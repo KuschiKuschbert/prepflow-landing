@@ -85,18 +85,33 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Visual mock */}
+          {/* PrepFlow Dashboard Screenshot */}
           <div className="relative">
             <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
             <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
-              {/* Replace with real screenshots */}
-              <div className="aspect-[16/10] w-full rounded-xl border border-gray-600 bg-gradient-to-tr from-[#1f1f1f] to-[#2a2a2a]" />
+              <img 
+                src="/images/dashboard-screenshot.png" 
+                alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
+                className="w-full h-auto rounded-xl border border-gray-600"
+              />
               <div className="mt-6 grid grid-cols-3 gap-4">
-                <div className="h-24 rounded-lg border border-gray-600 bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]" />
-                <div className="h-24 rounded-lg border border-gray-600 bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]" />
-                <div className="h-24 rounded-lg border border-gray-600 bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]" />
+                <img 
+                  src="/images/settings-screenshot.png" 
+                  alt="PrepFlow Settings page with business configuration"
+                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                />
+                <img 
+                  src="/images/recipe-screenshot.png" 
+                  alt="PrepFlow Recipe costing for Double Cheese Burger"
+                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                />
+                <img 
+                  src="/images/stocklist-screenshot.png" 
+                  alt="PrepFlow Infinite Stock List with ingredient management"
+                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                />
               </div>
-              <p className="mt-4 text-center text-sm text-gray-500">Swap with: Dashboard · Item Performance · COGS Recipes</p>
+              <p className="mt-4 text-center text-sm text-gray-500">Dashboard · Settings · Recipe Costing · Stock Management</p>
             </div>
           </div>
         </section>
@@ -155,8 +170,13 @@ export default function Page() {
               </div>
             </div>
             <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
-              <div className="aspect-video w-full overflow-hidden rounded-xl bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] border border-gray-600" />
-              <p className="mt-4 text-center text-sm text-gray-500">Embed your Loom/YouTube demo here</p>
+              <iframe
+                src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                className="w-full aspect-video rounded-xl border border-gray-600"
+                title="PrepFlow 2-Minute Demo - See how pricing changes affect COGS and profit margins"
+                allowFullScreen
+              />
+              <p className="mt-4 text-center text-sm text-gray-500">Watch the full demo to see PrepFlow in action</p>
             </div>
           </div>
         </section>
