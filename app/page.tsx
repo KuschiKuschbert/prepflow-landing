@@ -49,7 +49,7 @@ export default function Page() {
               href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Start Free Trial
+              Get Started
             </a>
           </div>
         </header>
@@ -72,16 +72,16 @@ export default function Page() {
               <Bullet>Automatic categories: Chef's Kiss, Hidden Gem, Bargain Bucket</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
-              >
-                Start Free Trial
-              </a>
+                              <a
+                  href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                >
+                  Get Started
+                </a>
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
               </a>
-              <p className="w-full text-sm text-gray-500">Free trial · Google Sheets · Member portal access</p>
+              <p className="w-full text-sm text-gray-500">$29/month · Google Sheets · Member portal access</p>
             </div>
           </div>
 
@@ -166,7 +166,7 @@ export default function Page() {
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
-                <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Start Your Free Trial</h3>
+                <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Started Today</h3>
                 <p className="mt-4 text-lg text-gray-300">Get access to the PrepFlow COGS Google Sheet template with member portal access for ongoing support and updates.</p>
                 <ul className="mt-6 space-y-3 text-base text-gray-300">
                   <Bullet>Google Sheet template — ready to use immediately</Bullet>
@@ -185,7 +185,7 @@ export default function Page() {
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Start Free Trial
+                  Get Started
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Lemon Squeezy</p>
               </div>
