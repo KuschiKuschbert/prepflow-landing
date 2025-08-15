@@ -108,10 +108,10 @@ export default function ThankYouPage() {
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
             <a
-              href="mailto:support@prepflow.com"
+              href="/auth"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Need Help? Contact Support
+              Sign In to Your Account
             </a>
             <a 
               href="/"
