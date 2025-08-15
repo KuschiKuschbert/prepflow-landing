@@ -167,9 +167,9 @@ export default function Page() {
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
                 <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Start Your Free Trial</h3>
-                <p className="mt-4 text-lg text-gray-300">Access PrepFlow COGS in Google Sheets with real-time collaboration, automatic updates, and member portal access.</p>
+                <p className="mt-4 text-lg text-gray-300">Get access to the PrepFlow COGS Google Sheet template with member portal access for ongoing support and updates.</p>
                 <ul className="mt-6 space-y-3 text-base text-gray-300">
-                  <Bullet>Google Sheets integration — always up to date</Bullet>
+                  <Bullet>Google Sheet template — ready to use immediately</Bullet>
                   <Bullet>Automated COGS, GP%, GP$ per item</Bullet>
                   <Bullet>Popularity & profit classes (Chef's Kiss etc.)</Bullet>
                   <Bullet>Member portal with exclusive resources</Bullet>
@@ -212,7 +212,7 @@ export default function Page() {
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need advanced Google Sheets skills?" a="No. Enter your ingredients, supplier costs and sales — the formulas and dashboards do the rest." />
-            <FAQ q="Will this work for multiple locations?" a="Yes. Track each site separately or combine reports with real-time collaboration." />
+            <FAQ q="Will this work for multiple locations?" a="Yes. Track each site separately or combine reports in your Google Sheet." />
             <FAQ q="Is my data private?" a="Your data stays in your Google account with enterprise-grade security and privacy controls." />
             <FAQ q="Does it handle Australian GST?" a="Yes. Set GST% in Settings and the tool will reflect ex‑GST and inc‑GST where relevant." />
           </div>
