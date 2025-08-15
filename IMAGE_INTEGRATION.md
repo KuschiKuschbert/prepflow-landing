@@ -5,22 +5,22 @@
 Add these screenshots to the `public/images/` folder:
 
 ### 1. Main Dashboard Screenshot
-- **File:** `dashboard-screenshot.png`
+- **File:** `dashboard-screenshot.jpg`
 - **Content:** The comprehensive dashboard showing KPIs, item categories, charts, and profit margins
 - **Size:** Recommended 1200x800px or similar 16:10 aspect ratio
 
 ### 2. Settings Page Screenshot
-- **File:** `settings-screenshot.png`
+- **File:** `settings-screenshot.jpg`
 - **Content:** The settings page with business configuration, suppliers, food categories
 - **Size:** Recommended 400x300px (will be cropped to fit 24x24 grid)
 
 ### 3. Recipe Costing Screenshot
-- **File:** `recipe-screenshot.png`
+- **File:** `recipe-screenshot.jpg`
 - **Content:** The Double Cheese Burger recipe with ingredients, costs, and profit calculation
 - **Size:** Recommended 400x300px (will be cropped to fit 24x24 grid)
 
 ### 4. Stock List Screenshot
-- **File:** `stocklist-screenshot.png`
+- **File:** `stocklist-screenshot.jpg`
 - **Content:** The Infinite Stock List with ingredient management and costing
 - **Size:** Recommended 400x300px (will be cropped to fit 24x24 grid)
 
