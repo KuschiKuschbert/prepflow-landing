@@ -49,7 +49,7 @@ export default function Page() {
               href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Get Instant Access
+              Start Free Trial
             </a>
           </div>
         </header>
@@ -76,12 +76,12 @@ export default function Page() {
                 href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
               >
-                Get PrepFlow Now
+                Start Free Trial
               </a>
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
               </a>
-              <p className="w-full text-sm text-gray-500">Instant download · Keep forever · No subscription</p>
+              <p className="w-full text-sm text-gray-500">Free trial · Google Sheets · Member portal access</p>
             </div>
           </div>
 
@@ -116,7 +116,7 @@ export default function Page() {
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
             <FeatureCard title="GST & Currency" body="Set country and GST% in Settings. All outputs reflect Australian GST and AUD pricing conventions." />
-            <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data to learn the flow in minutes." />
+            <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and member portal resources to learn the flow in minutes." />
           </div>
         </section>
 
@@ -166,26 +166,26 @@ export default function Page() {
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
-                <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Instant Access</h3>
-                <p className="mt-4 text-lg text-gray-300">Download the PrepFlow COGS workbook, Quick Start, and demo dataset. Keep it forever. Use across locations.</p>
+                <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Start Your Free Trial</h3>
+                <p className="mt-4 text-lg text-gray-300">Access PrepFlow COGS in Google Sheets with real-time collaboration, automatic updates, and member portal access.</p>
                 <ul className="mt-6 space-y-3 text-base text-gray-300">
-                  <Bullet>Excel workbook (offline) — no monthly fee</Bullet>
+                  <Bullet>Google Sheets integration — always up to date</Bullet>
                   <Bullet>Automated COGS, GP%, GP$ per item</Bullet>
                   <Bullet>Popularity & profit classes (Chef's Kiss etc.)</Bullet>
-                  <Bullet>7‑day money‑back guarantee</Bullet>
+                  <Bullet>Member portal with exclusive resources</Bullet>
                 </ul>
               </div>
               <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
-                <p className="text-base text-gray-500 line-through">AUD $147</p>
+                <p className="text-base text-gray-500 line-through">AUD $49</p>
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                  AUD $79
+                  AUD $29
                 </p>
-                <p className="text-sm text-gray-500">Launch price · Limited to first 20 customers</p>
+                <p className="text-sm text-gray-500">per month · Cancel anytime</p>
                 <a
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Buy Now
+                  Start Free Trial
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Lemon Squeezy</p>
               </div>
@@ -211,9 +211,9 @@ export default function Page() {
             FAQ
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
-            <FAQ q="Do I need advanced Excel skills?" a="No. Enter your ingredients, supplier costs and sales — the formulas and dashboards do the rest." />
-            <FAQ q="Will this work for multiple locations?" a="Yes. Track each site separately or combine reports." />
-            <FAQ q="Is my data private?" a="Your file stays on your computer — nothing is uploaded to the cloud." />
+            <FAQ q="Do I need advanced Google Sheets skills?" a="No. Enter your ingredients, supplier costs and sales — the formulas and dashboards do the rest." />
+            <FAQ q="Will this work for multiple locations?" a="Yes. Track each site separately or combine reports with real-time collaboration." />
+            <FAQ q="Is my data private?" a="Your data stays in your Google account with enterprise-grade security and privacy controls." />
             <FAQ q="Does it handle Australian GST?" a="Yes. Set GST% in Settings and the tool will reflect ex‑GST and inc‑GST where relevant." />
           </div>
         </section>
