@@ -37,7 +37,7 @@ export default function Page() {
               href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Get Started
+              Start Free Now
             </a>
           </div>
         </header>
@@ -46,30 +46,31 @@ export default function Page() {
         <section className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              Increase Your Restaurant's Profit Margins in 24 Hours — {" "}
+              Your Menu Is Leaking Cash. PrepFlow Finds Every Cent — {" "}
               <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                No New Customers Needed
+                in 24 Hours Flat.
               </span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-              PrepFlow turns your menu into a profit map. Get true COGS, GP%, popularity and profit per item so you know exactly what to push, fix or remove.
+              See what's draining your profit. Fix it before the next lunch rush.
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
-              <Bullet>Australian GST-ready (set GST% in <em>Settings</em>)</Bullet>
-              <Bullet>Real yields & trim/waste for accurate unit cost</Bullet>
-              <Bullet>Automatic categories: Chef's Kiss, Hidden Gem, Bargain Bucket</Bullet>
+              <Bullet>Know your real profit per dish — no more guesswork or gut feeling</Bullet>
+              <Bullet>Classify menu items instantly: margin monsters vs dead weight</Bullet>
+              <Bullet>See where your waste, yield, and prep time destroy profits</Bullet>
+              <Bullet>Works with GST. Works fast. You'll feel the difference tomorrow</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Get Started
+                  Start Your Profit Scan Now
                 </a>
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
               </a>
-              <p className="w-full text-sm text-gray-500">$29/month · Google Sheets · Member portal access</p>
+              <p className="w-full text-sm text-gray-500">No credit card · Results in 1 day · $29/month</p>
             </div>
           </div>
 
@@ -77,11 +78,24 @@ export default function Page() {
           <div className="relative">
             <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
             <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
-              <img 
-                src="/images/dashboard-screenshot.png" 
-                alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
-                className="w-full h-auto rounded-xl border border-gray-600"
-              />
+              <div className="relative">
+                <img 
+                  src="/images/dashboard-screenshot.png" 
+                  alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
+                  className="w-full h-auto rounded-xl border border-gray-600"
+                />
+                {/* Action Overlay */}
+                <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <div className="bg-[#29E7CD] text-black px-4 py-2 rounded-lg font-semibold mb-2">
+                      Live GP% Dashboard
+                    </div>
+                    <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                      Play Demo
+                    </button>
+                  </div>
+                </div>
+              </div>
               <div className="mt-6 grid grid-cols-3 gap-4">
                 <img 
                   src="/images/settings-screenshot.png" 
@@ -129,11 +143,11 @@ export default function Page() {
             How It Works
           </h2>
           <div className="mt-12 grid gap-8 md:grid-cols-5">
-            <Step n={1} title="Open Start" body="Add your venue name, country and GST%." />
-            <Step n={2} title="Fill Stock List" body="Ingredients, pack size, supplier, yields, trim/waste." />
-            <Step n={3} title="Build Recipes" body="Select ingredients; tool auto‑calculates cost per UOM." />
-            <Step n={4} title="Paste Sales" body="Drop in weekly/monthly item counts in Item Performance." />
-            <Step n={5} title="Decide" body="Use Dashboard & Classes (Chef's Kiss / Hidden Gem / Bargain Bucket) to price, push or remove items." />
+            <Step n={1} title="Load Recipes & Prices" body="Add your recipes & ingredient prices." />
+            <Step n={2} title="Add Prep & Waste" body="Include prep time, yield, waste data." />
+            <Step n={3} title="Upload Sales Data" body="Drop in your weekly/monthly sales." />
+            <Step n={4} title="See Profit Reality" body="Watch the system expose profit traps per plate." />
+            <Step n={5} title="Get Action Plan" body="Simple suggestions: raise this price, drop that item, swap that cut." />
           </div>
         </section>
 
@@ -153,7 +167,7 @@ export default function Page() {
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Get the Tool
+                  Watch Demo
                 </a>
               </div>
             </div>
@@ -168,6 +182,11 @@ export default function Page() {
             </div>
           </div>
         </section>
+
+        {/* Urgency Banner */}
+        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-4 text-center text-white font-semibold">
+          🔥 60% launch discount ends this Friday. Don't miss the margin makeover.
+        </div>
 
         {/* Pricing */}
         <section id="pricing" className="py-20">
@@ -193,7 +212,7 @@ export default function Page() {
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Get Started
+                  Start Now — Fix Your Margins Today
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Lemon Squeezy</p>
               </div>
