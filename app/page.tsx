@@ -46,7 +46,7 @@ export default function Page() {
           </nav>
           <div className="hidden md:block">
             <a
-              href="https://prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+              href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
               Get Instant Access
@@ -73,7 +73,7 @@ export default function Page() {
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <a
-                href="https://prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
               >
                 Get PrepFlow Now
@@ -147,7 +147,7 @@ export default function Page() {
               </ul>
               <div className="mt-8">
                 <a
-                  href="https://prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                  href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
                   Get the Tool
@@ -182,7 +182,7 @@ export default function Page() {
                 </p>
                 <p className="text-sm text-gray-500">Launch price · Limited to first 20 customers</p>
                 <a
-                  href="https://prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                  href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
                   Buy Now
