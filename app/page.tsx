@@ -73,7 +73,7 @@ export default function Page() {
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <a
-                href="https://your-store.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_HASH"
+                href="https://prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
               >
                 Get PrepFlow Now
