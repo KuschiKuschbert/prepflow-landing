@@ -249,9 +249,9 @@ export default function Page() {
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="text-center">
-                <div className="bg-red-500/20 border border-red-500/30 rounded-2xl p-6 mb-4">
-                  <p className="text-2xl font-bold text-red-400">Before PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-red-300">19%</p>
+                <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4">
+                  <p className="text-2xl font-bold text-orange-400">Before PrepFlow</p>
+                  <p className="text-4xl font-extrabold text-orange-300">24%</p>
                   <p className="text-sm text-gray-400">Average GP</p>
                 </div>
                 <p className="text-sm text-gray-400">Blind pricing, gut feeling, profit leaks everywhere</p>
@@ -260,7 +260,7 @@ export default function Page() {
               <div className="text-center">
                 <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
                   <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-green-300">32%</p>
+                  <p className="text-4xl font-extrabold text-green-300">34%</p>
                   <p className="text-sm text-gray-400">Average GP in 3 days</p>
                 </div>
                 <p className="text-sm text-gray-400">Data-driven decisions, margin monsters identified, profits secured</p>
