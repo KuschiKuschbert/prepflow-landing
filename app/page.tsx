@@ -377,8 +377,8 @@ export default function Page() {
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
-                <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Choose Your Profit Plan</h3>
-                <p className="mt-4 text-lg text-gray-300">Start with the essentials, scale as you grow. Every plan includes our 30-day profit guarantee.</p>
+                              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
+              <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
                 
                 <div className="mt-6 space-y-4">
                   <div className="flex items-center gap-3">
@@ -399,7 +399,7 @@ export default function Page() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">30-day profit guarantee</span>
+                    <span className="text-gray-300">30-day satisfaction guarantee</span>
                   </div>
                 </div>
               </div>
@@ -414,10 +414,10 @@ export default function Page() {
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Start Now — Fix Your Margins Today
+                  Start Now — Get Menu Clarity Today
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Lemon Squeezy</p>
-                <p className="mt-2 text-xs text-gray-400">Not profitable in 30 days? Full refund.</p>
+                <p className="mt-2 text-xs text-gray-400">Not satisfied in 30 days? Full refund.</p>
                 <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
               </div>
             </div>
@@ -429,7 +429,7 @@ export default function Page() {
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">Real Results in Real Time</h3>
-              <p className="text-lg text-gray-300">See the transformation from guesswork to profit precision</p>
+                              <p className="text-lg text-gray-300">See the transformation from guesswork to data-driven clarity</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -439,7 +439,7 @@ export default function Page() {
                   <p className="text-4xl font-extrabold text-orange-300">24%</p>
                   <p className="text-sm text-gray-400">Average GP</p>
                 </div>
-                <p className="text-sm text-gray-400">Blind pricing, gut feeling, profit leaks everywhere</p>
+                <p className="text-sm text-gray-400">Blind pricing, gut feeling, unclear margins everywhere</p>
               </div>
               
               <div className="text-center">
@@ -448,12 +448,12 @@ export default function Page() {
                   <p className="text-4xl font-extrabold text-green-300">34%</p>
                   <p className="text-sm text-gray-400">Average GP in 3 days</p>
                 </div>
-                <p className="text-sm text-gray-400">Data-driven decisions, margin monsters identified, profits secured</p>
+                <p className="text-sm text-gray-400">Data-driven decisions, margin insights revealed, clarity achieved</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
-              <p className="text-sm text-gray-400">"We found $2,400 in hidden profit opportunities in our first week"</p>
+                              <p className="text-sm text-gray-400">"We found $2,400 in hidden margin opportunities in our first week"</p>
             </div>
           </div>
         </section>
@@ -470,7 +470,7 @@ export default function Page() {
               result="+9% GP in 24 hours"
             />
             <Testimonial 
-              quote="Found $1,200 in hidden profit on our burger menu alone. PrepFlow paid for itself in 2 days." 
+                              quote="Found $1,200 in hidden margin on our burger menu alone. PrepFlow paid for itself in 2 days." 
               author="Marcus T., Head Chef @ Beachside Café" 
               result="$1,200 profit found"
             />
@@ -500,7 +500,7 @@ export default function Page() {
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
             <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-            <FAQ q="What if it doesn't work for me?" a="If your margin doesn't improve in 30 days, you'll get every cent back. No hassle." />
+                            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 30 days, you'll get every cent back. No hassle." />
             <FAQ q="Will this slow me down?" a="Setup takes 1 hour. After that, you'll save 2-3 hours per week on menu planning." />
           </div>
         </section>
