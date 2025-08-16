@@ -19,23 +19,12 @@ export default function ThankYouPage() {
         {/* Header */}
         <header className="flex items-center justify-between py-8">
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="h-12 w-12 rounded-2xl bg-[#0a0a0a] p-0.5 border border-gray-700">
-                <div className="h-full w-full rounded-2xl bg-[#0a0a0a] flex items-center justify-center relative overflow-hidden">
-                  {/* Main large cyan circle (upper left portion) */}
-                  <div className="absolute top-1 left-1 h-6 w-6 bg-[#29E7CD] rounded-full opacity-90" />
-                  
-                  {/* Overlapping organic shapes */}
-                  <div className="absolute top-2 right-2 h-5 w-6 bg-[#3B82F6] rounded-full opacity-80" />
-                  <div className="absolute bottom-2 left-2 h-4 w-5 bg-[#D925C7] rounded-full opacity-80" />
-                  
-                  {/* Small accent circles */}
-                  <div className="absolute top-0 left-0 h-2 w-2 bg-[#29E7CD] rounded-full opacity-80" />
-                  <div className="absolute bottom-0 right-0 h-2 w-2 bg-[#3B82F6] rounded-full opacity-80" />
-                  <div className="absolute bottom-1 left-1 h-1.5 w-1.5 bg-[#D925C7] rounded-full opacity-80" />
-                </div>
-              </div>
-            </div>
+            <img 
+              src="/images/prepflow-logo.png" 
+              alt="PrepFlow Logo" 
+              className="h-12 w-auto"
+              loading="eager"
+            />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow
             </span>
