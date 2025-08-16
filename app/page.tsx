@@ -107,14 +107,14 @@ export default function Page() {
               </span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-              See what's draining your profit. Fix it before the next lunch rush. Works worldwide with multi-currency support.
+              See what's draining your profit. Fix it before the next lunch rush. No expensive software, no complicated setup — just results.
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
               <Bullet>Know your real profit per dish — no more guesswork or gut feeling</Bullet>
               <Bullet>See <strong>contributing margin</strong> — understand what each dish truly contributes to your bottom line</Bullet>
               <Bullet>Classify menu items instantly: margin monsters vs dead weight</Bullet>
               <Bullet>See where your waste, yield, and prep time destroy profits</Bullet>
-              <Bullet>Works with GST, VAT, and tax systems worldwide — fast setup, immediate results</Bullet>
+              <Bullet>Works with GST, VAT, and tax systems worldwide — simple setup, no expensive consultants needed</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
@@ -188,7 +188,7 @@ export default function Page() {
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          Built for hospitality businesses worldwide. Works for restaurants, cafés, food trucks, caterers, and small groups. Easy configuration for local tax systems and currencies.
+          Built for the restaurant owner who doesn't want to spend thousands on expensive, complicated software. Simple, affordable, and gets the job done.
         </div>
 
         {/* Contributing Margin Highlight */}
@@ -255,16 +255,16 @@ export default function Page() {
         {/* Global Features */}
         <section className="py-20">
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
-            <div className="text-center mb-12">
+                        <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                  Built for the World
-                </span> — Works Everywhere
+                  Simple & Affordable
+                </span> — No Expensive Software
               </h3>
-                          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-              PrepFlow works for hospitality businesses worldwide. Users can easily configure their local tax system and currency, 
-              making it adaptable to any market.
-            </p>
+              <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+                While others charge thousands for complicated restaurant software, PrepFlow gives you the same insights 
+                in a simple Google Sheet for just $29/month.
+              </p>
             </div>
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -296,15 +296,15 @@ export default function Page() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🚀</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">Easy Configuration</h4>
-                <p className="text-sm text-gray-400">Simple setup for your local tax system and currency requirements.</p>
+                <h4 className="font-semibold text-white mb-2">No Consultants</h4>
+                <p className="text-sm text-gray-400">Set up yourself in under an hour. No expensive implementation fees.</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>From local cafes to international chains</strong> — PrepFlow's flexible configuration works with your 
-                tax system and currency, helping you maximize profits regardless of your location.
+                <strong>Stop paying thousands for restaurant software</strong> — Get the same profit insights in a simple 
+                Google Sheet that you can set up yourself. No complexity, no consultants, just results.
               </p>
             </div>
           </div>
