@@ -232,7 +232,7 @@ class PrepFlowABTesting {
 
   public trackImpression(experimentId: string, variantId: string, sessionId: string): void {
     // This would integrate with your existing analytics
-    console.log(`🔬 A/B Test Impression: ${experimentId} - ${variantId}`);
+    // Silent tracking - no visible indicators to users
   }
 
   public trackConversion(experimentId: string, variantId: string, sessionId: string, conversionType: string, value?: number): void {
@@ -247,7 +247,7 @@ class PrepFlowABTesting {
     };
 
     this.results.push(result);
-    console.log(`🎯 A/B Test Conversion: ${experimentId} - ${variantId} - ${conversionType}`);
+    // Silent tracking - no visible indicators to users
   }
 
   public getExperimentStats(experimentId: string): ExperimentStats[] {

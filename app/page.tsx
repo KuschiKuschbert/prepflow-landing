@@ -1,16 +1,27 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Control from '../components/landing/variants/Control';
+import V1 from '../components/landing/variants/V1';
+import V2 from '../components/landing/variants/V2';
+import V3 from '../components/landing/variants/V3';
 
-export default function Page() {
-
+function LandingPageContent() {
+  // Get A/B testing variant from Edge Middleware
+  const searchParams = useSearchParams();
+  const variant = searchParams.get('variant') || 'control';
+  
   // Performance monitoring - track page load time
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const loadTime = performance.now();
       console.log(`PrepFlow landing page loaded in ${loadTime.toFixed(2)}ms`);
+      
+      // Track A/B testing variant for analytics
+      console.log('A/B Testing Variant:', variant);
     }
-  }, []);
+  }, [variant]);
 
   // Structured data for SEO
   const structuredData = {
@@ -32,6 +43,21 @@ export default function Page() {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
       "ratingCount": "127"
+    }
+  };
+
+  // Render the appropriate variant
+  const renderVariant = () => {
+    switch (variant) {
+      case 'v1':
+        return <V1 />;
+      case 'v2':
+        return <V2 />;
+      case 'v3':
+        return <V3 />;
+      case 'control':
+      default:
+        return <Control />;
     }
   };
 
@@ -93,95 +119,15 @@ export default function Page() {
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+              data-event="outbound_click_gumroad"
             >
               Get PrepFlow Now
             </a>
           </div>
         </header>
 
-        {/* Hero */}
-        <section className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
-          <div>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              Instant menu profit clarity for Aussie cafés.
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-              Know your winners and fix low-margin items in minutes — GST-ready, inside a simple Google Sheet.
-            </p>
-            <ul className="mt-8 space-y-3 text-base text-gray-300">
-              <Bullet><strong>Item Profit & Popularity</strong> — know what to promote, fix, or drop to raise gross profit</Bullet>
-              <Bullet><strong>Recipe Builder</strong> — auto-calculate COGS, GP$, and GP% for every dish, instantly</Bullet>
-              <Bullet><strong>Yield/Waste Aware</strong> — realistic ingredient costs — no fantasy margins</Bullet>
-              <Bullet><strong>GST-Ready for AU</strong> — price confidently; avoid surprises</Bullet>
-              <Bullet><strong>Menu Mix Intelligence</strong> — "Chef's Kiss / Hidden Gem / Bargain Bucket" categories to guide decisions</Bullet>
-              <Bullet><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
-            </ul>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-                              <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
-                Watch the 2-min demo
-              </a>
-              <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
-                Get the sample sheet (free)
-              </a>
-                              <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy.</p>
-            </div>
-          </div>
-
-          {/* PrepFlow Dashboard Screenshot */}
-          <div className="relative">
-            <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
-            <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
-              <div className="relative">
-                <img 
-                  src="/images/dashboard-screenshot.png" 
-                  alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
-                  className="w-full h-auto rounded-xl border border-gray-600"
-                  loading="lazy"
-                  width="800"
-                  height="500"
-                />
-                {/* Action Overlay */}
-                <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <div className="bg-[#29E7CD] text-black px-4 py-2 rounded-lg font-semibold mb-2">
-                      Live GP% Dashboard
-                    </div>
-                    <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                      Play Demo
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 grid grid-cols-3 gap-4">
-                <img 
-                  src="/images/settings-screenshot.png" 
-                  alt="PrepFlow Settings page with business configuration"
-                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
-                  loading="lazy"
-                  width="200"
-                  height="96"
-                />
-                <img 
-                  src="/images/recipe-screenshot.png" 
-                  alt="PrepFlow Recipe costing for Double Cheese Burger"
-                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
-                  loading="lazy"
-                  width="200"
-                  height="96"
-                />
-                <img 
-                  src="/images/stocklist-screenshot.png" 
-                  alt="PrepFlow Infinite Stock List with ingredient management"
-                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
-                  loading="lazy"
-                  width="200"
-                  height="96"
-                />
-              </div>
-              <p className="mt-4 text-center text-sm text-gray-500">Dashboard · Settings · Recipe Costing · Stock Management</p>
-            </div>
-          </div>
-        </section>
+        {/* Render the appropriate variant */}
+        {renderVariant()}
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
@@ -302,7 +248,7 @@ export default function Page() {
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
             <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
-                          <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
+            <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
             <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
           </div>
         </section>
@@ -310,7 +256,7 @@ export default function Page() {
         {/* Global Features */}
         <section className="py-20">
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
-                        <div className="text-center mb-12">
+            <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   Expose Hidden Profits
@@ -431,6 +377,7 @@ export default function Page() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                  data-event="outbound_click_gumroad"
                 >
                   Get PrepFlow Now
                 </a>
@@ -475,12 +422,19 @@ export default function Page() {
             </div>
             
             <div className="max-w-md mx-auto">
-              <form className="space-y-4">
+              <form 
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert('Demo sent! Check your email.');
+                }}
+              >
                 <div>
                   <input
                     type="text"
                     placeholder="Your name"
                     className="w-full px-4 py-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80 text-white placeholder-gray-400 focus:border-[#29E7CD] focus:outline-none transition-colors"
+                    required
                   />
                 </div>
                 <div>
@@ -488,6 +442,7 @@ export default function Page() {
                     type="email"
                     placeholder="Your email"
                     className="w-full px-4 py-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80 text-white placeholder-gray-400 focus:border-[#29E7CD] focus:outline-none transition-colors"
+                    required
                   />
                 </div>
                 <button
@@ -514,60 +469,35 @@ export default function Page() {
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
-                              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
-              <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
-              
-              {/* Refund Policy */}
-              <div className="mt-6 p-4 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
-                <div className="text-center">
-                  <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">Our Refund Policy</h4>
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
-                    If PrepFlow isn't what you expected, you can request a full refund within 7 days of purchase. 
-                    No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
-                  </p>
-                </div>
-              </div>
+                <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
+                <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
                 
-                <div className="mt-6 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">Google Sheet template — ready to use immediately</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">Automated COGS, GP%, GP$ per item</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">Popularity & profit classes (Chef's Kiss etc.)</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">AI Method Generator for cooking optimization</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">Comprehensive setup guide and resources</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">7-day refund policy</span>
+                {/* Refund Policy */}
+                <div className="mt-6 p-4 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
+                  <div className="text-center">
+                    <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">Our Refund Policy</h4>
+                    <p className="text-sm text-gray-300 leading-relaxed">
+                      PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
+                      If PrepFlow isn't what you expected, you can request a full refund within 7 days of purchase. 
+                      No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
+                    </p>
                   </div>
                 </div>
               </div>
+              
+              {/* Cards Layout (Control) */}
               <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
                 <p className="text-base text-gray-500 line-through">AUD $49</p>
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   AUD $29
                 </p>
                 <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
-                <p className="text-xs text-[#29E7CD] font-semibold">🔥 Limited founder pricing — ends soon</p>
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                  data-event="outbound_click_gumroad"
                 >
                   Start Now — Get Menu Clarity Today
                 </a>
@@ -584,7 +514,7 @@ export default function Page() {
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">Real Results in Real Time</h3>
-                              <p className="text-lg text-gray-300">See the transformation from guesswork to data-driven clarity</p>
+              <p className="text-lg text-gray-300">See the transformation from guesswork to data-driven clarity</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -608,7 +538,7 @@ export default function Page() {
             </div>
             
             <div className="mt-8 text-center">
-                              <p className="text-sm text-gray-400">"We found $2,400 in hidden margin opportunities in our first week"</p>
+              <p className="text-sm text-gray-400">"We found $2,400 in hidden margin opportunities in our first week"</p>
             </div>
           </div>
         </section>
@@ -625,7 +555,7 @@ export default function Page() {
               result="+9% GP in 24 hours"
             />
             <Testimonial 
-                              quote="Found $1,200 in hidden margin on our burger menu alone. PrepFlow paid for itself in 2 days." 
+              quote="Found $1,200 in hidden margin on our burger menu alone. PrepFlow paid for itself in 2 days." 
               author="Marcus T., Head Chef @ Beachside Café" 
               result="$1,200 profit found"
             />
@@ -655,7 +585,7 @@ export default function Page() {
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
             <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-                            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
+            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
             <FAQ q="Will this slow me down?" a="Setup takes 1 hour. After that, you'll save 2-3 hours per week on menu planning." />
           </div>
         </section>
@@ -695,6 +625,22 @@ export default function Page() {
       </div>
     </main>
     </>
+  );
+}
+
+// Main Page component with Suspense wrapper
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#29E7CD] mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading PrepFlow...</p>
+        </div>
+      </div>
+    }>
+      <LandingPageContent />
+    </Suspense>
   );
 }
 

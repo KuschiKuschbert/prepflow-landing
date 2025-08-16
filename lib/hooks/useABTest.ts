@@ -103,7 +103,7 @@ export function useABTestWithTracking(experimentId: string) {
       // Also track in main analytics
       if (typeof window !== 'undefined') {
         // This would integrate with your existing analytics.trackEvent
-        console.log(`🎯 A/B Test Conversion tracked: ${experimentId} - ${variant.id} - ${conversionType}`);
+        // Silent tracking - no visible indicators to users
       }
     }
   };
