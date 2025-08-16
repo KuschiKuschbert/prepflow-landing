@@ -1,0 +1,87 @@
+experiments:
+  landing_ab_001:
+    goal: primary_cta_conversion
+    split: { control: 25, v1: 25, v2: 25, v3: 25 }
+    metrics:
+      - primary_cta_click
+      - purchase_complete
+      - hero_cta_click
+      - scroll_50
+      - outbound_click_gumroad
+    variants:
+      control: "Current landing unchanged - baseline for comparison"
+      v1: "Clarity-first: tighter hero, 3 key benefits + single CTA, screenshots above fold"
+      v2: "Trust-first: social proof above fold, refund policy near CTA, trust badges prominent"
+      v3: "Action-first: pricing preview in hero, prominent risk reduction, simplified messaging"
+    guardrails:
+      - "Keep tone/style; no color palette changes"
+      - "No price or policy edits; links are fine"
+      - "Accessibility: maintain heading order and alt text"
+      - "Preserve existing brand voice and messaging"
+      - "Keep all legal and pricing information intact"
+    
+    # Variant-specific implementation details
+    implementation:
+      control:
+        description: "Baseline - current landing page exactly as is"
+        changes: "None - serves as control group"
+        
+      v1:
+        description: "Clarity-first hero optimization"
+        changes:
+          - "Reduce hero bullets from 6 to 3 most compelling benefits"
+          - "Move screenshots above fold with short captions"
+          - "Single primary CTA with stronger copy ('Start Free Trial')"
+          - "Remove secondary CTA from hero section"
+          - "Simplify hero messaging to focus on core value"
+        hypothesis: "Simplified hero with visual proof above fold will increase primary CTA clicks by 15-25%"
+        
+      v2:
+        description: "Trust-first above fold optimization"
+        changes:
+          - "Add micro-testimonial above hero CTA"
+          - "Move refund policy link near primary CTA"
+          - "Add trust badge (500+ venues) prominently in hero"
+          - "Surface case study data (24% → 34% GP) in hero section"
+          - "Add trust signals without overwhelming content"
+        hypothesis: "Immediate social proof and trust signals will increase conversion confidence by 20-30%"
+        
+      v3:
+        description: "Action-first with risk reduction"
+        changes:
+          - "Add pricing preview ($29 AUD) in hero section"
+          - "Surface refund policy prominently near CTA"
+          - "Add 'No risk - 7-day refund' messaging near CTA"
+          - "Simplify hero to focus on action and pricing clarity"
+          - "Reduce cognitive load while maintaining trust"
+        hypothesis: "Clear pricing + risk reduction near CTA will increase purchase intent by 25-35%"
+    
+    # Success criteria and statistical significance
+    success_criteria:
+      primary_metric: "primary_cta_click_rate"
+      secondary_metrics: ["purchase_conversion_rate", "scroll_50_rate"]
+      statistical_significance: 95
+      minimum_sample_size: 1000_impressions_per_variant
+      expected_duration: "2-4 weeks"
+      
+    # Traffic allocation strategy
+    traffic_strategy:
+      phase_1: "25% each variant (current)"
+      phase_2: "Adjust based on early performance signals"
+      phase_3: "Winner takes all or continue testing if no clear winner"
+      
+    # Risk mitigation
+    risk_mitigation:
+      - "All variants maintain existing brand voice and visual identity"
+      - "No changes to pricing, legal text, or core functionality"
+      - "Rollback plan: flip all traffic to control if issues arise"
+      - "Monitor Core Web Vitals for performance impact"
+      - "A/B test dashboard for real-time monitoring"
+      
+    # Implementation notes
+    implementation_notes:
+      - "Use Edge Middleware for server-side variant assignment"
+      - "Maintain user consistency across sessions via cookies"
+      - "Track all events with PostHog or local logging"
+      - "Ensure variants are indistinguishable from testing tools"
+      - "Maintain SEO safety with single URL structure"

@@ -66,12 +66,7 @@ export function ABTestHeroSection() {
 
             {showSocialProof && (
               <div className="mt-8">
-                <p className="text-sm text-gray-500 mb-3">Trusted by leading restaurants:</p>
-                <div className="flex items-center space-x-6 opacity-60">
-                  <div className="text-sm font-medium">🍽️ 500+ Kitchens</div>
-                  <div className="text-sm font-medium">⭐ 4.8/5 Rating</div>
-                  <div className="text-sm font-medium">🚀 40% Time Saved</div>
-                </div>
+                <p className="text-sm text-gray-500 mb-3">Example social section (demo content)</p>
               </div>
             )}
           </div>
@@ -146,7 +141,7 @@ export function ABTestConditionalContent() {
         </h2>
         
         <p className="text-lg text-gray-600 mb-8">
-          Join hundreds of professional kitchens already using PrepFlow to streamline operations.
+          This is a demo section to show conditional rendering with A/B tests.
         </p>
 
         <div className="mb-8">
@@ -194,30 +189,16 @@ export function ABTestPricingSection() {
     layout: 'cards',
     showFeatures: true,
     highlightPopular: true,
-    ctaText: 'Start Free Trial'
+    ctaText: 'Get the Google Sheet'
   };
 
   const plans = [
     {
-      name: 'Starter',
-      price: '$29',
-      period: '/month',
-      features: ['Up to 5 users', 'Basic inventory', 'Recipe management'],
-      popular: false
-    },
-    {
-      name: 'Professional',
-      price: '$79',
-      period: '/month',
-      features: ['Up to 20 users', 'Advanced analytics', 'Staff scheduling', 'AI insights'],
-      popular: true
-    },
-    {
-      name: 'Enterprise',
-      price: 'Custom',
+      name: 'PrepFlow Sheet',
+      price: 'AUD $29',
       period: '',
-      features: ['Unlimited users', 'Custom integrations', 'Dedicated support', 'White-label options'],
-      popular: false
+      features: ['Google Sheet template', 'Setup guide', 'Sample data', '7-day refund'],
+      popular: true
     }
   ];
 

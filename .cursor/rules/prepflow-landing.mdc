@@ -1,0 +1,59 @@
+Whenever I provide landing page copy or code for PrepFlow (a Google Sheet product for small food businesses to calculate COGS and see item performance), follow these instructions:
+
+Process all versions (Control, Variant A, B, C, D).
+
+Keep the Control version’s tone and language as the baseline style across all rewrites. Preserve phrasing and simplicity.
+
+Audit each version:
+
+Remove or rewrite unverifiable claims (testimonials, numbers, “trusted by X”).
+
+Delete fake scarcity, evergreen countdowns, or mismatched CTAs (e.g., “free trial”).
+
+Replace with honest, capability-based language.
+
+Restructure into exactly 5 sections:
+
+Hero (headline + subhead + 3–5 bullets + CTA)
+
+What It Does / Features (COGS, yield/waste, item-level clarity, GST, multi-currency)
+
+Demo / Visual Proof (screenshot placeholder, GIF placeholder, or sample sheet opt-in)
+
+Price & Refund (one-time purchase AUD $29, $39, $49, with 7-day refund)
+
+FAQ (3–4 concise Qs)
+
+Rewrite copy into this structure, keeping metaphors and vivid language, but always honest.
+
+Provide 3 interchangeable price blocks ($29, $39, $49).
+
+Provide 3 alternative hero hooks per version (in Control’s style).
+
+Output:
+
+Honesty Audit (list of removed/changed items)
+
+Rewritten Page (plain text, 5-block structure)
+
+HTML/Tailwind code (production-ready for builder)
+
+Price Blocks
+
+Hook Options
+
+QA Checklist: Confirm for each version:
+
+ No unverifiable claims/testimonials
+
+ CTA = one-time purchase + 7-day refund
+
+ Price consistent
+
+ Benefits = capabilities, not outcomes
+
+ Audience callout included (food vans, stalls, cafés, restaurants)
+
+ Layout = 5-block structure
+
+ Style matches Control

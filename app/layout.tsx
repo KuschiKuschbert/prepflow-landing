@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights in 24 Hours",
-  description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support. Start your profit scan now.",
+  title: "PrepFlow – COGS & Menu Profit Tool | Clear Menu Numbers in Google Sheets",
+  description: "PrepFlow helps you see item-level costs and margins with contributing margin analysis and COGS tracking in a Google Sheet. Built for small food businesses with GST and multi-currency support.",
   keywords: [
     "restaurant COGS",
     "menu profitability", 
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights in 24 Hours",
-    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
+    title: "PrepFlow – COGS & Menu Profit Tool | Clear Menu Numbers in Google Sheets",
+    description: "See item-level costs and margins with contributing margin analysis and COGS tracking in a Google Sheet.",
     url: 'https://www.prepflow.org',
     siteName: 'PrepFlow',
     images: [
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights in 24 Hours",
-    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
+    title: "PrepFlow – COGS & Menu Profit Tool | Clear Menu Numbers in Google Sheets",
+    description: "See item-level costs and margins with contributing margin analysis and COGS tracking in a Google Sheet.",
     images: ['/images/dashboard-screenshot.png'],
   },
   robots: {
@@ -87,8 +87,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}

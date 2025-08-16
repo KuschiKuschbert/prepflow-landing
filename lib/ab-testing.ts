@@ -66,7 +66,7 @@ class PrepFlowABTesting {
           weight: 50,
           config: {
             layout: 'centered',
-            ctaText: 'Get Started',
+            ctaText: 'Get the Google Sheet',
             ctaColor: 'primary',
             showDemoButton: true
           }
@@ -77,7 +77,7 @@ class PrepFlowABTesting {
           weight: 50,
           config: {
             layout: 'left_aligned',
-            ctaText: 'Start Free Trial',
+            ctaText: 'Get the Google Sheet',
             ctaColor: 'secondary',
             showDemoButton: false,
             showSocialProof: true
@@ -102,7 +102,7 @@ class PrepFlowABTesting {
           name: 'Control',
           weight: 33,
           config: {
-            text: 'Get Started',
+            text: 'Get the Google Sheet',
             color: 'primary',
             size: 'large'
           }
@@ -112,7 +112,7 @@ class PrepFlowABTesting {
           name: 'Action-Oriented',
           weight: 33,
           config: {
-            text: 'Start Free Trial',
+            text: 'Get the Google Sheet',
             color: 'secondary',
             size: 'large'
           }
@@ -122,7 +122,7 @@ class PrepFlowABTesting {
           name: 'Urgency-Based',
           weight: 34,
           config: {
-            text: 'Join Now - Free',
+            text: 'Learn More',
             color: 'accent',
             size: 'large'
           }
@@ -149,7 +149,7 @@ class PrepFlowABTesting {
             layout: 'cards',
             showFeatures: true,
             highlightPopular: true,
-            ctaText: 'Start Free Trial'
+            ctaText: 'Get the Google Sheet'
           }
         },
         {
@@ -232,7 +232,7 @@ class PrepFlowABTesting {
 
   public trackImpression(experimentId: string, variantId: string, sessionId: string): void {
     // This would integrate with your existing analytics
-    console.log(`🔬 A/B Test Impression: ${experimentId} - ${variantId}`);
+    // Silent tracking - no visible indicators to users
   }
 
   public trackConversion(experimentId: string, variantId: string, sessionId: string, conversionType: string, value?: number): void {
@@ -247,7 +247,7 @@ class PrepFlowABTesting {
     };
 
     this.results.push(result);
-    console.log(`🎯 A/B Test Conversion: ${experimentId} - ${variantId} - ${conversionType}`);
+    // Silent tracking - no visible indicators to users
   }
 
   public getExperimentStats(experimentId: string): ExperimentStats[] {
