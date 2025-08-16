@@ -262,7 +262,7 @@ function LandingPageContent() {
             <FeatureCard title="Item Performance" body="Paste sales to see popularity, margin and total profit ex‑GST. Simple tags highlight winners and weak links." />
             <FeatureCard title="Daily Specials" body="Set today’s price on the fly and see GP$ and GP% instantly — GST‑aware." />
             <FeatureCard title="GST for Australia" body="Turn on GST; outputs reflect the AU 10% GST and show values in AUD." />
-            <FeatureCard title="Built by Kitchens" body="Designed and refined with almost two decades of hands‑on kitchen and food ops experience." />
+            <FeatureCard title="Built by Chefs for Chefs" body="Designed and refined with almost two decades of hands‑on kitchen and food ops experience." />
           </div>
           <div className="mt-10 mx-auto max-w-3xl grid grid-cols-3 gap-4">
             <div className="text-center">
