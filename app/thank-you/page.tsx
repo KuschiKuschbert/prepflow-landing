@@ -59,53 +59,51 @@ export default function ThankYouPage() {
             </div>
           </div>
 
-          {/* Main Message - A/B Variant 1 */}
+          {/* Main Message - Post-Purchase */}
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl mb-6">
-            You're in — your PrepFlow demo is on its way{" "}
+            Welcome to PrepFlow!{" "}
             <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-              🚀
+              🎉
             </span>
           </h1>
           
           <p className="text-xl leading-8 text-gray-300 max-w-3xl mb-8">
-            Check your inbox for the link (allow a few minutes).
+            Your menu profit clarity tool is ready. Check your email for access and setup instructions.
           </p>
 
-          {/* Delivery Box */}
+          {/* Access Box */}
           <div className="w-full max-w-2xl mb-12">
             <div className="rounded-2xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
               <div className="space-y-4 text-left">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">🎥</span>
+                  <span className="text-2xl">📊</span>
                   <div>
-                    <p className="font-semibold text-white">Demo / Sample</p>
-                    <p className="text-gray-300">Click here if you don't want to wait → <a href="#" className="text-[#29E7CD] hover:underline">[[instant access link]]</a></p>
+                    <p className="font-semibold text-white">PrepFlow Tool Access</p>
+                    <p className="text-gray-300">Your Google Sheet template is ready → <a href="#" className="text-[#29E7CD] hover:underline">[[access link]]</a></p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">📧</span>
                   <div>
-                    <p className="font-semibold text-white">Email reminder</p>
-                    <p className="text-gray-300">We also sent it to [[email placeholder]] — check spam if you don't see it.</p>
+                    <p className="font-semibold text-white">Setup Guide</p>
+                    <p className="text-gray-300">Complete setup instructions sent to your email — check spam if you don't see it.</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Next Step CTA - Primary Conversion */}
+          {/* Get Started CTA */}
           <div className="w-full max-w-3xl mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-white">Don't just watch it — use it.</h2>
+            <h2 className="text-3xl font-bold mb-4 text-white">Ready to see your menu's true margins?</h2>
             <p className="text-lg text-gray-300 mb-8">
-              In 10 minutes you could see exactly which menu items are making or losing you money. Start your 30-day free trial today.
+              In 15 minutes you could be analyzing your menu profitability and making data-driven pricing decisions.
             </p>
             <a
-              href="https://7495573591101.gumroad.com/l/prepflow"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#"
               className="inline-flex rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Activate PrepFlow (30 days free)
+              Get Started Now
             </a>
           </div>
 
@@ -142,12 +140,10 @@ export default function ThankYouPage() {
               </div>
               <div className="text-center">
                 <a
-                  href="https://7495573591101.gumroad.com/l/prepflow"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#"
                   className="inline-flex rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-6 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300"
                 >
-                  Try it now → [[trial link]]
+                  Start Setup Now
                 </a>
               </div>
             </div>
