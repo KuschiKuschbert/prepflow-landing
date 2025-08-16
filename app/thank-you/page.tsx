@@ -4,6 +4,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function ThankYouPage() {
   return (
@@ -30,12 +31,12 @@ export default function ThankYouPage() {
             </span>
           </div>
           <div className="hidden md:block">
-            <a
+            <Link
               href="/"
               className="rounded-2xl border border-gray-600 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
             >
               Back to Home
-            </a>
+            </Link>
           </div>
         </header>
 
@@ -80,7 +81,7 @@ export default function ThankYouPage() {
                   <span className="text-2xl">📧</span>
                   <div>
                     <p className="font-semibold text-white">Setup Guide</p>
-                    <p className="text-gray-300">Complete setup instructions sent to your email — check spam if you don't see it.</p>
+                    <p className="text-gray-300">Complete setup instructions sent to your email — check spam if you don&apos;t see it.</p>
                   </div>
                 </div>
               </div>
@@ -89,7 +90,7 @@ export default function ThankYouPage() {
 
           {/* Get Started CTA */}
           <div className="w-full max-w-3xl mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-white">Ready to see your menu's true margins?</h2>
+            <h2 className="text-3xl font-bold mb-4 text-white">Ready to see your menu&apos;s true margins?</h2>
             <p className="text-lg text-gray-300 mb-8">
               In 15 minutes you could be analyzing your menu profitability and making data-driven pricing decisions.
             </p>
@@ -224,12 +225,12 @@ export default function ThankYouPage() {
 
           {/* Back to Home */}
           <div className="text-center">
-            <a 
+            <Link 
               href="/"
               className="rounded-2xl border border-gray-600 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
             >
               ← Back to Homepage
-            </a>
+            </Link>
           </div>
         </section>
       </div>

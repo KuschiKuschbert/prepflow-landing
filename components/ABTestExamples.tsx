@@ -154,15 +154,15 @@ export function ABTestConditionalContent() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="text-center">
                 <div className="text-2xl mb-2">🍽️</div>
-                <p className="text-gray-600">"Reduced prep time by 40%"</p>
+                <p className="text-gray-600">&quot;Reduced prep time by 40%&quot;</p>
               </div>
               <div className="text-center">
                 <div className="text-2xl mb-2">⭐</div>
-                <p className="text-gray-600">"Intuitive and powerful"</p>
+                <p className="text-gray-600">&quot;Intuitive and powerful&quot;</p>
               </div>
               <div className="text-center">
                 <div className="text-2xl mb-2">🚀</div>
-                <p className="text-gray-600">"Game changer for our kitchen"</p>
+                <p className="text-gray-600">&quot;Game changer for our kitchen&quot;</p>
               </div>
             </div>
           </div>
@@ -210,7 +210,7 @@ export function ABTestPricingSection() {
             Simple, Transparent Pricing
           </h2>
           <p className="text-xl text-gray-600">
-            Choose the plan that fits your kitchen's needs
+            Choose the plan that fits your kitchen&apos;s needs
           </p>
         </div>
 

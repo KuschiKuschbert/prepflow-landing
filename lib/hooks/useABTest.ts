@@ -94,7 +94,7 @@ export function useABTestWithTracking(experimentId: string) {
 
   const trackConversionWithMetadata = (
     conversionType: string, 
-    metadata?: Record<string, any>,
+    metadata?: Record<string, unknown>,
     value?: number
   ) => {
     if (variant && sessionId) {

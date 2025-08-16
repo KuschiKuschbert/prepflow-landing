@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { getActiveExperiments, getExperimentInfo } from '../../lib/experiment';
 
 interface ExperimentData {
@@ -142,9 +143,9 @@ export default function ExperimentsDashboard() {
             PrepFlow Experiments
           </span>
         </div>
-        <a href="/" className="text-gray-300 hover:text-[#29E7CD] transition-colors">
+        <Link href="/" className="text-gray-300 hover:text-[#29E7CD] transition-colors">
           ← Back to Landing Page
-        </a>
+        </Link>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -14,7 +14,7 @@ export interface Variant {
   id: string;
   name: string;
   description: string;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
 }
 
 // Current experiment configuration

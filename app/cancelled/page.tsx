@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function CancelledPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
@@ -34,12 +36,12 @@ export default function CancelledPage() {
             </span>
           </div>
           <div className="hidden md:block">
-            <a
+            <Link
               href="/"
               className="rounded-2xl border border-gray-600 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
             >
               Back to Home
-            </a>
+            </Link>
           </div>
         </header>
 
@@ -67,14 +69,14 @@ export default function CancelledPage() {
             </h1>
             
             <p className="text-xl leading-8 text-gray-300 max-w-2xl mx-auto mb-8">
-              Your order was cancelled or the payment didn't go through. No worries - you haven't been charged.
+              Your order was cancelled or the payment didn&apos;t go through. No worries - you haven&apos;t been charged.
             </p>
 
             {/* Help Section */}
             <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 mb-8">
               <h2 className="text-2xl font-bold mb-4">Need Help?</h2>
               <p className="text-gray-400 mb-6">
-                If you believe this was an error or need assistance with your order, we're here to help.
+                If you believe this was an error or need assistance with your order, we&apos;re here to help.
               </p>
               
               <div className="grid md:grid-cols-2 gap-4">
@@ -84,29 +86,29 @@ export default function CancelledPage() {
                 >
                   Contact Support
                 </a>
-                <a
+                <Link
                   href="/auth"
                   className="rounded-2xl border border-gray-600 px-6 py-3 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
                 >
                   Try Again
-                </a>
+                </Link>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a
+              <Link
                 href="/"
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
               >
                 Back to Homepage
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/auth"
                 className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
               >
                 Sign In
-              </a>
+              </Link>
             </div>
 
             {/* Additional Info */}

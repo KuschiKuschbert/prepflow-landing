@@ -6,14 +6,14 @@ import { getClientFlags } from './flags';
 
 export interface TrackingEvent {
 	event: string;
-	properties?: Record<string, any>;
+	properties?: Record<string, unknown>;
 	timestamp?: number;
 }
 
 export interface TrackingProperties {
 	experiment: string;
 	variant: string;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 // External tracking (optional). Keep safe and dependency-free by default
@@ -21,8 +21,9 @@ function trackWithPostHog(event: string, properties?: TrackingProperties): void 
 	if (typeof window === 'undefined') return;
 	try {
 		// PostHog (if present)
-		if ((window as any).posthog?.capture) {
-			(window as any).posthog.capture(event, properties);
+		const w = window as Window & { posthog?: { capture?: (e: string, p?: Record<string, unknown>) => void } };
+		if (w.posthog?.capture) {
+			w.posthog.capture(event, properties);
 			return;
 		}
 		// Vercel Analytics custom event
