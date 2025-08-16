@@ -1,6 +1,7 @@
 // React hooks for A/B testing integration
 import { useState, useEffect } from 'react';
 import { getVariant, trackConversion, getExperimentStats, isExperimentActive } from '../ab-testing';
+import type { Variant as AbVariant } from '../ab-testing';
 import { getSessionId } from '../analytics';
 import type { Variant, ExperimentStats } from '../ab-testing';
 
@@ -66,14 +67,14 @@ export function useExperimentStats(experimentId: string) {
   return { stats, isLoading };
 }
 
-export function useExperimentValue<T>(experimentId: string, key: string, defaultValue: T): T {
+export function useExperimentValue<T>(experimentId: string, key: keyof AbVariant['config'], defaultValue: T): T {
   const { variant, isLoading } = useABTest(experimentId);
 
   if (isLoading || !variant) {
     return defaultValue;
   }
 
-  return variant.config[key] ?? defaultValue;
+  return (variant.config[key] as T) ?? defaultValue;
 }
 
 // Hook for conditional rendering based on A/B test variants

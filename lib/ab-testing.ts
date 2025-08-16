@@ -19,6 +19,8 @@ type VariantConfig = {
   ctaText?: string;
   ctaColor?: 'primary' | 'secondary' | 'accent';
   size?: 'small' | 'medium' | 'large';
+  text?: string;
+  color?: 'primary' | 'secondary' | 'accent';
   showDemoButton?: boolean;
   showSocialProof?: boolean;
   showFeatures?: boolean;

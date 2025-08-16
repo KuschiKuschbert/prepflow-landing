@@ -101,7 +101,7 @@ export function ABTestCTAButton() {
     return <button className="px-6 py-3 bg-gray-300 text-gray-600 rounded-lg">Loading...</button>;
   }
 
-  const { text, color, size } = variant.config;
+  const { text = 'Get Started', color = 'primary', size = 'large' } = variant.config as { text?: string; color?: 'primary' | 'secondary' | 'accent'; size?: 'small' | 'medium' | 'large' };
 
   const buttonClasses: Record<string, string> = {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white',

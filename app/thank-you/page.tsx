@@ -124,7 +124,7 @@ export default function ThankYouPage() {
                   <div className="w-8 h-8 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
                     <span className="text-[#29E7CD] text-sm font-bold">3</span>
                   </div>
-                  <span className="text-gray-300">Paste last week's sales export</span>
+                  <span className="text-gray-300">Paste last week&apos;s sales export</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
@@ -154,11 +154,11 @@ export default function ThankYouPage() {
                   <span className="text-[#29E7CD] text-sm font-medium">Real Results</span>
                 </div>
                 <div className="relative">
-                  <span className="text-4xl text-[#29E7CD] absolute -left-4 -top-2">"</span>
+                  <span className="text-4xl text-[#29E7CD] absolute -left-4 -top-2">&quot;</span>
                   <p className="text-xl text-gray-200 italic mb-4 px-8 leading-relaxed">
                     PrepFlow showed me exactly which menu items were killing my margins. I fixed pricing on 3 dishes and saw a 12% increase in gross profit within 2 weeks.
                   </p>
-                  <span className="text-4xl text-[#29E7CD] absolute -right-4 -bottom-2">"</span>
+                  <span className="text-4xl text-[#29E7CD] absolute -right-4 -bottom-2">&quot;</span>
                 </div>
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <div className="flex gap-1">
@@ -210,7 +210,7 @@ export default function ThankYouPage() {
           {/* Support & Next Touch */}
           <div className="w-full max-w-3xl mb-12">
             <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-2xl">
-              <h3 className="text-xl font-semibold mb-4 text-white">Support & What's Next</h3>
+              <h3 className="text-xl font-semibold mb-4 text-white">Support & What&apos;s Next</h3>
               <div className="space-y-4 text-left">
                 <div className="flex items-start gap-3">
                   <span className="text-[#29E7CD] text-xl">📧</span>

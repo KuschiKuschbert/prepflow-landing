@@ -345,7 +345,7 @@ function LandingPageContent() {
                     <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">Our Refund Policy</h4>
                     <p className="text-sm text-gray-300 leading-relaxed">
                       PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
-                      If PrepFlow isn't what you expected, you can request a full refund within 7 days of purchase. 
+                      If PrepFlow isn&apos;t what you expected, you can request a full refund within 7 days of purchase. 
                       No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
                     </p>
                   </div>
@@ -380,9 +380,9 @@ function LandingPageContent() {
             FAQ
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
-            <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
+            <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you&apos;re good." />
             <FAQ q="Does it work in Australia?" a="Yes. It’s GST-aware and priced in AUD." />
-            <FAQ q="What if it doesn't work for me?" a="If it's not what you expected, request a refund within 7 days." />
+            <FAQ q="What if it doesn&apos;t work for me?" a="If it&apos;s not what you expected, request a refund within 7 days." />
             <FAQ q="Will this slow me down?" a="Setup is straightforward. Add your data at your own pace." />
           </div>
         </section>
@@ -516,7 +516,7 @@ function Step({ n, title, body }: { n: number; title: string; body: string }) {
 function Testimonial({ quote, author, result }: { quote: string; author: string; result?: string }) {
   return (
     <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
-      <p className="text-base italic text-gray-200 leading-relaxed">"{quote}"</p>
+      <p className="text-base italic text-gray-200 leading-relaxed">&quot;{quote}&quot;</p>
       {result && (
         <div className="mt-3 inline-block bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-lg px-3 py-1">
           <span className="text-sm font-semibold text-[#29E7CD]">{result}</span>

@@ -10,10 +10,11 @@ export interface TrackingEvent {
 	timestamp?: number;
 }
 
+export type AllowedPropertyValue = string | number | boolean | null;
 export interface TrackingProperties {
 	experiment: string;
 	variant: string;
-	[key: string]: unknown;
+	[key: string]: AllowedPropertyValue;
 }
 
 // External tracking (optional). Keep safe and dependency-free by default
@@ -29,7 +30,8 @@ function trackWithPostHog(event: string, properties?: TrackingProperties): void 
 		// Vercel Analytics custom event
 		try {
 			const flags = getClientFlags();
-			vaTrack(event, properties || {}, { flags: Object.keys(flags) });
+			const data = (properties || {}) as Record<string, AllowedPropertyValue>;
+			vaTrack(event, data, { flags: Object.keys(flags) });
 		} catch {}
 		// Fallback to console for development only
 		if (process.env.NODE_ENV === 'development') {
@@ -72,13 +74,11 @@ export function track(
 	event: string, 
 	properties?: TrackingProperties
 ): void {
-	// Append feature flags context to all events
-	const flags = getClientFlags();
-	const enriched = { ...(properties || {}), flags } as TrackingProperties;
-	// Try PostHog/Vercel first
-	trackWithPostHog(event, enriched);
+	const props = (properties || {}) as TrackingProperties;
+	// Try PostHog/Vercel first (flags handled inside)
+	trackWithPostHog(event, props);
 	// Also track locally as backup
-	trackLocally(event, enriched);
+	trackLocally(event, props);
 }
 
 // Convenience functions for common events
@@ -239,7 +239,7 @@ export function initializeTracking(variant: string): void {
 	setupCTATracking(variant);
 }
 
-export default {
+const trackingApi = {
 	track,
 	trackPrimaryCTAClick,
 	trackPurchaseComplete,
@@ -254,3 +254,5 @@ export default {
 	setupCTATracking,
 	initializeTracking
 };
+
+export default trackingApi;
