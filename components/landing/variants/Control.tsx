@@ -111,7 +111,7 @@ export default function Control() {
 
       {/* Price & FAQ around card */}
       <section id="pricing" className="py-10 md:py-12">
-        <div className="mx-auto max-w-6xl text-center">
+        <div className="mx-auto max-w-6xl text-center fade-in-up">
           <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
           <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
           <div className="mt-8 grid gap-6 lg:grid-cols-3 items-start">

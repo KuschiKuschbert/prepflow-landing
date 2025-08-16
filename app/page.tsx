@@ -76,6 +76,12 @@ function LandingPageContent() {
       {/* Sticky mobile CTA bar */}
       <StickyMobileCta />
       {/* Background gradient effects - optimized with CSS custom properties */}
+      <style jsx global>{`
+        .fade-in-up{opacity:0;transform:translateY(8px);animation:fadeUp .5s ease-out forwards}
+        .delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}
+        @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+        @media (prefers-reduced-motion: reduce){.fade-in-up{animation:none;opacity:1;transform:none}}
+      `}</style>
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#29E7CD]/10 rounded-full blur-3xl" />
         <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-[#D925C7]/10 rounded-full blur-3xl" />
@@ -84,7 +90,7 @@ function LandingPageContent() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-6 md:py-8" role="banner">
+        <header className="flex items-center justify-between py-6 md:py-8 fade-in-up" role="banner">
           <div className="flex items-center gap-3">
             <img 
               src="/images/prepflow-logo.png" 
@@ -118,7 +124,7 @@ function LandingPageContent() {
         </header>
 
         {/* Render the appropriate variant */}
-        {renderVariant()}
+        <div className="fade-in-up delay-1">{renderVariant()}</div>
 
         {/* Compact trust chips removed per design feedback */}
 
@@ -239,7 +245,7 @@ function LandingPageContent() {
 
         {/* Inside the sheet – features + screenshots */}
         <section id="features" className="py-12 md:py-14">
-          <div className="mx-auto max-w-5xl grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto max-w-5xl grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 fade-in-up delay-2">
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
             <FeatureCard title="Yield & Waste Aware" body="Include trim and prep yields so unit costs and margins reflect real kitchen conditions." />
             <FeatureCard title="Item Performance" body="Paste sales to see popularity, margin and total profit ex‑GST. Simple tags highlight winners and weak links." />
