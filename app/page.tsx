@@ -275,6 +275,7 @@ function LandingPageContent() {
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
             <FeatureCard title="Yield & Waste Aware" body="Include trim and prep yields so unit costs and margins reflect real kitchen conditions." />
             <FeatureCard title="Item Performance" body="Paste sales to see popularity, margin and total profit ex‑GST. Simple tags highlight winners and weak links." />
+            <FeatureCard title="Daily Specials" body="Set today’s price on the fly and see GP$ and GP% instantly — GST‑aware." />
             <FeatureCard title="GST for Australia" body="Turn on GST; outputs reflect the AU 10% GST and show values in AUD." />
             <FeatureCard title="Built by Kitchens" body="Designed and refined with almost two decades of hands‑on kitchen and food ops experience." />
           </div>
