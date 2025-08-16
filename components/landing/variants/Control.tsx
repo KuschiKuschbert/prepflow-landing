@@ -10,15 +10,45 @@ export default function Control() {
     initializeTracking('control');
   }, []);
 
+  const left1Ref = React.useRef<HTMLDivElement | null>(null);
+  const left2Ref = React.useRef<HTMLDivElement | null>(null);
+  const right1Ref = React.useRef<HTMLDivElement | null>(null);
+  const right2Ref = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    const attach = (el: HTMLElement | null, dir: 'left' | 'right', delayMs: number) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.animationDelay = `${delayMs}ms`;
+          el.classList.add(dir === 'left' ? 'animate-left' : 'animate-right');
+          obs.unobserve(el);
+        }
+      }, { threshold: 0.2 });
+      obs.observe(el);
+    };
+    attach(left1Ref.current, 'left', 0);
+    attach(left2Ref.current, 'left', 120);
+    attach(right1Ref.current, 'right', 0);
+    attach(right2Ref.current, 'right', 120);
+  }, []);
+
   return (
     <>
       <style jsx global>{`
-        .faq-fly-left{opacity:0;transform:translateX(40px) translateY(-6px);animation:flyLeft .6s ease-out forwards}
-        .faq-fly-right{opacity:0;transform:translateX(-40px) translateY(-6px);animation:flyRight .6s ease-out forwards}
-        @keyframes flyLeft{to{opacity:1;transform:translateX(0) translateY(0)}}
-        @keyframes flyRight{to{opacity:1;transform:translateX(0) translateY(0)}}
-        @media (prefers-reduced-motion: reduce){.faq-fly-left,.faq-fly-right{animation:none;opacity:1;transform:none}}
+        .observe-left{opacity:0;transform:translateY(-6px) translateX(40px)}
+        .observe-right{opacity:0;transform:translateY(-6px) translateX(-40px)}
+        .animate-left{animation:flyLeft .6s ease-out forwards}
+        .animate-right{animation:flyRight .6s ease-out forwards}
+        @keyframes flyLeft{to{opacity:1;transform:translateY(0) translateX(0)}}
+        @keyframes flyRight{to{opacity:1;transform:translateY(0) translateX(0)}}
+        @media (prefers-reduced-motion: reduce){
+          .observe-left,.observe-right{opacity:1;transform:none}
+          .animate-left,.animate-right{animation:none}
+        }
       `}</style>
+      {/* On-scroll animation setup */}
+      {(() => null)()}
       {/* Hero */}
       <section id="hero" className="grid items-center gap-10 py-12 md:py-16 md:grid-cols-2">
         <div>
@@ -123,15 +153,15 @@ export default function Control() {
           <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
           <div className="mt-8 grid gap-6 lg:grid-cols-3 items-start">
             <div className="space-y-6 text-left">
-              <div className="faq-fly-left delay-1"><FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." /></div>
-              <div className="faq-fly-left delay-2"><FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." /></div>
+              <div ref={left1Ref} className="observe-left"><FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." /></div>
+              <div ref={left2Ref} className="observe-left"><FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." /></div>
             </div>
             <div className="flex justify-center">
               <DynamicPriceCard />
             </div>
             <div className="space-y-6 text-left">
-              <div className="faq-fly-right delay-1"><FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." /></div>
-              <div className="faq-fly-right delay-2"><FaqItem q="What if it is not for me?" a="Request a refund within 7 days." /></div>
+              <div ref={right1Ref} className="observe-right"><FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." /></div>
+              <div ref={right2Ref} className="observe-right"><FaqItem q="What if it is not for me?" a="Request a refund within 7 days." /></div>
             </div>
           </div>
         </div>
