@@ -136,31 +136,37 @@ function LandingPageContent() {
           </div>
         </div>
 
-        {/* Problem */}
+        {/* Problem ⇆ Outcome (centered table) */}
         <section className="py-14 md:py-16">
-          <div className="grid gap-12 md:grid-cols-2">
-            <div>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
-                <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
-                  The Problem
-                </span>
-              </h3>
+          <div className="text-center mb-8">
+            <h3 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">The Problem</span>
+              <span className="mx-3 text-gray-600">⇆</span>
+              <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">The Outcome</span>
+            </h3>
+          </div>
+          <div className="mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-red-400/30 bg-red-400/5 p-6">
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3">
+                <li className="flex items-start gap-3 justify-center">
                   <span className="text-red-400 text-xl">✗</span>
                   <span>Hard to tell which dishes actually make money</span>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-start gap-3 justify-center">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>COGS creep and waste quietly chip away at profit</span>
+                  <span>COGS creep and waste chip away at profit</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>Pricing feels like guesswork — GST makes it fiddly</span>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-green-400/30 bg-green-400/5 p-6">
+              <ul className="space-y-4 text-lg text-gray-300">
+                <li className="flex items-start gap-3 justify-center">
+                  <span className="text-green-400 text-xl">✓</span>
+                  <span>Clear item‑level margins and profit</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>Reports are slow or stuck in someone else&apos;s system</span>
+                <li className="flex items-start gap-3 justify-center">
+                  <span className="text-green-400 text-xl">✓</span>
+                  <span>See winners and profit leaks in seconds</span>
                 </li>
               </ul>
             </div>
