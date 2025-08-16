@@ -164,6 +164,11 @@ function FeatureCard({ title, children }: { title: string; children: React.React
 }
 
 function PriceCard({ amount }: { amount: string }) {
+  const getProductUrl = (amt: string): string => {
+    if (amt === '49') return 'https://7495573591101.gumroad.com/l/prepflow2';
+    if (amt === '39') return 'https://7495573591101.gumroad.com/l/prepflow1';
+    return 'https://7495573591101.gumroad.com/l/prepflow';
+  };
   return (
     <div className="rounded-2xl border border-gray-700 bg-[#121212] p-6 flex flex-col">
       <div>
@@ -177,7 +182,11 @@ function PriceCard({ amount }: { amount: string }) {
         <li>• Works with Google Sheets</li>
       </ul>
       <a
-        href="#checkout"
+        href={getProductUrl(amount)}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-event="outbound_click_gumroad"
+        data-price={amount}
         className="mt-6 inline-flex justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white hover:opacity-90 transition"
       >
         Get the Google Sheet
