@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { initializeTracking } from '../../../lib/track';
+import { getCurrentPrice, formatAud } from '../../../lib/pricing';
 
 export default function Control() {
   React.useEffect(() => {
@@ -123,9 +124,7 @@ export default function Control() {
         <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
         <p className="mt-2 text-gray-400">Choose the price you want to test. No subscriptions.</p>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          <PriceCard amount="29" />
-          <PriceCard amount="39" />
-          <PriceCard amount="49" />
+          <DynamicPriceCard />
         </div>
       </section>
 
@@ -163,17 +162,13 @@ function FeatureCard({ title, children }: { title: string; children: React.React
   );
 }
 
-function PriceCard({ amount }: { amount: string }) {
-  const getProductUrl = (amt: string): string => {
-    if (amt === '49') return 'https://7495573591101.gumroad.com/l/prepflow2';
-    if (amt === '39') return 'https://7495573591101.gumroad.com/l/prepflow1';
-    return 'https://7495573591101.gumroad.com/l/prepflow';
-  };
+function DynamicPriceCard() {
+  const { price, url } = getCurrentPrice();
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#121212] p-6 flex flex-col">
+    <div className="rounded-2xl border border-gray-700 bg-[#121212] p-6 flex flex-col md:col-span-3 lg:col-span-1">
       <div>
         <p className="text-sm text-gray-400">AUD</p>
-        <p className="mt-1 text-4xl font-extrabold">${amount}</p>
+        <p className="mt-1 text-4xl font-extrabold">{formatAud(price)}</p>
         <p className="mt-1 text-sm text-gray-400">One-time purchase • 7-day refund</p>
       </div>
       <ul className="mt-6 space-y-2 text-sm text-gray-300">
@@ -182,11 +177,11 @@ function PriceCard({ amount }: { amount: string }) {
         <li>• Works with Google Sheets</li>
       </ul>
       <a
-        href={getProductUrl(amount)}
+        href={url}
         target="_blank"
         rel="noopener noreferrer"
         data-event="outbound_click_gumroad"
-        data-price={amount}
+        data-price={price}
         className="mt-6 inline-flex justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white hover:opacity-90 transition"
       >
         Get the Google Sheet
