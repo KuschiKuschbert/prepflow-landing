@@ -451,6 +451,8 @@ function StickyMobileCta() {
       setVisible(y > 40);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+    // Initialize immediately on mount
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   return (
