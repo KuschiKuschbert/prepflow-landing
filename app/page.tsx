@@ -3,11 +3,6 @@
 import React, { useState } from 'react';
 import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
 
-export const metadata = {
-  title: "PrepFlow – COGS & Menu Profit Tool",
-  description: "See true dish costs, GP%, popularity and pricing opportunities in minutes. Built for Australian hospitality (GST-ready).",
-};
-
 export default function Page() {
   const [showAnalytics, setShowAnalytics] = useState(false);
 
