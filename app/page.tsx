@@ -179,49 +179,49 @@ function LandingPageContent() {
         </section>
 
         {/* Contributing Margin Highlight */}
-        <section className="py-14 md:py-16" id="contributing-margin">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+        <section className="py-8 md:py-10" id="contributing-margin">
+          <div className="rounded-2xl border border-[#29E7CD]/25 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-6 md:p-8 shadow-lg">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold tracking-tight md:text-3xl mb-3">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   Contributing Margin
                 </span> — The Real Profit Story
               </h3>
-              <p className="text-lg text-gray-300">See beyond gross profit to understand what each dish truly contributes to your business</p>
+              <p className="text-base text-gray-300">See beyond gross profit to understand what each dish truly contributes to your business</p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4">
-                  <span className="text-4xl">💰</span>
-                  <h4 className="text-xl font-semibold text-white mt-3">Gross Profit</h4>
+                <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-4 mb-3">
+                  <span className="text-3xl">💰</span>
+                  <h4 className="text-lg font-semibold text-white mt-2">Gross Profit</h4>
                   <p className="text-sm text-gray-300">What you think you&apos;re making</p>
                 </div>
               </div>
               
               <div className="text-center">
-                <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-6 mb-4">
-                  <span className="text-4xl">⚡</span>
-                  <h4 className="text-xl font-semibold text-white mt-3">Contributing Margin</h4>
+                <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-4 mb-3">
+                  <span className="text-3xl">⚡</span>
+                  <h4 className="text-lg font-semibold text-white mt-2">Contributing Margin</h4>
                   <p className="text-sm text-gray-300">What you&apos;re actually contributing</p>
                 </div>
               </div>
               
               <div className="text-center">
-                <div className="bg-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-6 mb-4">
-                  <span className="text-4xl">🎯</span>
-                  <h4 className="text-xl font-semibold text-white mt-3">Action Plan</h4>
+                <div className="bg-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-4 mb-3">
+                  <span className="text-3xl">🎯</span>
+                  <h4 className="text-lg font-semibold text-white mt-2">Action Plan</h4>
                   <p className="text-sm text-gray-300">What to do about it</p>
                 </div>
               </div>
             </div>
             
             {/* Integrated capability tiles */}
-            <div className="mt-12">
-              <h4 className="text-xl font-semibold text-center mb-6">All in one Google Sheet</h4>
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8">
+              <h4 className="text-lg font-semibold text-center mb-4">All in one Google Sheet</h4>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-3">
                     <span className="text-2xl">🏛️</span>
                   </div>
                   <h4 className="font-semibold text-white mb-2">Tax Systems</h4>
@@ -229,7 +229,7 @@ function LandingPageContent() {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-3">
                     <span className="text-2xl">📱</span>
                   </div>
                   <h4 className="font-semibold text-white mb-2">Access via Google Sheets</h4>
@@ -237,7 +237,7 @@ function LandingPageContent() {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-3">
                     <span className="text-2xl">🚀</span>
                   </div>
                   <h4 className="font-semibold text-white mb-2">Self‑Serve Setup</h4>
