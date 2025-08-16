@@ -178,7 +178,7 @@ export default function Control() {
               <div ref={left1Ref} className="observe-left"><FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." /></div>
               <div ref={left2Ref} className="observe-left"><FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." /></div>
             </div>
-            <div className="flex justify-center" ref={priceRef} data-price-card-anchor>
+            <div className="flex justify-center" data-price-card-anchor>
               <DynamicPriceCard />
             </div>
             <div className="space-y-6 text-left">
