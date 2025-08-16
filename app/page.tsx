@@ -104,7 +104,7 @@ function LandingPageContent() {
           </nav>
           <div className="hidden md:block">
             <a
-              href="https://7495573591101.gumroad.com/l/prepflow"
+              href="/go/gumroad"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
@@ -344,7 +344,7 @@ function LandingPageContent() {
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
                 <p className="text-sm text-gray-500">one-time purchase · 7-day refund</p>
                 <a
-                  href={getCurrentPrice().url}
+                  href="/go/gumroad"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"

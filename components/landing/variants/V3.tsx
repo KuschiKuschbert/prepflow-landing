@@ -214,7 +214,7 @@ function DynamicPriceCard() {
         <li>• Works with Google Sheets</li>
       </ul>
       <a
-        href={url}
+        href="/go/gumroad"
         target="_blank"
         rel="noopener noreferrer"
         data-event="outbound_click_gumroad"
