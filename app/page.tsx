@@ -136,7 +136,7 @@ function LandingPageContent() {
           </div>
         </div>
 
-        {/* Problem → Outcome */}
+        {/* Problem */}
         <section className="py-14 md:py-16">
           <div className="grid gap-12 md:grid-cols-2">
             <div>
@@ -164,33 +164,14 @@ function LandingPageContent() {
                 </li>
               </ul>
             </div>
-            
-            <div>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
-                <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">
-                  The Outcome
-                </span>
-              </h3>
-              <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>Clear item‑level margins and profit</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>See winners and profit leaks in seconds</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>Price with confidence (GST‑ready)</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>All in Google Sheets — no new software</span>
-                </li>
-              </ul>
-            </div>
           </div>
+        </section>
+
+        {/* Solution */}
+        <section className="py-6">
+          <p className="text-center text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+            A Google Sheet that gives clear item‑level margins and GST‑ready pricing for small Aussie venues.
+          </p>
         </section>
 
         {/* Contributing Margin Highlight */}
@@ -269,7 +250,7 @@ function LandingPageContent() {
           </div>
         </section>
 
-        {/* Features – tailored to the spreadsheet */}
+        {/* Inside the sheet – features + screenshots */}
         <section id="features" className="py-14 md:py-16">
           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
@@ -278,6 +259,41 @@ function LandingPageContent() {
             <FeatureCard title="Daily Specials" body="Set today’s price on the fly and see GP$ and GP% instantly — GST‑aware." />
             <FeatureCard title="GST for Australia" body="Turn on GST; outputs reflect the AU 10% GST and show values in AUD." />
             <FeatureCard title="Built by Kitchens" body="Designed and refined with almost two decades of hands‑on kitchen and food ops experience." />
+          </div>
+          <div className="mt-8 grid grid-cols-3 gap-4">
+            <div className="text-center">
+              <img 
+                src="/images/settings-screenshot.png" 
+                alt="PrepFlow Settings page with business configuration"
+                className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                loading="lazy"
+                width="200"
+                height="96"
+              />
+              <p className="text-xs text-gray-400 mt-2">Settings</p>
+            </div>
+            <div className="text-center">
+              <img 
+                src="/images/recipe-screenshot.png" 
+                alt="PrepFlow Recipe costing for Double Cheese Burger"
+                className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                loading="lazy"
+                width="200"
+                height="96"
+              />
+              <p className="text-xs text-gray-400 mt-2">Recipe Costing</p>
+            </div>
+            <div className="text-center">
+              <img 
+                src="/images/stocklist-screenshot.png" 
+                alt="PrepFlow Infinite Stock List with ingredient management"
+                className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                loading="lazy"
+                width="200"
+                height="96"
+              />
+              <p className="text-xs text-gray-400 mt-2">Stock List</p>
+            </div>
           </div>
         </section>
 
@@ -290,43 +306,6 @@ function LandingPageContent() {
             <Step n={1} title="Set up" body="Turn on GST, add ingredients, yields, and supplier costs." />
             <Step n={2} title="Import sales" body="Paste your POS export into the Sales tab." />
             <Step n={3} title="Decide & act" body="Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix." />
-          </div>
-          
-          {/* 60-Second Checklist */}
-          <div className="mt-16 rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
-            <h3 className="text-2xl font-bold text-center mb-6">Quick Checklist</h3>
-            <div className="grid gap-4 md:grid-cols-5 text-center">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">1</span>
-                </div>
-                <span className="text-sm text-gray-300">GST toggle set?</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">2</span>
-                </div>
-                <span className="text-sm text-gray-300">Ingredient yields/waste entered?</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">3</span>
-                </div>
-                <span className="text-sm text-gray-300">Sales pasted?</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">4</span>
-                </div>
-                <span className="text-sm text-gray-300">Review top 5 low-margin items?</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">5</span>
-                </div>
-                <span className="text-sm text-gray-300">Re-check dashboard tomorrow</span>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -388,22 +367,30 @@ function LandingPageContent() {
           </div>
         </section>
 
-        {/* Trust Elements */}
-        <section className="py-16 border-t border-gray-700">
-          <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-white mb-4">Helpful info</h3>
-            <div className="flex flex-wrap justify-center gap-6">
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
-                <span className="text-[#29E7CD]">📊</span>
-                <span className="text-white text-sm">Works with Google Sheets</span>
+        {/* Final CTA */}
+        <section className="py-12">
+          <div className="text-center">
+            <a
+              href="/go/gumroad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+              data-event="outbound_click_gumroad"
+            >
+              Get the Google Sheet
+            </a>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-gray-300">
+              <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+                <span className="text-[#29E7CD]">🧮</span>
+                <span>GST-ready • AUD</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
+              <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
                 <span className="text-[#29E7CD]">🛡️</span>
-                <span className="text-white text-sm">7-Day Refund Policy</span>
+                <span>7‑day refund</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
-                <span className="text-[#29E7CD]">🇦🇺</span>
-                <span className="text-white text-sm">Made for AU Market</span>
+              <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+                <span className="text-[#29E7CD]">📄</span>
+                <span>Works in Google Sheets</span>
               </div>
             </div>
           </div>
