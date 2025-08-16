@@ -114,18 +114,14 @@ export default function Control() {
         <div className="mx-auto max-w-6xl text-center fade-in-up">
           <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
           <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
-          <div className="mt-8 grid gap-6 lg:grid-cols-3 items-start">
-            <div className="space-y-6 text-left">
-              <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />
-              <FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." />
-            </div>
-            <div className="flex justify-center">
-              <DynamicPriceCard />
-            </div>
-            <div className="space-y-6 text-left">
-              <FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." />
-              <FaqItem q="What if it is not for me?" a="Request a refund within 7 days." />
-            </div>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-left">
+            <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />
+            <FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." />
+            <FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." />
+            <FaqItem q="What if it is not for me?" a="Request a refund within 7 days." />
+          </div>
+          <div className="mt-8 flex justify-center">
+            <DynamicPriceCard />
           </div>
         </div>
       </section>
