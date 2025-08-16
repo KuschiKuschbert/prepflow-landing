@@ -13,7 +13,7 @@ export default function Control() {
   return (
     <>
       {/* Hero */}
-      <section id="hero" className="grid items-center gap-12 py-16 md:py-24 md:grid-cols-2">
+      <section id="hero" className="grid items-center gap-10 py-12 md:py-16 md:grid-cols-2">
         <div>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
             Instant menu profit clarity for Australian small food businesses.
@@ -90,8 +90,8 @@ export default function Control() {
       </section>
 
       {/* What It Does / Features */}
-      <section id="features" className="py-12 md:py-16">
-        <div className="grid gap-6 md:grid-cols-2">
+      <section id="features" className="py-10 md:py-12">
+        <div className="grid gap-5 md:grid-cols-2">
           <FeatureCard title="Easy COGS">
             Enter ingredients and recipe steps; costs and GP calculate automatically.
           </FeatureCard>
@@ -107,20 +107,10 @@ export default function Control() {
         </div>
       </section>
 
-      {/* Demo / Visual Proof */}
-      <section id="demo" className="py-12 md:py-16">
-        <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/60 p-6">
-          <h2 className="text-2xl font-semibold">See it in action</h2>
-          <p className="mt-2 text-gray-400">Explore the dashboard, recipe costing, and stock list with sample data.</p>
-          <div className="mt-6 flex flex-wrap gap-4">
-            <a href="#" className="rounded-2xl px-6 py-3 text-sm font-semibold text-white bg-[#3B82F6] hover:bg-[#2563eb] transition-colors">Play demo</a>
-            <a href="#" className="rounded-2xl px-6 py-3 text-sm font-semibold text-[#29E7CD] border border-[#29E7CD]/40 hover:border-[#29E7CD] transition-colors">Get the sample sheet (free)</a>
-          </div>
-        </div>
-      </section>
+      {/* Demo removed to reduce empty space */}
 
       {/* Price & Refund */}
-      <section id="pricing" className="py-12 md:py-16">
+      <section id="pricing" className="py-10 md:py-12">
         <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
         <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
         <div className="mt-6">
@@ -129,7 +119,7 @@ export default function Control() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-12 md:py-16">
+      <section id="faq" className="py-10 md:py-12">
         <h2 className="text-3xl font-bold">FAQ</h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />

@@ -73,6 +73,8 @@ function LandingPageContent() {
         '--gray-800': '#1f2937'
       } as React.CSSProperties}
     >
+      {/* Sticky mobile CTA bar */}
+      <StickyMobileCta />
       {/* Background gradient effects - optimized with CSS custom properties */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#29E7CD]/10 rounded-full blur-3xl" />
@@ -82,7 +84,7 @@ function LandingPageContent() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-8" role="banner">
+        <header className="flex items-center justify-between py-6 md:py-8" role="banner">
           <div className="flex items-center gap-3">
             <img 
               src="/images/prepflow-logo.png" 
@@ -96,7 +98,7 @@ function LandingPageContent() {
               PrepFlow
             </span>
           </div>
-          <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
+          <nav className="hidden gap-6 text-sm md:flex" role="navigation" aria-label="Main navigation">
             <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow features">Features</a>
             <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Learn how PrepFlow works">How it works</a>
             <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow pricing">Pricing</a>
@@ -118,13 +120,24 @@ function LandingPageContent() {
         {/* Render the appropriate variant */}
         {renderVariant()}
 
-        {/* Trust bar */}
-        <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          <strong>Stop guessing. Start knowing.</strong> PrepFlow is like an X-ray for your menu's numbers.
+        {/* Compact trust chips (replacing bulky trust bar) */}
+        <div className="mt-6 mb-2 flex flex-wrap items-center gap-3 text-xs md:text-sm text-gray-300">
+          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+            <span className="text-[#29E7CD]">🧮</span>
+            <span>GST-ready • AUD</span>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+            <span className="text-[#29E7CD]">🛡️</span>
+            <span>7‑day refund</span>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+            <span className="text-[#29E7CD]">📄</span>
+            <span>Works in Google Sheets</span>
+          </div>
         </div>
 
         {/* Problem → Outcome */}
-        <section className="py-20">
+        <section className="py-14 md:py-16">
           <div className="grid gap-12 md:grid-cols-2">
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
@@ -181,7 +194,7 @@ function LandingPageContent() {
         </section>
 
         {/* Contributing Margin Highlight */}
-        <section className="py-20" id="contributing-margin">
+        <section className="py-14 md:py-16" id="contributing-margin">
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
@@ -257,8 +270,8 @@ function LandingPageContent() {
         </section>
 
         {/* Features – tailored to the spreadsheet */}
-        <section id="features" className="py-20">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+        <section id="features" className="py-14 md:py-16">
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
             <FeatureCard title="Yield & Waste Aware" body="Include trim and prep yields so unit costs and margins reflect real kitchen conditions." />
             <FeatureCard title="Item Performance" body="Paste sales to see popularity, margin and total profit ex‑GST. Simple tags highlight winners and weak links." />
@@ -268,7 +281,7 @@ function LandingPageContent() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="py-20">
+        <section id="how-it-works" className="py-14 md:py-16">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
             How it works in 3 steps
           </h2>
@@ -319,7 +332,7 @@ function LandingPageContent() {
         {/* Demo and lead magnet removed: sheet purchase only */}
 
         {/* Pricing */}
-        <section id="pricing" className="py-20">
+        <section id="pricing" className="py-14 md:py-16">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
@@ -340,7 +353,7 @@ function LandingPageContent() {
               </div>
               
               {/* Cards Layout (Control) */}
-              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
+              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg md:sticky md:top-24">
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
                 <p className="text-sm text-gray-500">one-time purchase · 7-day refund</p>
                 <a
@@ -362,21 +375,21 @@ function LandingPageContent() {
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="py-20">
+        <section id="faq" className="py-14 md:py-16">
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
             FAQ
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
-            <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
+            <FAQ q="Does it work in Australia?" a="Yes. It’s GST-aware and priced in AUD." />
+            <FAQ q="What if it doesn't work for me?" a="If it's not what you expected, request a refund within 7 days." />
             <FAQ q="Will this slow me down?" a="Setup is straightforward. Add your data at your own pace." />
           </div>
         </section>
 
         {/* Trust Elements */}
         <section className="py-16 border-t border-gray-700">
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <h3 className="text-2xl font-bold text-white mb-4">Helpful info</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
@@ -429,6 +442,45 @@ export default function Page() {
 }
 
 /* ---------- Small helper components ---------- */
+function StickyMobileCta() {
+  const [visible, setVisible] = React.useState<boolean>(false);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      setVisible(y > 40);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Initialize immediately on mount
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <div
+      className={`fixed bottom-3 left-3 right-3 z-50 transition-transform duration-300 ${visible ? 'translate-y-0' : 'translate-y-24'} motion-reduce:transition-none`}
+      aria-hidden={!visible}
+    >
+      <div className="mx-auto max-w-md md:max-w-lg rounded-2xl border border-gray-700 bg-[#1f1f1f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#1f1f1f]/70 p-3 shadow-2xl">
+        <div className="flex items-center justify-between gap-3">
+          <div className="text-sm text-gray-300">
+            <span className="block font-semibold">{formatAud(getCurrentPrice().price)}</span>
+            <span className="text-xs text-gray-500">One-time • 7-day refund</span>
+          </div>
+          <a
+            href="/go/gumroad"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-xs font-semibold text-white shadow-md hover:opacity-95"
+            data-event="outbound_click_gumroad"
+            aria-label="Get the Google Sheet"
+          >
+            Get Sheet
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-3">
