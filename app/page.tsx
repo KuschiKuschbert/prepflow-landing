@@ -111,10 +111,10 @@ export default function Page() {
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
               <Bullet>Know your real profit per dish — no more guesswork or gut feeling</Bullet>
-              <Bullet>See <strong>contributing margin</strong> — the real profit each dish brings to your business</Bullet>
+              <Bullet>See <strong>contributing margin</strong> — understand what each dish truly contributes to your bottom line</Bullet>
               <Bullet>Classify menu items instantly: margin monsters vs dead weight</Bullet>
               <Bullet>See where your waste, yield, and prep time destroy profits</Bullet>
-              <Bullet>Works with GST, VAT, and tax systems worldwide. Works fast. You'll feel the difference tomorrow</Bullet>
+              <Bullet>Works with GST, VAT, and tax systems worldwide — fast setup, immediate results</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
