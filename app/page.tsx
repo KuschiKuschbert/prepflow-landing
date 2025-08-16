@@ -89,10 +89,12 @@ export default function Page() {
           </nav>
           <div className="hidden md:block">
             <a
-              href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+              href="https://7495573591101.gumroad.com/l/prepflow"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Start Free Now
+              Get PrepFlow Now
             </a>
           </div>
         </header>
@@ -115,7 +117,9 @@ export default function Page() {
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
-                  href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                  href="https://7495573591101.gumroad.com/l/prepflow"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
                   Unlock Your Menu's Profit Potential
@@ -334,10 +338,12 @@ export default function Page() {
               </ul>
               <div className="mt-8">
                 <a
-                  href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                  href="https://7495573591101.gumroad.com/l/prepflow"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Watch Demo
+                  Get PrepFlow Now
                 </a>
               </div>
             </div>
@@ -411,12 +417,14 @@ export default function Page() {
                 <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
                 <p className="text-xs text-[#29E7CD] font-semibold">🔥 Limited founder pricing — ends soon</p>
                 <a
-                  href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
+                  href="https://7495573591101.gumroad.com/l/prepflow"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
                   Start Now — Get Menu Clarity Today
                 </a>
-                <p className="mt-4 text-sm text-gray-500">Secure checkout via Lemon Squeezy</p>
+                <p className="mt-4 text-sm text-gray-500">Secure checkout via Gumroad</p>
                 <p className="mt-2 text-xs text-gray-400">Not satisfied in 30 days? Full refund.</p>
                 <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
               </div>

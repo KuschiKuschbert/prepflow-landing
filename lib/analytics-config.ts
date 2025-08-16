@@ -126,7 +126,7 @@ export const conversionGoals: ConversionGoal[] = [
     id: 'hero_cta_click',
     name: 'Hero CTA Click',
     type: 'click',
-    target: 'a[href*="prepflow.org/buy"]',
+    target: 'a[href*="gumroad.com/l/prepflow"]',
     value: 100, // $1.00
     category: 'micro',
     description: 'User clicked the main CTA button in the hero section'
