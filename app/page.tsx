@@ -215,44 +215,42 @@ function LandingPageContent() {
                 </div>
               </div>
             </div>
-            
-            {/* Integrated capability tiles */}
-            <div className="mt-8">
-              <h4 className="text-lg font-semibold text-center mb-4">All in one Google Sheet</h4>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl">🏛️</span>
-                  </div>
-                  <h4 className="font-semibold text-white mb-2">Tax Systems</h4>
-                  <p className="text-sm text-gray-400">GST, VAT, Sales Tax, HST. Configure to your locale.</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl">📱</span>
-                  </div>
-                  <h4 className="font-semibold text-white mb-2">Access via Google Sheets</h4>
-                  <p className="text-sm text-gray-400">Web and mobile where Sheets is available.</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl">🚀</span>
-                  </div>
-                  <h4 className="font-semibold text-white mb-2">Self‑Serve Setup</h4>
-                  <p className="text-sm text-gray-400">Set it up yourself. No consultants.</p>
-                </div>
+          </div>
+        </div>
+      </section>
+
+      {/* All in one Google Sheet */}
+      <section className="py-8 md:py-10">
+        <div className="rounded-2xl border border-gray-700 bg-[#101010]/80 p-6">
+          <h4 className="text-lg font-semibold text-center mb-4">All in one Google Sheet</h4>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">🏛️</span>
               </div>
+              <h4 className="font-semibold text-white mb-2">Tax Systems</h4>
+              <p className="text-sm text-gray-400">GST, VAT, Sales Tax, HST. Configure to your locale.</p>
             </div>
-            
-            <div className="mt-8 text-center">
-              <p className="text-base text-gray-300">
-                <strong>Example:</strong> A $15 burger might show 60% GP, but after prep time, waste and complexity, it could only contribute $2.50. A simple $8 side might contribute $4.00.
-              </p>
+            <div className="text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">📱</span>
+              </div>
+              <h4 className="font-semibold text-white mb-2">Access via Google Sheets</h4>
+              <p className="text-sm text-gray-400">Web and mobile where Sheets is available.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">🚀</span>
+              </div>
+              <h4 className="font-semibold text-white mb-2">Self‑Serve Setup</h4>
+              <p className="text-sm text-gray-400">Set it up yourself. No consultants.</p>
             </div>
           </div>
-        </section>
+          <p className="mt-6 text-center text-sm md:text-base text-gray-300">
+            <strong>Example:</strong> A $15 burger might show 60% GP, but after prep time, waste and complexity, it could only contribute $2.50. A simple $8 side might contribute $4.00.
+          </p>
+        </div>
+      </section>
 
         {/* Inside the sheet – features + screenshots */}
         <section id="features" className="py-12 md:py-14">
