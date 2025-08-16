@@ -55,10 +55,8 @@ export function middleware(request: NextRequest) {
       url.searchParams.delete('key');
     }
 
-    // Build response: redirect for rotation (to ensure URL updates), rewrite otherwise
     const response = rotateAllowed ? NextResponse.redirect(url) : NextResponse.rewrite(url);
 
-    // Persist uid
     response.cookies.set('pf_uid', userId, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: true,
@@ -66,7 +64,6 @@ export function middleware(request: NextRequest) {
       sameSite: 'lax',
     });
 
-    // Variant cookie
     response.cookies.set(`pf_exp_${experimentKey}`, chosenVariant, {
       maxAge: 60 * 60 * 24 * 30,
       httpOnly: true,
@@ -77,6 +74,9 @@ export function middleware(request: NextRequest) {
     response.headers.set('x-ab-experiment', experimentKey);
     response.headers.set('x-ab-variant', chosenVariant);
     response.headers.set('x-ab-user-id', userId);
+    // Vercel Web Analytics experiment headers
+    response.headers.set('x-vercel-experiment', experimentKey);
+    response.headers.set('x-vercel-variant', chosenVariant);
 
     return response;
   }
