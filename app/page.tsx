@@ -148,19 +148,19 @@ function LandingPageContent() {
               <ul className="space-y-4 text-lg text-gray-300">
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>You don&apos;t know which menu items actually make money</span>
+                  <span>Hard to tell which dishes actually make money</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>COGS creep and waste eat your profit</span>
+                  <span>COGS creep and waste quietly chip away at profit</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>Pricing is guesswork; GST adds friction</span>
+                  <span>Pricing feels like guesswork — GST makes it fiddly</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>Reports are slow, complicated, or sit in someone else&apos;s tool</span>
+                  <span>Reports are slow or stuck in someone else&apos;s system</span>
                 </li>
               </ul>
             </div>
@@ -174,19 +174,19 @@ function LandingPageContent() {
               <ul className="space-y-4 text-lg text-gray-300">
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>See item-level margins and profit at a glance</span>
+                  <span>Clear item‑level margins and profit</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Spot &quot;winners&quot; and &quot;profit leaks&quot; at a glance</span>
+                  <span>See winners and profit leaks in seconds</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Adjust pricing with confidence (GST-aware)</span>
+                  <span>Price with confidence (GST‑ready)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Run everything in Google Sheets — no new software to learn</span>
+                  <span>All in Google Sheets — no new software</span>
                 </li>
               </ul>
             </div>
