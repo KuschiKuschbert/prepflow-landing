@@ -19,7 +19,8 @@ export function middleware(request: NextRequest) {
     const experimentKey = 'landing_ab_001';
 
     const rotateParam = request.nextUrl.searchParams.get('rotate');
-    const rotateSteps = rotateParam ? Number(rotateParam) : 0;
+    const rotateStepsRaw = Number(rotateParam);
+    const rotateSteps = isNaN(rotateStepsRaw) ? (rotateParam ? 1 : 0) : Math.max(1, Math.floor(rotateStepsRaw));
     const key = request.nextUrl.searchParams.get('key') || '';
     const host = request.headers.get('host') || '';
     const rotateAllowed = !!rotateParam && (host.startsWith('localhost') || key === (process.env.ROTATE_KEY || 'shkya'));
@@ -35,12 +36,11 @@ export function middleware(request: NextRequest) {
       chosenVariant = manualVariant;
     } else if (rotateAllowed) {
       const currentCookie = request.cookies.get(`pf_exp_${experimentKey}`)?.value as string | undefined;
-      if (rotateSteps && currentCookie && (allowedVariants as unknown as string[]).includes(currentCookie)) {
+      if (currentCookie && (allowedVariants as unknown as string[]).includes(currentCookie)) {
         const idx = (allowedVariants as unknown as string[]).indexOf(currentCookie);
-        const nextIdx = (idx + (isNaN(rotateSteps) ? 1 : Math.max(1, Math.floor(rotateSteps)))) % allowedVariants.length;
+        const nextIdx = (idx + rotateSteps) % allowedVariants.length;
         chosenVariant = (allowedVariants as unknown as string[])[nextIdx];
       } else {
-        // Fallback to new hash bucket
         userId = `pf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         chosenVariant = getVariantForUser(userId, experimentKey);
       }
@@ -55,8 +55,10 @@ export function middleware(request: NextRequest) {
       url.searchParams.delete('key');
     }
 
-    const response = NextResponse.rewrite(url);
+    // Build response: redirect for rotation (to ensure URL updates), rewrite otherwise
+    const response = rotateAllowed ? NextResponse.redirect(url) : NextResponse.rewrite(url);
 
+    // Persist uid
     response.cookies.set('pf_uid', userId, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: true,
@@ -64,6 +66,7 @@ export function middleware(request: NextRequest) {
       sameSite: 'lax',
     });
 
+    // Variant cookie
     response.cookies.set(`pf_exp_${experimentKey}`, chosenVariant, {
       maxAge: 60 * 60 * 24 * 30,
       httpOnly: true,
