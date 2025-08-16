@@ -14,11 +14,22 @@ export interface ExperimentConfig {
   minimumSampleSize: number;
 }
 
+type VariantConfig = {
+  layout?: 'centered' | 'left_aligned' | 'cards' | 'table';
+  ctaText?: string;
+  ctaColor?: 'primary' | 'secondary' | 'accent';
+  size?: 'small' | 'medium' | 'large';
+  showDemoButton?: boolean;
+  showSocialProof?: boolean;
+  showFeatures?: boolean;
+  highlightPopular?: boolean;
+};
+
 export interface Variant {
   id: string;
   name: string;
   weight: number; // Traffic distribution weight
-  config: Record<string, any>;
+  config: VariantConfig;
 }
 
 export interface ExperimentResult {

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function ABTestingDemoPage() {
   return (
@@ -20,9 +21,9 @@ export default function ABTestingDemoPage() {
             PrepFlow
           </span>
         </div>
-        <a href="/" className="text-gray-300 hover:text-[#29E7CD] transition-colors">
+        <Link href="/" className="text-gray-300 hover:text-[#29E7CD] transition-colors">
           ← Back to Landing Page
-        </a>
+        </Link>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -213,12 +214,12 @@ export default function ABTestingDemoPage() {
             Visit our main landing page to see the current optimization variants in action. 
             Each visit might show you a different, optimized version of the page.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-flex rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
           >
             Visit Landing Page
-          </a>
+          </Link>
         </section>
 
         {/* Footer */}

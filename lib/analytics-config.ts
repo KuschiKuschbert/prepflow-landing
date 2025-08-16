@@ -212,8 +212,9 @@ export function shouldEnableAnalytics(): boolean {
   // Check Do Not Track
   if (navigator.doNotTrack === '1') return false;
   
-  // Check for privacy mode (using type assertion for non-standard property)
-  if ((navigator as any).privateBrowsing) return false;
+  // Check for privacy mode (using a narrowed Navigator type)
+  const nav: Navigator & { privateBrowsing?: boolean } = navigator as Navigator & { privateBrowsing?: boolean };
+  if (nav.privateBrowsing) return false;
   
   return true;
 }

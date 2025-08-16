@@ -169,7 +169,17 @@ function ExperimentStats({ experimentId }: { experimentId: string }) {
   );
 }
 
-function VariantStatRow({ stat }: { stat: any }) {
+export interface VariantStat {
+  variantId: string;
+  impressions: number;
+  conversions: number;
+  conversionRate: number;
+  revenue: number;
+  confidence: number;
+  isWinner: boolean;
+}
+
+function VariantStatRow({ stat }: { stat: VariantStat }) {
   const confidenceColor = stat.confidence >= 0.95 ? 'text-green-600' : 
                          stat.confidence >= 0.8 ? 'text-yellow-600' : 'text-red-600';
 

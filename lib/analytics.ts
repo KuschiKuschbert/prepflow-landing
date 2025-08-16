@@ -21,7 +21,7 @@ export interface ConversionEvent {
   timestamp: number;
   sessionId: string;
   userId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface PerformanceMetrics {

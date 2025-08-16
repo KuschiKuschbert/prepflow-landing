@@ -148,7 +148,7 @@ function LandingPageContent() {
               <ul className="space-y-4 text-lg text-gray-300">
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>You don't know which menu items actually make money</span>
+                  <span>You don&apos;t know which menu items actually make money</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
@@ -160,7 +160,7 @@ function LandingPageContent() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>Reports are slow, complicated, or sit in someone else's tool</span>
+                  <span>Reports are slow, complicated, or sit in someone else&apos;s tool</span>
                 </li>
               </ul>
             </div>
@@ -178,7 +178,7 @@ function LandingPageContent() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Spot "winners" and "profit leaks" at a glance</span>
+                  <span>Spot &quot;winners&quot; and &quot;profit leaks&quot; at a glance</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
@@ -210,7 +210,7 @@ function LandingPageContent() {
                 <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4">
                   <span className="text-4xl">💰</span>
                   <h4 className="text-xl font-semibold text-white mt-3">Gross Profit</h4>
-                  <p className="text-sm text-gray-300">What you think you're making</p>
+                  <p className="text-sm text-gray-300">What you think you&apos;re making</p>
                 </div>
               </div>
               
@@ -218,7 +218,7 @@ function LandingPageContent() {
                 <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-6 mb-4">
                   <span className="text-4xl">⚡</span>
                   <h4 className="text-xl font-semibold text-white mt-3">Contributing Margin</h4>
-                  <p className="text-sm text-gray-300">What you're actually contributing</p>
+                  <p className="text-sm text-gray-300">What you&apos;re actually contributing</p>
                 </div>
               </div>
               
