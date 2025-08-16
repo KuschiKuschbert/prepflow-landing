@@ -2,6 +2,7 @@
 // Supports PostHog with fallback to local logging and Vercel Analytics custom events
 
 import { track as vaTrack } from '@vercel/analytics/react';
+import { getClientFlags } from './flags';
 
 export interface TrackingEvent {
 	event: string;
@@ -69,10 +70,13 @@ export function track(
 	event: string, 
 	properties?: TrackingProperties
 ): void {
+	// Append feature flags context to all events
+	const flags = getClientFlags();
+	const enriched = { ...(properties || {}), flags } as TrackingProperties;
 	// Try PostHog/Vercel first
-	trackWithPostHog(event, properties);
+	trackWithPostHog(event, enriched);
 	// Also track locally as backup
-	trackLocally(event, properties);
+	trackLocally(event, enriched);
 }
 
 // Convenience functions for common events
@@ -223,7 +227,10 @@ export function setupCTATracking(variant: string): void {
 // Initialize all tracking
 export function initializeTracking(variant: string): void {
 	// Vercel Analytics custom page event in addition to our tracker
-	try { vaTrack('page_view', { experiment: 'landing_ab_001', variant }); } catch {}
+	try { 
+		const flags = getClientFlags();
+		vaTrack('page_view', { experiment: 'landing_ab_001', variant, flags }); 
+	} catch {}
 	trackPageView(variant);
 	setupScrollTracking(variant);
 	setupFormTracking(variant);

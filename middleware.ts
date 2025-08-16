@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAssignedVariant, getVariantForUser } from './lib/experiment';
+import { getServerFlagsFromUrl, serializeFlags } from './lib/flags';
 
 export function middleware(request: NextRequest) {
   const userAgent = request.headers.get('user-agent') || '';
@@ -17,6 +18,7 @@ export function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname === '/') {
     const experimentKey = 'landing_ab_001';
+    const requestFlags = getServerFlagsFromUrl(request.nextUrl);
 
     const rotateParam = request.nextUrl.searchParams.get('rotate');
     const rotateStepsRaw = Number(rotateParam);
@@ -77,6 +79,12 @@ export function middleware(request: NextRequest) {
     // Vercel Web Analytics experiment headers
     response.headers.set('x-vercel-experiment', experimentKey);
     response.headers.set('x-vercel-variant', chosenVariant);
+    // Attach feature flags as headers for observability
+    const flatFlags = serializeFlags(requestFlags);
+    response.headers.set('x-vercel-flags', JSON.stringify(flatFlags));
+    Object.entries(flatFlags).forEach(([k, v]) => {
+      response.headers.set(`x-vercel-flag-${k}`, v);
+    });
 
     return response;
   }
