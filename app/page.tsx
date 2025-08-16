@@ -28,22 +28,10 @@ function LandingPageContent() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "PrepFlow",
-    "description": "COGS & Menu Profit Tool for restaurant profitability optimization",
+    "description": "COGS and menu clarity in a Google Sheet for small food businesses.",
     "url": "https://www.prepflow.org",
     "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web Browser",
-    "offers": {
-      "@type": "Offer",
-      "price": "29",
-      "priceCurrency": "AUD",
-      "priceValidUntil": "2025-12-31",
-      "availability": "https://schema.org/InStock"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "127"
-    }
+    "operatingSystem": "Web Browser"
   };
 
   // Render the appropriate variant
@@ -131,7 +119,7 @@ function LandingPageContent() {
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          <strong>Stop guessing. Start knowing.</strong> PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.
+          <strong>Stop guessing. Start knowing.</strong> PrepFlow is like an X-ray for your menu's numbers.
         </div>
 
         {/* Problem → Outcome */}
@@ -172,7 +160,7 @@ function LandingPageContent() {
               <ul className="space-y-4 text-lg text-gray-300">
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>See item-level margins and profit instantly</span>
+                  <span>See item-level margins and profit at a glance</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
@@ -247,8 +235,8 @@ function LandingPageContent() {
           </div>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
-            <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
-            <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
+            <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. Outputs adapt to your local market setup." />
+            <FeatureCard title="Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and resources to learn the flow." />
             <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
           </div>
         </section>
@@ -289,16 +277,16 @@ function LandingPageContent() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📱</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">24/7 Access</h4>
-                <p className="text-sm text-gray-400">Cloud-based Google Sheets. Access from anywhere, anytime.</p>
+                <h4 className="font-semibold text-white mb-2">Access via Google Sheets</h4>
+                <p className="text-sm text-gray-400">Works on the web and mobile where Google Sheets is available.</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🚀</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">No Consultants</h4>
-                <p className="text-sm text-gray-400">Set up yourself in under an hour. No expensive implementation fees.</p>
+                <h4 className="font-semibold text-white mb-2">Self-Serve Setup</h4>
+                <p className="text-sm text-gray-400">Set up yourself. No consultants required.</p>
               </div>
             </div>
             
@@ -314,17 +302,17 @@ function LandingPageContent() {
         {/* How it works */}
         <section id="how-it-works" className="py-20">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            Get Results in 3 Simple Steps
+            How it works in 3 steps
           </h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            <Step n={1} title="Set up (5–10 min)" body="Turn on GST, add ingredients, yields, and supplier costs." />
+            <Step n={1} title="Set up" body="Turn on GST, add ingredients, yields, and supplier costs." />
             <Step n={2} title="Import sales" body="Paste your POS export into the Sales tab." />
             <Step n={3} title="Decide & act" body="Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix." />
           </div>
           
           {/* 60-Second Checklist */}
           <div className="mt-16 rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
-            <h3 className="text-2xl font-bold text-center mb-6">60-Second Checklist</h3>
+            <h3 className="text-2xl font-bold text-center mb-6">Quick Checklist</h3>
             <div className="grid gap-4 md:grid-cols-5 text-center">
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
@@ -365,9 +353,9 @@ function LandingPageContent() {
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl">2‑Minute Demo</h3>
-              <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ in real-time.</p>
+              <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ as you update values.</p>
               <ul className="mt-6 space-y-3 text-base text-gray-300">
-                <Bullet>See margin calculations instantly</Bullet>
+                <Bullet>See margin calculations as you edit</Bullet>
                 <Bullet>Understand profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
                 <Bullet>Make informed pricing decisions</Bullet>
               </ul>
@@ -459,11 +447,6 @@ function LandingPageContent() {
           </div>
         </section>
 
-        {/* Urgency Banner */}
-        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-4 text-center text-white font-semibold">
-          🔥 60% launch discount ends this Friday. Don't miss the margin makeover.
-        </div>
-
         {/* Pricing */}
         <section id="pricing" className="py-20">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
@@ -487,11 +470,10 @@ function LandingPageContent() {
               
               {/* Cards Layout (Control) */}
               <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
-                <p className="text-base text-gray-500 line-through">AUD $49</p>
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   AUD $29
                 </p>
-                <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
+                <p className="text-sm text-gray-500">one-time purchase · 7-day refund</p>
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
@@ -499,80 +481,10 @@ function LandingPageContent() {
                   className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                   data-event="outbound_click_gumroad"
                 >
-                  Start Now — Get Menu Clarity Today
+                  Get the Google Sheet
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Gumroad</p>
-                <p className="mt-2 text-xs text-gray-400">Not satisfied in 7 days? Full refund.</p>
-                <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Visual Proof - Case Study */}
-        <section className="py-20">
-          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">Real Results in Real Time</h3>
-              <p className="text-lg text-gray-300">See the transformation from guesswork to data-driven clarity</p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="text-center">
-                <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4">
-                  <p className="text-2xl font-bold text-orange-400">Before PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-orange-300">24%</p>
-                  <p className="text-sm text-gray-400">Average GP</p>
-                </div>
-                <p className="text-sm text-gray-400">Blind pricing, gut feeling, unclear margins everywhere</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
-                  <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-green-300">34%</p>
-                  <p className="text-sm text-gray-400">Average GP in 3 days</p>
-                </div>
-                <p className="text-sm text-gray-400">Data-driven decisions, margin insights revealed, clarity achieved</p>
-              </div>
-            </div>
-            
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-400">"We found $2,400 in hidden margin opportunities in our first week"</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="py-20">
-          <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            Real Results from Real Venues
-          </h3>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            <Testimonial 
-              quote="We raised two prices and cut one item. Our gross margin shot up 9% overnight." 
-              author="Emily W., Owner @ The Dockhouse" 
-              result="+9% GP in 24 hours"
-            />
-            <Testimonial 
-              quote="Found $1,200 in hidden margin on our burger menu alone. PrepFlow paid for itself in 2 days." 
-              author="Marcus T., Head Chef @ Beachside Café" 
-              result="$1,200 profit found"
-            />
-            <Testimonial 
-              quote="Set up in under an hour. Now I know exactly which dishes to push and which to retire." 
-              author="Sarah L., Manager @ Food Truck Co" 
-              result="Setup in 1 hour"
-            />
-          </div>
-          
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
-              <span className="text-[#29E7CD]">🎬</span>
-              <span className="text-white font-medium">Watch: "Before vs After using PrepFlow"</span>
-              <button className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
-                Play Video
-              </button>
             </div>
           </div>
         </section>
@@ -586,14 +498,14 @@ function LandingPageContent() {
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
             <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
             <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
-            <FAQ q="Will this slow me down?" a="Setup takes 1 hour. After that, you'll save 2-3 hours per week on menu planning." />
+            <FAQ q="Will this slow me down?" a="Setup is straightforward. Add your data at your own pace." />
           </div>
         </section>
 
         {/* Trust Elements */}
         <section className="py-16 border-t border-gray-700">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Trusted by Independent Venues & Franchise Kitchens Worldwide</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">Helpful info</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">📊</span>
