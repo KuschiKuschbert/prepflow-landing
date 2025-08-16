@@ -54,8 +54,11 @@ function LandingPageContent() {
         }
       });
     }, { threshold: 0.3, rootMargin: '0px 0px -10% 0px' });
+    const isLg = window.matchMedia && window.matchMedia('(min-width: 1024px)').matches;
+    const baseDelays = isLg ? [0, 0, 140, 140] : [0, 120, 240, 360];
     items.forEach((el, idx) => {
-      el.style.animationDelay = `${200 + idx * 120}ms`;
+      const delayMs = baseDelays[idx] ?? idx * 120;
+      el.style.animationDelay = `${delayMs}ms`;
       observer.observe(el);
     });
     return () => observer.disconnect();
