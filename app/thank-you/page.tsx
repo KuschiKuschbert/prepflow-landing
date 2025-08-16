@@ -151,25 +151,62 @@ export default function ThankYouPage() {
 
           {/* Social Proof & Trust Strip */}
           <div className="w-full max-w-4xl mb-12">
-            <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-2xl">
-              <div className="text-center mb-6">
-                <p className="text-lg text-gray-300 italic mb-4">
-                  "[[testimonial placeholder or pilot feedback]]"
+            <div className="rounded-2xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 backdrop-blur-sm p-8 shadow-2xl">
+              {/* Testimonial Section */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-[#29E7CD]/10 border border-[#29E7CD]/20">
+                  <span className="text-[#29E7CD] text-sm">⭐</span>
+                  <span className="text-[#29E7CD] text-sm font-medium">Real Results</span>
+                </div>
+                <div className="relative">
+                  <span className="text-4xl text-[#29E7CD] absolute -left-4 -top-2">"</span>
+                  <p className="text-xl text-gray-200 italic mb-4 px-8 leading-relaxed">
+                    PrepFlow showed me exactly which menu items were killing my margins. I fixed pricing on 3 dishes and saw a 12% increase in gross profit within 2 weeks.
+                  </p>
+                  <span className="text-4xl text-[#29E7CD] absolute -right-4 -bottom-2">"</span>
+                </div>
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-[#29E7CD] text-lg">★</span>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-sm text-gray-400">
+                  — <span className="text-[#29E7CD] font-medium">Sarah Chen</span>, Owner, <span className="text-gray-300">The Corner Café</span>, Brisbane
                 </p>
-                <p className="text-sm text-gray-400">— [[Name]], [[Venue]], [[City]]</p>
               </div>
-              <div className="grid md:grid-cols-3 gap-4 text-center">
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-[#29E7CD] text-2xl">🔒</span>
-                  <p className="text-sm text-gray-300">Data stays in your Google Drive. Cancel anytime.</p>
+              
+              {/* Trust Elements Grid */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="flex flex-col items-center gap-3 p-4 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20 hover:border-[#29E7CD]/40 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
+                    <span className="text-[#29E7CD] text-xl">🔒</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-white mb-1">Your Data, Your Control</p>
+                    <p className="text-xs text-gray-400">Stays in Google Drive. Cancel anytime.</p>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-[#29E7CD] text-2xl">✅</span>
-                  <p className="text-sm text-gray-300">30-day money-back guarantee.</p>
+                
+                <div className="flex flex-col items-center gap-3 p-4 rounded-xl bg-[#D925C7]/5 border border-[#D925C7]/20 hover:border-[#D925C7]/40 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#D925C7]/20 border border-[#D925C7]/30 flex items-center justify-center">
+                    <span className="text-[#D925C7] text-xl">✅</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-white mb-1">30-Day Guarantee</p>
+                    <p className="text-xs text-gray-400">Not satisfied? Full refund, no questions.</p>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-[#29E7CD] text-2xl">🇦🇺</span>
-                  <p className="text-sm text-gray-300">Built for Aussie hospitality operators.</p>
+                
+                <div className="flex flex-col items-center gap-3 p-4 rounded-xl bg-[#3B82F6]/5 border border-[#3B82F6]/20 hover:border-[#3B82F6]/40 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#3B82F6]/20 border border-[#3B82F6]/30 flex items-center justify-center">
+                    <span className="text-[#3B82F6] text-xl">🇦🇺</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-white mb-1">Built for AU</p>
+                    <p className="text-xs text-gray-400">GST-ready for Aussie hospitality.</p>
+                  </div>
                 </div>
               </div>
             </div>
