@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { initializeTracking } from '../../../lib/track';
-import { getCurrentPrice, formatAud } from '../../../lib/pricing';
+import { getCurrentPrice, formatAud, getUpcomingChanges, daysUntil } from '../../../lib/pricing';
 
 export default function V3() {
   React.useEffect(() => {
@@ -158,9 +158,10 @@ export default function V3() {
       {/* Price & Refund */}
       <section id="pricing" className="py-12 md:py-16">
         <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
-        <p className="mt-2 text-gray-400">Choose the price you want to test. No subscriptions.</p>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
+        <p className="mt-2 text-gray-400">No subscriptions. Current price and planned changes shown.</p>
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start">
           <DynamicPriceCard />
+          <UpcomingPricePanel />
         </div>
       </section>
 
@@ -201,7 +202,7 @@ function FeatureCard({ title, children }: { title: string; children: React.React
 function DynamicPriceCard() {
   const { price, url } = getCurrentPrice();
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#121212] p-6 flex flex-col md:col-span-3 lg:col-span-1">
+    <div className="rounded-2xl border border-gray-700 bg-[#121212] p-6 flex flex-col">
       <div>
         <p className="text-sm text-gray-400">AUD</p>
         <p className="mt-1 text-4xl font-extrabold">{formatAud(price)}</p>
@@ -222,6 +223,28 @@ function DynamicPriceCard() {
       >
         Get the Google Sheet
       </a>
+    </div>
+  );
+}
+
+function UpcomingPricePanel() {
+  const upcoming = getUpcomingChanges();
+  if (upcoming.length === 0) return null;
+  return (
+    <div className="rounded-2xl border border-gray-700 bg-[#141414] p-6">
+      <h3 className="text-lg font-semibold">Planned price changes</h3>
+      <p className="text-xs text-gray-400 mt-1">Schedule is based on today’s date and may change.</p>
+      <div className="mt-4 grid gap-3">
+        {upcoming.map((p) => (
+          <div key={p.date.toISOString()} className="flex items-center justify-between rounded-xl border border-gray-700 px-4 py-3">
+            <div>
+              <p className="text-sm text-gray-300">{p.date.toLocaleDateString()}</p>
+              <p className="text-xs text-gray-500">in {daysUntil(p.date)} days</p>
+            </div>
+            <div className="text-sm font-semibold">{formatAud(p.price)}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
