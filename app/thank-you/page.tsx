@@ -196,21 +196,7 @@ export default function ThankYouPage() {
             </div>
           </div>
 
-          {/* Secondary CTA - Community */}
-          <div className="w-full max-w-3xl mb-8">
-            <div className="rounded-2xl border border-[#D925C7]/30 bg-gradient-to-br from-[#D925C7]/10 to-[#29E7CD]/10 backdrop-blur-sm p-8 shadow-2xl">
-              <h3 className="text-xl font-semibold mb-4 text-white">Shape the Future of PrepFlow</h3>
-              <p className="text-gray-300 mb-6">
-                Want to shape PrepFlow? Join our early-user group and share feedback — get bonus templates & updates first.
-              </p>
-              <a
-                href="#"
-                className="inline-flex rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-6 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300"
-              >
-                Join pilot group
-              </a>
-            </div>
-          </div>
+
 
           {/* Back to Home */}
           <div className="text-center">
