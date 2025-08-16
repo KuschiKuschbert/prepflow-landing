@@ -1,12 +1,40 @@
+'use client';
+
+import React from 'react';
+
 export const metadata = {
   title: "PrepFlow – COGS & Menu Profit Tool",
   description: "See true dish costs, GP%, popularity and pricing opportunities in minutes. Built for Australian hospitality (GST-ready).",
 };
 
 export default function Page() {
+  // Performance monitoring - track page load time
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const loadTime = performance.now();
+      console.log(`PrepFlow landing page loaded in ${loadTime.toFixed(2)}ms`);
+    }
+  }, []);
+
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Background gradient effects */}
+    <main 
+      className="min-h-screen bg-[#0a0a0a] text-white" 
+      style={{ 
+        scrollBehavior: 'smooth',
+        '--primary-color': '#29E7CD',
+        '--secondary-color': '#3B82F6', 
+        '--accent-color': '#D925C7',
+        '--bg-color': '#0a0a0a',
+        '--text-color': '#ffffff',
+        '--gray-300': '#d1d5db',
+        '--gray-400': '#9ca3af',
+        '--gray-500': '#6b7280',
+        '--gray-600': '#4b5563',
+        '--gray-700': '#374151',
+        '--gray-800': '#1f2937'
+      } as React.CSSProperties}
+    >
+      {/* Background gradient effects - optimized with CSS custom properties */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#29E7CD]/10 rounded-full blur-3xl" />
         <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-[#D925C7]/10 rounded-full blur-3xl" />
@@ -15,22 +43,25 @@ export default function Page() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-8">
+        <header className="flex items-center justify-between py-8" role="banner">
           <div className="flex items-center gap-3">
             <img 
               src="/images/prepflow-logo.png" 
               alt="PrepFlow Logo"
               className="h-12 w-auto"
+              loading="eager"
+              width="48"
+              height="48"
             />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow
             </span>
           </div>
-          <nav className="hidden gap-8 text-sm md:flex">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors">Features</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors">How it works</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors">Pricing</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors">FAQ</a>
+          <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow features">Features</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Learn how PrepFlow works">How it works</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow pricing">Pricing</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Frequently asked questions">FAQ</a>
           </nav>
           <div className="hidden md:block">
             <a
@@ -84,6 +115,9 @@ export default function Page() {
                   src="/images/dashboard-screenshot.png" 
                   alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
                   className="w-full h-auto rounded-xl border border-gray-600"
+                  loading="lazy"
+                  width="800"
+                  height="500"
                 />
                 {/* Action Overlay */}
                 <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
@@ -102,16 +136,25 @@ export default function Page() {
                   src="/images/settings-screenshot.png" 
                   alt="PrepFlow Settings page with business configuration"
                   className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                  loading="lazy"
+                  width="200"
+                  height="96"
                 />
                 <img 
                   src="/images/recipe-screenshot.png" 
                   alt="PrepFlow Recipe costing for Double Cheese Burger"
                   className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                  loading="lazy"
+                  width="200"
+                  height="96"
                 />
                 <img 
                   src="/images/stocklist-screenshot.png" 
                   alt="PrepFlow Infinite Stock List with ingredient management"
                   className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                  loading="lazy"
+                  width="200"
+                  height="96"
                 />
               </div>
               <p className="mt-4 text-center text-sm text-gray-500">Dashboard · Settings · Recipe Costing · Stock Management</p>
@@ -125,7 +168,7 @@ export default function Page() {
         </div>
 
         {/* Contributing Margin Highlight */}
-        <section className="py-20">
+        <section className="py-20" id="contributing-margin">
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
@@ -220,12 +263,26 @@ export default function Page() {
               </div>
             </div>
             <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
-              <iframe
-                src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-                className="w-full aspect-video rounded-xl border border-gray-600"
-                title="PrepFlow 2-Minute Demo - See how pricing changes affect COGS and profit margins"
-                allowFullScreen
-              />
+              <div className="relative w-full aspect-video rounded-xl border border-gray-600 bg-gray-800 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#29E7CD] mb-4"></div>
+                  <p className="text-gray-400">Loading demo video...</p>
+                </div>
+                <iframe
+                  src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                  className="absolute inset-0 w-full h-full rounded-xl opacity-0 transition-opacity duration-300"
+                  title="PrepFlow 2-Minute Demo - See how pricing changes affect COGS and profit margins"
+                  allowFullScreen
+                  loading="lazy"
+                  onLoad={(e) => {
+                    const target = e.target as HTMLIFrameElement;
+                    target.style.opacity = '1';
+                  }}
+                  onError={() => {
+                    console.error('Failed to load demo video');
+                  }}
+                />
+              </div>
               <p className="mt-4 text-center text-sm text-gray-500">Watch the full demo to see PrepFlow in action</p>
             </div>
           </div>
