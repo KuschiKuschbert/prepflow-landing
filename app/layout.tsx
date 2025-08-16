@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import MemberstackProvider from "../components/MemberstackProvider";
+import { Analytics } from '@vercel/analytics/react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -90,6 +91,7 @@ export default function RootLayout({
         <MemberstackProvider>
           {children}
         </MemberstackProvider>
+        <Analytics />
       </body>
     </html>
   );

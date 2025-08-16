@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
 
 export const metadata = {
   title: "PrepFlow – COGS & Menu Profit Tool",
@@ -8,6 +9,8 @@ export const metadata = {
 };
 
 export default function Page() {
+  const [showAnalytics, setShowAnalytics] = useState(false);
+
   // Performance monitoring - track page load time
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -486,6 +489,18 @@ export default function Page() {
           </div>
         </footer>
       </div>
+
+      {/* Analytics Toggle Button */}
+      <button
+        onClick={() => setShowAnalytics(!showAnalytics)}
+        className="fixed bottom-4 left-4 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 z-40"
+        aria-label="Toggle analytics dashboard"
+      >
+        {showAnalytics ? '📊' : '📈'}
+      </button>
+
+      {/* Analytics Dashboard */}
+      <AnalyticsDashboard isVisible={showAnalytics} />
     </main>
     </>
   );
