@@ -216,7 +216,6 @@ function LandingPageContent() {
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* All in one Google Sheet */}
