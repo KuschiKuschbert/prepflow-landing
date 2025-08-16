@@ -2,7 +2,7 @@
 
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getCurrentPrice, formatAud } from '../lib/pricing';
+import { getCurrentPrice, formatAud, getUpcomingChanges, daysUntil } from '../lib/pricing';
 import Control from '../components/landing/variants/Control';
 import V1 from '../components/landing/variants/V1';
 import V2 from '../components/landing/variants/V2';
@@ -352,6 +352,9 @@ function LandingPageContent() {
                 >
                   Get the Google Sheet
                 </a>
+                {(() => { const n = getUpcomingChanges()[0]; return n ? (
+                  <p className="mt-3 text-xs text-gray-500">Next change: {formatAud(n.price)} on {n.date.toLocaleDateString()} (in {daysUntil(n.date)} days)</p>
+                ) : null; })()}
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Gumroad</p>
               </div>
             </div>
