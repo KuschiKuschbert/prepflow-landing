@@ -333,7 +333,7 @@ function LandingPageContent() {
 
         {/* Pricing */}
         <section id="pricing" className="py-14 md:py-16">
-          <div className="mx-auto max-w-6xl grid items-start gap-12 md:grid-cols-2">
+          <div className="mx-auto max-w-6xl grid items-start gap-12 lg:grid-cols-2">
               <div className="w-full max-w-2xl">
                 <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
                 <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>

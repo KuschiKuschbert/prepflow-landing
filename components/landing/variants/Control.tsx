@@ -114,7 +114,7 @@ export default function Control() {
         <div className="mx-auto max-w-6xl text-center">
           <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
           <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
-          <div className="mt-8 grid gap-6 md:grid-cols-3 items-start">
+          <div className="mt-8 grid gap-6 lg:grid-cols-3 items-start">
             <div className="space-y-6 text-left">
               <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />
               <FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." />
