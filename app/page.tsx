@@ -56,6 +56,7 @@ export default function Page() {
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
               <Bullet>Know your real profit per dish — no more guesswork or gut feeling</Bullet>
+              <Bullet>See <strong>contributing margin</strong> — the real profit each dish brings to your business</Bullet>
               <Bullet>Classify menu items instantly: margin monsters vs dead weight</Bullet>
               <Bullet>See where your waste, yield, and prep time destroy profits</Bullet>
               <Bullet>Works with GST. Works fast. You'll feel the difference tomorrow</Bullet>
@@ -122,6 +123,53 @@ export default function Page() {
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
           Built for Australian hospitality. Works for restaurants, cafés, food trucks, caterers, and small groups.
         </div>
+
+        {/* Contributing Margin Highlight */}
+        <section className="py-20">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
+            <div className="text-center mb-8">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+                <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+                  Contributing Margin
+                </span> — The Real Profit Story
+              </h3>
+              <p className="text-lg text-gray-300">See beyond gross profit to understand what each dish truly contributes to your business</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4">
+                  <span className="text-4xl">💰</span>
+                  <h4 className="text-xl font-semibold text-white mt-3">Gross Profit</h4>
+                  <p className="text-sm text-gray-300">What you think you're making</p>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-6 mb-4">
+                  <span className="text-4xl">⚡</span>
+                  <h4 className="text-xl font-semibold text-white mt-3">Contributing Margin</h4>
+                  <p className="text-sm text-gray-300">What you're actually contributing</p>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <div className="bg-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-6 mb-4">
+                  <span className="text-4xl">🎯</span>
+                  <h4 className="text-xl font-semibold text-white mt-3">Action Plan</h4>
+                  <p className="text-sm text-gray-300">What to do about it</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <p className="text-base text-gray-300">
+                <strong>PrepFlow reveals:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
+                it's only contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Features – tailored to the spreadsheet */}
         <section id="features" className="py-20">
