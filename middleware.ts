@@ -22,6 +22,15 @@ export function middleware(request: NextRequest) {
 
   // Only run A/B testing on the main landing page
   if (request.nextUrl.pathname === '/') {
+    // Guarded rotation: only allow on localhost or with secret key
+    const rotate = request.nextUrl.searchParams.get('rotate') === '1';
+    const key = request.nextUrl.searchParams.get('key') || '';
+    const host = request.headers.get('host') || '';
+    const rotateAllowed = rotate && (
+      host.startsWith('localhost') ||
+      key === (process.env.ROTATE_KEY || 'shkya')
+    );
+
     // Get or create user ID
     let userId = request.cookies.get('pf_uid')?.value;
     if (!userId) {
@@ -32,13 +41,30 @@ export function middleware(request: NextRequest) {
     const allowedVariants = ['control', 'v1', 'v2', 'v3'];
     const manualVariant = request.nextUrl.searchParams.get('variant');
     const experimentKey = 'landing_ab_001';
+
+    // If rotation is allowed, drop existing cookies to force reassignment
+    const response = NextResponse.next();
+
+    if (rotateAllowed) {
+      response.cookies.delete(`pf_exp_${experimentKey}`);
+      // Regenerate user id for a different hash bucket
+      userId = `pf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      response.cookies.set('pf_uid', userId, {
+        maxAge: 60 * 60 * 24 * 365,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
+      const clean = request.nextUrl.clone();
+      clean.searchParams.delete('rotate');
+      clean.searchParams.delete('key');
+      request = new NextRequest(clean, { headers: request.headers });
+    }
+
     const chosenVariant = manualVariant && allowedVariants.includes(manualVariant)
       ? manualVariant
       : getAssignedVariant(request);
 
-    // Create response with A/B testing variants
-    const response = NextResponse.next();
-    
     // Set user ID cookie for consistency (1 year)
     response.cookies.set('pf_uid', userId, {
       maxAge: 60 * 60 * 24 * 365,
@@ -63,8 +89,12 @@ export function middleware(request: NextRequest) {
     // Add A/B testing data to the request for the page component
     const url = request.nextUrl.clone();
     url.searchParams.set('variant', chosenVariant);
+    if (rotateAllowed) {
+      url.searchParams.delete('rotate');
+      url.searchParams.delete('key');
+    }
 
-    return NextResponse.rewrite(url);
+    return NextResponse.rewrite(url, response);
   }
 
   return NextResponse.next();
