@@ -217,12 +217,7 @@ export default function ThankYouPage() {
                     <p className="text-gray-300">Need help? Email us at <a href="mailto:support@prepflow.org" className="text-[#29E7CD] hover:underline">support@prepflow.org</a></p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-[#29E7CD] text-xl">📬</span>
-                  <div>
-                    <p className="text-gray-300">Coming next: You'll get 3 onboarding emails (Demo recap, Profit leaks, Pricing tweaks).</p>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
