@@ -330,17 +330,22 @@ function LandingPageContent() {
           </div>
           <script dangerouslySetInnerHTML={{__html: `
             (function(){
-              var grid=document.getElementById('outcome-grid');
-              if(!grid||'IntersectionObserver'in window===false) return;
-              var items=grid.querySelectorAll('.outcome-observe');
-              var obs=new IntersectionObserver(function(entries){
-                entries.forEach(function(e){
-                  if(e.isIntersecting){ e.target.classList.add('outcome-animate'); obs.unobserve(e.target); }
-                });
-              },{threshold:0.5});
-              items.forEach(function(i,idx){
-                if(i instanceof HTMLElement){ i.style.animationDelay=(200+idx*120)+'ms'; obs.observe(i); }
-              });
+              var run=function(){
+                var grid=document.getElementById('outcome-grid');
+                if(!grid) return; 
+                if(typeof window==='undefined') return;
+                var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if(reduce) { grid.querySelectorAll('.outcome-observe').forEach(function(n){n.classList.add('outcome-animate')}); return; }
+                if(!('IntersectionObserver' in window)) { grid.querySelectorAll('.outcome-observe').forEach(function(n){n.classList.add('outcome-animate')}); return; }
+                var items=grid.querySelectorAll('.outcome-observe');
+                var obs=new IntersectionObserver(function(entries){
+                  entries.forEach(function(e){
+                    if(e.isIntersecting){ e.target.classList.add('outcome-animate'); obs.unobserve(e.target); }
+                  });
+                },{threshold:0.7, rootMargin:'0px 0px -10% 0px'});
+                items.forEach(function(i,idx){ if(i instanceof HTMLElement){ i.style.animationDelay=(400+idx*140)+'ms'; obs.observe(i); }});
+              };
+              if('requestIdleCallback' in window){ window.requestIdleCallback(run); } else { window.setTimeout(run, 200); }
             })();
           `}} />
         </section>
