@@ -264,12 +264,12 @@ function LandingPageContent() {
             <FeatureCard title="GST for Australia" body="Turn on GST; outputs reflect the AU 10% GST and show values in AUD." />
             <FeatureCard title="Built by Chefs for Chefs" body="Designed and refined with almost two decades of hands‑on kitchen and food ops experience." />
           </div>
-          <div className="mt-10 mx-auto max-w-3xl grid grid-cols-3 gap-4">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="text-center">
               <img 
                 src="/images/settings-screenshot.png" 
                 alt="PrepFlow Settings page with business configuration"
-                className="h-32 w-full object-cover rounded-lg border border-gray-600"
+                className="h-40 md:h-48 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
                 width="200"
                 height="96"
@@ -280,7 +280,7 @@ function LandingPageContent() {
               <img 
                 src="/images/recipe-screenshot.png" 
                 alt="PrepFlow Recipe costing for Double Cheese Burger"
-                className="h-32 w-full object-cover rounded-lg border border-gray-600"
+                className="h-40 md:h-48 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
                 width="200"
                 height="96"
@@ -291,7 +291,7 @@ function LandingPageContent() {
               <img 
                 src="/images/stocklist-screenshot.png" 
                 alt="PrepFlow Infinite Stock List with ingredient management"
-                className="h-32 w-full object-cover rounded-lg border border-gray-600"
+                className="h-40 md:h-48 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
                 width="200"
                 height="96"
