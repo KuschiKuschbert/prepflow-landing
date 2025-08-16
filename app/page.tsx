@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
+import React from 'react';
 
 export default function Page() {
-  const [showAnalytics, setShowAnalytics] = useState(false);
 
   // Performance monitoring - track page load time
   React.useEffect(() => {
@@ -543,18 +541,6 @@ export default function Page() {
           </div>
         </footer>
       </div>
-
-      {/* Analytics Toggle Button */}
-      <button
-        onClick={() => setShowAnalytics(!showAnalytics)}
-        className="fixed bottom-4 left-4 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 z-40"
-        aria-label="Toggle analytics dashboard"
-      >
-        {showAnalytics ? '📊' : '📈'}
-      </button>
-
-      {/* Analytics Dashboard */}
-      <AnalyticsDashboard isVisible={showAnalytics} />
     </main>
     </>
   );
