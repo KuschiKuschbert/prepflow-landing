@@ -15,17 +15,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PrepFlow – COGS & Menu Profit Tool | Transform Restaurant Margins in 24 Hours",
-  description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit optimization. Built for Australian hospitality. Start your profit scan now.",
+  title: "PrepFlow – COGS & Menu Profit Tool | Transform Restaurant Margins Worldwide in 24 Hours",
+  description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit optimization. Built for global hospitality with multi-currency support. Start your profit scan now.",
   keywords: [
     "restaurant COGS",
     "menu profitability", 
     "contributing margin",
     "gross profit optimization",
-    "Australian hospitality",
+    "global hospitality",
+    "international restaurants",
+    "multi-currency support",
     "restaurant management",
     "menu costing",
-    "profit analysis"
+    "profit analysis",
+    "worldwide restaurant software"
   ],
   authors: [{ name: "PrepFlow Team" }],
   creator: "PrepFlow",
@@ -40,8 +43,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "PrepFlow – COGS & Menu Profit Tool | Transform Restaurant Margins in 24 Hours",
-    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit optimization.",
+    title: "PrepFlow – COGS & Menu Profit Tool | Transform Restaurant Margins Worldwide in 24 Hours",
+    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit optimization. Built for global hospitality with multi-currency support.",
     url: 'https://www.prepflow.org',
     siteName: 'PrepFlow',
     images: [
@@ -52,13 +55,13 @@ export const metadata: Metadata = {
         alt: 'PrepFlow Dashboard showing COGS metrics and profit analysis',
       },
     ],
-    locale: 'en_AU',
+    locale: 'en', // Changed from 'en_AU' to 'en' for global appeal
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "PrepFlow – COGS & Menu Profit Tool | Transform Restaurant Margins in 24 Hours",
-    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit optimization.",
+    title: "PrepFlow – COGS & Menu Profit Tool | Transform Restaurant Margins Worldwide in 24 Hours",
+    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit optimization. Built for global hospitality with multi-currency support.",
     images: ['/images/dashboard-screenshot.png'],
   },
   robots: {

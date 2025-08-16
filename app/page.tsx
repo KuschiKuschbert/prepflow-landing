@@ -109,14 +109,14 @@ export default function Page() {
               </span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-              See what's draining your profit. Fix it before the next lunch rush.
+              See what's draining your profit. Fix it before the next lunch rush. Works worldwide with multi-currency support.
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
               <Bullet>Know your real profit per dish — no more guesswork or gut feeling</Bullet>
               <Bullet>See <strong>contributing margin</strong> — the real profit each dish brings to your business</Bullet>
               <Bullet>Classify menu items instantly: margin monsters vs dead weight</Bullet>
               <Bullet>See where your waste, yield, and prep time destroy profits</Bullet>
-              <Bullet>Works with GST. Works fast. You'll feel the difference tomorrow</Bullet>
+              <Bullet>Works with GST, VAT, and tax systems worldwide. Works fast. You'll feel the difference tomorrow</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
@@ -128,7 +128,7 @@ export default function Page() {
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
               </a>
-              <p className="w-full text-sm text-gray-500">No credit card · Results in 1 day · $29/month</p>
+              <p className="w-full text-sm text-gray-500">No credit card · Results in 1 day · $29/month · Global support</p>
             </div>
           </div>
 
@@ -190,7 +190,7 @@ export default function Page() {
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          Built for Australian hospitality. Works for restaurants, cafés, food trucks, caterers, and small groups.
+          Built for global hospitality. Works for restaurants, cafés, food trucks, caterers, and small groups worldwide. Multi-currency support for international markets.
         </div>
 
         {/* Contributing Margin Highlight */}
@@ -249,8 +249,66 @@ export default function Page() {
           </div>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
-            <FeatureCard title="GST & Currency" body="Set country and GST% in Settings. All outputs reflect Australian GST and AUD pricing conventions." />
+            <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
             <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and member portal resources to learn the flow in minutes." />
+          </div>
+        </section>
+
+        {/* Global Features */}
+        <section className="py-20">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+                <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+                  Built for the World
+                </span> — Works Everywhere
+              </h3>
+              <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+                PrepFlow is designed for global hospitality businesses. Whether you're in Sydney, Singapore, San Francisco, or Stockholm, 
+                our multi-currency and multi-tax system adapts to your local market.
+              </p>
+            </div>
+            
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#3B82F6] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🌍</span>
+                </div>
+                <h4 className="font-semibold text-white mb-2">Multi-Currency</h4>
+                <p className="text-sm text-gray-400">USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🏛️</span>
+                </div>
+                <h4 className="font-semibold text-white mb-2">Tax Systems</h4>
+                <p className="text-sm text-gray-400">GST, VAT, Sales Tax, HST. Configure for your local requirements.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">📱</span>
+                </div>
+                <h4 className="font-semibold text-white mb-2">24/7 Access</h4>
+                <p className="text-sm text-gray-400">Cloud-based Google Sheets. Access from anywhere, anytime.</p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🚀</span>
+                </div>
+                <h4 className="font-semibold text-white mb-2">Local Support</h4>
+                <p className="text-sm text-gray-400">Expert support in your timezone. We speak your language.</p>
+              </div>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <p className="text-base text-gray-300">
+                <strong>From food trucks in Toronto to fine dining in Tokyo</strong> — PrepFlow adapts to your business, 
+                your market, and your local regulations. No matter where you serve food, we help you maximize profits.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -276,7 +334,7 @@ export default function Page() {
               <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change shifts COGS% and GP$ immediately.</p>
               <ul className="mt-6 space-y-3 text-base text-gray-300">
                 <Bullet>Find margin leaks in seconds</Bullet>
-                <Bullet>Know your profit ex‑GST per item</Bullet>
+                <Bullet>Know your profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
                 <Bullet>Make data‑driven price changes</Bullet>
               </ul>
               <div className="mt-8">
@@ -365,6 +423,7 @@ export default function Page() {
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Lemon Squeezy</p>
                 <p className="mt-2 text-xs text-gray-400">Not profitable in 30 days? Full refund.</p>
+                <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
               </div>
             </div>
           </div>
@@ -445,7 +504,7 @@ export default function Page() {
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
-            <FAQ q="Does it work in Australia?" a="Built for AU venues — includes GST toggles and export-ready reports." />
+            <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
             <FAQ q="What if it doesn't work for me?" a="If your margin doesn't improve in 30 days, you'll get every cent back. No hassle." />
             <FAQ q="Will this slow me down?" a="Setup takes 1 hour. After that, you'll save 2-3 hours per week on menu planning." />
           </div>
@@ -454,7 +513,7 @@ export default function Page() {
         {/* Trust Elements */}
         <section className="py-16 border-t border-gray-700">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Trusted by Independent Venues & Franchise Kitchens</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">Trusted by Independent Venues & Franchise Kitchens Worldwide</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">📊</span>
