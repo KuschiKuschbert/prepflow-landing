@@ -134,6 +134,7 @@ function LandingPageContent() {
         .outcome-animate{animation:outFade .6s ease-out forwards}
         @keyframes outFade{to{opacity:1;transform:translate(0,0)}}
         @media (prefers-reduced-motion: reduce){.outcome-from,.outcome-observe{opacity:1;transform:none}.outcome-animate{animation:none}}
+        .faq-arc-observe{opacity:0}
       `}</style>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -436,12 +437,28 @@ function LandingPageContent() {
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
             FAQ
           </h3>
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you&apos;re good." />
+          <div className="mt-12 grid gap-8 md:grid-cols-2" id="global-faq-grid">
+            <div className="faq-arc-observe" data-faq-arc>
+              <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you&apos;re good." />
+            </div>
             <FAQ q="Does it work in Australia?" a="Yes. It’s GST-aware and priced in AUD." />
             <FAQ q="What if it doesn&apos;t work for me?" a="If it&apos;s not what you expected, request a refund within 7 days." />
             <FAQ q="Will this slow me down?" a="Setup is straightforward. Add your data at your own pace." />
           </div>
+          <script dangerouslySetInnerHTML={{__html:`(function(){
+            var grid=document.getElementById('global-faq-grid');
+            if(!grid) return; var card=grid.querySelector('[data-faq-arc]'); if(!card) return;
+            var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; 
+            var cta=document.querySelector('section#pricing a[href\="/go/gumroad\"]');
+            var anchor=cta?cta.getBoundingClientRect():null; var run=function(){
+              var el=card.firstElementChild; if(!(el instanceof HTMLElement)) return;
+              var rect=el.getBoundingClientRect(); var ax=anchor?anchor.left+anchor.width/2:window.innerWidth/2; var ay=anchor?anchor.top:0;
+              var ex=rect.left+rect.width/2; var ey=rect.top+rect.height/2; var dx=ax-ex; var dy=ay-ey; var midX=dx*0.4; var midY=dy-80;
+              if(reduce){el.style.opacity='1';return;}
+              var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+                el.animate([{transform:'translate('+dx+'px,'+dy+'px)',opacity:0},{transform:'translate('+Math.round(midX)+'px,'+Math.round(midY)+'px)',opacity:.85,offset:.6},{transform:'translate(0,0)',opacity:1}],{duration:800,easing:'cubic-bezier(0.2,0.7,0.2,1)',fill:'forwards'});
+                obs.unobserve(e.target);} });},{threshold:.4}); obs.observe(el);
+            }; if('requestIdleCallback'in window){window.requestIdleCallback(run);}else{setTimeout(run,200);} })();`}}/>
         </section>
 
         {/* Final CTA */}
