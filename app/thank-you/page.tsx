@@ -188,8 +188,8 @@ export default function ThankYouPage() {
                     <span className="text-[#D925C7] text-xl">✅</span>
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-medium text-white mb-1">30-Day Guarantee</p>
-                    <p className="text-xs text-gray-400">Not satisfied? Full refund, no questions.</p>
+                    <p className="text-sm font-medium text-white mb-1">7-Day Refund Policy</p>
+                    <p className="text-xs text-gray-400">Not satisfied? Full refund within 7 days.</p>
                   </div>
                 </div>
                 

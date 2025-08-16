@@ -123,7 +123,7 @@ export default function Page() {
               <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Get the sample sheet (free)
               </a>
-              <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 30-day guarantee.</p>
+                              <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy.</p>
             </div>
           </div>
 
@@ -516,6 +516,18 @@ export default function Page() {
               <div>
                               <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
               <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
+              
+              {/* Refund Policy */}
+              <div className="mt-6 p-4 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
+                <div className="text-center">
+                  <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">Our Refund Policy</h4>
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
+                    If PrepFlow isn't what you expected, you can request a full refund within 7 days of purchase. 
+                    No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
+                  </p>
+                </div>
+              </div>
                 
                 <div className="mt-6 space-y-4">
                   <div className="flex items-center gap-3">
@@ -540,7 +552,7 @@ export default function Page() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">30-day satisfaction guarantee</span>
+                    <span className="text-gray-300">7-day refund policy</span>
                   </div>
                 </div>
               </div>
@@ -659,7 +671,7 @@ export default function Page() {
               </div>
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">🛡️</span>
-                <span className="text-white text-sm">30-Day Guarantee</span>
+                <span className="text-white text-sm">7-Day Refund Policy</span>
               </div>
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">🇦🇺</span>
