@@ -225,7 +225,7 @@ export default function ThankYouPage() {
                 <div className="flex items-start gap-3">
                   <span className="text-[#29E7CD] text-xl">📧</span>
                   <div>
-                    <p className="text-gray-300">Need help? Email us at <a href="mailto:support@prepflow.org" className="text-[#29E7CD] hover:underline">support@prepflow.org</a> — reply in under 24h.</p>
+                    <p className="text-gray-300">Need help? Email us at <a href="mailto:support@prepflow.org" className="text-[#29E7CD] hover:underline">support@prepflow.org</a></p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
