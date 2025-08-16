@@ -1,5 +1,10 @@
 
 
+'use client';
+
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 export default function ThankYouPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
@@ -79,7 +84,7 @@ export default function ThankYouPage() {
                   <span className="text-2xl">📊</span>
                   <div>
                     <p className="font-semibold text-white">PrepFlow Tool Access</p>
-                    <p className="text-gray-300">Your Google Sheet template is ready → <a href="#" className="text-[#29E7CD] hover:underline">[[access link]]</a></p>
+                    <p className="text-gray-300">Your Google Sheet template is ready — check your email for the access link.</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -232,8 +237,6 @@ export default function ThankYouPage() {
               </div>
             </div>
           </div>
-
-
 
           {/* Back to Home */}
           <div className="text-center">
