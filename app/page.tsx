@@ -351,28 +351,24 @@ function LandingPageContent() {
         {/* Pricing */}
         <section id="pricing" className="py-14 md:py-16">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
-            <div className="grid items-center gap-12 md:grid-cols-2">
-              <div>
+            <div className="flex flex-col items-center gap-12 md:grid md:grid-cols-2">
+              <div className="order-2 md:order-none">
                 <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
                 <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
                 
                 {/* Refund Policy */}
                 <div className="mt-6 p-4 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
                   <div className="text-center">
-                    <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">Our Refund Policy</h4>
-                    <p className="text-sm text-gray-300 leading-relaxed">
-                      PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
-                      If PrepFlow isn&apos;t what you expected, you can request a full refund within 7 days of purchase. 
-                      No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
-                    </p>
+                    <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">7‑Day Refund</h4>
+                    <p className="text-sm text-gray-300 leading-relaxed">Try PrepFlow with confidence. If it isn’t right for you, reply to your receipt within 7 days for a full refund. Instant access; after 7 days, sales are final.</p>
                   </div>
                 </div>
               </div>
               
               {/* Cards Layout (Control) */}
-              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg md:sticky md:top-24">
+              <div className="order-1 md:order-none rounded-2xl border border-gray-500/60 bg-[#2a2a2a]/40 p-6 md:p-8 text-center shadow-md md:sticky md:top-24 w-full sm:max-w-md md:max-w-none">
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
-                <p className="text-sm text-gray-500">one-time purchase · 7-day refund</p>
+                <p className="text-sm text-gray-400">one-time purchase · 7-day refund</p>
                 <a
                   href="/go/gumroad"
                   target="_blank"
