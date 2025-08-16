@@ -87,6 +87,12 @@ function LandingPageContent() {
         <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-[#D925C7]/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-[#3B82F6]/10 rounded-full blur-3xl" />
       </div>
+      <style jsx global>{`
+        .outcome-observe{opacity:0;transform:translateY(10px)}
+        .outcome-animate{animation:outFade .6s ease-out forwards}
+        @keyframes outFade{to{opacity:1;transform:translateY(0)}}
+        @media (prefers-reduced-motion: reduce){.outcome-observe{opacity:1;transform:none}.outcome-animate{animation:none}}
+      `}</style>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -295,32 +301,48 @@ function LandingPageContent() {
           <h3 className="text-center text-3xl font-bold tracking-tight md:text-4xl mb-8">
             <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">The Outcome</span>
           </h3>
-          <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+          {/* Outcome animation styles declared globally at top-level; using class names only here */}
+          <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="outcome-grid">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">Clear item‑level margins and profit</p>
               </div>
             </div>
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">See winners and profit leaks in seconds</p>
               </div>
             </div>
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">Price with confidence (GST‑ready)</p>
               </div>
             </div>
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">All in Google Sheets — no new software</p>
               </div>
             </div>
           </div>
+          <script dangerouslySetInnerHTML={{__html: `
+            (function(){
+              var grid=document.getElementById('outcome-grid');
+              if(!grid||'IntersectionObserver'in window===false) return;
+              var items=grid.querySelectorAll('.outcome-observe');
+              var obs=new IntersectionObserver(function(entries){
+                entries.forEach(function(e){
+                  if(e.isIntersecting){ e.target.classList.add('outcome-animate'); obs.unobserve(e.target); }
+                });
+              },{threshold:0.5});
+              items.forEach(function(i,idx){
+                if(i instanceof HTMLElement){ i.style.animationDelay=(200+idx*120)+'ms'; obs.observe(i); }
+              });
+            })();
+          `}} />
         </section>
 
         {/* How it works */}
