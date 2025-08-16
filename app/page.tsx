@@ -448,17 +448,17 @@ function StickyMobileCta() {
     if (typeof window === 'undefined') return;
     const onScroll = () => {
       const y = window.scrollY || 0;
-      setVisible(y > 120);
+      setVisible(y > 40);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   return (
     <div
-      className={`fixed bottom-3 left-3 right-3 z-40 lg:hidden transition-transform duration-300 ${visible ? 'translate-y-0' : 'translate-y-24'} motion-reduce:transition-none`}
+      className={`fixed bottom-3 left-3 right-3 z-50 transition-transform duration-300 ${visible ? 'translate-y-0' : 'translate-y-24'} motion-reduce:transition-none`}
       aria-hidden={!visible}
     >
-      <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#1f1f1f]/70 p-3 shadow-2xl">
+      <div className="mx-auto max-w-md md:max-w-lg rounded-2xl border border-gray-700 bg-[#1f1f1f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#1f1f1f]/70 p-3 shadow-2xl">
         <div className="flex items-center justify-between gap-3">
           <div className="text-sm text-gray-300">
             <span className="block font-semibold">{formatAud(getCurrentPrice().price)}</span>
