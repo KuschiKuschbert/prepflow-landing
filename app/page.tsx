@@ -114,6 +114,7 @@ export default function Page() {
               <Bullet><strong>Paste Sales Data</strong> — watch PrepFlow reveal popularity, profit, and even auto-classify items as Chef's Kiss, Hidden Gem, or Bargain Bucket</Bullet>
               <Bullet><strong>Profit Dashboard</strong> — see your top performers, food cost %, and average margins in one clean view</Bullet>
               <Bullet><strong>Global Tax Support</strong> — works with GST, VAT, and tax systems worldwide — simple setup, no expensive consultants needed</Bullet>
+              <Bullet><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
@@ -250,6 +251,7 @@ export default function Page() {
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
             <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
                           <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
+            <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
           </div>
         </section>
 
@@ -398,6 +400,10 @@ export default function Page() {
                   <div className="flex items-center gap-3">
                     <span className="text-[#29E7CD]">✅</span>
                     <span className="text-gray-300">Popularity & profit classes (Chef's Kiss etc.)</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-gray-300">AI Method Generator for cooking optimization</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[#29E7CD]">✅</span>
