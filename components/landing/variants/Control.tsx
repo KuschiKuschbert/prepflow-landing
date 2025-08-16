@@ -14,14 +14,35 @@ export default function Control() {
   const left2Ref = React.useRef<HTMLDivElement | null>(null);
   const right1Ref = React.useRef<HTMLDivElement | null>(null);
   const right2Ref = React.useRef<HTMLDivElement | null>(null);
+  const priceRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     const attach = (el: HTMLElement | null, dir: 'left' | 'right', delayMs: number) => {
       if (!el) return;
       const obs = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
-          el.style.animationDelay = `${delayMs}ms`;
-          el.classList.add(dir === 'left' ? 'animate-left' : 'animate-right');
+          // Half-circle animation relative to price card
+          const anchor = document.querySelector('[data-price-card-anchor]') as HTMLElement | null;
+          if (anchor) {
+            const a = anchor.getBoundingClientRect();
+            const e = el.getBoundingClientRect();
+            const ax = a.left + a.width / 2;
+            const ay = a.top + a.height / 2;
+            const ex = e.left + e.width / 2;
+            const ey = e.top + e.height / 2;
+            const dx = ax - ex;
+            const dy = ay - ey;
+            const midX = dx * 0.5;
+            const midY = dy - Math.max(60, Math.abs(dx) * 0.3);
+            el.animate([
+              { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 },
+              { transform: `translate(${Math.round(midX)}px, ${Math.round(midY)}px)`, opacity: 0.8, offset: 0.6 },
+              { transform: 'translate(0, 0)', opacity: 1 }
+            ], { duration: 750, delay: delayMs, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'forwards' });
+          } else {
+            el.style.animationDelay = `${delayMs}ms`;
+            el.classList.add(dir === 'left' ? 'animate-left' : 'animate-right');
+          }
           obs.unobserve(el);
         }
       }, { threshold: 0.6 });
@@ -157,7 +178,7 @@ export default function Control() {
               <div ref={left1Ref} className="observe-left"><FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." /></div>
               <div ref={left2Ref} className="observe-left"><FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." /></div>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center" ref={priceRef} data-price-card-anchor>
               <DynamicPriceCard />
             </div>
             <div className="space-y-6 text-left">
