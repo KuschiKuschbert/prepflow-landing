@@ -120,21 +120,7 @@ function LandingPageContent() {
         {/* Render the appropriate variant */}
         {renderVariant()}
 
-        {/* Compact trust chips (replacing bulky trust bar) */}
-        <div className="mt-6 mb-2 flex flex-wrap items-center gap-3 text-xs md:text-sm text-gray-300">
-          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
-            <span className="text-[#29E7CD]">🧮</span>
-            <span>GST-ready • AUD</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
-            <span className="text-[#29E7CD]">🛡️</span>
-            <span>7‑day refund</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
-            <span className="text-[#29E7CD]">📄</span>
-            <span>Works in Google Sheets</span>
-          </div>
-        </div>
+        {/* Compact trust chips removed per design feedback */}
 
         {/* Problem – 4 small boxes across */}
         <section className="py-14 md:py-16">
