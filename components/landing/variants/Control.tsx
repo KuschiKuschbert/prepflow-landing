@@ -109,25 +109,24 @@ export default function Control() {
 
       {/* Demo removed to reduce empty space */}
 
-      {/* Price & Refund */}
+      {/* Price & FAQ around card */}
       <section id="pricing" className="py-10 md:py-12">
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-6xl text-center">
           <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
           <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
-          <div className="mt-6 flex justify-center">
-            <DynamicPriceCard />
+          <div className="mt-8 grid gap-6 md:grid-cols-3 items-start">
+            <div className="space-y-6 text-left">
+              <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />
+              <FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." />
+            </div>
+            <div className="flex justify-center">
+              <DynamicPriceCard />
+            </div>
+            <div className="space-y-6 text-left">
+              <FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." />
+              <FaqItem q="What if it is not for me?" a="Request a refund within 7 days." />
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="py-10 md:py-12">
-        <h2 className="text-3xl font-bold">FAQ</h2>
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />
-          <FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." />
-          <FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." />
-          <FaqItem q="What if it is not for me?" a="Request a refund within 7 days." />
         </div>
       </section>
 

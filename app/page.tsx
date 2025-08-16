@@ -347,8 +347,8 @@ function LandingPageContent() {
 
         {/* Pricing */}
         <section id="pricing" className="py-14 md:py-16">
-          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
-            <div className="flex flex-col items-center gap-12">
+          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-2xl md:p-12">
+            <div className="flex flex-col items-center gap-10">
               <div className="order-2 w-full max-w-2xl">
                 <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
                 <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
@@ -363,11 +363,11 @@ function LandingPageContent() {
               </div>
               
               {/* Cards Layout (Control) */}
-              <div className="order-1 self-center rounded-2xl border border-gray-500/60 bg-[#2a2a2a]/40 p-6 md:p-8 text-center shadow-md w-full sm:max-w-md md:max-w-lg mx-auto">
+              <div className="order-1 self-center rounded-2xl border border-gray-600/50 bg-[#242424]/50 p-5 md:p-7 text-center shadow-md w-full sm:max-w-sm md:max-w-md mx-auto">
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
                 <p className="text-sm text-gray-400">one-time purchase · 7-day refund</p>
                 <div className="mt-4 mx-auto max-w-xs text-left">
-                  <ul className="list-disc list-inside text-sm text-gray-300 space-y-2">
+                  <ul className="list-disc list-inside text-sm text-gray-300 space-y-1.5">
                     <li>Google Sheet template</li>
                     <li>Setup guide and sample data</li>
                     <li>Works with Google Sheets</li>
