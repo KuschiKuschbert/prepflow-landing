@@ -3,7 +3,6 @@
 
 import { track as vaTrack } from '@vercel/analytics';
 import { getClientFlags } from './flags';
-import { getClientFlags } from './flags';
 
 export interface TrackingEvent {
 	event: string;
