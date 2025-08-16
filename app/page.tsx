@@ -73,6 +73,8 @@ function LandingPageContent() {
         '--gray-800': '#1f2937'
       } as React.CSSProperties}
     >
+      {/* Sticky mobile CTA bar */}
+      <StickyMobileCta />
       {/* Background gradient effects - optimized with CSS custom properties */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#29E7CD]/10 rounded-full blur-3xl" />
@@ -269,7 +271,7 @@ function LandingPageContent() {
 
         {/* Features – tailored to the spreadsheet */}
         <section id="features" className="py-14 md:py-16">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
             <FeatureCard title="Yield & Waste Aware" body="Include trim and prep yields so unit costs and margins reflect real kitchen conditions." />
             <FeatureCard title="Item Performance" body="Paste sales to see popularity, margin and total profit ex‑GST. Simple tags highlight winners and weak links." />
@@ -440,6 +442,43 @@ export default function Page() {
 }
 
 /* ---------- Small helper components ---------- */
+function StickyMobileCta() {
+  const [visible, setVisible] = React.useState<boolean>(false);
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      setVisible(y > 200);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <div
+      className={`fixed bottom-3 left-3 right-3 z-40 md:hidden transition-transform duration-300 ${visible ? 'translate-y-0' : 'translate-y-24'} motion-reduce:transition-none`}
+      aria-hidden={!visible}
+    >
+      <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#1f1f1f]/70 p-3 shadow-2xl">
+        <div className="flex items-center justify-between gap-3">
+          <div className="text-sm text-gray-300">
+            <span className="block font-semibold">{formatAud(getCurrentPrice().price)}</span>
+            <span className="text-xs text-gray-500">One-time • 7-day refund</span>
+          </div>
+          <a
+            href="/go/gumroad"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-xs font-semibold text-white shadow-md hover:opacity-95"
+            data-event="outbound_click_gumroad"
+            aria-label="Get the Google Sheet"
+          >
+            Get Sheet
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-3">
