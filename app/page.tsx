@@ -101,27 +101,24 @@ export default function Page() {
         <section className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              Get clarity on your margins within 24 hours*
+              Turn chaos into clarity — see your menu's true margins in 24 hours
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-              PrepFlow visualizes your menu profitability at a glance.
-            </p>
-            <p className="mt-2 text-sm text-gray-400">
-              *Instant visibility of COGS and profit data — optimization depends on your decisions.
+              PrepFlow gives you instant profit visibility so you can make smarter menu decisions fast.
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
-              <Bullet>Infinite Stock List with pack size, supplier, storage, and yield/trim tracking</Bullet>
-              <Bullet>Recipe builder with automatic COGS, GP%, and GP$ calculations</Bullet>
-              <Bullet>Paste in sales data → get popularity, profit, and auto-classification</Bullet>
-              <Bullet>Dashboard with averages, margins, and top-performing items</Bullet>
-              <Bullet>Works with GST, VAT, and tax systems worldwide — simple setup, no expensive consultants needed</Bullet>
+              <Bullet><strong>Infinite Stock List</strong> — track every ingredient with pack size, supplier, yield/trim, and true unit cost</Bullet>
+              <Bullet><strong>Recipe Builder</strong> — auto-calculate COGS, GP$, and GP% for every dish, instantly</Bullet>
+              <Bullet><strong>Paste Sales Data</strong> — watch PrepFlow reveal popularity, profit, and even auto-classify items as Chef's Kiss, Hidden Gem, or Bargain Bucket</Bullet>
+              <Bullet><strong>Profit Dashboard</strong> — see your top performers, food cost %, and average margins in one clean view</Bullet>
+              <Bullet><strong>Global Tax Support</strong> — works with GST, VAT, and tax systems worldwide — simple setup, no expensive consultants needed</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
                               <a
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Get Menu Clarity Now
+                  Unlock Your Menu's Profit Potential
                 </a>
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
@@ -188,7 +185,7 @@ export default function Page() {
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          Built for the restaurant owner who doesn't want to spend thousands on expensive, complicated software. Simple, affordable, and gets the job done.
+          <strong>Stop guessing. Start knowing.</strong> PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.
         </div>
 
         {/* Contributing Margin Highlight */}
@@ -258,11 +255,11 @@ export default function Page() {
                         <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                  Simple & Affordable
-                </span> — No Expensive Software
+                  Expose Hidden Profits
+                </span> — One Sheet, Every Answer
               </h3>
               <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                While others charge thousands for complicated restaurant software, PrepFlow gives you the same insights 
+                While others charge thousands for complicated restaurant software, PrepFlow reveals the same profit insights 
                 in a simple Google Sheet for just $29/month.
               </p>
             </div>
@@ -303,8 +300,8 @@ export default function Page() {
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>Stop paying thousands for restaurant software</strong> — Get the same profit insights in a simple 
-                Google Sheet that you can set up yourself. No complexity, no consultants, just clarity and data.
+                <strong>One sheet. Every answer your kitchen needs.</strong> Expose hidden profits buried in your menu 
+                with the same insights expensive software provides — but in a simple Google Sheet you can set up yourself.
               </p>
             </div>
           </div>
@@ -313,14 +310,14 @@ export default function Page() {
         {/* How it works */}
         <section id="how-it-works" className="py-20">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            How It Works
+            From Chaos to Clarity in 5 Steps
           </h2>
           <div className="mt-12 grid gap-8 md:grid-cols-5">
-            <Step n={1} title="Load Recipes & Prices" body="Add your recipes & ingredient prices." />
-            <Step n={2} title="Add Prep & Waste" body="Include prep time, yield, waste data." />
-            <Step n={3} title="Upload Sales Data" body="Drop in your weekly/monthly sales." />
-            <Step n={4} title="See Profit Reality" body="Get instant visibility of COGS, GP%, and profit per item." />
-            <Step n={5} title="Make Data-Driven Decisions" body="Use insights to optimize pricing, menu items, and operations." />
+            <Step n={1} title="Load Recipes & Prices" body="Add your recipes & ingredient prices to unlock true costs." />
+            <Step n={2} title="Add Prep & Waste" body="Include prep time, yield, waste data for complete visibility." />
+            <Step n={3} title="Paste Sales Data" body="Drop in your weekly/monthly sales to reveal hidden patterns." />
+            <Step n={4} title="See Profit Reality" body="Watch PrepFlow expose your true COGS, GP%, and profit per item." />
+            <Step n={5} title="Take Action Fast" body="Use insights to optimize pricing, menu items, and operations immediately." />
           </div>
         </section>
 
