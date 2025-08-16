@@ -168,10 +168,12 @@ function LandingPageContent() {
         </section>
 
         {/* Solution */}
-        <section className="py-6">
-          <p className="text-center text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-            A Google Sheet that gives clear item‑level margins and GST‑ready pricing for small Aussie venues.
-          </p>
+        <section className="py-8">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-[#29E7CD]/20 bg-[#101010]/80 p-6 text-center">
+            <p className="text-lg md:text-xl text-gray-300">
+              A Google Sheet that gives clear item‑level margins and GST‑ready pricing for small Aussie venues.
+            </p>
+          </div>
         </section>
 
         {/* Contributing Margin Highlight */}
@@ -251,8 +253,8 @@ function LandingPageContent() {
         </section>
 
         {/* Inside the sheet – features + screenshots */}
-        <section id="features" className="py-14 md:py-16">
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6">
+        <section id="features" className="py-12 md:py-14">
+          <div className="mx-auto max-w-5xl grid gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
             <FeatureCard title="Yield & Waste Aware" body="Include trim and prep yields so unit costs and margins reflect real kitchen conditions." />
             <FeatureCard title="Item Performance" body="Paste sales to see popularity, margin and total profit ex‑GST. Simple tags highlight winners and weak links." />
@@ -260,12 +262,12 @@ function LandingPageContent() {
             <FeatureCard title="GST for Australia" body="Turn on GST; outputs reflect the AU 10% GST and show values in AUD." />
             <FeatureCard title="Built by Kitchens" body="Designed and refined with almost two decades of hands‑on kitchen and food ops experience." />
           </div>
-          <div className="mt-8 grid grid-cols-3 gap-4">
+          <div className="mt-10 mx-auto max-w-3xl grid grid-cols-3 gap-4">
             <div className="text-center">
               <img 
                 src="/images/settings-screenshot.png" 
                 alt="PrepFlow Settings page with business configuration"
-                className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                className="h-32 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
                 width="200"
                 height="96"
@@ -276,7 +278,7 @@ function LandingPageContent() {
               <img 
                 src="/images/recipe-screenshot.png" 
                 alt="PrepFlow Recipe costing for Double Cheese Burger"
-                className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                className="h-32 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
                 width="200"
                 height="96"
@@ -287,7 +289,7 @@ function LandingPageContent() {
               <img 
                 src="/images/stocklist-screenshot.png" 
                 alt="PrepFlow Infinite Stock List with ingredient management"
-                className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                className="h-32 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
                 width="200"
                 height="96"
@@ -295,6 +297,29 @@ function LandingPageContent() {
               <p className="text-xs text-gray-400 mt-2">Stock List</p>
             </div>
           </div>
+        </section>
+
+        {/* Outcome (benefits) */}
+        <section className="py-10 md:py-12">
+          <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6 text-center">The Outcome</h3>
+          <ul className="max-w-3xl mx-auto space-y-4 text-lg text-gray-300">
+            <li className="flex items-start gap-3 justify-center">
+              <span className="text-green-400 text-xl">✓</span>
+              <span>Clear item‑level margins and profit</span>
+            </li>
+            <li className="flex items-start gap-3 justify-center">
+              <span className="text-green-400 text-xl">✓</span>
+              <span>See winners and profit leaks in seconds</span>
+            </li>
+            <li className="flex items-start gap-3 justify-center">
+              <span className="text-green-400 text-xl">✓</span>
+              <span>Price with confidence (GST‑ready)</span>
+            </li>
+            <li className="flex items-start gap-3 justify-center">
+              <span className="text-green-400 text-xl">✓</span>
+              <span>All in Google Sheets — no new software</span>
+            </li>
+          </ul>
         </section>
 
         {/* How it works */}
