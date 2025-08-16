@@ -12,6 +12,13 @@ export default function Control() {
 
   return (
     <>
+      <style jsx global>{`
+        .faq-fly-left{opacity:0;transform:translateX(40px) translateY(-6px);animation:flyLeft .6s ease-out forwards}
+        .faq-fly-right{opacity:0;transform:translateX(-40px) translateY(-6px);animation:flyRight .6s ease-out forwards}
+        @keyframes flyLeft{to{opacity:1;transform:translateX(0) translateY(0)}}
+        @keyframes flyRight{to{opacity:1;transform:translateX(0) translateY(0)}}
+        @media (prefers-reduced-motion: reduce){.faq-fly-left,.faq-fly-right{animation:none;opacity:1;transform:none}}
+      `}</style>
       {/* Hero */}
       <section id="hero" className="grid items-center gap-10 py-12 md:py-16 md:grid-cols-2">
         <div>
@@ -114,14 +121,18 @@ export default function Control() {
         <div className="mx-auto max-w-6xl text-center fade-in-up">
           <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
           <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-left">
-            <FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." />
-            <FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." />
-            <FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." />
-            <FaqItem q="What if it is not for me?" a="Request a refund within 7 days." />
-          </div>
-          <div className="mt-8 flex justify-center">
-            <DynamicPriceCard />
+          <div className="mt-8 grid gap-6 lg:grid-cols-3 items-start">
+            <div className="space-y-6 text-left">
+              <div className="faq-fly-left delay-1"><FaqItem q="Who is it for?" a="Food vans, stalls, cafés, and small restaurants in Australia." /></div>
+              <div className="faq-fly-left delay-2"><FaqItem q="Can I customize it?" a="Yes. It is your copy to adapt and edit." /></div>
+            </div>
+            <div className="flex justify-center">
+              <DynamicPriceCard />
+            </div>
+            <div className="space-y-6 text-left">
+              <div className="faq-fly-right delay-1"><FaqItem q="Do I need Excel?" a="No. It is designed for Google Sheets." /></div>
+              <div className="faq-fly-right delay-2"><FaqItem q="What if it is not for me?" a="Request a refund within 7 days." /></div>
+            </div>
           </div>
         </div>
       </section>
