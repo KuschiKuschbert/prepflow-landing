@@ -59,76 +59,171 @@ export default function ThankYouPage() {
             </div>
           </div>
 
-          {/* Main Message */}
+          {/* Main Message - A/B Variant 1 */}
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl mb-6">
-            Thank You for Choosing{" "}
+            You're in — your PrepFlow demo is on its way{" "}
             <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-              PrepFlow
+              🚀
             </span>
           </h1>
           
           <p className="text-xl leading-8 text-gray-300 max-w-3xl mb-8">
-            Your COGS & Menu Profit Tool is ready to transform your restaurant's profitability. 
-            You'll receive your download link and setup instructions via email within the next few minutes.
+            Check your inbox for the link (allow a few minutes).
           </p>
 
-          {/* What's Next Section */}
-          <div className="w-full max-w-4xl mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-gray-100">What happens next?</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
-                <div className="h-12 w-12 rounded-xl bg-[#29E7CD]/20 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-[#29E7CD]">1</span>
+          {/* Delivery Box */}
+          <div className="w-full max-w-2xl mb-12">
+            <div className="rounded-2xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
+              <div className="space-y-4 text-left">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎥</span>
+                  <div>
+                    <p className="font-semibold text-white">Demo / Sample</p>
+                    <p className="text-gray-300">Click here if you don't want to wait → <a href="#" className="text-[#29E7CD] hover:underline">[[instant access link]]</a></p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Download & Install</h3>
-                <p className="text-gray-400 text-sm">Get your PrepFlow tool and follow the simple setup guide</p>
-              </div>
-              
-              <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
-                <div className="h-12 w-12 rounded-xl bg-[#D925C7]/20 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-[#D925C7]">2</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📧</span>
+                  <div>
+                    <p className="font-semibold text-white">Email reminder</p>
+                    <p className="text-gray-300">We also sent it to [[email placeholder]] — check spam if you don't see it.</p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Import Your Menu</h3>
-                <p className="text-gray-400 text-sm">Upload your current menu or start building from scratch</p>
-              </div>
-              
-              <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
-                <div className="h-12 w-12 rounded-xl bg-[#3B82F6]/20 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-[#3B82F6]">3</span>
-                </div>
-                <h3 className="text-lg font-semibold mb-2">See Profit Insights</h3>
-                <p className="text-gray-400 text-sm">Discover hidden opportunities to boost your margins</p>
               </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+          {/* Next Step CTA - Primary Conversion */}
+          <div className="w-full max-w-3xl mb-12">
+            <h2 className="text-3xl font-bold mb-4 text-white">Don't just watch it — use it.</h2>
+            <p className="text-lg text-gray-300 mb-8">
+              In 10 minutes you could see exactly which menu items are making or losing you money. Start your 30-day free trial today.
+            </p>
             <a
-              href="/auth"
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+              href="https://7495573591101.gumroad.com/l/prepflow"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
             >
-              Sign In to Your Account
-            </a>
-            <a 
-              href="/"
-              className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
-            >
-              Back to Homepage
+              Activate PrepFlow (30 days free)
             </a>
           </div>
 
-          {/* Additional Info */}
-          <div className="text-center text-gray-500 max-w-2xl">
-            <p className="mb-2">
-              Check your email (including spam folder) for your download link and welcome guide.
-            </p>
-            <p className="text-sm">
-              Having trouble? Email us at{" "}
-              <a href="mailto:support@prepflow.com" className="text-[#29E7CD] hover:underline">
-                support@prepflow.com
+          {/* Quick Wins Checklist */}
+          <div className="w-full max-w-4xl mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-gray-100">Quick Wins in 15 Minutes</h2>
+            <div className="rounded-2xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
+              <p className="text-lg text-gray-300 mb-6">In your first 15 minutes with PrepFlow:</p>
+              <div className="grid md:grid-cols-2 gap-4 text-left mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
+                    <span className="text-[#29E7CD] text-sm font-bold">1</span>
+                  </div>
+                  <span className="text-gray-300">Toggle GST for AU settings</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
+                    <span className="text-[#29E7CD] text-sm font-bold">2</span>
+                  </div>
+                  <span className="text-gray-300">Add 3 key ingredients + supplier costs</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
+                    <span className="text-[#29E7CD] text-sm font-bold">3</span>
+                  </div>
+                  <span className="text-gray-300">Paste last week's sales export</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#29E7CD]/20 border border-[#29E7CD]/30 flex items-center justify-center">
+                    <span className="text-[#29E7CD] text-sm font-bold">4</span>
+                  </div>
+                  <span className="text-gray-300">See top 5 profit leaks → fix 1 price or portion today</span>
+                </div>
+              </div>
+              <div className="text-center">
+                <a
+                  href="https://7495573591101.gumroad.com/l/prepflow"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-6 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300"
+                >
+                  Try it now → [[trial link]]
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Proof & Trust Strip */}
+          <div className="w-full max-w-4xl mb-12">
+            <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-2xl">
+              <div className="text-center mb-6">
+                <p className="text-lg text-gray-300 italic mb-4">
+                  "[[testimonial placeholder or pilot feedback]]"
+                </p>
+                <p className="text-sm text-gray-400">— [[Name]], [[Venue]], [[City]]</p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4 text-center">
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-[#29E7CD] text-2xl">🔒</span>
+                  <p className="text-sm text-gray-300">Data stays in your Google Drive. Cancel anytime.</p>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-[#29E7CD] text-2xl">✅</span>
+                  <p className="text-sm text-gray-300">30-day money-back guarantee.</p>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-[#29E7CD] text-2xl">🇦🇺</span>
+                  <p className="text-sm text-gray-300">Built for Aussie hospitality operators.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Support & Next Touch */}
+          <div className="w-full max-w-3xl mb-12">
+            <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-2xl">
+              <h3 className="text-xl font-semibold mb-4 text-white">Support & What's Next</h3>
+              <div className="space-y-4 text-left">
+                <div className="flex items-start gap-3">
+                  <span className="text-[#29E7CD] text-xl">📧</span>
+                  <div>
+                    <p className="text-gray-300">Need help? Email us at <a href="mailto:support@prepflow.org" className="text-[#29E7CD] hover:underline">support@prepflow.org</a> — reply in under 24h.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-[#29E7CD] text-xl">📬</span>
+                  <div>
+                    <p className="text-gray-300">Coming next: You'll get 3 onboarding emails (Demo recap, Profit leaks, Pricing tweaks).</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Secondary CTA - Community */}
+          <div className="w-full max-w-3xl mb-8">
+            <div className="rounded-2xl border border-[#D925C7]/30 bg-gradient-to-br from-[#D925C7]/10 to-[#29E7CD]/10 backdrop-blur-sm p-8 shadow-2xl">
+              <h3 className="text-xl font-semibold mb-4 text-white">Shape the Future of PrepFlow</h3>
+              <p className="text-gray-300 mb-6">
+                Want to shape PrepFlow? Join our early-user group and share feedback — get bonus templates & updates first.
+              </p>
+              <a
+                href="#"
+                className="inline-flex rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-6 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300"
+              >
+                Join pilot group
               </a>
-            </p>
+            </div>
+          </div>
+
+          {/* Back to Home */}
+          <div className="text-center">
+            <a 
+              href="/"
+              className="rounded-2xl border border-gray-600 px-6 py-3 text-sm font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
+            >
+              ← Back to Homepage
+            </a>
           </div>
         </section>
       </div>
