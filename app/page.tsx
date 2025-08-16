@@ -444,17 +444,24 @@ export default function Page() {
 /* ---------- Small helper components ---------- */
 function StickyMobileCta() {
   const [visible, setVisible] = React.useState<boolean>(false);
+  const [hasMinTime, setHasMinTime] = React.useState<boolean>(false);
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
     const onScroll = () => {
       const y = window.scrollY || 0;
-      setVisible(y > 40);
+      const viewport = typeof window !== 'undefined' ? window.innerHeight : 800;
+      const threshold = Math.max(400, Math.floor(viewport * 1.25));
+      setVisible(hasMinTime && y > threshold);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     // Initialize immediately on mount
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    const t = window.setTimeout(() => setHasMinTime(true), 6000);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.clearTimeout(t);
+    };
+  }, [hasMinTime]);
   return (
     <div
       className={`fixed bottom-3 left-3 right-3 z-50 transition-transform duration-300 ${visible ? 'translate-y-0' : 'translate-y-24'} motion-reduce:transition-none`}
