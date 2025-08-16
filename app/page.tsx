@@ -136,39 +136,35 @@ function LandingPageContent() {
           </div>
         </div>
 
-        {/* Problem ⇆ Outcome (centered table) */}
+        {/* Problem – 4 small boxes across */}
         <section className="py-14 md:py-16">
-          <div className="text-center mb-8">
-            <h3 className="text-3xl font-bold tracking-tight md:text-4xl">
-              <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">The Problem</span>
-              <span className="mx-3 text-gray-600">⇆</span>
-              <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">The Outcome</span>
-            </h3>
-          </div>
-          <div className="mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-red-400/30 bg-red-400/5 p-6">
-              <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3 justify-center">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>Hard to tell which dishes actually make money</span>
-                </li>
-                <li className="flex items-start gap-3 justify-center">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>COGS creep and waste chip away at profit</span>
-                </li>
-              </ul>
+          <h3 className="text-center text-3xl font-bold tracking-tight md:text-4xl mb-8">
+            <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">The Problem</span>
+          </h3>
+          <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-red-400 text-xl">✗</span>
+                <p className="text-sm md:text-base text-gray-300">Hard to tell which dishes actually make money</p>
+              </div>
             </div>
-            <div className="rounded-2xl border border-green-400/30 bg-green-400/5 p-6">
-              <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3 justify-center">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>Clear item‑level margins and profit</span>
-                </li>
-                <li className="flex items-start gap-3 justify-center">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>See winners and profit leaks in seconds</span>
-                </li>
-              </ul>
+            <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-red-400 text-xl">✗</span>
+                <p className="text-sm md:text-base text-gray-300">COGS creep and waste chip away at profit</p>
+              </div>
+            </div>
+            <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-red-400 text-xl">✗</span>
+                <p className="text-sm md:text-base text-gray-300">Pricing feels like guesswork — GST makes it fiddly</p>
+              </div>
+            </div>
+            <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-red-400 text-xl">✗</span>
+                <p className="text-sm md:text-base text-gray-300">Reports are slow or stuck in someone else&apos;s system</p>
+              </div>
             </div>
           </div>
         </section>
@@ -305,27 +301,37 @@ function LandingPageContent() {
           </div>
         </section>
 
-        {/* Outcome (benefits) */}
-        <section className="py-10 md:py-12">
-          <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6 text-center">The Outcome</h3>
-          <ul className="max-w-3xl mx-auto space-y-4 text-lg text-gray-300">
-            <li className="flex items-start gap-3 justify-center">
-              <span className="text-green-400 text-xl">✓</span>
-              <span>Clear item‑level margins and profit</span>
-            </li>
-            <li className="flex items-start gap-3 justify-center">
-              <span className="text-green-400 text-xl">✓</span>
-              <span>See winners and profit leaks in seconds</span>
-            </li>
-            <li className="flex items-start gap-3 justify-center">
-              <span className="text-green-400 text-xl">✓</span>
-              <span>Price with confidence (GST‑ready)</span>
-            </li>
-            <li className="flex items-start gap-3 justify-center">
-              <span className="text-green-400 text-xl">✓</span>
-              <span>All in Google Sheets — no new software</span>
-            </li>
-          </ul>
+        {/* Outcome – 4 small boxes across */}
+        <section className="py-12 md:py-14">
+          <h3 className="text-center text-3xl font-bold tracking-tight md:text-4xl mb-8">
+            <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">The Outcome</span>
+          </h3>
+          <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-[#29E7CD] text-xl">✓</span>
+                <p className="text-sm md:text-base text-gray-300">Clear item‑level margins and profit</p>
+              </div>
+            </div>
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-[#29E7CD] text-xl">✓</span>
+                <p className="text-sm md:text-base text-gray-300">See winners and profit leaks in seconds</p>
+              </div>
+            </div>
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-[#29E7CD] text-xl">✓</span>
+                <p className="text-sm md:text-base text-gray-300">Price with confidence (GST‑ready)</p>
+              </div>
+            </div>
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-[#29E7CD] text-xl">✓</span>
+                <p className="text-sm md:text-base text-gray-300">All in Google Sheets — no new software</p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* How it works */}
