@@ -111,10 +111,12 @@ export default function Control() {
 
       {/* Price & Refund */}
       <section id="pricing" className="py-10 md:py-12">
-        <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
-        <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
-        <div className="mt-6">
-          <DynamicPriceCard />
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-bold">One-time purchase. 7-day refund.</h2>
+          <p className="mt-2 text-gray-400">No subscriptions. Current price with next planned change.</p>
+          <div className="mt-6 flex justify-center">
+            <DynamicPriceCard />
+          </div>
         </div>
       </section>
 
