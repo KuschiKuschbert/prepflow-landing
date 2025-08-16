@@ -24,6 +24,32 @@ function LandingPageContent() {
     }
   }, [variant]);
 
+  // Outcome section on-scroll animation
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const grid = document.getElementById('outcome-grid');
+    if (!grid) return;
+    const items = Array.from(grid.querySelectorAll('.outcome-observe')) as HTMLElement[];
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !(window as unknown as { IntersectionObserver?: unknown }).IntersectionObserver) {
+      items.forEach((el) => el.classList.add('outcome-animate'));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).classList.add('outcome-animate');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '0px 0px -10% 0px' });
+    items.forEach((el, idx) => {
+      el.style.animationDelay = `${200 + idx * 120}ms`;
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   // Structured data for SEO
   const structuredData = {
     "@context": "https://schema.org",
@@ -328,26 +354,7 @@ function LandingPageContent() {
               </div>
             </div>
           </div>
-          <script dangerouslySetInnerHTML={{__html: `
-            (function(){
-              var run=function(){
-                var grid=document.getElementById('outcome-grid');
-                if(!grid) return; 
-                if(typeof window==='undefined') return;
-                var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if(reduce) { grid.querySelectorAll('.outcome-observe').forEach(function(n){n.classList.add('outcome-animate')}); return; }
-                if(!('IntersectionObserver' in window)) { grid.querySelectorAll('.outcome-observe').forEach(function(n){n.classList.add('outcome-animate')}); return; }
-                var items=grid.querySelectorAll('.outcome-observe');
-                var obs=new IntersectionObserver(function(entries){
-                  entries.forEach(function(e){
-                    if(e.isIntersecting){ e.target.classList.add('outcome-animate'); obs.unobserve(e.target); }
-                  });
-                },{threshold:0.7, rootMargin:'0px 0px -10% 0px'});
-                items.forEach(function(i,idx){ if(i instanceof HTMLElement){ i.style.animationDelay=(400+idx*140)+'ms'; obs.observe(i); }});
-              };
-              if('requestIdleCallback' in window){ window.requestIdleCallback(run); } else { window.setTimeout(run, 200); }
-            })();
-          `}} />
+          {/* outcome animation is handled via React effect above */}
         </section>
 
         {/* How it works */}
