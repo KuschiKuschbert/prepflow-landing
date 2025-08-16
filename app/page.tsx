@@ -188,7 +188,7 @@ export default function Page() {
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          Built for global hospitality. Works for restaurants, cafés, food trucks, caterers, and small groups worldwide. Multi-currency support for international markets.
+          Built for hospitality businesses worldwide. Works for restaurants, cafés, food trucks, caterers, and small groups. Easy configuration for local tax systems and currencies.
         </div>
 
         {/* Contributing Margin Highlight */}
@@ -261,10 +261,10 @@ export default function Page() {
                   Built for the World
                 </span> — Works Everywhere
               </h3>
-              <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                PrepFlow is designed for global hospitality businesses. Whether you're in Sydney, Singapore, San Francisco, or Stockholm, 
-                our multi-currency and multi-tax system adapts to your local market.
-              </p>
+                          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+              PrepFlow works for hospitality businesses worldwide. Users can easily configure their local tax system and currency, 
+              making it adaptable to any market.
+            </p>
             </div>
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -296,15 +296,15 @@ export default function Page() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🚀</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">Local Support</h4>
-                <p className="text-sm text-gray-400">Expert support in your timezone. We speak your language.</p>
+                <h4 className="font-semibold text-white mb-2">Easy Configuration</h4>
+                <p className="text-sm text-gray-400">Simple setup for your local tax system and currency requirements.</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>From food trucks in Toronto to fine dining in Tokyo</strong> — PrepFlow adapts to your business, 
-                your market, and your local regulations. No matter where you serve food, we help you maximize profits.
+                <strong>From local cafes to international chains</strong> — PrepFlow's flexible configuration works with your 
+                tax system and currency, helping you maximize profits regardless of your location.
               </p>
             </div>
           </div>
