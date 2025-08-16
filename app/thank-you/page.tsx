@@ -1,7 +1,4 @@
-export const metadata = {
-  title: "Thank You – PrepFlow",
-  description: "Thank you for choosing PrepFlow. Your COGS & Menu Profit Tool is ready to transform your restaurant's profitability.",
-};
+
 
 export default function ThankYouPage() {
   return (
