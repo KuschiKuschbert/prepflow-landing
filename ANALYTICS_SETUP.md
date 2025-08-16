@@ -159,8 +159,7 @@ The system tracks these conversion goals automatically:
    - Tracks successful purchases
    - Macro-conversion goal
 
-5. **Portal Access** ($10.00 value)
-   - Tracks member portal usage
+
    - User engagement metric
 
 ### **Custom Conversion Goals**

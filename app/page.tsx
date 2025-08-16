@@ -123,7 +123,7 @@ export default function Page() {
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
               </a>
-              <p className="w-full text-sm text-gray-500">No credit card · Results in 1 day · $29/month · Global support</p>
+                              <p className="w-full text-sm text-gray-500">No credit card · Results in 1 day · One-time purchase · Global support</p>
             </div>
           </div>
 
@@ -245,7 +245,7 @@ export default function Page() {
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
             <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
-            <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and member portal resources to learn the flow in minutes." />
+                          <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
           </div>
         </section>
 
@@ -260,7 +260,7 @@ export default function Page() {
               </h3>
               <p className="text-lg text-gray-300 max-w-3xl mx-auto">
                 While others charge thousands for complicated restaurant software, PrepFlow reveals the same profit insights 
-                in a simple Google Sheet for just $29/month.
+                in a simple Google Sheet for a one-time purchase.
               </p>
             </div>
             
@@ -395,7 +395,7 @@ export default function Page() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[#29E7CD]">✅</span>
-                    <span className="text-gray-300">Member portal with exclusive resources</span>
+                    <span className="text-gray-300">Comprehensive setup guide and resources</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[#29E7CD]">✅</span>
@@ -408,7 +408,7 @@ export default function Page() {
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   AUD $29
                 </p>
-                <p className="text-sm text-gray-500">per month · Cancel anytime</p>
+                <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
                 <p className="text-xs text-[#29E7CD] font-semibold">🔥 Limited founder pricing — ends soon</p>
                 <a
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"

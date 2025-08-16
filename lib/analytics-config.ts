@@ -154,19 +154,11 @@ export const conversionGoals: ConversionGoal[] = [
     name: 'Purchase Complete',
     type: 'page_view',
     target: '/thank-you',
-    value: 2900, // $29.00 (monthly subscription)
+    value: 2900, // $29.00 (one-time purchase)
     category: 'macro',
     description: 'User completed a purchase and reached thank you page'
   },
-  {
-    id: 'portal_access',
-    name: 'Portal Access',
-    type: 'page_view',
-    target: '/portal',
-    value: 1000, // $10.00
-    category: 'micro',
-    description: 'User accessed the member portal'
-  }
+
 ];
 
 // Event categories for consistent tracking
@@ -210,8 +202,7 @@ export const eventActions = {
   // Business
   feature_usage: 'feature_usage',
   user_registration: 'user_registration',
-  subscription_start: 'subscription_start',
-  subscription_cancel: 'subscription_cancel'
+
 } as const;
 
 // Helper function to check if analytics should be enabled
