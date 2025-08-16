@@ -30,6 +30,17 @@ function LandingPageContent() {
     const grid = document.getElementById('outcome-grid');
     if (!grid) return;
     const items = Array.from(grid.querySelectorAll('.outcome-observe')) as HTMLElement[];
+    const headline = document.getElementById('outcome-headline');
+    const headRect = headline ? headline.getBoundingClientRect() : null;
+    const headCenterX = headRect ? headRect.left + headRect.width / 2 : window.innerWidth / 2;
+    const headTop = headRect ? headRect.top : 0;
+    items.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const dx = headCenterX - (rect.left + rect.width / 2);
+      const dy = headTop - (rect.top + rect.height / 2) - 24;
+      el.style.setProperty('--fromX', `${Math.round(dx)}px`);
+      el.style.setProperty('--fromY', `${Math.round(dy)}px`);
+    });
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce || !(window as unknown as { IntersectionObserver?: unknown }).IntersectionObserver) {
       items.forEach((el) => el.classList.add('outcome-animate'));
@@ -114,10 +125,11 @@ function LandingPageContent() {
         <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-[#3B82F6]/10 rounded-full blur-3xl" />
       </div>
       <style jsx global>{`
-        .outcome-observe{opacity:0;transform:translateY(10px)}
+        .outcome-from{opacity:0;transform:translate(var(--fromX,0px), var(--fromY,10px))}
+        .outcome-observe{opacity:0}
         .outcome-animate{animation:outFade .6s ease-out forwards}
-        @keyframes outFade{to{opacity:1;transform:translateY(0)}}
-        @media (prefers-reduced-motion: reduce){.outcome-observe{opacity:1;transform:none}.outcome-animate{animation:none}}
+        @keyframes outFade{to{opacity:1;transform:translate(0,0)}}
+        @media (prefers-reduced-motion: reduce){.outcome-from,.outcome-observe{opacity:1;transform:none}.outcome-animate{animation:none}}
       `}</style>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -324,30 +336,30 @@ function LandingPageContent() {
 
         {/* Outcome – 4 small boxes across */}
         <section className="py-12 md:py-14">
-          <h3 className="text-center text-3xl font-bold tracking-tight md:text-4xl mb-8">
+          <h3 className="text-center text-3xl font-bold tracking-tight md:text-4xl mb-8" id="outcome-headline">
             <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">The Outcome</span>
           </h3>
           {/* Outcome animation styles declared globally at top-level; using class names only here */}
           <div className="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="outcome-grid">
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-from outcome-observe" style={{['--fromX' as unknown as string]:'0px',['--fromY' as unknown as string]:'-24px'}}>
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">Clear item‑level margins and profit</p>
               </div>
             </div>
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-from outcome-observe" style={{['--fromX' as unknown as string]:'-32px',['--fromY' as unknown as string]:'-24px'}}>
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">See winners and profit leaks in seconds</p>
               </div>
             </div>
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-from outcome-observe" style={{['--fromX' as unknown as string]:'32px',['--fromY' as unknown as string]:'-24px'}}>
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">Price with confidence (GST‑ready)</p>
               </div>
             </div>
-            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-observe">
+            <div className="rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-5 outcome-from outcome-observe" style={{['--fromX' as unknown as string]:'0px',['--fromY' as unknown as string]:'-24px'}}>
               <div className="flex items-start gap-3">
                 <span className="text-[#29E7CD] text-xl">✓</span>
                 <p className="text-sm md:text-base text-gray-300">All in Google Sheets — no new software</p>
