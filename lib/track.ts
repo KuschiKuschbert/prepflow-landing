@@ -1,7 +1,8 @@
 // Tracking library for A/B testing events
 // Supports PostHog with fallback to local logging and Vercel Analytics custom events
 
-import { track as vaTrack } from '@vercel/analytics/react';
+import { track as vaTrack } from '@vercel/analytics';
+import { getClientFlags } from './flags';
 import { getClientFlags } from './flags';
 
 export interface TrackingEvent {
@@ -27,7 +28,8 @@ function trackWithPostHog(event: string, properties?: TrackingProperties): void 
 		}
 		// Vercel Analytics custom event
 		try {
-			vaTrack(event, properties || {});
+			const flags = getClientFlags();
+			vaTrack(event, properties || {}, { flags: Object.keys(flags) });
 		} catch {}
 		// Fallback to console for development only
 		if (process.env.NODE_ENV === 'development') {
@@ -229,7 +231,7 @@ export function initializeTracking(variant: string): void {
 	// Vercel Analytics custom page event in addition to our tracker
 	try { 
 		const flags = getClientFlags();
-		vaTrack('page_view', { experiment: 'landing_ab_001', variant, flags }); 
+		vaTrack('page_view', { experiment: 'landing_ab_001', variant }, { flags: Object.keys(flags) });
 	} catch {}
 	trackPageView(variant);
 	setupScrollTracking(variant);
