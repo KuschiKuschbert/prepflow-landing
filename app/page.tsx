@@ -101,19 +101,19 @@ export default function Page() {
         <section className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              Your Menu Is Leaking Cash. PrepFlow Finds Every Cent — {" "}
-              <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                in 24 Hours Flat.
-              </span>
+              Get clarity on your margins within 24 hours*
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-              See what's draining your profit. Fix it before the next lunch rush. No expensive software, no complicated setup — just results.
+              PrepFlow visualizes your menu profitability at a glance.
+            </p>
+            <p className="mt-2 text-sm text-gray-400">
+              *Instant visibility of COGS and profit data — optimization depends on your decisions.
             </p>
             <ul className="mt-8 space-y-3 text-base text-gray-300">
-              <Bullet>Know your real profit per dish — no more guesswork or gut feeling</Bullet>
-              <Bullet>See <strong>contributing margin</strong> — understand what each dish truly contributes to your bottom line</Bullet>
-              <Bullet>Classify menu items instantly: margin monsters vs dead weight</Bullet>
-              <Bullet>See where your waste, yield, and prep time destroy profits</Bullet>
+              <Bullet>Infinite Stock List with pack size, supplier, storage, and yield/trim tracking</Bullet>
+              <Bullet>Recipe builder with automatic COGS, GP%, and GP$ calculations</Bullet>
+              <Bullet>Paste in sales data → get popularity, profit, and auto-classification</Bullet>
+              <Bullet>Dashboard with averages, margins, and top-performing items</Bullet>
               <Bullet>Works with GST, VAT, and tax systems worldwide — simple setup, no expensive consultants needed</Bullet>
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -121,7 +121,7 @@ export default function Page() {
                   href="https://www.prepflow.org/buy/0e6d865e-4ef3-437d-b92f-9a231e1e81e1"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
-                  Start Your Profit Scan Now
+                  Get Menu Clarity Now
                 </a>
               <a href="#demo" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Watch 2‑min Demo
@@ -304,7 +304,7 @@ export default function Page() {
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
                 <strong>Stop paying thousands for restaurant software</strong> — Get the same profit insights in a simple 
-                Google Sheet that you can set up yourself. No complexity, no consultants, just results.
+                Google Sheet that you can set up yourself. No complexity, no consultants, just clarity and data.
               </p>
             </div>
           </div>
@@ -319,8 +319,8 @@ export default function Page() {
             <Step n={1} title="Load Recipes & Prices" body="Add your recipes & ingredient prices." />
             <Step n={2} title="Add Prep & Waste" body="Include prep time, yield, waste data." />
             <Step n={3} title="Upload Sales Data" body="Drop in your weekly/monthly sales." />
-            <Step n={4} title="See Profit Reality" body="Watch the system expose profit traps per plate." />
-            <Step n={5} title="Get Action Plan" body="Simple suggestions: raise this price, drop that item, swap that cut." />
+            <Step n={4} title="See Profit Reality" body="Get instant visibility of COGS, GP%, and profit per item." />
+            <Step n={5} title="Make Data-Driven Decisions" body="Use insights to optimize pricing, menu items, and operations." />
           </div>
         </section>
 
@@ -329,11 +329,11 @@ export default function Page() {
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl">2‑Minute Demo</h3>
-              <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change shifts COGS% and GP$ immediately.</p>
+              <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ in real-time.</p>
               <ul className="mt-6 space-y-3 text-base text-gray-300">
-                <Bullet>Find margin leaks in seconds</Bullet>
-                <Bullet>Know your profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
-                <Bullet>Make data‑driven price changes</Bullet>
+                <Bullet>See margin calculations instantly</Bullet>
+                <Bullet>Understand profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
+                <Bullet>Make informed pricing decisions</Bullet>
               </ul>
               <div className="mt-8">
                 <a
