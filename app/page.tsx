@@ -351,8 +351,8 @@ function LandingPageContent() {
         {/* Pricing */}
         <section id="pricing" className="py-14 md:py-16">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
-            <div className="flex flex-col items-center gap-12 md:grid md:grid-cols-2">
-              <div className="order-2 md:order-none">
+            <div className="flex flex-col items-center gap-12">
+              <div className="order-2 w-full max-w-2xl">
                 <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
                 <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
                 
@@ -366,7 +366,7 @@ function LandingPageContent() {
               </div>
               
               {/* Cards Layout (Control) */}
-              <div className="order-1 md:order-none rounded-2xl border border-gray-500/60 bg-[#2a2a2a]/40 p-6 md:p-8 text-center shadow-md w-full sm:max-w-md md:max-w-none">
+              <div className="order-1 self-center rounded-2xl border border-gray-500/60 bg-[#2a2a2a]/40 p-6 md:p-8 text-center shadow-md w-full sm:max-w-md md:max-w-lg mx-auto">
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
                 <p className="text-sm text-gray-400">one-time purchase · 7-day refund</p>
                 <div className="mt-4 mx-auto max-w-xs text-left">
@@ -479,7 +479,8 @@ function StickyMobileCta() {
       const y = window.scrollY || 0;
       const viewport = typeof window !== 'undefined' ? window.innerHeight : 800;
       const threshold = Math.max(400, Math.floor(viewport * 1.25));
-      setVisible(hasMinTime && y > threshold);
+      const isDesktop = typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : false;
+      setVisible(!isDesktop && hasMinTime && y > threshold);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     // Initialize immediately on mount
