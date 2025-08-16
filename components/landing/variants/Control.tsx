@@ -24,13 +24,14 @@ export default function Control() {
           el.classList.add(dir === 'left' ? 'animate-left' : 'animate-right');
           obs.unobserve(el);
         }
-      }, { threshold: 0.2 });
+      }, { threshold: 0.6 });
       obs.observe(el);
     };
-    attach(left1Ref.current, 'left', 0);
-    attach(left2Ref.current, 'left', 120);
-    attach(right1Ref.current, 'right', 0);
-    attach(right2Ref.current, 'right', 120);
+    const startDelayMs = 300; // start a bit later
+    attach(left1Ref.current, 'left', startDelayMs + 0);
+    attach(left2Ref.current, 'left', startDelayMs + 140);
+    attach(right1Ref.current, 'right', startDelayMs + 0);
+    attach(right2Ref.current, 'right', startDelayMs + 140);
   }, []);
 
   return (
