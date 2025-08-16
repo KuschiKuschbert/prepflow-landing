@@ -4,7 +4,7 @@ import { getCurrentPrice } from '../../../lib/pricing';
 
 export async function GET(request: NextRequest) {
   const experimentKey = 'landing_ab_001';
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const cookieVariant = cookieStore.get(`pf_exp_${experimentKey}`)?.value;
   const headerVariant = request.headers.get('x-ab-variant') || undefined;
   const variant = headerVariant || cookieVariant || 'control';
