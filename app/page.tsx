@@ -366,9 +366,16 @@ function LandingPageContent() {
               </div>
               
               {/* Cards Layout (Control) */}
-              <div className="order-1 md:order-none rounded-2xl border border-gray-500/60 bg-[#2a2a2a]/40 p-6 md:p-8 text-center shadow-md md:sticky md:top-24 w-full sm:max-w-md md:max-w-none">
+              <div className="order-1 md:order-none rounded-2xl border border-gray-500/60 bg-[#2a2a2a]/40 p-6 md:p-8 text-center shadow-md w-full sm:max-w-md md:max-w-none">
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
                 <p className="text-sm text-gray-400">one-time purchase · 7-day refund</p>
+                <div className="mt-4 mx-auto max-w-xs text-left">
+                  <ul className="list-disc list-inside text-sm text-gray-300 space-y-2">
+                    <li>Google Sheet template</li>
+                    <li>Setup guide and sample data</li>
+                    <li>Works with Google Sheets</li>
+                  </ul>
+                </div>
                 <a
                   href="/go/gumroad"
                   target="_blank"
