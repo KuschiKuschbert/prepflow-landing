@@ -572,7 +572,7 @@ export default function Page() {
                   Start Now — Get Menu Clarity Today
                 </a>
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Gumroad</p>
-                <p className="mt-2 text-xs text-gray-400">Not satisfied in 30 days? Full refund.</p>
+                <p className="mt-2 text-xs text-gray-400">Not satisfied in 7 days? Full refund.</p>
                 <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
               </div>
             </div>
@@ -655,7 +655,7 @@ export default function Page() {
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
             <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-                            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 30 days, you'll get every cent back. No hassle." />
+                            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
             <FAQ q="Will this slow me down?" a="Setup takes 1 hour. After that, you'll save 2-3 hours per week on menu planning." />
           </div>
         </section>
