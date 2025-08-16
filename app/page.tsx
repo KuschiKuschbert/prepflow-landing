@@ -82,7 +82,7 @@ function LandingPageContent() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-8" role="banner">
+        <header className="flex items-center justify-between py-6 md:py-8" role="banner">
           <div className="flex items-center gap-3">
             <img 
               src="/images/prepflow-logo.png" 
@@ -96,7 +96,7 @@ function LandingPageContent() {
               PrepFlow
             </span>
           </div>
-          <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
+          <nav className="hidden gap-6 text-sm md:flex" role="navigation" aria-label="Main navigation">
             <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow features">Features</a>
             <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Learn how PrepFlow works">How it works</a>
             <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow pricing">Pricing</a>
@@ -118,13 +118,24 @@ function LandingPageContent() {
         {/* Render the appropriate variant */}
         {renderVariant()}
 
-        {/* Trust bar */}
-        <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          <strong>Stop guessing. Start knowing.</strong> PrepFlow is like an X-ray for your menu's numbers.
+        {/* Compact trust chips (replacing bulky trust bar) */}
+        <div className="mt-6 mb-2 flex flex-wrap items-center gap-3 text-xs md:text-sm text-gray-300">
+          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+            <span className="text-[#29E7CD]">🧮</span>
+            <span>GST-ready • AUD</span>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+            <span className="text-[#29E7CD]">🛡️</span>
+            <span>7‑day refund</span>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1">
+            <span className="text-[#29E7CD]">📄</span>
+            <span>Works in Google Sheets</span>
+          </div>
         </div>
 
         {/* Problem → Outcome */}
-        <section className="py-20">
+        <section className="py-14 md:py-16">
           <div className="grid gap-12 md:grid-cols-2">
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
@@ -181,7 +192,7 @@ function LandingPageContent() {
         </section>
 
         {/* Contributing Margin Highlight */}
-        <section className="py-20" id="contributing-margin">
+        <section className="py-14 md:py-16" id="contributing-margin">
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
@@ -257,7 +268,7 @@ function LandingPageContent() {
         </section>
 
         {/* Features – tailored to the spreadsheet */}
-        <section id="features" className="py-20">
+        <section id="features" className="py-14 md:py-16">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
             <FeatureCard title="Recipe Costing" body="Build dishes from your ingredients and see dish cost, COGS%, GP$ and GP% directly in the sheet." />
             <FeatureCard title="Yield & Waste Aware" body="Include trim and prep yields so unit costs and margins reflect real kitchen conditions." />
@@ -268,7 +279,7 @@ function LandingPageContent() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="py-20">
+        <section id="how-it-works" className="py-14 md:py-16">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
             How it works in 3 steps
           </h2>
@@ -319,7 +330,7 @@ function LandingPageContent() {
         {/* Demo and lead magnet removed: sheet purchase only */}
 
         {/* Pricing */}
-        <section id="pricing" className="py-20">
+        <section id="pricing" className="py-14 md:py-16">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
@@ -340,7 +351,7 @@ function LandingPageContent() {
               </div>
               
               {/* Cards Layout (Control) */}
-              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
+              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg md:sticky md:top-24">
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">{formatAud(getCurrentPrice().price)}</p>
                 <p className="text-sm text-gray-500">one-time purchase · 7-day refund</p>
                 <a
@@ -362,21 +373,21 @@ function LandingPageContent() {
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="py-20">
+        <section id="faq" className="py-14 md:py-16">
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
             FAQ
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
-            <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
+            <FAQ q="Does it work in Australia?" a="Yes. It’s GST-aware and priced in AUD." />
+            <FAQ q="What if it doesn't work for me?" a="If it's not what you expected, request a refund within 7 days." />
             <FAQ q="Will this slow me down?" a="Setup is straightforward. Add your data at your own pace." />
           </div>
         </section>
 
         {/* Trust Elements */}
         <section className="py-16 border-t border-gray-700">
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <h3 className="text-2xl font-bold text-white mb-4">Helpful info</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
