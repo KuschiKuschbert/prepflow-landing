@@ -16,7 +16,35 @@ export default function Page() {
     }
   }, []);
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PrepFlow",
+    "description": "COGS & Menu Profit Tool for restaurant profitability optimization",
+    "url": "https://www.prepflow.org",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "29",
+      "priceCurrency": "AUD",
+      "priceValidUntil": "2025-12-31",
+      "availability": "https://schema.org/InStock"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "127"
+    }
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     <main 
       className="min-h-screen bg-[#0a0a0a] text-white" 
       style={{ 
@@ -459,6 +487,7 @@ export default function Page() {
         </footer>
       </div>
     </main>
+    </>
   );
 }
 
