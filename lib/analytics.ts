@@ -224,8 +224,22 @@ class PrepFlowAnalytics {
   }
 
   private sendToAnalytics(event: AnalyticsEvent): void {
-    // Send to Vercel Analytics (automatic)
-    // Send to custom analytics endpoint if needed
+    // Vercel Analytics (automatic)
+    // GA4 (if configured)
+    if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
+      const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+      if (typeof w.gtag === 'function') {
+        try {
+          w.gtag('event', event.action, {
+            event_category: event.category,
+            event_label: event.label,
+            value: event.value,
+            page_location: window.location.href,
+            page_path: event.page
+          });
+        } catch {}
+      }
+    }
     if (process.env.NODE_ENV === 'development') {
       console.log('📊 Analytics Event:', event);
     }
@@ -235,6 +249,20 @@ class PrepFlowAnalytics {
   }
 
   private sendConversionData(conversion: ConversionEvent): void {
+    // GA4 conversion-like event
+    if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
+      const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+      if (typeof w.gtag === 'function') {
+        try {
+          w.gtag('event', conversion.type, {
+            event_category: 'conversion',
+            page_location: window.location.href,
+            page_path: conversion.page,
+            value: 1
+          });
+        } catch {}
+      }
+    }
     if (process.env.NODE_ENV === 'development') {
       console.log('🎯 Conversion Event:', conversion);
     }

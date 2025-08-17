@@ -66,7 +66,7 @@ export const defaultAnalyticsConfig: AnalyticsConfig = {
   },
   
   googleAnalytics: {
-    enabled: false,
+    enabled: !!process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
     measurementId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
     debugMode: process.env.NODE_ENV === 'development',
   },
