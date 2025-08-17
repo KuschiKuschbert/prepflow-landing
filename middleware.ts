@@ -25,7 +25,9 @@ export function middleware(request: NextRequest) {
     const rotateSteps = isNaN(rotateStepsRaw) ? (rotateParam ? 1 : 0) : Math.max(1, Math.floor(rotateStepsRaw));
     const key = request.nextUrl.searchParams.get('key') || '';
     const host = request.headers.get('host') || '';
-    const rotateAllowed = !!rotateParam && (host.startsWith('localhost') || key === (process.env.ROTATE_KEY || 'shkya'));
+    // Allow rotation only on localhost OR when a ROTATE_KEY is explicitly set and matches. No default fallback in prod.
+    const hasValidKey = !!process.env.ROTATE_KEY && key === process.env.ROTATE_KEY;
+    const rotateAllowed = !!rotateParam && (host.startsWith('localhost') || hasValidKey);
 
     let userId = request.cookies.get('pf_uid')?.value;
     if (!userId) userId = `pf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

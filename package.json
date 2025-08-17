@@ -8,8 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npx tsx lib/experiment.test.ts",
-    "test:watch": "npx tsx --watch lib/experiment.test.ts",
+    "test": "tsx lib/experiment.test.ts && tsx lib/pricing.test.ts",
+    "test:watch": "tsx --watch lib/experiment.test.ts lib/pricing.test.ts",
     "format": "prettier --write .",
     "type-check": "tsc --noEmit"
   },

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { getCurrentPrice, formatAud, getUpcomingChanges, daysUntil } from '../lib/pricing';
 import Control from '../components/landing/variants/Control';
@@ -73,7 +74,14 @@ function LandingPageContent() {
     "description": "COGS and menu clarity in a Google Sheet for small food businesses.",
     "url": "https://www.prepflow.org",
     "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web Browser"
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "AUD",
+      "price": getCurrentPrice().price,
+      "availability": "https://schema.org/InStock",
+      "url": "https://www.prepflow.org/go/gumroad"
+    }
   };
 
   // Render the appropriate variant
@@ -147,14 +155,7 @@ function LandingPageContent() {
         {/* Header */}
         <header className="flex items-center justify-between py-6 md:py-8 fade-in-up" role="banner">
           <div className="flex items-center gap-3">
-            <img 
-              src="/images/prepflow-logo.png" 
-              alt="PrepFlow Logo"
-              className="h-12 w-auto"
-              loading="eager"
-              width="48"
-              height="48"
-            />
+            <Image src="/images/prepflow-logo.png" alt="PrepFlow Logo" className="h-12 w-auto" priority width={48} height={48} />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow
             </span>
@@ -310,35 +311,35 @@ function LandingPageContent() {
           </div>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="text-center">
-              <img 
+              <Image 
                 src="/images/settings-screenshot.png" 
                 alt="PrepFlow Settings page with business configuration"
                 className="h-40 md:h-48 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
-                width="200"
-                height="96"
+                width={400}
+                height={240}
               />
               <p className="text-xs text-gray-400 mt-2">Settings</p>
             </div>
             <div className="text-center">
-              <img 
+              <Image 
                 src="/images/recipe-screenshot.png" 
                 alt="PrepFlow Recipe costing for Double Cheese Burger"
                 className="h-40 md:h-48 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
-                width="200"
-                height="96"
+                width={400}
+                height={240}
               />
               <p className="text-xs text-gray-400 mt-2">Recipe Costing</p>
             </div>
             <div className="text-center">
-              <img 
+              <Image 
                 src="/images/stocklist-screenshot.png" 
                 alt="PrepFlow Infinite Stock List with ingredient management"
                 className="h-40 md:h-48 w-full object-cover rounded-lg border border-gray-600"
                 loading="lazy"
-                width="200"
-                height="96"
+                width={400}
+                height={240}
               />
               <p className="text-xs text-gray-400 mt-2">Stock List</p>
             </div>
@@ -494,9 +495,9 @@ function LandingPageContent() {
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <p>© {new Date().getFullYear()} PrepFlow. All rights reserved.</p>
             <div className="flex items-center gap-8">
-              <a href="#" className="hover:text-[#29E7CD] transition-colors">Terms</a>
-              <a href="#" className="hover:text-[#29E7CD] transition-colors">Privacy</a>
-              <a href="#" className="hover:text-[#29E7CD] transition-colors">Support</a>
+              <a href="/terms" className="hover:text-[#29E7CD] transition-colors">Terms</a>
+              <a href="/privacy" className="hover:text-[#29E7CD] transition-colors">Privacy</a>
+              <a href="/support" className="hover:text-[#29E7CD] transition-colors">Support</a>
             </div>
           </div>
         </footer>

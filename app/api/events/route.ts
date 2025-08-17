@@ -5,6 +5,10 @@ import { join } from 'path';
 // Local event tracking endpoint
 export async function POST(request: NextRequest) {
   try {
+    // In production, avoid filesystem writes in serverless environments
+    if (process.env.NODE_ENV !== 'development') {
+      return new NextResponse(null, { status: 204 });
+    }
     const body = await request.json();
     
     // Validate event data
