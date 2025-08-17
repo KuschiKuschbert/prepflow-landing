@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ABTestingDemoPage() {
   return (
@@ -9,13 +10,13 @@ export default function ABTestingDemoPage() {
       {/* Header */}
       <header className="flex items-center justify-between py-8 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <img 
+          <Image 
             src="/images/prepflow-logo.png" 
             alt="PrepFlow Logo"
             className="h-12 w-auto"
-            loading="eager"
-            width="48"
-            height="48"
+            priority
+            width={48}
+            height={48}
           />
           <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
             PrepFlow

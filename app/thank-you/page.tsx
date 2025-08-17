@@ -3,6 +3,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -20,11 +21,13 @@ export default function ThankYouPage() {
         {/* Header */}
         <header className="flex items-center justify-between py-8">
           <div className="flex items-center gap-3">
-            <img 
+            <Image 
               src="/images/prepflow-logo.png" 
               alt="PrepFlow Logo" 
               className="h-12 w-auto"
-              loading="eager"
+              priority
+              width={48}
+              height={48}
             />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow
