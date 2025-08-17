@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import { initializeTracking } from '../../../lib/track';
+import { initializePageTracking } from '../../../lib/analytics';
 import Image from 'next/image';
 
 export default function V2() {
   React.useEffect(() => {
-    // Initialize tracking for V2 variant
-    initializeTracking('v2');
+    initializePageTracking('v2');
   }, []);
 
   return (
@@ -57,6 +56,7 @@ export default function V2() {
                 loading="lazy"
                 width={800}
                 height={500}
+                sizes="(max-width: 768px) 100vw, 800px"
               />
             </div>
             

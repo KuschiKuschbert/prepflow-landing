@@ -136,6 +136,13 @@ function LandingPageContent() {
           accept.onclick=function(){
             document.cookie='pf_consent=granted; Max-Age='+(60*60*24*365)+'; Path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');
             updateConsent('granted');
+            // Load GA script on-demand if not loaded yet
+            try{
+              if(!window.gtag && ${process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? 'true' : 'false'}){
+                var s=document.createElement('script'); s.async=true; s.src='https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}'; document.head.appendChild(s);
+                var inline=document.createElement('script'); inline.innerHTML="window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}',{anonymize_ip:true});"; document.head.appendChild(inline);
+              }
+            }catch(e){}
             bar.remove();
           };
           decline.onclick=function(){
@@ -205,7 +212,7 @@ function LandingPageContent() {
         {/* Header */}
         <header className="flex items-center justify-between py-6 md:py-8 fade-in-up" role="banner">
           <div className="flex items-center gap-3">
-            <Image src="/images/prepflow-logo.png" alt="PrepFlow Logo" className="h-12 w-auto" priority width={48} height={48} />
+            <Image src="/images/prepflow-logo.png" alt="PrepFlow Logo" className="h-12 w-auto" priority width={48} height={48} sizes="48px" />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow
             </span>

@@ -1,8 +1,7 @@
 // Tracking library for A/B testing events
 // Supports PostHog with fallback to local logging and Vercel Analytics custom events
 
-import { track as vaTrack } from '@vercel/analytics';
-import { getClientFlags } from './flags';
+// Deprecated: prefer lib/analytics.ts
 
 export interface TrackingEvent {
 	event: string;
@@ -17,31 +16,9 @@ export interface TrackingProperties {
 	[key: string]: AllowedPropertyValue;
 }
 
-// External tracking (optional). Keep safe and dependency-free by default
-function trackWithPostHog(event: string, properties?: TrackingProperties): void {
-	if (typeof window === 'undefined') return;
-	try {
-		// PostHog (if present)
-		const w = window as Window & { posthog?: { capture?: (e: string, p?: Record<string, unknown>) => void } };
-		if (w.posthog?.capture) {
-			w.posthog.capture(event, properties);
-			return;
-		}
-		// Vercel Analytics custom event
-		try {
-			const flags = getClientFlags();
-			const data = (properties || {}) as Record<string, AllowedPropertyValue>;
-			vaTrack(event, data, { flags: Object.keys(flags) });
-		} catch {}
-		// Fallback to console for development only
-		if (process.env.NODE_ENV === 'development') {
-			console.log('📊 Tracking Event:', { event, properties });
-		}
-	} catch (error) {
-		if (process.env.NODE_ENV === 'development') {
-			console.error('Tracking failed:', error);
-		}
-	}
+// External tracking deprecated; no-op
+function trackWithPostHog(event?: string, properties?: TrackingProperties): void {
+	return;
 }
 
 // Local logging fallback
@@ -75,9 +52,8 @@ export function track(
 	properties?: TrackingProperties
 ): void {
 	const props = (properties || {}) as TrackingProperties;
-	// Try PostHog/Vercel first (flags handled inside)
+	// Try (deprecated) external, then local
 	trackWithPostHog(event, props);
-	// Also track locally as backup
 	trackLocally(event, props);
 }
 
@@ -218,7 +194,7 @@ export function setupCTATracking(variant: string): void {
 					track(eventType || 'cta_click', {
 						experiment: 'landing_ab_001',
 						variant,
-						element: button.tagName.toLowerCase(),
+						element: (button as HTMLElement).tagName.toLowerCase(),
 						text: button.textContent?.trim()
 					});
 			}
@@ -226,18 +202,8 @@ export function setupCTATracking(variant: string): void {
 	});
 }
 
-// Initialize all tracking
-export function initializeTracking(variant: string): void {
-	// Vercel Analytics custom page event in addition to our tracker
-	try { 
-		const flags = getClientFlags();
-		vaTrack('page_view', { experiment: 'landing_ab_001', variant }, { flags: Object.keys(flags) });
-	} catch {}
-	trackPageView(variant);
-	setupScrollTracking(variant);
-	setupFormTracking(variant);
-	setupCTATracking(variant);
-}
+// Initialize all tracking (deprecated)
+export function initializeTracking(): void {}
 
 const trackingApi = {
 	track,

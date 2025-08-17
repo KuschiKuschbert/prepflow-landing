@@ -94,7 +94,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Google Consent Mode v2 (default denied until consent) */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? (
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_GA === 'true') ? (
           <>
             <Script id="consent-default" strategy="afterInteractive">
               {`
@@ -110,7 +110,7 @@ export default function RootLayout({
             </Script>
           </>
         ) : null}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ? (
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_GA === 'true') ? (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}

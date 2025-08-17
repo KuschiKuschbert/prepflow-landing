@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import { initializeTracking } from '../../../lib/track';
+import { initializePageTracking } from '../../../lib/analytics';
 import Image from 'next/image';
 
 export default function V1() {
   React.useEffect(() => {
-    // Initialize tracking for V1 variant
-    initializeTracking('v1');
+    initializePageTracking('v1');
   }, []);
 
   return (
@@ -54,6 +53,7 @@ export default function V1() {
                 loading="lazy"
                 width={800}
                 height={500}
+                sizes="(max-width: 768px) 100vw, 800px"
               />
               {/* Action Overlay */}
               <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">

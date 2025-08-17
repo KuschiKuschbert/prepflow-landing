@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import { initializeTracking } from '../../../lib/track';
+import { initializePageTracking } from '../../../lib/analytics';
 import Image from 'next/image';
 
 export default function V3() {
   React.useEffect(() => {
-    // Initialize tracking for V3 variant
-    initializeTracking('v3');
+    initializePageTracking('v3');
   }, []);
 
   return (

@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import { initializeTracking } from '../../../lib/track';
+import { initializePageTracking } from '../../../lib/analytics';
 import Image from 'next/image';
 
 export default function Control() {
   React.useEffect(() => {
-    // Initialize tracking for control variant
-    initializeTracking('control');
+    initializePageTracking('control');
   }, []);
 
   const left1Ref = React.useRef<HTMLDivElement | null>(null);
@@ -114,6 +113,7 @@ export default function Control() {
                 loading="lazy"
                 width={800}
                 height={500}
+                sizes="(max-width: 768px) 100vw, 800px"
               />
             </div>
             <div className="mt-6 grid grid-cols-3 gap-4">

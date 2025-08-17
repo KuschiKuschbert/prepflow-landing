@@ -333,3 +333,39 @@ export const trackConversion = analytics.trackConversion.bind(analytics);
 export const trackPerformance = analytics.trackPerformanceMetrics.bind(analytics);
 export const getSessionId = analytics.getSessionId.bind(analytics);
 export const setUserId = analytics.setUserId.bind(analytics);
+
+// Lightweight client-side page tracking initializer replacing lib/track.ts
+export function initializePageTracking(variant: string): void {
+  if (typeof window === 'undefined') return;
+  // Page view
+  trackEvent('page_view', 'navigation', 'landing', 1);
+  // Scroll depth 50% and 75%
+  try {
+    let tracked50 = false;
+    let tracked75 = false;
+    const onScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
+      if (!tracked50 && pct >= 50) {
+        trackEvent('scroll_depth', 'engagement', '50%', 1);
+        tracked50 = true;
+      }
+      if (!tracked75 && pct >= 75) {
+        trackEvent('scroll_depth', 'engagement', '75%', 1);
+        tracked75 = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+  } catch {}
+  // CTA buttons via data-event
+  try {
+    document.querySelectorAll('[data-event]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const type = (el.getAttribute('data-event') || 'cta_click');
+        const text = el.textContent?.trim();
+        trackEvent(type, 'conversion', text, 1);
+      }, { once: false });
+    });
+  } catch {}
+}

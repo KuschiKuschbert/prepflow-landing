@@ -3,11 +3,15 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
+import { trackConversion } from '../../lib/analytics';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    try { trackConversion({ type: 'purchase_complete', element: 'thank_you', page: '/thank-you', timestamp: Date.now(), sessionId: 'session', }); } catch {}
+  }, []);
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Background gradient effects */}
