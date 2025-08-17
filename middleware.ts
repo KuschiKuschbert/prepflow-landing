@@ -61,6 +61,22 @@ export function middleware(request: NextRequest) {
 
     const response = rotateAllowed ? NextResponse.redirect(url) : NextResponse.rewrite(url);
 
+    // Mark EEA users for consent banner using edge geo when available (Vercel)
+    try {
+      // @ts-ignore
+      const country = (request as any).geo?.country as string | undefined;
+      const eeaCountries = new Set(['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LI','LT','LU','MT','NL','NO','PL','PT','RO','SK','SI','ES','SE']);
+      const isEea = !!country && eeaCountries.has(country.toUpperCase());
+      if (isEea) {
+        response.cookies.set('pf_eea', '1', {
+          maxAge: 60 * 60 * 24 * 365,
+          httpOnly: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+        });
+      }
+    } catch {}
+
     response.cookies.set('pf_uid', userId, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: true,

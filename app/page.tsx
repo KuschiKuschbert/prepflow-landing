@@ -101,6 +101,56 @@ function LandingPageContent() {
 
   return (
     <>
+      {/* Consent banner for EEA users */}
+      <script dangerouslySetInnerHTML={{__html:`(function(){
+        try{
+          var isEea = document.cookie.split('; ').some(function(c){return c.indexOf('pf_eea=1')===0});
+          if(!isEea) return;
+          if(document.getElementById('pf-consent')) return;
+          var bar=document.createElement('div');
+          bar.id='pf-consent';
+          bar.setAttribute('role','dialog');
+          bar.setAttribute('aria-live','polite');
+          bar.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#111;color:#fff;border-top:1px solid #333;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap';
+          var text=document.createElement('span');
+          text.textContent='We use cookies for analytics. You can accept or decline.';
+          text.style.cssText='font-size:14px;color:#e5e7eb';
+          var accept=document.createElement('button');
+          accept.textContent='Accept';
+          accept.style.cssText='background:#29E7CD;color:#000;padding:8px 12px;border-radius:10px;font-weight:600';
+          var decline=document.createElement('button');
+          decline.textContent='Decline';
+          decline.style.cssText='background:#333;color:#e5e7eb;padding:8px 12px;border-radius:10px;font-weight:600;border:1px solid #555';
+          var updateConsent=function(status){
+            if(!window.gtag) return;
+            if(status==='granted'){
+              gtag('consent','update',{
+                'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'
+              });
+            } else {
+              gtag('consent','update',{
+                'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied'
+              });
+            }
+          };
+          accept.onclick=function(){
+            document.cookie='pf_consent=granted; Max-Age='+(60*60*24*365)+'; Path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');
+            updateConsent('granted');
+            bar.remove();
+          };
+          decline.onclick=function(){
+            document.cookie='pf_consent=denied; Max-Age='+(60*60*24*365)+'; Path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');
+            updateConsent('denied');
+            bar.remove();
+          };
+          var prior=(document.cookie.match(/(?:^|; )pf_consent=([^;]+)/)||[])[1];
+          if(!prior){
+            bar.appendChild(text);bar.appendChild(accept);bar.appendChild(decline);document.body.appendChild(bar);
+          } else {
+            updateConsent(prior);
+          }
+        }catch(e){}
+      })();`}} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
