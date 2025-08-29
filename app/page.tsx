@@ -707,20 +707,20 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Visual Proof - Case Study */}
-        <section id="case-study" className="py-20">
+        {/* How PrepFlow Works in Practice */}
+        <section id="how-it-works-practice" className="py-20">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">Real Results in Real Time</h3>
-                              <p className="text-lg text-gray-300">See the transformation from guesswork to data-driven clarity</p>
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">How PrepFlow Works in Practice</h3>
+              <p className="text-lg text-gray-300">From guesswork to data-driven clarity - here's what you can expect</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="text-center">
                 <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4">
                   <p className="text-2xl font-bold text-orange-400">Before PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-orange-300">24%</p>
-                  <p className="text-sm text-gray-400">Average GP</p>
+                  <p className="text-4xl font-extrabold text-orange-300">?</p>
+                  <p className="text-sm text-gray-400">Unclear margins</p>
                 </div>
                 <p className="text-sm text-gray-400">Blind pricing, gut feeling, unclear margins everywhere</p>
               </div>
@@ -728,50 +728,50 @@ export default function Page() {
               <div className="text-center">
                 <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
                   <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-green-300">34%</p>
-                  <p className="text-sm text-gray-400">Average GP within weeks</p>
+                  <p className="text-4xl font-extrabold text-green-300">📊</p>
+                  <p className="text-sm text-gray-400">Clear insights</p>
                 </div>
                 <p className="text-sm text-gray-400">Data-driven decisions, margin insights revealed, clarity achieved</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
-              <p className="text-sm text-gray-400">"We identified margin improvement opportunities that could add $2,400+ to our monthly profit"</p>
-              <p className="text-xs text-gray-500 mt-2">*Results may vary. This represents potential opportunity, not guaranteed outcome.</p>
+              <p className="text-sm text-gray-400">PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins</p>
+              <p className="text-xs text-gray-500 mt-2">*Results depend on your current menu structure and how you implement the insights</p>
             </div>
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section id="testimonials" className="py-20">
+        {/* What PrepFlow Helps You Achieve */}
+        <section id="benefits" className="py-20">
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            Real Results from Real Venues
+            What PrepFlow Helps You Achieve
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            <Testimonial 
-              quote="We raised two prices and cut one item. Our gross margin improved significantly within a week." 
-              author="Emily W., Owner @ The Dockhouse" 
-              result="Improved GP margins"
+            <BenefitCard 
+              title="Better Pricing Decisions"
+              description="See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing."
+              icon="💰"
             />
-            <Testimonial 
-              quote="Identified $1,200+ in potential margin improvements on our burger menu. PrepFlow paid for itself quickly." 
-              author="Marcus T., Head Chef @ Beachside Café" 
-              result="$1,200+ opportunity found"
+            <BenefitCard 
+              title="Identify Profit Opportunities"
+              description="Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they'll have the biggest impact."
+              icon="🎯"
             />
-            <Testimonial 
-              quote="Set up in about an hour. Now I have clear insights into which dishes perform best and which need attention." 
-              author="Sarah L., Manager @ Food Truck Co" 
-              result="Quick setup, clear insights"
+            <BenefitCard 
+              title="Streamline Operations"
+              description="Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line."
+              icon="⚡"
             />
           </div>
           
           <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
               <span className="text-[#29E7CD]">🎬</span>
-              <span className="text-white font-medium">Watch: "Before vs After using PrepFlow"</span>
-              <button className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
-                Play Video
-              </button>
+              <span className="text-white font-medium">See PrepFlow in action with our demo</span>
+              <a href="#demo" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
+                Watch Demo
+              </a>
             </div>
           </div>
         </section>
@@ -860,25 +860,23 @@ function Step({ n, title, body }: { n: number; title: string; body: string }) {
   );
 }
 
-function Testimonial({ quote, author, result }: { quote: string; author: string; result?: string }) {
-  return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
-      <p className="text-base italic text-gray-200 leading-relaxed">"{quote}"</p>
-      {result && (
-        <div className="mt-3 inline-block bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-lg px-3 py-1">
-          <span className="text-sm font-semibold text-[#29E7CD]">{result}</span>
-        </div>
-      )}
-      <p className="mt-4 text-sm font-medium text-[#29E7CD]">— {author}</p>
-    </div>
-  );
-}
+
 
 function FAQ({ q, a }: { q: string; a: string }) {
   return (
     <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
       <p className="text-base font-semibold text-white mb-3">{q}</p>
       <p className="text-gray-300 leading-relaxed">{a}</p>
+    </div>
+  );
+}
+
+function BenefitCard({ title, description, icon }: { title: string; description: string; icon: string }) {
+  return (
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
+      <div className="text-4xl mb-4">{icon}</div>
+      <h4 className="text-xl font-semibold text-white mb-3">{title}</h4>
+      <p className="text-gray-300 leading-relaxed">{description}</p>
     </div>
   );
 }
