@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { trackEvent, trackConversion } from '../lib/analytics';
+import { trackGTMEvent, trackGTMConversion } from './GoogleTagManager';
 
 interface ExitIntentTrackerProps {
   onExitIntent?: () => void;
@@ -43,7 +44,17 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true }: Exit
           onExitIntent();
         }
 
-        // Send to Google Analytics
+        // Send to GTM data layer
+        trackGTMEvent('exit_intent', {
+          event_category: 'engagement',
+          event_label: 'user_leaving_page',
+          trigger: 'mouse_leave_top',
+          page: window.location.pathname,
+          user_agent: navigator.userAgent,
+          referrer: document.referrer,
+        });
+
+        // Send to Google Analytics (legacy support)
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'exit_intent', {
             event_category: 'engagement',
@@ -62,7 +73,14 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true }: Exit
         // Track page unload event
         trackEvent('page_unload', 'engagement', 'user_closing_tab');
         
-        // Send to Google Analytics
+        // Send to GTM data layer
+        trackGTMEvent('page_unload', {
+          event_category: 'engagement',
+          event_label: 'user_closing_tab',
+          page: window.location.pathname,
+        });
+        
+        // Send to Google Analytics (legacy support)
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'page_unload', {
             event_category: 'engagement',
@@ -80,7 +98,14 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true }: Exit
         // Track tab switch/background event
         trackEvent('tab_background', 'engagement', 'user_switched_tab');
         
-        // Send to Google Analytics
+        // Send to GTM data layer
+        trackGTMEvent('tab_background', {
+          event_category: 'engagement',
+          event_label: 'user_switched_tab',
+          page: window.location.pathname,
+        });
+        
+        // Send to Google Analytics (legacy support)
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'tab_background', {
             event_category: 'engagement',
