@@ -97,7 +97,7 @@ export default function RootLayout({
         {children}
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
-        <GoogleTagManager gtmId="GTM-XXXXXXX" ga4MeasurementId="G-W1D5LQXGJT" />
+        <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
         <GoogleAnalyticsTest />
       </body>
     </html>

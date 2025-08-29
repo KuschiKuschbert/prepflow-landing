@@ -9,7 +9,7 @@ export interface GTMConfig {
 }
 
 export const gtmConfig: GTMConfig = {
-  gtmId: 'GTM-XXXXXXX', // Replace with your actual GTM container ID
+  gtmId: 'GTM-WQMV22RD', // Your actual GTM container ID
   ga4MeasurementId: 'G-W1D5LQXGJT',
   enabled: true,
   debugMode: process.env.NODE_ENV === 'development',
