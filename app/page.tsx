@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
@@ -696,9 +697,9 @@ export default function Page() {
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <p>© {new Date().getFullYear()} PrepFlow. All rights reserved.</p>
             <div className="flex items-center gap-8">
-              <a href="#" className="hover:text-[#29E7CD] transition-colors">Terms</a>
-              <a href="#" className="hover:text-[#29E7CD] transition-colors">Privacy</a>
-              <a href="#" className="hover:text-[#29E7CD] transition-colors">Support</a>
+              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors">Terms</Link>
+              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors">Privacy</Link>
+              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors">Support</a>
             </div>
           </div>
         </footer>
