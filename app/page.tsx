@@ -331,32 +331,32 @@ export default function Page() {
             </h2>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto">
               This isn't just another tool - it's my personal solution to real kitchen problems, 
-              refined over 12+ years of working in restaurants around the world.
+              refined over 20 years of working in restaurants across Europe and Australia.
             </p>
           </div>
           
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="text-center">
               <div className="text-4xl mb-4">👨‍🍳</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2012 - First Creation</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">2008-2012 - Early Experience</h3>
               <p className="text-gray-300 text-sm">
-                Built the first version as Head Chef to solve real COGS and profitability problems in my kitchen
+                Started as Sous Chef at Krautwells GmbH, managing vegan cuisine and training junior chefs
               </p>
             </div>
             
             <div className="text-center">
               <div className="text-4xl mb-4">🌍</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2012-2020 - Global Evolution</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">2012-2018 - European Leadership</h3>
               <p className="text-gray-300 text-sm">
-                Refined and evolved the tool while working in kitchens around the world, adapting to different markets
+                Founded KSK-Küchenspezialkräfte vegan catering, managed teams of 21 staff, served 1,200+ daily
               </p>
             </div>
             
             <div className="text-center">
               <div className="text-4xl mb-4">🇦🇺</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2016-2024 - Australian Perfection</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">2018-2024 - Australian Excellence</h3>
               <p className="text-gray-300 text-sm">
-                Spent 8 years perfecting the tool for Australian and global markets, with GST and multi-currency support
+                Executive Chef roles, Head Chef at ALH Hotels, leading teams of 9 chefs with AI integration
               </p>
             </div>
             
@@ -375,7 +375,11 @@ export default function Page() {
                 Why I Created PrepFlow
               </h3>
               <p className="text-gray-300 leading-relaxed mb-4">
-                As a Head Chef, I was constantly struggling with menu costing, waste management, and profitability analysis. 
+                Over 20 years as a chef, I've managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. 
+                I've faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.
+              </p>
+              <p className="text-gray-300 leading-relaxed mb-4">
+                As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. 
                 Existing solutions were either too complex, too expensive, or didn't understand real kitchen operations.
               </p>
               <p className="text-gray-300 leading-relaxed mb-4">
@@ -383,8 +387,8 @@ export default function Page() {
                 track ingredient costs, and show me exactly which menu items were profitable and which were losing money.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                Over the years, I've refined it to work perfectly for Australian venues (with GST support) and 
-                international markets. It's the tool I wish I had when I started, and now I'm sharing it with you.
+                Having worked across Europe and Australia, I've refined it to work perfectly for venues worldwide - with GST support for Australian markets, 
+                multi-currency options, and the flexibility to adapt to any kitchen's needs. It's the tool I wish I had when I started, and now I'm sharing it with you.
               </p>
             </div>
           </div>
@@ -694,7 +698,7 @@ export default function Page() {
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-purple-500">✅</span>
-                      <span>12+ years of real kitchen experience</span>
+                      <span>20 years of real kitchen experience</span>
                     </div>
                   </div>
                 </div>

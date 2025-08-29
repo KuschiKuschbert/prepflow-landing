@@ -24,25 +24,25 @@ export default function RealStoryNotifier({ enabled = true, showStory = true }: 
   const realStory: RealStorySection[] = [
     {
       id: '1',
-      year: '2012',
-      title: 'First Creation',
-      description: 'Created the first version as Head Chef to solve real kitchen problems',
-      location: 'First Restaurant',
+      year: '2008-2012',
+      title: 'Early Experience',
+      description: 'Started as Sous Chef at Krautwells GmbH, managing vegan cuisine and training junior chefs',
+      location: 'Germany',
       icon: '👨‍🍳'
     },
     {
       id: '2',
-      year: '2012-2020',
-      title: 'Global Evolution',
-      description: 'Refined and evolved the tool while working in kitchens around the world',
-      location: 'International',
+      year: '2012-2018',
+      title: 'European Leadership',
+      description: 'Founded KSK-Küchenspezialkräfte vegan catering, managed teams of 21 staff, served 1,200+ daily',
+      location: 'Europe',
       icon: '🌍'
     },
     {
       id: '3',
-      year: '2016-2024',
-      title: 'Australian Perfection',
-      description: 'Spent 8 years perfecting the tool for Australian and global markets',
+      year: '2018-2024',
+      title: 'Australian Excellence',
+      description: 'Executive Chef roles, Head Chef at ALH Hotels, leading teams of 9 chefs with AI integration',
       location: 'Australia',
       icon: '🇦🇺'
     },
