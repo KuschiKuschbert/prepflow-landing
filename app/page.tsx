@@ -405,8 +405,8 @@ export default function Page() {
 
         {/* Features – tailored to the spreadsheet */}
         <section id="features" className="py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+          <div className="text-center mb-16 animate-fade-in-up animate-delay-2400">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6 gradient-text-animate">
               Built for Real Kitchen Operations
             </h2>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
@@ -415,24 +415,38 @@ export default function Page() {
           </div>
           
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <FeatureCard title="Stock List (infinite)" body="Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit." />
-            <FeatureCard title="COGS Recipes" body="Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly." />
-            <FeatureCard title="Item Performance" body="Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef's Kiss, Hidden Gem or Bargain Bucket." />
+            <div className="animate-fade-in-up animate-delay-2500">
+              <FeatureCard title="Stock List (infinite)" body="Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-2600">
+              <FeatureCard title="COGS Recipes" body="Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-2700">
+              <FeatureCard title="Item Performance" body="Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef's Kiss, Hidden Gem or Bargain Bucket." />
+            </div>
           </div>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
-            <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
-            <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
-                          <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
-            <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
+            <div className="animate-fade-in-up animate-delay-2800">
+              <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-2900">
+              <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-3000">
+              <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-3100">
+              <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
+            </div>
           </div>
         </section>
 
         {/* Global Features */}
         <section id="global-features" className="py-24">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl animate-fade-in-scale animate-delay-3200 hover-glow">
             <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
-                <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent gradient-text-animate">
                   Expose Hidden Profits
                 </span> — One Sheet, Every Answer
               </h3>
@@ -443,32 +457,32 @@ export default function Page() {
             </div>
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#3B82F6] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="text-center space-y-4 animate-fade-in-up animate-delay-3300 hover-lift">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#3B82F6] rounded-2xl flex items-center justify-center mx-auto mb-4 hover-scale animate-float">
                   <span className="text-2xl">🌍</span>
                 </div>
                 <h4 className="font-semibold text-white mb-2">Multi-Currency</h4>
                 <p className="text-sm text-gray-400">USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.</p>
               </div>
               
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="text-center space-y-4 animate-fade-in-up animate-delay-3400 hover-lift">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-4 hover-scale animate-float">
                   <span className="text-2xl">🏛️</span>
                 </div>
                 <h4 className="font-semibold text-white mb-2">Tax Systems</h4>
                 <p className="text-sm text-gray-400">GST, VAT, Sales Tax, HST. Configure for your local requirements.</p>
               </div>
               
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="text-center space-y-4 animate-fade-in-up animate-delay-3500 hover-lift">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4 hover-scale animate-float">
                   <span className="text-2xl">📱</span>
                 </div>
                 <h4 className="font-semibold text-white mb-2">24/7 Access</h4>
                 <p className="text-sm text-gray-400">Cloud-based Google Sheets. Access from anywhere, anytime.</p>
               </div>
               
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="text-center space-y-4 animate-fade-in-up animate-delay-3600 hover-lift">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4 hover-scale animate-float">
                   <span className="text-2xl">🚀</span>
                 </div>
                 <h4 className="font-semibold text-white mb-2">No Consultants</h4>
@@ -476,7 +490,7 @@ export default function Page() {
               </div>
             </div>
             
-            <div className="mt-12 text-center">
+            <div className="mt-12 text-center animate-fade-in-up animate-delay-3700">
               <p className="text-base text-gray-300 max-w-4xl mx-auto">
                 <strong>One sheet. Key insights your kitchen needs.</strong> Identify profit opportunities in your menu 
                 with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.
@@ -487,8 +501,8 @@ export default function Page() {
 
         {/* How it works */}
         <section id="how-it-works" className="py-24">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+          <div className="text-center mb-16 animate-fade-in-up animate-delay-3800">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6 gradient-text-animate">
               Get Results in 3 Simple Steps
             </h2>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
@@ -497,42 +511,48 @@ export default function Page() {
           </div>
           
           <div className="grid gap-8 md:grid-cols-3 mb-16">
-            <Step n={1} title="Set up (5–10 min)" body="Turn on GST, add ingredients, yields, and supplier costs." />
-            <Step n={2} title="Import sales" body="Paste your POS export into the Sales tab." />
-            <Step n={3} title="Decide & act" body="Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix." />
+            <div className="animate-fade-in-up animate-delay-3900">
+              <Step n={1} title="Set up (5–10 min)" body="Turn on GST, add ingredients, yields, and supplier costs." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-4000">
+              <Step n={2} title="Import sales" body="Paste your POS export into the Sales tab." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-4100">
+              <Step n={3} title="Decide & act" body="Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix." />
+            </div>
           </div>
           
           {/* 60-Second Checklist */}
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 lg:p-12 shadow-2xl">
-            <h3 className="text-2xl font-bold text-center mb-8 lg:text-3xl">60-Second Checklist</h3>
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 lg:p-12 shadow-2xl animate-fade-in-scale animate-delay-4200 hover-glow">
+            <h3 className="text-2xl font-bold text-center mb-8 lg:text-3xl gradient-text-animate">60-Second Checklist</h3>
             <div className="grid gap-6 md:grid-cols-5 text-center">
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl font-semibold">1</span>
+              <div className="flex flex-col items-center gap-3 animate-fade-in-up animate-delay-4300 hover-lift">
+                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center hover-scale hover-glow">
+                  <span className="text-[#29E7CD] text-xl font-semibold animate-pulse-slow">1</span>
                 </div>
                 <span className="text-sm text-gray-300">GST toggle set?</span>
               </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl font-semibold">2</span>
+              <div className="flex flex-col items-center gap-3 animate-fade-in-up animate-delay-4400 hover-lift">
+                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center hover-scale hover-glow">
+                  <span className="text-[#29E7CD] text-xl font-semibold animate-pulse-slow">2</span>
                 </div>
                 <span className="text-sm text-gray-300">Ingredient yields/waste entered?</span>
               </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl font-semibold">3</span>
+              <div className="flex flex-col items-center gap-3 animate-fade-in-up animate-delay-4500 hover-lift">
+                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center hover-scale hover-glow">
+                  <span className="text-[#29E7CD] text-xl font-semibold animate-pulse-slow">3</span>
                 </div>
                 <span className="text-sm text-gray-300">Sales pasted?</span>
               </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl font-semibold">4</span>
+              <div className="flex flex-col items-center gap-3 animate-fade-in-up animate-delay-4600 hover-lift">
+                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center hover-scale hover-glow">
+                  <span className="text-[#29E7CD] text-xl font-semibold animate-pulse-slow">4</span>
                 </div>
                 <span className="text-sm text-gray-300">Review top 5 low-margin items?</span>
               </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl font-semibold">5</span>
+              <div className="flex flex-col items-center gap-3 animate-fade-in-up animate-delay-4700 hover-lift">
+                <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center hover-scale hover-glow">
+                  <span className="text-[#29E7CD] text-xl font-semibold animate-pulse-slow">5</span>
                 </div>
                 <span className="text-sm text-gray-300">Re-check dashboard tomorrow</span>
               </div>
@@ -543,26 +563,26 @@ export default function Page() {
         {/* Demo */}
         <section id="demo" className="py-24">
           <div className="grid items-center gap-12 md:grid-cols-2">
-            <div className="space-y-6">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">2‑Minute Demo</h3>
+            <div className="space-y-6 animate-fade-in-left animate-delay-4800">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl gradient-text-animate">2‑Minute Demo</h3>
               <p className="text-lg text-gray-300 md:text-xl">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ in real-time.</p>
               <ul className="space-y-3 text-base text-gray-300">
-                <Bullet>See margin calculations instantly</Bullet>
-                <Bullet>Understand profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
-                <Bullet>Make informed pricing decisions</Bullet>
+                <Bullet className="animate-fade-in-up animate-delay-4900"><strong>See margin calculations instantly</strong></Bullet>
+                <Bullet className="animate-fade-in-up animate-delay-5000"><strong>Understand profit ex-tax per item (GST, VAT, Sales Tax)</strong></Bullet>
+                <Bullet className="animate-fade-in-up animate-delay-5100"><strong>Make informed pricing decisions</strong></Bullet>
               </ul>
               <div className="pt-4">
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 inline-block"
+                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 inline-block btn-hover-effect hover-lift hover-glow"
                 >
                   Get PrepFlow Now
                 </a>
               </div>
             </div>
-            <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
+            <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 animate-fade-in-right animate-delay-4900 hover-scale hover-glow">
               <div className="relative w-full aspect-video rounded-xl border border-gray-600 bg-gray-800 flex items-center justify-center">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#29E7CD] mb-4"></div>
@@ -590,9 +610,9 @@ export default function Page() {
 
         {/* Lead Magnet */}
         <section id="lead-magnet" className="py-24">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl animate-fade-in-scale animate-delay-5200 hover-glow">
             <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6 gradient-text-animate">
                 See PrepFlow before you buy
               </h3>
               <p className="text-lg text-gray-300 md:text-xl">
@@ -600,7 +620,7 @@ export default function Page() {
               </p>
             </div>
             
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-auto animate-fade-in-up animate-delay-5300">
               <LeadMagnetForm 
                 onSuccess={(data: { name: string; email: string; preference: 'demo' | 'sample' }) => {
                   console.log('Lead captured:', data);
@@ -616,9 +636,9 @@ export default function Page() {
         </section>
 
         {/* Simple Pricing Banner */}
-        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-8 text-center text-white my-16">
+        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-8 text-center text-white my-16 animate-fade-in-up animate-delay-5400 hover-scale">
           <div className="mb-3">
-            <h3 className="text-2xl font-bold mb-2 lg:text-3xl">
+            <h3 className="text-2xl font-bold mb-2 lg:text-3xl animate-pulse-slow">
               🚀 Simple, Honest Pricing
             </h3>
             <p className="text-sm opacity-90 md:text-base">
@@ -629,14 +649,14 @@ export default function Page() {
 
         {/* Pricing */}
         <section id="pricing" className="py-24">
-          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
+          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16 animate-fade-in-scale animate-delay-5500 hover-glow">
             <div className="grid items-center gap-12 md:grid-cols-2">
-              <div className="space-y-6">
-                <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Get Your Menu Clarity Tool</h3>
+              <div className="space-y-6 animate-fade-in-left animate-delay-5600">
+                <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl gradient-text-animate">Get Your Menu Clarity Tool</h3>
                 <p className="text-lg text-gray-300 md:text-xl">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
                 
                 {/* Refund Policy */}
-                <div className="p-6 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
+                <div className="p-6 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20 animate-fade-in-up animate-delay-5700 hover-scale hover-glow">
                   <div className="text-center">
                     <h4 className="text-sm font-semibold text-[#29E7CD] mb-3">Our Refund Policy</h4>
                     <p className="text-sm text-gray-300 leading-relaxed">
@@ -648,34 +668,34 @@ export default function Page() {
                 </div>
                   
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD] text-lg">✅</span>
+                  <div className="flex items-center gap-3 animate-fade-in-up animate-delay-5800">
+                    <span className="text-[#29E7CD] text-lg animate-pulse-slow">✅</span>
                     <span className="text-gray-300">Google Sheet template — ready to use immediately</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD] text-lg">✅</span>
+                  <div className="flex items-center gap-3 animate-fade-in-up animate-delay-5900">
+                    <span className="text-[#29E7CD] text-lg animate-pulse-slow">✅</span>
                     <span className="text-gray-300">Automated COGS, GP%, GP$ per item</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD] text-lg">✅</span>
+                  <div className="flex items-center gap-3 animate-fade-in-up animate-delay-6000">
+                    <span className="text-[#29E7CD] text-lg animate-pulse-slow">✅</span>
                     <span className="text-gray-300">Popularity & profit classes (Chef's Kiss etc.)</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD] text-lg">✅</span>
+                  <div className="flex items-center gap-3 animate-fade-in-up animate-delay-6100">
+                    <span className="text-[#29E7CD] text-lg animate-pulse-slow">✅</span>
                     <span className="text-gray-300">AI Method Generator for cooking optimization</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD] text-lg">✅</span>
+                  <div className="flex items-center gap-3 animate-fade-in-up animate-delay-6200">
+                    <span className="text-[#29E7CD] text-lg animate-pulse-slow">✅</span>
                     <span className="text-gray-300">Comprehensive setup guide and resources</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD] text-lg">✅</span>
+                  <div className="flex items-center gap-3 animate-fade-in-up animate-delay-6300">
+                    <span className="text-[#29E7CD] text-lg animate-pulse-slow">✅</span>
                     <span className="text-gray-300">7-day refund policy</span>
                   </div>
                 </div>
               </div>
-              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
-                <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent lg:text-6xl">
+              <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg animate-fade-in-right animate-delay-5700 hover-scale hover-glow">
+                <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent lg:text-6xl gradient-text-animate">
                   AUD $29
                 </p>
                 <p className="text-sm text-gray-500 mb-8">one-time purchase · Lifetime access</p>
@@ -683,7 +703,7 @@ export default function Page() {
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                  className="inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 btn-hover-effect hover-lift hover-glow"
                 >
                   Start Now — Get Menu Clarity Today
                 </a>
@@ -694,16 +714,16 @@ export default function Page() {
                 {/* Trust Indicators */}
                 <div className="mt-6 pt-4 border-t border-gray-600">
                   <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
-                    <div className="flex items-center gap-1">
-                      <span className="text-green-500">🔒</span>
+                    <div className="flex items-center gap-1 animate-fade-in-up animate-delay-6400">
+                      <span className="text-green-500 animate-pulse-slow">🔒</span>
                       <span>SSL Secure</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-blue-500">🛡️</span>
+                    <div className="flex items-center gap-1 animate-fade-in-up animate-delay-6500">
+                      <span className="text-blue-500 animate-pulse-slow">🛡️</span>
                       <span>Privacy Focused</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-purple-500">✅</span>
+                    <div className="flex items-center gap-1 animate-fade-in-up animate-delay-6600">
+                      <span className="text-purple-500 animate-pulse-slow">✅</span>
                       <span>20 years of real kitchen experience</span>
                     </div>
                   </div>
@@ -715,33 +735,33 @@ export default function Page() {
 
         {/* How PrepFlow Works in Practice */}
         <section id="how-it-works-practice" className="py-24">
-          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 lg:p-12 shadow-2xl animate-fade-in-scale animate-delay-6700 hover-glow">
             <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">How PrepFlow Works in Practice</h3>
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6 gradient-text-animate">How PrepFlow Works in Practice</h3>
               <p className="text-lg text-gray-300 md:text-xl">From guesswork to data-driven clarity - here's what you can expect</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="text-center space-y-4">
-                <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4">
+              <div className="text-center space-y-4 animate-fade-in-left animate-delay-6800 hover-lift">
+                <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4 hover-scale hover-glow">
                   <p className="text-2xl font-bold text-orange-400">Before PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-orange-300">?</p>
+                  <p className="text-4xl font-extrabold text-orange-300 animate-pulse-slow">?</p>
                   <p className="text-sm text-gray-400">Unclear margins</p>
                 </div>
                 <p className="text-sm text-gray-400">Blind pricing, gut feeling, unclear margins everywhere</p>
               </div>
               
-              <div className="text-center space-y-4">
-                <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
+              <div className="text-center space-y-4 animate-fade-in-right animate-delay-6900 hover-lift">
+                <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4 hover-scale hover-glow">
                   <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
-                  <p className="text-4xl font-extrabold text-green-300">📊</p>
+                  <p className="text-4xl font-extrabold text-green-300 animate-pulse-slow">📊</p>
                   <p className="text-sm text-gray-400">Clear insights</p>
                 </div>
                 <p className="text-sm text-gray-400">Data-driven decisions, margin insights revealed, clarity achieved</p>
               </div>
             </div>
             
-            <div className="mt-12 text-center">
+            <div className="mt-12 text-center animate-fade-in-up animate-delay-7000">
               <p className="text-sm text-gray-400">PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins</p>
               <p className="text-xs text-gray-500 mt-2">*Results depend on your current menu structure and how you implement the insights</p>
             </div>
@@ -750,8 +770,8 @@ export default function Page() {
 
         {/* What PrepFlow Helps You Achieve */}
         <section id="benefits" className="py-24">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+          <div className="text-center mb-16 animate-fade-in-up animate-delay-7100">
+            <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6 gradient-text-animate">
               What PrepFlow Helps You Achieve
             </h3>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
@@ -760,28 +780,34 @@ export default function Page() {
           </div>
           
           <div className="grid gap-8 md:grid-cols-3 mb-12">
-            <BenefitCard 
-              title="Better Pricing Decisions"
-              description="See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing."
-              icon="💰"
-            />
-            <BenefitCard 
-              title="Identify Profit Opportunities"
-              description="Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they'll have the biggest impact."
-              icon="🎯"
-            />
-            <BenefitCard 
-              title="Streamline Operations"
-              description="Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line."
-              icon="⚡"
-            />
+            <div className="animate-fade-in-up animate-delay-7200">
+              <BenefitCard 
+                title="Better Pricing Decisions"
+                description="See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing."
+                icon="💰"
+              />
+            </div>
+            <div className="animate-fade-in-up animate-delay-7300">
+              <BenefitCard 
+                title="Identify Profit Opportunities"
+                description="Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they'll have the biggest impact."
+                icon="🎯"
+              />
+            </div>
+            <div className="animate-fade-in-up animate-delay-7400">
+              <BenefitCard 
+                title="Streamline Operations"
+                description="Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line."
+                icon="⚡"
+              />
+            </div>
           </div>
           
-          <div className="text-center">
-            <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
-              <span className="text-[#29E7CD]">🎬</span>
+          <div className="text-center animate-fade-in-up animate-delay-7500">
+            <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3 hover-scale hover-glow">
+              <span className="text-[#29E7CD] animate-float">🎬</span>
               <span className="text-white font-medium">See PrepFlow in action with our demo</span>
-              <a href="#demo" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
+              <a href="#demo" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors hover-scale">
                 Watch Demo
               </a>
             </div>
@@ -790,8 +816,8 @@ export default function Page() {
 
         {/* FAQ */}
         <section id="faq" className="py-24">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+          <div className="text-center mb-16 animate-fade-in-up animate-delay-7600">
+            <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6 gradient-text-animate">
               Frequently Asked Questions
             </h3>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
@@ -800,28 +826,36 @@ export default function Page() {
           </div>
           
           <div className="grid gap-8 md:grid-cols-2">
-            <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
-            <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
-            <FAQ q="Will this slow me down?" a="Setup typically takes 1-2 hours. After that, you'll save time on menu planning and cost analysis." />
+            <div className="animate-fade-in-up animate-delay-7700">
+              <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-7800">
+              <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-7900">
+              <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
+            </div>
+            <div className="animate-fade-in-up animate-delay-8000">
+              <FAQ q="Will this slow me down?" a="Setup typically takes 1-2 hours. After that, you'll save time on menu planning and cost analysis." />
+            </div>
           </div>
         </section>
 
         {/* Trust Elements */}
         <section className="py-20 border-t border-gray-700">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-white mb-6 lg:text-3xl">Built for Independent Venues & Small Kitchens</h3>
+          <div className="text-center mb-12 animate-fade-in-up animate-delay-8100">
+            <h3 className="text-2xl font-bold text-white mb-6 lg:text-3xl gradient-text-animate">Built for Independent Venues & Small Kitchens</h3>
             <div className="flex flex-wrap justify-center gap-6">
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
-                <span className="text-[#29E7CD]">📊</span>
+              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2 hover-scale hover-glow animate-fade-in-up animate-delay-8200">
+                <span className="text-[#29E7CD] animate-float">📊</span>
                 <span className="text-white text-sm">Works with Google Sheets</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
-                <span className="text-[#29E7CD]">🛡️</span>
+              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2 hover-scale hover-glow animate-fade-in-up animate-delay-8300">
+                <span className="text-[#29E7CD] animate-float">🛡️</span>
                 <span className="text-white text-sm">7-Day Refund Policy</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
-                <span className="text-[#29E7CD]">🇦🇺</span>
+              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2 hover-scale hover-glow animate-fade-in-up animate-delay-8400">
+                <span className="text-[#29E7CD] animate-float">🇦🇺</span>
                 <span className="text-white text-sm">Made for AU Market</span>
               </div>
             </div>
@@ -829,13 +863,13 @@ export default function Page() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-gray-700 py-16 text-sm text-gray-500">
+        <footer className="border-t border-gray-700 py-16 text-sm text-gray-500 animate-fade-in-up animate-delay-8500">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <p>© {new Date().getFullYear()} PrepFlow. All rights reserved.</p>
             <div className="flex items-center gap-8">
-              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors duration-200">Terms</Link>
-              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors duration-200">Privacy</Link>
-              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors duration-200">Support</a>
+              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors duration-200 hover-lift">Terms</Link>
+              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors duration-200 hover-lift">Privacy</Link>
+              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors duration-200 hover-lift">Support</a>
             </div>
           </div>
         </footer>
