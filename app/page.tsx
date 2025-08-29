@@ -1,6 +1,9 @@
 'use client';
 
 import React from 'react';
+import ExitIntentTracker from '../components/ExitIntentTracker';
+import ScrollTracker from '../components/ScrollTracker';
+import PerformanceTracker from '../components/PerformanceTracker';
 
 export default function Page() {
 
@@ -37,6 +40,27 @@ export default function Page() {
 
   return (
     <>
+      {/* Analytics Tracking Components */}
+      <ExitIntentTracker 
+        onExitIntent={() => {
+          console.log('🚨 User attempting to leave page - potential conversion opportunity');
+          // You could trigger a popup, offer, or other retention strategy here
+        }}
+      />
+      <ScrollTracker 
+        onSectionView={(sectionId) => {
+          console.log(`👁️ User viewed section: ${sectionId}`);
+        }}
+        onScrollDepth={(depth) => {
+          console.log(`📊 User scrolled to ${depth}% of page`);
+        }}
+      />
+      <PerformanceTracker 
+        onMetrics={(metrics) => {
+          console.log('⚡ Performance metrics:', metrics);
+        }}
+      />
+      
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -100,7 +124,7 @@ export default function Page() {
         </header>
 
         {/* Hero */}
-        <section className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
+        <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
               Instant menu profit clarity for Aussie cafés.
@@ -189,7 +213,7 @@ export default function Page() {
         </div>
 
         {/* Problem → Outcome */}
-        <section className="py-20">
+        <section id="problem-outcome" className="py-20">
           <div className="grid gap-12 md:grid-cols-2">
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
@@ -308,7 +332,7 @@ export default function Page() {
         </section>
 
         {/* Global Features */}
-        <section className="py-20">
+        <section id="global-features" className="py-20">
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
                         <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
@@ -580,7 +604,7 @@ export default function Page() {
         </section>
 
         {/* Visual Proof - Case Study */}
-        <section className="py-20">
+        <section id="case-study" className="py-20">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">Real Results in Real Time</h3>
@@ -614,7 +638,7 @@ export default function Page() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-20">
+        <section id="testimonials" className="py-20">
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
             Real Results from Real Venues
           </h3>

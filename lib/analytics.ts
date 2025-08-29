@@ -15,7 +15,7 @@ export interface AnalyticsEvent {
 }
 
 export interface ConversionEvent {
-  type: 'cta_click' | 'demo_watch' | 'pricing_view' | 'signup_start' | 'purchase_complete';
+  type: 'cta_click' | 'demo_watch' | 'pricing_view' | 'signup_start' | 'purchase_complete' | 'exit_intent' | 'section_view' | 'scroll_milestone';
   element: string;
   page: string;
   timestamp: number;

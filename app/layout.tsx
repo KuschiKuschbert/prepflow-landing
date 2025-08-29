@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { Analytics } from '@vercel/analytics/react';
 import GoogleAnalytics from '../components/GoogleAnalytics';
+import GoogleAnalyticsTest from '../components/GoogleAnalyticsTest';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -95,6 +96,7 @@ export default function RootLayout({
         {children}
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
+        <GoogleAnalyticsTest />
       </body>
     </html>
   );

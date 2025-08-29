@@ -2,11 +2,12 @@
 
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense } from 'react';
+import { useEffect, Suspense, useRef } from 'react';
 
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
+    dataLayer: any[];
   }
 }
 
@@ -17,23 +18,78 @@ interface GoogleAnalyticsProps {
 function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const hasInitialized = useRef(false);
 
-  useEffect(() => {
-    if (pathname && window.gtag) {
+  // Initialize gtag function
+  const initializeGtag = () => {
+    if (typeof window !== 'undefined' && !window.gtag) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() {
+        window.dataLayer.push(arguments);
+      };
+      
+      // Initialize with current date
+      window.gtag('js', new Date());
+      
+      // Configure with measurement ID
       window.gtag('config', measurementId, {
-        page_path: pathname + searchParams.toString(),
+        page_title: document.title,
+        page_location: window.location.href,
+        send_page_view: false, // We'll handle page views manually
       });
+      
+      hasInitialized.current = true;
+      console.log('✅ Google Analytics initialized with ID:', measurementId);
     }
-  }, [pathname, searchParams, measurementId]);
+  };
+
+  // Track page views
+  useEffect(() => {
+    if (pathname && window.gtag && hasInitialized.current) {
+      // Track page view
+      window.gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: pathname + (searchParams.toString() ? `?${searchParams.toString()}` : ''),
+      });
+      
+      console.log('📊 GA4 Page View tracked:', pathname);
+    }
+  }, [pathname, searchParams]);
+
+  // Initialize when component mounts
+  useEffect(() => {
+    // Wait for scripts to load
+    const checkGtag = () => {
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        initializeGtag();
+      } else {
+        // Retry after a short delay
+        setTimeout(checkGtag, 100);
+      }
+    };
+    
+    checkGtag();
+  }, [measurementId]);
 
   return (
     <>
+      {/* Load Google Analytics script */}
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+        onLoad={() => {
+          console.log('📥 Google Analytics script loaded');
+          initializeGtag();
+        }}
+        onError={() => {
+          console.error('❌ Failed to load Google Analytics script');
+        }}
       />
+      
+      {/* Initialize gtag function */}
       <Script
-        id="google-analytics"
+        id="google-analytics-init"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
@@ -43,8 +99,14 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
             gtag('config', '${measurementId}', {
               page_title: document.title,
               page_location: window.location.href,
+              send_page_view: false,
             });
+            console.log('🔧 Google Analytics gtag function initialized');
           `,
+        }}
+        onLoad={() => {
+          console.log('✅ Google Analytics initialization script loaded');
+          initializeGtag();
         }}
       />
     </>
