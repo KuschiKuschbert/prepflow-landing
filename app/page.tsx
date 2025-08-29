@@ -7,6 +7,7 @@ import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
+import CountdownTimer from '../components/CountdownTimer';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 
 export default function Page() {
@@ -515,9 +516,24 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Urgency Banner */}
-        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-4 text-center text-white font-semibold">
-          🔥 60% launch discount ends this Friday. Don't miss the margin makeover.
+        {/* Urgency Banner with Real Countdown */}
+        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-6 text-center text-white">
+          <div className="mb-3">
+            <h3 className="text-xl font-bold mb-2">
+              🚀 Launch Discount - Save 60% Today!
+            </h3>
+            <p className="text-sm opacity-90">
+              Don't miss the margin makeover - limited time offer
+            </p>
+          </div>
+          <CountdownTimer 
+            endDate={new Date('2024-12-31T23:59:59')} // Set to end of year for demo
+            onExpired={() => {
+              console.log('Launch discount expired');
+              // You could update pricing or show different message here
+            }}
+            showSeconds={true}
+          />
         </div>
 
         {/* Pricing */}
@@ -573,7 +589,15 @@ export default function Page() {
                   AUD $29
                 </p>
                 <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
-                <p className="text-xs text-[#29E7CD] font-semibold">🔥 Limited founder pricing — ends soon</p>
+                <div className="mt-2">
+                  <CountdownTimer 
+                    endDate={new Date('2024-12-31T23:59:59')}
+                    showSeconds={false}
+                    onExpired={() => {
+                      console.log('Founder pricing expired');
+                    }}
+                  />
+                </div>
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
