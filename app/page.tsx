@@ -4,6 +4,7 @@ import React from 'react';
 import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
+import LeadMagnetForm from '../components/LeadMagnetForm';
 
 export default function Page() {
 
@@ -499,31 +500,16 @@ export default function Page() {
             </div>
             
             <div className="max-w-md mx-auto">
-              <form className="space-y-4">
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80 text-white placeholder-gray-400 focus:border-[#29E7CD] focus:outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="email"
-                    placeholder="Your email"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80 text-white placeholder-gray-400 focus:border-[#29E7CD] focus:outline-none transition-colors"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
-                >
-                  Send me the demo
-                </button>
-              </form>
-              <p className="mt-4 text-xs text-gray-400 text-center">
-                No spam. No lock-in. Your data stays private.
-              </p>
+              <LeadMagnetForm 
+                onSuccess={(data: { name: string; email: string; preference: 'demo' | 'sample' }) => {
+                  console.log('Lead captured:', data);
+                  // You can add additional success handling here
+                }}
+                onError={(error: string) => {
+                  console.error('Lead capture failed:', error);
+                  // You can add additional error handling here
+                }}
+              />
             </div>
           </div>
         </section>
