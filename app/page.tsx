@@ -8,7 +8,7 @@ import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
 import CountdownTimer from '../components/CountdownTimer';
-import SocialProofNotifier from '../components/SocialProofNotifier';
+import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 
 export default function Page() {
@@ -68,8 +68,8 @@ export default function Page() {
         }}
       />
       
-      {/* Social Proof & Trust Components */}
-      <SocialProofNotifier enabled={true} interval={20000} />
+      {/* Real Story & Trust Components */}
+      <RealStoryNotifier enabled={true} showStory={true} />
       
       <script
         type="application/ld+json"
@@ -318,6 +318,73 @@ export default function Page() {
               <p className="text-base text-gray-300">
                 <strong>PrepFlow reveals:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
                 it's only contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* My Story - Authentic Journey */}
+        <section className="py-20 border-t border-gray-700">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+              My Journey Creating PrepFlow
+            </h2>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+              This isn't just another tool - it's my personal solution to real kitchen problems, 
+              refined over 12+ years of working in restaurants around the world.
+            </p>
+          </div>
+          
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div className="text-center">
+              <div className="text-4xl mb-4">👨‍🍳</div>
+              <h3 className="text-xl font-semibold text-white mb-2">2012 - First Creation</h3>
+              <p className="text-gray-300 text-sm">
+                Built the first version as Head Chef to solve real COGS and profitability problems in my kitchen
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-4xl mb-4">🌍</div>
+              <h3 className="text-xl font-semibold text-white mb-2">2012-2020 - Global Evolution</h3>
+              <p className="text-gray-300 text-sm">
+                Refined and evolved the tool while working in kitchens around the world, adapting to different markets
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-4xl mb-4">🇦🇺</div>
+              <h3 className="text-xl font-semibold text-white mb-2">2016-2024 - Australian Perfection</h3>
+              <p className="text-gray-300 text-sm">
+                Spent 8 years perfecting the tool for Australian and global markets, with GST and multi-currency support
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-4xl mb-4">🚀</div>
+              <h3 className="text-xl font-semibold text-white mb-2">2024 - Ready to Share</h3>
+              <p className="text-gray-300 text-sm">
+                Now sharing the perfected tool with fellow chefs and restaurateurs who face the same challenges I did
+              </p>
+            </div>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <div className="bg-[#1f1f1f] border border-[#29E7CD]/30 rounded-2xl p-8 max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-[#29E7CD] mb-4">
+                Why I Created PrepFlow
+              </h3>
+              <p className="text-gray-300 leading-relaxed mb-4">
+                As a Head Chef, I was constantly struggling with menu costing, waste management, and profitability analysis. 
+                Existing solutions were either too complex, too expensive, or didn't understand real kitchen operations.
+              </p>
+              <p className="text-gray-300 leading-relaxed mb-4">
+                So I built my own solution - a simple Google Sheets template that could handle COGS calculations, 
+                track ingredient costs, and show me exactly which menu items were profitable and which were losing money.
+              </p>
+              <p className="text-gray-300 leading-relaxed">
+                Over the years, I've refined it to work perfectly for Australian venues (with GST support) and 
+                international markets. It's the tool I wish I had when I started, and now I'm sharing it with you.
               </p>
             </div>
           </div>
@@ -627,7 +694,7 @@ export default function Page() {
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-purple-500">✅</span>
-                      <span>Trusted by 500+ venues</span>
+                      <span>12+ years of real kitchen experience</span>
                     </div>
                   </div>
                 </div>
