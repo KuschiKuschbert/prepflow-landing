@@ -127,7 +127,48 @@ class PrepFlowAnalytics {
         const text = cta.textContent?.trim() || '';
         const href = (cta as HTMLAnchorElement).href;
         
-        if (text.includes('Get Started') || text.includes('Start') || text.includes('Watch Demo')) {
+        // Track Gumroad purchase links
+        if (href && href.includes('gumroad.com/l/prepflow')) {
+          this.trackConversion({
+            type: 'cta_click',
+            element: 'gumroad_purchase',
+            page: window.location.pathname,
+            timestamp: Date.now(),
+            sessionId: this.sessionId,
+            userId: this.userId,
+            metadata: { href, text, action: 'purchase_start' }
+          });
+          
+          // Send enhanced GA4 event
+          if (typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'begin_checkout', {
+              currency: 'AUD',
+              value: 29.00,
+              items: [{
+                item_id: 'prepflow_app',
+                item_name: 'PrepFlow App',
+                price: 29.00,
+                quantity: 1
+              }]
+            });
+          }
+        }
+        
+        // Track demo/watch buttons
+        if (text.includes('Watch Demo') || text.includes('Demo')) {
+          this.trackConversion({
+            type: 'demo_watch',
+            element: text,
+            page: window.location.pathname,
+            timestamp: Date.now(),
+            sessionId: this.sessionId,
+            userId: this.userId,
+            metadata: { href, text, action: 'demo_start' }
+          });
+        }
+        
+        // Track general CTA clicks
+        if (text.includes('Get Started') || text.includes('Start')) {
           this.trackConversion({
             type: 'cta_click',
             element: text,
@@ -135,14 +176,16 @@ class PrepFlowAnalytics {
             timestamp: Date.now(),
             sessionId: this.sessionId,
             userId: this.userId,
-            metadata: { href, text }
+            metadata: { href, text, action: 'cta_click' }
           });
         }
       }
     });
 
-    // Track scroll depth
+    // Track scroll depth and key sections
     let maxScrollDepth = 0;
+    const keySections = ['#features', '#demo', '#pricing', '#faq'];
+    
     window.addEventListener('scroll', () => {
       const scrollDepth = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
       if (scrollDepth > maxScrollDepth) {
@@ -151,6 +194,37 @@ class PrepFlowAnalytics {
           this.trackEvent('scroll_depth', 'engagement', `${maxScrollDepth}%`);
         }
       }
+      
+      // Track key section visibility
+      keySections.forEach(sectionId => {
+        const section = document.querySelector(sectionId);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+          
+          if (isVisible && !section.hasAttribute('data-tracked')) {
+            section.setAttribute('data-tracked', 'true');
+            const sectionName = sectionId.replace('#', '');
+            
+            this.trackEvent('section_view', 'engagement', sectionName);
+            
+            // Send enhanced GA4 event for key sections
+            if (typeof window !== 'undefined' && window.gtag) {
+              if (sectionName === 'pricing') {
+                window.gtag('event', 'view_item_list', {
+                  item_list_id: 'pricing_section',
+                  item_list_name: 'Pricing Options'
+                });
+              } else if (sectionName === 'demo') {
+                window.gtag('event', 'view_item', {
+                  item_id: 'demo_video',
+                  item_name: 'PrepFlow Demo Video'
+                });
+              }
+            }
+          }
+        }
+      });
     });
   }
 
@@ -230,13 +304,37 @@ class PrepFlowAnalytics {
       console.log('📊 Analytics Event:', event);
     }
     
-    // You can add custom analytics endpoints here
-    // Example: Google Analytics 4, Mixpanel, etc.
+    // Send to Google Analytics 4
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', event.action, {
+        event_category: event.category,
+        event_label: event.label,
+        value: event.value,
+        custom_parameter_session_id: event.sessionId,
+        custom_parameter_user_id: event.userId,
+        custom_parameter_page: event.page,
+        custom_parameter_referrer: event.referrer,
+      });
+    }
   }
 
   private sendConversionData(conversion: ConversionEvent): void {
     if (process.env.NODE_ENV === 'development') {
       console.log('🎯 Conversion Event:', conversion);
+    }
+    
+    // Send to Google Analytics 4
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        event_category: 'conversion',
+        event_label: conversion.type,
+        value: 1,
+        custom_parameter_element: conversion.element,
+        custom_parameter_page: conversion.page,
+        custom_parameter_session_id: conversion.sessionId,
+        custom_parameter_user_id: conversion.userId,
+        custom_parameter_metadata: JSON.stringify(conversion.metadata),
+      });
     }
     
     // Send to conversion tracking endpoints

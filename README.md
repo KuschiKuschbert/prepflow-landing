@@ -34,3 +34,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Analytics Setup
+
+This project includes Google Analytics 4 integration with measurement ID `494248133`.
+
+### Google Analytics Configuration
+- **Measurement ID**: 494248133
+- **Tracking**: Page views, user interactions, conversions, and performance metrics
+- **Privacy**: Respects Do Not Track and includes GDPR compliance features
+
+### Environment Variables
+Create a `.env.local` file with:
+```bash
+NEXT_PUBLIC_GA_MEASUREMENT_ID=494248133
+```
+
+### Testing Analytics
+1. Open browser developer tools
+2. Check Console for analytics events (in development mode)
+3. Verify Google Analytics Real-Time reports
+4. Test conversion tracking on CTA clicks and form submissions
