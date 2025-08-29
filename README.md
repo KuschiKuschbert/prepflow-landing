@@ -55,3 +55,72 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=494248133
 2. Check Console for analytics events (in development mode)
 3. Verify Google Analytics Real-Time reports
 4. Test conversion tracking on CTA clicks and form submissions
+
+## A/B Testing Analytics
+
+This project includes comprehensive A/B testing analytics with Google Analytics 4 integration.
+
+### Features
+- **Variant Assignment**: Automatic traffic splitting (25% each for 4 variants)
+- **Performance Tracking**: Conversion rates, engagement metrics, and statistical significance
+- **Real-time Results**: Live dashboard with variant performance comparison
+- **Google Analytics Integration**: All A/B test events sent to GA4 with variant context
+
+### Usage
+
+#### Basic A/B Testing Hook
+```tsx
+import { useLandingPageABTest } from '../components/useABTest';
+
+function MyComponent() {
+  const { variantId, isLoading, trackEngagement } = useLandingPageABTest();
+  
+  if (isLoading) return <div>Loading...</div>;
+  
+  return (
+    <div>
+      {variantId === 'control' && <OriginalHero />}
+      {variantId === 'variant_a' && <AlternativeHero />}
+      {variantId === 'variant_b' && <PricingHero />}
+      {variantId === 'variant_c' && <CTAHero />}
+      
+      <button onClick={() => trackEngagement('cta_click')}>
+        Get Started
+      </button>
+    </div>
+  );
+}
+```
+
+#### A/B Test Dashboard
+```tsx
+import ABTestDashboard from '../components/ABTestDashboard';
+
+function AnalyticsPage() {
+  return (
+    <div>
+      <h1>Analytics Dashboard</h1>
+      <ABTestDashboard testId="landing_page_variants" />
+    </div>
+  );
+}
+```
+
+### Default Test Configuration
+- **Control**: Original landing page (25% traffic)
+- **Variant A**: Alternative hero section (25% traffic)
+- **Variant B**: Different pricing layout (25% traffic)
+- **Variant C**: New CTA positioning (25% traffic)
+
+### Tracking Events
+- `variant_assigned`: When user gets assigned to a variant
+- `page_view`: Page views with variant context
+- `conversion`: Purchase/conversion events per variant
+- `engagement`: User interactions (clicks, scrolls, etc.)
+
+### Google Analytics Integration
+All A/B test events include custom parameters:
+- `custom_parameter_test_id`: Test identifier
+- `custom_parameter_variant_id`: Variant identifier
+- `custom_parameter_user_id`: User identifier
+- `custom_parameter_session_id`: Session identifier

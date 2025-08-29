@@ -403,3 +403,14 @@ export const trackConversion = analytics.trackConversion.bind(analytics);
 export const trackPerformance = analytics.trackPerformanceMetrics.bind(analytics);
 export const getSessionId = analytics.getSessionId.bind(analytics);
 export const setUserId = analytics.setUserId.bind(analytics);
+
+// Export A/B testing functions
+export { 
+  assignVariant, 
+  getCurrentVariant, 
+  trackConversion as trackABConversion, 
+  trackEngagement,
+  getTestResults,
+  getActiveTests,
+  getVariantInfo
+} from './ab-testing-analytics';
