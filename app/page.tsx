@@ -10,6 +10,7 @@ import PerformanceOptimizer from '../components/PerformanceOptimizer';
 
 import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
+import { useScrollAnimation, useStaggeredAnimation } from '../components/useScrollAnimation';
 
 export default function Page() {
 
@@ -94,15 +95,15 @@ export default function Page() {
     >
       {/* Background gradient effects - optimized with CSS custom properties */}
       <div className="fixed inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#29E7CD]/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-[#D925C7]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-[#3B82F6]/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#29E7CD]/10 rounded-full blur-3xl floating-bg" />
+        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-[#D925C7]/10 rounded-full blur-3xl floating-bg" />
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-[#3B82F6]/10 rounded-full blur-3xl floating-bg" />
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-8 lg:py-12" role="banner">
-          <div className="flex items-center gap-3">
+        <header className="flex items-center justify-between py-8 lg:py-12 animate-fade-in-down" role="banner">
+          <div className="flex items-center gap-3 hover-scale">
             <Image 
               src="/images/prepflow-logo.png" 
               alt="PrepFlow Logo"
@@ -111,22 +112,22 @@ export default function Page() {
               className="h-12 w-auto"
               priority
             />
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent gradient-text-animate">
               PrepFlow
             </span>
           </div>
           <nav className="hidden gap-8 text-sm lg:flex" role="navigation" aria-label="Main navigation">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="View PrepFlow features">Features</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="Learn how PrepFlow works">How it works</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="View PrepFlow pricing">Pricing</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="Frequently asked questions">FAQ</a>
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200 hover-lift" aria-label="View PrepFlow features">Features</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200 hover-lift" aria-label="Learn how PrepFlow works">How it works</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200 hover-lift" aria-label="View PrepFlow pricing">Pricing</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200 hover-lift" aria-label="Frequently asked questions">FAQ</a>
           </nav>
           <div className="hidden md:block">
             <a
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 btn-hover-effect hover-lift hover-glow"
             >
               Get PrepFlow Now
             </a>
@@ -135,27 +136,27 @@ export default function Page() {
 
         {/* Hero */}
         <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24 lg:py-32">
-          <div className="space-y-8">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
-              Instant menu profit clarity for Aussie cafés.
+          <div className="space-y-8 animate-fade-in-left">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-tight text-reveal">
+              <span className="animate-delay-200">Instant menu profit clarity for Aussie cafés.</span>
             </h1>
-            <p className="text-lg leading-8 text-gray-300 md:text-xl lg:text-2xl">
+            <p className="text-lg leading-8 text-gray-300 md:text-xl lg:text-2xl animate-fade-in-up animate-delay-400">
               Know your winners and fix low-margin items in minutes — GST-ready, inside a simple Google Sheet.
             </p>
             <ul className="space-y-4 text-base text-gray-300">
-              <Bullet><strong>Item Profit & Popularity</strong> — know what to promote, fix, or drop to raise gross profit</Bullet>
-              <Bullet><strong>Recipe Builder</strong> — auto-calculate COGS, GP$, and GP% for every dish, instantly</Bullet>
-              <Bullet><strong>Yield/Waste Aware</strong> — realistic ingredient costs — no fantasy margins</Bullet>
-              <Bullet><strong>GST-Ready for AU</strong> — price confidently; avoid surprises</Bullet>
-              <Bullet><strong>Menu Mix Intelligence</strong> — "Chef's Kiss / Hidden Gem / Bargain Bucket" categories to guide decisions</Bullet>
-              <Bullet><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
+              <Bullet className="animate-fade-in-up animate-delay-500"><strong>Item Profit & Popularity</strong> — know what to promote, fix, or drop to raise gross profit</Bullet>
+              <Bullet className="animate-fade-in-up animate-delay-600"><strong>Recipe Builder</strong> — auto-calculate COGS, GP$, and GP% for every dish, instantly</Bullet>
+              <Bullet className="animate-fade-in-up animate-delay-700"><strong>Yield/Waste Aware</strong> — realistic ingredient costs — no fantasy margins</Bullet>
+              <Bullet className="animate-fade-in-up animate-delay-800"><strong>GST-Ready for AU</strong> — price confidently; avoid surprises</Bullet>
+              <Bullet className="animate-fade-in-up animate-delay-900"><strong>Menu Mix Intelligence</strong> — "Chef's Kiss / Hidden Gem / Bargain Bucket" categories to guide decisions</Bullet>
+              <Bullet className="animate-fade-in-up animate-delay-1000"><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
             </ul>
-            <div className="space-y-6">
+            <div className="space-y-6 animate-fade-in-up animate-delay-1100">
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 text-center">
+                <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 text-center btn-hover-effect hover-lift hover-glow">
                   Watch the 2-min demo
                 </a>
-                <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300 text-center">
+                <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300 text-center hover-lift hover-glow">
                   Get the sample sheet (free)
                 </a>
               </div>
@@ -166,9 +167,9 @@ export default function Page() {
           </div>
 
           {/* PrepFlow Dashboard Screenshot */}
-          <div className="relative">
-            <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
-            <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
+          <div className="relative animate-fade-in-right animate-delay-300">
+            <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl animate-pulse-slow" />
+            <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl hover-scale hover-glow">
               <div className="relative">
                 <Image 
                   src="/images/dashboard-screenshot.png" 
@@ -181,10 +182,10 @@ export default function Page() {
                 {/* Action Overlay */}
                 <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
                   <div className="text-center text-white">
-                    <div className="bg-[#29E7CD] text-black px-4 py-2 rounded-lg font-semibold mb-2">
+                    <div className="bg-[#29E7CD] text-black px-4 py-2 rounded-lg font-semibold mb-2 animate-pulse-slow">
                       Live GP% Dashboard
                     </div>
-                    <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors hover-scale">
                       Play Demo
                     </button>
                   </div>
@@ -196,21 +197,21 @@ export default function Page() {
                   alt="PrepFlow Settings page with business configuration"
                   width={200}
                   height={96}
-                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                  className="h-24 w-full object-cover rounded-lg border border-gray-600 hover-scale transition-transform duration-200"
                 />
                 <Image 
                   src="/images/recipe-screenshot.png" 
                   alt="PrepFlow Recipe costing for Double Cheese Burger"
                   width={200}
                   height={96}
-                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                  className="h-24 w-full object-cover rounded-lg border border-gray-600 hover-scale transition-transform duration-200"
                 />
                 <Image 
                   src="/images/stocklist-screenshot.png" 
                   alt="PrepFlow Infinite Stock List with ingredient management"
                   width={200}
                   height={96}
-                  className="h-24 w-full object-cover rounded-lg border border-gray-600"
+                  className="h-24 w-full object-cover rounded-lg border border-gray-600 hover-scale transition-transform duration-200"
                 />
               </div>
               <p className="mt-4 text-center text-sm text-gray-500">Dashboard · Settings · Recipe Costing · Stock Management</p>
@@ -219,7 +220,7 @@ export default function Page() {
         </section>
 
         {/* Trust bar */}
-        <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 text-center text-base text-gray-300 shadow-lg my-16">
+        <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 text-center text-base text-gray-300 shadow-lg my-16 animate-fade-in-up animate-delay-1200 hover-scale hover-glow">
           <strong className="text-lg">Stop guessing. Start knowing.</strong> 
           <span className="block mt-2">PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.</span>
         </div>
@@ -227,53 +228,53 @@ export default function Page() {
         {/* Problem → Outcome */}
         <section id="problem-outcome" className="py-24">
           <div className="grid gap-16 md:grid-cols-2">
-            <div className="space-y-6">
+            <div className="space-y-6 animate-fade-in-left animate-delay-1300">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent gradient-text-animate">
                   The Problem
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-4">
-                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1400">
+                  <span className="text-red-400 text-xl flex-shrink-0 animate-pulse-slow">✗</span>
                   <span>You don't know which menu items actually make money</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1500">
+                  <span className="text-red-400 text-xl flex-shrink-0 animate-pulse-slow">✗</span>
                   <span>COGS creep and waste eat your profit</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1600">
+                  <span className="text-red-400 text-xl flex-shrink-0 animate-pulse-slow">✗</span>
                   <span>Pricing is guesswork; GST adds friction</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1700">
+                  <span className="text-red-400 text-xl flex-shrink-0 animate-pulse-slow">✗</span>
                   <span>Reports are slow, complicated, or sit in someone else's tool</span>
                 </li>
               </ul>
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-6 animate-fade-in-right animate-delay-1400">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent gradient-text-animate">
                   The Outcome
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-4">
-                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1500">
+                  <span className="text-green-400 text-xl flex-shrink-0 animate-pulse-slow">✓</span>
                   <span>See item-level margins and profit instantly</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1600">
+                  <span className="text-green-400 text-xl flex-shrink-0 animate-pulse-slow">✓</span>
                   <span>Spot "winners" and "profit leaks" at a glance</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1700">
+                  <span className="text-green-400 text-xl flex-shrink-0 animate-pulse-slow">✓</span>
                   <span>Adjust pricing with confidence (GST-aware)</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
+                <li className="flex items-start gap-4 animate-fade-in-up animate-delay-1800">
+                  <span className="text-green-400 text-xl flex-shrink-0 animate-pulse-slow">✓</span>
                   <span>Run everything in Google Sheets — no new software to learn</span>
                 </li>
               </ul>
@@ -283,10 +284,10 @@ export default function Page() {
 
         {/* Contributing Margin Highlight */}
         <section className="py-24" id="contributing-margin">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl animate-fade-in-scale animate-delay-1900 hover-glow">
             <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
-                <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent gradient-text-animate">
                   Contributing Margin
                 </span> — The Real Profit Story
               </h3>
@@ -294,32 +295,32 @@ export default function Page() {
             </div>
             
             <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-              <div className="text-center">
-                <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4">
-                  <span className="text-4xl">💰</span>
+              <div className="text-center animate-fade-in-up animate-delay-2000 hover-lift">
+                <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4 hover-scale hover-glow">
+                  <span className="text-4xl animate-float">💰</span>
                   <h4 className="text-xl font-semibold text-white mt-3">Gross Profit</h4>
                   <p className="text-sm text-gray-300">What you think you're making</p>
                 </div>
               </div>
               
-              <div className="text-center">
-                <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-6 mb-4">
-                  <span className="text-4xl">⚡</span>
+              <div className="text-center animate-fade-in-up animate-delay-2100 hover-lift">
+                <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-6 mb-4 hover-scale hover-glow">
+                  <span className="text-4xl animate-float">⚡</span>
                   <h4 className="text-xl font-semibold text-white mt-3">Contributing Margin</h4>
                   <p className="text-sm text-gray-300">What you're actually contributing</p>
                 </div>
               </div>
               
-              <div className="text-center">
-                <div className="bg-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-6 mb-4">
-                  <span className="text-4xl">🎯</span>
+              <div className="text-center animate-fade-in-up animate-delay-2200 hover-lift">
+                <div className="bg-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-6 mb-4 hover-scale hover-glow">
+                  <span className="text-4xl animate-float">🎯</span>
                   <h4 className="text-xl font-semibold text-white mt-3">Action Plan</h4>
                   <p className="text-sm text-gray-300">What to do about it</p>
                 </div>
               </div>
             </div>
             
-            <div className="mt-12 text-center">
+            <div className="mt-12 text-center animate-fade-in-up animate-delay-2300">
               <p className="text-base text-gray-300 max-w-4xl mx-auto">
                 <strong>PrepFlow helps you see:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
                 it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
@@ -845,10 +846,10 @@ export default function Page() {
 }
 
 /* ---------- Small helper components ---------- */
-function Bullet({ children }: { children: React.ReactNode }) {
+function Bullet({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <li className="flex items-start gap-3">
-      <span className="mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] flex-shrink-0" />
+    <li className={`flex items-start gap-3 ${className}`}>
+      <span className="mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] flex-shrink-0 animate-pulse-slow" />
       {children}
     </li>
   );
@@ -856,7 +857,7 @@ function Bullet({ children }: { children: React.ReactNode }) {
 
 function FeatureCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group hover-lift hover-glow">
       <h4 className="text-xl font-semibold text-white mb-4 group-hover:text-[#29E7CD] transition-colors duration-200">{title}</h4>
       <p className="text-gray-300 leading-relaxed">{body}</p>
     </div>
@@ -865,9 +866,9 @@ function FeatureCard({ title, body }: { title: string; body: string }) {
 
 function Step({ n, title, body }: { n: number; title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group hover-lift hover-glow">
       <div className="flex items-center gap-4 mb-6">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-lg font-bold text-white group-hover:scale-110 transition-transform duration-200">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-lg font-bold text-white group-hover:scale-110 transition-transform duration-200 animate-pulse-slow">
           {n}
         </div>
         <h5 className="text-lg font-semibold text-white group-hover:text-[#29E7CD] transition-colors duration-200">{title}</h5>
@@ -879,7 +880,7 @@ function Step({ n, title, body }: { n: number; title: string; body: string }) {
 
 function FAQ({ q, a }: { q: string; a: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group hover-lift hover-glow">
       <p className="text-base font-semibold text-white mb-4 group-hover:text-[#29E7CD] transition-colors duration-200">{q}</p>
       <p className="text-gray-300 leading-relaxed">{a}</p>
     </div>
@@ -888,8 +889,8 @@ function FAQ({ q, a }: { q: string; a: string }) {
 
 function BenefitCard({ title, description, icon }: { title: string; description: string; icon: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
-      <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">{icon}</div>
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group hover-lift hover-glow">
+      <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200 animate-float">{icon}</div>
       <h4 className="text-xl font-semibold text-white mb-4 group-hover:text-[#29E7CD] transition-colors duration-200">{title}</h4>
       <p className="text-gray-300 leading-relaxed">{description}</p>
     </div>
