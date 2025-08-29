@@ -3,14 +3,17 @@
 import { useEffect, useState } from 'react';
 import { trackEvent, trackConversion } from '../lib/analytics';
 import { trackGTMEvent, trackGTMConversion } from './GoogleTagManager';
+import ExitIntentPopup from './ExitIntentPopup';
 
 interface ExitIntentTrackerProps {
   onExitIntent?: () => void;
   enabled?: boolean;
+  showPopup?: boolean;
 }
 
-export default function ExitIntentTracker({ onExitIntent, enabled = true }: ExitIntentTrackerProps) {
+export default function ExitIntentTracker({ onExitIntent, enabled = true, showPopup = true }: ExitIntentTrackerProps) {
   const [hasTriggered, setHasTriggered] = useState(false);
+  const [showExitPopup, setShowExitPopup] = useState(false);
 
   useEffect(() => {
     if (!enabled || hasTriggered) return;
@@ -38,6 +41,11 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true }: Exit
             referrer: document.referrer
           }
         });
+
+        // Show exit intent popup if enabled
+        if (showPopup) {
+          setShowExitPopup(true);
+        }
 
         // Call custom handler if provided
         if (onExitIntent) {
@@ -130,6 +138,18 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true }: Exit
     };
   }, [enabled, hasTriggered, onExitIntent]);
 
-  // This component doesn't render anything visible
-  return null;
+  // Render the exit intent popup
+  return (
+    <>
+      <ExitIntentPopup
+        isVisible={showExitPopup}
+        onClose={() => setShowExitPopup(false)}
+        onSuccess={(data) => {
+          console.log('Exit intent lead captured:', data);
+          // Reset trigger so popup can show again if needed
+          setHasTriggered(false);
+        }}
+      />
+    </>
+  );
 }
