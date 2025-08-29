@@ -7,7 +7,7 @@ import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
-import CountdownTimer from '../components/CountdownTimer';
+
 import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 
@@ -592,24 +592,16 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Honest Pricing Banner */}
+        {/* Simple Pricing Banner */}
         <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-6 text-center text-white">
           <div className="mb-3">
             <h3 className="text-xl font-bold mb-2">
-              🚀 Founder Pricing - AUD $29
+              🚀 Simple, Honest Pricing
             </h3>
             <p className="text-sm opacity-90">
-              Special launch price for early adopters
+              AUD $29 - one-time purchase, lifetime access
             </p>
           </div>
-          <CountdownTimer 
-            endDate={new Date('2024-12-31T23:59:59')} // Set to end of year for demo
-            onExpired={() => {
-              console.log('Founder pricing expired');
-              // You could update pricing or show different message here
-            }}
-            showSeconds={false}
-          />
         </div>
 
         {/* Pricing */}
@@ -664,15 +656,6 @@ export default function Page() {
                   AUD $29
                 </p>
                 <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
-                <div className="mt-2">
-                  <CountdownTimer 
-                    endDate={new Date('2024-12-31T23:59:59')}
-                    showSeconds={false}
-                    onExpired={() => {
-                      console.log('Founder pricing expired');
-                    }}
-                  />
-                </div>
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
