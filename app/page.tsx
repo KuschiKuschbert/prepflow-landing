@@ -8,6 +8,7 @@ import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
 import CountdownTimer from '../components/CountdownTimer';
+import SocialProofNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 
 export default function Page() {
@@ -66,6 +67,9 @@ export default function Page() {
           console.log('⚡ Performance metrics:', metrics);
         }}
       />
+      
+      {/* Social Proof & Trust Components */}
+      <SocialProofNotifier enabled={true} interval={20000} />
       
       <script
         type="application/ld+json"
@@ -609,6 +613,24 @@ export default function Page() {
                 <p className="mt-4 text-sm text-gray-500">Secure checkout via Gumroad</p>
                 <p className="mt-2 text-xs text-gray-400">Not satisfied in 7 days? Full refund.</p>
                 <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
+                
+                {/* Trust Indicators */}
+                <div className="mt-4 pt-4 border-t border-gray-600">
+                  <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <span className="text-green-500">🔒</span>
+                      <span>SSL Secure</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-blue-500">🛡️</span>
+                      <span>GDPR Compliant</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-purple-500">✅</span>
+                      <span>Trusted by 500+ venues</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
