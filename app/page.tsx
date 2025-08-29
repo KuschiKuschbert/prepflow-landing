@@ -2,9 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
+import PerformanceOptimizer from '../components/PerformanceOptimizer';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 
 export default function Page() {
@@ -42,7 +44,8 @@ export default function Page() {
 
   return (
     <>
-      {/* Analytics Tracking Components */}
+      {/* Performance & Analytics Components */}
+      <PerformanceOptimizer />
       <ExitIntentTracker 
         onExitIntent={() => {
           console.log('🚨 User attempting to leave page - potential conversion opportunity');
@@ -95,13 +98,13 @@ export default function Page() {
         {/* Header */}
         <header className="flex items-center justify-between py-8" role="banner">
           <div className="flex items-center gap-3">
-            <img 
+            <Image 
               src="/images/prepflow-logo.png" 
               alt="PrepFlow Logo"
+              width={48}
+              height={48}
               className="h-12 w-auto"
-              loading="eager"
-              width="48"
-              height="48"
+              priority
             />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow
@@ -158,13 +161,13 @@ export default function Page() {
             <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
             <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
               <div className="relative">
-                <img 
+                <Image 
                   src="/images/dashboard-screenshot.png" 
                   alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
+                  width={800}
+                  height={500}
                   className="w-full h-auto rounded-xl border border-gray-600"
-                  loading="lazy"
-                  width="800"
-                  height="500"
+                  priority
                 />
                 {/* Action Overlay */}
                 <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
@@ -179,29 +182,26 @@ export default function Page() {
                 </div>
               </div>
               <div className="mt-6 grid grid-cols-3 gap-4">
-                <img 
+                <Image 
                   src="/images/settings-screenshot.png" 
                   alt="PrepFlow Settings page with business configuration"
+                  width={200}
+                  height={96}
                   className="h-24 w-full object-cover rounded-lg border border-gray-600"
-                  loading="lazy"
-                  width="200"
-                  height="96"
                 />
-                <img 
+                <Image 
                   src="/images/recipe-screenshot.png" 
                   alt="PrepFlow Recipe costing for Double Cheese Burger"
+                  width={200}
+                  height={96}
                   className="h-24 w-full object-cover rounded-lg border border-gray-600"
-                  loading="lazy"
-                  width="200"
-                  height="96"
                 />
-                <img 
+                <Image 
                   src="/images/stocklist-screenshot.png" 
                   alt="PrepFlow Infinite Stock List with ingredient management"
+                  width={200}
+                  height={96}
                   className="h-24 w-full object-cover rounded-lg border border-gray-600"
-                  loading="lazy"
-                  width="200"
-                  height="96"
                 />
               </div>
               <p className="mt-4 text-center text-sm text-gray-500">Dashboard · Settings · Recipe Costing · Stock Management</p>
