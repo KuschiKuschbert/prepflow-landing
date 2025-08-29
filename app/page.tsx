@@ -101,7 +101,7 @@ export default function Page() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-8" role="banner">
+        <header className="flex items-center justify-between py-8 lg:py-12" role="banner">
           <div className="flex items-center gap-3">
             <Image 
               src="/images/prepflow-logo.png" 
@@ -115,11 +115,11 @@ export default function Page() {
               PrepFlow
             </span>
           </div>
-          <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow features">Features</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Learn how PrepFlow works">How it works</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow pricing">Pricing</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Frequently asked questions">FAQ</a>
+          <nav className="hidden gap-8 text-sm lg:flex" role="navigation" aria-label="Main navigation">
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="View PrepFlow features">Features</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="Learn how PrepFlow works">How it works</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="View PrepFlow pricing">Pricing</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors duration-200" aria-label="Frequently asked questions">FAQ</a>
           </nav>
           <div className="hidden md:block">
             <a
@@ -134,15 +134,15 @@ export default function Page() {
         </header>
 
         {/* Hero */}
-        <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
-          <div>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+        <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24 lg:py-32">
+          <div className="space-y-8">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
               Instant menu profit clarity for Aussie cafés.
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
+            <p className="text-lg leading-8 text-gray-300 md:text-xl lg:text-2xl">
               Know your winners and fix low-margin items in minutes — GST-ready, inside a simple Google Sheet.
             </p>
-            <ul className="mt-8 space-y-3 text-base text-gray-300">
+            <ul className="space-y-4 text-base text-gray-300">
               <Bullet><strong>Item Profit & Popularity</strong> — know what to promote, fix, or drop to raise gross profit</Bullet>
               <Bullet><strong>Recipe Builder</strong> — auto-calculate COGS, GP$, and GP% for every dish, instantly</Bullet>
               <Bullet><strong>Yield/Waste Aware</strong> — realistic ingredient costs — no fantasy margins</Bullet>
@@ -150,14 +150,18 @@ export default function Page() {
               <Bullet><strong>Menu Mix Intelligence</strong> — "Chef's Kiss / Hidden Gem / Bargain Bucket" categories to guide decisions</Bullet>
               <Bullet><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
             </ul>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-                              <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
-                Watch the 2-min demo
-              </a>
-              <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
-                Get the sample sheet (free)
-              </a>
-                              <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.</p>
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 text-center">
+                  Watch the 2-min demo
+                </a>
+                <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300 text-center">
+                  Get the sample sheet (free)
+                </a>
+              </div>
+              <p className="text-sm text-gray-500 text-center sm:text-left">
+                Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.
+              </p>
             </div>
           </div>
 
@@ -215,60 +219,61 @@ export default function Page() {
         </section>
 
         {/* Trust bar */}
-        <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          <strong>Stop guessing. Start knowing.</strong> PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.
+        <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 text-center text-base text-gray-300 shadow-lg my-16">
+          <strong className="text-lg">Stop guessing. Start knowing.</strong> 
+          <span className="block mt-2">PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.</span>
         </div>
 
         {/* Problem → Outcome */}
-        <section id="problem-outcome" className="py-20">
-          <div className="grid gap-12 md:grid-cols-2">
-            <div>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
+        <section id="problem-outcome" className="py-24">
+          <div className="grid gap-16 md:grid-cols-2">
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
                 <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
                   The Problem
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
                   <span>You don't know which menu items actually make money</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
                   <span>COGS creep and waste eat your profit</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
                   <span>Pricing is guesswork; GST adds friction</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-red-400 text-xl flex-shrink-0">✗</span>
                   <span>Reports are slow, complicated, or sit in someone else's tool</span>
                 </li>
               </ul>
             </div>
             
-            <div>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
                 <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">
                   The Outcome
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
                   <span>See item-level margins and profit instantly</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
                   <span>Spot "winners" and "profit leaks" at a glance</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
                   <span>Adjust pricing with confidence (GST-aware)</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
+                <li className="flex items-start gap-4">
+                  <span className="text-green-400 text-xl flex-shrink-0">✓</span>
                   <span>Run everything in Google Sheets — no new software to learn</span>
                 </li>
               </ul>
@@ -277,18 +282,18 @@ export default function Page() {
         </section>
 
         {/* Contributing Margin Highlight */}
-        <section className="py-20" id="contributing-margin">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+        <section className="py-24" id="contributing-margin">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   Contributing Margin
                 </span> — The Real Profit Story
               </h3>
-              <p className="text-lg text-gray-300">See beyond gross profit to understand what each dish truly contributes to your business</p>
+              <p className="text-lg text-gray-300 md:text-xl">See beyond gross profit to understand what each dish truly contributes to your business</p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
               <div className="text-center">
                 <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4">
                   <span className="text-4xl">💰</span>
@@ -314,30 +319,30 @@ export default function Page() {
               </div>
             </div>
             
-            <div className="mt-8 text-center">
-              <p className="text-base text-gray-300">
+            <div className="mt-12 text-center">
+              <p className="text-base text-gray-300 max-w-4xl mx-auto">
                 <strong>PrepFlow helps you see:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
                 it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
-                <br /><span className="text-sm text-gray-400">*Example for illustration - actual results depend on your specific menu and costs</span>
+                <br /><span className="text-sm text-gray-400 block mt-2">*Example for illustration - actual results depend on your specific menu and costs</span>
               </p>
             </div>
           </div>
         </section>
 
         {/* My Story - Authentic Journey */}
-        <section className="py-20 border-t border-gray-700">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+        <section className="py-24 border-t border-gray-700">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
               My Journey Creating PrepFlow
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-300 max-w-4xl mx-auto md:text-xl">
               This isn't just another tool - it's my personal solution to real kitchen problems, 
               refined over 20 years of working in restaurants across Europe and Australia.
             </p>
           </div>
           
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <div className="text-center">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-16">
+            <div className="text-center space-y-4">
               <div className="text-4xl mb-4">👨‍🍳</div>
               <h3 className="text-xl font-semibold text-white mb-2">2008-2012 - Early Experience</h3>
               <p className="text-gray-300 text-sm">
@@ -345,7 +350,7 @@ export default function Page() {
               </p>
             </div>
             
-            <div className="text-center">
+            <div className="text-center space-y-4">
               <div className="text-4xl mb-4">🌍</div>
               <h3 className="text-xl font-semibold text-white mb-2">2012-2018 - European Leadership</h3>
               <p className="text-gray-300 text-sm">
@@ -353,7 +358,7 @@ export default function Page() {
               </p>
             </div>
             
-            <div className="text-center">
+            <div className="text-center space-y-4">
               <div className="text-4xl mb-4">🇦🇺</div>
               <h3 className="text-xl font-semibold text-white mb-2">2018-2024 - Australian Excellence</h3>
               <p className="text-gray-300 text-sm">
@@ -361,7 +366,7 @@ export default function Page() {
               </p>
             </div>
             
-            <div className="text-center">
+            <div className="text-center space-y-4">
               <div className="text-4xl mb-4">🚀</div>
               <h3 className="text-xl font-semibold text-white mb-2">2024 - Ready to Share</h3>
               <p className="text-gray-300 text-sm">
@@ -370,34 +375,45 @@ export default function Page() {
             </div>
           </div>
           
-          <div className="mt-12 text-center">
-            <div className="bg-[#1f1f1f] border border-[#29E7CD]/30 rounded-2xl p-8 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-[#29E7CD] mb-4">
+          <div className="text-center">
+            <div className="bg-[#1f1f1f] border border-[#29E7CD]/30 rounded-2xl p-8 lg:p-12 max-w-5xl mx-auto">
+              <h3 className="text-2xl font-bold text-[#29E7CD] mb-6 lg:text-3xl">
                 Why I Created PrepFlow
               </h3>
-              <p className="text-gray-300 leading-relaxed mb-4">
-                Over 20 years as a chef, I've managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. 
-                I've faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.
-              </p>
-              <p className="text-gray-300 leading-relaxed mb-4">
-                As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. 
-                Existing solutions were either too complex, too expensive, or didn't understand real kitchen operations.
-              </p>
-              <p className="text-gray-300 leading-relaxed mb-4">
-                So I built my own solution - a simple Google Sheets template that could handle COGS calculations, 
-                track ingredient costs, and show me exactly which menu items were profitable and which were losing money.
-              </p>
-              <p className="text-gray-300 leading-relaxed">
-                Having worked across Europe and Australia, I've refined it to work perfectly for venues worldwide - with GST support for Australian markets, 
-                multi-currency options, and the flexibility to adapt to any kitchen's needs. It's the tool I wish I had when I started, and now I'm sharing it with you.
-              </p>
+              <div className="space-y-4 text-gray-300 leading-relaxed text-left">
+                <p>
+                  Over 20 years as a chef, I've managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. 
+                  I've faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.
+                </p>
+                <p>
+                  As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. 
+                  Existing solutions were either too complex, too expensive, or didn't understand real kitchen operations.
+                </p>
+                <p>
+                  So I built my own solution - a simple Google Sheets template that could handle COGS calculations, 
+                  track ingredient costs, and show me exactly which menu items were profitable and which were losing money.
+                </p>
+                <p>
+                  Having worked across Europe and Australia, I've refined it to work perfectly for venues worldwide - with GST support for Australian markets, 
+                  multi-currency options, and the flexibility to adapt to any kitchen's needs. It's the tool I wish I had when I started, and now I'm sharing it with you.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Features – tailored to the spreadsheet */}
-        <section id="features" className="py-20">
-          <div className="grid gap-8 md:grid-cols-3">
+        <section id="features" className="py-24">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+              Built for Real Kitchen Operations
+            </h2>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
+              Every feature is designed from actual kitchen experience, not corporate software assumptions
+            </p>
+          </div>
+          
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <FeatureCard title="Stock List (infinite)" body="Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit." />
             <FeatureCard title="COGS Recipes" body="Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly." />
             <FeatureCard title="Item Performance" body="Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef's Kiss, Hidden Gem or Bargain Bucket." />
@@ -411,22 +427,22 @@ export default function Page() {
         </section>
 
         {/* Global Features */}
-        <section id="global-features" className="py-20">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
-                        <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+        <section id="global-features" className="py-24">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   Expose Hidden Profits
                 </span> — One Sheet, Every Answer
               </h3>
-              <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+              <p className="text-lg text-gray-300 max-w-4xl mx-auto md:text-xl">
                 While others charge thousands for complicated restaurant software, PrepFlow provides similar profit insights 
                 in a simple Google Sheet for a one-time purchase.
               </p>
             </div>
             
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-              <div className="text-center">
+              <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#3B82F6] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🌍</span>
                 </div>
@@ -434,7 +450,7 @@ export default function Page() {
                 <p className="text-sm text-gray-400">USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.</p>
               </div>
               
-              <div className="text-center">
+              <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🏛️</span>
                 </div>
@@ -442,7 +458,7 @@ export default function Page() {
                 <p className="text-sm text-gray-400">GST, VAT, Sales Tax, HST. Configure for your local requirements.</p>
               </div>
               
-              <div className="text-center">
+              <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📱</span>
                 </div>
@@ -450,7 +466,7 @@ export default function Page() {
                 <p className="text-sm text-gray-400">Cloud-based Google Sheets. Access from anywhere, anytime.</p>
               </div>
               
-              <div className="text-center">
+              <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🚀</span>
                 </div>
@@ -459,8 +475,8 @@ export default function Page() {
               </div>
             </div>
             
-            <div className="mt-8 text-center">
-              <p className="text-base text-gray-300">
+            <div className="mt-12 text-center">
+              <p className="text-base text-gray-300 max-w-4xl mx-auto">
                 <strong>One sheet. Key insights your kitchen needs.</strong> Identify profit opportunities in your menu 
                 with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.
               </p>
@@ -469,47 +485,53 @@ export default function Page() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="py-20">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            Get Results in 3 Simple Steps
-          </h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+        <section id="how-it-works" className="py-24">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+              Get Results in 3 Simple Steps
+            </h2>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
+              Simple setup, instant insights, actionable results
+            </p>
+          </div>
+          
+          <div className="grid gap-8 md:grid-cols-3 mb-16">
             <Step n={1} title="Set up (5–10 min)" body="Turn on GST, add ingredients, yields, and supplier costs." />
             <Step n={2} title="Import sales" body="Paste your POS export into the Sales tab." />
             <Step n={3} title="Decide & act" body="Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix." />
           </div>
           
           {/* 60-Second Checklist */}
-          <div className="mt-16 rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
-            <h3 className="text-2xl font-bold text-center mb-6">60-Second Checklist</h3>
-            <div className="grid gap-4 md:grid-cols-5 text-center">
-              <div className="flex flex-col items-center gap-2">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 lg:p-12 shadow-2xl">
+            <h3 className="text-2xl font-bold text-center mb-8 lg:text-3xl">60-Second Checklist</h3>
+            <div className="grid gap-6 md:grid-cols-5 text-center">
+              <div className="flex flex-col items-center gap-3">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">1</span>
+                  <span className="text-[#29E7CD] text-xl font-semibold">1</span>
                 </div>
                 <span className="text-sm text-gray-300">GST toggle set?</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-3">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">2</span>
+                  <span className="text-[#29E7CD] text-xl font-semibold">2</span>
                 </div>
                 <span className="text-sm text-gray-300">Ingredient yields/waste entered?</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-3">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">3</span>
+                  <span className="text-[#29E7CD] text-xl font-semibold">3</span>
                 </div>
                 <span className="text-sm text-gray-300">Sales pasted?</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-3">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">4</span>
+                  <span className="text-[#29E7CD] text-xl font-semibold">4</span>
                 </div>
                 <span className="text-sm text-gray-300">Review top 5 low-margin items?</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-3">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
-                  <span className="text-[#29E7CD] text-xl">5</span>
+                  <span className="text-[#29E7CD] text-xl font-semibold">5</span>
                 </div>
                 <span className="text-sm text-gray-300">Re-check dashboard tomorrow</span>
               </div>
@@ -518,22 +540,22 @@ export default function Page() {
         </section>
 
         {/* Demo */}
-        <section id="demo" className="py-20">
+        <section id="demo" className="py-24">
           <div className="grid items-center gap-12 md:grid-cols-2">
-            <div>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">2‑Minute Demo</h3>
-              <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ in real-time.</p>
-              <ul className="mt-6 space-y-3 text-base text-gray-300">
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">2‑Minute Demo</h3>
+              <p className="text-lg text-gray-300 md:text-xl">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ in real-time.</p>
+              <ul className="space-y-3 text-base text-gray-300">
                 <Bullet>See margin calculations instantly</Bullet>
                 <Bullet>Understand profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
                 <Bullet>Make informed pricing decisions</Bullet>
               </ul>
-              <div className="mt-8">
+              <div className="pt-4">
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 inline-block"
                 >
                   Get PrepFlow Now
                 </a>
@@ -566,13 +588,13 @@ export default function Page() {
         </section>
 
         {/* Lead Magnet */}
-        <section id="lead-magnet" className="py-20">
-          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+        <section id="lead-magnet" className="py-24">
+          <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
                 See PrepFlow before you buy
               </h3>
-              <p className="text-lg text-gray-300">
+              <p className="text-lg text-gray-300 md:text-xl">
                 Get the 2-min demo or a sample dashboard — we'll email it to you.
               </p>
             </div>
@@ -593,74 +615,74 @@ export default function Page() {
         </section>
 
         {/* Simple Pricing Banner */}
-        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-6 text-center text-white">
+        <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-8 text-center text-white my-16">
           <div className="mb-3">
-            <h3 className="text-xl font-bold mb-2">
+            <h3 className="text-2xl font-bold mb-2 lg:text-3xl">
               🚀 Simple, Honest Pricing
             </h3>
-            <p className="text-sm opacity-90">
+            <p className="text-sm opacity-90 md:text-base">
               AUD $29 - one-time purchase, lifetime access
             </p>
           </div>
         </div>
 
         {/* Pricing */}
-        <section id="pricing" className="py-20">
+        <section id="pricing" className="py-24">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
             <div className="grid items-center gap-12 md:grid-cols-2">
-              <div>
-                              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Get Your Menu Clarity Tool</h3>
-              <p className="mt-4 text-lg text-gray-300">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
-              
-              {/* Refund Policy */}
-              <div className="mt-6 p-4 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
-                <div className="text-center">
-                  <h4 className="text-sm font-semibold text-[#29E7CD] mb-2">Our Refund Policy</h4>
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
-                    If PrepFlow isn't what you expected, you can request a full refund within 7 days of purchase. 
-                    No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
-                  </p>
-                </div>
-              </div>
+              <div className="space-y-6">
+                <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">Get Your Menu Clarity Tool</h3>
+                <p className="text-lg text-gray-300 md:text-xl">Simple, powerful, and designed to give you the insights you need to make better decisions.</p>
                 
-                <div className="mt-6 space-y-4">
+                {/* Refund Policy */}
+                <div className="p-6 rounded-xl bg-[#29E7CD]/5 border border-[#29E7CD]/20">
+                  <div className="text-center">
+                    <h4 className="text-sm font-semibold text-[#29E7CD] mb-3">Our Refund Policy</h4>
+                    <p className="text-sm text-gray-300 leading-relaxed">
+                      PrepFlow is a digital product with instant access. That said, we want you to feel confident. 
+                      If PrepFlow isn't what you expected, you can request a full refund within 7 days of purchase. 
+                      No hoops, no hassle — just reply to your purchase email and let us know. After 7 days, all sales are final.
+                    </p>
+                  </div>
+                </div>
+                  
+                <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-[#29E7CD] text-lg">✅</span>
                     <span className="text-gray-300">Google Sheet template — ready to use immediately</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-[#29E7CD] text-lg">✅</span>
                     <span className="text-gray-300">Automated COGS, GP%, GP$ per item</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-[#29E7CD] text-lg">✅</span>
                     <span className="text-gray-300">Popularity & profit classes (Chef's Kiss etc.)</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-[#29E7CD] text-lg">✅</span>
                     <span className="text-gray-300">AI Method Generator for cooking optimization</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-[#29E7CD] text-lg">✅</span>
                     <span className="text-gray-300">Comprehensive setup guide and resources</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[#29E7CD]">✅</span>
+                    <span className="text-[#29E7CD] text-lg">✅</span>
                     <span className="text-gray-300">7-day refund policy</span>
                   </div>
                 </div>
               </div>
               <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
-                <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+                <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent lg:text-6xl">
                   AUD $29
                 </p>
-                <p className="text-sm text-gray-500">one-time purchase · Lifetime access</p>
+                <p className="text-sm text-gray-500 mb-8">one-time purchase · Lifetime access</p>
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                  className="inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
                   Start Now — Get Menu Clarity Today
                 </a>
@@ -669,7 +691,7 @@ export default function Page() {
                 <p className="mt-2 text-xs text-[#29E7CD]">🌍 Global pricing available in USD, EUR, GBP, AUD</p>
                 
                 {/* Trust Indicators */}
-                <div className="mt-4 pt-4 border-t border-gray-600">
+                <div className="mt-6 pt-4 border-t border-gray-600">
                   <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
                     <div className="flex items-center gap-1">
                       <span className="text-green-500">🔒</span>
@@ -691,15 +713,15 @@ export default function Page() {
         </section>
 
         {/* How PrepFlow Works in Practice */}
-        <section id="how-it-works-practice" className="py-20">
-          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">How PrepFlow Works in Practice</h3>
-              <p className="text-lg text-gray-300">From guesswork to data-driven clarity - here's what you can expect</p>
+        <section id="how-it-works-practice" className="py-24">
+          <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 lg:p-12 shadow-2xl">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">How PrepFlow Works in Practice</h3>
+              <p className="text-lg text-gray-300 md:text-xl">From guesswork to data-driven clarity - here's what you can expect</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="text-center">
+              <div className="text-center space-y-4">
                 <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4">
                   <p className="text-2xl font-bold text-orange-400">Before PrepFlow</p>
                   <p className="text-4xl font-extrabold text-orange-300">?</p>
@@ -708,7 +730,7 @@ export default function Page() {
                 <p className="text-sm text-gray-400">Blind pricing, gut feeling, unclear margins everywhere</p>
               </div>
               
-              <div className="text-center">
+              <div className="text-center space-y-4">
                 <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
                   <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
                   <p className="text-4xl font-extrabold text-green-300">📊</p>
@@ -718,7 +740,7 @@ export default function Page() {
               </div>
             </div>
             
-            <div className="mt-8 text-center">
+            <div className="mt-12 text-center">
               <p className="text-sm text-gray-400">PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins</p>
               <p className="text-xs text-gray-500 mt-2">*Results depend on your current menu structure and how you implement the insights</p>
             </div>
@@ -726,11 +748,17 @@ export default function Page() {
         </section>
 
         {/* What PrepFlow Helps You Achieve */}
-        <section id="benefits" className="py-20">
-          <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            What PrepFlow Helps You Achieve
-          </h3>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+        <section id="benefits" className="py-24">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+              What PrepFlow Helps You Achieve
+            </h3>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
+              Transform your menu from guesswork to data-driven decisions
+            </p>
+          </div>
+          
+          <div className="grid gap-8 md:grid-cols-3 mb-12">
             <BenefitCard 
               title="Better Pricing Decisions"
               description="See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing."
@@ -748,7 +776,7 @@ export default function Page() {
             />
           </div>
           
-          <div className="mt-12 text-center">
+          <div className="text-center">
             <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
               <span className="text-[#29E7CD]">🎬</span>
               <span className="text-white font-medium">See PrepFlow in action with our demo</span>
@@ -760,22 +788,28 @@ export default function Page() {
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="py-20">
-          <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            FAQ
-          </h3>
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
+        <section id="faq" className="py-24">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl mb-6">
+              Frequently Asked Questions
+            </h3>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto md:text-xl">
+              Everything you need to know about PrepFlow
+            </p>
+          </div>
+          
+          <div className="grid gap-8 md:grid-cols-2">
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
             <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-                            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
+            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
             <FAQ q="Will this slow me down?" a="Setup typically takes 1-2 hours. After that, you'll save time on menu planning and cost analysis." />
           </div>
         </section>
 
         {/* Trust Elements */}
-        <section className="py-16 border-t border-gray-700">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Built for Independent Venues & Small Kitchens</h3>
+        <section className="py-20 border-t border-gray-700">
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold text-white mb-6 lg:text-3xl">Built for Independent Venues & Small Kitchens</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">📊</span>
@@ -794,13 +828,13 @@ export default function Page() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-gray-700 py-12 text-sm text-gray-500">
+        <footer className="border-t border-gray-700 py-16 text-sm text-gray-500">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <p>© {new Date().getFullYear()} PrepFlow. All rights reserved.</p>
             <div className="flex items-center gap-8">
-              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors">Terms</Link>
-              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors">Privacy</Link>
-              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors">Support</a>
+              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors duration-200">Terms</Link>
+              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors duration-200">Privacy</Link>
+              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors duration-200">Support</a>
             </div>
           </div>
         </footer>
@@ -814,7 +848,7 @@ export default function Page() {
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-3">
-      <span className="mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]" />
+      <span className="mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] flex-shrink-0" />
       {children}
     </li>
   );
@@ -822,8 +856,8 @@ function Bullet({ children }: { children: React.ReactNode }) {
 
 function FeatureCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
-      <h4 className="text-xl font-semibold text-white mb-3">{title}</h4>
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+      <h4 className="text-xl font-semibold text-white mb-4 group-hover:text-[#29E7CD] transition-colors duration-200">{title}</h4>
       <p className="text-gray-300 leading-relaxed">{body}</p>
     </div>
   );
@@ -831,24 +865,22 @@ function FeatureCard({ title, body }: { title: string; body: string }) {
 
 function Step({ n, title, body }: { n: number; title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
-      <div className="flex items-center gap-4 mb-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-sm font-bold text-white">
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+      <div className="flex items-center gap-4 mb-6">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-lg font-bold text-white group-hover:scale-110 transition-transform duration-200">
           {n}
         </div>
-        <h5 className="text-lg font-semibold text-white">{title}</h5>
+        <h5 className="text-lg font-semibold text-white group-hover:text-[#29E7CD] transition-colors duration-200">{title}</h5>
       </div>
       <p className="text-gray-300 leading-relaxed">{body}</p>
     </div>
   );
 }
 
-
-
 function FAQ({ q, a }: { q: string; a: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
-      <p className="text-base font-semibold text-white mb-3">{q}</p>
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+      <p className="text-base font-semibold text-white mb-4 group-hover:text-[#29E7CD] transition-colors duration-200">{q}</p>
       <p className="text-gray-300 leading-relaxed">{a}</p>
     </div>
   );
@@ -856,9 +888,9 @@ function FAQ({ q, a }: { q: string; a: string }) {
 
 function BenefitCard({ title, description, icon }: { title: string; description: string; icon: string }) {
   return (
-    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300">
-      <div className="text-4xl mb-4">{icon}</div>
-      <h4 className="text-xl font-semibold text-white mb-3">{title}</h4>
+    <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-8 shadow-lg hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-300 group">
+      <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">{icon}</div>
+      <h4 className="text-xl font-semibold text-white mb-4 group-hover:text-[#29E7CD] transition-colors duration-200">{title}</h4>
       <p className="text-gray-300 leading-relaxed">{description}</p>
     </div>
   );
