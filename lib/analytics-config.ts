@@ -67,7 +67,7 @@ export const defaultAnalyticsConfig: AnalyticsConfig = {
   
   googleAnalytics: {
     enabled: true,
-    measurementId: '494248133',
+    measurementId: 'G-W1D5LQXGJT',
     debugMode: process.env.NODE_ENV === 'development',
   },
   

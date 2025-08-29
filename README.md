@@ -37,17 +37,17 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Analytics Setup
 
-This project includes Google Analytics 4 integration with measurement ID `494248133`.
+This project includes Google Analytics 4 integration with measurement ID `G-W1D5LQXGJT`.
 
 ### Google Analytics Configuration
-- **Measurement ID**: 494248133
+- **Measurement ID**: G-W1D5LQXGJT
 - **Tracking**: Page views, user interactions, conversions, and performance metrics
 - **Privacy**: Respects Do Not Track and includes GDPR compliance features
 
 ### Environment Variables
 Create a `.env.local` file with:
 ```bash
-NEXT_PUBLIC_GA_MEASUREMENT_ID=494248133
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-W1D5LQXGJT
 ```
 
 ### Testing Analytics
