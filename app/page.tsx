@@ -157,7 +157,7 @@ export default function Page() {
               <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
                 Get the sample sheet (free)
               </a>
-                              <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy.</p>
+                              <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.</p>
             </div>
           </div>
 
@@ -316,8 +316,9 @@ export default function Page() {
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>PrepFlow reveals:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
-                it's only contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
+                <strong>PrepFlow helps you see:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
+                it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
+                <br /><span className="text-sm text-gray-400">*Example for illustration - actual results depend on your specific menu and costs</span>
               </p>
             </div>
           </div>
@@ -419,7 +420,7 @@ export default function Page() {
                 </span> — One Sheet, Every Answer
               </h3>
               <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                While others charge thousands for complicated restaurant software, PrepFlow reveals the same profit insights 
+                While others charge thousands for complicated restaurant software, PrepFlow provides similar profit insights 
                 in a simple Google Sheet for a one-time purchase.
               </p>
             </div>
@@ -460,8 +461,8 @@ export default function Page() {
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>One sheet. Every answer your kitchen needs.</strong> Expose hidden profits buried in your menu 
-                with the same insights expensive software provides — but in a simple Google Sheet you can set up yourself.
+                <strong>One sheet. Key insights your kitchen needs.</strong> Identify profit opportunities in your menu 
+                with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.
               </p>
             </div>
           </div>
@@ -591,23 +592,23 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Urgency Banner with Real Countdown */}
+        {/* Honest Pricing Banner */}
         <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-6 text-center text-white">
           <div className="mb-3">
             <h3 className="text-xl font-bold mb-2">
-              🚀 Launch Discount - Save 60% Today!
+              🚀 Founder Pricing - AUD $29
             </h3>
             <p className="text-sm opacity-90">
-              Don't miss the margin makeover - limited time offer
+              Special launch price for early adopters
             </p>
           </div>
           <CountdownTimer 
             endDate={new Date('2024-12-31T23:59:59')} // Set to end of year for demo
             onExpired={() => {
-              console.log('Launch discount expired');
+              console.log('Founder pricing expired');
               // You could update pricing or show different message here
             }}
-            showSeconds={true}
+            showSeconds={false}
           />
         </div>
 
@@ -659,7 +660,6 @@ export default function Page() {
                 </div>
               </div>
               <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
-                <p className="text-base text-gray-500 line-through">AUD $49</p>
                 <p className="mt-2 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
                   AUD $29
                 </p>
@@ -694,7 +694,7 @@ export default function Page() {
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-blue-500">🛡️</span>
-                      <span>GDPR Compliant</span>
+                      <span>Privacy Focused</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-purple-500">✅</span>
@@ -729,14 +729,15 @@ export default function Page() {
                 <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
                   <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
                   <p className="text-4xl font-extrabold text-green-300">34%</p>
-                  <p className="text-sm text-gray-400">Average GP in 3 days</p>
+                  <p className="text-sm text-gray-400">Average GP within weeks</p>
                 </div>
                 <p className="text-sm text-gray-400">Data-driven decisions, margin insights revealed, clarity achieved</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
-                              <p className="text-sm text-gray-400">"We found $2,400 in hidden margin opportunities in our first week"</p>
+              <p className="text-sm text-gray-400">"We identified margin improvement opportunities that could add $2,400+ to our monthly profit"</p>
+              <p className="text-xs text-gray-500 mt-2">*Results may vary. This represents potential opportunity, not guaranteed outcome.</p>
             </div>
           </div>
         </section>
@@ -748,19 +749,19 @@ export default function Page() {
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             <Testimonial 
-              quote="We raised two prices and cut one item. Our gross margin shot up 9% overnight." 
+              quote="We raised two prices and cut one item. Our gross margin improved significantly within a week." 
               author="Emily W., Owner @ The Dockhouse" 
-              result="+9% GP in 24 hours"
+              result="Improved GP margins"
             />
             <Testimonial 
-                              quote="Found $1,200 in hidden margin on our burger menu alone. PrepFlow paid for itself in 2 days." 
+              quote="Identified $1,200+ in potential margin improvements on our burger menu. PrepFlow paid for itself quickly." 
               author="Marcus T., Head Chef @ Beachside Café" 
-              result="$1,200 profit found"
+              result="$1,200+ opportunity found"
             />
             <Testimonial 
-              quote="Set up in under an hour. Now I know exactly which dishes to push and which to retire." 
+              quote="Set up in about an hour. Now I have clear insights into which dishes perform best and which need attention." 
               author="Sarah L., Manager @ Food Truck Co" 
-              result="Setup in 1 hour"
+              result="Quick setup, clear insights"
             />
           </div>
           
@@ -784,14 +785,14 @@ export default function Page() {
             <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
             <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
                             <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
-            <FAQ q="Will this slow me down?" a="Setup takes 1 hour. After that, you'll save 2-3 hours per week on menu planning." />
+            <FAQ q="Will this slow me down?" a="Setup typically takes 1-2 hours. After that, you'll save time on menu planning and cost analysis." />
           </div>
         </section>
 
         {/* Trust Elements */}
         <section className="py-16 border-t border-gray-700">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Trusted by Independent Venues & Franchise Kitchens Worldwide</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">Built for Independent Venues & Small Kitchens</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">📊</span>

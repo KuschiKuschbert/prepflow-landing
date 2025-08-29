@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights in 24 Hours",
-  description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support. Start your profit scan now.",
+  title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights",
+  description: "Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support. Start your profit journey now.",
   keywords: [
     "restaurant COGS",
     "menu profitability", 
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights in 24 Hours",
-    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
+    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights",
+    description: "Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
     url: 'https://www.prepflow.org',
     siteName: 'PrepFlow',
     images: [
@@ -63,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights in 24 Hours",
-    description: "Your menu is leaking cash. PrepFlow finds every cent with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
+    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights",
+    description: "Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
     images: ['/images/dashboard-screenshot.png'],
   },
   robots: {
