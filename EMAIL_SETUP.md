@@ -26,14 +26,14 @@ Add these to your `.env.local` file:
 RESEND_API_KEY=re_hpumY9K8_HhSnL3T4DMXqsnHZpkNGzjQv
 
 # Email Configuration
-FROM_EMAIL=hello@prepflow.com
+FROM_EMAIL=hello@prepflow.org
 FROM_NAME=PrepFlow Team
 ```
 
 ### 4. Verify Domain (Optional but Recommended)
 For better deliverability, verify your domain:
 1. In Resend dashboard, go to "Domains"
-2. Add your domain (e.g., `prepflow.com`)
+2. Add your domain (e.g., `prepflow.org`)
 3. Follow the DNS setup instructions
 4. Update `FROM_EMAIL` to use your verified domain
 

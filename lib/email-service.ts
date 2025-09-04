@@ -20,7 +20,7 @@ class EmailService {
 
   constructor() {
     this.apiKey = process.env.RESEND_API_KEY || '';
-    this.fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+    this.fromEmail = process.env.FROM_EMAIL || 'hello@prepflow.org';
     this.fromName = process.env.FROM_NAME || 'PrepFlow Team';
   }
 
@@ -150,7 +150,7 @@ class EmailService {
         
         <p>Thanks for requesting the PrepFlow sample dashboard! This gives you a real taste of how PrepFlow can transform your menu profitability analysis.</p>
         
-        <img src="https://prepflow-landing.vercel.app/images/dashboard-screenshot.png" alt="PrepFlow Dashboard Preview" class="dashboard-image">
+        <img src="https://prepflow.org/images/dashboard-screenshot.png" alt="PrepFlow Dashboard Preview" class="dashboard-image">
         
         <h3 style="color: #2d3748;">What You'll Discover:</h3>
         
@@ -191,7 +191,7 @@ class EmailService {
     <div class="footer">
         <p>Questions? Reply to this email - I'm here to help!</p>
         <p>PrepFlow Team<br>
-        <a href="https://prepflow.com" style="color: #29E7CD;">prepflow.com</a></p>
+        <a href="https://prepflow.org" style="color: #29E7CD;">prepflow.org</a></p>
         <p style="font-size: 12px; margin-top: 20px;">
             You received this email because you requested a sample dashboard.<br>
             No spam. No lock-in. Your data stays private.
@@ -232,7 +232,7 @@ Pro Tip: Start with your best-selling items. You might be surprised to find that
 Questions? Reply to this email - I'm here to help!
 
 PrepFlow Team
-prepflow.com
+prepflow.org
 
 You received this email because you requested a sample dashboard.
 No spam. No lock-in. Your data stays private.

@@ -79,7 +79,7 @@ export default function CancelledPage() {
               
               <div className="grid md:grid-cols-2 gap-4">
                 <a
-                  href="mailto:support@prepflow.com"
+                  href="mailto:support@prepflow.org"
                   className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
                 >
                   Contact Support
@@ -113,8 +113,8 @@ export default function CancelledPage() {
             <div className="mt-8 text-center text-gray-500">
               <p className="text-sm">
                 Questions? Email us at{" "}
-                <a href="mailto:support@prepflow.com" className="text-[#29E7CD] hover:underline">
-                  support@prepflow.com
+                <a href="mailto:support@prepflow.org" className="text-[#29E7CD] hover:underline">
+                  support@prepflow.org
                 </a>
               </p>
             </div>
