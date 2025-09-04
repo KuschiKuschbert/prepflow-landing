@@ -61,12 +61,61 @@ class ABTestingAnalytics {
       return 'control';
     }
 
-    // Check if user already has a variant assigned
-    const existingVariant = this.userVariants.get(userId);
-    if (existingVariant) {
-      return existingVariant;
+    // Check for existing persistent variant assignment
+    const persistentVariant = this.getPersistentVariant(userId);
+    if (persistentVariant) {
+      return persistentVariant;
     }
 
+    // Assign new persistent variant based on traffic split
+    const assignedVariant = this.assignNewPersistentVariant(testId, userId, variants);
+    
+    // Track variant assignment
+    this.trackEvent({
+      testId,
+      variantId: assignedVariant,
+      userId,
+      sessionId: this.getSessionId(),
+      eventType: 'variant_assigned',
+      timestamp: Date.now(),
+      metadata: { 
+        variant_name: variants.find(v => v.id === assignedVariant)?.name || assignedVariant, 
+        is_control: assignedVariant === 'control',
+        assignment_type: 'persistent',
+        rotation_period: '1_month'
+      }
+    });
+
+    return assignedVariant;
+  }
+
+  private getPersistentVariant(userId: string): string | null {
+    if (typeof window === 'undefined') return null;
+    
+    try {
+      const stored = localStorage.getItem(`prepflow_variant_${userId}`);
+      if (!stored) return null;
+      
+      const variantData = JSON.parse(stored);
+      const assignmentDate = new Date(variantData.assignedAt);
+      const currentDate = new Date();
+      const daysSinceAssignment = (currentDate.getTime() - assignmentDate.getTime()) / (1000 * 60 * 60 * 24);
+      
+      // If less than 30 days, return the assigned variant
+      if (daysSinceAssignment < 30) {
+        return variantData.variantId;
+      }
+      
+      // If more than 30 days, clear the assignment for rotation
+      localStorage.removeItem(`prepflow_variant_${userId}`);
+      return null;
+    } catch (error) {
+      console.warn('Error reading persistent variant:', error);
+      return null;
+    }
+  }
+
+  private assignNewPersistentVariant(testId: string, userId: string, variants: ABTestVariant[]): string {
     // Assign variant based on traffic split
     const random = Math.random() * 100;
     let cumulativeSplit = 0;
@@ -74,30 +123,39 @@ class ABTestingAnalytics {
     for (const variant of variants) {
       cumulativeSplit += variant.trafficSplit;
       if (random <= cumulativeSplit) {
-        this.userVariants.set(userId, variant.id);
+        const assignedVariant = variant.id;
         
-        // Track variant assignment
-        this.trackEvent({
-          testId,
-          variantId: variant.id,
-          userId,
-          sessionId: this.getSessionId(),
-          eventType: 'variant_assigned',
-          timestamp: Date.now(),
-          metadata: { variant_name: variant.name, is_control: variant.isControl }
-        });
-
-        return variant.id;
+        // Store persistent assignment
+        this.storePersistentVariant(userId, assignedVariant);
+        
+        return assignedVariant;
       }
     }
 
     // Fallback to control
-    this.userVariants.set(userId, 'control');
-    return 'control';
+    const assignedVariant = 'control';
+    this.storePersistentVariant(userId, assignedVariant);
+    return assignedVariant;
+  }
+
+  private storePersistentVariant(userId: string, variantId: string): void {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const variantData = {
+        variantId,
+        assignedAt: new Date().toISOString(),
+        testId: 'landing_page_variants'
+      };
+      
+      localStorage.setItem(`prepflow_variant_${userId}`, JSON.stringify(variantData));
+    } catch (error) {
+      console.warn('Error storing persistent variant:', error);
+    }
   }
 
   public getCurrentVariant(testId: string, userId: string): string {
-    return this.userVariants.get(userId) || this.assignVariant(testId, userId);
+    return this.assignVariant(testId, userId);
   }
 
   public trackEvent(event: ABTestEvent): void {
@@ -242,6 +300,36 @@ class ABTestingAnalytics {
     const variants = this.tests.get(testId);
     return variants?.find(v => v.id === variantId);
   }
+
+  public getVariantAssignmentInfo(userId: string): {
+    variantId: string;
+    assignedAt: string;
+    daysRemaining: number;
+    isPersistent: boolean;
+  } | null {
+    if (typeof window === 'undefined') return null;
+    
+    try {
+      const stored = localStorage.getItem(`prepflow_variant_${userId}`);
+      if (!stored) return null;
+      
+      const variantData = JSON.parse(stored);
+      const assignmentDate = new Date(variantData.assignedAt);
+      const currentDate = new Date();
+      const daysSinceAssignment = (currentDate.getTime() - assignmentDate.getTime()) / (1000 * 60 * 60 * 24);
+      const daysRemaining = Math.max(0, 30 - daysSinceAssignment);
+      
+      return {
+        variantId: variantData.variantId,
+        assignedAt: variantData.assignedAt,
+        daysRemaining: Math.round(daysRemaining),
+        isPersistent: daysRemaining > 0
+      };
+    } catch (error) {
+      console.warn('Error reading variant assignment info:', error);
+      return null;
+    }
+  }
 }
 
 // Create singleton instance
@@ -255,3 +343,4 @@ export const trackEngagement = abTestingAnalytics.trackEngagement.bind(abTesting
 export const getTestResults = abTestingAnalytics.getTestResults.bind(abTestingAnalytics);
 export const getActiveTests = abTestingAnalytics.getActiveTests.bind(abTestingAnalytics);
 export const getVariantInfo = abTestingAnalytics.getVariantInfo.bind(abTestingAnalytics);
+export const getVariantAssignmentInfo = abTestingAnalytics.getVariantAssignmentInfo.bind(abTestingAnalytics);

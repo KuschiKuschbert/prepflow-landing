@@ -10,6 +10,7 @@ import PerformanceOptimizer from '../components/PerformanceOptimizer';
 import { useLandingPageABTest } from '../components/useABTest';
 import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
+import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
 
 // Import variant components
 import { 
@@ -36,6 +37,18 @@ export default function Page() {
       const loadTime = performance.now();
       console.log(`PrepFlow landing page loaded in ${loadTime.toFixed(2)}ms`);
       console.log(`🧪 A/B Test Variant: ${variantId}`);
+      
+      // Log variant assignment info for debugging
+      const userId = localStorage.getItem('prepflow_user_id') || `user_${Date.now()}`;
+      const assignmentInfo = getVariantAssignmentInfo(userId);
+      if (assignmentInfo) {
+        console.log(`📊 Variant Assignment:`, {
+          variant: assignmentInfo.variantId,
+          assignedAt: assignmentInfo.assignedAt,
+          daysRemaining: assignmentInfo.daysRemaining,
+          isPersistent: assignmentInfo.isPersistent
+        });
+      }
     }
   }, [variantId]);
 
