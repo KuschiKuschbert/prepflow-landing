@@ -23,7 +23,7 @@ Add these to your `.env.local` file:
 
 ```bash
 # Email Service Configuration
-RESEND_API_KEY=re_your_api_key_here
+RESEND_API_KEY=re_hpumY9K8_HhSnL3T4DMXqsnHZpkNGzjQv
 
 # Email Configuration
 FROM_EMAIL=hello@prepflow.com

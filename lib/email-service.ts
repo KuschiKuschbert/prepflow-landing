@@ -20,7 +20,7 @@ class EmailService {
 
   constructor() {
     this.apiKey = process.env.RESEND_API_KEY || '';
-    this.fromEmail = process.env.FROM_EMAIL || 'hello@prepflow.com';
+    this.fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
     this.fromName = process.env.FROM_NAME || 'PrepFlow Team';
   }
 
