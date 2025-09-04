@@ -1,0 +1,10 @@
+{
+  "/api/send-sample-email/route": "/api/send-sample-email",
+  "/favicon.ico/route": "/favicon.ico",
+  "/_not-found/page": "/_not-found",
+  "/cancelled/page": "/cancelled",
+  "/page": "/",
+  "/thank-you/page": "/thank-you",
+  "/terms-of-service/page": "/terms-of-service",
+  "/privacy-policy/page": "/privacy-policy"
+}

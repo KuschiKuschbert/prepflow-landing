@@ -1,126 +1,242 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PrepFlow WebApp - Restaurant Management SaaS
 
-## Getting Started
+A secure, mobile-first, subscription-based online tool for restaurant and pub owners. Each subscriber has a personalized dashboard and dedicated storage for their data, including editable stock lists, a Cost of Goods (COG) calculator, and an automated recipe management system.
 
-First, run the development server:
+## 🚀 Features
 
+### Core Features
+- **User Authentication & Subscription Portal**
+  - Secure user registration and login
+  - Stripe integration for subscription management
+  - Admin panel with user impersonation
+  - Multi-tenant data isolation
+
+- **Personalized Dashboard**
+  - Key metrics (average GP, food cost %, profit margins)
+  - Interactive charts and graphs
+  - Popularity vs. Profitability matrix
+  - Contributing Profit Margin analysis
+
+- **Stock List Management**
+  - CRUD operations for ingredients
+  - Advanced filtering and sorting
+  - Waste and yield calculations
+  - Supplier and storage tracking
+
+- **Recipe Management**
+  - Recipe creation with ingredient linking
+  - COG calculation automation
+  - Yield scaling capabilities
+  - Cooking method generation
+
+- **Menu Analysis**
+  - Menu dish performance tracking
+  - Sales data integration
+  - Profit optimization insights
+  - Pricing recommendations
+
+## 🛠️ Technology Stack
+
+- **Backend**: Node.js with Express.js
+- **Database**: PostgreSQL
+- **Authentication**: JWT with bcrypt
+- **Payments**: Stripe
+- **Email**: Nodemailer
+- **Deployment**: Vercel
+- **Testing**: Jest + Supertest
+
+## 📋 Prerequisites
+
+- Node.js 18+ 
+- PostgreSQL 12+
+- npm or yarn
+- Stripe account
+- Email service (Gmail, SendGrid, etc.)
+
+## 🚀 Quick Start
+
+### 1. Clone and Setup
+```bash
+git clone <repository-url>
+cd prepflow-webapp
+npm install
+```
+
+### 2. Environment Configuration
+```bash
+cp env.example .env
+```
+
+Edit `.env` with your configuration:
+```bash
+# Database
+DATABASE_URL=postgresql://username:password@localhost:5432/prepflow_webapp
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# Stripe
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+
+# Email
+SMTP_HOST=smtp.gmail.com
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+```
+
+### 3. Database Setup
+```bash
+# Create PostgreSQL database
+createdb prepflow_webapp
+
+# Run migrations
+npm run db:migrate
+```
+
+### 4. Start Development Server
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The server will start on `http://localhost:3001`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📚 API Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Authentication Endpoints
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
 
-## Learn More
+### Subscription Endpoints
+- `GET /api/subscriptions/current` - Get current subscription
+- `POST /api/subscriptions/create` - Create subscription
+- `POST /api/subscriptions/cancel` - Cancel subscription
 
-To learn more about Next.js, take a look at the following resources:
+### Ingredients Endpoints
+- `GET /api/ingredients` - List ingredients
+- `POST /api/ingredients` - Create ingredient
+- `PUT /api/ingredients/:id` - Update ingredient
+- `DELETE /api/ingredients/:id` - Delete ingredient
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Recipes Endpoints
+- `GET /api/recipes` - List recipes
+- `POST /api/recipes` - Create recipe
+- `PUT /api/recipes/:id` - Update recipe
+- `POST /api/recipes/:id/calculate-cogs` - Calculate COGS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Dashboard Endpoints
+- `GET /api/dashboard/metrics` - Get dashboard metrics
+- `GET /api/dashboard/charts` - Get chart data
 
-## Deploy on Vercel
+### Admin Endpoints
+- `GET /api/admin/users` - List all users
+- `POST /api/admin/impersonate/:userId` - Start impersonation
+- `DELETE /api/admin/impersonate` - End impersonation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Analytics Setup
-
-This project includes Google Analytics 4 integration with measurement ID `G-W1D5LQXGJT`.
-
-### Google Analytics Configuration
-- **Measurement ID**: G-W1D5LQXGJT
-- **Tracking**: Page views, user interactions, conversions, and performance metrics
-- **Privacy**: Respects Do Not Track and includes GDPR compliance features
-
-### Environment Variables
-Create a `.env.local` file with:
 ```bash
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-W1D5LQXGJT
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
 ```
 
-### Testing Analytics
-1. Open browser developer tools
-2. Check Console for analytics events (in development mode)
-3. Verify Google Analytics Real-Time reports
-4. Test conversion tracking on CTA clicks and form submissions
+## 🚀 Deployment
 
-## A/B Testing Analytics
+### Vercel Deployment
+1. Connect your GitHub repository to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
 
-This project includes comprehensive A/B testing analytics with Google Analytics 4 integration.
-
-### Features
-- **Variant Assignment**: Automatic traffic splitting (25% each for 4 variants)
-- **Performance Tracking**: Conversion rates, engagement metrics, and statistical significance
-- **Real-time Results**: Live dashboard with variant performance comparison
-- **Google Analytics Integration**: All A/B test events sent to GA4 with variant context
-
-### Usage
-
-#### Basic A/B Testing Hook
-```tsx
-import { useLandingPageABTest } from '../components/useABTest';
-
-function MyComponent() {
-  const { variantId, isLoading, trackEngagement } = useLandingPageABTest();
-  
-  if (isLoading) return <div>Loading...</div>;
-  
-  return (
-    <div>
-      {variantId === 'control' && <OriginalHero />}
-      {variantId === 'variant_a' && <AlternativeHero />}
-      {variantId === 'variant_b' && <PricingHero />}
-      {variantId === 'variant_c' && <CTAHero />}
-      
-      <button onClick={() => trackEngagement('cta_click')}>
-        Get Started
-      </button>
-    </div>
-  );
-}
+### Environment Variables for Production
+```bash
+DATABASE_URL=your-production-database-url
+JWT_SECRET=your-production-jwt-secret
+STRIPE_SECRET_KEY=your-production-stripe-key
+NODE_ENV=production
 ```
 
-#### A/B Test Dashboard
-```tsx
-import ABTestDashboard from '../components/ABTestDashboard';
+## 🔐 Security Features
 
-function AnalyticsPage() {
-  return (
-    <div>
-      <h1>Analytics Dashboard</h1>
-      <ABTestDashboard testId="landing_page_variants" />
-    </div>
-  );
-}
+- **JWT Authentication** with secure token management
+- **Password Hashing** using bcrypt with 12 rounds
+- **Rate Limiting** to prevent abuse
+- **CORS Protection** with configurable origins
+- **Helmet.js** for security headers
+- **Input Validation** using Joi schemas
+- **SQL Injection Protection** using parameterized queries
+- **Admin Impersonation** with audit logging
+
+## 📊 Database Schema
+
+The application uses PostgreSQL with the following main tables:
+- `users` - User accounts and profiles
+- `subscriptions` - Stripe subscription data
+- `ingredients` - Stock list items
+- `recipes` - Recipe definitions
+- `recipe_items` - Recipe-ingredient relationships
+- `menu_dishes` - Menu items with pricing
+- `sales_data` - Sales tracking
+- `impersonation_logs` - Admin action audit
+
+## 🔧 Development
+
+### Project Structure
+```
+src/
+├── api/           # API route handlers
+├── config/       # Configuration files
+├── middleware/    # Express middleware
+├── models/        # Database models
+├── services/      # Business logic
+├── utils/         # Utility functions
+└── scripts/       # Database scripts
 ```
 
-### Default Test Configuration
-- **Control**: Original landing page (25% traffic)
-- **Variant A**: Alternative hero section (25% traffic)
-- **Variant B**: Different pricing layout (25% traffic)
-- **Variant C**: New CTA positioning (25% traffic)
+### Code Style
+- ESLint configuration included
+- Consistent error response format
+- Comprehensive logging
+- Type checking with JSDoc
 
-### Tracking Events
-- `variant_assigned`: When user gets assigned to a variant
-- `page_view`: Page views with variant context
-- `conversion`: Purchase/conversion events per variant
-- `engagement`: User interactions (clicks, scrolls, etc.)
+## 🤝 Contributing
 
-### Google Analytics Integration
-All A/B test events include custom parameters:
-- `custom_parameter_test_id`: Test identifier
-- `custom_parameter_variant_id`: Variant identifier
-- `custom_parameter_user_id`: User identifier
-- `custom_parameter_session_id`: Session identifier
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the ISC License.
+
+## 🆘 Support
+
+For support and questions:
+- Email: support@prepflow.org
+- Documentation: [Coming Soon]
+- Issues: GitHub Issues
+
+## 🔄 Roadmap
+
+### Phase 2 Features
+- [ ] Import/Export functionality
+- [ ] Dark/Light mode themes
+- [ ] On-device AI integration
+- [ ] AI specials creator
+- [ ] Advanced inventory management
+- [ ] Workflow tools (cleaning rosters, temperature logs)
+- [ ] Mobile app companion
+- [ ] Multi-location support
+
+---
+
+**Built with ❤️ for restaurant owners worldwide**

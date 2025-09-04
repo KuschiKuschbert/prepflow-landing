@@ -2,20 +2,25 @@
 
 ## 🎯 **Project Overview**
 
-PrepFlow is a restaurant profitability optimization tool that helps cafés, restaurants, and food trucks analyze their menu costs, calculate COGS, and optimize gross profit margins. The tool is built as a Google Sheets template with automated calculations and AI-powered insights.
+PrepFlow is a unified restaurant profitability optimization platform that helps cafés, restaurants, and food trucks analyze their menu costs, calculate COGS, and optimize gross profit margins. The platform combines a marketing landing page with a comprehensive webapp featuring subscription-based access.
 
 **Target Market:** Independent restaurants, cafés, food trucks in Australia and globally
-**Primary Goal:** Convert visitors into customers through lead generation and direct sales
-**Business Model:** One-time purchase ($29 AUD) with 7-day refund policy
+**Primary Goal:** Convert visitors into customers through lead generation and subscription sales
+**Business Model:** Subscription-based SaaS ($29/month AUD) with 7-day free trial
+**Platform:** Unified Next.js webapp with future React Native mobile apps
 
 ## 🏗️ **Technical Architecture**
 
 ### **Framework & Stack**
-- **Frontend:** Next.js 15.4.6 with React 19
+- **Frontend:** Next.js 15.4.6 with React 19 (App Router)
 - **Styling:** Tailwind CSS 4 with custom CSS variables
 - **Analytics:** Google Analytics 4, Google Tag Manager, Vercel Analytics
 - **Deployment:** Vercel platform
-- **Payment:** Gumroad integration
+- **Payment:** Stripe integration
+- **Database:** Supabase PostgreSQL
+- **Authentication:** Supabase Auth with JWT
+- **Email:** Resend integration
+- **Mobile:** React Native + Expo (future)
 
 ### **Key Components**
 - **Analytics Stack:** ExitIntentTracker, ScrollTracker, PerformanceTracker
@@ -29,20 +34,46 @@ PrepFlow is a restaurant profitability optimization tool that helps cafés, rest
 app/
 ├── layout.tsx          # Root layout with metadata and analytics
 ├── page.tsx            # Main landing page
-├── thank-you/          # Post-purchase page
-├── cancelled/          # Cancelled purchase page
+├── login/              # Authentication pages
+│   ├── page.tsx        # Login page
+│   └── register/page.tsx # Registration page
+├── verify-email/       # Email verification
+│   └── page.tsx        # Email verification page
+├── dashboard/          # Protected webapp area
+│   ├── page.tsx        # Main dashboard
+│   ├── ingredients/    # Stock management
+│   ├── recipes/        # Recipe management
+│   ├── cogs/           # COG calculator
+│   └── settings/       # User settings
+├── api/                # API routes
+│   ├── auth/           # Authentication endpoints
+│   ├── dashboard/      # Dashboard APIs
+│   └── webhook/stripe/ # Payment processing
 └── globals.css         # Global styles and CSS variables
 
 components/
-├── ui/                 # Reusable UI components
-│   ├── Button.tsx      # Custom button component
-│   ├── Card.tsx        # Card component
+├── ui/                 # Universal UI components
+│   ├── Button.tsx      # Universal button component
+│   ├── Input.tsx       # Universal input component
+│   ├── Card.tsx        # Universal card component
 │   ├── LoadingSkeleton.tsx # Loading skeleton components
 │   ├── MobileNavigation.tsx # Mobile hamburger menu
 │   ├── FloatingCTA.tsx # Floating CTA buttons
 │   ├── ScrollToTop.tsx # Scroll to top button
 │   └── ScrollProgress.tsx # Scroll progress indicator
-├── variants/           # A/B testing variant components
+├── auth/               # Authentication components
+│   ├── LoginForm.tsx   # Login form
+│   ├── RegisterForm.tsx # Registration form
+│   └── EmailVerification.tsx # Email verification
+├── dashboard/          # Webapp components
+│   ├── DashboardLayout.tsx # Dashboard layout
+│   ├── IngredientsTable.tsx # Ingredients management
+│   ├── RecipeForm.tsx  # Recipe creation/editing
+│   └── COGCalculator.tsx # COG calculator
+├── paywall/            # Subscription components
+│   ├── PaywallOverlay.tsx # Paywall overlay
+│   └── SubscriptionManager.tsx # Subscription management
+├── variants/            # A/B testing variant components
 │   ├── HeroVariants.tsx # Hero section variants
 │   └── PricingVariants.tsx # Pricing section variants
 ├── GoogleAnalytics.tsx # GA4 integration
@@ -52,11 +83,50 @@ components/
 └── PerformanceTracker.tsx # Core Web Vitals
 
 lib/
+├── supabase.ts         # Supabase client
+├── auth.ts             # Authentication utilities
+├── stripe.ts           # Payment integration
+├── email-service.ts    # Email service
 ├── analytics.ts        # Analytics service
-├── analytics-config.ts # Analytics configuration
 ├── gtm-config.ts      # GTM configuration
 └── ab-testing-analytics.ts # A/B testing system
+
+hooks/
+├── useAuth.ts          # Authentication hook
+├── usePlatform.ts      # Platform detection
+├── useSubscription.ts  # Subscription management
+└── useResponsive.ts    # Responsive design
+
+types/
+├── auth.ts             # Authentication types
+├── dashboard.ts        # Dashboard types
+└── subscription.ts    # Subscription types
+
+mobile/                 # React Native app (future)
+├── App.tsx
+├── components/
+└── screens/
 ```
+
+## 🏗️ **Unified Architecture**
+
+### **Platform Strategy**
+- **Web-First Development:** Build for web with mobile-ready components
+- **Universal Components:** Create components that work on web and mobile
+- **Shared Business Logic:** Core functionality shared across platforms
+- **Progressive Enhancement:** Start with web, add mobile capabilities
+
+### **Authentication Flow**
+- **Supabase Auth:** Email/password with JWT tokens
+- **Email Verification:** Required for account activation
+- **Session Management:** Secure token storage and refresh
+- **Role-Based Access:** User and admin permissions
+
+### **Subscription Management**
+- **Stripe Integration:** Payment processing and subscription management
+- **Paywall System:** Protect premium features behind subscription
+- **Trial Period:** 7-day free trial for new users
+- **Billing Management:** User dashboard for subscription management
 
 ## 📋 **Development Standards**
 
@@ -66,6 +136,7 @@ lib/
 - **Performance:** Lazy loading, image optimization, Core Web Vitals optimization
 - **Accessibility:** ARIA labels, semantic HTML, keyboard navigation support
 - **SEO:** Proper meta tags, structured data, semantic markup
+- **Universal Design:** Components that work on web and mobile
 
 ### **Naming Conventions**
 - **Files:** kebab-case (e.g., `exit-intent-tracker.tsx`)
