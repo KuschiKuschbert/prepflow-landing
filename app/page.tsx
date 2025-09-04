@@ -358,7 +358,7 @@ export default function Page() {
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
             <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
-                          <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded demo data and comprehensive resources to learn the flow in minutes." />
+                          <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded sample data and comprehensive resources to learn the flow in minutes." />
             <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
           </div>
         </section>
@@ -470,53 +470,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Demo */}
-        <section id="demo" className="py-20">
-          <div className="grid items-center gap-12 md:grid-cols-2">
-            <div>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">2‑Minute Demo</h3>
-              <p className="mt-4 text-lg text-gray-300">Watch us price a Double Cheese Burger and see how a $1 change affects COGS% and GP$ in real-time.</p>
-              <ul className="mt-6 space-y-3 text-base text-gray-300">
-                <Bullet>See margin calculations instantly</Bullet>
-                <Bullet>Understand profit ex-tax per item (GST, VAT, Sales Tax)</Bullet>
-                <Bullet>Make informed pricing decisions</Bullet>
-              </ul>
-              <div className="mt-8">
-                <a
-                  href="https://7495573591101.gumroad.com/l/prepflow"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
-                >
-                  Get PrepFlow Now
-                </a>
-              </div>
-            </div>
-            <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6">
-              <div className="relative w-full aspect-video rounded-xl border border-gray-600 bg-gray-800 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#29E7CD] mb-4"></div>
-                  <p className="text-gray-400">Loading demo video...</p>
-                </div>
-                <iframe
-                  src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-                  className="absolute inset-0 w-full h-full rounded-xl opacity-0 transition-opacity duration-300"
-                  title="PrepFlow 2-Minute Demo - See how pricing changes affect COGS and profit margins"
-                  allowFullScreen
-                  loading="lazy"
-                  onLoad={(e) => {
-                    const target = e.target as HTMLIFrameElement;
-                    target.style.opacity = '1';
-                  }}
-                  onError={() => {
-                    console.error('Failed to load demo video');
-                  }}
-                />
-              </div>
-              <p className="mt-4 text-center text-sm text-gray-500">Watch the full demo to see PrepFlow in action</p>
-            </div>
-          </div>
-        </section>
+
 
         {/* Lead Magnet */}
         <section id="lead-magnet" className="py-20">
@@ -526,13 +480,13 @@ export default function Page() {
                 See PrepFlow before you buy
               </h3>
               <p className="text-lg text-gray-300">
-                Get the 2-min demo or a sample dashboard — we'll email it to you.
+                Get a sample dashboard — we'll email it to you.
               </p>
             </div>
             
             <div className="max-w-md mx-auto">
               <LeadMagnetForm 
-                onSuccess={(data: { name: string; email: string; preference: 'demo' | 'sample' }) => {
+                onSuccess={(data: { name: string; email: string; preference: 'sample' }) => {
                   console.log('Lead captured:', data);
                   // You can add additional success handling here
                 }}
@@ -627,10 +581,10 @@ export default function Page() {
           
           <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
-              <span className="text-[#29E7CD]">🎬</span>
-              <span className="text-white font-medium">See PrepFlow in action with our demo</span>
-              <a href="#demo" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
-                Watch Demo
+              <span className="text-[#29E7CD]">📊</span>
+              <span className="text-white font-medium">See PrepFlow in action</span>
+              <a href="#lead-magnet" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
+                Get Sample
               </a>
             </div>
           </div>

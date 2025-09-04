@@ -23,8 +23,8 @@ export function ControlHero() {
           <Bullet><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
-            Watch the 2-min demo
+          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
+            Get Sample Dashboard
           </a>
           <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
             Get the sample sheet (free)
@@ -53,7 +53,7 @@ export function ControlHero() {
                   Live GP% Dashboard
                 </div>
                 <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                  Play Demo
+                  View Dashboard
                 </button>
               </div>
             </div>
@@ -108,8 +108,8 @@ export function VariantAHero() {
           <Bullet><strong>AI Kitchen Insights</strong> — discover new methods to improve margins</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300">
-            See How It Works
+          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300">
+            Get Sample Dashboard
           </a>
           <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#D925C7] hover:text-[#D925C7] transition-all duration-300">
             Get Free Sample
@@ -138,7 +138,7 @@ export function VariantAHero() {
                   Profit Analysis Dashboard
                 </div>
                 <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                  View Demo
+                  View Dashboard
                 </button>
               </div>
             </div>
@@ -193,8 +193,8 @@ export function VariantBHero() {
           <Bullet><strong>AI Optimization</strong> — get suggestions to improve your margins</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#3B82F6]/25 transition-all duration-300">
-            Start Profiting Now
+          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#3B82F6]/25 transition-all duration-300">
+            Get Sample Dashboard
           </a>
           <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#3B82F6] hover:text-[#3B82F6] transition-all duration-300">
             Try Sample Sheet
@@ -223,7 +223,7 @@ export function VariantBHero() {
                   Profit Optimization
                 </div>
                 <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                  Start Now
+                  View Dashboard
                 </button>
               </div>
             </div>
@@ -278,8 +278,8 @@ export function VariantCHero() {
           <Bullet><strong>Smart Insights</strong> — AI suggestions to improve your margins</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#demo" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
-            Get Started
+          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
+            Get Sample Dashboard
           </a>
           <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
             Free Sample
@@ -308,7 +308,7 @@ export function VariantCHero() {
                   Cost Analysis Dashboard
                 </div>
                 <button className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                  Get Started
+                  View Dashboard
                 </button>
               </div>
             </div>

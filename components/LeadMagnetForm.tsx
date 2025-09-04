@@ -6,7 +6,7 @@ import { trackEvent, trackConversion, getSessionId } from '../lib/analytics';
 interface FormData {
   name: string;
   email: string;
-  preference: 'demo' | 'sample';
+  preference: 'sample';
 }
 
 interface LeadMagnetFormProps {
@@ -18,7 +18,7 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
-    preference: 'demo'
+    preference: 'sample'
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,7 +77,7 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
       
       // Reset form after success
       setTimeout(() => {
-        setFormData({ name: '', email: '', preference: 'demo' });
+        setFormData({ name: '', email: '', preference: 'sample' });
         setIsSuccess(false);
       }, 3000);
       
@@ -105,7 +105,7 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
           Check your email!
         </h4>
         <p className="text-gray-300">
-          We've sent you the {formData.preference === 'demo' ? 'demo video' : 'sample dashboard'}.
+          We've sent you the sample dashboard.
           <br />
           It should arrive in the next few minutes.
         </p>
@@ -165,50 +165,15 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
 
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-3">
-          What would you like to see first? *
+          Get your sample dashboard
         </label>
-        <div className="grid grid-cols-2 gap-3">
-          <label className="flex items-center p-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80 cursor-pointer hover:border-[#29E7CD] transition-colors">
-            <input
-              type="radio"
-              name="preference"
-              value="demo"
-              checked={formData.preference === 'demo'}
-              onChange={(e) => setFormData(prev => ({ ...prev, preference: e.target.value as 'demo' | 'sample' }))}
-              className="sr-only"
-            />
-            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-              formData.preference === 'demo' 
-                ? 'border-[#29E7CD] bg-[#29E7CD]' 
-                : 'border-gray-500'
-            }`}>
-              {formData.preference === 'demo' && (
-                <div className="w-2 h-2 rounded-full bg-white m-0.5" />
-              )}
+        <div className="p-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80">
+          <div className="flex items-center">
+            <div className="w-4 h-4 rounded-full border-2 mr-3 border-[#29E7CD] bg-[#29E7CD]">
+              <div className="w-2 h-2 rounded-full bg-white m-0.5" />
             </div>
-            <span className="text-sm text-gray-300">2-min Demo</span>
-          </label>
-          
-          <label className="flex items-center p-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80 cursor-pointer hover:border-[#29E7CD] transition-colors">
-            <input
-              type="radio"
-              name="preference"
-              value="sample"
-              checked={formData.preference === 'sample'}
-              onChange={(e) => setFormData(prev => ({ ...prev, preference: e.target.value as 'demo' | 'sample' }))}
-              className="sr-only"
-            />
-            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-              formData.preference === 'sample' 
-                ? 'border-[#29E7CD] bg-[#29E7CD]' 
-                : 'border-gray-500'
-            }`}>
-              {formData.preference === 'sample' && (
-                <div className="w-2 h-2 rounded-full bg-white m-0.5" />
-              )}
-            </div>
-            <span className="text-sm text-gray-300">Sample Sheet</span>
-          </label>
+            <span className="text-sm text-gray-300">Sample Dashboard</span>
+          </div>
         </div>
       </div>
 
@@ -230,7 +195,7 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
             Sending...
           </span>
         ) : (
-          `Send me the ${formData.preference === 'demo' ? 'demo' : 'sample sheet'}`
+          'Send me the sample dashboard'
         )}
       </button>
 
