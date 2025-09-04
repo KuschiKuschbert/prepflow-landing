@@ -15,7 +15,13 @@ export function useABTest({ testId, userId, onVariantChange }: UseABTestOptions)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const currentUserId = userId || localStorage.getItem('prepflow_user_id') || `user_${Date.now()}`;
+      let currentUserId = userId || localStorage.getItem('prepflow_user_id');
+      
+      // Generate stable user ID if none exists
+      if (!currentUserId) {
+        currentUserId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+        localStorage.setItem('prepflow_user_id', currentUserId);
+      }
       
       // Assign or get variant for this user
       const assignedVariant = assignVariant(testId, currentUserId);
@@ -32,7 +38,7 @@ export function useABTest({ testId, userId, onVariantChange }: UseABTestOptions)
 
   const trackEngagementEvent = (engagementType: string, metadata?: Record<string, any>) => {
     if (typeof window !== 'undefined') {
-      const currentUserId = userId || localStorage.getItem('prepflow_user_id') || `user_${Date.now()}`;
+      const currentUserId = userId || localStorage.getItem('prepflow_user_id') || 'user_unknown';
       trackEngagement(testId, currentUserId, engagementType, metadata);
     }
   };

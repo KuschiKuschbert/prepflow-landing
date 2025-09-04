@@ -54,8 +54,20 @@ class PrepFlowAnalytics {
 
   private loadUserId(): void {
     if (typeof window !== 'undefined') {
-      this.userId = localStorage.getItem('prepflow_user_id') || undefined;
+      const storedUserId = localStorage.getItem('prepflow_user_id');
+      this.userId = storedUserId || undefined;
+      
+      // Generate and store a stable user ID if none exists
+      if (!this.userId) {
+        this.userId = this.generateStableUserId();
+        localStorage.setItem('prepflow_user_id', this.userId);
+      }
     }
+  }
+
+  private generateStableUserId(): string {
+    // Generate a stable user ID that persists across sessions
+    return 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
   }
 
   private initializeAnalytics(): void {
@@ -412,5 +424,6 @@ export {
   trackEngagement,
   getTestResults,
   getActiveTests,
-  getVariantInfo
+  getVariantInfo,
+  getVariantAssignmentInfo
 } from './ab-testing-analytics';

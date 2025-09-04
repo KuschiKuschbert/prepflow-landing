@@ -55,6 +55,8 @@ class ABTestingAnalytics {
   }
 
   public assignVariant(testId: string, userId: string): string {
+    console.log('🎯 Assigning variant for:', { testId, userId });
+    
     const variants = this.tests.get(testId);
     if (!variants) {
       console.warn(`AB test ${testId} not found`);
@@ -64,11 +66,13 @@ class ABTestingAnalytics {
     // Check for existing persistent variant assignment
     const persistentVariant = this.getPersistentVariant(userId);
     if (persistentVariant) {
+      console.log('🎯 Returning existing persistent variant:', persistentVariant);
       return persistentVariant;
     }
 
     // Assign new persistent variant based on traffic split
     const assignedVariant = this.assignNewPersistentVariant(testId, userId, variants);
+    console.log('🎯 Assigned new persistent variant:', assignedVariant);
     
     // Track variant assignment
     this.trackEvent({
@@ -94,19 +98,32 @@ class ABTestingAnalytics {
     
     try {
       const stored = localStorage.getItem(`prepflow_variant_${userId}`);
-      if (!stored) return null;
+      if (!stored) {
+        console.log('🔍 No persistent variant found for user:', userId);
+        return null;
+      }
       
       const variantData = JSON.parse(stored);
       const assignmentDate = new Date(variantData.assignedAt);
       const currentDate = new Date();
       const daysSinceAssignment = (currentDate.getTime() - assignmentDate.getTime()) / (1000 * 60 * 60 * 24);
       
+      console.log('🔍 Persistent variant check:', {
+        userId,
+        variantId: variantData.variantId,
+        assignedAt: variantData.assignedAt,
+        daysSinceAssignment: Math.round(daysSinceAssignment),
+        isExpired: daysSinceAssignment >= 30
+      });
+      
       // If less than 30 days, return the assigned variant
       if (daysSinceAssignment < 30) {
+        console.log('✅ Returning persistent variant:', variantData.variantId);
         return variantData.variantId;
       }
       
       // If more than 30 days, clear the assignment for rotation
+      console.log('🔄 Variant expired, clearing for rotation');
       localStorage.removeItem(`prepflow_variant_${userId}`);
       return null;
     } catch (error) {
@@ -149,6 +166,12 @@ class ABTestingAnalytics {
       };
       
       localStorage.setItem(`prepflow_variant_${userId}`, JSON.stringify(variantData));
+      console.log('💾 Stored persistent variant:', {
+        userId,
+        variantId,
+        assignedAt: variantData.assignedAt,
+        storageKey: `prepflow_variant_${userId}`
+      });
     } catch (error) {
       console.warn('Error storing persistent variant:', error);
     }

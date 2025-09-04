@@ -46,7 +46,11 @@ export default function Page() {
       console.log(`🧪 A/B Test Variant: ${variantId}`);
       
       // Log variant assignment info for debugging
-      const userId = localStorage.getItem('prepflow_user_id') || `user_${Date.now()}`;
+      let userId = localStorage.getItem('prepflow_user_id');
+      if (!userId) {
+        userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+        localStorage.setItem('prepflow_user_id', userId);
+      }
       const assignmentInfo = getVariantAssignmentInfo(userId);
       if (assignmentInfo) {
         console.log(`📊 Variant Assignment:`, {
