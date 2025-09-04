@@ -12,6 +12,13 @@ import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
 
+// Import UI components
+import { HeroSkeleton, PricingSkeleton } from '../components/ui/LoadingSkeleton';
+import { MobileNavigation } from '../components/ui/MobileNavigation';
+import { FloatingCTA } from '../components/ui/FloatingCTA';
+import { ScrollToTop } from '../components/ui/ScrollToTop';
+import { ScrollProgress } from '../components/ui/ScrollProgress';
+
 // Import variant components
 import { 
   ControlHero, 
@@ -84,6 +91,7 @@ export default function Page() {
     <>
       {/* Performance & Analytics Components */}
       <PerformanceOptimizer />
+      <ScrollProgress />
       <ExitIntentTracker 
         onExitIntent={() => {
           console.log('🚨 User attempting to leave page - potential conversion opportunity');
@@ -107,14 +115,19 @@ export default function Page() {
       {/* Real Story & Trust Components */}
       <RealStoryNotifier enabled={true} showStory={true} />
       
+      {/* Floating CTA */}
+      <FloatingCTA onEngagement={handleEngagement} />
+      
+      {/* Scroll to Top */}
+      <ScrollToTop />
+      
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
     <main 
-      className="min-h-screen bg-[#0a0a0a] text-white" 
+      className="min-h-screen bg-[#0a0a0a] text-white scroll-smooth" 
       style={{ 
-        scrollBehavior: 'smooth',
         '--primary-color': '#29E7CD',
         '--secondary-color': '#3B82F6', 
         '--accent-color': '#D925C7',
@@ -152,26 +165,29 @@ export default function Page() {
             </span>
           </div>
           <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow features">Features</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Learn how PrepFlow works">How it works</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="View PrepFlow pricing">Pricing</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors" aria-label="Frequently asked questions">FAQ</a>
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow features">Features</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Learn how PrepFlow works">How it works</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow pricing">Pricing</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Frequently asked questions">FAQ</a>
           </nav>
           <div className="hidden md:block">
-                          <a
-                href="https://7495573591101.gumroad.com/l/prepflow"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
-                onClick={() => handleEngagement('header_cta_click')}
-              >
-                Get PrepFlow Now
-              </a>
+            <a
+              href="https://7495573591101.gumroad.com/l/prepflow"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
+              onClick={() => handleEngagement('header_cta_click')}
+            >
+              Get PrepFlow Now
+            </a>
           </div>
+          <MobileNavigation onEngagement={handleEngagement} />
         </header>
 
         {/* Hero Section - A/B Testing Variants */}
-        {!isLoading && (
+        {isLoading ? (
+          <HeroSkeleton />
+        ) : (
           <>
             {variantId === 'control' && <ControlHero />}
             {variantId === 'variant_a' && <VariantAHero />}
@@ -525,7 +541,9 @@ export default function Page() {
         </div>
 
         {/* Pricing Section - A/B Testing Variants */}
-        {!isLoading && (
+        {isLoading ? (
+          <PricingSkeleton />
+        ) : (
           <>
             {variantId === 'control' && <ControlPricing />}
             {variantId === 'variant_a' && <VariantAPricing />}
