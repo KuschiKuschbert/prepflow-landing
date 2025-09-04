@@ -68,8 +68,22 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
         }
       });
 
-      // Simulate API call (replace with actual email service)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Send email via API
+      const response = await fetch('/api/send-sample-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send email');
+      }
       
       // Success handling
       setIsSuccess(true);
