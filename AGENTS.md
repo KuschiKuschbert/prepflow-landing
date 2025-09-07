@@ -151,37 +151,103 @@ mobile/                 # React Native app (future)
 - **E2E Tests:** Critical user journeys (lead capture, purchase)
 - **Performance Tests:** Core Web Vitals and loading times
 
-## 🎨 **Design System**
+## 🎨 **Material Design 3 Design System**
 
 ### **Color Palette**
 ```css
---primary: #29E7CD      /* Electric Cyan */
---secondary: #3B82F6    /* Blue */
---accent: #D925C7       /* Vibrant Magenta */
+--primary: #29E7CD      /* Electric Cyan - Primary Actions */
+--secondary: #3B82F6    /* Blue - Secondary Actions */
+--accent: #D925C7       /* Vibrant Magenta - Accent Elements */
 --background: #0a0a0a   /* Dark background */
 --foreground: #ffffff    /* White text */
---muted: #1f1f1f        /* Dark gray */
---border: #2a2a2a       /* Border gray */
+--muted: #1f1f1f        /* Dark gray - Cards & Containers */
+--border: #2a2a2a       /* Border gray - Subtle borders */
+--surface: #2a2a2a      /* Surface color - Elevated elements */
+--surface-variant: #2a2a2a/30  /* Surface variant - Subtle backgrounds */
 ```
 
-### **Typography**
+### **Material Design 3 Typography**
 - **Primary Font:** Geist Sans (Google Fonts)
 - **Monospace:** Geist Mono (for technical content)
-- **Hierarchy:** H1 (4xl-6xl), H2 (3xl-4xl), H3 (2xl-3xl), Body (base-lg)
+- **Hierarchy:** 
+  - Display Large: 4xl-6xl (Page titles)
+  - Headline Large: 2xl-3xl (Section headers)
+  - Title Large: xl-2xl (Card titles)
+  - Body Large: base-lg (Main content)
+  - Label Large: sm (Labels & metadata)
+  - Label Small: xs (Captions & fine print)
 
-### **Component Guidelines**
-- **Buttons:** Gradient backgrounds, rounded corners, hover effects
-- **Cards:** Dark backgrounds with borders, backdrop blur effects
-- **Forms:** Clean inputs with focus states, proper validation
-- **Navigation:** Smooth scrolling, active states, mobile responsive
+### **Material Design 3 Component Guidelines**
 
-### **UX Component Guidelines**
-- **Loading Skeletons:** Use skeleton placeholders for all loading states
-- **Mobile Navigation:** Always include hamburger menu for mobile
-- **Floating CTAs:** Position strategically for maximum engagement
-- **Accessibility:** Include focus states and ARIA labels
-- **Smooth Transitions:** Use 300ms transitions for all interactions
-- **Touch Targets:** Minimum 44px for mobile interactions
+#### **Containers & Cards**
+- **Border Radius:** `rounded-3xl` for main containers, `rounded-2xl` for cards
+- **Elevation:** `shadow-lg` with `border border-[#2a2a2a]` for depth
+- **Background:** `bg-[#1f1f1f]` for main containers, `bg-[#2a2a2a]/30` for cards
+- **Gradients:** Subtle gradients for headers and accents
+
+#### **Buttons & Actions**
+- **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] to-[#D925C7]` with `rounded-2xl`
+- **Secondary Buttons:** `bg-[#29E7CD]/10` with `hover:bg-[#29E7CD]/20`
+- **Icon Buttons:** `rounded-full` with `p-2` and hover scaling
+- **Hover Effects:** `hover:shadow-xl` and `transition-all duration-200`
+
+#### **Data Tables**
+- **Table Headers:** `bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20`
+- **Table Rows:** `hover:bg-[#2a2a2a]/20` with smooth transitions
+- **Progress Bars:** Gradient bars for visual data representation
+- **Chips:** `rounded-full` with `bg-[#29E7CD]/10` and `border border-[#29E7CD]/20`
+
+#### **Forms & Inputs**
+- **Input Fields:** `border border-[#2a2a2a]` with `focus:ring-2 focus:ring-[#29E7CD]`
+- **Focus States:** Cyan ring with smooth transitions
+- **Validation:** Color-coded feedback with Material 3 styling
+
+### **Material Design 3 Animation System**
+```css
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+```
+
+### **Material Design 3 Layout Patterns**
+
+#### **Mobile-First Cards**
+- **Card Structure:** Header with title/brand, content grid, action buttons
+- **Staggered Animations:** `animationDelay: ${index * 50}ms`
+- **Touch Targets:** Minimum 44px with proper spacing
+- **Hover States:** `group-hover:text-[#29E7CD]` for interactive elements
+
+#### **Desktop Data Tables**
+- **Avatar Icons:** `w-10 h-10 rounded-full` with gradient backgrounds
+- **Progress Indicators:** Visual bars for percentages and metrics
+- **Action Buttons:** Circular buttons with icon scaling on hover
+- **Row Interactions:** Smooth hover effects with color transitions
+
+#### **Empty States**
+- **Large Icons:** `w-20 h-20` with gradient backgrounds
+- **Contextual Messaging:** Different messages for different states
+- **Call-to-Actions:** Prominent buttons with Material 3 styling
+
+### **Material Design 3 UX Guidelines**
+- **Loading Skeletons:** Use skeleton placeholders with pulse animations
+- **Mobile Navigation:** Material 3 navigation rail with proper spacing
+- **Floating CTAs:** Elevated buttons with shadow and hover effects
+- **Accessibility:** Focus rings, ARIA labels, keyboard navigation
+- **Smooth Transitions:** 200-300ms transitions for all interactions
+- **Touch Targets:** Minimum 44px for mobile, proper spacing
+- **Visual Hierarchy:** Clear distinction between primary and secondary actions
 
 ## 📊 **Analytics & Tracking**
 
@@ -393,6 +459,191 @@ interface TrackingEvent {
 4. **Accessibility:** Focus management and keyboard navigation
 5. **Smooth Scrolling:** Enhanced navigation with progress indicators
 6. **Visual Feedback:** Hover effects and smooth transitions
+
+## 🏗️ **Implementation Guide & Current Status**
+
+### **Current Implementation Status ✅**
+
+#### **✅ Completed Features**
+1. **Unified Project Structure** - Next.js 15.4.6 with App Router
+2. **Supabase Integration** - Database connection and API keys configured
+3. **WebApp Routes** - `/webapp/*` routes for dashboard functionality
+4. **Database Schema** - Complete SQL schema for all tables
+5. **API Endpoints** - Setup and data management APIs
+6. **Sample Data** - 300+ realistic kitchen ingredients ready
+7. **Environment Configuration** - All API keys and settings configured
+
+#### **🔄 In Progress**
+1. **Database Table Creation** - Tables need to be created in Supabase dashboard
+2. **Data Population** - Sample ingredients ready for insertion
+
+#### **📋 Next Steps**
+1. **Create Database Tables** - Run SQL script in Supabase dashboard
+2. **Test Data Insertion** - Populate sample ingredients
+3. **Test All Features** - Verify webapp functionality
+4. **Deploy to Production** - Vercel deployment with custom domain
+
+### **Development Workflow & Standards**
+
+#### **Code Quality Standards**
+- **TypeScript:** Strict typing, no `any` types without justification
+- **Error Handling:** Comprehensive error handling with user-friendly messages
+- **API Design:** RESTful APIs with proper HTTP status codes
+- **Database:** Proper schema design with foreign key relationships
+- **Testing:** Test all API endpoints and user flows
+
+#### **Implementation Patterns**
+- **API Routes:** Use Next.js App Router API routes (`/app/api/*`)
+- **Database:** Use Supabase client with proper error handling
+- **Components:** Client components with `"use client"` directive when needed
+- **Environment:** Use `.env.local` for all configuration
+- **Error Messages:** Provide clear, actionable error messages
+
+#### **Database Schema Standards**
+```sql
+-- Standard table structure
+CREATE TABLE table_name (
+  id SERIAL PRIMARY KEY,
+  -- Business fields
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+#### **API Response Standards**
+```typescript
+// Success response
+{
+  success: true,
+  message: "Operation completed successfully",
+  data: resultData
+}
+
+// Error response
+{
+  error: "Error description",
+  message: "User-friendly message",
+  details?: errorDetails
+}
+```
+
+### **Current Project Structure**
+```
+prepflow-landing/
+├── app/
+│   ├── page.tsx                    # Landing page
+│   ├── webapp/                     # WebApp routes
+│   │   ├── page.tsx               # Dashboard
+│   │   ├── ingredients/           # Ingredients management
+│   │   ├── recipes/              # Recipe management
+│   │   ├── cogs/                 # COG calculator
+│   │   └── setup/                # Database setup
+│   └── api/                      # API routes
+│       ├── setup-database/        # Database setup
+│       └── create-tables/         # Table creation
+├── lib/
+│   └── supabase.ts               # Supabase client
+├── components/                   # UI components
+└── .env.local                   # Environment variables
+```
+
+### **Environment Variables**
+```bash
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://dulkrqgjfohsuxhsmofo.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Email Service
+RESEND_API_KEY=re_hpumY9K8_HhSnL3T4DMXqsnHZpkNGzjQv
+FROM_EMAIL=hello@prepflow.org
+FROM_NAME=PrepFlow Team
+```
+
+### **Database Tables Required**
+1. **ingredients** - Ingredient inventory with cost data
+2. **recipes** - Recipe management with instructions
+3. **recipe_ingredients** - Recipe-ingredient relationships
+4. **menu_dishes** - Menu items with selling prices
+5. **users** - User management with subscriptions
+
+### **API Endpoints Available**
+- `POST /api/setup-database` - Populate sample data
+- `POST /api/create-tables` - Get SQL script for table creation
+- `GET /webapp/*` - WebApp dashboard routes
+
+### **Testing Checklist**
+- [ ] Database tables created in Supabase
+- [ ] Sample data populated successfully
+- [ ] All webapp routes accessible
+- [ ] API endpoints responding correctly
+- [ ] Error handling working properly
+- [ ] Environment variables loaded
+- [ ] Supabase connection established
+
+### **Implementation Best Practices**
+
+#### **Database Setup Process**
+1. **Always check table existence** before data operations
+2. **Use proper error handling** for database operations
+3. **Provide clear error messages** with actionable instructions
+4. **Test API endpoints** after any database changes
+
+#### **Supabase Integration Patterns**
+```typescript
+// Standard Supabase client usage
+import { supabaseAdmin } from '@/lib/supabase';
+
+// Check table existence
+const { data, error } = await supabaseAdmin
+  .from('table_name')
+  .select('id')
+  .limit(1);
+
+if (error) {
+  // Handle table doesn't exist error
+  return NextResponse.json({ 
+    error: 'Table does not exist',
+    message: 'Please create tables first',
+    instructions: 'Visit /api/create-tables for SQL script'
+  }, { status: 400 });
+}
+```
+
+#### **Error Handling Standards**
+- **Always log errors** for debugging
+- **Provide user-friendly messages** in API responses
+- **Include actionable instructions** when possible
+- **Use proper HTTP status codes** (400 for client errors, 500 for server errors)
+
+#### **Development Workflow**
+1. **Test locally first** - Always test changes locally
+2. **Check environment variables** - Ensure all keys are loaded
+3. **Verify database connection** - Test Supabase connectivity
+4. **Test API endpoints** - Use curl or Postman for testing
+5. **Update documentation** - Keep AGENTS.md current with changes
+
+#### **Current Known Issues & Solutions**
+- **"supabaseKey is required"** - Fixed with complete service role key
+- **"Invalid API key"** - Fixed with proper environment variables
+- **"Could not find column"** - Requires database table creation
+- **Client component errors** - Add `"use client"` directive when using hooks
+
+#### **File Organization Standards**
+- **API routes** in `/app/api/` directory
+- **WebApp pages** in `/app/webapp/` directory
+- **Shared utilities** in `/lib/` directory
+- **Environment config** in `.env.local`
+- **Database schema** documented in AGENTS.md
+
+#### **Code Review Checklist**
+- [ ] TypeScript types properly defined
+- [ ] Error handling implemented
+- [ ] API responses follow standards
+- [ ] Database operations use proper patterns
+- [ ] Environment variables properly configured
+- [ ] Client components marked with `"use client"`
+- [ ] Documentation updated
 
 ## 📈 **Success Metrics**
 
