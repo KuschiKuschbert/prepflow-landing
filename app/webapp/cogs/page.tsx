@@ -8,6 +8,8 @@ interface Ingredient {
   ingredient_name: string;
   unit?: string;
   cost_per_unit: number;
+  cost_per_unit_as_purchased?: number;
+  cost_per_unit_incl_trim?: number;
   trim_peel_waste_percentage?: number;
   yield_percentage?: number;
 }
@@ -71,7 +73,7 @@ export default function COGSPage() {
       const { data: ingredientsData, error: ingredientsError } = await supabase
         .from('ingredients')
         .select('*')
-        .order('name');
+        .order('ingredient_name');
 
       // Fetch recipes
       const { data: recipesData, error: recipesError } = await supabase
@@ -80,8 +82,10 @@ export default function COGSPage() {
         .order('name');
 
       if (ingredientsError) {
+        console.error('Ingredients fetch error:', ingredientsError);
         setError(ingredientsError.message);
       } else {
+        console.log('Ingredients fetched:', ingredientsData?.length || 0, 'items');
         setIngredients(ingredientsData || []);
       }
 
@@ -122,13 +126,37 @@ export default function COGSPage() {
       const ingredient = ingredients.find(i => i.id === ri.ingredient_id);
       if (!ingredient) return null;
 
-      const costPerUnit = ingredient.cost_per_unit;
+      // Use the correct cost field - prefer cost_per_unit_incl_trim if available, otherwise cost_per_unit
+      const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+      
+      // Calculate base cost for the quantity used
       const totalCost = ri.quantity * costPerUnit;
+      
+      // Get waste and yield percentages
       const wastePercent = ingredient.trim_peel_waste_percentage || 0;
       const yieldPercent = ingredient.yield_percentage || 100;
       
-      const wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
+      // Calculate waste-adjusted cost (if not already included in cost_per_unit_incl_trim)
+      let wasteAdjustedCost = totalCost;
+      if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {
+        wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
+      }
+      
+      // Calculate yield-adjusted cost (final cost per usable portion)
       const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
+
+      // Debug logging
+      console.log(`COGS Calculation for ${ingredient.ingredient_name}:`, {
+        quantity: ri.quantity,
+        unit: ri.unit || ingredient.unit,
+        costPerUnit,
+        totalCost,
+        wastePercent,
+        yieldPercent,
+        wasteAdjustedCost,
+        yieldAdjustedCost,
+        hasInclTrim: !!ingredient.cost_per_unit_incl_trim
+      });
 
       return {
         recipeId: ri.recipe_id || 'temp',
@@ -240,12 +268,16 @@ export default function COGSPage() {
 
   // Live search with Material Design 3 guidelines - instant filtering
   const filteredIngredients = useMemo(() => {
+    console.log('Filtering ingredients:', ingredients.length, 'total, search:', ingredientSearch);
+    
     if (!ingredientSearch.trim()) {
-      return ingredients.slice(0, 50); // Show first 50 ingredients when no search
+      const result = ingredients.slice(0, 50); // Show first 50 ingredients when no search
+      console.log('No search term, returning first 50:', result.length);
+      return result;
     }
     
     const searchTerm = ingredientSearch.toLowerCase().trim();
-    return ingredients
+    const filtered = ingredients
       .filter(ingredient => 
         ingredient.ingredient_name.toLowerCase().includes(searchTerm) ||
         (ingredient.unit && ingredient.unit.toLowerCase().includes(searchTerm))
@@ -263,6 +295,9 @@ export default function COGSPage() {
         return aName.localeCompare(bName);
       })
       .slice(0, 20); // Limit to 20 results for performance
+    
+    console.log('Search results:', filtered.length, 'matches for', searchTerm);
+    return filtered;
   }, [ingredients, ingredientSearch]);
 
   if (loading) {
@@ -415,11 +450,14 @@ export default function COGSPage() {
                         className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-[#29E7CD] transition-all duration-200 shadow-sm hover:shadow-md appearance-none cursor-pointer"
                       >
                         <option value="">Choose an ingredient...</option>
-                        {filteredIngredients.map((ingredient) => (
-                          <option key={ingredient.id} value={ingredient.id}>
-                            {ingredient.ingredient_name} - ${ingredient.cost_per_unit.toFixed(2)}/{ingredient.unit || 'unit'}
-                          </option>
-                        ))}
+                        {filteredIngredients.map((ingredient) => {
+                          const displayCost = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+                          return (
+                            <option key={ingredient.id} value={ingredient.id}>
+                              {ingredient.ingredient_name} - ${displayCost.toFixed(2)}/{ingredient.unit || 'unit'}
+                            </option>
+                          );
+                        })}
                       </select>
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
