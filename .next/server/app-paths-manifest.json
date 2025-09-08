@@ -1,5 +1,9 @@
 {
-  "/api/send-sample-email/route": "app/api/send-sample-email/route.js",
+  "/api/setup-database/route": "app/api/setup-database/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js"
+  "/webapp/cogs/page": "app/webapp/cogs/page.js",
+  "/webapp/ingredients/page": "app/webapp/ingredients/page.js",
+  "/webapp/page": "app/webapp/page.js",
+  "/webapp/recipes/page": "app/webapp/recipes/page.js",
+  "/webapp/setup/page": "app/webapp/setup/page.js"
 }

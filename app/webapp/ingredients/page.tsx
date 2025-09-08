@@ -2,14 +2,18 @@
 
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState, useMemo } from 'react';
+import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeightUnit } from '@/lib/unit-conversion';
+import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
 
 interface Ingredient {
   id: string;
   ingredient_name: string; // Database uses 'ingredient_name'
   brand?: string;
   pack_size?: string;
+  pack_size_unit?: string; // Unit for the pack size (e.g., 'L' for 5L tub)
+  pack_price?: number; // Total price for the entire pack
   unit?: string;
-  cost_per_unit: number;
+  cost_per_unit: number; // Calculated: pack_price / pack_size
   cost_per_unit_as_purchased?: number;
   cost_per_unit_incl_trim?: number;
   trim_peel_waste_percentage?: number; // Database uses 'trim_peel_waste_percentage'
@@ -19,7 +23,6 @@ interface Ingredient {
   storage_location?: string; // Database uses 'storage_location'
   min_stock_level?: number;
   current_stock?: number;
-  is_active?: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -45,6 +48,11 @@ export default function IngredientsPage() {
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [newSupplier, setNewSupplier] = useState<string>('');
   const [newUnit, setNewUnit] = useState<string>('');
+  const [displayUnit, setDisplayUnit] = useState<string>('g'); // Default display unit
+  
+  // Wizard state
+  const [wizardStep, setWizardStep] = useState<number>(1);
+  const [wizardData, setWizardData] = useState<Partial<Ingredient>>({});
 
   // Dynamic units list - built from existing ingredients
   const availableUnits = useMemo(() => {
@@ -61,6 +69,84 @@ export default function IngredientsPage() {
     
     return allUnits;
   }, [ingredients]);
+
+  // Calculate cost per unit from pack price and pack size
+  const calculateCostPerUnit = (packPrice: number, packSize: number, packSizeUnit: string, targetUnit: string): number => {
+    if (packPrice === 0 || packSize === 0) return 0;
+    
+    // Convert pack size to target unit
+    const conversion = convertUnit(1, packSizeUnit, targetUnit);
+    const packSizeInTargetUnit = packSize * conversion.conversionFactor;
+    
+    // Calculate cost per target unit
+    return packPrice / packSizeInTargetUnit;
+  };
+
+  // Auto-calculate cost per unit when pack price or pack size changes
+  const updateCostPerUnit = () => {
+    if (newIngredient.pack_price && newIngredient.pack_size && newIngredient.pack_size_unit && newIngredient.unit) {
+      const calculatedCost = calculateCostPerUnit(
+        newIngredient.pack_price,
+        parseFloat(newIngredient.pack_size),
+        newIngredient.pack_size_unit,
+        newIngredient.unit
+      );
+      setNewIngredient(prev => ({
+        ...prev,
+        cost_per_unit: calculatedCost,
+        cost_per_unit_as_purchased: calculatedCost,
+        cost_per_unit_incl_trim: calculatedCost
+      }));
+    }
+  };
+
+  // Smart cost formatting - 3 decimals for small amounts (0.xxx), fewer for larger amounts
+  const formatCost = (cost: number): string => {
+    if (cost < 1) {
+      return cost.toFixed(3); // 0.007
+    } else if (cost < 10) {
+      return cost.toFixed(2); // 1.25
+    } else {
+      return cost.toFixed(2); // 15.50
+    }
+  };
+
+  // Get converted cost for display
+  const getDisplayCost = (ingredient: Ingredient): { cost: number; unit: string; original?: string; packInfo?: string; formattedCost: string } => {
+    // Always show the cost in the ingredient's actual unit
+    const result = { 
+      cost: ingredient.cost_per_unit, 
+      unit: ingredient.unit || '',
+      formattedCost: formatCost(ingredient.cost_per_unit)
+    };
+
+    // Add pack information if available
+    if (ingredient.pack_price && ingredient.pack_size && ingredient.pack_size_unit) {
+      result.packInfo = `Pack: $${ingredient.pack_price} for ${ingredient.pack_size}${ingredient.pack_size_unit}`;
+    }
+
+    return result;
+  };
+
+  // Get converted cost for display in a specific unit (for the unit selector)
+  const getDisplayCostInUnit = (ingredient: Ingredient, targetUnit: string): { cost: number; unit: string; original?: string } => {
+    if (!ingredient.unit || ingredient.unit.toLowerCase() === targetUnit.toLowerCase()) {
+      return { cost: ingredient.cost_per_unit, unit: ingredient.unit || '' };
+    }
+    
+    const convertedCost = convertIngredientCost(
+      ingredient.cost_per_unit,
+      ingredient.unit,
+      targetUnit,
+      ingredient.ingredient_name
+    );
+    
+    return {
+      cost: convertedCost,
+      unit: targetUnit,
+      original: `$${ingredient.cost_per_unit.toFixed(2)}/${ingredient.unit}`
+    };
+  };
   
   // Search and filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -71,6 +157,8 @@ export default function IngredientsPage() {
     ingredient_name: '',
     brand: '',
     pack_size: '1',
+    pack_size_unit: 'GM',
+    pack_price: 0,
     unit: 'GM',
     cost_per_unit: 0,
     cost_per_unit_as_purchased: 0,
@@ -80,7 +168,6 @@ export default function IngredientsPage() {
     supplier: '',
     product_code: '',
     storage_location: '',
-    is_active: true,
   });
 
   useEffect(() => {
@@ -135,10 +222,6 @@ export default function IngredientsPage() {
     return Math.floor(Math.random() * 11) + 5; // 5-15%
   };
 
-  // Calculate cost per unit from packaging cost
-  const calculateCostPerUnit = (packagingCost: number, packSize: number): number => {
-    return packSize > 0 ? packagingCost / packSize : 0;
-  };
 
   // Add new supplier to database
   const addNewSupplier = async (supplierName: string) => {
@@ -187,11 +270,37 @@ export default function IngredientsPage() {
       // Auto-calculate wastage percentage using AI
       const wastagePercentage = calculateWastagePercentage(newIngredient.ingredient_name);
       updatedIngredient.trim_peel_waste_percentage = wastagePercentage;
+      updatedIngredient.yield_percentage = 100 - wastagePercentage;
     } else {
       updatedIngredient.trim_peel_waste_percentage = 0;
+      updatedIngredient.yield_percentage = 100;
     }
     
     setNewIngredient(updatedIngredient);
+  };
+
+  // Handle wastage percentage change (linked with yield)
+  const handleWastagePercentageChange = (wastage: number) => {
+    const clampedWastage = Math.max(0, Math.min(100, Math.round(wastage)));
+    const yieldPercentage = 100 - clampedWastage;
+    
+    setNewIngredient({ 
+      ...newIngredient, 
+      trim_peel_waste_percentage: clampedWastage,
+      yield_percentage: yieldPercentage
+    });
+  };
+
+  // Handle yield percentage change (linked with wastage)
+  const handleYieldPercentageChange = (yieldPercent: number) => {
+    const clampedYield = Math.max(0, Math.min(100, Math.round(yieldPercent)));
+    const wastagePercentage = 100 - clampedYield;
+    
+    setNewIngredient({ 
+      ...newIngredient, 
+      yield_percentage: clampedYield,
+      trim_peel_waste_percentage: wastagePercentage
+    });
   };
 
   // Handle pack size change
@@ -199,21 +308,43 @@ export default function IngredientsPage() {
     setNewIngredient({ ...newIngredient, pack_size: size });
   };
 
-  // Calculate cost per unit from total pack cost and pack size
-  const calculateCostPerUnitFromPack = (packCost: number, packSize: string): number => {
-    const size = parseFloat(packSize) || 1;
-    return packCost / size;
+  // Wizard navigation functions
+  const nextWizardStep = () => {
+    if (wizardStep < 3) {
+      setWizardStep(wizardStep + 1);
+    }
   };
 
-  // Helper function to capitalize first letter of each word
-  const capitalizeWords = (text: string | null | undefined): string => {
-    if (!text) return '';
-    return text
-      .toLowerCase()
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+  const prevWizardStep = () => {
+    if (wizardStep > 1) {
+      setWizardStep(wizardStep - 1);
+    }
   };
+
+  const resetWizard = () => {
+    setWizardStep(1);
+    setWizardData({});
+    setNewIngredient({
+      ingredient_name: '',
+      brand: '',
+      pack_size: '1',
+      pack_size_unit: 'GM',
+      pack_price: 0,
+      unit: 'GM',
+      cost_per_unit: 0,
+      cost_per_unit_as_purchased: 0,
+      cost_per_unit_incl_trim: 0,
+      trim_peel_waste_percentage: 0,
+      yield_percentage: 100,
+      supplier: '',
+      product_code: '',
+      storage_location: '',
+    });
+  };
+
+
+  // Use centralized formatting utilities
+  const toProperCase = formatTextInput;
 
   // Filter and sort ingredients
   useEffect(() => {
@@ -264,16 +395,16 @@ export default function IngredientsPage() {
     }
   };
 
-  const handleAddIngredient = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAddIngredient = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     try {
       // Capitalize text fields before saving
       const capitalizedIngredient = {
         ...newIngredient,
-        ingredient_name: capitalizeWords(newIngredient.ingredient_name),
-        brand: capitalizeWords(newIngredient.brand),
-        supplier: capitalizeWords(newIngredient.supplier),
-        storage_location: capitalizeWords(newIngredient.storage_location),
+        ingredient_name: formatIngredientName(newIngredient.ingredient_name),
+        brand: formatBrandName(newIngredient.brand),
+        supplier: formatSupplierName(newIngredient.supplier),
+        storage_location: formatStorageLocation(newIngredient.storage_location),
       };
 
       const { error } = await supabase
@@ -284,20 +415,7 @@ export default function IngredientsPage() {
         setError(error.message);
       } else {
         setShowAddForm(false);
-        setNewIngredient({
-          ingredient_name: '',
-          brand: '',
-          pack_size: '1',
-          unit: 'GM',
-          cost_per_unit: 0,
-          cost_per_unit_as_purchased: 0,
-          cost_per_unit_incl_trim: 0,
-          trim_peel_waste_percentage: 0,
-          yield_percentage: 100,
-          supplier: '',
-          product_code: '',
-          storage_location: '',
-        });
+        resetWizard();
         fetchIngredients();
       }
     } catch (err) {
@@ -382,19 +500,19 @@ export default function IngredientsPage() {
           
           // AI-powered column mapping with capitalization
           if (header.includes('name') || header.includes('ingredient')) {
-            ingredient.ingredient_name = capitalizeWords(value);
+            ingredient.ingredient_name = formatIngredientName(value);
           } else if (header.includes('brand')) {
-            ingredient.brand = capitalizeWords(value);
+            ingredient.brand = formatBrandName(value);
           } else if (header.includes('cost') || header.includes('price')) {
             ingredient.cost_per_unit = parseFloat(value) || 0;
           } else if (header.includes('unit')) {
             ingredient.unit = value.toUpperCase();
           } else if (header.includes('supplier')) {
-            ingredient.supplier = capitalizeWords(value);
+            ingredient.supplier = formatSupplierName(value);
           } else if (header.includes('code') || header.includes('sku')) {
             ingredient.product_code = value;
           } else if (header.includes('location') || header.includes('storage')) {
-            ingredient.storage_location = capitalizeWords(value);
+            ingredient.storage_location = formatStorageLocation(value);
           } else if (header.includes('pack') || header.includes('size')) {
             ingredient.pack_size = value || '1';
           }
@@ -427,10 +545,10 @@ export default function IngredientsPage() {
         selectedIngredients.has(index.toString())
       ).map(ingredient => ({
         ...ingredient,
-        ingredient_name: capitalizeWords(ingredient.ingredient_name),
-        brand: capitalizeWords(ingredient.brand),
-        supplier: capitalizeWords(ingredient.supplier),
-        storage_location: capitalizeWords(ingredient.storage_location),
+        ingredient_name: formatIngredientName(ingredient.ingredient_name),
+        brand: formatBrandName(ingredient.brand),
+        supplier: formatSupplierName(ingredient.supplier),
+        storage_location: formatStorageLocation(ingredient.storage_location),
       }));
 
       const { error } = await supabase
@@ -508,8 +626,36 @@ export default function IngredientsPage() {
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white mb-2">🥘 Ingredients Management</h1>
-          <p className="text-gray-400">Manage your kitchen ingredients and inventory</p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">🥘 Ingredients Management</h1>
+              <p className="text-gray-400">Manage your kitchen ingredients and inventory</p>
+            </div>
+            
+            {/* Unit Selector */}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-gray-300">Display costs in:</label>
+              <select
+                value={displayUnit}
+                onChange={(e) => setDisplayUnit(e.target.value)}
+                className="px-3 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+              >
+                <optgroup label="Weight">
+                  <option value="g">Grams (g)</option>
+                  <option value="kg">Kilograms (kg)</option>
+                  <option value="oz">Ounces (oz)</option>
+                  <option value="lb">Pounds (lb)</option>
+                </optgroup>
+                <optgroup label="Volume">
+                  <option value="ml">Milliliters (ml)</option>
+                  <option value="l">Liters (L)</option>
+                  <option value="tsp">Teaspoons (tsp)</option>
+                  <option value="tbsp">Tablespoons (tbsp)</option>
+                  <option value="cup">Cups</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
         </div>
 
         {error && (
@@ -540,231 +686,398 @@ export default function IngredientsPage() {
           </button>
       </div>
 
-        {/* Enhanced Add Ingredient Form */}
+        {/* Multi-Step Add Ingredient Wizard */}
       {showAddForm && (
           <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold text-white">🥘 Add New Ingredient</h2>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
-              <span className="text-xs text-gray-400">AI-Powered</span>
+              <span className="text-xs text-gray-400">Guided Setup</span>
         </div>
       </div>
 
-          <form onSubmit={handleAddIngredient} className="space-y-6">
-            {/* Basic Information */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Ingredient Name *
-            </label>
-            <input
-              type="text"
-                  required
-                  value={newIngredient.ingredient_name}
-                  onChange={(e) => setNewIngredient({ ...newIngredient, ingredient_name: e.target.value })}
-                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                  placeholder="e.g., Fresh Tomatoes"
-            />
-          </div>
-
-          <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Brand (Optional)
-            </label>
-                <input
-                  type="text"
-                  value={newIngredient.brand || ''}
-                  onChange={(e) => setNewIngredient({ ...newIngredient, brand: e.target.value })}
-                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                  placeholder="e.g., Coles, Woolworths"
-                />
+      {/* Wizard Progress */}
+      <div className="mb-8">
+        <div className="flex items-center justify-center space-x-4">
+          {[1, 2, 3].map((step) => (
+            <div key={step} className="flex items-center">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
+                step <= wizardStep 
+                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white' 
+                  : 'bg-[#2a2a2a] text-gray-400'
+              }`}>
+                {step}
               </div>
-          </div>
-
-            {/* Packaging Information */}
-            <div className="bg-[#2a2a2a]/30 p-4 rounded-2xl border border-[#2a2a2a]/50">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                📦 Packaging Information
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Pack Size *
-            </label>
-                  <input
-                    type="text"
-                    required
-                    value={newIngredient.pack_size || ''}
-                    onChange={(e) => handlePackSizeChange(e.target.value)}
-                    className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                    placeholder="e.g., 96"
-                  />
-          </div>
-
-          <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Pack Unit *
-            </label>
-                  <div className="space-y-2">
-            <select
-                      value={newIngredient.unit || ''}
-                      onChange={(e) => setNewIngredient({ ...newIngredient, unit: e.target.value })}
-                      className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                    >
-                      <option value="">Select from existing units</option>
-                      {availableUnits.map(unit => (
-                        <option key={unit} value={unit}>{unit}</option>
-                      ))}
-                      <option value="custom">+ Add new unit</option>
-            </select>
-                    
-                    {newIngredient.unit === 'custom' && (
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={newUnit}
-                          onChange={(e) => setNewUnit(e.target.value.toUpperCase())}
-                          className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                          placeholder="Enter new unit (e.g., SLICES)"
-                          autoFocus
-                        />
-                        <button
-                          type="button"
-                          onClick={() => addNewUnit(newUnit)}
-                          disabled={!newUnit.trim()}
-                          className="px-4 py-3 bg-[#29E7CD]/10 text-[#29E7CD] rounded-2xl hover:bg-[#29E7CD]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Add
-                        </button>
+              {step < 3 && (
+                <div className={`w-12 h-1 mx-2 transition-all duration-200 ${
+                  step < wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'
+                }`} />
+              )}
+            </div>
+          ))}
         </div>
-      )}
+        <div className="flex justify-center mt-4">
+          <div className="text-sm text-gray-400">
+            {wizardStep === 1 && '📦 Basic Information'}
+            {wizardStep === 2 && '⚙️ Advanced Settings'}
+            {wizardStep === 3 && '✅ Review & Save'}
+          </div>
+        </div>
+      </div>
 
-                    {availableUnits.length > 0 && (
-                      <p className="text-xs text-gray-400">
-                        💡 Available units from your ingredients: {availableUnits.slice(0, 5).join(', ')}
-                        {availableUnits.length > 5 && ` +${availableUnits.length - 5} more`}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                
+      {/* Wizard Steps */}
+      {wizardStep === 1 && (
+        <div className="space-y-6">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-white mb-2">📦 Basic Information</h3>
+            <p className="text-gray-400">Let's start with the essential details</p>
+          </div>
+          
+          {/* Step 1: Basic Information */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Cost per Unit *
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Ingredient Name *
               </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-3 text-gray-400">$</span>
               <input
-                      type="number"
-                      step="0.01"
+                type="text"
                 required
-                      value={newIngredient.cost_per_unit || ''}
-                      onChange={(e) => setNewIngredient({ ...newIngredient, cost_per_unit: parseFloat(e.target.value) || 0 })}
-                      className="w-full pl-8 pr-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                      placeholder="0.15"
+                value={newIngredient.ingredient_name}
+                onChange={(e) => setNewIngredient({ ...newIngredient, ingredient_name: e.target.value })}
+                className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                placeholder="e.g., Fresh Tomatoes"
               />
             </div>
-                </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Brand (Optional)
+              </label>
+              <input
+                type="text"
+                value={newIngredient.brand || ''}
+                onChange={(e) => setNewIngredient({ ...newIngredient, brand: e.target.value })}
+                className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                placeholder="e.g., Coles, Woolworths"
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+              📦 Packaging Information
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Pack Size *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newIngredient.pack_size || ''}
+                  onChange={(e) => {
+                    const packSize = e.target.value;
+                    setNewIngredient({ ...newIngredient, pack_size: packSize });
+                    // Auto-calculate cost per unit when pack size changes
+                    if (newIngredient.pack_price && packSize && newIngredient.pack_size_unit && newIngredient.unit) {
+                      const calculatedCost = calculateCostPerUnit(
+                        newIngredient.pack_price,
+                        parseFloat(packSize),
+                        newIngredient.pack_size_unit,
+                        newIngredient.unit
+                      );
+                      setNewIngredient(prev => ({
+                        ...prev,
+                        pack_size: packSize,
+                        cost_per_unit: calculatedCost,
+                        cost_per_unit_as_purchased: calculatedCost,
+                        cost_per_unit_incl_trim: calculatedCost
+                      }));
+                    }
+                  }}
+                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                  placeholder="e.g., 5"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Pack Unit *
+                </label>
+                <select
+                  value={newIngredient.pack_size_unit || ''}
+                  onChange={(e) => {
+                    const packSizeUnit = e.target.value;
+                    setNewIngredient({ ...newIngredient, pack_size_unit: packSizeUnit });
+                    // Auto-calculate cost per unit when pack size unit changes
+                    if (newIngredient.pack_price && newIngredient.pack_size && packSizeUnit && newIngredient.unit) {
+                      const calculatedCost = calculateCostPerUnit(
+                        newIngredient.pack_price,
+                        parseFloat(newIngredient.pack_size),
+                        packSizeUnit,
+                        newIngredient.unit
+                      );
+                      setNewIngredient(prev => ({
+                        ...prev,
+                        pack_size_unit: packSizeUnit,
+                        cost_per_unit: calculatedCost,
+                        cost_per_unit_as_purchased: calculatedCost,
+                        cost_per_unit_incl_trim: calculatedCost
+                      }));
+                    }
+                  }}
+                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                >
+                  <option value="">Select pack unit</option>
+                  <option value="GM">Grams (g)</option>
+                  <option value="KG">Kilograms (kg)</option>
+                  <option value="ML">Milliliters (ml)</option>
+                  <option value="L">Liters (L)</option>
+                  <option value="PC">Pieces</option>
+                  <option value="BOX">Box</option>
+                  <option value="PACK">Pack</option>
+                  <option value="BAG">Bag</option>
+                  <option value="BOTTLE">Bottle</option>
+                  <option value="CAN">Can</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Individual Unit *
+                </label>
+                <select
+                  value={newIngredient.unit || ''}
+                  onChange={(e) => {
+                    const unit = e.target.value;
+                    setNewIngredient({ ...newIngredient, unit: unit });
+                    // Auto-calculate cost per unit when individual unit changes
+                    if (newIngredient.pack_price && newIngredient.pack_size && newIngredient.pack_size_unit && unit) {
+                      const calculatedCost = calculateCostPerUnit(
+                        newIngredient.pack_price,
+                        parseFloat(newIngredient.pack_size),
+                        newIngredient.pack_size_unit,
+                        unit
+                      );
+                      setNewIngredient(prev => ({
+                        ...prev,
+                        unit: unit,
+                        cost_per_unit: calculatedCost,
+                        cost_per_unit_as_purchased: calculatedCost,
+                        cost_per_unit_incl_trim: calculatedCost
+                      }));
+                    }
+                  }}
+                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                >
+                  <option value="">Select individual unit</option>
+                  <option value="GM">Grams (g)</option>
+                  <option value="KG">Kilograms (kg)</option>
+                  <option value="ML">Milliliters (ml)</option>
+                  <option value="L">Liters (L)</option>
+                  <option value="PC">Pieces</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Pack Price ($) *
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-3 text-gray-400">$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  value={newIngredient.pack_price || ''}
+                  onChange={(e) => {
+                    const packPrice = parseFloat(e.target.value) || 0;
+                    setNewIngredient({ ...newIngredient, pack_price: packPrice });
+                    // Auto-calculate cost per unit
+                    if (packPrice && newIngredient.pack_size && newIngredient.pack_size_unit && newIngredient.unit) {
+                      const calculatedCost = calculateCostPerUnit(
+                        packPrice,
+                        parseFloat(newIngredient.pack_size),
+                        newIngredient.pack_size_unit,
+                        newIngredient.unit
+                      );
+                      setNewIngredient(prev => ({
+                        ...prev,
+                        pack_price: packPrice,
+                        cost_per_unit: calculatedCost,
+                        cost_per_unit_as_purchased: calculatedCost,
+                        cost_per_unit_incl_trim: calculatedCost
+                      }));
+                    }
+                  }}
+                  className="w-full pl-8 pr-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                  placeholder="13.54"
+                />
               </div>
               
               {/* Helper text */}
               <div className="mt-4 p-3 bg-[#29E7CD]/10 border border-[#29E7CD]/20 rounded-xl">
                 <p className="text-sm text-[#29E7CD]">
-                  💡 Enter the cost per individual unit (e.g., $0.15 per burger patty from a pack of 96)
+                  💡 Enter the total pack price (e.g., $13.54 for a 5L tub of yogurt). The system will automatically calculate the price per unit.
                 </p>
+                {newIngredient.pack_price && newIngredient.pack_size && newIngredient.pack_size_unit && newIngredient.unit && (
+                  <p className="text-sm text-[#29E7CD] mt-2 font-medium">
+                    ✅ Price per {newIngredient.unit}: ${formatCost(newIngredient.cost_per_unit || 0)}
+                  </p>
+                )}
               </div>
             </div>
+          </div>
 
-            {/* Supplier Information */}
-            <div className="bg-[#2a2a2a]/30 p-4 rounded-2xl border border-[#2a2a2a]/50">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                🏪 Supplier Information
-              </h3>
-              <div className="flex gap-2">
-                <select
-                  value={newIngredient.supplier || ''}
-                  onChange={(e) => setNewIngredient({ ...newIngredient, supplier: e.target.value })}
-                  className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                >
-                  <option value="">Select Supplier</option>
-                  {suppliers.map(supplier => (
-                    <option key={supplier.id} value={supplier.name}>{supplier.name}</option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  onClick={() => addNewSupplier(newSupplier)}
-                  className="px-4 py-3 bg-[#3B82F6]/10 text-[#3B82F6] rounded-2xl hover:bg-[#3B82F6]/20 transition-colors"
-                >
-                  Add New
-                </button>
+          {/* Step 1 Navigation */}
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              onClick={() => setShowAddForm(false)}
+              className="px-6 py-3 bg-[#2a2a2a] text-gray-300 rounded-2xl hover:bg-[#2a2a2a]/80 transition-all duration-200 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={nextWizardStep}
+              disabled={!newIngredient.ingredient_name || !newIngredient.pack_price || !newIngredient.pack_size}
+              className="px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next Step →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 2: Advanced Settings */}
+      {wizardStep === 2 && (
+        <div className="space-y-6">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-white mb-2">⚙️ Advanced Settings</h3>
+            <p className="text-gray-400">Configure wastage, yield, and supplier information</p>
+          </div>
+
+          {/* Wastage and Yield */}
+          <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+              🎯 Wastage & Yield Management
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Trim/Waste Percentage
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    max="100"
+                    value={newIngredient.trim_peel_waste_percentage || 0}
+                    onChange={(e) => handleWastagePercentageChange(parseInt(e.target.value) || 0)}
+                    className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                  />
+                  <span className="text-gray-400">%</span>
+                </div>
+                {newIngredient.ingredient_name && (
+                  <p className="text-xs text-gray-400 mt-1">
+                    💡 AI suggests: {calculateWastagePercentage(newIngredient.ingredient_name)}% based on "{newIngredient.ingredient_name}"
+                  </p>
+                )}
               </div>
-              <input
-                type="text"
-                value={newSupplier}
-                onChange={(e) => setNewSupplier(e.target.value)}
-                className="w-full mt-2 px-3 py-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#3B82F6] transition-all text-sm"
-                placeholder="New supplier name"
-              />
-            </div>
-
-            {/* Wastage Information */}
-            <div className="bg-[#2a2a2a]/30 p-4 rounded-2xl border border-[#2a2a2a]/50">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                🗑️ Wastage & Yield Information
-              </h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Trim/Waste Percentage
-              </label>
-                  <div className="flex items-center space-x-2">
-              <input
-                type="number"
-                step="0.01"
-                      min="0"
-                      max="100"
-                      value={newIngredient.trim_peel_waste_percentage || 0}
-                      onChange={(e) => setNewIngredient({ ...newIngredient, trim_peel_waste_percentage: parseFloat(e.target.value) || 0 })}
-                      className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                    />
-                    <span className="text-gray-400">%</span>
-            </div>
-                  {newIngredient.ingredient_name && (
-                    <p className="text-xs text-gray-400 mt-1">
-                      💡 AI suggests: {calculateWastagePercentage(newIngredient.ingredient_name)}% based on "{newIngredient.ingredient_name}"
-                    </p>
-                  )}
-            </div>
                 
-            <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Yield Percentage
-              </label>
-                  <div className="flex items-center space-x-2">
-              <input
-                type="number"
-                step="0.01"
-                      min="0"
-                      max="100"
-                      value={newIngredient.yield_percentage || 100}
-                      onChange={(e) => setNewIngredient({ ...newIngredient, yield_percentage: parseFloat(e.target.value) || 100 })}
-                      className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                    />
-                    <span className="text-gray-400">%</span>
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Yield Percentage
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    max="100"
+                    value={newIngredient.yield_percentage || 100}
+                    onChange={(e) => handleYieldPercentageChange(parseInt(e.target.value) || 100)}
+                    className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                  />
+                  <span className="text-gray-400">%</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Additional Information */}
+          {/* Supplier Information */}
+          <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+              🏪 Supplier Information
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Supplier
+                </label>
+                <select
+                  value={newIngredient.supplier || ''}
+                  onChange={(e) => setNewIngredient({ ...newIngredient, supplier: e.target.value })}
+                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                >
+                  <option value="">Select supplier</option>
+                  {suppliers.map(supplier => (
+                    <option key={supplier.id} value={supplier.name}>{supplier.name}</option>
+                  ))}
+                  <option value="custom">+ Add new supplier</option>
+                </select>
+                    
+                {newIngredient.supplier === 'custom' && (
+                  <div className="flex gap-2 mt-2">
+                    <input
+                      type="text"
+                      value={newSupplier}
+                      onChange={(e) => setNewSupplier(e.target.value)}
+                      className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                      placeholder="Enter new supplier name"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => addNewSupplier(newSupplier)}
+                      disabled={!newSupplier.trim()}
+                      className="px-4 py-3 bg-[#29E7CD]/10 text-[#29E7CD] rounded-2xl hover:bg-[#29E7CD]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Add
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Storage Location
+                </label>
+                <input
+                  type="text"
+                  value={newIngredient.storage_location || ''}
+                  onChange={(e) => setNewIngredient({ ...newIngredient, storage_location: e.target.value })}
+                  className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                  placeholder="e.g., Cold Room A, Dry Storage"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Information */}
+          <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+              📋 Additional Information
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Product Code (Optional)
-              </label>
+                </label>
                 <input
                   type="text"
                   value={newIngredient.product_code || ''}
@@ -776,35 +1089,147 @@ export default function IngredientsPage() {
               
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Storage Location (Optional)
+                  Min Stock Level
                 </label>
                 <input
-                  type="text"
-                  value={newIngredient.storage_location || ''}
-                  onChange={(e) => setNewIngredient({ ...newIngredient, storage_location: e.target.value })}
+                  type="number"
+                  value={newIngredient.min_stock_level || 0}
+                  onChange={(e) => setNewIngredient({ ...newIngredient, min_stock_level: parseInt(e.target.value) || 0 })}
                   className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
-                  placeholder="e.g., Cold Room A, Dry Storage"
+                  placeholder="0"
                 />
               </div>
             </div>
+          </div>
 
-            {/* Form Actions */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <button
-                type="submit"
-                className="flex-1 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white px-6 py-3 rounded-2xl hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
-              >
-                ✅ Add Ingredient
-                </button>
-                <button
-                  type="button"
-                onClick={() => setShowAddForm(false)}
-                className="flex-1 bg-[#2a2a2a] text-gray-300 px-6 py-3 rounded-2xl hover:bg-[#2a2a2a]/80 transition-all duration-200 font-medium"
-              >
-                Cancel
-                </button>
+          {/* Step 2 Navigation */}
+          <div className="flex justify-between space-x-4">
+            <button
+              type="button"
+              onClick={prevWizardStep}
+              className="px-6 py-3 bg-[#2a2a2a] text-gray-300 rounded-2xl hover:bg-[#2a2a2a]/80 transition-all duration-200 font-medium"
+            >
+              ← Previous Step
+            </button>
+            <button
+              type="button"
+              onClick={nextWizardStep}
+              className="px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+            >
+              Next Step →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Review & Save */}
+      {wizardStep === 3 && (
+        <div className="space-y-6">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-white mb-2">✅ Review & Save</h3>
+            <p className="text-gray-400">Review your ingredient details before saving</p>
+          </div>
+
+          {/* Review Summary */}
+          <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+              📋 Ingredient Summary
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div>
+                  <span className="text-sm text-gray-400">Ingredient Name:</span>
+                  <div className="text-white font-medium">{newIngredient.ingredient_name}</div>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-400">Brand:</span>
+                  <div className="text-white font-medium">{newIngredient.brand || 'Not specified'}</div>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-400">Pack Size:</span>
+                  <div className="text-white font-medium">{newIngredient.pack_size} {newIngredient.pack_size_unit}</div>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-400">Pack Price:</span>
+                  <div className="text-white font-medium">${newIngredient.pack_price}</div>
+                </div>
               </div>
-          </form>
+              <div className="space-y-3">
+                <div>
+                  <span className="text-sm text-gray-400">Individual Unit:</span>
+                  <div className="text-white font-medium">{newIngredient.unit}</div>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-400">Price per {newIngredient.unit}:</span>
+                  <div className="text-white font-medium">${formatCost(newIngredient.cost_per_unit || 0)}</div>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-400">Wastage:</span>
+                  <div className="text-white font-medium">{newIngredient.trim_peel_waste_percentage}%</div>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-400">Yield:</span>
+                  <div className="text-white font-medium">{newIngredient.yield_percentage}%</div>
+                </div>
+              </div>
+            </div>
+            
+            {(newIngredient.supplier || newIngredient.storage_location || newIngredient.product_code) && (
+              <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
+                <h4 className="text-md font-semibold text-white mb-3">Additional Details</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {newIngredient.supplier && (
+                    <div>
+                      <span className="text-sm text-gray-400">Supplier:</span>
+                      <div className="text-white font-medium">{newIngredient.supplier}</div>
+                    </div>
+                  )}
+                  {newIngredient.storage_location && (
+                    <div>
+                      <span className="text-sm text-gray-400">Storage Location:</span>
+                      <div className="text-white font-medium">{newIngredient.storage_location}</div>
+                    </div>
+                  )}
+                  {newIngredient.product_code && (
+                    <div>
+                      <span className="text-sm text-gray-400">Product Code:</span>
+                      <div className="text-white font-medium">{newIngredient.product_code}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Step 3 Navigation */}
+          <div className="flex justify-between space-x-4">
+            <button
+              type="button"
+              onClick={prevWizardStep}
+              className="px-6 py-3 bg-[#2a2a2a] text-gray-300 rounded-2xl hover:bg-[#2a2a2a]/80 transition-all duration-200 font-medium"
+            >
+              ← Previous Step
+            </button>
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={resetWizard}
+                className="px-6 py-3 bg-[#2a2a2a] text-gray-300 rounded-2xl hover:bg-[#2a2a2a]/80 transition-all duration-200 font-medium"
+              >
+                Start Over
+              </button>
+              <button
+                type="button"
+                onClick={handleAddIngredient}
+                className="px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+              >
+                ✅ Save Ingredient
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
         </div>
       )}
 
@@ -872,11 +1297,17 @@ export default function IngredientsPage() {
                             className="rounded"
                           />
                           <div className="flex-1">
-                            <div className="text-white font-medium">{capitalizeWords(ingredient.ingredient_name)}</div>
+                            <div className="text-white font-medium">{formatIngredientName(ingredient.ingredient_name)}</div>
                             <div className="text-sm text-gray-400">
                               {ingredient.brand && `Brand: ${ingredient.brand} • `}
-                              {ingredient.cost_per_unit && `Cost: $${ingredient.cost_per_unit} • `}
-                              {ingredient.unit && `Unit: ${ingredient.unit}`}
+                              {(() => {
+                                const displayCost = getDisplayCost(ingredient);
+                                return `Cost: $${displayCost.formattedCost}/${displayCost.unit}`;
+                              })()}
+                              {(() => {
+                                const displayCost = getDisplayCost(ingredient);
+                                return displayCost.packInfo ? ` • ${displayCost.packInfo}` : '';
+                              })()}
                             </div>
                           </div>
                         </div>
@@ -1003,10 +1434,10 @@ export default function IngredientsPage() {
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-white text-lg mb-1 group-hover:text-[#29E7CD] transition-colors">
-                      {capitalizeWords(ingredient.ingredient_name)}
+                      {formatIngredientName(ingredient.ingredient_name)}
                     </h3>
                     {ingredient.brand && (
-                      <p className="text-sm text-gray-400 font-medium">{capitalizeWords(ingredient.brand)}</p>
+                      <p className="text-sm text-gray-400 font-medium">{formatBrandName(ingredient.brand)}</p>
                     )}
                   </div>
                   <div className="flex space-x-1">
@@ -1034,9 +1465,23 @@ export default function IngredientsPage() {
                   <div className="bg-[#2a2a2a]/30 rounded-2xl p-3 border border-[#2a2a2a]/50">
                     <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cost</div>
                     <div className="text-lg font-semibold text-white">
-                      ${ingredient.cost_per_unit?.toFixed(2) || '0.00'}
-        </div>
-                    <div className="text-xs text-gray-400">per {ingredient.unit || 'unit'}</div>
+                      {(() => {
+                        const displayCost = getDisplayCost(ingredient);
+                        return `$${displayCost.formattedCost}`;
+                      })()}
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {(() => {
+                        const displayCost = getDisplayCost(ingredient);
+                        return `per ${displayCost.unit}`;
+                      })()}
+                    </div>
+                    {(() => {
+                      const displayCost = getDisplayCost(ingredient);
+                      return displayCost.packInfo ? (
+                        <div className="text-xs text-gray-500 mt-1">{displayCost.packInfo}</div>
+                      ) : null;
+                    })()}
                   </div>
                   
                   <div className="bg-[#2a2a2a]/30 rounded-2xl p-3 border border-[#2a2a2a]/50">
@@ -1060,10 +1505,10 @@ export default function IngredientsPage() {
                   <div className="bg-[#2a2a2a]/30 rounded-2xl p-3 border border-[#2a2a2a]/50">
                     <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Supplier</div>
                     <div className="text-sm font-medium text-white truncate">
-                      {capitalizeWords(ingredient.supplier) || 'N/A'}
+                      {formatSupplierName(ingredient.supplier) || 'N/A'}
                     </div>
                     <div className="text-xs text-gray-400 truncate">
-                      {capitalizeWords(ingredient.storage_location) || 'No location'}
+                      {formatStorageLocation(ingredient.storage_location) || 'No location'}
                     </div>
                   </div>
                 </div>
@@ -1143,10 +1588,10 @@ export default function IngredientsPage() {
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white group-hover:text-[#29E7CD] transition-colors">
-                    {capitalizeWords(ingredient.ingredient_name)}
+                    {formatIngredientName(ingredient.ingredient_name)}
                             </div>
                             <div className="text-xs text-gray-400">
-                              {capitalizeWords(ingredient.brand) || 'No brand'}
+                              {formatBrandName(ingredient.brand) || 'No brand'}
                             </div>
                           </div>
                         </div>
@@ -1169,8 +1614,17 @@ export default function IngredientsPage() {
                       {/* Cost Column */}
                       <td className="px-6 py-4">
                         <div className="text-sm font-semibold text-white">
-                          ${ingredient.cost_per_unit?.toFixed(2) || '0.00'}
+                          {(() => {
+                            const displayCost = getDisplayCost(ingredient);
+                            return `$${displayCost.formattedCost}/${displayCost.unit}`;
+                          })()}
                         </div>
+                        {(() => {
+                          const displayCost = getDisplayCost(ingredient);
+                          return displayCost.packInfo ? (
+                            <div className="text-xs text-gray-500">{displayCost.packInfo}</div>
+                          ) : null;
+                        })()}
                   </td>
                       
                       {/* Waste % Column */}
@@ -1206,11 +1660,11 @@ export default function IngredientsPage() {
                       {/* Supplier Column */}
                       <td className="px-6 py-4">
                         <div className="text-sm text-white">
-                          {capitalizeWords(ingredient.supplier) || 'N/A'}
+                          {formatSupplierName(ingredient.supplier) || 'N/A'}
                         </div>
                         {ingredient.storage_location && (
                           <div className="text-xs text-gray-400">
-                            📍 {capitalizeWords(ingredient.storage_location)}
+                            📍 {formatStorageLocation(ingredient.storage_location)}
                           </div>
                         )}
                   </td>
@@ -1270,6 +1724,212 @@ export default function IngredientsPage() {
           )}
         </div>
       </div>
+
+      {/* Edit Ingredient Modal */}
+      {editingIngredient && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="p-6 border-b border-[#2a2a2a]">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-white">Edit Ingredient</h2>
+                <button
+                  onClick={() => setEditingIngredient(null)}
+                  className="p-2 rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] text-gray-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleUpdateIngredient(editingIngredient.id, editingIngredient);
+            }} className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Ingredient Name */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Ingredient Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={editingIngredient.ingredient_name}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, ingredient_name: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                {/* Brand */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Brand
+                  </label>
+                  <input
+                    type="text"
+                    value={editingIngredient.brand || ''}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, brand: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Pack Size */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Pack Size
+                  </label>
+                  <input
+                    type="text"
+                    value={editingIngredient.pack_size || ''}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, pack_size: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Unit */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Unit *
+                  </label>
+                  <select
+                    value={editingIngredient.unit || ''}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, unit: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                    required
+                  >
+                    <option value="">Select Unit</option>
+                    {availableUnits.map(unit => (
+                      <option key={unit} value={unit}>{unit}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Cost Per Unit */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Cost Per Unit ($) *
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={editingIngredient.cost_per_unit}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, cost_per_unit: parseFloat(e.target.value) || 0})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                {/* Trim/Waste Percentage */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Trim/Waste Percentage (%)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    value={editingIngredient.trim_peel_waste_percentage || 0}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, trim_peel_waste_percentage: parseFloat(e.target.value) || 0})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Yield Percentage */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Yield Percentage (%)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    value={editingIngredient.yield_percentage || 100}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, yield_percentage: parseFloat(e.target.value) || 100})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Supplier */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Supplier
+                  </label>
+                  <input
+                    type="text"
+                    value={editingIngredient.supplier || ''}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, supplier: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Storage Location */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Storage Location
+                  </label>
+                  <input
+                    type="text"
+                    value={editingIngredient.storage_location || ''}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, storage_location: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Product Code */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Product Code
+                  </label>
+                  <input
+                    type="text"
+                    value={editingIngredient.product_code || ''}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, product_code: e.target.value})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+
+                {/* Min Stock Level */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Min Stock Level
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={editingIngredient.min_stock_level || 0}
+                    onChange={(e) => setEditingIngredient({...editingIngredient, min_stock_level: parseFloat(e.target.value) || 0})}
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-6 border-t border-[#2a2a2a]">
+                <button
+                  type="button"
+                  onClick={() => setEditingIngredient(null)}
+                  className="flex-1 bg-[#2a2a2a] text-gray-300 px-6 py-3 rounded-xl hover:bg-[#3a3a3a] transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white px-6 py-3 rounded-xl hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+                >
+                  Update Ingredient
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
