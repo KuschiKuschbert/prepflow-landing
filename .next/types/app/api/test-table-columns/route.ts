@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/api/test-table-columns/route.ts
+// File: /workspace/app/api/test-table-columns/route.ts
 import * as entry from '../../../../../app/api/test-table-columns/route.js'
 import type { NextRequest } from 'next/server.js'
 

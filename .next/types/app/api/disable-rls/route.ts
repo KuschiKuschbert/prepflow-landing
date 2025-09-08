@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/api/disable-rls/route.ts
+// File: /workspace/app/api/disable-rls/route.ts
 import * as entry from '../../../../../app/api/disable-rls/route.js'
 import type { NextRequest } from 'next/server.js'
 

@@ -22,6 +22,18 @@ export default function WebAppDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        if (!supabase) {
+          console.log('Supabase client not available');
+          setStats({
+            totalIngredients: 0,
+            totalRecipes: 0,
+            totalMenuDishes: 0,
+            averageDishPrice: 0
+          });
+          setLoading(false);
+          return;
+        }
+
         // Fetch ingredients count
         const { count: ingredientsCount } = await supabase
           .from('ingredients')

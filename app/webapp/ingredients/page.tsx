@@ -178,6 +178,11 @@ export default function IngredientsPage() {
   // Fetch suppliers from database
   const fetchSuppliers = async () => {
     try {
+      if (!supabase) {
+        console.log('Supabase client not available');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('suppliers')
         .select('*')
@@ -226,6 +231,11 @@ export default function IngredientsPage() {
   // Add new supplier to database
   const addNewSupplier = async (supplierName: string) => {
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('suppliers')
         .insert([{ name: supplierName }])
@@ -378,6 +388,14 @@ export default function IngredientsPage() {
   const fetchIngredients = async () => {
     try {
       setLoading(true);
+      
+      if (!supabase) {
+        console.log('Supabase client not available');
+        setIngredients([]);
+        setLoading(false);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('ingredients')
         .select('*')
@@ -407,6 +425,11 @@ export default function IngredientsPage() {
         storage_location: formatStorageLocation(newIngredient.storage_location),
       };
 
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       const { error } = await supabase
         .from('ingredients')
         .insert([capitalizedIngredient]);
@@ -425,6 +448,11 @@ export default function IngredientsPage() {
 
   const handleUpdateIngredient = async (id: string, updates: Partial<Ingredient>) => {
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       const { error } = await supabase
         .from('ingredients')
         .update(updates)
@@ -445,6 +473,11 @@ export default function IngredientsPage() {
     if (!confirm('Are you sure you want to delete this ingredient?')) return;
     
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       const { error } = await supabase
         .from('ingredients')
         .delete()
@@ -550,6 +583,12 @@ export default function IngredientsPage() {
         supplier: formatSupplierName(ingredient.supplier),
         storage_location: formatStorageLocation(ingredient.storage_location),
       }));
+
+      if (!supabase) {
+        setError('Database connection not available');
+        setImporting(false);
+        return;
+      }
 
       const { error } = await supabase
         .from('ingredients')

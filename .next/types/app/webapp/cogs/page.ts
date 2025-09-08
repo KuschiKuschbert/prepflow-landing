@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/webapp/cogs/page.tsx
+// File: /workspace/app/webapp/cogs/page.tsx
 import * as entry from '../../../../../app/webapp/cogs/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

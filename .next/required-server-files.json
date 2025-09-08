@@ -97,7 +97,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/danielkuschmierz/prepflow-landing",
+    "outputFileTracingRoot": "/workspace",
     "experimental": {
       "useSkewCookie": false,
       "nodeMiddleware": false,
@@ -156,7 +156,7 @@
       "middlewarePrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 7,
+      "cpus": 3,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -288,10 +288,10 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "/Users/danielkuschmierz/prepflow-landing"
+      "root": "/workspace"
     }
   },
-  "appDir": "/Users/danielkuschmierz/prepflow-landing",
+  "appDir": "/workspace",
   "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
