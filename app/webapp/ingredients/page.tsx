@@ -267,9 +267,18 @@ export default function IngredientsPage() {
   const handleAddIngredient = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Capitalize text fields before saving
+      const capitalizedIngredient = {
+        ...newIngredient,
+        ingredient_name: capitalizeWords(newIngredient.ingredient_name),
+        brand: capitalizeWords(newIngredient.brand),
+        supplier: capitalizeWords(newIngredient.supplier),
+        storage_location: capitalizeWords(newIngredient.storage_location),
+      };
+
       const { error } = await supabase
         .from('ingredients')
-        .insert([newIngredient]);
+        .insert([capitalizedIngredient]);
 
       if (error) {
         setError(error.message);
@@ -371,21 +380,21 @@ export default function IngredientsPage() {
         headers.forEach((header, index) => {
           const value = values[index] || '';
           
-          // AI-powered column mapping
+          // AI-powered column mapping with capitalization
           if (header.includes('name') || header.includes('ingredient')) {
-            ingredient.ingredient_name = value;
+            ingredient.ingredient_name = capitalizeWords(value);
           } else if (header.includes('brand')) {
-            ingredient.brand = value;
+            ingredient.brand = capitalizeWords(value);
           } else if (header.includes('cost') || header.includes('price')) {
             ingredient.cost_per_unit = parseFloat(value) || 0;
           } else if (header.includes('unit')) {
             ingredient.unit = value.toUpperCase();
           } else if (header.includes('supplier')) {
-            ingredient.supplier = value;
+            ingredient.supplier = capitalizeWords(value);
           } else if (header.includes('code') || header.includes('sku')) {
             ingredient.product_code = value;
           } else if (header.includes('location') || header.includes('storage')) {
-            ingredient.storage_location = value;
+            ingredient.storage_location = capitalizeWords(value);
           } else if (header.includes('pack') || header.includes('size')) {
             ingredient.pack_size = value || '1';
           }
@@ -416,7 +425,13 @@ export default function IngredientsPage() {
       setImporting(true);
       const ingredientsToImport = parsedIngredients.filter((_, index) => 
         selectedIngredients.has(index.toString())
-      );
+      ).map(ingredient => ({
+        ...ingredient,
+        ingredient_name: capitalizeWords(ingredient.ingredient_name),
+        brand: capitalizeWords(ingredient.brand),
+        supplier: capitalizeWords(ingredient.supplier),
+        storage_location: capitalizeWords(ingredient.storage_location),
+      }));
 
       const { error } = await supabase
         .from('ingredients')
