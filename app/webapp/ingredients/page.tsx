@@ -1424,10 +1424,9 @@ export default function IngredientsPage() {
             {filteredIngredients.map((ingredient, index) => (
               <div 
                 key={ingredient.id} 
-                className="group relative p-5 border-b border-[#2a2a2a]/50 last:border-b-0 hover:bg-[#2a2a2a]/20 transition-all duration-200"
+                className="group relative p-5 border-b border-[#2a2a2a]/50 last:border-b-0 hover:bg-[#2a2a2a]/20 transition-all duration-200 animate-fadeInUp"
                 style={{
-                  animationDelay: `${index * 50}ms`,
-                  animation: 'fadeInUp 0.3s ease-out forwards'
+                  animationDelay: `${index * 50}ms`
                 }}
               >
                 {/* Card Header */}
@@ -1574,10 +1573,9 @@ export default function IngredientsPage() {
                   {filteredIngredients.map((ingredient, index) => (
                     <tr 
                       key={ingredient.id} 
-                      className="group hover:bg-[#2a2a2a]/20 transition-all duration-200"
+                      className="group hover:bg-[#2a2a2a]/20 transition-all duration-200 animate-fadeInUp"
                       style={{
-                        animationDelay: `${index * 30}ms`,
-                        animation: 'fadeInUp 0.3s ease-out forwards'
+                        animationDelay: `${index * 30}ms`
                       }}
                     >
                       {/* Ingredient Name Column */}

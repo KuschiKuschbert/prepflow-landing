@@ -16,7 +16,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0122,
     min_stock_level: 5.0,
     current_stock: 10.0,
-    is_active: true
   },
   { 
     ingredient_name: "Chicken Breast Skinless", 
@@ -33,7 +32,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0084,
     min_stock_level: 8.0,
     current_stock: 15.0,
-    is_active: true
   },
   { 
     ingredient_name: "Pork Belly", 
@@ -50,7 +48,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0163,
     min_stock_level: 3.0,
     current_stock: 6.0,
-    is_active: true
   },
   { 
     ingredient_name: "Lamb Shoulder", 
@@ -67,7 +64,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0200,
     min_stock_level: 2.0,
     current_stock: 4.0,
-    is_active: true
   },
   { 
     ingredient_name: "Salmon Fillet", 
@@ -84,7 +80,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0258,
     min_stock_level: 4.0,
     current_stock: 8.0,
-    is_active: true
   },
   { 
     ingredient_name: "Prawns Raw", 
@@ -101,7 +96,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0259,
     min_stock_level: 3.0,
     current_stock: 6.0,
-    is_active: true
   },
   { 
     ingredient_name: "Eggs Free Range", 
@@ -118,7 +112,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.45,
     min_stock_level: 2.0,
     current_stock: 5.0,
-    is_active: true
   },
   
   // VEGETABLES
@@ -137,7 +130,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0023,
     min_stock_level: 10.0,
     current_stock: 20.0,
-    is_active: true
   },
   { 
     ingredient_name: "Garlic", 
@@ -154,7 +146,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0100,
     min_stock_level: 2.0,
     current_stock: 5.0,
-    is_active: true
   },
   { 
     ingredient_name: "Carrots", 
@@ -171,7 +162,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0033,
     min_stock_level: 8.0,
     current_stock: 15.0,
-    is_active: true
   },
   { 
     ingredient_name: "Celery", 
@@ -188,7 +178,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0044,
     min_stock_level: 5.0,
     current_stock: 10.0,
-    is_active: true
   },
   { 
     ingredient_name: "Tomatoes Roma", 
@@ -205,7 +194,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0053,
     min_stock_level: 6.0,
     current_stock: 12.0,
-    is_active: true
   },
   { 
     ingredient_name: "Potatoes Sebago", 
@@ -222,7 +210,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0024,
     min_stock_level: 15.0,
     current_stock: 30.0,
-    is_active: true
   },
   { 
     ingredient_name: "Mushrooms Button", 
@@ -239,7 +226,6 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0122,
     min_stock_level: 3.0,
     current_stock: 6.0,
-    is_active: true
   },
   { 
     ingredient_name: "Spinach Baby", 
@@ -256,6 +242,5 @@ export const sampleIngredients = [
     cost_per_unit_incl_trim: 0.0263,
     min_stock_level: 2.0,
     current_stock: 4.0,
-    is_active: true
   }
 ];
