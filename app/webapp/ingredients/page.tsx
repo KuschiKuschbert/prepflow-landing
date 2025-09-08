@@ -114,7 +114,7 @@ export default function IngredientsPage() {
   // Get converted cost for display
   const getDisplayCost = (ingredient: Ingredient): { cost: number; unit: string; original?: string; packInfo?: string; formattedCost: string } => {
     // Always show the cost in the ingredient's actual unit
-    const result = { 
+    const result: { cost: number; unit: string; original?: string; packInfo?: string; formattedCost: string } = { 
       cost: ingredient.cost_per_unit, 
       unit: ingredient.unit || '',
       formattedCost: formatCost(ingredient.cost_per_unit)
@@ -1301,11 +1301,13 @@ export default function IngredientsPage() {
                             <div className="text-sm text-gray-400">
                               {ingredient.brand && `Brand: ${ingredient.brand} • `}
                               {(() => {
-                                const displayCost = getDisplayCost(ingredient);
+                                if (!ingredient.cost_per_unit || !ingredient.unit) return 'Cost: N/A';
+                                const displayCost = getDisplayCost(ingredient as Ingredient);
                                 return `Cost: $${displayCost.formattedCost}/${displayCost.unit}`;
                               })()}
                               {(() => {
-                                const displayCost = getDisplayCost(ingredient);
+                                if (!ingredient.cost_per_unit || !ingredient.unit) return '';
+                                const displayCost = getDisplayCost(ingredient as Ingredient);
                                 return displayCost.packInfo ? ` • ${displayCost.packInfo}` : '';
                               })()}
                             </div>
