@@ -26,7 +26,7 @@ interface RecipeIngredient {
   ingredients: {
     id: string;
     ingredient_name: string;
-  cost_per_unit: number;
+    cost_per_unit: number;
     unit: string;
     trim_peel_waste_percentage: number;
     yield_percentage: number;
@@ -225,7 +225,7 @@ export default function RecipesPage() {
         return [];
       }
 
-      return ingredientsData || [];
+      return (ingredientsData || []) as unknown as RecipeIngredient[];
     } catch (err) {
       setError('Failed to fetch recipe ingredients');
       return [];
