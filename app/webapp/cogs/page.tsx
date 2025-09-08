@@ -73,7 +73,8 @@ export default function COGSPage() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.ingredient-search-container')) {
+      // Don't close if clicking on suggestions or search input
+      if (!target.closest('.ingredient-search-container') && !target.closest('.suggestions-dropdown')) {
         setShowSuggestions(false);
       }
     };
@@ -243,6 +244,7 @@ export default function COGSPage() {
   };
 
   const handleIngredientSelect = (ingredient: Ingredient) => {
+    console.log('Ingredient selected:', ingredient.ingredient_name);
     setSelectedIngredient(ingredient);
     setNewIngredient({
       ...newIngredient,
@@ -338,6 +340,16 @@ export default function COGSPage() {
     console.log('Search results:', filtered.length, 'matches for', searchTerm);
     return filtered;
   }, [ingredients, ingredientSearch]);
+
+  // Debug suggestions visibility
+  useEffect(() => {
+    console.log('Suggestions state:', {
+      showSuggestions,
+      ingredientSearch,
+      filteredIngredientsCount: filteredIngredients.length,
+      ingredientsCount: ingredients.length
+    });
+  }, [showSuggestions, ingredientSearch, filteredIngredients.length, ingredients.length]);
 
   if (loading) {
     return (
@@ -480,14 +492,19 @@ export default function COGSPage() {
                   </div>
                   {/* Autocomplete Suggestions */}
                   {showSuggestions && filteredIngredients.length > 0 && (
-                    <div className="absolute z-10 w-full mt-1 bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <div className="absolute z-10 w-full mt-1 bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl shadow-lg max-h-60 overflow-y-auto suggestions-dropdown">
                       {filteredIngredients.slice(0, 10).map((ingredient) => {
                         const displayCost = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
                         return (
                           <button
                             key={ingredient.id}
                             type="button"
-                            onClick={() => handleIngredientSelect(ingredient)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              console.log('Button clicked for:', ingredient.ingredient_name);
+                              handleIngredientSelect(ingredient);
+                            }}
                             className="w-full px-4 py-3 text-left hover:bg-[#2a2a2a] transition-colors border-b border-[#2a2a2a] last:border-b-0"
                           >
                             <div className="flex justify-between items-center">
