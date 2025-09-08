@@ -74,7 +74,7 @@ function WebAppDashboard() {
                         // Fetch menu dishes count and average price
                         const { data: menuDishes } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('menu_dishes').select('selling_price');
                         const totalDishes = (menuDishes === null || menuDishes === void 0 ? void 0 : menuDishes.length) || 0;
-                        const averagePrice = totalDishes > 0 ? menuDishes.reduce({
+                        const averagePrice = totalDishes > 0 && menuDishes ? menuDishes.reduce({
                             "WebAppDashboard.useEffect.fetchStats": (sum, dish)=>sum + (dish.selling_price || 0)
                         }["WebAppDashboard.useEffect.fetchStats"], 0) / totalDishes : 0;
                         setStats({

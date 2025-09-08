@@ -38,7 +38,7 @@ export default function WebAppDashboard() {
           .select('selling_price');
 
         const totalDishes = menuDishes?.length || 0;
-        const averagePrice = totalDishes > 0 
+        const averagePrice = totalDishes > 0 && menuDishes
           ? menuDishes.reduce((sum, dish) => sum + (dish.selling_price || 0), 0) / totalDishes
           : 0;
 

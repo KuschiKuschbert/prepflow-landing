@@ -8,6 +8,7 @@
   "/api/setup-database/route": "app/api/setup-database/route.js",
   "/api/test-recipe-ingredient/route": "app/api/test-recipe-ingredient/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
   "/webapp/cogs/page": "app/webapp/cogs/page.js",
   "/webapp/ingredients/page": "app/webapp/ingredients/page.js",
   "/webapp/page": "app/webapp/page.js",
