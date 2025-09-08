@@ -143,6 +143,14 @@ export default function COGSPage() {
 
   const fetchData = async () => {
     try {
+      if (!supabase) {
+        console.log('Supabase client not available');
+        setIngredients([]);
+        setRecipes([]);
+        setLoading(false);
+        return;
+      }
+
       // Fetch ingredients
       const { data: ingredientsData, error: ingredientsError } = await supabase
         .from('ingredients')
@@ -180,6 +188,11 @@ export default function COGSPage() {
     if (!selectedRecipe) return;
 
     try {
+      if (!supabase) {
+        console.log('Supabase client not available');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('recipe_ingredients')
         .select('*')
@@ -261,6 +274,11 @@ export default function COGSPage() {
     try {
       console.log('Loading ingredients for recipe:', recipeId);
       
+      if (!supabase) {
+        console.log('Supabase client not available');
+        return;
+      }
+      
       const { data: recipeIngredients, error } = await supabase
         .from('recipe_ingredients')
         .select(`
@@ -333,14 +351,16 @@ export default function COGSPage() {
       setRecipeIngredients(loadedRecipeIngredients);
       
       // Also set the dish portions from the recipe
-      const { data: recipeData } = await supabase
-        .from('recipes')
-        .select('yield')
-        .eq('id', recipeId)
-        .single();
-      
-      if (recipeData) {
-        setDishPortions(recipeData.yield || 1);
+      if (supabase) {
+        const { data: recipeData } = await supabase
+          .from('recipes')
+          .select('yield')
+          .eq('id', recipeId)
+          .single();
+        
+        if (recipeData) {
+          setDishPortions(recipeData.yield || 1);
+        }
       }
       
     } catch (err) {
@@ -358,6 +378,13 @@ export default function COGSPage() {
     setCheckingRecipe(true);
     try {
       console.log('Checking for recipe:', recipeName.trim());
+      
+      if (!supabase) {
+        console.log('Supabase client not available');
+        setRecipeExists(false);
+        setCheckingRecipe(false);
+        return;
+      }
       
       const { data: existingRecipes, error } = await supabase
         .from('recipes')
@@ -472,6 +499,11 @@ export default function COGSPage() {
     const recipeName = capitalizeRecipeName(rawRecipeName);
 
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       // Check if recipe already exists (case-insensitive)
       const { data: existingRecipes, error: checkError } = await supabase
         .from('recipes')

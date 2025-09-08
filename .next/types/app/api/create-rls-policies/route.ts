@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/api/create-rls-policies/route.ts
+// File: /workspace/app/api/create-rls-policies/route.ts
 import * as entry from '../../../../../app/api/create-rls-policies/route.js'
 import type { NextRequest } from 'next/server.js'
 

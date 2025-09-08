@@ -122,7 +122,7 @@ export default function RecipesPage() {
 
   // Listen for ingredient price changes and update recipe prices automatically
   useEffect(() => {
-    if (recipes.length === 0) return;
+    if (recipes.length === 0 || !supabase) return;
 
     // Subscribe to ingredient table changes
     const subscription = supabase
@@ -149,6 +149,12 @@ export default function RecipesPage() {
 
   const fetchRecipes = async () => {
     try {
+      if (!supabase) {
+        console.log('Supabase client not available');
+        setRecipes([]);
+        return;
+      }
+
       const { data: recipesData, error: recipesError } = await supabase
         .from('recipes')
         .select('*')
@@ -201,6 +207,11 @@ export default function RecipesPage() {
 
   const fetchRecipeIngredients = async (recipeId: string) => {
     try {
+      if (!supabase) {
+        console.log('Supabase client not available');
+        return [];
+      }
+
       const { data: ingredientsData, error: ingredientsError } = await supabase
         .from('recipe_ingredients')
         .select(`
@@ -235,6 +246,11 @@ export default function RecipesPage() {
   const handleAddRecipe = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       const { error } = await supabase
         .from('recipes')
         .insert([newRecipe]);
@@ -671,6 +687,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
     if (!recipeToDelete) return;
 
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       // First delete all recipe ingredients
       const { error: ingredientsError } = await supabase
         .from('recipe_ingredients')
@@ -744,6 +765,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
     if (selectedRecipes.size === 0) return;
 
     try {
+      if (!supabase) {
+        setError('Database connection not available');
+        return;
+      }
+
       const selectedRecipeIds = Array.from(selectedRecipes);
       
       // Delete all recipe ingredients for selected recipes

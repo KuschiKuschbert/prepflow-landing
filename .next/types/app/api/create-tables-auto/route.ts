@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/api/create-tables-auto/route.ts
+// File: /workspace/app/api/create-tables-auto/route.ts
 import * as entry from '../../../../../app/api/create-tables-auto/route.js'
 import type { NextRequest } from 'next/server.js'
 
