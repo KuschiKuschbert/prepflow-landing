@@ -51,6 +51,8 @@ export default function COGSPage() {
   const [dishName, setDishName] = useState<string>('');
   const [dishPortions, setDishPortions] = useState<number>(1);
   const [ingredientSearch, setIngredientSearch] = useState<string>('');
+  const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
   const [newIngredient, setNewIngredient] = useState<Partial<RecipeIngredient>>({
     ingredient_id: '',
     quantity: 0,
@@ -66,6 +68,19 @@ export default function COGSPage() {
       fetchRecipeIngredients();
     }
   }, [selectedRecipe]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.ingredient-search-container')) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -227,6 +242,27 @@ export default function COGSPage() {
     }
   };
 
+  const handleIngredientSelect = (ingredient: Ingredient) => {
+    setSelectedIngredient(ingredient);
+    setNewIngredient({
+      ...newIngredient,
+      ingredient_id: ingredient.id,
+      unit: ingredient.unit || 'kg',
+    });
+    setIngredientSearch(ingredient.ingredient_name);
+    setShowSuggestions(false);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setIngredientSearch(value);
+    setShowSuggestions(value.length > 0);
+    setSelectedIngredient(null);
+    setNewIngredient({
+      ...newIngredient,
+      ingredient_id: '',
+    });
+  };
+
   const handleAddIngredient = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newIngredient.ingredient_id || !newIngredient.quantity) {
@@ -251,6 +287,9 @@ export default function COGSPage() {
         quantity: 0,
         unit: 'kg',
       });
+      setIngredientSearch('');
+      setSelectedIngredient(null);
+      setShowSuggestions(false);
       
       // Calculate COGS with updated ingredients
       calculateCOGS([...recipeIngredients, ingredientToAdd]);
@@ -404,16 +443,17 @@ export default function COGSPage() {
 
               {showAddIngredient && (
                 <form onSubmit={handleAddIngredient} className="space-y-3 p-4 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg">
-                  <div className="relative">
+                  <div className="relative ingredient-search-container">
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      🔍 Search Ingredients
+                      🔍 Search & Select Ingredient
                     </label>
                     <div className="relative">
                       <input
                         type="text"
                         placeholder="Type to search ingredients..."
                         value={ingredientSearch}
-                        onChange={(e) => setIngredientSearch(e.target.value)}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        onFocus={() => setShowSuggestions(ingredientSearch.length > 0)}
                         className="w-full pl-10 pr-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-[#29E7CD] transition-all duration-200 shadow-sm hover:shadow-md"
                       />
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -423,7 +463,7 @@ export default function COGSPage() {
                       </div>
                       {ingredientSearch && (
                         <button
-                          onClick={() => setIngredientSearch('')}
+                          onClick={() => handleSearchChange('')}
                           className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
                         >
                           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -438,49 +478,70 @@ export default function COGSPage() {
                       </div>
                     )}
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      📋 Select Ingredient
-                    </label>
-                    <div className="relative">
-                      <select
-                        required
-                        value={newIngredient.ingredient_id}
-                        onChange={(e) => setNewIngredient({ ...newIngredient, ingredient_id: e.target.value })}
-                        className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-[#29E7CD] transition-all duration-200 shadow-sm hover:shadow-md appearance-none cursor-pointer"
-                      >
-                        <option value="">Choose an ingredient...</option>
-                        {filteredIngredients.map((ingredient) => {
-                          const displayCost = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
-                          return (
-                            <option key={ingredient.id} value={ingredient.id}>
-                              {ingredient.ingredient_name} - ${displayCost.toFixed(2)}/{ingredient.unit || 'unit'}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
+                  {/* Autocomplete Suggestions */}
+                  {showSuggestions && filteredIngredients.length > 0 && (
+                    <div className="absolute z-10 w-full mt-1 bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                      {filteredIngredients.slice(0, 10).map((ingredient) => {
+                        const displayCost = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+                        return (
+                          <button
+                            key={ingredient.id}
+                            type="button"
+                            onClick={() => handleIngredientSelect(ingredient)}
+                            className="w-full px-4 py-3 text-left hover:bg-[#2a2a2a] transition-colors border-b border-[#2a2a2a] last:border-b-0"
+                          >
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <div className="text-white font-medium">{ingredient.ingredient_name}</div>
+                                <div className="text-xs text-gray-400">
+                                  {ingredient.unit && `${ingredient.unit} • `}
+                                  ${displayCost.toFixed(2)}/{ingredient.unit || 'unit'}
+                                </div>
+                              </div>
+                              <div className="text-[#29E7CD] text-sm">
+                                {ingredient.trim_peel_waste_percentage ? `${ingredient.trim_peel_waste_percentage}% waste` : 'No waste'}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                  
+                  {/* No results message */}
+                  {showSuggestions && filteredIngredients.length === 0 && ingredientSearch && (
+                    <div className="absolute z-10 w-full mt-1 p-3 bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl shadow-lg">
+                      <p className="text-sm text-gray-400 text-center">
+                        🔍 No ingredients found matching "{ingredientSearch}"
+                      </p>
+                      <p className="text-xs text-gray-500 text-center mt-1">
+                        Try a different search term or add the ingredient to your list first
+                      </p>
+                    </div>
+                  )}
+                  
+                  {/* Selected ingredient info */}
+                  {selectedIngredient && (
+                    <div className="mt-2 p-3 bg-[#29E7CD]/10 border border-[#29E7CD]/20 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-[#29E7CD] font-medium">✓ {selectedIngredient.ingredient_name}</div>
+                          <div className="text-xs text-gray-400">
+                            ${(selectedIngredient.cost_per_unit_incl_trim || selectedIngredient.cost_per_unit || 0).toFixed(2)}/{selectedIngredient.unit || 'unit'}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleSearchChange('')}
+                          className="text-gray-400 hover:text-white transition-colors"
+                        >
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
                       </div>
                     </div>
-                    {filteredIngredients.length === 0 && ingredientSearch && (
-                      <div className="mt-3 p-3 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg">
-                        <p className="text-sm text-gray-400 text-center">
-                          🔍 No ingredients found matching "{ingredientSearch}"
-                        </p>
-                        <p className="text-xs text-gray-500 text-center mt-1">
-                          Try a different search term or check your ingredients list
-                        </p>
-                      </div>
-                    )}
-                    {filteredIngredients.length > 0 && ingredientSearch && (
-                      <div className="mt-2 text-xs text-[#29E7CD]">
-                        ✨ Showing best matches for "{ingredientSearch}"
-                      </div>
-                    )}
-                  </div>
+                  )}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
