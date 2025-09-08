@@ -732,10 +732,13 @@ function RecipesPage() {
         };
     };
     const generateAIInstructions = async (recipe, ingredients)=>{
+        console.log('🤖 DEBUG: Generating AI instructions for:', recipe.name);
+        console.log('🤖 DEBUG: Ingredients:', ingredients);
         setGeneratingInstructions(true);
         try {
             // Analyze ingredients to determine cooking method
             const ingredientNames = ingredients.map((ri)=>ri.ingredients.ingredient_name.toLowerCase());
+            console.log('🤖 DEBUG: Ingredient names:', ingredientNames);
             const hasProtein = ingredientNames.some((name)=>name.includes('beef') || name.includes('chicken') || name.includes('pork') || name.includes('fish') || name.includes('lamb') || name.includes('mince'));
             const hasVegetables = ingredientNames.some((name)=>name.includes('carrot') || name.includes('onion') || name.includes('garlic') || name.includes('tomato') || name.includes('pepper') || name.includes('celery'));
             const hasDairy = ingredientNames.some((name)=>name.includes('cheese') || name.includes('milk') || name.includes('cream') || name.includes('butter') || name.includes('yogurt'));
@@ -857,8 +860,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
 - Keep work area clean and organized
 - Taste frequently and adjust seasoning`;
             }
+            console.log('🤖 DEBUG: Generated instructions:', generatedInstructions);
             setAiInstructions(generatedInstructions);
+            console.log('🤖 DEBUG: AI instructions state set');
         } catch (err) {
+            console.error('🤖 DEBUG: Error generating instructions:', err);
             setError('Failed to generate cooking instructions');
         } finally{
             setGeneratingInstructions(false);
@@ -968,7 +974,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             className: "h-8 bg-[#2a2a2a] rounded-3xl w-1/2 mb-8"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 790,
+                            lineNumber: 796,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -982,41 +988,41 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             className: "h-4 bg-[#2a2a2a] rounded-xl w-3/4 mb-3"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 794,
+                                            lineNumber: 800,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "h-3 bg-[#2a2a2a] rounded-xl w-1/2"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 795,
+                                            lineNumber: 801,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, i, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 793,
+                                    lineNumber: 799,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 791,
+                            lineNumber: 797,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 789,
+                    lineNumber: 795,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                lineNumber: 788,
+                lineNumber: 794,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/recipes/page.tsx",
-            lineNumber: 787,
+            lineNumber: 793,
             columnNumber: 7
         }, this);
     }
@@ -1040,7 +1046,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                     priority: true
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 811,
+                                    lineNumber: 817,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -1048,13 +1054,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                     children: "📖 Recipe Book"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 819,
+                                    lineNumber: 825,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 810,
+                            lineNumber: 816,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1062,13 +1068,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "Manage your saved recipes and create new ones"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 823,
+                            lineNumber: 829,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 809,
+                    lineNumber: 815,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1080,7 +1086,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: showAddForm ? 'Cancel' : '+ Add Manual Recipe'
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 828,
+                            lineNumber: 834,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1089,7 +1095,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "Create Recipe from COGS"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 834,
+                            lineNumber: 840,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1101,13 +1107,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "🔄 Refresh Recipes"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 840,
+                            lineNumber: 846,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 827,
+                    lineNumber: 833,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1118,7 +1124,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "How Recipe Book Works"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 853,
+                            lineNumber: 859,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1131,20 +1137,20 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             children: "✍️ Manual Recipes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 856,
+                                            lineNumber: 862,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: "Add recipes manually with instructions and portion counts. Perfect for documenting cooking methods and procedures."
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 857,
+                                            lineNumber: 863,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 855,
+                                    lineNumber: 861,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1154,32 +1160,32 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             children: "📊 From COGS Calculations"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 860,
+                                            lineNumber: 866,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: "Create cost calculations in the COGS screen, then save them as recipes. These recipes include all ingredient costs and portion calculations."
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 861,
+                                            lineNumber: 867,
                                             columnNumber: 13
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 859,
+                                    lineNumber: 865,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 854,
+                            lineNumber: 860,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 852,
+                    lineNumber: 858,
                     columnNumber: 7
                 }, this),
                 selectedRecipes.size > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1197,12 +1203,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             children: selectedRecipes.size
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 872,
+                                            lineNumber: 878,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 871,
+                                        lineNumber: 877,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1217,7 +1223,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 875,
+                                                lineNumber: 881,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1225,19 +1231,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "Choose an action for the selected recipes"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 878,
+                                                lineNumber: 884,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 874,
+                                        lineNumber: 880,
                                         columnNumber: 11
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 870,
+                                lineNumber: 876,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1249,7 +1255,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         children: "🗑️ Delete Selected"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 882,
+                                        lineNumber: 888,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1258,24 +1264,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         children: "Clear Selection"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 888,
+                                        lineNumber: 894,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 881,
+                                lineNumber: 887,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                        lineNumber: 869,
+                        lineNumber: 875,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 868,
+                    lineNumber: 874,
                     columnNumber: 11
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1283,7 +1289,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 900,
+                    lineNumber: 906,
                     columnNumber: 9
                 }, this),
                 successMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1301,12 +1307,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                     clipRule: "evenodd"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 909,
+                                    lineNumber: 915,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 908,
+                                lineNumber: 914,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1314,18 +1320,18 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                 children: successMessage
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 911,
+                                lineNumber: 917,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                        lineNumber: 907,
+                        lineNumber: 913,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 906,
+                    lineNumber: 912,
                     columnNumber: 11
                 }, this),
                 showAddForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1336,7 +1342,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "Add New Recipe"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 918,
+                            lineNumber: 924,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1350,7 +1356,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             children: "Recipe Name *"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 921,
+                                            lineNumber: 927,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1365,13 +1371,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             placeholder: "e.g., Chicken Stir-fry"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 924,
+                                            lineNumber: 930,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 920,
+                                    lineNumber: 926,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1381,7 +1387,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             children: "Yield Portions"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 934,
+                                            lineNumber: 940,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1395,13 +1401,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             className: "w-full px-3 py-2 border border-[#2a2a2a] rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 937,
+                                            lineNumber: 943,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 933,
+                                    lineNumber: 939,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1411,7 +1417,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             children: "Instructions"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 946,
+                                            lineNumber: 952,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1425,13 +1431,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                             placeholder: "Step-by-step cooking instructions..."
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 949,
+                                            lineNumber: 955,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 945,
+                                    lineNumber: 951,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1440,19 +1446,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                     children: "Add Recipe"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 957,
+                                    lineNumber: 963,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 919,
+                            lineNumber: 925,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 917,
+                    lineNumber: 923,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1472,7 +1478,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 971,
+                                        lineNumber: 977,
                                         columnNumber: 11
                                     }, this),
                                     selectedRecipes.size > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1485,12 +1491,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: selectedRecipes.size
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 977,
+                                                    lineNumber: 983,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 976,
+                                                lineNumber: 982,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1501,24 +1507,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 979,
+                                                lineNumber: 985,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 975,
+                                        lineNumber: 981,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 970,
+                                lineNumber: 976,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 969,
+                            lineNumber: 975,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1541,7 +1547,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 className: "w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2 mr-3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 994,
+                                                                lineNumber: 1000,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1550,13 +1556,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: capitalizeRecipeName(recipe.name)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1000,
+                                                                lineNumber: 1006,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 993,
+                                                        lineNumber: 999,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1564,13 +1570,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: new Date(recipe.created_at).toLocaleDateString()
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1004,
+                                                        lineNumber: 1010,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 992,
+                                                lineNumber: 998,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1583,7 +1589,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: "Recommended Price:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1011,
+                                                                lineNumber: 1017,
                                                                 columnNumber: 23
                                                             }, this),
                                                             recipePrices[recipe.id] ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1594,20 +1600,20 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1013,
+                                                                lineNumber: 1019,
                                                                 columnNumber: 25
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-gray-500 ml-1",
                                                                 children: "Calculating..."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1017,
+                                                                lineNumber: 1023,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1010,
+                                                        lineNumber: 1016,
                                                         columnNumber: 19
                                                     }, this),
                                                     recipePrices[recipe.id] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1617,7 +1623,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: "Food Cost:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1022,
+                                                                lineNumber: 1028,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1628,13 +1634,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1023,
+                                                                lineNumber: 1029,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1021,
+                                                        lineNumber: 1027,
                                                         columnNumber: 21
                                                     }, this),
                                                     recipe.instructions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1644,7 +1650,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: "Instructions:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1030,
+                                                                lineNumber: 1036,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1652,19 +1658,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: recipe.instructions
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1031,
+                                                                lineNumber: 1037,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1029,
+                                                        lineNumber: 1035,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1009,
+                                                lineNumber: 1015,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1676,7 +1682,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: "✏️ Edit in COGS"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1040,
+                                                        lineNumber: 1046,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1685,29 +1691,29 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: "🗑️ Delete"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1046,
+                                                        lineNumber: 1052,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1039,
+                                                lineNumber: 1045,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, recipe.id, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 991,
+                                        lineNumber: 997,
                                         columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 989,
+                                lineNumber: 995,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 988,
+                            lineNumber: 994,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1731,7 +1737,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 className: "w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1065,
+                                                                lineNumber: 1071,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1739,18 +1745,18 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: "Select"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1071,
+                                                                lineNumber: 1077,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1064,
+                                                        lineNumber: 1070,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1063,
+                                                    lineNumber: 1069,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1758,7 +1764,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Name"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1074,
+                                                    lineNumber: 1080,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1766,7 +1772,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Recommended Price"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1077,
+                                                    lineNumber: 1083,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1774,7 +1780,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Instructions"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1080,
+                                                    lineNumber: 1086,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1782,7 +1788,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Created"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1083,
+                                                    lineNumber: 1089,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1790,18 +1796,18 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Actions"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1086,
+                                                    lineNumber: 1092,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1062,
+                                            lineNumber: 1068,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1061,
+                                        lineNumber: 1067,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -1819,12 +1825,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                             className: "w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1095,
+                                                            lineNumber: 1101,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1094,
+                                                        lineNumber: 1100,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1833,7 +1839,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: capitalizeRecipeName(recipe.name)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1102,
+                                                        lineNumber: 1108,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1850,7 +1856,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1108,
+                                                                    lineNumber: 1114,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1861,25 +1867,25 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1109,
+                                                                    lineNumber: 1115,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1107,
+                                                            lineNumber: 1113,
                                                             columnNumber: 25
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-gray-500",
                                                             children: "Calculating..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1114,
+                                                            lineNumber: 1120,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1105,
+                                                        lineNumber: 1111,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1890,12 +1896,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                             children: recipe.instructions
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1119,
+                                                            lineNumber: 1125,
                                                             columnNumber: 23
                                                         }, this) : '-'
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1117,
+                                                        lineNumber: 1123,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1904,7 +1910,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: new Date(recipe.created_at).toLocaleDateString()
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1126,
+                                                        lineNumber: 1132,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1919,7 +1925,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "✏️ Edit"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1131,
+                                                                    lineNumber: 1137,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1928,46 +1934,46 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "🗑️ Delete"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1137,
+                                                                    lineNumber: 1143,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1130,
+                                                            lineNumber: 1136,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1129,
+                                                        lineNumber: 1135,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, recipe.id, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1093,
+                                                lineNumber: 1099,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1091,
+                                        lineNumber: 1097,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1060,
+                                lineNumber: 1066,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 1059,
+                            lineNumber: 1065,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 968,
+                    lineNumber: 974,
                     columnNumber: 7
                 }, this),
                 recipes.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1978,7 +1984,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "🍳"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 1154,
+                            lineNumber: 1160,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1986,7 +1992,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "No recipes yet"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 1155,
+                            lineNumber: 1161,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1994,7 +2000,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "Start by adding your first recipe to begin managing your kitchen costs."
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 1156,
+                            lineNumber: 1162,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2003,13 +2009,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                             children: "Add Your First Recipe"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                            lineNumber: 1159,
+                            lineNumber: 1165,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 1153,
+                    lineNumber: 1159,
                     columnNumber: 9
                 }, this),
                 showPreview && selectedRecipe && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2030,7 +2036,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: capitalizeRecipeName(selectedRecipe.name)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1176,
+                                                    lineNumber: 1182,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2044,7 +2050,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "Original Yield:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1181,
+                                                                    lineNumber: 1187,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2056,13 +2062,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1182,
+                                                                    lineNumber: 1188,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1180,
+                                                            lineNumber: 1186,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2073,7 +2079,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "Adjust for:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1186,
+                                                                    lineNumber: 1192,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2085,7 +2091,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                             children: "−"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                            lineNumber: 1188,
+                                                                            lineNumber: 1194,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2096,7 +2102,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                             min: "1"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                            lineNumber: 1194,
+                                                                            lineNumber: 1200,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2105,13 +2111,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                             children: "+"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                            lineNumber: 1201,
+                                                                            lineNumber: 1207,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1187,
+                                                                    lineNumber: 1193,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2119,13 +2125,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: selectedRecipe.yield_unit
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1208,
+                                                                    lineNumber: 1214,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1185,
+                                                            lineNumber: 1191,
                                                             columnNumber: 23
                                                         }, this),
                                                         previewYield !== selectedRecipe.yield && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2136,7 +2142,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "Scale:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1213,
+                                                                    lineNumber: 1219,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2148,25 +2154,25 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1214,
+                                                                    lineNumber: 1220,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1212,
+                                                            lineNumber: 1218,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1179,
+                                                    lineNumber: 1185,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1175,
+                                            lineNumber: 1181,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2178,7 +2184,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "✏️ Edit Recipe"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1223,
+                                                    lineNumber: 1229,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2187,7 +2193,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "🖨️ Print"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1229,
+                                                    lineNumber: 1235,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2196,24 +2202,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "✕ Close"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1235,
+                                                    lineNumber: 1241,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1222,
+                                            lineNumber: 1228,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 1174,
+                                    lineNumber: 1180,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1173,
+                                lineNumber: 1179,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2230,7 +2236,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: "📋"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1250,
+                                                        lineNumber: 1256,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Ingredients",
@@ -2245,13 +2251,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1252,
+                                                        lineNumber: 1258,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1249,
+                                                lineNumber: 1255,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2267,7 +2273,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "#"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1261,
+                                                                    lineNumber: 1267,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2275,7 +2281,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "Ingredient"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1262,
+                                                                    lineNumber: 1268,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2283,18 +2289,18 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                     children: "Quantity"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1263,
+                                                                    lineNumber: 1269,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1260,
+                                                            lineNumber: 1266,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1259,
+                                                        lineNumber: 1265,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2314,12 +2320,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                                 children: String(index + 1).padStart(2, '0')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                                lineNumber: 1278,
+                                                                                lineNumber: 1284,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                            lineNumber: 1277,
+                                                                            lineNumber: 1283,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2329,12 +2335,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                                 children: ingredient.ingredient_name
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                                lineNumber: 1285,
+                                                                                lineNumber: 1291,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                            lineNumber: 1284,
+                                                                            lineNumber: 1290,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2358,7 +2364,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                                                lineNumber: 1299,
+                                                                                                lineNumber: 1305,
                                                                                                 columnNumber: 43
                                                                                             }, this),
                                                                                             previewYield !== selectedRecipe.yield && !isConverted && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2372,7 +2378,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                                                lineNumber: 1304,
+                                                                                                lineNumber: 1310,
                                                                                                 columnNumber: 43
                                                                                             }, this)
                                                                                         ]
@@ -2380,41 +2386,41 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                                 })()
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                                lineNumber: 1290,
+                                                                                lineNumber: 1296,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                            lineNumber: 1289,
+                                                                            lineNumber: 1295,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                    lineNumber: 1275,
+                                                                    lineNumber: 1281,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             }, ri.id, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1274,
+                                                                lineNumber: 1280,
                                                                 columnNumber: 27
                                                             }, this);
                                                         })
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1268,
+                                                        lineNumber: 1274,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1257,
+                                                lineNumber: 1263,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1248,
+                                        lineNumber: 1254,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2425,7 +2431,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "🤖 AI-Generated Cooking Method"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1323,
+                                                lineNumber: 1329,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2437,7 +2443,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                             className: "animate-spin rounded-full h-8 w-8 border-b-2 border-[#29E7CD]"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1327,
+                                                            lineNumber: 1333,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2445,31 +2451,31 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                             children: "Generating cooking instructions..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                            lineNumber: 1328,
+                                                            lineNumber: 1334,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1326,
+                                                    lineNumber: 1332,
                                                     columnNumber: 23
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "text-gray-300 whitespace-pre-wrap",
                                                     children: aiInstructions
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1331,
+                                                    lineNumber: 1337,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1324,
+                                                lineNumber: 1330,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1322,
+                                        lineNumber: 1328,
                                         columnNumber: 17
                                     }, this),
                                     selectedRecipe.instructions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2479,7 +2485,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "👨‍🍳 Manual Instructions"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1341,
+                                                lineNumber: 1347,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2489,35 +2495,35 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: selectedRecipe.instructions
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1343,
+                                                    lineNumber: 1349,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1342,
+                                                lineNumber: 1348,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1340,
+                                        lineNumber: 1346,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1246,
+                                lineNumber: 1252,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                        lineNumber: 1171,
+                        lineNumber: 1177,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 1170,
+                    lineNumber: 1176,
                     columnNumber: 11
                 }, this),
                 showDeleteConfirm && recipeToDelete && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2544,17 +2550,17 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1363,
+                                                    lineNumber: 1369,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1362,
+                                                lineNumber: 1368,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1361,
+                                            lineNumber: 1367,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2564,7 +2570,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Delete Recipe"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1367,
+                                                    lineNumber: 1373,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2572,24 +2578,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "This action cannot be undone"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1368,
+                                                    lineNumber: 1374,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1366,
+                                            lineNumber: 1372,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 1360,
+                                    lineNumber: 1366,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1359,
+                                lineNumber: 1365,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2608,14 +2614,14 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1376,
+                                                lineNumber: 1382,
                                                 columnNumber: 51
                                             }, this),
                                             "? This will permanently remove the recipe and all its ingredients from your Recipe Book."
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1375,
+                                        lineNumber: 1381,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2627,7 +2633,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1382,
+                                                lineNumber: 1388,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2636,30 +2642,30 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "Delete Recipe"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1388,
+                                                lineNumber: 1394,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1381,
+                                        lineNumber: 1387,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1374,
+                                lineNumber: 1380,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                        lineNumber: 1357,
+                        lineNumber: 1363,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 1356,
+                    lineNumber: 1362,
                     columnNumber: 11
                 }, this),
                 showBulkDeleteConfirm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2686,17 +2692,17 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1409,
+                                                    lineNumber: 1415,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1408,
+                                                lineNumber: 1414,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1407,
+                                            lineNumber: 1413,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2706,7 +2712,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "Delete Multiple Recipes"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1413,
+                                                    lineNumber: 1419,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2714,24 +2720,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                     children: "This action cannot be undone"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                    lineNumber: 1414,
+                                                    lineNumber: 1420,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/recipes/page.tsx",
-                                            lineNumber: 1412,
+                                            lineNumber: 1418,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                                    lineNumber: 1406,
+                                    lineNumber: 1412,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1405,
+                                lineNumber: 1411,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2750,14 +2756,14 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1422,
+                                                lineNumber: 1428,
                                                 columnNumber: 51
                                             }, this),
                                             "? This will permanently remove all selected recipes and their ingredients from your Recipe Book."
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1421,
+                                        lineNumber: 1427,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2768,7 +2774,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "Selected Recipes:"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1428,
+                                                lineNumber: 1434,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2783,19 +2789,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         ]
                                                     }, recipeId, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1433,
+                                                        lineNumber: 1439,
                                                         columnNumber: 25
                                                     }, this) : null;
                                                 })
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1429,
+                                                lineNumber: 1435,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1427,
+                                        lineNumber: 1433,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2807,7 +2813,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: "Cancel"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1441,
+                                                lineNumber: 1447,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2821,30 +2827,30 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1447,
+                                                lineNumber: 1453,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1440,
+                                        lineNumber: 1446,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1420,
+                                lineNumber: 1426,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                        lineNumber: 1403,
+                        lineNumber: 1409,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 1402,
+                    lineNumber: 1408,
                     columnNumber: 11
                 }, this),
                 selectedRecipe && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2862,7 +2868,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 children: capitalizeRecipeName(selectedRecipe.name)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1466,
+                                                lineNumber: 1472,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2883,19 +2889,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1472,
+                                                        lineNumber: 1478,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1469,
+                                                lineNumber: 1475,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1465,
+                                        lineNumber: 1471,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2907,7 +2913,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                 className: "print:w-16 print:h-16 print:object-contain"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1479,
+                                                lineNumber: 1485,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2918,7 +2924,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: "PrepFlow"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1485,
+                                                        lineNumber: 1491,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2926,25 +2932,25 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         children: "Kitchen Management"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1486,
+                                                        lineNumber: 1492,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1484,
+                                                lineNumber: 1490,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1478,
+                                        lineNumber: 1484,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1464,
+                                lineNumber: 1470,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2955,7 +2961,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         children: "📋 Ingredients"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1493,
+                                        lineNumber: 1499,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2978,7 +2984,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1505,
+                                                                lineNumber: 1511,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2986,13 +2992,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                                 children: ingredient.ingredient_name
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                                lineNumber: 1508,
+                                                                lineNumber: 1514,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1504,
+                                                        lineNumber: 1510,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3004,25 +3010,25 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                        lineNumber: 1512,
+                                                        lineNumber: 1518,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, ri.id, true, {
                                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                                lineNumber: 1503,
+                                                lineNumber: 1509,
                                                 columnNumber: 23
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1496,
+                                        lineNumber: 1502,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1492,
+                                lineNumber: 1498,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3033,7 +3039,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         children: "🤖 Cooking Instructions"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1523,
+                                        lineNumber: 1529,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3041,13 +3047,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         children: aiInstructions
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1526,
+                                        lineNumber: 1532,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1522,
+                                lineNumber: 1528,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3057,7 +3063,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         children: "Generated by PrepFlow Kitchen Management System"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1533,
+                                        lineNumber: 1539,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3069,35 +3075,35 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find((ri)=>ri.ingredients.ingredie
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                                        lineNumber: 1534,
+                                        lineNumber: 1540,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/recipes/page.tsx",
-                                lineNumber: 1532,
+                                lineNumber: 1538,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/recipes/page.tsx",
-                        lineNumber: 1462,
+                        lineNumber: 1468,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/recipes/page.tsx",
-                    lineNumber: 1461,
+                    lineNumber: 1467,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/recipes/page.tsx",
-            lineNumber: 807,
+            lineNumber: 813,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/recipes/page.tsx",
-        lineNumber: 806,
+        lineNumber: 812,
         columnNumber: 5
     }, this);
 }

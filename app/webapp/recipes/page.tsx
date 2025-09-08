@@ -482,10 +482,13 @@ export default function RecipesPage() {
   };
 
   const generateAIInstructions = async (recipe: Recipe, ingredients: RecipeIngredient[]) => {
+    console.log('🤖 DEBUG: Generating AI instructions for:', recipe.name);
+    console.log('🤖 DEBUG: Ingredients:', ingredients);
     setGeneratingInstructions(true);
     try {
       // Analyze ingredients to determine cooking method
       const ingredientNames = ingredients.map(ri => ri.ingredients.ingredient_name.toLowerCase());
+      console.log('🤖 DEBUG: Ingredient names:', ingredientNames);
       const hasProtein = ingredientNames.some(name => 
         name.includes('beef') || name.includes('chicken') || name.includes('pork') || 
         name.includes('fish') || name.includes('lamb') || name.includes('mince')
@@ -644,8 +647,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 - Taste frequently and adjust seasoning`;
       }
 
+      console.log('🤖 DEBUG: Generated instructions:', generatedInstructions);
       setAiInstructions(generatedInstructions);
+      console.log('🤖 DEBUG: AI instructions state set');
     } catch (err) {
+      console.error('🤖 DEBUG: Error generating instructions:', err);
       setError('Failed to generate cooking instructions');
     } finally {
       setGeneratingInstructions(false);
