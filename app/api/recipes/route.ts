@@ -3,6 +3,10 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+    }
+
     const { data: recipes, error } = await supabaseAdmin
       .from('recipes')
       .select('*')
