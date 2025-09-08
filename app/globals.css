@@ -10,6 +10,28 @@
   --border: #2a2a2a;
 }
 
+/* Print Styles for Recipe Cards */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-recipe-card,
+  .print-recipe-card * {
+    visibility: visible;
+  }
+  .print-recipe-card {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: white !important;
+    margin: 0 !important;
+    padding: 2rem !important;
+    z-index: 9999 !important;
+  }
+}
+
 /* Material Design 3 Animations */
 @keyframes fadeInUp {
   from {
