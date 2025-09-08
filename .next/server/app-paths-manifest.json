@@ -1,8 +1,12 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
+  "/api/all-recipe-ingredients/route": "app/api/all-recipe-ingredients/route.js",
+  "/api/ingredients/route": "app/api/ingredients/route.js",
   "/api/populate-recipes/route": "app/api/populate-recipes/route.js",
+  "/api/recipe-ingredients/route": "app/api/recipe-ingredients/route.js",
   "/api/recipes/route": "app/api/recipes/route.js",
   "/api/setup-database/route": "app/api/setup-database/route.js",
+  "/api/test-recipe-ingredient/route": "app/api/test-recipe-ingredient/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/webapp/cogs/page": "app/webapp/cogs/page.js",
   "/webapp/ingredients/page": "app/webapp/ingredients/page.js",
