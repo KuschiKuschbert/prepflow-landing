@@ -1006,10 +1006,6 @@
     margin: calc(var(--spacing) * .5);
   }
 
-  .mx-0 {
-    margin-inline: calc(var(--spacing) * 0);
-  }
-
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2);
   }
@@ -1252,10 +1248,6 @@
 
   .max-h-\[90vh\] {
     max-height: 90vh;
-  }
-
-  .max-h-full {
-    max-height: 100%;
   }
 
   .min-h-screen {
@@ -1828,10 +1820,6 @@
     border-radius: var(--radius-md);
   }
 
-  .rounded-none {
-    border-radius: 0;
-  }
-
   .rounded-xl {
     border-radius: var(--radius-xl);
   }
@@ -1864,11 +1852,6 @@
   .border-l {
     border-left-style: var(--tw-border-style);
     border-left-width: 1px;
-  }
-
-  .border-dashed {
-    --tw-border-style: dashed;
-    border-style: dashed;
   }
 
   .border-\[\#2a2a2a\] {
@@ -1937,10 +1920,6 @@
 
   .border-blue-500 {
     border-color: var(--color-blue-500);
-  }
-
-  .border-gray-100 {
-    border-color: var(--color-gray-100);
   }
 
   .border-gray-200 {
@@ -2845,10 +2824,6 @@
     object-fit: cover;
   }
 
-  .p-0 {
-    padding: calc(var(--spacing) * 0);
-  }
-
   .p-0\.5 {
     padding: calc(var(--spacing) * .5);
   }
@@ -3330,11 +3305,6 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .shadow-xl {
-    --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgba(0, 0, 0, .1)), 0 8px 10px -6px var(--tw-shadow-color, rgba(0, 0, 0, .1));
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-
   .ring {
     --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -3577,12 +3547,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:bg-\[\#1f1f1f\]:hover {
-      background-color: #1f1f1f;
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:bg-\[\#2a2a2a\]:hover {
       background-color: #2a2a2a;
     }
@@ -3609,14 +3573,6 @@
       background-color: rgba(42, 42, 42, .8);
       background-color: color(display-p3 .164706 .164706 .164706 / .8);
       background-color: lab(17.062% -.0000298023 .00000596046 / .8);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#3B82F6\]\/20:hover {
-      background-color: rgba(59, 130, 246, .2);
-      background-color: color(display-p3 .304728 .503473 .933831 / .2);
-      background-color: lab(54.6189% 8.76281 -65.7907 / .2);
     }
   }
 
@@ -3657,12 +3613,6 @@
   @media (hover: hover) {
     .hover\:bg-gray-100:hover {
       background-color: var(--color-gray-100);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-gray-300:hover {
-      background-color: var(--color-gray-300);
     }
   }
 
@@ -3875,12 +3825,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:text-gray-400:hover {
-      color: var(--color-gray-400);
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:text-gray-700:hover {
       color: var(--color-gray-700);
     }
@@ -4018,10 +3962,6 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .focus\:ring-\[\#3B82F6\]:focus {
-    --tw-ring-color: #3b82f6;
-  }
-
   .focus\:ring-\[\#29E7CD\]:focus {
     --tw-ring-color: #29e7cd;
   }
@@ -4073,42 +4013,6 @@
   }
 
   @media (min-width: 40rem) {
-    .sm\:col-span-2 {
-      grid-column: span 2 / span 2;
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:mx-4 {
-      margin-inline: calc(var(--spacing) * 4);
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:mb-8 {
-      margin-bottom: calc(var(--spacing) * 8);
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:h-auto {
-      height: auto;
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:max-h-\[90vh\] {
-      max-height: 90vh;
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:w-auto {
-      width: auto;
-    }
-  }
-
-  @media (min-width: 40rem) {
     .sm\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -4157,83 +4061,14 @@
   }
 
   @media (min-width: 40rem) {
-    :where(.sm\:space-y-0 > :not(:last-child)) {
-      --tw-space-y-reverse: 0;
-      margin-top: calc(calc(var(--spacing) * 0) * var(--tw-space-y-reverse));
-      margin-bottom: calc(calc(var(--spacing) * 0) * calc(1 - var(--tw-space-y-reverse)));
-    }
-  }
-
-  @media (min-width: 40rem) {
-    :where(.sm\:space-x-3 > :not(:last-child)) {
-      --tw-space-x-reverse: 0;
-    }
-
-    :where(.sm\:space-x-3 > :not(:last-child)):not(:-webkit-any(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi))) {
-      margin-left: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-right: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-
-    :where(.sm\:space-x-3 > :not(:last-child)):not(:-moz-any(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi))) {
-      margin-left: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-right: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-
-    :where(.sm\:space-x-3 > :not(:last-child)):not(:is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi))) {
-      margin-left: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-right: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-
-    :where(.sm\:space-x-3 > :not(:last-child)):-webkit-any(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)) {
-      margin-right: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-left: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-
-    :where(.sm\:space-x-3 > :not(:last-child)):-moz-any(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)) {
-      margin-right: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-left: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-
-    :where(.sm\:space-x-3 > :not(:last-child)):is(:lang(ae), :lang(ar), :lang(arc), :lang(bcc), :lang(bqi), :lang(ckb), :lang(dv), :lang(fa), :lang(glk), :lang(he), :lang(ku), :lang(mzn), :lang(nqo), :lang(pnb), :lang(ps), :lang(sd), :lang(ug), :lang(ur), :lang(yi)) {
-      margin-right: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse));
-      margin-left: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse)));
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:rounded-lg {
-      border-radius: var(--radius-lg);
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:p-4 {
-      padding: calc(var(--spacing) * 4);
-    }
-  }
-
-  @media (min-width: 40rem) {
     .sm\:p-6 {
       padding: calc(var(--spacing) * 6);
     }
   }
 
   @media (min-width: 40rem) {
-    .sm\:p-8 {
-      padding: calc(var(--spacing) * 8);
-    }
-  }
-
-  @media (min-width: 40rem) {
     .sm\:px-6 {
       padding-inline: calc(var(--spacing) * 6);
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:text-3xl {
-      font-size: var(--text-3xl);
-      line-height: var(--tw-leading, var(--text-3xl--line-height));
     }
   }
 
@@ -4737,6 +4572,10 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.animate-fadeInUp {
+  animation: .3s ease-out forwards fadeInUp;
 }
 
 @keyframes pulse {

@@ -1,0 +1,3 @@
+{
+  "/api/populate-recipes/route": "app/api/populate-recipes/route.js"
+}

@@ -3110,10 +3110,9 @@ function IngredientsPage() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "md:hidden",
                                 children: filteredIngredients.map((ingredient, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "group relative p-5 border-b border-[#2a2a2a]/50 last:border-b-0 hover:bg-[#2a2a2a]/20 transition-all duration-200",
+                                        className: "group relative p-5 border-b border-[#2a2a2a]/50 last:border-b-0 hover:bg-[#2a2a2a]/20 transition-all duration-200 animate-fadeInUp",
                                         style: {
-                                            animationDelay: "".concat(index * 50, "ms"),
-                                            animation: 'fadeInUp 0.3s ease-out forwards'
+                                            animationDelay: "".concat(index * 50, "ms")
                                         },
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3127,7 +3126,7 @@ function IngredientsPage() {
                                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatIngredientName"])(ingredient.ingredient_name)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1436,
+                                                                lineNumber: 1435,
                                                                 columnNumber: 21
                                                             }, this),
                                                             ingredient.brand && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3135,13 +3134,13 @@ function IngredientsPage() {
                                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatBrandName"])(ingredient.brand)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1440,
+                                                                lineNumber: 1439,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1435,
+                                                        lineNumber: 1434,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3162,17 +3161,17 @@ function IngredientsPage() {
                                                                         d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1449,
+                                                                        lineNumber: 1448,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1448,
+                                                                    lineNumber: 1447,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1444,
+                                                                lineNumber: 1443,
                                                                 columnNumber: 15
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3190,29 +3189,29 @@ function IngredientsPage() {
                                                                         d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1457,
+                                                                        lineNumber: 1456,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1456,
+                                                                    lineNumber: 1455,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1452,
+                                                                lineNumber: 1451,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1443,
+                                                        lineNumber: 1442,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 1434,
+                                                lineNumber: 1433,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3226,7 +3225,7 @@ function IngredientsPage() {
                                                                 children: "Cost"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1466,
+                                                                lineNumber: 1465,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3237,7 +3236,7 @@ function IngredientsPage() {
                                                                 })()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1467,
+                                                                lineNumber: 1466,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3248,7 +3247,7 @@ function IngredientsPage() {
                                                                 })()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1473,
+                                                                lineNumber: 1472,
                                                                 columnNumber: 21
                                                             }, this),
                                                             (()=>{
@@ -3258,14 +3257,14 @@ function IngredientsPage() {
                                                                     children: displayCost.packInfo
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1482,
+                                                                    lineNumber: 1481,
                                                                     columnNumber: 25
                                                                 }, this) : null;
                                                             })()
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1465,
+                                                        lineNumber: 1464,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3276,7 +3275,7 @@ function IngredientsPage() {
                                                                 children: "Yield"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1488,
+                                                                lineNumber: 1487,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3287,7 +3286,7 @@ function IngredientsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1489,
+                                                                lineNumber: 1488,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3298,13 +3297,13 @@ function IngredientsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1492,
+                                                                lineNumber: 1491,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1487,
+                                                        lineNumber: 1486,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3315,7 +3314,7 @@ function IngredientsPage() {
                                                                 children: "Pack Size"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1498,
+                                                                lineNumber: 1497,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3323,7 +3322,7 @@ function IngredientsPage() {
                                                                 children: ingredient.pack_size || 'N/A'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1499,
+                                                                lineNumber: 1498,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3331,13 +3330,13 @@ function IngredientsPage() {
                                                                 children: ingredient.unit || 'units'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1502,
+                                                                lineNumber: 1501,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1497,
+                                                        lineNumber: 1496,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3348,7 +3347,7 @@ function IngredientsPage() {
                                                                 children: "Supplier"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1506,
+                                                                lineNumber: 1505,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3356,7 +3355,7 @@ function IngredientsPage() {
                                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatSupplierName"])(ingredient.supplier) || 'N/A'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1507,
+                                                                lineNumber: 1506,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3364,19 +3363,19 @@ function IngredientsPage() {
                                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatStorageLocation"])(ingredient.storage_location) || 'No location'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1510,
+                                                                lineNumber: 1509,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1505,
+                                                        lineNumber: 1504,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 1464,
+                                                lineNumber: 1463,
                                                 columnNumber: 17
                                             }, this)
                                         ]
@@ -3411,25 +3410,25 @@ function IngredientsPage() {
                                                                         children: "Ingredient"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1528,
+                                                                        lineNumber: 1527,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "w-1 h-1 bg-[#29E7CD] rounded-full"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1531,
+                                                                        lineNumber: 1530,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1527,
+                                                                lineNumber: 1526,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1526,
+                                                            lineNumber: 1525,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3439,12 +3438,12 @@ function IngredientsPage() {
                                                                 children: "Pack Size"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1535,
+                                                                lineNumber: 1534,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1534,
+                                                            lineNumber: 1533,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3454,12 +3453,12 @@ function IngredientsPage() {
                                                                 children: "Unit"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1540,
+                                                                lineNumber: 1539,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1539,
+                                                            lineNumber: 1538,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3469,12 +3468,12 @@ function IngredientsPage() {
                                                                 children: "Cost"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1545,
+                                                                lineNumber: 1544,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1544,
+                                                            lineNumber: 1543,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3484,12 +3483,12 @@ function IngredientsPage() {
                                                                 children: "Waste %"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1550,
+                                                                lineNumber: 1549,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1549,
+                                                            lineNumber: 1548,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3499,12 +3498,12 @@ function IngredientsPage() {
                                                                 children: "Yield %"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1555,
+                                                                lineNumber: 1554,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1554,
+                                                            lineNumber: 1553,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3514,12 +3513,12 @@ function IngredientsPage() {
                                                                 children: "Supplier"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1560,
+                                                                lineNumber: 1559,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1559,
+                                                            lineNumber: 1558,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -3529,32 +3528,31 @@ function IngredientsPage() {
                                                                 children: "Actions"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1565,
+                                                                lineNumber: 1564,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1564,
+                                                            lineNumber: 1563,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1525,
+                                                    lineNumber: 1524,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 1524,
+                                                lineNumber: 1523,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
                                                 className: "divide-y divide-[#2a2a2a]/30",
                                                 children: filteredIngredients.map((ingredient, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                                        className: "group hover:bg-[#2a2a2a]/20 transition-all duration-200",
+                                                        className: "group hover:bg-[#2a2a2a]/20 transition-all duration-200 animate-fadeInUp",
                                                         style: {
-                                                            animationDelay: "".concat(index * 30, "ms"),
-                                                            animation: 'fadeInUp 0.3s ease-out forwards'
+                                                            animationDelay: "".concat(index * 30, "ms")
                                                         },
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3569,12 +3567,12 @@ function IngredientsPage() {
                                                                                 children: "🥘"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                lineNumber: 1587,
+                                                                                lineNumber: 1585,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1586,
+                                                                            lineNumber: 1584,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3584,7 +3582,7 @@ function IngredientsPage() {
                                                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatIngredientName"])(ingredient.ingredient_name)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                    lineNumber: 1590,
+                                                                                    lineNumber: 1588,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3592,24 +3590,24 @@ function IngredientsPage() {
                                                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatBrandName"])(ingredient.brand) || 'No brand'
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                    lineNumber: 1593,
+                                                                                    lineNumber: 1591,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1589,
+                                                                            lineNumber: 1587,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1585,
+                                                                    lineNumber: 1583,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1584,
+                                                                lineNumber: 1582,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3619,12 +3617,12 @@ function IngredientsPage() {
                                                                     children: ingredient.pack_size || 'N/A'
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1602,
+                                                                    lineNumber: 1600,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1601,
+                                                                lineNumber: 1599,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3634,12 +3632,12 @@ function IngredientsPage() {
                                                                     children: ingredient.unit || 'N/A'
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1609,
+                                                                    lineNumber: 1607,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1608,
+                                                                lineNumber: 1606,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3653,7 +3651,7 @@ function IngredientsPage() {
                                                                         })()
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1616,
+                                                                        lineNumber: 1614,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     (()=>{
@@ -3663,14 +3661,14 @@ function IngredientsPage() {
                                                                             children: displayCost.packInfo
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1625,
+                                                                            lineNumber: 1623,
                                                                             columnNumber: 29
                                                                         }, this) : null;
                                                                     })()
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1615,
+                                                                lineNumber: 1613,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3686,7 +3684,7 @@ function IngredientsPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1633,
+                                                                            lineNumber: 1631,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3698,23 +3696,23 @@ function IngredientsPage() {
                                                                                 }
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                lineNumber: 1637,
+                                                                                lineNumber: 1635,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1636,
+                                                                            lineNumber: 1634,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1632,
+                                                                    lineNumber: 1630,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1631,
+                                                                lineNumber: 1629,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3730,7 +3728,7 @@ function IngredientsPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1648,
+                                                                            lineNumber: 1646,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3742,23 +3740,23 @@ function IngredientsPage() {
                                                                                 }
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                lineNumber: 1652,
+                                                                                lineNumber: 1650,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1651,
+                                                                            lineNumber: 1649,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1647,
+                                                                    lineNumber: 1645,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1646,
+                                                                lineNumber: 1644,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3769,7 +3767,7 @@ function IngredientsPage() {
                                                                         children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2d$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatSupplierName"])(ingredient.supplier) || 'N/A'
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1662,
+                                                                        lineNumber: 1660,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     ingredient.storage_location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3780,13 +3778,13 @@ function IngredientsPage() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                        lineNumber: 1666,
+                                                                        lineNumber: 1664,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1661,
+                                                                lineNumber: 1659,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -3810,17 +3808,17 @@ function IngredientsPage() {
                                                                                     d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                    lineNumber: 1681,
+                                                                                    lineNumber: 1679,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                lineNumber: 1680,
+                                                                                lineNumber: 1678,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1675,
+                                                                            lineNumber: 1673,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3839,55 +3837,55 @@ function IngredientsPage() {
                                                                                     d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                    lineNumber: 1690,
+                                                                                    lineNumber: 1688,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                                lineNumber: 1689,
+                                                                                lineNumber: 1687,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                            lineNumber: 1684,
+                                                                            lineNumber: 1682,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                    lineNumber: 1674,
+                                                                    lineNumber: 1672,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1673,
+                                                                lineNumber: 1671,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, ingredient.id, true, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 1575,
+                                                        lineNumber: 1574,
                                                         columnNumber: 21
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 1573,
+                                                lineNumber: 1572,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1522,
+                                        lineNumber: 1521,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                    lineNumber: 1521,
+                                    lineNumber: 1520,
                                     columnNumber: 9
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                lineNumber: 1520,
+                                lineNumber: 1519,
                                 columnNumber: 11
                             }, this),
                             filteredIngredients.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3900,12 +3898,12 @@ function IngredientsPage() {
                                             children: "🥘"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1706,
+                                            lineNumber: 1704,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1705,
+                                        lineNumber: 1703,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -3913,7 +3911,7 @@ function IngredientsPage() {
                                         children: "No ingredients found"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1708,
+                                        lineNumber: 1706,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3921,7 +3919,7 @@ function IngredientsPage() {
                                         children: searchTerm || supplierFilter || storageFilter ? 'Try adjusting your search filters to find what you\'re looking for' : 'Add your first ingredient to start building your kitchen inventory'
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1709,
+                                        lineNumber: 1707,
                                         columnNumber: 15
                                     }, this),
                                     !searchTerm && !supplierFilter && !storageFilter && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3930,13 +3928,13 @@ function IngredientsPage() {
                                         children: "Add Your First Ingredient"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1716,
+                                        lineNumber: 1714,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                lineNumber: 1704,
+                                lineNumber: 1702,
                                 columnNumber: 13
                             }, this)
                         ]
@@ -3966,7 +3964,7 @@ function IngredientsPage() {
                                         children: "Edit Ingredient"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1735,
+                                        lineNumber: 1733,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3984,28 +3982,28 @@ function IngredientsPage() {
                                                 d: "M6 18L18 6M6 6l12 12"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 1741,
+                                                lineNumber: 1739,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1740,
+                                            lineNumber: 1738,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 1736,
+                                        lineNumber: 1734,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                lineNumber: 1734,
+                                lineNumber: 1732,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                            lineNumber: 1733,
+                            lineNumber: 1731,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -4026,7 +4024,7 @@ function IngredientsPage() {
                                                     children: "Ingredient Name *"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1755,
+                                                    lineNumber: 1753,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4040,13 +4038,13 @@ function IngredientsPage() {
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1758,
+                                                    lineNumber: 1756,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1754,
+                                            lineNumber: 1752,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4056,7 +4054,7 @@ function IngredientsPage() {
                                                     children: "Brand"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1769,
+                                                    lineNumber: 1767,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4069,13 +4067,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1772,
+                                                    lineNumber: 1770,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1768,
+                                            lineNumber: 1766,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4085,7 +4083,7 @@ function IngredientsPage() {
                                                     children: "Pack Size"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1782,
+                                                    lineNumber: 1780,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4098,13 +4096,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1785,
+                                                    lineNumber: 1783,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1781,
+                                            lineNumber: 1779,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4114,7 +4112,7 @@ function IngredientsPage() {
                                                     children: "Unit *"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1795,
+                                                    lineNumber: 1793,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -4131,7 +4129,7 @@ function IngredientsPage() {
                                                             children: "Select Unit"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                            lineNumber: 1804,
+                                                            lineNumber: 1802,
                                                             columnNumber: 21
                                                         }, this),
                                                         availableUnits.map((unit)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4139,19 +4137,19 @@ function IngredientsPage() {
                                                                 children: unit
                                                             }, unit, false, {
                                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                                lineNumber: 1806,
+                                                                lineNumber: 1804,
                                                                 columnNumber: 23
                                                             }, this))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1798,
+                                                    lineNumber: 1796,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1794,
+                                            lineNumber: 1792,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4161,7 +4159,7 @@ function IngredientsPage() {
                                                     children: "Cost Per Unit ($) *"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1813,
+                                                    lineNumber: 1811,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4177,13 +4175,13 @@ function IngredientsPage() {
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1816,
+                                                    lineNumber: 1814,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1812,
+                                            lineNumber: 1810,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4193,7 +4191,7 @@ function IngredientsPage() {
                                                     children: "Trim/Waste Percentage (%)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1829,
+                                                    lineNumber: 1827,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4209,13 +4207,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1832,
+                                                    lineNumber: 1830,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1828,
+                                            lineNumber: 1826,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4225,7 +4223,7 @@ function IngredientsPage() {
                                                     children: "Yield Percentage (%)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1845,
+                                                    lineNumber: 1843,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4241,13 +4239,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1848,
+                                                    lineNumber: 1846,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1844,
+                                            lineNumber: 1842,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4257,7 +4255,7 @@ function IngredientsPage() {
                                                     children: "Supplier"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1861,
+                                                    lineNumber: 1859,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4270,13 +4268,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1864,
+                                                    lineNumber: 1862,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1860,
+                                            lineNumber: 1858,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4286,7 +4284,7 @@ function IngredientsPage() {
                                                     children: "Storage Location"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1874,
+                                                    lineNumber: 1872,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4299,13 +4297,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1877,
+                                                    lineNumber: 1875,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1873,
+                                            lineNumber: 1871,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4315,7 +4313,7 @@ function IngredientsPage() {
                                                     children: "Product Code"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1887,
+                                                    lineNumber: 1885,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4328,13 +4326,13 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1890,
+                                                    lineNumber: 1888,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1886,
+                                            lineNumber: 1884,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4344,7 +4342,7 @@ function IngredientsPage() {
                                                     children: "Min Stock Level"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1900,
+                                                    lineNumber: 1898,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4358,19 +4356,19 @@ function IngredientsPage() {
                                                     className: "w-full px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                    lineNumber: 1903,
+                                                    lineNumber: 1901,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1899,
+                                            lineNumber: 1897,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                    lineNumber: 1752,
+                                    lineNumber: 1750,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4383,7 +4381,7 @@ function IngredientsPage() {
                                             children: "Cancel"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1915,
+                                            lineNumber: 1913,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4392,30 +4390,30 @@ function IngredientsPage() {
                                             children: "Update Ingredient"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                            lineNumber: 1922,
+                                            lineNumber: 1920,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                    lineNumber: 1914,
+                                    lineNumber: 1912,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/ingredients/page.tsx",
-                            lineNumber: 1748,
+                            lineNumber: 1746,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 1731,
+                    lineNumber: 1729,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                lineNumber: 1730,
+                lineNumber: 1728,
                 columnNumber: 9
             }, this)
         ]
