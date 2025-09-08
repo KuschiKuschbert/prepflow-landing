@@ -3,6 +3,10 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+    }
+
     const { searchParams } = new URL(request.url);
     const recipeId = searchParams.get('recipe_id');
 

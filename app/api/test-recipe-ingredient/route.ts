@@ -3,6 +3,10 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST() {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+    }
+
     // Get a recipe ID
     const { data: recipes } = await supabaseAdmin
       .from('recipes')
