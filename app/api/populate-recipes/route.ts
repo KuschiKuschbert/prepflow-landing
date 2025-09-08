@@ -3,6 +3,10 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+    }
+
     console.log('Starting recipe population...');
 
     // First, ensure we have all the required ingredients
