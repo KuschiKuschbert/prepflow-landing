@@ -110,7 +110,7 @@ function WebAppDashboard() {
                 // Fetch menu dishes count and average price
                 const { data: menuDishes } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from('menu_dishes').select('selling_price');
                 const totalDishes = menuDishes?.length || 0;
-                const averagePrice = totalDishes > 0 ? menuDishes.reduce((sum, dish)=>sum + (dish.selling_price || 0), 0) / totalDishes : 0;
+                const averagePrice = totalDishes > 0 && menuDishes ? menuDishes.reduce((sum, dish)=>sum + (dish.selling_price || 0), 0) / totalDishes : 0;
                 setStats({
                     totalIngredients: ingredientsCount || 0,
                     totalRecipes: recipesCount || 0,
