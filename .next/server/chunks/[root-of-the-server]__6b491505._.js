@@ -157,8 +157,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.012,
         cost_per_unit_incl_trim: 0.0122,
         min_stock_level: 5.0,
-        current_stock: 10.0,
-        is_active: true
+        current_stock: 10.0
     },
     {
         ingredient_name: "Chicken Breast Skinless",
@@ -174,8 +173,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.008,
         cost_per_unit_incl_trim: 0.0084,
         min_stock_level: 8.0,
-        current_stock: 15.0,
-        is_active: true
+        current_stock: 15.0
     },
     {
         ingredient_name: "Pork Belly",
@@ -191,8 +189,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.015,
         cost_per_unit_incl_trim: 0.0163,
         min_stock_level: 3.0,
-        current_stock: 6.0,
-        is_active: true
+        current_stock: 6.0
     },
     {
         ingredient_name: "Lamb Shoulder",
@@ -208,8 +205,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.018,
         cost_per_unit_incl_trim: 0.0200,
         min_stock_level: 2.0,
-        current_stock: 4.0,
-        is_active: true
+        current_stock: 4.0
     },
     {
         ingredient_name: "Salmon Fillet",
@@ -225,8 +221,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.025,
         cost_per_unit_incl_trim: 0.0258,
         min_stock_level: 4.0,
-        current_stock: 8.0,
-        is_active: true
+        current_stock: 8.0
     },
     {
         ingredient_name: "Prawns Raw",
@@ -242,8 +237,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.022,
         cost_per_unit_incl_trim: 0.0259,
         min_stock_level: 3.0,
-        current_stock: 6.0,
-        is_active: true
+        current_stock: 6.0
     },
     {
         ingredient_name: "Eggs Free Range",
@@ -259,8 +253,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.45,
         cost_per_unit_incl_trim: 0.45,
         min_stock_level: 2.0,
-        current_stock: 5.0,
-        is_active: true
+        current_stock: 5.0
     },
     // VEGETABLES
     {
@@ -277,8 +270,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.002,
         cost_per_unit_incl_trim: 0.0023,
         min_stock_level: 10.0,
-        current_stock: 20.0,
-        is_active: true
+        current_stock: 20.0
     },
     {
         ingredient_name: "Garlic",
@@ -294,8 +286,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.008,
         cost_per_unit_incl_trim: 0.0100,
         min_stock_level: 2.0,
-        current_stock: 5.0,
-        is_active: true
+        current_stock: 5.0
     },
     {
         ingredient_name: "Carrots",
@@ -311,8 +302,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.003,
         cost_per_unit_incl_trim: 0.0033,
         min_stock_level: 8.0,
-        current_stock: 15.0,
-        is_active: true
+        current_stock: 15.0
     },
     {
         ingredient_name: "Celery",
@@ -328,8 +318,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.004,
         cost_per_unit_incl_trim: 0.0044,
         min_stock_level: 5.0,
-        current_stock: 10.0,
-        is_active: true
+        current_stock: 10.0
     },
     {
         ingredient_name: "Tomatoes Roma",
@@ -345,8 +334,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.005,
         cost_per_unit_incl_trim: 0.0053,
         min_stock_level: 6.0,
-        current_stock: 12.0,
-        is_active: true
+        current_stock: 12.0
     },
     {
         ingredient_name: "Potatoes Sebago",
@@ -362,8 +350,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.002,
         cost_per_unit_incl_trim: 0.0024,
         min_stock_level: 15.0,
-        current_stock: 30.0,
-        is_active: true
+        current_stock: 30.0
     },
     {
         ingredient_name: "Mushrooms Button",
@@ -379,8 +366,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.012,
         cost_per_unit_incl_trim: 0.0122,
         min_stock_level: 3.0,
-        current_stock: 6.0,
-        is_active: true
+        current_stock: 6.0
     },
     {
         ingredient_name: "Spinach Baby",
@@ -396,8 +382,7 @@ const sampleIngredients = [
         cost_per_unit_as_purchased: 0.025,
         cost_per_unit_incl_trim: 0.0263,
         min_stock_level: 2.0,
-        current_stock: 4.0,
-        is_active: true
+        current_stock: 4.0
     }
 ];
 }),

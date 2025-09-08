@@ -837,6 +837,15 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
           >
             Create Recipe from COGS
           </a>
+          <button
+            onClick={() => {
+              setLoading(true);
+              fetchRecipes();
+            }}
+            className="bg-gradient-to-r from-[#D925C7] to-[#3B82F6] text-white px-6 py-3 rounded-2xl hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+          >
+            🔄 Refresh Recipes
+          </button>
         </div>
 
       {/* Recipe Book Description */}

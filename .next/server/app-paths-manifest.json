@@ -1,5 +1,7 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/populate-recipes/route": "app/api/populate-recipes/route.js",
+  "/api/recipes/route": "app/api/recipes/route.js",
   "/api/setup-database/route": "app/api/setup-database/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/webapp/cogs/page": "app/webapp/cogs/page.js",
