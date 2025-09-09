@@ -33,4 +33,5 @@ build/
 
 # Temporary files
 tmp/
-temp/
+temp/.env.local
+.next/
