@@ -11,7 +11,12 @@ export const translations = {
     features: 'Funktionen',
     howItWorks: 'So funktioniert es',
     pricing: 'Preise',
-    faq: 'FAQ'
+    faq: 'FAQ',
+    ariaLabel: 'Hauptnavigation',
+    featuresAria: 'PrepFlow-Funktionen anzeigen',
+    howItWorksAria: 'Erfahren Sie, wie PrepFlow funktioniert',
+    pricingAria: 'PrepFlow-Preise anzeigen',
+    faqAria: 'Häufig gestellte Fragen'
   },
 
   // WebApp Dashboard
@@ -736,5 +741,19 @@ export const translations = {
     mainButton: 'PrepFlow holen',
     price: 'AUD $29',
     sampleButton: 'Kostenlose Probe'
-  }
+  },
+
+  // Footer
+  footer: {
+    copyright: `© ${new Date().getFullYear()} PrepFlow. Alle Rechte vorbehalten.`,
+    terms: 'AGB',
+    privacy: 'Datenschutz',
+    support: 'Support'
+  },
+
+  // Logo
+  logo: {
+    alt: 'PrepFlow Logo'
+  },
+
 };

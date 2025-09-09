@@ -11,7 +11,12 @@ export const translations = {
     features: 'Features',
     howItWorks: 'How it works',
     pricing: 'Pricing',
-    faq: 'FAQ'
+    faq: 'FAQ',
+    ariaLabel: 'Main navigation',
+    featuresAria: 'View PrepFlow features',
+    howItWorksAria: 'Learn how PrepFlow works',
+    pricingAria: 'View PrepFlow pricing',
+    faqAria: 'Frequently asked questions'
   },
 
   // WebApp Dashboard
@@ -736,5 +741,19 @@ export const translations = {
     mainButton: 'Get PrepFlow',
     price: 'AUD $29',
     sampleButton: 'Free Sample'
-  }
+  },
+
+  // Footer
+  footer: {
+    copyright: `© ${new Date().getFullYear()} PrepFlow. All rights reserved.`,
+    terms: 'Terms',
+    privacy: 'Privacy',
+    support: 'Support'
+  },
+
+  // Logo
+  logo: {
+    alt: 'PrepFlow Logo'
+  },
+
 };

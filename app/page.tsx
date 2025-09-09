@@ -158,7 +158,7 @@ export default function Page() {
           <div className="flex items-center gap-3">
             <Image 
               src="/images/prepflow-logo.png" 
-              alt="PrepFlow Logo"
+              alt={String(t('logo.alt', 'PrepFlow Logo'))}
               width={48}
               height={48}
               className="h-12 w-auto"
@@ -168,11 +168,11 @@ export default function Page() {
               PrepFlow
             </span>
           </div>
-          <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow features">{t('nav.features', 'Features')}</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Learn how PrepFlow works">{t('nav.howItWorks', 'How it works')}</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow pricing">{t('nav.pricing', 'Pricing')}</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Frequently asked questions">{t('nav.faq', 'FAQ')}</a>
+          <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label={String(t('nav.ariaLabel', 'Main navigation'))}>
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label={String(t('nav.featuresAria', 'View PrepFlow features'))}>{t('nav.features', 'Features')}</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label={String(t('nav.howItWorksAria', 'Learn how PrepFlow works'))}>{t('nav.howItWorks', 'How it works')}</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label={String(t('nav.pricingAria', 'View PrepFlow pricing'))}>{t('nav.pricing', 'Pricing')}</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label={String(t('nav.faqAria', 'Frequently asked questions'))}>{t('nav.faq', 'FAQ')}</a>
           </nav>
           <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher className="mr-4" />
@@ -639,11 +639,11 @@ export default function Page() {
         {/* Footer */}
         <footer className="border-t border-gray-700 py-12 text-sm text-gray-500">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <p>© {new Date().getFullYear()} PrepFlow. All rights reserved.</p>
+            <p>{t('footer.copyright', `© ${new Date().getFullYear()} PrepFlow. All rights reserved.`)}</p>
             <div className="flex items-center gap-8">
-              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors">Terms</Link>
-              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors">Privacy</Link>
-              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors">Support</a>
+              <Link href="/terms-of-service" className="hover:text-[#29E7CD] transition-colors">{t('footer.terms', 'Terms')}</Link>
+              <Link href="/privacy-policy" className="hover:text-[#29E7CD] transition-colors">{t('footer.privacy', 'Privacy')}</Link>
+              <a href="mailto:support@prepflow.org" className="hover:text-[#29E7CD] transition-colors">{t('footer.support', 'Support')}</a>
             </div>
           </div>
         </footer>
