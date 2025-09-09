@@ -182,7 +182,17 @@ export default function Page() {
               {t('hero.ctaPrimary', 'Get PrepFlow Now')}
             </a>
           </div>
-          <MobileNavigation onEngagement={handleEngagement} />
+          
+          {/* Mobile Header - Language Switcher + Navigation */}
+          <div className="md:hidden flex items-center gap-3">
+            <LanguageSwitcher 
+              className="scale-90" 
+              showFlag={true} 
+              showName={false} 
+              size="sm" 
+            />
+            <MobileNavigation onEngagement={handleEngagement} />
+          </div>
         </header>
 
         {/* Hero Section - A/B Testing Variants with Lazy Loading */}
