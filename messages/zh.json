@@ -1,0 +1,284 @@
+{
+  "metadata": {
+    "title": "PrepFlow – COGS和菜单利润工具 | 获取菜单清晰度和利润洞察",
+    "description": "基于20年真实厨房经验构建的菜单盈利能力工具。PrepFlow通过贡献利润率分析、COGS跟踪和利润洞察帮助识别利润机会。为全球酒店业构建，支持多货币。立即开始您的利润之旅。",
+    "keywords": "餐厅COGS, 菜单盈利能力, 贡献利润率, 毛利润优化, 全球酒店业, 国际餐厅, 多货币支持, 餐厅管理, 菜单成本核算, 利润分析, 全球餐厅软件"
+  },
+  "navigation": {
+    "features": "功能",
+    "howItWorks": "工作原理",
+    "pricing": "价格",
+    "faq": "常见问题",
+    "getPrepFlowNow": "立即获取PrepFlow",
+    "backToLanding": "返回首页",
+    "dashboard": "仪表板",
+    "ingredients": "食材",
+    "recipeBook": "食谱书",
+    "cogs": "COGS",
+    "setup": "设置"
+  },
+  "hero": {
+    "title": "停止猜测。开始了解。",
+    "subtitle": "PrepFlow不仅仅是电子表格 — 它是您菜单盈利能力的X光机。",
+    "cta": "立即获取PrepFlow"
+  },
+  "problemOutcome": {
+    "problem": "问题",
+    "outcome": "结果",
+    "problems": [
+      "您不知道哪些菜单项目真正赚钱",
+      "COGS爬升和浪费吞噬您的利润",
+      "定价是猜测；GST增加摩擦",
+      "报告缓慢、复杂，或在别人的工具中"
+    ],
+    "outcomes": [
+      "即时查看项目级利润率和利润",
+      "一眼识别"赢家"和"利润泄漏"",
+      "自信调整价格（GST意识）",
+      "在Google Sheets中运行一切 — 无需学习新软件"
+    ]
+  },
+  "contributingMargin": {
+    "title": "贡献利润率 — 真正的利润故事",
+    "subtitle": "超越毛利润，了解每道菜真正为您的业务贡献什么",
+    "grossProfit": "毛利润",
+    "grossProfitDesc": "您认为正在赚取的",
+    "contributingMargin": "贡献利润率",
+    "contributingMarginDesc": "您真正贡献的",
+    "actionPlan": "行动计划",
+    "actionPlanDesc": "对此做什么",
+    "example": "PrepFlow帮助您看到：那个15美元的汉堡可能有60%的GP，但在准备时间、浪费和复杂性之后，它可能只贡献2.50美元到底线。同时，那个简单的8美元配菜可能贡献4.00美元。",
+    "disclaimer": "*示例说明 - 实际结果取决于您的特定菜单和成本"
+  },
+  "myStory": {
+    "title": "我创建PrepFlow的旅程",
+    "subtitle": "这不仅仅是另一个工具 - 它是我对真实厨房问题的个人解决方案，在欧洲和澳大利亚餐厅工作20年的经验中不断完善。",
+    "timeline": {
+      "2008-2012": {
+        "title": "2008-2012 - 早期经验",
+        "description": "在Krautwells GmbH开始担任副主厨，管理素食烹饪并培训初级厨师"
+      },
+      "2012-2018": {
+        "title": "2012-2018 - 欧洲领导力",
+        "description": "创立KSK-Küchenspezialkräfte素食餐饮，管理21名员工团队，每天服务1,200+人"
+      },
+      "2018-2024": {
+        "title": "2018-2024 - 澳大利亚卓越",
+        "description": "行政总厨角色，ALH酒店主厨，领导9名厨师团队并整合AI"
+      },
+      "2024": {
+        "title": "2024 - 准备分享",
+        "description": "现在与面临相同挑战的同事厨师和餐厅经营者分享完善后的工具"
+      }
+    },
+    "whyCreated": {
+      "title": "为什么我创建PrepFlow",
+      "paragraphs": [
+        "作为厨师20多年来，我管理过从小咖啡馆到每天服务1,200+客人的大型餐饮运营的一切。我面临与您相同的挑战：菜单成本核算、废物管理、盈利能力分析和团队效率。",
+        "作为ALH酒店的主厨，我不断寻找更好的方法来管理成本、优化准备系统并优化我们的菜单组合。现有解决方案要么太复杂、太昂贵，要么不理解真正的厨房运营。",
+        "所以我构建了自己的解决方案 - 一个简单的Google Sheets模板，可以处理COGS计算、跟踪食材成本，并准确显示哪些菜单项目盈利，哪些在亏损。",
+        "在欧洲和澳大利亚工作后，我将其完善为完美适用于全球场所 - 为澳大利亚市场提供GST支持、多货币选项，以及适应任何厨房需求的灵活性。这是我开始时希望拥有的工具，现在我正在与您分享。"
+      ]
+    }
+  },
+  "features": {
+    "stockList": {
+      "title": "库存清单（无限）",
+      "description": "集中管理食材，包括包装尺寸、单位、供应商、储存、产品代码。捕获修剪/浪费和产量以获得每单位的真实成本。"
+    },
+    "cogsRecipes": {
+      "title": "COGS食谱",
+      "description": "构建自动提取食材成本的食谱（包括产量/修剪）。即时查看菜品成本、COGS%、GP$和GP%。"
+    },
+    "itemPerformance": {
+      "title": "项目绩效",
+      "description": "粘贴销售数据。我们计算受欢迎程度、利润率、不含GST的总利润，并将项目分类为厨师之吻、隐藏宝石或特价桶。"
+    },
+    "dashboardKPIs": {
+      "title": "仪表板KPI",
+      "description": "一目了然：平均GP%、食品成本%、平均项目利润和销售价格，以及按受欢迎程度和利润率排序的顶级表现者。"
+    },
+    "globalTaxCurrency": {
+      "title": "全球税收和货币",
+      "description": "在设置中指定国家、税收制度（GST/VAT/销售税）和货币。所有输出都适应您的本地市场要求。"
+    },
+    "fastOnboarding": {
+      "title": "快速入门",
+      "description": "带分步指导的启动标签。预加载示例数据和综合资源，让您在几分钟内学会流程。"
+    },
+    "aiMethodGenerator": {
+      "title": "AI方法生成器",
+      "description": "发现可能改善您的利润率并减少浪费的新烹饪方法。获得AI驱动的建议来优化您的厨房流程。"
+    }
+  },
+  "globalFeatures": {
+    "title": "暴露隐藏利润 — 一张表格，每个答案",
+    "subtitle": "当其他人对复杂的餐厅软件收取数千费用时，PrepFlow在简单的Google表格中提供类似的利润洞察，只需一次性购买。",
+    "multiCurrency": {
+      "title": "多货币",
+      "description": "USD、EUR、GBP、AUD、SGD等。即时切换货币。"
+    },
+    "taxSystems": {
+      "title": "税收制度",
+      "description": "GST、VAT、销售税、HST。为您的本地要求配置。"
+    },
+    "access": {
+      "title": "24/7访问",
+      "description": "基于云的Google Sheets。随时随地访问。"
+    },
+    "noConsultants": {
+      "title": "无需顾问",
+      "description": "一小时内自己设置。无昂贵的实施费用。"
+    },
+    "summary": "一张表格。您的厨房需要的关键洞察。用类似昂贵软件的洞察识别菜单中的利润机会 — 但在您可以自己设置的简单Google表格中。"
+  },
+  "howItWorks": {
+    "title": "3个简单步骤获得结果",
+    "steps": [
+      {
+        "title": "设置（5-10分钟）",
+        "description": "开启GST，添加食材、产量和供应商成本。"
+      },
+      {
+        "title": "导入销售",
+        "description": "将您的POS导出粘贴到销售标签中。"
+      },
+      {
+        "title": "决定和行动",
+        "description": "仪表板按利润和受欢迎程度对项目进行排名；修正定价、分量或菜单组合。"
+      }
+    ],
+    "checklist": {
+      "title": "60秒检查清单",
+      "items": [
+        "GST开关设置？",
+        "食材产量/浪费输入？",
+        "销售粘贴？",
+        "查看前5个低利润率项目？",
+        "明天重新检查仪表板"
+      ]
+    }
+  },
+  "leadMagnet": {
+    "title": "购买前查看PrepFlow",
+    "subtitle": "获取示例仪表板 — 我们将通过电子邮件发送给您。"
+  },
+  "pricing": {
+    "title": "简单诚实的定价",
+    "subtitle": "AUD $29 - 一次性购买，终身访问"
+  },
+  "practice": {
+    "title": "PrepFlow在实践中如何工作",
+    "subtitle": "从猜测到数据驱动的清晰度 - 这是您可以期待的",
+    "before": {
+      "title": "PrepFlow之前",
+      "description": "盲目定价、直觉、到处都是不清晰的利润率"
+    },
+    "after": {
+      "title": "PrepFlow之后",
+      "description": "数据驱动的决策、利润率洞察揭示、清晰度达成"
+    },
+    "note": "PrepFlow帮助您识别菜单中哪些地方有利润潜力，哪些地方成本可能在吞噬您的利润率",
+    "disclaimer": "*结果取决于您当前的菜单结构以及如何实施洞察"
+  },
+  "benefits": {
+    "title": "PrepFlow帮助您实现什么",
+    "betterPricing": {
+      "title": "更好的定价决策",
+      "description": "准确了解食材成本、产量和浪费如何影响您的利润率。做出明智的定价决策而不是猜测。"
+    },
+    "identifyOpportunities": {
+      "title": "识别利润机会",
+      "description": "发现哪些菜单项目表现不佳，哪些有隐藏潜力。将努力集中在影响最大的地方。"
+    },
+    "streamlineOperations": {
+      "title": "简化运营",
+      "description": "了解您的真实成本并优化您的菜单组合。减少浪费、提高效率并增加您的底线。"
+    },
+    "cta": "查看PrepFlow的实际效果",
+    "getSample": "获取样本"
+  },
+  "faq": {
+    "title": "常见问题",
+    "techSkills": {
+      "question": "我需要技术技能吗？",
+      "answer": "无需电子表格公式。如果您会使用Google Sheets，就准备好了。"
+    },
+    "worldwide": {
+      "question": "它在全球范围内工作吗？",
+      "answer": "为全球场所构建 — 包括GST、VAT、销售税开关、多货币支持和适用于任何市场的导出就绪报告。"
+    },
+    "satisfaction": {
+      "question": "如果它不适合我怎么办？",
+      "answer": "如果您对PrepFlow在7天内提供的洞察和清晰度不满意，您将获得全额退款。无麻烦。"
+    },
+    "speed": {
+      "question": "这会让我变慢吗？",
+      "answer": "设置通常需要1-2小时。之后，您将在菜单规划和成本分析上节省时间。"
+    }
+  },
+  "trust": {
+    "title": "为独立场所和小厨房构建",
+    "features": [
+      "与Google Sheets配合使用",
+      "7天退款政策",
+      "为AU市场制作"
+    ]
+  },
+  "footer": {
+    "copyright": "© {year} PrepFlow. 版权所有。",
+    "terms": "条款",
+    "privacy": "隐私",
+    "support": "支持"
+  },
+  "webapp": {
+    "title": "厨房管理仪表板",
+    "subtitle": "欢迎回来！这是您的厨房概览",
+    "stats": {
+      "totalIngredients": "总食材数",
+      "totalRecipes": "总食谱数",
+      "menuDishes": "菜单菜品",
+      "avgDishPrice": "平均菜品价格"
+    },
+    "quickActions": {
+      "title": "⚡ 快速操作",
+      "subtitle": "跳转到您最常用的功能",
+      "live": "实时",
+      "manageIngredients": {
+        "title": "管理食材",
+        "subtitle": "添加、编辑和整理",
+        "description": "通过详细的食材跟踪构建您的厨房库存"
+      },
+      "recipeBook": {
+        "title": "食谱书",
+        "subtitle": "查看保存的食谱",
+        "description": "从COGS计算中访问您保存的食谱"
+      },
+      "calculateCOGS": {
+        "title": "计算COGS",
+        "subtitle": "分析成本和利润率",
+        "description": "计算销售成本和利润利润率"
+      }
+    },
+    "gettingStarted": {
+      "title": "开始使用PrepFlow",
+      "description": "欢迎来到您的厨房管理中心！首先添加您的食材来构建库存，然后创建食谱来计算您的销售成本（COGS）并优化您的利润利润率。",
+      "features": [
+        "📊 实时分析",
+        "💰 利润优化",
+        "🎯 智能洞察"
+      ]
+    }
+  },
+  "language": {
+    "select": "选择语言",
+    "english": "English",
+    "spanish": "Español",
+    "french": "Français",
+    "german": "Deutsch",
+    "italian": "Italiano",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "chinese": "中文"
+  }
+}

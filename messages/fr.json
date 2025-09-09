@@ -1,0 +1,284 @@
+{
+  "metadata": {
+    "title": "PrepFlow – Outil COGS et Rentabilité Menu | Obtenez Clarté et Insights de Profit",
+    "description": "Votre outil de rentabilité de menu construit avec 20 ans d'expérience réelle en cuisine. PrepFlow aide à identifier les opportunités de profit avec l'analyse de marge contributive, le suivi COGS et les insights de profit. Construit pour l'hospitalité mondiale avec support multi-devises. Commencez votre parcours de profit maintenant.",
+    "keywords": "COGS restaurant, rentabilité menu, marge contributive, optimisation profit brut, hospitalité mondiale, restaurants internationaux, support multi-devises, gestion restaurant, coûts menu, analyse profit, logiciel restaurant mondial"
+  },
+  "navigation": {
+    "features": "Fonctionnalités",
+    "howItWorks": "Comment ça marche",
+    "pricing": "Tarifs",
+    "faq": "FAQ",
+    "getPrepFlowNow": "Obtenir PrepFlow Maintenant",
+    "backToLanding": "Retour à l'Accueil",
+    "dashboard": "Tableau de Bord",
+    "ingredients": "Ingrédients",
+    "recipeBook": "Livre de Recettes",
+    "cogs": "COGS",
+    "setup": "Configuration"
+  },
+  "hero": {
+    "title": "Arrêtez de deviner. Commencez à savoir.",
+    "subtitle": "PrepFlow n'est pas juste une feuille de calcul — c'est la machine à rayons X pour la rentabilité de votre menu.",
+    "cta": "Obtenir PrepFlow Maintenant"
+  },
+  "problemOutcome": {
+    "problem": "Le Problème",
+    "outcome": "Le Résultat",
+    "problems": [
+      "Vous ne savez pas quels éléments de menu génèrent vraiment de l'argent",
+      "La dérive COGS et le gaspillage mangent votre profit",
+      "La tarification est du tâtonnement; la TVA ajoute de la friction",
+      "Les rapports sont lents, compliqués, ou sont dans l'outil de quelqu'un d'autre"
+    ],
+    "outcomes": [
+      "Voyez les marges au niveau des éléments et le profit instantanément",
+      "Repérez les \"gagnants\" et les \"fuites de profit\" d'un coup d'œil",
+      "Ajustez les prix avec confiance (conscient de la TVA)",
+      "Tout fonctionne dans Google Sheets — pas de nouveau logiciel à apprendre"
+    ]
+  },
+  "contributingMargin": {
+    "title": "Marge Contributive — La Vraie Histoire du Profit",
+    "subtitle": "Voyez au-delà du profit brut pour comprendre ce que chaque plat contribue vraiment à votre entreprise",
+    "grossProfit": "Profit Brut",
+    "grossProfitDesc": "Ce que vous pensez gagner",
+    "contributingMargin": "Marge Contributive",
+    "contributingMarginDesc": "Ce que vous contribuez vraiment",
+    "actionPlan": "Plan d'Action",
+    "actionPlanDesc": "Que faire à ce sujet",
+    "example": "PrepFlow vous aide à voir : Ce burger de 15$ pourrait avoir 60% de GP, mais après le temps de préparation, le gaspillage et la complexité, il ne contribuerait que 2,50$ à votre résultat net. Pendant ce temps, ce simple accompagnement de 8$ pourrait contribuer 4,00$.",
+    "disclaimer": "*Exemple à titre d'illustration - les résultats réels dépendent de votre menu spécifique et de vos coûts"
+  },
+  "myStory": {
+    "title": "Mon Parcours Créant PrepFlow",
+    "subtitle": "Ce n'est pas juste un autre outil - c'est ma solution personnelle aux vrais problèmes de cuisine, raffinée sur 20 ans de travail dans des restaurants en Europe et en Australie.",
+    "timeline": {
+      "2008-2012": {
+        "title": "2008-2012 - Expérience Précoce",
+        "description": "Commencé comme Sous Chef chez Krautwells GmbH, gérant la cuisine végane et formant les chefs juniors"
+      },
+      "2012-2018": {
+        "title": "2012-2018 - Leadership Européen",
+        "description": "Fondé KSK-Küchenspezialkräfte traiteur végane, géré des équipes de 21 employés, servi 1,200+ quotidien"
+      },
+      "2018-2024": {
+        "title": "2018-2024 - Excellence Australienne",
+        "description": "Rôles de Chef Exécutif, Head Chef chez ALH Hotels, dirigeant des équipes de 9 chefs avec intégration IA"
+      },
+      "2024": {
+        "title": "2024 - Prêt à Partager",
+        "description": "Maintenant partage l'outil perfectionné avec mes collègues chefs et restaurateurs qui font face aux mêmes défis que moi"
+      }
+    },
+    "whyCreated": {
+      "title": "Pourquoi J'ai Créé PrepFlow",
+      "paragraphs": [
+        "Pendant plus de 20 ans en tant que chef, j'ai géré tout des petits cafés aux opérations de traiteur à grande échelle servant 1,200+ invités quotidiens. J'ai fait face aux mêmes défis que vous : coûts de menu, gestion des déchets, analyse de rentabilité et efficacité d'équipe.",
+        "En tant que Head Chef chez ALH Hotels, je cherchais constamment de meilleures façons de gérer les coûts, optimiser les systèmes de préparation et optimiser notre mix de menu. Les solutions existantes étaient soit trop complexes, trop chères, ou ne comprenaient pas les vraies opérations de cuisine.",
+        "Alors j'ai construit ma propre solution - un simple modèle Google Sheets qui pouvait gérer les calculs COGS, suivre les coûts d'ingrédients, et me montrer exactement quels éléments de menu étaient rentables et lesquels perdaient de l'argent.",
+        "Ayant travaillé en Europe et en Australie, je l'ai raffiné pour fonctionner parfaitement pour les établissements mondiaux - avec support GST pour les marchés australiens, options multi-devises, et la flexibilité pour s'adapter aux besoins de n'importe quelle cuisine. C'est l'outil que j'aurais aimé avoir quand j'ai commencé, et maintenant je le partage avec vous."
+      ]
+    }
+  },
+  "features": {
+    "stockList": {
+      "title": "Liste de Stock (infinie)",
+      "description": "Centralisez les ingrédients avec taille d'emballage, unité, fournisseur, stockage, code produit. Capturez les chutes/déchets et rendements pour obtenir le vrai coût par unité."
+    },
+    "cogsRecipes": {
+      "title": "Recettes COGS",
+      "description": "Construisez des recettes qui extraient automatiquement les coûts d'ingrédients (incl. rendement/chutes). Voyez le coût du plat, COGS%, GP$ et GP% instantanément."
+    },
+    "itemPerformance": {
+      "title": "Performance des Éléments",
+      "description": "Collez les ventes. Nous calculons la popularité, marge de profit, profit total ex-TVA et classifions les éléments comme Baiser du Chef, Gemme Cachée ou Seau d'Affaires."
+    },
+    "dashboardKPIs": {
+      "title": "KPIs du Tableau de Bord",
+      "description": "D'un coup d'œil : GP% moyen, % coût nourriture, profit moyen de l'élément et prix de vente, plus les meilleurs performeurs par popularité et marge."
+    },
+    "globalTaxCurrency": {
+      "title": "Taxes et Devises Globales",
+      "description": "Définissez pays, système fiscal (GST/TVA/Taxe de Vente), et devise dans Paramètres. Toutes les sorties s'adaptent à vos exigences de marché local."
+    },
+    "fastOnboarding": {
+      "title": "Intégration Rapide",
+      "description": "Onglet de démarrage avec orientation étape par étape. Données d'exemple pré-chargées et ressources complètes pour apprendre le flux en minutes."
+    },
+    "aiMethodGenerator": {
+      "title": "Générateur de Méthodes IA",
+      "description": "Découvrez de nouvelles méthodes de cuisson qui pourraient améliorer vos marges et réduire les déchets. Obtenez des suggestions alimentées par l'IA pour optimiser vos processus de cuisine."
+    }
+  },
+  "globalFeatures": {
+    "title": "Exposez les Profits Cachés — Une Feuille, Chaque Réponse",
+    "subtitle": "Pendant que d'autres facturent des milliers pour des logiciels de restaurant compliqués, PrepFlow fournit des insights de profit similaires dans une simple Google Sheet pour un achat unique.",
+    "multiCurrency": {
+      "title": "Multi-Devises",
+      "description": "USD, EUR, GBP, AUD, SGD, et plus. Changez de devises instantanément."
+    },
+    "taxSystems": {
+      "title": "Systèmes Fiscaux",
+      "description": "GST, TVA, Taxe de Vente, HST. Configurez pour vos exigences locales."
+    },
+    "access": {
+      "title": "Accès 24/7",
+      "description": "Google Sheets basé sur le cloud. Accédez de n'importe où, n'importe quand."
+    },
+    "noConsultants": {
+      "title": "Pas de Consultants",
+      "description": "Configurez-vous en moins d'une heure. Pas de frais d'implémentation coûteux."
+    },
+    "summary": "Une feuille. Insights clés dont votre cuisine a besoin. Identifiez les opportunités de profit dans votre menu avec des insights similaires au logiciel cher — mais dans une simple Google Sheet que vous pouvez configurer vous-même."
+  },
+  "howItWorks": {
+    "title": "Obtenez des Résultats en 3 Étapes Simples",
+    "steps": [
+      {
+        "title": "Configuration (5–10 min)",
+        "description": "Activez GST, ajoutez ingrédients, rendements et coûts fournisseurs."
+      },
+      {
+        "title": "Importer les ventes",
+        "description": "Collez votre export POS dans l'onglet Ventes."
+      },
+      {
+        "title": "Décider et agir",
+        "description": "Le tableau de bord classe les éléments par profit et popularité ; corrigez les prix, portions ou mix de menu."
+      }
+    ],
+    "checklist": {
+      "title": "Liste de Vérification 60 Secondes",
+      "items": [
+        "GST activé ?",
+        "Rendements/déchets d'ingrédients saisis ?",
+        "Ventes collées ?",
+        "Réviser les 5 éléments à faible marge ?",
+        "Re-vérifier le tableau de bord demain"
+      ]
+    }
+  },
+  "leadMagnet": {
+    "title": "Voyez PrepFlow avant d'acheter",
+    "subtitle": "Obtenez un tableau de bord d'exemple — nous vous l'enverrons par email."
+  },
+  "pricing": {
+    "title": "Tarification Simple et Honnête",
+    "subtitle": "AUD $29 - achat unique, accès à vie"
+  },
+  "practice": {
+    "title": "Comment PrepFlow Fonctionne en Pratique",
+    "subtitle": "Du tâtonnement à la clarté basée sur les données - voici ce que vous pouvez attendre",
+    "before": {
+      "title": "Avant PrepFlow",
+      "description": "Tarification aveugle, sentiment viscéral, marges peu claires partout"
+    },
+    "after": {
+      "title": "Après PrepFlow",
+      "description": "Décisions basées sur les données, insights de marge révélés, clarté atteinte"
+    },
+    "note": "PrepFlow vous aide à identifier où votre menu a un potentiel de profit et où les coûts pourraient manger vos marges",
+    "disclaimer": "*Les résultats dépendent de votre structure de menu actuelle et de comment vous implémentez les insights"
+  },
+  "benefits": {
+    "title": "Ce Que PrepFlow Vous Aide à Atteindre",
+    "betterPricing": {
+      "title": "Meilleures Décisions de Prix",
+      "description": "Voyez exactement comment les coûts d'ingrédients, rendements et déchets affectent vos marges. Prenez des décisions de prix informées au lieu de deviner."
+    },
+    "identifyOpportunities": {
+      "title": "Identifier les Opportunités de Profit",
+      "description": "Repérez quels éléments de menu sous-performent et lesquels ont un potentiel caché. Concentrez vos efforts là où ils auront le plus d'impact."
+    },
+    "streamlineOperations": {
+      "title": "Optimiser les Opérations",
+      "description": "Comprenez vos vrais coûts et optimisez votre mix de menu. Réduisez les déchets, améliorez l'efficacité et augmentez votre résultat net."
+    },
+    "cta": "Voyez PrepFlow en action",
+    "getSample": "Obtenir Échantillon"
+  },
+  "faq": {
+    "title": "FAQ",
+    "techSkills": {
+      "question": "Ai-je besoin de compétences techniques ?",
+      "answer": "Zéro formules de feuille de calcul requises. Si vous pouvez utiliser Google Sheets, vous êtes prêt."
+    },
+    "worldwide": {
+      "question": "Fonctionne-t-il dans le monde entier ?",
+      "answer": "Construit pour les établissements mondiaux — inclut les toggles GST, TVA, Taxe de Vente, support multi-devises et rapports prêts à l'export pour n'importe quel marché."
+    },
+    "satisfaction": {
+      "question": "Et si ça ne fonctionne pas pour moi ?",
+      "answer": "Si vous n'êtes pas satisfait des insights et de la clarté que PrepFlow fournit en 7 jours, vous récupérerez chaque centime. Sans tracas."
+    },
+    "speed": {
+      "question": "Est-ce que ça va me ralentir ?",
+      "answer": "La configuration prend typiquement 1-2 heures. Après ça, vous économiserez du temps sur la planification de menu et l'analyse des coûts."
+    }
+  },
+  "trust": {
+    "title": "Construit pour les Établissements Indépendants et Petites Cuisines",
+    "features": [
+      "Fonctionne avec Google Sheets",
+      "Politique de Remboursement 7 Jours",
+      "Fait pour le Marché AU"
+    ]
+  },
+  "footer": {
+    "copyright": "© {year} PrepFlow. Tous droits réservés.",
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "support": "Support"
+  },
+  "webapp": {
+    "title": "Tableau de Bord Gestion Cuisine",
+    "subtitle": "Bon retour ! Voici votre aperçu de cuisine",
+    "stats": {
+      "totalIngredients": "Total Ingrédients",
+      "totalRecipes": "Total Recettes",
+      "menuDishes": "Plats du Menu",
+      "avgDishPrice": "Prix Moyen du Plat"
+    },
+    "quickActions": {
+      "title": "⚡ Actions Rapides",
+      "subtitle": "Sautez dans vos fonctionnalités les plus utilisées",
+      "live": "En Direct",
+      "manageIngredients": {
+        "title": "Gérer Ingrédients",
+        "subtitle": "Ajouter, modifier et organiser",
+        "description": "Construisez votre inventaire de cuisine avec suivi détaillé des ingrédients"
+      },
+      "recipeBook": {
+        "title": "Livre de Recettes",
+        "subtitle": "Voir recettes sauvegardées",
+        "description": "Accédez à vos recettes sauvegardées des calculs COGS"
+      },
+      "calculateCOGS": {
+        "title": "Calculer COGS",
+        "subtitle": "Analyser coûts et marges",
+        "description": "Calculez le Coût des Biens Vendus et marges de profit"
+      }
+    },
+    "gettingStarted": {
+      "title": "Commencer avec PrepFlow",
+      "description": "Bienvenue dans votre centre de gestion de cuisine ! Commencez par ajouter vos ingrédients pour construire votre inventaire, puis créez des recettes pour calculer votre Coût des Biens Vendus (COGS) et optimiser vos marges de profit.",
+      "features": [
+        "📊 Analytics en Temps Réel",
+        "💰 Optimisation Profit",
+        "🎯 Insights Intelligents"
+      ]
+    }
+  },
+  "language": {
+    "select": "Sélectionner Langue",
+    "english": "English",
+    "spanish": "Español",
+    "french": "Français",
+    "german": "Deutsch",
+    "italian": "Italiano",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "chinese": "中文"
+  }
+}

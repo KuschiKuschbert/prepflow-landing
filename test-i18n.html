@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepFlow i18n Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #0a0a0a; color: white; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .language-test { margin: 20px 0; padding: 20px; border: 1px solid #333; border-radius: 8px; }
+        .success { color: #29E7CD; }
+        .error { color: #ff6b6b; }
+        .info { color: #3B82F6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 PrepFlow Internationalization Test</h1>
+        
+        <div class="language-test">
+            <h2>Supported Languages</h2>
+            <p class="info">✅ English (en) - Default</p>
+            <p class="info">✅ Spanish (es) - Español</p>
+            <p class="info">✅ French (fr) - Français</p>
+            <p class="info">✅ German (de) - Deutsch</p>
+            <p class="info">✅ Italian (it) - Italiano</p>
+            <p class="info">✅ Portuguese (pt) - Português</p>
+            <p class="info">✅ Japanese (ja) - 日本語</p>
+            <p class="info">✅ Chinese (zh) - 中文</p>
+        </div>
+
+        <div class="language-test">
+            <h2>Features Implemented</h2>
+            <p class="success">✅ Automatic language detection based on browser preferences</p>
+            <p class="success">✅ Language detection based on user location (IP-based)</p>
+            <p class="success">✅ Language switcher component in header</p>
+            <p class="success">✅ Translation files for all 8 languages</p>
+            <p class="success">✅ i18n context and hooks for React components</p>
+            <p class="success">✅ Dynamic metadata and SEO for each language</p>
+            <p class="success">✅ URL-based language routing</p>
+            <p class="success">✅ Local storage for language preference persistence</p>
+        </div>
+
+        <div class="language-test">
+            <h2>How It Works</h2>
+            <ol>
+                <li><strong>Automatic Detection:</strong> The system first checks if the user has a saved language preference in localStorage</li>
+                <li><strong>Browser Language:</strong> If no saved preference, it detects the browser's language setting</li>
+                <li><strong>Location-based:</strong> For new users, it can detect language based on their geographic location</li>
+                <li><strong>Manual Override:</strong> Users can manually change language using the language switcher in the header</li>
+                <li><strong>Persistence:</strong> Language choice is saved and remembered across sessions</li>
+                <li><strong>URL Routing:</strong> Each language has its own URL path (e.g., /es/, /fr/, /de/)</li>
+            </ol>
+        </div>
+
+        <div class="language-test">
+            <h2>Translation Coverage</h2>
+            <p class="info">📊 Landing Page: Navigation, hero section, features, pricing, FAQ</p>
+            <p class="info">📊 WebApp: Dashboard, stats, quick actions, getting started</p>
+            <p class="info">📊 SEO: Meta titles, descriptions, keywords for each language</p>
+            <p class="info">📊 UI Elements: Buttons, forms, error messages, success messages</p>
+        </div>
+
+        <div class="language-test">
+            <h2>Next Steps</h2>
+            <p class="info">🚀 Start the development server: <code>npm run dev</code></p>
+            <p class="info">🌐 Visit the site and test the language switcher</p>
+            <p class="info">📱 Test on different devices and browsers</p>
+            <p class="info">🔍 Verify SEO metadata for each language</p>
+            <p class="info">📈 Monitor analytics for language usage</p>
+        </div>
+    </div>
+</body>
+</html>
