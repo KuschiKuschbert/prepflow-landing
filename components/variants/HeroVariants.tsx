@@ -115,7 +115,9 @@ export function VariantAHero({ t, handleEngagement }: HeroProps) {
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          {t('hero.variantA.title', 'Stop losing money on your menu.')}
+          <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+            {t('hero.variantA.title', 'Stop losing money on your menu.')}
+          </span>
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
           {t('hero.variantA.subtitle', 'Most restaurants don\'t know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.')}
@@ -212,7 +214,9 @@ export function VariantBHero({ t, handleEngagement }: HeroProps) {
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          {t('hero.variantB.title', 'Turn your menu into a profit machine.')}
+          <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+            {t('hero.variantB.title', 'Turn your menu into a profit machine.')}
+          </span>
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
           {t('hero.variantB.subtitle', 'Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.')}
@@ -309,7 +313,9 @@ export function VariantCHero({ t, handleEngagement }: HeroProps) {
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          {t('hero.variantC.title', 'Know your menu costs. Make more profit.')}
+          <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+            {t('hero.variantC.title', 'Know your menu costs. Make more profit.')}
+          </span>
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
           {t('hero.variantC.subtitle', 'PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.')}

@@ -371,7 +371,14 @@ function VariantAHero({ t, handleEngagement }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                         className: "text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl",
-                        children: t('hero.variantA.title', 'Stop losing money on your menu.')
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent",
+                            children: t('hero.variantA.title', 'Stop losing money on your menu.')
+                        }, void 0, false, {
+                            fileName: "[project]/components/variants/HeroVariants.tsx",
+                            lineNumber: 118,
+                            columnNumber: 11
+                        }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
                         lineNumber: 117,
@@ -382,7 +389,7 @@ function VariantAHero({ t, handleEngagement }) {
                         children: t('hero.variantA.subtitle', 'Most restaurants don\'t know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.')
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 120,
+                        lineNumber: 122,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -394,45 +401,11 @@ function VariantAHero({ t, handleEngagement }) {
                                         children: t('hero.variantA.bullet1.title', 'Stop the Bleeding')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 124,
-                                        columnNumber: 19
-                                    }, this),
-                                    " — ",
-                                    t('hero.variantA.bullet1.description', 'identify which menu items are costing you money')
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 124,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantA.bullet2.title', 'Real Cost Analysis')
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 125,
-                                        columnNumber: 19
-                                    }, this),
-                                    " — ",
-                                    t('hero.variantA.bullet2.description', 'see true ingredient costs including waste and yields')
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 125,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantA.bullet3.title', 'Profit Optimization')
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/variants/HeroVariants.tsx",
                                         lineNumber: 126,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
-                                    t('hero.variantA.bullet3.description', 'know which dishes to promote, fix, or remove')
+                                    t('hero.variantA.bullet1.description', 'identify which menu items are costing you money')
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
@@ -442,14 +415,14 @@ function VariantAHero({ t, handleEngagement }) {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantA.bullet4.title', 'GST Compliance')
+                                        children: t('hero.variantA.bullet2.title', 'Real Cost Analysis')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
                                         lineNumber: 127,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
-                                    t('hero.variantA.bullet4.description', 'price correctly for Australian tax requirements')
+                                    t('hero.variantA.bullet2.description', 'see true ingredient costs including waste and yields')
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
@@ -459,14 +432,14 @@ function VariantAHero({ t, handleEngagement }) {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantA.bullet5.title', 'Smart Menu Decisions')
+                                        children: t('hero.variantA.bullet3.title', 'Profit Optimization')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
                                         lineNumber: 128,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
-                                    t('hero.variantA.bullet5.description', 'data-driven choices about your menu mix')
+                                    t('hero.variantA.bullet3.description', 'know which dishes to promote, fix, or remove')
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
@@ -476,10 +449,44 @@ function VariantAHero({ t, handleEngagement }) {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantA.bullet6.title', 'AI Kitchen Insights')
+                                        children: t('hero.variantA.bullet4.title', 'GST Compliance')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
                                         lineNumber: 129,
+                                        columnNumber: 19
+                                    }, this),
+                                    " — ",
+                                    t('hero.variantA.bullet4.description', 'price correctly for Australian tax requirements')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/variants/HeroVariants.tsx",
+                                lineNumber: 129,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                        children: t('hero.variantA.bullet5.title', 'Smart Menu Decisions')
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/variants/HeroVariants.tsx",
+                                        lineNumber: 130,
+                                        columnNumber: 19
+                                    }, this),
+                                    " — ",
+                                    t('hero.variantA.bullet5.description', 'data-driven choices about your menu mix')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/variants/HeroVariants.tsx",
+                                lineNumber: 130,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                        children: t('hero.variantA.bullet6.title', 'AI Kitchen Insights')
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/variants/HeroVariants.tsx",
+                                        lineNumber: 131,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -487,13 +494,13 @@ function VariantAHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 129,
+                                lineNumber: 131,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 123,
+                        lineNumber: 125,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -506,7 +513,7 @@ function VariantAHero({ t, handleEngagement }) {
                                 children: t('hero.variantA.ctaPrimary', 'Get Sample Dashboard')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 132,
+                                lineNumber: 134,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -516,7 +523,7 @@ function VariantAHero({ t, handleEngagement }) {
                                 children: t('hero.variantA.ctaSecondary', 'Get Free Sample')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 139,
+                                lineNumber: 141,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -524,13 +531,13 @@ function VariantAHero({ t, handleEngagement }) {
                                 children: t('hero.variantA.disclaimer', 'Built for Australian cafés and restaurants. No lock-in. 7-day refund policy.')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 146,
+                                lineNumber: 148,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 131,
+                        lineNumber: 133,
                         columnNumber: 9
                     }, this)
                 ]
@@ -546,7 +553,7 @@ function VariantAHero({ t, handleEngagement }) {
                         className: "absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#D925C7]/20 to-[#29E7CD]/20 blur-2xl"
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 152,
+                        lineNumber: 154,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -565,7 +572,7 @@ function VariantAHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 157,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -578,7 +585,7 @@ function VariantAHero({ t, handleEngagement }) {
                                                     children: "Profit Analysis Dashboard"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/variants/HeroVariants.tsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 169,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -586,24 +593,24 @@ function VariantAHero({ t, handleEngagement }) {
                                                     children: "View Dashboard"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/variants/HeroVariants.tsx",
-                                                    lineNumber: 170,
+                                                    lineNumber: 172,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/variants/HeroVariants.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 168,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 167,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 154,
+                                lineNumber: 156,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -618,7 +625,7 @@ function VariantAHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 177,
+                                        lineNumber: 179,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$OptimizedImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -630,7 +637,7 @@ function VariantAHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 185,
+                                        lineNumber: 187,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$OptimizedImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -642,13 +649,13 @@ function VariantAHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 193,
+                                        lineNumber: 195,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 176,
+                                lineNumber: 178,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -656,19 +663,19 @@ function VariantAHero({ t, handleEngagement }) {
                                 children: "Profit Analysis · Recipe Costing · Stock Management"
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 202,
+                                lineNumber: 204,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 153,
+                        lineNumber: 155,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                lineNumber: 151,
+                lineNumber: 153,
                 columnNumber: 7
             }, this)
         ]
@@ -687,10 +694,17 @@ function VariantBHero({ t, handleEngagement }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                         className: "text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl",
-                        children: t('hero.variantB.title', 'Turn your menu into a profit machine.')
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent",
+                            children: t('hero.variantB.title', 'Turn your menu into a profit machine.')
+                        }, void 0, false, {
+                            fileName: "[project]/components/variants/HeroVariants.tsx",
+                            lineNumber: 217,
+                            columnNumber: 11
+                        }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 214,
+                        lineNumber: 216,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -698,7 +712,7 @@ function VariantBHero({ t, handleEngagement }) {
                         children: t('hero.variantB.subtitle', 'Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.')
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 217,
+                        lineNumber: 221,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -710,79 +724,11 @@ function VariantBHero({ t, handleEngagement }) {
                                         children: t('hero.variantB.bullet1.title', 'Profit Maximization')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 221,
-                                        columnNumber: 19
-                                    }, this),
-                                    " — ",
-                                    t('hero.variantB.bullet1.description', 'identify your highest-margin opportunities')
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 221,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantB.bullet2.title', 'Cost Transparency')
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 222,
-                                        columnNumber: 19
-                                    }, this),
-                                    " — ",
-                                    t('hero.variantB.bullet2.description', 'see exactly what each dish costs to make')
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 222,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantB.bullet3.title', 'Menu Optimization')
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 223,
-                                        columnNumber: 19
-                                    }, this),
-                                    " — ",
-                                    t('hero.variantB.bullet3.description', 'know which items to feature or remove')
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 223,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantB.bullet4.title', 'Tax Compliance')
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 224,
-                                        columnNumber: 19
-                                    }, this),
-                                    " — ",
-                                    t('hero.variantB.bullet4.description', 'GST-ready pricing for Australian businesses')
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 224,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantB.bullet5.title', 'Performance Tracking')
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/variants/HeroVariants.tsx",
                                         lineNumber: 225,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
-                                    t('hero.variantB.bullet5.description', 'monitor which dishes drive your profit')
+                                    t('hero.variantB.bullet1.description', 'identify your highest-margin opportunities')
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
@@ -792,10 +738,78 @@ function VariantBHero({ t, handleEngagement }) {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                        children: t('hero.variantB.bullet6.title', 'AI Optimization')
+                                        children: t('hero.variantB.bullet2.title', 'Cost Transparency')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
                                         lineNumber: 226,
+                                        columnNumber: 19
+                                    }, this),
+                                    " — ",
+                                    t('hero.variantB.bullet2.description', 'see exactly what each dish costs to make')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/variants/HeroVariants.tsx",
+                                lineNumber: 226,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                        children: t('hero.variantB.bullet3.title', 'Menu Optimization')
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/variants/HeroVariants.tsx",
+                                        lineNumber: 227,
+                                        columnNumber: 19
+                                    }, this),
+                                    " — ",
+                                    t('hero.variantB.bullet3.description', 'know which items to feature or remove')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/variants/HeroVariants.tsx",
+                                lineNumber: 227,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                        children: t('hero.variantB.bullet4.title', 'Tax Compliance')
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/variants/HeroVariants.tsx",
+                                        lineNumber: 228,
+                                        columnNumber: 19
+                                    }, this),
+                                    " — ",
+                                    t('hero.variantB.bullet4.description', 'GST-ready pricing for Australian businesses')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/variants/HeroVariants.tsx",
+                                lineNumber: 228,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                        children: t('hero.variantB.bullet5.title', 'Performance Tracking')
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/variants/HeroVariants.tsx",
+                                        lineNumber: 229,
+                                        columnNumber: 19
+                                    }, this),
+                                    " — ",
+                                    t('hero.variantB.bullet5.description', 'monitor which dishes drive your profit')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/variants/HeroVariants.tsx",
+                                lineNumber: 229,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                        children: t('hero.variantB.bullet6.title', 'AI Optimization')
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/variants/HeroVariants.tsx",
+                                        lineNumber: 230,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -803,13 +817,13 @@ function VariantBHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 226,
+                                lineNumber: 230,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 220,
+                        lineNumber: 224,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -822,7 +836,7 @@ function VariantBHero({ t, handleEngagement }) {
                                 children: t('hero.variantB.ctaPrimary', 'Get Sample Dashboard')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 229,
+                                lineNumber: 233,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -832,7 +846,7 @@ function VariantBHero({ t, handleEngagement }) {
                                 children: t('hero.variantB.ctaSecondary', 'Try Sample Sheet')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 236,
+                                lineNumber: 240,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -840,19 +854,19 @@ function VariantBHero({ t, handleEngagement }) {
                                 children: t('hero.variantB.disclaimer', 'Designed for Australian hospitality. Simple setup. 7-day refund guarantee.')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 243,
+                                lineNumber: 247,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 228,
+                        lineNumber: 232,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                lineNumber: 213,
+                lineNumber: 215,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -862,7 +876,7 @@ function VariantBHero({ t, handleEngagement }) {
                         className: "absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#3B82F6]/20 to-[#29E7CD]/20 blur-2xl"
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 249,
+                        lineNumber: 253,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -881,7 +895,7 @@ function VariantBHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 252,
+                                        lineNumber: 256,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -894,7 +908,7 @@ function VariantBHero({ t, handleEngagement }) {
                                                     children: "Profit Optimization"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/variants/HeroVariants.tsx",
-                                                    lineNumber: 264,
+                                                    lineNumber: 268,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -902,24 +916,24 @@ function VariantBHero({ t, handleEngagement }) {
                                                     children: "View Dashboard"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/variants/HeroVariants.tsx",
-                                                    lineNumber: 267,
+                                                    lineNumber: 271,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/variants/HeroVariants.tsx",
-                                            lineNumber: 263,
+                                            lineNumber: 267,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 262,
+                                        lineNumber: 266,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 251,
+                                lineNumber: 255,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -934,7 +948,7 @@ function VariantBHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 274,
+                                        lineNumber: 278,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$OptimizedImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -946,7 +960,7 @@ function VariantBHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 282,
+                                        lineNumber: 286,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$OptimizedImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -958,13 +972,13 @@ function VariantBHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 290,
+                                        lineNumber: 294,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 273,
+                                lineNumber: 277,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -972,25 +986,25 @@ function VariantBHero({ t, handleEngagement }) {
                                 children: "Profit Dashboard · Recipe Analysis · Stock Tracking"
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 299,
+                                lineNumber: 303,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 250,
+                        lineNumber: 254,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                lineNumber: 248,
+                lineNumber: 252,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/variants/HeroVariants.tsx",
-        lineNumber: 212,
+        lineNumber: 214,
         columnNumber: 5
     }, this);
 }
@@ -1003,10 +1017,17 @@ function VariantCHero({ t, handleEngagement }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                         className: "text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl",
-                        children: t('hero.variantC.title', 'Know your menu costs. Make more profit.')
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent",
+                            children: t('hero.variantC.title', 'Know your menu costs. Make more profit.')
+                        }, void 0, false, {
+                            fileName: "[project]/components/variants/HeroVariants.tsx",
+                            lineNumber: 316,
+                            columnNumber: 11
+                        }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 311,
+                        lineNumber: 315,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1014,7 +1035,7 @@ function VariantCHero({ t, handleEngagement }) {
                         children: t('hero.variantC.subtitle', 'PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.')
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 314,
+                        lineNumber: 320,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1026,7 +1047,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         children: t('hero.variantC.bullet1.title', 'Cost Breakdown')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 318,
+                                        lineNumber: 324,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -1034,7 +1055,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 318,
+                                lineNumber: 324,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
@@ -1043,7 +1064,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         children: t('hero.variantC.bullet2.title', 'Profit Calculation')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 319,
+                                        lineNumber: 325,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -1051,7 +1072,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 319,
+                                lineNumber: 325,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
@@ -1060,7 +1081,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         children: t('hero.variantC.bullet3.title', 'Menu Decisions')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 320,
+                                        lineNumber: 326,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -1068,7 +1089,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 320,
+                                lineNumber: 326,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
@@ -1077,7 +1098,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         children: t('hero.variantC.bullet4.title', 'GST Ready')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 321,
+                                        lineNumber: 327,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -1085,7 +1106,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 321,
+                                lineNumber: 327,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
@@ -1094,7 +1115,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         children: t('hero.variantC.bullet5.title', 'Easy Setup')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 322,
+                                        lineNumber: 328,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -1102,7 +1123,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 322,
+                                lineNumber: 328,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Bullet, {
@@ -1111,7 +1132,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         children: t('hero.variantC.bullet6.title', 'Smart Insights')
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 323,
+                                        lineNumber: 329,
                                         columnNumber: 19
                                     }, this),
                                     " — ",
@@ -1119,13 +1140,13 @@ function VariantCHero({ t, handleEngagement }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 323,
+                                lineNumber: 329,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 317,
+                        lineNumber: 323,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1138,7 +1159,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 children: t('hero.variantC.ctaPrimary', 'Get Sample Dashboard')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 326,
+                                lineNumber: 332,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1148,7 +1169,7 @@ function VariantCHero({ t, handleEngagement }) {
                                 children: t('hero.variantC.ctaSecondary', 'Free Sample')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 333,
+                                lineNumber: 339,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1156,19 +1177,19 @@ function VariantCHero({ t, handleEngagement }) {
                                 children: t('hero.variantC.disclaimer', 'For Australian cafés and restaurants. 7-day refund policy.')
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 340,
+                                lineNumber: 346,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 325,
+                        lineNumber: 331,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                lineNumber: 310,
+                lineNumber: 314,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1178,7 +1199,7 @@ function VariantCHero({ t, handleEngagement }) {
                         className: "absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl"
                     }, void 0, false, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 346,
+                        lineNumber: 352,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1197,7 +1218,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 349,
+                                        lineNumber: 355,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1210,7 +1231,7 @@ function VariantCHero({ t, handleEngagement }) {
                                                     children: "Cost Analysis Dashboard"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/variants/HeroVariants.tsx",
-                                                    lineNumber: 361,
+                                                    lineNumber: 367,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1218,24 +1239,24 @@ function VariantCHero({ t, handleEngagement }) {
                                                     children: "View Dashboard"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/variants/HeroVariants.tsx",
-                                                    lineNumber: 364,
+                                                    lineNumber: 370,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/variants/HeroVariants.tsx",
-                                            lineNumber: 360,
+                                            lineNumber: 366,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 359,
+                                        lineNumber: 365,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 348,
+                                lineNumber: 354,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1250,7 +1271,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 371,
+                                        lineNumber: 377,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$OptimizedImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1262,7 +1283,7 @@ function VariantCHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 379,
+                                        lineNumber: 385,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$OptimizedImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1274,13 +1295,13 @@ function VariantCHero({ t, handleEngagement }) {
                                         sizes: "(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                                        lineNumber: 387,
+                                        lineNumber: 393,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 370,
+                                lineNumber: 376,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1288,25 +1309,25 @@ function VariantCHero({ t, handleEngagement }) {
                                 children: "Cost Analysis · Recipe Costs · Stock List"
                             }, void 0, false, {
                                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                                lineNumber: 396,
+                                lineNumber: 402,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/variants/HeroVariants.tsx",
-                        lineNumber: 347,
+                        lineNumber: 353,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                lineNumber: 345,
+                lineNumber: 351,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/variants/HeroVariants.tsx",
-        lineNumber: 309,
+        lineNumber: 313,
         columnNumber: 5
     }, this);
 }
@@ -1319,14 +1340,14 @@ function Bullet({ children }) {
                 className: "mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]"
             }, void 0, false, {
                 fileName: "[project]/components/variants/HeroVariants.tsx",
-                lineNumber: 407,
+                lineNumber: 413,
                 columnNumber: 7
             }, this),
             children
         ]
     }, void 0, true, {
         fileName: "[project]/components/variants/HeroVariants.tsx",
-        lineNumber: 406,
+        lineNumber: 412,
         columnNumber: 5
     }, this);
 }
