@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleAnalyticsTest from '../components/GoogleAnalyticsTest';
 import GoogleTagManager from '../components/GoogleTagManager';
+import { I18nProvider } from '../lib/i18n';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -94,7 +95,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <I18nProvider>
+          {children}
+        </I18nProvider>
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
         <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />

@@ -11,6 +11,8 @@ import { useLandingPageABTest } from '../components/useABTest';
 import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
+import { useI18n } from '../lib/i18n';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 // Import UI components
 import { HeroSkeleton, PricingSkeleton } from '../components/ui/LoadingSkeleton';
@@ -37,6 +39,9 @@ import {
 export default function Page() {
   // A/B Testing hook
   const { variantId, isLoading, trackEngagement } = useLandingPageABTest();
+  
+  // i18n hook
+  const { t, isLoading: i18nLoading } = useI18n();
 
   // Performance monitoring - track page load time
   React.useEffect(() => {
@@ -169,12 +174,13 @@ export default function Page() {
             </span>
           </div>
           <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow features">Features</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Learn how PrepFlow works">How it works</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow pricing">Pricing</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Frequently asked questions">FAQ</a>
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow features">{t('navigation.features')}</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Learn how PrepFlow works">{t('navigation.howItWorks')}</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow pricing">{t('navigation.pricing')}</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Frequently asked questions">{t('navigation.faq')}</a>
           </nav>
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher />
             <a
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
@@ -182,10 +188,13 @@ export default function Page() {
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
               onClick={() => handleEngagement('header_cta_click')}
             >
-              Get PrepFlow Now
+              {t('navigation.getPrepFlowNow')}
             </a>
           </div>
-          <MobileNavigation onEngagement={handleEngagement} />
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher />
+            <MobileNavigation onEngagement={handleEngagement} />
+          </div>
         </header>
 
         {/* Hero Section - A/B Testing Variants */}
@@ -202,7 +211,7 @@ export default function Page() {
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          <strong>Stop guessing. Start knowing.</strong> PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.
+          <strong>{t('hero.title')}</strong> {t('hero.subtitle')}
         </div>
 
         {/* Problem → Outcome */}
@@ -211,52 +220,32 @@ export default function Page() {
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
                 <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
-                  The Problem
+                  {t('problemOutcome.problem')}
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>You don't know which menu items actually make money</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>COGS creep and waste eat your profit</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>Pricing is guesswork; GST adds friction</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-red-400 text-xl">✗</span>
-                  <span>Reports are slow, complicated, or sit in someone else's tool</span>
-                </li>
+                {t('problemOutcome.problems').map((problem: string, index: number) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="text-red-400 text-xl">✗</span>
+                    <span>{problem}</span>
+                  </li>
+                ))}
               </ul>
             </div>
             
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
                 <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">
-                  The Outcome
+                  {t('problemOutcome.outcome')}
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>See item-level margins and profit instantly</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>Spot "winners" and "profit leaks" at a glance</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>Adjust pricing with confidence (GST-aware)</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <span>Run everything in Google Sheets — no new software to learn</span>
-                </li>
+                {t('problemOutcome.outcomes').map((outcome: string, index: number) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="text-green-400 text-xl">✓</span>
+                    <span>{outcome}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

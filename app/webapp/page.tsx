@@ -2,6 +2,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
+import { useI18n } from '@/lib/i18n';
 
 interface DashboardStats {
   totalIngredients: number;
@@ -11,6 +12,7 @@ interface DashboardStats {
 }
 
 export default function WebAppDashboard() {
+  const { t } = useI18n();
   const [stats, setStats] = useState<DashboardStats>({
     totalIngredients: 0,
     totalRecipes: 0,
@@ -92,9 +94,9 @@ export default function WebAppDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
-            🏠 Kitchen Management Dashboard
+            🏠 {t('webapp.title')}
           </h1>
-          <p className="text-gray-400">Welcome back! Here's your kitchen overview</p>
+          <p className="text-gray-400">{t('webapp.subtitle')}</p>
         </div>
         
         {/* Stats Cards - Material Design 3 */}
@@ -109,7 +111,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Ingredients</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('webapp.stats.totalIngredients')}</h3>
             <p className="text-3xl font-bold text-[#29E7CD]">{stats.totalIngredients}</p>
           </div>
           
@@ -123,7 +125,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#3B82F6] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Recipes</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('webapp.stats.totalRecipes')}</h3>
             <p className="text-3xl font-bold text-[#3B82F6]">{stats.totalRecipes}</p>
           </div>
           
@@ -137,7 +139,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#D925C7] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Menu Dishes</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('webapp.stats.menuDishes')}</h3>
             <p className="text-3xl font-bold text-[#D925C7]">{stats.totalMenuDishes}</p>
           </div>
           
@@ -151,7 +153,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Avg Dish Price</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('webapp.stats.avgDishPrice')}</h3>
             <p className="text-3xl font-bold text-[#29E7CD]">
               ${stats.averageDishPrice.toFixed(2)}
             </p>
@@ -162,12 +164,12 @@ export default function WebAppDashboard() {
         <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-semibold text-white mb-1">⚡ Quick Actions</h2>
-              <p className="text-gray-400">Jump into your most used features</p>
+              <h2 className="text-2xl font-semibold text-white mb-1">{t('webapp.quickActions.title')}</h2>
+              <p className="text-gray-400">{t('webapp.quickActions.subtitle')}</p>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
-              <span className="text-xs text-gray-400">Live</span>
+              <span className="text-xs text-gray-400">{t('webapp.quickActions.live')}</span>
             </div>
           </div>
           
@@ -183,11 +185,11 @@ export default function WebAppDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#29E7CD] transition-colors">Manage Ingredients</h3>
-                  <p className="text-sm text-gray-400">Add, edit, and organize</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#29E7CD] transition-colors">{t('webapp.quickActions.manageIngredients.title')}</h3>
+                  <p className="text-sm text-gray-400">{t('webapp.quickActions.manageIngredients.subtitle')}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400">Build your kitchen inventory with detailed ingredient tracking</p>
+              <p className="text-sm text-gray-400">{t('webapp.quickActions.manageIngredients.description')}</p>
             </a>
             
             <a
@@ -201,11 +203,11 @@ export default function WebAppDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#3B82F6] transition-colors">Recipe Book</h3>
-                  <p className="text-sm text-gray-400">View saved recipes</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#3B82F6] transition-colors">{t('webapp.quickActions.recipeBook.title')}</h3>
+                  <p className="text-sm text-gray-400">{t('webapp.quickActions.recipeBook.subtitle')}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400">Access your saved recipes from COGS calculations</p>
+              <p className="text-sm text-gray-400">{t('webapp.quickActions.recipeBook.description')}</p>
             </a>
             
             <a
@@ -219,11 +221,11 @@ export default function WebAppDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#D925C7] transition-colors">Calculate COGS</h3>
-                  <p className="text-sm text-gray-400">Analyze costs & margins</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#D925C7] transition-colors">{t('webapp.quickActions.calculateCOGS.title')}</h3>
+                  <p className="text-sm text-gray-400">{t('webapp.quickActions.calculateCOGS.subtitle')}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400">Calculate Cost of Goods Sold and profit margins</p>
+              <p className="text-sm text-gray-400">{t('webapp.quickActions.calculateCOGS.description')}</p>
             </a>
           </div>
         </div>
@@ -235,21 +237,16 @@ export default function WebAppDashboard() {
               <span className="text-2xl">🚀</span>
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white mb-2">Getting Started with PrepFlow</h2>
+              <h2 className="text-xl font-semibold text-white mb-2">{t('webapp.gettingStarted.title')}</h2>
               <p className="text-gray-300 leading-relaxed">
-                Welcome to your kitchen management hub! Start by adding your ingredients to build your inventory, 
-                then create recipes to calculate your Cost of Goods Sold (COGS) and optimize your profit margins.
+                {t('webapp.gettingStarted.description')}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#29E7CD]/10 text-[#29E7CD] border border-[#29E7CD]/20">
-                  📊 Real-time Analytics
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20">
-                  💰 Profit Optimization
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#D925C7]/10 text-[#D925C7] border border-[#D925C7]/20">
-                  🎯 Smart Insights
-                </span>
+                {t('webapp.gettingStarted.features').map((feature: string, index: number) => (
+                  <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#29E7CD]/10 text-[#29E7CD] border border-[#29E7CD]/20">
+                    {feature}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
