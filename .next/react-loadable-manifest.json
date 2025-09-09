@@ -1,14 +1,21 @@
 {
+  "components/ClientPerformanceTracker.tsx -> ./AdvancedPerformanceTracker": {
+    "id": 9443,
+    "files": [
+      "static/chunks/common-ee758ab3fedd273f.js",
+      "static/chunks/9443.c62e5da52e18362b.js"
+    ]
+  },
   "components/useABTest.tsx -> ./variants/HeroVariants": {
     "id": 5598,
     "files": [
-      "static/chunks/5598.49f92e840ea45614.js"
+      "static/chunks/5598.90db9df57ccccd6e.js"
     ]
   },
   "components/useABTest.tsx -> ./variants/PricingVariants": {
     "id": 9724,
     "files": [
-      "static/chunks/9724.7673d9dd248787ea.js"
+      "static/chunks/9724.e20f6350cb8e531c.js"
     ]
   },
   "node_modules/@supabase/auth-js/dist/module/lib/helpers.js -> @supabase/node-fetch": {
