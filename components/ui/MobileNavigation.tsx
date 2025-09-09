@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 interface MobileNavigationProps {
   onEngagement: (type: string) => void;
@@ -113,8 +114,16 @@ export function MobileNavigation({ onEngagement }: MobileNavigationProps) {
                 </button>
               </nav>
 
+              {/* Language Switcher */}
+              <div className="mt-6 pt-6 border-t border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-gray-400">Language</span>
+                </div>
+                <LanguageSwitcher className="w-full" />
+              </div>
+
               {/* CTA Button */}
-              <div className="mt-8 pt-6 border-t border-gray-700">
+              <div className="mt-6 pt-6 border-t border-gray-700">
                 <a
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
