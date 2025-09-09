@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleAnalyticsTest from '../components/GoogleAnalyticsTest';
 import GoogleTagManager from '../components/GoogleTagManager';
+import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -91,14 +92,104 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#29E7CD" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="PrepFlow" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ClientPerformanceTracker />
         {children}
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
         <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
         <GoogleAnalyticsTest />
+        
+        {/* Advanced Performance Optimizations */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Initialize advanced optimizations
+              (function() {
+                // Critical CSS injection
+                const criticalCSS = ${JSON.stringify(require('../lib/critical-css').CRITICAL_CSS)};
+                const style = document.createElement('style');
+                style.id = 'critical-css';
+                style.textContent = criticalCSS;
+                document.head.insertBefore(style, document.head.firstChild);
+                
+                // Resource hints initialization
+                const resourceHints = ${JSON.stringify(require('../lib/resource-hints').RESOURCE_HINTS_CONFIG)};
+                
+                // Preconnect to external domains
+                resourceHints.preconnect.forEach(domain => {
+                  const link = document.createElement('link');
+                  link.rel = 'preconnect';
+                  link.href = domain;
+                  link.crossOrigin = 'anonymous';
+                  document.head.appendChild(link);
+                });
+                
+                // DNS prefetch for external domains
+                resourceHints.dnsPrefetch.forEach(domain => {
+                  const link = document.createElement('link');
+                  link.rel = 'dns-prefetch';
+                  link.href = domain;
+                  document.head.appendChild(link);
+                });
+                
+                // Preload critical resources
+                resourceHints.critical.forEach(resource => {
+                  const link = document.createElement('link');
+                  link.rel = 'preload';
+                  link.href = resource.href;
+                  link.as = resource.as;
+                  if (resource.type) link.type = resource.type;
+                  if (resource.priority === 'high') link.setAttribute('fetchpriority', 'high');
+                  document.head.appendChild(link);
+                });
+                
+                // Font optimization
+                const fontLink = document.createElement('link');
+                fontLink.rel = 'preload';
+                fontLink.as = 'style';
+                fontLink.href = 'https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap';
+                fontLink.onload = function() {
+                  this.rel = 'stylesheet';
+                };
+                document.head.appendChild(fontLink);
+                
+                console.log('🚀 Advanced optimizations initialized');
+              })();
+            `,
+          }}
+        />
+        
+        {/* Service Worker Registration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                      console.log('✅ PrepFlow SW: Registration successful');
+                    })
+                    .catch(function(error) {
+                      console.log('❌ PrepFlow SW: Registration failed');
+                    });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

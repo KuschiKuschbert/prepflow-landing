@@ -6,7 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "node scripts/analyze-bundle.js",
+    "lighthouse": "lhci autorun",
+    "lighthouse:mobile": "lighthouse http://localhost:3000 --view --emulated-form-factor=mobile",
+    "lighthouse:desktop": "lighthouse http://localhost:3000 --view --emulated-form-factor=desktop",
+    "perf:test": "npm run build && npm run lighthouse",
+    "perf:analyze": "npm run build && npm run analyze"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",

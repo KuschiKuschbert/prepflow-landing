@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import I18nTest from '../../../components/I18nTest';
 
 export default function SetupPage() {
   const [loading, setLoading] = useState(false);
@@ -241,6 +242,11 @@ export default function SetupPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Internationalization Test Component */}
+        <div className="mt-8">
+          <I18nTest />
         </div>
       </div>
     </div>

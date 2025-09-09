@@ -11,6 +11,8 @@ import { useLandingPageABTest } from '../components/useABTest';
 import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
+import { useTranslation } from '../lib/useTranslation';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 // Import UI components
 import { HeroSkeleton, PricingSkeleton } from '../components/ui/LoadingSkeleton';
@@ -19,24 +21,26 @@ import { FloatingCTA } from '../components/ui/FloatingCTA';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 import { ScrollProgress } from '../components/ui/ScrollProgress';
 
-// Import variant components
-import { 
-  ControlHero, 
-  VariantAHero, 
-  VariantBHero, 
-  VariantCHero 
-} from '../components/variants/HeroVariants';
-
-import { 
-  ControlPricing, 
-  VariantAPricing, 
-  VariantBPricing, 
-  VariantCPricing 
-} from '../components/variants/PricingVariants';
+// Variant components are now lazy-loaded via useABTest hook
 
 export default function Page() {
-  // A/B Testing hook
-  const { variantId, isLoading, trackEngagement } = useLandingPageABTest();
+  // Translation hook
+  const { t, currentLanguage, changeLanguage } = useTranslation();
+  
+  // Engagement tracking function
+  const handleEngagement = (event: string) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', event, {
+        event_category: 'user_engagement',
+        event_label: event,
+        page_title: document.title,
+        page_location: window.location.href,
+      });
+    }
+  };
+  
+  // A/B Testing hook with lazy loading
+  const { variantId, isLoading, trackEngagement, renderHero, renderPricing } = useLandingPageABTest(undefined, t, handleEngagement);
 
   // Performance monitoring - track page load time
   React.useEffect(() => {
@@ -63,10 +67,6 @@ export default function Page() {
     }
   }, [variantId]);
 
-  // Track engagement when user interacts
-  const handleEngagement = (type: string) => {
-    trackEngagement(type);
-  };
 
   // Structured data for SEO
   const structuredData = {
@@ -169,12 +169,13 @@ export default function Page() {
             </span>
           </div>
           <nav className="hidden gap-8 text-sm md:flex" role="navigation" aria-label="Main navigation">
-            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow features">Features</a>
-            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Learn how PrepFlow works">How it works</a>
-            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow pricing">Pricing</a>
-            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Frequently asked questions">FAQ</a>
+            <a href="#features" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow features">{t('nav.features', 'Features')}</a>
+            <a href="#how-it-works" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Learn how PrepFlow works">{t('nav.howItWorks', 'How it works')}</a>
+            <a href="#pricing" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="View PrepFlow pricing">{t('nav.pricing', 'Pricing')}</a>
+            <a href="#faq" className="text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded" aria-label="Frequently asked questions">{t('nav.faq', 'FAQ')}</a>
           </nav>
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher className="mr-4" />
             <a
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
@@ -182,28 +183,21 @@ export default function Page() {
               className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
               onClick={() => handleEngagement('header_cta_click')}
             >
-              Get PrepFlow Now
+              {t('hero.ctaPrimary', 'Get PrepFlow Now')}
             </a>
           </div>
           <MobileNavigation onEngagement={handleEngagement} />
         </header>
 
-        {/* Hero Section - A/B Testing Variants */}
-        {isLoading ? (
-          <HeroSkeleton />
-        ) : (
-          <>
-            {variantId === 'control' && <ControlHero />}
-            {variantId === 'variant_a' && <VariantAHero />}
-            {variantId === 'variant_b' && <VariantBHero />}
-            {variantId === 'variant_c' && <VariantCHero />}
-          </>
-        )}
+        {/* Hero Section - A/B Testing Variants with Lazy Loading */}
+        {renderHero()}
 
         {/* Trust bar */}
         <div className="rounded-2xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 text-center text-base text-gray-300 shadow-lg">
-          <strong>Stop guessing. Start knowing.</strong> PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.
+          {t('trustBar.text')}
         </div>
+
+
 
         {/* Problem → Outcome */}
         <section id="problem-outcome" className="py-20">
@@ -211,25 +205,25 @@ export default function Page() {
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
                 <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
-                  The Problem
+                  {t('problemOutcome.problem.title')}
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>You don't know which menu items actually make money</span>
+                  <span>{t('problemOutcome.problem.points.0')}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>COGS creep and waste eat your profit</span>
+                  <span>{t('problemOutcome.problem.points.1')}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>Pricing is guesswork; GST adds friction</span>
+                  <span>{t('problemOutcome.problem.points.2')}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-400 text-xl">✗</span>
-                  <span>Reports are slow, complicated, or sit in someone else's tool</span>
+                  <span>{t('problemOutcome.problem.points.3')}</span>
                 </li>
               </ul>
             </div>
@@ -237,25 +231,25 @@ export default function Page() {
             <div>
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-6">
                 <span className="bg-gradient-to-r from-green-400 to-[#29E7CD] bg-clip-text text-transparent">
-                  The Outcome
+                  {t('problemOutcome.outcome.title')}
                 </span>
               </h3>
               <ul className="space-y-4 text-lg text-gray-300">
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>See item-level margins and profit instantly</span>
+                  <span>{t('problemOutcome.outcome.points.0')}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Spot "winners" and "profit leaks" at a glance</span>
+                  <span>{t('problemOutcome.outcome.points.1')}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Adjust pricing with confidence (GST-aware)</span>
+                  <span>{t('problemOutcome.outcome.points.2')}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-green-400 text-xl">✓</span>
-                  <span>Run everything in Google Sheets — no new software to learn</span>
+                  <span>{t('problemOutcome.outcome.points.3')}</span>
                 </li>
               </ul>
             </div>
@@ -268,43 +262,42 @@ export default function Page() {
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                  Contributing Margin
-                </span> — The Real Profit Story
+                  {t('contributingMargin.title')}
+                </span>
               </h3>
-              <p className="text-lg text-gray-300">See beyond gross profit to understand what each dish truly contributes to your business</p>
+              <p className="text-lg text-gray-300">{t('contributingMargin.subtitle')}</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-2xl p-6 mb-4">
                   <span className="text-4xl">💰</span>
-                  <h4 className="text-xl font-semibold text-white mt-3">Gross Profit</h4>
-                  <p className="text-sm text-gray-300">What you think you're making</p>
+                  <h4 className="text-xl font-semibold text-white mt-3">{t('contributingMargin.grossProfit.title')}</h4>
+                  <p className="text-sm text-gray-300">{t('contributingMargin.grossProfit.description')}</p>
                 </div>
               </div>
               
               <div className="text-center">
                 <div className="bg-[#D925C7]/20 border border-[#D925C7]/30 rounded-2xl p-6 mb-4">
                   <span className="text-4xl">⚡</span>
-                  <h4 className="text-xl font-semibold text-white mt-3">Contributing Margin</h4>
-                  <p className="text-sm text-gray-300">What you're actually contributing</p>
+                  <h4 className="text-xl font-semibold text-white mt-3">{t('contributingMargin.contributingMargin.title')}</h4>
+                  <p className="text-sm text-gray-300">{t('contributingMargin.contributingMargin.description')}</p>
                 </div>
               </div>
               
               <div className="text-center">
                 <div className="bg-[#3B82F6]/20 border border-[#3B82F6]/30 rounded-2xl p-6 mb-4">
                   <span className="text-4xl">🎯</span>
-                  <h4 className="text-xl font-semibold text-white mt-3">Action Plan</h4>
-                  <p className="text-sm text-gray-300">What to do about it</p>
+                  <h4 className="text-xl font-semibold text-white mt-3">{t('contributingMargin.actionPlan.title')}</h4>
+                  <p className="text-sm text-gray-300">{t('contributingMargin.actionPlan.description')}</p>
                 </div>
               </div>
             </div>
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>PrepFlow helps you see:</strong> That $15 burger might have a 60% GP, but after prep time, waste, and complexity, 
-                it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.
-                <br /><span className="text-sm text-gray-400">*Example for illustration - actual results depend on your specific menu and costs</span>
+                <strong>{t('contributingMargin.explanation')}</strong>
+                <br /><span className="text-sm text-gray-400">{t('contributingMargin.disclaimer')}</span>
               </p>
             </div>
           </div>
@@ -314,44 +307,43 @@ export default function Page() {
         <section className="py-20 border-t border-gray-700">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
-              My Journey Creating PrepFlow
+              {t('journey.title')}
             </h2>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-              This isn't just another tool - it's my personal solution to real kitchen problems, 
-              refined over 20 years of working in restaurants across Europe and Australia.
+              {t('journey.subtitle')}
             </p>
           </div>
           
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="text-center">
               <div className="text-4xl mb-4">👨‍🍳</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2008-2012 - Early Experience</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">{t('journey.earlyExperience.title')}</h3>
               <p className="text-gray-300 text-sm">
-                Started as Sous Chef at Krautwells GmbH, managing vegan cuisine and training junior chefs
+                {t('journey.earlyExperience.description')}
               </p>
             </div>
             
             <div className="text-center">
               <div className="text-4xl mb-4">🌍</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2012-2018 - European Leadership</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">{t('journey.europeanLeadership.title')}</h3>
               <p className="text-gray-300 text-sm">
-                Founded KSK-Küchenspezialkräfte vegan catering, managed teams of 21 staff, served 1,200+ daily
+                {t('journey.europeanLeadership.description')}
               </p>
             </div>
             
             <div className="text-center">
               <div className="text-4xl mb-4">🇦🇺</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2018-2024 - Australian Excellence</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">{t('journey.australianExcellence.title')}</h3>
               <p className="text-gray-300 text-sm">
-                Executive Chef roles, Head Chef at ALH Hotels, leading teams of 9 chefs with AI integration
+                {t('journey.australianExcellence.description')}
               </p>
             </div>
             
             <div className="text-center">
               <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-xl font-semibold text-white mb-2">2024 - Ready to Share</h3>
+              <h3 className="text-xl font-semibold text-white mb-2">{t('journey.readyToShare.title')}</h3>
               <p className="text-gray-300 text-sm">
-                Now sharing the perfected tool with fellow chefs and restaurateurs who face the same challenges I did
+                {t('journey.readyToShare.description')}
               </p>
             </div>
           </div>
@@ -359,23 +351,19 @@ export default function Page() {
           <div className="mt-12 text-center">
             <div className="bg-[#1f1f1f] border border-[#29E7CD]/30 rounded-2xl p-8 max-w-4xl mx-auto">
               <h3 className="text-2xl font-bold text-[#29E7CD] mb-4">
-                Why I Created PrepFlow
+                {t('journey.whyCreated.title')}
               </h3>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Over 20 years as a chef, I've managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. 
-                I've faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.
+                {t('journey.whyCreated.paragraphs.0')}
               </p>
               <p className="text-gray-300 leading-relaxed mb-4">
-                As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. 
-                Existing solutions were either too complex, too expensive, or didn't understand real kitchen operations.
+                {t('journey.whyCreated.paragraphs.1')}
               </p>
               <p className="text-gray-300 leading-relaxed mb-4">
-                So I built my own solution - a simple Google Sheets template that could handle COGS calculations, 
-                track ingredient costs, and show me exactly which menu items were profitable and which were losing money.
+                {t('journey.whyCreated.paragraphs.2')}
               </p>
-              <p className="text-gray-300 leading-relaxed">
-                Having worked across Europe and Australia, I've refined it to work perfectly for venues worldwide - with GST support for Australian markets, 
-                multi-currency options, and the flexibility to adapt to any kitchen's needs. It's the tool I wish I had when I started, and now I'm sharing it with you.
+              <p className="text-gray-300 leading-relaxed mb-4">
+                {t('journey.whyCreated.paragraphs.3')}
               </p>
             </div>
           </div>
@@ -384,15 +372,15 @@ export default function Page() {
         {/* Features – tailored to the spreadsheet */}
         <section id="features" className="py-20">
           <div className="grid gap-8 md:grid-cols-3">
-            <FeatureCard title="Stock List (infinite)" body="Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit." />
-            <FeatureCard title="COGS Recipes" body="Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly." />
-            <FeatureCard title="Item Performance" body="Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef's Kiss, Hidden Gem or Bargain Bucket." />
+            <FeatureCard title={String(t('features.stockList.title'))} body={String(t('features.stockList.description'))} />
+            <FeatureCard title={String(t('features.cogsRecipes.title'))} body={String(t('features.cogsRecipes.description'))} />
+            <FeatureCard title={String(t('features.itemPerformance.title'))} body={String(t('features.itemPerformance.description'))} />
           </div>
           <div className="mt-8 grid gap-8 md:grid-cols-3">
-            <FeatureCard title="Dashboard KPIs" body="At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin." />
-            <FeatureCard title="Global Tax & Currency" body="Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements." />
-                          <FeatureCard title="Fast Onboarding" body="Start tab with step‑by‑step guidance. Pre‑loaded sample data and comprehensive resources to learn the flow in minutes." />
-            <FeatureCard title="AI Method Generator" body="Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes." />
+            <FeatureCard title={String(t('features.dashboardKpis.title'))} body={String(t('features.dashboardKpis.description'))} />
+            <FeatureCard title={String(t('features.globalTax.title'))} body={String(t('features.globalTax.description'))} />
+            <FeatureCard title={String(t('features.fastOnboarding.title'))} body={String(t('features.fastOnboarding.description'))} />
+            <FeatureCard title={String(t('features.aiMethodGenerator.title'))} body={String(t('features.aiMethodGenerator.description'))} />
           </div>
         </section>
 
@@ -402,12 +390,11 @@ export default function Page() {
                         <div className="text-center mb-12">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
                 <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
-                  Expose Hidden Profits
-                </span> — One Sheet, Every Answer
+                  {t('globalFeatures.title')}
+                </span>
               </h3>
               <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                While others charge thousands for complicated restaurant software, PrepFlow provides similar profit insights 
-                in a simple Google Sheet for a one-time purchase.
+                {t('globalFeatures.subtitle')}
               </p>
             </div>
             
@@ -416,39 +403,38 @@ export default function Page() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#3B82F6] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🌍</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">Multi-Currency</h4>
-                <p className="text-sm text-gray-400">USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.</p>
+                <h4 className="font-semibold text-white mb-2">{t('globalFeatures.multiCurrency.title')}</h4>
+                <p className="text-sm text-gray-400">{t('globalFeatures.multiCurrency.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#D925C7] to-[#29E7CD] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🏛️</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">Tax Systems</h4>
-                <p className="text-sm text-gray-400">GST, VAT, Sales Tax, HST. Configure for your local requirements.</p>
+                <h4 className="font-semibold text-white mb-2">{t('globalFeatures.taxSystems.title')}</h4>
+                <p className="text-sm text-gray-400">{t('globalFeatures.taxSystems.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">📱</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">24/7 Access</h4>
-                <p className="text-sm text-gray-400">Cloud-based Google Sheets. Access from anywhere, anytime.</p>
+                <h4 className="font-semibold text-white mb-2">{t('globalFeatures.access24_7.title')}</h4>
+                <p className="text-sm text-gray-400">{t('globalFeatures.access24_7.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#29E7CD] to-[#D925C7] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🚀</span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">No Consultants</h4>
-                <p className="text-sm text-gray-400">Set up yourself in under an hour. No expensive implementation fees.</p>
+                <h4 className="font-semibold text-white mb-2">{t('globalFeatures.noConsultants.title')}</h4>
+                <p className="text-sm text-gray-400">{t('globalFeatures.noConsultants.description')}</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
               <p className="text-base text-gray-300">
-                <strong>One sheet. Key insights your kitchen needs.</strong> Identify profit opportunities in your menu 
-                with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.
+                <strong>{t('globalFeatures.conclusion')}</strong>
               </p>
             </div>
           </div>
@@ -457,47 +443,47 @@ export default function Page() {
         {/* How it works */}
         <section id="how-it-works" className="py-20">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            Get Results in 3 Simple Steps
+            {t('howItWorks.title')}
           </h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            <Step n={1} title="Set up (5–10 min)" body="Turn on GST, add ingredients, yields, and supplier costs." />
-            <Step n={2} title="Import sales" body="Paste your POS export into the Sales tab." />
-            <Step n={3} title="Decide & act" body="Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix." />
+            <Step n={1} title={String(t('howItWorks.step1.title'))} body={String(t('howItWorks.step1.description'))} />
+            <Step n={2} title={String(t('howItWorks.step2.title'))} body={String(t('howItWorks.step2.description'))} />
+            <Step n={3} title={String(t('howItWorks.step3.title'))} body={String(t('howItWorks.step3.description'))} />
           </div>
           
           {/* 60-Second Checklist */}
           <div className="mt-16 rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-8 shadow-2xl">
-            <h3 className="text-2xl font-bold text-center mb-6">60-Second Checklist</h3>
+            <h3 className="text-2xl font-bold text-center mb-6">{t('howItWorks.checklist.title')}</h3>
             <div className="grid gap-4 md:grid-cols-5 text-center">
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
                   <span className="text-[#29E7CD] text-xl">1</span>
                 </div>
-                <span className="text-sm text-gray-300">GST toggle set?</span>
+                <span className="text-sm text-gray-300">{t('howItWorks.checklist.items.0')}</span>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
                   <span className="text-[#29E7CD] text-xl">2</span>
                 </div>
-                <span className="text-sm text-gray-300">Ingredient yields/waste entered?</span>
+                <span className="text-sm text-gray-300">{t('howItWorks.checklist.items.1')}</span>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
                   <span className="text-[#29E7CD] text-xl">3</span>
                 </div>
-                <span className="text-sm text-gray-300">Sales pasted?</span>
+                <span className="text-sm text-gray-300">{t('howItWorks.checklist.items.2')}</span>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
                   <span className="text-[#29E7CD] text-xl">4</span>
                 </div>
-                <span className="text-sm text-gray-300">Review top 5 low-margin items?</span>
+                <span className="text-sm text-gray-300">{t('howItWorks.checklist.items.3')}</span>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 bg-[#29E7CD]/20 border border-[#29E7CD]/30 rounded-full flex items-center justify-center">
                   <span className="text-[#29E7CD] text-xl">5</span>
                 </div>
-                <span className="text-sm text-gray-300">Re-check dashboard tomorrow</span>
+                <span className="text-sm text-gray-300">{t('howItWorks.checklist.items.4')}</span>
               </div>
             </div>
           </div>
@@ -510,10 +496,10 @@ export default function Page() {
           <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
               <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
-                See PrepFlow before you buy
+                {t('leadMagnet.title')}
               </h3>
               <p className="text-lg text-gray-300">
-                Get a sample dashboard — we'll email it to you.
+                {t('leadMagnet.subtitle')}
               </p>
             </div>
             
@@ -536,57 +522,48 @@ export default function Page() {
         <div className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] p-6 text-center text-white">
           <div className="mb-3">
             <h3 className="text-xl font-bold mb-2">
-              🚀 Simple, Honest Pricing
+              {t('pricing.title')}
             </h3>
             <p className="text-sm opacity-90">
-              AUD $29 - one-time purchase, lifetime access
+              {t('pricing.subtitle')}
             </p>
           </div>
         </div>
 
-        {/* Pricing Section - A/B Testing Variants */}
-        {isLoading ? (
-          <PricingSkeleton />
-        ) : (
-          <>
-            {variantId === 'control' && <ControlPricing />}
-            {variantId === 'variant_a' && <VariantAPricing />}
-            {variantId === 'variant_b' && <VariantBPricing />}
-            {variantId === 'variant_c' && <VariantCPricing />}
-          </>
-        )}
+        {/* Pricing Section - A/B Testing Variants with Lazy Loading */}
+        {renderPricing()}
 
         {/* How PrepFlow Works in Practice */}
         <section id="how-it-works-practice" className="py-20">
           <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl">
             <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">How PrepFlow Works in Practice</h3>
-              <p className="text-lg text-gray-300">From guesswork to data-driven clarity - here's what you can expect</p>
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">{t('howItWorksPractice.title')}</h3>
+              <p className="text-lg text-gray-300">{t('howItWorksPractice.subtitle')}</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="text-center">
                 <div className="bg-orange-500/20 border border-orange-500/30 rounded-2xl p-6 mb-4">
-                  <p className="text-2xl font-bold text-orange-400">Before PrepFlow</p>
+                  <p className="text-2xl font-bold text-orange-400">{t('howItWorksPractice.before.title')}</p>
                   <p className="text-4xl font-extrabold text-orange-300">?</p>
-                  <p className="text-sm text-gray-400">Unclear margins</p>
+                  <p className="text-sm text-gray-400">{t('howItWorksPractice.before.status')}</p>
                 </div>
-                <p className="text-sm text-gray-400">Blind pricing, gut feeling, unclear margins everywhere</p>
+                <p className="text-sm text-gray-400">{t('howItWorksPractice.before.description')}</p>
               </div>
               
               <div className="text-center">
                 <div className="bg-green-500/20 border border-green-500/30 rounded-2xl p-6 mb-4">
-                  <p className="text-2xl font-bold text-green-400">After PrepFlow</p>
+                  <p className="text-2xl font-bold text-green-400">{t('howItWorksPractice.after.title')}</p>
                   <p className="text-4xl font-extrabold text-green-300">📊</p>
-                  <p className="text-sm text-gray-400">Clear insights</p>
+                  <p className="text-sm text-gray-400">{t('howItWorksPractice.after.status')}</p>
                 </div>
-                <p className="text-sm text-gray-400">Data-driven decisions, margin insights revealed, clarity achieved</p>
+                <p className="text-sm text-gray-400">{t('howItWorksPractice.after.description')}</p>
               </div>
             </div>
             
             <div className="mt-8 text-center">
-              <p className="text-sm text-gray-400">PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins</p>
-              <p className="text-xs text-gray-500 mt-2">*Results depend on your current menu structure and how you implement the insights</p>
+              <p className="text-sm text-gray-400">{t('howItWorksPractice.explanation')}</p>
+              <p className="text-xs text-gray-500 mt-2">{t('howItWorksPractice.disclaimer')}</p>
             </div>
           </div>
         </section>
@@ -594,22 +571,22 @@ export default function Page() {
         {/* What PrepFlow Helps You Achieve */}
         <section id="benefits" className="py-20">
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            What PrepFlow Helps You Achieve
+            {t('benefits.title')}
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             <BenefitCard 
-              title="Better Pricing Decisions"
-              description="See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing."
+              title={String(t('benefits.betterPricing.title'))}
+              description={String(t('benefits.betterPricing.description'))}
               icon="💰"
             />
             <BenefitCard 
-              title="Identify Profit Opportunities"
-              description="Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they'll have the biggest impact."
+              title={String(t('benefits.identifyOpportunities.title'))}
+              description={String(t('benefits.identifyOpportunities.description'))}
               icon="🎯"
             />
             <BenefitCard 
-              title="Streamline Operations"
-              description="Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line."
+              title={String(t('benefits.streamlineOperations.title'))}
+              description={String(t('benefits.streamlineOperations.description'))}
               icon="⚡"
             />
           </div>
@@ -617,9 +594,9 @@ export default function Page() {
           <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
               <span className="text-[#29E7CD]">📊</span>
-              <span className="text-white font-medium">See PrepFlow in action</span>
+              <span className="text-white font-medium">{t('benefits.cta.text')}</span>
               <a href="#lead-magnet" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
-                Get Sample
+                {t('benefits.cta.button')}
               </a>
             </div>
           </div>
@@ -628,32 +605,32 @@ export default function Page() {
         {/* FAQ */}
         <section id="faq" className="py-20">
           <h3 className="text-3xl font-bold tracking-tight md:text-4xl text-center mb-12">
-            FAQ
+            {t('faq.title')}
           </h3>
           <div className="mt-12 grid gap-8 md:grid-cols-2">
-            <FAQ q="Do I need tech skills?" a="Zero spreadsheet formulas required. If you can use Google Sheets, you're good." />
-            <FAQ q="Does it work worldwide?" a="Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market." />
-                            <FAQ q="What if it doesn't work for me?" a="If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle." />
-            <FAQ q="Will this slow me down?" a="Setup typically takes 1-2 hours. After that, you'll save time on menu planning and cost analysis." />
+            <FAQ q={String(t('faq.questions.0.question'))} a={String(t('faq.questions.0.answer'))} />
+            <FAQ q={String(t('faq.questions.1.question'))} a={String(t('faq.questions.1.answer'))} />
+            <FAQ q={String(t('faq.questions.2.question'))} a={String(t('faq.questions.2.answer'))} />
+            <FAQ q={String(t('faq.questions.3.question'))} a={String(t('faq.questions.3.answer'))} />
           </div>
         </section>
 
         {/* Trust Elements */}
         <section className="py-16 border-t border-gray-700">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Built for Independent Venues & Small Kitchens</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">{t('builtFor.title')}</h3>
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">📊</span>
-                <span className="text-white text-sm">Works with Google Sheets</span>
+                <span className="text-white text-sm">{t('builtFor.features.0')}</span>
               </div>
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">🛡️</span>
-                <span className="text-white text-sm">7-Day Refund Policy</span>
+                <span className="text-white text-sm">{t('builtFor.features.1')}</span>
               </div>
               <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
                 <span className="text-[#29E7CD]">🇦🇺</span>
-                <span className="text-white text-sm">Made for AU Market</span>
+                <span className="text-white text-sm">{t('builtFor.features.2')}</span>
               </div>
             </div>
           </div>

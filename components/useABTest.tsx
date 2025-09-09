@@ -1,15 +1,41 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { assignVariant, getCurrentVariant, trackEngagement } from '../lib/analytics';
+
+// Lazy load variants for better performance
+const ControlHero = lazy(() => import('./variants/HeroVariants').then(m => ({ default: m.ControlHero })));
+const VariantAHero = lazy(() => import('./variants/HeroVariants').then(m => ({ default: m.VariantAHero })));
+const VariantBHero = lazy(() => import('./variants/HeroVariants').then(m => ({ default: m.VariantBHero })));
+const VariantCHero = lazy(() => import('./variants/HeroVariants').then(m => ({ default: m.VariantCHero })));
+
+const ControlPricing = lazy(() => import('./variants/PricingVariants').then(m => ({ default: m.ControlPricing })));
+const VariantAPricing = lazy(() => import('./variants/PricingVariants').then(m => ({ default: m.VariantAPricing })));
+const VariantBPricing = lazy(() => import('./variants/PricingVariants').then(m => ({ default: m.VariantBPricing })));
+const VariantCPricing = lazy(() => import('./variants/PricingVariants').then(m => ({ default: m.VariantCPricing })));
+
+// Loading components
+const HeroSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="h-96 bg-gray-800 rounded-3xl"></div>
+  </div>
+);
+
+const PricingSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="h-64 bg-gray-800 rounded-3xl"></div>
+  </div>
+);
 
 interface UseABTestOptions {
   testId: string;
   userId?: string;
   onVariantChange?: (variantId: string) => void;
+  t?: (key: string, fallback?: string | any[]) => string | any[];
+  handleEngagement?: (event: string) => void;
 }
 
-export function useABTest({ testId, userId, onVariantChange }: UseABTestOptions) {
+export function useABTest({ testId, userId, onVariantChange, t, handleEngagement }: UseABTestOptions) {
   const [variantId, setVariantId] = useState<string>('control');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,10 +69,39 @@ export function useABTest({ testId, userId, onVariantChange }: UseABTestOptions)
     }
   };
 
+  // Render functions for lazy-loaded components
+  const renderHero = () => {
+    if (isLoading) return <HeroSkeleton />;
+
+    return (
+      <Suspense fallback={<HeroSkeleton />}>
+        {variantId === 'control' && <ControlHero t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'variant_a' && <VariantAHero t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'variant_b' && <VariantBHero t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'variant_c' && <VariantCHero t={t} handleEngagement={handleEngagement} />}
+      </Suspense>
+    );
+  };
+
+  const renderPricing = () => {
+    if (isLoading) return <PricingSkeleton />;
+
+    return (
+      <Suspense fallback={<PricingSkeleton />}>
+        {variantId === 'control' && <ControlPricing t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'variant_a' && <VariantAPricing t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'variant_b' && <VariantBPricing t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'variant_c' && <VariantCPricing t={t} handleEngagement={handleEngagement} />}
+      </Suspense>
+    );
+  };
+
   return {
     variantId,
     isLoading,
     trackEngagement: trackEngagementEvent,
+    renderHero,
+    renderPricing,
     isControl: variantId === 'control',
     isVariantA: variantId === 'variant_a',
     isVariantB: variantId === 'variant_b',
@@ -55,10 +110,12 @@ export function useABTest({ testId, userId, onVariantChange }: UseABTestOptions)
 }
 
 // Convenience hook for specific test types
-export function useLandingPageABTest(userId?: string) {
+export function useLandingPageABTest(userId?: string, t?: (key: string, fallback?: string | any[]) => string | any[], handleEngagement?: (event: string) => void) {
   return useABTest({ 
     testId: 'landing_page_variants', 
     userId,
+    t,
+    handleEngagement,
     onVariantChange: (variantId) => {
       // Track page view with variant context
       if (typeof window !== 'undefined' && window.gtag) {
