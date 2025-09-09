@@ -153,7 +153,51 @@ export const translations = {
     subtitle: 'Sehen Sie genau, welche Gerichte Geld verdienen und welche Ihren Gewinn auffressen. Entwickelt aus 20 Jahren echter Küchenerfahrung.',
     ctaPrimary: 'Jetzt PrepFlow holen - 29€',
     ctaSecondary: 'Kostenlose Probe holen',
-    dashboardAlt: 'PrepFlow Dashboard zeigt COGS-Analyse und Gewinneinblicke'
+    dashboardAlt: 'PrepFlow Dashboard zeigt COGS-Analyse und Gewinneinblicke',
+    disclaimer: 'Funktioniert für Cafés, Food Trucks, kleine Restaurants. Keine Bindung. 7-Tage-Geld-zurück-Richtlinie. Ergebnisse können je nach Ihrer aktuellen Speisekarte und Betrieb variieren.',
+    
+    // A/B Test Variants
+    variantA: {
+      title: 'Hören Sie auf, Geld mit Ihrer Speisekarte zu verlieren.',
+      subtitle: 'Die meisten Restaurants wissen nicht, welche Gerichte profitabel sind. PrepFlow zeigt Ihnen genau, wohin Ihr Geld fließt — und wie Sie es beheben können.',
+      bullet1: { title: 'Blutung stoppen', description: 'identifizieren Sie, welche Menüpunkte Sie Geld kosten' },
+      bullet2: { title: 'Echte Kostenanalyse', description: 'sehen Sie echte Zutatenkosten inklusive Abfall und Ausbeute' },
+      bullet3: { title: 'Gewinnoptimierung', description: 'wissen Sie, welche Gerichte Sie bewerben, reparieren oder entfernen sollten' },
+      bullet4: { title: 'GST-Compliance', description: 'preisen Sie korrekt für australische Steueranforderungen' },
+      bullet5: { title: 'Intelligente Menüentscheidungen', description: 'datengetriebene Entscheidungen über Ihre Menümischung' },
+      bullet6: { title: 'KI-Kücheneinblicke', description: 'entdecken Sie neue Methoden zur Verbesserung Ihrer Margen' },
+      ctaPrimary: 'Beispiel-Dashboard holen',
+      ctaSecondary: 'Kostenlose Probe holen',
+      disclaimer: 'Entwickelt für australische Cafés und Restaurants. Keine Bindung. 7-Tage-Geld-zurück-Richtlinie.'
+    },
+    
+    variantB: {
+      title: 'Verwandeln Sie Ihr Menü in eine Gewinnmaschine.',
+      subtitle: 'Verwandeln Sie Raten in datengetriebene Entscheidungen. PrepFlow gibt Ihnen die Einblicke, um jeden Dollar auf Ihrem Menü zu maximieren.',
+      bullet1: { title: 'Gewinnmaximierung', description: 'identifizieren Sie Ihre höchsten Margenmöglichkeiten' },
+      bullet2: { title: 'Kostentransparenz', description: 'sehen Sie genau, was jedes Gericht kostet' },
+      bullet3: { title: 'Menüoptimierung', description: 'wissen Sie, welche Artikel Sie bewerben oder entfernen sollten' },
+      bullet4: { title: 'Steuercompliance', description: 'GST-bereite Preisgestaltung für australische Unternehmen' },
+      bullet5: { title: 'Leistungsverfolgung', description: 'überwachen Sie, welche Gerichte Ihren Gewinn antreiben' },
+      bullet6: { title: 'KI-Optimierung', description: 'erhalten Sie Vorschläge zur Verbesserung Ihrer Margen' },
+      ctaPrimary: 'Beispiel-Dashboard holen',
+      ctaSecondary: 'Beispiel-Blatt ausprobieren',
+      disclaimer: 'Entwickelt für australische Gastronomie. Einfache Einrichtung. 7-Tage-Geld-zurück-Garantie.'
+    },
+    
+    variantC: {
+      title: 'Kennen Sie Ihre Menükosten. Machen Sie mehr Gewinn.',
+      subtitle: 'PrepFlow zeigt Ihnen genau, was jedes Gericht kostet und wie viel Gewinn es macht. Einfaches Google Sheet. Echte Ergebnisse.',
+      bullet1: { title: 'Kostenaufschlüsselung', description: 'sehen Sie genau, was jedes Gericht kostet' },
+      bullet2: { title: 'Gewinnberechnung', description: 'kennen Sie Ihre Marge bei jedem Artikel' },
+      bullet3: { title: 'Menüentscheidungen', description: 'entscheiden Sie, was Sie behalten, ändern oder entfernen möchten' },
+      bullet4: { title: 'GST-bereit', description: 'australische Steuercompliance eingebaut' },
+      bullet5: { title: 'Einfache Einrichtung', description: 'funktioniert in Google Sheets, keine neue Software' },
+      bullet6: { title: 'Intelligente Einblicke', description: 'KI-Vorschläge zur Verbesserung Ihrer Margen' },
+      ctaPrimary: 'Beispiel-Dashboard holen',
+      ctaSecondary: 'Kostenlose Probe',
+      disclaimer: 'Für australische Cafés und Restaurants. 7-Tage-Geld-zurück-Richtlinie.'
+    }
   },
   
   // Pricing

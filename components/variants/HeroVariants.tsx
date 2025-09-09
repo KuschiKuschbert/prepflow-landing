@@ -115,27 +115,35 @@ export function VariantAHero({ t, handleEngagement }: HeroProps) {
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          Stop losing money on your menu.
+          {t('hero.variantA.title', 'Stop losing money on your menu.')}
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-          Most restaurants don't know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.
+          {t('hero.variantA.subtitle', 'Most restaurants don\'t know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.')}
         </p>
         <ul className="mt-8 space-y-3 text-base text-gray-300">
-          <Bullet><strong>Stop the Bleeding</strong> — identify which menu items are costing you money</Bullet>
-          <Bullet><strong>Real Cost Analysis</strong> — see true ingredient costs including waste and yields</Bullet>
-          <Bullet><strong>Profit Optimization</strong> — know which dishes to promote, fix, or remove</Bullet>
-          <Bullet><strong>GST Compliance</strong> — price correctly for Australian tax requirements</Bullet>
-          <Bullet><strong>Smart Menu Decisions</strong> — data-driven choices about your menu mix</Bullet>
-          <Bullet><strong>AI Kitchen Insights</strong> — discover new methods to improve margins</Bullet>
+          <Bullet><strong>{t('hero.variantA.bullet1.title', 'Stop the Bleeding')}</strong> — {t('hero.variantA.bullet1.description', 'identify which menu items are costing you money')}</Bullet>
+          <Bullet><strong>{t('hero.variantA.bullet2.title', 'Real Cost Analysis')}</strong> — {t('hero.variantA.bullet2.description', 'see true ingredient costs including waste and yields')}</Bullet>
+          <Bullet><strong>{t('hero.variantA.bullet3.title', 'Profit Optimization')}</strong> — {t('hero.variantA.bullet3.description', 'know which dishes to promote, fix, or remove')}</Bullet>
+          <Bullet><strong>{t('hero.variantA.bullet4.title', 'GST Compliance')}</strong> — {t('hero.variantA.bullet4.description', 'price correctly for Australian tax requirements')}</Bullet>
+          <Bullet><strong>{t('hero.variantA.bullet5.title', 'Smart Menu Decisions')}</strong> — {t('hero.variantA.bullet5.description', 'data-driven choices about your menu mix')}</Bullet>
+          <Bullet><strong>{t('hero.variantA.bullet6.title', 'AI Kitchen Insights')}</strong> — {t('hero.variantA.bullet6.description', 'discover new methods to improve margins')}</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300">
-            Get Sample Dashboard
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25 transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_cta_click')}
+          >
+            {t('hero.variantA.ctaPrimary', 'Get Sample Dashboard')}
           </a>
-          <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#D925C7] hover:text-[#D925C7] transition-all duration-300">
-            Get Free Sample
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#D925C7] hover:text-[#D925C7] transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_demo_click')}
+          >
+            {t('hero.variantA.ctaSecondary', 'Get Free Sample')}
           </a>
-          <p className="w-full text-sm text-gray-500">Built for Australian cafés and restaurants. No lock-in. 7-day refund policy.</p>
+          <p className="w-full text-sm text-gray-500">{t('hero.variantA.disclaimer', 'Built for Australian cafés and restaurants. No lock-in. 7-day refund policy.')}</p>
         </div>
       </div>
 
@@ -204,27 +212,35 @@ export function VariantBHero({ t, handleEngagement }: HeroProps) {
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          Turn your menu into a profit machine.
+          {t('hero.variantB.title', 'Turn your menu into a profit machine.')}
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-          Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.
+          {t('hero.variantB.subtitle', 'Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.')}
         </p>
         <ul className="mt-8 space-y-3 text-base text-gray-300">
-          <Bullet><strong>Profit Maximization</strong> — identify your highest-margin opportunities</Bullet>
-          <Bullet><strong>Cost Transparency</strong> — see exactly what each dish costs to make</Bullet>
-          <Bullet><strong>Menu Optimization</strong> — know which items to feature or remove</Bullet>
-          <Bullet><strong>Tax Compliance</strong> — GST-ready pricing for Australian businesses</Bullet>
-          <Bullet><strong>Performance Tracking</strong> — monitor which dishes drive your profit</Bullet>
-          <Bullet><strong>AI Optimization</strong> — get suggestions to improve your margins</Bullet>
+          <Bullet><strong>{t('hero.variantB.bullet1.title', 'Profit Maximization')}</strong> — {t('hero.variantB.bullet1.description', 'identify your highest-margin opportunities')}</Bullet>
+          <Bullet><strong>{t('hero.variantB.bullet2.title', 'Cost Transparency')}</strong> — {t('hero.variantB.bullet2.description', 'see exactly what each dish costs to make')}</Bullet>
+          <Bullet><strong>{t('hero.variantB.bullet3.title', 'Menu Optimization')}</strong> — {t('hero.variantB.bullet3.description', 'know which items to feature or remove')}</Bullet>
+          <Bullet><strong>{t('hero.variantB.bullet4.title', 'Tax Compliance')}</strong> — {t('hero.variantB.bullet4.description', 'GST-ready pricing for Australian businesses')}</Bullet>
+          <Bullet><strong>{t('hero.variantB.bullet5.title', 'Performance Tracking')}</strong> — {t('hero.variantB.bullet5.description', 'monitor which dishes drive your profit')}</Bullet>
+          <Bullet><strong>{t('hero.variantB.bullet6.title', 'AI Optimization')}</strong> — {t('hero.variantB.bullet6.description', 'get suggestions to improve your margins')}</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#3B82F6]/25 transition-all duration-300">
-            Get Sample Dashboard
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#3B82F6]/25 transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_cta_click')}
+          >
+            {t('hero.variantB.ctaPrimary', 'Get Sample Dashboard')}
           </a>
-          <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#3B82F6] hover:text-[#3B82F6] transition-all duration-300">
-            Try Sample Sheet
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#3B82F6] hover:text-[#3B82F6] transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_demo_click')}
+          >
+            {t('hero.variantB.ctaSecondary', 'Try Sample Sheet')}
           </a>
-          <p className="w-full text-sm text-gray-500">Designed for Australian hospitality. Simple setup. 7-day refund guarantee.</p>
+          <p className="w-full text-sm text-gray-500">{t('hero.variantB.disclaimer', 'Designed for Australian hospitality. Simple setup. 7-day refund guarantee.')}</p>
         </div>
       </div>
 
@@ -293,27 +309,35 @@ export function VariantCHero({ t, handleEngagement }: HeroProps) {
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          Know your menu costs. Make more profit.
+          {t('hero.variantC.title', 'Know your menu costs. Make more profit.')}
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-          PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.
+          {t('hero.variantC.subtitle', 'PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.')}
         </p>
         <ul className="mt-8 space-y-3 text-base text-gray-300">
-          <Bullet><strong>Cost Breakdown</strong> — see exactly what each dish costs to make</Bullet>
-          <Bullet><strong>Profit Calculation</strong> — know your margin on every item</Bullet>
-          <Bullet><strong>Menu Decisions</strong> — decide what to keep, change, or remove</Bullet>
-          <Bullet><strong>GST Ready</strong> — Australian tax compliance built-in</Bullet>
-          <Bullet><strong>Easy Setup</strong> — works in Google Sheets, no new software</Bullet>
-          <Bullet><strong>Smart Insights</strong> — AI suggestions to improve your margins</Bullet>
+          <Bullet><strong>{t('hero.variantC.bullet1.title', 'Cost Breakdown')}</strong> — {t('hero.variantC.bullet1.description', 'see exactly what each dish costs to make')}</Bullet>
+          <Bullet><strong>{t('hero.variantC.bullet2.title', 'Profit Calculation')}</strong> — {t('hero.variantC.bullet2.description', 'know your margin on every item')}</Bullet>
+          <Bullet><strong>{t('hero.variantC.bullet3.title', 'Menu Decisions')}</strong> — {t('hero.variantC.bullet3.description', 'decide what to keep, change, or remove')}</Bullet>
+          <Bullet><strong>{t('hero.variantC.bullet4.title', 'GST Ready')}</strong> — {t('hero.variantC.bullet4.description', 'Australian tax compliance built-in')}</Bullet>
+          <Bullet><strong>{t('hero.variantC.bullet5.title', 'Easy Setup')}</strong> — {t('hero.variantC.bullet5.description', 'works in Google Sheets, no new software')}</Bullet>
+          <Bullet><strong>{t('hero.variantC.bullet6.title', 'Smart Insights')}</strong> — {t('hero.variantC.bullet6.description', 'AI suggestions to improve your margins')}</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
-            Get Sample Dashboard
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_cta_click')}
+          >
+            {t('hero.variantC.ctaPrimary', 'Get Sample Dashboard')}
           </a>
-          <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
-            Free Sample
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_demo_click')}
+          >
+            {t('hero.variantC.ctaSecondary', 'Free Sample')}
           </a>
-          <p className="w-full text-sm text-gray-500">For Australian cafés and restaurants. 7-day refund policy.</p>
+          <p className="w-full text-sm text-gray-500">{t('hero.variantC.disclaimer', 'For Australian cafés and restaurants. 7-day refund policy.')}</p>
         </div>
       </div>
 
