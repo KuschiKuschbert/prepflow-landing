@@ -3671,41 +3671,20 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$de$2d
 ;
 const availableLanguages = {
     'en-AU': {
-        name: 'English (Australia)',
+        name: 'English',
         flag: '🇦🇺'
     },
-    'en-US': {
-        name: 'English (US)',
-        flag: '🇺🇸'
-    },
-    'en-GB': {
-        name: 'English (UK)',
-        flag: '🇬🇧'
-    },
     'de-DE': {
-        name: 'Deutsch (Deutschland)',
+        name: 'Deutsch',
         flag: '🇩🇪'
-    },
-    'fr-FR': {
-        name: 'Français (France)',
-        flag: '🇫🇷'
-    },
-    'es-ES': {
-        name: 'Español (España)',
-        flag: '🇪🇸'
     }
 };
-// Translation files mapping
+// Translation files mapping - Only English and German
 const translations = {
     'en-AU': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$en$2d$AU$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translations"],
-    'en-US': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$en$2d$AU$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translations"],
-    'en-GB': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$en$2d$AU$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translations"],
-    'de-DE': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$de$2d$DE$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translations"],
-    'fr-FR': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$en$2d$AU$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translations"],
-    'es-ES': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$en$2d$AU$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ // Fallback to EN for now
-    ["translations"]
+    'de-DE': __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$translations$2f$de$2d$DE$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translations"]
 };
-// Get browser language
+// Get browser language - Only English and German
 function getBrowserLanguage() {
     if ("TURBOPACK compile-time truthy", 1) return 'en-AU';
     //TURBOPACK unreachable
@@ -3713,7 +3692,6 @@ function getBrowserLanguage() {
     const browserLang = undefined;
     // Check for language code only (e.g., 'en' from 'en-US')
     const langCode = undefined;
-    const matchingLang = undefined;
 }
 // Get nested translation value
 function getNestedValue(obj, path) {

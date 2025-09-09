@@ -6,27 +6,19 @@ import { useState, useEffect } from 'react';
 import { translations as enAU } from './translations/en-AU';
 import { translations as deDE } from './translations/de-DE';
 
-// Available languages
+// Available languages - Only English and German
 export const availableLanguages = {
-  'en-AU': { name: 'English (Australia)', flag: '🇦🇺' },
-  'en-US': { name: 'English (US)', flag: '🇺🇸' },
-  'en-GB': { name: 'English (UK)', flag: '🇬🇧' },
-  'de-DE': { name: 'Deutsch (Deutschland)', flag: '🇩🇪' },
-  'fr-FR': { name: 'Français (France)', flag: '🇫🇷' },
-  'es-ES': { name: 'Español (España)', flag: '🇪🇸' }
+  'en-AU': { name: 'English', flag: '🇦🇺' },
+  'de-DE': { name: 'Deutsch', flag: '🇩🇪' }
 };
 
-// Translation files mapping
+// Translation files mapping - Only English and German
 const translations = {
   'en-AU': enAU,
-  'en-US': enAU, // Fallback to AU for now
-  'en-GB': enAU, // Fallback to AU for now
-  'de-DE': deDE,
-  'fr-FR': enAU, // Fallback to EN for now
-  'es-ES': enAU  // Fallback to EN for now
+  'de-DE': deDE
 };
 
-// Get browser language
+// Get browser language - Only English and German
 function getBrowserLanguage(): string {
   if (typeof window === 'undefined') return 'en-AU';
   
@@ -39,11 +31,14 @@ function getBrowserLanguage(): string {
   
   // Check for language code only (e.g., 'en' from 'en-US')
   const langCode = browserLang.split('-')[0];
-  const matchingLang = Object.keys(translations).find(lang => 
-    lang.startsWith(langCode)
-  );
   
-  return matchingLang || 'en-AU';
+  // Only support English and German
+  if (langCode === 'de') {
+    return 'de-DE';
+  }
+  
+  // Default to English for all other languages
+  return 'en-AU';
 }
 
 // Get nested translation value
