@@ -153,7 +153,51 @@ export const translations = {
     subtitle: 'See exactly which dishes make money and which eat your profit. Built from 20 years of real kitchen experience.',
     ctaPrimary: 'Get PrepFlow Now - $29 AUD',
     ctaSecondary: 'Get Free Sample',
-    dashboardAlt: 'PrepFlow Dashboard showing COGS analysis and profit insights'
+    dashboardAlt: 'PrepFlow Dashboard showing COGS analysis and profit insights',
+    disclaimer: 'Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.',
+    
+    // A/B Test Variants
+    variantA: {
+      title: 'Stop losing money on your menu.',
+      subtitle: 'Most restaurants don\'t know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.',
+      bullet1: { title: 'Stop the Bleeding', description: 'identify which menu items are costing you money' },
+      bullet2: { title: 'Real Cost Analysis', description: 'see true ingredient costs including waste and yields' },
+      bullet3: { title: 'Profit Optimization', description: 'know which dishes to promote, fix, or remove' },
+      bullet4: { title: 'GST Compliance', description: 'price correctly for Australian tax requirements' },
+      bullet5: { title: 'Smart Menu Decisions', description: 'data-driven choices about your menu mix' },
+      bullet6: { title: 'AI Kitchen Insights', description: 'discover new methods to improve margins' },
+      ctaPrimary: 'Get Sample Dashboard',
+      ctaSecondary: 'Get Free Sample',
+      disclaimer: 'Built for Australian cafés and restaurants. No lock-in. 7-day refund policy.'
+    },
+    
+    variantB: {
+      title: 'Turn your menu into a profit machine.',
+      subtitle: 'Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.',
+      bullet1: { title: 'Profit Maximization', description: 'identify your highest-margin opportunities' },
+      bullet2: { title: 'Cost Transparency', description: 'see exactly what each dish costs to make' },
+      bullet3: { title: 'Menu Optimization', description: 'know which items to feature or remove' },
+      bullet4: { title: 'Tax Compliance', description: 'GST-ready pricing for Australian businesses' },
+      bullet5: { title: 'Performance Tracking', description: 'monitor which dishes drive your profit' },
+      bullet6: { title: 'AI Optimization', description: 'get suggestions to improve your margins' },
+      ctaPrimary: 'Get Sample Dashboard',
+      ctaSecondary: 'Try Sample Sheet',
+      disclaimer: 'Designed for Australian hospitality. Simple setup. 7-day refund guarantee.'
+    },
+    
+    variantC: {
+      title: 'Know your menu costs. Make more profit.',
+      subtitle: 'PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.',
+      bullet1: { title: 'Cost Breakdown', description: 'see exactly what each dish costs to make' },
+      bullet2: { title: 'Profit Calculation', description: 'know your margin on every item' },
+      bullet3: { title: 'Menu Decisions', description: 'decide what to keep, change, or remove' },
+      bullet4: { title: 'GST Ready', description: 'Australian tax compliance built-in' },
+      bullet5: { title: 'Easy Setup', description: 'works in Google Sheets, no new software' },
+      bullet6: { title: 'Smart Insights', description: 'AI suggestions to improve your margins' },
+      ctaPrimary: 'Get Sample Dashboard',
+      ctaSecondary: 'Free Sample',
+      disclaimer: 'For Australian cafés and restaurants. 7-day refund policy.'
+    }
   },
   
   // Pricing
