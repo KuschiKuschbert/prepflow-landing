@@ -1,0 +1,691 @@
+// English (Australia) translations
+export const translations = {
+  // Navigation
+  nav: {
+    dashboard: 'Dashboard',
+    ingredients: 'Ingredients',
+    recipes: 'Recipe Book',
+    cogs: 'COGS',
+    setup: 'Setup',
+    backToLanding: 'Back to Landing',
+    features: 'Features',
+    howItWorks: 'How it works',
+    pricing: 'Pricing',
+    faq: 'FAQ'
+  },
+
+  // WebApp Dashboard
+  dashboard: {
+    title: 'Kitchen Management Dashboard',
+    subtitle: 'Welcome back! Here\'s your kitchen overview',
+    totalIngredients: 'Total Ingredients',
+    totalRecipes: 'Total Recipes',
+    menuDishes: 'Menu Dishes',
+    avgDishPrice: 'Avg Dish Price',
+    quickActions: 'Quick Actions',
+    quickActionsSubtitle: 'Jump into your most used features',
+    live: 'Live',
+    manageIngredients: 'Manage Ingredients',
+    manageIngredientsDesc: 'Add, edit, and organize',
+    manageIngredientsSubtitle: 'Build your kitchen inventory with detailed ingredient tracking',
+    recipeBook: 'Recipe Book',
+    recipeBookDesc: 'View saved recipes',
+    recipeBookSubtitle: 'Access your saved recipes from COGS calculations',
+    calculateCOGS: 'Calculate COGS',
+    calculateCOGSDesc: 'Analyze costs & margins',
+    calculateCOGSSubtitle: 'Calculate Cost of Goods Sold and profit margins',
+    gettingStarted: 'Getting Started with PrepFlow',
+    gettingStartedDesc: 'Welcome to your kitchen management hub! Start by adding your ingredients to build your inventory, then create recipes to calculate your Cost of Goods Sold (COGS) and optimize your profit margins.',
+    realTimeAnalytics: 'Real-time Analytics',
+    profitOptimization: 'Profit Optimization',
+    smartInsights: 'Smart Insights'
+  },
+
+  // WebApp Ingredients
+  ingredients: {
+    title: 'Ingredients Management',
+    subtitle: 'Manage your kitchen ingredients and inventory',
+    displayCostsIn: 'Display costs in',
+    addIngredient: 'Add Ingredient',
+    cancel: 'Cancel',
+    importCSV: 'Import CSV',
+    exportCSV: 'Export CSV',
+    search: 'Search',
+    searchPlaceholder: 'Search ingredients...',
+    supplier: 'Supplier',
+    allSuppliers: 'All Suppliers',
+    storage: 'Storage',
+    allLocations: 'All Locations',
+    sortBy: 'Sort By',
+    name: 'Name',
+    costLowToHigh: 'Cost (Low to High)',
+    costHighToLow: 'Cost (High to Low)',
+    supplierName: 'Supplier',
+    ingredients: 'Ingredients',
+    liveData: 'Live Data',
+    noIngredientsFound: 'No ingredients found',
+    noIngredientsDesc: 'Add your first ingredient to start building your kitchen inventory',
+    noIngredientsFilterDesc: 'Try adjusting your search filters to find what you\'re looking for',
+    addFirstIngredient: 'Add Your First Ingredient',
+    ingredient: 'Ingredient',
+    packSize: 'Pack Size',
+    unit: 'Unit',
+    cost: 'Cost',
+    wastePercent: 'Waste %',
+    yieldPercent: 'Yield %',
+    actions: 'Actions',
+    editIngredient: 'Edit ingredient',
+    deleteIngredient: 'Delete ingredient',
+    editIngredientTitle: 'Edit Ingredient',
+    ingredientName: 'Ingredient Name',
+    brand: 'Brand',
+    unitRequired: 'Unit *',
+    selectUnit: 'Select Unit',
+    costPerUnit: 'Cost Per Unit ($)',
+    trimWastePercent: 'Trim/Waste Percentage (%)',
+    yieldPercent: 'Yield Percentage (%)',
+    storageLocation: 'Storage Location',
+    productCode: 'Product Code',
+    minStockLevel: 'Min Stock Level',
+    updateIngredient: 'Update Ingredient',
+    // Add Ingredient Wizard
+    addNewIngredient: 'Add New Ingredient',
+    guidedSetup: 'Guided Setup',
+    basicInformation: 'Basic Information',
+    basicInformationDesc: 'Let\'s start with the essential details',
+    packagingInformation: 'Packaging Information',
+    packSizeRequired: 'Pack Size *',
+    packUnitRequired: 'Pack Unit *',
+    individualUnitRequired: 'Individual Unit *',
+    packPriceRequired: 'Pack Price ($) *',
+    selectPackUnit: 'Select pack unit',
+    selectIndividualUnit: 'Select individual unit',
+    grams: 'Grams (g)',
+    kilograms: 'Kilograms (kg)',
+    milliliters: 'Milliliters (ml)',
+    liters: 'Liters (L)',
+    pieces: 'Pieces',
+    box: 'Box',
+    pack: 'Pack',
+    bag: 'Bag',
+    bottle: 'Bottle',
+    can: 'Can',
+    packPriceHelper: 'Enter the total pack price (e.g., $13.54 for a 5L tub of yogurt). The system will automatically calculate the price per unit.',
+    pricePerUnit: 'Price per {unit}: ${cost}',
+    nextStep: 'Next Step →',
+    advancedSettings: 'Advanced Settings',
+    advancedSettingsDesc: 'Configure wastage, yield, and supplier information',
+    wastageYieldManagement: 'Wastage & Yield Management',
+    trimWastePercentage: 'Trim/Waste Percentage',
+    yieldPercentage: 'Yield Percentage',
+    aiSuggests: 'AI suggests: {percentage}% based on "{name}"',
+    supplierInformation: 'Supplier Information',
+    selectSupplier: 'Select supplier',
+    addNewSupplier: '+ Add new supplier',
+    enterNewSupplier: 'Enter new supplier name',
+    add: 'Add',
+    additionalInformation: 'Additional Information',
+    productCodeOptional: 'Product Code (Optional)',
+    previousStep: '← Previous Step',
+    reviewSave: 'Review & Save',
+    reviewSaveDesc: 'Review your ingredient details before saving',
+    ingredientSummary: 'Ingredient Summary',
+    additionalDetails: 'Additional Details',
+    startOver: 'Start Over',
+    saveIngredient: 'Save Ingredient',
+    // CSV Import
+    importFromCSV: 'Import Ingredients from CSV',
+    previewFound: 'Preview ({count} ingredients found)',
+    selectAll: 'Select All',
+    clearAll: 'Clear All',
+    importing: 'Importing...',
+    importSelected: 'Import Selected ({count})',
+    // Units
+    weight: 'Weight',
+    volume: 'Volume',
+    teaspoons: 'Teaspoons (tsp)',
+    tablespoons: 'Tablespoons (tbsp)',
+    cups: 'Cups'
+  },
+  
+  // Hero Section
+  hero: {
+    title: 'Stop Guessing Your Menu\'s Profit',
+    subtitle: 'See exactly which dishes make money and which eat your profit. Built from 20 years of real kitchen experience.',
+    ctaPrimary: 'Get PrepFlow Now - $29 AUD',
+    ctaSecondary: 'Get Free Sample',
+    dashboardAlt: 'PrepFlow Dashboard showing COGS analysis and profit insights'
+  },
+  
+  // Pricing
+  pricing: {
+    title: 'Simple, Honest Pricing',
+    subtitle: 'One-time purchase. Lifetime access. No subscriptions, no hidden fees.',
+    price: '$29',
+    currency: 'AUD',
+    guarantee: '7-day money-back guarantee',
+    features: {
+      completeTemplate: 'Complete Google Sheets template',
+      preloadedIngredients: '300+ pre-loaded ingredients',
+      multiCurrency: 'Multi-currency support',
+      gstVat: 'GST/VAT calculations',
+      lifetimeUpdates: 'Lifetime updates',
+      moneyBack: '7-day money-back guarantee'
+    },
+    cta: 'Get PrepFlow Now',
+    instantAccess: 'Instant access via Gumroad'
+  },
+  
+  // Features
+  features: {
+    stockList: {
+      title: 'Stock List (infinite)',
+      description: 'Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit.'
+    },
+    cogsRecipes: {
+      title: 'COGS Recipes',
+      description: 'Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly.'
+    },
+    itemPerformance: {
+      title: 'Item Performance',
+      description: 'Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef\'s Kiss, Hidden Gem or Bargain Bucket.'
+    },
+    dashboardKpis: {
+      title: 'Dashboard KPIs',
+      description: 'At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin.'
+    },
+    globalTax: {
+      title: 'Global Tax & Currency',
+      description: 'Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements.'
+    },
+    fastOnboarding: {
+      title: 'Fast Onboarding',
+      description: 'Start tab with step‑by‑step guidance. Pre‑loaded sample data and comprehensive resources to learn the flow in minutes.'
+    },
+    aiMethodGenerator: {
+      title: 'AI Method Generator',
+      description: 'Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes.'
+    }
+  },
+  
+  // Landing Page Sections
+  problemOutcome: {
+    problem: {
+      title: 'The Problem',
+      points: [
+        'You don\'t know which menu items actually make money',
+        'COGS creep and waste eat your profit',
+        'Pricing is guesswork; GST adds friction',
+        'Reports are slow, complicated, or sit in someone else\'s tool'
+      ]
+    },
+    outcome: {
+      title: 'The Outcome',
+      points: [
+        'See item-level margins and profit instantly',
+        'Spot "winners" and "profit leaks" at a glance',
+        'Adjust pricing with confidence (GST-aware)',
+        'Run everything in Google Sheets — no new software to learn'
+      ]
+    }
+  },
+
+  contributingMargin: {
+    title: 'Contributing Margin — The Real Profit Story',
+    subtitle: 'See beyond gross profit to understand what each dish truly contributes to your business',
+    grossProfit: {
+      title: 'Gross Profit',
+      description: 'What you think you\'re making'
+    },
+    contributingMargin: {
+      title: 'Contributing Margin',
+      description: 'What you\'re actually contributing'
+    },
+    actionPlan: {
+      title: 'Action Plan',
+      description: 'What to do about it'
+    },
+    explanation: 'PrepFlow helps you see: That $15 burger might have a 60% GP, but after prep time, waste, and complexity, it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.',
+    disclaimer: '*Example for illustration - actual results depend on your specific menu and costs'
+  },
+
+  journey: {
+    title: 'My Journey Creating PrepFlow',
+    subtitle: 'This isn\'t just another tool - it\'s my personal solution to real kitchen problems, refined over 20 years of working in restaurants across Europe and Australia.',
+    earlyExperience: {
+      title: '2008-2012 - Early Experience',
+      description: 'Started as Sous Chef at Krautwells GmbH, managing vegan cuisine and training junior chefs'
+    },
+    europeanLeadership: {
+      title: '2012-2018 - European Leadership',
+      description: 'Founded KSK-Küchenspezialkräfte vegan catering, managed teams of 21 staff, served 1,200+ daily'
+    },
+    australianExcellence: {
+      title: '2018-2024 - Australian Excellence',
+      description: 'Executive Chef roles, Head Chef at ALH Hotels, leading teams of 9 chefs with AI integration'
+    },
+    readyToShare: {
+      title: '2024 - Ready to Share',
+      description: 'Now sharing the perfected tool with fellow chefs and restaurateurs who face the same challenges I did'
+    },
+    whyCreated: {
+      title: 'Why I Created PrepFlow',
+      paragraphs: [
+        'Over 20 years as a chef, I\'ve managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. I\'ve faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.',
+        'As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. Existing solutions were either too complex, too expensive, or didn\'t understand real kitchen operations.',
+        'So I built my own solution - a simple Google Sheets template that could handle COGS calculations, track ingredient costs, and show me exactly which menu items were profitable and which were losing money.',
+        'Having worked across Europe and Australia, I\'ve refined it to work perfectly for venues worldwide - with GST support for Australian markets, multi-currency options, and the flexibility to adapt to any kitchen\'s needs. It\'s the tool I wish I had when I started, and now I\'m sharing it with you.'
+      ]
+    }
+  },
+
+  globalFeatures: {
+    title: 'Expose Hidden Profits — One Sheet, Every Answer',
+    subtitle: 'While others charge thousands for complicated restaurant software, PrepFlow provides similar profit insights in a simple Google Sheet for a one-time purchase.',
+    multiCurrency: {
+      title: 'Multi-Currency',
+      description: 'USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.'
+    },
+    taxSystems: {
+      title: 'Tax Systems',
+      description: 'GST, VAT, Sales Tax, HST. Configure for your local requirements.'
+    },
+    access24_7: {
+      title: '24/7 Access',
+      description: 'Cloud-based Google Sheets. Access from anywhere, anytime.'
+    },
+    noConsultants: {
+      title: 'No Consultants',
+      description: 'Set up yourself in under an hour. No expensive implementation fees.'
+    },
+    conclusion: 'One sheet. Key insights your kitchen needs. Identify profit opportunities in your menu with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.'
+  },
+
+  howItWorks: {
+    title: 'Get Results in 3 Simple Steps',
+    step1: {
+      title: 'Set up (5–10 min)',
+      description: 'Turn on GST, add ingredients, yields, and supplier costs.'
+    },
+    step2: {
+      title: 'Import sales',
+      description: 'Paste your POS export into the Sales tab.'
+    },
+    step3: {
+      title: 'Decide & act',
+      description: 'Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix.'
+    },
+    checklist: {
+      title: '60-Second Checklist',
+      items: [
+        'GST toggle set?',
+        'Ingredient yields/waste entered?',
+        'Sales pasted?',
+        'Review top 5 low-margin items?',
+        'Re-check dashboard tomorrow'
+      ]
+    }
+  },
+
+  leadMagnet: {
+    title: 'See PrepFlow before you buy',
+    subtitle: 'Get a sample dashboard — we\'ll email it to you.',
+    form: {
+      nameLabel: 'Your name *',
+      namePlaceholder: 'Your name',
+      emailLabel: 'Your email *',
+      emailPlaceholder: 'your@email.com',
+      sampleLabel: 'Get your sample dashboard',
+      sampleDescription: 'Sample Dashboard',
+      submitButton: 'Send me the sample dashboard',
+      disclaimer: 'No spam. No lock-in. Your data stays private.\nWe\'ll only email you about PrepFlow updates.'
+    }
+  },
+
+  howItWorksPractice: {
+    title: 'How PrepFlow Works in Practice',
+    subtitle: 'From guesswork to data-driven clarity - here\'s what you can expect',
+    before: {
+      title: 'Before PrepFlow',
+      status: 'Unclear margins',
+      description: 'Blind pricing, gut feeling, unclear margins everywhere'
+    },
+    after: {
+      title: 'After PrepFlow',
+      status: 'Clear insights',
+      description: 'Data-driven decisions, margin insights revealed, clarity achieved'
+    },
+    explanation: 'PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins',
+    disclaimer: '*Results depend on your current menu structure and how you implement the insights'
+  },
+
+  benefits: {
+    title: 'What PrepFlow Helps You Achieve',
+    betterPricing: {
+      title: 'Better Pricing Decisions',
+      description: 'See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing.'
+    },
+    identifyOpportunities: {
+      title: 'Identify Profit Opportunities',
+      description: 'Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they\'ll have the biggest impact.'
+    },
+    streamlineOperations: {
+      title: 'Streamline Operations',
+      description: 'Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line.'
+    },
+    cta: {
+      text: 'See PrepFlow in action',
+      button: 'Get Sample'
+    }
+  },
+
+  faq: {
+    title: 'FAQ',
+    questions: [
+      {
+        question: 'Do I need tech skills?',
+        answer: 'Zero spreadsheet formulas required. If you can use Google Sheets, you\'re good.'
+      },
+      {
+        question: 'Does it work worldwide?',
+        answer: 'Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market.'
+      },
+      {
+        question: 'What if it doesn\'t work for me?',
+        answer: 'If you\'re not satisfied with the insights and clarity PrepFlow provides in 7 days, you\'ll get every cent back. No hassle.'
+      },
+      {
+        question: 'Will this slow me down?',
+        answer: 'Setup typically takes 1-2 hours. After that, you\'ll save time on menu planning and cost analysis.'
+      }
+    ]
+  },
+
+  builtFor: {
+    title: 'Built for Independent Venues & Small Kitchens',
+    features: [
+      'Works with Google Sheets',
+      '7-Day Refund Policy',
+      'Made for AU Market'
+    ]
+  },
+
+  trustBar: {
+    text: 'Stop guessing. Start knowing. PrepFlow isn\'t just a spreadsheet — it\'s the X-ray machine for your menu\'s profitability.'
+  },
+
+  // Common
+  common: {
+    loading: 'Loading...',
+    error: 'Error',
+    success: 'Success',
+    save: 'Save',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    edit: 'Edit',
+    add: 'Add',
+    search: 'Search',
+    filter: 'Filter',
+    sort: 'Sort',
+    actions: 'Actions',
+    name: 'Name',
+    description: 'Description',
+    price: 'Price',
+    cost: 'Cost',
+    quantity: 'Quantity',
+    unit: 'Unit',
+    total: 'Total',
+    subtotal: 'Subtotal',
+    tax: 'Tax',
+    gst: 'GST',
+    profit: 'Profit',
+    margin: 'Margin',
+    percentage: 'Percentage',
+    currency: 'Currency',
+    date: 'Date',
+    time: 'Time',
+    created: 'Created',
+    updated: 'Updated',
+    status: 'Status',
+    active: 'Active',
+    inactive: 'Inactive',
+    pending: 'Pending',
+    completed: 'Completed',
+    failed: 'Failed',
+    yes: 'Yes',
+    no: 'No',
+    ok: 'OK',
+    close: 'Close',
+    back: 'Back',
+    next: 'Next',
+    previous: 'Previous',
+    finish: 'Finish',
+    continue: 'Continue',
+    skip: 'Skip',
+    retry: 'Retry',
+    refresh: 'Refresh',
+    reset: 'Reset',
+    clear: 'Clear',
+    select: 'Select',
+    selectAll: 'Select All',
+    deselectAll: 'Deselect All',
+    export: 'Export',
+    import: 'Import',
+    download: 'Download',
+    upload: 'Upload',
+    print: 'Print',
+    share: 'Share',
+    copy: 'Copy',
+    paste: 'Paste',
+    cut: 'Cut',
+    undo: 'Undo',
+    redo: 'Redo',
+    help: 'Help',
+    about: 'About',
+    settings: 'Settings',
+    preferences: 'Preferences',
+    profile: 'Profile',
+    account: 'Account',
+    logout: 'Logout',
+    login: 'Login',
+    register: 'Register',
+    signup: 'Sign Up',
+    signin: 'Sign In',
+    forgotPassword: 'Forgot Password?',
+    rememberMe: 'Remember Me',
+    terms: 'Terms of Service',
+    privacy: 'Privacy Policy',
+    cookies: 'Cookie Policy',
+    contact: 'Contact',
+    support: 'Support',
+    faq: 'FAQ',
+    documentation: 'Documentation',
+    tutorial: 'Tutorial',
+    guide: 'Guide',
+    tips: 'Tips',
+    tricks: 'Tricks',
+    bestPractices: 'Best Practices',
+    examples: 'Examples',
+    samples: 'Samples',
+    templates: 'Templates',
+    themes: 'Themes',
+    languages: 'Languages',
+    regions: 'Regions',
+    timezones: 'Timezones',
+    currencies: 'Currencies',
+    units: 'Units',
+    measurements: 'Measurements',
+    formats: 'Formats',
+    styles: 'Styles',
+    colors: 'Colors',
+    fonts: 'Fonts',
+    sizes: 'Sizes',
+    weights: 'Weights',
+    alignments: 'Alignments',
+    spacings: 'Spacings',
+    margins: 'Margins',
+    paddings: 'Paddings',
+    borders: 'Borders',
+    radiuses: 'Radiuses',
+    shadows: 'Shadows',
+    gradients: 'Gradients',
+    animations: 'Animations',
+    transitions: 'Transitions',
+    effects: 'Effects',
+    filters: 'Filters',
+    blurs: 'Blurs',
+    opacities: 'Opacities',
+    rotations: 'Rotations',
+    scales: 'Scales',
+    translations: 'Translations',
+    positions: 'Positions',
+    dimensions: 'Dimensions',
+    widths: 'Widths',
+    heights: 'Heights',
+    depths: 'Depths',
+    layers: 'Layers',
+    levels: 'Levels',
+    orders: 'Orders',
+    priorities: 'Priorities',
+    importances: 'Importances',
+    urgencies: 'Urgencies',
+    categories: 'Categories',
+    types: 'Types',
+    kinds: 'Kinds',
+    sorts: 'Sorts',
+    varieties: 'Varieties',
+    versions: 'Versions',
+    editions: 'Editions',
+    releases: 'Releases',
+    builds: 'Builds',
+    patches: 'Patches',
+    updates: 'Updates',
+    upgrades: 'Upgrades',
+    downgrades: 'Downgrades',
+    migrations: 'Migrations',
+    conversions: 'Conversions',
+    transformations: 'Transformations',
+    modifications: 'Modifications',
+    alterations: 'Alterations',
+    changes: 'Changes',
+    adjustments: 'Adjustments',
+    corrections: 'Corrections',
+    fixes: 'Fixes',
+    improvements: 'Improvements',
+    enhancements: 'Enhancements',
+    optimizations: 'Optimizations',
+    performance: 'Performance',
+    speed: 'Speed',
+    efficiency: 'Efficiency',
+    productivity: 'Productivity',
+    quality: 'Quality',
+    reliability: 'Reliability',
+    stability: 'Stability',
+    security: 'Security',
+    safety: 'Safety',
+    privacy: 'Privacy',
+    confidentiality: 'Confidentiality',
+    anonymity: 'Anonymity',
+    encryption: 'Encryption',
+    authentication: 'Authentication',
+    authorization: 'Authorization',
+    permissions: 'Permissions',
+    access: 'Access',
+    control: 'Control',
+    management: 'Management',
+    administration: 'Administration',
+    governance: 'Governance',
+    oversight: 'Oversight',
+    supervision: 'Supervision',
+    monitoring: 'Monitoring',
+    tracking: 'Tracking',
+    logging: 'Logging',
+    auditing: 'Auditing',
+    reporting: 'Reporting',
+    analytics: 'Analytics',
+    metrics: 'Metrics',
+    statistics: 'Statistics',
+    data: 'Data',
+    information: 'Information',
+    knowledge: 'Knowledge',
+    wisdom: 'Wisdom',
+    insights: 'Insights',
+    intelligence: 'Intelligence',
+    smart: 'Smart',
+    intelligent: 'Intelligent',
+    clever: 'Clever',
+    bright: 'Bright',
+    brilliant: 'Brilliant',
+    genius: 'Genius',
+    expert: 'Expert',
+    professional: 'Professional',
+    specialist: 'Specialist',
+    consultant: 'Consultant',
+    advisor: 'Advisor',
+    mentor: 'Mentor',
+    coach: 'Coach',
+    trainer: 'Trainer',
+    teacher: 'Teacher',
+    instructor: 'Instructor',
+    educator: 'Educator',
+    leader: 'Leader',
+    manager: 'Manager',
+    director: 'Director',
+    executive: 'Executive',
+    administrator: 'Administrator',
+    supervisor: 'Supervisor',
+    coordinator: 'Coordinator',
+    facilitator: 'Facilitator',
+    organizer: 'Organizer',
+    planner: 'Planner',
+    strategist: 'Strategist',
+    analyst: 'Analyst',
+    researcher: 'Researcher',
+    investigator: 'Investigator',
+    explorer: 'Explorer',
+    discoverer: 'Discoverer',
+    innovator: 'Innovator',
+    creator: 'Creator',
+    builder: 'Builder',
+    developer: 'Developer',
+    designer: 'Designer',
+    architect: 'Architect',
+    engineer: 'Engineer',
+    technician: 'Technician',
+    master: 'Master',
+    guru: 'Guru',
+    wizard: 'Wizard',
+    magician: 'Magician',
+    artist: 'Artist',
+    craftsman: 'Craftsman',
+    artisan: 'Artisan',
+    skilled: 'Skilled',
+    talented: 'Talented',
+    gifted: 'Gifted',
+    able: 'Able',
+    capable: 'Capable',
+    competent: 'Competent',
+    proficient: 'Proficient',
+    experienced: 'Experienced',
+    qualified: 'Qualified',
+    certified: 'Certified',
+    licensed: 'Licensed',
+    accredited: 'Accredited',
+    approved: 'Approved',
+    validated: 'Validated',
+    verified: 'Verified',
+    confirmed: 'Confirmed',
+    authenticated: 'Authenticated',
+    authorized: 'Authorized',
+    permitted: 'Permitted',
+    allowed: 'Allowed',
+    enabled: 'Enabled',
+    activated: 'Activated',
+    working: 'Working',
+    functional: 'Functional',
+    operational: 'Operational',
+    running: 'Running',
+    operating: 'Operating',
+    functioning: 'Functioning'
+  }
+};

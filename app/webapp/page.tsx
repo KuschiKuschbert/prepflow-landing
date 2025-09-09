@@ -2,6 +2,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
+import { useTranslation } from '@/lib/useTranslation';
 
 interface DashboardStats {
   totalIngredients: number;
@@ -11,6 +12,7 @@ interface DashboardStats {
 }
 
 export default function WebAppDashboard() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<DashboardStats>({
     totalIngredients: 0,
     totalRecipes: 0,
@@ -92,9 +94,9 @@ export default function WebAppDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
-            🏠 Kitchen Management Dashboard
+            🏠 {t('dashboard.title', 'Kitchen Management Dashboard')}
           </h1>
-          <p className="text-gray-400">Welcome back! Here's your kitchen overview</p>
+          <p className="text-gray-400">{t('dashboard.subtitle', 'Welcome back! Here\'s your kitchen overview')}</p>
         </div>
         
         {/* Stats Cards - Material Design 3 */}
@@ -109,7 +111,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Ingredients</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('dashboard.totalIngredients', 'Total Ingredients')}</h3>
             <p className="text-3xl font-bold text-[#29E7CD]">{stats.totalIngredients}</p>
           </div>
           
@@ -123,7 +125,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#3B82F6] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Recipes</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('dashboard.totalRecipes', 'Total Recipes')}</h3>
             <p className="text-3xl font-bold text-[#3B82F6]">{stats.totalRecipes}</p>
           </div>
           
@@ -137,7 +139,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#D925C7] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Menu Dishes</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('dashboard.menuDishes', 'Menu Dishes')}</h3>
             <p className="text-3xl font-bold text-[#D925C7]">{stats.totalMenuDishes}</p>
           </div>
           
@@ -151,7 +153,7 @@ export default function WebAppDashboard() {
               </div>
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
             </div>
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Avg Dish Price</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">{t('dashboard.avgDishPrice', 'Avg Dish Price')}</h3>
             <p className="text-3xl font-bold text-[#29E7CD]">
               ${stats.averageDishPrice.toFixed(2)}
             </p>
@@ -162,12 +164,12 @@ export default function WebAppDashboard() {
         <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-semibold text-white mb-1">⚡ Quick Actions</h2>
-              <p className="text-gray-400">Jump into your most used features</p>
+              <h2 className="text-2xl font-semibold text-white mb-1">⚡ {t('dashboard.quickActions', 'Quick Actions')}</h2>
+              <p className="text-gray-400">{t('dashboard.quickActionsSubtitle', 'Jump into your most used features')}</p>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
-              <span className="text-xs text-gray-400">Live</span>
+              <span className="text-xs text-gray-400">{t('dashboard.live', 'Live')}</span>
             </div>
           </div>
           
@@ -183,11 +185,11 @@ export default function WebAppDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#29E7CD] transition-colors">Manage Ingredients</h3>
-                  <p className="text-sm text-gray-400">Add, edit, and organize</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#29E7CD] transition-colors">{t('dashboard.manageIngredients', 'Manage Ingredients')}</h3>
+                  <p className="text-sm text-gray-400">{t('dashboard.manageIngredientsDesc', 'Add, edit, and organize')}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400">Build your kitchen inventory with detailed ingredient tracking</p>
+              <p className="text-sm text-gray-400">{t('dashboard.manageIngredientsSubtitle', 'Build your kitchen inventory with detailed ingredient tracking')}</p>
             </a>
             
             <a
@@ -201,11 +203,11 @@ export default function WebAppDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#3B82F6] transition-colors">Recipe Book</h3>
-                  <p className="text-sm text-gray-400">View saved recipes</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#3B82F6] transition-colors">{t('dashboard.recipeBook', 'Recipe Book')}</h3>
+                  <p className="text-sm text-gray-400">{t('dashboard.recipeBookDesc', 'View saved recipes')}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400">Access your saved recipes from COGS calculations</p>
+              <p className="text-sm text-gray-400">{t('dashboard.recipeBookSubtitle', 'Access your saved recipes from COGS calculations')}</p>
             </a>
             
             <a
@@ -219,11 +221,11 @@ export default function WebAppDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-lg group-hover:text-[#D925C7] transition-colors">Calculate COGS</h3>
-                  <p className="text-sm text-gray-400">Analyze costs & margins</p>
+                  <h3 className="font-semibold text-white text-lg group-hover:text-[#D925C7] transition-colors">{t('dashboard.calculateCOGS', 'Calculate COGS')}</h3>
+                  <p className="text-sm text-gray-400">{t('dashboard.calculateCOGSDesc', 'Analyze costs & margins')}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400">Calculate Cost of Goods Sold and profit margins</p>
+              <p className="text-sm text-gray-400">{t('dashboard.calculateCOGSSubtitle', 'Calculate Cost of Goods Sold and profit margins')}</p>
             </a>
           </div>
         </div>
@@ -235,20 +237,19 @@ export default function WebAppDashboard() {
               <span className="text-2xl">🚀</span>
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white mb-2">Getting Started with PrepFlow</h2>
+              <h2 className="text-xl font-semibold text-white mb-2">{t('dashboard.gettingStarted', 'Getting Started with PrepFlow')}</h2>
               <p className="text-gray-300 leading-relaxed">
-                Welcome to your kitchen management hub! Start by adding your ingredients to build your inventory, 
-                then create recipes to calculate your Cost of Goods Sold (COGS) and optimize your profit margins.
+                {t('dashboard.gettingStartedDesc', 'Welcome to your kitchen management hub! Start by adding your ingredients to build your inventory, then create recipes to calculate your Cost of Goods Sold (COGS) and optimize your profit margins.')}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#29E7CD]/10 text-[#29E7CD] border border-[#29E7CD]/20">
-                  📊 Real-time Analytics
+                  📊 {t('dashboard.realTimeAnalytics', 'Real-time Analytics')}
                 </span>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20">
-                  💰 Profit Optimization
+                  💰 {t('dashboard.profitOptimization', 'Profit Optimization')}
                 </span>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#D925C7]/10 text-[#D925C7] border border-[#D925C7]/20">
-                  🎯 Smart Insights
+                  🎯 {t('dashboard.smartInsights', 'Smart Insights')}
                 </span>
               </div>
             </div>

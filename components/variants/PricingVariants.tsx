@@ -2,8 +2,13 @@
 
 import React from 'react';
 
+interface PricingProps {
+  t: (key: string, fallback?: string | any[]) => string | any[];
+  handleEngagement?: (event: string) => void;
+}
+
 // Control Pricing (Original)
-export function ControlPricing() {
+export function ControlPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
       <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
@@ -93,7 +98,7 @@ export function ControlPricing() {
 }
 
 // Variant A - Value-Focused Pricing
-export function VariantAPricing() {
+export function VariantAPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
       <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
@@ -160,7 +165,7 @@ export function VariantAPricing() {
 }
 
 // Variant B - Comparison Pricing
-export function VariantBPricing() {
+export function VariantBPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
       <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
@@ -227,7 +232,7 @@ export function VariantBPricing() {
 }
 
 // Variant C - Feature-Focused Pricing
-export function VariantCPricing() {
+export function VariantCPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
       <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">

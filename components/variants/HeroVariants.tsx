@@ -1,18 +1,25 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
+import OptimizedImage from '../OptimizedImage';
+
+interface HeroProps {
+  t: (key: string, fallback?: string | any[]) => string | any[];
+  handleEngagement?: (event: string) => void;
+}
 
 // Control Hero (Original)
-export function ControlHero() {
+export function ControlHero({ t, handleEngagement }: HeroProps) {
   return (
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-          Instant menu profit clarity for Aussie cafés.
+          <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+            {t('hero.title', 'Stop Guessing Your Menu\'s Profit')}
+          </span>
         </h1>
         <p className="mt-6 text-lg leading-8 text-gray-300 md:text-xl">
-          Know your winners and fix low-margin items in minutes — GST-ready, inside a simple Google Sheet.
+          {t('hero.subtitle', 'See exactly which dishes make money and which eat your profit. Built from 20 years of real kitchen experience.')}
         </p>
         <ul className="mt-8 space-y-3 text-base text-gray-300">
           <Bullet><strong>Item Profit & Popularity</strong> — know what to promote, fix, or drop to raise gross profit</Bullet>
@@ -23,13 +30,23 @@ export function ControlHero() {
           <Bullet><strong>AI Method Generator</strong> — discover new cooking methods that could improve your margins and reduce waste</Bullet>
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a href="#lead-magnet" className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300">
-            Get Sample Dashboard
+          <a 
+            href="https://7495573591101.gumroad.com/l/prepflow"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_cta_click')}
+          >
+            {t('hero.ctaPrimary', 'Get PrepFlow Now - $29 AUD')}
           </a>
-          <a href="#lead-magnet" className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300">
-            Get the sample sheet (free)
+          <a 
+            href="#lead-magnet" 
+            className="rounded-2xl border border-gray-600 px-8 py-4 text-base font-semibold text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD] transition-all duration-300"
+            onClick={() => handleEngagement?.('hero_demo_click')}
+          >
+            {t('hero.ctaSecondary', 'Get Free Sample')}
           </a>
-          <p className="w-full text-sm text-gray-500">Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.</p>
+          <p className="w-full text-sm text-gray-500">{t('hero.disclaimer', 'Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.')}</p>
         </div>
       </div>
 
@@ -38,13 +55,14 @@ export function ControlHero() {
         <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
         <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
           <div className="relative">
-            <Image 
+            <OptimizedImage 
               src="/images/dashboard-screenshot.png" 
-              alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
+              alt={t('hero.dashboardAlt', 'PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts')}
               width={800}
               height={500}
               className="w-full h-auto rounded-xl border border-gray-600"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
             />
             {/* Action Overlay */}
             <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
@@ -59,26 +77,29 @@ export function ControlHero() {
             </div>
           </div>
           <div className="mt-6 grid grid-cols-3 gap-4">
-            <Image 
+            <OptimizedImage 
               src="/images/settings-screenshot.png" 
               alt="PrepFlow Settings page with business configuration"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/recipe-screenshot.png" 
               alt="PrepFlow Recipe costing for Double Cheese Burger"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/stocklist-screenshot.png" 
               alt="PrepFlow Infinite Stock List with ingredient management"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
           </div>
           <p className="mt-4 text-center text-sm text-gray-500">Dashboard · Settings · Recipe Costing · Stock Management</p>
@@ -89,7 +110,7 @@ export function ControlHero() {
 }
 
 // Variant A - Problem-Focused Hero
-export function VariantAHero() {
+export function VariantAHero({ t, handleEngagement }: HeroProps) {
   return (
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
@@ -123,13 +144,14 @@ export function VariantAHero() {
         <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#D925C7]/20 to-[#29E7CD]/20 blur-2xl" />
         <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
           <div className="relative">
-            <Image 
+            <OptimizedImage 
               src="/images/dashboard-screenshot.png" 
               alt="PrepFlow Dashboard showing profit analysis and cost breakdown"
               width={800}
               height={500}
               className="w-full h-auto rounded-xl border border-gray-600"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
             />
             {/* Action Overlay */}
             <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
@@ -144,26 +166,29 @@ export function VariantAHero() {
             </div>
           </div>
           <div className="mt-6 grid grid-cols-3 gap-4">
-            <Image 
+            <OptimizedImage 
               src="/images/settings-screenshot.png" 
               alt="PrepFlow Settings page"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/recipe-screenshot.png" 
               alt="PrepFlow Recipe costing"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/stocklist-screenshot.png" 
               alt="PrepFlow Stock management"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
           </div>
           <p className="mt-4 text-center text-sm text-gray-500">Profit Analysis · Recipe Costing · Stock Management</p>
@@ -174,7 +199,7 @@ export function VariantAHero() {
 }
 
 // Variant B - Results-Focused Hero
-export function VariantBHero() {
+export function VariantBHero({ t, handleEngagement }: HeroProps) {
   return (
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
@@ -208,13 +233,14 @@ export function VariantBHero() {
         <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#3B82F6]/20 to-[#29E7CD]/20 blur-2xl" />
         <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
           <div className="relative">
-            <Image 
+            <OptimizedImage 
               src="/images/dashboard-screenshot.png" 
               alt="PrepFlow Dashboard showing profit optimization and performance metrics"
               width={800}
               height={500}
               className="w-full h-auto rounded-xl border border-gray-600"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
             />
             {/* Action Overlay */}
             <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
@@ -229,26 +255,29 @@ export function VariantBHero() {
             </div>
           </div>
           <div className="mt-6 grid grid-cols-3 gap-4">
-            <Image 
+            <OptimizedImage 
               src="/images/settings-screenshot.png" 
               alt="PrepFlow Settings"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/recipe-screenshot.png" 
               alt="PrepFlow Recipe analysis"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/stocklist-screenshot.png" 
               alt="PrepFlow Stock tracking"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
           </div>
           <p className="mt-4 text-center text-sm text-gray-500">Profit Dashboard · Recipe Analysis · Stock Tracking</p>
@@ -259,7 +288,7 @@ export function VariantBHero() {
 }
 
 // Variant C - Simple/Direct Hero
-export function VariantCHero() {
+export function VariantCHero({ t, handleEngagement }: HeroProps) {
   return (
     <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div>
@@ -293,13 +322,14 @@ export function VariantCHero() {
         <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-2xl" />
         <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
           <div className="relative">
-            <Image 
+            <OptimizedImage 
               src="/images/dashboard-screenshot.png" 
               alt="PrepFlow Dashboard showing cost analysis and profit metrics"
               width={800}
               height={500}
               className="w-full h-auto rounded-xl border border-gray-600"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
             />
             {/* Action Overlay */}
             <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center">
@@ -314,26 +344,29 @@ export function VariantCHero() {
             </div>
           </div>
           <div className="mt-6 grid grid-cols-3 gap-4">
-            <Image 
+            <OptimizedImage 
               src="/images/settings-screenshot.png" 
               alt="PrepFlow Settings"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/recipe-screenshot.png" 
               alt="PrepFlow Recipe costs"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
-            <Image 
+            <OptimizedImage 
               src="/images/stocklist-screenshot.png" 
               alt="PrepFlow Stock list"
               width={200}
               height={96}
               className="h-24 w-full object-cover rounded-lg border border-gray-600"
+              sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
             />
           </div>
           <p className="mt-4 text-center text-sm text-gray-500">Cost Analysis · Recipe Costs · Stock List</p>
