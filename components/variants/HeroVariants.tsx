@@ -57,7 +57,7 @@ export function ControlHero({ t, handleEngagement }: HeroProps) {
           <div className="relative">
             <OptimizedImage 
               src="/images/dashboard-screenshot.png" 
-              alt={t('hero.dashboardAlt', 'PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts')}
+              alt={String(t('hero.dashboardAlt', 'PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts'))}
               width={800}
               height={500}
               className="w-full h-auto rounded-xl border border-gray-600"

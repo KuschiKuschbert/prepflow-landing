@@ -73,12 +73,23 @@ export function useABTest({ testId, userId, onVariantChange, t, handleEngagement
   const renderHero = () => {
     if (isLoading) return <HeroSkeleton />;
 
+    // Provide default functions if not provided
+    const defaultT = (key: string, fallback?: string | any[]) => fallback || key;
+    const defaultHandleEngagement = (event: string) => {
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', event, {
+          event_category: 'user_engagement',
+          event_label: event,
+        });
+      }
+    };
+
     return (
       <Suspense fallback={<HeroSkeleton />}>
-        {variantId === 'control' && <ControlHero t={t} handleEngagement={handleEngagement} />}
-        {variantId === 'variant_a' && <VariantAHero t={t} handleEngagement={handleEngagement} />}
-        {variantId === 'variant_b' && <VariantBHero t={t} handleEngagement={handleEngagement} />}
-        {variantId === 'variant_c' && <VariantCHero t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'control' && <ControlHero t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
+        {variantId === 'variant_a' && <VariantAHero t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
+        {variantId === 'variant_b' && <VariantBHero t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
+        {variantId === 'variant_c' && <VariantCHero t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
       </Suspense>
     );
   };
@@ -86,12 +97,23 @@ export function useABTest({ testId, userId, onVariantChange, t, handleEngagement
   const renderPricing = () => {
     if (isLoading) return <PricingSkeleton />;
 
+    // Provide default functions if not provided
+    const defaultT = (key: string, fallback?: string | any[]) => fallback || key;
+    const defaultHandleEngagement = (event: string) => {
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', event, {
+          event_category: 'user_engagement',
+          event_label: event,
+        });
+      }
+    };
+
     return (
       <Suspense fallback={<PricingSkeleton />}>
-        {variantId === 'control' && <ControlPricing t={t} handleEngagement={handleEngagement} />}
-        {variantId === 'variant_a' && <VariantAPricing t={t} handleEngagement={handleEngagement} />}
-        {variantId === 'variant_b' && <VariantBPricing t={t} handleEngagement={handleEngagement} />}
-        {variantId === 'variant_c' && <VariantCPricing t={t} handleEngagement={handleEngagement} />}
+        {variantId === 'control' && <ControlPricing t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
+        {variantId === 'variant_a' && <VariantAPricing t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
+        {variantId === 'variant_b' && <VariantBPricing t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
+        {variantId === 'variant_c' && <VariantCPricing t={t || defaultT} handleEngagement={handleEngagement || defaultHandleEngagement} />}
       </Suspense>
     );
   };
