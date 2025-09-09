@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/api/check-table-structure/route.ts
+// File: /workspace/app/api/check-table-structure/route.ts
 import * as entry from '../../../../../app/api/check-table-structure/route.js'
 import type { NextRequest } from 'next/server.js'
 

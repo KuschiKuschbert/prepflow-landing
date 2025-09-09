@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/cancelled/page.tsx
+// File: /workspace/app/cancelled/page.tsx
 import * as entry from '../../../../app/cancelled/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

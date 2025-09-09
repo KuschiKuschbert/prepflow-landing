@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/api/populate-recipes/route.ts
+// File: /workspace/app/api/populate-recipes/route.ts
 import * as entry from '../../../../../app/api/populate-recipes/route.js'
 import type { NextRequest } from 'next/server.js'
 

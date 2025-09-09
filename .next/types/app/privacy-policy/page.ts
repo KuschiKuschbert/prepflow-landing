@@ -1,4 +1,4 @@
-// File: /Users/danielkuschmierz/prepflow-landing/app/privacy-policy/page.tsx
+// File: /workspace/app/privacy-policy/page.tsx
 import * as entry from '../../../../app/privacy-policy/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
