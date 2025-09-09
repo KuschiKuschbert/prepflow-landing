@@ -4363,52 +4363,36 @@ function LanguageSwitcher(param) {
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "relative ".concat(className),
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                value: currentLanguage,
-                onChange: (e)=>changeLanguage(e.target.value),
-                className: "\n          ".concat(sizeClasses[size], "\n          bg-[#2a2a2a] border border-[#29E7CD]/30 rounded-lg text-white\n          focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent\n          transition-all duration-200 hover:border-[#29E7CD]/50\n          appearance-none cursor-pointer\n        "),
-                style: {
-                    backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e\")",
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem'
-                },
-                children: availableLangs.map((lang)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                        value: lang.code,
-                        children: [
-                            showFlag && lang.flag,
-                            " ",
-                            showName && lang.name
-                        ]
-                    }, lang.code, true, {
-                        fileName: "[project]/components/LanguageSwitcher.tsx",
-                        lineNumber: 56,
-                        columnNumber: 11
-                    }, this))
-            }, void 0, false, {
-                fileName: "[project]/components/LanguageSwitcher.tsx",
-                lineNumber: 37,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                    className: "text-gray-400 text-sm",
-                    children: showFlag && currentLangInfo.flag
-                }, void 0, false, {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+            value: currentLanguage,
+            onChange: (e)=>changeLanguage(e.target.value),
+            className: "\n          ".concat(sizeClasses[size], "\n          bg-[#2a2a2a] border border-[#29E7CD]/30 rounded-lg text-white\n          focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent\n          transition-all duration-200 hover:border-[#29E7CD]/50\n          appearance-none cursor-pointer\n          pl-3\n        "),
+            style: {
+                backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e\")",
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem'
+            },
+            children: availableLangs.map((lang)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                    value: lang.code,
+                    className: "bg-[#2a2a2a] text-white",
+                    children: [
+                        showFlag && lang.flag,
+                        " ",
+                        showName && lang.name
+                    ]
+                }, lang.code, true, {
                     fileName: "[project]/components/LanguageSwitcher.tsx",
-                    lineNumber: 64,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/components/LanguageSwitcher.tsx",
-                lineNumber: 63,
-                columnNumber: 7
-            }, this)
-        ]
-    }, void 0, true, {
+                    lineNumber: 57,
+                    columnNumber: 11
+                }, this))
+        }, void 0, false, {
+            fileName: "[project]/components/LanguageSwitcher.tsx",
+            lineNumber: 37,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
         fileName: "[project]/components/LanguageSwitcher.tsx",
         lineNumber: 36,
         columnNumber: 5
@@ -4429,7 +4413,7 @@ function LanguageSwitcherCompact(param) {
         size: "sm"
     }, void 0, false, {
         fileName: "[project]/components/LanguageSwitcher.tsx",
-        lineNumber: 75,
+        lineNumber: 69,
         columnNumber: 5
     }, this);
 }
@@ -4443,7 +4427,7 @@ function LanguageSwitcherFull(param) {
         size: "md"
     }, void 0, false, {
         fileName: "[project]/components/LanguageSwitcher.tsx",
-        lineNumber: 87,
+        lineNumber: 81,
         columnNumber: 5
     }, this);
 }
@@ -5342,7 +5326,7 @@ function Page() {
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$LanguageSwitcher$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                 className: "scale-90",
                                                 showFlag: true,
-                                                showName: false,
+                                                showName: true,
                                                 size: "sm"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",

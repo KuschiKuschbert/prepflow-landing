@@ -188,7 +188,7 @@ export default function Page() {
             <LanguageSwitcher 
               className="scale-90" 
               showFlag={true} 
-              showName={false} 
+              showName={true} 
               size="sm" 
             />
             <MobileNavigation onEngagement={handleEngagement} />
