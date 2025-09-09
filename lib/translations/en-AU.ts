@@ -729,5 +729,12 @@ export const translations = {
     running: 'Running',
     operating: 'Operating',
     functioning: 'Functioning'
+  },
+
+  // Floating CTA Banner
+  floatingCta: {
+    mainButton: 'Get PrepFlow',
+    price: 'AUD $29',
+    sampleButton: 'Free Sample'
   }
 };

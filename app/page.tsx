@@ -120,7 +120,7 @@ export default function Page() {
       <RealStoryNotifier enabled={true} showStory={true} />
       
       {/* Floating CTA */}
-      <FloatingCTA onEngagement={handleEngagement} />
+      <FloatingCTA onEngagement={handleEngagement} t={t} />
       
       {/* Scroll to Top */}
       <ScrollToTop />
