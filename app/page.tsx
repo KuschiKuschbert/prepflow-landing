@@ -8,7 +8,6 @@ import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
 import { useLandingPageABTest } from '../components/useABTest';
-import RealStoryNotifier from '../components/SocialProofNotifier';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
 import { useTranslation } from '../lib/useTranslation';
@@ -115,9 +114,6 @@ export default function Page() {
           console.log('⚡ Performance metrics:', metrics);
         }}
       />
-      
-      {/* Real Story & Trust Components */}
-      <RealStoryNotifier enabled={true} showStory={true} />
       
       {/* Floating CTA */}
       <FloatingCTA onEngagement={handleEngagement} t={t} />

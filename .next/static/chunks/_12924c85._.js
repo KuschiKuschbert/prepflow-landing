@@ -2834,7 +2834,12 @@ const translations = {
         features: 'Features',
         howItWorks: 'How it works',
         pricing: 'Pricing',
-        faq: 'FAQ'
+        faq: 'FAQ',
+        ariaLabel: 'Main navigation',
+        featuresAria: 'View PrepFlow features',
+        howItWorksAria: 'Learn how PrepFlow works',
+        pricingAria: 'View PrepFlow pricing',
+        faqAria: 'Frequently asked questions'
     },
     // WebApp Dashboard
     dashboard: {
@@ -3586,6 +3591,23 @@ const translations = {
         running: 'Running',
         operating: 'Operating',
         functioning: 'Functioning'
+    },
+    // Floating CTA Banner
+    floatingCta: {
+        mainButton: 'Get PrepFlow',
+        price: 'AUD $29',
+        sampleButton: 'Free Sample'
+    },
+    // Footer
+    footer: {
+        copyright: "© ".concat(new Date().getFullYear(), " PrepFlow. All rights reserved."),
+        terms: 'Terms',
+        privacy: 'Privacy',
+        support: 'Support'
+    },
+    // Logo
+    logo: {
+        alt: 'PrepFlow Logo'
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -3613,7 +3635,12 @@ const translations = {
         features: 'Funktionen',
         howItWorks: 'So funktioniert es',
         pricing: 'Preise',
-        faq: 'FAQ'
+        faq: 'FAQ',
+        ariaLabel: 'Hauptnavigation',
+        featuresAria: 'PrepFlow-Funktionen anzeigen',
+        howItWorksAria: 'Erfahren Sie, wie PrepFlow funktioniert',
+        pricingAria: 'PrepFlow-Preise anzeigen',
+        faqAria: 'Häufig gestellte Fragen'
     },
     // WebApp Dashboard
     dashboard: {
@@ -4365,6 +4392,23 @@ const translations = {
         running: 'Laufend',
         operating: 'Betrieb',
         functioning: 'Funktionierend'
+    },
+    // Floating CTA Banner
+    floatingCta: {
+        mainButton: 'PrepFlow holen',
+        price: 'AUD $29',
+        sampleButton: 'Kostenlose Probe'
+    },
+    // Footer
+    footer: {
+        copyright: "© ".concat(new Date().getFullYear(), " PrepFlow. Alle Rechte vorbehalten."),
+        terms: 'AGB',
+        privacy: 'Datenschutz',
+        support: 'Support'
+    },
+    // Logo
+    logo: {
+        alt: 'PrepFlow Logo'
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -4915,7 +4959,7 @@ var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 function FloatingCTA(param) {
-    let { onEngagement } = param;
+    let { onEngagement, t } = param;
     _s();
     const [isVisible, setIsVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -4940,6 +4984,9 @@ function FloatingCTA(param) {
         }
     }["FloatingCTA.useEffect"], []);
     if (!isVisible) return null;
+    // Default translation function if not provided
+    const defaultT = (key, fallback)=>fallback || key;
+    const translate = t || defaultT;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "fixed bottom-6 right-6 z-40 md:bottom-8 md:right-8",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4953,24 +5000,24 @@ function FloatingCTA(param) {
                     onClick: ()=>onEngagement('floating_cta_click'),
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            children: "Get PrepFlow"
+                            children: translate('floatingCta.mainButton', 'Get PrepFlow')
                         }, void 0, false, {
                             fileName: "[project]/components/ui/FloatingCTA.tsx",
-                            lineNumber: 43,
+                            lineNumber: 48,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "text-xs opacity-90",
-                            children: "AUD $29"
+                            children: translate('floatingCta.price', 'AUD $29')
                         }, void 0, false, {
                             fileName: "[project]/components/ui/FloatingCTA.tsx",
-                            lineNumber: 44,
+                            lineNumber: 49,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ui/FloatingCTA.tsx",
-                    lineNumber: 36,
+                    lineNumber: 41,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -4978,26 +5025,26 @@ function FloatingCTA(param) {
                     className: "inline-flex items-center gap-2 rounded-2xl bg-gray-800/80 backdrop-blur-sm border border-gray-600 px-6 py-3 text-sm font-semibold text-gray-300 hover:text-[#29E7CD] hover:border-[#29E7CD] transition-all duration-300 transform hover:scale-105",
                     onClick: ()=>onEngagement('floating_sample_click'),
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        children: "Free Sample"
+                        children: translate('floatingCta.sampleButton', 'Free Sample')
                     }, void 0, false, {
                         fileName: "[project]/components/ui/FloatingCTA.tsx",
-                        lineNumber: 53,
+                        lineNumber: 58,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/ui/FloatingCTA.tsx",
-                    lineNumber: 48,
+                    lineNumber: 53,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/ui/FloatingCTA.tsx",
-            lineNumber: 34,
+            lineNumber: 39,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/ui/FloatingCTA.tsx",
-        lineNumber: 33,
+        lineNumber: 38,
         columnNumber: 5
     }, this);
 }
@@ -5308,7 +5355,8 @@ function Page() {
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$FloatingCTA$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FloatingCTA"], {
-                onEngagement: handleEngagement
+                onEngagement: handleEngagement,
+                t: t
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
                 lineNumber: 123,
@@ -5387,7 +5435,7 @@ function Page() {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                 src: "/images/prepflow-logo.png",
-                                                alt: "PrepFlow Logo",
+                                                alt: String(t('logo.alt', 'PrepFlow Logo')),
                                                 width: 48,
                                                 height: 48,
                                                 className: "h-12 w-auto",
@@ -5414,12 +5462,12 @@ function Page() {
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
                                         className: "hidden gap-8 text-sm md:flex",
                                         role: "navigation",
-                                        "aria-label": "Main navigation",
+                                        "aria-label": String(t('nav.ariaLabel', 'Main navigation')),
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                 href: "#features",
                                                 className: "text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded",
-                                                "aria-label": "View PrepFlow features",
+                                                "aria-label": String(t('nav.featuresAria', 'View PrepFlow features')),
                                                 children: t('nav.features', 'Features')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
@@ -5429,7 +5477,7 @@ function Page() {
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                 href: "#how-it-works",
                                                 className: "text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded",
-                                                "aria-label": "Learn how PrepFlow works",
+                                                "aria-label": String(t('nav.howItWorksAria', 'Learn how PrepFlow works')),
                                                 children: t('nav.howItWorks', 'How it works')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
@@ -5439,7 +5487,7 @@ function Page() {
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                 href: "#pricing",
                                                 className: "text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded",
-                                                "aria-label": "View PrepFlow pricing",
+                                                "aria-label": String(t('nav.pricingAria', 'View PrepFlow pricing')),
                                                 children: t('nav.pricing', 'Pricing')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
@@ -5449,7 +5497,7 @@ function Page() {
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                 href: "#faq",
                                                 className: "text-gray-300 hover:text-[#29E7CD] transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] rounded",
-                                                "aria-label": "Frequently asked questions",
+                                                "aria-label": String(t('nav.faqAria', 'Frequently asked questions')),
                                                 children: t('nav.faq', 'FAQ')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
@@ -7333,12 +7381,8 @@ function Page() {
                                     className: "flex flex-col items-center justify-between gap-6 md:flex-row",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            children: [
-                                                "© ",
-                                                new Date().getFullYear(),
-                                                " PrepFlow. All rights reserved."
-                                            ]
-                                        }, void 0, true, {
+                                            children: t('footer.copyright', "© ".concat(new Date().getFullYear(), " PrepFlow. All rights reserved."))
+                                        }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
                                             lineNumber: 642,
                                             columnNumber: 13
@@ -7349,7 +7393,7 @@ function Page() {
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                     href: "/terms-of-service",
                                                     className: "hover:text-[#29E7CD] transition-colors",
-                                                    children: "Terms"
+                                                    children: t('footer.terms', 'Terms')
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
                                                     lineNumber: 644,
@@ -7358,7 +7402,7 @@ function Page() {
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                     href: "/privacy-policy",
                                                     className: "hover:text-[#29E7CD] transition-colors",
-                                                    children: "Privacy"
+                                                    children: t('footer.privacy', 'Privacy')
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
                                                     lineNumber: 645,
@@ -7367,7 +7411,7 @@ function Page() {
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                     href: "mailto:support@prepflow.org",
                                                     className: "hover:text-[#29E7CD] transition-colors",
-                                                    children: "Support"
+                                                    children: t('footer.support', 'Support')
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
                                                     lineNumber: 646,
