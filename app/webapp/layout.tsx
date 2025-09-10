@@ -17,9 +17,8 @@ export default function WebAppLayout({
   const { t } = useTranslation();
 
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-[#0a0a0a] text-white`}>
-        <nav className="bg-[#1f1f1f] border-b border-[#2a2a2a]">
+    <div className={`${inter.className} bg-[#0a0a0a] text-white`}>
+      <nav className="bg-[#1f1f1f] border-b border-[#2a2a2a]">
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -127,10 +126,9 @@ export default function WebAppLayout({
             </div>
           </div>
         </nav>
-        <main className="min-h-screen bg-[#0a0a0a]">
-          {children}
-        </main>
-      </body>
-    </html>
+      <main className="min-h-screen bg-[#0a0a0a]">
+        {children}
+      </main>
+    </div>
   );
 }
