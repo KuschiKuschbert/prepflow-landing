@@ -55,7 +55,7 @@ export default function LanguageSwitcher({
       >
         {availableLangs.map((lang) => (
           <option key={lang.code} value={lang.code} className="bg-[#2a2a2a] text-white">
-            {showFlag && lang.flag} {showName && lang.name}
+            {showFlag && lang.flag && `${lang.flag} `}{showName && lang.name}
           </option>
         ))}
       </select>
