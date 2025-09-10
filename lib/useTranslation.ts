@@ -8,8 +8,8 @@ import { translations as deDE } from './translations/de-DE';
 
 // Available languages - Only English and German
 export const availableLanguages = {
-  'en-AU': { name: 'English', flag: '' },
-  'de-DE': { name: 'Deutsch', flag: '' }
+  'en-AU': { name: 'English', flag: '🇬🇧' },
+  'de-DE': { name: 'Deutsch', flag: '🇩🇪' }
 };
 
 // Translation files mapping - Only English and German
