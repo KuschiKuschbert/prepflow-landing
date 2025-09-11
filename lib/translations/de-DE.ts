@@ -6,6 +6,7 @@ export const translations = {
     ingredients: 'Zutaten',
     recipes: 'Rezeptbuch',
     cogs: 'COGS',
+    performance: 'Leistung',
     setup: 'Setup',
     backToLanding: 'Zurück zur Startseite',
     features: 'Funktionen',
@@ -44,6 +45,43 @@ export const translations = {
     realTimeAnalytics: 'Echtzeit-Analysen',
     profitOptimization: 'Gewinnoptimierung',
     smartInsights: 'Intelligente Einblicke'
+  },
+
+  // WebApp Performance Analysis
+  performance: {
+    title: 'Leistungsanalyse',
+    subtitle: 'Analysieren Sie Ihre Menüleistung und Rentabilität',
+    dish: 'Gericht',
+    numberSold: 'Verkaufte Anzahl',
+    popularity: 'Beliebtheit',
+    itemFoodCost: 'Lebensmittelkosten',
+    itemSalePrice: 'Verkaufspreis',
+    grossProfit: 'Bruttogewinn',
+    grossProfitExclGST: 'Bruttogewinn ohne MwSt.',
+    profitCat: 'Gewinn-Kat.',
+    popularityCat: 'Beliebtheits-Kat.',
+    menuItemClass: 'Menügericht-Klasse',
+    allCategories: 'Alle Kategorien',
+    chefsKiss: 'Chef\'s Kiss',
+    hiddenGem: 'Verstecktes Juwel',
+    bargainBucket: 'Schnäppchen',
+    burntToast: 'Angebrannt',
+    grossProfitPercent: 'Bruttogewinn %',
+    dishName: 'Gerichtsname',
+    ascending: '↑ Aufsteigend',
+    descending: '↓ Absteigend',
+    importSalesData: 'Verkaufsdaten importieren',
+    exportCSV: 'CSV exportieren',
+    importModalTitle: 'Verkaufsdaten importieren',
+    importModalDesc: 'Fügen Sie Ihre CSV-Daten unten ein. Stellen Sie sicher, dass Spalten für Gericht, Verkaufte Anzahl und Beliebtheit vorhanden sind.',
+    importPlaceholder: 'Gericht,Verkaufte Anzahl,Beliebtheit\nDoppel-Cheeseburger,175,10.85\nHot Dog,158,9.80',
+    importing: 'Importiere...',
+    importData: 'Daten importieren',
+    cancel: 'Abbrechen',
+    high: 'Hoch',
+    low: 'Niedrig',
+    performanceOverview: 'Leistungsübersicht',
+    categoryDistribution: 'Kategorieverteilung'
   },
 
   // WebApp Ingredients
@@ -461,7 +499,7 @@ export const translations = {
   trustBar: {
     text: 'Hören Sie auf zu raten. Beginnen Sie zu wissen. PrepFlow ist nicht nur eine Tabelle — es ist das Röntgengerät für die Rentabilität Ihres Menüs.'
   },
-
+  
   // Common
   common: {
     loading: 'Lädt...',

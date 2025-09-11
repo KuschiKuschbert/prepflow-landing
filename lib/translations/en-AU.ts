@@ -6,6 +6,7 @@ export const translations = {
     ingredients: 'Ingredients',
     recipes: 'Recipe Book',
     cogs: 'COGS',
+    performance: 'Performance',
     setup: 'Setup',
     backToLanding: 'Back to Landing',
     features: 'Features',
@@ -44,6 +45,43 @@ export const translations = {
     realTimeAnalytics: 'Real-time Analytics',
     profitOptimization: 'Profit Optimization',
     smartInsights: 'Smart Insights'
+  },
+
+  // WebApp Performance Analysis
+  performance: {
+    title: 'Performance Analysis',
+    subtitle: 'Analyze your menu performance and profitability',
+    dish: 'Dish',
+    numberSold: 'Number Sold',
+    popularity: 'Popularity',
+    itemFoodCost: 'Item Food Cost',
+    itemSalePrice: 'Item Sale Price',
+    grossProfit: 'Gross Profit',
+    grossProfitExclGST: 'Gross Profit excl. GST',
+    profitCat: 'Profit Cat',
+    popularityCat: 'Popularity Cat',
+    menuItemClass: 'Menu Item Class',
+    allCategories: 'All Categories',
+    chefsKiss: 'Chef\'s Kiss',
+    hiddenGem: 'Hidden Gem',
+    bargainBucket: 'Bargain Bucket',
+    burntToast: 'Burnt Toast',
+    grossProfitPercent: 'Gross Profit %',
+    dishName: 'Dish Name',
+    ascending: '↑ Ascending',
+    descending: '↓ Descending',
+    importSalesData: 'Import Sales Data',
+    exportCSV: 'Export CSV',
+    importModalTitle: 'Import Sales Data',
+    importModalDesc: 'Paste your CSV data below. Make sure it has columns for Dish, Number Sold, and Popularity.',
+    importPlaceholder: 'Dish,Number Sold,Popularity\nDouble Cheese Burger,175,10.85\nHot Dog,158,9.80',
+    importing: 'Importing...',
+    importData: 'Import Data',
+    cancel: 'Cancel',
+    high: 'High',
+    low: 'Low',
+    performanceOverview: 'Performance Overview',
+    categoryDistribution: 'Category Distribution'
   },
 
   // WebApp Ingredients
@@ -461,7 +499,7 @@ export const translations = {
   trustBar: {
     text: 'Stop guessing. Start knowing. PrepFlow isn\'t just a spreadsheet — it\'s the X-ray machine for your menu\'s profitability.'
   },
-
+  
   // Common
   common: {
     loading: 'Loading...',

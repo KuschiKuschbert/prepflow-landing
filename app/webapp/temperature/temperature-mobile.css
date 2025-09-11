@@ -1,0 +1,225 @@
+/* Temperature Page Mobile Optimizations */
+
+/* Mobile-first responsive design */
+.temperature-container {
+  @apply p-4 sm:p-6;
+}
+
+/* Tab Navigation - Mobile Optimized */
+.temperature-tabs {
+  @apply flex overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.temperature-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.temperature-tab-button {
+  @apply flex-shrink-0 px-4 py-3 text-sm sm:text-base;
+  min-width: fit-content;
+}
+
+/* Mobile Cards */
+@media (max-width: 768px) {
+  .equipment-grid {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .equipment-card {
+    @apply p-4;
+  }
+  
+  /* Larger touch targets for mobile */
+  .quick-temp-input {
+    @apply text-base py-3;
+    min-height: 44px;
+  }
+  
+  .quick-temp-button {
+    @apply p-3 min-w-[44px];
+  }
+}
+
+/* Chart Optimizations */
+.chart-container {
+  @apply w-full overflow-x-auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.chart-scroll-indicator {
+  @apply absolute right-0 top-1/2 transform -translate-y-1/2;
+  @apply bg-gradient-to-l from-[#0a0a0a] to-transparent;
+  @apply pointer-events-none opacity-75 transition-opacity;
+  @apply w-12 h-full flex items-center justify-end pr-2;
+}
+
+.chart-scroll-indicator.hidden {
+  @apply opacity-0;
+}
+
+/* Mobile Chart Heights */
+@media (max-width: 768px) {
+  .temperature-chart {
+    height: 250px;
+    min-width: 100vw;
+  }
+  
+  .chart-legend {
+    @apply flex flex-wrap gap-2 text-xs;
+  }
+}
+
+/* Form Optimizations */
+.temperature-form {
+  @apply space-y-4;
+}
+
+@media (max-width: 768px) {
+  .temperature-form {
+    @apply grid-cols-1;
+  }
+  
+  .form-input {
+    @apply text-base py-3;
+    min-height: 44px;
+  }
+  
+  .form-label {
+    @apply text-sm font-medium mb-2;
+  }
+}
+
+/* Date Navigation - Mobile Friendly */
+.date-navigation {
+  @apply flex items-center justify-between gap-2;
+}
+
+.date-nav-button {
+  @apply p-2 min-w-[44px] min-h-[44px] flex items-center justify-center;
+}
+
+@media (max-width: 640px) {
+  .date-input {
+    @apply text-sm;
+    max-width: 140px;
+  }
+}
+
+/* Loading Skeleton Improvements */
+.skeleton-pulse {
+  @apply animate-pulse bg-gradient-to-r from-[#2a2a2a] to-[#3a3a3a];
+}
+
+.skeleton-text {
+  @apply h-4 rounded-xl mb-2;
+}
+
+.skeleton-box {
+  @apply h-20 rounded-2xl;
+}
+
+/* Error States */
+.error-container {
+  @apply bg-red-400/10 border border-red-400/20 rounded-2xl p-4;
+}
+
+.error-message {
+  @apply text-red-400 text-sm;
+}
+
+/* Success States */
+.success-toast {
+  @apply fixed bottom-4 right-4 left-4 sm:left-auto sm:w-auto;
+  @apply bg-green-400/10 border border-green-400/20 rounded-2xl p-4;
+  @apply transform transition-transform duration-300;
+  @apply translate-y-0 opacity-100;
+}
+
+.success-toast.hidden {
+  @apply translate-y-full opacity-0;
+}
+
+/* Floating Action Button - Mobile */
+.fab-container {
+  @apply fixed bottom-20 right-4 z-50 sm:hidden;
+}
+
+.fab-button {
+  @apply w-14 h-14 rounded-full shadow-lg;
+  @apply bg-gradient-to-r from-[#29E7CD] to-[#D925C7];
+  @apply flex items-center justify-center;
+  @apply transform transition-all duration-200;
+  @apply hover:scale-110 active:scale-95;
+}
+
+/* Analytics Mobile View */
+.analytics-stats {
+  @apply grid grid-cols-2 sm:grid-cols-3 gap-3;
+}
+
+.stat-card {
+  @apply bg-[#2a2a2a]/30 p-3 rounded-xl text-center;
+}
+
+.stat-value {
+  @apply text-lg sm:text-2xl font-bold text-[#29E7CD];
+}
+
+.stat-label {
+  @apply text-xs text-gray-400 mt-1;
+}
+
+/* Responsive Data Table */
+@media (max-width: 640px) {
+  .temperature-log-item {
+    @apply block space-y-2 p-4;
+  }
+  
+  .log-header {
+    @apply flex justify-between items-start mb-2;
+  }
+  
+  .log-details {
+    @apply text-sm space-y-1;
+  }
+}
+
+/* Touch-friendly Tooltips */
+.touch-tooltip {
+  @apply absolute z-50 bg-[#1a1a1a] border border-[#2a2a2a];
+  @apply rounded-lg px-3 py-2 text-sm text-white shadow-lg;
+  @apply pointer-events-none opacity-0 transition-opacity;
+}
+
+.touch-tooltip.visible {
+  @apply opacity-100;
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .temperature-chart {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .print-friendly {
+    color: black !important;
+    background: white !important;
+  }
+}

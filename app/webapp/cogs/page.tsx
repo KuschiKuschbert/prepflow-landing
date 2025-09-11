@@ -708,9 +708,9 @@ export default function COGSPage() {
 
           // Convert if there's a mismatch between user input and ingredient base unit
           if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-            const conversionResult = convertUnit(newIngredient.quantity!, newIngredient.unit || 'kg', selectedIngredientData.unit || 'kg', selectedIngredientData.ingredient_name);
-            convertedQuantity = conversionResult.convertedValue;
-            convertedUnit = conversionResult.convertedUnit;
+            const conversionResult = convertUnit(newIngredient.quantity!, newIngredient.unit || 'kg', selectedIngredientData.unit || 'kg');
+            convertedQuantity = newIngredient.quantity! * conversionResult.conversionFactor;
+            convertedUnit = selectedIngredientData.unit || 'kg';
             conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
           }
 
@@ -765,9 +765,9 @@ export default function COGSPage() {
 
           // Convert if there's a mismatch between user input and ingredient base unit
           if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-            const conversionResult = convertUnit(newIngredient.quantity!, newIngredient.unit || 'kg', selectedIngredientData.unit || 'kg', selectedIngredientData.ingredient_name);
-            convertedQuantity = conversionResult.convertedValue;
-            convertedUnit = conversionResult.convertedUnit;
+            const conversionResult = convertUnit(newIngredient.quantity!, newIngredient.unit || 'kg', selectedIngredientData.unit || 'kg');
+            convertedQuantity = newIngredient.quantity! * conversionResult.conversionFactor;
+            convertedUnit = selectedIngredientData.unit || 'kg';
             conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
           }
 

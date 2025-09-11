@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState, useMemo } from 'react';
 import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeightUnit } from '@/lib/unit-conversion';
 import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
+import { useTranslation } from '@/lib/useTranslation';
 
 interface Ingredient {
   id: string;
@@ -34,6 +35,7 @@ interface Supplier {
 }
 
 export default function IngredientsPage() {
+  const { t } = useTranslation();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -401,10 +403,10 @@ export default function IngredientsPage() {
       // Capitalize text fields before saving
       const capitalizedIngredient = {
         ...newIngredient,
-        ingredient_name: formatIngredientName(newIngredient.ingredient_name),
-        brand: formatBrandName(newIngredient.brand),
-        supplier: formatSupplierName(newIngredient.supplier),
-        storage_location: formatStorageLocation(newIngredient.storage_location),
+        ingredient_name: formatIngredientName(newIngredient.ingredient_name || ''),
+        brand: formatBrandName(newIngredient.brand || ''),
+        supplier: formatSupplierName(newIngredient.supplier || ''),
+        storage_location: formatStorageLocation(newIngredient.storage_location || ''),
       };
 
       const { error } = await supabase
@@ -545,10 +547,10 @@ export default function IngredientsPage() {
         selectedIngredients.has(index.toString())
       ).map(ingredient => ({
         ...ingredient,
-        ingredient_name: formatIngredientName(ingredient.ingredient_name),
-        brand: formatBrandName(ingredient.brand),
-        supplier: formatSupplierName(ingredient.supplier),
-        storage_location: formatStorageLocation(ingredient.storage_location),
+        ingredient_name: formatIngredientName(ingredient.ingredient_name || ''),
+        brand: formatBrandName(ingredient.brand || ''),
+        supplier: formatSupplierName(ingredient.supplier || ''),
+        storage_location: formatStorageLocation(ingredient.storage_location || ''),
       }));
 
       const { error } = await supabase
@@ -628,8 +630,8 @@ export default function IngredientsPage() {
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">🥘 Ingredients Management</h1>
-              <p className="text-gray-400">Manage your kitchen ingredients and inventory</p>
+              <h1 className="text-3xl font-bold text-white mb-2">🥘 {t('ingredients.title', 'Ingredients Management')}</h1>
+              <p className="text-gray-400">{t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')}</p>
             </div>
             
             {/* Unit Selector */}
@@ -1297,7 +1299,7 @@ export default function IngredientsPage() {
                             className="rounded"
                           />
                           <div className="flex-1">
-                            <div className="text-white font-medium">{formatIngredientName(ingredient.ingredient_name)}</div>
+                             <div className="text-white font-medium">{formatIngredientName(ingredient.ingredient_name || '')}</div>
                             <div className="text-sm text-gray-400">
                               {ingredient.brand && `Brand: ${ingredient.brand} • `}
                               {(() => {
@@ -1509,7 +1511,7 @@ export default function IngredientsPage() {
                       {formatSupplierName(ingredient.supplier) || 'N/A'}
                     </div>
                     <div className="text-xs text-gray-400 truncate">
-                      {formatStorageLocation(ingredient.storage_location) || 'No location'}
+                       {formatStorageLocation(ingredient.storage_location || '') || 'No location'}
                     </div>
                   </div>
                 </div>
@@ -1660,7 +1662,7 @@ export default function IngredientsPage() {
                       {/* Supplier Column */}
                       <td className="px-6 py-4">
                         <div className="text-sm text-white">
-                          {formatSupplierName(ingredient.supplier) || 'N/A'}
+                          {formatSupplierName(ingredient.supplier || '') || 'N/A'}
                         </div>
                         {ingredient.storage_location && (
                           <div className="text-xs text-gray-400">

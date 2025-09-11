@@ -13,7 +13,7 @@ const CACHE_STRATEGIES = {
   // API calls - Network First with fallback
   API: ['/api/'],
   // Pages - Stale While Revalidate
-  PAGES: ['/', '/webapp/', '/privacy-policy/', '/terms-of-service/'],
+  PAGES: ['/', '/webapp/', '/webapp/cleaning/', '/webapp/temperature/', '/webapp/compliance/', '/webapp/suppliers/', '/webapp/par-levels/', '/webapp/order-lists/', '/webapp/dish-sections/', '/webapp/prep-lists/', '/webapp/recipe-sharing/', '/webapp/ai-specials/', '/privacy-policy/', '/terms-of-service/'],
   // Critical resources - Cache First
   CRITICAL: ['/images/dashboard-screenshot.png', '/images/prepflow-logo.png']
 };
@@ -41,7 +41,21 @@ self.addEventListener('install', (event) => {
       caches.open(API_CACHE).then(cache => {
         return cache.addAll([
           '/api/ingredients',
-          '/api/recipes'
+          '/api/recipes',
+          '/api/cleaning-areas',
+          '/api/cleaning-tasks',
+          '/api/temperature-logs',
+          '/api/temperature-thresholds',
+          '/api/compliance-types',
+          '/api/compliance-records',
+          '/api/suppliers',
+          '/api/supplier-price-lists',
+          '/api/par-levels',
+          '/api/order-lists',
+          '/api/kitchen-sections',
+          '/api/prep-lists',
+          '/api/recipe-share',
+          '/api/ai-specials'
         ]);
       })
     ]).then(() => {

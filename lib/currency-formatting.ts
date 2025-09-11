@@ -1,6 +1,8 @@
 // Currency formatting utilities for internationalization performance
 // This centralizes currency formatting to avoid repeated Intl.NumberFormat creation
 
+import { CountryConfig } from './country-config';
+
 interface CurrencyConfig {
   code: string;
   symbol: string;
@@ -68,6 +70,37 @@ export function formatCurrency(
   
   const formatter = getCurrencyFormatter(currency);
   return formatter.format(amount);
+}
+
+/**
+ * Format currency with country-specific configuration
+ */
+export function formatCurrencyWithCountry(
+  amount: number,
+  countryConfig: CountryConfig,
+  options?: {
+    includeTax?: boolean;
+    compact?: boolean;
+  }
+): string {
+  const { includeTax = false, compact = false } = options || {};
+  const finalAmount = includeTax ? amount * (1 + countryConfig.taxRate) : amount;
+  
+  if (compact && finalAmount >= 1000) {
+    return new Intl.NumberFormat(countryConfig.locale, {
+      style: 'currency',
+      currency: countryConfig.currency,
+      notation: 'compact',
+      maximumFractionDigits: 1,
+    }).format(finalAmount);
+  }
+  
+  return new Intl.NumberFormat(countryConfig.locale, {
+    style: 'currency',
+    currency: countryConfig.currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(finalAmount);
 }
 
 /**
