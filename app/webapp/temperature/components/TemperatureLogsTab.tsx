@@ -4,44 +4,11 @@ import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import OptimizedImage from '@/components/OptimizedImage';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { TemperatureLog, TemperatureEquipment } from '../types';
 
-interface TemperatureLog {
-  id: number;
-  log_date: string;
-  log_time: string;
-  temperature_type: string;
-  temperature_celsius: number;
-  location: string | null;
-  notes: string | null;
-  photo_url: string | null;
-  logged_by: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface TemperatureThreshold {
-  id: number;
-  temperature_type: string;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  alert_enabled: boolean;
-}
-
-interface TemperatureEquipment {
-  id: string;
-  name: string;
-  equipment_type: string;
-  location: string | null;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
 
 interface TemperatureLogsTabProps {
   logs: TemperatureLog[];
-  thresholds: TemperatureThreshold[];
   equipment: TemperatureEquipment[];
   selectedDate: string;
   setSelectedDate: (date: string) => void;
@@ -66,7 +33,6 @@ const temperatureTypes = [
 
 export default function TemperatureLogsTab({
   logs,
-  thresholds,
   equipment,
   selectedDate,
   setSelectedDate,
@@ -95,12 +61,12 @@ export default function TemperatureLogsTab({
     return formatDate(date);
   };
 
-  const getTemperatureStatus = (temp: number, type: string) => {
-    const threshold = thresholds.find(t => t.temperature_type === type);
-    if (!threshold || !threshold.alert_enabled) return 'normal';
+  const getTemperatureStatus = (temp: number, location: string) => {
+    const equipmentItem = equipment.find(e => e.name === location);
+    if (!equipmentItem || !equipmentItem.is_active) return 'normal';
     
-    if (threshold.min_temp_celsius && temp < threshold.min_temp_celsius) return 'low';
-    if (threshold.max_temp_celsius && temp > threshold.max_temp_celsius) return 'high';
+    if (equipmentItem.min_temp_celsius && temp < equipmentItem.min_temp_celsius) return 'low';
+    if (equipmentItem.max_temp_celsius && temp > equipmentItem.max_temp_celsius) return 'high';
     return 'normal';
   };
 
@@ -450,7 +416,7 @@ export default function TemperatureLogsTab({
               {/* Logs for this time period */}
               <div className="space-y-3">
                 {timeGroup.logs.map((log) => {
-                  const status = getTemperatureStatus(log.temperature_celsius, log.temperature_type);
+                  const status = getTemperatureStatus(log.temperature_celsius, log.location || '');
                   const foodSafety = getFoodSafetyStatus(log.temperature_celsius, log.log_time, log.log_date, log.temperature_type);
                   return (
                     <div key={log.id} className="bg-[#1f1f1f] p-4 rounded-2xl shadow-lg border border-[#2a2a2a] hover:shadow-xl transition-all duration-200">

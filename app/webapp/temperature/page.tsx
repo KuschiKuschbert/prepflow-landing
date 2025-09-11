@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import dynamic from 'next/dynamic';
+import { TemperatureLog, TemperatureEquipment } from './types';
 
 // Dynamic imports for heavy components
 const TemperatureLogsTab = dynamic(() => import('./components/TemperatureLogsTab'), {
@@ -24,57 +25,9 @@ const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEq
   ssr: false
 });
 
-const TemperatureThresholdsTab = dynamic(() => import('./components/TemperatureThresholdsTab'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
-  ssr: false
-});
 
-const TemperatureAnalyticsTab = dynamic(() => import('./components/TemperatureAnalyticsTab'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
-  ssr: false
-});
+import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 
-interface TemperatureLog {
-  id: number;
-  log_date: string;
-  log_time: string;
-  temperature_type: string;
-  temperature_celsius: number;
-  location: string | null;
-  notes: string | null;
-  photo_url: string | null;
-  logged_by: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface TemperatureThreshold {
-  id: number;
-  temperature_type: string;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  alert_enabled: boolean;
-}
-
-interface TemperatureEquipment {
-  id: string;
-  name: string;
-  equipment_type: string;
-  location: string | null;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
 
 export default function TemperatureLogsPage() {
   const { t } = useTranslation();
@@ -95,11 +48,99 @@ export default function TemperatureLogsPage() {
   };
 
   const [logs, setLogs] = useState<TemperatureLog[]>([]);
-  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
-  const [thresholds, setThresholds] = useState<TemperatureThreshold[]>([]);
-  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'logs' | 'thresholds' | 'equipment' | 'analytics'>('logs');
+  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([
+    {
+      id: '1',
+      log_date: '2025-01-11',
+      log_time: '08:00',
+      temperature_type: 'refrigerator',
+      temperature_celsius: 4.2,
+      location: 'Main Fridge',
+      notes: 'Morning check',
+      photo_url: null,
+      logged_by: 'Chef',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '2',
+      log_date: '2025-01-11',
+      log_time: '12:00',
+      temperature_type: 'refrigerator',
+      temperature_celsius: 3.8,
+      location: 'Main Fridge',
+      notes: 'Lunch check',
+      photo_url: null,
+      logged_by: 'Chef',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '3',
+      log_date: '2025-01-11',
+      log_time: '16:00',
+      temperature_type: 'refrigerator',
+      temperature_celsius: 4.5,
+      location: 'Main Fridge',
+      notes: 'Afternoon check',
+      photo_url: null,
+      logged_by: 'Chef',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '4',
+      log_date: '2025-01-11',
+      log_time: '08:30',
+      temperature_type: 'freezer',
+      temperature_celsius: -16.5,
+      location: 'Freezer Unit',
+      notes: 'Morning check',
+      photo_url: null,
+      logged_by: 'Chef',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '5',
+      log_date: '2025-01-11',
+      log_time: '14:30',
+      temperature_type: 'freezer',
+      temperature_celsius: -17.2,
+      location: 'Freezer Unit',
+      notes: 'Afternoon check',
+      photo_url: null,
+      logged_by: 'Chef',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ]);
+  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([
+    {
+      id: '1',
+      name: 'Main Fridge',
+      equipment_type: 'refrigerator',
+      location: 'Kitchen',
+      min_temp_celsius: 2,
+      max_temp_celsius: 8,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: '2', 
+      name: 'Freezer Unit',
+      equipment_type: 'freezer',
+      location: 'Kitchen',
+      min_temp_celsius: -18,
+      max_temp_celsius: -15,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ]);
+  const [loading, setLoading] = useState(false); // Temporarily set to false to test charts
+  const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
   const [quickTempLoading, setQuickTempLoading] = useState<{[key: string]: boolean}>({});
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedType, setSelectedType] = useState('all');
@@ -124,10 +165,34 @@ export default function TemperatureLogsPage() {
   ];
 
   useEffect(() => {
-    fetchLogs();
-    fetchThresholds();
-    fetchEquipment();
-    fetchAllLogs();
+    const loadData = async () => {
+      try {
+        console.log('TemperaturePage - Starting data load...');
+        setLoading(true);
+        
+        // Test one function at a time to isolate the issue
+        console.log('TemperaturePage - Testing fetchLogs...');
+        await fetchLogs();
+        console.log('TemperaturePage - fetchLogs completed');
+        
+        console.log('TemperaturePage - Testing fetchEquipment...');
+        await fetchEquipment();
+        console.log('TemperaturePage - fetchEquipment completed');
+        
+        console.log('TemperaturePage - Testing fetchAllLogs...');
+        await fetchAllLogs();
+        console.log('TemperaturePage - fetchAllLogs completed');
+        
+        
+        console.log('TemperaturePage - All data loaded successfully');
+      } catch (error) {
+        console.error('TemperaturePage - Error loading data:', error);
+      } finally {
+        console.log('TemperaturePage - Setting loading to false');
+        setLoading(false);
+      }
+    };
+    loadData();
   }, [selectedDate, selectedType]);
 
   const fetchLogs = async () => {
@@ -140,13 +205,13 @@ export default function TemperatureLogsPage() {
 
       const response = await fetch(url);
       const data = await response.json();
+      console.log('fetchLogs - API response:', data);
       if (data.success) {
+        console.log('fetchLogs - Setting logs:', data.data.length, 'logs');
         setLogs(data.data);
       }
     } catch (error) {
-      // Handle fetch error gracefully
-    } finally {
-      setLoading(false);
+      console.error('fetchLogs - Error:', error);
     }
   };
 
@@ -154,35 +219,28 @@ export default function TemperatureLogsPage() {
     try {
       const response = await fetch('/api/temperature-logs');
       const data = await response.json();
+      console.log('fetchAllLogs - API response:', data);
       if (data.success) {
+        console.log('fetchAllLogs - Setting allLogs:', data.data.length, 'logs');
         setAllLogs(data.data);
       }
     } catch (error) {
-      // Handle fetch error gracefully
+      console.error('fetchAllLogs - Error:', error);
     }
   };
 
-  const fetchThresholds = async () => {
-    try {
-      const response = await fetch('/api/temperature-thresholds');
-      const data = await response.json();
-      if (data.success) {
-        setThresholds(data.data);
-      }
-    } catch (error) {
-      // Handle fetch error gracefully
-    }
-  };
 
   const fetchEquipment = async () => {
     try {
       const response = await fetch('/api/temperature-equipment');
       const data = await response.json();
+      console.log('fetchEquipment - API response:', data);
       if (data.success) {
+        console.log('fetchEquipment - Setting equipment:', data.data.length, 'equipment');
         setEquipment(data.data);
       }
     } catch (error) {
-      // Handle fetch error gracefully
+      console.error('fetchEquipment - Error:', error);
     }
   };
 
@@ -328,63 +386,6 @@ export default function TemperatureLogsPage() {
     }
   };
 
-  const handleUpdateThreshold = async (thresholdId: number, updates: Partial<TemperatureThreshold>) => {
-    try {
-      const response = await fetch(`/api/temperature-thresholds/${thresholdId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updates),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        fetchThresholds();
-      }
-    } catch (error) {
-      // Handle update error gracefully
-    }
-  };
-
-  const handleCreateThreshold = async (equipmentId: string, minTemp: number, maxTemp: number, alertEnabled: boolean) => {
-    try {
-      const response = await fetch('/api/temperature-thresholds', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          equipment_id: equipmentId,
-          min_temp_celsius: minTemp,
-          max_temp_celsius: maxTemp,
-          alert_enabled: alertEnabled
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        fetchThresholds();
-      }
-    } catch (error) {
-      // Handle create error gracefully
-    }
-  };
-
-  const handleDeleteThreshold = async (thresholdId: number) => {
-    try {
-      const response = await fetch(`/api/temperature-thresholds/${thresholdId}`, {
-        method: 'DELETE',
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        fetchThresholds();
-      }
-    } catch (error) {
-      // Handle delete error gracefully
-    }
-  };
 
   const getTypeIcon = (type: string) => {
     const typeInfo = temperatureTypes.find(t => t.value === type);
@@ -433,10 +434,21 @@ export default function TemperatureLogsPage() {
     }
   };
 
-  if (loading) {
+  // Temporarily bypass loading state to test charts
+  if (false && loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
+          <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+            <h3 className="text-yellow-300 font-semibold mb-2">🐛 Debug Information (Loading State)</h3>
+            <div className="text-sm space-y-1">
+              <p>Loading: <span className="text-yellow-300">{loading ? 'true' : 'false'}</span></p>
+              <p>Logs count: <span className="text-yellow-300">{logs.length}</span></p>
+              <p>All logs count: <span className="text-yellow-300">{allLogs.length}</span></p>
+              <p>Equipment count: <span className="text-yellow-300">{equipment.length}</span></p>
+              <p>Active tab: <span className="text-yellow-300">{activeTab}</span></p>
+            </div>
+          </div>
           <div className="animate-pulse">
             <div className="h-8 bg-[#2a2a2a] rounded-3xl w-1/3 mb-8"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -456,6 +468,7 @@ export default function TemperatureLogsPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
@@ -492,18 +505,6 @@ export default function TemperatureLogsPage() {
               🏭 {t('temperature.equipment', 'Equipment')}
             </button>
             <button
-              onClick={() => setActiveTab('thresholds')}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
-                activeTab === 'thresholds'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-              aria-pressed={activeTab === 'thresholds'}
-              aria-label="View temperature thresholds"
-            >
-              ⚙️ {t('temperature.thresholds', 'Thresholds')}
-            </button>
-            <button
               onClick={() => setActiveTab('analytics')}
               className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
                 activeTab === 'analytics'
@@ -522,7 +523,6 @@ export default function TemperatureLogsPage() {
         {activeTab === 'logs' && (
           <TemperatureLogsTab
             logs={logs}
-            thresholds={thresholds}
             equipment={equipment}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
@@ -548,21 +548,11 @@ export default function TemperatureLogsPage() {
           />
         )}
 
-        {activeTab === 'thresholds' && (
-          <TemperatureThresholdsTab
-            thresholds={thresholds}
-            equipment={equipment}
-            onUpdateThreshold={handleUpdateThreshold}
-            onCreateThreshold={handleCreateThreshold}
-            onDeleteThreshold={handleDeleteThreshold}
-          />
-        )}
 
         {activeTab === 'analytics' && (
           <TemperatureAnalyticsTab
             allLogs={allLogs}
             equipment={equipment}
-            logs={logs}
           />
         )}
 
