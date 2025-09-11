@@ -18,6 +18,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
   const [dateOffset, setDateOffset] = useState(0); // 0 for today, 1 for yesterday, etc.
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
+  const [hasManuallyChangedFilter, setHasManuallyChangedFilter] = useState(false);
 
   // Handle loading state to prevent FOUC - wait for data to be ready
   useEffect(() => {
@@ -38,16 +39,18 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
           }
         }
         
-        // Smart time filter selection - find the best filter with data
-        const bestTimeFilter = findBestTimeFilter();
-        if (bestTimeFilter !== timeFilter) {
-          setTimeFilter(bestTimeFilter);
+        // Smart time filter selection - find the best filter with data (only if not manually changed)
+        if (!hasManuallyChangedFilter) {
+          const bestTimeFilter = findBestTimeFilter();
+          if (bestTimeFilter !== timeFilter) {
+            setTimeFilter(bestTimeFilter);
+          }
         }
       }, 100); // Small delay to ensure content is ready
       
       return () => clearTimeout(timer);
     }
-  }, [equipment.length, allLogs.length, dateOffset, selectedEquipmentId, timeFilter]);
+  }, [equipment.length, allLogs.length, dateOffset, selectedEquipmentId, hasManuallyChangedFilter]);
 
   const getFilteredLogs = (equipment: TemperatureEquipment) => {
     // Filter logs by equipment name (location field in logs matches equipment name)
@@ -200,7 +203,10 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
           ['24h', '7d', '30d', 'all'].map(filter => (
             <button
               key={filter}
-              onClick={() => setTimeFilter(filter as '24h' | '7d' | '30d' | 'all')}
+              onClick={() => {
+                setTimeFilter(filter as '24h' | '7d' | '30d' | 'all');
+                setHasManuallyChangedFilter(true);
+              }}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                 timeFilter === filter ? 'bg-[#29E7CD] text-black' : 'bg-transparent text-gray-400 hover:text-white hover:bg-[#2a2a2a]'
               }`}
