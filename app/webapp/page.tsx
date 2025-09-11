@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
 import TestWarningButton from '@/components/TestWarningButton';
+import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 
 // Dynamic imports for heavy components
 const DashboardStats = dynamic(() => import('./components/DashboardStats'), {
@@ -41,6 +42,32 @@ interface DashboardStats {
   averageDishPrice: number;
 }
 
+interface TemperatureLog {
+  id: string;
+  log_date: string;
+  log_time: string;
+  temperature_type: string;
+  temperature_celsius: number;
+  location: string | null;
+  notes: string | null;
+  photo_url: string | null;
+  logged_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface TemperatureEquipment {
+  id: string;
+  name: string;
+  equipment_type: string;
+  location: string | null;
+  min_temp_celsius: number | null;
+  max_temp_celsius: number | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export default function WebAppDashboard() {
   const { t } = useTranslation();
   const [stats, setStats] = useState<DashboardStats>({
@@ -50,6 +77,8 @@ export default function WebAppDashboard() {
     averageDishPrice: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
+  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -89,6 +118,36 @@ export default function WebAppDashboard() {
 
     fetchStats();
   }, []);
+
+  // Fetch temperature data for warnings
+  useEffect(() => {
+    const fetchTemperatureData = async () => {
+      try {
+        // Fetch temperature logs
+        const { data: logs } = await supabase
+          .from('temperature_logs')
+          .select('*')
+          .order('log_date', { ascending: false })
+          .order('log_time', { ascending: false });
+
+        // Fetch temperature equipment
+        const { data: equipmentData } = await supabase
+          .from('temperature_equipment')
+          .select('*')
+          .eq('is_active', true);
+
+        setAllLogs(logs || []);
+        setEquipment(equipmentData || []);
+      } catch (error) {
+        console.error('Error fetching temperature data:', error);
+      }
+    };
+
+    fetchTemperatureData();
+  }, []);
+
+  // Use temperature warnings hook
+  useTemperatureWarnings({ allLogs, equipment });
 
   if (loading) {
     return (
