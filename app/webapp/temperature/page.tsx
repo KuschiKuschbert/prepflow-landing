@@ -167,6 +167,14 @@ export default function TemperatureLogsPage() {
     loadData();
   }, []);
 
+  // Watch for changes in selectedDate or selectedType and refetch logs
+  useEffect(() => {
+    if (hasStartedLoading) {
+      console.log('Date/type changed, refetching logs:', selectedDate, selectedType);
+      fetchLogs();
+    }
+  }, [selectedDate, selectedType, hasStartedLoading]);
+
   const handleAddLog = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
