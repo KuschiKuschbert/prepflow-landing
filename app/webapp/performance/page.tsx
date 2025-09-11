@@ -2,28 +2,29 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
-import { Bar, Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
+import dynamic from 'next/dynamic';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+// Dynamic imports for chart components
+const BarChart = dynamic(() => import('recharts').then(mod => ({ default: mod.BarChart })), {
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-80 bg-[#2a2a2a] rounded-2xl"></div>
+    </div>
+  ),
+  ssr: false
+});
+
+const PieChart = dynamic(() => import('recharts').then(mod => ({ default: mod.PieChart })), {
+  loading: () => (
+    <div className="animate-pulse">
+      <div className="h-80 bg-[#2a2a2a] rounded-2xl"></div>
+    </div>
+  ),
+  ssr: false
+});
+
+// Import other recharts components normally
+import { Bar, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface MenuDish {
   id: string;
@@ -85,7 +86,7 @@ export default function PerformancePage() {
       }
     } catch (err) {
       setError('Error fetching performance data');
-      console.error('Error fetching dishes:', err);
+      // Handle fetch error gracefully
     } finally {
       setLoading(false);
     }
@@ -130,7 +131,7 @@ export default function PerformancePage() {
       setCsvData('');
       fetchPerformanceData(); // Refresh data
     } catch (err) {
-      console.error('Import error:', err);
+      // Handle import error gracefully
     } finally {
       setImporting(false);
     }
@@ -492,66 +493,58 @@ export default function PerformancePage() {
             <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-6">
               <h3 className="text-xl font-semibold text-white mb-4">Profit by Category</h3>
               <div className="h-80 w-full">
-                <Bar
-                data={{
-                  labels: ['Chef\'s Kiss', 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'],
-                  datasets: [
-                    {
-                      label: 'Average Profit %',
-                      data: [
-                        performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length),
-                        performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length),
-                        performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length),
-                        performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length),
-                      ],
-                      backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(249, 115, 22, 0.8)',
-                        'rgba(239, 68, 68, 0.8)',
-                      ],
-                      borderColor: [
-                        'rgba(34, 197, 94, 1)',
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(249, 115, 22, 1)',
-                        'rgba(239, 68, 68, 1)',
-                      ],
-                      borderWidth: 1,
-                    },
-                  ],
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      labels: {
-                        color: '#ffffff',
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={[
+                      {
+                        name: 'Chef\'s Kiss',
+                        profit: performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length)
                       },
-                    },
-                  },
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      ticks: {
-                        color: '#9ca3af',
+                      {
+                        name: 'Hidden Gem',
+                        profit: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length)
                       },
-                      grid: {
-                        color: '#374151',
+                      {
+                        name: 'Bargain Bucket',
+                        profit: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length)
                       },
-                    },
-                    x: {
-                      ticks: {
-                        color: '#9ca3af',
-                      },
-                      grid: {
-                        color: '#374151',
-                      },
-                    },
-                  },
-                }}
-                height={300}
-              />
+                      {
+                        name: 'Burnt Toast',
+                        profit: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length)
+                      }
+                    ]}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
+                    <XAxis 
+                      dataKey="name" 
+                      stroke="#9ca3af"
+                      fontSize={12}
+                      tick={{ fill: '#9ca3af' }}
+                    />
+                    <YAxis 
+                      stroke="#9ca3af"
+                      fontSize={12}
+                      tick={{ fill: '#9ca3af' }}
+                      tickFormatter={(value) => `${value}%`}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'rgba(31, 31, 31, 0.95)',
+                        border: '1px solid #29E7CD',
+                        borderRadius: '8px',
+                        color: '#ffffff'
+                      }}
+                      labelStyle={{ color: '#ffffff' }}
+                      formatter={(value: any) => [`${value.toFixed(1)}%`, 'Average Profit']}
+                    />
+                    <Bar 
+                      dataKey="profit" 
+                      fill="#29E7CD"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
@@ -559,48 +552,48 @@ export default function PerformancePage() {
             <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-6">
               <h3 className="text-xl font-semibold text-white mb-4">Category Distribution</h3>
               <div className="h-80 w-full">
-                <Pie
-                data={{
-                  labels: ['Chef\'s Kiss', 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'],
-                  datasets: [
-                    {
-                      data: [
-                        performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length,
-                        performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
-                        performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length,
-                        performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
-                      ],
-                      backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(249, 115, 22, 0.8)',
-                        'rgba(239, 68, 68, 0.8)',
-                      ],
-                      borderColor: [
-                        'rgba(34, 197, 94, 1)',
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(249, 115, 22, 1)',
-                        'rgba(239, 68, 68, 1)',
-                      ],
-                      borderWidth: 1,
-                    },
-                  ],
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: 'bottom',
-                      labels: {
-                        color: '#ffffff',
-                        padding: 20,
-                      },
-                    },
-                  },
-                }}
-                height={300}
-              />
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Chef\'s Kiss', value: performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length, color: '#22c55e' },
+                        { name: 'Hidden Gem', value: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length, color: '#3b82f6' },
+                        { name: 'Bargain Bucket', value: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length, color: '#f97316' },
+                        { name: 'Burnt Toast', value: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length, color: '#ef4444' }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value }) => `${name}: ${value}`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {[
+                        { name: 'Chef\'s Kiss', value: performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length, color: '#22c55e' },
+                        { name: 'Hidden Gem', value: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length, color: '#3b82f6' },
+                        { name: 'Bargain Bucket', value: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length, color: '#f97316' },
+                        { name: 'Burnt Toast', value: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length, color: '#ef4444' }
+                      ].map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'rgba(31, 31, 31, 0.95)',
+                        border: '1px solid #29E7CD',
+                        borderRadius: '8px',
+                        color: '#ffffff'
+                      }}
+                      labelStyle={{ color: '#ffffff' }}
+                    />
+                    <Legend 
+                      wrapperStyle={{ color: '#ffffff' }}
+                      verticalAlign="bottom"
+                      height={36}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>

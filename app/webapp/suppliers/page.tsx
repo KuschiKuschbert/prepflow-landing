@@ -255,7 +255,7 @@ export default function SuppliersPage() {
                       value={newSupplier.name}
                       onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.namePlaceholder', 'e.g., Fresh Produce Co.')}
+                       placeholder={String(t('suppliers.namePlaceholder', 'e.g., Fresh Produce Co.'))}
                       required
                     />
                   </div>
@@ -266,7 +266,7 @@ export default function SuppliersPage() {
                       value={newSupplier.contact_person}
                       onChange={(e) => setNewSupplier({ ...newSupplier, contact_person: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.contactPersonPlaceholder', 'e.g., John Smith')}
+                       placeholder={String(t('suppliers.contactPersonPlaceholder', 'e.g., John Smith'))}
                     />
                   </div>
                   <div>
@@ -276,7 +276,7 @@ export default function SuppliersPage() {
                       value={newSupplier.email}
                       onChange={(e) => setNewSupplier({ ...newSupplier, email: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.emailPlaceholder', 'contact@supplier.com')}
+                       placeholder={String(t('suppliers.emailPlaceholder', 'contact@supplier.com'))}
                     />
                   </div>
                   <div>
@@ -286,7 +286,7 @@ export default function SuppliersPage() {
                       value={newSupplier.phone}
                       onChange={(e) => setNewSupplier({ ...newSupplier, phone: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.phonePlaceholder', '+61 2 1234 5678')}
+                       placeholder={String(t('suppliers.phonePlaceholder', '+61 2 1234 5678'))}
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -295,7 +295,7 @@ export default function SuppliersPage() {
                       value={newSupplier.address}
                       onChange={(e) => setNewSupplier({ ...newSupplier, address: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.addressPlaceholder', 'Full business address')}
+                       placeholder={String(t('suppliers.addressPlaceholder', 'Full business address'))}
                       rows={2}
                     />
                   </div>
@@ -306,7 +306,7 @@ export default function SuppliersPage() {
                       value={newSupplier.website}
                       onChange={(e) => setNewSupplier({ ...newSupplier, website: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.websitePlaceholder', 'https://supplier.com')}
+                       placeholder={String(t('suppliers.websitePlaceholder', 'https://supplier.com'))}
                     />
                   </div>
                   <div>
@@ -316,7 +316,7 @@ export default function SuppliersPage() {
                       value={newSupplier.payment_terms}
                       onChange={(e) => setNewSupplier({ ...newSupplier, payment_terms: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.paymentTermsPlaceholder', 'e.g., Net 30, Cash on Delivery')}
+                       placeholder={String(t('suppliers.paymentTermsPlaceholder', 'e.g., Net 30, Cash on Delivery'))}
                     />
                   </div>
                   <div>
@@ -326,7 +326,7 @@ export default function SuppliersPage() {
                       value={newSupplier.delivery_schedule}
                       onChange={(e) => setNewSupplier({ ...newSupplier, delivery_schedule: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.deliverySchedulePlaceholder', 'e.g., Monday, Wednesday, Friday')}
+                       placeholder={String(t('suppliers.deliverySchedulePlaceholder', 'e.g., Monday, Wednesday, Friday'))}
                     />
                   </div>
                   <div>
@@ -337,7 +337,7 @@ export default function SuppliersPage() {
                       value={newSupplier.minimum_order_amount}
                       onChange={(e) => setNewSupplier({ ...newSupplier, minimum_order_amount: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.minimumOrderPlaceholder', 'e.g., 100.00')}
+                       placeholder={String(t('suppliers.minimumOrderPlaceholder', 'e.g., 100.00'))}
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -346,7 +346,7 @@ export default function SuppliersPage() {
                       value={newSupplier.notes}
                       onChange={(e) => setNewSupplier({ ...newSupplier, notes: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.notesPlaceholder', 'Additional notes or special instructions')}
+                       placeholder={String(t('suppliers.notesPlaceholder', 'Additional notes or special instructions'))}
                       rows={3}
                     />
                   </div>
@@ -509,7 +509,7 @@ export default function SuppliersPage() {
                       value={newPriceList.document_name}
                       onChange={(e) => setNewPriceList({ ...newPriceList, document_name: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.documentNamePlaceholder', 'e.g., January 2024 Price List')}
+                       placeholder={String(t('suppliers.documentNamePlaceholder', 'e.g., January 2024 Price List'))}
                       required
                     />
                   </div>
@@ -520,7 +520,7 @@ export default function SuppliersPage() {
                       value={newPriceList.document_url}
                       onChange={(e) => setNewPriceList({ ...newPriceList, document_url: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.documentUrlPlaceholder', 'Link to price list document')}
+                       placeholder={String(t('suppliers.documentUrlPlaceholder', 'Link to price list document'))}
                       required
                     />
                   </div>
@@ -548,7 +548,7 @@ export default function SuppliersPage() {
                       value={newPriceList.notes}
                       onChange={(e) => setNewPriceList({ ...newPriceList, notes: e.target.value })}
                       className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                      placeholder={t('suppliers.notesPlaceholder', 'Additional notes about this price list')}
+                       placeholder={String(t('suppliers.notesPlaceholder', 'Additional notes about this price list'))}
                       rows={3}
                     />
                   </div>

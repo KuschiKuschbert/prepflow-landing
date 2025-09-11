@@ -194,7 +194,7 @@ export default function CountrySetup() {
           
           <div className="flex items-center space-x-2 bg-[#1f1f1f] rounded-lg px-3 py-2">
             <span className="text-[#29E7CD] font-medium">Time:</span>
-            <span className="text-white">{countryConfig.timeFormat}</span>
+            <span className="text-white">{countryConfig.dateFormat}</span>
           </div>
         </div>
       </div>

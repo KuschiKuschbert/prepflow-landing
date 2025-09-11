@@ -1542,9 +1542,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                   </p>
                 </div>
                 <div className="print:flex print:items-center print:gap-3">
-                  <img 
+                  <Image 
                     src="/images/prepflow-logo.png" 
                     alt="PrepFlow" 
+                    width={64}
+                    height={64}
                     className="print:w-16 print:h-16 print:object-contain"
                   />
                   <div className="print:text-right">

@@ -3,6 +3,13 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Database connection not available' },
+        { status: 500 }
+      );
+    }
+
     const { data, error } = await supabaseAdmin
       .from('temperature_thresholds')
       .select('*')
@@ -36,6 +43,13 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Database connection not available' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { id, ...updateData } = body;
     

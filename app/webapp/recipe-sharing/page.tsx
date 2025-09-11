@@ -322,7 +322,7 @@ export default function RecipeSharingPage() {
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                     rows={3}
-                    placeholder={t('recipeSharing.notesPlaceholder', 'Optional message to include with the shared recipe')}
+                     placeholder={String(t('recipeSharing.notesPlaceholder', 'Optional message to include with the shared recipe'))}
                   />
                 </div>
 

@@ -168,7 +168,8 @@ export default function IngredientTable({
               const convertedCost = convertIngredientCost(
                 ingredient.cost_per_unit,
                 ingredient.unit || 'GM',
-                displayUnit
+                displayUnit,
+                ingredient.ingredient_name || 'Unknown'
               );
               
               const isLowStock = ingredient.min_stock_level && ingredient.current_stock && 
