@@ -69,26 +69,31 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
       }
     };
 
-    // Check for equipment that hasn't been temperature checked today
+    // Check for equipment that hasn't been temperature checked in the last 8 hours
     const checkEquipmentTemperatureWarning = () => {
-      const today = new Date();
-      const todayString = today.toISOString().split('T')[0];
-      const todayLogs = allLogs.filter(log => log.log_date === todayString);
+      const now = new Date();
+      const eightHoursAgo = new Date(now.getTime() - (8 * 60 * 60 * 1000)); // 8 hours ago
+      
+      // Filter logs from the last 8 hours
+      const recentLogs = allLogs.filter(log => {
+        const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
+        return logDateTime >= eightHoursAgo && logDateTime <= now;
+      });
 
       // Get active equipment that should be monitored
       const activeEquipment = equipment.filter(eq => eq.is_active && eq.location);
       
       if (activeEquipment.length === 0) return;
 
-      // Check which equipment has been temperature checked today
+      // Check which equipment has been temperature checked in the last 8 hours
       const checkedEquipment = new Set();
-      todayLogs.forEach(log => {
+      recentLogs.forEach(log => {
         if (log.location) {
           checkedEquipment.add(log.location);
         }
       });
 
-      // Find equipment that hasn't been checked
+      // Find equipment that hasn't been checked in the last 8 hours
       const uncheckedEquipment = activeEquipment.filter(eq => 
         eq.location && !checkedEquipment.has(eq.location)
       );
@@ -100,7 +105,7 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
         addWarning({
           type: 'warning',
           title: 'Equipment Temperature Check Required',
-          message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentNames} ${isMultiple ? 'have' : 'has'} not been temperature checked today. Ensure all active equipment is monitored for safety compliance.`,
+          message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentNames} ${isMultiple ? 'have' : 'has'} not been temperature checked in the last 8 hours. Ensure all active equipment is monitored for safety compliance.`,
           action: {
             label: 'Go to Temperature Logs',
             onClick: () => {
