@@ -95,6 +95,7 @@ export default function TemperatureLogsPage() {
       if (data.success) {
         console.log('fetchLogs - Setting logs:', data.data.length, 'logs for date:', selectedDate, 'type:', selectedType);
         setLogs(data.data);
+        console.log('fetchLogs - Current logs state after set:', data.data.length);
       }
     } catch (error) {
       console.error('fetchLogs - Error:', error);
@@ -169,7 +170,7 @@ export default function TemperatureLogsPage() {
 
   // Watch for changes in selectedDate or selectedType and refetch logs
   useEffect(() => {
-    if (hasStartedLoading) {
+    if (hasStartedLoading && selectedDate) {
       console.log('Date/type changed, refetching logs:', selectedDate, selectedType);
       fetchLogs();
     }
