@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
+import TestWarningButton from '@/components/TestWarningButton';
 
 // Dynamic imports for heavy components
 const DashboardStats = dynamic(() => import('./components/DashboardStats'), {
@@ -126,6 +127,11 @@ export default function WebAppDashboard() {
             🏠 {t('dashboard.title', 'Kitchen Management Dashboard')}
           </h1>
           <p className="text-gray-400">{t('dashboard.subtitle', 'Welcome back! Here\'s your kitchen overview')}</p>
+          
+          {/* Test Warning Button - Remove in production */}
+          <div className="mt-4">
+            <TestWarningButton />
+          </div>
         </div>
         
         {/* Dashboard Components */}

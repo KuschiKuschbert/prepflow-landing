@@ -27,6 +27,7 @@ const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEq
 
 
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
+import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 
 
 export default function TemperatureLogsPage() {
@@ -48,105 +49,18 @@ export default function TemperatureLogsPage() {
   };
 
   const [logs, setLogs] = useState<TemperatureLog[]>([]);
-  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([
-    {
-      id: '1',
-      log_date: '2025-01-11',
-      log_time: '08:00',
-      temperature_type: 'refrigerator',
-      temperature_celsius: 4.2,
-      location: 'Main Fridge',
-      notes: 'Morning check',
-      photo_url: null,
-      logged_by: 'Chef',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: '2',
-      log_date: '2025-01-11',
-      log_time: '12:00',
-      temperature_type: 'refrigerator',
-      temperature_celsius: 3.8,
-      location: 'Main Fridge',
-      notes: 'Lunch check',
-      photo_url: null,
-      logged_by: 'Chef',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: '3',
-      log_date: '2025-01-11',
-      log_time: '16:00',
-      temperature_type: 'refrigerator',
-      temperature_celsius: 4.5,
-      location: 'Main Fridge',
-      notes: 'Afternoon check',
-      photo_url: null,
-      logged_by: 'Chef',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: '4',
-      log_date: '2025-01-11',
-      log_time: '08:30',
-      temperature_type: 'freezer',
-      temperature_celsius: -16.5,
-      location: 'Freezer Unit',
-      notes: 'Morning check',
-      photo_url: null,
-      logged_by: 'Chef',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: '5',
-      log_date: '2025-01-11',
-      log_time: '14:30',
-      temperature_type: 'freezer',
-      temperature_celsius: -17.2,
-      location: 'Freezer Unit',
-      notes: 'Afternoon check',
-      photo_url: null,
-      logged_by: 'Chef',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-  ]);
-  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([
-    {
-      id: '1',
-      name: 'Main Fridge',
-      equipment_type: 'refrigerator',
-      location: 'Kitchen',
-      min_temp_celsius: 2,
-      max_temp_celsius: 8,
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: '2', 
-      name: 'Freezer Unit',
-      equipment_type: 'freezer',
-      location: 'Kitchen',
-      min_temp_celsius: -18,
-      max_temp_celsius: -15,
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-  ]);
-  const [loading, setLoading] = useState(false); // Temporarily set to false to test charts
+  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
+  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton showing
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load to prevent FOUC
+  const [hasStartedLoading, setHasStartedLoading] = useState(false); // Track if loading has actually started
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
   const [quickTempLoading, setQuickTempLoading] = useState<{[key: string]: boolean}>({});
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [newLog, setNewLog] = useState({
-    log_date: new Date().toISOString().split('T')[0],
-    log_time: new Date().toTimeString().split(' ')[0].substring(0, 5),
+    log_date: '',
+    log_time: '',
     temperature_type: 'fridge',
     temperature_celsius: '',
     location: '',
@@ -154,6 +68,9 @@ export default function TemperatureLogsPage() {
     logged_by: ''
   });
   const [showAddLog, setShowAddLog] = useState(false);
+
+  // Initialize temperature warnings
+  useTemperatureWarnings({ allLogs, equipment });
 
   const temperatureTypes = [
     { value: 'fridge', label: 'Fridge', icon: '🧊' },
@@ -163,37 +80,6 @@ export default function TemperatureLogsPage() {
     { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '🥗' },
     { value: 'storage', label: 'Storage', icon: '📦' }
   ];
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        console.log('TemperaturePage - Starting data load...');
-        setLoading(true);
-        
-        // Test one function at a time to isolate the issue
-        console.log('TemperaturePage - Testing fetchLogs...');
-        await fetchLogs();
-        console.log('TemperaturePage - fetchLogs completed');
-        
-        console.log('TemperaturePage - Testing fetchEquipment...');
-        await fetchEquipment();
-        console.log('TemperaturePage - fetchEquipment completed');
-        
-        console.log('TemperaturePage - Testing fetchAllLogs...');
-        await fetchAllLogs();
-        console.log('TemperaturePage - fetchAllLogs completed');
-        
-        
-        console.log('TemperaturePage - All data loaded successfully');
-      } catch (error) {
-        console.error('TemperaturePage - Error loading data:', error);
-      } finally {
-        console.log('TemperaturePage - Setting loading to false');
-        setLoading(false);
-      }
-    };
-    loadData();
-  }, [selectedDate, selectedType]);
 
   const fetchLogs = async () => {
     try {
@@ -220,7 +106,7 @@ export default function TemperatureLogsPage() {
       const response = await fetch('/api/temperature-logs');
       const data = await response.json();
       console.log('fetchAllLogs - API response:', data);
-      if (data.success) {
+      if (data.success && data.data) {
         console.log('fetchAllLogs - Setting allLogs:', data.data.length, 'logs');
         setAllLogs(data.data);
       }
@@ -243,6 +129,43 @@ export default function TemperatureLogsPage() {
       console.error('fetchEquipment - Error:', error);
     }
   };
+
+  useEffect(() => {
+    // Initialize date/time values on client side to prevent hydration mismatch
+    const now = new Date();
+    setSelectedDate(now.toISOString().split('T')[0]);
+    setNewLog(prev => ({
+      ...prev,
+      log_date: now.toISOString().split('T')[0],
+      log_time: now.toTimeString().split(' ')[0].substring(0, 5)
+    }));
+  }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setHasStartedLoading(true);
+        setLoading(true);
+        setIsInitialLoad(true);
+        
+        // Load all data in parallel for better performance
+        await Promise.all([
+          fetchLogs(),
+          fetchEquipment(),
+          fetchAllLogs()
+        ]);
+        
+        // Small delay to ensure smooth transition
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } catch (error) {
+        console.error('Error loading temperature data:', error);
+      } finally {
+        setLoading(false);
+        setIsInitialLoad(false);
+      }
+    };
+    loadData();
+  }, []);
 
   const handleAddLog = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -434,32 +357,12 @@ export default function TemperatureLogsPage() {
     }
   };
 
-  // Temporarily bypass loading state to test charts
-  if (false && loading) {
+  // Only show content when data is ready
+  if (isInitialLoad || !hasStartedLoading || equipment.length === 0) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
-            <h3 className="text-yellow-300 font-semibold mb-2">🐛 Debug Information (Loading State)</h3>
-            <div className="text-sm space-y-1">
-              <p>Loading: <span className="text-yellow-300">{loading ? 'true' : 'false'}</span></p>
-              <p>Logs count: <span className="text-yellow-300">{logs.length}</span></p>
-              <p>All logs count: <span className="text-yellow-300">{allLogs.length}</span></p>
-              <p>Equipment count: <span className="text-yellow-300">{equipment.length}</span></p>
-              <p>Active tab: <span className="text-yellow-300">{activeTab}</span></p>
-            </div>
-          </div>
-          <div className="animate-pulse">
-            <div className="h-8 bg-[#2a2a2a] rounded-3xl w-1/3 mb-8"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-                  <div className="h-4 bg-[#2a2a2a] rounded-xl w-3/4 mb-3"></div>
-                  <div className="h-20 bg-[#2a2a2a] rounded-xl"></div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Empty state - no skeleton, just dark background */}
         </div>
       </div>
     );
