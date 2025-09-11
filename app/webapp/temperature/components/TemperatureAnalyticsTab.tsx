@@ -58,7 +58,14 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
     const selectedDateString = format(today, 'yyyy-MM-dd');
 
     if (timeFilter === '24h') {
-      filtered = filtered.filter(log => log.log_date === selectedDateString);
+      // For 24h, look at the last 24 hours from now
+      const now = new Date();
+      const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+      
+      filtered = filtered.filter(log => {
+        const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
+        return logDateTime >= twentyFourHoursAgo && logDateTime <= now;
+      });
     } else if (timeFilter === '7d') {
       const sevenDaysAgo = new Date(today);
       sevenDaysAgo.setDate(today.getDate() - 7);
@@ -85,7 +92,14 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
 
     let filteredLogs = allLogs;
     if (timeFilter === '24h') {
-      filteredLogs = allLogs.filter(log => log.log_date === selectedDateString);
+      // For 24h, look at the last 24 hours from now
+      const now = new Date();
+      const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+      
+      filteredLogs = allLogs.filter(log => {
+        const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
+        return logDateTime >= twentyFourHoursAgo && logDateTime <= now;
+      });
     } else if (timeFilter === '7d') {
       const sevenDaysAgo = new Date(today);
       sevenDaysAgo.setDate(today.getDate() - 7);
