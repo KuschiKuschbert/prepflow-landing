@@ -341,14 +341,15 @@ export default function WebAppLayout({
             )}
           </div>
         </nav>
+        
+        {/* Global Warning System - Bar under navigation */}
+        <GlobalWarning />
+        
         <main className="min-h-screen bg-[#0a0a0a]">
           <ReactQueryProvider>
             {children}
           </ReactQueryProvider>
         </main>
-        
-        {/* Global Warning System */}
-        <GlobalWarning />
         </div>
       </GlobalWarningProvider>
     </CountryProvider>
