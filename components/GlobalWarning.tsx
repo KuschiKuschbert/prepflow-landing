@@ -8,37 +8,40 @@ const GlobalWarning: React.FC = () => {
 
   if (warnings.length === 0) return null;
 
+  // Show only the first warning in the bar
+  const warning = warnings[0];
+
   const getWarningStyles = (type: string) => {
     switch (type) {
       case 'error':
         return {
-          container: 'bg-red-500/10 border-red-500/30 text-red-400',
+          container: 'bg-red-900/90 border-red-700/50 text-red-100',
           icon: 'text-red-400',
-          iconBg: 'bg-red-500/20',
+          button: 'bg-red-800/50 hover:bg-red-700/50 text-red-100',
         };
       case 'warning':
         return {
-          container: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400',
+          container: 'bg-yellow-900/90 border-yellow-700/50 text-yellow-100',
           icon: 'text-yellow-400',
-          iconBg: 'bg-yellow-500/20',
+          button: 'bg-yellow-800/50 hover:bg-yellow-700/50 text-yellow-100',
         };
       case 'info':
         return {
-          container: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
+          container: 'bg-blue-900/90 border-blue-700/50 text-blue-100',
           icon: 'text-blue-400',
-          iconBg: 'bg-blue-500/20',
+          button: 'bg-blue-800/50 hover:bg-blue-700/50 text-blue-100',
         };
       case 'success':
         return {
-          container: 'bg-green-500/10 border-green-500/30 text-green-400',
+          container: 'bg-green-900/90 border-green-700/50 text-green-100',
           icon: 'text-green-400',
-          iconBg: 'bg-green-500/20',
+          button: 'bg-green-800/50 hover:bg-green-700/50 text-green-100',
         };
       default:
         return {
-          container: 'bg-gray-500/10 border-gray-500/30 text-gray-400',
+          container: 'bg-gray-900/90 border-gray-700/50 text-gray-100',
           icon: 'text-gray-400',
-          iconBg: 'bg-gray-500/20',
+          button: 'bg-gray-800/50 hover:bg-gray-700/50 text-gray-100',
         };
     }
   };
@@ -78,60 +81,51 @@ const GlobalWarning: React.FC = () => {
     }
   };
 
+  const styles = getWarningStyles(warning.type);
+
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2 max-w-md">
-      {warnings.map((warning) => {
-        const styles = getWarningStyles(warning.type);
-        
-        return (
-          <div
-            key={warning.id}
-            className={`${styles.container} border rounded-xl p-4 shadow-lg backdrop-blur-sm transition-all duration-300 transform animate-in slide-in-from-right-5`}
-          >
-            <div className="flex items-start space-x-3">
-              {/* Icon */}
-              <div className={`${styles.iconBg} p-1 rounded-full flex-shrink-0`}>
-                <div className={styles.icon}>
-                  {getWarningIcon(warning.type)}
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-sm mb-1">
-                  {warning.title}
-                </h4>
-                <p className="text-sm opacity-90 leading-relaxed">
-                  {warning.message}
-                </p>
-                
-                {/* Action Button */}
-                {warning.action && (
-                  <button
-                    onClick={warning.action.onClick}
-                    className="mt-2 text-xs font-medium hover:underline focus:outline-none focus:underline"
-                  >
-                    {warning.action.label}
-                  </button>
-                )}
-              </div>
-
-              {/* Dismiss Button */}
-              {warning.dismissible && (
-                <button
-                  onClick={() => removeWarning(warning.id)}
-                  className="flex-shrink-0 p-1 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20"
-                  aria-label="Dismiss warning"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              )}
+    <div className={`w-full border-b backdrop-blur-sm ${styles.container}`}>
+      <div className="max-w-7xl mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className={styles.icon}>
+              {getWarningIcon(warning.type)}
+            </div>
+            <div>
+              <h4 className="font-semibold text-sm">
+                {warning.title}
+              </h4>
+              <p className="text-xs opacity-90">
+                {warning.message}
+              </p>
             </div>
           </div>
-        );
-      })}
+          <div className="flex items-center space-x-2">
+            {warning.action && (
+              <button
+                onClick={() => {
+                  warning.action?.onClick();
+                  removeWarning(warning.id);
+                }}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 ${styles.button}`}
+              >
+                {warning.action.label}
+              </button>
+            )}
+            {warning.dismissible && (
+              <button
+                onClick={() => removeWarning(warning.id)}
+                className="p-1 rounded-full hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20"
+                aria-label="Dismiss warning"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
