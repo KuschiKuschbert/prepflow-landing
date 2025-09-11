@@ -8,7 +8,9 @@ import "../globals.css";
 import { useTranslation } from "@/lib/useTranslation";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { CountryProvider } from "../../contexts/CountryContext";
+import { GlobalWarningProvider } from "../../contexts/GlobalWarningContext";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
+import GlobalWarning from "@/components/GlobalWarning";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +39,9 @@ export default function WebAppLayout({
 
   return (
     <CountryProvider>
-      <div className={`${inter.className} bg-[#0a0a0a] text-white`}>
-      <nav className="bg-[#1f1f1f] border-b border-[#2a2a2a]">
+      <GlobalWarningProvider>
+        <div className={`${inter.className} bg-[#0a0a0a] text-white`}>
+        <nav className="bg-[#1f1f1f] border-b border-[#2a2a2a]">
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="max-w-7xl mx-auto px-6 py-4">
@@ -338,12 +341,16 @@ export default function WebAppLayout({
             )}
           </div>
         </nav>
-      <main className="min-h-screen bg-[#0a0a0a]">
-        <ReactQueryProvider>
-          {children}
-        </ReactQueryProvider>
-      </main>
-      </div>
+        <main className="min-h-screen bg-[#0a0a0a]">
+          <ReactQueryProvider>
+            {children}
+          </ReactQueryProvider>
+        </main>
+        
+        {/* Global Warning System */}
+        <GlobalWarning />
+        </div>
+      </GlobalWarningProvider>
     </CountryProvider>
   );
 }
