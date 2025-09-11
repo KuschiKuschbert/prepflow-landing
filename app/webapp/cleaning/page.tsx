@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface CleaningArea {
   id: number;
@@ -406,9 +407,11 @@ export default function CleaningRosterPage() {
                   
                   {task.photo_url && (
                     <div className="mb-4">
-                      <img 
+                      <OptimizedImage 
                         src={task.photo_url} 
                         alt="Cleaning verification" 
+                        width={128}
+                        height={128}
                         className="w-32 h-32 object-cover rounded-2xl border border-[#2a2a2a]"
                       />
                     </div>

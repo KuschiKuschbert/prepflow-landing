@@ -84,7 +84,7 @@ export class ResourceHintsManager {
   initializeResourceHints(): void {
     if (typeof window === 'undefined') return;
     
-    console.log('🔗 Initializing resource hints...');
+    // Initializing resource hints...
     
     // Preconnect to external domains
     this.preconnectDomains();
@@ -101,7 +101,7 @@ export class ResourceHintsManager {
     // Module preload for critical JavaScript
     this.modulePreloadResources();
     
-    console.log('✅ Resource hints initialized');
+    // Resource hints initialized
   }
   
   // Preconnect to external domains
@@ -155,7 +155,7 @@ export class ResourceHintsManager {
     document.head.appendChild(link);
     this.loadedHints.add(`preconnect-${href}`);
     
-    console.log(`🔗 Preconnected to: ${href}`);
+    // Preconnected to domain
   }
   
   // DNS prefetch for a domain
@@ -170,7 +170,7 @@ export class ResourceHintsManager {
     document.head.appendChild(link);
     this.loadedHints.add(`dns-prefetch-${href}`);
     
-    console.log(`🔗 DNS prefetched: ${href}`);
+    // DNS prefetched domain
   }
   
   // Preload a resource
@@ -201,7 +201,7 @@ export class ResourceHintsManager {
     document.head.appendChild(link);
     this.loadedHints.add(`preload-${href}`);
     
-    console.log(`🔗 Preloaded: ${href} (${as})`);
+    // Resource preloaded
   }
   
   // Prefetch a resource
@@ -221,7 +221,7 @@ export class ResourceHintsManager {
     document.head.appendChild(link);
     this.loadedHints.add(`prefetch-${href}`);
     
-    console.log(`🔗 Prefetched: ${href} (${as})`);
+    // Resource prefetched
   }
   
   // Module preload for JavaScript modules
@@ -236,7 +236,7 @@ export class ResourceHintsManager {
     document.head.appendChild(link);
     this.loadedHints.add(`module-preload-${href}`);
     
-    console.log(`🔗 Module preloaded: ${href}`);
+    // Module preloaded
   }
   
   // Preload font with optimization

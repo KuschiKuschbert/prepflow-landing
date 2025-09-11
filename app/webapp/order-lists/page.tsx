@@ -385,7 +385,7 @@ export default function OrderListsPage() {
                       <button
                         onClick={() => handleEdit(orderList)}
                         className="p-2 text-[#29E7CD] hover:bg-[#29E7CD]/10 rounded-xl transition-colors"
-                        title={t('orderLists.edit', 'Edit')}
+                        title={String(t('orderLists.edit', 'Edit'))}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -394,7 +394,7 @@ export default function OrderListsPage() {
                       <button
                         onClick={() => handleDelete(orderList.id)}
                         className="p-2 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors"
-                        title={t('orderLists.delete', 'Delete')}
+                        title={String(t('orderLists.delete', 'Delete'))}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -471,7 +471,7 @@ export default function OrderListsPage() {
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                     rows={3}
-                    placeholder={t('orderLists.notesPlaceholder', 'Optional notes about this order')}
+                     placeholder={String(t('orderLists.notesPlaceholder', 'Optional notes about this order'))}
                   />
                 </div>
 
@@ -538,7 +538,7 @@ export default function OrderListsPage() {
                             value={item.notes}
                             onChange={(e) => updateItem(index, 'notes', e.target.value)}
                             className="flex-1 px-3 py-2 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent mr-3"
-                            placeholder={t('orderLists.itemNotes', 'Item notes (optional)')}
+                             placeholder={String(t('orderLists.itemNotes', 'Item notes (optional)'))}
                           />
                           <button
                             type="button"

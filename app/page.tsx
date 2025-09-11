@@ -97,21 +97,21 @@ export default function Page() {
       <ScrollProgress />
       <ExitIntentTracker 
         onExitIntent={() => {
-          console.log('🚨 User attempting to leave page - potential conversion opportunity');
+          // Track exit intent for conversion optimization
           // You could trigger a popup, offer, or other retention strategy here
         }}
       />
       <ScrollTracker 
         onSectionView={(sectionId) => {
-          console.log(`👁️ User viewed section: ${sectionId}`);
+          // Track section views for analytics
         }}
         onScrollDepth={(depth) => {
-          console.log(`📊 User scrolled to ${depth}% of page`);
+          // Track scroll depth for analytics
         }}
       />
       <PerformanceTracker 
         onMetrics={(metrics) => {
-          console.log('⚡ Performance metrics:', metrics);
+          // Track performance metrics for optimization
         }}
       />
       
@@ -176,7 +176,7 @@ export default function Page() {
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-4 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] min-h-[48px] flex items-center justify-center"
               onClick={() => handleEngagement('header_cta_click')}
             >
               {t('hero.ctaPrimary', 'Get PrepFlow Now')}
@@ -601,7 +601,7 @@ export default function Page() {
             <div className="inline-flex items-center gap-3 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-6 py-3">
               <span className="text-[#29E7CD]">📊</span>
               <span className="text-white font-medium">{t('benefits.cta.text')}</span>
-              <a href="#lead-magnet" className="bg-[#29E7CD] text-black px-4 py-1 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors">
+              <a href="#lead-magnet" className="bg-[#29E7CD] text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#29E7CD]/80 transition-colors min-h-[36px] flex items-center justify-center">
                 {t('benefits.cta.button')}
               </a>
             </div>
@@ -626,15 +626,15 @@ export default function Page() {
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-white mb-4">{t('builtFor.title')}</h3>
             <div className="flex flex-wrap justify-center gap-6">
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
+              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-3 min-h-[40px]">
                 <span className="text-[#29E7CD]">📊</span>
                 <span className="text-white text-sm">{t('builtFor.features.0')}</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
+              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-3 min-h-[40px]">
                 <span className="text-[#29E7CD]">🛡️</span>
                 <span className="text-white text-sm">{t('builtFor.features.1')}</span>
               </div>
-              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-2">
+              <div className="flex items-center gap-2 bg-[#29E7CD]/10 border border-[#29E7CD]/30 rounded-full px-4 py-3 min-h-[40px]">
                 <span className="text-[#29E7CD]">🇦🇺</span>
                 <span className="text-white text-sm">{t('builtFor.features.2')}</span>
               </div>

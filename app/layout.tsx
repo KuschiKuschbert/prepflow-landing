@@ -7,6 +7,7 @@ import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleAnalyticsTest from '../components/GoogleAnalyticsTest';
 import GoogleTagManager from '../components/GoogleTagManager';
 import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
+import WebVitalsTracker from '../components/WebVitalsTracker';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,6 +94,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#29E7CD" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -106,6 +108,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClientPerformanceTracker />
+        <WebVitalsTracker />
         {children}
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />

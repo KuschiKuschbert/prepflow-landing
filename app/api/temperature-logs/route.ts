@@ -7,6 +7,13 @@ export async function GET(request: NextRequest) {
   const type = searchParams.get('type');
   
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Database connection not available' },
+        { status: 500 }
+      );
+    }
+
     let query = supabaseAdmin
       .from('temperature_logs')
       .select('*')
@@ -43,6 +50,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Database connection not available' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     
     // Validate required fields

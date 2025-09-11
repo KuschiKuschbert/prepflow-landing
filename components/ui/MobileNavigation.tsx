@@ -38,7 +38,7 @@ export function MobileNavigation({ onEngagement }: MobileNavigationProps) {
       {/* Hamburger Button */}
       <button
         onClick={toggleMenu}
-        className="p-2 rounded-lg bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:bg-gray-700/50 transition-colors"
+        className="p-3 rounded-lg bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:bg-gray-700/50 transition-colors min-h-[44px] min-w-[44px]"
         aria-label="Toggle navigation menu"
         aria-expanded={isOpen}
       >
@@ -77,7 +77,7 @@ export function MobileNavigation({ onEngagement }: MobileNavigationProps) {
                 </div>
                 <button
                   onClick={closeMenu}
-                  className="p-2 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors"
+                  className="p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Close menu"
                 >
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,25 +90,25 @@ export function MobileNavigation({ onEngagement }: MobileNavigationProps) {
               <nav className="space-y-4">
                 <button
                   onClick={() => handleNavClick('features')}
-                  className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors"
+                  className="w-full text-left px-4 py-4 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors min-h-[44px] flex items-center"
                 >
                   Features
                 </button>
                 <button
                   onClick={() => handleNavClick('how-it-works')}
-                  className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors"
+                  className="w-full text-left px-4 py-4 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors min-h-[44px] flex items-center"
                 >
                   How it works
                 </button>
                 <button
                   onClick={() => handleNavClick('pricing')}
-                  className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors"
+                  className="w-full text-left px-4 py-4 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors min-h-[44px] flex items-center"
                 >
                   Pricing
                 </button>
                 <button
                   onClick={() => handleNavClick('faq')}
-                  className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors"
+                  className="w-full text-left px-4 py-4 rounded-xl text-gray-300 hover:text-[#29E7CD] hover:bg-gray-800/50 transition-colors min-h-[44px] flex items-center"
                 >
                   FAQ
                 </button>
@@ -128,7 +128,7 @@ export function MobileNavigation({ onEngagement }: MobileNavigationProps) {
                   href="https://7495573591101.gumroad.com/l/prepflow"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-4 text-center font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300"
+                  className="block w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-4 text-center font-semibold text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25 transition-all duration-300 min-h-[48px] flex items-center justify-center"
                   onClick={() => {
                     onEngagement('mobile_menu_cta_click');
                     closeMenu();

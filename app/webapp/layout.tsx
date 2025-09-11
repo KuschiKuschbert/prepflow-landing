@@ -8,6 +8,7 @@ import "../globals.css";
 import { useTranslation } from "@/lib/useTranslation";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { CountryProvider } from "../../contexts/CountryContext";
+import ReactQueryProvider from "@/components/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -338,7 +339,9 @@ export default function WebAppLayout({
           </div>
         </nav>
       <main className="min-h-screen bg-[#0a0a0a]">
-        {children}
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
       </main>
       </div>
     </CountryProvider>

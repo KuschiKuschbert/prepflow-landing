@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import OptimizedImage from '@/components/OptimizedImage';
 
 interface ComplianceType {
   id: number;
@@ -465,9 +466,11 @@ export default function ComplianceTrackingPage() {
                             </a>
                           )}
                           {record.photo_url && (
-                            <img 
+                            <OptimizedImage 
                               src={record.photo_url} 
                               alt="Compliance document" 
+                              width={128}
+                              height={128}
                               className="w-32 h-32 object-cover rounded-2xl border border-[#2a2a2a]"
                             />
                           )}
