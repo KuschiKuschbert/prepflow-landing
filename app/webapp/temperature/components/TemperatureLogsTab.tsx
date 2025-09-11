@@ -48,6 +48,9 @@ export default function TemperatureLogsTab({
   const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
 
+  // Debug logging
+  console.log('TemperatureLogsTab - Received logs:', logs.length, 'for date:', selectedDate, 'type:', selectedType);
+
   // Helper functions
   const formatTime = (timeString: string) => {
     if (!timeString) return '';

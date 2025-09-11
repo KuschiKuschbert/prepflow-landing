@@ -93,7 +93,7 @@ export default function TemperatureLogsPage() {
       const data = await response.json();
       console.log('fetchLogs - API response:', data);
       if (data.success) {
-        console.log('fetchLogs - Setting logs:', data.data.length, 'logs');
+        console.log('fetchLogs - Setting logs:', data.data.length, 'logs for date:', selectedDate, 'type:', selectedType);
         setLogs(data.data);
       }
     } catch (error) {
