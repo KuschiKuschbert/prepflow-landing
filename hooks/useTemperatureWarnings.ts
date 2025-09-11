@@ -69,6 +69,50 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
       }
     };
 
+    // Check for equipment that hasn't been temperature checked today
+    const checkEquipmentTemperatureWarning = () => {
+      const today = new Date();
+      const todayString = today.toISOString().split('T')[0];
+      const todayLogs = allLogs.filter(log => log.log_date === todayString);
+
+      // Get active equipment that should be monitored
+      const activeEquipment = equipment.filter(eq => eq.is_active && eq.location);
+      
+      if (activeEquipment.length === 0) return;
+
+      // Check which equipment has been temperature checked today
+      const checkedEquipment = new Set();
+      todayLogs.forEach(log => {
+        if (log.location) {
+          checkedEquipment.add(log.location);
+        }
+      });
+
+      // Find equipment that hasn't been checked
+      const uncheckedEquipment = activeEquipment.filter(eq => 
+        eq.location && !checkedEquipment.has(eq.location)
+      );
+
+      if (uncheckedEquipment.length > 0) {
+        const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
+        const isMultiple = uncheckedEquipment.length > 1;
+        
+        addWarning({
+          type: 'warning',
+          title: 'Equipment Temperature Check Required',
+          message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentNames} ${isMultiple ? 'have' : 'has'} not been temperature checked today. Ensure all active equipment is monitored for safety compliance.`,
+          action: {
+            label: 'Go to Temperature Logs',
+            onClick: () => {
+              window.location.href = '/webapp/temperature';
+            }
+          },
+          dismissible: true,
+          autoHide: false,
+        });
+      }
+    };
+
     // Check for equipment out of range warnings
     const checkEquipmentWarnings = () => {
       const today = new Date();
@@ -108,6 +152,7 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
     // Only run checks if we have data
     if (allLogs.length > 0 && equipment.length > 0) {
       checkFoodTemperatureWarning();
+      checkEquipmentTemperatureWarning();
       checkEquipmentWarnings();
     }
   }, [allLogs, equipment, addWarning]);
