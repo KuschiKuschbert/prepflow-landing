@@ -125,6 +125,126 @@
           "sizes": "96x96"
         }
       ]
+    },
+    {
+      "name": "Cleaning Roster",
+      "short_name": "Cleaning",
+      "description": "Track cleaning tasks with photos",
+      "url": "/webapp/cleaning",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Temperature Logs",
+      "short_name": "Temperature",
+      "description": "Food safety compliance tracking",
+      "url": "/webapp/temperature",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Compliance",
+      "short_name": "Compliance",
+      "description": "Track licenses and inspections",
+      "url": "/webapp/compliance",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Suppliers",
+      "short_name": "Suppliers",
+      "description": "Manage supplier contacts",
+      "url": "/webapp/suppliers",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Par Levels",
+      "short_name": "Par Levels",
+      "description": "Set minimum stock levels",
+      "url": "/webapp/par-levels",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Order Lists",
+      "short_name": "Orders",
+      "description": "Create supplier orders",
+      "url": "/webapp/order-lists",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Dish Sections",
+      "short_name": "Sections",
+      "description": "Organize dishes by kitchen sections",
+      "url": "/webapp/dish-sections",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Prep Lists",
+      "short_name": "Prep Lists",
+      "description": "Create kitchen prep lists",
+      "url": "/webapp/prep-lists",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Recipe Sharing",
+      "short_name": "Sharing",
+      "description": "Share recipes as PDFs",
+      "url": "/webapp/recipe-sharing",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "AI Specials",
+      "short_name": "AI Specials",
+      "description": "Generate specials from photos",
+      "url": "/webapp/ai-specials",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ],
   "related_applications": [],

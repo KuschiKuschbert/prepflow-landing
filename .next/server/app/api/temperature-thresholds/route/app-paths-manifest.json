@@ -1,0 +1,3 @@
+{
+  "/api/temperature-thresholds/route": "app/api/temperature-thresholds/route.js"
+}

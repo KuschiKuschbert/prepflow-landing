@@ -230,6 +230,152 @@ export default function WebAppDashboard() {
           </div>
         </div>
 
+        {/* Additional Quick Actions */}
+        <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-semibold text-white mb-1">🏪 {t('dashboard.restaurantManagement', 'Restaurant Management')}</h2>
+              <p className="text-gray-400">{t('dashboard.restaurantManagementSubtitle', 'Operations, compliance, and daily management')}</p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
+              <span className="text-xs text-gray-400">{t('dashboard.new', 'New')}</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a
+              href="/webapp/cleaning"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#29E7CD]/5 hover:to-[#29E7CD]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">🧹</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#29E7CD] transition-colors">{t('dashboard.cleaningRoster', 'Cleaning Roster')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.cleaningRosterDesc', 'Track cleaning tasks with photos')}</p>
+            </a>
+            
+            <a
+              href="/webapp/temperature"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#3B82F6]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#3B82F6]/5 hover:to-[#3B82F6]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">🌡️</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#3B82F6] transition-colors">{t('dashboard.temperatureLogs', 'Temperature Logs')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.temperatureLogsDesc', 'Food safety compliance')}</p>
+            </a>
+            
+            <a
+              href="/webapp/compliance"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#D925C7]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#D925C7]/5 hover:to-[#D925C7]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#D925C7]/20 to-[#D925C7]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">📋</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#D925C7] transition-colors">{t('dashboard.compliance', 'Compliance')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.complianceDesc', 'Track licenses & inspections')}</p>
+            </a>
+            
+            <a
+              href="/webapp/suppliers"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#29E7CD]/5 hover:to-[#29E7CD]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">🚚</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#29E7CD] transition-colors">{t('dashboard.suppliers', 'Suppliers')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.suppliersDesc', 'Manage supplier contacts')}</p>
+            </a>
+            <a
+              href="/webapp/par-levels"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#3B82F6]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#3B82F6]/5 hover:to-[#3B82F6]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">📦</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#3B82F6] transition-colors">{t('dashboard.parLevels', 'Par Levels')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.parLevelsDesc', 'Set minimum stock levels')}</p>
+            </a>
+            <a
+              href="/webapp/order-lists"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#D925C7]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#D925C7]/5 hover:to-[#D925C7]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#D925C7]/20 to-[#D925C7]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">📋</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#D925C7] transition-colors">{t('dashboard.orderLists', 'Order Lists')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.orderListsDesc', 'Create supplier orders')}</p>
+            </a>
+            <a
+              href="/webapp/dish-sections"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#29E7CD]/5 hover:to-[#29E7CD]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">🍽️</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#29E7CD] transition-colors">{t('dashboard.dishSections', 'Dish Sections')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.dishSectionsDesc', 'Organize dishes by kitchen sections')}</p>
+            </a>
+            <a
+              href="/webapp/prep-lists"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#3B82F6]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#3B82F6]/5 hover:to-[#3B82F6]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">📝</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#3B82F6] transition-colors">{t('dashboard.prepLists', 'Prep Lists')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.prepListsDesc', 'Create kitchen prep lists')}</p>
+            </a>
+            <a
+              href="/webapp/ai-specials"
+              className="group p-4 border border-[#2a2a2a] rounded-2xl hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200 bg-gradient-to-br from-[#1f1f1f] to-[#0a0a0a] hover:from-[#29E7CD]/5 hover:to-[#29E7CD]/10"
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-lg">🤖</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm group-hover:text-[#29E7CD] transition-colors">{t('dashboard.aiSpecials', 'AI Specials')}</h3>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">{t('dashboard.aiSpecialsDesc', 'Generate specials from photos')}</p>
+            </a>
+          </div>
+        </div>
+
         {/* Getting Started - Material Design 3 */}
         <div className="bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 border border-[#29E7CD]/30 p-6 rounded-3xl shadow-lg">
           <div className="flex items-start space-x-4">

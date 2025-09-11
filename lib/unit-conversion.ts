@@ -1,261 +1,84 @@
-// Comprehensive Unit Conversion System for PrepFlow WebApp
+// Unit conversion utilities for ingredient management
 
 export interface ConversionResult {
-  convertedValue: number;
-  convertedUnit: string;
-  originalValue: number;
-  originalUnit: string;
   conversionFactor: number;
+  isValid: boolean;
+  error?: string;
 }
 
-// Volume to Volume conversions (base unit: ml)
-const volumeConversions: Record<string, number> = {
-  'ml': 1,
-  'milliliter': 1,
-  'l': 1000,
-  'liter': 1000,
-  'litre': 1000,
-  'tsp': 5,
-  'teaspoon': 5,
-  'tbsp': 15,
-  'tablespoon': 15,
-  'cup': 240,
-  'cups': 240,
-  'fl oz': 30,
-  'fluid ounce': 30,
-  'pint': 480,
-  'quart': 960,
-  'gallon': 3840
+// Common unit conversions
+const CONVERSION_FACTORS: Record<string, Record<string, number>> = {
+  // Weight conversions (base unit: grams)
+  'g': { 'g': 1, 'kg': 0.001, 'oz': 0.035274, 'lb': 0.002205 },
+  'kg': { 'g': 1000, 'kg': 1, 'oz': 35.274, 'lb': 2.205 },
+  'oz': { 'g': 28.3495, 'kg': 0.0283495, 'oz': 1, 'lb': 0.0625 },
+  'lb': { 'g': 453.592, 'kg': 0.453592, 'oz': 16, 'lb': 1 },
+  
+  // Volume conversions (base unit: milliliters)
+  'ml': { 'ml': 1, 'l': 0.001, 'tsp': 0.202884, 'tbsp': 0.067628, 'cup': 0.004227 },
+  'l': { 'ml': 1000, 'l': 1, 'tsp': 202.884, 'tbsp': 67.628, 'cup': 4.227 },
+  'tsp': { 'ml': 4.92892, 'l': 0.00492892, 'tsp': 1, 'tbsp': 0.333333, 'cup': 0.0208333 },
+  'tbsp': { 'ml': 14.7868, 'l': 0.0147868, 'tsp': 3, 'tbsp': 1, 'cup': 0.0625 },
+  'cup': { 'ml': 236.588, 'l': 0.236588, 'tsp': 48, 'tbsp': 16, 'cup': 1 },
+  
+  // Piece conversions (base unit: pieces)
+  'pc': { 'pc': 1, 'box': 0.01, 'pack': 0.1, 'bag': 0.05, 'bottle': 0.1, 'can': 0.1 },
+  'box': { 'pc': 100, 'box': 1, 'pack': 10, 'bag': 5, 'bottle': 10, 'can': 10 },
+  'pack': { 'pc': 10, 'box': 0.1, 'pack': 1, 'bag': 0.5, 'bottle': 1, 'can': 1 },
+  'bag': { 'pc': 20, 'box': 0.2, 'pack': 2, 'bag': 1, 'bottle': 2, 'can': 2 },
+  'bottle': { 'pc': 10, 'box': 0.1, 'pack': 1, 'bag': 0.5, 'bottle': 1, 'can': 1 },
+  'can': { 'pc': 10, 'box': 0.1, 'pack': 1, 'bag': 0.5, 'bottle': 1, 'can': 1 }
 };
 
-// Weight to Weight conversions (base unit: g)
-const weightConversions: Record<string, number> = {
-  'g': 1,
-  'gm': 1,
-  'gram': 1,
-  'grams': 1,
-  'kg': 1000,
-  'kilogram': 1000,
-  'oz': 28.35,
-  'ounce': 28.35,
-  'lb': 453.6,
-  'pound': 453.6,
-  'mg': 0.001,
-  'milligram': 0.001
-};
-
-// Common ingredient densities (grams per ml) for volume to weight conversion
-const densities: Record<string, number> = {
-  // Liquids
-  'water': 1.0,
-  'milk': 1.03,
-  'cream': 1.01,
-  'oil': 0.92,
-  'olive oil': 0.92,
-  'vegetable oil': 0.92,
-  'vinegar': 1.01,
-  'honey': 1.42,
-  'syrup': 1.33,
-  
-  // Flours and powders
-  'flour': 0.59,
-  'all-purpose flour': 0.59,
-  'bread flour': 0.59,
-  'cake flour': 0.59,
-  'sugar': 0.85,
-  'white sugar': 0.85,
-  'brown sugar': 0.8,
-  'powdered sugar': 0.6,
-  'cocoa powder': 0.4,
-  'baking powder': 0.6,
-  'baking soda': 0.87,
-  'salt': 1.2,
-  'cornstarch': 0.6,
-  
-  // Nuts and seeds
-  'almonds': 0.6,
-  'walnuts': 0.65,
-  'pecans': 0.7,
-  'peanuts': 0.6,
-  'sesame seeds': 0.6,
-  'sunflower seeds': 0.5,
-  
-  // Dairy
-  'butter': 0.91,
-  'cheese': 1.1,
-  'cream cheese': 1.0,
-  'yogurt': 1.03,
-  
-  // Default density for unknown ingredients
-  'default': 0.8
-};
-
-/**
- * Get density for an ingredient
- */
-export function getIngredientDensity(ingredientName: string): number {
-  if (!ingredientName) return densities.default;
-  
-  const lowerIngredient = ingredientName.toLowerCase();
-  
-  // Check for exact matches first
-  if (densities[lowerIngredient]) {
-    return densities[lowerIngredient];
+export function convertUnit(amount: number, fromUnit: string, toUnit: string): ConversionResult {
+  if (!fromUnit || !toUnit) {
+    return { conversionFactor: 1, isValid: false, error: 'Unit not specified' };
   }
-  
-  // Check for partial matches
-  for (const [key, density] of Object.entries(densities)) {
-    if (lowerIngredient.includes(key) || key.includes(lowerIngredient)) {
-      return density;
-    }
+
+  const from = fromUnit.toLowerCase();
+  const to = toUnit.toLowerCase();
+
+  if (from === to) {
+    return { conversionFactor: 1, isValid: true };
   }
-  
-  return densities.default;
+
+  const fromFactors = CONVERSION_FACTORS[from];
+  if (!fromFactors) {
+    return { conversionFactor: 1, isValid: false, error: `Unknown unit: ${fromUnit}` };
+  }
+
+  const conversionFactor = fromFactors[to];
+  if (conversionFactor === undefined) {
+    return { conversionFactor: 1, isValid: false, error: `Cannot convert from ${fromUnit} to ${toUnit}` };
+  }
+
+  return { conversionFactor, isValid: true };
 }
 
-/**
- * Check if a unit is a volume unit
- */
-export function isVolumeUnit(unit: string): boolean {
-  const normalizedUnit = unit.toLowerCase().trim();
-  return normalizedUnit in volumeConversions;
-}
-
-/**
- * Check if a unit is a weight unit
- */
-export function isWeightUnit(unit: string): boolean {
-  const normalizedUnit = unit.toLowerCase().trim();
-  return normalizedUnit in weightConversions;
-}
-
-/**
- * Convert between units (volume to volume, weight to weight, or volume to weight)
- */
-export function convertUnit(
-  value: number, 
+export function convertIngredientCost(
+  cost: number, 
   fromUnit: string, 
   toUnit: string, 
-  ingredientName?: string
-): ConversionResult {
-  const from = fromUnit.toLowerCase().trim();
-  const to = toUnit.toLowerCase().trim();
-  
-  // If same unit, return original value
-  if (from === to) {
-    return {
-      convertedValue: value,
-      convertedUnit: toUnit,
-      originalValue: value,
-      originalUnit: fromUnit,
-      conversionFactor: 1
-    };
-  }
-  
-  const isFromVolume = isVolumeUnit(from);
-  const isToVolume = isVolumeUnit(to);
-  const isFromWeight = isWeightUnit(from);
-  const isToWeight = isWeightUnit(to);
-  
-  let convertedValue: number;
-  let conversionFactor: number;
-  
-  if (isFromVolume && isToVolume) {
-    // Volume to Volume conversion
-    const fromMl = value * volumeConversions[from];
-    convertedValue = fromMl / volumeConversions[to];
-    conversionFactor = volumeConversions[from] / volumeConversions[to];
-  } else if (isFromWeight && isToWeight) {
-    // Weight to Weight conversion
-    const fromGrams = value * weightConversions[from];
-    convertedValue = fromGrams / weightConversions[to];
-    conversionFactor = weightConversions[from] / weightConversions[to];
-  } else if (isFromVolume && isToWeight) {
-    // Volume to Weight conversion
-    const density = getIngredientDensity(ingredientName || '');
-    const fromMl = value * volumeConversions[from];
-    const grams = fromMl * density;
-    convertedValue = grams / weightConversions[to];
-    conversionFactor = (volumeConversions[from] * density) / weightConversions[to];
-  } else if (isFromWeight && isToVolume) {
-    // Weight to Volume conversion
-    const density = getIngredientDensity(ingredientName || '');
-    const fromGrams = value * weightConversions[from];
-    const ml = fromGrams / density;
-    convertedValue = ml / volumeConversions[to];
-    conversionFactor = weightConversions[from] / (density * volumeConversions[to]);
-  } else {
-    // Unknown units - return original value
-    return {
-      convertedValue: value,
-      convertedUnit: toUnit,
-      originalValue: value,
-      originalUnit: fromUnit,
-      conversionFactor: 1
-    };
-  }
-  
-  return {
-    convertedValue,
-    convertedUnit: toUnit,
-    originalValue: value,
-    originalUnit: fromUnit,
-    conversionFactor
-  };
-}
-
-/**
- * Convert ingredient cost from one unit to another
- */
-export function convertIngredientCost(
-  costPerUnit: number,
-  fromUnit: string,
-  toUnit: string,
-  ingredientName?: string
+  ingredientName: string
 ): number {
-  const conversion = convertUnit(1, fromUnit, toUnit, ingredientName);
-  return costPerUnit / conversion.conversionFactor;
-}
-
-/**
- * Format quantity with smart unit conversion for display
- */
-export function formatQuantityWithConversion(
-  quantity: number,
-  unit: string,
-  targetUnit?: string
-): { value: string; unit: string; original?: string } {
-  if (!targetUnit || unit.toLowerCase() === targetUnit.toLowerCase()) {
-    return { value: quantity.toFixed(2), unit };
+  const conversion = convertUnit(1, fromUnit, toUnit);
+  if (!conversion.isValid) {
+    console.warn(`Conversion failed for ${ingredientName}: ${conversion.error}`);
+    return cost;
   }
-  
-  const conversion = convertUnit(quantity, unit, targetUnit);
-  
-  return {
-    value: conversion.convertedValue.toFixed(2),
-    unit: targetUnit,
-    original: `${quantity} ${unit}`
-  };
+  return cost * conversion.conversionFactor;
 }
 
-/**
- * Get all available units
- */
-export function getAllUnits(): { volume: string[]; weight: string[] } {
-  return {
-    volume: Object.keys(volumeConversions),
-    weight: Object.keys(weightConversions)
-  };
+export function isVolumeUnit(unit: string): boolean {
+  const volumeUnits = ['ml', 'l', 'tsp', 'tbsp', 'cup'];
+  return volumeUnits.includes(unit.toLowerCase());
 }
 
-/**
- * Get conversion factor between two units
- */
-export function getConversionFactor(
-  fromUnit: string,
-  toUnit: string,
-  ingredientName?: string
-): number {
-  const conversion = convertUnit(1, fromUnit, toUnit, ingredientName);
-  return conversion.conversionFactor;
+export function isWeightUnit(unit: string): boolean {
+  const weightUnits = ['g', 'kg', 'oz', 'lb'];
+  return weightUnits.includes(unit.toLowerCase());
+}
+
+export function getAllUnits(): string[] {
+  return Object.keys(CONVERSION_FACTORS);
 }

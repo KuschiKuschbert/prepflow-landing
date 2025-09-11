@@ -680,6 +680,54 @@ if (error) {
 - **Performance Monitoring:** Vercel Analytics and Core Web Vitals
 - **A/B Testing:** Built-in framework with GTM integration
 
+## 🎯 **PrepFlow COGS Dynamic Methodology**
+
+### **Performance Analysis Implementation**
+
+The PrepFlow performance analysis system uses a **dynamic approach** that automatically adapts to your menu data, ensuring accurate categorization that reflects your actual business performance.
+
+#### **Dynamic Profit Thresholds**
+- **Formula**: `profitThreshold = averageProfitMargin` (calculated from all menu items)
+- **Logic**: HIGH if above menu average, LOW if below
+- **Purpose**: Identifies items that are "making you smile at the bank" vs. underperformers
+
+#### **Dynamic Popularity Thresholds**
+- **Formula**: `popularityThreshold = averagePopularity * 0.8` (80% of average)
+- **Logic**: HIGH if ≥ 80% of average popularity, LOW if below
+- **Purpose**: Identifies items that are "selling like hot chips" vs. slow movers
+
+#### **Menu Item Classifications**
+Based on the combination of profit and popularity categories:
+
+1. **Chef's Kiss** (High Profit + High Popularity)
+   - Profitable and popular
+   - Keep it, flaunt it, feature it
+
+2. **Hidden Gem** (High Profit + Low Popularity)
+   - Profitable but overlooked
+   - Market it, plate it better, get it noticed
+
+3. **Bargain Bucket** (Low Profit + High Popularity)
+   - Popular but slim profit
+   - Adjust price or portion before it eats your margins
+
+4. **Burnt Toast** (Low Profit + Low Popularity)
+   - Not profitable, not popular
+   - Bin it. No ceremony needed
+
+#### **Implementation Details**
+- **API Endpoint**: `/api/performance`
+- **Methodology**: `PrepFlow COGS Dynamic`
+- **Real-time Adaptation**: Thresholds automatically adjust as menu changes
+- **GST Exclusion**: Gross profit calculations exclude 10% GST (Australian standard)
+- **Data Filtering**: Only items with sales data (number_sold > 0) are analyzed
+
+#### **Key Benefits**
+- ✅ **Accurate Categorization**: Reflects actual business performance
+- ✅ **Automatic Adaptation**: No manual threshold adjustments needed
+- ✅ **Real-time Updates**: Categories update as menu evolves
+- ✅ **Industry Standard**: Follows PrepFlow COGS methodology exactly
+
 ---
 
 **Remember:** PrepFlow is a high-converting landing page that needs to balance technical excellence with conversion optimization. Every change should be measured and optimized for maximum impact on both user experience and business results.

@@ -60,6 +60,20 @@ CREATE TABLE IF NOT EXISTS menu_dishes (
   description TEXT,
   recipe_id INTEGER REFERENCES recipes(id),
   selling_price DECIMAL(10,2),
+  food_cost DECIMAL(10,2),
+  gross_profit DECIMAL(10,2),
+  gross_profit_percentage DECIMAL(5,2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create sales_data table
+CREATE TABLE IF NOT EXISTS sales_data (
+  id SERIAL PRIMARY KEY,
+  dish_id INTEGER REFERENCES menu_dishes(id) ON DELETE CASCADE,
+  number_sold INTEGER NOT NULL DEFAULT 0,
+  popularity_percentage DECIMAL(5,2) NOT NULL DEFAULT 0,
+  date DATE NOT NULL DEFAULT CURRENT_DATE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -82,6 +96,19 @@ CREATE TABLE IF NOT EXISTS users (
   password_reset_expires TIMESTAMP WITH TIME ZONE,
   failed_login_attempts INTEGER DEFAULT 0,
   locked_until TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create temperature_equipment table for temperature monitoring
+CREATE TABLE IF NOT EXISTS temperature_equipment (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  equipment_type VARCHAR(50) NOT NULL,
+  location VARCHAR(255),
+  min_temp_celsius DECIMAL(5,2),
+  max_temp_celsius DECIMAL(5,2),
+  is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

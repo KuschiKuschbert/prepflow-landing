@@ -1,0 +1,3 @@
+{
+  "/api/temperature-logs/route": "app/api/temperature-logs/route.js"
+}

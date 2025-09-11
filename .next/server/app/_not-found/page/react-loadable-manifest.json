@@ -1,9 +1,1 @@
-{
-  "[project]/components/AdvancedPerformanceTracker.tsx [app-client] (ecmascript, next/dynamic entry)": {
-    "id": "[project]/components/AdvancedPerformanceTracker.tsx [app-client] (ecmascript, next/dynamic entry)",
-    "files": [
-      "static/chunks/_34d2a9aa._.js",
-      "static/chunks/components_AdvancedPerformanceTracker_tsx_3348e3c6._.js"
-    ]
-  }
-}
+{}
