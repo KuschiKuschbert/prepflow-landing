@@ -44,6 +44,7 @@ export default function RecentActivity() {
         // Check for errors and handle gracefully
         if (ingredientsError || recipesError || menuDishesError) {
           console.error('Error fetching recent activity:', { ingredientsError, recipesError, menuDishesError });
+          // If tables don't exist yet, just show empty state instead of error
           setActivities([]);
           return;
         }
