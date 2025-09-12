@@ -31,7 +31,7 @@ export default function CleaningRosterPage() {
   const { t } = useTranslation();
   const [areas, setAreas] = useState<CleaningArea[]>([]);
   const [tasks, setTasks] = useState<CleaningTask[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [activeTab, setActiveTab] = useState<'areas' | 'tasks'>('areas');
   const [showAddArea, setShowAddArea] = useState(false);
   const [showAddTask, setShowAddTask] = useState(false);

@@ -39,7 +39,7 @@ export default function SuppliersPage() {
   const { t } = useTranslation();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [priceLists, setPriceLists] = useState<SupplierPriceList[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [activeTab, setActiveTab] = useState<'suppliers' | 'priceLists'>('suppliers');
   const [showAddSupplier, setShowAddSupplier] = useState(false);
   const [showAddPriceList, setShowAddPriceList] = useState(false);

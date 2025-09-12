@@ -16,7 +16,7 @@ interface AISpecial {
 export default function AISpecialsPage() {
   const { t } = useTranslation();
   const [aiSpecials, setAiSpecials] = useState<AISpecial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

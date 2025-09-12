@@ -44,7 +44,7 @@ export default function OrderListsPage() {
   const [orderLists, setOrderLists] = useState<OrderList[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingOrderList, setEditingOrderList] = useState<OrderList | null>(null);

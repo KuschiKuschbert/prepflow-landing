@@ -41,7 +41,7 @@ interface PerformanceItem extends MenuDish {
 export default function PerformancePage() {
   const { t } = useTranslation();
   const [performanceItems, setPerformanceItems] = useState<PerformanceItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('gross_profit_percentage');

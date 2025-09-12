@@ -16,7 +16,7 @@ interface RecentActivity {
 export default function RecentActivity() {
   const { t } = useTranslation();
   const [activities, setActivities] = useState<RecentActivity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
 
   useEffect(() => {
     const fetchRecentActivity = async () => {

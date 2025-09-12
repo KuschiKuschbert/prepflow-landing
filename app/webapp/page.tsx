@@ -51,7 +51,7 @@ export default function WebAppDashboard() {
     totalMenuDishes: 0,
     averageDishPrice: 0,
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
 
