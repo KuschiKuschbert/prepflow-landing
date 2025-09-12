@@ -140,7 +140,7 @@ export default function IngredientWizardRefactored({
         ...prev,
         trim_peel_waste_percentage: suggestedWastage,
         yield_percentage: 100 - suggestedWastage,
-        cost_per_unit_incl_trim: prev.cost_per_unit / ((100 - suggestedWastage) / 100)
+        cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / ((100 - suggestedWastage) / 100)
       }));
     }
   };
@@ -153,7 +153,7 @@ export default function IngredientWizardRefactored({
       ...prev,
       trim_peel_waste_percentage: clampedWastage,
       yield_percentage: yieldPercentage,
-      cost_per_unit_incl_trim: prev.cost_per_unit / (yieldPercentage / 100)
+      cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (yieldPercentage / 100)
     }));
   };
 
@@ -165,7 +165,7 @@ export default function IngredientWizardRefactored({
       ...prev,
       yield_percentage: clampedYield,
       trim_peel_waste_percentage: wastagePercentage,
-      cost_per_unit_incl_trim: prev.cost_per_unit / (clampedYield / 100)
+      cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (clampedYield / 100)
     }));
   };
 

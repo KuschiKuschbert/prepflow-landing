@@ -82,7 +82,7 @@ export default function IngredientTable({
   if (loading) {
     return (
       <div className="bg-[#1f1f1f] rounded-3xl p-6 border border-[#2a2a2a]">
-        <LoadingSkeleton variant="table" rows={5} columns={6} />
+        <LoadingSkeleton variant="table" />
       </div>
     );
   }
