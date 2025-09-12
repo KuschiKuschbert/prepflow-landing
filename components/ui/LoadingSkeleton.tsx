@@ -2,74 +2,173 @@
 
 import React from 'react';
 
-export function HeroSkeleton() {
+interface LoadingSkeletonProps {
+  variant?: 'card' | 'table' | 'chart' | 'list' | 'form' | 'stats' | 'text' | 'button';
+  className?: string;
+  count?: number;
+  height?: string;
+  width?: string;
+}
+
+export function LoadingSkeleton({ 
+  variant = 'card', 
+  className = '', 
+  count = 1, 
+  height,
+  width 
+}: LoadingSkeletonProps) {
+  const baseClasses = 'animate-pulse bg-[#2a2a2a] rounded-xl';
+  
+  const variants = {
+    card: 'h-32',
+    table: 'h-64',
+    chart: 'h-80',
+    list: 'h-16',
+    form: 'h-96',
+    stats: 'h-24',
+    text: 'h-4',
+    button: 'h-10 w-24'
+  };
+
+  const skeletonClasses = `${baseClasses} ${variants[variant]} ${className}`;
+  const style = {
+    ...(height && { height }),
+    ...(width && { width })
+  };
+
+  if (count === 1) {
+    return <div className={skeletonClasses} style={style}></div>;
+  }
+
   return (
-    <section className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
-      <div className="animate-pulse">
-        {/* Title skeleton */}
-        <div className="h-16 bg-gray-700 rounded-lg mb-6 w-3/4"></div>
-        
-        {/* Subtitle skeleton */}
-        <div className="h-6 bg-gray-700 rounded mb-8 w-full"></div>
-        
-        {/* Bullet points skeleton */}
-        <div className="space-y-3">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <div className="w-3 h-3 rounded-full bg-gray-600 mt-2"></div>
-              <div className="h-5 bg-gray-700 rounded w-full"></div>
-            </div>
-          ))}
-        </div>
-        
-        {/* CTA buttons skeleton */}
-        <div className="mt-10 flex flex-wrap items-center gap-4">
-          <div className="h-12 bg-gray-700 rounded-2xl w-48"></div>
-          <div className="h-12 bg-gray-700 rounded-2xl w-48"></div>
-        </div>
-      </div>
-      
-      {/* Image skeleton */}
-      <div className="animate-pulse">
-        <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-6 shadow-2xl">
-          <div className="relative">
-            <div className="w-full h-80 bg-gray-700 rounded-xl"></div>
-            <div className="mt-6 grid grid-cols-3 gap-4">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-24 bg-gray-700 rounded-lg"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="space-y-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className={skeletonClasses} style={style}></div>
+      ))}
+    </div>
   );
 }
 
-export function PricingSkeleton() {
+// Specialized skeleton components for common patterns
+export function PageSkeleton() {
   return (
-    <section className="py-20 animate-pulse">
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 backdrop-blur-sm p-10 shadow-2xl md:p-16">
-        <div className="grid items-center gap-12 md:grid-cols-2">
-          <div>
-            <div className="h-10 bg-gray-700 rounded mb-4 w-3/4"></div>
-            <div className="h-6 bg-gray-700 rounded mb-6 w-full"></div>
+    <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header skeleton */}
+        <div className="animate-pulse mb-8">
+          <div className="h-8 bg-[#2a2a2a] rounded-3xl w-1/3 mb-4"></div>
+          <div className="h-4 bg-[#2a2a2a] rounded-xl w-1/2"></div>
+        </div>
+
+        {/* Action buttons skeleton */}
+        <div className="flex gap-3 mb-8">
+          <div className="h-12 bg-[#2a2a2a] rounded-2xl w-32 animate-pulse"></div>
+          <div className="h-12 bg-[#2a2a2a] rounded-2xl w-40 animate-pulse"></div>
+          <div className="h-12 bg-[#2a2a2a] rounded-2xl w-28 animate-pulse"></div>
+        </div>
+
+        {/* Main content skeleton */}
+        <div className="bg-[#1f1f1f] rounded-3xl shadow-lg border border-[#2a2a2a] p-6">
+          <div className="animate-pulse">
+            <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/4 mb-6"></div>
             <div className="space-y-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-gray-600 rounded"></div>
-                  <div className="h-5 bg-gray-700 rounded w-full"></div>
-                </div>
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-16 bg-[#2a2a2a] rounded-xl"></div>
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center">
-            <div className="h-16 bg-gray-700 rounded mb-4"></div>
-            <div className="h-6 bg-gray-700 rounded mb-8 w-3/4 mx-auto"></div>
-            <div className="h-12 bg-gray-700 rounded-2xl w-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
+  return (
+    <div className="bg-[#1f1f1f] rounded-3xl shadow-lg border border-[#2a2a2a] overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4 border-b border-[#2a2a2a]">
+        <div className="animate-pulse">
+          <div className="flex gap-4">
+            {Array.from({ length: columns }).map((_, i) => (
+              <div key={i} className="h-4 bg-[#2a2a2a] rounded w-24"></div>
+            ))}
           </div>
         </div>
       </div>
-    </section>
+      
+      {/* Rows */}
+      <div className="divide-y divide-[#2a2a2a]">
+        {Array.from({ length: rows }).map((_, i) => (
+          <div key={i} className="px-6 py-4">
+            <div className="animate-pulse">
+              <div className="flex gap-4">
+                {Array.from({ length: columns }).map((_, j) => (
+                  <div key={j} className="h-4 bg-[#2a2a2a] rounded w-20"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function ChartSkeleton() {
+  return (
+    <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
+      <div className="animate-pulse">
+        <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/3 mb-4"></div>
+        <div className="h-80 bg-[#2a2a2a] rounded-xl"></div>
+      </div>
+    </div>
+  );
+}
+
+export function CardGridSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="bg-[#1f1f1f] p-4 rounded-2xl shadow-lg border border-[#2a2a2a] animate-pulse">
+          <div className="h-4 bg-[#2a2a2a] rounded w-3/4 mb-3"></div>
+          <div className="h-3 bg-[#2a2a2a] rounded w-1/2 mb-2"></div>
+          <div className="h-3 bg-[#2a2a2a] rounded w-2/3"></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function StatsGridSkeleton() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] animate-pulse">
+          <div className="h-4 bg-[#2a2a2a] rounded w-1/2 mb-3"></div>
+          <div className="h-8 bg-[#2a2a2a] rounded w-1/3 mb-2"></div>
+          <div className="h-3 bg-[#2a2a2a] rounded w-2/3"></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function FormSkeleton() {
+  return (
+    <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
+      <div className="animate-pulse">
+        <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/4 mb-6"></div>
+        <div className="space-y-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i}>
+              <div className="h-4 bg-[#2a2a2a] rounded w-1/3 mb-2"></div>
+              <div className="h-10 bg-[#2a2a2a] rounded-xl"></div>
+            </div>
+          ))}
+          <div className="h-10 bg-[#2a2a2a] rounded-xl w-24"></div>
+        </div>
+      </div>
+    </div>
   );
 }
