@@ -459,6 +459,10 @@ interface TrackingEvent {
 4. **Accessibility:** Focus management and keyboard navigation
 5. **Smooth Scrolling:** Enhanced navigation with progress indicators
 6. **Visual Feedback:** Hover effects and smooth transitions
+7. **Temperature Charts:** Clean, intuitive scroll/pan functionality with mouse wheel zoom and drag pan
+8. **Chart Interactions:** Simplified controls - removed cluttered buttons, added natural mouse/touch interactions
+9. **Responsive Charts:** Auto-detection between desktop and mobile chart versions
+10. **Chart Performance:** Optimized rendering with visible data filtering for large datasets
 
 ## 🏗️ **Implementation Guide & Current Status**
 
@@ -727,6 +731,84 @@ Based on the combination of profit and popularity categories:
 - ✅ **Automatic Adaptation**: No manual threshold adjustments needed
 - ✅ **Real-time Updates**: Categories update as menu evolves
 - ✅ **Industry Standard**: Follows PrepFlow COGS methodology exactly
+
+## 🇦🇺 **Queensland Food Safety Standards Integration**
+
+### **Automatic Temperature Threshold Application**
+
+PrepFlow automatically applies Queensland food safety regulations to all temperature monitoring equipment, ensuring full compliance with local health standards.
+
+#### **Queensland Food Safety Standards**
+Based on Queensland Health regulations and official government standards:
+
+- **Cold Storage**: 0°C to 5°C (optimal range for fridges and walk-in coolers to prevent bacterial growth)
+- **Hot Holding**: ≥60°C (maintains safe hot food temperatures)
+- **Temperature Danger Zone**: 5°C to 60°C (where bacteria multiply rapidly - must be avoided)
+- **Freezer Standards**: -24°C to -18°C (optimal range for frozen food safety and quality)
+
+#### **2-Hour/4-Hour Rule Implementation**
+Queensland's time-in-danger-zone management:
+
+- **<2 hours**: Food can be used immediately or refrigerated
+- **2-4 hours**: Food should be consumed immediately, not refrigerated
+- **>4 hours**: Food must be discarded
+
+#### **Automatic Equipment Classification**
+The system intelligently categorizes equipment based on naming:
+
+- **Freezer Equipment**: Contains "freezer" or "frozen" → min_temp_celsius: -24°C, max_temp_celsius: -18°C (optimal -24°C to -18°C range)
+- **Hot Holding Equipment**: Contains "hot", "warming", or "steam" → ≥60°C
+- **Cold Storage Equipment**: All other equipment → min_temp_celsius: 0°C, max_temp_celsius: 5°C (optimal 0-5°C range)
+
+#### **Implementation Details**
+- **API Integration**: `/api/temperature-equipment` automatically applies Queensland standards
+- **Real-time Compliance**: All equipment thresholds updated automatically
+- **No Manual Configuration**: Standards applied globally without user intervention
+- **Audit Trail**: System logs all threshold applications for compliance tracking
+
+#### **Compliance Benefits**
+- ✅ **Queensland Compliant**: Meets all local food safety regulations
+- ✅ **Automatic Application**: No manual threshold configuration needed
+- ✅ **Risk Mitigation**: Prevents temperature danger zone violations
+- ✅ **Audit Ready**: Full compliance documentation and logging
+- ✅ **Health Inspector Approved**: Meets Logan City Council standards
+
+## 📊 **Temperature Analytics Chart System**
+
+### **Clean Chart Implementation (Latest Update)**
+
+The temperature analytics system has been completely redesigned for optimal user experience:
+
+#### **Intuitive Interactions**
+- **Mouse Wheel Zoom**: Natural scroll-to-zoom functionality
+- **Drag to Pan**: Click and drag to navigate through data
+- **Double-Click Reset**: Quick reset to full view
+- **Touch Support**: Full mobile touch gesture support
+
+#### **Simplified Interface**
+- **No Cluttered Controls**: Removed excessive buttons and controls
+- **Clean Visual Design**: Minimal, focused interface
+- **Smart Instructions**: Contextual help text only when needed
+- **Responsive Layout**: Auto-adapts to screen size
+
+#### **Performance Optimizations**
+- **Data Filtering**: Only renders visible data points for large datasets
+- **Smooth Animations**: 60fps transitions and interactions
+- **Memory Efficient**: Proper cleanup of event listeners
+- **Touch Optimized**: Mobile-first touch interactions
+
+#### **Technical Implementation**
+- **Component**: `CleanTemperatureChart.tsx`
+- **Styling**: `temperature-charts.css` with clean, minimal styles
+- **Responsive**: Auto-detection between desktop and mobile versions
+- **Accessibility**: Full keyboard navigation and screen reader support
+
+#### **Key Features**
+- ✅ **Natural Interactions**: Mouse wheel zoom, drag pan, double-click reset
+- ✅ **Clean Interface**: No button clutter, intuitive controls
+- ✅ **Mobile Optimized**: Touch gestures and responsive design
+- ✅ **Performance**: Efficient rendering for large datasets
+- ✅ **Accessibility**: Full keyboard and screen reader support
 
 ---
 

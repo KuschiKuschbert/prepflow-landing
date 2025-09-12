@@ -4,26 +4,12 @@
 // Resource hints configuration
 export const RESOURCE_HINTS_CONFIG = {
   // Critical resources to preload
-  critical: [
-    {
-      href: '/images/dashboard-screenshot.png',
-      as: 'image',
-      type: 'image/png',
-      priority: 'high' as 'high' | 'low' | 'auto',
-    },
-    {
-      href: '/images/prepflow-logo.png',
-      as: 'image',
-      type: 'image/png',
-      priority: 'high' as 'high' | 'low' | 'auto',
-    },
-    {
-      href: '/manifest.json',
-      as: 'manifest',
-      type: 'application/manifest+json',
-      priority: 'high' as 'high' | 'low' | 'auto',
-    },
-  ],
+  critical: [] as Array<{
+    href: string;
+    as: string;
+    type?: string;
+    priority: 'high' | 'low' | 'auto';
+  }>,
   
   // Resources to prefetch
   prefetch: [
