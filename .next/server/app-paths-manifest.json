@@ -16,8 +16,6 @@
   "/api/suppliers/route": "app/api/suppliers/route.js",
   "/api/temperature-equipment/route": "app/api/temperature-equipment/route.js",
   "/api/temperature-logs/route": "app/api/temperature-logs/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js",
   "/webapp/ai-specials/page": "app/webapp/ai-specials/page.js",
   "/webapp/cleaning/page": "app/webapp/cleaning/page.js",
   "/webapp/cogs/page": "app/webapp/cogs/page.js",
