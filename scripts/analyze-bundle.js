@@ -37,7 +37,7 @@ function analyzeBundle() {
         fileCount++;
         
         // Categorize by chunk type
-        if (item.includes('chunk')) {
+        if (item.includes('chunk') || item.includes('_') || item.includes('[')) {
           chunkSizes[item] = size;
         }
       }
@@ -59,7 +59,8 @@ function analyzeBundle() {
   console.log('\n🔍 Largest chunks:');
   sortedChunks.forEach(([name, size]) => {
     const sizeKB = (size / 1024).toFixed(1);
-    console.log(`   ${name}: ${sizeKB}KB`);
+    const percentage = ((size / totalSize) * 100).toFixed(1);
+    console.log(`   ${name}: ${sizeKB}KB (${percentage}%)`);
   });
 
   // Recommendations

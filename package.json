@@ -22,6 +22,7 @@
     "perf:optimize": "node scripts/optimize-performance.js",
     "bundle:analyze": "node scripts/analyze-bundle.js",
     "bundle:webpack": "ANALYZE=true npm run build",
+    "audit:deps": "node scripts/audit-dependencies.js",
     "bundle:size": "npm run build && npm run analyze"
   },
   "dependencies": {

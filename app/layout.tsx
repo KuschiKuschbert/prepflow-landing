@@ -3,12 +3,20 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Analytics } from '@vercel/analytics/react';
-import GoogleAnalytics from '../components/GoogleAnalytics';
-import GoogleTagManager from '../components/GoogleTagManager';
+import { Suspense, lazy } from 'react';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+
+// Temporarily disable lazy loading to fix build
+// const LazyAnalytics = lazy(() => import('../components/LazyAnalytics'));
+// const LazyTracking = lazy(() => import('../components/LazyTracking'));
+
+// Keep performance components for now (they're lightweight)
 import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
 import WebVitalsTracker from '../components/WebVitalsTracker';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
 import PerformanceDashboard from '../components/PerformanceDashboard';
+import GoogleAnalytics from '../components/GoogleAnalytics';
+import GoogleTagManager from '../components/GoogleTagManager';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -108,15 +116,29 @@ export default function RootLayout({
       <body
         className="geist-sans-variable geist-mono-variable antialiased"
       >
-            <PerformanceOptimizer>
-              <ClientPerformanceTracker />
-              <WebVitalsTracker />
-              {children}
-              <PerformanceDashboard />
-            </PerformanceOptimizer>
-        <Analytics />
-        <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
-        <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
+        <ErrorBoundary>
+          <PerformanceOptimizer>
+            <ClientPerformanceTracker />
+            <WebVitalsTracker />
+            {children}
+            <PerformanceDashboard />
+          </PerformanceOptimizer>
+          
+          <Analytics />
+          
+          {/* Temporarily use direct imports */}
+          <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
+          <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
+          
+          {/* Analytics and tracking - lazy loaded after initial render */}
+          {/* <Suspense fallback={null}>
+            <LazyAnalytics />
+          </Suspense>
+          
+          <Suspense fallback={null}>
+            <LazyTracking />
+          </Suspense> */}
+        </ErrorBoundary>
         
         {/* Advanced Performance Optimizations - DISABLED TO PREVENT CONSOLE ERRORS */}
         {/* <script

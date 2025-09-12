@@ -17,23 +17,6 @@
     "url": "http://localhost:3000/"
   },
   {
-    "name": "maxNumericValue",
-    "expected": 2500,
-    "actual": 2664.728,
-    "values": [
-      3109.599,
-      2724.029,
-      2664.728
-    ],
-    "operator": "<=",
-    "passed": false,
-    "auditId": "largest-contentful-paint",
-    "level": "error",
-    "url": "http://localhost:3000/",
-    "auditTitle": "Largest Contentful Paint",
-    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/"
-  },
-  {
     "name": "auditRan",
     "expected": 1,
     "actual": 0,
@@ -86,11 +69,11 @@
   {
     "name": "maxNumericValue",
     "expected": 500000,
-    "actual": 2287109,
+    "actual": 2278114,
     "values": [
-      2287109,
-      2287249,
-      2287711
+      2278114,
+      2278295,
+      2278494
     ],
     "operator": "<=",
     "passed": false,
@@ -151,13 +134,30 @@
     "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/"
   },
   {
+    "name": "maxLength",
+    "expected": 0,
+    "actual": 2,
+    "values": [
+      2,
+      2,
+      2
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "uses-text-compression",
+    "level": "error",
+    "url": "http://localhost:3000/webapp",
+    "auditTitle": "Enable text compression",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/uses-text-compression/"
+  },
+  {
     "name": "maxNumericValue",
     "expected": 500000,
-    "actual": 4526643,
+    "actual": 4687072,
     "values": [
-      4526643,
-      4683085,
-      4784740
+      4763421,
+      4895758,
+      4687072
     ],
     "operator": "<=",
     "passed": false,
@@ -170,11 +170,11 @@
   {
     "name": "maxNumericValue",
     "expected": 2000,
-    "actual": 17617.779000023645,
+    "actual": 8717.121000012936,
     "values": [
-      19566.78400002131,
-      21042.037000025834,
-      17617.779000023645
+      8903.22400001382,
+      9213.152000015123,
+      8717.121000012936
     ],
     "operator": "<=",
     "passed": false,
@@ -218,23 +218,6 @@
     "url": "http://localhost:3000/webapp/ingredients"
   },
   {
-    "name": "maxNumericValue",
-    "expected": 300,
-    "actual": 444.4999999999993,
-    "values": [
-      505.5000000000002,
-      444.4999999999993,
-      447.5
-    ],
-    "operator": "<=",
-    "passed": false,
-    "auditId": "total-blocking-time",
-    "level": "error",
-    "url": "http://localhost:3000/webapp/ingredients",
-    "auditTitle": "Total Blocking Time",
-    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/"
-  },
-  {
     "name": "maxLength",
     "expected": 0,
     "actual": 10,
@@ -271,11 +254,11 @@
   {
     "name": "maxNumericValue",
     "expected": 500000,
-    "actual": 2545655,
+    "actual": 2546879,
     "values": [
-      2545673,
-      2545655,
-      2545679
+      2546879,
+      2547464,
+      2546903
     ],
     "operator": "<=",
     "passed": false,
@@ -372,11 +355,11 @@
   {
     "name": "maxNumericValue",
     "expected": 500000,
-    "actual": 2559118,
+    "actual": 2560400,
     "values": [
-      2559151,
-      2559151,
-      2559118
+      2560966,
+      2560401,
+      2560400
     ],
     "operator": "<=",
     "passed": false,
@@ -473,11 +456,11 @@
   {
     "name": "maxNumericValue",
     "expected": 500000,
-    "actual": 2542066,
+    "actual": 2543301,
     "values": [
-      2542066,
-      2542077,
-      2542075
+      2543939,
+      2543301,
+      2543901
     ],
     "operator": "<=",
     "passed": false,

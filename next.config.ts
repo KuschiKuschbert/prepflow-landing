@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
   // Enable compression
   compress: true,
   
+  // Performance optimizations
+  poweredByHeader: false,
+  generateEtags: true,
+  
   // Image optimization with advanced settings
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -25,6 +29,20 @@ const nextConfig: NextConfig = {
     // Enable modern bundling
     esmExternals: true,
   },
+  
+  
+  // Remove dev tools from production
+  ...(process.env.NODE_ENV === 'production' && {
+    webpack: (config, { dev, isServer }) => {
+      // Remove Next.js dev tools from production
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'next/dist/compiled/next-dev-tools': false,
+      };
+      
+      return config;
+    },
+  }),
   
   // Turbopack configuration (moved from experimental)
   turbopack: {
@@ -137,6 +155,23 @@ const nextConfig: NextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
+          },
+          {
+            key: 'Content-Encoding',
+            value: 'gzip, br'
+          }
+        ]
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate'
+          },
+          {
+            key: 'Content-Encoding',
+            value: 'gzip, br'
           }
         ]
       },
