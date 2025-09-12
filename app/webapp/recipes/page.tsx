@@ -152,18 +152,16 @@ export default function RecipesPage() {
 
   const fetchRecipes = async () => {
     try {
-      const { data: recipesData, error: recipesError } = await supabase
-        .from('recipes')
-        .select('*')
-        .order('name');
+      const response = await fetch('/api/recipes');
+      const result = await response.json();
 
-      if (recipesError) {
-        setError(recipesError.message);
+      if (!response.ok) {
+        setError(result.error || 'Failed to fetch recipes');
       } else {
-        setRecipes(recipesData || []);
+        setRecipes(result.recipes || []);
         
         // Calculate prices for each recipe
-        await calculateAllRecipePrices(recipesData || []);
+        await calculateAllRecipePrices(result.recipes || []);
       }
     } catch (err) {
       setError('Failed to fetch recipes');
