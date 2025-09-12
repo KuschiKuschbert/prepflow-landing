@@ -6,39 +6,15 @@ import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeight
 import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import { useSmartLoading } from '@/hooks/useSmartLoading';
-import dynamic from 'next/dynamic';
 import { PageSkeleton, LoadingSkeleton, TableSkeleton, FormSkeleton } from '@/components/ui/LoadingSkeleton';
 
-// Dynamic imports for heavy components
-const IngredientTable = dynamic(() => import('./components/IngredientTable'), {
-  loading: () => <TableSkeleton rows={8} columns={6} />,
-  ssr: false
-});
-
-const IngredientFilters = dynamic(() => import('./components/IngredientFilters'), {
-  loading: () => <LoadingSkeleton variant="form" height="128px" />,
-  ssr: false
-});
-
-const IngredientActions = dynamic(() => import('./components/IngredientActions'), {
-  loading: () => <LoadingSkeleton variant="button" count={3} />,
-  ssr: false
-});
-
-const IngredientForm = dynamic(() => import('./components/IngredientForm'), {
-  loading: () => <FormSkeleton />,
-  ssr: false
-});
-
-const CSVImportModal = dynamic(() => import('./components/CSVImportModal'), {
-  loading: () => <LoadingSkeleton variant="form" height="320px" />,
-  ssr: false
-});
-
-const IngredientWizard = dynamic(() => import('./components/IngredientWizard'), {
-  loading: () => <FormSkeleton />,
-  ssr: false
-});
+// Direct imports to eliminate skeleton flashes
+import IngredientTable from './components/IngredientTable';
+import IngredientFilters from './components/IngredientFilters';
+import IngredientActions from './components/IngredientActions';
+import IngredientForm from './components/IngredientForm';
+import CSVImportModal from './components/CSVImportModal';
+import IngredientWizard from './components/IngredientWizard';
 
 interface Ingredient {
   id: string;

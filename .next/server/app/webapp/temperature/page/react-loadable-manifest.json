@@ -1,16 +1,1 @@
-{
-  "[project]/app/webapp/temperature/components/TemperatureEquipmentTab.tsx [app-client] (ecmascript, next/dynamic entry)": {
-    "id": "[project]/app/webapp/temperature/components/TemperatureEquipmentTab.tsx [app-client] (ecmascript, next/dynamic entry)",
-    "files": [
-      "static/chunks/app_webapp_temperature_components_TemperatureEquipmentTab_tsx_22183855._.js",
-      "static/chunks/app_webapp_temperature_components_TemperatureEquipmentTab_tsx_9f823ba6._.js"
-    ]
-  },
-  "[project]/app/webapp/temperature/components/TemperatureLogsTab.tsx [app-client] (ecmascript, next/dynamic entry)": {
-    "id": "[project]/app/webapp/temperature/components/TemperatureLogsTab.tsx [app-client] (ecmascript, next/dynamic entry)",
-    "files": [
-      "static/chunks/_3236be33._.js",
-      "static/chunks/app_webapp_temperature_components_TemperatureLogsTab_tsx_9f823ba6._.js"
-    ]
-  }
-}
+{}

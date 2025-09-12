@@ -3,20 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
-import dynamic from 'next/dynamic';
 import { TemperatureLog, TemperatureEquipment } from './types';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
-// Dynamic imports for heavy components
-const TemperatureLogsTab = dynamic(() => import('./components/TemperatureLogsTab'), {
-  loading: () => <LoadingSkeleton variant="table" height="384px" />,
-  ssr: false
-});
-
-const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEquipmentTab'), {
-  loading: () => <LoadingSkeleton variant="table" height="384px" />,
-  ssr: false
-});
+// Direct imports to eliminate skeleton flashes
+import TemperatureLogsTab from './components/TemperatureLogsTab';
+import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
 
 
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
