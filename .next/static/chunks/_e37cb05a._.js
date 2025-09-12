@@ -1436,8 +1436,11 @@ function RecentActivity() {
     const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"])();
     const [activities, setActivities] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setSmartLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useSmartLoading$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSmartLoading"])(false, 100); // Smart loading with 100ms delay
+    const [hasError, setHasError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "RecentActivity.useEffect": ()=>{
+            // Don't retry if we already know there's an error
+            if (hasError) return;
             const fetchRecentActivity = {
                 "RecentActivity.useEffect.fetchRecentActivity": async ()=>{
                     setSmartLoading(true);
@@ -1456,11 +1459,15 @@ function RecentActivity() {
                         }).limit(3);
                         // Check for errors and handle gracefully
                         if (ingredientsError || recipesError || menuDishesError) {
-                            console.error('Error fetching recent activity:', {
-                                ingredientsError,
-                                recipesError,
-                                menuDishesError
-                            });
+                            // Only log error once to prevent console spam
+                            if (!hasError) {
+                                console.error('Error fetching recent activity:', {
+                                    ingredientsError,
+                                    recipesError,
+                                    menuDishesError
+                                });
+                                setHasError(true);
+                            }
                             // If tables don't exist yet, just show empty state instead of error
                             setActivities([]);
                             return;
@@ -1515,7 +1522,9 @@ function RecentActivity() {
             }["RecentActivity.useEffect.fetchRecentActivity"];
             fetchRecentActivity();
         }
-    }["RecentActivity.useEffect"], []);
+    }["RecentActivity.useEffect"], [
+        hasError
+    ]);
     const getActivityIcon = (type)=>{
         switch(type){
             case 'ingredient':
@@ -1558,12 +1567,12 @@ function RecentActivity() {
                 height: "64px"
             }, void 0, false, {
                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                lineNumber: 128,
+                lineNumber: 136,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-            lineNumber: 127,
+            lineNumber: 135,
             columnNumber: 7
         }, this);
     }
@@ -1578,7 +1587,7 @@ function RecentActivity() {
                         children: "📈 Recent Activity"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                        lineNumber: 136,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1586,13 +1595,13 @@ function RecentActivity() {
                         children: "Latest updates to your kitchen data"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                        lineNumber: 137,
+                        lineNumber: 145,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                lineNumber: 135,
+                lineNumber: 143,
                 columnNumber: 7
             }, this),
             activities.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1603,7 +1612,7 @@ function RecentActivity() {
                         children: "📝"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                        lineNumber: 142,
+                        lineNumber: 150,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1611,7 +1620,7 @@ function RecentActivity() {
                         children: "No Recent Activity"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                        lineNumber: 143,
+                        lineNumber: 151,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1619,13 +1628,13 @@ function RecentActivity() {
                         children: "Start by adding ingredients or creating recipes"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                        lineNumber: 144,
+                        lineNumber: 152,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                lineNumber: 141,
+                lineNumber: 149,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "space-y-4",
@@ -1639,12 +1648,12 @@ function RecentActivity() {
                                     children: getActivityIcon(activity.type)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                                    lineNumber: 151,
+                                    lineNumber: 159,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                                lineNumber: 150,
+                                lineNumber: 158,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1655,7 +1664,7 @@ function RecentActivity() {
                                         children: activity.name
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 163,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1667,13 +1676,13 @@ function RecentActivity() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                                        lineNumber: 158,
+                                        lineNumber: 166,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                                lineNumber: 154,
+                                lineNumber: 162,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1681,28 +1690,28 @@ function RecentActivity() {
                                 children: formatDate(activity.created_at)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                                lineNumber: 163,
+                                lineNumber: 171,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, activity.id, true, {
                         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                        lineNumber: 149,
+                        lineNumber: 157,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-                lineNumber: 147,
+                lineNumber: 155,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/webapp/components/RecentActivity.tsx",
-        lineNumber: 134,
+        lineNumber: 142,
         columnNumber: 5
     }, this);
 }
-_s(RecentActivity, "tMTWby16b/lBN7Nvteg0pkjDyJc=", false, function() {
+_s(RecentActivity, "jHZKUzPehzF1zeQrfekB5dKL3ao=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"],
         __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useSmartLoading$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSmartLoading"]

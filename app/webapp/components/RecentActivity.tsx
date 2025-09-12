@@ -18,8 +18,12 @@ export default function RecentActivity() {
   const { t } = useTranslation();
   const [activities, setActivities] = useState<RecentActivity[]>([]);
   const [loading, setSmartLoading] = useSmartLoading(false, 100); // Smart loading with 100ms delay
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
+    // Don't retry if we already know there's an error
+    if (hasError) return;
+    
     const fetchRecentActivity = async () => {
       setSmartLoading(true);
       try {
@@ -46,7 +50,11 @@ export default function RecentActivity() {
 
         // Check for errors and handle gracefully
         if (ingredientsError || recipesError || menuDishesError) {
-          console.error('Error fetching recent activity:', { ingredientsError, recipesError, menuDishesError });
+          // Only log error once to prevent console spam
+          if (!hasError) {
+            console.error('Error fetching recent activity:', { ingredientsError, recipesError, menuDishesError });
+            setHasError(true);
+          }
           // If tables don't exist yet, just show empty state instead of error
           setActivities([]);
           return;
@@ -91,7 +99,7 @@ export default function RecentActivity() {
     };
 
     fetchRecentActivity();
-  }, []);
+  }, [hasError]);
 
   const getActivityIcon = (type: string) => {
     switch (type) {

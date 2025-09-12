@@ -35,8 +35,18 @@ export function convertUnit(amount: number, fromUnit: string, toUnit: string): C
     return { conversionFactor: 1, isValid: false, error: 'Unit not specified' };
   }
 
-  const from = fromUnit.toLowerCase();
-  const to = toUnit.toLowerCase();
+  // Normalize units - handle common variations
+  const normalizeUnit = (unit: string): string => {
+    const normalized = unit.toLowerCase().trim();
+    // Handle common unit variations
+    if (normalized === 'gm') return 'g';
+    if (normalized === 'ml') return 'ml';
+    if (normalized === 'pc') return 'pc';
+    return normalized;
+  };
+
+  const from = normalizeUnit(fromUnit);
+  const to = normalizeUnit(toUnit);
 
   if (from === to) {
     return { conversionFactor: 1, isValid: true };
@@ -63,11 +73,19 @@ export function convertIngredientCost(
 ): number {
   const conversion = convertUnit(1, fromUnit, toUnit);
   if (!conversion.isValid) {
-    console.warn(`Conversion failed for ${ingredientName}: ${conversion.error}`);
+    // Only log unique conversion errors to reduce console spam
+    const errorKey = `${fromUnit}-${toUnit}`;
+    if (!conversionErrors.has(errorKey)) {
+      console.warn(`Conversion failed for ${ingredientName}: ${conversion.error}`);
+      conversionErrors.add(errorKey);
+    }
     return cost;
   }
   return cost * conversion.conversionFactor;
 }
+
+// Track conversion errors to prevent spam
+const conversionErrors = new Set<string>();
 
 export function isVolumeUnit(unit: string): boolean {
   const volumeUnits = ['ml', 'l', 'tsp', 'tbsp', 'cup'];
