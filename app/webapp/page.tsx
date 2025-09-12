@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import TestWarningButton from '@/components/TestWarningButton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import DashboardStats from './components/DashboardStats';
@@ -43,7 +44,7 @@ interface TemperatureEquipment {
   updated_at: string;
 }
 
-export default function WebAppDashboard() {
+function WebAppDashboardContent() {
   const { t } = useTranslation();
   const [stats, setStats] = useState<DashboardStats>({
     totalIngredients: 0,
@@ -153,5 +154,13 @@ export default function WebAppDashboard() {
         <RecentActivity />
       </div>
     </div>
+  );
+}
+
+export default function WebAppDashboard() {
+  return (
+    <ErrorBoundary>
+      <WebAppDashboardContent />
+    </ErrorBoundary>
   );
 }
