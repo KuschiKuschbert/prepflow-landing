@@ -51,20 +51,20 @@ export const GlobalWarningProvider: React.FC<GlobalWarningProviderProps> = ({ ch
       autoHideDelay: warning.autoHideDelay || 5000,
     };
 
-    setWarnings(prev => {
-      // Check if similar warning already exists
-      const existingWarning = prev.find(w => 
-        w.type === newWarning.type && 
-        w.title === newWarning.title && 
-        w.message === newWarning.message
-      );
-      
-      if (existingWarning) {
-        return prev; // Don't add duplicate warnings
-      }
-      
-      return [...prev, newWarning];
-    });
+          setWarnings(prev => {
+            // Check if similar warning already exists
+            const existingWarning = prev.find(w => 
+              w.type === newWarning.type && 
+              w.title === newWarning.title && 
+              w.message === newWarning.message
+            );
+            
+            if (existingWarning) {
+              return prev; // Don't add duplicate warnings
+            }
+            
+            return [...prev, newWarning];
+          });
 
     // Auto-hide warning if enabled
     if (newWarning.autoHide) {

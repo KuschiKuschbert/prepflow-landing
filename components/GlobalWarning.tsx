@@ -6,7 +6,9 @@ import { useGlobalWarning } from '@/contexts/GlobalWarningContext';
 const GlobalWarning: React.FC = () => {
   const { warnings, removeWarning } = useGlobalWarning();
 
-  if (warnings.length === 0) return null;
+  if (warnings.length === 0) {
+    return null;
+  }
 
   // Show only the first warning in the bar
   const warning = warnings[0];
