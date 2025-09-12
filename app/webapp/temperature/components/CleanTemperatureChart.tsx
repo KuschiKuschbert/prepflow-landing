@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import { format } from 'date-fns';
 import './temperature-charts.css';
-import ChartJSTemperatureChart from './ChartJSTemperatureChart';
+import RechartsTemperatureChart from './RechartsTemperatureChart';
 
 interface CleanTemperatureChartProps {
   logs: TemperatureLog[];
@@ -481,13 +481,13 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
 
 
       {/* Main Chart.js Chart */}
-      <div className="w-full" style={{ height: `${adaptiveSettings.chartHeight}px` }}>
-        <ChartJSTemperatureChart 
-          logs={logs} 
-          equipment={equipment} 
-          timeFilter={timeFilter} 
-        />
-      </div>
+        <div className="w-full" style={{ height: `${adaptiveSettings.chartHeight}px` }}>
+          <RechartsTemperatureChart
+            logs={logs}
+            equipment={equipment}
+            timeFilter={timeFilter}
+          />
+        </div>
 
     </div>
   );
