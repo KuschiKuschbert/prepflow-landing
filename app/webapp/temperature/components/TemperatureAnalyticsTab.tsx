@@ -45,9 +45,6 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
             setTimeFilter(bestTimeFilter);
           }
         }
-      }, 100); // Small delay to ensure content is ready
-      
-      return () => clearTimeout(timer);
     }
   }, [equipment.length, allLogs.length, dateOffset, selectedEquipmentId, hasManuallyChangedFilter]);
 
