@@ -59,16 +59,8 @@
   overflow: hidden !important;
 }
 
-/* Prevent any chart elements from appearing before ready */
+/* Charts are visible by default - no global hiding */
 .recharts-wrapper {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  transition: none !important;
-  animation: none !important;
-}
-
-/* Temperature charts are always visible */
-.temperature-chart-container .recharts-wrapper {
   opacity: 1;
   visibility: visible;
 }
