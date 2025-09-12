@@ -34,3 +34,7 @@ build/
 # Temporary files
 tmp/
 temp/.next/
+
+# Next.js build outputs
+.next/
+.next/**
