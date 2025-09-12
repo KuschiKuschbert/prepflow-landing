@@ -383,9 +383,9 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
   if (!isLoaded || chartData.length === 0 || !equipment || !equipment.name) {
     return (
       <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-        <div className="h-6 bg-[#2a2a2a] rounded w-1/3 mb-4 animate-pulse"></div>
-        <div className="h-8 bg-[#2a2a2a] rounded w-1/4 mb-4 animate-pulse"></div>
-        <div className="h-48 bg-[#2a2a2a] rounded animate-pulse"></div>
+        <div className="h-6 bg-[#2a2a2a] rounded w-1/3 mb-4"></div>
+        <div className="h-8 bg-[#2a2a2a] rounded w-1/4 mb-4"></div>
+        <div className="h-48 bg-[#2a2a2a] rounded"></div>
       </div>
     );
   }
