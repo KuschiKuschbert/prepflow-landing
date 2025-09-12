@@ -1,0 +1,274 @@
+/* Performance Page Mobile Optimizations */
+
+/* Mobile-first responsive design */
+.performance-container {
+  @apply p-4 sm:p-6;
+}
+
+/* Mobile Card Layout Optimizations */
+@media (max-width: 768px) {
+  .performance-card {
+    @apply p-3 space-y-2;
+  }
+  
+  .performance-card-header {
+    @apply flex-col items-start space-y-2;
+  }
+  
+  .performance-metrics-grid {
+    @apply grid-cols-1 gap-3;
+  }
+  
+  .performance-metric-card {
+    @apply p-3;
+  }
+  
+  .performance-financial-data {
+    @apply space-y-1 text-sm;
+  }
+  
+  .performance-categories {
+    @apply flex-wrap gap-1;
+  }
+  
+  .performance-category-chip {
+    @apply px-2 py-1 text-xs;
+  }
+}
+
+/* Chart Optimizations */
+@media (max-width: 768px) {
+  .performance-chart-container {
+    @apply p-4 h-64;
+  }
+  
+  .performance-chart-title {
+    @apply text-lg mb-3;
+  }
+  
+  .chart-margin-mobile {
+    margin: {
+      top: 20px;
+      right: 10px;
+      left: 10px;
+      bottom: 5px;
+    }
+  }
+  
+  .chart-axis-mobile {
+    @apply text-xs;
+  }
+  
+  .chart-tooltip-mobile {
+    font-size: 12px !important;
+  }
+}
+
+/* Filter Controls - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-filters {
+    @apply grid-cols-1 gap-3;
+  }
+  
+  .performance-filter-input {
+    @apply py-3 text-base;
+    min-height: 44px;
+  }
+  
+  .performance-filter-label {
+    @apply text-sm font-medium mb-2;
+  }
+}
+
+/* Action Buttons - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-actions {
+    @apply flex-col gap-3;
+  }
+  
+  .performance-action-button {
+    @apply px-4 py-3 text-sm min-h-[44px];
+  }
+  
+  .performance-action-button-mobile-text {
+    @apply sm:hidden;
+  }
+  
+  .performance-action-button-desktop-text {
+    @apply hidden sm:inline;
+  }
+}
+
+/* Header - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-header {
+    @apply flex-col items-start space-y-4;
+  }
+  
+  .performance-title {
+    @apply text-2xl mb-2;
+  }
+  
+  .performance-subtitle {
+    @apply text-base;
+  }
+  
+  .performance-stats {
+    @apply flex-col space-y-2 w-full;
+  }
+  
+  .performance-score {
+    @apply text-xl;
+  }
+  
+  .performance-status {
+    @apply flex-col items-start space-y-1;
+  }
+}
+
+/* Metadata Display - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-metadata {
+    @apply p-4;
+  }
+  
+  .performance-metadata-grid {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .performance-metadata-item {
+    @apply text-center p-3 bg-[#2a2a2a]/20 rounded-lg;
+  }
+  
+  .performance-metadata-label {
+    @apply text-xs mb-1;
+  }
+  
+  .performance-metadata-value {
+    @apply text-base;
+  }
+}
+
+/* Pagination - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-pagination {
+    @apply flex-col space-y-2;
+  }
+  
+  .performance-pagination-info {
+    @apply text-sm;
+  }
+  
+  .performance-pagination-button {
+    @apply px-4 py-2 text-sm min-h-[44px];
+  }
+}
+
+/* Import Modal - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-import-modal {
+    @apply mx-4 w-auto;
+  }
+  
+  .performance-import-content {
+    @apply p-4;
+  }
+  
+  .performance-import-textarea {
+    @apply h-32 text-sm;
+  }
+  
+  .performance-import-actions {
+    @apply flex-col space-y-2;
+  }
+  
+  .performance-import-button {
+    @apply w-full py-3 min-h-[44px];
+  }
+}
+
+/* Touch-friendly Interactions */
+.performance-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Loading States - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-skeleton-card {
+    @apply p-3 space-y-2;
+  }
+  
+  .performance-skeleton-header {
+    @apply h-6 rounded-lg;
+  }
+  
+  .performance-skeleton-metric {
+    @apply h-16 rounded-lg;
+  }
+  
+  .performance-skeleton-text {
+    @apply h-4 rounded;
+  }
+}
+
+/* Error States - Mobile Optimized */
+@media (max-width: 768px) {
+  .performance-error {
+    @apply p-4 text-center;
+  }
+  
+  .performance-error-icon {
+    @apply w-12 h-12 mx-auto mb-3;
+  }
+  
+  .performance-error-message {
+    @apply text-sm;
+  }
+}
+
+/* Accessibility Improvements */
+.performance-focus-visible {
+  @apply focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a];
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .performance-animation {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .performance-card {
+    @apply border-2 border-white;
+  }
+  
+  .performance-text {
+    @apply text-white;
+  }
+  
+  .performance-button {
+    @apply border-2 border-current;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .performance-no-print {
+    display: none !important;
+  }
+  
+  .performance-chart {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .performance-print-friendly {
+    color: black !important;
+    background: white !important;
+  }
+}
