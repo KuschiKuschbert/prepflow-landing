@@ -92,6 +92,23 @@ export default function TemperatureLogsPage() {
       const response = await fetch(url);
       const data = await response.json();
       if (data.success) {
+        // If no data for selected date, automatically switch to most recent date with data
+        if (data.data.length === 0 && allLogs.length > 0) {
+          const datesWithLogs = [...new Set(allLogs.map(log => log.log_date))].sort().reverse();
+          if (datesWithLogs.length > 0) {
+            const mostRecentDate = datesWithLogs[0];
+            console.log(`No data for ${selectedDate}, switching to ${mostRecentDate}`);
+            setSelectedDate(mostRecentDate);
+            // Fetch logs for the most recent date
+            const fallbackUrl = `/api/temperature-logs?date=${mostRecentDate}${selectedType !== 'all' ? `&type=${selectedType}` : ''}`;
+            const fallbackResponse = await fetch(fallbackUrl);
+            const fallbackData = await fallbackResponse.json();
+            if (fallbackData.success) {
+              setLogs(fallbackData.data);
+            }
+            return;
+          }
+        }
         setLogs(data.data);
       }
     } catch (error) {
@@ -139,16 +156,17 @@ export default function TemperatureLogsPage() {
     }));
   }, []);
 
-  // Set default date to most recent date with data
+  // Set default date to most recent date with data after initial load
   useEffect(() => {
-    if (allLogs.length > 0 && !hasStartedLoading) {
+    if (allLogs.length > 0 && isInitialLoad) {
       // Find the most recent date with logs
       const datesWithLogs = [...new Set(allLogs.map(log => log.log_date))].sort().reverse();
       if (datesWithLogs.length > 0) {
         setSelectedDate(datesWithLogs[0]);
+        setIsInitialLoad(false); // Prevent this from running again
       }
     }
-  }, [allLogs, hasStartedLoading]);
+  }, [allLogs, isInitialLoad]);
 
   useEffect(() => {
     const loadData = async () => {
