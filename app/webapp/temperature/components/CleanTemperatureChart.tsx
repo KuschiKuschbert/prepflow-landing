@@ -16,13 +16,19 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
   const chartRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Filter logs based on time range
+  // Filter logs based on time range and equipment
   const getFilteredLogs = () => {
+    // First filter by equipment ID
+    let equipmentFilteredLogs = logs;
+    if (equipment && equipment.id) {
+      equipmentFilteredLogs = logs.filter(log => log.equipment_id === equipment.id);
+    }
+    
     // If we have logs but they're all from the same date (historical data),
-    // don't apply time filtering - just return all logs
-    const uniqueDates = [...new Set(logs.map(log => log.log_date))];
-    if (uniqueDates.length === 1 && logs.length > 0) {
-      return logs;
+    // don't apply time filtering - just return all equipment-filtered logs
+    const uniqueDates = [...new Set(equipmentFilteredLogs.map(log => log.log_date))];
+    if (uniqueDates.length === 1 && equipmentFilteredLogs.length > 0) {
+      return equipmentFilteredLogs;
     }
     
     const now = new Date();
@@ -40,10 +46,10 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
         break;
       case 'all':
       default:
-        return logs;
+        return equipmentFilteredLogs;
     }
     
-    return logs.filter(log => {
+    return equipmentFilteredLogs.filter(log => {
       const logDate = new Date(`${log.log_date} ${log.log_time}`);
       return logDate >= cutoffDate;
     });
