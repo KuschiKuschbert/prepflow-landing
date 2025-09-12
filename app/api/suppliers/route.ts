@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     let query = supabaseAdmin
       .from('suppliers')
       .select('*')
-      .order('name');
+      .order('supplier_name');
 
     if (active !== null) {
       query = query.eq('is_active', active === 'true');
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { 
-      name, 
+      supplier_name, 
       contact_person, 
       email, 
       phone, 
@@ -67,9 +67,9 @@ export async function POST(request: NextRequest) {
       notes 
     } = body;
 
-    if (!name) {
+    if (!supplier_name) {
       return NextResponse.json({ 
-        error: 'Name is required',
+        error: 'Supplier name is required',
         message: 'Please provide a supplier name'
       }, { status: 400 });
     }
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabaseAdmin
       .from('suppliers')
       .insert({
-        name,
+        supplier_name,
         contact_person: contact_person || null,
         email: email || null,
         phone: phone || null,

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabaseAdmin
       .from('cleaning_areas')
       .select('*')
-      .order('name');
+      .order('area_name');
 
     if (error) {
       console.error('Error fetching cleaning areas:', error);
@@ -39,11 +39,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, frequency_days } = body;
+    const { area_name, description, cleaning_frequency } = body;
 
-    if (!name) {
+    if (!area_name) {
       return NextResponse.json({ 
-        error: 'Name is required',
+        error: 'Area name is required',
         message: 'Please provide a name for the cleaning area'
       }, { status: 400 });
     }
@@ -57,9 +57,9 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabaseAdmin
       .from('cleaning_areas')
       .insert({
-        name,
+        area_name,
         description: description || null,
-        frequency_days: frequency_days || 7
+        cleaning_frequency: cleaning_frequency || 'daily'
       })
       .select()
       .single();
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, name, description, frequency_days, is_active } = body;
+    const { id, area_name, description, cleaning_frequency, is_active } = body;
 
     if (!id) {
       return NextResponse.json({ 
@@ -100,9 +100,9 @@ export async function PUT(request: NextRequest) {
     }
 
     const updateData: any = {};
-    if (name !== undefined) updateData.name = name;
+    if (area_name !== undefined) updateData.area_name = area_name;
     if (description !== undefined) updateData.description = description;
-    if (frequency_days !== undefined) updateData.frequency_days = frequency_days;
+    if (cleaning_frequency !== undefined) updateData.cleaning_frequency = cleaning_frequency;
     if (is_active !== undefined) updateData.is_active = is_active;
 
     if (!supabaseAdmin) {
