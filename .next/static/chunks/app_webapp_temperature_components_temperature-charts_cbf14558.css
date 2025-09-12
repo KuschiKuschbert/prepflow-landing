@@ -1,0 +1,175 @@
+/* [project]/app/webapp/temperature/components/temperature-charts.css [app-client] (css) */
+.temperature-chart-container {
+  opacity: 1;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  transition: opacity .2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.recharts-wrapper {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.recharts-surface {
+  position: relative !important;
+}
+
+.recharts-cartesian-axis, .recharts-cartesian-grid, .recharts-line, .recharts-dot {
+  opacity: 1;
+}
+
+.recharts-wrapper * {
+  transition: opacity .2s ease-in-out;
+}
+
+.recharts-surface {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.temperature-chart-container .recharts-wrapper {
+  transition: opacity .2s ease-in-out;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.temperature-chart-container:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .3);
+}
+
+.temperature-chart-container[style*="grabbing"] {
+  cursor: grabbing !important;
+}
+
+.temperature-chart-container[style*="grab"] {
+  cursor: grab !important;
+}
+
+.chart-grid {
+  flex-direction: column;
+  gap: 1.5rem;
+  display: flex;
+}
+
+@media (max-width: 640px) {
+  .chart-grid {
+    gap: 1rem;
+  }
+}
+
+.temperature-chart-container:hover .chart-title {
+  color: #29e7cd;
+  transition: color .2s;
+}
+
+.chart-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-loading:after {
+  content: "";
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(41, 231, 205, .1), rgba(0, 0, 0, 0));
+  width: 100%;
+  height: 100%;
+  animation: 1.5s infinite shimmer;
+  position: absolute;
+  top: 0;
+  left: -100%;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.temperature-chart-container:focus {
+  outline-offset: 2px;
+  outline: 2px solid #29e7cd;
+}
+
+.temperature-chart-container:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.temperature-chart-container * {
+  transition: transform .2s, box-shadow .2s, color .2s;
+}
+
+@media (max-width: 768px) {
+  .temperature-chart-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .chart-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.status-indicator {
+  display: inline-block;
+  position: relative;
+}
+
+.status-indicator:before {
+  content: "";
+  background: currentColor;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  animation: 2s infinite pulse;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translate(-50%, -50%)scale(1);
+  }
+
+  50% {
+    opacity: .7;
+    transform: translate(-50%, -50%)scale(1.1);
+  }
+}
+
+.temperature-tooltip {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+}
+
+.chart-zoom-transition {
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.chart-instructions {
+  color: #6b7280;
+  text-align: center;
+  opacity: .8;
+  margin-top: 1rem;
+  font-size: .75rem;
+}
+
+.chart-instructions:hover {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+/*# sourceMappingURL=app_webapp_temperature_components_temperature-charts_cbf14558.css.map*/
