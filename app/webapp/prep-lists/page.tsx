@@ -43,7 +43,7 @@ export default function PrepListsPage() {
   const [prepLists, setPrepLists] = useState<PrepList[]>([]);
   const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingPrepList, setEditingPrepList] = useState<PrepList | null>(null);

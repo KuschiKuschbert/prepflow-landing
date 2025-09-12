@@ -35,7 +35,7 @@ export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
   const [types, setTypes] = useState<ComplianceType[]>([]);
   const [records, setRecords] = useState<ComplianceRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [activeTab, setActiveTab] = useState<'records' | 'types'>('records');
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [showAddType, setShowAddType] = useState(false);

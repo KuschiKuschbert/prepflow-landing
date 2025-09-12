@@ -26,7 +26,7 @@ export default function ParLevelsPage() {
   const { t } = useTranslation();
   const [parLevels, setParLevels] = useState<ParLevel[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingParLevel, setEditingParLevel] = useState<ParLevel | null>(null);

@@ -49,7 +49,7 @@ interface COGSCalculation {
 export default function RecipesPage() {
   const router = useRouter();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
 
   // Use centralized formatting utility

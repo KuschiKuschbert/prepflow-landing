@@ -48,7 +48,7 @@ export default function COGSPage() {
   const [selectedRecipe, setSelectedRecipe] = useState<string>('');
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>([]);
   const [calculations, setCalculations] = useState<COGSCalculation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showAddIngredient, setShowAddIngredient] = useState(false);

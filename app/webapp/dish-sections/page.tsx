@@ -26,7 +26,7 @@ export default function DishSectionsPage() {
   const { t } = useTranslation();
   const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>([]);
   const [menuDishes, setMenuDishes] = useState<MenuDish[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingSection, setEditingSection] = useState<KitchenSection | null>(null);
