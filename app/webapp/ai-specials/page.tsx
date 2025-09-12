@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 interface AISpecial {
   id: string;
@@ -114,46 +115,18 @@ export default function AISpecialsPage() {
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header skeleton */}
-          <div className="animate-pulse mb-8">
-            <div className="h-8 bg-[#2a2a2a] rounded-3xl w-1/3 mb-4"></div>
-            <div className="h-4 bg-[#2a2a2a] rounded-xl w-1/2"></div>
+          <div className="mb-8">
+            <LoadingSkeleton variant="stats" height="64px" />
           </div>
 
           {/* Upload form skeleton */}
           <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] mb-8">
-            <div className="animate-pulse">
-              <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/4 mb-6"></div>
-              <div className="space-y-4">
-                <div>
-                  <div className="h-4 bg-[#2a2a2a] rounded w-1/3 mb-2"></div>
-                  <div className="h-12 bg-[#2a2a2a] rounded-xl"></div>
-                </div>
-                <div>
-                  <div className="h-4 bg-[#2a2a2a] rounded w-1/3 mb-2"></div>
-                  <div className="h-20 bg-[#2a2a2a] rounded-xl"></div>
-                </div>
-                <div className="h-12 bg-[#2a2a2a] rounded-xl w-full"></div>
-              </div>
-            </div>
+            <LoadingSkeleton variant="form" height="200px" />
           </div>
 
           {/* Results skeleton */}
           <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] animate-pulse">
-                <div className="flex items-start space-x-4">
-                  <div className="w-16 h-16 bg-[#2a2a2a] rounded-xl"></div>
-                  <div className="flex-1 space-y-3">
-                    <div className="h-4 bg-[#2a2a2a] rounded w-1/4"></div>
-                    <div className="h-3 bg-[#2a2a2a] rounded w-1/3"></div>
-                    <div className="space-y-2">
-                      <div className="h-3 bg-[#2a2a2a] rounded w-2/3"></div>
-                      <div className="h-3 bg-[#2a2a2a] rounded w-1/2"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <LoadingSkeleton variant="card" count={3} height="120px" />
           </div>
         </div>
       </div>
