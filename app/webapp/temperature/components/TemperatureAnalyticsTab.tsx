@@ -6,6 +6,7 @@ import { TemperatureLog, TemperatureEquipment } from '../types';
 import CleanTemperatureChart from './CleanTemperatureChart';
 import { format } from 'date-fns';
 import './temperature-charts.css';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 interface TemperatureAnalyticsTabProps {
   allLogs: TemperatureLog[];
@@ -159,33 +160,18 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
         {/* Time Period Filter Skeleton */}
         <div className="bg-[#1f1f1f] p-4 rounded-2xl shadow-lg border border-[#2a2a2a] flex flex-wrap gap-2">
           {['24h', '7d', '30d', 'all'].map(filter => (
-            <div key={filter} className="px-4 py-2 rounded-xl bg-gray-700 animate-pulse w-20 h-8"></div>
+            <div key={filter} className="px-4 py-2 rounded-xl bg-gray-700 w-20 h-8 animate-pulse"></div>
           ))}
         </div>
 
         {/* Equipment Cards Skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="bg-[#1f1f1f] p-3 rounded-xl shadow-lg border border-[#2a2a2a] animate-pulse">
-              <div className="flex items-center justify-between mb-2">
-                <div className="h-3 bg-gray-700 rounded w-3/4"></div>
-                <div className="h-2 bg-gray-700 rounded w-1/4"></div>
-              </div>
-              <div className="h-6 bg-gray-700 rounded mb-2"></div>
-              <div className="h-2 bg-gray-700 rounded w-1/2"></div>
-            </div>
-          ))}
+          <LoadingSkeleton variant="card" count={6} height="80px" />
         </div>
 
         {/* Charts Skeleton */}
         <div className="space-y-6">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] animate-pulse">
-              <div className="h-6 bg-gray-700 rounded w-1/3 mb-4"></div>
-              <div className="h-8 bg-gray-700 rounded w-1/4 mb-4"></div>
-              <div className="h-48 bg-gray-700 rounded"></div>
-            </div>
-          ))}
+          <LoadingSkeleton variant="chart" count={3} height="320px" />
         </div>
       </div>
     );
@@ -212,9 +198,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
           ))
         ) : (
           // Loading skeleton for time filter buttons
-          [...Array(4)].map((_, i) => (
-            <div key={i} className="h-8 bg-[#2a2a2a] rounded-xl w-20 animate-pulse"></div>
-          ))
+          <LoadingSkeleton variant="button" count={4} />
         )}
       </div>
 
@@ -319,23 +303,14 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
           );
         }) : (
           // Loading skeleton for equipment cards
-          [...Array(6)].map((_, i) => (
-            <div key={i} className="bg-[#1f1f1f] p-3 rounded-xl shadow-lg border border-[#2a2a2a] animate-pulse">
-              <div className="h-3 bg-[#2a2a2a] rounded w-3/4 mb-2"></div>
-              <div className="h-2 bg-[#2a2a2a] rounded w-1/2 mb-2"></div>
-              <div className="h-6 bg-[#2a2a2a] rounded w-1/3 mb-1"></div>
-              <div className="h-2 bg-[#2a2a2a] rounded w-1/2"></div>
-            </div>
-          ))
+          <LoadingSkeleton variant="card" count={6} height="80px" />
         )}
       </div>
 
       {/* Selected Equipment Chart */}
       {!isLoaded ? (
         // Loading skeleton for chart
-        <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] animate-pulse">
-          <div className="h-48 bg-[#2a2a2a] rounded"></div>
-        </div>
+        <LoadingSkeleton variant="chart" height="320px" />
       ) : equipment.length === 0 ? (
         <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] w-full h-64 flex items-center justify-center">
           <p className="text-gray-400">No equipment found to display analytics.</p>

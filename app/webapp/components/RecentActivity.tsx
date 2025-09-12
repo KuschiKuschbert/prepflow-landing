@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/lib/useTranslation';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
@@ -122,20 +123,7 @@ export default function RecentActivity() {
   if (loading) {
     return (
       <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-        <div className="animate-pulse">
-          <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/3 mb-4"></div>
-          <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-[#2a2a2a] rounded-full"></div>
-                <div className="flex-1">
-                  <div className="h-4 bg-[#2a2a2a] rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-[#2a2a2a] rounded w-1/2"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <LoadingSkeleton variant="list" count={5} height="64px" />
       </div>
     );
   }
