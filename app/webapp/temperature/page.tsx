@@ -170,7 +170,6 @@ export default function TemperatureLogsPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        setHasStartedLoading(true);
         setLoading(true);
         setIsInitialLoad(true);
         
