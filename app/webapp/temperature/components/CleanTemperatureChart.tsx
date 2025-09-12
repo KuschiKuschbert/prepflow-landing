@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import { format } from 'date-fns';
 import './temperature-charts.css';
@@ -479,96 +478,15 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
         )}
       </div>
 
-      {/* Debug section - remove after fixing */}
-      <div className="mb-4 p-2 bg-gray-800 rounded text-xs">
-        <div>Debug: {enhancedData.length} data points</div>
-        <div>Sample: {JSON.stringify(enhancedData.slice(0, 2))}</div>
-        <div>Recharts Test: {enhancedData.length > 0 ? 'Data available' : 'No data'}</div>
-      </div>
 
-      {/* Chart.js Test Chart */}
-      <div className="mb-4 p-4 bg-gray-900 rounded">
-        <h3 className="text-sm text-gray-300 mb-2">Chart.js Test Chart</h3>
+
+      {/* Main Chart.js Chart */}
+      <div className="w-full" style={{ height: `${adaptiveSettings.chartHeight}px` }}>
         <ChartJSTemperatureChart 
           logs={logs} 
           equipment={equipment} 
           timeFilter={timeFilter} 
         />
-      </div>
-
-      <div className="w-full" style={{ height: `${adaptiveSettings.chartHeight}px` }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={enhancedData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-            
-            <XAxis
-              dataKey="timestamp"
-              tickFormatter={formatXAxisLabel}
-              stroke="#6b7280"
-              fontSize={chartData.length > 1000 ? 10 : 12}
-              tick={{ fill: '#9ca3af' }}
-              axisLine={{ stroke: '#374151' }}
-              interval={adaptiveSettings.xAxisInterval}
-            />
-            
-            <YAxis
-              stroke="#6b7280"
-              fontSize={12}
-              tick={{ fill: '#9ca3af' }}
-              axisLine={{ stroke: '#374151' }}
-              label={{ value: '°C', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#9ca3af' } }}
-            />
-            
-            <Tooltip
-              labelFormatter={formatTooltipLabel}
-              formatter={(value: number) => [formatTooltipValue(value), 'Temperature']}
-              contentStyle={{
-                backgroundColor: '#1f1f1f',
-                border: '1px solid #2a2a2a',
-                borderRadius: '8px',
-                color: '#ffffff'
-              }}
-            />
-            
-            {/* Temperature threshold lines */}
-            {equipment.min_temp_celsius !== null && (
-              <ReferenceLine
-                y={equipment.min_temp_celsius}
-                stroke="#ef4444"
-                strokeDasharray="5 5"
-                label={{ value: `Min: ${equipment.min_temp_celsius}°C`, position: "top", style: { fill: '#ef4444' } }}
-              />
-            )}
-            
-            {equipment.max_temp_celsius !== null && (
-              <ReferenceLine
-                y={equipment.max_temp_celsius}
-                stroke="#ef4444"
-                strokeDasharray="5 5"
-                label={{ value: `Max: ${equipment.max_temp_celsius}°C`, position: "top", style: { fill: '#ef4444' } }}
-              />
-            )}
-            
-            <Line
-              type="monotone"
-              dataKey="temperature"
-              stroke="#29E7CD"
-              strokeWidth={3}
-              dot={{ 
-                fill: '#29E7CD', 
-                strokeWidth: 2, 
-                r: 4 
-              }}
-              activeDot={{ 
-                r: 6, 
-                stroke: '#29E7CD', 
-                strokeWidth: 2, 
-                fill: '#ffffff' 
-              }}
-              connectNulls={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
       </div>
 
     </div>
