@@ -600,12 +600,12 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/app/webapp/prep-lists/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
+"[project]/app/webapp/order-lists/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
-    ()=>PrepListsPage
+    ()=>OrderListsPage
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
@@ -617,18 +617,18 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function PrepListsPage() {
+function OrderListsPage() {
     _s();
     const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"])();
-    const [prepLists, setPrepLists] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [kitchenSections, setKitchenSections] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [orderLists, setOrderLists] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [suppliers, setSuppliers] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [ingredients, setIngredients] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // Start with false to prevent skeleton flash
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [showForm, setShowForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [editingPrepList, setEditingPrepList] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [editingOrderList, setEditingOrderList] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
-        kitchenSectionId: '',
+        supplierId: '',
         name: '',
         notes: '',
         items: []
@@ -636,37 +636,36 @@ function PrepListsPage() {
     // Mock user ID for now
     const userId = 'user-123';
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "PrepListsPage.useEffect": ()=>{
-            fetchPrepLists();
-            fetchKitchenSections();
+        "OrderListsPage.useEffect": ()=>{
+            fetchOrderLists();
+            fetchSuppliers();
             fetchIngredients();
         }
-    }["PrepListsPage.useEffect"], []);
-    const fetchPrepLists = async ()=>{
-        setLoading(true);
+    }["OrderListsPage.useEffect"], []);
+    const fetchOrderLists = async ()=>{
         try {
-            const response = await fetch("/api/prep-lists?userId=".concat(userId));
+            const response = await fetch("/api/order-lists?userId=".concat(userId));
             const result = await response.json();
             if (result.success) {
-                setPrepLists(result.data);
+                setOrderLists(result.data);
             } else {
-                setError(result.message || 'Failed to fetch prep lists');
+                setError(result.message || 'Failed to fetch order lists');
             }
         } catch (err) {
-            setError('Failed to fetch prep lists');
+            setError('Failed to fetch order lists');
         } finally{
             setLoading(false);
         }
     };
-    const fetchKitchenSections = async ()=>{
+    const fetchSuppliers = async ()=>{
         try {
-            const response = await fetch("/api/kitchen-sections?userId=".concat(userId));
+            const response = await fetch("/api/suppliers?userId=".concat(userId));
             const result = await response.json();
             if (result.success) {
-                setKitchenSections(result.data);
+                setSuppliers(result.data);
             }
         } catch (err) {
-            console.error('Failed to fetch kitchen sections:', err);
+            console.error('Failed to fetch suppliers:', err);
         }
     };
     const fetchIngredients = async ()=>{
@@ -683,18 +682,18 @@ function PrepListsPage() {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         try {
-            const url = editingPrepList ? '/api/prep-lists' : '/api/prep-lists';
-            const method = editingPrepList ? 'PUT' : 'POST';
-            const body = editingPrepList ? {
-                id: editingPrepList.id,
-                kitchenSectionId: formData.kitchenSectionId,
+            const url = editingOrderList ? '/api/order-lists' : '/api/order-lists';
+            const method = editingOrderList ? 'PUT' : 'POST';
+            const body = editingOrderList ? {
+                id: editingOrderList.id,
+                supplierId: formData.supplierId,
                 name: formData.name,
                 notes: formData.notes,
                 status: 'draft',
                 items: formData.items.filter((item)=>item.ingredientId && item.quantity)
             } : {
                 userId,
-                kitchenSectionId: formData.kitchenSectionId,
+                supplierId: formData.supplierId,
                 name: formData.name,
                 notes: formData.notes,
                 items: formData.items.filter((item)=>item.ingredientId && item.quantity)
@@ -708,23 +707,23 @@ function PrepListsPage() {
             });
             const result = await response.json();
             if (result.success) {
-                await fetchPrepLists();
+                await fetchOrderLists();
                 resetForm();
                 setError(null);
             } else {
-                setError(result.message || 'Failed to save prep list');
+                setError(result.message || 'Failed to save order list');
             }
         } catch (err) {
-            setError('Failed to save prep list');
+            setError('Failed to save order list');
         }
     };
-    const handleEdit = (prepList)=>{
-        setEditingPrepList(prepList);
+    const handleEdit = (orderList)=>{
+        setEditingOrderList(orderList);
         setFormData({
-            kitchenSectionId: prepList.kitchen_section_id,
-            name: prepList.name,
-            notes: prepList.notes || '',
-            items: prepList.prep_list_items.map((item)=>({
+            supplierId: orderList.supplier_id,
+            name: orderList.name,
+            notes: orderList.notes || '',
+            items: orderList.order_list_items.map((item)=>({
                     ingredientId: item.ingredient_id,
                     quantity: item.quantity.toString(),
                     unit: item.unit,
@@ -734,24 +733,24 @@ function PrepListsPage() {
         setShowForm(true);
     };
     const handleDelete = async (id)=>{
-        if (!confirm('Are you sure you want to delete this prep list?')) return;
+        if (!confirm('Are you sure you want to delete this order list?')) return;
         try {
-            const response = await fetch("/api/prep-lists?id=".concat(id), {
+            const response = await fetch("/api/order-lists?id=".concat(id), {
                 method: 'DELETE'
             });
             const result = await response.json();
             if (result.success) {
-                await fetchPrepLists();
+                await fetchOrderLists();
             } else {
-                setError(result.message || 'Failed to delete prep list');
+                setError(result.message || 'Failed to delete order list');
             }
         } catch (err) {
-            setError('Failed to delete prep list');
+            setError('Failed to delete order list');
         }
     };
     const handleStatusChange = async (id, status)=>{
         try {
-            const response = await fetch('/api/prep-lists', {
+            const response = await fetch('/api/order-lists', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -763,7 +762,7 @@ function PrepListsPage() {
             });
             const result = await response.json();
             if (result.success) {
-                await fetchPrepLists();
+                await fetchOrderLists();
             } else {
                 setError(result.message || 'Failed to update status');
             }
@@ -806,21 +805,21 @@ function PrepListsPage() {
     };
     const resetForm = ()=>{
         setFormData({
-            kitchenSectionId: '',
+            supplierId: '',
             name: '',
             notes: '',
             items: []
         });
         setShowForm(false);
-        setEditingPrepList(null);
+        setEditingOrderList(null);
     };
     const getStatusColor = (status)=>{
         switch(status){
             case 'draft':
                 return 'text-gray-400 bg-gray-400/10';
-            case 'active':
+            case 'sent':
                 return 'text-blue-400 bg-blue-400/10';
-            case 'completed':
+            case 'received':
                 return 'text-green-400 bg-green-400/10';
             case 'cancelled':
                 return 'text-red-400 bg-red-400/10';
@@ -829,10 +828,45 @@ function PrepListsPage() {
         }
     };
     if (loading) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PageSkeleton"], {}, void 0, false, {
-            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-            lineNumber: 257,
-            columnNumber: 12
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "min-h-screen bg-[#0a0a0a] text-white",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "container mx-auto px-4 py-8",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {
+                        variant: "stats",
+                        height: "64px"
+                    }, void 0, false, {
+                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                        lineNumber: 261,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "space-y-4 mt-6",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {
+                            variant: "card",
+                            count: 5,
+                            height: "80px"
+                        }, void 0, false, {
+                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                            lineNumber: 263,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                        lineNumber: 262,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                lineNumber: 260,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/app/webapp/order-lists/page.tsx",
+            lineNumber: 259,
+            columnNumber: 7
         }, this);
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -848,26 +882,26 @@ function PrepListsPage() {
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                     className: "text-3xl font-bold text-white mb-2",
                                     children: [
-                                        "📝 ",
-                                        t('prepLists.title', 'Prep Lists')
+                                        "📋 ",
+                                        t('orderLists.title', 'Order Lists')
                                     ]
                                 }, void 0, true, {
-                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                    lineNumber: 266,
+                                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                    lineNumber: 276,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-gray-400",
-                                    children: t('prepLists.subtitle', 'Create and manage kitchen prep lists by section')
+                                    children: t('orderLists.subtitle', 'Create and manage supplier order lists')
                                 }, void 0, false, {
-                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                    lineNumber: 267,
+                                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                    lineNumber: 277,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
-                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                            lineNumber: 265,
+                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                            lineNumber: 275,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -875,17 +909,17 @@ function PrepListsPage() {
                             className: "px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:shadow-xl transition-all duration-200 font-semibold",
                             children: [
                                 "+ ",
-                                t('prepLists.createPrepList', 'Create Prep List')
+                                t('orderLists.createOrderList', 'Create Order List')
                             ]
                         }, void 0, true, {
-                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                            lineNumber: 269,
+                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                            lineNumber: 279,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 264,
+                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                    lineNumber: 274,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -894,66 +928,66 @@ function PrepListsPage() {
                         className: "text-red-400",
                         children: error
                     }, void 0, false, {
-                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                        lineNumber: 280,
+                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                        lineNumber: 290,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 279,
+                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                    lineNumber: 289,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "space-y-4",
-                    children: prepLists.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    children: orderLists.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "text-center py-12",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-20 h-20 bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 rounded-2xl flex items-center justify-center mx-auto mb-4",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     className: "text-3xl",
-                                    children: "📝"
+                                    children: "📋"
                                 }, void 0, false, {
-                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                    lineNumber: 289,
+                                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                    lineNumber: 299,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 288,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 298,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                 className: "text-xl font-semibold text-white mb-2",
-                                children: t('prepLists.noPrepLists', 'No Prep Lists')
+                                children: t('orderLists.noOrderLists', 'No Order Lists')
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 291,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 301,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-gray-400 mb-6",
-                                children: t('prepLists.noPrepListsDesc', 'Create your first prep list to organize kitchen preparation')
+                                children: t('orderLists.noOrderListsDesc', 'Create your first order list to streamline supplier ordering')
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 292,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 302,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>setShowForm(true),
                                 className: "px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:shadow-xl transition-all duration-200 font-semibold",
-                                children: t('prepLists.createFirstPrepList', 'Create Your First Prep List')
+                                children: t('orderLists.createFirstOrderList', 'Create Your First Order List')
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 293,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 303,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                        lineNumber: 287,
+                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                        lineNumber: 297,
                         columnNumber: 13
-                    }, this) : prepLists.map((prepList)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    }, this) : orderLists.map((orderList)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-6 hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center justify-between mb-4",
@@ -965,51 +999,48 @@ function PrepListsPage() {
                                                 className: "flex items-center space-x-4 mb-3",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "w-12 h-12 rounded-xl flex items-center justify-center",
-                                                        style: {
-                                                            backgroundColor: "".concat(prepList.kitchen_sections.color, "20")
-                                                        },
+                                                        className: "w-12 h-12 bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 rounded-xl flex items-center justify-center",
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-lg",
-                                                            children: "📝"
+                                                            children: "📋"
                                                         }, void 0, false, {
-                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                            lineNumber: 313,
+                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                            lineNumber: 320,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 309,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 319,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                                 className: "font-semibold text-white text-lg",
-                                                                children: prepList.name
+                                                                children: orderList.name
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 316,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 323,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-sm text-gray-400",
-                                                                children: prepList.kitchen_sections.name
+                                                                children: orderList.suppliers.name
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 317,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 324,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 315,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 322,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 308,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 318,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1019,111 +1050,111 @@ function PrepListsPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-xs text-gray-400 mb-1",
-                                                                children: t('prepLists.status', 'Status')
+                                                                children: t('orderLists.status', 'Status')
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 323,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 330,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ".concat(getStatusColor(prepList.status)),
-                                                                children: prepList.status.charAt(0).toUpperCase() + prepList.status.slice(1)
+                                                                className: "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ".concat(getStatusColor(orderList.status)),
+                                                                children: orderList.status.charAt(0).toUpperCase() + orderList.status.slice(1)
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 324,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 331,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 322,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 329,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-xs text-gray-400 mb-1",
-                                                                children: t('prepLists.items', 'Items')
+                                                                children: t('orderLists.items', 'Items')
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 329,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 336,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-white font-semibold",
-                                                                children: prepList.prep_list_items.length
+                                                                children: orderList.order_list_items.length
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 330,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 337,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 328,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 335,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-xs text-gray-400 mb-1",
-                                                                children: t('prepLists.created', 'Created')
+                                                                children: t('orderLists.created', 'Created')
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 333,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 340,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-white font-semibold",
-                                                                children: new Date(prepList.created_at).toLocaleDateString()
+                                                                children: new Date(orderList.created_at).toLocaleDateString()
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 334,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 341,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 332,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 339,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 321,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 328,
                                                 columnNumber: 21
                                             }, this),
-                                            prepList.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            orderList.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                 className: "text-sm text-gray-300 mb-4",
-                                                children: prepList.notes
+                                                children: orderList.notes
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 339,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 346,
                                                 columnNumber: 23
                                             }, this),
-                                            prepList.prep_list_items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            orderList.order_list_items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "bg-[#2a2a2a]/30 rounded-xl p-4",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
                                                         className: "text-sm font-semibold text-white mb-3",
-                                                        children: t('prepLists.items', 'Items')
+                                                        children: t('orderLists.items', 'Items')
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 345,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 352,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "space-y-2",
                                                         children: [
-                                                            prepList.prep_list_items.slice(0, 3).map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            orderList.order_list_items.slice(0, 3).map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex items-center justify-between text-sm",
                                                                     children: [
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "text-gray-300",
                                                                             children: item.ingredients.name
                                                                         }, void 0, false, {
-                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                            lineNumber: 349,
+                                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                            lineNumber: 356,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1134,99 +1165,99 @@ function PrepListsPage() {
                                                                                 item.unit
                                                                             ]
                                                                         }, void 0, true, {
-                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                            lineNumber: 350,
+                                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                            lineNumber: 357,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, item.id, true, {
-                                                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                    lineNumber: 348,
+                                                                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                    lineNumber: 355,
                                                                     columnNumber: 29
                                                                 }, this)),
-                                                            prepList.prep_list_items.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            orderList.order_list_items.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-xs text-gray-400",
                                                                 children: [
                                                                     "+",
-                                                                    prepList.prep_list_items.length - 3,
+                                                                    orderList.order_list_items.length - 3,
                                                                     " more items"
                                                                 ]
                                                             }, void 0, true, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 354,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 361,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 346,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 353,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 344,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 351,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 307,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 317,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex flex-col space-y-2",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                                value: prepList.status,
-                                                onChange: (e)=>handleStatusChange(prepList.id, e.target.value),
+                                                value: orderList.status,
+                                                onChange: (e)=>handleStatusChange(orderList.id, e.target.value),
                                                 className: "px-3 py-2 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                         value: "draft",
                                                         children: "Draft"
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 368,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 375,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "active",
-                                                        children: "Active"
+                                                        value: "sent",
+                                                        children: "Sent"
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 369,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 376,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "completed",
-                                                        children: "Completed"
+                                                        value: "received",
+                                                        children: "Received"
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 370,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 377,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                         value: "cancelled",
                                                         children: "Cancelled"
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 371,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 378,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 363,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 370,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "flex space-x-2",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        onClick: ()=>handleEdit(prepList),
+                                                        onClick: ()=>handleEdit(orderList),
                                                         className: "p-2 text-[#29E7CD] hover:bg-[#29E7CD]/10 rounded-xl transition-colors",
-                                                        title: String(t('prepLists.edit', 'Edit')),
+                                                        title: String(t('orderLists.edit', 'Edit')),
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                                             className: "w-5 h-5",
                                                             fill: "none",
@@ -1238,24 +1269,24 @@ function PrepListsPage() {
                                                                 strokeWidth: 2,
                                                                 d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 381,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 388,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
-                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                            lineNumber: 380,
+                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                            lineNumber: 387,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 375,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 382,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        onClick: ()=>handleDelete(prepList.id),
+                                                        onClick: ()=>handleDelete(orderList.id),
                                                         className: "p-2 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors",
-                                                        title: String(t('prepLists.delete', 'Delete')),
+                                                        title: String(t('orderLists.delete', 'Delete')),
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                                                             className: "w-5 h-5",
                                                             fill: "none",
@@ -1267,46 +1298,46 @@ function PrepListsPage() {
                                                                 strokeWidth: 2,
                                                                 d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 390,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 397,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
-                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                            lineNumber: 389,
+                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                            lineNumber: 396,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 384,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 391,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 374,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 381,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 361,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 368,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 306,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 316,
                                 columnNumber: 17
                             }, this)
-                        }, prepList.id, false, {
-                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                            lineNumber: 302,
+                        }, orderList.id, false, {
+                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                            lineNumber: 312,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 285,
+                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                    lineNumber: 295,
                     columnNumber: 9
                 }, this),
                 showForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1319,10 +1350,10 @@ function PrepListsPage() {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                         className: "text-xl font-semibold text-white",
-                                        children: editingPrepList ? t('prepLists.editPrepList', 'Edit Prep List') : t('prepLists.createPrepList', 'Create Prep List')
+                                        children: editingOrderList ? t('orderLists.editOrderList', 'Edit Order List') : t('orderLists.createOrderList', 'Create Order List')
                                     }, void 0, false, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 406,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 413,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1339,24 +1370,24 @@ function PrepListsPage() {
                                                 strokeWidth: 2,
                                                 d: "M6 18L18 6M6 6l12 12"
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 414,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 421,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
-                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                            lineNumber: 413,
+                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                            lineNumber: 420,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 409,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 416,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 405,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 412,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1370,57 +1401,57 @@ function PrepListsPage() {
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                         className: "block text-sm font-medium text-gray-300 mb-2",
-                                                        children: t('prepLists.kitchenSection', 'Kitchen Section')
+                                                        children: t('orderLists.supplier', 'Supplier')
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 422,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 429,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                                        value: formData.kitchenSectionId,
+                                                        value: formData.supplierId,
                                                         onChange: (e)=>setFormData({
                                                                 ...formData,
-                                                                kitchenSectionId: e.target.value
+                                                                supplierId: e.target.value
                                                             }),
                                                         className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
                                                         required: true,
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                                 value: "",
-                                                                children: t('prepLists.selectSection', 'Select a kitchen section')
+                                                                children: t('orderLists.selectSupplier', 'Select a supplier')
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 431,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 438,
                                                                 columnNumber: 23
                                                             }, this),
-                                                            kitchenSections.map((section)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                                    value: section.id,
-                                                                    children: section.name
-                                                                }, section.id, false, {
-                                                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                    lineNumber: 433,
+                                                            suppliers.map((supplier)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                    value: supplier.id,
+                                                                    children: supplier.name
+                                                                }, supplier.id, false, {
+                                                                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                    lineNumber: 440,
                                                                     columnNumber: 25
                                                                 }, this))
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 425,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 432,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 421,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 428,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                         className: "block text-sm font-medium text-gray-300 mb-2",
-                                                        children: t('prepLists.name', 'Prep List Name')
+                                                        children: t('orderLists.name', 'Order List Name')
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 441,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 448,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1431,33 +1462,33 @@ function PrepListsPage() {
                                                                 name: e.target.value
                                                             }),
                                                         className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                        placeholder: "e.g., Morning Prep - Hot Kitchen",
+                                                        placeholder: "e.g., Weekly Produce Order",
                                                         required: true
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 444,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 451,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 440,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 447,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 420,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 427,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                 className: "block text-sm font-medium text-gray-300 mb-2",
-                                                children: t('prepLists.notes', 'Notes')
+                                                children: t('orderLists.notes', 'Notes')
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 456,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 463,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1468,16 +1499,16 @@ function PrepListsPage() {
                                                     }),
                                                 className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
                                                 rows: 3,
-                                                placeholder: String(t('prepLists.notesPlaceholder', 'Optional notes about this prep list'))
+                                                placeholder: String(t('orderLists.notesPlaceholder', 'Optional notes about this order'))
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 459,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 466,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 455,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 462,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1487,10 +1518,10 @@ function PrepListsPage() {
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                         className: "text-lg font-semibold text-white",
-                                                        children: t('prepLists.items', 'Items')
+                                                        children: t('orderLists.items', 'Items')
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 471,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 478,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1499,17 +1530,17 @@ function PrepListsPage() {
                                                         className: "px-4 py-2 bg-[#29E7CD]/10 text-[#29E7CD] rounded-xl hover:bg-[#29E7CD]/20 transition-colors text-sm font-semibold",
                                                         children: [
                                                             "+ ",
-                                                            t('prepLists.addItem', 'Add Item')
+                                                            t('orderLists.addItem', 'Add Item')
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 472,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 479,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 470,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 477,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1525,10 +1556,10 @@ function PrepListsPage() {
                                                                         children: [
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                                                 className: "block text-xs text-gray-400 mb-1",
-                                                                                children: t('prepLists.ingredient', 'Ingredient')
+                                                                                children: t('orderLists.ingredient', 'Ingredient')
                                                                             }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 486,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 493,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1539,10 +1570,10 @@ function PrepListsPage() {
                                                                                 children: [
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                                                         value: "",
-                                                                                        children: t('prepLists.selectIngredient', 'Select ingredient')
+                                                                                        children: t('orderLists.selectIngredient', 'Select ingredient')
                                                                                     }, void 0, false, {
-                                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                        lineNumber: 493,
+                                                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                        lineNumber: 500,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     ingredients.map((ingredient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1554,30 +1585,30 @@ function PrepListsPage() {
                                                                                                 ")"
                                                                                             ]
                                                                                         }, ingredient.id, true, {
-                                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                            lineNumber: 495,
+                                                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                            lineNumber: 502,
                                                                                             columnNumber: 33
                                                                                         }, this))
                                                                                 ]
                                                                             }, void 0, true, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 487,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 494,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 485,
+                                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                        lineNumber: 492,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         children: [
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                                                 className: "block text-xs text-gray-400 mb-1",
-                                                                                children: t('prepLists.quantity', 'Quantity')
+                                                                                children: t('orderLists.quantity', 'Quantity')
                                                                             }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 502,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 509,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1589,24 +1620,24 @@ function PrepListsPage() {
                                                                                 placeholder: "0",
                                                                                 required: true
                                                                             }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 503,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 510,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 501,
+                                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                        lineNumber: 508,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         children: [
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                                                 className: "block text-xs text-gray-400 mb-1",
-                                                                                children: t('prepLists.unit', 'Unit')
+                                                                                children: t('orderLists.unit', 'Unit')
                                                                             }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 514,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 521,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1617,20 +1648,20 @@ function PrepListsPage() {
                                                                                 placeholder: "kg",
                                                                                 required: true
                                                                             }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 515,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 522,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 513,
+                                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                        lineNumber: 520,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 484,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 491,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1641,10 +1672,10 @@ function PrepListsPage() {
                                                                         value: item.notes,
                                                                         onChange: (e)=>updateItem(index, 'notes', e.target.value),
                                                                         className: "flex-1 px-3 py-2 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent mr-3",
-                                                                        placeholder: String(t('prepLists.itemNotes', 'Item notes (optional)'))
+                                                                        placeholder: String(t('orderLists.itemNotes', 'Item notes (optional)'))
                                                                     }, void 0, false, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 526,
+                                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                        lineNumber: 533,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1662,41 +1693,41 @@ function PrepListsPage() {
                                                                                 strokeWidth: 2,
                                                                                 d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                                             }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 539,
+                                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                                lineNumber: 546,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         }, void 0, false, {
-                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                            lineNumber: 538,
+                                                                            fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                            lineNumber: 545,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     }, void 0, false, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 533,
+                                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                        lineNumber: 540,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 525,
+                                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                                lineNumber: 532,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, index, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 483,
+                                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                        lineNumber: 490,
                                                         columnNumber: 23
                                                     }, this))
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 481,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 488,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 469,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 476,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1706,68 +1737,68 @@ function PrepListsPage() {
                                                 type: "button",
                                                 onClick: resetForm,
                                                 className: "flex-1 px-4 py-3 bg-[#2a2a2a] text-gray-300 rounded-xl hover:bg-[#2a2a2a]/80 transition-colors",
-                                                children: t('prepLists.cancel', 'Cancel')
+                                                children: t('orderLists.cancel', 'Cancel')
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 549,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 556,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 type: "submit",
                                                 className: "flex-1 px-4 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-xl hover:shadow-xl transition-all duration-200 font-semibold",
-                                                children: editingPrepList ? t('prepLists.update', 'Update') : t('prepLists.create', 'Create')
+                                                children: editingOrderList ? t('orderLists.update', 'Update') : t('orderLists.create', 'Create')
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 556,
+                                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                                lineNumber: 563,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 548,
+                                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                        lineNumber: 555,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 419,
+                                fileName: "[project]/app/webapp/order-lists/page.tsx",
+                                lineNumber: 426,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                        lineNumber: 404,
+                        fileName: "[project]/app/webapp/order-lists/page.tsx",
+                        lineNumber: 411,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 403,
+                    fileName: "[project]/app/webapp/order-lists/page.tsx",
+                    lineNumber: 410,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
-            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-            lineNumber: 262,
+            fileName: "[project]/app/webapp/order-lists/page.tsx",
+            lineNumber: 272,
             columnNumber: 7
         }, this)
     }, void 0, false, {
-        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-        lineNumber: 261,
+        fileName: "[project]/app/webapp/order-lists/page.tsx",
+        lineNumber: 271,
         columnNumber: 5
     }, this);
 }
-_s(PrepListsPage, "7GGwL9hWFc3XCFy3h73IIqMC9jA=", false, function() {
+_s(OrderListsPage, "/RKF/eQBSlLbK1pNruFJpAH5sss=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"]
     ];
 });
-_c = PrepListsPage;
+_c = OrderListsPage;
 var _c;
-__turbopack_context__.k.register(_c, "PrepListsPage");
+__turbopack_context__.k.register(_c, "OrderListsPage");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
 ]);
 
-//# sourceMappingURL=_0eeb0f89._.js.map
+//# sourceMappingURL=_68cc3854._.js.map

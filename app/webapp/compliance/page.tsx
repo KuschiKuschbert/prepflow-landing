@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import OptimizedImage from '@/components/OptimizedImage';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 interface ComplianceType {
   id: number;
@@ -189,16 +190,9 @@ export default function ComplianceTrackingPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-[#2a2a2a] rounded-3xl w-1/3 mb-8"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-                  <div className="h-4 bg-[#2a2a2a] rounded-xl w-3/4 mb-3"></div>
-                  <div className="h-20 bg-[#2a2a2a] rounded-xl"></div>
-                </div>
-              ))}
-            </div>
+          <LoadingSkeleton variant="stats" height="64px" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <LoadingSkeleton variant="card" count={4} height="120px" />
           </div>
         </div>
       </div>
