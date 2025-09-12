@@ -7,6 +7,8 @@ import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
 import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
 import WebVitalsTracker from '../components/WebVitalsTracker';
+import PerformanceOptimizer from '../components/PerformanceOptimizer';
+import PerformanceDashboard from '../components/PerformanceDashboard';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -106,9 +108,12 @@ export default function RootLayout({
       <body
         className="geist-sans-variable geist-mono-variable antialiased"
       >
-        <ClientPerformanceTracker />
-        <WebVitalsTracker />
-        {children}
+        <PerformanceOptimizer>
+          <ClientPerformanceTracker />
+          <WebVitalsTracker />
+          {children}
+          <PerformanceDashboard />
+        </PerformanceOptimizer>
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
         <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />

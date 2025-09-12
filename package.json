@@ -19,6 +19,7 @@
     "lighthouse:desktop": "lighthouse http://localhost:3000 --view --emulated-form-factor=desktop",
     "perf:test": "npm run build && npm run lighthouse",
     "perf:analyze": "npm run build && npm run analyze",
+    "perf:optimize": "node scripts/optimize-performance.js",
     "bundle:analyze": "ANALYZE=true npm run build",
     "bundle:size": "npm run build && npm run analyze"
   },
@@ -57,6 +58,7 @@
     "lighthouse": "^12.0.0",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.8",
+    "sharp": "^0.34.3",
     "tailwindcss": "^4.1.13",
     "ts-jest": "^29.2.5",
     "typescript": "^5.9.2"

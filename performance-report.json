@@ -1,0 +1,186 @@
+{
+  "timestamp": "2025-09-12T14:49:13.934Z",
+  "bundleAnalysis": {
+    "hasAnalysis": true,
+    "files": [
+      "client.html",
+      "edge.html",
+      "nodejs.html"
+    ],
+    "totalSize": 1627905,
+    "chunkSizes": [
+      {
+        "name": "chunks",
+        "size": 2312948
+      }
+    ],
+    "totalChunkSize": 2312948
+  },
+  "recommendations": [
+    {
+      "type": "bundle-size",
+      "priority": "high",
+      "title": "Bundle size is large",
+      "description": "Total chunk size is 2259KB",
+      "action": "Consider code splitting and lazy loading"
+    }
+  ],
+  "optimizations": [],
+  "imageAnalysis": {
+    "totalImages": 23,
+    "totalSize": 12615665,
+    "optimizedImages": 12,
+    "images": [
+      {
+        "path": "public/favicon.svg",
+        "size": 329600,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/globe.svg",
+        "size": 1035,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/icons/icon-144x144.avif",
+        "size": 41577,
+        "extension": ".avif",
+        "optimized": true
+      },
+      {
+        "path": "public/icons/icon-144x144.png",
+        "size": 964914,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/icons/icon-144x144.webp",
+        "size": 43080,
+        "extension": ".webp",
+        "optimized": true
+      },
+      {
+        "path": "public/images/dashboard-screenshot.avif",
+        "size": 116742,
+        "extension": ".avif",
+        "optimized": true
+      },
+      {
+        "path": "public/images/dashboard-screenshot.png",
+        "size": 1043676,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/images/dashboard-screenshot.webp",
+        "size": 149876,
+        "extension": ".webp",
+        "optimized": true
+      },
+      {
+        "path": "public/images/prepflow-logo.avif",
+        "size": 41577,
+        "extension": ".avif",
+        "optimized": true
+      },
+      {
+        "path": "public/images/prepflow-logo.png",
+        "size": 964914,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/images/prepflow-logo.webp",
+        "size": 43080,
+        "extension": ".webp",
+        "optimized": true
+      },
+      {
+        "path": "public/images/recipe-screenshot.avif",
+        "size": 191397,
+        "extension": ".avif",
+        "optimized": true
+      },
+      {
+        "path": "public/images/recipe-screenshot.png",
+        "size": 2154693,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/images/recipe-screenshot.webp",
+        "size": 264744,
+        "extension": ".webp",
+        "optimized": true
+      },
+      {
+        "path": "public/images/settings-screenshot.avif",
+        "size": 302866,
+        "extension": ".avif",
+        "optimized": true
+      },
+      {
+        "path": "public/images/settings-screenshot.png",
+        "size": 2721990,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/images/settings-screenshot.webp",
+        "size": 431764,
+        "extension": ".webp",
+        "optimized": true
+      },
+      {
+        "path": "public/images/stocklist-screenshot.avif",
+        "size": 188369,
+        "extension": ".avif",
+        "optimized": true
+      },
+      {
+        "path": "public/images/stocklist-screenshot.png",
+        "size": 2297763,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/images/stocklist-screenshot.webp",
+        "size": 320120,
+        "extension": ".webp",
+        "optimized": true
+      },
+      {
+        "path": "public/next.svg",
+        "size": 1375,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/vercel.svg",
+        "size": 128,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/window.svg",
+        "size": 385,
+        "extension": ".svg",
+        "optimized": false
+      }
+    ]
+  },
+  "fontAnalysis": {
+    "totalFonts": 0,
+    "totalSize": 0,
+    "optimizedFonts": 0,
+    "fonts": []
+  },
+  "criticalResources": {
+    "hasPreload": true,
+    "hasPrefetch": true,
+    "hasCriticalCSS": true,
+    "hasServiceWorker": true
+  }
+}

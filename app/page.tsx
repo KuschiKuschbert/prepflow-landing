@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from '../components/OptimizedImage';
 import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
@@ -93,7 +93,6 @@ export default function Page() {
   return (
     <>
       {/* Performance & Analytics Components */}
-      <PerformanceOptimizer />
       <ScrollProgress />
       <ExitIntentTracker 
         onExitIntent={() => {
@@ -152,13 +151,13 @@ export default function Page() {
         {/* Header */}
         <header className="flex items-center justify-between py-8" role="banner">
           <div className="flex items-center gap-3">
-            <Image 
+            <OptimizedImage 
               src="/images/prepflow-logo.png" 
               alt={String(t('logo.alt', 'PrepFlow Logo'))}
               width={48}
               height={48}
               className="h-12 w-auto"
-              priority
+              priority={true}
             />
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
               PrepFlow

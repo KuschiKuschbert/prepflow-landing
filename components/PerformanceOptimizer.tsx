@@ -1,99 +1,199 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { performanceMonitor, type PerformanceMetrics } from '@/lib/performance-monitor';
 
 interface PerformanceOptimizerProps {
-  enabled?: boolean;
+  children: React.ReactNode;
+  enableOptimizations?: boolean;
 }
 
-export default function PerformanceOptimizer({ enabled = true }: PerformanceOptimizerProps) {
+export default function PerformanceOptimizer({ 
+  children, 
+  enableOptimizations = true 
+}: PerformanceOptimizerProps) {
+  const [metrics, setMetrics] = useState<PerformanceMetrics>({
+    lcp: null,
+    fid: null,
+    cls: null,
+    fcp: null,
+    ttfb: null,
+    inp: null,
+  });
+
   useEffect(() => {
-    if (!enabled || typeof window === 'undefined') return;
+    if (!enableOptimizations || typeof window === 'undefined') return;
 
-    // Preload critical resources
-    const preloadCriticalResources = () => {
-      // Preload critical fonts
-      const fontLink = document.createElement('link');
-      fontLink.rel = 'preload';
-      fontLink.href = 'https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&display=swap';
-      fontLink.as = 'style';
-      document.head.appendChild(fontLink);
+    // Subscribe to performance metrics
+    const unsubscribe = performanceMonitor.subscribe(setMetrics);
 
-      // Preload critical images
-      const criticalImages = [
-        '/images/prepflow-logo.png',
-        '/images/dashboard-screenshot.png'
-      ];
+    // Apply performance optimizations
+    applyPerformanceOptimizations();
 
-      criticalImages.forEach(src => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.href = src;
-        link.as = 'image';
-        document.head.appendChild(link);
-      });
-    };
+    return unsubscribe;
+  }, [enableOptimizations]);
 
-    // Optimize images for better LCP
-    const optimizeImages = () => {
-      const images = document.querySelectorAll('img[data-src]');
-      images.forEach(img => {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const imgElement = entry.target as HTMLImageElement;
-              imgElement.src = imgElement.dataset.src!;
-              imgElement.classList.remove('lazy');
-              observer.unobserve(imgElement);
-            }
-          });
-        });
-        observer.observe(img);
-      });
-    };
+  // Apply dynamic optimizations based on performance
+  useEffect(() => {
+    if (!enableOptimizations || typeof window === 'undefined') return;
 
-    // Optimize scroll performance
-    const optimizeScroll = () => {
-      let ticking = false;
-      
-      const updateScroll = () => {
-        // Add scroll optimization logic here
-        ticking = false;
-      };
+    const { lcp, cls, fcp } = metrics;
 
-      const requestTick = () => {
-        if (!ticking) {
-          requestAnimationFrame(updateScroll);
-          ticking = true;
-        }
-      };
+    // If LCP is poor, reduce image quality
+    if (lcp && lcp > 2500) {
+      document.documentElement.style.setProperty('--image-quality', '0.7');
+    }
 
-      window.addEventListener('scroll', requestTick, { passive: true });
-    };
+    // If CLS is poor, add layout stability
+    if (cls && cls > 0.1) {
+      document.documentElement.style.setProperty('--layout-stability', '1');
+    }
 
-    // Optimize animations for better performance
-    const optimizeAnimations = () => {
-      // Check if user prefers reduced motion
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      if (prefersReducedMotion) {
-        document.documentElement.style.setProperty('--animation-duration', '0.01ms');
-        document.documentElement.style.setProperty('--transition-duration', '0.01ms');
+    // If FCP is poor, defer non-critical resources
+    if (fcp && fcp > 1800) {
+      deferNonCriticalResources();
+    }
+  }, [metrics, enableOptimizations]);
+
+  return <>{children}</>;
+}
+
+function applyPerformanceOptimizations() {
+  // Preload critical resources
+  preloadCriticalResources();
+
+  // Optimize images
+  optimizeImages();
+
+  // Defer non-critical JavaScript
+  deferNonCriticalJS();
+
+  // Optimize fonts
+  optimizeFonts();
+
+  // Add resource hints
+  addResourceHints();
+}
+
+function preloadCriticalResources() {
+  const criticalResources = [
+    { href: '/fonts/geist-sans.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
+    { href: '/fonts/geist-mono.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
+  ];
+
+  criticalResources.forEach(resource => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.href = resource.href;
+    link.as = resource.as;
+    if (resource.type) link.type = resource.type;
+    if (resource.crossorigin) link.crossOrigin = resource.crossorigin;
+    document.head.appendChild(link);
+  });
+}
+
+function optimizeImages() {
+  // Lazy load images below the fold
+  const images = document.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target as HTMLImageElement;
+        img.src = img.dataset.src || '';
+        img.classList.remove('lazy');
+        imageObserver.unobserve(img);
       }
-    };
+    });
+  });
 
-    // Initialize all optimizations
-    preloadCriticalResources();
-    optimizeImages();
-    optimizeScroll();
-    optimizeAnimations();
+  images.forEach(img => imageObserver.observe(img));
+}
 
-    // Cleanup function
-    return () => {
-      // Remove any event listeners if needed
-    };
-  }, [enabled]);
+function deferNonCriticalJS() {
+  // Defer analytics scripts
+  const analyticsScripts = document.querySelectorAll('script[data-defer]');
+  analyticsScripts.forEach(script => {
+    script.setAttribute('defer', '');
+  });
+}
 
-  // This component doesn't render anything visible
-  return null;
+function optimizeFonts() {
+  // Add font-display: swap to prevent FOIT
+  const style = document.createElement('style');
+  style.textContent = `
+    @font-face {
+      font-family: 'Geist Sans';
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist Mono';
+      font-display: swap;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function addResourceHints() {
+  // Add DNS prefetch for external domains
+  const externalDomains = [
+    'https://fonts.googleapis.com',
+    'https://fonts.gstatic.com',
+    'https://www.googletagmanager.com',
+    'https://www.google-analytics.com',
+  ];
+
+  externalDomains.forEach(domain => {
+    const link = document.createElement('link');
+    link.rel = 'dns-prefetch';
+    link.href = domain;
+    document.head.appendChild(link);
+  });
+}
+
+function deferNonCriticalResources() {
+  // Defer non-critical CSS
+  const nonCriticalCSS = document.querySelectorAll('link[rel="stylesheet"][data-defer]');
+  nonCriticalCSS.forEach(link => {
+    link.setAttribute('media', 'print');
+    link.setAttribute('onload', "this.media='all'");
+  });
+
+  // Defer non-critical JavaScript
+  const nonCriticalJS = document.querySelectorAll('script[data-defer]');
+  nonCriticalJS.forEach(script => {
+    script.setAttribute('defer', '');
+  });
+}
+
+// Performance optimization hooks
+export function usePerformanceOptimization() {
+  const [metrics, setMetrics] = useState<PerformanceMetrics>({
+    lcp: null,
+    fid: null,
+    cls: null,
+    fcp: null,
+    ttfb: null,
+    inp: null,
+  });
+
+  const [score, setScore] = useState(0);
+  const [grade, setGrade] = useState<'A' | 'B' | 'C' | 'D' | 'F'>('F');
+
+  useEffect(() => {
+    const unsubscribe = performanceMonitor.subscribe((newMetrics) => {
+      setMetrics(newMetrics);
+      setScore(performanceMonitor.getPerformanceScore());
+      setGrade(performanceMonitor.getPerformanceGrade());
+    });
+
+    return unsubscribe;
+  }, []);
+
+  return {
+    metrics,
+    score,
+    grade,
+    isGoodPerformance: score >= 80,
+    isPoorPerformance: score < 60,
+  };
 }

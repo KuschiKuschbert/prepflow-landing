@@ -2,7 +2,7 @@
 
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import Image from "next/image";
+import OptimizedImage from "../../components/OptimizedImage";
 import { useState, useEffect, useRef } from "react";
 import "../globals.css";
 import { useTranslation } from "@/lib/useTranslation";
@@ -48,13 +48,13 @@ export default function WebAppLayout({
               <div className="flex justify-between items-center">
                 {/* Logo */}
                 <Link href="/webapp" className="flex items-center space-x-3">
-                  <Image
+                  <OptimizedImage
                     src="/images/prepflow-logo.png"
                     alt="PrepFlow Logo"
                     width={140}
                     height={45}
                     className="h-9 w-auto"
-                    priority
+                    priority={true}
                   />
                 </Link>
 
@@ -197,13 +197,13 @@ export default function WebAppLayout({
           <div className="md:hidden">
             <div className="px-4 py-3 flex justify-between items-center">
               <Link href="/webapp" className="flex items-center">
-                <Image
+                <OptimizedImage
                   src="/images/prepflow-logo.png"
                   alt="PrepFlow Logo"
                   width={100}
                   height={32}
                   className="h-6 w-auto"
-                  priority
+                  priority={true}
                 />
               </Link>
               <div className="flex items-center space-x-2">
