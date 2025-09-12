@@ -67,10 +67,10 @@
   animation: none !important;
 }
 
-/* Only show charts when explicitly loaded */
-.temperature-chart-container.loaded .recharts-wrapper {
-  opacity: 1 !important;
-  visibility: visible !important;
+/* Temperature charts are always visible */
+.temperature-chart-container .recharts-wrapper {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* FOUC prevention handled by component-level loading states */

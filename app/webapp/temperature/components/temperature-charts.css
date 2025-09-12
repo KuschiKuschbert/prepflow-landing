@@ -28,10 +28,10 @@
   opacity: 0;
 }
 
-.temperature-chart-container.loaded .recharts-cartesian-axis,
-.temperature-chart-container.loaded .recharts-cartesian-grid,
-.temperature-chart-container.loaded .recharts-line,
-.temperature-chart-container.loaded .recharts-dot {
+.temperature-chart-container .recharts-cartesian-axis,
+.temperature-chart-container .recharts-cartesian-grid,
+.temperature-chart-container .recharts-line,
+.temperature-chart-container .recharts-dot {
   opacity: 1;
 }
 
