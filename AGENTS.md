@@ -363,7 +363,9 @@ interface TrackingEvent {
 
 ## 🔧 **Development Workflow**
 
-### **🚨 CRITICAL: Git Best Practices (MANDATORY)**
+### **🚨 CRITICAL: Mandatory Development Practices (NON-NEGOTIABLE)**
+
+#### **1. Git Best Practices (MANDATORY)**
 **ALL development work MUST follow this workflow to prevent code destruction:**
 
 1. **Create Feature Branch:** `git checkout -b improvement/feature-name`
@@ -376,6 +378,76 @@ interface TrackingEvent {
 8. **Push Changes:** `git push origin main` when ready
 
 **NEVER work directly on main branch for improvements!**
+
+#### **2. File Refactoring Standards (MANDATORY)**
+**ALL files MUST be refactored when they exceed size limits:**
+
+**File Size Limits:**
+- **Page Components:** Maximum 500 lines
+- **Complex Components:** Maximum 300 lines
+- **API Routes:** Maximum 200 lines
+- **Utility Functions:** Maximum 150 lines
+- **Hooks:** Maximum 100 lines
+
+**Mandatory Refactoring Triggers:**
+- ✅ **Page exceeds 500 lines** → Split into smaller components
+- ✅ **Component exceeds 300 lines** → Extract sub-components and hooks
+- ✅ **API route exceeds 200 lines** → Split into multiple endpoints
+- ✅ **Function exceeds 150 lines** → Break into smaller functions
+- ✅ **Hook exceeds 100 lines** → Split into multiple specialized hooks
+
+**Refactoring Requirements:**
+1. **Component Splitting:** Break large components into logical sub-components
+2. **Hook Extraction:** Extract reusable logic into custom hooks
+3. **Type Definitions:** Create separate `.types.ts` files for complex interfaces
+4. **Utility Functions:** Move helper functions to separate utility files
+5. **Error Boundaries:** Wrap complex components with error boundaries
+6. **Loading States:** Implement proper loading and error handling
+7. **Documentation:** Update component documentation and prop interfaces
+
+**Refactoring Workflow:**
+1. **Create refactoring branch:** `git checkout -b refactor/component-name`
+2. **Analyze current structure:** Identify logical separation points
+3. **Create new files:** Components, hooks, types, utilities
+4. **Update imports:** Fix all import statements
+5. **Test thoroughly:** Ensure functionality remains intact
+6. **Update documentation:** Keep AGENTS.md current
+7. **Merge and clean:** Merge to main, delete old files
+
+**Example Refactoring Pattern:**
+```typescript
+// Before: Large component (800+ lines)
+// app/webapp/recipes/page.tsx
+
+// After: Refactored structure
+// app/webapp/recipes/
+//   ├── page.tsx (160 lines - main page)
+//   ├── types.ts (50 lines - TypeScript interfaces)
+//   ├── components/
+//   │   ├── RecipeCard.tsx (80 lines)
+//   │   ├── RecipeTable.tsx (120 lines)
+//   │   ├── RecipeForm.tsx (150 lines)
+//   │   └── RecipePreviewModal.tsx (100 lines)
+//   └── hooks/
+//       ├── useRecipeManagement.ts (80 lines)
+//       └── useAIInstructions.ts (60 lines)
+```
+
+**Code Quality Enforcement:**
+- **Pre-commit hooks:** Automatically check file sizes
+- **CI/CD pipeline:** Fail builds if files exceed limits
+- **Code reviews:** Mandatory review of refactored code
+- **Performance monitoring:** Track bundle size impact
+
+**Benefits of Mandatory Refactoring:**
+- ✅ **Maintainability:** Smaller files are easier to understand and modify
+- ✅ **Debugging:** Easier to isolate and fix issues in smaller components
+- ✅ **Testing:** Smaller components are easier to unit test
+- ✅ **Performance:** Better tree-shaking and code splitting
+- ✅ **Collaboration:** Multiple developers can work on different components
+- ✅ **Reusability:** Extracted hooks and utilities can be reused across the app
+- ✅ **Bundle Size:** Smaller, more focused bundles improve loading performance
+- ✅ **Code Safety:** Git branching prevents code destruction during refactoring
 
 ### **Git Strategy**
 - **Main Branch:** Production-ready code (protected)
@@ -694,15 +766,17 @@ if (error) {
 - **Include actionable instructions** when possible
 - **Use proper HTTP status codes** (400 for client errors, 500 for server errors)
 
-#### **Development Workflow**
+#### **Development Workflow (MANDATORY)**
 1. **🚨 MANDATORY: Create feature branch** - Never work directly on main
-2. **Test locally first** - Always test changes locally
-3. **Check environment variables** - Ensure all keys are loaded
-4. **Verify database connection** - Test Supabase connectivity
-5. **Test API endpoints** - Use curl or Postman for testing
-6. **Commit and test branch** - Verify functionality before merging
-7. **Merge to main and test** - Ensure stability after merge
-8. **Update documentation** - Keep AGENTS.md current with changes
+2. **🚨 MANDATORY: Check file sizes** - Refactor if any file exceeds limits
+3. **Test locally first** - Always test changes locally
+4. **Check environment variables** - Ensure all keys are loaded
+5. **Verify database connection** - Test Supabase connectivity
+6. **Test API endpoints** - Use curl or Postman for testing
+7. **Commit and test branch** - Verify functionality before merging
+8. **Merge to main and test** - Ensure stability after merge
+9. **Update documentation** - Keep AGENTS.md current with changes
+10. **Clean up refactored files** - Delete old files after successful refactoring
 
 #### **Current Known Issues & Solutions**
 - **"supabaseKey is required"** - Fixed with complete service role key
