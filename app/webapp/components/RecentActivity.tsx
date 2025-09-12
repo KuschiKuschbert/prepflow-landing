@@ -23,21 +23,21 @@ export default function RecentActivity() {
         // Fetch recent ingredients
         const { data: ingredients, error: ingredientsError } = await supabase
           .from('ingredients')
-          .select('id, ingredient_name as name, created_at, updated_at')
+          .select('id, ingredient_name, created_at, updated_at')
           .order('updated_at', { ascending: false })
           .limit(3);
 
         // Fetch recent recipes
         const { data: recipes, error: recipesError } = await supabase
           .from('recipes')
-          .select('id, recipe_name as name, created_at, updated_at')
+          .select('id, recipe_name, created_at, updated_at')
           .order('updated_at', { ascending: false })
           .limit(3);
 
         // Fetch recent menu dishes
         const { data: menuDishes, error: menuDishesError } = await supabase
           .from('menu_dishes')
-          .select('id, dish_name as name, created_at, updated_at')
+          .select('id, dish_name, created_at, updated_at')
           .order('updated_at', { ascending: false })
           .limit(3);
 
@@ -53,21 +53,21 @@ export default function RecentActivity() {
           ...(ingredients || []).filter((item): item is any => item && typeof item === 'object' && 'id' in item).map(item => ({
             id: String(item.id),
             type: 'ingredient' as const,
-            name: String(item.name || 'Unknown'),
+            name: String(item.ingredient_name || 'Unknown'),
             action: 'updated' as const,
             created_at: item.updated_at || item.created_at || new Date().toISOString()
           })),
           ...(recipes || []).filter((item): item is any => item && typeof item === 'object' && 'id' in item).map(item => ({
             id: String(item.id),
             type: 'recipe' as const,
-            name: String(item.name || 'Unknown'),
+            name: String(item.recipe_name || 'Unknown'),
             action: 'updated' as const,
             created_at: item.updated_at || item.created_at || new Date().toISOString()
           })),
           ...(menuDishes || []).filter((item): item is any => item && typeof item === 'object' && 'id' in item).map(item => ({
             id: String(item.id),
             type: 'menu_dish' as const,
-            name: String(item.name || 'Unknown'),
+            name: String(item.dish_name || 'Unknown'),
             action: 'updated' as const,
             created_at: item.updated_at || item.created_at || new Date().toISOString()
           }))
