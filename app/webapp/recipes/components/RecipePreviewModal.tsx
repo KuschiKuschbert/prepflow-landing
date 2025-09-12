@@ -16,7 +16,7 @@ interface RecipePreviewModalProps {
   onEditFromPreview: () => void;
   onShareRecipe: () => void;
   onPrint: () => void;
-  onUpdatePreviewYield: (yield: number) => void;
+  onUpdatePreviewYield: (newYield: number) => void;
   capitalizeRecipeName: (name: string) => string;
   formatQuantity: (quantity: number, unit: string) => {
     value: string;
