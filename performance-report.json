@@ -1,20 +1,13 @@
 {
-  "timestamp": "2025-09-12T14:49:13.934Z",
+  "timestamp": "2025-09-12T15:06:32.355Z",
   "bundleAnalysis": {
-    "hasAnalysis": true,
-    "files": [
-      "client.html",
-      "edge.html",
-      "nodejs.html"
-    ],
-    "totalSize": 1627905,
     "chunkSizes": [
       {
         "name": "chunks",
-        "size": 2312948
+        "size": 2312952
       }
     ],
-    "totalChunkSize": 2312948
+    "totalChunkSize": 2312952
   },
   "recommendations": [
     {

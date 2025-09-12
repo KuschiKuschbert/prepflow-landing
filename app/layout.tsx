@@ -108,12 +108,12 @@ export default function RootLayout({
       <body
         className="geist-sans-variable geist-mono-variable antialiased"
       >
-        <PerformanceOptimizer>
-          <ClientPerformanceTracker />
-          <WebVitalsTracker />
-          {children}
-          <PerformanceDashboard />
-        </PerformanceOptimizer>
+            <PerformanceOptimizer>
+              <ClientPerformanceTracker />
+              <WebVitalsTracker />
+              {children}
+              <PerformanceDashboard />
+            </PerformanceOptimizer>
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
         <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />

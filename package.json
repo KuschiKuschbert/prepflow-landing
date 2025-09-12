@@ -20,7 +20,8 @@
     "perf:test": "npm run build && npm run lighthouse",
     "perf:analyze": "npm run build && npm run analyze",
     "perf:optimize": "node scripts/optimize-performance.js",
-    "bundle:analyze": "ANALYZE=true npm run build",
+    "bundle:analyze": "node scripts/analyze-bundle.js",
+    "bundle:webpack": "ANALYZE=true npm run build",
     "bundle:size": "npm run build && npm run analyze"
   },
   "dependencies": {

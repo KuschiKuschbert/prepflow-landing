@@ -6,7 +6,10 @@ import OptimizedImage from '../components/OptimizedImage';
 import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
-import PerformanceOptimizer from '../components/PerformanceOptimizer';
+import { MobileNavigation } from '../components/ui/MobileNavigation';
+import { FloatingCTA } from '../components/ui/FloatingCTA';
+import { ScrollToTop } from '../components/ui/ScrollToTop';
+import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { useLandingPageABTest } from '../components/useABTest';
 import LeadMagnetForm from '../components/LeadMagnetForm';
 import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
@@ -15,10 +18,6 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 
 // Import UI components
 import { HeroSkeleton, PricingSkeleton } from '../components/ui/LoadingSkeleton';
-import { MobileNavigation } from '../components/ui/MobileNavigation';
-import { FloatingCTA } from '../components/ui/FloatingCTA';
-import { ScrollToTop } from '../components/ui/ScrollToTop';
-import { ScrollProgress } from '../components/ui/ScrollProgress';
 
 // Variant components are now lazy-loaded via useABTest hook
 

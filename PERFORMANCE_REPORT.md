@@ -1,13 +1,13 @@
 # PrepFlow Performance Report
 
-Generated: 2025-09-12T14:49:13.934Z
+Generated: 2025-09-12T15:06:32.355Z
 
 ## 📊 Bundle Analysis
 
 
 - **Total Chunk Size**: 2259KB
 - **Chunks**: 1
-- **Bundle Analysis**: ✅ Available
+- **Bundle Analysis**: ❌ Not available
 
 
 ## 🖼️ Image Analysis
