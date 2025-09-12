@@ -1,0 +1,3 @@
+{
+  "/api/create-missing-tables/route": "app/api/create-missing-tables/route.js"
+}
