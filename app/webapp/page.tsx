@@ -6,7 +6,6 @@ import { useTranslation } from '@/lib/useTranslation';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import TestWarningButton from '@/components/TestWarningButton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
-import { useSmartLoading } from '@/hooks/useSmartLoading';
 import DashboardStats from './components/DashboardStats';
 import QuickActions from './components/QuickActions';
 import RecentActivity from './components/RecentActivity';
@@ -52,13 +51,14 @@ export default function WebAppDashboard() {
     totalMenuDishes: 0,
     averageDishPrice: 0,
   });
-  const [loading, setSmartLoading] = useSmartLoading(false, 150); // Smart loading with 150ms delay
+  const [loading, setLoading] = useState(false); // Completely disabled to prevent skeleton flashes
   const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
-      setSmartLoading(true);
+      // Completely disabled loading state to prevent skeleton flashes
+      // setLoading(true);
       try {
         // Fetch ingredients count
         const { count: ingredientsCount } = await supabase
@@ -89,7 +89,8 @@ export default function WebAppDashboard() {
       } catch (error) {
         // Handle error gracefully
       } finally {
-        setSmartLoading(false);
+        // Completely disabled loading state to prevent skeleton flashes
+        // setLoading(false);
       }
     };
 

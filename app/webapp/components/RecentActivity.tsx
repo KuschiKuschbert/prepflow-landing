@@ -16,7 +16,7 @@ interface RecentActivity {
 export default function RecentActivity() {
   const { t } = useTranslation();
   const [activities, setActivities] = useState<RecentActivity[]>([]);
-  const [loading, setLoading] = useState(false); // Disable smart loading to prevent skeleton flashes
+  const [loading, setLoading] = useState(false); // Completely disabled to prevent skeleton flashes
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function RecentActivity() {
     if (hasError) return;
     
     const fetchRecentActivity = async () => {
-      // Don't set loading to true to prevent skeleton flashes during API errors
+      // Completely disabled loading state to prevent skeleton flashes
       // setLoading(true);
       try {
         // Fetch recent ingredients
@@ -94,7 +94,7 @@ export default function RecentActivity() {
       } catch (error) {
         // Handle error gracefully
       } finally {
-        // Don't set loading to false since we never set it to true
+        // Completely disabled loading state to prevent skeleton flashes
         // setLoading(false);
       }
     };
@@ -131,13 +131,14 @@ export default function RecentActivity() {
     return date.toLocaleDateString();
   };
 
-  if (loading) {
-    return (
-      <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-        <LoadingSkeleton variant="list" count={5} height="64px" />
-      </div>
-    );
-  }
+  // Completely disabled loading state to prevent skeleton flashes
+  // if (loading) {
+  //   return (
+  //     <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
+  //       <LoadingSkeleton variant="list" count={5} height="64px" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
