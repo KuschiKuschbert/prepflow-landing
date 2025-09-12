@@ -104,7 +104,7 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
   // Handle loading state to prevent FOUC and stray chart elements
   useEffect(() => {
     // Only show chart when we have actual data and equipment info
-    if (filteredLogs.length > 0 && equipment && equipment.id) {
+    if (filteredLogs.length > 0 && equipment && equipment.name) {
       const timer = setTimeout(() => {
         setIsLoaded(true);
       }, 200); // Small delay to ensure content is ready
@@ -113,7 +113,7 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
     } else {
       setIsLoaded(false);
     }
-  }, [filteredLogs.length, equipment?.id, timeFilter]);
+  }, [filteredLogs.length, equipment?.name, timeFilter]);
 
   const isTemperatureInRange = (temp: number) => {
     if (equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) {
@@ -328,7 +328,7 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
 
 
   // Don't render chart if not loaded, no data, or invalid equipment
-  if (!isLoaded || chartData.length === 0 || !equipment || !equipment.id) {
+  if (!isLoaded || chartData.length === 0 || !equipment || !equipment.name) {
     return (
       <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
         <div className="animate-pulse">
