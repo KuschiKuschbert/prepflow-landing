@@ -4,35 +4,23 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageSkeleton, LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import TestWarningButton from '@/components/TestWarningButton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 
 // Dynamic imports for heavy components
 const DashboardStats = dynamic(() => import('./components/DashboardStats'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-32 bg-[#2a2a2a] rounded-3xl mb-6"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="stats" count={4} />,
   ssr: false
 });
 
 const QuickActions = dynamic(() => import('./components/QuickActions'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-48 bg-[#2a2a2a] rounded-3xl mb-6"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="card" height="192px" />,
   ssr: false
 });
 
 const RecentActivity = dynamic(() => import('./components/RecentActivity'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-64 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="list" count={4} height="64px" />,
   ssr: false
 });
 

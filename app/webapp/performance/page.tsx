@@ -3,24 +3,16 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageSkeleton, LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Dynamic imports for chart components
 const BarChart = dynamic(() => import('recharts').then(mod => ({ default: mod.BarChart })), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-80 bg-[#2a2a2a] rounded-2xl"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="chart" height="320px" />,
   ssr: false
 });
 
 const PieChart = dynamic(() => import('recharts').then(mod => ({ default: mod.PieChart })), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-80 bg-[#2a2a2a] rounded-2xl"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="chart" height="320px" />,
   ssr: false
 });
 

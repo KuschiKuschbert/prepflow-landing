@@ -5,23 +5,16 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import dynamic from 'next/dynamic';
 import { TemperatureLog, TemperatureEquipment } from './types';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Dynamic imports for heavy components
 const TemperatureLogsTab = dynamic(() => import('./components/TemperatureLogsTab'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="table" height="384px" />,
   ssr: false
 });
 
 const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEquipmentTab'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="table" height="384px" />,
   ssr: false
 });
 
