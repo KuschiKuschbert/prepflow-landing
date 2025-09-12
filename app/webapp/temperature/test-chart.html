@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Temperature Chart</title>
+    <script src="https://unpkg.com/recharts@2.8.0/umd/Recharts.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #0a0a0a; color: white; }
+        .chart-container { width: 100%; height: 400px; }
+    </style>
+</head>
+<body>
+    <h1>Temperature Chart Test</h1>
+    <div class="chart-container">
+        <div id="chart"></div>
+    </div>
+
+    <script>
+        // Test data
+        const testData = [
+            { timestamp: "2025-09-11 08:00", temperature: -17.5, location: "Freezer Downstairs" },
+            { timestamp: "2025-09-11 12:00", temperature: -18.2, location: "Freezer Downstairs" },
+            { timestamp: "2025-09-11 16:00", temperature: -17.8, location: "Freezer Downstairs" },
+            { timestamp: "2025-09-11 20:00", temperature: -16.9, location: "Freezer Downstairs" }
+        ];
+
+        console.log('Test data:', testData);
+
+        // Render chart using Recharts
+        const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
+        
+        const chartElement = document.getElementById('chart');
+        
+        const chart = React.createElement(ResponsiveContainer, { width: "100%", height: "100%" },
+            React.createElement(LineChart, { data: testData },
+                React.createElement(CartesianGrid, { strokeDasharray: "3 3", stroke: "#2a2a2a" }),
+                React.createElement(XAxis, { dataKey: "timestamp", stroke: "#9ca3af" }),
+                React.createElement(YAxis, { stroke: "#9ca3af", tickFormatter: (value) => `${value}°C` }),
+                React.createElement(Tooltip, { 
+                    contentStyle: {
+                        backgroundColor: 'rgba(31, 31, 31, 0.95)',
+                        border: '1px solid #29E7CD',
+                        borderRadius: '8px',
+                        color: '#ffffff'
+                    }
+                }),
+                React.createElement(Line, { 
+                    type: "monotone", 
+                    dataKey: "temperature", 
+                    stroke: "#29E7CD", 
+                    strokeWidth: 2,
+                    dot: { fill: "#29E7CD", stroke: "#ffffff", strokeWidth: 2, r: 4 }
+                })
+            )
+        );
+
+        ReactDOM.render(chart, chartElement);
+    </script>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</body>
+</html>

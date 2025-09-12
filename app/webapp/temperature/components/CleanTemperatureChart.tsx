@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import { format } from 'date-fns';
 import './temperature-charts.css';
+import ChartJSTemperatureChart from './ChartJSTemperatureChart';
 
 interface CleanTemperatureChartProps {
   logs: TemperatureLog[];
@@ -482,6 +483,17 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
       <div className="mb-4 p-2 bg-gray-800 rounded text-xs">
         <div>Debug: {enhancedData.length} data points</div>
         <div>Sample: {JSON.stringify(enhancedData.slice(0, 2))}</div>
+        <div>Recharts Test: {enhancedData.length > 0 ? 'Data available' : 'No data'}</div>
+      </div>
+
+      {/* Chart.js Test Chart */}
+      <div className="mb-4 p-4 bg-gray-900 rounded">
+        <h3 className="text-sm text-gray-300 mb-2">Chart.js Test Chart</h3>
+        <ChartJSTemperatureChart 
+          logs={logs} 
+          equipment={equipment} 
+          timeFilter={timeFilter} 
+        />
       </div>
 
       <div className="w-full" style={{ height: `${adaptiveSettings.chartHeight}px` }}>

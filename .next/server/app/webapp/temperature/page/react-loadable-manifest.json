@@ -1,9 +1,0 @@
-{
-  "[project]/app/webapp/temperature/components/SynchronizedChart.tsx [app-client] (ecmascript, next/dynamic entry)": {
-    "id": "[project]/app/webapp/temperature/components/SynchronizedChart.tsx [app-client] (ecmascript, next/dynamic entry)",
-    "files": [
-      "static/chunks/app_webapp_temperature_components_SynchronizedChart_tsx_b150c667._.js",
-      "static/chunks/app_webapp_temperature_components_SynchronizedChart_tsx_2bfda384._.js"
-    ]
-  }
-}

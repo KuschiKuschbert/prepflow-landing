@@ -22,8 +22,36 @@ export async function GET() {
         { status: 500 }
       );
     }
+
+    // Apply Queensland food safety standards automatically
+    const queenslandCompliantData = data?.map(equipment => {
+      const name = equipment.name.toLowerCase();
+      
+      // Apply Queensland thresholds based on equipment type
+      if (name.includes('freezer') || name.includes('frozen')) {
+        return {
+          ...equipment,
+          min_temp_celsius: -24,  // Optimal minimum freezer temperature
+          max_temp_celsius: -18   // Queensland freezer standard - must be at or below -18°C
+        };
+      } else if (name.includes('hot') || name.includes('warming') || name.includes('steam')) {
+        return {
+          ...equipment,
+          min_temp_celsius: 60,  // Queensland hot holding standard
+          max_temp_celsius: null // No upper limit for hot holding
+        };
+      } else {
+        // Default to cold storage (fridges, walk-ins, etc.)
+        // Set 0°C to 5°C range for optimal food safety
+        return {
+          ...equipment,
+          min_temp_celsius: 0,   // Minimum temperature for cold storage
+          max_temp_celsius: 5    // Queensland cold storage standard - must be at or below 5°C
+        };
+      }
+    });
     
-    return NextResponse.json({ success: true, data: data || [] });
+    return NextResponse.json({ success: true, data: queenslandCompliantData || [] });
   } catch (error) {
     console.error('Server error:', error);
     return NextResponse.json(

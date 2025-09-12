@@ -1,7 +1,0 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/temperature-equipment/route": "app/api/temperature-equipment/route.js",
-  "/api/temperature-logs/route": "app/api/temperature-logs/route.js",
-  "/api/temperature-thresholds/route": "app/api/temperature-thresholds/route.js",
-  "/webapp/temperature/page": "app/webapp/temperature/page.js"
-}
