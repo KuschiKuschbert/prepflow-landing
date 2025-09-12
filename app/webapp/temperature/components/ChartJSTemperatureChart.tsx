@@ -288,7 +288,7 @@ export default function ChartJSTemperatureChart({
     maintainAspectRatio: false,
     // Material Design 3 Animation Configuration
     animation: {
-      duration: 2000, // 2 second line drawing animation
+      duration: 1000, // 1 second line drawing animation
       easing: 'easeInOutQuart', // Smooth Material Design easing
       delay: (context: any) => {
         // Staggered animation for multiple datasets
