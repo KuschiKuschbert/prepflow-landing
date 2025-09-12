@@ -1,16 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+-- PrepFlow Complete Database Fix
+-- Run this in your Supabase SQL Editor to fix all missing tables
 
-export async function POST(request: NextRequest) {
-  try {
-    if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
-    }
-
-    // Create all missing tables with proper column names
-    const createTablesSQL = `
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -59,21 +49,10 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Update menu_dishes table to match expected structure
+-- Fix menu_dishes table structure
 ALTER TABLE menu_dishes ADD COLUMN IF NOT EXISTS dish_name VARCHAR(255);
-UPDATE menu_dishes SET dish_name = name WHERE dish_name IS NULL;
-ALTER TABLE menu_dishes DROP COLUMN IF EXISTS name;
-
--- Create sales_data table if it doesn't exist
-CREATE TABLE IF NOT EXISTS sales_data (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  dish_id UUID REFERENCES menu_dishes(id) ON DELETE CASCADE,
-  number_sold INTEGER NOT NULL DEFAULT 0,
-  popularity_percentage DECIMAL(5,2) NOT NULL DEFAULT 0,
-  date DATE NOT NULL DEFAULT CURRENT_DATE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+UPDATE menu_dishes SET dish_name = name WHERE dish_name IS NULL AND name IS NOT NULL;
+-- Don't drop the name column yet, keep both for compatibility
 
 -- Create temperature_equipment table
 CREATE TABLE IF NOT EXISTS temperature_equipment (
@@ -271,42 +250,42 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-    `;
 
-    // Execute the SQL
-    const { error } = await supabaseAdmin.rpc('exec_sql', { sql: createTablesSQL });
-    
-    if (error) {
-      // If RPC doesn't work, try direct execution
-      console.log('RPC failed, trying direct execution...');
-      
-      // Split SQL into individual statements and execute them
-      const statements = createTablesSQL.split(';').filter(stmt => stmt.trim());
-      
-      for (const statement of statements) {
-        if (statement.trim()) {
-          try {
-            await supabaseAdmin.rpc('exec_sql', { sql: statement + ';' });
-          } catch (stmtError) {
-            console.log('Statement failed:', statement.substring(0, 50) + '...', stmtError);
-            // Continue with other statements
-          }
-        }
-      }
-    }
+-- Insert sample data for testing
+INSERT INTO ingredients (ingredient_name, unit, cost_per_unit, category) VALUES
+('Tomatoes', 'kg', 4.50, 'Vegetables'),
+('Onions', 'kg', 2.30, 'Vegetables'),
+('Garlic', 'kg', 8.90, 'Vegetables'),
+('Olive Oil', 'L', 12.50, 'Oils'),
+('Salt', 'kg', 1.20, 'Seasonings')
+ON CONFLICT DO NOTHING;
 
-    return NextResponse.json({
-      success: true,
-      message: 'Database tables created/updated successfully',
-      details: 'All missing tables have been created with proper column names'
-    });
+INSERT INTO cleaning_areas (area_name, description, cleaning_frequency) VALUES
+('Kitchen Floor', 'Main kitchen floor area', 'Daily'),
+('Prep Station', 'Food preparation area', 'After each use'),
+('Storage Area', 'Dry storage and cold storage', 'Weekly')
+ON CONFLICT DO NOTHING;
 
-  } catch (error) {
-    console.error('Database fix error:', error);
-    return NextResponse.json({
-      error: 'Failed to fix database',
-      message: 'Could not create missing tables',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
-  }
-}
+INSERT INTO cleaning_tasks (area_id, task_name, description, frequency, estimated_duration_minutes) VALUES
+((SELECT id FROM cleaning_areas WHERE area_name = 'Kitchen Floor' LIMIT 1), 'Sweep and Mop', 'Clean kitchen floor thoroughly', 'Daily', 30),
+((SELECT id FROM cleaning_areas WHERE area_name = 'Prep Station' LIMIT 1), 'Sanitize Surfaces', 'Clean and sanitize all prep surfaces', 'After each use', 15),
+((SELECT id FROM cleaning_areas WHERE area_name = 'Storage Area' LIMIT 1), 'Organize Storage', 'Check dates and organize storage areas', 'Weekly', 45)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO suppliers (supplier_name, contact_person, email, phone) VALUES
+('Fresh Produce Co', 'John Smith', 'john@freshproduce.com', '0412 345 678'),
+('Meat Suppliers Ltd', 'Sarah Johnson', 'sarah@meatsuppliers.com', '0413 456 789'),
+('Dairy Direct', 'Mike Brown', 'mike@dairydirect.com', '0414 567 890')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO compliance_types (type_name, description, frequency) VALUES
+('Temperature Check', 'Monitor food storage temperatures', 'Daily'),
+('Cleaning Schedule', 'Verify cleaning tasks completion', 'Daily'),
+('Stock Rotation', 'Check for expired products', 'Weekly')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO temperature_equipment (name, equipment_type, location, min_temp_celsius, max_temp_celsius) VALUES
+('Main Refrigerator', 'Cold Storage', 'Kitchen', 0, 5),
+('Walk-in Freezer', 'Freezer', 'Storage Room', -24, -18),
+('Hot Holding Cabinet', 'Hot Holding', 'Service Area', 60, 75)
+ON CONFLICT DO NOTHING;
