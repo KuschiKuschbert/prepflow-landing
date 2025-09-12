@@ -53,7 +53,6 @@ export default function TemperatureLogsPage() {
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton showing
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load to prevent FOUC
-  const [hasStartedLoading, setHasStartedLoading] = useState(false); // Track if loading has actually started
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
   const [quickTempLoading, setQuickTempLoading] = useState<{[key: string]: boolean}>({});
   const [selectedDate, setSelectedDate] = useState('');
@@ -182,8 +181,7 @@ export default function TemperatureLogsPage() {
           fetchAllLogs()
         ]);
         
-        // Small delay to ensure smooth transition
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // No artificial delay needed
       } catch (error) {
         console.error('Error loading temperature data:', error);
       } finally {

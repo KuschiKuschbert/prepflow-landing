@@ -20,25 +20,17 @@
   position: relative !important;
 }
 
-/* Hide any transparent chart elements that might appear in corners */
+/* Chart elements are visible by default */
 .recharts-cartesian-axis,
 .recharts-cartesian-grid,
 .recharts-line,
 .recharts-dot {
-  opacity: 0;
-}
-
-.temperature-chart-container .recharts-cartesian-axis,
-.temperature-chart-container .recharts-cartesian-grid,
-.temperature-chart-container .recharts-line,
-.temperature-chart-container .recharts-dot {
   opacity: 1;
 }
 
-/* Disable all Recharts animations to prevent flashing */
+/* Smooth Recharts animations */
 .recharts-wrapper * {
-  animation: none !important;
-  transition: none !important;
+  transition: opacity 0.2s ease-in-out;
 }
 
 /* Ensure smooth chart rendering without flicker */

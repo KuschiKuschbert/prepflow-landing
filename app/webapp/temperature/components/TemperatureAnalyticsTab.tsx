@@ -22,10 +22,9 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
 
   // Handle loading state to prevent FOUC - wait for data to be ready
   useEffect(() => {
-    // Only show content when we have actual data
+    // Show content immediately to prevent FOUC
     if (equipment.length > 0 && allLogs.length > 0) {
-      const timer = setTimeout(() => {
-        setIsLoaded(true);
+      setIsLoaded(true);
         
         // Smart equipment selection logic
         if (!selectedEquipmentId && equipment.length > 0) {

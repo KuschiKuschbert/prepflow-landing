@@ -137,13 +137,9 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
 
   // Handle loading state to prevent FOUC and stray chart elements
   useEffect(() => {
-    // Only show chart when we have actual data and equipment info
+    // Show chart immediately to prevent FOUC
     if (filteredLogs.length > 0 && equipment && equipment.name) {
-      const timer = setTimeout(() => {
-        setIsLoaded(true);
-      }, 200); // Small delay to ensure content is ready
-      
-      return () => clearTimeout(timer);
+      setIsLoaded(true);
     } else {
       setIsLoaded(false);
     }
