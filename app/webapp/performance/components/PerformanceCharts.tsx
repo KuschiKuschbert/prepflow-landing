@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { PerformanceItem } from '../types';
 
@@ -8,6 +9,18 @@ interface PerformanceChartsProps {
 }
 
 export default function PerformanceCharts({ performanceItems }: PerformanceChartsProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
   const chartData = [
     {
       name: 'Chef\'s Kiss',
@@ -37,24 +50,32 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       {/* Bar Chart - Profit by Category */}
-      <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-6">
-        <h3 className="text-xl font-semibold text-white mb-4">Profit by Category</h3>
-        <div className="h-80 w-full">
+      <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-4 md:p-6">
+        <h3 className="text-lg md:text-xl font-semibold text-white mb-4">Profit by Category</h3>
+        <div className="h-64 md:h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              margin={{ 
+                top: 20, 
+                right: isMobile ? 10 : 30, 
+                left: isMobile ? 10 : 20, 
+                bottom: 5 
+              }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
               <XAxis 
                 dataKey="name" 
                 stroke="#9ca3af"
-                fontSize={12}
+                fontSize={isMobile ? 10 : 12}
                 tick={{ fill: '#9ca3af' }}
+                angle={isMobile ? -45 : 0}
+                textAnchor={isMobile ? 'end' : 'middle'}
+                height={isMobile ? 60 : 30}
               />
               <YAxis 
                 stroke="#9ca3af"
-                fontSize={12}
+                fontSize={isMobile ? 10 : 12}
                 tick={{ fill: '#9ca3af' }}
                 tickFormatter={(value) => `${value}%`}
               />
@@ -63,7 +84,8 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
                   backgroundColor: 'rgba(31, 31, 31, 0.95)',
                   border: '1px solid #29E7CD',
                   borderRadius: '8px',
-                  color: '#ffffff'
+                  color: '#ffffff',
+                  fontSize: isMobile ? '12px' : '14px'
                 }}
                 labelStyle={{ color: '#ffffff' }}
                 formatter={(value: any) => [`${value.toFixed(1)}%`, 'Average Profit']}
@@ -79,9 +101,9 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
       </div>
 
       {/* Pie Chart - Category Distribution */}
-      <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-6">
-        <h3 className="text-xl font-semibold text-white mb-4">Category Distribution</h3>
-        <div className="h-80 w-full">
+      <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-4 md:p-6">
+        <h3 className="text-lg md:text-xl font-semibold text-white mb-4">Category Distribution</h3>
+        <div className="h-64 md:h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -89,8 +111,8 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, value }) => `${name}: ${value}`}
-                outerRadius={80}
+                label={({ name, value }) => isMobile ? `${name}` : `${name}: ${value}`}
+                outerRadius={isMobile ? 60 : 80}
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -103,14 +125,19 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
                   backgroundColor: 'rgba(31, 31, 31, 0.95)',
                   border: '1px solid #29E7CD',
                   borderRadius: '8px',
-                  color: '#ffffff'
+                  color: '#ffffff',
+                  fontSize: isMobile ? '12px' : '14px'
                 }}
                 labelStyle={{ color: '#ffffff' }}
+                formatter={(value: any, name: any) => [`${value} items`, name]}
               />
               <Legend 
-                wrapperStyle={{ color: '#ffffff' }}
+                wrapperStyle={{ 
+                  color: '#ffffff',
+                  fontSize: isMobile ? '10px' : '12px'
+                }}
                 verticalAlign="bottom"
-                height={36}
+                height={isMobile ? 30 : 36}
               />
             </PieChart>
           </ResponsiveContainer>
