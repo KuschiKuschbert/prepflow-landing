@@ -1,9 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
+
+  // Only show on landing page, not in webapp
+  if (pathname.startsWith('/webapp')) {
+    return null;
+  }
 
   useEffect(() => {
     const handleScroll = () => {
