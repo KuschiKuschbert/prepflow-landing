@@ -194,10 +194,10 @@ export default function TemperatureLogsPage() {
 
   // Watch for changes in selectedDate or selectedType and refetch logs
   useEffect(() => {
-    if (hasStartedLoading && selectedDate) {
+    if (selectedDate) {
       fetchLogs();
     }
-  }, [selectedDate, selectedType, hasStartedLoading]);
+  }, [selectedDate, selectedType]);
 
   const handleAddLog = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -390,7 +390,7 @@ export default function TemperatureLogsPage() {
   };
 
   // Only show content when data is ready
-  if (isInitialLoad || !hasStartedLoading || equipment.length === 0) {
+  if (isInitialLoad || equipment.length === 0) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
