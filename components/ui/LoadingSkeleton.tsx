@@ -172,3 +172,40 @@ export function FormSkeleton() {
     </div>
   );
 }
+
+// Landing page specific skeletons
+export function HeroSkeleton() {
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="animate-pulse">
+          <div className="h-16 bg-[#2a2a2a] rounded-3xl w-2/3 mb-8 mx-auto"></div>
+          <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/2 mb-12 mx-auto"></div>
+          <div className="flex justify-center gap-4 mb-16">
+            <div className="h-14 bg-[#2a2a2a] rounded-2xl w-48"></div>
+            <div className="h-14 bg-[#2a2a2a] rounded-2xl w-40"></div>
+          </div>
+          <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function PricingSkeleton() {
+  return (
+    <div className="bg-[#1f1f1f] p-8 rounded-3xl shadow-lg border border-[#2a2a2a]">
+      <div className="animate-pulse">
+        <div className="h-8 bg-[#2a2a2a] rounded-xl w-1/3 mb-6"></div>
+        <div className="h-12 bg-[#2a2a2a] rounded-xl w-1/4 mb-4"></div>
+        <div className="h-4 bg-[#2a2a2a] rounded w-1/2 mb-8"></div>
+        <div className="space-y-4 mb-8">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-4 bg-[#2a2a2a] rounded w-full"></div>
+          ))}
+        </div>
+        <div className="h-14 bg-[#2a2a2a] rounded-2xl w-full"></div>
+      </div>
+    </div>
+  );
+}
