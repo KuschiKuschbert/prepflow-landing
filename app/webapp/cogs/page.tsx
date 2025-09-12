@@ -39,6 +39,10 @@ function COGSPageContent() {
     setError,
   } = useCOGSCalculations();
 
+  // Local state for dish form
+  const [dishName, setDishName] = useState<string>('');
+  const [dishPortions, setDishPortions] = useState<number>(1);
+
   // Pricing calculations
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
@@ -74,9 +78,7 @@ function COGSPageContent() {
     setSuccessMessage,
   } = useRecipeSaving();
 
-  // Local state for dish form
-  const [dishName, setDishName] = useState<string>('');
-  const [dishPortions, setDishPortions] = useState<number>(1);
+  // Additional local state
   const [dishNameLocked, setDishNameLocked] = useState(false);
   const [recipeExists, setRecipeExists] = useState<boolean | null>(null);
   const [checkingRecipe, setCheckingRecipe] = useState(false);
