@@ -263,6 +263,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/check-all-tables/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/check-all-tables">> = Specific
+  const handler = {} as typeof import("../../app/api/check-all-tables/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/check-table-structure/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/check-table-structure">> = Specific
@@ -312,6 +321,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/create-correct-rls-policies">> = Specific
   const handler = {} as typeof import("../../app/api/create-correct-rls-policies/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/create-database-tables/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/create-database-tables">> = Specific
+  const handler = {} as typeof import("../../app/api/create-database-tables/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -375,6 +393,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/fix-rls-policies">> = Specific
   const handler = {} as typeof import("../../app/api/fix-rls-policies/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/fix-table-structure/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/fix-table-structure">> = Specific
+  const handler = {} as typeof import("../../app/api/fix-table-structure/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -452,6 +479,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/populate-simple-test-data/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/populate-simple-test-data">> = Specific
+  const handler = {} as typeof import("../../app/api/populate-simple-test-data/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/populate-test-data/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/populate-test-data">> = Specific
+  const handler = {} as typeof import("../../app/api/populate-test-data/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/prep-lists/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/prep-lists">> = Specific
@@ -501,6 +546,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/send-sample-email">> = Specific
   const handler = {} as typeof import("../../app/api/send-sample-email/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/setup-complete-database/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/setup-complete-database">> = Specific
+  const handler = {} as typeof import("../../app/api/setup-complete-database/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
