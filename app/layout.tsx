@@ -4,7 +4,6 @@ import "./globals.css";
 
 import { Analytics } from '@vercel/analytics/react';
 import GoogleAnalytics from '../components/GoogleAnalytics';
-import GoogleAnalyticsTest from '../components/GoogleAnalyticsTest';
 import GoogleTagManager from '../components/GoogleTagManager';
 import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
 import WebVitalsTracker from '../components/WebVitalsTracker';
@@ -105,7 +104,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="geist-sans-variable geist-mono-variable antialiased"
       >
         <ClientPerformanceTracker />
         <WebVitalsTracker />
@@ -113,23 +112,22 @@ export default function RootLayout({
         <Analytics />
         <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
         <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
-        <GoogleAnalyticsTest />
         
-        {/* Advanced Performance Optimizations */}
-        <script
+        {/* Advanced Performance Optimizations - DISABLED TO PREVENT CONSOLE ERRORS */}
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               // Initialize advanced optimizations
               (function() {
                 // Critical CSS injection
-                const criticalCSS = ${JSON.stringify(require('../lib/critical-css').CRITICAL_CSS)};
+                // Critical CSS removed to prevent console errors
                 const style = document.createElement('style');
                 style.id = 'critical-css';
                 style.textContent = criticalCSS;
                 document.head.insertBefore(style, document.head.firstChild);
                 
                 // Resource hints initialization
-                const resourceHints = ${JSON.stringify(require('../lib/resource-hints').RESOURCE_HINTS_CONFIG)};
+                // Resource hints removed to prevent console errors
                 
                 // Preconnect to external domains
                 resourceHints.preconnect.forEach(domain => {
@@ -173,12 +171,26 @@ export default function RootLayout({
               })();
             `,
           }}
-        />
+        /> */}
         
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              // Prevent FOUC by hiding body until loaded
+              document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('loaded');
+              });
+              
+              // Also add loaded class immediately if DOM is already ready
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                  document.body.classList.add('loaded');
+                });
+              } else {
+                document.body.classList.add('loaded');
+              }
+              
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js')

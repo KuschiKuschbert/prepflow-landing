@@ -71,56 +71,38 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
 
     // Check for equipment that hasn't been temperature checked in the last 8 hours
     const checkEquipmentTemperatureWarning = () => {
-      const now = new Date();
-      const eightHoursAgo = new Date(now.getTime() - (8 * 60 * 60 * 1000)); // 8 hours ago
-      
-      console.log('🔍 Equipment Temperature Warning Check:');
-      console.log('Current time:', now.toISOString());
-      console.log('8 hours ago:', eightHoursAgo.toISOString());
-      console.log('Total logs available:', allLogs.length);
-      
-      // Filter logs from the last 8 hours
-      const recentLogs = allLogs.filter(log => {
-        const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
-        return logDateTime >= eightHoursAgo && logDateTime <= now;
-      });
+             const now = new Date();
+             const eightHoursAgo = new Date(now.getTime() - (8 * 60 * 60 * 1000)); // 8 hours ago
+             
+             // Filter logs from the last 8 hours
+             const recentLogs = allLogs.filter(log => {
+               const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
+               return logDateTime >= eightHoursAgo && logDateTime <= now;
+             });
 
-      console.log('Recent logs (last 8 hours):', recentLogs.length);
+             // Get active equipment that should be monitored
+             const activeEquipment = equipment.filter(eq => eq.is_active && eq.location);
+             
+             if (activeEquipment.length === 0) {
+               return;
+             }
 
-      // Get active equipment that should be monitored
-      const activeEquipment = equipment.filter(eq => eq.is_active && eq.location);
-      
-      console.log('Active equipment:', activeEquipment.length);
-      console.log('Active equipment names:', activeEquipment.map(eq => eq.name));
-      
-      if (activeEquipment.length === 0) {
-        console.log('No active equipment found, skipping warning check');
-        return;
-      }
+             // Check which equipment has been temperature checked in the last 8 hours
+             const checkedEquipment = new Set();
+             recentLogs.forEach(log => {
+               if (log.location) {
+                 checkedEquipment.add(log.location);
+               }
+             });
 
-      // Check which equipment has been temperature checked in the last 8 hours
-      const checkedEquipment = new Set();
-      recentLogs.forEach(log => {
-        if (log.location) {
-          checkedEquipment.add(log.location);
-        }
-      });
+             // Find equipment that hasn't been checked in the last 8 hours
+             const uncheckedEquipment = activeEquipment.filter(eq => 
+               eq.location && !checkedEquipment.has(eq.location)
+             );
 
-      console.log('Checked equipment locations:', Array.from(checkedEquipment));
-
-      // Find equipment that hasn't been checked in the last 8 hours
-      const uncheckedEquipment = activeEquipment.filter(eq => 
-        eq.location && !checkedEquipment.has(eq.location)
-      );
-
-      console.log('Unchecked equipment:', uncheckedEquipment.length);
-      console.log('Unchecked equipment names:', uncheckedEquipment.map(eq => eq.name));
-
-      if (uncheckedEquipment.length > 0) {
-        const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
-        const isMultiple = uncheckedEquipment.length > 1;
-        
-        console.log('🚨 Adding equipment warning for:', equipmentNames);
+             if (uncheckedEquipment.length > 0) {
+               const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
+               const isMultiple = uncheckedEquipment.length > 1;
         
         addWarning({
           type: 'warning',
@@ -134,10 +116,8 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
           },
           dismissible: true,
           autoHide: false,
-        });
-      } else {
-        console.log('✅ All equipment has been checked in the last 8 hours');
-      }
+               });
+             }
     };
 
     // Check for equipment out of range warnings
