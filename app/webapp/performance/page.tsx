@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Dynamic imports for chart components
 const BarChart = dynamic(() => import('recharts').then(mod => ({ default: mod.BarChart })), {
@@ -252,21 +253,7 @@ export default function PerformancePage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-700 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-700 rounded w-1/2 mb-8"></div>
-            <div className="space-y-4">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 bg-gray-700 rounded"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error) {

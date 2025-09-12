@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import TestWarningButton from '@/components/TestWarningButton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 
@@ -150,31 +151,7 @@ export default function WebAppDashboard() {
   useTemperatureWarnings({ allLogs, equipment });
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-[#2a2a2a] rounded-3xl w-1/3 mb-8"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-                  <div className="h-4 bg-[#2a2a2a] rounded-xl w-3/4 mb-3"></div>
-                  <div className="h-8 bg-[#2a2a2a] rounded-xl w-1/2"></div>
-                </div>
-              ))}
-            </div>
-            <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-              <div className="h-6 bg-[#2a2a2a] rounded-xl w-1/3 mb-4"></div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-20 bg-[#2a2a2a] rounded-2xl"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (

@@ -6,6 +6,7 @@ import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeight
 import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Dynamic imports for heavy components
 const IngredientTable = dynamic(() => import('./components/IngredientTable'), {
@@ -363,20 +364,7 @@ export default function IngredientsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-700 rounded w-1/4 mb-6"></div>
-            <div className="space-y-4">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 bg-gray-700 rounded"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (
