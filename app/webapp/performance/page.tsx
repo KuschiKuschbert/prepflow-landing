@@ -2,22 +2,10 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
-import dynamic from 'next/dynamic';
 import { PageSkeleton, LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
-// Dynamic imports for chart components
-const BarChart = dynamic(() => import('recharts').then(mod => ({ default: mod.BarChart })), {
-  loading: () => <LoadingSkeleton variant="chart" height="320px" />,
-  ssr: false
-});
-
-const PieChart = dynamic(() => import('recharts').then(mod => ({ default: mod.PieChart })), {
-  loading: () => <LoadingSkeleton variant="chart" height="320px" />,
-  ssr: false
-});
-
-// Import other recharts components normally
-import { Bar, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+// Direct imports to eliminate skeleton flashes
+import { BarChart, PieChart, Bar, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface MenuDish {
   id: string;
