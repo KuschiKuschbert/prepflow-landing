@@ -170,29 +170,12 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
   
   const dailyCompliance = getDailyCompliance();
   
-  // Smart alerts for unusual patterns
+  // Smart alerts for unusual patterns (only non-redundant alerts)
   const getSmartAlerts = () => {
     const alerts = [];
     
-    // Alert 1: Insufficient daily logs
-    if (!dailyCompliance.hasMinimumLogs) {
-      alerts.push({
-        type: 'warning',
-        message: `Only ${dailyCompliance.logCount} logs today (need 2+)`,
-        icon: '⚠️'
-      });
-    }
-    
-    // Alert 2: No food temperature logs
-    if (!dailyCompliance.hasFoodTemp) {
-      alerts.push({
-        type: 'info',
-        message: 'No food items temped today',
-        icon: '📋'
-      });
-    }
-    
-    // Alert 3: No recent logs (if no logs in last 4 hours)
+    // Only show alerts that aren't already covered by daily compliance status
+    // Alert: No recent logs (if no logs in last 4 hours)
     const now = new Date();
     const fourHoursAgo = new Date(now.getTime() - 4 * 60 * 60 * 1000);
     const recentLogs = filteredLogs.filter(log => {
