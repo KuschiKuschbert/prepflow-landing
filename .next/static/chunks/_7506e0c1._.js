@@ -610,9 +610,10 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/useTranslation.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/shared/lib/app-dynamic.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/LoadingSkeleton.tsx [app-client] (ecmascript)");
-// Import other recharts components normally
+// Direct imports to eliminate skeleton flashes
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$chart$2f$BarChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/chart/BarChart.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$chart$2f$PieChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/chart/PieChart.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Bar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/cartesian/Bar.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$polar$2f$Pie$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/polar/Pie.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Cell$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/component/Cell.js [app-client] (ecmascript)");
@@ -623,53 +624,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Legend$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/component/Legend.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$ResponsiveContainer$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/component/ResponsiveContainer.js [app-client] (ecmascript)");
 ;
-;
-;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
 ;
-;
-// Dynamic imports for chart components
-const BarChart = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])(()=>__turbopack_context__.A("[project]/node_modules/recharts/es6/index.js [app-client] (ecmascript, next/dynamic entry, async loader)").then((mod)=>({
-            default: mod.BarChart
-        })), {
-    loadableGenerated: {
-        modules: [
-            "[project]/node_modules/recharts/es6/index.js [app-client] (ecmascript, next/dynamic entry)"
-        ]
-    },
-    loading: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {
-            variant: "chart",
-            height: "320px"
-        }, void 0, false, {
-            fileName: "[project]/app/webapp/performance/page.tsx",
-            lineNumber: 10,
-            columnNumber: 18
-        }, ("TURBOPACK compile-time value", void 0)),
-    ssr: false
-});
-_c = BarChart;
-const PieChart = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])(()=>__turbopack_context__.A("[project]/node_modules/recharts/es6/index.js [app-client] (ecmascript, next/dynamic entry, async loader)").then((mod)=>({
-            default: mod.PieChart
-        })), {
-    loadableGenerated: {
-        modules: [
-            "[project]/node_modules/recharts/es6/index.js [app-client] (ecmascript, next/dynamic entry)"
-        ]
-    },
-    loading: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {
-            variant: "chart",
-            height: "320px"
-        }, void 0, false, {
-            fileName: "[project]/app/webapp/performance/page.tsx",
-            lineNumber: 15,
-            columnNumber: 18
-        }, ("TURBOPACK compile-time value", void 0)),
-    ssr: false
-});
-_c1 = PieChart;
 ;
 function PerformancePage() {
     var _metadata_averageProfitMargin, _metadata_averagePopularity, _metadata_popularityThreshold, _metadata_averageProfitMargin1, _metadata_popularityThreshold1;
@@ -877,7 +836,7 @@ function PerformancePage() {
     if (loading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PageSkeleton"], {}, void 0, false, {
             fileName: "[project]/app/webapp/performance/page.tsx",
-            lineNumber: 248,
+            lineNumber: 236,
             columnNumber: 12
         }, this);
     }
@@ -894,7 +853,7 @@ function PerformancePage() {
                             children: "Error"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 256,
+                            lineNumber: 244,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -902,7 +861,7 @@ function PerformancePage() {
                             children: error
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 257,
+                            lineNumber: 245,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -911,23 +870,23 @@ function PerformancePage() {
                             children: "Retry"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 258,
+                            lineNumber: 246,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 255,
+                    lineNumber: 243,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/webapp/performance/page.tsx",
-                lineNumber: 254,
+                lineNumber: 242,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/performance/page.tsx",
-            lineNumber: 253,
+            lineNumber: 241,
             columnNumber: 7
         }, this);
     }
@@ -949,7 +908,7 @@ function PerformancePage() {
                                             children: "Performance Analysis"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 277,
+                                            lineNumber: 265,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -957,13 +916,13 @@ function PerformancePage() {
                                             children: "Analyze your menu performance and profitability"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 280,
+                                            lineNumber: 268,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 276,
+                                    lineNumber: 264,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -977,7 +936,7 @@ function PerformancePage() {
                                                     children: "Performance Score"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 286,
+                                                    lineNumber: 274,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -988,13 +947,13 @@ function PerformancePage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 287,
+                                                    lineNumber: 275,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 285,
+                                            lineNumber: 273,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1004,7 +963,7 @@ function PerformancePage() {
                                                     className: "w-3 h-3 rounded-full ".concat(realtimeEnabled ? 'bg-green-400 animate-pulse' : 'bg-gray-400')
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 295,
+                                                    lineNumber: 283,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1012,13 +971,13 @@ function PerformancePage() {
                                                     children: realtimeEnabled ? 'Live' : 'Offline'
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 298,
+                                                    lineNumber: 286,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 294,
+                                            lineNumber: 282,
                                             columnNumber: 15
                                         }, this),
                                         lastUpdate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1029,7 +988,7 @@ function PerformancePage() {
                                                     children: "Last Update"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 304,
+                                                    lineNumber: 292,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1037,25 +996,25 @@ function PerformancePage() {
                                                     children: lastUpdate.toLocaleTimeString()
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 305,
+                                                    lineNumber: 293,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 303,
+                                            lineNumber: 291,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 284,
+                                    lineNumber: 272,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 275,
+                            lineNumber: 263,
                             columnNumber: 11
                         }, this),
                         performanceAlerts.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1074,12 +1033,12 @@ function PerformancePage() {
                                                 clipRule: "evenodd"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 316,
+                                                lineNumber: 304,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 315,
+                                            lineNumber: 303,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1087,13 +1046,13 @@ function PerformancePage() {
                                             children: "Performance Alerts"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 318,
+                                            lineNumber: 306,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 314,
+                                    lineNumber: 302,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1103,24 +1062,24 @@ function PerformancePage() {
                                             children: alert.message
                                         }, alert.id, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 322,
+                                            lineNumber: 310,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 320,
+                                    lineNumber: 308,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 313,
+                            lineNumber: 301,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 274,
+                    lineNumber: 262,
                     columnNumber: 9
                 }, this),
                 metadata && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1131,7 +1090,7 @@ function PerformancePage() {
                             children: "PrepFlow COGS Dynamic Methodology"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 334,
+                            lineNumber: 322,
                             columnNumber: 14
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1145,7 +1104,7 @@ function PerformancePage() {
                                             children: "Methodology"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 337,
+                                            lineNumber: 325,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1153,13 +1112,13 @@ function PerformancePage() {
                                             children: metadata.methodology
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 338,
+                                            lineNumber: 326,
                                             columnNumber: 18
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 336,
+                                    lineNumber: 324,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1170,7 +1129,7 @@ function PerformancePage() {
                                             children: "Average Profit Margin"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 341,
+                                            lineNumber: 329,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1181,13 +1140,13 @@ function PerformancePage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 342,
+                                            lineNumber: 330,
                                             columnNumber: 18
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 340,
+                                    lineNumber: 328,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1198,7 +1157,7 @@ function PerformancePage() {
                                             children: "Average Popularity"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 345,
+                                            lineNumber: 333,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1209,13 +1168,13 @@ function PerformancePage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 346,
+                                            lineNumber: 334,
                                             columnNumber: 18
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 344,
+                                    lineNumber: 332,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1226,7 +1185,7 @@ function PerformancePage() {
                                             children: "Popularity Threshold"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 349,
+                                            lineNumber: 337,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1237,19 +1196,19 @@ function PerformancePage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 350,
+                                            lineNumber: 338,
                                             columnNumber: 18
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 348,
+                                    lineNumber: 336,
                                     columnNumber: 16
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 335,
+                            lineNumber: 323,
                             columnNumber: 14
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1261,7 +1220,7 @@ function PerformancePage() {
                                             children: "Profit Check:"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 354,
+                                            lineNumber: 342,
                                             columnNumber: 19
                                         }, this),
                                         " HIGH if above menu average (",
@@ -1270,7 +1229,7 @@ function PerformancePage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 354,
+                                    lineNumber: 342,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1279,7 +1238,7 @@ function PerformancePage() {
                                             children: "Popularity Check:"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 355,
+                                            lineNumber: 343,
                                             columnNumber: 19
                                         }, this),
                                         " HIGH if ≥ 80% of average popularity (",
@@ -1288,19 +1247,19 @@ function PerformancePage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 355,
+                                    lineNumber: 343,
                                     columnNumber: 16
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 353,
+                            lineNumber: 341,
                             columnNumber: 14
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 333,
+                    lineNumber: 321,
                     columnNumber: 12
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1314,7 +1273,7 @@ function PerformancePage() {
                                     children: "Search"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 363,
+                                    lineNumber: 351,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1325,13 +1284,13 @@ function PerformancePage() {
                                     className: "px-4 py-2 bg-[#2a2a2a] border border-[#2a2a2a] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 364,
+                                    lineNumber: 352,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 362,
+                            lineNumber: 350,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1342,7 +1301,7 @@ function PerformancePage() {
                                     children: "Category"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 374,
+                                    lineNumber: 362,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1355,7 +1314,7 @@ function PerformancePage() {
                                             children: "All Categories"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 380,
+                                            lineNumber: 368,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1363,7 +1322,7 @@ function PerformancePage() {
                                             children: "Chef's Kiss"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 381,
+                                            lineNumber: 369,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1371,7 +1330,7 @@ function PerformancePage() {
                                             children: "Hidden Gem"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 382,
+                                            lineNumber: 370,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1379,7 +1338,7 @@ function PerformancePage() {
                                             children: "Bargain Bucket"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 383,
+                                            lineNumber: 371,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1387,19 +1346,19 @@ function PerformancePage() {
                                             children: "Burnt Toast"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 384,
+                                            lineNumber: 372,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 375,
+                                    lineNumber: 363,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 373,
+                            lineNumber: 361,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1410,7 +1369,7 @@ function PerformancePage() {
                                     children: "Sort By"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 389,
+                                    lineNumber: 377,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1423,7 +1382,7 @@ function PerformancePage() {
                                             children: "Gross Profit %"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 395,
+                                            lineNumber: 383,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1431,7 +1390,7 @@ function PerformancePage() {
                                             children: "Number Sold"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 396,
+                                            lineNumber: 384,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1439,7 +1398,7 @@ function PerformancePage() {
                                             children: "Popularity %"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 397,
+                                            lineNumber: 385,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1447,19 +1406,19 @@ function PerformancePage() {
                                             children: "Name"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 398,
+                                            lineNumber: 386,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 390,
+                                    lineNumber: 378,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 388,
+                            lineNumber: 376,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1470,7 +1429,7 @@ function PerformancePage() {
                                     children: "Order"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 403,
+                                    lineNumber: 391,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1483,7 +1442,7 @@ function PerformancePage() {
                                             children: "Descending"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 409,
+                                            lineNumber: 397,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1491,25 +1450,25 @@ function PerformancePage() {
                                             children: "Ascending"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 410,
+                                            lineNumber: 398,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 404,
+                                    lineNumber: 392,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 402,
+                            lineNumber: 390,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 361,
+                    lineNumber: 349,
                     columnNumber: 10
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1529,19 +1488,19 @@ function PerformancePage() {
                                         clipRule: "evenodd"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 422,
+                                        lineNumber: 410,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 421,
+                                    lineNumber: 409,
                                     columnNumber: 13
                                 }, this),
                                 "Import Sales Data"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 417,
+                            lineNumber: 405,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1558,19 +1517,19 @@ function PerformancePage() {
                                         clipRule: "evenodd"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 431,
+                                        lineNumber: 419,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 430,
+                                    lineNumber: 418,
                                     columnNumber: 13
                                 }, this),
                                 "Export CSV"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 426,
+                            lineNumber: 414,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1585,19 +1544,19 @@ function PerformancePage() {
                                         d: showCharts ? "M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" : "M10 12a2 2 0 100-4 2 2 0 000 4zM3.05 13a1 1 0 011.414 0L9 16.536V19a1 1 0 11-2 0v-2.464L4.464 13a1 1 0 010-1.414zM16.95 7a1 1 0 010 1.414L14.536 10H17a1 1 0 110 2h-2.464l2.414 2.414a1 1 0 11-1.414 1.414L12 13.414V16a1 1 0 11-2 0v-2.586l-2.414 2.414a1 1 0 11-1.414-1.414L10.536 12H8a1 1 0 110-2h2.536L8.122 7.586a1 1 0 111.414-1.414L12 8.586V6a1 1 0 112 0v2.586l2.414-2.414A1 1 0 0116.95 7z"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 440,
+                                        lineNumber: 428,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 439,
+                                    lineNumber: 427,
                                     columnNumber: 13
                                 }, this),
                                 showCharts ? 'Hide Charts' : 'Show Charts'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 435,
+                            lineNumber: 423,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1617,20 +1576,20 @@ function PerformancePage() {
                                     className: "w-3 h-3 rounded-full ".concat(realtimeEnabled ? 'bg-green-400 animate-pulse' : 'bg-gray-400')
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 461,
+                                    lineNumber: 449,
                                     columnNumber: 13
                                 }, this),
                                 realtimeEnabled ? 'Disable Real-time' : 'Enable Real-time'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 444,
+                            lineNumber: 432,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 416,
+                    lineNumber: 404,
                     columnNumber: 9
                 }, this),
                 showCharts && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1644,7 +1603,7 @@ function PerformancePage() {
                                     children: "Profit by Category"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 473,
+                                    lineNumber: 461,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1652,7 +1611,7 @@ function PerformancePage() {
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$ResponsiveContainer$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ResponsiveContainer"], {
                                         width: "100%",
                                         height: "100%",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BarChart, {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$chart$2f$BarChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["BarChart"], {
                                             data: [
                                                 {
                                                     name: 'Chef\'s Kiss',
@@ -1683,7 +1642,7 @@ function PerformancePage() {
                                                     stroke: "#2a2a2a"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 497,
+                                                    lineNumber: 485,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$XAxis$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["XAxis"], {
@@ -1695,7 +1654,7 @@ function PerformancePage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 498,
+                                                    lineNumber: 486,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$YAxis$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["YAxis"], {
@@ -1707,7 +1666,7 @@ function PerformancePage() {
                                                     tickFormatter: (value)=>"".concat(value, "%")
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 504,
+                                                    lineNumber: 492,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Tooltip"], {
@@ -1726,7 +1685,7 @@ function PerformancePage() {
                                                         ]
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 510,
+                                                    lineNumber: 498,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Bar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Bar"], {
@@ -1740,29 +1699,29 @@ function PerformancePage() {
                                                     ]
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 520,
+                                                    lineNumber: 508,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 476,
+                                            lineNumber: 464,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 475,
+                                        lineNumber: 463,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 474,
+                                    lineNumber: 462,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 472,
+                            lineNumber: 460,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1773,7 +1732,7 @@ function PerformancePage() {
                                     children: "Category Distribution"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 532,
+                                    lineNumber: 520,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1781,7 +1740,7 @@ function PerformancePage() {
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$ResponsiveContainer$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ResponsiveContainer"], {
                                         width: "100%",
                                         height: "100%",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PieChart, {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$chart$2f$PieChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PieChart"], {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$polar$2f$Pie$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Pie"], {
                                                     data: [
@@ -1841,12 +1800,12 @@ function PerformancePage() {
                                                             fill: entry.color
                                                         }, "cell-".concat(index), false, {
                                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                                            lineNumber: 557,
+                                                            lineNumber: 545,
                                                             columnNumber: 25
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 536,
+                                                    lineNumber: 524,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Tooltip"], {
@@ -1861,7 +1820,7 @@ function PerformancePage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 560,
+                                                    lineNumber: 548,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Legend$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Legend"], {
@@ -1872,35 +1831,35 @@ function PerformancePage() {
                                                     height: 36
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 569,
+                                                    lineNumber: 557,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 535,
+                                            lineNumber: 523,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 534,
+                                        lineNumber: 522,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 533,
+                                    lineNumber: 521,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 531,
+                            lineNumber: 519,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 470,
+                    lineNumber: 458,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1919,7 +1878,7 @@ function PerformancePage() {
                                                 children: "Dish"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 587,
+                                                lineNumber: 575,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1927,7 +1886,7 @@ function PerformancePage() {
                                                 children: "Number Sold"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 590,
+                                                lineNumber: 578,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1935,7 +1894,7 @@ function PerformancePage() {
                                                 children: "Popularity %"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 593,
+                                                lineNumber: 581,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1943,7 +1902,7 @@ function PerformancePage() {
                                                 children: "Total Revenue ex GST"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 596,
+                                                lineNumber: 584,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1951,7 +1910,7 @@ function PerformancePage() {
                                                 children: "Total Cost"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 599,
+                                                lineNumber: 587,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1959,7 +1918,7 @@ function PerformancePage() {
                                                 children: "Total Profit ex GST"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 602,
+                                                lineNumber: 590,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1967,7 +1926,7 @@ function PerformancePage() {
                                                 children: "Gross Profit %"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 605,
+                                                lineNumber: 593,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1975,7 +1934,7 @@ function PerformancePage() {
                                                 children: "Profit Cat"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 608,
+                                                lineNumber: 596,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1983,7 +1942,7 @@ function PerformancePage() {
                                                 children: "Popularity Cat"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 611,
+                                                lineNumber: 599,
                                                 columnNumber: 20
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1991,18 +1950,18 @@ function PerformancePage() {
                                                 children: "Menu Item Class"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                                lineNumber: 614,
+                                                lineNumber: 602,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 586,
+                                        lineNumber: 574,
                                         columnNumber: 18
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 585,
+                                    lineNumber: 573,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -2014,7 +1973,7 @@ function PerformancePage() {
                                                     children: item.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 622,
+                                                    lineNumber: 610,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2022,7 +1981,7 @@ function PerformancePage() {
                                                     children: item.number_sold
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 625,
+                                                    lineNumber: 613,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2033,7 +1992,7 @@ function PerformancePage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 628,
+                                                    lineNumber: 616,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2041,7 +2000,7 @@ function PerformancePage() {
                                                     children: formatCurrency(item.selling_price * item.number_sold / 1.1)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 631,
+                                                    lineNumber: 619,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2049,7 +2008,7 @@ function PerformancePage() {
                                                     children: formatCurrency(item.food_cost * item.number_sold)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 634,
+                                                    lineNumber: 622,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2057,7 +2016,7 @@ function PerformancePage() {
                                                     children: formatCurrency(item.gross_profit * item.number_sold)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 637,
+                                                    lineNumber: 625,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2065,7 +2024,7 @@ function PerformancePage() {
                                                     children: formatPercentage(item.gross_profit_percentage)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 640,
+                                                    lineNumber: 628,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2075,12 +2034,12 @@ function PerformancePage() {
                                                         children: item.profit_category
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                                        lineNumber: 644,
+                                                        lineNumber: 632,
                                                         columnNumber: 24
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 643,
+                                                    lineNumber: 631,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2090,12 +2049,12 @@ function PerformancePage() {
                                                         children: item.popularity_category
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                                        lineNumber: 653,
+                                                        lineNumber: 641,
                                                         columnNumber: 24
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 652,
+                                                    lineNumber: 640,
                                                     columnNumber: 22
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -2105,39 +2064,39 @@ function PerformancePage() {
                                                         children: item.menu_item_class
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                                        lineNumber: 662,
+                                                        lineNumber: 650,
                                                         columnNumber: 24
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                                    lineNumber: 661,
+                                                    lineNumber: 649,
                                                     columnNumber: 22
                                                 }, this)
                                             ]
                                         }, item.id, true, {
                                             fileName: "[project]/app/webapp/performance/page.tsx",
-                                            lineNumber: 621,
+                                            lineNumber: 609,
                                             columnNumber: 20
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/performance/page.tsx",
-                                    lineNumber: 619,
+                                    lineNumber: 607,
                                     columnNumber: 16
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 584,
+                            lineNumber: 572,
                             columnNumber: 14
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/performance/page.tsx",
-                        lineNumber: 583,
+                        lineNumber: 571,
                         columnNumber: 12
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 582,
+                    lineNumber: 570,
                     columnNumber: 10
                 }, this),
                 totalPages > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2150,7 +2109,7 @@ function PerformancePage() {
                             children: "Previous"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 681,
+                            lineNumber: 669,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2163,7 +2122,7 @@ function PerformancePage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 688,
+                            lineNumber: 676,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2173,13 +2132,13 @@ function PerformancePage() {
                             children: "Next"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/performance/page.tsx",
-                            lineNumber: 691,
+                            lineNumber: 679,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 680,
+                    lineNumber: 668,
                     columnNumber: 11
                 }, this),
                 showImportModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2192,7 +2151,7 @@ function PerformancePage() {
                                 children: "Import Sales Data"
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                lineNumber: 705,
+                                lineNumber: 693,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2200,7 +2159,7 @@ function PerformancePage() {
                                 children: "Paste your CSV data below. Format: Dish, Number Sold, Popularity %"
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                lineNumber: 706,
+                                lineNumber: 694,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2210,7 +2169,7 @@ function PerformancePage() {
                                 className: "w-full h-40 px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent resize-none"
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                lineNumber: 709,
+                                lineNumber: 697,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2222,7 +2181,7 @@ function PerformancePage() {
                                         children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 716,
+                                        lineNumber: 704,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2232,35 +2191,35 @@ function PerformancePage() {
                                         children: importing ? 'Importing...' : 'Import'
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/performance/page.tsx",
-                                        lineNumber: 722,
+                                        lineNumber: 710,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/performance/page.tsx",
-                                lineNumber: 715,
+                                lineNumber: 703,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/performance/page.tsx",
-                        lineNumber: 704,
+                        lineNumber: 692,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/performance/page.tsx",
-                    lineNumber: 703,
+                    lineNumber: 691,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/performance/page.tsx",
-            lineNumber: 272,
+            lineNumber: 260,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/performance/page.tsx",
-        lineNumber: 271,
+        lineNumber: 259,
         columnNumber: 5
     }, this);
 }
@@ -2269,11 +2228,9 @@ _s(PerformancePage, "lYYVdpFjjLRJI4D5OWczLP5hmTc=", false, function() {
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"]
     ];
 });
-_c2 = PerformancePage;
-var _c, _c1, _c2;
-__turbopack_context__.k.register(_c, "BarChart");
-__turbopack_context__.k.register(_c1, "PieChart");
-__turbopack_context__.k.register(_c2, "PerformancePage");
+_c = PerformancePage;
+var _c;
+__turbopack_context__.k.register(_c, "PerformancePage");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

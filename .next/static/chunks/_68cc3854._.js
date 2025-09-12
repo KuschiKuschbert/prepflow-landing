@@ -643,6 +643,8 @@ function OrderListsPage() {
         }
     }["OrderListsPage.useEffect"], []);
     const fetchOrderLists = async ()=>{
+        // Disable loading state to prevent skeleton flashes during API errors
+        // setLoading(true);
         try {
             const response = await fetch("/api/order-lists?userId=".concat(userId));
             const result = await response.json();
@@ -838,7 +840,7 @@ function OrderListsPage() {
                         height: "64px"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                        lineNumber: 261,
+                        lineNumber: 263,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -849,23 +851,23 @@ function OrderListsPage() {
                             height: "80px"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                            lineNumber: 263,
+                            lineNumber: 265,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                        lineNumber: 262,
+                        lineNumber: 264,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                lineNumber: 260,
+                lineNumber: 262,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/order-lists/page.tsx",
-            lineNumber: 259,
+            lineNumber: 261,
             columnNumber: 7
         }, this);
     }
@@ -887,7 +889,7 @@ function OrderListsPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                    lineNumber: 276,
+                                    lineNumber: 278,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -895,13 +897,13 @@ function OrderListsPage() {
                                     children: t('orderLists.subtitle', 'Create and manage supplier order lists')
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                    lineNumber: 277,
+                                    lineNumber: 279,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                            lineNumber: 275,
+                            lineNumber: 277,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -913,13 +915,13 @@ function OrderListsPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                            lineNumber: 279,
+                            lineNumber: 281,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                    lineNumber: 274,
+                    lineNumber: 276,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -929,12 +931,12 @@ function OrderListsPage() {
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                        lineNumber: 290,
+                        lineNumber: 292,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                    lineNumber: 289,
+                    lineNumber: 291,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -949,12 +951,12 @@ function OrderListsPage() {
                                     children: "📋"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                    lineNumber: 299,
+                                    lineNumber: 301,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 298,
+                                lineNumber: 300,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -962,7 +964,7 @@ function OrderListsPage() {
                                 children: t('orderLists.noOrderLists', 'No Order Lists')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 301,
+                                lineNumber: 303,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -970,7 +972,7 @@ function OrderListsPage() {
                                 children: t('orderLists.noOrderListsDesc', 'Create your first order list to streamline supplier ordering')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 302,
+                                lineNumber: 304,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -979,13 +981,13 @@ function OrderListsPage() {
                                 children: t('orderLists.createFirstOrderList', 'Create Your First Order List')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 303,
+                                lineNumber: 305,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                        lineNumber: 297,
+                        lineNumber: 299,
                         columnNumber: 13
                     }, this) : orderLists.map((orderList)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-6 hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200",
@@ -1005,12 +1007,12 @@ function OrderListsPage() {
                                                             children: "📋"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                            lineNumber: 320,
+                                                            lineNumber: 322,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 319,
+                                                        lineNumber: 321,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1020,7 +1022,7 @@ function OrderListsPage() {
                                                                 children: orderList.name
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 323,
+                                                                lineNumber: 325,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1028,19 +1030,19 @@ function OrderListsPage() {
                                                                 children: orderList.suppliers.name
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 324,
+                                                                lineNumber: 326,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 322,
+                                                        lineNumber: 324,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 318,
+                                                lineNumber: 320,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1053,7 +1055,7 @@ function OrderListsPage() {
                                                                 children: t('orderLists.status', 'Status')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 330,
+                                                                lineNumber: 332,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1061,13 +1063,13 @@ function OrderListsPage() {
                                                                 children: orderList.status.charAt(0).toUpperCase() + orderList.status.slice(1)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 331,
+                                                                lineNumber: 333,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 329,
+                                                        lineNumber: 331,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1077,7 +1079,7 @@ function OrderListsPage() {
                                                                 children: t('orderLists.items', 'Items')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 336,
+                                                                lineNumber: 338,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1085,13 +1087,13 @@ function OrderListsPage() {
                                                                 children: orderList.order_list_items.length
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 337,
+                                                                lineNumber: 339,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 335,
+                                                        lineNumber: 337,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1101,7 +1103,7 @@ function OrderListsPage() {
                                                                 children: t('orderLists.created', 'Created')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 340,
+                                                                lineNumber: 342,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1109,19 +1111,19 @@ function OrderListsPage() {
                                                                 children: new Date(orderList.created_at).toLocaleDateString()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 341,
+                                                                lineNumber: 343,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 339,
+                                                        lineNumber: 341,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 328,
+                                                lineNumber: 330,
                                                 columnNumber: 21
                                             }, this),
                                             orderList.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1129,7 +1131,7 @@ function OrderListsPage() {
                                                 children: orderList.notes
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 346,
+                                                lineNumber: 348,
                                                 columnNumber: 23
                                             }, this),
                                             orderList.order_list_items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1140,7 +1142,7 @@ function OrderListsPage() {
                                                         children: t('orderLists.items', 'Items')
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 352,
+                                                        lineNumber: 354,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1154,7 +1156,7 @@ function OrderListsPage() {
                                                                             children: item.ingredients.name
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                            lineNumber: 356,
+                                                                            lineNumber: 358,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1166,13 +1168,13 @@ function OrderListsPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                            lineNumber: 357,
+                                                                            lineNumber: 359,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, item.id, true, {
                                                                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                    lineNumber: 355,
+                                                                    lineNumber: 357,
                                                                     columnNumber: 29
                                                                 }, this)),
                                                             orderList.order_list_items.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1184,25 +1186,25 @@ function OrderListsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 361,
+                                                                lineNumber: 363,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 353,
+                                                        lineNumber: 355,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 351,
+                                                lineNumber: 353,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 317,
+                                        lineNumber: 319,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1218,7 +1220,7 @@ function OrderListsPage() {
                                                         children: "Draft"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 375,
+                                                        lineNumber: 377,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1226,7 +1228,7 @@ function OrderListsPage() {
                                                         children: "Sent"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 376,
+                                                        lineNumber: 378,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1234,7 +1236,7 @@ function OrderListsPage() {
                                                         children: "Received"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 379,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1242,13 +1244,13 @@ function OrderListsPage() {
                                                         children: "Cancelled"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 378,
+                                                        lineNumber: 380,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 370,
+                                                lineNumber: 372,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1270,17 +1272,17 @@ function OrderListsPage() {
                                                                 d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 388,
+                                                                lineNumber: 390,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                            lineNumber: 387,
+                                                            lineNumber: 389,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 382,
+                                                        lineNumber: 384,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1299,45 +1301,45 @@ function OrderListsPage() {
                                                                 d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 397,
+                                                                lineNumber: 399,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                            lineNumber: 396,
+                                                            lineNumber: 398,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 391,
+                                                        lineNumber: 393,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 381,
+                                                lineNumber: 383,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 368,
+                                        lineNumber: 370,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 316,
+                                lineNumber: 318,
                                 columnNumber: 17
                             }, this)
                         }, orderList.id, false, {
                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                            lineNumber: 312,
+                            lineNumber: 314,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                    lineNumber: 295,
+                    lineNumber: 297,
                     columnNumber: 9
                 }, this),
                 showForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1353,7 +1355,7 @@ function OrderListsPage() {
                                         children: editingOrderList ? t('orderLists.editOrderList', 'Edit Order List') : t('orderLists.createOrderList', 'Create Order List')
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 413,
+                                        lineNumber: 415,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1371,23 +1373,23 @@ function OrderListsPage() {
                                                 d: "M6 18L18 6M6 6l12 12"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 421,
+                                                lineNumber: 423,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                            lineNumber: 420,
+                                            lineNumber: 422,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 416,
+                                        lineNumber: 418,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 412,
+                                lineNumber: 414,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1404,7 +1406,7 @@ function OrderListsPage() {
                                                         children: t('orderLists.supplier', 'Supplier')
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 429,
+                                                        lineNumber: 431,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1421,7 +1423,7 @@ function OrderListsPage() {
                                                                 children: t('orderLists.selectSupplier', 'Select a supplier')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 438,
+                                                                lineNumber: 440,
                                                                 columnNumber: 23
                                                             }, this),
                                                             suppliers.map((supplier)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1429,19 +1431,19 @@ function OrderListsPage() {
                                                                     children: supplier.name
                                                                 }, supplier.id, false, {
                                                                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                    lineNumber: 440,
+                                                                    lineNumber: 442,
                                                                     columnNumber: 25
                                                                 }, this))
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 432,
+                                                        lineNumber: 434,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 428,
+                                                lineNumber: 430,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1451,7 +1453,7 @@ function OrderListsPage() {
                                                         children: t('orderLists.name', 'Order List Name')
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 448,
+                                                        lineNumber: 450,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1466,19 +1468,19 @@ function OrderListsPage() {
                                                         required: true
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 451,
+                                                        lineNumber: 453,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 447,
+                                                lineNumber: 449,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 427,
+                                        lineNumber: 429,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1488,7 +1490,7 @@ function OrderListsPage() {
                                                 children: t('orderLists.notes', 'Notes')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 463,
+                                                lineNumber: 465,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1502,13 +1504,13 @@ function OrderListsPage() {
                                                 placeholder: String(t('orderLists.notesPlaceholder', 'Optional notes about this order'))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 466,
+                                                lineNumber: 468,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 462,
+                                        lineNumber: 464,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1521,7 +1523,7 @@ function OrderListsPage() {
                                                         children: t('orderLists.items', 'Items')
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 478,
+                                                        lineNumber: 480,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1534,13 +1536,13 @@ function OrderListsPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 479,
+                                                        lineNumber: 481,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 477,
+                                                lineNumber: 479,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1559,7 +1561,7 @@ function OrderListsPage() {
                                                                                 children: t('orderLists.ingredient', 'Ingredient')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 493,
+                                                                                lineNumber: 495,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1573,7 +1575,7 @@ function OrderListsPage() {
                                                                                         children: t('orderLists.selectIngredient', 'Select ingredient')
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                        lineNumber: 500,
+                                                                                        lineNumber: 502,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     ingredients.map((ingredient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1586,19 +1588,19 @@ function OrderListsPage() {
                                                                                             ]
                                                                                         }, ingredient.id, true, {
                                                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                            lineNumber: 502,
+                                                                                            lineNumber: 504,
                                                                                             columnNumber: 33
                                                                                         }, this))
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 494,
+                                                                                lineNumber: 496,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                        lineNumber: 492,
+                                                                        lineNumber: 494,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1608,7 +1610,7 @@ function OrderListsPage() {
                                                                                 children: t('orderLists.quantity', 'Quantity')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 509,
+                                                                                lineNumber: 511,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1621,13 +1623,13 @@ function OrderListsPage() {
                                                                                 required: true
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 510,
+                                                                                lineNumber: 512,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                        lineNumber: 508,
+                                                                        lineNumber: 510,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1637,7 +1639,7 @@ function OrderListsPage() {
                                                                                 children: t('orderLists.unit', 'Unit')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 521,
+                                                                                lineNumber: 523,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1649,19 +1651,19 @@ function OrderListsPage() {
                                                                                 required: true
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 522,
+                                                                                lineNumber: 524,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                        lineNumber: 520,
+                                                                        lineNumber: 522,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 491,
+                                                                lineNumber: 493,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1675,7 +1677,7 @@ function OrderListsPage() {
                                                                         placeholder: String(t('orderLists.itemNotes', 'Item notes (optional)'))
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                        lineNumber: 533,
+                                                                        lineNumber: 535,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1694,40 +1696,40 @@ function OrderListsPage() {
                                                                                 d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                                lineNumber: 546,
+                                                                                lineNumber: 548,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                            lineNumber: 545,
+                                                                            lineNumber: 547,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                        lineNumber: 540,
+                                                                        lineNumber: 542,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                                lineNumber: 532,
+                                                                lineNumber: 534,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, index, true, {
                                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                        lineNumber: 490,
+                                                        lineNumber: 492,
                                                         columnNumber: 23
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 488,
+                                                lineNumber: 490,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 476,
+                                        lineNumber: 478,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1740,7 +1742,7 @@ function OrderListsPage() {
                                                 children: t('orderLists.cancel', 'Cancel')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 556,
+                                                lineNumber: 558,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1749,41 +1751,41 @@ function OrderListsPage() {
                                                 children: editingOrderList ? t('orderLists.update', 'Update') : t('orderLists.create', 'Create')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                                lineNumber: 563,
+                                                lineNumber: 565,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                        lineNumber: 555,
+                                        lineNumber: 557,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/order-lists/page.tsx",
-                                lineNumber: 426,
+                                lineNumber: 428,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/order-lists/page.tsx",
-                        lineNumber: 411,
+                        lineNumber: 413,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/order-lists/page.tsx",
-                    lineNumber: 410,
+                    lineNumber: 412,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/order-lists/page.tsx",
-            lineNumber: 272,
+            lineNumber: 274,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/order-lists/page.tsx",
-        lineNumber: 271,
+        lineNumber: 273,
         columnNumber: 5
     }, this);
 }

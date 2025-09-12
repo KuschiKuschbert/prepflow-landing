@@ -71,6 +71,8 @@ export default function OrderListsPage() {
   }, []);
 
   const fetchOrderLists = async () => {
+    // Disable loading state to prevent skeleton flashes during API errors
+    // setLoading(true);
     try {
       const response = await fetch(`/api/order-lists?userId=${userId}`);
       const result = await response.json();
