@@ -642,6 +642,8 @@ function ParLevelsPage() {
         }
     }["ParLevelsPage.useEffect"], []);
     const fetchParLevels = async ()=>{
+        // Disable loading state to prevent skeleton flashes during API errors
+        // setLoading(true);
         try {
             const response = await fetch("/api/par-levels?userId=".concat(userId));
             const result = await response.json();
@@ -776,7 +778,7 @@ function ParLevelsPage() {
                         height: "64px"
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                        lineNumber: 198,
+                        lineNumber: 200,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -787,23 +789,23 @@ function ParLevelsPage() {
                             height: "80px"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                            lineNumber: 200,
+                            lineNumber: 202,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                        lineNumber: 199,
+                        lineNumber: 201,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                lineNumber: 197,
+                lineNumber: 199,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/par-levels/page.tsx",
-            lineNumber: 196,
+            lineNumber: 198,
             columnNumber: 7
         }, this);
     }
@@ -825,7 +827,7 @@ function ParLevelsPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                    lineNumber: 213,
+                                    lineNumber: 215,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -833,13 +835,13 @@ function ParLevelsPage() {
                                     children: t('parLevels.subtitle', 'Set minimum stock levels for automatic reordering')
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                    lineNumber: 214,
+                                    lineNumber: 216,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                            lineNumber: 212,
+                            lineNumber: 214,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -851,13 +853,13 @@ function ParLevelsPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                            lineNumber: 216,
+                            lineNumber: 218,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                    lineNumber: 211,
+                    lineNumber: 213,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -867,12 +869,12 @@ function ParLevelsPage() {
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                        lineNumber: 227,
+                        lineNumber: 229,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                    lineNumber: 226,
+                    lineNumber: 228,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -887,12 +889,12 @@ function ParLevelsPage() {
                                     children: "📦"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                    lineNumber: 236,
+                                    lineNumber: 238,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 235,
+                                lineNumber: 237,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -900,7 +902,7 @@ function ParLevelsPage() {
                                 children: t('parLevels.noParLevels', 'No Par Levels Set')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 238,
+                                lineNumber: 240,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -908,7 +910,7 @@ function ParLevelsPage() {
                                 children: t('parLevels.noParLevelsDesc', 'Set par levels to automate your inventory management')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 239,
+                                lineNumber: 241,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -917,13 +919,13 @@ function ParLevelsPage() {
                                 children: t('parLevels.addFirstParLevel', 'Add Your First Par Level')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 240,
+                                lineNumber: 242,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                        lineNumber: 234,
+                        lineNumber: 236,
                         columnNumber: 13
                     }, this) : parLevels.map((parLevel)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-6 hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200",
@@ -943,12 +945,12 @@ function ParLevelsPage() {
                                                             children: "📦"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                            lineNumber: 257,
+                                                            lineNumber: 259,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 256,
+                                                        lineNumber: 258,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -958,7 +960,7 @@ function ParLevelsPage() {
                                                                 children: parLevel.ingredients.name
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 260,
+                                                                lineNumber: 262,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -966,19 +968,19 @@ function ParLevelsPage() {
                                                                 children: parLevel.ingredients.category
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 261,
+                                                                lineNumber: 263,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 259,
+                                                        lineNumber: 261,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 255,
+                                                lineNumber: 257,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -991,7 +993,7 @@ function ParLevelsPage() {
                                                                 children: t('parLevels.parLevel', 'Par Level')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 267,
+                                                                lineNumber: 269,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1003,13 +1005,13 @@ function ParLevelsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 268,
+                                                                lineNumber: 270,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 266,
+                                                        lineNumber: 268,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1019,7 +1021,7 @@ function ParLevelsPage() {
                                                                 children: t('parLevels.reorderPoint', 'Reorder Point')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 271,
+                                                                lineNumber: 273,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1031,13 +1033,13 @@ function ParLevelsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 272,
+                                                                lineNumber: 274,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 270,
+                                                        lineNumber: 272,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1047,7 +1049,7 @@ function ParLevelsPage() {
                                                                 children: t('parLevels.status', 'Status')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 275,
+                                                                lineNumber: 277,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1055,19 +1057,19 @@ function ParLevelsPage() {
                                                                 children: getStatusText(parLevel)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                                lineNumber: 276,
+                                                                lineNumber: 278,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 274,
+                                                        lineNumber: 276,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 265,
+                                                lineNumber: 267,
                                                 columnNumber: 21
                                             }, this),
                                             parLevel.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1075,13 +1077,13 @@ function ParLevelsPage() {
                                                 children: parLevel.notes
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 283,
+                                                lineNumber: 285,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 254,
+                                        lineNumber: 256,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1103,17 +1105,17 @@ function ParLevelsPage() {
                                                         d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 294,
+                                                        lineNumber: 296,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                    lineNumber: 293,
+                                                    lineNumber: 295,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 288,
+                                                lineNumber: 290,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1132,39 +1134,39 @@ function ParLevelsPage() {
                                                         d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 303,
+                                                        lineNumber: 305,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                    lineNumber: 302,
+                                                    lineNumber: 304,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 297,
+                                                lineNumber: 299,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 287,
+                                        lineNumber: 289,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 253,
+                                lineNumber: 255,
                                 columnNumber: 17
                             }, this)
                         }, parLevel.id, false, {
                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                            lineNumber: 249,
+                            lineNumber: 251,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                    lineNumber: 232,
+                    lineNumber: 234,
                     columnNumber: 9
                 }, this),
                 showForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1180,7 +1182,7 @@ function ParLevelsPage() {
                                         children: editingParLevel ? t('parLevels.editParLevel', 'Edit Par Level') : t('parLevels.addParLevel', 'Add Par Level')
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 318,
+                                        lineNumber: 320,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1198,23 +1200,23 @@ function ParLevelsPage() {
                                                 d: "M6 18L18 6M6 6l12 12"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 326,
+                                                lineNumber: 328,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                            lineNumber: 325,
+                                            lineNumber: 327,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 321,
+                                        lineNumber: 323,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 317,
+                                lineNumber: 319,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1228,7 +1230,7 @@ function ParLevelsPage() {
                                                 children: t('parLevels.ingredient', 'Ingredient')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 334,
+                                                lineNumber: 336,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1245,7 +1247,7 @@ function ParLevelsPage() {
                                                         children: t('parLevels.selectIngredient', 'Select an ingredient')
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                        lineNumber: 343,
+                                                        lineNumber: 345,
                                                         columnNumber: 23
                                                     }, this),
                                                     ingredients.map((ingredient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1258,19 +1260,19 @@ function ParLevelsPage() {
                                                             ]
                                                         }, ingredient.id, true, {
                                                             fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                            lineNumber: 345,
+                                                            lineNumber: 347,
                                                             columnNumber: 25
                                                         }, this))
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 337,
+                                                lineNumber: 339,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 333,
+                                        lineNumber: 335,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1280,7 +1282,7 @@ function ParLevelsPage() {
                                                 children: t('parLevels.parLevel', 'Par Level')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 354,
+                                                lineNumber: 356,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1296,13 +1298,13 @@ function ParLevelsPage() {
                                                 required: true
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 357,
+                                                lineNumber: 359,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 353,
+                                        lineNumber: 355,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1312,7 +1314,7 @@ function ParLevelsPage() {
                                                 children: t('parLevels.reorderPoint', 'Reorder Point')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 369,
+                                                lineNumber: 371,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1328,13 +1330,13 @@ function ParLevelsPage() {
                                                 required: true
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 372,
+                                                lineNumber: 374,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 368,
+                                        lineNumber: 370,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1344,7 +1346,7 @@ function ParLevelsPage() {
                                                 children: t('parLevels.unit', 'Unit')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 384,
+                                                lineNumber: 386,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1359,13 +1361,13 @@ function ParLevelsPage() {
                                                 required: true
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 387,
+                                                lineNumber: 389,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 383,
+                                        lineNumber: 385,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1375,7 +1377,7 @@ function ParLevelsPage() {
                                                 children: t('parLevels.notes', 'Notes')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 398,
+                                                lineNumber: 400,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1389,13 +1391,13 @@ function ParLevelsPage() {
                                                 placeholder: String(t('parLevels.notesPlaceholder', 'Optional notes about this par level'))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 401,
+                                                lineNumber: 403,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 397,
+                                        lineNumber: 399,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1408,7 +1410,7 @@ function ParLevelsPage() {
                                                 children: t('parLevels.cancel', 'Cancel')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 411,
+                                                lineNumber: 413,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1417,41 +1419,41 @@ function ParLevelsPage() {
                                                 children: editingParLevel ? t('parLevels.update', 'Update') : t('parLevels.create', 'Create')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                                lineNumber: 418,
+                                                lineNumber: 420,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                        lineNumber: 410,
+                                        lineNumber: 412,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/par-levels/page.tsx",
-                                lineNumber: 331,
+                                lineNumber: 333,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/par-levels/page.tsx",
-                        lineNumber: 316,
+                        lineNumber: 318,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/par-levels/page.tsx",
-                    lineNumber: 315,
+                    lineNumber: 317,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/par-levels/page.tsx",
-            lineNumber: 209,
+            lineNumber: 211,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/par-levels/page.tsx",
-        lineNumber: 208,
+        lineNumber: 210,
         columnNumber: 5
     }, this);
 }

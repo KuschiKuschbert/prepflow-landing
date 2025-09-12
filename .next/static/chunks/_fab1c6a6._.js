@@ -5315,7 +5315,7 @@ function IngredientsPage() {
     if (loading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PageSkeleton"], {}, void 0, false, {
             fileName: "[project]/app/webapp/ingredients/page.tsx",
-            lineNumber: 321,
+            lineNumber: 320,
             columnNumber: 12
         }, this);
     }
@@ -5339,7 +5339,7 @@ function IngredientsPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 331,
+                                        lineNumber: 330,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5347,13 +5347,13 @@ function IngredientsPage() {
                                         children: t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 332,
+                                        lineNumber: 331,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                lineNumber: 330,
+                                lineNumber: 329,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5364,7 +5364,7 @@ function IngredientsPage() {
                                         children: "Display costs in:"
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 336,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5380,7 +5380,7 @@ function IngredientsPage() {
                                                         children: "Grams (g)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 344,
+                                                        lineNumber: 343,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5388,7 +5388,7 @@ function IngredientsPage() {
                                                         children: "Kilograms (kg)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 345,
+                                                        lineNumber: 344,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5396,7 +5396,7 @@ function IngredientsPage() {
                                                         children: "Ounces (oz)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 346,
+                                                        lineNumber: 345,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5404,13 +5404,13 @@ function IngredientsPage() {
                                                         children: "Pounds (lb)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 347,
+                                                        lineNumber: 346,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 343,
+                                                lineNumber: 342,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("optgroup", {
@@ -5421,7 +5421,7 @@ function IngredientsPage() {
                                                         children: "Milliliters (ml)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 350,
+                                                        lineNumber: 349,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5429,7 +5429,7 @@ function IngredientsPage() {
                                                         children: "Liters (L)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 351,
+                                                        lineNumber: 350,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5437,7 +5437,7 @@ function IngredientsPage() {
                                                         children: "Teaspoons (tsp)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 352,
+                                                        lineNumber: 351,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5445,7 +5445,7 @@ function IngredientsPage() {
                                                         children: "Tablespoons (tbsp)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 353,
+                                                        lineNumber: 352,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5453,36 +5453,36 @@ function IngredientsPage() {
                                                         children: "Cups"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                        lineNumber: 354,
+                                                        lineNumber: 353,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                                lineNumber: 349,
+                                                lineNumber: 348,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                        lineNumber: 338,
+                                        lineNumber: 337,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/ingredients/page.tsx",
-                                lineNumber: 336,
+                                lineNumber: 335,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/ingredients/page.tsx",
-                        lineNumber: 329,
+                        lineNumber: 328,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 328,
+                    lineNumber: 327,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5490,7 +5490,7 @@ function IngredientsPage() {
                     children: error
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 362,
+                    lineNumber: 361,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$ingredients$2f$components$2f$IngredientActions$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -5504,7 +5504,7 @@ function IngredientsPage() {
                     loading: loading
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 368,
+                    lineNumber: 367,
                     columnNumber: 9
                 }, this),
                 showAddForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$ingredients$2f$components$2f$IngredientWizard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -5552,7 +5552,7 @@ function IngredientsPage() {
                     loading: loading
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 381,
+                    lineNumber: 380,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$ingredients$2f$components$2f$IngredientFilters$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -5569,7 +5569,7 @@ function IngredientsPage() {
                     onDisplayUnitChange: setDisplayUnit
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 412,
+                    lineNumber: 411,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$ingredients$2f$components$2f$IngredientTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -5583,7 +5583,7 @@ function IngredientsPage() {
                     loading: loading
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 427,
+                    lineNumber: 426,
                     columnNumber: 9
                 }, this),
                 editingIngredient && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$ingredients$2f$components$2f$IngredientForm$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -5626,7 +5626,7 @@ function IngredientsPage() {
                     loading: loading
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 440,
+                    lineNumber: 439,
                     columnNumber: 11
                 }, this),
                 showCSVImport && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$ingredients$2f$components$2f$CSVImportModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -5640,18 +5640,18 @@ function IngredientsPage() {
                     loading: importing
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ingredients/page.tsx",
-                    lineNumber: 477,
+                    lineNumber: 476,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/ingredients/page.tsx",
-            lineNumber: 326,
+            lineNumber: 325,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/ingredients/page.tsx",
-        lineNumber: 325,
+        lineNumber: 324,
         columnNumber: 5
     }, this);
 }

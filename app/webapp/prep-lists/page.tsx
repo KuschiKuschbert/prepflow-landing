@@ -69,7 +69,8 @@ export default function PrepListsPage() {
   }, []);
 
   const fetchPrepLists = async () => {
-    setLoading(true);
+    // Disable loading state to prevent skeleton flashes during API errors
+    // setLoading(true);
     try {
       const response = await fetch(`/api/prep-lists?userId=${userId}`);
       const result = await response.json();

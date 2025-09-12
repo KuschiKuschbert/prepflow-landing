@@ -46,7 +46,8 @@ export default function DishSectionsPage() {
   }, []);
 
   const fetchKitchenSections = async () => {
-    setLoading(true);
+    // Disable loading state to prevent skeleton flashes during API errors
+    // setLoading(true);
     try {
       const response = await fetch(`/api/kitchen-sections?userId=${userId}`);
       const result = await response.json();
