@@ -48,6 +48,33 @@
   animation: fadeInUp 0.3s ease-out forwards;
 }
 
+/* Hide any stray chart elements that might appear in corners */
+.recharts-wrapper:not(.temperature-chart-container .recharts-wrapper) {
+  display: none !important;
+}
+
+/* Ensure chart elements are properly contained */
+.recharts-surface {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Prevent any chart elements from appearing before ready */
+.recharts-wrapper {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Only show charts when explicitly loaded */
+.temperature-chart-container.loaded .recharts-wrapper {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* FOUC prevention handled by component-level loading states */
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;

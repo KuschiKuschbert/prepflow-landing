@@ -2,16 +2,11 @@
 
 /* Prevent flash of unstyled content and hide any stray chart elements */
 .temperature-chart-container {
-  opacity: 0;
+  opacity: 1;
   user-select: none;
   position: relative;
   overflow: hidden;
   transition: opacity 0.2s ease-in-out;
-}
-
-/* Show content only when ready */
-.temperature-chart-container.loaded {
-  opacity: 1;
 }
 
 /* Hide any stray Recharts elements that might appear */
@@ -52,14 +47,8 @@
   visibility: visible !important;
 }
 
-/* Completely hide chart elements until loaded */
-.temperature-chart-container:not(.loaded) .recharts-wrapper {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* Ensure chart only shows when fully loaded */
-.temperature-chart-container.loaded .recharts-wrapper {
+/* Chart elements are visible by default */
+.temperature-chart-container .recharts-wrapper {
   opacity: 1 !important;
   pointer-events: auto !important;
   transition: opacity 0.2s ease-in-out;
