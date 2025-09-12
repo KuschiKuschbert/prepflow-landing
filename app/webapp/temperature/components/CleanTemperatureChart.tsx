@@ -31,18 +31,52 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
       return equipmentFilteredLogs;
     }
     
+    // For historical data that doesn't extend to current date, be more flexible with time filtering
     const now = new Date();
     const cutoffDate = new Date();
     
     switch (timeFilter) {
       case '24h':
-        cutoffDate.setHours(now.getHours() - 24);
+        // For 24h, if we have historical data, show the most recent 24 hours of available data
+        if (equipmentFilteredLogs.length > 0) {
+          const mostRecentLog = equipmentFilteredLogs.reduce((latest, log) => {
+            const logDate = new Date(`${log.log_date} ${log.log_time}`);
+            const latestDate = new Date(`${latest.log_date} ${latest.log_time}`);
+            return logDate > latestDate ? log : latest;
+          });
+          const mostRecentDate = new Date(`${mostRecentLog.log_date} ${mostRecentLog.log_time}`);
+          cutoffDate.setTime(mostRecentDate.getTime() - (24 * 60 * 60 * 1000));
+        } else {
+          cutoffDate.setHours(now.getHours() - 24);
+        }
         break;
       case '7d':
-        cutoffDate.setDate(now.getDate() - 7);
+        // For 7d, if we have historical data, show the most recent 7 days of available data
+        if (equipmentFilteredLogs.length > 0) {
+          const mostRecentLog = equipmentFilteredLogs.reduce((latest, log) => {
+            const logDate = new Date(`${log.log_date} ${log.log_time}`);
+            const latestDate = new Date(`${latest.log_date} ${latest.log_time}`);
+            return logDate > latestDate ? log : latest;
+          });
+          const mostRecentDate = new Date(`${mostRecentLog.log_date} ${mostRecentLog.log_time}`);
+          cutoffDate.setTime(mostRecentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
+        } else {
+          cutoffDate.setDate(now.getDate() - 7);
+        }
         break;
       case '30d':
-        cutoffDate.setDate(now.getDate() - 30);
+        // For 30d, if we have historical data, show the most recent 30 days of available data
+        if (equipmentFilteredLogs.length > 0) {
+          const mostRecentLog = equipmentFilteredLogs.reduce((latest, log) => {
+            const logDate = new Date(`${log.log_date} ${log.log_time}`);
+            const latestDate = new Date(`${latest.log_date} ${latest.log_time}`);
+            return logDate > latestDate ? log : latest;
+          });
+          const mostRecentDate = new Date(`${mostRecentLog.log_date} ${mostRecentLog.log_time}`);
+          cutoffDate.setTime(mostRecentDate.getTime() - (30 * 24 * 60 * 60 * 1000));
+        } else {
+          cutoffDate.setDate(now.getDate() - 30);
+        }
         break;
       case 'all':
       default:
