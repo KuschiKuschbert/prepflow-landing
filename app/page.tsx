@@ -118,7 +118,7 @@ export default function Page() {
       {/* Floating CTA */}
       <FloatingCTA onEngagement={handleEngagement} t={t} />
       
-      {/* Scroll to Top */}
+      {/* Scroll to Top - Only on landing page */}
       <ScrollToTop />
       
       <script
