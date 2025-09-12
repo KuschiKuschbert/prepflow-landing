@@ -139,6 +139,17 @@ export default function TemperatureLogsPage() {
     }));
   }, []);
 
+  // Set default date to most recent date with data
+  useEffect(() => {
+    if (allLogs.length > 0 && !hasStartedLoading) {
+      // Find the most recent date with logs
+      const datesWithLogs = [...new Set(allLogs.map(log => log.log_date))].sort().reverse();
+      if (datesWithLogs.length > 0) {
+        setSelectedDate(datesWithLogs[0]);
+      }
+    }
+  }, [allLogs, hasStartedLoading]);
+
   useEffect(() => {
     const loadData = async () => {
       try {
