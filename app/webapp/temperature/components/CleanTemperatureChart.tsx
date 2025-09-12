@@ -18,10 +18,10 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
 
   // Filter logs based on time range and equipment
   const getFilteredLogs = () => {
-    // First filter by equipment ID
+    // First filter by equipment name (matching log.location with equipment.name)
     let equipmentFilteredLogs = logs;
-    if (equipment && equipment.id) {
-      equipmentFilteredLogs = logs.filter(log => log.equipment_id === equipment.id);
+    if (equipment && equipment.name) {
+      equipmentFilteredLogs = logs.filter(log => log.location === equipment.name);
     }
     
     // If we have logs but they're all from the same date (historical data),
