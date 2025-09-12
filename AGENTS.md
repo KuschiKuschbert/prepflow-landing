@@ -363,10 +363,24 @@ interface TrackingEvent {
 
 ## 🔧 **Development Workflow**
 
+### **🚨 CRITICAL: Git Best Practices (MANDATORY)**
+**ALL development work MUST follow this workflow to prevent code destruction:**
+
+1. **Create Feature Branch:** `git checkout -b improvement/feature-name`
+2. **Implement & Test:** Make incremental changes and test each change
+3. **Commit Changes:** `git add -A && git commit -m "feat: descriptive message"`
+4. **Test Branch:** Verify all functionality works on the branch
+5. **Merge to Main:** `git checkout main && git merge improvement/feature-name`
+6. **Test Main:** Verify functionality on main branch
+7. **Create Next Branch:** Start new branch for next improvement
+8. **Push Changes:** `git push origin main` when ready
+
+**NEVER work directly on main branch for improvements!**
+
 ### **Git Strategy**
-- **Main Branch:** Production-ready code
-- **Feature Branches:** New features and improvements
-- **Hotfix Branches:** Critical bug fixes
+- **Main Branch:** Production-ready code (protected)
+- **Improvement Branches:** All new features and improvements (`improvement/feature-name`)
+- **Hotfix Branches:** Critical bug fixes (`hotfix/bug-description`)
 - **Commit Messages:** Conventional commits with descriptive messages
 
 ### **Deployment Process**
@@ -642,11 +656,14 @@ if (error) {
 - **Use proper HTTP status codes** (400 for client errors, 500 for server errors)
 
 #### **Development Workflow**
-1. **Test locally first** - Always test changes locally
-2. **Check environment variables** - Ensure all keys are loaded
-3. **Verify database connection** - Test Supabase connectivity
-4. **Test API endpoints** - Use curl or Postman for testing
-5. **Update documentation** - Keep AGENTS.md current with changes
+1. **🚨 MANDATORY: Create feature branch** - Never work directly on main
+2. **Test locally first** - Always test changes locally
+3. **Check environment variables** - Ensure all keys are loaded
+4. **Verify database connection** - Test Supabase connectivity
+5. **Test API endpoints** - Use curl or Postman for testing
+6. **Commit and test branch** - Verify functionality before merging
+7. **Merge to main and test** - Ensure stability after merge
+8. **Update documentation** - Keep AGENTS.md current with changes
 
 #### **Current Known Issues & Solutions**
 - **"supabaseKey is required"** - Fixed with complete service role key
