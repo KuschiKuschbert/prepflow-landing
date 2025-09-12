@@ -160,7 +160,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
         {/* Time Period Filter Skeleton */}
         <div className="bg-[#1f1f1f] p-4 rounded-2xl shadow-lg border border-[#2a2a2a] flex flex-wrap gap-2">
           {['24h', '7d', '30d', 'all'].map(filter => (
-            <div key={filter} className="px-4 py-2 rounded-xl bg-gray-700 w-20 h-8 animate-pulse"></div>
+            <div key={filter} className="px-4 py-2 rounded-xl bg-gray-700 w-20 h-8"></div>
           ))}
         </div>
 

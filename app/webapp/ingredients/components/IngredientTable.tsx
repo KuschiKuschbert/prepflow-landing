@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { convertIngredientCost } from '@/lib/unit-conversion';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 interface Ingredient {
   id: string;
@@ -81,14 +82,7 @@ export default function IngredientTable({
   if (loading) {
     return (
       <div className="bg-[#1f1f1f] rounded-3xl p-6 border border-[#2a2a2a]">
-        <div className="animate-pulse">
-          <div className="h-8 bg-[#2a2a2a] rounded mb-4"></div>
-          <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-[#2a2a2a] rounded"></div>
-            ))}
-          </div>
-        </div>
+        <LoadingSkeleton variant="table" rows={5} columns={6} />
       </div>
     );
   }
