@@ -66,6 +66,7 @@ function COGSPageContent() {
     handleSearchChange,
     resetForm,
     setNewIngredient,
+    setShowSuggestions,
   } = useIngredientSearch(ingredients);
 
   // Recipe saving functionality
