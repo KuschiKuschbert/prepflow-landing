@@ -31,6 +31,13 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
       timeFilter,
       sampleEquipmentLogs: equipmentFilteredLogs.slice(0, 3)
     });
+    console.log('🔍 Filter Debug - Expanded:', 
+      'Total logs:', logs.length,
+      'Equipment name:', equipment?.name,
+      'Equipment filtered count:', equipmentFilteredLogs.length,
+      'Time filter:', timeFilter,
+      'Sample logs:', equipmentFilteredLogs.slice(0, 3)
+    );
     
     // If we have logs but they're all from the same date (historical data),
     // don't apply time filtering - just return all equipment-filtered logs
@@ -121,6 +128,12 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
     timestampFormat: chartData.length > 0 ? chartData[0].timestamp : 'N/A',
     temperatureValues: chartData.slice(0, 3).map(d => d.temperature)
   });
+  console.log('🔍 Chart Data Structure - Expanded:',
+    'Chart data length:', chartData.length,
+    'Sample chart data:', chartData.slice(0, 3),
+    'Timestamp format:', chartData.length > 0 ? chartData[0].timestamp : 'N/A',
+    'Temperature values:', chartData.slice(0, 3).map(d => d.temperature)
+  );
 
   // Handle loading state to prevent FOUC and stray chart elements
   useEffect(() => {
@@ -225,6 +238,16 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
     timeFilter,
     isLoaded
   });
+  console.log('🔍 Chart Debug Info - Expanded:',
+    'Equipment name:', equipment?.name,
+    'Filtered logs count:', filteredLogs.length,
+    'Chart data count:', chartData.length,
+    'Optimized data count:', optimizedData.length,
+    'Enhanced data count:', enhancedData.length,
+    'Sample enhanced data:', enhancedData.slice(0, 3),
+    'Time filter:', timeFilter,
+    'Is loaded:', isLoaded
+  );
   
   const latestLog = filteredLogs.length > 0 ? filteredLogs[filteredLogs.length - 1] : null;
   const latestTemperature = latestLog?.temperature_celsius;
@@ -467,11 +490,8 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
             <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
             
             <XAxis
-              dataKey="timestampMs"
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-              }}
+              dataKey="timestamp"
+              tickFormatter={formatXAxisLabel}
               stroke="#6b7280"
               fontSize={chartData.length > 1000 ? 10 : 12}
               tick={{ fill: '#9ca3af' }}
@@ -533,7 +553,6 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
                 strokeWidth: 2, 
                 fill: '#ffffff' 
               }}
-              isAnimationActive={false}
               connectNulls={false}
             />
           </LineChart>
