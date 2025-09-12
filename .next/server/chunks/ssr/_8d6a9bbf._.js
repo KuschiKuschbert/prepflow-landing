@@ -4403,10 +4403,7 @@ const useTemperatureWarnings = ({ allLogs, equipment })=>{
 "[project]/app/webapp/temperature/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-__turbopack_context__.s([
-    "default",
-    ()=>TemperatureLogsPage
-]);
+__turbopack_context__.s([]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/useTranslation.ts [app-ssr] (ecmascript)");
@@ -4425,7 +4422,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useTemperatureWarni
 ;
 ;
 ;
-function TemperatureLogsPage() {
+function TemperatureLogsPageContent() {
     const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTranslation"])();
     const { formatDate } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useCountryFormatting$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCountryFormatting"])();
     // Helper function to format time strings
@@ -4801,12 +4798,12 @@ function TemperatureLogsPage() {
                 className: "max-w-7xl mx-auto"
             }, void 0, false, {
                 fileName: "[project]/app/webapp/temperature/page.tsx",
-                lineNumber: 378,
+                lineNumber: 379,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/temperature/page.tsx",
-            lineNumber: 377,
+            lineNumber: 378,
             columnNumber: 7
         }, this);
     }
@@ -4826,7 +4823,7 @@ function TemperatureLogsPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/temperature/page.tsx",
-                            lineNumber: 391,
+                            lineNumber: 392,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4834,13 +4831,13 @@ function TemperatureLogsPage() {
                             children: t('temperature.subtitle', 'Track fridge, freezer, and food temperatures for food safety compliance')
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/temperature/page.tsx",
-                            lineNumber: 394,
+                            lineNumber: 395,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/temperature/page.tsx",
-                    lineNumber: 390,
+                    lineNumber: 391,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4859,7 +4856,7 @@ function TemperatureLogsPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/temperature/page.tsx",
-                                lineNumber: 400,
+                                lineNumber: 401,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4873,7 +4870,7 @@ function TemperatureLogsPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/temperature/page.tsx",
-                                lineNumber: 412,
+                                lineNumber: 413,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4887,18 +4884,18 @@ function TemperatureLogsPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/temperature/page.tsx",
-                                lineNumber: 424,
+                                lineNumber: 425,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/temperature/page.tsx",
-                        lineNumber: 399,
+                        lineNumber: 400,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/temperature/page.tsx",
-                    lineNumber: 398,
+                    lineNumber: 399,
                     columnNumber: 9
                 }, this),
                 activeTab === 'logs' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$temperature$2f$components$2f$TemperatureLogsTab$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4916,7 +4913,7 @@ function TemperatureLogsPage() {
                     onRefreshLogs: fetchLogs
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/temperature/page.tsx",
-                    lineNumber: 441,
+                    lineNumber: 442,
                     columnNumber: 11
                 }, this),
                 activeTab === 'equipment' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$temperature$2f$components$2f$TemperatureEquipmentTab$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4928,7 +4925,7 @@ function TemperatureLogsPage() {
                     onQuickTempLog: handleQuickTempLog
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/temperature/page.tsx",
-                    lineNumber: 458,
+                    lineNumber: 459,
                     columnNumber: 11
                 }, this),
                 activeTab === 'analytics' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$temperature$2f$components$2f$TemperatureAnalyticsTab$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4936,18 +4933,18 @@ function TemperatureLogsPage() {
                     equipment: equipment
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/temperature/page.tsx",
-                    lineNumber: 470,
+                    lineNumber: 471,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/temperature/page.tsx",
-            lineNumber: 387,
+            lineNumber: 388,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/temperature/page.tsx",
-        lineNumber: 386,
+        lineNumber: 387,
         columnNumber: 5
     }, this);
 }

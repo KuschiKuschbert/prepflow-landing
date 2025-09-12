@@ -11,6 +11,7 @@
   "/api/fix-database/route": "app/api/fix-database/route.js",
   "/api/ingredients/route": "app/api/ingredients/route.js",
   "/api/kitchen-sections/route": "app/api/kitchen-sections/route.js",
+  "/api/menu-dishes/route": "app/api/menu-dishes/route.js",
   "/api/order-lists/route": "app/api/order-lists/route.js",
   "/api/par-levels/route": "app/api/par-levels/route.js",
   "/api/performance/route": "app/api/performance/route.js",
@@ -34,6 +35,7 @@
   "/webapp/performance/page": "app/webapp/performance/page.js",
   "/webapp/prep-lists/page": "app/webapp/prep-lists/page.js",
   "/webapp/recipes/page": "app/webapp/recipes/page.js",
+  "/webapp/setup/page": "app/webapp/setup/page.js",
   "/webapp/suppliers/page": "app/webapp/suppliers/page.js",
   "/webapp/temperature/page": "app/webapp/temperature/page.js"
 }

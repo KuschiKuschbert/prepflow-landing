@@ -2301,10 +2301,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 "[project]/app/webapp/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-__turbopack_context__.s([
-    "default",
-    ()=>WebAppDashboard
-]);
+__turbopack_context__.s([]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/supabase.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
@@ -2327,7 +2324,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function WebAppDashboard() {
+function WebAppDashboardContent() {
     _s();
     const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"])();
     const [stats, setStats] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
@@ -2340,9 +2337,9 @@ function WebAppDashboard() {
     const [allLogs, setAllLogs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [equipment, setEquipment] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "WebAppDashboard.useEffect": ()=>{
+        "WebAppDashboardContent.useEffect": ()=>{
             const fetchStats = {
-                "WebAppDashboard.useEffect.fetchStats": async ()=>{
+                "WebAppDashboardContent.useEffect.fetchStats": async ()=>{
                     // Completely disabled loading state to prevent skeleton flashes
                     // setLoading(true);
                     try {
@@ -2360,8 +2357,8 @@ function WebAppDashboard() {
                         const { data: menuDishes } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('menu_dishes').select('selling_price');
                         const totalDishes = (menuDishes === null || menuDishes === void 0 ? void 0 : menuDishes.length) || 0;
                         const averagePrice = totalDishes > 0 && menuDishes ? menuDishes.reduce({
-                            "WebAppDashboard.useEffect.fetchStats": (sum, dish)=>sum + (dish.selling_price || 0)
-                        }["WebAppDashboard.useEffect.fetchStats"], 0) / totalDishes : 0;
+                            "WebAppDashboardContent.useEffect.fetchStats": (sum, dish)=>sum + (dish.selling_price || 0)
+                        }["WebAppDashboardContent.useEffect.fetchStats"], 0) / totalDishes : 0;
                         setStats({
                             totalIngredients: ingredientsCount || 0,
                             totalRecipes: recipesCount || 0,
@@ -2375,15 +2372,15 @@ function WebAppDashboard() {
                     // setLoading(false);
                     }
                 }
-            }["WebAppDashboard.useEffect.fetchStats"];
+            }["WebAppDashboardContent.useEffect.fetchStats"];
             fetchStats();
         }
-    }["WebAppDashboard.useEffect"], []);
+    }["WebAppDashboardContent.useEffect"], []);
     // Fetch temperature data for warnings
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "WebAppDashboard.useEffect": ()=>{
+        "WebAppDashboardContent.useEffect": ()=>{
             const fetchTemperatureData = {
-                "WebAppDashboard.useEffect.fetchTemperatureData": async ()=>{
+                "WebAppDashboardContent.useEffect.fetchTemperatureData": async ()=>{
                     try {
                         // Fetch temperature logs
                         const { data: logs } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('temperature_logs').select('*').order('log_date', {
@@ -2399,10 +2396,10 @@ function WebAppDashboard() {
                         console.error('Error fetching temperature data:', error);
                     }
                 }
-            }["WebAppDashboard.useEffect.fetchTemperatureData"];
+            }["WebAppDashboardContent.useEffect.fetchTemperatureData"];
             fetchTemperatureData();
         }
-    }["WebAppDashboard.useEffect"], []);
+    }["WebAppDashboardContent.useEffect"], []);
     // Use temperature warnings hook
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useTemperatureWarnings$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTemperatureWarnings"])({
         allLogs,
@@ -2411,7 +2408,7 @@ function WebAppDashboard() {
     if (loading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PageSkeleton"], {}, void 0, false, {
             fileName: "[project]/app/webapp/page.tsx",
-            lineNumber: 131,
+            lineNumber: 132,
             columnNumber: 12
         }, this);
     }
@@ -2431,7 +2428,7 @@ function WebAppDashboard() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/page.tsx",
-                            lineNumber: 139,
+                            lineNumber: 140,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2439,65 +2436,65 @@ function WebAppDashboard() {
                             children: t('dashboard.subtitle', 'Welcome back! Here\'s your kitchen overview')
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/page.tsx",
-                            lineNumber: 142,
+                            lineNumber: 143,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "mt-4",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TestWarningButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                 fileName: "[project]/app/webapp/page.tsx",
-                                lineNumber: 146,
+                                lineNumber: 147,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/page.tsx",
-                            lineNumber: 145,
+                            lineNumber: 146,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/page.tsx",
-                    lineNumber: 138,
+                    lineNumber: 139,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$components$2f$DashboardStats$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     stats: stats
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/page.tsx",
-                    lineNumber: 151,
+                    lineNumber: 152,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$components$2f$QuickActions$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                     fileName: "[project]/app/webapp/page.tsx",
-                    lineNumber: 152,
+                    lineNumber: 153,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$webapp$2f$components$2f$RecentActivity$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                     fileName: "[project]/app/webapp/page.tsx",
-                    lineNumber: 153,
+                    lineNumber: 154,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/page.tsx",
-            lineNumber: 136,
+            lineNumber: 137,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/page.tsx",
-        lineNumber: 135,
+        lineNumber: 136,
         columnNumber: 5
     }, this);
 }
-_s(WebAppDashboard, "YwW+uPfMamEvtzRWfD1xJGlVkXw=", false, function() {
+_s(WebAppDashboardContent, "YwW+uPfMamEvtzRWfD1xJGlVkXw=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"],
         __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useTemperatureWarnings$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTemperatureWarnings"]
     ];
 });
-_c = WebAppDashboard;
+_c = WebAppDashboardContent;
 var _c;
-__turbopack_context__.k.register(_c, "WebAppDashboard");
+__turbopack_context__.k.register(_c, "WebAppDashboardContent");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
