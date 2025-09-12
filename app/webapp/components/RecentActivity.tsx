@@ -2,6 +2,7 @@
 
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { useSmartLoading } from '@/hooks/useSmartLoading';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
@@ -16,10 +17,11 @@ interface RecentActivity {
 export default function RecentActivity() {
   const { t } = useTranslation();
   const [activities, setActivities] = useState<RecentActivity[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setSmartLoading] = useSmartLoading(false, 100); // Smart loading with 100ms delay
 
   useEffect(() => {
     const fetchRecentActivity = async () => {
+      setSmartLoading(true);
       try {
         // Fetch recent ingredients
         const { data: ingredients, error: ingredientsError } = await supabase
@@ -84,7 +86,7 @@ export default function RecentActivity() {
       } catch (error) {
         // Handle error gracefully
       } finally {
-        setLoading(false);
+        setSmartLoading(false);
       }
     };
 

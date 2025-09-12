@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeightUnit } from '@/lib/unit-conversion';
 import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
+import { useSmartLoading } from '@/hooks/useSmartLoading';
 import dynamic from 'next/dynamic';
 import { PageSkeleton, LoadingSkeleton, TableSkeleton, FormSkeleton } from '@/components/ui/LoadingSkeleton';
 
@@ -72,7 +73,7 @@ export default function IngredientsPage() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setSmartLoading] = useSmartLoading(false, 200); // Smart loading with 200ms delay
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(null);
@@ -136,8 +137,8 @@ export default function IngredientsPage() {
   }, [ingredients, searchTerm, supplierFilter, storageFilter, sortBy]);
 
   const fetchIngredients = async () => {
+    setSmartLoading(true);
     try {
-      setLoading(true);
       const { data, error } = await supabase
         .from('ingredients')
         .select('*')
@@ -148,7 +149,7 @@ export default function IngredientsPage() {
     } catch (error) {
       setError('Failed to fetch ingredients');
     } finally {
-      setLoading(false);
+      setSmartLoading(false);
     }
   };
 
