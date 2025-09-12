@@ -294,7 +294,7 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
 
   return (
     <div 
-      className={`bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] temperature-chart-container loaded`}
+      className={`bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] temperature-chart-container`}
       ref={chartRef}
     >
       <div className="flex items-center justify-between mb-4">

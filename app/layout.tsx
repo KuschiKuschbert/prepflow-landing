@@ -177,19 +177,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Prevent FOUC by hiding body until loaded
-              document.addEventListener('DOMContentLoaded', function() {
-                document.body.classList.add('loaded');
-              });
-              
-              // Also add loaded class immediately if DOM is already ready
-              if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                  document.body.classList.add('loaded');
-                });
-              } else {
-                document.body.classList.add('loaded');
-              }
+              // FOUC prevention handled by CSS and component-level loading states
               
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
