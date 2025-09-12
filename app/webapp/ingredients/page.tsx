@@ -6,60 +6,36 @@ import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeight
 import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import dynamic from 'next/dynamic';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageSkeleton, LoadingSkeleton, TableSkeleton, FormSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Dynamic imports for heavy components
 const IngredientTable = dynamic(() => import('./components/IngredientTable'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-64 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <TableSkeleton rows={8} columns={6} />,
   ssr: false
 });
 
 const IngredientFilters = dynamic(() => import('./components/IngredientFilters'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-32 bg-[#2a2a2a] rounded-3xl mb-6"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="form" height="128px" />,
   ssr: false
 });
 
 const IngredientActions = dynamic(() => import('./components/IngredientActions'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-16 bg-[#2a2a2a] rounded-3xl mb-6"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="button" count={3} />,
   ssr: false
 });
 
 const IngredientForm = dynamic(() => import('./components/IngredientForm'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <FormSkeleton />,
   ssr: false
 });
 
 const CSVImportModal = dynamic(() => import('./components/CSVImportModal'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-80 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <LoadingSkeleton variant="form" height="320px" />,
   ssr: false
 });
 
 const IngredientWizard = dynamic(() => import('./components/IngredientWizard'), {
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="h-96 bg-[#2a2a2a] rounded-3xl"></div>
-    </div>
-  ),
+  loading: () => <FormSkeleton />,
   ssr: false
 });
 
