@@ -23,6 +23,14 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
     if (equipment && equipment.name) {
       equipmentFilteredLogs = logs.filter(log => log.location === equipment.name);
     }
+
+    console.log('🔍 Filter Debug:', {
+      totalLogs: logs.length,
+      equipmentName: equipment?.name,
+      equipmentFilteredCount: equipmentFilteredLogs.length,
+      timeFilter,
+      sampleEquipmentLogs: equipmentFilteredLogs.slice(0, 3)
+    });
     
     // If we have logs but they're all from the same date (historical data),
     // don't apply time filtering - just return all equipment-filtered logs
@@ -93,13 +101,26 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
   
   
   const chartData = filteredLogs
-    .map(log => ({
-      timestamp: `${log.log_date} ${log.log_time}`,
-      temperature: log.temperature_celsius,
-      date: log.log_date,
-      time: log.log_time,
-    }))
-    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    .map(log => {
+      const timestamp = `${log.log_date} ${log.log_time}`;
+      const timestampMs = new Date(timestamp).getTime();
+      return {
+        timestamp: timestamp,
+        timestampMs: timestampMs,
+        temperature: log.temperature_celsius,
+        date: log.log_date,
+        time: log.log_time,
+      };
+    })
+    .sort((a, b) => a.timestampMs - b.timestampMs);
+
+  // Debug the chart data structure
+  console.log('🔍 Chart Data Structure:', {
+    chartDataLength: chartData.length,
+    sampleChartData: chartData.slice(0, 3),
+    timestampFormat: chartData.length > 0 ? chartData[0].timestamp : 'N/A',
+    temperatureValues: chartData.slice(0, 3).map(d => d.temperature)
+  });
 
   // Handle loading state to prevent FOUC and stray chart elements
   useEffect(() => {
@@ -192,6 +213,18 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
     isOutOfRange: !isTemperatureInRange(point.temperature),
     isRecentOutOfRange: !isTemperatureInRange(point.temperature) && index >= optimizedData.length - 5 // Last 5 points
   }));
+
+  // Debug logging to understand data flow
+  console.log('🔍 Chart Debug Info:', {
+    equipmentName: equipment?.name,
+    filteredLogsCount: filteredLogs.length,
+    chartDataCount: chartData.length,
+    optimizedDataCount: optimizedData.length,
+    enhancedDataCount: enhancedData.length,
+    sampleData: enhancedData.slice(0, 3),
+    timeFilter,
+    isLoaded
+  });
   
   const latestLog = filteredLogs.length > 0 ? filteredLogs[filteredLogs.length - 1] : null;
   const latestTemperature = latestLog?.temperature_celsius;
@@ -422,14 +455,23 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
         )}
       </div>
 
+      {/* Debug section - remove after fixing */}
+      <div className="mb-4 p-2 bg-gray-800 rounded text-xs">
+        <div>Debug: {enhancedData.length} data points</div>
+        <div>Sample: {JSON.stringify(enhancedData.slice(0, 2))}</div>
+      </div>
+
       <div className="w-full" style={{ height: `${adaptiveSettings.chartHeight}px` }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={enhancedData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
             
             <XAxis
-              dataKey="timestamp"
-              tickFormatter={formatXAxisLabel}
+              dataKey="timestampMs"
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+              }}
               stroke="#6b7280"
               fontSize={chartData.length > 1000 ? 10 : 12}
               tick={{ fill: '#9ca3af' }}
@@ -479,19 +521,20 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
               type="monotone"
               dataKey="temperature"
               stroke="#29E7CD"
-              strokeWidth={adaptiveSettings.lineWidth}
-              dot={adaptiveSettings.showDots ? { 
+              strokeWidth={3}
+              dot={{ 
                 fill: '#29E7CD', 
-                strokeWidth: 1, 
-                r: adaptiveSettings.dotSize 
-              } : false}
+                strokeWidth: 2, 
+                r: 4 
+              }}
               activeDot={{ 
-                r: adaptiveSettings.dotSize + 2, 
+                r: 6, 
                 stroke: '#29E7CD', 
                 strokeWidth: 2, 
                 fill: '#ffffff' 
               }}
               isAnimationActive={false}
+              connectNulls={false}
             />
           </LineChart>
         </ResponsiveContainer>
