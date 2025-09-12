@@ -14,6 +14,49 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
+// Custom Material Design 3 Line Drawing Animation Plugin
+const materialLineDrawingPlugin = {
+  id: 'materialLineDrawing',
+  beforeDraw: (chart: any) => {
+    const { ctx, data } = chart;
+    const dataset = data.datasets[0];
+    
+    if (!dataset || !dataset.data || dataset.data.length === 0) return;
+    
+    // Get the line path
+    const meta = chart.getDatasetMeta(0);
+    if (!meta || !meta.data) return;
+    
+    // Create gradient for the line
+    const gradient = ctx.createLinearGradient(0, 0, chart.width, 0);
+    gradient.addColorStop(0, 'rgba(41, 231, 205, 0.8)');
+    gradient.addColorStop(0.5, '#29E7CD');
+    gradient.addColorStop(1, 'rgba(41, 231, 205, 0.8)');
+    
+    // Draw the line with Material Design 3 styling
+    ctx.save();
+    ctx.strokeStyle = gradient;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = 'rgba(41, 231, 205, 0.3)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetY = 2;
+    
+    // Draw the path
+    ctx.beginPath();
+    meta.data.forEach((point: any, index: number) => {
+      if (index === 0) {
+        ctx.moveTo(point.x, point.y);
+      } else {
+        ctx.lineTo(point.x, point.y);
+      }
+    });
+    ctx.stroke();
+    ctx.restore();
+  }
+};
+
 // Register Chart.js components
 ChartJS.register(
   CategoryScale,
@@ -23,7 +66,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  materialLineDrawingPlugin
 );
 
 interface TemperatureLog {
@@ -166,13 +210,45 @@ export default function ChartJSTemperatureChart({
   // Don't render chart if not loaded, no data, or invalid equipment
   if (!isLoaded || chartData.length === 0 || !equipment || !equipment.name) {
     return (
-      <div className="w-full h-96 bg-gray-800 rounded-lg flex items-center justify-center">
-        <div className="text-gray-400">Loading chart...</div>
+      <div className="w-full h-96 bg-gray-800 rounded-lg flex items-center justify-center relative overflow-hidden">
+        {/* Material Design 3 Loading Animation */}
+        <div className="absolute inset-0">
+          {/* Animated background lines */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="h-full w-full bg-gradient-to-r from-transparent via-gray-600 to-transparent animate-pulse"></div>
+          </div>
+          
+          {/* Animated line drawing effect */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-3/4 h-1 bg-gradient-to-r from-transparent via-[#29E7CD] to-transparent rounded-full animate-pulse"></div>
+          </div>
+          
+          {/* Animated dots */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex space-x-2">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"
+                  style={{
+                    animationDelay: `${i * 0.2}s`,
+                    animationDuration: '1.5s'
+                  }}
+                ></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Loading text */}
+        <div className="text-gray-400 text-sm font-medium relative z-10">
+          Drawing temperature path...
+        </div>
       </div>
     );
   }
 
-  // Chart.js configuration
+  // Chart.js configuration with Material Design 3 styling
   const data = {
     labels: chartData.map(point => {
       const date = new Date(point.timestamp);
@@ -186,12 +262,23 @@ export default function ChartJSTemperatureChart({
         backgroundColor: 'rgba(41, 231, 205, 0.1)',
         borderWidth: 3,
         fill: true,
-        tension: 0.1,
+        tension: 0.1, // Smooth curves for Material Design 3
         pointBackgroundColor: '#29E7CD',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 4,
         pointHoverRadius: 6,
+        // Animation properties
+        borderOpacity: 0, // Start invisible for animation
+        pointOpacity: 0, // Start invisible for animation
+        // Material Design 3 gradient fill
+        backgroundColor: (context: any) => {
+          const gradient = context.chart.ctx.createLinearGradient(0, 0, 0, context.chart.height);
+          gradient.addColorStop(0, 'rgba(41, 231, 205, 0.3)');
+          gradient.addColorStop(0.5, 'rgba(41, 231, 205, 0.1)');
+          gradient.addColorStop(1, 'rgba(41, 231, 205, 0.05)');
+          return gradient;
+        },
       },
     ],
   };
@@ -199,6 +286,32 @@ export default function ChartJSTemperatureChart({
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    // Material Design 3 Animation Configuration
+    animation: {
+      duration: 2000, // 2 second line drawing animation
+      easing: 'easeInOutQuart', // Smooth Material Design easing
+      delay: (context: any) => {
+        // Staggered animation for multiple datasets
+        return context.type === 'data' && context.mode === 'default' ? context.dataIndex * 50 : 0;
+      },
+      // Line drawing animation
+      onProgress: (animation: any) => {
+        // This creates the path drawing effect
+        const progress = animation.currentStep / animation.numSteps;
+        // Update line opacity and point visibility based on progress
+        if (animation.chart.data.datasets[0]) {
+          animation.chart.data.datasets[0].borderOpacity = progress;
+          animation.chart.data.datasets[0].pointOpacity = progress;
+        }
+      },
+      onComplete: (animation: any) => {
+        // Ensure final state is fully visible
+        if (animation.chart.data.datasets[0]) {
+          animation.chart.data.datasets[0].borderOpacity = 1;
+          animation.chart.data.datasets[0].pointOpacity = 1;
+        }
+      },
+    },
     plugins: {
       legend: {
         display: false,
@@ -209,24 +322,49 @@ export default function ChartJSTemperatureChart({
         bodyColor: '#ffffff',
         borderColor: '#29E7CD',
         borderWidth: 1,
+        // Material Design 3 tooltip styling
+        cornerRadius: 12,
+        displayColors: false,
+        titleFont: {
+          size: 14,
+          weight: '500',
+        },
+        bodyFont: {
+          size: 13,
+        },
+        padding: 12,
       },
     },
     scales: {
       x: {
         grid: {
           color: 'rgba(42, 42, 42, 0.5)',
+          drawBorder: false,
         },
         ticks: {
           color: '#9ca3af',
           maxTicksLimit: chartData.length > 1000 ? 10 : 20,
+          font: {
+            size: 12,
+          },
+        },
+        border: {
+          display: false,
         },
       },
       y: {
         grid: {
           color: 'rgba(42, 42, 42, 0.5)',
+          drawBorder: false,
         },
         ticks: {
           color: '#9ca3af',
+          font: {
+            size: 12,
+          },
+        },
+        border: {
+          display: false,
         },
         // Add threshold lines
         afterBuildTicks: (axis: any) => {
@@ -246,7 +384,23 @@ export default function ChartJSTemperatureChart({
     elements: {
       point: {
         hoverBackgroundColor: '#29E7CD',
+        hoverBorderColor: '#ffffff',
+        hoverBorderWidth: 3,
+        hoverRadius: 8,
       },
+      line: {
+        borderCapStyle: 'round', // Rounded line caps for Material Design 3
+        borderJoinStyle: 'round', // Rounded line joins
+      },
+    },
+    // Material Design 3 interaction configuration
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
+    // Hover effects
+    hover: {
+      animationDuration: 200,
     },
   };
 
