@@ -267,7 +267,7 @@ export default function IngredientWizard({
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-white">🥘 Add New Ingredient</h2>
         <div className="flex items-center space-x-2">
-          <div className="w-2 h-2 bg-[#29E7CD] rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-[#29E7CD] rounded-full"></div>
           <span className="text-xs text-gray-400">Guided Setup</span>
         </div>
       </div>

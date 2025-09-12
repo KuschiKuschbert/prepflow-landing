@@ -45,7 +45,7 @@ export default function TemperatureLogsPage() {
   const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton showing
-  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track initial load to prevent FOUC
+  const [isInitialLoad, setIsInitialLoad] = useState(false); // Start with false to prevent skeleton flash
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
   const [quickTempLoading, setQuickTempLoading] = useState<{[key: string]: boolean}>({});
   const [selectedDate, setSelectedDate] = useState('');
@@ -150,12 +150,12 @@ export default function TemperatureLogsPage() {
 
   // Set default date to most recent date with data after initial load
   useEffect(() => {
-    if (allLogs.length > 0 && isInitialLoad) {
+    if (allLogs.length > 0 && !isInitialLoad) {
       // Find the most recent date with logs
       const datesWithLogs = [...new Set(allLogs.map(log => log.log_date))].sort().reverse();
       if (datesWithLogs.length > 0) {
         setSelectedDate(datesWithLogs[0]);
-        setIsInitialLoad(false); // Prevent this from running again
+        setIsInitialLoad(true); // Mark as processed
       }
     }
   }, [allLogs, isInitialLoad]);
@@ -164,7 +164,6 @@ export default function TemperatureLogsPage() {
     const loadData = async () => {
       try {
         setLoading(true);
-        setIsInitialLoad(true);
         
         // Load all data in parallel for better performance
         await Promise.all([
@@ -178,7 +177,6 @@ export default function TemperatureLogsPage() {
         console.error('Error loading temperature data:', error);
       } finally {
         setLoading(false);
-        setIsInitialLoad(false);
       }
     };
     loadData();
@@ -382,7 +380,7 @@ export default function TemperatureLogsPage() {
   };
 
   // Only show content when data is ready
-  if (isInitialLoad || equipment.length === 0) {
+  if (equipment.length === 0) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">

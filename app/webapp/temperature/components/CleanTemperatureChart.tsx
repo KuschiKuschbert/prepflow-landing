@@ -399,7 +399,7 @@ export default function CleanTemperatureChart({ logs, equipment, timeFilter }: C
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-semibold text-white chart-title">{equipment.name}</h3>
           {hasRecentOutOfRange && (
-            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
           )}
         </div>
         <div className="flex items-center space-x-2">

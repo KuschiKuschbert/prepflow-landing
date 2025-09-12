@@ -246,7 +246,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
                     <div className={`rounded-full ${
                       isCompact ? 'w-1 h-1' : 'w-1.5 h-1.5'
                     } ${
-                      isOutOfRange ? 'bg-red-500 animate-pulse' : 
+                      isOutOfRange ? 'bg-red-500' : 
                       needsSetup ? 'bg-yellow-500' : 
                       'bg-green-500'
                     }`}></div>
