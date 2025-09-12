@@ -5,6 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { TemperatureLog, TemperatureEquipment } from './types';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 // Direct imports to eliminate skeleton flashes
 import TemperatureLogsTab from './components/TemperatureLogsTab';
@@ -15,7 +16,7 @@ import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 
 
-export default function TemperatureLogsPage() {
+function TemperatureLogsPageContent() {
   const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
   
@@ -475,5 +476,13 @@ export default function TemperatureLogsPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function TemperatureLogsPage() {
+  return (
+    <ErrorBoundary>
+      <TemperatureLogsPageContent />
+    </ErrorBoundary>
   );
 }

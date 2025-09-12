@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { useRecipeManagement } from './hooks/useRecipeManagement';
 import { useAIInstructions } from './hooks/useAIInstructions';
 import { Recipe, RecipeIngredient, COGSCalculation } from './types';
@@ -14,7 +15,7 @@ import RecipeForm from './components/RecipeForm';
 import BulkActionsBar from './components/BulkActionsBar';
 import RecipePreviewModal from './components/RecipePreviewModal';
 
-export default function RecipesPageRefactored() {
+function RecipesPageContent() {
   const router = useRouter();
   const {
     recipes,
@@ -669,5 +670,13 @@ export default function RecipesPageRefactored() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function RecipesPageRefactored() {
+  return (
+    <ErrorBoundary>
+      <RecipesPageContent />
+    </ErrorBoundary>
   );
 }

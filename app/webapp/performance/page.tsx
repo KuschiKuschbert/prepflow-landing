@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageSkeleton, LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 // Direct imports to eliminate skeleton flashes
 import { BarChart, PieChart, Bar, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -26,7 +27,7 @@ interface PerformanceItem extends MenuDish {
   menu_item_class: 'Chef\'s Kiss' | 'Hidden Gem' | 'Bargain Bucket' | 'Burnt Toast';
 }
 
-export default function PerformancePage() {
+function PerformancePageContent() {
   const { t } = useTranslation();
   const [performanceItems, setPerformanceItems] = useState<PerformanceItem[]>([]);
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
@@ -720,5 +721,13 @@ export default function PerformancePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PerformancePage() {
+  return (
+    <ErrorBoundary>
+      <PerformancePageContent />
+    </ErrorBoundary>
   );
 }
