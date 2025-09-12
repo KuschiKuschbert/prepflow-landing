@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 interface Recipe {
   id: string;
@@ -147,13 +148,9 @@ export default function RecipeSharingPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white">
         <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-[#1f1f1f] rounded w-1/4 mb-6"></div>
-            <div className="space-y-4">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 bg-[#1f1f1f] rounded-2xl"></div>
-              ))}
-            </div>
+          <LoadingSkeleton variant="stats" height="64px" />
+          <div className="space-y-4 mt-6">
+            <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
       </div>

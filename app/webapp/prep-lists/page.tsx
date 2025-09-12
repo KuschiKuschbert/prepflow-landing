@@ -69,6 +69,7 @@ export default function PrepListsPage() {
   }, []);
 
   const fetchPrepLists = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/prep-lists?userId=${userId}`);
       const result = await response.json();

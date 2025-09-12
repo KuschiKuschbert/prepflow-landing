@@ -30,6 +30,7 @@ export default function AISpecialsPage() {
   }, []);
 
   const fetchAISpecials = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/ai-specials?userId=${userId}`);
       const result = await response.json();

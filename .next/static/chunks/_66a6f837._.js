@@ -600,12 +600,12 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/app/webapp/prep-lists/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
+"[project]/app/webapp/par-levels/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
-    ()=>PrepListsPage
+    ()=>ParLevelsPage
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
@@ -617,56 +617,43 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function PrepListsPage() {
+function ParLevelsPage() {
     _s();
     const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"])();
-    const [prepLists, setPrepLists] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [kitchenSections, setKitchenSections] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [parLevels, setParLevels] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [ingredients, setIngredients] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // Start with false to prevent skeleton flash
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [showForm, setShowForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [editingPrepList, setEditingPrepList] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [editingParLevel, setEditingParLevel] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
-        kitchenSectionId: '',
-        name: '',
-        notes: '',
-        items: []
+        ingredientId: '',
+        parLevel: '',
+        reorderPoint: '',
+        unit: '',
+        notes: ''
     });
     // Mock user ID for now
     const userId = 'user-123';
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "PrepListsPage.useEffect": ()=>{
-            fetchPrepLists();
-            fetchKitchenSections();
+        "ParLevelsPage.useEffect": ()=>{
+            fetchParLevels();
             fetchIngredients();
         }
-    }["PrepListsPage.useEffect"], []);
-    const fetchPrepLists = async ()=>{
-        setLoading(true);
+    }["ParLevelsPage.useEffect"], []);
+    const fetchParLevels = async ()=>{
         try {
-            const response = await fetch("/api/prep-lists?userId=".concat(userId));
+            const response = await fetch("/api/par-levels?userId=".concat(userId));
             const result = await response.json();
             if (result.success) {
-                setPrepLists(result.data);
+                setParLevels(result.data);
             } else {
-                setError(result.message || 'Failed to fetch prep lists');
+                setError(result.message || 'Failed to fetch par levels');
             }
         } catch (err) {
-            setError('Failed to fetch prep lists');
+            setError('Failed to fetch par levels');
         } finally{
             setLoading(false);
-        }
-    };
-    const fetchKitchenSections = async ()=>{
-        try {
-            const response = await fetch("/api/kitchen-sections?userId=".concat(userId));
-            const result = await response.json();
-            if (result.success) {
-                setKitchenSections(result.data);
-            }
-        } catch (err) {
-            console.error('Failed to fetch kitchen sections:', err);
         }
     };
     const fetchIngredients = async ()=>{
@@ -683,21 +670,21 @@ function PrepListsPage() {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         try {
-            const url = editingPrepList ? '/api/prep-lists' : '/api/prep-lists';
-            const method = editingPrepList ? 'PUT' : 'POST';
-            const body = editingPrepList ? {
-                id: editingPrepList.id,
-                kitchenSectionId: formData.kitchenSectionId,
-                name: formData.name,
-                notes: formData.notes,
-                status: 'draft',
-                items: formData.items.filter((item)=>item.ingredientId && item.quantity)
+            const url = editingParLevel ? '/api/par-levels' : '/api/par-levels';
+            const method = editingParLevel ? 'PUT' : 'POST';
+            const body = editingParLevel ? {
+                id: editingParLevel.id,
+                parLevel: parseFloat(formData.parLevel),
+                reorderPoint: parseFloat(formData.reorderPoint),
+                unit: formData.unit,
+                notes: formData.notes
             } : {
                 userId,
-                kitchenSectionId: formData.kitchenSectionId,
-                name: formData.name,
-                notes: formData.notes,
-                items: formData.items.filter((item)=>item.ingredientId && item.quantity)
+                ingredientId: formData.ingredientId,
+                parLevel: parseFloat(formData.parLevel),
+                reorderPoint: parseFloat(formData.reorderPoint),
+                unit: formData.unit,
+                notes: formData.notes
             };
             const response = await fetch(url, {
                 method,
@@ -708,131 +695,116 @@ function PrepListsPage() {
             });
             const result = await response.json();
             if (result.success) {
-                await fetchPrepLists();
+                await fetchParLevels();
                 resetForm();
                 setError(null);
             } else {
-                setError(result.message || 'Failed to save prep list');
+                setError(result.message || 'Failed to save par level');
             }
         } catch (err) {
-            setError('Failed to save prep list');
+            setError('Failed to save par level');
         }
     };
-    const handleEdit = (prepList)=>{
-        setEditingPrepList(prepList);
+    const handleEdit = (parLevel)=>{
+        setEditingParLevel(parLevel);
         setFormData({
-            kitchenSectionId: prepList.kitchen_section_id,
-            name: prepList.name,
-            notes: prepList.notes || '',
-            items: prepList.prep_list_items.map((item)=>({
-                    ingredientId: item.ingredient_id,
-                    quantity: item.quantity.toString(),
-                    unit: item.unit,
-                    notes: item.notes || ''
-                }))
+            ingredientId: parLevel.ingredient_id,
+            parLevel: parLevel.par_level.toString(),
+            reorderPoint: parLevel.reorder_point.toString(),
+            unit: parLevel.unit,
+            notes: parLevel.notes || ''
         });
         setShowForm(true);
     };
     const handleDelete = async (id)=>{
-        if (!confirm('Are you sure you want to delete this prep list?')) return;
+        if (!confirm('Are you sure you want to delete this par level?')) return;
         try {
-            const response = await fetch("/api/prep-lists?id=".concat(id), {
+            const response = await fetch("/api/par-levels?id=".concat(id), {
                 method: 'DELETE'
             });
             const result = await response.json();
             if (result.success) {
-                await fetchPrepLists();
+                await fetchParLevels();
             } else {
-                setError(result.message || 'Failed to delete prep list');
+                setError(result.message || 'Failed to delete par level');
             }
         } catch (err) {
-            setError('Failed to delete prep list');
+            setError('Failed to delete par level');
         }
-    };
-    const handleStatusChange = async (id, status)=>{
-        try {
-            const response = await fetch('/api/prep-lists', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id,
-                    status
-                })
-            });
-            const result = await response.json();
-            if (result.success) {
-                await fetchPrepLists();
-            } else {
-                setError(result.message || 'Failed to update status');
-            }
-        } catch (err) {
-            setError('Failed to update status');
-        }
-    };
-    const addItem = ()=>{
-        setFormData({
-            ...formData,
-            items: [
-                ...formData.items,
-                {
-                    ingredientId: '',
-                    quantity: '',
-                    unit: '',
-                    notes: ''
-                }
-            ]
-        });
-    };
-    const removeItem = (index)=>{
-        setFormData({
-            ...formData,
-            items: formData.items.filter((_, i)=>i !== index)
-        });
-    };
-    const updateItem = (index, field, value)=>{
-        const newItems = [
-            ...formData.items
-        ];
-        newItems[index] = {
-            ...newItems[index],
-            [field]: value
-        };
-        setFormData({
-            ...formData,
-            items: newItems
-        });
     };
     const resetForm = ()=>{
         setFormData({
-            kitchenSectionId: '',
-            name: '',
-            notes: '',
-            items: []
+            ingredientId: '',
+            parLevel: '',
+            reorderPoint: '',
+            unit: '',
+            notes: ''
         });
         setShowForm(false);
-        setEditingPrepList(null);
+        setEditingParLevel(null);
     };
-    const getStatusColor = (status)=>{
-        switch(status){
-            case 'draft':
-                return 'text-gray-400 bg-gray-400/10';
-            case 'active':
-                return 'text-blue-400 bg-blue-400/10';
-            case 'completed':
-                return 'text-green-400 bg-green-400/10';
-            case 'cancelled':
-                return 'text-red-400 bg-red-400/10';
-            default:
-                return 'text-gray-400 bg-gray-400/10';
+    const getStatusColor = (parLevel)=>{
+        // This would be calculated based on current stock levels
+        // For now, we'll use a mock calculation
+        const currentStock = Math.random() * parLevel.par_level * 2; // Mock current stock
+        if (currentStock <= parLevel.reorder_point) {
+            return 'text-red-400 bg-red-400/10';
+        } else if (currentStock <= parLevel.par_level) {
+            return 'text-yellow-400 bg-yellow-400/10';
+        } else {
+            return 'text-green-400 bg-green-400/10';
+        }
+    };
+    const getStatusText = (parLevel)=>{
+        const currentStock = Math.random() * parLevel.par_level * 2; // Mock current stock
+        if (currentStock <= parLevel.reorder_point) {
+            return 'Reorder Now';
+        } else if (currentStock <= parLevel.par_level) {
+            return 'Low Stock';
+        } else {
+            return 'In Stock';
         }
     };
     if (loading) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PageSkeleton"], {}, void 0, false, {
-            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-            lineNumber: 257,
-            columnNumber: 12
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "min-h-screen bg-[#0a0a0a] text-white",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "container mx-auto px-4 py-8",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {
+                        variant: "stats",
+                        height: "64px"
+                    }, void 0, false, {
+                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                        lineNumber: 198,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "space-y-4 mt-6",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {
+                            variant: "card",
+                            count: 5,
+                            height: "80px"
+                        }, void 0, false, {
+                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                            lineNumber: 200,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                        lineNumber: 199,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                lineNumber: 197,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/app/webapp/par-levels/page.tsx",
+            lineNumber: 196,
+            columnNumber: 7
         }, this);
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -848,26 +820,26 @@ function PrepListsPage() {
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                     className: "text-3xl font-bold text-white mb-2",
                                     children: [
-                                        "📝 ",
-                                        t('prepLists.title', 'Prep Lists')
+                                        "📦 ",
+                                        t('parLevels.title', 'Par Level Management')
                                     ]
                                 }, void 0, true, {
-                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                    lineNumber: 266,
+                                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                    lineNumber: 213,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-gray-400",
-                                    children: t('prepLists.subtitle', 'Create and manage kitchen prep lists by section')
+                                    children: t('parLevels.subtitle', 'Set minimum stock levels for automatic reordering')
                                 }, void 0, false, {
-                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                    lineNumber: 267,
+                                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                    lineNumber: 214,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
-                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                            lineNumber: 265,
+                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                            lineNumber: 212,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -875,17 +847,17 @@ function PrepListsPage() {
                             className: "px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:shadow-xl transition-all duration-200 font-semibold",
                             children: [
                                 "+ ",
-                                t('prepLists.createPrepList', 'Create Prep List')
+                                t('parLevels.addParLevel', 'Add Par Level')
                             ]
                         }, void 0, true, {
-                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                            lineNumber: 269,
+                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                            lineNumber: 216,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 264,
+                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                    lineNumber: 211,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -894,69 +866,69 @@ function PrepListsPage() {
                         className: "text-red-400",
                         children: error
                     }, void 0, false, {
-                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                        lineNumber: 280,
+                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                        lineNumber: 227,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 279,
+                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                    lineNumber: 226,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "space-y-4",
-                    children: prepLists.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    children: parLevels.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "text-center py-12",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-20 h-20 bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 rounded-2xl flex items-center justify-center mx-auto mb-4",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     className: "text-3xl",
-                                    children: "📝"
+                                    children: "📦"
                                 }, void 0, false, {
-                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                    lineNumber: 289,
+                                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                    lineNumber: 236,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 288,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 235,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                 className: "text-xl font-semibold text-white mb-2",
-                                children: t('prepLists.noPrepLists', 'No Prep Lists')
+                                children: t('parLevels.noParLevels', 'No Par Levels Set')
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 291,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 238,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-gray-400 mb-6",
-                                children: t('prepLists.noPrepListsDesc', 'Create your first prep list to organize kitchen preparation')
+                                children: t('parLevels.noParLevelsDesc', 'Set par levels to automate your inventory management')
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 292,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 239,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>setShowForm(true),
                                 className: "px-6 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-2xl hover:shadow-xl transition-all duration-200 font-semibold",
-                                children: t('prepLists.createFirstPrepList', 'Create Your First Prep List')
+                                children: t('parLevels.addFirstParLevel', 'Add Your First Par Level')
                             }, void 0, false, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 293,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 240,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                        lineNumber: 287,
+                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                        lineNumber: 234,
                         columnNumber: 13
-                    }, this) : prepLists.map((prepList)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    }, this) : parLevels.map((parLevel)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-6 hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center justify-between mb-4",
+                                className: "flex items-center justify-between",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex-1",
@@ -965,364 +937,250 @@ function PrepListsPage() {
                                                 className: "flex items-center space-x-4 mb-3",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "w-12 h-12 rounded-xl flex items-center justify-center",
-                                                        style: {
-                                                            backgroundColor: "".concat(prepList.kitchen_sections.color, "20")
-                                                        },
+                                                        className: "w-12 h-12 bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 rounded-xl flex items-center justify-center",
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-lg",
-                                                            children: "📝"
+                                                            children: "📦"
                                                         }, void 0, false, {
-                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                            lineNumber: 313,
+                                                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                            lineNumber: 257,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 309,
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 256,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                                 className: "font-semibold text-white text-lg",
-                                                                children: prepList.name
+                                                                children: parLevel.ingredients.name
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 316,
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 260,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-sm text-gray-400",
-                                                                children: prepList.kitchen_sections.name
+                                                                children: parLevel.ingredients.category
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 317,
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 261,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 315,
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 259,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 308,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 255,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex items-center space-x-4 mb-4",
+                                                className: "grid grid-cols-1 md:grid-cols-3 gap-4 mb-4",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-xs text-gray-400 mb-1",
-                                                                children: t('prepLists.status', 'Status')
+                                                                children: t('parLevels.parLevel', 'Par Level')
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 323,
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 267,
+                                                                columnNumber: 25
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-white font-semibold",
+                                                                children: [
+                                                                    parLevel.par_level,
+                                                                    " ",
+                                                                    parLevel.unit
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 268,
+                                                                columnNumber: 25
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 266,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-xs text-gray-400 mb-1",
+                                                                children: t('parLevels.reorderPoint', 'Reorder Point')
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 271,
+                                                                columnNumber: 25
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-white font-semibold",
+                                                                children: [
+                                                                    parLevel.reorder_point,
+                                                                    " ",
+                                                                    parLevel.unit
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 272,
+                                                                columnNumber: 25
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 270,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-xs text-gray-400 mb-1",
+                                                                children: t('parLevels.status', 'Status')
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 275,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ".concat(getStatusColor(prepList.status)),
-                                                                children: prepList.status.charAt(0).toUpperCase() + prepList.status.slice(1)
+                                                                className: "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ".concat(getStatusColor(parLevel)),
+                                                                children: getStatusText(parLevel)
                                                             }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 324,
+                                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                                lineNumber: 276,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 322,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-xs text-gray-400 mb-1",
-                                                                children: t('prepLists.items', 'Items')
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 329,
-                                                                columnNumber: 25
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-white font-semibold",
-                                                                children: prepList.prep_list_items.length
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 330,
-                                                                columnNumber: 25
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 328,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-xs text-gray-400 mb-1",
-                                                                children: t('prepLists.created', 'Created')
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 333,
-                                                                columnNumber: 25
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-white font-semibold",
-                                                                children: new Date(prepList.created_at).toLocaleDateString()
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 334,
-                                                                columnNumber: 25
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 332,
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 274,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 321,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 265,
                                                 columnNumber: 21
                                             }, this),
-                                            prepList.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-sm text-gray-300 mb-4",
-                                                children: prepList.notes
+                                            parLevel.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-sm text-gray-300",
+                                                children: parLevel.notes
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 339,
-                                                columnNumber: 23
-                                            }, this),
-                                            prepList.prep_list_items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "bg-[#2a2a2a]/30 rounded-xl p-4",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                                        className: "text-sm font-semibold text-white mb-3",
-                                                        children: t('prepLists.items', 'Items')
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 345,
-                                                        columnNumber: 25
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "space-y-2",
-                                                        children: [
-                                                            prepList.prep_list_items.slice(0, 3).map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "flex items-center justify-between text-sm",
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "text-gray-300",
-                                                                            children: item.ingredients.name
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                            lineNumber: 349,
-                                                                            columnNumber: 31
-                                                                        }, this),
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "text-white font-semibold",
-                                                                            children: [
-                                                                                item.quantity,
-                                                                                " ",
-                                                                                item.unit
-                                                                            ]
-                                                                        }, void 0, true, {
-                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                            lineNumber: 350,
-                                                                            columnNumber: 31
-                                                                        }, this)
-                                                                    ]
-                                                                }, item.id, true, {
-                                                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                    lineNumber: 348,
-                                                                    columnNumber: 29
-                                                                }, this)),
-                                                            prepList.prep_list_items.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                className: "text-xs text-gray-400",
-                                                                children: [
-                                                                    "+",
-                                                                    prepList.prep_list_items.length - 3,
-                                                                    " more items"
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 354,
-                                                                columnNumber: 29
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 346,
-                                                        columnNumber: 25
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 344,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 283,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 307,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 254,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "flex flex-col space-y-2",
+                                        className: "flex items-center space-x-2",
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                                value: prepList.status,
-                                                onChange: (e)=>handleStatusChange(prepList.id, e.target.value),
-                                                className: "px-3 py-2 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "draft",
-                                                        children: "Draft"
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>handleEdit(parLevel),
+                                                className: "p-2 text-[#29E7CD] hover:bg-[#29E7CD]/10 rounded-xl transition-colors",
+                                                title: String(t('parLevels.edit', 'Edit')),
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-5 h-5",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    viewBox: "0 0 24 24",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        strokeWidth: 2,
+                                                        d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 368,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "active",
-                                                        children: "Active"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 369,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "completed",
-                                                        children: "Completed"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 370,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "cancelled",
-                                                        children: "Cancelled"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 371,
-                                                        columnNumber: 23
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 294,
+                                                        columnNumber: 25
                                                     }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 363,
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                    lineNumber: 293,
+                                                    columnNumber: 23
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 288,
                                                 columnNumber: 21
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex space-x-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        onClick: ()=>handleEdit(prepList),
-                                                        className: "p-2 text-[#29E7CD] hover:bg-[#29E7CD]/10 rounded-xl transition-colors",
-                                                        title: String(t('prepLists.edit', 'Edit')),
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                                            className: "w-5 h-5",
-                                                            fill: "none",
-                                                            stroke: "currentColor",
-                                                            viewBox: "0 0 24 24",
-                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                                                strokeLinecap: "round",
-                                                                strokeLinejoin: "round",
-                                                                strokeWidth: 2,
-                                                                d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 381,
-                                                                columnNumber: 27
-                                                            }, this)
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                            lineNumber: 380,
-                                                            columnNumber: 25
-                                                        }, this)
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>handleDelete(parLevel.id),
+                                                className: "p-2 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors",
+                                                title: String(t('parLevels.delete', 'Delete')),
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                    className: "w-5 h-5",
+                                                    fill: "none",
+                                                    stroke: "currentColor",
+                                                    viewBox: "0 0 24 24",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        strokeWidth: 2,
+                                                        d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 375,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        onClick: ()=>handleDelete(prepList.id),
-                                                        className: "p-2 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors",
-                                                        title: String(t('prepLists.delete', 'Delete')),
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                                            className: "w-5 h-5",
-                                                            fill: "none",
-                                                            stroke: "currentColor",
-                                                            viewBox: "0 0 24 24",
-                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                                                strokeLinecap: "round",
-                                                                strokeLinejoin: "round",
-                                                                strokeWidth: 2,
-                                                                d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 390,
-                                                                columnNumber: 27
-                                                            }, this)
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                            lineNumber: 389,
-                                                            columnNumber: 25
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 384,
-                                                        columnNumber: 23
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 303,
+                                                        columnNumber: 25
                                                     }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 374,
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                    lineNumber: 302,
+                                                    columnNumber: 23
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 297,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 361,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 287,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 306,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 253,
                                 columnNumber: 17
                             }, this)
-                        }, prepList.id, false, {
-                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                            lineNumber: 302,
+                        }, parLevel.id, false, {
+                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                            lineNumber: 249,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 285,
+                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                    lineNumber: 232,
                     columnNumber: 9
                 }, this),
                 showForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-3xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto",
+                        className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-3xl p-6 w-full max-w-md",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center justify-between mb-6",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                         className: "text-xl font-semibold text-white",
-                                        children: editingPrepList ? t('prepLists.editPrepList', 'Edit Prep List') : t('prepLists.createPrepList', 'Create Prep List')
+                                        children: editingParLevel ? t('parLevels.editParLevel', 'Edit Par Level') : t('parLevels.addParLevel', 'Add Par Level')
                                     }, void 0, false, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 406,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 318,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1339,125 +1197,185 @@ function PrepListsPage() {
                                                 strokeWidth: 2,
                                                 d: "M6 18L18 6M6 6l12 12"
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 414,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 326,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
-                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                            lineNumber: 413,
+                                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                            lineNumber: 325,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 409,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 321,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 405,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 317,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                                 onSubmit: handleSubmit,
-                                className: "space-y-6",
+                                className: "space-y-4",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                    !editingParLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-gray-300 mb-2",
+                                                children: t('parLevels.ingredient', 'Ingredient')
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 334,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                value: formData.ingredientId,
+                                                onChange: (e)=>setFormData({
+                                                        ...formData,
+                                                        ingredientId: e.target.value
+                                                    }),
+                                                className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
+                                                required: true,
                                                 children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                        className: "block text-sm font-medium text-gray-300 mb-2",
-                                                        children: t('prepLists.kitchenSection', 'Kitchen Section')
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        value: "",
+                                                        children: t('parLevels.selectIngredient', 'Select an ingredient')
                                                     }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 422,
-                                                        columnNumber: 21
+                                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                        lineNumber: 343,
+                                                        columnNumber: 23
                                                     }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                                        value: formData.kitchenSectionId,
-                                                        onChange: (e)=>setFormData({
-                                                                ...formData,
-                                                                kitchenSectionId: e.target.value
-                                                            }),
-                                                        className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                        required: true,
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                                value: "",
-                                                                children: t('prepLists.selectSection', 'Select a kitchen section')
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 431,
-                                                                columnNumber: 23
-                                                            }, this),
-                                                            kitchenSections.map((section)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                                    value: section.id,
-                                                                    children: section.name
-                                                                }, section.id, false, {
-                                                                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                    lineNumber: 433,
-                                                                    columnNumber: 25
-                                                                }, this))
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 425,
-                                                        columnNumber: 21
-                                                    }, this)
+                                                    ingredients.map((ingredient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: ingredient.id,
+                                                            children: [
+                                                                ingredient.name,
+                                                                " (",
+                                                                ingredient.unit,
+                                                                ")"
+                                                            ]
+                                                        }, ingredient.id, true, {
+                                                            fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                            lineNumber: 345,
+                                                            columnNumber: 25
+                                                        }, this))
                                                 ]
                                             }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 421,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 337,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 333,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-gray-300 mb-2",
+                                                children: t('parLevels.parLevel', 'Par Level')
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 354,
                                                 columnNumber: 19
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                        className: "block text-sm font-medium text-gray-300 mb-2",
-                                                        children: t('prepLists.name', 'Prep List Name')
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 441,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                        type: "text",
-                                                        value: formData.name,
-                                                        onChange: (e)=>setFormData({
-                                                                ...formData,
-                                                                name: e.target.value
-                                                            }),
-                                                        className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                        placeholder: "e.g., Morning Prep - Hot Kitchen",
-                                                        required: true
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 444,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 440,
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "number",
+                                                step: "0.01",
+                                                value: formData.parLevel,
+                                                onChange: (e)=>setFormData({
+                                                        ...formData,
+                                                        parLevel: e.target.value
+                                                    }),
+                                                className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
+                                                placeholder: "e.g., 50",
+                                                required: true
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 357,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 420,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 353,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                 className: "block text-sm font-medium text-gray-300 mb-2",
-                                                children: t('prepLists.notes', 'Notes')
+                                                children: t('parLevels.reorderPoint', 'Reorder Point')
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 456,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 369,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "number",
+                                                step: "0.01",
+                                                value: formData.reorderPoint,
+                                                onChange: (e)=>setFormData({
+                                                        ...formData,
+                                                        reorderPoint: e.target.value
+                                                    }),
+                                                className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
+                                                placeholder: "e.g., 25",
+                                                required: true
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 372,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 368,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-gray-300 mb-2",
+                                                children: t('parLevels.unit', 'Unit')
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 384,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "text",
+                                                value: formData.unit,
+                                                onChange: (e)=>setFormData({
+                                                        ...formData,
+                                                        unit: e.target.value
+                                                    }),
+                                                className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
+                                                placeholder: "e.g., kg, pieces, liters",
+                                                required: true
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 387,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 383,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-gray-300 mb-2",
+                                                children: t('parLevels.notes', 'Notes')
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 398,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1468,235 +1386,16 @@ function PrepListsPage() {
                                                     }),
                                                 className: "w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
                                                 rows: 3,
-                                                placeholder: String(t('prepLists.notesPlaceholder', 'Optional notes about this prep list'))
+                                                placeholder: String(t('parLevels.notesPlaceholder', 'Optional notes about this par level'))
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 459,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 401,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 455,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex items-center justify-between mb-4",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                        className: "text-lg font-semibold text-white",
-                                                        children: t('prepLists.items', 'Items')
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 471,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        type: "button",
-                                                        onClick: addItem,
-                                                        className: "px-4 py-2 bg-[#29E7CD]/10 text-[#29E7CD] rounded-xl hover:bg-[#29E7CD]/20 transition-colors text-sm font-semibold",
-                                                        children: [
-                                                            "+ ",
-                                                            t('prepLists.addItem', 'Add Item')
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 472,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 470,
-                                                columnNumber: 19
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "space-y-3",
-                                                children: formData.items.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "bg-[#2a2a2a]/30 rounded-xl p-4",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "grid grid-cols-1 md:grid-cols-4 gap-3 mb-3",
-                                                                children: [
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                        className: "md:col-span-2",
-                                                                        children: [
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                                                className: "block text-xs text-gray-400 mb-1",
-                                                                                children: t('prepLists.ingredient', 'Ingredient')
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 486,
-                                                                                columnNumber: 29
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                                                                value: item.ingredientId,
-                                                                                onChange: (e)=>updateItem(index, 'ingredientId', e.target.value),
-                                                                                className: "w-full px-3 py-2 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                                                required: true,
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                                                        value: "",
-                                                                                        children: t('prepLists.selectIngredient', 'Select ingredient')
-                                                                                    }, void 0, false, {
-                                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                        lineNumber: 493,
-                                                                                        columnNumber: 31
-                                                                                    }, this),
-                                                                                    ingredients.map((ingredient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                                                            value: ingredient.id,
-                                                                                            children: [
-                                                                                                ingredient.name,
-                                                                                                " (",
-                                                                                                ingredient.unit,
-                                                                                                ")"
-                                                                                            ]
-                                                                                        }, ingredient.id, true, {
-                                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                            lineNumber: 495,
-                                                                                            columnNumber: 33
-                                                                                        }, this))
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 487,
-                                                                                columnNumber: 29
-                                                                            }, this)
-                                                                        ]
-                                                                    }, void 0, true, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 485,
-                                                                        columnNumber: 27
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                        children: [
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                                                className: "block text-xs text-gray-400 mb-1",
-                                                                                children: t('prepLists.quantity', 'Quantity')
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 502,
-                                                                                columnNumber: 29
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                                                type: "number",
-                                                                                step: "0.01",
-                                                                                value: item.quantity,
-                                                                                onChange: (e)=>updateItem(index, 'quantity', e.target.value),
-                                                                                className: "w-full px-3 py-2 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                                                placeholder: "0",
-                                                                                required: true
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 503,
-                                                                                columnNumber: 29
-                                                                            }, this)
-                                                                        ]
-                                                                    }, void 0, true, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 501,
-                                                                        columnNumber: 27
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                        children: [
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                                                className: "block text-xs text-gray-400 mb-1",
-                                                                                children: t('prepLists.unit', 'Unit')
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 514,
-                                                                                columnNumber: 29
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                                                type: "text",
-                                                                                value: item.unit,
-                                                                                onChange: (e)=>updateItem(index, 'unit', e.target.value),
-                                                                                className: "w-full px-3 py-2 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent",
-                                                                                placeholder: "kg",
-                                                                                required: true
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 515,
-                                                                                columnNumber: 29
-                                                                            }, this)
-                                                                        ]
-                                                                    }, void 0, true, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 513,
-                                                                        columnNumber: 27
-                                                                    }, this)
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 484,
-                                                                columnNumber: 25
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "flex items-center justify-between",
-                                                                children: [
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                                        type: "text",
-                                                                        value: item.notes,
-                                                                        onChange: (e)=>updateItem(index, 'notes', e.target.value),
-                                                                        className: "flex-1 px-3 py-2 bg-[#1f1f1f] border border-[#2a2a2a] rounded-lg text-white text-sm focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent mr-3",
-                                                                        placeholder: String(t('prepLists.itemNotes', 'Item notes (optional)'))
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 526,
-                                                                        columnNumber: 27
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                        type: "button",
-                                                                        onClick: ()=>removeItem(index),
-                                                                        className: "p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors",
-                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                                                            className: "w-4 h-4",
-                                                                            fill: "none",
-                                                                            stroke: "currentColor",
-                                                                            viewBox: "0 0 24 24",
-                                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                                                                strokeLinecap: "round",
-                                                                                strokeLinejoin: "round",
-                                                                                strokeWidth: 2,
-                                                                                d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                                lineNumber: 539,
-                                                                                columnNumber: 31
-                                                                            }, this)
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                            lineNumber: 538,
-                                                                            columnNumber: 29
-                                                                        }, this)
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                        lineNumber: 533,
-                                                                        columnNumber: 27
-                                                                    }, this)
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                                lineNumber: 525,
-                                                                columnNumber: 25
-                                                            }, this)
-                                                        ]
-                                                    }, index, true, {
-                                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                        lineNumber: 483,
-                                                        columnNumber: 23
-                                                    }, this))
-                                            }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 481,
-                                                columnNumber: 19
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 469,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 397,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1706,68 +1405,68 @@ function PrepListsPage() {
                                                 type: "button",
                                                 onClick: resetForm,
                                                 className: "flex-1 px-4 py-3 bg-[#2a2a2a] text-gray-300 rounded-xl hover:bg-[#2a2a2a]/80 transition-colors",
-                                                children: t('prepLists.cancel', 'Cancel')
+                                                children: t('parLevels.cancel', 'Cancel')
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 549,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 411,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 type: "submit",
                                                 className: "flex-1 px-4 py-3 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white rounded-xl hover:shadow-xl transition-all duration-200 font-semibold",
-                                                children: editingPrepList ? t('prepLists.update', 'Update') : t('prepLists.create', 'Create')
+                                                children: editingParLevel ? t('parLevels.update', 'Update') : t('parLevels.create', 'Create')
                                             }, void 0, false, {
-                                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                                lineNumber: 556,
+                                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                                lineNumber: 418,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
-                                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                        lineNumber: 548,
+                                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                        lineNumber: 410,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                                lineNumber: 419,
+                                fileName: "[project]/app/webapp/par-levels/page.tsx",
+                                lineNumber: 331,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                        lineNumber: 404,
+                        fileName: "[project]/app/webapp/par-levels/page.tsx",
+                        lineNumber: 316,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
-                    fileName: "[project]/app/webapp/prep-lists/page.tsx",
-                    lineNumber: 403,
+                    fileName: "[project]/app/webapp/par-levels/page.tsx",
+                    lineNumber: 315,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
-            fileName: "[project]/app/webapp/prep-lists/page.tsx",
-            lineNumber: 262,
+            fileName: "[project]/app/webapp/par-levels/page.tsx",
+            lineNumber: 209,
             columnNumber: 7
         }, this)
     }, void 0, false, {
-        fileName: "[project]/app/webapp/prep-lists/page.tsx",
-        lineNumber: 261,
+        fileName: "[project]/app/webapp/par-levels/page.tsx",
+        lineNumber: 208,
         columnNumber: 5
     }, this);
 }
-_s(PrepListsPage, "7GGwL9hWFc3XCFy3h73IIqMC9jA=", false, function() {
+_s(ParLevelsPage, "AWKl+IaauDuXV4tnuZ9zQKizg7I=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$useTranslation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"]
     ];
 });
-_c = PrepListsPage;
+_c = ParLevelsPage;
 var _c;
-__turbopack_context__.k.register(_c, "PrepListsPage");
+__turbopack_context__.k.register(_c, "ParLevelsPage");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
 ]);
 
-//# sourceMappingURL=_0eeb0f89._.js.map
+//# sourceMappingURL=_66a6f837._.js.map

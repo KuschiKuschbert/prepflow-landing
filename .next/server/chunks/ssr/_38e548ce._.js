@@ -605,6 +605,7 @@ function AISpecialsPage() {
         fetchAISpecials();
     }, []);
     const fetchAISpecials = async ()=>{
+        setLoading(true);
         try {
             const response = await fetch(`/api/ai-specials?userId=${userId}`);
             const result = await response.json();
@@ -692,12 +693,12 @@ function AISpecialsPage() {
                             height: "64px"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                            lineNumber: 119,
+                            lineNumber: 120,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                        lineNumber: 118,
+                        lineNumber: 119,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -707,12 +708,12 @@ function AISpecialsPage() {
                             height: "200px"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                            lineNumber: 124,
+                            lineNumber: 125,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                        lineNumber: 123,
+                        lineNumber: 124,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -723,23 +724,23 @@ function AISpecialsPage() {
                             height: "120px"
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                            lineNumber: 129,
+                            lineNumber: 130,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                        lineNumber: 128,
+                        lineNumber: 129,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                lineNumber: 116,
+                lineNumber: 117,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-            lineNumber: 115,
+            lineNumber: 116,
             columnNumber: 7
         }, this);
     }
@@ -760,7 +761,7 @@ function AISpecialsPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                lineNumber: 142,
+                                lineNumber: 143,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -768,18 +769,18 @@ function AISpecialsPage() {
                                 children: t('aiSpecials.subtitle', 'Generate specials from ingredient photos using AI')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                lineNumber: 143,
+                                lineNumber: 144,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                        lineNumber: 141,
+                        lineNumber: 142,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                    lineNumber: 140,
+                    lineNumber: 141,
                     columnNumber: 9
                 }, this),
                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -789,12 +790,12 @@ function AISpecialsPage() {
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                        lineNumber: 150,
+                        lineNumber: 151,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                    lineNumber: 149,
+                    lineNumber: 150,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -805,7 +806,7 @@ function AISpecialsPage() {
                             children: t('aiSpecials.uploadImage', 'Upload Ingredient Image')
                         }, void 0, false, {
                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                            lineNumber: 156,
+                            lineNumber: 157,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -819,7 +820,7 @@ function AISpecialsPage() {
                                             children: t('aiSpecials.selectImage', 'Select Image')
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 161,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -830,7 +831,7 @@ function AISpecialsPage() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                            lineNumber: 163,
+                                            lineNumber: 164,
                                             columnNumber: 15
                                         }, this),
                                         selectedFile && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -842,13 +843,13 @@ function AISpecialsPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 172,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                    lineNumber: 159,
+                                    lineNumber: 160,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -858,7 +859,7 @@ function AISpecialsPage() {
                                             children: t('aiSpecials.customPrompt', 'Custom Prompt (Optional)')
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                            lineNumber: 178,
+                                            lineNumber: 179,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -869,13 +870,13 @@ function AISpecialsPage() {
                                             placeholder: "e.g., Create a vegetarian special using these ingredients"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                            lineNumber: 181,
+                                            lineNumber: 182,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                    lineNumber: 177,
+                                    lineNumber: 178,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -889,37 +890,37 @@ function AISpecialsPage() {
                                                 className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                lineNumber: 197,
+                                                lineNumber: 198,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('aiSpecials.processing', 'Processing...')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                lineNumber: 198,
+                                                lineNumber: 199,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                        lineNumber: 196,
+                                        lineNumber: 197,
                                         columnNumber: 17
                                     }, this) : t('aiSpecials.generateSpecials', 'Generate Specials')
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                    lineNumber: 190,
+                                    lineNumber: 191,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                            lineNumber: 158,
+                            lineNumber: 159,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                    lineNumber: 155,
+                    lineNumber: 156,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -934,12 +935,12 @@ function AISpecialsPage() {
                                     children: "🤖"
                                 }, void 0, false, {
                                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                    lineNumber: 212,
+                                    lineNumber: 213,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                lineNumber: 211,
+                                lineNumber: 212,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -947,7 +948,7 @@ function AISpecialsPage() {
                                 children: t('aiSpecials.noResults', 'No AI Specials Generated')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                lineNumber: 214,
+                                lineNumber: 215,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -955,13 +956,13 @@ function AISpecialsPage() {
                                 children: t('aiSpecials.noResultsDesc', 'Upload an image of your ingredients to generate AI-powered specials')
                             }, void 0, false, {
                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                lineNumber: 215,
+                                lineNumber: 216,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                        lineNumber: 210,
+                        lineNumber: 211,
                         columnNumber: 13
                     }, this) : aiSpecials.map((special)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-6 hover:shadow-xl hover:border-[#29E7CD]/50 transition-all duration-200",
@@ -975,12 +976,12 @@ function AISpecialsPage() {
                                             children: "🤖"
                                         }, void 0, false, {
                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                            lineNumber: 225,
+                                            lineNumber: 226,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                        lineNumber: 224,
+                                        lineNumber: 225,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -996,7 +997,7 @@ function AISpecialsPage() {
                                                                 children: t('aiSpecials.aiAnalysis', 'AI Analysis')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 231,
+                                                                lineNumber: 232,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1004,13 +1005,13 @@ function AISpecialsPage() {
                                                                 children: new Date(special.created_at).toLocaleDateString()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 232,
+                                                                lineNumber: 233,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 230,
+                                                        lineNumber: 231,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1018,13 +1019,13 @@ function AISpecialsPage() {
                                                         children: special.status.charAt(0).toUpperCase() + special.status.slice(1)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 234,
+                                                        lineNumber: 235,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                lineNumber: 229,
+                                                lineNumber: 230,
                                                 columnNumber: 21
                                             }, this),
                                             special.status === 'completed' && special.ai_response && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1037,7 +1038,7 @@ function AISpecialsPage() {
                                                                 children: t('aiSpecials.detectedIngredients', 'Detected Ingredients')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 243,
+                                                                lineNumber: 244,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1047,18 +1048,18 @@ function AISpecialsPage() {
                                                                         children: ingredient
                                                                     }, index, false, {
                                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                        lineNumber: 246,
+                                                                        lineNumber: 247,
                                                                         columnNumber: 31
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 244,
+                                                                lineNumber: 245,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 242,
+                                                        lineNumber: 243,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1068,7 +1069,7 @@ function AISpecialsPage() {
                                                                 children: t('aiSpecials.specialSuggestions', 'Special Suggestions')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 258,
+                                                                lineNumber: 259,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1080,23 +1081,23 @@ function AISpecialsPage() {
                                                                             children: suggestion
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                            lineNumber: 265,
+                                                                            lineNumber: 266,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     }, index, false, {
                                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                        lineNumber: 261,
+                                                                        lineNumber: 262,
                                                                         columnNumber: 31
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 259,
+                                                                lineNumber: 260,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 257,
+                                                        lineNumber: 258,
                                                         columnNumber: 25
                                                     }, this),
                                                     special.ai_response.confidence && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1110,7 +1111,7 @@ function AISpecialsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 274,
+                                                                lineNumber: 275,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1122,12 +1123,12 @@ function AISpecialsPage() {
                                                                     }
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                    lineNumber: 276,
+                                                                    lineNumber: 277,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 275,
+                                                                lineNumber: 276,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1138,19 +1139,19 @@ function AISpecialsPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                                lineNumber: 281,
+                                                                lineNumber: 282,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 274,
                                                         columnNumber: 27
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                lineNumber: 240,
+                                                lineNumber: 241,
                                                 columnNumber: 23
                                             }, this),
                                             special.status === 'processing' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1160,7 +1161,7 @@ function AISpecialsPage() {
                                                         className: "w-4 h-4 border-2 border-[#29E7CD] border-t-transparent rounded-full animate-spin"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 291,
+                                                        lineNumber: 292,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1168,13 +1169,13 @@ function AISpecialsPage() {
                                                         children: t('aiSpecials.processingImage', 'Processing image with AI...')
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                        lineNumber: 292,
+                                                        lineNumber: 293,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                lineNumber: 290,
+                                                lineNumber: 291,
                                                 columnNumber: 23
                                             }, this),
                                             special.status === 'failed' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1182,40 +1183,40 @@ function AISpecialsPage() {
                                                 children: t('aiSpecials.processingFailed', 'Failed to process image. Please try again.')
                                             }, void 0, false, {
                                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                                lineNumber: 297,
+                                                lineNumber: 298,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                        lineNumber: 228,
+                                        lineNumber: 229,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                                lineNumber: 223,
+                                lineNumber: 224,
                                 columnNumber: 17
                             }, this)
                         }, special.id, false, {
                             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                            lineNumber: 219,
+                            lineNumber: 220,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/app/webapp/ai-specials/page.tsx",
-                    lineNumber: 208,
+                    lineNumber: 209,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/webapp/ai-specials/page.tsx",
-            lineNumber: 138,
+            lineNumber: 139,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/webapp/ai-specials/page.tsx",
-        lineNumber: 137,
+        lineNumber: 138,
         columnNumber: 5
     }, this);
 }
