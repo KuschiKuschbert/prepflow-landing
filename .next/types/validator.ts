@@ -380,6 +380,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/enable-rls-security/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/enable-rls-security">> = Specific
+  const handler = {} as typeof import("../../app/api/enable-rls-security/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/fix-database/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/fix-database">> = Specific

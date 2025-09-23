@@ -1,4 +1,5 @@
 {
+  "/api/enable-rls-security/route": "app/api/enable-rls-security/route.js",
   "/api/ingredients/route": "app/api/ingredients/route.js",
   "/api/menu-dishes/route": "app/api/menu-dishes/route.js",
   "/api/recipes/route": "app/api/recipes/route.js",
