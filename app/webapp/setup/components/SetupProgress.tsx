@@ -25,7 +25,8 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
         </div>
       </div>
       
-      <div className="flex items-center space-x-4">
+      {/* Desktop Layout */}
+      <div className="hidden md:flex items-center space-x-4">
         {steps.map((step, index) => {
           const isCompleted = setupProgress[step.key as keyof SetupProgressType];
           const isLast = index === steps.length - 1;
@@ -53,6 +54,34 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
                   isCompleted ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a]'
                 }`}></div>
               )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Mobile Layout - Grid */}
+      <div className="md:hidden grid grid-cols-2 gap-4">
+        {steps.map((step, index) => {
+          const isCompleted = setupProgress[step.key as keyof SetupProgressType];
+          
+          return (
+            <div key={step.key} className="flex items-center space-x-3 p-3 rounded-xl bg-[#2a2a2a]/30">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                isCompleted ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a] border border-[#29E7CD]/30'
+              }`}>
+                {isCompleted ? (
+                  <span className="text-black font-bold text-sm">✓</span>
+                ) : (
+                  <span className="text-[#29E7CD] font-bold text-sm">{step.number}</span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className={`font-medium text-sm transition-colors duration-200 block truncate ${
+                  isCompleted ? 'text-[#29E7CD]' : 'text-white'
+                }`}>
+                  {step.label}
+                </span>
+              </div>
             </div>
           );
         })}
