@@ -13,6 +13,7 @@
     "lighthouse:desktop": "lighthouse http://localhost:3000 --view --emulated-form-factor=desktop",
     "perf:test": "npm run build && npm run lighthouse",
     "perf:analyze": "npm run build && npm run analyze",
+    "perf:full": "bash scripts/run-performance-tests.sh",
     "bundle:analyze": "ANALYZE=true npm run build",
     "bundle:size": "npm run build && npm run analyze"
   },
@@ -37,11 +38,13 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.12.0",
     "@next/bundle-analyzer": "^15.5.3",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^20.19.13",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
+    "lighthouse": "^11.7.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
   }

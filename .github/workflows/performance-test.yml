@@ -1,0 +1,129 @@
+name: Performance Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  performance-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Start application
+      run: |
+        npm start &
+        echo $! > app.pid
+      env:
+        NODE_ENV: production
+        
+    - name: Wait for application
+      run: |
+        timeout 30s bash -c 'until curl -f http://localhost:3000 > /dev/null 2>&1; do sleep 1; done'
+        
+    - name: Run Lighthouse CI
+      run: npm run lighthouse
+      
+    - name: Run bundle analysis
+      run: npm run analyze
+      
+    - name: Performance budget check
+      run: npm run perf:analyze
+      
+    - name: Upload performance results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-results
+        path: |
+          .lighthouseci/
+          bundle-analysis-report.json
+          performance-budget-report.json
+          
+    - name: Comment PR with performance results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Read performance results
+          let lighthouseResults = '';
+          let bundleResults = '';
+          let budgetResults = '';
+          
+          try {
+            if (fs.existsSync('.lighthouseci/results.json')) {
+              const lighthouse = JSON.parse(fs.readFileSync('.lighthouseci/results.json', 'utf8'));
+              lighthouseResults = `\n## 🚀 Lighthouse Results\n\n`;
+              lighthouse.forEach(result => {
+                const { summary } = result;
+                lighthouseResults += `- **Performance**: ${summary.performance}/100\n`;
+                lighthouseResults += `- **Accessibility**: ${summary.accessibility}/100\n`;
+                lighthouseResults += `- **Best Practices**: ${summary['best-practices']}/100\n`;
+                lighthouseResults += `- **SEO**: ${summary.seo}/100\n`;
+              });
+            }
+          } catch (error) {
+            lighthouseResults = `\n⚠️ Could not read Lighthouse results: ${error.message}\n`;
+          }
+          
+          try {
+            if (fs.existsSync('bundle-analysis-report.json')) {
+              const bundle = JSON.parse(fs.readFileSync('bundle-analysis-report.json', 'utf8'));
+              bundleResults = `\n## 📦 Bundle Analysis\n\n`;
+              bundleResults += `- **Total Size**: ${(bundle.totalSize / 1024).toFixed(2)} KB\n`;
+              bundleResults += `- **JavaScript**: ${(bundle.jsSize / 1024).toFixed(2)} KB\n`;
+              bundleResults += `- **CSS**: ${(bundle.cssSize / 1024).toFixed(2)} KB\n`;
+            }
+          } catch (error) {
+            bundleResults = `\n⚠️ Could not read bundle analysis: ${error.message}\n`;
+          }
+          
+          try {
+            if (fs.existsSync('performance-budget-report.json')) {
+              const budget = JSON.parse(fs.readFileSync('performance-budget-report.json', 'utf8'));
+              budgetResults = `\n## 📊 Performance Budget\n\n`;
+              budgetResults += `- **Overall Score**: ${budget.score}/100\n`;
+              budgetResults += `- **Violations**: ${budget.totalViolations}\n`;
+              if (budget.totalViolations > 0) {
+                budgetResults += `- **Critical**: ${budget.criticalViolations}\n`;
+                budgetResults += `- **High**: ${budget.highViolations}\n`;
+                budgetResults += `- **Medium**: ${budget.mediumViolations}\n`;
+                budgetResults += `- **Low**: ${budget.lowViolations}\n`;
+              }
+            }
+          } catch (error) {
+            budgetResults = `\n⚠️ Could not read performance budget: ${error.message}\n`;
+          }
+          
+          const comment = `## 🔍 Performance Test Results
+          
+          ${lighthouseResults}${bundleResults}${budgetResults}
+          
+          ---
+          
+          *Performance tests completed successfully!* 🚀`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
