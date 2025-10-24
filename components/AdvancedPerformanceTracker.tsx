@@ -6,6 +6,7 @@ import { trackEvent, trackPerformance } from '../lib/analytics';
 import { initializePerformanceABTesting } from '../lib/performance-ab-testing';
 import { checkPerformanceAndAlert, initializePerformanceAlerts } from '../lib/performance-alerts';
 import { trackPerformanceBudget } from '../lib/performance-budgets';
+import { PERFORMANCE_THRESHOLDS, isDevelopment } from '../lib/constants';
 
 interface PerformanceMetrics {
   // Core Web Vitals
@@ -73,7 +74,9 @@ interface AdvancedPerformanceTrackerProps {
 export default function AdvancedPerformanceTracker({
   onMetrics,
   enabled = true,
-  sampleRate = process.env.NODE_ENV === 'development' ? 0.01 : 0.1, // 1% in dev, 10% in prod
+  sampleRate = isDevelopment
+    ? PERFORMANCE_THRESHOLDS.SAMPLE_RATE_DEVELOPMENT
+    : PERFORMANCE_THRESHOLDS.SAMPLE_RATE_PRODUCTION,
 }: AdvancedPerformanceTrackerProps) {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const hasTrackedInitial = useRef(false);
@@ -90,13 +93,13 @@ export default function AdvancedPerformanceTracker({
 
     // Sample rate check
     if (Math.random() > sampleRate) {
-      if (process.env.NODE_ENV === 'development') {
+      if (isDevelopment) {
         console.log('📊 PrepFlow Performance: User not sampled for performance tracking');
       }
       return;
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (isDevelopment) {
       console.log('🚀 PrepFlow Performance: Starting advanced performance tracking');
     }
 
@@ -126,7 +129,7 @@ export default function AdvancedPerformanceTracker({
         // Track memory usage
         trackMemoryUsage();
 
-        if (process.env.NODE_ENV === 'development') {
+        if (isDevelopment) {
           console.log('✅ PrepFlow Performance: All tracking initialized');
         }
       } catch (error) {
@@ -361,8 +364,7 @@ export default function AdvancedPerformanceTracker({
       let totalResources = 0;
       let totalLoadTime = 0;
       let lastSlowResourceReport = 0;
-      const SLOW_RESOURCE_THRESHOLD = 2000; // Increased to 2 seconds
-      const SLOW_RESOURCE_REPORT_INTERVAL = 5000; // Report every 5 seconds max
+      // cleaned: Using constants from lib/constants.ts
 
       // Filter out non-critical resources
       const isCriticalResource = (entry: any) => {
@@ -396,7 +398,7 @@ export default function AdvancedPerformanceTracker({
             totalResources++;
             totalLoadTime += entry.duration;
 
-            if (entry.duration > SLOW_RESOURCE_THRESHOLD) {
+            if (entry.duration > PERFORMANCE_THRESHOLDS.SLOW_RESOURCE_THRESHOLD) {
               // Slow resources > 2 seconds
               slowResources.push({
                 name: entry.name,
@@ -426,7 +428,7 @@ export default function AdvancedPerformanceTracker({
         const now = Date.now();
         if (
           slowResources.length > 0 &&
-          now - lastSlowResourceReport > SLOW_RESOURCE_REPORT_INTERVAL
+          now - lastSlowResourceReport > PERFORMANCE_THRESHOLDS.SLOW_RESOURCE_REPORT_INTERVAL
         ) {
           lastSlowResourceReport = now;
 

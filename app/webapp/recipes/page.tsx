@@ -3,12 +3,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+
+// External dependencies
 import { supabase } from '@/lib/supabase';
+
+// UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+
+// Local hooks and types
 import { useRecipeManagement } from './hooks/useRecipeManagement';
 import { useAIInstructions } from './hooks/useAIInstructions';
 import { Recipe, RecipeIngredient, COGSCalculation } from './types';
+
+// Local components
 import RecipeCard from './components/RecipeCard';
 import RecipeTable from './components/RecipeTable';
 import RecipeForm from './components/RecipeForm';
@@ -135,9 +143,8 @@ function RecipesPageContent() {
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
-        console.log('🔍 DEBUG: Fetching ingredients for recipe:', recipe.name, recipe.id);
+        // cleaned: Removed debug console.log statements
         const ingredients = await fetchRecipeIngredients(recipe.id);
-        console.log('🔍 DEBUG: Fetched ingredients:', ingredients);
         setSelectedRecipe(recipe);
         setRecipeIngredients(ingredients);
         setPreviewYield(recipe.yield); // Initialize with original yield
@@ -160,9 +167,7 @@ function RecipesPageContent() {
     }
 
     try {
-      console.log('🔍 DEBUG: Recipe ingredients from preview:', recipeIngredients);
-      console.log('🔍 DEBUG: Selected recipe:', selectedRecipe);
-
+      // cleaned: Removed debug console.log statements
       // Convert already loaded recipe ingredients to COGSCalculation format
       const calculations: COGSCalculation[] = recipeIngredients.map(ri => {
         const ingredient = ri.ingredients;
@@ -189,8 +194,7 @@ function RecipesPageContent() {
         };
       });
 
-      console.log('🔍 DEBUG: Final calculations array:', calculations);
-
+      // cleaned: Removed debug console.log statement
       // Store data in sessionStorage for COGS page
       sessionStorage.setItem(
         'editingRecipe',

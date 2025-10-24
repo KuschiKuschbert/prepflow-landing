@@ -2,63 +2,63 @@
 
 import React from 'react';
 import Link from 'next/link';
+
+// External components
 import OptimizedImage from '../components/OptimizedImage';
 import ExitIntentTracker from '../components/ExitIntentTracker';
 import ScrollTracker from '../components/ScrollTracker';
 import PerformanceTracker from '../components/PerformanceTracker';
+import LeadMagnetForm from '../components/LeadMagnetForm';
+import LanguageSwitcher from '../components/LanguageSwitcher';
+
+// UI components
 import { MobileNavigation } from '../components/ui/MobileNavigation';
 import { FloatingCTA } from '../components/ui/FloatingCTA';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 import { ScrollProgress } from '../components/ui/ScrollProgress';
+import { HeroSkeleton, PricingSkeleton } from '../components/ui/LoadingSkeleton';
+
+// Hooks and utilities
 import { useLandingPageABTest } from '../components/useABTest';
-import LeadMagnetForm from '../components/LeadMagnetForm';
 import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
 import { useTranslation } from '../lib/useTranslation';
-import LanguageSwitcher from '../components/LanguageSwitcher';
-
-// Import UI components
-import { HeroSkeleton, PricingSkeleton } from '../components/ui/LoadingSkeleton';
+import { getOrCreateUserId } from '../lib/user-utils';
+import { isDevelopment } from '../lib/constants';
+import { BUTTON_STYLES } from '../lib/tailwind-utils';
+import { useEngagementTracking } from '../hooks/useEngagementTracking';
 
 // Variant components are now lazy-loaded via useABTest hook
 
 export default function Page() {
   // Translation hook
-  const { t, currentLanguage, changeLanguage } = useTranslation();
+  const { t } = useTranslation();
 
-  // Engagement tracking function
-  const handleEngagement = (event: string) => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', event, {
-        event_category: 'user_engagement',
-        event_label: event,
-        page_title: document.title,
-        page_location: window.location.href,
-      });
-    }
-  };
+  // Engagement tracking
+  const { trackEngagement } = useEngagementTracking();
 
   // A/B Testing hook with lazy loading
-  const { variantId, isLoading, trackEngagement, renderHero, renderPricing } = useLandingPageABTest(
-    undefined,
-    t,
-    handleEngagement,
-  );
+  const {
+    variantId,
+    isLoading,
+    trackEngagement: abTrackEngagement,
+    renderHero,
+    renderPricing,
+  } = useLandingPageABTest(undefined, t, trackEngagement);
 
   // Performance monitoring - track page load time
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const loadTime = performance.now();
-      console.log(`PrepFlow landing page loaded in ${loadTime.toFixed(2)}ms`);
-      console.log(`🧪 A/B Test Variant: ${variantId}`);
+      // cleaned: Removed console.log statements for production
+      if (isDevelopment) {
+        console.log(`PrepFlow landing page loaded in ${loadTime.toFixed(2)}ms`);
+        console.log(`🧪 A/B Test Variant: ${variantId}`);
+      }
 
       // Log variant assignment info for debugging
-      let userId = localStorage.getItem('prepflow_user_id');
-      if (!userId) {
-        userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
-        localStorage.setItem('prepflow_user_id', userId);
-      }
+      const userId = getOrCreateUserId();
       const assignmentInfo = getVariantAssignmentInfo(userId);
-      if (assignmentInfo) {
+      if (assignmentInfo && isDevelopment) {
         console.log(`📊 Variant Assignment:`, {
           variant: assignmentInfo.variantId,
           assignedAt: assignmentInfo.assignedAt,
@@ -117,7 +117,7 @@ export default function Page() {
       />
 
       {/* Floating CTA */}
-      <FloatingCTA onEngagement={handleEngagement} t={t} />
+      <FloatingCTA onEngagement={trackEngagement} t={t} />
 
       {/* Scroll to Top - Only on landing page */}
       <ScrollToTop />
@@ -207,8 +207,8 @@ export default function Page() {
                 href="https://7495573591101.gumroad.com/l/prepflow"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-h-[48px] items-center justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-4 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-                onClick={() => handleEngagement('header_cta_click')}
+                className={BUTTON_STYLES.primary}
+                onClick={() => trackEngagement('header_cta_click')}
               >
                 {t('hero.ctaPrimary', 'Get PrepFlow Now')}
               </a>
@@ -217,7 +217,7 @@ export default function Page() {
             {/* Mobile Header - Language Switcher + Navigation */}
             <div className="flex items-center gap-3 md:hidden">
               <LanguageSwitcher className="scale-90" showFlag={true} showName={true} size="sm" />
-              <MobileNavigation onEngagement={handleEngagement} />
+              <MobileNavigation onEngagement={trackEngagement} />
             </div>
           </header>
 
