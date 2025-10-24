@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { convertIngredientCost } from '@/lib/unit-conversion';
-import { Ingredient, Recipe, RecipeIngredient, COGSCalculation } from '../types';
+import { useCallback, useEffect, useState } from 'react';
+import { COGSCalculation, Ingredient, Recipe, RecipeIngredient } from '../types';
 
 export const useCOGSCalculations = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -86,7 +86,7 @@ export const useCOGSCalculations = () => {
             baseCostPerUnit,
             ingredient.unit || 'g',
             ri.unit || 'g',
-            ingredient.ingredient_name,
+            ri.quantity,
           );
 
           // Calculate base cost for the quantity used
@@ -163,7 +163,7 @@ export const useCOGSCalculations = () => {
           baseCostPerUnit,
           ingredient.unit || 'g',
           ri.unit || 'g',
-          ingredient.ingredient_name,
+          quantity,
         );
         const totalCost = quantity * costPerUnit;
 
@@ -191,12 +191,19 @@ export const useCOGSCalculations = () => {
       setCalculations(loadedCalculations);
 
       // Also update recipeIngredients state
-      const loadedRecipeIngredients: RecipeIngredient[] = recipeIngredients.map(dbItem => ({
-        recipe_id: recipeId,
-        ingredient_id: (dbItem.ingredients as any).id,
-        quantity: dbItem.quantity,
-        unit: dbItem.unit,
-      }));
+      const loadedRecipeIngredients: RecipeIngredient[] = recipeIngredients.map(dbItem => {
+        const ingredient = dbItem.ingredients as any;
+        return {
+          id: dbItem.id || 'temp',
+          recipe_id: recipeId,
+          ingredient_id: ingredient.id,
+          ingredient_name: ingredient.ingredient_name,
+          quantity: dbItem.quantity,
+          unit: dbItem.unit,
+          cost_per_unit: ingredient.cost_per_unit || 0,
+          total_cost: dbItem.quantity * (ingredient.cost_per_unit || 0),
+        };
+      });
       setRecipeIngredients(loadedRecipeIngredients);
     } catch (err) {
       console.log('Error in loadExistingRecipeIngredients:', err);

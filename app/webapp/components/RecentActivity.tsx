@@ -1,10 +1,11 @@
 'use client';
 
-import { useTranslation } from '@/lib/useTranslation';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { useApiCall } from '@/hooks/useApiCall';
 import { ApiErrorDisplay } from '@/components/ui/ApiErrorDisplay';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabase } from '@/lib/supabase';
+import { useTranslation } from '@/lib/useTranslation';
+import { useEffect, useState } from 'react';
 
 interface RecentActivity {
   id: string;
@@ -16,6 +17,9 @@ interface RecentActivity {
 
 export default function RecentActivity() {
   const { t } = useTranslation();
+  const [activities, setActivities] = useState<RecentActivity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchRecentActivity = async (): Promise<RecentActivity[]> => {
     const activities: RecentActivity[] = [];
@@ -88,14 +92,22 @@ export default function RecentActivity() {
     }
   };
 
-  const {
-    data: activities,
-    loading,
-    error,
-    execute: refetch,
-  } = useApiCall(fetchRecentActivity, {
-    immediate: true,
-  });
+  const refetch = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchRecentActivity();
+      setActivities(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch recent activity');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   // Show loading state only if we have no data and are loading
   if (loading && !activities) {
@@ -110,7 +122,7 @@ export default function RecentActivity() {
   if (error) {
     return (
       <ApiErrorDisplay
-        error={error}
+        error={ApiErrorHandler.createError(error)}
         context="Recent Activity"
         onRetry={refetch}
         className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg"

@@ -1,106 +1,86 @@
-// Unit conversion utilities for ingredient management
-
+// Unit conversion utilities
 export interface ConversionResult {
-  conversionFactor: number;
-  isValid: boolean;
-  error?: string;
+  value: number;
+  unit: string;
+  originalValue: number;
+  originalUnit: string;
 }
 
-// Common unit conversions
-const CONVERSION_FACTORS: Record<string, Record<string, number>> = {
-  // Weight conversions (base unit: grams)
-  g: { g: 1, kg: 0.001, oz: 0.035274, lb: 0.002205 },
-  kg: { g: 1000, kg: 1, oz: 35.274, lb: 2.205 },
-  oz: { g: 28.3495, kg: 0.0283495, oz: 1, lb: 0.0625 },
-  lb: { g: 453.592, kg: 0.453592, oz: 16, lb: 1 },
-
-  // Volume conversions (base unit: milliliters)
-  ml: { ml: 1, l: 0.001, tsp: 0.202884, tbsp: 0.067628, cup: 0.004227 },
-  l: { ml: 1000, l: 1, tsp: 202.884, tbsp: 67.628, cup: 4.227 },
-  tsp: { ml: 4.92892, l: 0.00492892, tsp: 1, tbsp: 0.333333, cup: 0.0208333 },
-  tbsp: { ml: 14.7868, l: 0.0147868, tsp: 3, tbsp: 1, cup: 0.0625 },
-  cup: { ml: 236.588, l: 0.236588, tsp: 48, tbsp: 16, cup: 1 },
-
-  // Piece conversions (base unit: pieces)
-  pc: { pc: 1, box: 0.01, pack: 0.1, bag: 0.05, bottle: 0.1, can: 0.1 },
-  box: { pc: 100, box: 1, pack: 10, bag: 5, bottle: 10, can: 10 },
-  pack: { pc: 10, box: 0.1, pack: 1, bag: 0.5, bottle: 1, can: 1 },
-  bag: { pc: 20, box: 0.2, pack: 2, bag: 1, bottle: 2, can: 2 },
-  bottle: { pc: 10, box: 0.1, pack: 1, bag: 0.5, bottle: 1, can: 1 },
-  can: { pc: 10, box: 0.1, pack: 1, bag: 0.5, bottle: 1, can: 1 },
-};
-
-export function convertUnit(amount: number, fromUnit: string, toUnit: string): ConversionResult {
-  if (!fromUnit || !toUnit) {
-    return { conversionFactor: 1, isValid: false, error: 'Unit not specified' };
-  }
-
-  // Normalize units - handle common variations
-  const normalizeUnit = (unit: string): string => {
-    const normalized = unit.toLowerCase().trim();
-    // Handle common unit variations
-    if (normalized === 'gm') return 'g';
-    if (normalized === 'ml') return 'ml';
-    if (normalized === 'pc') return 'pc';
-    return normalized;
+// Basic unit conversion functions
+export const convertUnit = (value: number, fromUnit: string, toUnit: string): ConversionResult => {
+  // Simple conversion logic - can be expanded
+  const conversions: { [key: string]: { [key: string]: number } } = {
+    kg: { g: 1000, lb: 2.20462, oz: 35.274 },
+    g: { kg: 0.001, lb: 0.00220462, oz: 0.035274 },
+    lb: { kg: 0.453592, g: 453.592, oz: 16 },
+    oz: { kg: 0.0283495, g: 28.3495, lb: 0.0625 },
+    l: { ml: 1000, cup: 4.22675, fl_oz: 33.814 },
+    ml: { l: 0.001, cup: 0.00422675, fl_oz: 0.033814 },
+    cup: { l: 0.236588, ml: 236.588, fl_oz: 8 },
+    fl_oz: { l: 0.0295735, ml: 29.5735, cup: 0.125 },
   };
 
-  const from = normalizeUnit(fromUnit);
-  const to = normalizeUnit(toUnit);
-
-  if (from === to) {
-    return { conversionFactor: 1, isValid: true };
-  }
-
-  const fromFactors = CONVERSION_FACTORS[from];
-  if (!fromFactors) {
-    return { conversionFactor: 1, isValid: false, error: `Unknown unit: ${fromUnit}` };
-  }
-
-  const conversionFactor = fromFactors[to];
-  if (conversionFactor === undefined) {
+  if (fromUnit === toUnit) {
     return {
-      conversionFactor: 1,
-      isValid: false,
-      error: `Cannot convert from ${fromUnit} to ${toUnit}`,
+      value,
+      unit: toUnit,
+      originalValue: value,
+      originalUnit: fromUnit,
     };
   }
 
-  return { conversionFactor, isValid: true };
-}
+  const conversionFactor = conversions[fromUnit]?.[toUnit];
+  if (!conversionFactor) {
+    // Return original value if conversion not supported
+    return {
+      value,
+      unit: toUnit,
+      originalValue: value,
+      originalUnit: fromUnit,
+    };
+  }
 
-export function convertIngredientCost(
+  return {
+    value: value * conversionFactor,
+    unit: toUnit,
+    originalValue: value,
+    originalUnit: fromUnit,
+  };
+};
+
+export const convertIngredientCost = (
   cost: number,
   fromUnit: string,
   toUnit: string,
-  ingredientName: string,
-): number {
-  const conversion = convertUnit(1, fromUnit, toUnit);
-  if (!conversion.isValid) {
-    // Only log unique conversion errors to reduce console spam
-    const errorKey = `${fromUnit}-${toUnit}`;
-    if (!conversionErrors.has(errorKey)) {
-      console.warn(`Conversion failed for ${ingredientName}: ${conversion.error}`);
-      conversionErrors.add(errorKey);
-    }
-    return cost;
+  quantity: number = 1,
+): number => {
+  const conversion = convertUnit(quantity, fromUnit, toUnit);
+  return (cost / quantity) * conversion.value;
+};
+
+export const formatUnit = (value: number, unit: string): string => {
+  return `${value.toFixed(2)} ${unit}`;
+};
+
+export const getAllUnits = (): string[] => {
+  return ['kg', 'g', 'lb', 'oz', 'l', 'ml', 'cup', 'fl_oz'];
+};
+
+export const isVolumeUnit = (unit: string): boolean => {
+  return ['l', 'ml', 'cup', 'fl_oz'].includes(unit.toLowerCase());
+};
+
+export const isWeightUnit = (unit: string): boolean => {
+  return ['kg', 'g', 'lb', 'oz'].includes(unit.toLowerCase());
+};
+
+export const parseUnit = (unitString: string): { value: number; unit: string } => {
+  const match = unitString.match(/^([\d.]+)\s*(.*)$/);
+  if (match) {
+    return {
+      value: parseFloat(match[1]),
+      unit: match[2].trim(),
+    };
   }
-  return cost * conversion.conversionFactor;
-}
-
-// Track conversion errors to prevent spam
-const conversionErrors = new Set<string>();
-
-export function isVolumeUnit(unit: string): boolean {
-  const volumeUnits = ['ml', 'l', 'tsp', 'tbsp', 'cup'];
-  return volumeUnits.includes(unit.toLowerCase());
-}
-
-export function isWeightUnit(unit: string): boolean {
-  const weightUnits = ['g', 'kg', 'oz', 'lb'];
-  return weightUnits.includes(unit.toLowerCase());
-}
-
-export function getAllUnits(): string[] {
-  return Object.keys(CONVERSION_FACTORS);
-}
+  return { value: 0, unit: unitString };
+};

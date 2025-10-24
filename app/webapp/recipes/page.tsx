@@ -1,27 +1,27 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
 // External dependencies
 import { supabase } from '@/lib/supabase';
 
 // UI components
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Local hooks and types
-import { useRecipeManagement } from './hooks/useRecipeManagement';
 import { useAIInstructions } from './hooks/useAIInstructions';
-import { Recipe, RecipeIngredient, COGSCalculation } from './types';
+import { useRecipeManagement } from './hooks/useRecipeManagement';
+import { COGSCalculation, Recipe, RecipeIngredientWithDetails } from './types';
 
 // Local components
-import RecipeCard from './components/RecipeCard';
-import RecipeTable from './components/RecipeTable';
-import RecipeForm from './components/RecipeForm';
 import BulkActionsBar from './components/BulkActionsBar';
+import RecipeCard from './components/RecipeCard';
+import RecipeForm from './components/RecipeForm';
 import RecipePreviewModal from './components/RecipePreviewModal';
+import RecipeTable from './components/RecipeTable';
 
 function RecipesPageContent() {
   const router = useRouter();
@@ -50,7 +50,7 @@ function RecipesPageContent() {
 
   // Preview state
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>([]);
+  const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [previewYield, setPreviewYield] = useState<number>(1);
 
@@ -182,15 +182,18 @@ function RecipesPageContent() {
         const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
 
         return {
-          recipeId: selectedRecipe.id,
+          id: ri.id,
+          ingredient_id: ingredient.id,
           ingredientId: ingredient.id,
+          ingredient_name: ingredient.ingredient_name,
           ingredientName: ingredient.ingredient_name,
           quantity: quantity,
           unit: ri.unit,
-          costPerUnit: costPerUnit,
-          totalCost: totalCost,
-          wasteAdjustedCost: wasteAdjustedCost,
+          cost_per_unit: costPerUnit,
+          total_cost: totalCost,
           yieldAdjustedCost: yieldAdjustedCost,
+          supplier_name: ingredient.supplier_name,
+          category: ingredient.category,
         };
       });
 

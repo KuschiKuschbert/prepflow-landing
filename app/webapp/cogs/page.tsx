@@ -1,21 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { convertUnit } from '@/lib/unit-conversion';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { convertUnit } from '@/lib/unit-conversion';
+import { useEffect, useState } from 'react';
 
 // Components
+import { COGSTable } from './components/COGSTable';
 import { DishForm } from './components/DishForm';
 import { IngredientManager } from './components/IngredientManager';
-import { COGSTable } from './components/COGSTable';
 import { PricingTool } from './components/PricingTool';
 import { SaveRecipeButton } from './components/SaveRecipeButton';
 
 // Hooks
 import { useCOGSCalculations } from './hooks/useCOGSCalculations';
-import { usePricing } from './hooks/usePricing';
 import { useIngredientSearch } from './hooks/useIngredientSearch';
+import { usePricing } from './hooks/usePricing';
 import { useRecipeSaving } from './hooks/useRecipeSaving';
 
 // Types
@@ -269,7 +269,7 @@ function COGSPageContent() {
               newIngredient.unit || 'kg',
               selectedIngredientData.unit || 'kg',
             );
-            convertedQuantity = newIngredient.quantity! * conversionResult.conversionFactor;
+            convertedQuantity = newIngredient.quantity! * conversionResult.value;
             convertedUnit = selectedIngredientData.unit || 'kg';
             conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
           }
@@ -342,7 +342,7 @@ function COGSPageContent() {
               newIngredient.unit || 'kg',
               selectedIngredientData.unit || 'kg',
             );
-            convertedQuantity = newIngredient.quantity! * conversionResult.conversionFactor;
+            convertedQuantity = newIngredient.quantity! * conversionResult.value;
             convertedUnit = selectedIngredientData.unit || 'kg';
             conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
           }
@@ -395,7 +395,7 @@ function COGSPageContent() {
     dishName,
     dishPortions,
     dishNameLocked,
-    recipeExists,
+    recipeExists: recipeExists ?? false,
     checkingRecipe,
   };
 

@@ -1,14 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Recipe } from '../types';
+import { Recipe, RecipePriceData } from '../types';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  recipePrices: Record<
-    string,
-    { costPerServing: number; recommendedPrice: number; foodCostPercent: number }
-  >;
+  recipePrices: Record<string, RecipePriceData>;
   selectedRecipes: Set<string>;
   onSelectRecipe: (recipeId: string) => void;
   onPreviewRecipe: (recipe: Recipe) => void;

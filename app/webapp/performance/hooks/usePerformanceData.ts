@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
-import { PerformanceItem, PerformanceMetadata, PerformanceAlert, PerformanceState } from '../types';
+import { useEffect, useRef, useState } from 'react';
+import { PerformanceState } from '../types';
 
 export function usePerformanceData() {
   const [state, setState] = useState<PerformanceState>({
@@ -16,6 +16,15 @@ export function usePerformanceData() {
     showImportModal: false,
     csvData: '',
     importing: false,
+    filters: {
+      profitCategory: [],
+      popularityCategory: [],
+      menuItemClass: [],
+    },
+    sortBy: 'name',
+    sortOrder: 'asc',
+    loading: false,
+    error: null,
   });
 
   const realtimeSubscription = useRef<any>(null);

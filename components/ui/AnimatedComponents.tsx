@@ -33,7 +33,7 @@ export function AnimatedCard({
       onClick={onClick}
     >
       {/* Floating Icon */}
-      <FloatingElement intensity="subtle">
+      <FloatingElement intensity={1}>
         <div className="group-hover:animate-glow mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD] to-[#D925C7]">
           {icon}
         </div>

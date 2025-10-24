@@ -5,10 +5,7 @@ import './globals.css';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { Analytics } from '@vercel/analytics/react';
 
-// Temporarily disable lazy loading to fix build
-// const LazyAnalytics = lazy(() => import('../components/LazyAnalytics'));
-// const LazyTracking = lazy(() => import('../components/LazyTracking'));
-
+// cleaned: Removed commented-out lazy loading code
 // Keep performance components for now (they're lightweight)
 import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
 import GoogleAnalytics from '../components/GoogleAnalytics';
@@ -129,86 +126,15 @@ export default function RootLayout({
 
           <Analytics />
 
-          {/* Temporarily use direct imports */}
+          {/* Analytics and tracking */}
           <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
           <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
-
-          {/* Analytics and tracking - lazy loaded after initial render */}
-          {/* <Suspense fallback={null}>
-            <LazyAnalytics />
-          </Suspense>
-
-          <Suspense fallback={null}>
-            <LazyTracking />
-          </Suspense> */}
         </ErrorBoundary>
-
-        {/* Advanced Performance Optimizations - DISABLED TO PREVENT CONSOLE ERRORS */}
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Initialize advanced optimizations
-              (function() {
-                // Critical CSS injection
-                // Critical CSS removed to prevent console errors
-                const style = document.createElement('style');
-                style.id = 'critical-css';
-                style.textContent = criticalCSS;
-                document.head.insertBefore(style, document.head.firstChild);
-
-                // Resource hints initialization
-                // Resource hints removed to prevent console errors
-
-                // Preconnect to external domains
-                resourceHints.preconnect.forEach(domain => {
-                  const link = document.createElement('link');
-                  link.rel = 'preconnect';
-                  link.href = domain;
-                  link.crossOrigin = 'anonymous';
-                  document.head.appendChild(link);
-                });
-
-                // DNS prefetch for external domains
-                resourceHints.dnsPrefetch.forEach(domain => {
-                  const link = document.createElement('link');
-                  link.rel = 'dns-prefetch';
-                  link.href = domain;
-                  document.head.appendChild(link);
-                });
-
-                // Preload critical resources
-                resourceHints.critical.forEach(resource => {
-                  const link = document.createElement('link');
-                  link.rel = 'preload';
-                  link.href = resource.href;
-                  link.as = resource.as;
-                  if (resource.type) link.type = resource.type;
-                  if (resource.priority === 'high') link.setAttribute('fetchpriority', 'high');
-                  document.head.appendChild(link);
-                });
-
-                // Font optimization
-                const fontLink = document.createElement('link');
-                fontLink.rel = 'preload';
-                fontLink.as = 'style';
-                fontLink.href = 'https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap';
-                fontLink.onload = function() {
-                  this.rel = 'stylesheet';
-                };
-                document.head.appendChild(fontLink);
-
-                console.log('🚀 Advanced optimizations initialized');
-              })();
-            `,
-          }}
-        /> */}
 
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // FOUC prevention handled by CSS and component-level loading states
-
               // Service Worker Registration - COMPLETELY DISABLED FOR DEVELOPMENT
               // Unregister any existing service workers in development
               if (window.location.hostname.includes('localhost')) {

@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import { useGlobalWarning } from '@/contexts/GlobalWarningContext';
+import React from 'react';
 
 const GlobalWarning: React.FC = () => {
   const { warnings, removeWarning } = useGlobalWarning();
@@ -112,7 +112,7 @@ const GlobalWarning: React.FC = () => {
           <div className="flex items-center space-x-3">
             <div className={styles.icon}>{getWarningIcon(warning.type)}</div>
             <div>
-              <h4 className="text-sm font-semibold">{warning.title}</h4>
+              <h4 className="text-sm font-semibold">{warning.title || 'Notification'}</h4>
               <p className="text-xs opacity-90">{warning.message}</p>
             </div>
           </div>

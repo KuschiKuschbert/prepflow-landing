@@ -1,13 +1,11 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import { Recipe, RecipeIngredient } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '../types';
 
 interface RecipePreviewModalProps {
   showPreview: boolean;
   selectedRecipe: Recipe | null;
-  recipeIngredients: RecipeIngredient[];
+  recipeIngredients: RecipeIngredientWithDetails[];
   aiInstructions: string;
   generatingInstructions: boolean;
   previewYield: number;

@@ -16,7 +16,7 @@ export default function IngredientWizardStep2({
   const [showAddSupplier, setShowAddSupplier] = useState(false);
 
   const addNewSupplier = async (supplierName: string) => {
-    if (!supplierName.trim()) return;
+    if (!supplierName.trim() || !onAddSupplier) return;
 
     try {
       await onAddSupplier(supplierName);
@@ -50,7 +50,7 @@ export default function IngredientWizardStep2({
                   className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 >
                   <option value="">Select supplier</option>
-                  {suppliers.map(supplier => (
+                  {suppliers?.map(supplier => (
                     <option key={supplier.id} value={supplier.name}>
                       {supplier.name}
                     </option>
@@ -174,7 +174,7 @@ export default function IngredientWizardStep2({
                 min="0"
                 max="100"
                 value={formData.trim_peel_waste_percentage || 0}
-                onChange={e => onWastagePercentageChange(parseInt(e.target.value))}
+                onChange={e => onWastagePercentageChange?.(parseInt(e.target.value))}
                 className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
               />
               <div className="w-20 text-center">
@@ -197,7 +197,7 @@ export default function IngredientWizardStep2({
                 min="0"
                 max="100"
                 value={formData.yield_percentage || 100}
-                onChange={e => onYieldPercentageChange(parseInt(e.target.value))}
+                onChange={e => onYieldPercentageChange?.(parseInt(e.target.value))}
                 className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
               />
               <div className="w-20 text-center">

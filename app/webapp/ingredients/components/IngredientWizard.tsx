@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
 import { formatIngredientName } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
-import { IngredientWizardProps, Ingredient } from './types';
+import { useTranslation } from '@/lib/useTranslation';
+import { useState } from 'react';
+import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
 import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
-import IngredientWizardNavigation from './IngredientWizardNavigation';
+import { Ingredient, IngredientWizardProps } from './types';
 
 export default function IngredientWizardRefactored({
   suppliers,
@@ -52,7 +52,7 @@ export default function IngredientWizardRefactored({
     if (packPrice === 0 || packSize === 0) return 0;
 
     const conversion = convertUnit(1, packSizeUnit, targetUnit);
-    const packSizeInTargetUnit = packSize * conversion.conversionFactor;
+    const packSizeInTargetUnit = packSize * conversion.value;
 
     return packPrice / packSizeInTargetUnit;
   };

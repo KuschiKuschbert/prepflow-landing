@@ -1,7 +1,18 @@
-import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextResponse } from 'next/server';
 
 export async function POST() {
+  // cleaned: Added environment protection to prevent demo data in production
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json(
+      {
+        error: 'Test data population is not allowed in production',
+        message: 'This endpoint is only available in development mode',
+      },
+      { status: 403 },
+    );
+  }
+
   if (!supabaseAdmin) {
     return NextResponse.json({ error: 'Supabase admin client not available' }, { status: 500 });
   }

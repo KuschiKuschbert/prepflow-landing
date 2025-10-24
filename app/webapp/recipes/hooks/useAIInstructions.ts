@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { Recipe, RecipeIngredient } from '../types';
+import { useCallback, useState } from 'react';
+import { Recipe, RecipeIngredientWithDetails } from '../types';
 
 export function useAIInstructions() {
   const [aiInstructions, setAiInstructions] = useState<string>('');
   const [generatingInstructions, setGeneratingInstructions] = useState(false);
 
   const generateAIInstructions = useCallback(
-    async (recipe: Recipe, ingredients: RecipeIngredient[]) => {
+    async (recipe: Recipe, ingredients: RecipeIngredientWithDetails[]) => {
       console.log('🤖 DEBUG: Generating AI instructions for:', recipe.name);
       console.log('🤖 DEBUG: Ingredients:', ingredients);
       setGeneratingInstructions(true);

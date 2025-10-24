@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { convertIngredientCost } from '@/lib/unit-conversion';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { convertIngredientCost } from '@/lib/unit-conversion';
+import { useTranslation } from '@/lib/useTranslation';
+import { useState } from 'react';
 
 interface Ingredient {
   id: string;
@@ -173,7 +173,7 @@ export default function IngredientTable({
                 ingredient.cost_per_unit,
                 ingredient.unit || 'GM',
                 displayUnit,
-                ingredient.ingredient_name || 'Unknown',
+                1, // quantity = 1 for cost per unit
               );
 
               const isLowStock =

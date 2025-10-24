@@ -1,25 +1,13 @@
-export interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  unit?: string;
-  cost_per_unit: number;
-  cost_per_unit_as_purchased?: number;
-  cost_per_unit_incl_trim?: number;
-  trim_peel_waste_percentage?: number;
-  yield_percentage?: number;
-}
-
+// COGS Types
 export interface Recipe {
   id: string;
   name: string;
-  yield?: number;
-}
-
-export interface RecipeIngredient {
-  recipe_id: string;
-  ingredient_id: string;
-  quantity: number;
-  unit?: string;
+  description?: string;
+  instructions?: string;
+  yield: number;
+  yield_unit: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface COGSCalculation {
@@ -32,55 +20,76 @@ export interface COGSCalculation {
   totalCost: number;
   wasteAdjustedCost: number;
   yieldAdjustedCost: number;
+  // Legacy properties for compatibility
+  id?: string;
+  ingredient_id?: string;
+  ingredient_name?: string;
+  cost_per_unit?: number;
+  total_cost?: number;
+  supplier_name?: string;
+  category?: string;
 }
 
 export interface PricingCalculation {
   sellPriceExclGST: number;
   sellPriceInclGST: number;
-  gstAmount: number;
-  actualGrossProfit: number;
   grossProfitDollar: number;
+  actualGrossProfit: number;
   contributingMargin: number;
   contributingMarginPercent: number;
+  gstAmount: number;
 }
 
 export interface PricingStrategy {
-  type: 'charm' | 'whole' | 'real';
-  targetGrossProfit: number;
+  name: string;
+  multiplier: number;
+  description: string;
+}
+
+export interface Ingredient {
+  id: string;
+  ingredient_name: string;
+  category?: string;
+  unit?: string;
+  cost_per_unit?: number;
+  cost_per_unit_incl_trim?: number;
+  trim_peel_waste_percentage?: number;
+  yield_percentage?: number;
+  supplier_name?: string;
+}
+
+export interface RecipeIngredient {
+  id: string;
+  recipe_id: string;
+  ingredient_id: string;
+  ingredient_name: string;
+  quantity: number;
+  unit: string;
+  cost_per_unit: number;
+  total_cost: number;
+  supplier_name?: string;
+  category?: string;
 }
 
 export interface DishFormData {
   dishName: string;
   dishPortions: number;
   dishNameLocked: boolean;
-  recipeExists: boolean | null;
+  recipeExists: boolean;
   checkingRecipe: boolean;
 }
 
 export interface IngredientFormData {
-  ingredient_id: string;
+  id: string;
+  name: string;
   quantity: number;
   unit: string;
+  cost: number;
 }
 
 export interface COGSPageState {
-  ingredients: Ingredient[];
-  recipes: Recipe[];
-  selectedRecipe: string;
-  recipeIngredients: RecipeIngredient[];
   calculations: COGSCalculation[];
+  totalCost: number;
   loading: boolean;
   error: string | null;
-  successMessage: string | null;
-  showAddIngredient: boolean;
-  editingIngredient: string | null;
-  editQuantity: number;
-  ingredientSearch: string;
-  showSuggestions: boolean;
-  selectedIngredient: Ingredient | null;
-  newIngredient: Partial<RecipeIngredient>;
-  targetGrossProfit: number;
-  sellPriceExclGST: number;
-  sellPriceInclGST: number;
-  pricingStrategy: 'charm' | 'whole' | 'real';
 }

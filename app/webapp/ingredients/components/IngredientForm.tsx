@@ -1,15 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-  formatTextInput,
-} from '@/lib/text-utils';
+import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
+import { useTranslation } from '@/lib/useTranslation';
+import { useState } from 'react';
 
 interface Ingredient {
   id: string;
@@ -90,7 +84,7 @@ export default function IngredientForm({
     if (packPrice === 0 || packSize === 0) return 0;
 
     const conversion = convertUnit(1, packSizeUnit, targetUnit);
-    const packSizeInTargetUnit = packSize * conversion.conversionFactor;
+    const packSizeInTargetUnit = packSize * conversion.value;
 
     return packPrice / packSizeInTargetUnit;
   };

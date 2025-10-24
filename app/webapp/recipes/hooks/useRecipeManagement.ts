@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Recipe, RecipeIngredient, COGSCalculation, RecipePriceData } from '../types';
-import { convertIngredientCost } from '@/lib/unit-conversion';
 import { formatRecipeName } from '@/lib/text-utils';
-import { useApiCall } from '@/hooks/useApiCall';
+import { convertIngredientCost } from '@/lib/unit-conversion';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { COGSCalculation, Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../types';
 
 export function useRecipeManagement() {
   const router = useRouter();
@@ -20,7 +19,7 @@ export function useRecipeManagement() {
 
   // Calculate recommended selling price for a recipe
   const calculateRecommendedPrice = useCallback(
-    (recipe: Recipe, ingredients: RecipeIngredient[]) => {
+    (recipe: Recipe, ingredients: RecipeIngredientWithDetails[]) => {
       if (!ingredients || ingredients.length === 0) return null;
 
       // Calculate total cost per serving
@@ -35,7 +34,7 @@ export function useRecipeManagement() {
           baseCostPerUnit,
           ingredient.unit || 'g',
           ri.unit || 'g',
-          ingredient.ingredient_name,
+          ri.quantity,
         );
         const wastePercent = ingredient.trim_peel_waste_percentage || 0;
         const yieldPercent = ingredient.yield_percentage || 100;
@@ -56,9 +55,12 @@ export function useRecipeManagement() {
       const charmPrice = Math.floor(recommendedPrice) + 0.95;
 
       return {
-        costPerServing: totalCostPerServing,
+        cost_per_serving: totalCostPerServing,
         recommendedPrice: charmPrice,
         foodCostPercent: (totalCostPerServing / charmPrice) * 100,
+        selling_price: charmPrice,
+        gross_profit: charmPrice - totalCostPerServing,
+        gross_profit_margin: ((charmPrice - totalCostPerServing) / charmPrice) * 100,
       };
     },
     [],
@@ -117,12 +119,13 @@ export function useRecipeManagement() {
     }
   }, [recipes, calculateAllRecipePrices]);
 
-  const fetchRecipeIngredients = useCallback(async (recipeId: string) => {
-    try {
-      const { data: ingredientsData, error: ingredientsError } = await supabase
-        .from('recipe_ingredients')
-        .select(
-          `
+  const fetchRecipeIngredients = useCallback(
+    async (recipeId: string): Promise<RecipeIngredientWithDetails[]> => {
+      try {
+        const { data: ingredientsData, error: ingredientsError } = await supabase
+          .from('recipe_ingredients')
+          .select(
+            `
           id,
           recipe_id,
           ingredient_id,
@@ -137,20 +140,22 @@ export function useRecipeManagement() {
             yield_percentage
           )
         `,
-        )
-        .eq('recipe_id', recipeId);
+          )
+          .eq('recipe_id', recipeId);
 
-      if (ingredientsError) {
-        setError(ingredientsError.message);
+        if (ingredientsError) {
+          setError(ingredientsError.message);
+          return [];
+        }
+
+        return (ingredientsData || []) as unknown as RecipeIngredientWithDetails[];
+      } catch (err) {
+        setError('Failed to fetch recipe ingredients');
         return [];
       }
-
-      return (ingredientsData || []) as unknown as RecipeIngredient[];
-    } catch (err) {
-      setError('Failed to fetch recipe ingredients');
-      return [];
-    }
-  }, []);
+    },
+    [],
+  );
 
   const handleEditRecipe = useCallback(
     async (recipe: Recipe) => {
@@ -172,15 +177,18 @@ export function useRecipeManagement() {
           const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
 
           return {
-            recipeId: recipe.id,
+            id: ri.id,
+            ingredient_id: ingredient.id,
             ingredientId: ingredient.id,
+            ingredient_name: ingredient.ingredient_name,
             ingredientName: ingredient.ingredient_name,
             quantity: quantity,
             unit: ri.unit,
-            costPerUnit: costPerUnit,
-            totalCost: totalCost,
-            wasteAdjustedCost: wasteAdjustedCost,
+            cost_per_unit: costPerUnit,
+            total_cost: totalCost,
             yieldAdjustedCost: yieldAdjustedCost,
+            supplier_name: ingredient.supplier_name,
+            category: ingredient.category,
           };
         });
 

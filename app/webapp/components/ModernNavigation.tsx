@@ -4,7 +4,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useTranslation } from '@/lib/useTranslation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import OptimizedImage from '../../../components/OptimizedImage';
 
 interface NavigationItem {
@@ -19,7 +19,7 @@ interface ModernNavigationProps {
   className?: string;
 }
 
-export default function ModernNavigation({ className = '' }: ModernNavigationProps) {
+const ModernNavigation = memo(function ModernNavigation({ className = '' }: ModernNavigationProps) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -528,4 +528,6 @@ export default function ModernNavigation({ className = '' }: ModernNavigationPro
       )}
     </>
   );
-}
+});
+
+export default ModernNavigation;

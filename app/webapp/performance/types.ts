@@ -1,40 +1,41 @@
+// Performance Types
 export interface PerformanceItem {
-  id: number;
+  id: string;
   name: string;
-  number_sold: number;
-  popularity_percentage: number;
-  selling_price: number;
-  food_cost: number;
-  gross_profit: number;
+  menu_item_class: string;
+  gross_profit_margin: number;
   gross_profit_percentage: number;
-  profit_category: 'High' | 'Low';
-  popularity_category: 'High' | 'Low';
-  menu_item_class: "Chef's Kiss" | 'Hidden Gem' | 'Bargain Bucket' | 'Burnt Toast';
+  popularity_percentage: number;
+  number_sold: number;
+  selling_price: number;
+  cost_per_serving: number;
+  gross_profit: number;
+  food_cost: number;
+  profit_category: string;
+  popularity_category: string;
 }
 
 export interface PerformanceMetadata {
   methodology: string;
-  averageProfitMargin: number;
-  averagePopularity: number;
-  popularityThreshold: number;
-}
-
-export interface PerformanceAlert {
-  id: string;
-  message: string;
-  timestamp: Date;
-}
-
-export interface ChartData {
-  name: string;
-  profit: number;
-  value: number;
-  color: string;
+  averageProfitMargin?: number;
+  averagePopularity?: number;
+  profitThreshold?: number;
+  popularityThreshold?: number;
+  totalItems?: number;
+  analyzedItems?: number;
+  lastUpdated?: string;
 }
 
 export interface ImportCSVData {
   csvData: string;
   importing: boolean;
+}
+
+export interface PerformanceAlert {
+  id: string;
+  message: string;
+  type?: 'warning' | 'error' | 'info';
+  timestamp?: Date;
 }
 
 export interface PerformanceFilters {
@@ -43,6 +44,12 @@ export interface PerformanceFilters {
   sortOrder: 'asc' | 'desc';
   currentPage: number;
   itemsPerPage: number;
+}
+
+export interface ChartData {
+  name: string;
+  value: number;
+  color?: string;
 }
 
 export interface PerformanceState {
@@ -56,4 +63,13 @@ export interface PerformanceState {
   showImportModal: boolean;
   csvData: string;
   importing: boolean;
+  filters: {
+    profitCategory: string[];
+    popularityCategory: string[];
+    menuItemClass: string[];
+  };
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+  loading: boolean;
+  error: string | null;
 }
