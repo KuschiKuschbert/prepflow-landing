@@ -79,7 +79,12 @@ function preloadCriticalResources() {
   // Font preloading handled by Next.js built-in font optimization
   // Removed local font preloading that was causing 404 errors
 
-  const criticalResources = [
+  const criticalResources: Array<{
+    href: string;
+    as: string;
+    type?: string;
+    crossorigin?: string;
+  }> = [
     // Add other critical resources here if needed
   ];
 

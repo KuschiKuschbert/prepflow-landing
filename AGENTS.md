@@ -29,7 +29,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 - **GTM Integration:** GoogleTagManager with data layer management
 - **SEO Components:** Structured data, meta tags, OpenGraph
 - **UI Components:** Custom Button, Card, and form components
-- **UX Components:** LoadingSkeleton, MobileNavigation, FloatingCTA, ScrollToTop, ScrollProgress
+- **UX Components:** LoadingSkeleton, ModernNavigation, FloatingCTA, ScrollToTop, ScrollProgress
 
 ### **File Structure**
 
@@ -60,7 +60,7 @@ components/
 │   ├── Input.tsx       # Universal input component
 │   ├── Card.tsx        # Universal card component
 │   ├── LoadingSkeleton.tsx # Loading skeleton components
-│   ├── MobileNavigation.tsx # Mobile hamburger menu
+│   ├── ModernNavigation.tsx # Modern webapp navigation system
 │   ├── FloatingCTA.tsx # Floating CTA buttons
 │   ├── ScrollToTop.tsx # Scroll to top button
 │   └── ScrollProgress.tsx # Scroll progress indicator
@@ -547,11 +547,13 @@ interface TrackingEvent {
 - **Perceived Performance:** Reduce bounce rate with engaging loading states
 - **Smooth Transitions:** 60fps animations and hover effects
 
-### **Mobile Navigation & Responsiveness**
+### **Modern Navigation System**
 
-- **Hamburger Menu:** MobileNavigation component with slide-out panel
+- **Collapsible Sidebar:** ModernNavigation component with organized categories
 - **Touch-Friendly:** Minimum 44px touch targets for mobile interactions
-- **Smooth Scrolling:** Enhanced scroll behavior with header offset
+- **Smart Search:** Quick access to any feature with ⌘K shortcut
+- **Keyboard Shortcuts:** ⌘B to toggle sidebar, ⌘K for search
+- **Breadcrumb Navigation:** Context-aware navigation on desktop
 - **Mobile-First:** Responsive design optimized for all screen sizes
 
 ### **Conversion Optimization**
@@ -636,7 +638,7 @@ interface TrackingEvent {
 2. **Skeleton Positioning Fix:** Resolved skeleton positioning issues by removing unnecessary dynamic imports from dashboard components
 3. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
 4. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Material Design 3 styling across the entire webapp
-5. **Mobile Navigation:** Hamburger menu with slide-out panel
+5. **Modern Navigation System:** Collapsible sidebar with organized categories and smart search
 6. **Floating CTAs:** Strategic CTA placement for better conversion
 7. **Accessibility:** Focus management and keyboard navigation
 8. **Smooth Scrolling:** Enhanced navigation with progress indicators
@@ -682,7 +684,7 @@ interface TrackingEvent {
 3. **Component Architecture**: Split large components (Recipes: 1,670 → 673 lines, COGS: 1,634 → 459 lines)
 4. **Error Boundaries**: Implemented React error boundaries for better error handling
 5. **Loading States**: Comprehensive skeleton system with Material Design 3 compliance
-6. **Mobile Experience**: Touch-friendly navigation and responsive charts
+6. **Modern Navigation Experience**: Touch-friendly navigation and responsive charts
 
 #### **🎉 Database Population Success (Latest Update)**
 
@@ -940,6 +942,38 @@ if (error) {
 - **Analytics Dashboard:** Google Analytics and GTM
 - **Performance Monitoring:** Vercel Analytics and Core Web Vitals
 - **A/B Testing:** Built-in framework with GTM integration
+
+## 🧭 **Modern Navigation System**
+
+### **Architecture Overview**
+
+The PrepFlow webapp uses a modern, space-efficient navigation system designed for optimal screen real estate usage and user experience.
+
+### **Key Features**
+
+- **Collapsible Sidebar**: 320px width, hidden by default to maximize content space
+- **Organized Categories**: Core, Operations, Inventory, Kitchen, Tools
+- **Smart Search**: Real-time filtering with ⌘K shortcut
+- **Keyboard Shortcuts**: ⌘B to toggle sidebar, ⌘K for search
+- **Breadcrumb Navigation**: Context-aware navigation on desktop
+- **Touch-Optimized**: 44px minimum touch targets for mobile
+- **Responsive Design**: Adapts to all screen sizes
+
+### **Implementation Details**
+
+- **Component**: `app/webapp/components/ModernNavigation.tsx`
+- **Layout Integration**: Used in `app/webapp/layout.tsx`
+- **Search Modal**: Full-screen search with category filtering
+- **Active States**: Visual feedback for current page
+- **Accessibility**: Full keyboard and screen reader support
+
+### **Benefits**
+
+- **50% more screen space** for content
+- **Organized navigation** with clear hierarchy
+- **Quick access** to any feature via search
+- **Mobile-first** design approach
+- **Smooth animations** and transitions
 
 ## 🎯 **PrepFlow COGS Dynamic Methodology**
 

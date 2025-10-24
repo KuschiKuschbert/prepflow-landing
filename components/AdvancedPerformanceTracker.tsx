@@ -1,18 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { initializeRUM } from '../lib/advanced-rum';
 import { trackEvent, trackPerformance } from '../lib/analytics';
-import { performanceBudgetManager, trackPerformanceBudget } from '../lib/performance-budgets';
-import { advancedRUMManager, initializeRUM } from '../lib/advanced-rum';
-import {
-  performanceABTestingManager,
-  initializePerformanceABTesting,
-} from '../lib/performance-ab-testing';
-import {
-  performanceAlertManager,
-  initializePerformanceAlerts,
-  checkPerformanceAndAlert,
-} from '../lib/performance-alerts';
+import { initializePerformanceABTesting } from '../lib/performance-ab-testing';
+import { checkPerformanceAndAlert, initializePerformanceAlerts } from '../lib/performance-alerts';
+import { trackPerformanceBudget } from '../lib/performance-budgets';
 
 interface PerformanceMetrics {
   // Core Web Vitals
@@ -80,7 +73,7 @@ interface AdvancedPerformanceTrackerProps {
 export default function AdvancedPerformanceTracker({
   onMetrics,
   enabled = true,
-  sampleRate = 0.1, // Default to 10% sampling
+  sampleRate = process.env.NODE_ENV === 'development' ? 0.01 : 0.1, // 1% in dev, 10% in prod
 }: AdvancedPerformanceTrackerProps) {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const hasTrackedInitial = useRef(false);
@@ -97,11 +90,15 @@ export default function AdvancedPerformanceTracker({
 
     // Sample rate check
     if (Math.random() > sampleRate) {
-      console.log('📊 PrepFlow Performance: User not sampled for performance tracking');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('📊 PrepFlow Performance: User not sampled for performance tracking');
+      }
       return;
     }
 
-    console.log('🚀 PrepFlow Performance: Starting advanced performance tracking');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🚀 PrepFlow Performance: Starting advanced performance tracking');
+    }
 
     // Initialize performance tracking
     const initializeTracking = async () => {
@@ -129,7 +126,9 @@ export default function AdvancedPerformanceTracker({
         // Track memory usage
         trackMemoryUsage();
 
-        console.log('✅ PrepFlow Performance: All tracking initialized');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ PrepFlow Performance: All tracking initialized');
+        }
       } catch (error) {
         console.error('❌ PrepFlow Performance: Initialization failed:', error);
       }
@@ -361,15 +360,44 @@ export default function AdvancedPerformanceTracker({
         [];
       let totalResources = 0;
       let totalLoadTime = 0;
+      let lastSlowResourceReport = 0;
+      const SLOW_RESOURCE_THRESHOLD = 2000; // Increased to 2 seconds
+      const SLOW_RESOURCE_REPORT_INTERVAL = 5000; // Report every 5 seconds max
+
+      // Filter out non-critical resources
+      const isCriticalResource = (entry: any) => {
+        const url = entry.name.toLowerCase();
+        const initiatorType = entry.initiatorType;
+
+        // Skip non-critical resources
+        if (initiatorType === 'beacon' || initiatorType === 'other') return false;
+
+        // Skip analytics and tracking scripts
+        if (
+          url.includes('google-analytics') ||
+          url.includes('googletagmanager') ||
+          url.includes('gtag') ||
+          url.includes('analytics') ||
+          url.includes('facebook') ||
+          url.includes('hotjar') ||
+          url.includes('mixpanel')
+        )
+          return false;
+
+        // Skip small resources (< 50KB)
+        if (entry.transferSize && entry.transferSize < 50000) return false;
+
+        return true;
+      };
 
       resourceObserver.current = new PerformanceObserver(list => {
         list.getEntries().forEach((entry: any) => {
-          if (entry.entryType === 'resource') {
+          if (entry.entryType === 'resource' && isCriticalResource(entry)) {
             totalResources++;
             totalLoadTime += entry.duration;
 
-            if (entry.duration > 1000) {
-              // Slow resources > 1 second
+            if (entry.duration > SLOW_RESOURCE_THRESHOLD) {
+              // Slow resources > 2 seconds
               slowResources.push({
                 name: entry.name,
                 duration: Math.round(entry.duration),
@@ -394,8 +422,14 @@ export default function AdvancedPerformanceTracker({
             }) as PerformanceMetrics,
         );
 
-        // Track slow resources
-        if (slowResources.length > 0) {
+        // Track slow resources with throttling
+        const now = Date.now();
+        if (
+          slowResources.length > 0 &&
+          now - lastSlowResourceReport > SLOW_RESOURCE_REPORT_INTERVAL
+        ) {
+          lastSlowResourceReport = now;
+
           trackEvent('slow_resources', 'performance', 'slow_loading', slowResources.length);
 
           if (typeof window !== 'undefined' && window.gtag) {
