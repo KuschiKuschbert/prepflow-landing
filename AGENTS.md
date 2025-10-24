@@ -521,6 +521,27 @@ interface TrackingEvent {
 - **Production:** Automatic deployment from main branch
 - **Monitoring:** Performance metrics, error tracking, analytics
 
+### **🚨 CRITICAL: Vercel Compression Configuration**
+
+**IMPORTANT:** To prevent `ERR_CONTENT_DECODING_FAILED` errors on production:
+
+- **Set `compress: false`** in `next.config.ts` - Let Vercel handle compression automatically
+- **Remove explicit Content-Encoding headers** - Vercel's automatic compression conflicts with manual settings
+- **Never set `Content-Encoding: gzip, br`** manually - Causes browser decoding conflicts
+
+**Configuration:**
+
+```typescript
+// next.config.ts
+const nextConfig: NextConfig = {
+  // Let Vercel handle compression automatically
+  compress: false,
+  // Remove explicit compression headers from headers() function
+};
+```
+
+**Why:** Vercel automatically handles compression with optimal settings. Manual compression configuration causes conflicts and prevents proper content decoding in browsers.
+
 ### **Quality Assurance**
 
 - **Code Review:** All changes require review
@@ -882,6 +903,7 @@ if (error) {
 - **"Invalid API key"** - Fixed with proper environment variables
 - **"Could not find column"** - Requires database table creation
 - **Client component errors** - Add `"use client"` directive when using hooks
+- **ERR_CONTENT_DECODING_FAILED** - Fixed by setting `compress: false` in next.config.ts and removing explicit Content-Encoding headers
 
 #### **File Organization Standards**
 
