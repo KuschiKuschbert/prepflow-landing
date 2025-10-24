@@ -525,11 +525,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                         className={cn(
                           isActive(item.href)
                             ? item.color
-                            : cn(
-                                'text-gray-400',
-                                'group-hover:',
-                                item.color.replace('text-', 'text-'),
-                              ),
+                            : `text-gray-400 group-hover:${item.color.replace('text-', 'text-')}`,
                         )}
                       >
                         {item.icon}

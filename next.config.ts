@@ -28,6 +28,8 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['@supabase/supabase-js', '@vercel/analytics'],
     // Enable modern bundling
     esmExternals: true,
+    // Optimize CSS loading to prevent unused preloads
+    optimizeCss: true,
   },
 
   // Remove dev tools from production
@@ -112,6 +114,15 @@ const nextConfig: NextConfig = {
 
       // Module concatenation
       config.optimization.concatenateModules = true;
+
+      // CSS optimization to prevent unused preloads
+      config.optimization.splitChunks.cacheGroups.styles = {
+        name: 'styles',
+        test: /\.(css|scss|sass)$/,
+        chunks: 'all',
+        enforce: true,
+        priority: 30,
+      };
     }
 
     // Font optimization handled by Next.js built-in font optimization

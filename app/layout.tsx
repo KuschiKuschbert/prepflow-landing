@@ -12,6 +12,7 @@ import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
 import PerformanceDashboard from '../components/PerformanceDashboard';
 import PerformanceOptimizer from '../components/PerformanceOptimizer';
+import ResourceOptimizer from '../components/ResourceOptimizer';
 import WebVitalsTracker from '../components/WebVitalsTracker';
 
 const geistSans = Geist({
@@ -120,6 +121,7 @@ export default function RootLayout({
           <PerformanceOptimizer>
             <ClientPerformanceTracker />
             <WebVitalsTracker />
+            <ResourceOptimizer />
             {children}
             <PerformanceDashboard />
           </PerformanceOptimizer>
