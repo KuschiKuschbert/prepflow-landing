@@ -3,7 +3,10 @@
 
 // Development mode detection
 const isDevelopment =
-  self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1';
+  self.location.hostname === 'localhost' ||
+  self.location.hostname === '127.0.0.1' ||
+  self.location.port === '3000' ||
+  self.location.port === '3001';
 
 const CACHE_NAME = 'prepflow-v2.0';
 const STATIC_CACHE = 'prepflow-static-v2.0';
@@ -134,6 +137,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Skip Turbopack and Next.js development files
+  if (pathname.includes('/_next/') || pathname.includes('/turbopack-')) {
+    console.log('🚧 Development file detected, skipping cache:', pathname);
+    return;
+  }
+
   // In development mode, skip caching for better debugging
   if (isDevelopment) {
     console.log('🚧 Development mode: Bypassing cache for', url.pathname);
@@ -238,10 +247,10 @@ async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
 
-  const fetchPromise = fetch(request).then(networkResponse => {
+  const fetchPromise = fetch(request).then(async networkResponse => {
     if (networkResponse.ok) {
       try {
-        cache.put(request, networkResponse.clone());
+        await cache.put(request, networkResponse.clone());
       } catch (error) {
         console.warn('Service Worker: Cache put failed in staleWhileRevalidate:', error);
         // Continue without caching if cache fails
