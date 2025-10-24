@@ -8,10 +8,10 @@ const isDevelopment =
   self.location.port === '3000' ||
   self.location.port === '3001';
 
-const CACHE_NAME = 'prepflow-v2.0';
-const STATIC_CACHE = 'prepflow-static-v2.0';
-const DYNAMIC_CACHE = 'prepflow-dynamic-v2.0';
-const API_CACHE = 'prepflow-api-v2.0';
+const CACHE_NAME = 'prepflow-v2.1';
+const STATIC_CACHE = 'prepflow-static-v2.1';
+const DYNAMIC_CACHE = 'prepflow-dynamic-v2.1';
+const API_CACHE = 'prepflow-api-v2.1';
 
 // Cache strategies
 const CACHE_STRATEGIES = {
@@ -42,7 +42,7 @@ const CACHE_STRATEGIES = {
 
 // Install event - Cache static assets
 self.addEventListener('install', event => {
-  console.log('🔧 PrepFlow SW: Installing service worker v2.0');
+  console.log('🔧 PrepFlow SW: Installing service worker v2.1');
 
   if (isDevelopment) {
     console.log('🚧 Development mode: Skipping cache installation');
@@ -95,7 +95,7 @@ self.addEventListener('install', event => {
 
 // Activate event - Clean up old caches
 self.addEventListener('activate', event => {
-  console.log('🚀 PrepFlow SW: Activating service worker v2.0');
+  console.log('🚀 PrepFlow SW: Activating service worker v2.1');
 
   event.waitUntil(
     caches
