@@ -7,22 +7,29 @@ export async function POST(request: NextRequest) {
     const { recipeId, shareType, recipientEmail, notes } = body;
 
     if (!recipeId || !shareType) {
-      return NextResponse.json({ 
-        error: 'Missing required fields',
-        message: 'Recipe ID and share type are required'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Missing required fields',
+          message: 'Recipe ID and share type are required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     // Get recipe details with ingredients
     const { data: recipe, error: recipeError } = await supabaseAdmin
       .from('recipes')
-      .select(`
+      .select(
+        `
         *,
         recipe_ingredients (
           id,
@@ -37,16 +44,20 @@ export async function POST(request: NextRequest) {
             category
           )
         )
-      `)
+      `,
+      )
       .eq('id', recipeId)
       .single();
 
     if (recipeError || !recipe) {
       console.error('Error fetching recipe:', recipeError);
-      return NextResponse.json({ 
-        error: 'Recipe not found',
-        message: 'Could not find the specified recipe'
-      }, { status: 404 });
+      return NextResponse.json(
+        {
+          error: 'Recipe not found',
+          message: 'Could not find the specified recipe',
+        },
+        { status: 404 },
+      );
     }
 
     // Create share record
@@ -59,48 +70,56 @@ export async function POST(request: NextRequest) {
         notes: notes,
         status: 'pending',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
 
     if (shareError) {
       console.error('Error creating share record:', shareError);
-      return NextResponse.json({ 
-        error: 'Failed to create share record',
-        message: 'Could not save share information'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to create share record',
+          message: 'Could not save share information',
+        },
+        { status: 500 },
+      );
     }
 
     // Generate PDF content (simplified for now)
     const pdfContent = generateRecipePDF(recipe);
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Recipe share created successfully',
       data: {
         shareRecord,
         pdfContent: pdfContent,
-        recipe: recipe
-      }
+        recipe: recipe,
+      },
     });
-
   } catch (error) {
     console.error('Recipe share API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }
 
 function generateRecipePDF(recipe: any) {
   // This is a simplified PDF generation
   // In a real implementation, you would use a library like puppeteer or jsPDF
-  
-  const ingredients = recipe.recipe_ingredients.map((ri: any) => 
-    `• ${ri.quantity} ${ri.unit} ${ri.ingredients.name}${ri.notes ? ` (${ri.notes})` : ''}`
-  ).join('\n');
+
+  const ingredients = recipe.recipe_ingredients
+    .map(
+      (ri: any) =>
+        `• ${ri.quantity} ${ri.unit} ${ri.ingredients.name}${ri.notes ? ` (${ri.notes})` : ''}`,
+    )
+    .join('\n');
 
   const pdfContent = `
 RECIPE: ${recipe.name}
@@ -128,49 +147,62 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     if (!userId) {
-      return NextResponse.json({ 
-        error: 'User ID is required',
-        message: 'Please provide a valid user ID'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'User ID is required',
+          message: 'Please provide a valid user ID',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
       .from('recipe_shares')
-      .select(`
+      .select(
+        `
         *,
         recipes (
           id,
           name,
           description
         )
-      `)
+      `,
+      )
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching recipe shares:', error);
-      return NextResponse.json({ 
-        error: 'Failed to fetch recipe shares',
-        message: 'Could not retrieve share data'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to fetch recipe shares',
+          message: 'Could not retrieve share data',
+        },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
-
   } catch (error) {
     console.error('Recipe shares API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }

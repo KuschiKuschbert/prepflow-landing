@@ -45,7 +45,7 @@ class PerformanceOptimizer {
     try {
       // Run bundle analyzer
       execSync('npm run bundle:analyze', { stdio: 'pipe' });
-      
+
       // Check if .next/analyze directory exists
       const analyzeDir = path.join(this.projectRoot, '.next/analyze');
       if (fs.existsSync(analyzeDir)) {
@@ -65,11 +65,13 @@ class PerformanceOptimizer {
           name: chunk,
           size: this.calculateDirectorySize(path.join(staticDir, chunk)),
         }));
-        
-        this.report.bundleAnalysis.chunkSizes = chunkSizes;
-        this.report.bundleAnalysis.totalChunkSize = chunkSizes.reduce((sum, chunk) => sum + chunk.size, 0);
-      }
 
+        this.report.bundleAnalysis.chunkSizes = chunkSizes;
+        this.report.bundleAnalysis.totalChunkSize = chunkSizes.reduce(
+          (sum, chunk) => sum + chunk.size,
+          0,
+        );
+      }
     } catch (error) {
       console.warn('⚠️ Bundle analysis failed:', error.message);
       this.report.bundleAnalysis = { error: error.message };
@@ -81,7 +83,7 @@ class PerformanceOptimizer {
 
     const publicDir = path.join(this.projectRoot, 'public');
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.svg'];
-    
+
     if (fs.existsSync(publicDir)) {
       const images = this.findFiles(publicDir, imageExtensions);
       const imageAnalysis = images.map(img => ({
@@ -105,7 +107,7 @@ class PerformanceOptimizer {
 
     const publicDir = path.join(this.projectRoot, 'public');
     const fontExtensions = ['.woff', '.woff2', '.ttf', '.otf', '.eot'];
-    
+
     if (fs.existsSync(publicDir)) {
       const fonts = this.findFiles(publicDir, fontExtensions);
       const fontAnalysis = fonts.map(font => ({
@@ -156,7 +158,8 @@ class PerformanceOptimizer {
     const recommendations = [];
 
     // Bundle size recommendations
-    if (this.report.bundleAnalysis.totalChunkSize > 500000) { // 500KB
+    if (this.report.bundleAnalysis.totalChunkSize > 500000) {
+      // 500KB
       recommendations.push({
         type: 'bundle-size',
         priority: 'high',
@@ -167,7 +170,10 @@ class PerformanceOptimizer {
     }
 
     // Image optimization recommendations
-    if (this.report.imageAnalysis && this.report.imageAnalysis.optimizedImages < this.report.imageAnalysis.totalImages * 0.5) {
+    if (
+      this.report.imageAnalysis &&
+      this.report.imageAnalysis.optimizedImages < this.report.imageAnalysis.totalImages * 0.5
+    ) {
       recommendations.push({
         type: 'image-optimization',
         priority: 'medium',
@@ -178,7 +184,10 @@ class PerformanceOptimizer {
     }
 
     // Font optimization recommendations
-    if (this.report.fontAnalysis && this.report.fontAnalysis.optimizedFonts < this.report.fontAnalysis.totalFonts) {
+    if (
+      this.report.fontAnalysis &&
+      this.report.fontAnalysis.optimizedFonts < this.report.fontAnalysis.totalFonts
+    ) {
       recommendations.push({
         type: 'font-optimization',
         priority: 'medium',
@@ -225,7 +234,8 @@ class PerformanceOptimizer {
   }
 
   generateMarkdownReport() {
-    const { recommendations, bundleAnalysis, imageAnalysis, fontAnalysis, criticalResources } = this.report;
+    const { recommendations, bundleAnalysis, imageAnalysis, fontAnalysis, criticalResources } =
+      this.report;
 
     return `# PrepFlow Performance Report
 
@@ -233,27 +243,39 @@ Generated: ${this.report.timestamp}
 
 ## 📊 Bundle Analysis
 
-${bundleAnalysis.error ? `❌ Error: ${bundleAnalysis.error}` : `
+${
+  bundleAnalysis.error
+    ? `❌ Error: ${bundleAnalysis.error}`
+    : `
 - **Total Chunk Size**: ${bundleAnalysis.totalChunkSize ? Math.round(bundleAnalysis.totalChunkSize / 1024) + 'KB' : 'N/A'}
 - **Chunks**: ${bundleAnalysis.chunkSizes ? bundleAnalysis.chunkSizes.length : 0}
 - **Bundle Analysis**: ${bundleAnalysis.hasAnalysis ? '✅ Available' : '❌ Not available'}
-`}
+`
+}
 
 ## 🖼️ Image Analysis
 
-${imageAnalysis ? `
+${
+  imageAnalysis
+    ? `
 - **Total Images**: ${imageAnalysis.totalImages}
 - **Total Size**: ${Math.round(imageAnalysis.totalSize / 1024)}KB
-- **Optimized Images**: ${imageAnalysis.optimizedImages}/${imageAnalysis.totalImages} (${Math.round(imageAnalysis.optimizedImages / imageAnalysis.totalImages * 100)}%)
-` : 'No images found'}
+- **Optimized Images**: ${imageAnalysis.optimizedImages}/${imageAnalysis.totalImages} (${Math.round((imageAnalysis.optimizedImages / imageAnalysis.totalImages) * 100)}%)
+`
+    : 'No images found'
+}
 
 ## 🔤 Font Analysis
 
-${fontAnalysis ? `
+${
+  fontAnalysis
+    ? `
 - **Total Fonts**: ${fontAnalysis.totalFonts}
 - **Total Size**: ${Math.round(fontAnalysis.totalSize / 1024)}KB
-- **Optimized Fonts**: ${fontAnalysis.optimizedFonts}/${fontAnalysis.totalFonts} (${Math.round(fontAnalysis.optimizedFonts / fontAnalysis.totalFonts * 100)}%)
-` : 'No fonts found'}
+- **Optimized Fonts**: ${fontAnalysis.optimizedFonts}/${fontAnalysis.totalFonts} (${Math.round((fontAnalysis.optimizedFonts / fontAnalysis.totalFonts) * 100)}%)
+`
+    : 'No fonts found'
+}
 
 ## ⚡ Critical Resources
 
@@ -264,7 +286,9 @@ ${fontAnalysis ? `
 
 ## 💡 Recommendations
 
-${recommendations.map((rec, index) => `
+${recommendations
+  .map(
+    (rec, index) => `
 ### ${index + 1}. ${rec.title} ${rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🟢'}
 
 **Priority**: ${rec.priority.toUpperCase()}
@@ -272,7 +296,9 @@ ${recommendations.map((rec, index) => `
 **Issue**: ${rec.description}
 
 **Action**: ${rec.action}
-`).join('\n')}
+`,
+  )
+  .join('\n')}
 
 ## 🚀 Next Steps
 
@@ -291,36 +317,36 @@ ${recommendations.map((rec, index) => `
   findFiles(dir, extensions) {
     let results = [];
     const list = fs.readdirSync(dir);
-    
+
     list.forEach(file => {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat && stat.isDirectory()) {
         results = results.concat(this.findFiles(filePath, extensions));
       } else if (extensions.includes(path.extname(file).toLowerCase())) {
         results.push(filePath);
       }
     });
-    
+
     return results;
   }
 
   calculateDirectorySize(dir) {
     let size = 0;
     const files = fs.readdirSync(dir);
-    
+
     files.forEach(file => {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat.isDirectory()) {
         size += this.calculateDirectorySize(filePath);
       } else {
         size += stat.size;
       }
     });
-    
+
     return size;
   }
 }

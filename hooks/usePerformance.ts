@@ -60,7 +60,7 @@ export function useImportPerformanceData() {
       // Invalidate performance data cache
       invalidateQueries.performance();
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.performanceData]);
       console.error('Failed to import performance data:', errorMessage);
     },
@@ -91,7 +91,7 @@ export function useUpdateMenuItemPerformance() {
       // Invalidate performance data cache
       invalidateQueries.performance();
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.performanceData]);
       console.error('Failed to update menu item performance:', errorMessage);
     },
@@ -122,7 +122,7 @@ export function useAddMenuItem() {
       // Invalidate performance data cache
       invalidateQueries.performance();
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.performanceData]);
       console.error('Failed to add menu item:', errorMessage);
     },
@@ -149,7 +149,7 @@ export function useDeleteMenuItem() {
       // Invalidate performance data cache
       invalidateQueries.performance();
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.performanceData]);
       console.error('Failed to delete menu item:', errorMessage);
     },

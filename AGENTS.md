@@ -12,6 +12,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 ## 🏗️ **Technical Architecture**
 
 ### **Framework & Stack**
+
 - **Frontend:** Next.js 15.4.6 with React 19 (App Router)
 - **Styling:** Tailwind CSS 4 with custom CSS variables
 - **Analytics:** Google Analytics 4, Google Tag Manager, Vercel Analytics
@@ -23,6 +24,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 - **Mobile:** React Native + Expo (future)
 
 ### **Key Components**
+
 - **Analytics Stack:** ExitIntentTracker, ScrollTracker, PerformanceTracker
 - **GTM Integration:** GoogleTagManager with data layer management
 - **SEO Components:** Structured data, meta tags, OpenGraph
@@ -30,6 +32,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 - **UX Components:** LoadingSkeleton, MobileNavigation, FloatingCTA, ScrollToTop, ScrollProgress
 
 ### **File Structure**
+
 ```
 app/
 ├── layout.tsx          # Root layout with metadata and analytics
@@ -111,18 +114,21 @@ mobile/                 # React Native app (future)
 ## 🏗️ **Unified Architecture**
 
 ### **Platform Strategy**
+
 - **Web-First Development:** Build for web with mobile-ready components
 - **Universal Components:** Create components that work on web and mobile
 - **Shared Business Logic:** Core functionality shared across platforms
 - **Progressive Enhancement:** Start with web, add mobile capabilities
 
 ### **Authentication Flow**
+
 - **Supabase Auth:** Email/password with JWT tokens
 - **Email Verification:** Required for account activation
 - **Session Management:** Secure token storage and refresh
 - **Role-Based Access:** User and admin permissions
 
 ### **Subscription Management**
+
 - **Stripe Integration:** Payment processing and subscription management
 - **Paywall System:** Protect premium features behind subscription
 - **Trial Period:** 7-day free trial for new users
@@ -131,6 +137,7 @@ mobile/                 # React Native app (future)
 ## 📋 **Development Standards**
 
 ### **Code Quality Requirements**
+
 - **TypeScript:** Strict typing, no `any` types without justification
 - **React Patterns:** Functional components with hooks, proper error boundaries
 - **Performance:** Lazy loading, image optimization, Core Web Vitals optimization
@@ -139,6 +146,7 @@ mobile/                 # React Native app (future)
 - **Universal Design:** Components that work on web and mobile
 
 ### **Naming Conventions**
+
 - **Files:** kebab-case (e.g., `exit-intent-tracker.tsx`)
 - **Components:** PascalCase (e.g., `ExitIntentTracker`)
 - **Functions:** camelCase with descriptive verbs (e.g., `trackUserEngagement`)
@@ -146,6 +154,7 @@ mobile/                 # React Native app (future)
 - **CSS Classes:** Tailwind utility classes with custom CSS variables
 
 ### **Testing Requirements**
+
 - **Unit Tests:** All utility functions and components
 - **Integration Tests:** Analytics integration and user flows
 - **E2E Tests:** Critical user journeys (lead capture, purchase)
@@ -154,22 +163,21 @@ mobile/                 # React Native app (future)
 ## 🎨 **Material Design 3 Design System**
 
 ### **Color Palette**
+
 ```css
---primary: #29E7CD      /* Electric Cyan - Primary Actions */
---secondary: #3B82F6    /* Blue - Secondary Actions */
---accent: #D925C7       /* Vibrant Magenta - Accent Elements */
---background: #0a0a0a   /* Dark background */
---foreground: #ffffff    /* White text */
---muted: #1f1f1f        /* Dark gray - Cards & Containers */
---border: #2a2a2a       /* Border gray - Subtle borders */
---surface: #2a2a2a      /* Surface color - Elevated elements */
---surface-variant: #2a2a2a/30  /* Surface variant - Subtle backgrounds */
+--primary: #29e7cd /* Electric Cyan - Primary Actions */ --secondary: #3b82f6
+  /* Blue - Secondary Actions */ --accent: #d925c7 /* Vibrant Magenta - Accent Elements */
+  --background: #0a0a0a /* Dark background */ --foreground: #ffffff /* White text */
+  --muted: #1f1f1f /* Dark gray - Cards & Containers */ --border: #2a2a2a
+  /* Border gray - Subtle borders */ --surface: #2a2a2a /* Surface color - Elevated elements */
+  --surface-variant: #2a2a2a/30 /* Surface variant - Subtle backgrounds */;
 ```
 
 ### **Material Design 3 Typography**
+
 - **Primary Font:** Geist Sans (Google Fonts)
 - **Monospace:** Geist Mono (for technical content)
-- **Hierarchy:** 
+- **Hierarchy:**
   - Display Large: 4xl-6xl (Page titles)
   - Headline Large: 2xl-3xl (Section headers)
   - Title Large: xl-2xl (Card titles)
@@ -180,67 +188,93 @@ mobile/                 # React Native app (future)
 ### **Material Design 3 Component Guidelines**
 
 #### **Containers & Cards**
+
 - **Border Radius:** `rounded-3xl` for main containers, `rounded-2xl` for cards
 - **Elevation:** `shadow-lg` with `border border-[#2a2a2a]` for depth
 - **Background:** `bg-[#1f1f1f]` for main containers, `bg-[#2a2a2a]/30` for cards
 - **Gradients:** Subtle gradients for headers and accents
 
 #### **Buttons & Actions**
+
 - **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] to-[#D925C7]` with `rounded-2xl`
 - **Secondary Buttons:** `bg-[#29E7CD]/10` with `hover:bg-[#29E7CD]/20`
 - **Icon Buttons:** `rounded-full` with `p-2` and hover scaling
 - **Hover Effects:** `hover:shadow-xl` and `transition-all duration-200`
 
 #### **Data Tables**
+
 - **Table Headers:** `bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20`
 - **Table Rows:** `hover:bg-[#2a2a2a]/20` with smooth transitions
 - **Progress Bars:** Gradient bars for visual data representation
 - **Chips:** `rounded-full` with `bg-[#29E7CD]/10` and `border border-[#29E7CD]/20`
 
 #### **Forms & Inputs**
+
 - **Input Fields:** `border border-[#2a2a2a]` with `focus:ring-2 focus:ring-[#29E7CD]`
 - **Focus States:** Cyan ring with smooth transitions
 - **Validation:** Color-coded feedback with Material 3 styling
 
 ### **Material Design 3 Animation System**
+
 ```css
 /* Keyframe Animations */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 ```
 
 ### **Material Design 3 Layout Patterns**
 
 #### **Mobile-First Cards**
+
 - **Card Structure:** Header with title/brand, content grid, action buttons
 - **Staggered Animations:** `animationDelay: ${index * 50}ms`
 - **Touch Targets:** Minimum 44px with proper spacing
 - **Hover States:** `group-hover:text-[#29E7CD]` for interactive elements
 
 #### **Desktop Data Tables**
+
 - **Avatar Icons:** `w-10 h-10 rounded-full` with gradient backgrounds
 - **Progress Indicators:** Visual bars for percentages and metrics
 - **Action Buttons:** Circular buttons with icon scaling on hover
 - **Row Interactions:** Smooth hover effects with color transitions
 
 #### **Empty States**
+
 - **Large Icons:** `w-20 h-20` with gradient backgrounds
 - **Contextual Messaging:** Different messages for different states
 - **Call-to-Actions:** Prominent buttons with Material 3 styling
 
 ### **Material Design 3 UX Guidelines**
+
 - **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Material Design 3 principles
 - **Mobile Navigation:** Material 3 navigation rail with proper spacing
 - **Floating CTAs:** Elevated buttons with shadow and hover effects
@@ -250,6 +284,7 @@ mobile/                 # React Native app (future)
 - **Visual Hierarchy:** Clear distinction between primary and secondary actions
 
 ### **Loading Skeleton System Architecture**
+
 - **Base Component:** `LoadingSkeleton` with variant prop for different content types
 - **Specialized Components:** `TableSkeleton`, `FormSkeleton`, `ChartSkeleton` for specific use cases
 - **Page-Level:** `PageSkeleton` for full-page loading states
@@ -261,6 +296,7 @@ mobile/                 # React Native app (future)
 ## 📊 **Analytics & Tracking**
 
 ### **Required Tracking Events**
+
 - **Page Views:** All page loads with metadata
 - **User Engagement:** Scroll depth, time on page, section views
 - **Conversion Events:** CTA clicks, form submissions, purchases
@@ -268,6 +304,7 @@ mobile/                 # React Native app (future)
 - **A/B Testing:** Variant assignments, performance comparisons
 
 ### **Data Layer Structure**
+
 ```typescript
 interface TrackingEvent {
   event: string;
@@ -284,6 +321,7 @@ interface TrackingEvent {
 ```
 
 ### **GTM Configuration**
+
 - **Container ID:** GTM-WQMV22RD
 - **GA4 Measurement ID:** G-W1D5LQXGJT
 - **Data Layer:** Automatic page tracking, custom event support
@@ -292,16 +330,19 @@ interface TrackingEvent {
 ## 🚀 **Performance Requirements**
 
 ### **Core Web Vitals Targets**
+
 - **LCP (Largest Contentful Paint):** < 2.5 seconds
 - **FID (First Input Delay):** < 100 milliseconds
 - **CLS (Cumulative Layout Shift):** < 0.1
 
 ### **Loading Performance**
+
 - **First Contentful Paint:** < 1.8 seconds
 - **Time to Interactive:** < 3.8 seconds
 - **Total Bundle Size:** < 200KB (gzipped)
 
 ### **Optimization Strategies**
+
 - **Image Optimization:** next/image with proper sizing
 - **Code Splitting:** Dynamic imports for non-critical components
 - **Lazy Loading:** Images, components, and third-party scripts
@@ -310,18 +351,21 @@ interface TrackingEvent {
 ## 🔍 **SEO Requirements**
 
 ### **Meta Tags**
+
 - **Title:** Under 60 characters, includes primary keyword
 - **Description:** Under 160 characters, compelling and keyword-rich
 - **Keywords:** Relevant long-tail keywords for restaurant profitability
 - **Open Graph:** Social media optimization with proper images
 
 ### **Structured Data**
+
 - **Software Application:** Main product schema
 - **FAQ:** Question and answer markup
 - **Organization:** Company information
 - **Breadcrumb:** Navigation structure
 
 ### **Content Strategy**
+
 - **Primary Keywords:** restaurant COGS, menu profitability, gross profit optimization
 - **Long-tail Keywords:** Australian café profitability, food truck cost analysis
 - **Content Types:** Blog posts, case studies, video content, resource guides
@@ -329,18 +373,21 @@ interface TrackingEvent {
 ## 💰 **Conversion Optimization**
 
 ### **Lead Generation**
+
 - **Primary CTA:** "Get PrepFlow Now" (purchase)
 - **Secondary CTA:** "Watch the 2-min demo" (engagement)
 - **Lead Magnet:** "Get the sample sheet (free)" (email capture)
 - **Exit Intent:** Popup with lead magnet offer
 
 ### **Trust Elements**
+
 - **Social Proof:** Customer testimonials with specific results
 - **Risk Reversal:** 7-day refund policy, no lock-in
 - **Security:** SSL certificates, secure checkout badges
 - **Transparency:** Clear pricing, no hidden fees
 
 ### **Urgency & Scarcity**
+
 - **Limited Time:** Launch discount countdown
 - **Social Proof:** Real-time signup notifications
 - **FOMO Triggers:** "Don't miss the margin makeover"
@@ -349,6 +396,7 @@ interface TrackingEvent {
 ## 🧪 **A/B Testing Strategy**
 
 ### **Test Variables**
+
 - **Headlines:** Different value propositions
 - **CTAs:** Button text, colors, positioning
 - **Social Proof:** Testimonial placement, content
@@ -356,6 +404,7 @@ interface TrackingEvent {
 - **Layout:** Section ordering, content structure
 
 ### **Testing Framework**
+
 - **Traffic Split:** 25% each for 4 variants
 - **Statistical Significance:** 95% confidence level
 - **Metrics:** Conversion rate, engagement, revenue
@@ -366,6 +415,7 @@ interface TrackingEvent {
 ### **🚨 CRITICAL: Mandatory Development Practices (NON-NEGOTIABLE)**
 
 #### **1. Git Best Practices (MANDATORY)**
+
 **ALL development work MUST follow this workflow to prevent code destruction:**
 
 1. **Create Feature Branch:** `git checkout -b improvement/feature-name`
@@ -380,9 +430,11 @@ interface TrackingEvent {
 **NEVER work directly on main branch for improvements!**
 
 #### **2. File Refactoring Standards (MANDATORY)**
+
 **ALL files MUST be refactored when they exceed size limits:**
 
 **File Size Limits:**
+
 - **Page Components:** Maximum 500 lines
 - **Complex Components:** Maximum 300 lines
 - **API Routes:** Maximum 200 lines
@@ -390,6 +442,7 @@ interface TrackingEvent {
 - **Hooks:** Maximum 100 lines
 
 **Mandatory Refactoring Triggers:**
+
 - ✅ **Page exceeds 500 lines** → Split into smaller components
 - ✅ **Component exceeds 300 lines** → Extract sub-components and hooks
 - ✅ **API route exceeds 200 lines** → Split into multiple endpoints
@@ -397,6 +450,7 @@ interface TrackingEvent {
 - ✅ **Hook exceeds 100 lines** → Split into multiple specialized hooks
 
 **Refactoring Requirements:**
+
 1. **Component Splitting:** Break large components into logical sub-components
 2. **Hook Extraction:** Extract reusable logic into custom hooks
 3. **Type Definitions:** Create separate `.types.ts` files for complex interfaces
@@ -406,6 +460,7 @@ interface TrackingEvent {
 7. **Documentation:** Update component documentation and prop interfaces
 
 **Refactoring Workflow:**
+
 1. **Create refactoring branch:** `git checkout -b refactor/component-name`
 2. **Analyze current structure:** Identify logical separation points
 3. **Create new files:** Components, hooks, types, utilities
@@ -415,6 +470,7 @@ interface TrackingEvent {
 7. **Merge and clean:** Merge to main, delete old files
 
 **Example Refactoring Pattern:**
+
 ```typescript
 // Before: Large component (800+ lines)
 // app/webapp/recipes/page.tsx
@@ -434,12 +490,14 @@ interface TrackingEvent {
 ```
 
 **Code Quality Enforcement:**
+
 - **Pre-commit hooks:** Automatically check file sizes
 - **CI/CD pipeline:** Fail builds if files exceed limits
 - **Code reviews:** Mandatory review of refactored code
 - **Performance monitoring:** Track bundle size impact
 
 **Benefits of Mandatory Refactoring:**
+
 - ✅ **Maintainability:** Smaller files are easier to understand and modify
 - ✅ **Debugging:** Easier to isolate and fix issues in smaller components
 - ✅ **Testing:** Smaller components are easier to unit test
@@ -450,18 +508,21 @@ interface TrackingEvent {
 - ✅ **Code Safety:** Git branching prevents code destruction during refactoring
 
 ### **Git Strategy**
+
 - **Main Branch:** Production-ready code (protected)
 - **Improvement Branches:** All new features and improvements (`improvement/feature-name`)
 - **Hotfix Branches:** Critical bug fixes (`hotfix/bug-description`)
 - **Commit Messages:** Conventional commits with descriptive messages
 
 ### **Deployment Process**
+
 - **Development:** Local development with hot reload
 - **Staging:** Vercel preview deployments
 - **Production:** Automatic deployment from main branch
 - **Monitoring:** Performance metrics, error tracking, analytics
 
 ### **Quality Assurance**
+
 - **Code Review:** All changes require review
 - **Testing:** Automated tests must pass
 - **Performance:** Core Web Vitals monitoring
@@ -470,6 +531,7 @@ interface TrackingEvent {
 ## 🎨 **UX Optimization & User Experience**
 
 ### **Comprehensive Loading Skeleton System ✅**
+
 - **Unified LoadingSkeleton Component:** Single component with multiple variants (stats, table, form, chart, card, list, button)
 - **Material Design 3 Compliance:** All skeletons follow Material Design 3 principles with proper colors, spacing, and animations
 - **Contextual Skeletons:** Appropriate skeleton variants for different content types (TableSkeleton, FormSkeleton, ChartSkeleton)
@@ -478,6 +540,7 @@ interface TrackingEvent {
 - **Performance Optimized:** Skeletons provide immediate visual feedback while content loads, improving perceived performance
 
 ### **Loading States & Performance**
+
 - **Page-Level Skeletons:** PageSkeleton component for full-page loading states
 - **Component-Level Skeletons:** Specialized skeletons for specific content types
 - **A/B Test Loading:** Skeleton placeholders during variant assignment
@@ -485,30 +548,35 @@ interface TrackingEvent {
 - **Smooth Transitions:** 60fps animations and hover effects
 
 ### **Mobile Navigation & Responsiveness**
+
 - **Hamburger Menu:** MobileNavigation component with slide-out panel
 - **Touch-Friendly:** Minimum 44px touch targets for mobile interactions
 - **Smooth Scrolling:** Enhanced scroll behavior with header offset
 - **Mobile-First:** Responsive design optimized for all screen sizes
 
 ### **Conversion Optimization**
+
 - **Floating CTAs:** FloatingCTA component appears after 50% scroll
 - **Dual CTA Strategy:** Main purchase + free sample options
 - **Strategic Placement:** CTAs positioned for maximum engagement
 - **Engagement Tracking:** Analytics for CTA performance optimization
 
 ### **Navigation Enhancements**
+
 - **Scroll-to-Top:** ScrollToTop button appears after 400px scroll
 - **Progress Indicator:** ScrollProgress bar shows reading progress
 - **Smooth Scrolling:** Enhanced scroll behavior throughout page
 - **Section Navigation:** Smooth scroll to sections with header offset
 
 ### **Accessibility & Usability**
+
 - **Focus Management:** Visible focus rings on all interactive elements
 - **Keyboard Navigation:** Full keyboard accessibility support
 - **ARIA Labels:** Proper screen reader and assistive technology support
 - **WCAG Compliance:** WCAG 2.1 AA standards implementation
 
 ### **Visual Feedback & Interactions**
+
 - **Hover Effects:** Scale animations and shadow effects on CTAs
 - **Loading Animations:** Skeleton placeholders with pulse animations
 - **Smooth Transitions:** 300ms transitions for all interactive elements
@@ -517,12 +585,14 @@ interface TrackingEvent {
 ## 📱 **Mobile Optimization**
 
 ### **Responsive Design**
+
 - **Breakpoints:** Mobile-first approach with Tailwind breakpoints
 - **Touch Targets:** Minimum 44px for interactive elements
 - **Navigation:** Mobile-friendly hamburger menu with backdrop blur
 - **Forms:** Touch-optimized input fields with proper spacing
 
 ### **Performance**
+
 - **Mobile Speed:** Optimized for slower connections and limited bandwidth
 - **Image Sizing:** Appropriate sizes for mobile devices with next/image
 - **Touch Interactions:** Smooth scrolling, proper touch events
@@ -531,12 +601,14 @@ interface TrackingEvent {
 ## 🌐 **Internationalization**
 
 ### **Language Support**
+
 - **Primary:** English (Australian)
 - **Secondary:** English (Global)
 - **Currency:** AUD (primary), USD, EUR, GBP
 - **Date Format:** DD/MM/YYYY (Australian standard)
 
 ### **Cultural Considerations**
+
 - **GST:** Australian Goods and Services Tax support
 - **Local Examples:** Australian café and restaurant references
 - **Currency Display:** Clear pricing in multiple currencies
@@ -545,18 +617,21 @@ interface TrackingEvent {
 ## 🚨 **Critical Issues to Address**
 
 ### **Immediate Fixes Required**
+
 1. **Lead Magnet Form:** Currently non-functional, needs email capture
 2. **Image Optimization:** Large images without proper sizing
 3. **Legal Pages:** Privacy Policy and Terms of Service missing
 4. **Performance:** Core Web Vitals optimization needed
 
 ### **Conversion Blockers**
+
 1. **No Exit-Intent Capture:** Users leaving without lead capture
 2. **Form Validation:** No error handling or success states
 3. **Trust Indicators:** Missing security badges and company info
 4. **Urgency Elements:** No real countdown or scarcity triggers
 
 ### **UX Improvements Completed ✅**
+
 1. **Comprehensive Loading Skeleton System:** Unified LoadingSkeleton component with multiple variants (stats, table, form, chart, card, list, button) following Material Design 3 principles
 2. **Skeleton Positioning Fix:** Resolved skeleton positioning issues by removing unnecessary dynamic imports from dashboard components
 3. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
@@ -576,6 +651,7 @@ interface TrackingEvent {
 ### **Current Implementation Status ✅**
 
 #### **✅ Completed Features**
+
 1. **Unified Project Structure** - Next.js 15.4.6 with App Router
 2. **Supabase Integration** - Database connection and API keys configured
 3. **WebApp Routes** - `/webapp/*` routes for dashboard functionality
@@ -591,6 +667,7 @@ interface TrackingEvent {
 13. **Mobile Optimization** - Responsive design improvements and mobile-first components
 
 #### **📊 Database Population Complete**
+
 - **🧽 Cleaning Areas**: 24 areas (Kitchen Floor, Prep Station, Storage Area, etc.)
 - **🚚 Suppliers**: 20 suppliers (Fresh Produce Co, Meat Suppliers, Dairy Direct, etc.)
 - **🌡️ Temperature Equipment**: 76 pieces of equipment (Refrigerators, Freezers, Hot Holding, etc.)
@@ -599,6 +676,7 @@ interface TrackingEvent {
 - **🥬 Ingredients**: 95 ingredients with cost data
 
 #### **🔧 Technical Improvements**
+
 1. **Database Structure**: Fixed table schema and column naming issues
 2. **API Endpoints**: All endpoints tested and working correctly
 3. **Component Architecture**: Split large components (Recipes: 1,670 → 673 lines, COGS: 1,634 → 459 lines)
@@ -607,27 +685,32 @@ interface TrackingEvent {
 6. **Mobile Experience**: Touch-friendly navigation and responsive charts
 
 #### **🎉 Database Population Success (Latest Update)**
+
 **Date**: January 2025
 **Status**: ✅ COMPLETE
 
 **What Was Accomplished:**
+
 - **Table Structure Fix**: Resolved schema mismatches and missing columns
 - **Data Population**: Successfully populated all tables with realistic test data
 - **API Fixes**: Updated API endpoints to use correct column names
 - **Testing**: All API endpoints tested and working correctly
 
 **Data Summary:**
+
 - **Total Records**: 245+ records across 6 main tables
 - **API Endpoints**: 15+ endpoints tested and functional
 - **Error Rate**: 0% - All endpoints working without errors
 
 **Technical Details:**
+
 - Fixed column name mismatches (`name` → `area_name`, `supplier_name`, etc.)
 - Created comprehensive test data population API
 - Implemented proper error handling and validation
 - All tables now have proper structure and relationships
 
 #### **📋 Next Steps**
+
 1. **Production Deployment** - Deploy to Vercel with custom domain
 2. **Performance Optimization** - Core Web Vitals optimization
 3. **SEO Enhancement** - Meta tags and structured data optimization
@@ -636,6 +719,7 @@ interface TrackingEvent {
 ### **Development Workflow & Standards**
 
 #### **Code Quality Standards**
+
 - **TypeScript:** Strict typing, no `any` types without justification
 - **Error Handling:** Comprehensive error handling with user-friendly messages
 - **API Design:** RESTful APIs with proper HTTP status codes
@@ -643,6 +727,7 @@ interface TrackingEvent {
 - **Testing:** Test all API endpoints and user flows
 
 #### **Implementation Patterns**
+
 - **API Routes:** Use Next.js App Router API routes (`/app/api/*`)
 - **Database:** Use Supabase client with proper error handling
 - **Components:** Client components with `"use client"` directive when needed
@@ -650,6 +735,7 @@ interface TrackingEvent {
 - **Error Messages:** Provide clear, actionable error messages
 
 #### **Database Schema Standards**
+
 ```sql
 -- Standard table structure
 CREATE TABLE table_name (
@@ -661,6 +747,7 @@ CREATE TABLE table_name (
 ```
 
 #### **API Response Standards**
+
 ```typescript
 // Success response
 {
@@ -678,6 +765,7 @@ CREATE TABLE table_name (
 ```
 
 ### **Current Project Structure**
+
 ```
 prepflow-landing/
 ├── app/
@@ -698,6 +786,7 @@ prepflow-landing/
 ```
 
 ### **Environment Variables**
+
 ```bash
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://dulkrqgjfohsuxhsmofo.supabase.co
@@ -711,6 +800,7 @@ FROM_NAME=PrepFlow Team
 ```
 
 ### **Database Tables Required**
+
 1. **ingredients** - Ingredient inventory with cost data
 2. **recipes** - Recipe management with instructions
 3. **recipe_ingredients** - Recipe-ingredient relationships
@@ -718,11 +808,13 @@ FROM_NAME=PrepFlow Team
 5. **users** - User management with subscriptions
 
 ### **API Endpoints Available**
+
 - `POST /api/setup-database` - Populate sample data
 - `POST /api/create-tables` - Get SQL script for table creation
 - `GET /webapp/*` - WebApp dashboard routes
 
 ### **Testing Checklist**
+
 - [ ] Database tables created in Supabase
 - [ ] Sample data populated successfully
 - [ ] All webapp routes accessible
@@ -734,39 +826,43 @@ FROM_NAME=PrepFlow Team
 ### **Implementation Best Practices**
 
 #### **Database Setup Process**
+
 1. **Always check table existence** before data operations
 2. **Use proper error handling** for database operations
 3. **Provide clear error messages** with actionable instructions
 4. **Test API endpoints** after any database changes
 
 #### **Supabase Integration Patterns**
+
 ```typescript
 // Standard Supabase client usage
 import { supabaseAdmin } from '@/lib/supabase';
 
 // Check table existence
-const { data, error } = await supabaseAdmin
-  .from('table_name')
-  .select('id')
-  .limit(1);
+const { data, error } = await supabaseAdmin.from('table_name').select('id').limit(1);
 
 if (error) {
   // Handle table doesn't exist error
-  return NextResponse.json({ 
-    error: 'Table does not exist',
-    message: 'Please create tables first',
-    instructions: 'Visit /api/create-tables for SQL script'
-  }, { status: 400 });
+  return NextResponse.json(
+    {
+      error: 'Table does not exist',
+      message: 'Please create tables first',
+      instructions: 'Visit /api/create-tables for SQL script',
+    },
+    { status: 400 },
+  );
 }
 ```
 
 #### **Error Handling Standards**
+
 - **Always log errors** for debugging
 - **Provide user-friendly messages** in API responses
 - **Include actionable instructions** when possible
 - **Use proper HTTP status codes** (400 for client errors, 500 for server errors)
 
 #### **Development Workflow (MANDATORY)**
+
 1. **🚨 MANDATORY: Create feature branch** - Never work directly on main
 2. **🚨 MANDATORY: Check file sizes** - Refactor if any file exceeds limits
 3. **Test locally first** - Always test changes locally
@@ -779,12 +875,14 @@ if (error) {
 10. **Clean up refactored files** - Delete old files after successful refactoring
 
 #### **Current Known Issues & Solutions**
+
 - **"supabaseKey is required"** - Fixed with complete service role key
 - **"Invalid API key"** - Fixed with proper environment variables
 - **"Could not find column"** - Requires database table creation
 - **Client component errors** - Add `"use client"` directive when using hooks
 
 #### **File Organization Standards**
+
 - **API routes** in `/app/api/` directory
 - **WebApp pages** in `/app/webapp/` directory
 - **Shared utilities** in `/lib/` directory
@@ -792,6 +890,7 @@ if (error) {
 - **Database schema** documented in AGENTS.md
 
 #### **Code Review Checklist**
+
 - [ ] TypeScript types properly defined
 - [ ] Error handling implemented
 - [ ] API responses follow standards
@@ -803,12 +902,14 @@ if (error) {
 ## 📈 **Success Metrics**
 
 ### **Primary KPIs**
+
 - **Conversion Rate:** Target 3-5% (industry average 2-3%)
 - **Lead Generation:** Target 100+ email captures per month
 - **Revenue:** Target $10,000+ monthly recurring revenue
 - **SEO Rankings:** Top 3 for primary keywords
 
 ### **Secondary Metrics**
+
 - **Page Load Speed:** < 2 seconds
 - **Bounce Rate:** < 40%
 - **Time on Page:** > 3 minutes
@@ -817,19 +918,24 @@ if (error) {
 ## 🔮 **Future Roadmap**
 
 ### **Phase 1 (Month 1):** Critical fixes and optimization
+
 ### **Phase 2 (Month 2):** Content expansion and SEO
+
 ### **Phase 3 (Month 3):** Advanced features and personalization
+
 ### **Phase 4 (Month 4):** International expansion and scaling
 
 ## 📞 **Contact & Support**
 
 ### **Development Team**
+
 - **Lead Developer:** [Your Name]
 - **Design:** [Designer Name]
 - **Marketing:** [Marketing Lead]
 - **Analytics:** [Analytics Specialist]
 
 ### **Tools & Resources**
+
 - **Design System:** Figma components and guidelines
 - **Analytics Dashboard:** Google Analytics and GTM
 - **Performance Monitoring:** Vercel Analytics and Core Web Vitals
@@ -842,16 +948,19 @@ if (error) {
 The PrepFlow performance analysis system uses a **dynamic approach** that automatically adapts to your menu data, ensuring accurate categorization that reflects your actual business performance.
 
 #### **Dynamic Profit Thresholds**
+
 - **Formula**: `profitThreshold = averageProfitMargin` (calculated from all menu items)
 - **Logic**: HIGH if above menu average, LOW if below
 - **Purpose**: Identifies items that are "making you smile at the bank" vs. underperformers
 
 #### **Dynamic Popularity Thresholds**
+
 - **Formula**: `popularityThreshold = averagePopularity * 0.8` (80% of average)
 - **Logic**: HIGH if ≥ 80% of average popularity, LOW if below
 - **Purpose**: Identifies items that are "selling like hot chips" vs. slow movers
 
 #### **Menu Item Classifications**
+
 Based on the combination of profit and popularity categories:
 
 1. **Chef's Kiss** (High Profit + High Popularity)
@@ -871,6 +980,7 @@ Based on the combination of profit and popularity categories:
    - Bin it. No ceremony needed
 
 #### **Implementation Details**
+
 - **API Endpoint**: `/api/performance`
 - **Methodology**: `PrepFlow COGS Dynamic`
 - **Real-time Adaptation**: Thresholds automatically adjust as menu changes
@@ -878,6 +988,7 @@ Based on the combination of profit and popularity categories:
 - **Data Filtering**: Only items with sales data (number_sold > 0) are analyzed
 
 #### **Key Benefits**
+
 - ✅ **Accurate Categorization**: Reflects actual business performance
 - ✅ **Automatic Adaptation**: No manual threshold adjustments needed
 - ✅ **Real-time Updates**: Categories update as menu evolves
@@ -890,6 +1001,7 @@ Based on the combination of profit and popularity categories:
 PrepFlow automatically applies Queensland food safety regulations to all temperature monitoring equipment, ensuring full compliance with local health standards.
 
 #### **Queensland Food Safety Standards**
+
 Based on Queensland Health regulations and official government standards:
 
 - **Cold Storage**: 0°C to 5°C (optimal range for fridges and walk-in coolers to prevent bacterial growth)
@@ -898,6 +1010,7 @@ Based on Queensland Health regulations and official government standards:
 - **Freezer Standards**: -24°C to -18°C (optimal range for frozen food safety and quality)
 
 #### **2-Hour/4-Hour Rule Implementation**
+
 Queensland's time-in-danger-zone management:
 
 - **<2 hours**: Food can be used immediately or refrigerated
@@ -905,6 +1018,7 @@ Queensland's time-in-danger-zone management:
 - **>4 hours**: Food must be discarded
 
 #### **Automatic Equipment Classification**
+
 The system intelligently categorizes equipment based on naming:
 
 - **Freezer Equipment**: Contains "freezer" or "frozen" → min_temp_celsius: -24°C, max_temp_celsius: -18°C (optimal -24°C to -18°C range)
@@ -912,12 +1026,14 @@ The system intelligently categorizes equipment based on naming:
 - **Cold Storage Equipment**: All other equipment → min_temp_celsius: 0°C, max_temp_celsius: 5°C (optimal 0-5°C range)
 
 #### **Implementation Details**
+
 - **API Integration**: `/api/temperature-equipment` automatically applies Queensland standards
 - **Real-time Compliance**: All equipment thresholds updated automatically
 - **No Manual Configuration**: Standards applied globally without user intervention
 - **Audit Trail**: System logs all threshold applications for compliance tracking
 
 #### **Compliance Benefits**
+
 - ✅ **Queensland Compliant**: Meets all local food safety regulations
 - ✅ **Automatic Application**: No manual threshold configuration needed
 - ✅ **Risk Mitigation**: Prevents temperature danger zone violations
@@ -931,6 +1047,7 @@ The system intelligently categorizes equipment based on naming:
 The temperature analytics system uses **Recharts** for optimal performance and user experience:
 
 #### **Why Recharts**
+
 - ✅ **60% smaller bundle** than Chart.js (~200KB vs ~500KB)
 - ✅ **Native React components** - no wrapper needed
 - ✅ **Smooth SVG animations** - better performance than Canvas
@@ -939,6 +1056,7 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - ✅ **Tree-shakable** - only import what you use
 
 #### **Chart Features**
+
 - **Smooth Line Drawing**: 1-second Material Design 3 animations
 - **Responsive Design**: Auto-adapts to all screen sizes
 - **Touch Support**: Full mobile gesture support
@@ -946,12 +1064,14 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - **Accessibility**: Built-in screen reader support
 
 #### **Performance Optimizations**
+
 - **SVG Rendering**: Smooth, scalable graphics
 - **Data Filtering**: Only renders visible data points
 - **Memory Efficient**: Proper cleanup and optimization
 - **Mobile Optimized**: Touch-first interactions
 
 #### **Technical Implementation**
+
 - **Component**: `RechartsTemperatureChart.tsx`
 - **Library**: Recharts (recharts)
 - **Styling**: Material Design 3 with Tailwind CSS
@@ -959,6 +1079,7 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - **Accessibility**: Full keyboard and screen reader support
 
 #### **Key Benefits**
+
 - ✅ **Faster Loading**: 60% smaller bundle size
 - ✅ **Better Animations**: Smooth SVG-based transitions
 - ✅ **Mobile Ready**: Perfect for React Native migration

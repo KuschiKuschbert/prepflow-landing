@@ -23,13 +23,13 @@ describe('PrepFlow Basic Tests', () => {
     const testFunction = (input: string): string => {
       return input.toUpperCase();
     };
-    
+
     expect(testFunction('hello')).toBe('HELLO');
   });
 
   test('should have valid package.json configuration', () => {
     const packageJson = require('../package.json');
-    
+
     expect(packageJson.name).toBe('prepflow-landing');
     expect(packageJson.version).toBeDefined();
     expect(packageJson.scripts.build).toBe('next build');
@@ -48,10 +48,10 @@ describe('Performance Tests', () => {
     // Placeholder for Core Web Vitals tests
     const targets = {
       lcp: 2500, // 2.5 seconds
-      fid: 100,  // 100ms
-      cls: 0.1   // 0.1
+      fid: 100, // 100ms
+      cls: 0.1, // 0.1
     };
-    
+
     expect(targets.lcp).toBeLessThanOrEqual(2500);
     expect(targets.fid).toBeLessThanOrEqual(100);
     expect(targets.cls).toBeLessThanOrEqual(0.1);

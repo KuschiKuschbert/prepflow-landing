@@ -4,14 +4,14 @@ export async function POST(request: NextRequest) {
   try {
     // For now, we'll create a simple response indicating that tables need to be created manually
     // This is because Supabase requires SQL execution through their dashboard or CLI
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       message: 'Please create the database tables manually in Supabase dashboard',
       instructions: {
         step1: 'Go to your Supabase dashboard',
         step2: 'Navigate to SQL Editor',
         step3: 'Run the provided SQL script to create tables',
-        step4: 'Then run the setup-database API to populate data'
+        step4: 'Then run the setup-database API to populate data',
       },
       sqlScript: `
 -- Create ingredients table
@@ -112,14 +112,16 @@ CREATE TABLE IF NOT EXISTS temperature_equipment (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-      `
+      `,
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      details: err instanceof Error ? err.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

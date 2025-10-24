@@ -18,7 +18,10 @@ interface RecipePreviewModalProps {
   onPrint: () => void;
   onUpdatePreviewYield: (newYield: number) => void;
   capitalizeRecipeName: (name: string) => string;
-  formatQuantity: (quantity: number, unit: string) => {
+  formatQuantity: (
+    quantity: number,
+    unit: string,
+  ) => {
     value: string;
     unit: string;
     original: string;
@@ -39,86 +42,95 @@ export default function RecipePreviewModal({
   onPrint,
   onUpdatePreviewYield,
   capitalizeRecipeName,
-  formatQuantity
+  formatQuantity,
 }: RecipePreviewModalProps) {
   if (!showPreview || !selectedRecipe) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
         {/* Header */}
-        <div className="p-6 border-b border-[#2a2a2a]">
-          <div className="flex justify-between items-start">
+        <div className="border-b border-[#2a2a2a] p-6">
+          <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-white mb-2">{capitalizeRecipeName(selectedRecipe.name)}</h2>
-              
+              <h2 className="mb-2 text-2xl font-bold text-white">
+                {capitalizeRecipeName(selectedRecipe.name)}
+              </h2>
+
               {/* Yield Adjustment Section */}
-              <div className="flex items-center gap-4 mb-4">
+              <div className="mb-4 flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-400 text-sm">Original Yield:</span>
-                  <span className="text-white font-medium">{selectedRecipe.yield} {selectedRecipe.yield_unit}</span>
+                  <span className="text-sm text-gray-400">Original Yield:</span>
+                  <span className="font-medium text-white">
+                    {selectedRecipe.yield} {selectedRecipe.yield_unit}
+                  </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-400 text-sm">Adjust for:</span>
+                  <span className="text-sm text-gray-400">Adjust for:</span>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => onUpdatePreviewYield(Math.max(1, previewYield - 1))}
-                      className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-colors"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2a2a] text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
                     >
                       −
                     </button>
                     <input
                       type="number"
                       value={previewYield}
-                      onChange={(e) => onUpdatePreviewYield(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="bg-[#0a0a0a] border border-[#2a2a2a] text-white text-center w-16 h-8 rounded-lg text-sm font-medium focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                      onChange={e =>
+                        onUpdatePreviewYield(Math.max(1, parseInt(e.target.value) || 1))
+                      }
+                      className="h-8 w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                       min="1"
                     />
                     <button
                       onClick={() => onUpdatePreviewYield(previewYield + 1)}
-                      className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-colors"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2a2a] text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
                     >
                       +
                     </button>
                   </div>
-                  <span className="text-white font-medium">{selectedRecipe.yield_unit}</span>
+                  <span className="font-medium text-white">{selectedRecipe.yield_unit}</span>
                 </div>
-                
+
                 {previewYield !== selectedRecipe.yield && (
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-400">Scale:</span>
-                    <span className={`text-sm font-medium ${previewYield > selectedRecipe.yield ? 'text-[#29E7CD]' : 'text-[#3B82F6]'}`}>
-                      {previewYield > selectedRecipe.yield ? '+' : ''}{((previewYield / selectedRecipe.yield - 1) * 100).toFixed(0)}%
+                    <span
+                      className={`text-sm font-medium ${previewYield > selectedRecipe.yield ? 'text-[#29E7CD]' : 'text-[#3B82F6]'}`}
+                    >
+                      {previewYield > selectedRecipe.yield ? '+' : ''}
+                      {((previewYield / selectedRecipe.yield - 1) * 100).toFixed(0)}%
                     </span>
                   </div>
                 )}
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <button
                 onClick={onEditFromPreview}
-                className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200"
+                className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
               >
                 ✏️ Edit Recipe
               </button>
               <button
                 onClick={onShareRecipe}
                 disabled={shareLoading}
-                className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-[#10B981]/80 hover:to-[#059669]/80 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {shareLoading ? '⏳ Sharing...' : '📤 Share Recipe'}
               </button>
               <button
                 onClick={onPrint}
-                className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80 transition-all duration-200"
+                className="rounded-lg bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80"
               >
                 🖨️ Print
               </button>
               <button
                 onClick={onClose}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+                className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
               >
                 ✕ Close
               </button>
@@ -130,24 +142,24 @@ export default function RecipePreviewModal({
         <div className="p-6">
           {/* Ingredients */}
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
               <span className="text-2xl">📋</span>
               Ingredients
-              <span className="text-sm font-normal text-gray-400 ml-2">
+              <span className="ml-2 text-sm font-normal text-gray-400">
                 ({recipeIngredients.length} item{recipeIngredients.length !== 1 ? 's' : ''})
               </span>
             </h3>
-            
-            <div className="bg-[#0a0a0a] rounded-xl border border-[#2a2a2a]/50 overflow-hidden">
+
+            <div className="overflow-hidden rounded-xl border border-[#2a2a2a]/50 bg-[#0a0a0a]">
               {/* Header */}
-              <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-4 py-3 border-b border-[#2a2a2a]/50">
+              <div className="border-b border-[#2a2a2a]/50 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-4 py-3">
                 <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-300">
                   <div className="col-span-1 text-center">#</div>
                   <div className="col-span-8">Ingredient</div>
                   <div className="col-span-3 text-center">Quantity</div>
                 </div>
               </div>
-              
+
               {/* Ingredients List */}
               <div className="divide-y divide-[#2a2a2a]/30">
                 {recipeIngredients.map((ri, index) => {
@@ -155,37 +167,37 @@ export default function RecipePreviewModal({
                   const quantity = ri.quantity;
 
                   return (
-                    <div key={ri.id} className="px-4 py-3 hover:bg-[#2a2a2a]/20 transition-colors">
-                      <div className="grid grid-cols-12 gap-4 items-center">
+                    <div key={ri.id} className="px-4 py-3 transition-colors hover:bg-[#2a2a2a]/20">
+                      <div className="grid grid-cols-12 items-center gap-4">
                         {/* Index */}
                         <div className="col-span-1 text-center">
-                          <span className="text-sm text-gray-400 font-mono">
+                          <span className="font-mono text-sm text-gray-400">
                             {String(index + 1).padStart(2, '0')}
                           </span>
                         </div>
-                        
+
                         {/* Ingredient Name */}
                         <div className="col-span-8">
-                          <div className="text-white font-medium">{ingredient.ingredient_name}</div>
+                          <div className="font-medium text-white">{ingredient.ingredient_name}</div>
                         </div>
-                        
+
                         {/* Quantity */}
                         <div className="col-span-3 text-center">
-                          <span className="text-white font-medium">
+                          <span className="font-medium text-white">
                             {(() => {
                               const formatted = formatQuantity(quantity, ri.unit);
                               const isConverted = formatted.unit !== ri.unit.toLowerCase();
-                              
+
                               return (
                                 <>
                                   {formatted.value} {formatted.unit}
                                   {isConverted && (
-                                    <div className="text-xs text-gray-400 mt-1">
+                                    <div className="mt-1 text-xs text-gray-400">
                                       ({formatted.original})
                                     </div>
                                   )}
                                   {previewYield !== selectedRecipe.yield && !isConverted && (
-                                    <div className="text-xs text-gray-400 mt-1">
+                                    <div className="mt-1 text-xs text-gray-400">
                                       (orig: {quantity} {ri.unit})
                                     </div>
                                   )}
@@ -204,17 +216,17 @@ export default function RecipePreviewModal({
 
           {/* AI-Generated Cooking Instructions */}
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-white mb-4">🤖 AI-Generated Cooking Method</h3>
-            <div className="bg-[#0a0a0a] rounded-lg p-4">
+            <h3 className="mb-4 text-lg font-semibold text-white">
+              🤖 AI-Generated Cooking Method
+            </h3>
+            <div className="rounded-lg bg-[#0a0a0a] p-4">
               {generatingInstructions ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#29E7CD]"></div>
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[#29E7CD]"></div>
                   <span className="ml-3 text-gray-400">Generating cooking instructions...</span>
                 </div>
               ) : (
-                <div className="text-gray-300 whitespace-pre-wrap">
-                  {aiInstructions}
-                </div>
+                <div className="whitespace-pre-wrap text-gray-300">{aiInstructions}</div>
               )}
             </div>
           </div>
@@ -222,9 +234,9 @@ export default function RecipePreviewModal({
           {/* Manual Instructions (if available) */}
           {selectedRecipe.instructions && (
             <div>
-              <h3 className="text-lg font-semibold text-white mb-4">👨‍🍳 Manual Instructions</h3>
-              <div className="bg-[#0a0a0a] rounded-lg p-4">
-                <div className="text-gray-300 whitespace-pre-wrap">
+              <h3 className="mb-4 text-lg font-semibold text-white">👨‍🍳 Manual Instructions</h3>
+              <div className="rounded-lg bg-[#0a0a0a] p-4">
+                <div className="whitespace-pre-wrap text-gray-300">
                   {selectedRecipe.instructions}
                 </div>
               </div>

@@ -8,9 +8,9 @@ interface PerformanceOptimizerProps {
   enableOptimizations?: boolean;
 }
 
-export default function PerformanceOptimizer({ 
-  children, 
-  enableOptimizations = true 
+export default function PerformanceOptimizer({
+  children,
+  enableOptimizations = true,
 }: PerformanceOptimizerProps) {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     lcp: null,
@@ -95,7 +95,7 @@ function preloadCriticalResources() {
 function optimizeImages() {
   // Lazy load images below the fold
   const images = document.querySelectorAll('img[data-src]');
-  const imageObserver = new IntersectionObserver((entries) => {
+  const imageObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const img = entry.target as HTMLImageElement;
@@ -180,7 +180,7 @@ export function usePerformanceOptimization() {
   const [grade, setGrade] = useState<'A' | 'B' | 'C' | 'D' | 'F'>('F');
 
   useEffect(() => {
-    const unsubscribe = performanceMonitor.subscribe((newMetrics) => {
+    const unsubscribe = performanceMonitor.subscribe(newMetrics => {
       setMetrics(newMetrics);
       setScore(performanceMonitor.getPerformanceScore());
       setGrade(performanceMonitor.getPerformanceGrade());

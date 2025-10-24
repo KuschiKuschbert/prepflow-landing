@@ -4,9 +4,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     // Create all missing tables with proper column names
@@ -275,14 +278,14 @@ CREATE TABLE IF NOT EXISTS users (
 
     // Execute the SQL
     const { error } = await supabaseAdmin.rpc('exec_sql', { sql: createTablesSQL });
-    
+
     if (error) {
       // If RPC doesn't work, try direct execution
       console.log('RPC failed, trying direct execution...');
-      
+
       // Split SQL into individual statements and execute them
       const statements = createTablesSQL.split(';').filter(stmt => stmt.trim());
-      
+
       for (const statement of statements) {
         if (statement.trim()) {
           try {
@@ -298,15 +301,17 @@ CREATE TABLE IF NOT EXISTS users (
     return NextResponse.json({
       success: true,
       message: 'Database tables created/updated successfully',
-      details: 'All missing tables have been created with proper column names'
+      details: 'All missing tables have been created with proper column names',
     });
-
   } catch (error) {
     console.error('Database fix error:', error);
-    return NextResponse.json({
-      error: 'Failed to fix database',
-      message: 'Could not create missing tables',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to fix database',
+        message: 'Could not create missing tables',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

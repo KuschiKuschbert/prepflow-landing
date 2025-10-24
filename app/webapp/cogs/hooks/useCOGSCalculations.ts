@@ -72,59 +72,66 @@ export const useCOGSCalculations = () => {
     }
   }, []);
 
-  const calculateCOGS = useCallback((recipeIngredients: RecipeIngredient[]) => {
-    const calculations: COGSCalculation[] = recipeIngredients.map(ri => {
-      const ingredient = ingredients.find(i => i.id === ri.ingredient_id);
-      if (!ingredient) return null;
+  const calculateCOGS = useCallback(
+    (recipeIngredients: RecipeIngredient[]) => {
+      const calculations: COGSCalculation[] = recipeIngredients
+        .map(ri => {
+          const ingredient = ingredients.find(i => i.id === ri.ingredient_id);
+          if (!ingredient) return null;
 
-      // Use the correct cost field - prefer cost_per_unit_incl_trim if available, otherwise cost_per_unit
-      const baseCostPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
-      const costPerUnit = convertIngredientCost(
-        baseCostPerUnit,
-        ingredient.unit || 'g',
-        ri.unit || 'g',
-        ingredient.ingredient_name
-      );
-      
-      // Calculate base cost for the quantity used
-      const totalCost = ri.quantity * costPerUnit;
-      
-      // Get waste and yield percentages
-      const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-      const yieldPercent = ingredient.yield_percentage || 100;
-      
-      // Calculate waste-adjusted cost (if not already included in cost_per_unit_incl_trim)
-      let wasteAdjustedCost = totalCost;
-      if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {
-        wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
-      }
-      
-      // Calculate yield-adjusted cost (final cost per usable portion)
-      const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
+          // Use the correct cost field - prefer cost_per_unit_incl_trim if available, otherwise cost_per_unit
+          const baseCostPerUnit =
+            ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+          const costPerUnit = convertIngredientCost(
+            baseCostPerUnit,
+            ingredient.unit || 'g',
+            ri.unit || 'g',
+            ingredient.ingredient_name,
+          );
 
-      return {
-        recipeId: ri.recipe_id || 'temp',
-        ingredientId: ri.ingredient_id,
-        ingredientName: ingredient.ingredient_name,
-        quantity: ri.quantity,
-        unit: ri.unit || ingredient.unit || 'kg',
-        costPerUnit,
-        totalCost,
-        wasteAdjustedCost,
-        yieldAdjustedCost,
-      };
-    }).filter(Boolean) as COGSCalculation[];
+          // Calculate base cost for the quantity used
+          const totalCost = ri.quantity * costPerUnit;
 
-    setCalculations(calculations);
-  }, [ingredients]);
+          // Get waste and yield percentages
+          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
+          const yieldPercent = ingredient.yield_percentage || 100;
+
+          // Calculate waste-adjusted cost (if not already included in cost_per_unit_incl_trim)
+          let wasteAdjustedCost = totalCost;
+          if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {
+            wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
+          }
+
+          // Calculate yield-adjusted cost (final cost per usable portion)
+          const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
+
+          return {
+            recipeId: ri.recipe_id || 'temp',
+            ingredientId: ri.ingredient_id,
+            ingredientName: ingredient.ingredient_name,
+            quantity: ri.quantity,
+            unit: ri.unit || ingredient.unit || 'kg',
+            costPerUnit,
+            totalCost,
+            wasteAdjustedCost,
+            yieldAdjustedCost,
+          };
+        })
+        .filter(Boolean) as COGSCalculation[];
+
+      setCalculations(calculations);
+    },
+    [ingredients],
+  );
 
   const loadExistingRecipeIngredients = useCallback(async (recipeId: string) => {
     try {
       console.log('Loading ingredients for recipe:', recipeId);
-      
+
       const { data: recipeIngredients, error } = await supabase
         .from('recipe_ingredients')
-        .select(`
+        .select(
+          `
           id,
           quantity,
           unit,
@@ -136,7 +143,8 @@ export const useCOGSCalculations = () => {
             trim_peel_waste_percentage,
             yield_percentage
           )
-        `)
+        `,
+        )
         .eq('recipe_id', recipeId);
 
       if (error) {
@@ -155,10 +163,10 @@ export const useCOGSCalculations = () => {
           baseCostPerUnit,
           ingredient.unit || 'g',
           ri.unit || 'g',
-          ingredient.ingredient_name
+          ingredient.ingredient_name,
         );
         const totalCost = quantity * costPerUnit;
-        
+
         // Apply waste and yield adjustments
         const wastePercent = ingredient.trim_peel_waste_percentage || 0;
         const yieldPercent = ingredient.yield_percentage || 100;
@@ -174,85 +182,93 @@ export const useCOGSCalculations = () => {
           costPerUnit: costPerUnit,
           totalCost: totalCost,
           wasteAdjustedCost: wasteAdjustedCost,
-          yieldAdjustedCost: yieldAdjustedCost
+          yieldAdjustedCost: yieldAdjustedCost,
         };
       });
 
       console.log('Converted to calculations:', loadedCalculations);
-      
+
       setCalculations(loadedCalculations);
-      
+
       // Also update recipeIngredients state
       const loadedRecipeIngredients: RecipeIngredient[] = recipeIngredients.map(dbItem => ({
         recipe_id: recipeId,
         ingredient_id: (dbItem.ingredients as any).id,
         quantity: dbItem.quantity,
-        unit: dbItem.unit
+        unit: dbItem.unit,
       }));
       setRecipeIngredients(loadedRecipeIngredients);
-      
     } catch (err) {
       console.log('Error in loadExistingRecipeIngredients:', err);
     }
   }, []);
 
-  const checkRecipeExists = useCallback(async (recipeName: string) => {
-    if (!recipeName.trim()) {
-      return null;
-    }
-
-    try {
-      console.log('Checking for recipe:', recipeName.trim());
-      
-      const { data: existingRecipes, error } = await supabase
-        .from('recipes')
-        .select('id, name')
-        .ilike('name', recipeName.trim());
-      
-      const existingRecipe = existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
-
-      console.log('Recipe check result:', { existingRecipe, error });
-
-      if (error && error.code === 'PGRST116') {
-        console.log('Recipe not found - PGRST116 error');
-        return false;
-      } else if (existingRecipe) {
-        console.log('Recipe found:', existingRecipe);
-        await loadExistingRecipeIngredients(existingRecipe.id);
-        return true;
-      } else {
-        console.log('Recipe not found - no data returned');
-        return false;
+  const checkRecipeExists = useCallback(
+    async (recipeName: string) => {
+      if (!recipeName.trim()) {
+        return null;
       }
-    } catch (err) {
-      console.log('Error checking recipe:', err);
-      return null;
-    }
-  }, [loadExistingRecipeIngredients]);
 
-  const updateCalculation = useCallback((ingredientId: string, newQuantity: number) => {
-    setCalculations(prev => prev.map(calc => {
-      if (calc.ingredientId === ingredientId) {
-        const ingredient = ingredients.find(ing => ing.id === ingredientId);
-        if (ingredient) {
-          const newTotalCost = newQuantity * calc.costPerUnit;
-          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-          const yieldPercent = ingredient.yield_percentage || 100;
-          const newWasteAdjustedCost = newTotalCost * (1 + wastePercent / 100);
-          const newYieldAdjustedCost = newWasteAdjustedCost / (yieldPercent / 100);
-          
-          return {
-            ...calc,
-            quantity: newQuantity,
-            totalCost: newTotalCost,
-            wasteAdjustedCost: newWasteAdjustedCost,
-            yieldAdjustedCost: newYieldAdjustedCost
-          };
+      try {
+        console.log('Checking for recipe:', recipeName.trim());
+
+        const { data: existingRecipes, error } = await supabase
+          .from('recipes')
+          .select('id, name')
+          .ilike('name', recipeName.trim());
+
+        const existingRecipe =
+          existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
+
+        console.log('Recipe check result:', { existingRecipe, error });
+
+        if (error && error.code === 'PGRST116') {
+          console.log('Recipe not found - PGRST116 error');
+          return false;
+        } else if (existingRecipe) {
+          console.log('Recipe found:', existingRecipe);
+          await loadExistingRecipeIngredients(existingRecipe.id);
+          return true;
+        } else {
+          console.log('Recipe not found - no data returned');
+          return false;
         }
+      } catch (err) {
+        console.log('Error checking recipe:', err);
+        return null;
       }
-      return calc;
-    }));
-  }, [ingredients]);
+    },
+    [loadExistingRecipeIngredients],
+  );
+
+  const updateCalculation = useCallback(
+    (ingredientId: string, newQuantity: number) => {
+      setCalculations(prev =>
+        prev.map(calc => {
+          if (calc.ingredientId === ingredientId) {
+            const ingredient = ingredients.find(ing => ing.id === ingredientId);
+            if (ingredient) {
+              const newTotalCost = newQuantity * calc.costPerUnit;
+              const wastePercent = ingredient.trim_peel_waste_percentage || 0;
+              const yieldPercent = ingredient.yield_percentage || 100;
+              const newWasteAdjustedCost = newTotalCost * (1 + wastePercent / 100);
+              const newYieldAdjustedCost = newWasteAdjustedCost / (yieldPercent / 100);
+
+              return {
+                ...calc,
+                quantity: newQuantity,
+                totalCost: newTotalCost,
+                wasteAdjustedCost: newWasteAdjustedCost,
+                yieldAdjustedCost: newYieldAdjustedCost,
+              };
+            }
+          }
+          return calc;
+        }),
+      );
+    },
+    [ingredients],
+  );
 
   const removeCalculation = useCallback((ingredientId: string) => {
     setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
@@ -290,7 +306,7 @@ export const useCOGSCalculations = () => {
     calculations,
     loading,
     error,
-    
+
     // Actions
     fetchData,
     fetchRecipeIngredients,

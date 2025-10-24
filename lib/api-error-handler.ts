@@ -44,28 +44,28 @@ export const handleApiError = (error: any): ApiError => {
         status: 400,
         details: data,
       };
-    
+
     case 401:
       return {
         message: 'Authentication required',
         code: 'UNAUTHORIZED',
         status: 401,
       };
-    
+
     case 403:
       return {
         message: 'Access denied',
         code: 'FORBIDDEN',
         status: 403,
       };
-    
+
     case 404:
       return {
         message: 'Resource not found',
         code: 'NOT_FOUND',
         status: 404,
       };
-    
+
     case 500:
       return {
         message: data?.message || 'Internal server error',
@@ -73,7 +73,7 @@ export const handleApiError = (error: any): ApiError => {
         status: 500,
         details: data,
       };
-    
+
     default:
       return {
         message: data?.message || 'An unexpected error occurred',
@@ -89,7 +89,7 @@ export const handleApiError = (error: any): ApiError => {
  */
 export const withErrorHandling = async <T>(
   apiCall: () => Promise<T>,
-  fallbackValue?: T
+  fallbackValue?: T,
 ): Promise<ApiResponse<T>> => {
   try {
     const data = await apiCall();
@@ -99,7 +99,7 @@ export const withErrorHandling = async <T>(
     };
   } catch (error) {
     const apiError = handleApiError(error);
-    
+
     return {
       success: false,
       error: apiError,
@@ -115,7 +115,7 @@ export const createApiResponse = <T>(
   success: boolean,
   data?: T,
   error?: ApiError,
-  message?: string
+  message?: string,
 ): ApiResponse<T> => {
   return {
     success,
@@ -131,7 +131,7 @@ export const createApiResponse = <T>(
 export const retryApiCall = async <T>(
   apiCall: () => Promise<T>,
   maxRetries: number = 3,
-  delay: number = 1000
+  delay: number = 1000,
 ): Promise<ApiResponse<T>> => {
   let lastError: any;
 
@@ -144,7 +144,7 @@ export const retryApiCall = async <T>(
       };
     } catch (error) {
       lastError = error;
-      
+
       if (attempt === maxRetries) {
         break;
       }
@@ -166,7 +166,7 @@ export const retryApiCall = async <T>(
 export const useApiErrorHandler = () => {
   const handleError = (error: ApiError, context?: string) => {
     console.error(`API Error${context ? ` in ${context}` : ''}:`, error);
-    
+
     // Log to analytics if available
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'api_error', {

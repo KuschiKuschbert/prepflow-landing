@@ -27,11 +27,11 @@ class EmailService {
   public async sendSampleDashboardEmail(data: EmailData): Promise<boolean> {
     try {
       const template = this.getSampleDashboardTemplate(data);
-      
+
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -49,7 +49,7 @@ class EmailService {
 
       const result = await response.json();
       console.log('📧 Email sent successfully:', result);
-      
+
       return true;
     } catch (error) {
       console.error('📧 Email sending failed:', error);
@@ -59,7 +59,7 @@ class EmailService {
 
   private getSampleDashboardTemplate(data: EmailData): EmailTemplate {
     const subject = `Your PrepFlow Sample Dashboard is Ready, ${data.name}! 📊`;
-    
+
     const html = `
 <!DOCTYPE html>
 <html>
@@ -200,7 +200,7 @@ class EmailService {
 </body>
 </html>
     `;
-    
+
     const text = `
 Your PrepFlow Sample Dashboard is Ready, ${data.name}! 📊
 
@@ -237,7 +237,7 @@ prepflow.org
 You received this email because you requested a sample dashboard.
 No spam. No lock-in. Your data stays private.
     `;
-    
+
     return { subject, html, text };
   }
 }

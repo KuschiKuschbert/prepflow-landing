@@ -89,7 +89,7 @@ export function useAddTemperatureLog() {
 
       return response.json();
     },
-    onMutate: async (newLog) => {
+    onMutate: async newLog => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: [...queryKeys.temperatureLogs] });
 
@@ -110,7 +110,7 @@ export function useAddTemperatureLog() {
       if (context?.previousLogs) {
         queryClient.setQueryData([...queryKeys.temperatureLogs], context.previousLogs);
       }
-      
+
       // Handle error
       const errorMessage = handleQueryError(err, [...queryKeys.temperatureLogs]);
       console.error('Failed to add temperature log:', errorMessage);
@@ -146,7 +146,7 @@ export function useUpdateTemperatureEquipment() {
       // Invalidate temperature equipment cache
       queryClient.invalidateQueries({ queryKey: [...queryKeys.temperatureEquipment] });
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.temperatureEquipment]);
       console.error('Failed to update temperature equipment:', errorMessage);
     },
@@ -177,7 +177,7 @@ export function useCreateTemperatureThreshold() {
       // Invalidate temperature thresholds cache
       queryClient.invalidateQueries({ queryKey: [...queryKeys.temperatureThresholds] });
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.temperatureThresholds]);
       console.error('Failed to create temperature threshold:', errorMessage);
     },
@@ -208,7 +208,7 @@ export function useUpdateTemperatureThreshold() {
       // Invalidate temperature thresholds cache
       queryClient.invalidateQueries({ queryKey: [...queryKeys.temperatureThresholds] });
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.temperatureThresholds]);
       console.error('Failed to update temperature threshold:', errorMessage);
     },
@@ -235,7 +235,7 @@ export function useDeleteTemperatureThreshold() {
       // Invalidate temperature thresholds cache
       queryClient.invalidateQueries({ queryKey: [...queryKeys.temperatureThresholds] });
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.temperatureThresholds]);
       console.error('Failed to delete temperature threshold:', errorMessage);
     },

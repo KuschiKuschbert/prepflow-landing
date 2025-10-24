@@ -9,10 +9,18 @@ interface IngredientsSetupProps {
     equipment: boolean;
     country: boolean;
   };
-  onProgressUpdate: (progress: { ingredients: boolean; recipes: boolean; equipment: boolean; country: boolean }) => void;
+  onProgressUpdate: (progress: {
+    ingredients: boolean;
+    recipes: boolean;
+    equipment: boolean;
+    country: boolean;
+  }) => void;
 }
 
-export default function IngredientsSetup({ setupProgress, onProgressUpdate }: IngredientsSetupProps) {
+export default function IngredientsSetup({
+  setupProgress,
+  onProgressUpdate,
+}: IngredientsSetupProps) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +36,7 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ populateIngredients: true })
+        body: JSON.stringify({ populateIngredients: true }),
       });
 
       const data = await response.json();
@@ -47,18 +55,19 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
   };
 
   return (
-    <div className="bg-[#1f1f1f] p-8 rounded-3xl shadow-lg border border-[#2a2a2a]">
-      <div className="text-center mb-8">
-        <div className="text-6xl mb-4">🥕</div>
-        <h3 className="text-2xl font-bold text-white mb-2">Ingredients Database</h3>
-        <p className="text-gray-400 text-lg">
-          Populate your database with 300+ common kitchen ingredients including costs, units, and yield percentages
+    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
+      <div className="mb-8 text-center">
+        <div className="mb-4 text-6xl">🥕</div>
+        <h3 className="mb-2 text-2xl font-bold text-white">Ingredients Database</h3>
+        <p className="text-lg text-gray-400">
+          Populate your database with 300+ common kitchen ingredients including costs, units, and
+          yield percentages
         </p>
       </div>
 
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-[#2a2a2a]/50 p-6 rounded-2xl border border-[#2a2a2a] mb-6">
-          <h4 className="text-lg font-semibold text-white mb-4">What you'll get:</h4>
+      <div className="mx-auto max-w-2xl">
+        <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
+          <h4 className="mb-4 text-lg font-semibold text-white">What you'll get:</h4>
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
@@ -84,7 +93,7 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
         </div>
 
         {error && (
-          <div className="bg-red-900/20 border border-red-500/30 text-red-300 p-4 rounded-2xl mb-6">
+          <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-900/20 p-4 text-red-300">
             <div className="flex items-center space-x-2">
               <span className="text-red-400">⚠️</span>
               <span>{error}</span>
@@ -93,7 +102,7 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
         )}
 
         {result && (
-          <div className="bg-green-900/20 border border-green-500/30 text-green-300 p-4 rounded-2xl mb-6">
+          <div className="mb-6 rounded-2xl border border-green-500/30 bg-green-900/20 p-4 text-green-300">
             <div className="flex items-center space-x-2">
               <span className="text-green-400">✅</span>
               <span>{result}</span>
@@ -105,12 +114,12 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
           <button
             onClick={populateIngredients}
             disabled={loading || setupProgress.ingredients}
-            className={`px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-200 ${
+            className={`rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-200 ${
               setupProgress.ingredients
-                ? 'bg-green-600 text-white cursor-not-allowed'
+                ? 'cursor-not-allowed bg-green-600 text-white'
                 : loading
-                ? 'bg-[#2a2a2a] text-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 shadow-lg hover:shadow-xl'
+                  ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
+                  : 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl'
             }`}
           >
             {setupProgress.ingredients ? (
@@ -120,7 +129,7 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
               </span>
             ) : loading ? (
               <span className="flex items-center justify-center space-x-2">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-400"></div>
+                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-gray-400"></div>
                 <span>Adding Ingredients...</span>
               </span>
             ) : (
@@ -130,9 +139,9 @@ export default function IngredientsSetup({ setupProgress, onProgressUpdate }: In
               </span>
             )}
           </button>
-          
+
           {!setupProgress.ingredients && (
-            <p className="text-gray-400 text-sm mt-4">
+            <p className="mt-4 text-sm text-gray-400">
               This will take about 10-15 seconds to complete
             </p>
           )}

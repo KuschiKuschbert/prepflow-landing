@@ -2,14 +2,15 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Use the complete service role key you provided
 const supabaseUrl = 'https://dulkrqgjfohsuxhsmofo.supabase.co';
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bGtycWdqZm9oc3V4aHNtb2ZvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njk3NjAwMywiZXhwIjoyMDcyNTUyMDAzfQ.YourServiceRoleKeyHere';
+const supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bGtycWdqZm9oc3V4aHNtb2ZvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njk3NjAwMywiZXhwIjoyMDcyNTUyMDAzfQ.YourServiceRoleKeyHere';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function setupDatabase() {
   try {
     console.log('Setting up database tables...');
-    
+
     // Create ingredients table
     const { error: ingredientsError } = await supabase.rpc('exec', {
       sql: `
@@ -27,7 +28,7 @@ async function setupDatabase() {
           product_code TEXT,
           storage TEXT
         );
-      `
+      `,
     });
 
     if (ingredientsError) {
@@ -46,7 +47,7 @@ async function setupDatabase() {
           yield_portions INTEGER,
           instructions TEXT
         );
-      `
+      `,
     });
 
     if (recipesError) {
@@ -65,7 +66,7 @@ async function setupDatabase() {
           unit TEXT,
           PRIMARY KEY (recipe_id, ingredient_id)
         );
-      `
+      `,
     });
 
     if (recipeIngredientsError) {
@@ -85,7 +86,7 @@ async function setupDatabase() {
           selling_price DECIMAL(10, 2),
           target_profit_margin_percent DECIMAL(5, 2)
         );
-      `
+      `,
     });
 
     if (menuDishesError) {
@@ -95,7 +96,6 @@ async function setupDatabase() {
     }
 
     console.log('🎉 Database setup completed!');
-
   } catch (err) {
     console.error('Unexpected error:', err);
   }

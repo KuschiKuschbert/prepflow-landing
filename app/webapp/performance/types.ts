@@ -9,7 +9,7 @@ export interface PerformanceItem {
   gross_profit_percentage: number;
   profit_category: 'High' | 'Low';
   popularity_category: 'High' | 'Low';
-  menu_item_class: 'Chef\'s Kiss' | 'Hidden Gem' | 'Bargain Bucket' | 'Burnt Toast';
+  menu_item_class: "Chef's Kiss" | 'Hidden Gem' | 'Bargain Bucket' | 'Burnt Toast';
 }
 
 export interface PerformanceMetadata {

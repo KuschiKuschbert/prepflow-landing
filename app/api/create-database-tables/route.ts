@@ -4,10 +4,13 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available',
-        message: 'Supabase admin client not initialized'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+          message: 'Supabase admin client not initialized',
+        },
+        { status: 500 },
+      );
     }
 
     console.log('Creating database tables...');
@@ -36,7 +39,7 @@ export async function POST(request: NextRequest) {
           category VARCHAR(100),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'recipes',
@@ -51,7 +54,7 @@ export async function POST(request: NextRequest) {
           cook_time_minutes INTEGER,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'recipe_ingredients',
@@ -63,7 +66,7 @@ export async function POST(request: NextRequest) {
           unit VARCHAR(50) NOT NULL,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'temperature_equipment',
@@ -77,7 +80,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'temperature_logs',
@@ -89,7 +92,7 @@ export async function POST(request: NextRequest) {
           recorded_by VARCHAR(255),
           notes TEXT,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'cleaning_areas',
@@ -101,7 +104,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'cleaning_tasks',
@@ -115,7 +118,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'suppliers',
@@ -129,7 +132,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'compliance_types',
@@ -141,7 +144,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'compliance_records',
@@ -154,7 +157,7 @@ export async function POST(request: NextRequest) {
           recorded_by VARCHAR(255),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'par_levels',
@@ -168,7 +171,7 @@ export async function POST(request: NextRequest) {
           last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'order_lists',
@@ -180,7 +183,7 @@ export async function POST(request: NextRequest) {
           total_amount DECIMAL(10,2),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'order_items',
@@ -194,7 +197,7 @@ export async function POST(request: NextRequest) {
           total_price DECIMAL(10,2),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'kitchen_sections',
@@ -205,7 +208,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'prep_lists',
@@ -216,7 +219,7 @@ export async function POST(request: NextRequest) {
           status VARCHAR(50) DEFAULT 'pending',
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'prep_list_items',
@@ -229,7 +232,7 @@ export async function POST(request: NextRequest) {
           is_completed BOOLEAN DEFAULT false,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'ai_specials',
@@ -241,7 +244,7 @@ export async function POST(request: NextRequest) {
           is_active BOOLEAN DEFAULT true,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'ai_specials_ingredients',
@@ -253,7 +256,7 @@ export async function POST(request: NextRequest) {
           unit VARCHAR(50) NOT NULL,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       },
       {
         name: 'users',
@@ -276,15 +279,15 @@ export async function POST(request: NextRequest) {
           locked_until TIMESTAMP WITH TIME ZONE,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
-      }
+        )`,
+      },
     ];
 
     // Try to create each table
     for (const table of tables) {
       try {
         console.log(`Creating table: ${table.name}`);
-        
+
         // Check if table already exists
         const { data: existingTable, error: checkError } = await supabaseAdmin
           .from(table.name)
@@ -295,17 +298,14 @@ export async function POST(request: NextRequest) {
           results.push({
             table: table.name,
             status: 'already_exists',
-            message: 'Table already exists'
+            message: 'Table already exists',
           });
           continue;
         }
 
         // Since we can't execute raw SQL directly, we'll create a simple test record
         // to trigger table creation if it doesn't exist
-        const { data, error } = await supabaseAdmin
-          .from(table.name)
-          .insert({})
-          .select();
+        const { data, error } = await supabaseAdmin.from(table.name).insert({}).select();
 
         if (error && error.code === 'PGRST116') {
           // Table doesn't exist, we need to create it manually
@@ -313,42 +313,40 @@ export async function POST(request: NextRequest) {
             table: table.name,
             status: 'needs_manual_creation',
             message: 'Table needs to be created manually in Supabase dashboard',
-            sql: table.sql
+            sql: table.sql,
           });
         } else if (error) {
           errors.push({
             table: table.name,
             error: error.message,
-            code: error.code
+            code: error.code,
           });
         } else {
           // Table exists, delete the test record
           if (data && data.length > 0) {
-            await supabaseAdmin
-              .from(table.name)
-              .delete()
-              .eq('id', data[0].id);
+            await supabaseAdmin.from(table.name).delete().eq('id', data[0].id);
           }
-          
+
           results.push({
             table: table.name,
             status: 'exists',
-            message: 'Table exists and is accessible'
+            message: 'Table exists and is accessible',
           });
         }
       } catch (err) {
         errors.push({
           table: table.name,
-          error: err instanceof Error ? err.message : 'Unknown error'
+          error: err instanceof Error ? err.message : 'Unknown error',
         });
       }
     }
 
     return NextResponse.json({
       success: errors.length === 0,
-      message: errors.length === 0 
-        ? 'Database table check completed successfully!' 
-        : 'Database table check completed with some issues',
+      message:
+        errors.length === 0
+          ? 'Database table check completed successfully!'
+          : 'Database table check completed with some issues',
       results: results,
       errors: errors,
       instructions: {
@@ -357,29 +355,31 @@ export async function POST(request: NextRequest) {
           'Go to Supabase Dashboard > SQL Editor',
           'Copy and paste the COMPLETE_DATABASE_FIX.sql script',
           'Execute the script manually',
-          'Then run /api/setup-database to populate sample data'
+          'Then run /api/setup-database to populate sample data',
         ],
         manualTables: results
           .filter(r => r.status === 'needs_manual_creation')
-          .map(r => ({ name: r.table, sql: r.sql }))
-      }
+          .map(r => ({ name: r.table, sql: r.sql })),
+      },
     });
-
   } catch (err) {
     console.error('Unexpected error during database setup:', err);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'Failed to setup database',
-      details: err instanceof Error ? err.message : 'Unknown error',
-      instructions: {
-        note: 'Automatic setup failed. Please create tables manually.',
-        steps: [
-          'Go to Supabase Dashboard > SQL Editor',
-          'Copy and paste the COMPLETE_DATABASE_FIX.sql script',
-          'Execute the script manually',
-          'Then run /api/setup-database to populate sample data'
-        ]
-      }
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'Failed to setup database',
+        details: err instanceof Error ? err.message : 'Unknown error',
+        instructions: {
+          note: 'Automatic setup failed. Please create tables manually.',
+          steps: [
+            'Go to Supabase Dashboard > SQL Editor',
+            'Copy and paste the COMPLETE_DATABASE_FIX.sql script',
+            'Execute the script manually',
+            'Then run /api/setup-database to populate sample data',
+          ],
+        },
+      },
+      { status: 500 },
+    );
   }
 }

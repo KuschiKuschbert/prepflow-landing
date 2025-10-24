@@ -17,7 +17,7 @@ export default function WebVitalsTracker({ enabled = true, onMetric }: WebVitals
     const trackWebVital = (metric: any) => {
       // Send to analytics
       trackEvent(metric.name, 'web-vitals', metric.id, Math.round(metric.value));
-      
+
       // Send to Google Analytics
       if (typeof window !== 'undefined' && window.gtag) {
         window.gtag('event', metric.name, {
@@ -45,7 +45,6 @@ export default function WebVitalsTracker({ enabled = true, onMetric }: WebVitals
     onFCP(trackWebVital);
     onLCP(trackWebVital);
     onTTFB(trackWebVital);
-
   }, [enabled, onMetric]);
 
   return null;

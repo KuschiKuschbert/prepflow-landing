@@ -5,7 +5,10 @@ import { Recipe } from '../types';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  recipePrices: Record<string, {costPerServing: number, recommendedPrice: number, foodCostPercent: number}>;
+  recipePrices: Record<
+    string,
+    { costPerServing: number; recommendedPrice: number; foodCostPercent: number }
+  >;
   selectedRecipes: Set<string>;
   onSelectRecipe: (recipeId: string) => void;
   onPreviewRecipe: (recipe: Recipe) => void;
@@ -14,32 +17,32 @@ interface RecipeCardProps {
   capitalizeRecipeName: (name: string) => string;
 }
 
-const RecipeCard = React.memo(function RecipeCard({ 
-  recipe, 
-  recipePrices, 
-  selectedRecipes, 
-  onSelectRecipe, 
-  onPreviewRecipe, 
-  onEditRecipe, 
+const RecipeCard = React.memo(function RecipeCard({
+  recipe,
+  recipePrices,
+  selectedRecipes,
+  onSelectRecipe,
+  onPreviewRecipe,
+  onEditRecipe,
   onDeleteRecipe,
-  capitalizeRecipeName 
+  capitalizeRecipeName,
 }: RecipeCardProps) {
   return (
-    <div className="p-4 hover:bg-[#2a2a2a]/20 transition-colors">
-      <div className="flex items-start justify-between mb-2">
+    <div className="p-4 transition-colors hover:bg-[#2a2a2a]/20">
+      <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
           <label className="sr-only">
             <input
               type="checkbox"
               checked={selectedRecipes.has(recipe.id)}
               onChange={() => onSelectRecipe(recipe.id)}
-              className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2 mr-3"
+              className="mr-3 h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
               aria-label={`Select recipe ${capitalizeRecipeName(recipe.name)}`}
             />
             Select {capitalizeRecipeName(recipe.name)}
           </label>
-          <h3 
-            className="text-sm font-medium text-white cursor-pointer" 
+          <h3
+            className="cursor-pointer text-sm font-medium text-white"
             onClick={() => onPreviewRecipe(recipe)}
           >
             {capitalizeRecipeName(recipe.name)}
@@ -49,22 +52,22 @@ const RecipeCard = React.memo(function RecipeCard({
           {new Date(recipe.created_at).toLocaleDateString()}
         </span>
       </div>
-      
-      <div className="space-y-1 text-xs text-gray-500 mb-3 ml-7">
+
+      <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
         <div>
-          <span className="font-medium">Recommended Price:</span> 
+          <span className="font-medium">Recommended Price:</span>
           {recipePrices[recipe.id] ? (
-            <span className="text-white font-semibold ml-1">
+            <span className="ml-1 font-semibold text-white">
               ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
             </span>
           ) : (
-            <span className="text-gray-500 ml-1">Calculating...</span>
+            <span className="ml-1 text-gray-500">Calculating...</span>
           )}
         </div>
         {recipePrices[recipe.id] && (
           <div>
-            <span className="font-medium">Food Cost:</span> 
-            <span className="text-gray-400 ml-1">
+            <span className="font-medium">Food Cost:</span>
+            <span className="ml-1 text-gray-400">
               {recipePrices[recipe.id].foodCostPercent.toFixed(1)}%
             </span>
           </div>
@@ -72,24 +75,22 @@ const RecipeCard = React.memo(function RecipeCard({
         {recipe.instructions && (
           <div>
             <span className="font-medium">Instructions:</span>
-            <p className="mt-1 text-gray-400 line-clamp-2">
-              {recipe.instructions}
-            </p>
+            <p className="mt-1 line-clamp-2 text-gray-400">{recipe.instructions}</p>
           </div>
         )}
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 ml-7">
+      <div className="ml-7 flex gap-2">
         <button
           onClick={() => onEditRecipe(recipe)}
-          className="flex-1 bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-3 py-2 rounded-lg text-xs font-medium hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200"
+          className="flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
         >
           ✏️ Edit in COGS
         </button>
         <button
           onClick={() => onDeleteRecipe(recipe)}
-          className="flex-1 bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white px-3 py-2 rounded-lg text-xs font-medium hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 transition-all duration-200"
+          className="flex-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
         >
           🗑️ Delete
         </button>

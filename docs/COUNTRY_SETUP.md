@@ -40,12 +40,14 @@ import { useCountry } from '@/contexts/CountryContext';
 
 function MyComponent() {
   const { selectedCountry, countryConfig, setCountry } = useCountry();
-  
+
   return (
     <div>
       <p>Current Country: {countryConfig.name}</p>
       <p>Currency: {countryConfig.currency}</p>
-      <p>Tax Rate: {countryConfig.taxName} {(countryConfig.taxRate * 100).toFixed(1)}%</p>
+      <p>
+        Tax Rate: {countryConfig.taxName} {(countryConfig.taxRate * 100).toFixed(1)}%
+      </p>
     </div>
   );
 }
@@ -60,13 +62,15 @@ import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 
 function PriceDisplay({ amount }: { amount: number }) {
   const { formatCurrency, formatDate, calculateTax } = useCountryFormatting();
-  
+
   const taxBreakdown = calculateTax(amount);
-  
+
   return (
     <div>
       <p>Subtotal: {formatCurrency(amount, false)}</p>
-      <p>Tax ({taxBreakdown.taxName}): {formatCurrency(taxBreakdown.taxAmount, false)}</p>
+      <p>
+        Tax ({taxBreakdown.taxName}): {formatCurrency(taxBreakdown.taxAmount, false)}
+      </p>
       <p>Total: {formatCurrency(amount, true)}</p>
     </div>
   );
@@ -86,37 +90,41 @@ const priceWithTax = formatCurrencyWithTax(100, 'AU', true); // Includes GST
 
 ## Country Configurations
 
-| Country | Code | Currency | Tax Rate | Tax Name | Locale |
-|---------|------|----------|----------|----------|--------|
-| Australia | AU | AUD | 10% | GST | en-AU |
-| United States | US | USD | 8% | Sales Tax | en-US |
-| United Kingdom | GB | GBP | 20% | VAT | en-GB |
-| Germany | DE | EUR | 19% | MwSt | de-DE |
-| France | FR | EUR | 20% | TVA | fr-FR |
-| Spain | ES | EUR | 21% | IVA | es-ES |
-| Canada | CA | CAD | 13% | HST/GST | en-CA |
-| New Zealand | NZ | NZD | 15% | GST | en-NZ |
-| Italy | IT | EUR | 22% | IVA | it-IT |
-| Netherlands | NL | EUR | 21% | BTW | nl-NL |
+| Country        | Code | Currency | Tax Rate | Tax Name  | Locale |
+| -------------- | ---- | -------- | -------- | --------- | ------ |
+| Australia      | AU   | AUD      | 10%      | GST       | en-AU  |
+| United States  | US   | USD      | 8%       | Sales Tax | en-US  |
+| United Kingdom | GB   | GBP      | 20%      | VAT       | en-GB  |
+| Germany        | DE   | EUR      | 19%      | MwSt      | de-DE  |
+| France         | FR   | EUR      | 20%      | TVA       | fr-FR  |
+| Spain          | ES   | EUR      | 21%      | IVA       | es-ES  |
+| Canada         | CA   | CAD      | 13%      | HST/GST   | en-CA  |
+| New Zealand    | NZ   | NZD      | 15%      | GST       | en-NZ  |
+| Italy          | IT   | EUR      | 22%      | IVA       | it-IT  |
+| Netherlands    | NL   | EUR      | 21%      | BTW       | nl-NL  |
 
 ## Integration Points
 
 ### COGS Calculator
+
 - Automatically includes tax in cost calculations
 - Uses country-specific tax rates
 - Formats currency according to country settings
 
 ### Recipe Management
+
 - Ingredient costs formatted in local currency
 - Recipe pricing includes tax calculations
 - Export formats use local date/number formats
 
 ### Performance Analysis
+
 - Revenue calculations include tax
 - Profit margins calculated with country-specific tax rates
 - Reports formatted for local standards
 
 ### Order Management
+
 - Supplier pricing in local currency
 - Order totals include tax
 - Delivery addresses formatted for country
@@ -132,12 +140,14 @@ const priceWithTax = formatCurrencyWithTax(100, 'AU', true); // Includes GST
 ## Technical Implementation
 
 ### Files Created
+
 - `lib/country-config.ts` - Country configurations and utilities
 - `contexts/CountryContext.tsx` - React context for country state
 - `components/CountrySetup.tsx` - Country selection UI
 - `hooks/useCountryFormatting.ts` - Formatting utilities hook
 
 ### Key Functions
+
 - `getCountryConfig(countryCode)` - Get country configuration
 - `formatCurrencyWithTax(amount, country, includeTax)` - Format currency with tax
 - `getTaxBreakdown(amount, country)` - Calculate tax breakdown

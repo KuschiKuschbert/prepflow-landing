@@ -49,24 +49,28 @@ export default function IngredientFilters({
   onSupplierFilterChange,
   onStorageFilterChange,
   onSortChange,
-  onDisplayUnitChange
+  onDisplayUnitChange,
 }: IngredientFiltersProps) {
   const { t } = useTranslation();
 
   // Get unique suppliers and storage locations for filter options
-  const uniqueSuppliers = Array.from(new Set(ingredients.map(i => i.supplier).filter(Boolean))).sort();
-  const uniqueStorageLocations = Array.from(new Set(ingredients.map(i => i.storage_location).filter(Boolean))).sort();
+  const uniqueSuppliers = Array.from(
+    new Set(ingredients.map(i => i.supplier).filter(Boolean)),
+  ).sort();
+  const uniqueStorageLocations = Array.from(
+    new Set(ingredients.map(i => i.storage_location).filter(Boolean)),
+  ).sort();
 
   return (
     <div className="space-y-6">
       {/* Unit Selector */}
-      <div className="bg-[#1f1f1f] p-4 rounded-lg border border-[#2a2a2a]">
+      <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-4">
         <div className="flex items-center gap-3">
           <label className="text-sm font-medium text-gray-300">Display costs in:</label>
           <select
             value={displayUnit}
-            onChange={(e) => onDisplayUnitChange(e.target.value)}
-            className="px-3 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+            onChange={e => onDisplayUnitChange(e.target.value)}
+            className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
           >
             <optgroup label="Weight">
               <option value="g">Grams (g)</option>
@@ -86,65 +90,63 @@ export default function IngredientFilters({
       </div>
 
       {/* Search and Filter Controls */}
-      <div className="bg-[#1f1f1f] p-4 sm:p-6 rounded-lg shadow border border-[#2a2a2a]">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow sm:p-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           {/* Search */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              🔍 Search
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-300">🔍 Search</label>
             <input
               type="text"
               placeholder="Search ingredients..."
               value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full px-3 py-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD] placeholder-gray-500"
+              onChange={e => onSearchChange(e.target.value)}
+              className="w-full rounded-md border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white placeholder-gray-500 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             />
           </div>
 
           {/* Supplier Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              🏪 Supplier
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-300">🏪 Supplier</label>
             <select
               value={supplierFilter}
-              onChange={(e) => onSupplierFilterChange(e.target.value)}
-              className="w-full px-3 py-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
+              onChange={e => onSupplierFilterChange(e.target.value)}
+              className="w-full rounded-md border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             >
               <option value="">All Suppliers</option>
               {uniqueSuppliers.map(supplier => (
-                <option key={supplier} value={supplier}>{supplier}</option>
+                <option key={supplier} value={supplier}>
+                  {supplier}
+                </option>
               ))}
             </select>
           </div>
 
           {/* Storage Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              📍 Storage
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-300">📍 Storage</label>
             <select
               value={storageFilter}
-              onChange={(e) => onStorageFilterChange(e.target.value)}
-              className="w-full px-3 py-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
+              onChange={e => onStorageFilterChange(e.target.value)}
+              className="w-full rounded-md border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             >
               <option value="">All Locations</option>
               {uniqueStorageLocations.map(location => (
-                <option key={location} value={location}>{location}</option>
+                <option key={location} value={location}>
+                  {location}
+                </option>
               ))}
             </select>
           </div>
 
           {/* Sort By */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              📊 Sort By
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-300">📊 Sort By</label>
             <select
               value={sortBy}
-              onChange={(e) => onSortChange(e.target.value as 'name' | 'cost_asc' | 'cost_desc' | 'supplier')}
-              className="w-full px-3 py-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
+              onChange={e =>
+                onSortChange(e.target.value as 'name' | 'cost_asc' | 'cost_desc' | 'supplier')
+              }
+              className="w-full rounded-md border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             >
               <option value="name">Name</option>
               <option value="cost_asc">Cost (Low to High)</option>
@@ -156,21 +158,21 @@ export default function IngredientFilters({
 
         {/* Filter Summary */}
         {(searchTerm || supplierFilter || storageFilter) && (
-          <div className="mt-4 pt-4 border-t border-[#2a2a2a]">
+          <div className="mt-4 border-t border-[#2a2a2a] pt-4">
             <div className="flex flex-wrap gap-2">
               <span className="text-sm text-gray-400">Active filters:</span>
               {searchTerm && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#29E7CD]/10 text-[#29E7CD] border border-[#29E7CD]/20">
+                <span className="inline-flex items-center rounded-full border border-[#29E7CD]/20 bg-[#29E7CD]/10 px-2 py-1 text-xs font-medium text-[#29E7CD]">
                   Search: "{searchTerm}"
                 </span>
               )}
               {supplierFilter && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20">
+                <span className="inline-flex items-center rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/10 px-2 py-1 text-xs font-medium text-[#3B82F6]">
                   Supplier: {supplierFilter}
                 </span>
               )}
               {storageFilter && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#D925C7]/10 text-[#D925C7] border border-[#D925C7]/20">
+                <span className="inline-flex items-center rounded-full border border-[#D925C7]/20 bg-[#D925C7]/10 px-2 py-1 text-xs font-medium text-[#D925C7]">
                   Storage: {storageFilter}
                 </span>
               )}
@@ -180,7 +182,7 @@ export default function IngredientFilters({
                   onSupplierFilterChange('');
                   onStorageFilterChange('');
                 }}
-                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-600/10 text-gray-400 hover:text-white border border-gray-600/20 hover:border-gray-500/40 transition-colors"
+                className="inline-flex items-center rounded-full border border-gray-600/20 bg-gray-600/10 px-2 py-1 text-xs font-medium text-gray-400 transition-colors hover:border-gray-500/40 hover:text-white"
               >
                 Clear All
               </button>

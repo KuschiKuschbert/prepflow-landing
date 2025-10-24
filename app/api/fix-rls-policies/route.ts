@@ -26,15 +26,17 @@ export async function POST(request: NextRequest) {
         -- Create policy to allow public delete (for removing ingredients)
         CREATE POLICY "Allow public delete to ingredients" ON ingredients
         FOR DELETE USING (true);
-      `
+      `,
     });
 
     if (error) {
       console.error('Error creating RLS policies:', error);
-      return NextResponse.json({
-        error: 'Failed to create RLS policies',
-        message: 'The exec_sql function might not be available. Please create the policies manually in Supabase dashboard.',
-        instructions: `
+      return NextResponse.json(
+        {
+          error: 'Failed to create RLS policies',
+          message:
+            'The exec_sql function might not be available. Please create the policies manually in Supabase dashboard.',
+          instructions: `
           1. Go to Supabase Dashboard → Authentication → Policies
           2. Select the 'ingredients' table
           3. Create these policies:
@@ -43,21 +45,25 @@ export async function POST(request: NextRequest) {
              - UPDATE: "Allow public update to ingredients" (USING: true)
              - DELETE: "Allow public delete to ingredients" (USING: true)
         `,
-        errorDetails: error
-      }, { status: 400 });
+          errorDetails: error,
+        },
+        { status: 400 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       message: 'RLS policies created successfully!',
-      data: data
+      data: data,
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({
-      error: 'Internal server error',
-      details: err instanceof Error ? err.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

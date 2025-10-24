@@ -11,7 +11,11 @@ interface ExitIntentTrackerProps {
   showPopup?: boolean;
 }
 
-export default function ExitIntentTracker({ onExitIntent, enabled = true, showPopup = true }: ExitIntentTrackerProps) {
+export default function ExitIntentTracker({
+  onExitIntent,
+  enabled = true,
+  showPopup = true,
+}: ExitIntentTrackerProps) {
   const [hasTriggered, setHasTriggered] = useState(false);
   const [showExitPopup, setShowExitPopup] = useState(false);
 
@@ -24,10 +28,10 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true, showPo
       // Only trigger if mouse leaves from the top of the page (likely user leaving)
       if (e.clientY <= 0) {
         setHasTriggered(true);
-        
+
         // Track exit intent event
         trackEvent('exit_intent', 'engagement', 'user_leaving_page');
-        
+
         // Track as conversion event for analytics
         trackConversion({
           type: 'exit_intent',
@@ -35,11 +39,11 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true, showPo
           page: window.location.pathname,
           timestamp: Date.now(),
           sessionId: 'exit_intent_session',
-          metadata: { 
+          metadata: {
             trigger: 'mouse_leave_top',
             user_agent: navigator.userAgent,
-            referrer: document.referrer
-          }
+            referrer: document.referrer,
+          },
         });
 
         // Show exit intent popup if enabled
@@ -77,17 +81,17 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true, showPo
     const handleBeforeUnload = () => {
       if (!hasTriggered) {
         setHasTriggered(true);
-        
+
         // Track page unload event
         trackEvent('page_unload', 'engagement', 'user_closing_tab');
-        
+
         // Send to GTM data layer
         trackGTMEvent('page_unload', {
           event_category: 'engagement',
           event_label: 'user_closing_tab',
           page: window.location.pathname,
         });
-        
+
         // Send to Google Analytics (legacy support)
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'page_unload', {
@@ -102,17 +106,17 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true, showPo
     const handleVisibilityChange = () => {
       if (document.hidden && !hasTriggered) {
         setHasTriggered(true);
-        
+
         // Track tab switch/background event
         trackEvent('tab_background', 'engagement', 'user_switched_tab');
-        
+
         // Send to GTM data layer
         trackGTMEvent('tab_background', {
           event_category: 'engagement',
           event_label: 'user_switched_tab',
           page: window.location.pathname,
         });
-        
+
         // Send to Google Analytics (legacy support)
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'tab_background', {
@@ -144,7 +148,7 @@ export default function ExitIntentTracker({ onExitIntent, enabled = true, showPo
       <ExitIntentPopup
         isVisible={showExitPopup}
         onClose={() => setShowExitPopup(false)}
-        onSuccess={(data) => {
+        onSuccess={data => {
           console.log('Exit intent lead captured:', data);
           // Reset trigger so popup can show again if needed
           setHasTriggered(false);

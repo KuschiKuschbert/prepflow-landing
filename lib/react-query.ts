@@ -14,7 +14,7 @@ export const queryClient = new QueryClient({
       // Retry failed requests 3 times
       retry: 3,
       // Retry delay with exponential backoff
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
       // Refetch on window focus for fresh data
       refetchOnWindowFocus: true,
       // Don't refetch on reconnect by default
@@ -37,27 +37,27 @@ export const queryKeys = {
   ingredients: ['ingredients'] as const,
   ingredient: (id: string) => ['ingredients', id] as const,
   ingredientsByCategory: (category: string) => ['ingredients', 'category', category] as const,
-  
+
   // Recipes
   recipes: ['recipes'] as const,
   recipe: (id: string) => ['recipes', id] as const,
   recipesByCategory: (category: string) => ['recipes', 'category', category] as const,
-  
+
   // Temperature
   temperatureLogs: ['temperature', 'logs'] as const,
   temperatureEquipment: ['temperature', 'equipment'] as const,
   temperatureThresholds: ['temperature', 'thresholds'] as const,
   temperatureAnalytics: ['temperature', 'analytics'] as const,
-  
+
   // Performance
   performanceData: ['performance'] as const,
   performanceAnalytics: ['performance', 'analytics'] as const,
-  
+
   // User data
   userProfile: ['user', 'profile'] as const,
   userSettings: ['user', 'settings'] as const,
   userSubscription: ['user', 'subscription'] as const,
-  
+
   // Dashboard
   dashboardStats: ['dashboard', 'stats'] as const,
   dashboardRecentActivity: ['dashboard', 'recent-activity'] as const,
@@ -67,25 +67,25 @@ export const queryKeys = {
 export const invalidateQueries = {
   // Invalidate all ingredients queries
   ingredients: () => queryClient.invalidateQueries({ queryKey: queryKeys.ingredients }),
-  
+
   // Invalidate specific ingredient
   ingredient: (id: string) => queryClient.invalidateQueries({ queryKey: queryKeys.ingredient(id) }),
-  
+
   // Invalidate all recipes queries
   recipes: () => queryClient.invalidateQueries({ queryKey: queryKeys.recipes }),
-  
+
   // Invalidate specific recipe
   recipe: (id: string) => queryClient.invalidateQueries({ queryKey: queryKeys.recipe(id) }),
-  
+
   // Invalidate temperature data
   temperature: () => queryClient.invalidateQueries({ queryKey: ['temperature'] }),
-  
+
   // Invalidate performance data
   performance: () => queryClient.invalidateQueries({ queryKey: queryKeys.performanceData }),
-  
+
   // Invalidate user data
   user: () => queryClient.invalidateQueries({ queryKey: ['user'] }),
-  
+
   // Invalidate dashboard data
   dashboard: () => queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
 };
@@ -99,7 +99,7 @@ export const optimisticUpdates = {
       ...updates,
     }));
   },
-  
+
   // Optimistically update recipe
   updateRecipe: (id: string, updates: any) => {
     queryClient.setQueryData(queryKeys.recipe(id), (old: any) => ({
@@ -107,7 +107,7 @@ export const optimisticUpdates = {
       ...updates,
     }));
   },
-  
+
   // Optimistically add new ingredient
   addIngredient: (newIngredient: any) => {
     queryClient.setQueryData(queryKeys.ingredients, (old: any[]) => [
@@ -115,13 +115,10 @@ export const optimisticUpdates = {
       newIngredient,
     ]);
   },
-  
+
   // Optimistically add new recipe
   addRecipe: (newRecipe: any) => {
-    queryClient.setQueryData(queryKeys.recipes, (old: any[]) => [
-      ...(old || []),
-      newRecipe,
-    ]);
+    queryClient.setQueryData(queryKeys.recipes, (old: any[]) => [...(old || []), newRecipe]);
   },
 };
 
@@ -138,7 +135,7 @@ export const prefetchQueries = {
       },
     });
   },
-  
+
   // Prefetch recipes data
   recipes: async () => {
     await queryClient.prefetchQuery({
@@ -150,7 +147,7 @@ export const prefetchQueries = {
       },
     });
   },
-  
+
   // Prefetch temperature data
   temperature: async () => {
     await queryClient.prefetchQuery({
@@ -162,7 +159,7 @@ export const prefetchQueries = {
       },
     });
   },
-  
+
   // Prefetch dashboard data
   dashboard: async () => {
     await queryClient.prefetchQuery({
@@ -180,23 +177,23 @@ export const prefetchQueries = {
 export const backgroundSync = {
   // Sync ingredients in background
   syncIngredients: () => {
-    queryClient.invalidateQueries({ 
+    queryClient.invalidateQueries({
       queryKey: queryKeys.ingredients,
       refetchType: 'active',
     });
   },
-  
+
   // Sync recipes in background
   syncRecipes: () => {
-    queryClient.invalidateQueries({ 
+    queryClient.invalidateQueries({
       queryKey: queryKeys.recipes,
       refetchType: 'active',
     });
   },
-  
+
   // Sync temperature data in background
   syncTemperature: () => {
-    queryClient.invalidateQueries({ 
+    queryClient.invalidateQueries({
       queryKey: ['temperature'],
       refetchType: 'active',
     });
@@ -206,7 +203,7 @@ export const backgroundSync = {
 // Error handling helpers
 export const handleQueryError = (error: any, queryKey: string[]) => {
   console.error(`Query error for ${queryKey.join('.')}:`, error);
-  
+
   // Track error in analytics
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'query_error', {
@@ -215,20 +212,20 @@ export const handleQueryError = (error: any, queryKey: string[]) => {
       value: 1,
     });
   }
-  
+
   // Return user-friendly error message
   if (error.message?.includes('Failed to fetch')) {
     return 'Network error. Please check your connection and try again.';
   }
-  
+
   if (error.message?.includes('404')) {
     return 'Data not found. Please refresh the page.';
   }
-  
+
   if (error.message?.includes('500')) {
     return 'Server error. Please try again later.';
   }
-  
+
   return 'An unexpected error occurred. Please try again.';
 };
 
@@ -236,16 +233,16 @@ export const handleQueryError = (error: any, queryKey: string[]) => {
 export const cacheUtils = {
   // Clear all cache
   clearAll: () => queryClient.clear(),
-  
+
   // Clear specific cache
   clearByKey: (queryKey: string[]) => queryClient.removeQueries({ queryKey }),
-  
+
   // Get cache size
   getCacheSize: () => queryClient.getQueryCache().getAll().length,
-  
+
   // Get cache data
   getCacheData: (queryKey: string[]) => queryClient.getQueryData(queryKey),
-  
+
   // Set cache data
   setCacheData: (queryKey: string[], data: any) => queryClient.setQueryData(queryKey, data),
 };

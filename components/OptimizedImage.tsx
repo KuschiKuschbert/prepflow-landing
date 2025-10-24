@@ -8,25 +8,29 @@ interface OptimizedImageProps extends Omit<ImageProps, 'src'> {
   priority?: boolean;
 }
 
-export default function OptimizedImage({ 
-  src, 
-  alt, 
-  fallback, 
+export default function OptimizedImage({
+  src,
+  alt,
+  fallback,
   priority = false,
-  ...props 
+  ...props
 }: OptimizedImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
   const [isLoading, setIsLoading] = useState(true);
 
   // Convert PNG/JPG to optimized formats
   const getOptimizedSrc = (originalSrc: string) => {
-    if (originalSrc.includes('.png') || originalSrc.includes('.jpg') || originalSrc.includes('.jpeg')) {
+    if (
+      originalSrc.includes('.png') ||
+      originalSrc.includes('.jpg') ||
+      originalSrc.includes('.jpeg')
+    ) {
       // Try AVIF first (best compression), then WebP, then original
       const basePath = originalSrc.replace(/\.(png|jpg|jpeg)$/i, '');
       return {
         avif: `${basePath}.avif`,
         webp: `${basePath}.webp`,
-        original: originalSrc
+        original: originalSrc,
       };
     }
     return { original: originalSrc };
@@ -34,7 +38,7 @@ export default function OptimizedImage({
 
   const handleError = () => {
     const optimized = getOptimizedSrc(src);
-    
+
     if (imgSrc === optimized.avif) {
       // Try WebP if AVIF fails
       setImgSrc(optimized.webp);
@@ -58,12 +62,12 @@ export default function OptimizedImage({
   return (
     <div className="relative">
       {isLoading && (
-        <div 
-          className="absolute inset-0 bg-gray-200 animate-pulse rounded"
-          style={{ 
-            width: props.width, 
+        <div
+          className="absolute inset-0 animate-pulse rounded bg-gray-200"
+          style={{
+            width: props.width,
             height: props.height,
-            minHeight: props.height || 'auto'
+            minHeight: props.height || 'auto',
           }}
         />
       )}
@@ -75,7 +79,7 @@ export default function OptimizedImage({
         onLoad={handleLoad}
         style={{
           opacity: isLoading ? 0 : 1,
-          transition: 'opacity 0.3s ease-in-out'
+          transition: 'opacity 0.3s ease-in-out',
         }}
         {...props}
       />

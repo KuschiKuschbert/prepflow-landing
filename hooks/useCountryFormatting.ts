@@ -17,10 +17,10 @@ export function useCountryFormatting() {
   };
 
   const formatPercentage = (value: number) => {
-    return new Intl.NumberFormat(countryConfig.locale, { 
+    return new Intl.NumberFormat(countryConfig.locale, {
       style: 'percent',
       minimumFractionDigits: 1,
-      maximumFractionDigits: 1
+      maximumFractionDigits: 1,
     }).format(value);
   };
 
@@ -31,7 +31,7 @@ export function useCountryFormatting() {
   const getTaxInfo = () => ({
     rate: countryConfig.taxRate,
     name: countryConfig.taxName,
-    currency: countryConfig.currency
+    currency: countryConfig.currency,
   });
 
   return {
@@ -41,6 +41,6 @@ export function useCountryFormatting() {
     formatNumber,
     formatPercentage,
     calculateTax,
-    getTaxInfo
+    getTaxInfo,
   };
 }

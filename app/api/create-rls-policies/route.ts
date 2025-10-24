@@ -6,10 +6,13 @@ export async function POST(request: NextRequest) {
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json({
-        error: 'Missing Supabase configuration',
-        message: 'Please check your environment variables'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Missing Supabase configuration',
+          message: 'Please check your environment variables',
+        },
+        { status: 400 },
+      );
     }
 
     // Use Supabase REST API to create policies
@@ -17,23 +20,23 @@ export async function POST(request: NextRequest) {
       {
         name: 'Allow public read access to ingredients',
         operation: 'SELECT',
-        using: 'true'
+        using: 'true',
       },
       {
         name: 'Allow public insert to ingredients',
         operation: 'INSERT',
-        with_check: 'true'
+        with_check: 'true',
       },
       {
         name: 'Allow public update to ingredients',
         operation: 'UPDATE',
-        using: 'true'
+        using: 'true',
       },
       {
         name: 'Allow public delete to ingredients',
         operation: 'DELETE',
-        using: 'true'
-      }
+        using: 'true',
+      },
     ];
 
     const results = [];
@@ -45,12 +48,12 @@ export async function POST(request: NextRequest) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${serviceRoleKey}`,
-            'apikey': serviceRoleKey
+            Authorization: `Bearer ${serviceRoleKey}`,
+            apikey: serviceRoleKey,
           },
           body: JSON.stringify({
-            sql: 'ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;'
-          })
+            sql: 'ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;',
+          }),
         });
 
         // Create the policy
@@ -58,8 +61,8 @@ export async function POST(request: NextRequest) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${serviceRoleKey}`,
-            'apikey': serviceRoleKey
+            Authorization: `Bearer ${serviceRoleKey}`,
+            apikey: serviceRoleKey,
           },
           body: JSON.stringify({
             sql: `
@@ -67,8 +70,8 @@ export async function POST(request: NextRequest) {
               FOR ${policy.operation}
               ${policy.using ? `USING (${policy.using})` : ''}
               ${policy.with_check ? `WITH CHECK (${policy.with_check})` : ''};
-            `
-          })
+            `,
+          }),
         });
 
         const policyResult = await createPolicyResponse.json();
@@ -77,20 +80,20 @@ export async function POST(request: NextRequest) {
           results.push({
             policy: policy.name,
             status: 'created',
-            message: 'Policy created successfully'
+            message: 'Policy created successfully',
           });
         } else {
           if (policyResult.message?.includes('already exists')) {
             results.push({
               policy: policy.name,
               status: 'already_exists',
-              message: 'Policy already exists'
+              message: 'Policy already exists',
             });
           } else {
             results.push({
               policy: policy.name,
               status: 'error',
-              error: policyResult.message || 'Unknown error'
+              error: policyResult.message || 'Unknown error',
             });
           }
         }
@@ -98,7 +101,7 @@ export async function POST(request: NextRequest) {
         results.push({
           policy: policy.name,
           status: 'error',
-          error: err instanceof Error ? err.message : 'Unknown error'
+          error: err instanceof Error ? err.message : 'Unknown error',
         });
       }
     }
@@ -107,14 +110,17 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'RLS policy creation completed',
       results: results,
-      instructions: 'If automatic creation failed, create policies manually in Supabase dashboard: Authentication → Policies → ingredients table'
+      instructions:
+        'If automatic creation failed, create policies manually in Supabase dashboard: Authentication → Policies → ingredients table',
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({
-      error: 'Internal server error',
-      details: err instanceof Error ? err.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

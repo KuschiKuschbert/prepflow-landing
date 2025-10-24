@@ -13,7 +13,10 @@ interface TemperatureAnalyticsTabProps {
   equipment: TemperatureEquipment[];
 }
 
-export default function TemperatureAnalyticsTab({ allLogs, equipment }: TemperatureAnalyticsTabProps) {
+export default function TemperatureAnalyticsTab({
+  allLogs,
+  equipment,
+}: TemperatureAnalyticsTabProps) {
   const { t } = useTranslation();
   const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('24h');
   const [dateOffset, setDateOffset] = useState(0); // 0 for today, 1 for yesterday, etc.
@@ -26,26 +29,26 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
     // Show content immediately to prevent FOUC
     if (equipment.length > 0 && allLogs.length > 0) {
       setIsLoaded(true);
-        
-        // Smart equipment selection logic
-        if (!selectedEquipmentId && equipment.length > 0) {
-          // 1. First try to find equipment that is out of range
-          const outOfRangeEquipment = findOutOfRangeEquipment();
-          if (outOfRangeEquipment) {
-            setSelectedEquipmentId(outOfRangeEquipment.id);
-          } else {
-            // 2. Fallback to first equipment
-            setSelectedEquipmentId(equipment[0].id);
-          }
+
+      // Smart equipment selection logic
+      if (!selectedEquipmentId && equipment.length > 0) {
+        // 1. First try to find equipment that is out of range
+        const outOfRangeEquipment = findOutOfRangeEquipment();
+        if (outOfRangeEquipment) {
+          setSelectedEquipmentId(outOfRangeEquipment.id);
+        } else {
+          // 2. Fallback to first equipment
+          setSelectedEquipmentId(equipment[0].id);
         }
-        
-        // Smart time filter selection - find the best filter with data (only if not manually changed)
-        if (!hasManuallyChangedFilter) {
-          const bestTimeFilter = findBestTimeFilter();
-          if (bestTimeFilter !== timeFilter) {
-            setTimeFilter(bestTimeFilter);
-          }
+      }
+
+      // Smart time filter selection - find the best filter with data (only if not manually changed)
+      if (!hasManuallyChangedFilter) {
+        const bestTimeFilter = findBestTimeFilter();
+        if (bestTimeFilter !== timeFilter) {
+          setTimeFilter(bestTimeFilter);
         }
+      }
     }
   }, [equipment.length, allLogs.length, dateOffset, selectedEquipmentId, hasManuallyChangedFilter]);
 
@@ -60,8 +63,8 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
     if (timeFilter === '24h') {
       // For 24h, look at the last 24 hours from now
       const now = new Date();
-      const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
-      
+      const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
       filtered = filtered.filter(log => {
         const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
         return logDateTime >= twentyFourHoursAgo && logDateTime <= now;
@@ -94,8 +97,8 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
     if (timeFilter === '24h') {
       // For 24h, look at the last 24 hours from now
       const now = new Date();
-      const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
-      
+      const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
       filteredLogs = allLogs.filter(log => {
         const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
         return logDateTime >= twentyFourHoursAgo && logDateTime <= now;
@@ -132,24 +135,23 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
     });
   };
 
-
-
   const getEquipmentStatus = (equipment: TemperatureEquipment) => {
     const logs = getFilteredLogs(equipment);
     if (logs.length === 0) return { status: 'no-data', color: 'text-gray-400' };
-    
+
     const latestLog = logs[logs.length - 1];
     const latestTemp = latestLog.temperature_celsius;
-    
+
     if (equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) {
       return { status: 'no-thresholds', color: 'text-blue-400' };
     }
-    
-    const inRange = latestTemp >= equipment.min_temp_celsius && latestTemp <= equipment.max_temp_celsius;
+
+    const inRange =
+      latestTemp >= equipment.min_temp_celsius && latestTemp <= equipment.max_temp_celsius;
     return {
       status: inRange ? 'in-range' : 'out-of-range',
       color: inRange ? 'text-green-400' : 'text-red-400',
-      temperature: latestTemp
+      temperature: latestTemp,
     };
   };
 
@@ -158,14 +160,14 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
     return (
       <div className="space-y-6">
         {/* Time Period Filter Skeleton */}
-        <div className="bg-[#1f1f1f] p-4 rounded-2xl shadow-lg border border-[#2a2a2a] flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
           {['24h', '7d', '30d', 'all'].map(filter => (
-            <div key={filter} className="px-4 py-2 rounded-xl bg-gray-700 w-20 h-8"></div>
+            <div key={filter} className="h-8 w-20 rounded-xl bg-gray-700 px-4 py-2"></div>
           ))}
         </div>
 
         {/* Equipment Cards Skeleton */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
           <LoadingSkeleton variant="card" count={6} height="80px" />
         </div>
 
@@ -180,7 +182,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
   return (
     <div className="space-y-6">
       {/* Time Period Filter */}
-      <div className="bg-[#1f1f1f] p-4 rounded-2xl shadow-lg border border-[#2a2a2a] flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
         {isLoaded ? (
           ['24h', '7d', '30d', 'all'].map(filter => (
             <button
@@ -189,11 +191,22 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
                 setTimeFilter(filter as '24h' | '7d' | '30d' | 'all');
                 setHasManuallyChangedFilter(true);
               }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                timeFilter === filter ? 'bg-[#29E7CD] text-black' : 'bg-transparent text-gray-400 hover:text-white hover:bg-[#2a2a2a]'
+              className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                timeFilter === filter
+                  ? 'bg-[#29E7CD] text-black'
+                  : 'bg-transparent text-gray-400 hover:bg-[#2a2a2a] hover:text-white'
               }`}
             >
-              {t(`timeFilter.${filter}`, filter === '24h' ? 'Last 24h' : filter === '7d' ? 'Last 7 Days' : filter === '30d' ? 'Last 30 Days' : 'All Time')}
+              {t(
+                `timeFilter.${filter}`,
+                filter === '24h'
+                  ? 'Last 24h'
+                  : filter === '7d'
+                    ? 'Last 7 Days'
+                    : filter === '30d'
+                      ? 'Last 30 Days'
+                      : 'All Time',
+              )}
             </button>
           ))
         ) : (
@@ -203,105 +216,125 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
       </div>
 
       {/* Equipment Status Overview - Smart Responsive Grid */}
-      <div className={`grid gap-3 ${
-        equipment.length <= 2 ? 'grid-cols-1 sm:grid-cols-2' :
-        equipment.length <= 4 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' :
-        equipment.length <= 6 ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6' :
-        equipment.length <= 12 ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6' :
-        'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
-      }`}>
-        {isLoaded ? equipment.map(item => {
-          const status = getEquipmentStatus(item);
-          const logs = getFilteredLogs(item);
-          const isOutOfRange = status.status === 'out-of-range';
-          const needsSetup = status.status === 'no-thresholds';
-          const isSelected = selectedEquipmentId === item.id;
-          const isCompact = equipment.length > 6;
+      <div
+        className={`grid gap-3 ${
+          equipment.length <= 2
+            ? 'grid-cols-1 sm:grid-cols-2'
+            : equipment.length <= 4
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+              : equipment.length <= 6
+                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6'
+                : equipment.length <= 12
+                  ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'
+                  : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
+        }`}
+      >
+        {isLoaded ? (
+          equipment.map(item => {
+            const status = getEquipmentStatus(item);
+            const logs = getFilteredLogs(item);
+            const isOutOfRange = status.status === 'out-of-range';
+            const needsSetup = status.status === 'no-thresholds';
+            const isSelected = selectedEquipmentId === item.id;
+            const isCompact = equipment.length > 6;
 
-          return (
-            <button
-              key={item.id}
-              onClick={() => setSelectedEquipmentId(item.id)}
-              className={`group bg-[#1f1f1f] rounded-xl shadow-lg border transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 text-left w-full ${
-                isCompact ? 'p-3' : 'p-4'
-              } ${
-                isSelected
-                  ? 'border-[#29E7CD] ring-2 ring-[#29E7CD]/20 bg-[#29E7CD]/5'
-                  : isOutOfRange 
-                  ? 'border-red-500/50 hover:border-red-500' 
-                  : needsSetup 
-                  ? 'border-yellow-500/50 hover:border-yellow-500'
-                  : 'border-[#2a2a2a] hover:border-[#29E7CD]/50'
-              }`}
-            >
-              {/* Header with status indicator */}
-              <div className={`flex items-center justify-between ${isCompact ? 'mb-2' : 'mb-3'}`}>
-                <div className="flex-1 min-w-0">
-                  <h3 className={`font-semibold text-white truncate group-hover:text-[#29E7CD] transition-colors ${
-                    isCompact ? 'text-xs' : 'text-sm'
-                  }`}>
-                    {item.name}
-                  </h3>
-                  <div className="flex items-center space-x-1.5 mt-0.5">
-                    <div className={`rounded-full ${
-                      isCompact ? 'w-1 h-1' : 'w-1.5 h-1.5'
-                    } ${
-                      isOutOfRange ? 'bg-red-500' : 
-                      needsSetup ? 'bg-yellow-500' : 
-                      'bg-green-500'
-                    }`}></div>
-                    <span className={`font-medium ${
-                      isCompact ? 'text-xs' : 'text-xs'
-                    } ${
-                      isOutOfRange ? 'text-red-400' : 
-                      needsSetup ? 'text-yellow-400' : 
-                      'text-green-400'
-                    }`}>
-                      {status.status === 'no-data' ? 'No Data' : 
-                       status.status === 'no-thresholds' ? 'Setup Required' :
-                       status.status === 'in-range' ? 'In Range' : 'Out of Range'}
-                    </span>
+            return (
+              <button
+                key={item.id}
+                onClick={() => setSelectedEquipmentId(item.id)}
+                className={`group w-full rounded-xl border bg-[#1f1f1f] text-left shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl ${
+                  isCompact ? 'p-3' : 'p-4'
+                } ${
+                  isSelected
+                    ? 'border-[#29E7CD] bg-[#29E7CD]/5 ring-2 ring-[#29E7CD]/20'
+                    : isOutOfRange
+                      ? 'border-red-500/50 hover:border-red-500'
+                      : needsSetup
+                        ? 'border-yellow-500/50 hover:border-yellow-500'
+                        : 'border-[#2a2a2a] hover:border-[#29E7CD]/50'
+                }`}
+              >
+                {/* Header with status indicator */}
+                <div className={`flex items-center justify-between ${isCompact ? 'mb-2' : 'mb-3'}`}>
+                  <div className="min-w-0 flex-1">
+                    <h3
+                      className={`truncate font-semibold text-white transition-colors group-hover:text-[#29E7CD] ${
+                        isCompact ? 'text-xs' : 'text-sm'
+                      }`}
+                    >
+                      {item.name}
+                    </h3>
+                    <div className="mt-0.5 flex items-center space-x-1.5">
+                      <div
+                        className={`rounded-full ${isCompact ? 'h-1 w-1' : 'h-1.5 w-1.5'} ${
+                          isOutOfRange
+                            ? 'bg-red-500'
+                            : needsSetup
+                              ? 'bg-yellow-500'
+                              : 'bg-green-500'
+                        }`}
+                      ></div>
+                      <span
+                        className={`font-medium ${isCompact ? 'text-xs' : 'text-xs'} ${
+                          isOutOfRange
+                            ? 'text-red-400'
+                            : needsSetup
+                              ? 'text-yellow-400'
+                              : 'text-green-400'
+                        }`}
+                      >
+                        {status.status === 'no-data'
+                          ? 'No Data'
+                          : status.status === 'no-thresholds'
+                            ? 'Setup Required'
+                            : status.status === 'in-range'
+                              ? 'In Range'
+                              : 'Out of Range'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Temperature display */}
-              <div className={isCompact ? 'mb-2' : 'mb-3'}>
-                <div className={`font-bold text-white ${isCompact ? 'text-lg mb-1' : 'text-2xl mb-1'}`}>
-                  {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
+                {/* Temperature display */}
+                <div className={isCompact ? 'mb-2' : 'mb-3'}>
+                  <div
+                    className={`font-bold text-white ${isCompact ? 'mb-1 text-lg' : 'mb-1 text-2xl'}`}
+                  >
+                    {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {logs.length} readings {isCompact ? '' : `• ${timeFilter.toUpperCase()}`}
+                  </div>
                 </div>
-                <div className="text-xs text-gray-400">
-                  {logs.length} readings {isCompact ? '' : `• ${timeFilter.toUpperCase()}`}
-                </div>
-              </div>
 
-              {/* Action indicators - only show in non-compact mode or if critical */}
-              {!isCompact && (isOutOfRange || needsSetup) && (
-                <div className="pt-3 border-t border-[#2a2a2a]">
-                  {isOutOfRange && (
-                    <div className="flex items-center space-x-1.5 text-red-400 text-xs">
-                      <span>⚠️</span>
-                      <span>Attention required</span>
-                    </div>
-                  )}
-                  {needsSetup && (
-                    <div className="flex items-center space-x-1.5 text-yellow-400 text-xs">
-                      <span>⚙️</span>
-                      <span>Configure thresholds</span>
-                    </div>
-                  )}
-                </div>
-              )}
+                {/* Action indicators - only show in non-compact mode or if critical */}
+                {!isCompact && (isOutOfRange || needsSetup) && (
+                  <div className="border-t border-[#2a2a2a] pt-3">
+                    {isOutOfRange && (
+                      <div className="flex items-center space-x-1.5 text-xs text-red-400">
+                        <span>⚠️</span>
+                        <span>Attention required</span>
+                      </div>
+                    )}
+                    {needsSetup && (
+                      <div className="flex items-center space-x-1.5 text-xs text-yellow-400">
+                        <span>⚙️</span>
+                        <span>Configure thresholds</span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-              {/* Compact mode critical indicators */}
-              {isCompact && isOutOfRange && (
-                <div className="flex items-center justify-center text-red-400 text-xs">
-                  <span>⚠️</span>
-                </div>
-              )}
-            </button>
-          );
-        }) : (
+                {/* Compact mode critical indicators */}
+                {isCompact && isOutOfRange && (
+                  <div className="flex items-center justify-center text-xs text-red-400">
+                    <span>⚠️</span>
+                  </div>
+                )}
+              </button>
+            );
+          })
+        ) : (
           // Loading skeleton for equipment cards
           <LoadingSkeleton variant="card" count={6} height="80px" />
         )}
@@ -312,7 +345,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
         // Loading skeleton for chart
         <LoadingSkeleton variant="chart" height="320px" />
       ) : equipment.length === 0 ? (
-        <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] w-full h-64 flex items-center justify-center">
+        <div className="flex h-64 w-full items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
           <p className="text-gray-400">No equipment found to display analytics.</p>
         </div>
       ) : selectedEquipmentId ? (
@@ -320,7 +353,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
           {(() => {
             const selectedEquipment = getSelectedEquipment();
             if (!selectedEquipment) return null;
-            
+
             return (
               <SimpleTemperatureChart
                 key={selectedEquipment.id}
@@ -332,15 +365,16 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
           })()}
         </div>
       ) : (
-        <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] w-full h-64 flex items-center justify-center">
+        <div className="flex h-64 w-full items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
           <div className="text-center">
-            <div className="text-4xl mb-4">📊</div>
-            <p className="text-gray-400 mb-2">Select an equipment to view its temperature chart</p>
-            <p className="text-sm text-gray-500">Click on any equipment card above to see detailed analytics</p>
+            <div className="mb-4 text-4xl">📊</div>
+            <p className="mb-2 text-gray-400">Select an equipment to view its temperature chart</p>
+            <p className="text-sm text-gray-500">
+              Click on any equipment card above to see detailed analytics
+            </p>
           </div>
         </div>
       )}
-
     </div>
   );
 }

@@ -23,4 +23,3 @@ export interface TemperatureEquipment {
   created_at: string;
   updated_at: string;
 }
-

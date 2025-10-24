@@ -7,22 +7,18 @@ export async function GET() {
       return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
     }
 
-    const { data: recipes, error } = await supabaseAdmin
-      .from('recipes')
-      .select('*')
-      .order('name');
+    const { data: recipes, error } = await supabaseAdmin.from('recipes').select('*').order('name');
 
     if (error) {
       console.error('Error fetching recipes:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       recipes: recipes || [],
-      count: recipes?.length || 0
+      count: recipes?.length || 0,
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

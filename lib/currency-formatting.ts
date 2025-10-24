@@ -28,7 +28,7 @@ const formatterCache = new Map<string, Intl.NumberFormat>();
  */
 function getCurrencyFormatter(currency: string): Intl.NumberFormat {
   const cacheKey = currency;
-  
+
   if (!formatterCache.has(cacheKey)) {
     const config = CURRENCY_CONFIGS[currency] || CURRENCY_CONFIGS.AUD;
     const formatter = new Intl.NumberFormat(config.locale, {
@@ -39,7 +39,7 @@ function getCurrencyFormatter(currency: string): Intl.NumberFormat {
     });
     formatterCache.set(cacheKey, formatter);
   }
-  
+
   return formatterCache.get(cacheKey)!;
 }
 
@@ -47,16 +47,16 @@ function getCurrencyFormatter(currency: string): Intl.NumberFormat {
  * Format currency amount with proper localization
  */
 export function formatCurrency(
-  amount: number, 
+  amount: number,
   currency: string = 'AUD',
   options?: {
     showSymbol?: boolean;
     compact?: boolean;
-  }
+  },
 ): string {
   const config = CURRENCY_CONFIGS[currency] || CURRENCY_CONFIGS.AUD;
   const { showSymbol = true, compact = false } = options || {};
-  
+
   if (compact && amount >= 1000) {
     // Use compact notation for large numbers
     const formatter = new Intl.NumberFormat(config.locale, {
@@ -67,7 +67,7 @@ export function formatCurrency(
     });
     return formatter.format(amount);
   }
-  
+
   const formatter = getCurrencyFormatter(currency);
   return formatter.format(amount);
 }
@@ -81,11 +81,11 @@ export function formatCurrencyWithCountry(
   options?: {
     includeTax?: boolean;
     compact?: boolean;
-  }
+  },
 ): string {
   const { includeTax = false, compact = false } = options || {};
   const finalAmount = includeTax ? amount * (1 + countryConfig.taxRate) : amount;
-  
+
   if (compact && finalAmount >= 1000) {
     return new Intl.NumberFormat(countryConfig.locale, {
       style: 'currency',
@@ -94,7 +94,7 @@ export function formatCurrencyWithCountry(
       maximumFractionDigits: 1,
     }).format(finalAmount);
   }
-  
+
   return new Intl.NumberFormat(countryConfig.locale, {
     style: 'currency',
     currency: countryConfig.currency,
@@ -106,16 +106,13 @@ export function formatCurrencyWithCountry(
 /**
  * Format currency for display in tables (without symbol)
  */
-export function formatCurrencyValue(
-  amount: number, 
-  currency: string = 'AUD'
-): string {
+export function formatCurrencyValue(amount: number, currency: string = 'AUD'): string {
   const config = CURRENCY_CONFIGS[currency] || CURRENCY_CONFIGS.AUD;
   const formatter = new Intl.NumberFormat(config.locale, {
     minimumFractionDigits: config.decimals,
     maximumFractionDigits: config.decimals,
   });
-  
+
   return formatter.format(amount);
 }
 
@@ -124,12 +121,10 @@ export function formatCurrencyValue(
  */
 export function parseCurrency(value: string, currency: string = 'AUD'): number {
   const config = CURRENCY_CONFIGS[currency] || CURRENCY_CONFIGS.AUD;
-  
+
   // Remove currency symbols and spaces
-  const cleanValue = value
-    .replace(/[^\d.,-]/g, '')
-    .replace(',', '.');
-  
+  const cleanValue = value.replace(/[^\d.,-]/g, '').replace(',', '.');
+
   return parseFloat(cleanValue) || 0;
 }
 
@@ -152,16 +147,16 @@ export function getSupportedCurrencies(): string[] {
  * Format percentage with proper localization
  */
 export function formatPercentage(
-  value: number, 
+  value: number,
   decimals: number = 1,
-  locale: string = 'en-AU'
+  locale: string = 'en-AU',
 ): string {
   const formatter = new Intl.NumberFormat(locale, {
     style: 'percent',
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
-  
+
   return formatter.format(value / 100);
 }
 
@@ -169,14 +164,14 @@ export function formatPercentage(
  * Format number with thousand separators
  */
 export function formatNumber(
-  value: number, 
+  value: number,
   locale: string = 'en-AU',
-  decimals: number = 2
+  decimals: number = 2,
 ): string {
   const formatter = new Intl.NumberFormat(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
-  
+
   return formatter.format(value);
 }

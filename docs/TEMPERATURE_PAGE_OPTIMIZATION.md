@@ -87,8 +87,7 @@ const TemperatureThresholdsTab = lazy(() => import('./components/TemperatureThre
 
 // Use React.memo for expensive components
 const MemoizedChart = memo(TemperatureChart, (prevProps, nextProps) => {
-  return prevProps.data === nextProps.data && 
-         prevProps.timeFilter === nextProps.timeFilter;
+  return prevProps.data === nextProps.data && prevProps.timeFilter === nextProps.timeFilter;
 });
 ```
 
@@ -98,7 +97,7 @@ const MemoizedChart = memo(TemperatureChart, (prevProps, nextProps) => {
 // Implement data caching
 const useTemperatureData = () => {
   const queryClient = useQueryClient();
-  
+
   return useQuery({
     queryKey: ['temperature-logs', filters],
     queryFn: fetchTemperatureLogs,
@@ -113,7 +112,7 @@ const usePaginatedLogs = (pageSize = 50) => {
   return useInfiniteQuery({
     queryKey: ['temperature-logs-paginated'],
     queryFn: ({ pageParam = 0 }) => fetchLogs(pageParam, pageSize),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    getNextPageParam: lastPage => lastPage.nextCursor,
   });
 };
 ```
@@ -132,7 +131,7 @@ const usePaginatedLogs = (pageSize = 50) => {
     min-width: 100vw;
     height: 300px;
   }
-  
+
   .quick-input {
     @apply text-base; /* Larger for mobile */
     min-height: 44px; /* Touch target size */
@@ -153,7 +152,7 @@ useEffect(() => {
       setShowAddLog(false);
     }
   };
-  
+
   window.addEventListener('keydown', handleKeyPress);
   return () => window.removeEventListener('keydown', handleKeyPress);
 }, []);
@@ -164,7 +163,7 @@ const useDraftSaver = (formData: any) => {
     const timeoutId = setTimeout(() => {
       localStorage.setItem('temperature-draft', JSON.stringify(formData));
     }, 1000);
-    
+
     return () => clearTimeout(timeoutId);
   }, [formData]);
 };
@@ -216,7 +215,7 @@ const TemperatureErrorBoundary = ({ children }) => {
 // Progressive loading
 const ProgressiveChart = ({ data }) => {
   const [visibleData, setVisibleData] = useState(data.slice(0, 50));
-  
+
   useEffect(() => {
     const loadMore = () => {
       setVisibleData(prev => [
@@ -224,12 +223,12 @@ const ProgressiveChart = ({ data }) => {
         ...data.slice(prev.length, prev.length + 50)
       ]);
     };
-    
+
     if (visibleData.length < data.length) {
       requestIdleCallback(loadMore);
     }
   }, [visibleData, data]);
-  
+
   return <Chart data={visibleData} />;
 };
 ```

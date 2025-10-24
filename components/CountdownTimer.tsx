@@ -15,14 +15,18 @@ interface TimeLeft {
   seconds: number;
 }
 
-export default function CountdownTimer({ endDate, onExpired, showSeconds = true }: CountdownTimerProps) {
+export default function CountdownTimer({
+  endDate,
+  onExpired,
+  showSeconds = true,
+}: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
     const calculateTimeLeft = (): TimeLeft => {
       const difference = endDate.getTime() - new Date().getTime();
-      
+
       if (difference <= 0) {
         setIsExpired(true);
         onExpired?.();
@@ -33,7 +37,7 @@ export default function CountdownTimer({ endDate, onExpired, showSeconds = true 
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
+        seconds: Math.floor((difference / 1000) % 60),
       };
     };
 
@@ -51,64 +55,58 @@ export default function CountdownTimer({ endDate, onExpired, showSeconds = true 
   if (isExpired) {
     return (
       <div className="text-center">
-        <div className="text-2xl font-bold text-red-500 mb-2">
-          ⏰ Launch Discount Expired
-        </div>
-        <p className="text-gray-400 text-sm">
-          Regular pricing now applies
-        </p>
+        <div className="mb-2 text-2xl font-bold text-red-500">⏰ Launch Discount Expired</div>
+        <p className="text-sm text-gray-400">Regular pricing now applies</p>
       </div>
     );
   }
 
   return (
     <div className="text-center">
-      <div className="text-sm text-gray-400 mb-2">
-        🔥 Launch discount ends in:
-      </div>
-      <div className="flex items-center justify-center gap-3 mb-3">
+      <div className="mb-2 text-sm text-gray-400">🔥 Launch discount ends in:</div>
+      <div className="mb-3 flex items-center justify-center gap-3">
         {/* Days */}
         <div className="flex flex-col items-center">
-          <div className="bg-[#D925C7] text-white text-lg font-bold px-3 py-2 rounded-lg min-w-[3rem]">
+          <div className="min-w-[3rem] rounded-lg bg-[#D925C7] px-3 py-2 text-lg font-bold text-white">
             {timeLeft.days.toString().padStart(2, '0')}
           </div>
-          <span className="text-xs text-gray-400 mt-1">Days</span>
+          <span className="mt-1 text-xs text-gray-400">Days</span>
         </div>
-        
+
         {/* Hours */}
         <div className="flex flex-col items-center">
-          <div className="bg-[#29E7CD] text-black text-lg font-bold px-3 py-2 rounded-lg min-w-[3rem]">
+          <div className="min-w-[3rem] rounded-lg bg-[#29E7CD] px-3 py-2 text-lg font-bold text-black">
             {timeLeft.hours.toString().padStart(2, '0')}
           </div>
-          <span className="text-xs text-gray-400 mt-1">Hours</span>
+          <span className="mt-1 text-xs text-gray-400">Hours</span>
         </div>
-        
+
         {/* Minutes */}
         <div className="flex flex-col items-center">
-          <div className="bg-[#3B82F6] text-white text-lg font-bold px-3 py-2 rounded-lg min-w-[3rem]">
+          <div className="min-w-[3rem] rounded-lg bg-[#3B82F6] px-3 py-2 text-lg font-bold text-white">
             {timeLeft.minutes.toString().padStart(2, '0')}
           </div>
-          <span className="text-xs text-gray-400 mt-1">Minutes</span>
+          <span className="mt-1 text-xs text-gray-400">Minutes</span>
         </div>
-        
+
         {/* Seconds */}
         {showSeconds && (
           <div className="flex flex-col items-center">
-            <div className="bg-gray-600 text-white text-lg font-bold px-3 py-2 rounded-lg min-w-[3rem]">
+            <div className="min-w-[3rem] rounded-lg bg-gray-600 px-3 py-2 text-lg font-bold text-white">
               {timeLeft.seconds.toString().padStart(2, '0')}
             </div>
-            <span className="text-xs text-gray-400 mt-1">Seconds</span>
+            <span className="mt-1 text-xs text-gray-400">Seconds</span>
           </div>
         )}
       </div>
-      
+
       {/* Urgency message */}
-      <div className="text-sm text-[#29E7CD] font-semibold">
-        {timeLeft.days === 0 && timeLeft.hours < 6 
-          ? '🚨 Last few hours remaining!' 
-          : timeLeft.days === 0 
-          ? '⚡ Final day - don\'t miss out!' 
-          : '🔥 Limited time offer - secure your discount!'}
+      <div className="text-sm font-semibold text-[#29E7CD]">
+        {timeLeft.days === 0 && timeLeft.hours < 6
+          ? '🚨 Last few hours remaining!'
+          : timeLeft.days === 0
+            ? "⚡ Final day - don't miss out!"
+            : '🔥 Limited time offer - secure your discount!'}
       </div>
     </div>
   );

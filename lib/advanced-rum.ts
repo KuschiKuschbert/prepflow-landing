@@ -5,30 +5,30 @@
 export const RUM_CONFIG = {
   // Sampling rates
   sampling: {
-    performance: 0.1,      // 10% of users for performance monitoring
-    errors: 1.0,           // 100% of users for error tracking
+    performance: 0.1, // 10% of users for performance monitoring
+    errors: 1.0, // 100% of users for error tracking
     userInteractions: 0.05, // 5% of users for interaction tracking
-    resourceTiming: 0.2,   // 20% of users for resource timing
+    resourceTiming: 0.2, // 20% of users for resource timing
   },
-  
+
   // Performance thresholds
   thresholds: {
-    lcp: 2500,             // Largest Contentful Paint (ms)
-    fid: 100,              // First Input Delay (ms)
-    cls: 0.1,              // Cumulative Layout Shift
-    fcp: 1800,             // First Contentful Paint (ms)
-    tti: 3800,             // Time to Interactive (ms)
-    si: 3000,              // Speed Index (ms)
-    tbt: 300,              // Total Blocking Time (ms)
+    lcp: 2500, // Largest Contentful Paint (ms)
+    fid: 100, // First Input Delay (ms)
+    cls: 0.1, // Cumulative Layout Shift
+    fcp: 1800, // First Contentful Paint (ms)
+    tti: 3800, // Time to Interactive (ms)
+    si: 3000, // Speed Index (ms)
+    tbt: 300, // Total Blocking Time (ms)
   },
-  
+
   // Error tracking
   errorTracking: {
     enabled: true,
-    maxErrors: 100,        // Maximum errors to track per session
-    errorTimeout: 5000,    // Error timeout in ms
+    maxErrors: 100, // Maximum errors to track per session
+    errorTimeout: 5000, // Error timeout in ms
   },
-  
+
   // Session tracking
   session: {
     timeout: 30 * 60 * 1000, // 30 minutes
@@ -125,55 +125,55 @@ export class AdvancedRUMManager {
   private observers: Map<string, PerformanceObserver> = new Map();
   private errorCount = 0;
   private isInitialized = false;
-  
+
   static getInstance(): AdvancedRUMManager {
     if (!AdvancedRUMManager.instance) {
       AdvancedRUMManager.instance = new AdvancedRUMManager();
     }
     return AdvancedRUMManager.instance;
   }
-  
+
   constructor() {
     this.sessionId = this.generateSessionId();
     this.startTime = Date.now();
     this.data = this.initializeRUMData();
   }
-  
+
   // Initialize RUM monitoring
   initialize(): void {
     if (this.isInitialized || typeof window === 'undefined') return;
-    
+
     console.log('🔍 Initializing Advanced RUM monitoring...');
-    
+
     // Initialize performance monitoring
     this.initializePerformanceMonitoring();
-    
+
     // Initialize error tracking
     this.initializeErrorTracking();
-    
+
     // Initialize interaction tracking
     this.initializeInteractionTracking();
-    
+
     // Initialize resource monitoring
     this.initializeResourceMonitoring();
-    
+
     // Initialize navigation monitoring
     this.initializeNavigationMonitoring();
-    
+
     // Initialize session management
     this.initializeSessionManagement();
-    
+
     this.isInitialized = true;
     console.log('✅ Advanced RUM monitoring initialized');
   }
-  
+
   // Initialize performance monitoring
   private initializePerformanceMonitoring(): void {
     if (Math.random() > RUM_CONFIG.sampling.performance) return;
-    
+
     // LCP Observer
     if ('PerformanceObserver' in window) {
-      const lcpObserver = new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver(list => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1] as PerformanceEntry;
         if (lastEntry) {
@@ -184,10 +184,10 @@ export class AdvancedRUMManager {
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       this.observers.set('lcp', lcpObserver);
     }
-    
+
     // FID Observer
     if ('PerformanceObserver' in window) {
-      const fidObserver = new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver(list => {
         list.getEntries().forEach((entry: any) => {
           const fid = entry.processingStart - entry.startTime;
           this.data.performance.fid = fid;
@@ -197,11 +197,11 @@ export class AdvancedRUMManager {
       fidObserver.observe({ entryTypes: ['first-input'] });
       this.observers.set('fid', fidObserver);
     }
-    
+
     // CLS Observer
     if ('PerformanceObserver' in window) {
       let clsValue = 0;
-      const clsObserver = new PerformanceObserver((list) => {
+      const clsObserver = new PerformanceObserver(list => {
         list.getEntries().forEach((entry: any) => {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
@@ -210,14 +210,14 @@ export class AdvancedRUMManager {
       });
       clsObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.set('cls', clsObserver);
-      
+
       // Track CLS after a delay
       setTimeout(() => {
         this.data.performance.cls = clsValue;
         this.trackPerformanceMetric('cls', clsValue);
       }, 5000);
     }
-    
+
     // Memory monitoring
     if ('memory' in performance) {
       const memory = (performance as any).memory;
@@ -228,13 +228,13 @@ export class AdvancedRUMManager {
       };
     }
   }
-  
+
   // Initialize error tracking
   private initializeErrorTracking(): void {
     if (!RUM_CONFIG.errorTracking.enabled) return;
-    
+
     // Global error handler
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', event => {
       this.trackError({
         message: event.message,
         stack: event.error?.stack,
@@ -253,9 +253,9 @@ export class AdvancedRUMManager {
         },
       });
     });
-    
+
     // Unhandled promise rejection handler
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener('unhandledrejection', event => {
       this.trackError({
         message: `Unhandled Promise Rejection: ${event.reason}`,
         stack: event.reason?.stack,
@@ -268,15 +268,15 @@ export class AdvancedRUMManager {
       });
     });
   }
-  
+
   // Initialize interaction tracking
   private initializeInteractionTracking(): void {
     if (Math.random() > RUM_CONFIG.sampling.userInteractions) return;
-    
+
     const interactionTypes = ['click', 'scroll', 'keydown', 'resize', 'focus', 'blur'];
-    
+
     interactionTypes.forEach(type => {
-      window.addEventListener(type, (event) => {
+      window.addEventListener(type, event => {
         this.trackInteraction({
           type: type as any,
           target: this.getElementSelector(event.target as Element),
@@ -290,13 +290,13 @@ export class AdvancedRUMManager {
       });
     });
   }
-  
+
   // Initialize resource monitoring
   private initializeResourceMonitoring(): void {
     if (Math.random() > RUM_CONFIG.sampling.resourceTiming) return;
-    
+
     if ('PerformanceObserver' in window) {
-      const resourceObserver = new PerformanceObserver((list) => {
+      const resourceObserver = new PerformanceObserver(list => {
         list.getEntries().forEach((entry: any) => {
           if (entry.entryType === 'resource') {
             this.trackResource({
@@ -316,11 +316,11 @@ export class AdvancedRUMManager {
       this.observers.set('resource', resourceObserver);
     }
   }
-  
+
   // Initialize navigation monitoring
   private initializeNavigationMonitoring(): void {
     if ('PerformanceObserver' in window) {
-      const navObserver = new PerformanceObserver((list) => {
+      const navObserver = new PerformanceObserver(list => {
         list.getEntries().forEach((entry: any) => {
           if (entry.entryType === 'navigation') {
             this.data.navigation = {
@@ -340,14 +340,14 @@ export class AdvancedRUMManager {
       this.observers.set('navigation', navObserver);
     }
   }
-  
+
   // Initialize session management
   private initializeSessionManagement(): void {
     // Session timeout
     setTimeout(() => {
       this.endSession();
     }, RUM_CONFIG.session.timeout);
-    
+
     // Page visibility change
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
@@ -356,22 +356,24 @@ export class AdvancedRUMManager {
         this.resumeSession();
       }
     });
-    
+
     // Page unload
     window.addEventListener('beforeunload', () => {
       this.endSession();
     });
   }
-  
+
   // Track performance metric
   private trackPerformanceMetric(metric: string, value: number): void {
     const threshold = RUM_CONFIG.thresholds[metric as keyof typeof RUM_CONFIG.thresholds];
     const isViolation = threshold && value > threshold;
-    
+
     if (isViolation) {
-      console.warn(`⚠️ Performance threshold exceeded: ${metric} = ${value}ms (threshold: ${threshold}ms)`);
+      console.warn(
+        `⚠️ Performance threshold exceeded: ${metric} = ${value}ms (threshold: ${threshold}ms)`,
+      );
     }
-    
+
     // Send to analytics
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'performance_metric', {
@@ -385,16 +387,16 @@ export class AdvancedRUMManager {
       });
     }
   }
-  
+
   // Track error
   private trackError(error: ErrorData): void {
     if (this.errorCount >= RUM_CONFIG.errorTracking.maxErrors) return;
-    
+
     this.data.errors.push(error);
     this.errorCount++;
-    
+
     console.error('🚨 RUM Error tracked:', error);
-    
+
     // Send to analytics
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'rum_error', {
@@ -408,11 +410,11 @@ export class AdvancedRUMManager {
       });
     }
   }
-  
+
   // Track interaction
   private trackInteraction(interaction: InteractionData): void {
     this.data.interactions.push(interaction);
-    
+
     // Send to analytics
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'user_interaction', {
@@ -424,11 +426,11 @@ export class AdvancedRUMManager {
       });
     }
   }
-  
+
   // Track resource
   private trackResource(resource: ResourceData): void {
     this.data.resources.push(resource);
-    
+
     // Send to analytics
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'resource_load', {
@@ -443,7 +445,7 @@ export class AdvancedRUMManager {
       });
     }
   }
-  
+
   // Get error severity
   private getErrorSeverity(error: Error): 'low' | 'medium' | 'high' | 'critical' {
     if (error.name === 'ChunkLoadError' || error.name === 'Loading chunk failed') {
@@ -457,19 +459,19 @@ export class AdvancedRUMManager {
     }
     return 'low';
   }
-  
+
   // Get element selector
   private getElementSelector(element: Element): string {
     if (element.id) return `#${element.id}`;
     if (element.className) return `.${element.className.split(' ')[0]}`;
     return element.tagName.toLowerCase();
   }
-  
+
   // Generate session ID
   private generateSessionId(): string {
     return 'rum_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
   }
-  
+
   // Initialize RUM data
   private initializeRUMData(): RUMData {
     if (typeof window === 'undefined') {
@@ -502,7 +504,7 @@ export class AdvancedRUMManager {
         },
       };
     }
-    
+
     return {
       sessionId: this.sessionId,
       userId: this.userId,
@@ -534,29 +536,29 @@ export class AdvancedRUMManager {
       },
     };
   }
-  
+
   // Pause session
   private pauseSession(): void {
     console.log('⏸️ RUM session paused');
   }
-  
+
   // Resume session
   private resumeSession(): void {
     console.log('▶️ RUM session resumed');
   }
-  
+
   // End session
   private endSession(): void {
     console.log('🏁 RUM session ended');
-    
+
     // Send final data
     this.sendRUMData();
-    
+
     // Clean up observers
     this.observers.forEach(observer => observer.disconnect());
     this.observers.clear();
   }
-  
+
   // Send RUM data
   private sendRUMData(): void {
     // Send to analytics
@@ -576,18 +578,18 @@ export class AdvancedRUMManager {
       });
     }
   }
-  
+
   // Get RUM data
   getRUMData(): RUMData {
     return { ...this.data };
   }
-  
+
   // Set user ID
   setUserId(userId: string): void {
     this.userId = userId;
     this.data.userId = userId;
   }
-  
+
   // Get session ID
   getSessionId(): string {
     return this.sessionId;
@@ -613,7 +615,11 @@ export function trackCustomError(message: string, context?: Record<string, any>)
 }
 
 // Track custom interaction
-export function trackCustomInteraction(type: string, target: string, data?: Record<string, any>): void {
+export function trackCustomInteraction(
+  type: string,
+  target: string,
+  data?: Record<string, any>,
+): void {
   advancedRUMManager['trackInteraction']({
     type: type as any,
     target,

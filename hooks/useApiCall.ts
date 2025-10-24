@@ -19,50 +19,49 @@ interface UseApiCallReturn<T> {
 
 export function useApiCall<T = any>(
   apiFunction: (...args: any[]) => Promise<T>,
-  options: UseApiCallOptions = {}
+  options: UseApiCallOptions = {},
 ): UseApiCallReturn<T> {
-  const {
-    immediate = false,
-    retryOnError = false,
-    maxRetries = 3,
-  } = options;
+  const { immediate = false, retryOnError = false, maxRetries = 3 } = options;
 
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
 
-  const execute = useCallback(async (...args: any[]): Promise<ApiResponse<T>> => {
-    setLoading(true);
-    setError(null);
+  const execute = useCallback(
+    async (...args: any[]): Promise<ApiResponse<T>> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const result = await withErrorHandling(() => apiFunction(...args));
-      
-      if (result.success && result.data !== undefined) {
-        setData(result.data);
-        setError(null);
-      } else {
-        setError(result.error || null);
+      try {
+        const result = await withErrorHandling(() => apiFunction(...args));
+
+        if (result.success && result.data !== undefined) {
+          setData(result.data);
+          setError(null);
+        } else {
+          setError(result.error || null);
+          setData(null);
+        }
+
+        return result;
+      } catch (err) {
+        const apiError: ApiError = {
+          message: 'An unexpected error occurred',
+          code: 'UNEXPECTED_ERROR',
+        };
+        setError(apiError);
         setData(null);
-      }
 
-      return result;
-    } catch (err) {
-      const apiError: ApiError = {
-        message: 'An unexpected error occurred',
-        code: 'UNEXPECTED_ERROR',
-      };
-      setError(apiError);
-      setData(null);
-      
-      return {
-        success: false,
-        error: apiError,
-      };
-    } finally {
-      setLoading(false);
-    }
-  }, [apiFunction]);
+        return {
+          success: false,
+          error: apiError,
+        };
+      } finally {
+        setLoading(false);
+      }
+    },
+    [apiFunction],
+  );
 
   const reset = useCallback(() => {
     setData(null);
@@ -88,46 +87,49 @@ export function useApiCall<T = any>(
 // Hook for handling multiple API calls
 export function useApiCalls<T = any>(
   apiFunctions: Array<(...args: any[]) => Promise<T>>,
-  options: UseApiCallOptions = {}
+  options: UseApiCallOptions = {},
 ) {
   const [results, setResults] = useState<Array<ApiResponse<T>>>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Array<ApiError | null>>([]);
 
-  const executeAll = useCallback(async (...args: any[]): Promise<ApiResponse<T>[]> => {
-    setLoading(true);
-    setErrors([]);
+  const executeAll = useCallback(
+    async (...args: any[]): Promise<ApiResponse<T>[]> => {
+      setLoading(true);
+      setErrors([]);
 
-    try {
-      const promises = apiFunctions.map(apiFunction => 
-        withErrorHandling(() => apiFunction(...args))
-      );
+      try {
+        const promises = apiFunctions.map(apiFunction =>
+          withErrorHandling(() => apiFunction(...args)),
+        );
 
-      const results = await Promise.all(promises);
-      
-      setResults(results);
-      setErrors(results.map(result => result.error || null));
+        const results = await Promise.all(promises);
 
-      return results;
-    } catch (err) {
-      const apiError: ApiError = {
-        message: 'An unexpected error occurred',
-        code: 'UNEXPECTED_ERROR',
-      };
-      
-      const errorResults = apiFunctions.map(() => ({
-        success: false,
-        error: apiError,
-      }));
+        setResults(results);
+        setErrors(results.map(result => result.error || null));
 
-      setResults(errorResults);
-      setErrors(apiFunctions.map(() => apiError));
+        return results;
+      } catch (err) {
+        const apiError: ApiError = {
+          message: 'An unexpected error occurred',
+          code: 'UNEXPECTED_ERROR',
+        };
 
-      return errorResults;
-    } finally {
-      setLoading(false);
-    }
-  }, [apiFunctions]);
+        const errorResults = apiFunctions.map(() => ({
+          success: false,
+          error: apiError,
+        }));
+
+        setResults(errorResults);
+        setErrors(apiFunctions.map(() => apiError));
+
+        return errorResults;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [apiFunctions],
+  );
 
   const reset = useCallback(() => {
     setResults([]);
@@ -154,45 +156,51 @@ export function useApiCalls<T = any>(
 export function useCachedApiCall<T = any>(
   apiFunction: (...args: any[]) => Promise<T>,
   cacheKey: string,
-  options: UseApiCallOptions & { cacheTimeout?: number } = {}
+  options: UseApiCallOptions & { cacheTimeout?: number } = {},
 ) {
   const { cacheTimeout = 5 * 60 * 1000 } = options; // 5 minutes default
   const apiCall = useApiCall(apiFunction, options);
 
-  const executeWithCache = useCallback(async (...args: any[]): Promise<ApiResponse<T>> => {
-    const cacheKeyWithArgs = `${cacheKey}_${JSON.stringify(args)}`;
-    const cached = sessionStorage.getItem(cacheKeyWithArgs);
-    
-    if (cached) {
-      try {
-        const { data: cachedData, timestamp } = JSON.parse(cached);
-        
-        if (Date.now() - timestamp < cacheTimeout) {
-          apiCall.reset();
-          // Set data directly without going through the API call
-          (apiCall as any).setData(cachedData);
-          return {
-            success: true,
-            data: cachedData,
-          };
+  const executeWithCache = useCallback(
+    async (...args: any[]): Promise<ApiResponse<T>> => {
+      const cacheKeyWithArgs = `${cacheKey}_${JSON.stringify(args)}`;
+      const cached = sessionStorage.getItem(cacheKeyWithArgs);
+
+      if (cached) {
+        try {
+          const { data: cachedData, timestamp } = JSON.parse(cached);
+
+          if (Date.now() - timestamp < cacheTimeout) {
+            apiCall.reset();
+            // Set data directly without going through the API call
+            (apiCall as any).setData(cachedData);
+            return {
+              success: true,
+              data: cachedData,
+            };
+          }
+        } catch (err) {
+          // Invalid cache, continue with API call
         }
-      } catch (err) {
-        // Invalid cache, continue with API call
       }
-    }
 
-    const result = await apiCall.execute(...args);
-    
-    if (result.success && result.data) {
-      // Cache the successful result
-      sessionStorage.setItem(cacheKeyWithArgs, JSON.stringify({
-        data: result.data,
-        timestamp: Date.now(),
-      }));
-    }
+      const result = await apiCall.execute(...args);
 
-    return result;
-  }, [apiCall, cacheKey, cacheTimeout]);
+      if (result.success && result.data) {
+        // Cache the successful result
+        sessionStorage.setItem(
+          cacheKeyWithArgs,
+          JSON.stringify({
+            data: result.data,
+            timestamp: Date.now(),
+          }),
+        );
+      }
+
+      return result;
+    },
+    [apiCall, cacheKey, cacheTimeout],
+  );
 
   return {
     ...apiCall,

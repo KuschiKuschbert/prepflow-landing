@@ -9,12 +9,12 @@ export function usePerformanceFilters(performanceItems: PerformanceItem[]) {
     sortBy: 'gross_profit_percentage',
     sortOrder: 'desc',
     currentPage: 1,
-    itemsPerPage: 20
+    itemsPerPage: 20,
   });
 
   const filteredAndSortedItems = useMemo(() => {
     let filtered = performanceItems.filter(item =>
-      item.name.toLowerCase().includes(filters.searchTerm.toLowerCase())
+      item.name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
     );
 
     filtered.sort((a, b) => {
@@ -66,7 +66,12 @@ export function usePerformanceFilters(performanceItems: PerformanceItem[]) {
       ...prev,
       ...updates,
       // Reset to page 1 when changing search or sort
-      currentPage: updates.searchTerm !== undefined || updates.sortBy !== undefined || updates.sortOrder !== undefined ? 1 : prev.currentPage
+      currentPage:
+        updates.searchTerm !== undefined ||
+        updates.sortBy !== undefined ||
+        updates.sortOrder !== undefined
+          ? 1
+          : prev.currentPage,
     }));
   };
 
@@ -75,6 +80,6 @@ export function usePerformanceFilters(performanceItems: PerformanceItem[]) {
     updateFilters,
     filteredAndSortedItems,
     paginatedItems,
-    totalPages
+    totalPages,
   };
 }

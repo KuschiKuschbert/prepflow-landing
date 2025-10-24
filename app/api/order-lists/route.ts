@@ -7,21 +7,28 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     if (!userId) {
-      return NextResponse.json({ 
-        error: 'User ID is required',
-        message: 'Please provide a valid user ID'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'User ID is required',
+          message: 'Please provide a valid user ID',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
       .from('order_lists')
-      .select(`
+      .select(
+        `
         *,
         suppliers (
           id,
@@ -43,29 +50,35 @@ export async function GET(request: NextRequest) {
             category
           )
         )
-      `)
+      `,
+      )
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching order lists:', error);
-      return NextResponse.json({ 
-        error: 'Failed to fetch order lists',
-        message: 'Could not retrieve order list data'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to fetch order lists',
+          message: 'Could not retrieve order list data',
+        },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
-
   } catch (error) {
     console.error('Order lists API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -75,16 +88,22 @@ export async function POST(request: NextRequest) {
     const { userId, supplierId, name, notes, items } = body;
 
     if (!userId || !supplierId || !name) {
-      return NextResponse.json({ 
-        error: 'Missing required fields',
-        message: 'User ID, supplier ID, and name are required'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Missing required fields',
+          message: 'User ID, supplier ID, and name are required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     // Create the order list
@@ -97,17 +116,20 @@ export async function POST(request: NextRequest) {
         notes: notes,
         status: 'draft',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
 
     if (orderError) {
       console.error('Error creating order list:', orderError);
-      return NextResponse.json({ 
-        error: 'Failed to create order list',
-        message: 'Could not save order list data'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to create order list',
+          message: 'Could not save order list data',
+        },
+        { status: 500 },
+      );
     }
 
     // Add items if provided
@@ -117,12 +139,10 @@ export async function POST(request: NextRequest) {
         ingredient_id: item.ingredientId,
         quantity: item.quantity,
         unit: item.unit,
-        notes: item.notes
+        notes: item.notes,
       }));
 
-      const { error: itemsError } = await supabaseAdmin
-        .from('order_list_items')
-        .insert(orderItems);
+      const { error: itemsError } = await supabaseAdmin.from('order_list_items').insert(orderItems);
 
       if (itemsError) {
         console.error('Error creating order list items:', itemsError);
@@ -130,18 +150,20 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Order list created successfully',
-      data: orderList
+      data: orderList,
     });
-
   } catch (error) {
     console.error('Order lists API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -151,14 +173,17 @@ export async function PUT(request: NextRequest) {
     const { id, supplierId, name, notes, status, items } = body;
 
     if (!id) {
-      return NextResponse.json({ 
-        error: 'Missing required fields',
-        message: 'Order list ID is required'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Missing required fields',
+          message: 'Order list ID is required',
+        },
+        { status: 400 },
+      );
     }
 
     const updateData: any = {
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     if (supplierId !== undefined) updateData.supplier_id = supplierId;
@@ -167,9 +192,12 @@ export async function PUT(request: NextRequest) {
     if (status !== undefined) updateData.status = status;
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
@@ -181,19 +209,19 @@ export async function PUT(request: NextRequest) {
 
     if (error) {
       console.error('Error updating order list:', error);
-      return NextResponse.json({ 
-        error: 'Failed to update order list',
-        message: 'Could not update order list data'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to update order list',
+          message: 'Could not update order list data',
+        },
+        { status: 500 },
+      );
     }
 
     // Update items if provided
     if (items !== undefined) {
       // Delete existing items
-      await supabaseAdmin
-        .from('order_list_items')
-        .delete()
-        .eq('order_list_id', id);
+      await supabaseAdmin.from('order_list_items').delete().eq('order_list_id', id);
 
       // Add new items
       if (items.length > 0) {
@@ -202,27 +230,27 @@ export async function PUT(request: NextRequest) {
           ingredient_id: item.ingredientId,
           quantity: item.quantity,
           unit: item.unit,
-          notes: item.notes
+          notes: item.notes,
         }));
 
-        await supabaseAdmin
-          .from('order_list_items')
-          .insert(orderItems);
+        await supabaseAdmin.from('order_list_items').insert(orderItems);
       }
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Order list updated successfully',
-      data
+      data,
     });
-
   } catch (error) {
     console.error('Order lists API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -232,48 +260,53 @@ export async function DELETE(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ 
-        error: 'Missing ID',
-        message: 'Order list ID is required'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Missing ID',
+          message: 'Order list ID is required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     // Delete order list items first (foreign key constraint)
-    await supabaseAdmin
-      .from('order_list_items')
-      .delete()
-      .eq('order_list_id', id);
+    await supabaseAdmin.from('order_list_items').delete().eq('order_list_id', id);
 
     // Delete the order list
-    const { error } = await supabaseAdmin
-      .from('order_lists')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabaseAdmin.from('order_lists').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting order list:', error);
-      return NextResponse.json({ 
-        error: 'Failed to delete order list',
-        message: 'Could not remove order list'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to delete order list',
+          message: 'Could not remove order list',
+        },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      message: 'Order list deleted successfully'
+      message: 'Order list deleted successfully',
     });
-
   } catch (error) {
     console.error('Order lists API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }

@@ -42,13 +42,13 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
     const checkFoodTemperatureWarning = () => {
       const today = new Date();
       const todayString = today.toISOString().split('T')[0];
-      
+
       // Filter logs for today
       const todayLogs = allLogs.filter(log => log.log_date === todayString);
-      
+
       // Check if there are any food temperature logs for today
-      const foodLogsToday = todayLogs.filter(log => 
-        log.temperature_type === 'food' || log.temperature_type === 'Food'
+      const foodLogsToday = todayLogs.filter(
+        log => log.temperature_type === 'food' || log.temperature_type === 'Food',
       );
 
       // If no food items were temped today, show warning
@@ -56,12 +56,13 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
         addWarning({
           type: 'warning',
           title: 'Temperature Monitoring Alert',
-          message: 'No food items have been temperature checked today. Ensure all food items are properly monitored for safety compliance.',
+          message:
+            'No food items have been temperature checked today. Ensure all food items are properly monitored for safety compliance.',
           action: {
             label: 'Go to Temperature Logs',
             onClick: () => {
               window.location.href = '/webapp/temperature';
-            }
+            },
           },
           dismissible: true,
           autoHide: false,
@@ -71,39 +72,39 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
 
     // Check for equipment that hasn't been temperature checked in the last 8 hours
     const checkEquipmentTemperatureWarning = () => {
-             const now = new Date();
-             const eightHoursAgo = new Date(now.getTime() - (8 * 60 * 60 * 1000)); // 8 hours ago
-             
-             // Filter logs from the last 8 hours
-             const recentLogs = allLogs.filter(log => {
-               const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
-               return logDateTime >= eightHoursAgo && logDateTime <= now;
-             });
+      const now = new Date();
+      const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000); // 8 hours ago
 
-             // Get active equipment that should be monitored
-             const activeEquipment = equipment.filter(eq => eq.is_active && eq.location);
-             
-             if (activeEquipment.length === 0) {
-               return;
-             }
+      // Filter logs from the last 8 hours
+      const recentLogs = allLogs.filter(log => {
+        const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
+        return logDateTime >= eightHoursAgo && logDateTime <= now;
+      });
 
-             // Check which equipment has been temperature checked in the last 8 hours
-             const checkedEquipment = new Set();
-             recentLogs.forEach(log => {
-               if (log.location) {
-                 checkedEquipment.add(log.location);
-               }
-             });
+      // Get active equipment that should be monitored
+      const activeEquipment = equipment.filter(eq => eq.is_active && eq.location);
 
-             // Find equipment that hasn't been checked in the last 8 hours
-             const uncheckedEquipment = activeEquipment.filter(eq => 
-               eq.location && !checkedEquipment.has(eq.location)
-             );
+      if (activeEquipment.length === 0) {
+        return;
+      }
 
-             if (uncheckedEquipment.length > 0) {
-               const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
-               const isMultiple = uncheckedEquipment.length > 1;
-        
+      // Check which equipment has been temperature checked in the last 8 hours
+      const checkedEquipment = new Set();
+      recentLogs.forEach(log => {
+        if (log.location) {
+          checkedEquipment.add(log.location);
+        }
+      });
+
+      // Find equipment that hasn't been checked in the last 8 hours
+      const uncheckedEquipment = activeEquipment.filter(
+        eq => eq.location && !checkedEquipment.has(eq.location),
+      );
+
+      if (uncheckedEquipment.length > 0) {
+        const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
+        const isMultiple = uncheckedEquipment.length > 1;
+
         addWarning({
           type: 'warning',
           title: 'Equipment Temperature Check Required',
@@ -112,12 +113,12 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
             label: 'Go to Temperature Logs',
             onClick: () => {
               window.location.href = '/webapp/temperature';
-            }
+            },
           },
           dismissible: true,
           autoHide: false,
-               });
-             }
+        });
+      }
     };
 
     // Check for equipment out of range warnings
@@ -128,13 +129,14 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
 
       equipment.forEach(eq => {
         if (!eq.location || !eq.min_temp_celsius || !eq.max_temp_celsius) return;
-        
+
         const equipmentLogs = todayLogs.filter(log => log.location === eq.location);
-        
+
         if (equipmentLogs.length > 0) {
-          const outOfRangeLogs = equipmentLogs.filter(log => 
-            log.temperature_celsius < eq.min_temp_celsius! || 
-            log.temperature_celsius > eq.max_temp_celsius!
+          const outOfRangeLogs = equipmentLogs.filter(
+            log =>
+              log.temperature_celsius < eq.min_temp_celsius! ||
+              log.temperature_celsius > eq.max_temp_celsius!,
           );
 
           if (outOfRangeLogs.length > 0) {
@@ -146,7 +148,7 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
                 label: 'View Details',
                 onClick: () => {
                   window.location.href = '/webapp/temperature';
-                }
+                },
               },
               dismissible: true,
               autoHide: false,

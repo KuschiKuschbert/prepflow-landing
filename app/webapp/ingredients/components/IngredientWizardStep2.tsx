@@ -10,14 +10,14 @@ export default function IngredientWizardStep2({
   onInputChange,
   onWastagePercentageChange,
   onYieldPercentageChange,
-  onAddSupplier
+  onAddSupplier,
 }: WizardStepProps) {
   const [newSupplier, setNewSupplier] = useState('');
   const [showAddSupplier, setShowAddSupplier] = useState(false);
 
   const addNewSupplier = async (supplierName: string) => {
     if (!supplierName.trim()) return;
-    
+
     try {
       await onAddSupplier(supplierName);
       setNewSupplier('');
@@ -29,30 +29,28 @@ export default function IngredientWizardStep2({
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-6">
-        <h3 className="text-xl font-semibold text-white mb-2">⚙️ Advanced Settings</h3>
+      <div className="mb-6 text-center">
+        <h3 className="mb-2 text-xl font-semibold text-white">⚙️ Advanced Settings</h3>
         <p className="text-gray-400">Configure supplier, storage, and yield information</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
+          <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
             🏢 Supplier Information
           </h3>
-          
+
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Supplier
-              </label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">Supplier</label>
               <div className="flex space-x-2">
                 <select
                   value={formData.supplier || ''}
-                  onChange={(e) => onInputChange('supplier', e.target.value)}
-                  className="flex-1 px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                  onChange={e => onInputChange('supplier', e.target.value)}
+                  className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 >
                   <option value="">Select supplier</option>
-                  {suppliers.map((supplier) => (
+                  {suppliers.map(supplier => (
                     <option key={supplier.id} value={supplier.name}>
                       {supplier.name}
                     </option>
@@ -61,7 +59,7 @@ export default function IngredientWizardStep2({
                 <button
                   type="button"
                   onClick={() => setShowAddSupplier(true)}
-                  className="px-4 py-3 bg-[#29E7CD] text-black rounded-2xl hover:bg-[#29E7CD]/80 transition-all font-medium"
+                  className="rounded-2xl bg-[#29E7CD] px-4 py-3 font-medium text-black transition-all hover:bg-[#29E7CD]/80"
                 >
                   ➕
                 </button>
@@ -69,19 +67,19 @@ export default function IngredientWizardStep2({
             </div>
 
             {showAddSupplier && (
-              <div className="bg-[#1f1f1f] p-4 rounded-xl border border-[#29E7CD]/30">
+              <div className="rounded-xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-4">
                 <div className="flex space-x-2">
                   <input
                     type="text"
                     value={newSupplier}
-                    onChange={(e) => setNewSupplier(e.target.value)}
+                    onChange={e => setNewSupplier(e.target.value)}
                     placeholder="New supplier name"
-                    className="flex-1 px-3 py-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                    className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => addNewSupplier(newSupplier)}
-                    className="px-3 py-2 bg-[#29E7CD] text-black rounded-lg hover:bg-[#29E7CD]/80 transition-all font-medium"
+                    className="rounded-lg bg-[#29E7CD] px-3 py-2 font-medium text-black transition-all hover:bg-[#29E7CD]/80"
                   >
                     Add
                   </button>
@@ -91,7 +89,7 @@ export default function IngredientWizardStep2({
                       setShowAddSupplier(false);
                       setNewSupplier('');
                     }}
-                    className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#3a3a3a] transition-all"
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-white transition-all hover:bg-[#3a3a3a]"
                   >
                     Cancel
                   </button>
@@ -100,61 +98,59 @@ export default function IngredientWizardStep2({
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Product Code (Optional)
               </label>
               <input
                 type="text"
                 value={formData.product_code || ''}
-                onChange={(e) => onInputChange('product_code', e.target.value)}
-                className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                onChange={e => onInputChange('product_code', e.target.value)}
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 placeholder="e.g., SKU123456"
               />
             </div>
           </div>
         </div>
 
-        <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+        <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
+          <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
             📦 Storage & Stock
           </h3>
-          
+
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Storage Location
               </label>
               <input
                 type="text"
                 value={formData.storage_location || ''}
-                onChange={(e) => onInputChange('storage_location', e.target.value)}
-                className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                onChange={e => onInputChange('storage_location', e.target.value)}
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 placeholder="e.g., Walk-in Cooler, Pantry"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Min Stock Level
               </label>
               <input
                 type="number"
                 value={formData.min_stock_level || ''}
-                onChange={(e) => onInputChange('min_stock_level', parseFloat(e.target.value) || 0)}
-                className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                onChange={e => onInputChange('min_stock_level', parseFloat(e.target.value) || 0)}
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 placeholder="e.g., 10"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Current Stock
-              </label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">Current Stock</label>
               <input
                 type="number"
                 value={formData.current_stock || ''}
-                onChange={(e) => onInputChange('current_stock', parseFloat(e.target.value) || 0)}
-                className="w-full px-4 py-3 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#29E7CD] transition-all"
+                onChange={e => onInputChange('current_stock', parseFloat(e.target.value) || 0)}
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 placeholder="e.g., 25"
               />
             </div>
@@ -162,14 +158,14 @@ export default function IngredientWizardStep2({
         </div>
       </div>
 
-      <div className="bg-[#2a2a2a]/30 p-6 rounded-2xl border border-[#2a2a2a]/50">
-        <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+      <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
+        <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
           🎯 Yield & Wastage
         </h3>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-300">
               Wastage Percentage
             </label>
             <div className="flex items-center space-x-4">
@@ -178,8 +174,8 @@ export default function IngredientWizardStep2({
                 min="0"
                 max="100"
                 value={formData.trim_peel_waste_percentage || 0}
-                onChange={(e) => onWastagePercentageChange(parseInt(e.target.value))}
-                className="flex-1 h-2 bg-[#2a2a2a] rounded-lg appearance-none cursor-pointer slider"
+                onChange={e => onWastagePercentageChange(parseInt(e.target.value))}
+                className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
               />
               <div className="w-20 text-center">
                 <div className="text-2xl font-bold text-[#29E7CD]">
@@ -188,23 +184,21 @@ export default function IngredientWizardStep2({
                 <div className="text-xs text-gray-400">Waste</div>
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="mt-2 text-xs text-gray-400">
               How much gets thrown away during prep (peels, trimmings, etc.)
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Yield Percentage
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-300">Yield Percentage</label>
             <div className="flex items-center space-x-4">
               <input
                 type="range"
                 min="0"
                 max="100"
                 value={formData.yield_percentage || 100}
-                onChange={(e) => onYieldPercentageChange(parseInt(e.target.value))}
-                className="flex-1 h-2 bg-[#2a2a2a] rounded-lg appearance-none cursor-pointer slider"
+                onChange={e => onYieldPercentageChange(parseInt(e.target.value))}
+                className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
               />
               <div className="w-20 text-center">
                 <div className="text-2xl font-bold text-[#29E7CD]">
@@ -213,18 +207,18 @@ export default function IngredientWizardStep2({
                 <div className="text-xs text-gray-400">Yield</div>
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="mt-2 text-xs text-gray-400">
               How much you get after prep (usable portion)
             </p>
           </div>
         </div>
 
-        <div className="mt-4 p-4 bg-[#1f1f1f] rounded-xl border border-[#29E7CD]/20">
+        <div className="mt-4 rounded-xl border border-[#29E7CD]/20 bg-[#1f1f1f] p-4">
           <div className="flex items-center space-x-2 text-sm">
             <span className="text-[#29E7CD]">💡</span>
             <span className="text-gray-300">
-              <strong>Tip:</strong> These percentages are linked - adjusting one automatically adjusts the other. 
-              For example, if you waste 20%, you get 80% yield.
+              <strong>Tip:</strong> These percentages are linked - adjusting one automatically
+              adjusts the other. For example, if you waste 20%, you get 80% yield.
             </span>
           </div>
         </div>

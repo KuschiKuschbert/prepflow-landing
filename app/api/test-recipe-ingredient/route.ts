@@ -8,10 +8,7 @@ export async function POST() {
     }
 
     // Get a recipe ID
-    const { data: recipes } = await supabaseAdmin
-      .from('recipes')
-      .select('id')
-      .limit(1);
+    const { data: recipes } = await supabaseAdmin.from('recipes').select('id').limit(1);
 
     if (!recipes || recipes.length === 0) {
       return NextResponse.json({ error: 'No recipes found' }, { status: 400 });
@@ -29,26 +26,23 @@ export async function POST() {
     }
 
     // Try to insert a recipe ingredient
-    const { data, error } = await supabaseAdmin
-      .from('recipe_ingredients')
-      .insert({
-        recipe_id: recipes[0].id,
-        ingredient_id: ingredients[0].id,
-        quantity: 150,
-        unit: 'GM'
-      });
+    const { data, error } = await supabaseAdmin.from('recipe_ingredients').insert({
+      recipe_id: recipes[0].id,
+      ingredient_id: ingredients[0].id,
+      quantity: 150,
+      unit: 'GM',
+    });
 
     if (error) {
       console.error('Error inserting recipe ingredient:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       message: 'Recipe ingredient inserted successfully',
-      data: data
+      data: data,
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

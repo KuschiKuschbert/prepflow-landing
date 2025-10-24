@@ -15,7 +15,15 @@ export interface AnalyticsEvent {
 }
 
 export interface ConversionEvent {
-  type: 'cta_click' | 'demo_watch' | 'pricing_view' | 'signup_start' | 'purchase_complete' | 'exit_intent' | 'section_view' | 'scroll_milestone';
+  type:
+    | 'cta_click'
+    | 'demo_watch'
+    | 'pricing_view'
+    | 'signup_start'
+    | 'purchase_complete'
+    | 'exit_intent'
+    | 'section_view'
+    | 'scroll_milestone';
   element: string;
   page: string;
   timestamp: number;
@@ -56,7 +64,7 @@ class PrepFlowAnalytics {
     if (typeof window !== 'undefined') {
       const storedUserId = localStorage.getItem('prepflow_user_id');
       this.userId = storedUserId || undefined;
-      
+
       // Generate and store a stable user ID if none exists
       if (!this.userId) {
         this.userId = this.generateStableUserId();
@@ -74,13 +82,13 @@ class PrepFlowAnalytics {
     if (typeof window !== 'undefined') {
       // Track page views
       this.trackPageView();
-      
+
       // Track performance metrics
       this.trackPerformance();
-      
+
       // Track user interactions
       this.trackUserInteractions();
-      
+
       // Track conversions
       this.trackConversions();
     }
@@ -95,16 +103,16 @@ class PrepFlowAnalytics {
       userId: this.userId,
       page: window.location.pathname,
       referrer: document.referrer,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     };
-    
+
     this.events.push(event);
     this.sendToAnalytics(event);
   }
 
   private trackPerformance(): void {
     if ('performance' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === 'navigation') {
             const navEntry = entry as PerformanceNavigationTiming;
@@ -116,29 +124,29 @@ class PrepFlowAnalytics {
               cumulativeLayoutShift: 0,
               timestamp: Date.now(),
               page: window.location.pathname,
-              sessionId: this.sessionId
+              sessionId: this.sessionId,
             };
-            
+
             this.performance.push(metrics);
             this.sendPerformanceMetrics(metrics);
           }
         }
       });
-      
+
       observer.observe({ entryTypes: ['navigation'] });
     }
   }
 
   private trackUserInteractions(): void {
     // Track CTA clicks
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
       const target = e.target as HTMLElement;
       const cta = target.closest('a, button');
-      
+
       if (cta) {
         const text = cta.textContent?.trim() || '';
         const href = (cta as HTMLAnchorElement).href;
-        
+
         // Track Gumroad purchase links
         if (href && href.includes('gumroad.com/l/prepflow')) {
           this.trackConversion({
@@ -148,24 +156,26 @@ class PrepFlowAnalytics {
             timestamp: Date.now(),
             sessionId: this.sessionId,
             userId: this.userId,
-            metadata: { href, text, action: 'purchase_start' }
+            metadata: { href, text, action: 'purchase_start' },
           });
-          
+
           // Send enhanced GA4 event
           if (typeof window !== 'undefined' && window.gtag) {
             window.gtag('event', 'begin_checkout', {
               currency: 'AUD',
-              value: 29.00,
-              items: [{
-                item_id: 'prepflow_app',
-                item_name: 'PrepFlow App',
-                price: 29.00,
-                quantity: 1
-              }]
+              value: 29.0,
+              items: [
+                {
+                  item_id: 'prepflow_app',
+                  item_name: 'PrepFlow App',
+                  price: 29.0,
+                  quantity: 1,
+                },
+              ],
             });
           }
         }
-        
+
         // Track demo/watch buttons
         if (text.includes('Watch Demo') || text.includes('Demo')) {
           this.trackConversion({
@@ -175,10 +185,10 @@ class PrepFlowAnalytics {
             timestamp: Date.now(),
             sessionId: this.sessionId,
             userId: this.userId,
-            metadata: { href, text, action: 'demo_start' }
+            metadata: { href, text, action: 'demo_start' },
           });
         }
-        
+
         // Track general CTA clicks
         if (text.includes('Get Started') || text.includes('Start')) {
           this.trackConversion({
@@ -188,7 +198,7 @@ class PrepFlowAnalytics {
             timestamp: Date.now(),
             sessionId: this.sessionId,
             userId: this.userId,
-            metadata: { href, text, action: 'cta_click' }
+            metadata: { href, text, action: 'cta_click' },
           });
         }
       }
@@ -197,40 +207,43 @@ class PrepFlowAnalytics {
     // Track scroll depth and key sections
     let maxScrollDepth = 0;
     const keySections = ['#features', '#demo', '#pricing', '#faq'];
-    
+
     window.addEventListener('scroll', () => {
-      const scrollDepth = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+      const scrollDepth = Math.round(
+        (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100,
+      );
       if (scrollDepth > maxScrollDepth) {
         maxScrollDepth = scrollDepth;
-        if (maxScrollDepth % 25 === 0) { // Track every 25%
+        if (maxScrollDepth % 25 === 0) {
+          // Track every 25%
           this.trackEvent('scroll_depth', 'engagement', `${maxScrollDepth}%`);
         }
       }
-      
+
       // Track key section visibility
       keySections.forEach(sectionId => {
         const section = document.querySelector(sectionId);
         if (section) {
           const rect = section.getBoundingClientRect();
           const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-          
+
           if (isVisible && !section.hasAttribute('data-tracked')) {
             section.setAttribute('data-tracked', 'true');
             const sectionName = sectionId.replace('#', '');
-            
+
             this.trackEvent('section_view', 'engagement', sectionName);
-            
+
             // Send enhanced GA4 event for key sections
             if (typeof window !== 'undefined' && window.gtag) {
               if (sectionName === 'pricing') {
                 window.gtag('event', 'view_item_list', {
                   item_list_id: 'pricing_section',
-                  item_list_name: 'Pricing Options'
+                  item_list_name: 'Pricing Options',
                 });
               } else if (sectionName === 'demo') {
                 window.gtag('event', 'view_item', {
                   item_id: 'demo_video',
-                  item_name: 'PrepFlow Demo Video'
+                  item_name: 'PrepFlow Demo Video',
                 });
               }
             }
@@ -246,8 +259,8 @@ class PrepFlowAnalytics {
     if (demoVideo) {
       // YouTube iframe tracking would require YouTube API integration
       // For now, we'll track when the demo section comes into view
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             this.trackConversion({
               type: 'demo_watch',
@@ -256,7 +269,7 @@ class PrepFlowAnalytics {
               timestamp: Date.now(),
               sessionId: this.sessionId,
               userId: this.userId,
-              metadata: { section: 'demo' }
+              metadata: { section: 'demo' },
             });
             observer.disconnect();
           }
@@ -277,9 +290,9 @@ class PrepFlowAnalytics {
       userId: this.userId,
       page: typeof window !== 'undefined' ? window.location.pathname : '/',
       referrer: typeof window !== 'undefined' ? document.referrer : undefined,
-      userAgent: typeof window !== 'undefined' ? navigator.userAgent : undefined
+      userAgent: typeof window !== 'undefined' ? navigator.userAgent : undefined,
     };
-    
+
     this.events.push(event);
     this.sendToAnalytics(event);
   }
@@ -287,7 +300,7 @@ class PrepFlowAnalytics {
   public trackConversion(conversion: ConversionEvent): void {
     this.conversions.push(conversion);
     this.sendConversionData(conversion);
-    
+
     // Also track as a regular event
     this.trackEvent('conversion', 'business', conversion.type, 1);
   }
@@ -302,9 +315,9 @@ class PrepFlowAnalytics {
       timestamp: Date.now(),
       page: typeof window !== 'undefined' ? window.location.pathname : '/',
       sessionId: this.sessionId,
-      ...metrics
+      ...metrics,
     };
-    
+
     this.performance.push(fullMetrics);
     this.sendPerformanceMetrics(fullMetrics);
   }
@@ -315,7 +328,7 @@ class PrepFlowAnalytics {
     if (process.env.NODE_ENV === 'development') {
       console.log('📊 Analytics Event:', event);
     }
-    
+
     // Send to Google Analytics 4
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', event.action, {
@@ -334,7 +347,7 @@ class PrepFlowAnalytics {
     if (process.env.NODE_ENV === 'development') {
       console.log('🎯 Conversion Event:', conversion);
     }
-    
+
     // Send to Google Analytics 4
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'conversion', {
@@ -348,7 +361,7 @@ class PrepFlowAnalytics {
         custom_parameter_metadata: JSON.stringify(conversion.metadata),
       });
     }
-    
+
     // Send to conversion tracking endpoints
     // Example: Facebook Pixel, Google Ads, etc.
   }
@@ -357,7 +370,7 @@ class PrepFlowAnalytics {
     if (process.env.NODE_ENV === 'development') {
       console.log('⚡ Performance Metrics:', metrics);
     }
-    
+
     // Send to performance monitoring services
     // Example: Sentry, LogRocket, etc.
   }
@@ -401,7 +414,7 @@ class PrepFlowAnalytics {
       userId: this.userId,
       events: this.events,
       conversions: this.conversions,
-      performance: this.performance
+      performance: this.performance,
     };
   }
 }
@@ -417,13 +430,13 @@ export const getSessionId = analytics.getSessionId.bind(analytics);
 export const setUserId = analytics.setUserId.bind(analytics);
 
 // Export A/B testing functions
-export { 
-  assignVariant, 
-  getCurrentVariant, 
-  trackConversion as trackABConversion, 
+export {
+  assignVariant,
+  getCurrentVariant,
+  trackConversion as trackABConversion,
   trackEngagement,
   getTestResults,
   getActiveTests,
   getVariantInfo,
-  getVariantAssignmentInfo
+  getVariantAssignmentInfo,
 } from './ab-testing-analytics';

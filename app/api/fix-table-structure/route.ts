@@ -18,7 +18,7 @@ export async function POST() {
       'ALTER TABLE cleaning_areas ADD COLUMN IF NOT EXISTS cleaning_frequency VARCHAR(50)',
       'ALTER TABLE cleaning_areas ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true',
       'ALTER TABLE cleaning_areas ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE cleaning_areas ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE cleaning_areas ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of cleaningAreasColumns) {
@@ -44,7 +44,7 @@ export async function POST() {
       'ALTER TABLE cleaning_tasks ADD COLUMN IF NOT EXISTS estimated_duration_minutes INTEGER',
       'ALTER TABLE cleaning_tasks ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true',
       'ALTER TABLE cleaning_tasks ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE cleaning_tasks ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE cleaning_tasks ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of cleaningTasksColumns) {
@@ -70,7 +70,7 @@ export async function POST() {
       'ALTER TABLE suppliers ADD COLUMN IF NOT EXISTS address TEXT',
       'ALTER TABLE suppliers ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true',
       'ALTER TABLE suppliers ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE suppliers ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE suppliers ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of suppliersColumns) {
@@ -94,7 +94,7 @@ export async function POST() {
       'ALTER TABLE compliance_types ADD COLUMN IF NOT EXISTS frequency VARCHAR(50)',
       'ALTER TABLE compliance_types ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true',
       'ALTER TABLE compliance_types ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE compliance_types ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE compliance_types ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of complianceTypesColumns) {
@@ -119,7 +119,7 @@ export async function POST() {
       'ALTER TABLE compliance_records ADD COLUMN IF NOT EXISTS notes TEXT',
       'ALTER TABLE compliance_records ADD COLUMN IF NOT EXISTS recorded_by VARCHAR(255)',
       'ALTER TABLE compliance_records ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE compliance_records ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE compliance_records ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of complianceRecordsColumns) {
@@ -142,7 +142,7 @@ export async function POST() {
       'ALTER TABLE kitchen_sections ADD COLUMN IF NOT EXISTS description TEXT',
       'ALTER TABLE kitchen_sections ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true',
       'ALTER TABLE kitchen_sections ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE kitchen_sections ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE kitchen_sections ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of kitchenSectionsColumns) {
@@ -163,9 +163,9 @@ export async function POST() {
     const prepListsColumns = [
       'ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS prep_date DATE DEFAULT CURRENT_DATE',
       'ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS section_id UUID REFERENCES kitchen_sections(id)',
-      'ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT \'pending\'',
+      "ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'pending'",
       'ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE prep_lists ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of prepListsColumns) {
@@ -190,7 +190,7 @@ export async function POST() {
       'ALTER TABLE prep_list_items ADD COLUMN IF NOT EXISTS unit VARCHAR(50)',
       'ALTER TABLE prep_list_items ADD COLUMN IF NOT EXISTS is_completed BOOLEAN DEFAULT false',
       'ALTER TABLE prep_list_items ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE prep_list_items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE prep_list_items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of prepListItemsColumns) {
@@ -211,10 +211,10 @@ export async function POST() {
     const orderListsColumns = [
       'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS order_date DATE DEFAULT CURRENT_DATE',
       'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS supplier_id UUID REFERENCES suppliers(id)',
-      'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT \'pending\'',
+      "ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'pending'",
       'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS total_amount DECIMAL(10,2)',
       'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE order_lists ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of orderListsColumns) {
@@ -240,7 +240,7 @@ export async function POST() {
       'ALTER TABLE order_items ADD COLUMN IF NOT EXISTS unit_price DECIMAL(10,4)',
       'ALTER TABLE order_items ADD COLUMN IF NOT EXISTS total_price DECIMAL(10,2)',
       'ALTER TABLE order_items ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
-      'ALTER TABLE order_items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE order_items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of orderItemsColumns) {
@@ -264,7 +264,7 @@ export async function POST() {
       'ALTER TABLE temperature_logs ADD COLUMN IF NOT EXISTS recorded_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
       'ALTER TABLE temperature_logs ADD COLUMN IF NOT EXISTS recorded_by VARCHAR(255)',
       'ALTER TABLE temperature_logs ADD COLUMN IF NOT EXISTS notes TEXT',
-      'ALTER TABLE temperature_logs ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()'
+      'ALTER TABLE temperature_logs ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()',
     ];
 
     for (const sql of temperatureLogsColumns) {
@@ -285,22 +285,24 @@ export async function POST() {
       message: 'Table structure fixes completed',
       summary: {
         fixed: results.length,
-        errors: errors.length
+        errors: errors.length,
       },
       results: results.slice(0, 10), // Show first 10 results
       errors: errors.slice(0, 10), // Show first 10 errors
       nextSteps: [
         'Run /api/populate-test-data again to populate with correct structure',
-        'Check /webapp to see populated data'
-      ]
+        'Check /webapp to see populated data',
+      ],
     });
-
   } catch (err: any) {
     console.error('Error during table structure fix:', err);
-    return NextResponse.json({
-      success: false,
-      error: 'Internal server error during table structure fix',
-      details: err.message
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Internal server error during table structure fix',
+        details: err.message,
+      },
+      { status: 500 },
+    );
   }
 }

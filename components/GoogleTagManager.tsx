@@ -25,7 +25,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || [];
-      
+
       // Initialize data layer with page info
       if (!hasInitialized.current) {
         window.dataLayer.push({
@@ -35,7 +35,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
           page_location: window.location.href,
           page_path: pathname,
         });
-        
+
         hasInitialized.current = true;
         console.log('✅ GTM Data Layer initialized');
       }
@@ -54,7 +54,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
         page_referrer: document.referrer,
         timestamp: Date.now(),
       });
-      
+
       console.log('📊 GTM Page View tracked:', pathname);
     }
   }, [pathname, searchParams]);
@@ -86,10 +86,10 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
         }}
         onLoad={() => {
           console.log('📥 Google Tag Manager loaded');
-          
+
           // Initialize gtag function for backward compatibility
           if (typeof window !== 'undefined' && !window.gtag) {
-            window.gtag = function() {
+            window.gtag = function () {
               window.dataLayer.push(arguments);
             };
             console.log('🔧 gtag function initialized for GTM compatibility');
@@ -129,7 +129,11 @@ export function trackGTMEvent(eventName: string, parameters: Record<string, any>
 }
 
 // Helper function to track conversions
-export function trackGTMConversion(conversionType: string, value?: number, parameters: Record<string, any> = {}) {
+export function trackGTMConversion(
+  conversionType: string,
+  value?: number,
+  parameters: Record<string, any> = {},
+) {
   pushToDataLayer({
     event: 'conversion',
     conversion_type: conversionType,

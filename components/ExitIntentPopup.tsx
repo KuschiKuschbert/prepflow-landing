@@ -55,34 +55,34 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
 
   const validateForm = (): boolean => {
     const newErrors: { name?: string; email?: string } = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Track the exit-intent conversion
       trackEvent('exit_intent_conversion', 'conversion', 'lead_magnet', 1);
-      
+
       trackConversion({
         type: 'signup_start',
         element: 'exit_intent_popup',
@@ -91,17 +91,17 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
         sessionId: getSessionId(),
         metadata: {
           conversion_type: 'exit_intent_lead_magnet',
-          user_name: formData.name
-        }
+          user_name: formData.name,
+        },
       });
 
       // Simulate API call (replace with actual email service)
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // Success handling
       setIsSuccess(true);
       onSuccess?.(formData);
-      
+
       // Auto-close after success
       setTimeout(() => {
         onClose();
@@ -109,7 +109,6 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
         setFormData({ name: '', email: '' });
         setIsSuccess(false);
       }, 3000);
-      
     } catch (error) {
       console.error('Exit intent form submission failed:', error);
     } finally {
@@ -128,63 +127,64 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div 
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+      <div
         ref={popupRef}
-        className="relative w-full max-w-md bg-[#1f1f1f] border border-[#29E7CD]/30 rounded-3xl p-8 shadow-2xl animate-in slide-in-from-bottom-4 duration-300"
+        className="animate-in slide-in-from-bottom-4 relative w-full max-w-md rounded-3xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-8 shadow-2xl duration-300"
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-gray-400 transition-colors hover:text-white"
           aria-label="Close popup"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
         {isSuccess ? (
           <div className="text-center">
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-2xl font-bold text-[#29E7CD] mb-2">
-              Don't go yet!
-            </h3>
-            <p className="text-gray-300 mb-4">
-              We've sent the sample dashboard to your email.
-            </p>
-            <p className="text-sm text-gray-500">
-              Check your inbox in the next few minutes.
-            </p>
+            <div className="mb-4 text-6xl">🎉</div>
+            <h3 className="mb-2 text-2xl font-bold text-[#29E7CD]">Don't go yet!</h3>
+            <p className="mb-4 text-gray-300">We've sent the sample dashboard to your email.</p>
+            <p className="text-sm text-gray-500">Check your inbox in the next few minutes.</p>
           </div>
         ) : (
           <>
             {/* Header */}
-            <div className="text-center mb-6">
-              <div className="text-4xl mb-3">🚨</div>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Wait! Before you go...
-              </h3>
+            <div className="mb-6 text-center">
+              <div className="mb-3 text-4xl">🚨</div>
+              <h3 className="mb-2 text-2xl font-bold text-white">Wait! Before you go...</h3>
               <p className="text-gray-300">
-                Get your free sample dashboard and see exactly how PrepFlow can transform your menu profitability.
+                Get your free sample dashboard and see exactly how PrepFlow can transform your menu
+                profitability.
               </p>
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="popup-name" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="popup-name"
+                  className="mb-2 block text-sm font-medium text-gray-300"
+                >
                   Your name *
                 </label>
                 <input
                   id="popup-name"
                   type="text"
                   value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  onChange={e => handleInputChange('name', e.target.value)}
                   placeholder="Your name"
-                  className={`w-full px-4 py-3 rounded-xl border bg-[#2a2a2a] text-white placeholder-gray-400 focus:outline-none transition-colors ${
-                    errors.name 
-                      ? 'border-red-500 focus:border-red-500' 
+                  className={`w-full rounded-xl border bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 transition-colors focus:outline-none ${
+                    errors.name
+                      ? 'border-red-500 focus:border-red-500'
                       : 'border-gray-600 focus:border-[#29E7CD]'
                   }`}
                   aria-describedby={errors.name ? 'popup-name-error' : undefined}
@@ -197,18 +197,21 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
               </div>
 
               <div>
-                <label htmlFor="popup-email" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="popup-email"
+                  className="mb-2 block text-sm font-medium text-gray-300"
+                >
                   Your email *
                 </label>
                 <input
                   id="popup-email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onChange={e => handleInputChange('email', e.target.value)}
                   placeholder="your@email.com"
-                  className={`w-full px-4 py-3 rounded-xl border bg-[#2a2a2a] text-white placeholder-gray-400 focus:outline-none transition-colors ${
-                    errors.email 
-                      ? 'border-red-500 focus:border-red-500' 
+                  className={`w-full rounded-xl border bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 transition-colors focus:outline-none ${
+                    errors.email
+                      ? 'border-red-500 focus:border-red-500'
                       : 'border-gray-600 focus:border-[#29E7CD]'
                   }`}
                   aria-describedby={errors.email ? 'popup-email-error' : undefined}
@@ -225,15 +228,31 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
                 disabled={isSubmitting}
                 className={`w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-base font-semibold text-white shadow-lg transition-all duration-300 ${
                   isSubmitting
-                    ? 'opacity-50 cursor-not-allowed'
+                    ? 'cursor-not-allowed opacity-50'
                     : 'hover:shadow-xl hover:shadow-[#29E7CD]/25'
                 }`}
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Sending...
                   </span>
@@ -244,13 +263,11 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
             </form>
 
             {/* Footer */}
-            <div className="text-center mt-6">
-              <p className="text-xs text-gray-500">
-                No spam. No lock-in. Your data stays private.
-              </p>
+            <div className="mt-6 text-center">
+              <p className="text-xs text-gray-500">No spam. No lock-in. Your data stays private.</p>
               <button
                 onClick={onClose}
-                className="mt-3 text-sm text-gray-400 hover:text-white transition-colors underline"
+                className="mt-3 text-sm text-gray-400 underline transition-colors hover:text-white"
               >
                 No thanks, I'll continue browsing
               </button>

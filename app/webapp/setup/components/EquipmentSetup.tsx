@@ -10,31 +10,148 @@ interface EquipmentSetupProps {
     equipment: boolean;
     country: boolean;
   };
-  onProgressUpdate: (progress: { ingredients: boolean; recipes: boolean; equipment: boolean; country: boolean }) => void;
+  onProgressUpdate: (progress: {
+    ingredients: boolean;
+    recipes: boolean;
+    equipment: boolean;
+    country: boolean;
+  }) => void;
 }
 
 const equipmentTypes: EquipmentType[] = [
   // Cold Storage
-  { value: 'fridge', label: 'Fridge', icon: '🧊', defaultMin: 2, defaultMax: 8, category: 'Cold Storage' },
-  { value: 'freezer', label: 'Freezer', icon: '❄️', defaultMin: -18, defaultMax: -15, category: 'Cold Storage' },
-  { value: 'walk_in_cooler', label: 'Walk-in Cooler', icon: '🏠', defaultMin: 2, defaultMax: 8, category: 'Cold Storage' },
-  { value: 'walk_in_freezer', label: 'Walk-in Freezer', icon: '🏠', defaultMin: -18, defaultMax: -15, category: 'Cold Storage' },
-  { value: 'reach_in_cooler', label: 'Bench Fridge', icon: '🧊', defaultMin: 2, defaultMax: 8, category: 'Cold Storage' },
-  { value: 'ice_machine', label: 'Ice Machine', icon: '🧊', defaultMin: 0, defaultMax: 4, category: 'Cold Storage' },
-  
+  {
+    value: 'fridge',
+    label: 'Fridge',
+    icon: '🧊',
+    defaultMin: 2,
+    defaultMax: 8,
+    category: 'Cold Storage',
+  },
+  {
+    value: 'freezer',
+    label: 'Freezer',
+    icon: '❄️',
+    defaultMin: -18,
+    defaultMax: -15,
+    category: 'Cold Storage',
+  },
+  {
+    value: 'walk_in_cooler',
+    label: 'Walk-in Cooler',
+    icon: '🏠',
+    defaultMin: 2,
+    defaultMax: 8,
+    category: 'Cold Storage',
+  },
+  {
+    value: 'walk_in_freezer',
+    label: 'Walk-in Freezer',
+    icon: '🏠',
+    defaultMin: -18,
+    defaultMax: -15,
+    category: 'Cold Storage',
+  },
+  {
+    value: 'reach_in_cooler',
+    label: 'Bench Fridge',
+    icon: '🧊',
+    defaultMin: 2,
+    defaultMax: 8,
+    category: 'Cold Storage',
+  },
+  {
+    value: 'ice_machine',
+    label: 'Ice Machine',
+    icon: '🧊',
+    defaultMin: 0,
+    defaultMax: 4,
+    category: 'Cold Storage',
+  },
+
   // Hot Holding
-  { value: 'bain_marie', label: 'Bain Marie', icon: '♨️', defaultMin: 63, defaultMax: 75, category: 'Hot Holding' },
-  { value: 'hot_holding_cabinet', label: 'Hot Holding Cabinet', icon: '♨️', defaultMin: 63, defaultMax: 75, category: 'Hot Holding' },
-  { value: 'steam_table', label: 'Steam Table', icon: '♨️', defaultMin: 63, defaultMax: 75, category: 'Hot Holding' },
-  { value: 'warming_drawer', label: 'Warming Drawer', icon: '♨️', defaultMin: 63, defaultMax: 75, category: 'Hot Holding' },
-  { value: 'soup_kettle', label: 'Soup Kettle', icon: '🍲', defaultMin: 63, defaultMax: 75, category: 'Hot Holding' },
-  { value: 'rice_cooker', label: 'Rice Cooker', icon: '🍚', defaultMin: 63, defaultMax: 75, category: 'Hot Holding' },
-  
+  {
+    value: 'bain_marie',
+    label: 'Bain Marie',
+    icon: '♨️',
+    defaultMin: 63,
+    defaultMax: 75,
+    category: 'Hot Holding',
+  },
+  {
+    value: 'hot_holding_cabinet',
+    label: 'Hot Holding Cabinet',
+    icon: '♨️',
+    defaultMin: 63,
+    defaultMax: 75,
+    category: 'Hot Holding',
+  },
+  {
+    value: 'steam_table',
+    label: 'Steam Table',
+    icon: '♨️',
+    defaultMin: 63,
+    defaultMax: 75,
+    category: 'Hot Holding',
+  },
+  {
+    value: 'warming_drawer',
+    label: 'Warming Drawer',
+    icon: '♨️',
+    defaultMin: 63,
+    defaultMax: 75,
+    category: 'Hot Holding',
+  },
+  {
+    value: 'soup_kettle',
+    label: 'Soup Kettle',
+    icon: '🍲',
+    defaultMin: 63,
+    defaultMax: 75,
+    category: 'Hot Holding',
+  },
+  {
+    value: 'rice_cooker',
+    label: 'Rice Cooker',
+    icon: '🍚',
+    defaultMin: 63,
+    defaultMax: 75,
+    category: 'Hot Holding',
+  },
+
   // Cooking Equipment
-  { value: 'combi_oven', label: 'Combi Oven', icon: '🍳', defaultMin: 60, defaultMax: 80, category: 'Cooking Equipment' },
-  { value: 'sous_vide', label: 'Sous Vide Bath', icon: '🍳', defaultMin: 60, defaultMax: 80, category: 'Cooking Equipment' },
-  { value: 'proofing_cabinet', label: 'Proofing Cabinet', icon: '🍞', defaultMin: 30, defaultMax: 35, category: 'Cooking Equipment' },
-  { value: 'chocolate_tempering', label: 'Chocolate Tempering', icon: '🍫', defaultMin: 30, defaultMax: 32, category: 'Cooking Equipment' },
+  {
+    value: 'combi_oven',
+    label: 'Combi Oven',
+    icon: '🍳',
+    defaultMin: 60,
+    defaultMax: 80,
+    category: 'Cooking Equipment',
+  },
+  {
+    value: 'sous_vide',
+    label: 'Sous Vide Bath',
+    icon: '🍳',
+    defaultMin: 60,
+    defaultMax: 80,
+    category: 'Cooking Equipment',
+  },
+  {
+    value: 'proofing_cabinet',
+    label: 'Proofing Cabinet',
+    icon: '🍞',
+    defaultMin: 30,
+    defaultMax: 35,
+    category: 'Cooking Equipment',
+  },
+  {
+    value: 'chocolate_tempering',
+    label: 'Chocolate Tempering',
+    icon: '🍫',
+    defaultMin: 30,
+    defaultMax: 32,
+    category: 'Cooking Equipment',
+  },
 ];
 
 export default function EquipmentSetup({ setupProgress, onProgressUpdate }: EquipmentSetupProps) {
@@ -48,7 +165,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
     location: '',
     min_temp: '2',
     max_temp: '8',
-    is_active: true
+    is_active: true,
   });
   const [equipmentLoading, setEquipmentLoading] = useState(false);
   const [equipmentError, setEquipmentError] = useState<string | null>(null);
@@ -67,7 +184,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
       location: '',
       min_temp: defaults.min.toString(),
       max_temp: defaults.max.toString(),
-      is_active: true
+      is_active: true,
     });
     setShowEquipmentModal(false);
     setShowAddEquipment(true);
@@ -112,8 +229,8 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         body: JSON.stringify({
           ...newEquipment,
           min_temp: newEquipment.min_temp ? parseFloat(newEquipment.min_temp) : null,
-          max_temp: newEquipment.max_temp ? parseFloat(newEquipment.max_temp) : null
-        })
+          max_temp: newEquipment.max_temp ? parseFloat(newEquipment.max_temp) : null,
+        }),
       });
       const data = await response.json();
       if (data.success) {
@@ -124,7 +241,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
           location: '',
           min_temp: '2',
           max_temp: '8',
-          is_active: true
+          is_active: true,
         });
         setShowAddEquipment(false);
         setEquipmentResult('Equipment added successfully!');
@@ -141,10 +258,10 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
   const handleDeleteEquipment = async (id: number) => {
     if (!confirm('Are you sure you want to delete this equipment?')) return;
-    
+
     try {
       const response = await fetch(`/api/temperature-equipment?id=${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
       const data = await response.json();
       if (data.success) {
@@ -159,12 +276,12 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
   };
 
   return (
-    <div className="bg-[#1f1f1f] p-8 rounded-3xl shadow-lg border border-[#2a2a2a]">
+    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
       {/* Add Equipment Button */}
-      <div className="flex justify-center mb-6">
+      <div className="mb-6 flex justify-center">
         <button
           onClick={() => setShowEquipmentModal(true)}
-          className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-8 py-4 rounded-2xl hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium text-lg"
+          className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
         >
           ➕ Add Equipment
         </button>
@@ -172,31 +289,31 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
       {/* Equipment Type Selection Modal */}
       {showEquipmentModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+            <div className="mb-6 flex items-center justify-between">
               <h3 className="text-2xl font-bold text-white">Select Equipment Type</h3>
               <button
                 onClick={() => setShowEquipmentModal(false)}
-                className="text-gray-400 hover:text-white text-2xl"
+                className="text-2xl text-gray-400 hover:text-white"
               >
                 ✕
               </button>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {equipmentTypes.map((type) => (
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {equipmentTypes.map(type => (
                 <button
                   key={type.value}
                   onClick={() => handleEquipmentSelection(type.value)}
-                  className="p-4 bg-[#2a2a2a] rounded-2xl hover:bg-[#3a3a3a] transition-all duration-200 text-left"
+                  className="rounded-2xl bg-[#2a2a2a] p-4 text-left transition-all duration-200 hover:bg-[#3a3a3a]"
                 >
                   <div className="flex items-center space-x-3">
                     <span className="text-2xl">{type.icon}</span>
                     <div>
-                      <h4 className="text-white font-semibold">{type.label}</h4>
-                      <p className="text-gray-400 text-sm">{type.category}</p>
-                      <p className="text-[#29E7CD] text-xs">
+                      <h4 className="font-semibold text-white">{type.label}</h4>
+                      <p className="text-sm text-gray-400">{type.category}</p>
+                      <p className="text-xs text-[#29E7CD]">
                         {type.defaultMin}°C - {type.defaultMax}°C
                       </p>
                     </div>
@@ -210,37 +327,37 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
       {/* Add Equipment Form */}
       {showAddEquipment && (
-        <div className="bg-[#2a2a2a]/50 p-6 rounded-2xl border border-[#2a2a2a] mb-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Add New Equipment</h3>
-          <form onSubmit={handleAddEquipment} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
+          <h3 className="mb-4 text-xl font-semibold text-white">Add New Equipment</h3>
+          <form onSubmit={handleAddEquipment} className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Equipment Name</label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Name</label>
               <input
                 type="text"
                 value={newEquipment.name}
-                onChange={(e) => setNewEquipment({ ...newEquipment, name: e.target.value })}
-                className="w-full px-4 py-3 bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                onChange={e => setNewEquipment({ ...newEquipment, name: e.target.value })}
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                 placeholder="e.g., Main Kitchen Fridge"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Equipment Type</label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Type</label>
               <select
                 value={newEquipment.equipment_type}
-                onChange={(e) => {
+                onChange={e => {
                   const type = e.target.value;
                   const defaults = getDefaultTemps(type);
-                  setNewEquipment({ 
-                    ...newEquipment, 
+                  setNewEquipment({
+                    ...newEquipment,
                     equipment_type: type,
                     min_temp: defaults.min.toString(),
-                    max_temp: defaults.max.toString()
+                    max_temp: defaults.max.toString(),
                   });
                 }}
-                className="w-full px-4 py-3 bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               >
-                {equipmentTypes.map((type) => (
+                {equipmentTypes.map(type => (
                   <option key={type.value} value={type.value}>
                     {type.icon} {type.label} ({type.category})
                   </option>
@@ -248,19 +365,21 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">Location</label>
               <input
                 type="text"
                 value={newEquipment.location}
-                onChange={(e) => setNewEquipment({ ...newEquipment, location: e.target.value })}
-                className="w-full px-4 py-3 bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                onChange={e => setNewEquipment({ ...newEquipment, location: e.target.value })}
+                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                 placeholder="e.g., Main Kitchen, Prep Area"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Temperature Range</label>
-              <div className="text-white bg-[#2a2a2a] p-3 rounded-2xl">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
+                Temperature Range
+              </label>
+              <div className="rounded-2xl bg-[#2a2a2a] p-3 text-white">
                 <span className="text-lg font-semibold">
                   {(() => {
                     const defaults = getDefaultTemps(newEquipment.equipment_type);
@@ -268,8 +387,9 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
                   })()}
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mt-1">
-                Automatically set based on food safety standards for {getEquipmentLabel(newEquipment.equipment_type)}
+              <p className="mt-1 text-xs text-gray-400">
+                Automatically set based on food safety standards for{' '}
+                {getEquipmentLabel(newEquipment.equipment_type)}
               </p>
             </div>
             <div className="md:col-span-2">
@@ -278,36 +398,36 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
                   type="checkbox"
                   id="is_active"
                   checked={newEquipment.is_active}
-                  onChange={(e) => setNewEquipment({ ...newEquipment, is_active: e.target.checked })}
-                  className="w-4 h-4 text-[#29E7CD] bg-[#1f1f1f] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                  onChange={e => setNewEquipment({ ...newEquipment, is_active: e.target.checked })}
+                  className="h-4 w-4 rounded border-[#2a2a2a] bg-[#1f1f1f] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
                 />
                 <label htmlFor="is_active" className="ml-2 text-sm text-gray-300">
                   Active Equipment
                 </label>
               </div>
             </div>
-            
+
             {equipmentError && (
-              <div className="md:col-span-2 bg-red-900/20 border border-red-500/30 text-red-300 p-3 rounded-2xl">
+              <div className="rounded-2xl border border-red-500/30 bg-red-900/20 p-3 text-red-300 md:col-span-2">
                 {equipmentError}
               </div>
             )}
-            
+
             {equipmentResult && (
-              <div className="md:col-span-2 bg-green-900/20 border border-green-500/30 text-green-300 p-3 rounded-2xl">
+              <div className="rounded-2xl border border-green-500/30 bg-green-900/20 p-3 text-green-300 md:col-span-2">
                 {equipmentResult}
               </div>
             )}
-            
-            <div className="md:col-span-2 flex space-x-4">
+
+            <div className="flex space-x-4 md:col-span-2">
               <button
                 type="submit"
                 disabled={equipmentLoading}
-                className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-8 py-3 rounded-2xl font-semibold hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
+                className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-3 font-semibold text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {equipmentLoading ? (
                   <span className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white"></div>
                     Saving...
                   </span>
                 ) : (
@@ -317,7 +437,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
               <button
                 type="button"
                 onClick={() => setShowAddEquipment(false)}
-                className="bg-[#2a2a2a] text-white px-6 py-3 rounded-2xl font-semibold hover:bg-[#3a3a3a] transition-all duration-200"
+                className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
               >
                 Cancel
               </button>
@@ -328,7 +448,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
       {/* Equipment List */}
       {equipment.length > 0 && (
-        <div className="space-y-4 mb-6">
+        <div className="mb-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold text-white">
               Your Equipment ({equipment.length})
@@ -336,40 +456,42 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
             {equipment.length > 6 && (
               <button
                 onClick={() => setShowAllEquipment(!showAllEquipment)}
-                className="text-[#29E7CD] hover:text-[#29E7CD]/80 font-medium"
+                className="font-medium text-[#29E7CD] hover:text-[#29E7CD]/80"
               >
                 {showAllEquipment ? 'Show Less' : 'Show All'}
               </button>
             )}
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(showAllEquipment ? equipment : equipment.slice(0, 6)).map((eq) => (
-              <div key={eq.id} className="bg-[#2a2a2a] p-4 rounded-2xl border border-[#3a3a3a]">
-                <div className="flex items-start justify-between mb-3">
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {(showAllEquipment ? equipment : equipment.slice(0, 6)).map(eq => (
+              <div key={eq.id} className="rounded-2xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
+                <div className="mb-3 flex items-start justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl">{getEquipmentIcon(eq.equipment_type)}</span>
                     <div>
-                      <h4 className="text-white font-semibold">{eq.name}</h4>
-                      <p className="text-gray-400 text-sm">{getEquipmentLabel(eq.equipment_type)}</p>
+                      <h4 className="font-semibold text-white">{eq.name}</h4>
+                      <p className="text-sm text-gray-400">
+                        {getEquipmentLabel(eq.equipment_type)}
+                      </p>
                     </div>
                   </div>
                   <button
                     onClick={() => handleDeleteEquipment(eq.id!)}
-                    className="text-red-400 hover:text-red-300 text-sm"
+                    className="text-sm text-red-400 hover:text-red-300"
                   >
                     ✕
                   </button>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-sm text-gray-300">
                     <span className="font-medium">Location:</span> {eq.location}
                   </p>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-sm text-gray-300">
                     <span className="font-medium">Range:</span> {eq.min_temp}°C - {eq.max_temp}°C
                   </p>
-                  <p className="text-gray-300 text-sm">
-                    <span className="font-medium">Status:</span> 
+                  <p className="text-sm text-gray-300">
+                    <span className="font-medium">Status:</span>
                     <span className={`ml-1 ${eq.is_active ? 'text-green-400' : 'text-red-400'}`}>
                       {eq.is_active ? 'Active' : 'Inactive'}
                     </span>
@@ -382,10 +504,12 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
       )}
 
       {equipment.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">🌡️</div>
-          <h3 className="text-xl font-semibold text-white mb-2">No Equipment Added Yet</h3>
-          <p className="text-gray-400 mb-6">Add your first piece of temperature monitoring equipment to get started</p>
+        <div className="py-12 text-center">
+          <div className="mb-4 text-6xl">🌡️</div>
+          <h3 className="mb-2 text-xl font-semibold text-white">No Equipment Added Yet</h3>
+          <p className="mb-6 text-gray-400">
+            Add your first piece of temperature monitoring equipment to get started
+          </p>
         </div>
       )}
     </div>

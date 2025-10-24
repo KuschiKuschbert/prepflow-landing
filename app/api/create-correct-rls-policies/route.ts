@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
         {
           step: 1,
           description: 'Enable RLS on ingredients table',
-          sql: 'ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;'
+          sql: 'ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;',
         },
         {
           step: 2,
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 ON public.ingredients 
 FOR SELECT 
 TO anon 
-USING (true);`
+USING (true);`,
         },
         {
           step: 3,
@@ -27,7 +27,7 @@ USING (true);`
 ON public.ingredients 
 FOR INSERT 
 TO anon 
-WITH CHECK (true);`
+WITH CHECK (true);`,
         },
         {
           step: 4,
@@ -36,7 +36,7 @@ WITH CHECK (true);`
 ON public.ingredients 
 FOR UPDATE 
 TO anon 
-USING (true);`
+USING (true);`,
         },
         {
           step: 5,
@@ -45,8 +45,8 @@ USING (true);`
 ON public.ingredients 
 FOR DELETE 
 TO anon 
-USING (true);`
-        }
+USING (true);`,
+        },
       ],
       instructions: `
         1. Go to: https://supabase.com/dashboard/project/dulkrqgjfohsuxhsmofo
@@ -55,14 +55,16 @@ USING (true);`
         4. Copy and paste each SQL command above one by one
         5. Click "Run" after each command
         6. Refresh your webapp to see the changes
-      `
+      `,
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({
-      error: 'Internal server error',
-      details: err instanceof Error ? err.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

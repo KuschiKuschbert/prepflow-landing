@@ -32,12 +32,14 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
 ## 📊 Database Schema
 
 ### Tables Created
+
 - `ingredients` - Ingredient database with costs, waste, and yield percentages
 - `recipes` - Recipe definitions with yield and instructions
 - `recipe_ingredients` - Junction table linking recipes to ingredients
 - `menu_dishes` - Menu items with pricing and profit margins
 
 ### Sample Data Included
+
 - 5 sample ingredients (tomatoes, onions, garlic, olive oil, salt)
 - 2 sample recipes (tomato sauce, pasta carbonara)
 - Recipe ingredients relationships
@@ -46,13 +48,15 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 - Supabase account
 
 ### Installation
 
 1. **Clone and install dependencies**:
+
    ```bash
    cd prepflow-webapp-nextjs
    npm install
@@ -60,6 +64,7 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
 
 2. **Set up environment variables**:
    Create `.env.local` with your Supabase credentials:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -69,6 +74,7 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
    Run the SQL commands from `database-setup.sql` in your Supabase SQL editor
 
 4. **Start development server**:
+
    ```bash
    npm run dev
    ```
@@ -79,23 +85,27 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
 ## 📱 Usage
 
 ### 1. Dashboard
+
 - View statistics: total ingredients, recipes, menu dishes
 - Quick access to all features
 - Getting started guide
 
 ### 2. Ingredients Management
+
 - Add/edit/delete ingredients
 - Track costs, waste percentages, yield
 - Supplier and storage information
 - Search and filter capabilities
 
 ### 3. Recipe Creation
+
 - Create recipes with yield and instructions
 - Add ingredients with quantities
 - Real-time cost calculation
 - Prep and cook time tracking
 
 ### 4. COGS Calculator
+
 - Select recipe for cost analysis
 - Add labor and overhead costs
 - Set target profit margins
@@ -105,18 +115,21 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
 ## 🎯 Next Steps
 
 ### Phase 2: PWA & Offline Support
+
 - [ ] Progressive Web App configuration
 - [ ] Service worker for offline functionality
 - [ ] IndexedDB for local storage
 - [ ] Background sync capabilities
 
 ### Phase 3: Authentication & Multi-user
+
 - [ ] Supabase Auth integration
 - [ ] User registration/login
 - [ ] Multi-tenant data isolation
 - [ ] Role-based permissions
 
 ### Phase 4: Advanced Features
+
 - [ ] Inventory management
 - [ ] Supplier integration
 - [ ] Advanced reporting
@@ -125,6 +138,7 @@ A comprehensive kitchen management system built with Next.js 15 and Supabase, de
 ## 🔧 Development
 
 ### Project Structure
+
 ```
 src/
 ├── app/                 # Next.js App Router pages
@@ -138,6 +152,7 @@ src/
 ```
 
 ### Key Files
+
 - `src/lib/supabase.ts` - Database configuration and TypeScript types
 - `database-setup.sql` - Complete database schema with sample data
 - `src/app/layout.tsx` - Navigation and layout
@@ -156,6 +171,7 @@ src/
 Ready for deployment to Vercel:
 
 1. **Connect to Vercel**:
+
    ```bash
    npx vercel --prod
    ```
@@ -167,6 +183,7 @@ Ready for deployment to Vercel:
 ## 📞 Support
 
 This is a single-user MVP designed for testing and development. The system is ready for:
+
 - Multi-user authentication
 - Subscription tiers
 - Advanced features

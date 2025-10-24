@@ -3,6 +3,7 @@
 ## 🎯 **Phase 1: Foundation Setup (Week 1)**
 
 ### **1.1 Project Structure Setup**
+
 - [ ] **Create unified Next.js project structure**
   - [ ] Set up new Next.js 15 project with App Router
   - [ ] Configure TypeScript and ESLint
@@ -22,6 +23,7 @@
   - [ ] Test database connection
 
 ### **1.2 Authentication System**
+
 - [ ] **Create authentication pages**
   - [ ] Login page (`/app/login/page.tsx`)
   - [ ] Register page (`/app/register/page.tsx`)
@@ -49,6 +51,7 @@
   - [ ] Handle token storage
 
 ### **1.3 Database Schema Updates**
+
 - [ ] **Update users table**
   - [ ] Add subscription fields (status, expires, stripe_customer_id)
   - [ ] Add email verification fields (token, expires, sent_at)
@@ -71,6 +74,7 @@
 ## 🚀 **Phase 2: Core Features (Week 2)**
 
 ### **2.1 Paywall Implementation**
+
 - [ ] **Set up Stripe integration**
   - [ ] Install Stripe dependencies
   - [ ] Configure Stripe client
@@ -90,6 +94,7 @@
   - [ ] Subscription management UI
 
 ### **2.2 Dashboard Foundation**
+
 - [ ] **Create protected dashboard area**
   - [ ] Dashboard layout component
   - [ ] Navigation component
@@ -111,6 +116,7 @@
 ## 🏗️ **Phase 3: Webapp Features (Week 3)**
 
 ### **3.1 Ingredients Management**
+
 - [ ] **Create ingredients pages**
   - [ ] Ingredients list page (`/app/dashboard/ingredients/page.tsx`)
   - [ ] Add ingredient page (`/app/dashboard/ingredients/add/page.tsx`)
@@ -128,6 +134,7 @@
   - [ ] Ingredients import component
 
 ### **3.2 Recipe Management**
+
 - [ ] **Create recipe pages**
   - [ ] Recipes list page (`/app/dashboard/recipes/page.tsx`)
   - [ ] Add recipe page (`/app/dashboard/recipes/add/page.tsx`)
@@ -146,6 +153,7 @@
   - [ ] Recipe cost calculator
 
 ### **3.3 COG Calculator**
+
 - [ ] **Create COG calculator pages**
   - [ ] COG calculator page (`/app/dashboard/cogs/page.tsx`)
   - [ ] COG reports page (`/app/dashboard/cogs/reports/page.tsx`)
@@ -166,6 +174,7 @@
 ## 📱 **Phase 4: Mobile Preparation (Week 4)**
 
 ### **4.1 Universal Components**
+
 - [ ] **Create platform-agnostic components**
   - [ ] Universal Button component
   - [ ] Universal Input component
@@ -179,6 +188,7 @@
   - [ ] Responsive design system
 
 ### **4.2 PWA Implementation**
+
 - [ ] **Set up Progressive Web App**
   - [ ] Configure PWA manifest
   - [ ] Implement service worker
@@ -192,6 +202,7 @@
   - [ ] Performance optimization
 
 ### **4.3 React Native Preparation**
+
 - [ ] **Set up React Native structure**
   - [ ] Create mobile directory
   - [ ] Configure Expo project
@@ -209,6 +220,7 @@
 ## 🧪 **Phase 5: Testing & Quality Assurance**
 
 ### **5.1 Unit Testing**
+
 - [ ] **Set up testing framework**
   - [ ] Configure Jest
   - [ ] Set up React Testing Library
@@ -222,6 +234,7 @@
   - [ ] Test business logic
 
 ### **5.2 Integration Testing**
+
 - [ ] **Test authentication flows**
   - [ ] Registration flow
   - [ ] Login flow
@@ -235,6 +248,7 @@
   - [ ] Subscription management
 
 ### **5.3 E2E Testing**
+
 - [ ] **Set up E2E testing**
   - [ ] Configure Playwright
   - [ ] Set up test environment
@@ -252,6 +266,7 @@
 ## 🚀 **Phase 6: Deployment & Launch**
 
 ### **6.1 Production Setup**
+
 - [ ] **Configure production environment**
   - [ ] Set up production database
   - [ ] Configure production API keys
@@ -265,6 +280,7 @@
   - [ ] Configure CDN
 
 ### **6.2 Mobile Deployment**
+
 - [ ] **Prepare mobile apps**
   - [ ] Build iOS app
   - [ ] Build Android app
@@ -282,6 +298,7 @@
 ## 📊 **Phase 7: Analytics & Monitoring**
 
 ### **7.1 Analytics Setup**
+
 - [ ] **Configure analytics**
   - [ ] Set up user analytics
   - [ ] Configure conversion tracking
@@ -295,6 +312,7 @@
   - [ ] Performance tracking
 
 ### **7.2 Monitoring & Alerts**
+
 - [ ] **Set up monitoring**
   - [ ] Configure error monitoring
   - [ ] Set up performance monitoring
@@ -306,6 +324,7 @@
 ## 🎯 **Priority Matrix**
 
 ### **High Priority (Must Have)**
+
 - [ ] Authentication system
 - [ ] Paywall implementation
 - [ ] Basic dashboard
@@ -314,6 +333,7 @@
 - [ ] COG calculator
 
 ### **Medium Priority (Should Have)**
+
 - [ ] Advanced analytics
 - [ ] Mobile optimization
 - [ ] PWA features
@@ -321,6 +341,7 @@
 - [ ] Data export
 
 ### **Low Priority (Nice to Have)**
+
 - [ ] React Native app
 - [ ] Advanced A/B testing
 - [ ] Social features
@@ -332,18 +353,21 @@
 ## 📋 **Daily Tasks**
 
 ### **Day 1-2: Project Setup**
+
 - [ ] Create unified project structure
 - [ ] Set up development environment
 - [ ] Configure dependencies
 - [ ] Set up version control
 
 ### **Day 3-4: Authentication**
+
 - [ ] Implement authentication system
 - [ ] Create auth pages
 - [ ] Set up email verification
 - [ ] Test auth flows
 
 ### **Day 5-7: Paywall**
+
 - [ ] Integrate Stripe
 - [ ] Implement subscription management
 - [ ] Create paywall components
@@ -351,4 +375,4 @@
 
 ---
 
-*This TODO list will be updated as we progress through the project.*
+_This TODO list will be updated as we progress through the project._

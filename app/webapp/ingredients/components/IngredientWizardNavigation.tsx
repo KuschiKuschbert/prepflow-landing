@@ -19,30 +19,30 @@ export default function IngredientWizardNavigation({
   onSave,
   onCancel,
   canProceed,
-  loading = false
+  loading = false,
 }: IngredientWizardNavigationProps) {
   const isFirstStep = currentStep === 1;
   const isLastStep = currentStep === totalSteps;
 
   return (
-    <div className="flex justify-between items-center pt-6 border-t border-[#2a2a2a]">
+    <div className="flex items-center justify-between border-t border-[#2a2a2a] pt-6">
       <div className="flex items-center space-x-4">
         {!isFirstStep && (
           <button
             type="button"
             onClick={onPrevious}
             disabled={loading}
-            className="px-6 py-3 bg-[#2a2a2a] text-white rounded-2xl hover:bg-[#3a3a3a] transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] disabled:cursor-not-allowed disabled:opacity-50"
           >
             ← Previous
           </button>
         )}
-        
+
         <button
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="px-6 py-3 bg-red-600/20 text-red-400 rounded-2xl hover:bg-red-600/30 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-2xl bg-red-600/20 px-6 py-3 font-medium text-red-400 transition-all duration-200 hover:bg-red-600/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Cancel
         </button>
@@ -54,21 +54,19 @@ export default function IngredientWizardNavigation({
             type="button"
             onClick={onNext}
             disabled={!canProceed || loading}
-            className={`px-8 py-3 rounded-2xl font-medium transition-all duration-200 ${
+            className={`rounded-2xl px-8 py-3 font-medium transition-all duration-200 ${
               canProceed && !loading
-                ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 shadow-lg hover:shadow-xl'
-                : 'bg-[#2a2a2a] text-gray-400 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl'
+                : 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
             }`}
           >
             {loading ? (
               <span className="flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
+                <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-gray-400"></div>
                 <span>Loading...</span>
               </span>
             ) : (
-              <>
-                Next →
-              </>
+              <>Next →</>
             )}
           </button>
         )}
@@ -78,21 +76,19 @@ export default function IngredientWizardNavigation({
             type="button"
             onClick={onSave}
             disabled={!canProceed || loading}
-            className={`px-8 py-3 rounded-2xl font-medium transition-all duration-200 ${
+            className={`rounded-2xl px-8 py-3 font-medium transition-all duration-200 ${
               canProceed && !loading
-                ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 shadow-lg hover:shadow-xl'
-                : 'bg-[#2a2a2a] text-gray-400 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl'
+                : 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
             }`}
           >
             {loading ? (
               <span className="flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-white"></div>
                 <span>Saving...</span>
               </span>
             ) : (
-              <>
-                ✅ Save Ingredient
-              </>
+              <>✅ Save Ingredient</>
             )}
           </button>
         )}

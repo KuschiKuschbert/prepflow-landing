@@ -17,7 +17,7 @@ export const translations = {
     featuresAria: 'PrepFlow-Funktionen anzeigen',
     howItWorksAria: 'Erfahren Sie, wie PrepFlow funktioniert',
     pricingAria: 'PrepFlow-Preise anzeigen',
-    faqAria: 'Häufig gestellte Fragen'
+    faqAria: 'Häufig gestellte Fragen',
   },
 
   // WebApp Dashboard
@@ -33,7 +33,8 @@ export const translations = {
     live: 'Live',
     manageIngredients: 'Zutaten verwalten',
     manageIngredientsDesc: 'Hinzufügen, bearbeiten und organisieren',
-    manageIngredientsSubtitle: 'Erstellen Sie Ihr Kücheninventar mit detaillierter Zutatenverfolgung',
+    manageIngredientsSubtitle:
+      'Erstellen Sie Ihr Kücheninventar mit detaillierter Zutatenverfolgung',
     recipeBook: 'Rezeptbuch',
     recipeBookDesc: 'Gespeicherte Rezepte anzeigen',
     recipeBookSubtitle: 'Zugriff auf Ihre gespeicherten Rezepte aus COGS-Berechnungen',
@@ -41,10 +42,11 @@ export const translations = {
     calculateCOGSDesc: 'Kosten & Margen analysieren',
     calculateCOGSSubtitle: 'Berechnen Sie die Kosten der verkauften Waren und Gewinnmargen',
     gettingStarted: 'Erste Schritte mit PrepFlow',
-    gettingStartedDesc: 'Willkommen in Ihrem Küchenmanagement-Hub! Beginnen Sie mit dem Hinzufügen Ihrer Zutaten, um Ihr Inventar aufzubauen, und erstellen Sie dann Rezepte, um Ihre Kosten der verkauften Waren (COGS) zu berechnen und Ihre Gewinnmargen zu optimieren.',
+    gettingStartedDesc:
+      'Willkommen in Ihrem Küchenmanagement-Hub! Beginnen Sie mit dem Hinzufügen Ihrer Zutaten, um Ihr Inventar aufzubauen, und erstellen Sie dann Rezepte, um Ihre Kosten der verkauften Waren (COGS) zu berechnen und Ihre Gewinnmargen zu optimieren.',
     realTimeAnalytics: 'Echtzeit-Analysen',
     profitOptimization: 'Gewinnoptimierung',
-    smartInsights: 'Intelligente Einblicke'
+    smartInsights: 'Intelligente Einblicke',
   },
 
   // WebApp Performance Analysis
@@ -62,7 +64,7 @@ export const translations = {
     popularityCat: 'Beliebtheits-Kat.',
     menuItemClass: 'Menügericht-Klasse',
     allCategories: 'Alle Kategorien',
-    chefsKiss: 'Chef\'s Kiss',
+    chefsKiss: "Chef's Kiss",
     hiddenGem: 'Verstecktes Juwel',
     bargainBucket: 'Schnäppchen',
     burntToast: 'Angebrannt',
@@ -73,15 +75,17 @@ export const translations = {
     importSalesData: 'Verkaufsdaten importieren',
     exportCSV: 'CSV exportieren',
     importModalTitle: 'Verkaufsdaten importieren',
-    importModalDesc: 'Fügen Sie Ihre CSV-Daten unten ein. Stellen Sie sicher, dass Spalten für Gericht, Verkaufte Anzahl und Beliebtheit vorhanden sind.',
-    importPlaceholder: 'Gericht,Verkaufte Anzahl,Beliebtheit\nDoppel-Cheeseburger,175,10.85\nHot Dog,158,9.80',
+    importModalDesc:
+      'Fügen Sie Ihre CSV-Daten unten ein. Stellen Sie sicher, dass Spalten für Gericht, Verkaufte Anzahl und Beliebtheit vorhanden sind.',
+    importPlaceholder:
+      'Gericht,Verkaufte Anzahl,Beliebtheit\nDoppel-Cheeseburger,175,10.85\nHot Dog,158,9.80',
     importing: 'Importiere...',
     importData: 'Daten importieren',
     cancel: 'Abbrechen',
     high: 'Hoch',
     low: 'Niedrig',
     performanceOverview: 'Leistungsübersicht',
-    categoryDistribution: 'Kategorieverteilung'
+    categoryDistribution: 'Kategorieverteilung',
   },
 
   // WebApp Ingredients
@@ -108,7 +112,8 @@ export const translations = {
     liveData: 'Live-Daten',
     noIngredientsFound: 'Keine Zutaten gefunden',
     noIngredientsDesc: 'Fügen Sie Ihre erste Zutat hinzu, um Ihr Kücheninventar aufzubauen',
-    noIngredientsFilterDesc: 'Versuchen Sie, Ihre Suchfilter anzupassen, um zu finden, wonach Sie suchen',
+    noIngredientsFilterDesc:
+      'Versuchen Sie, Ihre Suchfilter anzupassen, um zu finden, wonach Sie suchen',
     addFirstIngredient: 'Ihre erste Zutat hinzufügen',
     ingredient: 'Zutat',
     packSize: 'Packungsgröße',
@@ -152,7 +157,8 @@ export const translations = {
     bag: 'Beutel',
     bottle: 'Flasche',
     can: 'Dose',
-    packPriceHelper: 'Geben Sie den Gesamtpackungspreis ein (z.B. 13,54€ für einen 5L Joghurt-Behälter). Das System berechnet automatisch den Preis pro Einheit.',
+    packPriceHelper:
+      'Geben Sie den Gesamtpackungspreis ein (z.B. 13,54€ für einen 5L Joghurt-Behälter). Das System berechnet automatisch den Preis pro Einheit.',
     pricePerUnit: 'Preis pro {unit}: {cost}€',
     nextStep: 'Nächster Schritt →',
     advancedSettings: 'Erweiterte Einstellungen',
@@ -187,66 +193,125 @@ export const translations = {
     volume: 'Volumen',
     teaspoons: 'Teelöffel (TL)',
     tablespoons: 'Esslöffel (EL)',
-    cups: 'Tassen'
+    cups: 'Tassen',
   },
-  
+
   // Hero Section
   hero: {
     title: 'Hören Sie auf, den Gewinn Ihrer Speisekarte zu erraten',
-    subtitle: 'Sehen Sie genau, welche Gerichte Geld verdienen und welche Ihren Gewinn auffressen. Entwickelt aus 20 Jahren echter Küchenerfahrung.',
+    subtitle:
+      'Sehen Sie genau, welche Gerichte Geld verdienen und welche Ihren Gewinn auffressen. Entwickelt aus 20 Jahren echter Küchenerfahrung.',
     ctaPrimary: 'Jetzt PrepFlow holen - 29€',
     ctaSecondary: 'Kostenlose Probe holen',
     dashboardAlt: 'PrepFlow Dashboard zeigt COGS-Analyse und Gewinneinblicke',
-    disclaimer: 'Funktioniert für Cafés, Food Trucks, kleine Restaurants. Keine Bindung. 7-Tage-Geld-zurück-Richtlinie. Ergebnisse können je nach Ihrer aktuellen Speisekarte und Betrieb variieren.',
-    
+    disclaimer:
+      'Funktioniert für Cafés, Food Trucks, kleine Restaurants. Keine Bindung. 7-Tage-Geld-zurück-Richtlinie. Ergebnisse können je nach Ihrer aktuellen Speisekarte und Betrieb variieren.',
+
     // A/B Test Variants
     variantA: {
       title: 'Hören Sie auf, Geld mit Ihrer Speisekarte zu verlieren.',
-      subtitle: 'Die meisten Restaurants wissen nicht, welche Gerichte profitabel sind. PrepFlow zeigt Ihnen genau, wohin Ihr Geld fließt — und wie Sie es beheben können.',
-      bullet1: { title: 'Blutung stoppen', description: 'identifizieren Sie, welche Menüpunkte Sie Geld kosten' },
-      bullet2: { title: 'Echte Kostenanalyse', description: 'sehen Sie echte Zutatenkosten inklusive Abfall und Ausbeute' },
-      bullet3: { title: 'Gewinnoptimierung', description: 'wissen Sie, welche Gerichte Sie bewerben, reparieren oder entfernen sollten' },
-      bullet4: { title: 'GST-Compliance', description: 'preisen Sie korrekt für australische Steueranforderungen' },
-      bullet5: { title: 'Intelligente Menüentscheidungen', description: 'datengetriebene Entscheidungen über Ihre Menümischung' },
-      bullet6: { title: 'KI-Kücheneinblicke', description: 'entdecken Sie neue Methoden zur Verbesserung Ihrer Margen' },
+      subtitle:
+        'Die meisten Restaurants wissen nicht, welche Gerichte profitabel sind. PrepFlow zeigt Ihnen genau, wohin Ihr Geld fließt — und wie Sie es beheben können.',
+      bullet1: {
+        title: 'Blutung stoppen',
+        description: 'identifizieren Sie, welche Menüpunkte Sie Geld kosten',
+      },
+      bullet2: {
+        title: 'Echte Kostenanalyse',
+        description: 'sehen Sie echte Zutatenkosten inklusive Abfall und Ausbeute',
+      },
+      bullet3: {
+        title: 'Gewinnoptimierung',
+        description: 'wissen Sie, welche Gerichte Sie bewerben, reparieren oder entfernen sollten',
+      },
+      bullet4: {
+        title: 'GST-Compliance',
+        description: 'preisen Sie korrekt für australische Steueranforderungen',
+      },
+      bullet5: {
+        title: 'Intelligente Menüentscheidungen',
+        description: 'datengetriebene Entscheidungen über Ihre Menümischung',
+      },
+      bullet6: {
+        title: 'KI-Kücheneinblicke',
+        description: 'entdecken Sie neue Methoden zur Verbesserung Ihrer Margen',
+      },
       ctaPrimary: 'Beispiel-Dashboard holen',
       ctaSecondary: 'Kostenlose Probe holen',
-      disclaimer: 'Entwickelt für australische Cafés und Restaurants. Keine Bindung. 7-Tage-Geld-zurück-Richtlinie.'
+      disclaimer:
+        'Entwickelt für australische Cafés und Restaurants. Keine Bindung. 7-Tage-Geld-zurück-Richtlinie.',
     },
-    
+
     variantB: {
       title: 'Verwandeln Sie Ihr Menü in eine Gewinnmaschine.',
-      subtitle: 'Verwandeln Sie Raten in datengetriebene Entscheidungen. PrepFlow gibt Ihnen die Einblicke, um jeden Dollar auf Ihrem Menü zu maximieren.',
-      bullet1: { title: 'Gewinnmaximierung', description: 'identifizieren Sie Ihre höchsten Margenmöglichkeiten' },
-      bullet2: { title: 'Kostentransparenz', description: 'sehen Sie genau, was jedes Gericht kostet' },
-      bullet3: { title: 'Menüoptimierung', description: 'wissen Sie, welche Artikel Sie bewerben oder entfernen sollten' },
-      bullet4: { title: 'Steuercompliance', description: 'GST-bereite Preisgestaltung für australische Unternehmen' },
-      bullet5: { title: 'Leistungsverfolgung', description: 'überwachen Sie, welche Gerichte Ihren Gewinn antreiben' },
-      bullet6: { title: 'KI-Optimierung', description: 'erhalten Sie Vorschläge zur Verbesserung Ihrer Margen' },
+      subtitle:
+        'Verwandeln Sie Raten in datengetriebene Entscheidungen. PrepFlow gibt Ihnen die Einblicke, um jeden Dollar auf Ihrem Menü zu maximieren.',
+      bullet1: {
+        title: 'Gewinnmaximierung',
+        description: 'identifizieren Sie Ihre höchsten Margenmöglichkeiten',
+      },
+      bullet2: {
+        title: 'Kostentransparenz',
+        description: 'sehen Sie genau, was jedes Gericht kostet',
+      },
+      bullet3: {
+        title: 'Menüoptimierung',
+        description: 'wissen Sie, welche Artikel Sie bewerben oder entfernen sollten',
+      },
+      bullet4: {
+        title: 'Steuercompliance',
+        description: 'GST-bereite Preisgestaltung für australische Unternehmen',
+      },
+      bullet5: {
+        title: 'Leistungsverfolgung',
+        description: 'überwachen Sie, welche Gerichte Ihren Gewinn antreiben',
+      },
+      bullet6: {
+        title: 'KI-Optimierung',
+        description: 'erhalten Sie Vorschläge zur Verbesserung Ihrer Margen',
+      },
       ctaPrimary: 'Beispiel-Dashboard holen',
       ctaSecondary: 'Beispiel-Blatt ausprobieren',
-      disclaimer: 'Entwickelt für australische Gastronomie. Einfache Einrichtung. 7-Tage-Geld-zurück-Garantie.'
+      disclaimer:
+        'Entwickelt für australische Gastronomie. Einfache Einrichtung. 7-Tage-Geld-zurück-Garantie.',
     },
-    
+
     variantC: {
       title: 'Kennen Sie Ihre Menükosten. Machen Sie mehr Gewinn.',
-      subtitle: 'PrepFlow zeigt Ihnen genau, was jedes Gericht kostet und wie viel Gewinn es macht. Einfaches Google Sheet. Echte Ergebnisse.',
-      bullet1: { title: 'Kostenaufschlüsselung', description: 'sehen Sie genau, was jedes Gericht kostet' },
-      bullet2: { title: 'Gewinnberechnung', description: 'kennen Sie Ihre Marge bei jedem Artikel' },
-      bullet3: { title: 'Menüentscheidungen', description: 'entscheiden Sie, was Sie behalten, ändern oder entfernen möchten' },
+      subtitle:
+        'PrepFlow zeigt Ihnen genau, was jedes Gericht kostet und wie viel Gewinn es macht. Einfaches Google Sheet. Echte Ergebnisse.',
+      bullet1: {
+        title: 'Kostenaufschlüsselung',
+        description: 'sehen Sie genau, was jedes Gericht kostet',
+      },
+      bullet2: {
+        title: 'Gewinnberechnung',
+        description: 'kennen Sie Ihre Marge bei jedem Artikel',
+      },
+      bullet3: {
+        title: 'Menüentscheidungen',
+        description: 'entscheiden Sie, was Sie behalten, ändern oder entfernen möchten',
+      },
       bullet4: { title: 'GST-bereit', description: 'australische Steuercompliance eingebaut' },
-      bullet5: { title: 'Einfache Einrichtung', description: 'funktioniert in Google Sheets, keine neue Software' },
-      bullet6: { title: 'Intelligente Einblicke', description: 'KI-Vorschläge zur Verbesserung Ihrer Margen' },
+      bullet5: {
+        title: 'Einfache Einrichtung',
+        description: 'funktioniert in Google Sheets, keine neue Software',
+      },
+      bullet6: {
+        title: 'Intelligente Einblicke',
+        description: 'KI-Vorschläge zur Verbesserung Ihrer Margen',
+      },
       ctaPrimary: 'Beispiel-Dashboard holen',
       ctaSecondary: 'Kostenlose Probe',
-      disclaimer: 'Für australische Cafés und Restaurants. 7-Tage-Geld-zurück-Richtlinie.'
-    }
+      disclaimer: 'Für australische Cafés und Restaurants. 7-Tage-Geld-zurück-Richtlinie.',
+    },
   },
-  
+
   // Pricing
   pricing: {
     title: 'Einfache, ehrliche Preise',
-    subtitle: 'Einmaliger Kauf. Lebenslanger Zugang. Keine Abonnements, keine versteckten Gebühren.',
+    subtitle:
+      'Einmaliger Kauf. Lebenslanger Zugang. Keine Abonnements, keine versteckten Gebühren.',
     price: '29€',
     currency: 'EUR',
     guarantee: '7-Tage-Geld-zurück-Garantie',
@@ -256,44 +321,51 @@ export const translations = {
       multiCurrency: 'Multi-Währungsunterstützung',
       gstVat: 'GST/VAT-Berechnungen',
       lifetimeUpdates: 'Lebenslange Updates',
-      moneyBack: '7-Tage-Geld-zurück-Garantie'
+      moneyBack: '7-Tage-Geld-zurück-Garantie',
     },
     cta: 'Jetzt PrepFlow holen',
-    instantAccess: 'Sofortiger Zugang über Gumroad'
+    instantAccess: 'Sofortiger Zugang über Gumroad',
   },
-  
+
   // Features
   features: {
     stockList: {
       title: 'Bestandsliste (unendlich)',
-      description: 'Zentralisieren Sie Zutaten mit Packungsgröße, Einheit, Lieferant, Lagerung, Produktcode. Erfassen Sie Zuschnitt/Abfall und Ausbeuten, um die echten Kosten pro Einheit zu erhalten.'
+      description:
+        'Zentralisieren Sie Zutaten mit Packungsgröße, Einheit, Lieferant, Lagerung, Produktcode. Erfassen Sie Zuschnitt/Abfall und Ausbeuten, um die echten Kosten pro Einheit zu erhalten.',
     },
     cogsRecipes: {
       title: 'COGS-Rezepte',
-      description: 'Erstellen Sie Rezepte, die automatisch Zutatenkosten (inkl. Ausbeute/Zuschnitt) abrufen. Sehen Sie Gerichtskosten, COGS%, GP€ und GP% sofort.'
+      description:
+        'Erstellen Sie Rezepte, die automatisch Zutatenkosten (inkl. Ausbeute/Zuschnitt) abrufen. Sehen Sie Gerichtskosten, COGS%, GP€ und GP% sofort.',
     },
     itemPerformance: {
       title: 'Artikel-Performance',
-      description: 'Fügen Sie Verkäufe ein. Wir berechnen Popularität, Gewinnmarge, Gesamtgewinn ex-MwSt und klassifizieren Artikel als Chef\'s Kiss, Hidden Gem oder Bargain Bucket.'
+      description:
+        "Fügen Sie Verkäufe ein. Wir berechnen Popularität, Gewinnmarge, Gesamtgewinn ex-MwSt und klassifizieren Artikel als Chef's Kiss, Hidden Gem oder Bargain Bucket.",
     },
     dashboardKpis: {
       title: 'Dashboard-KPIs',
-      description: 'Auf einen Blick: durchschnittlicher GP%, Lebensmittelkosten %, durchschnittlicher Artikelgewinn und Verkaufspreis, plus Top-Performer nach Popularität und Marge.'
+      description:
+        'Auf einen Blick: durchschnittlicher GP%, Lebensmittelkosten %, durchschnittlicher Artikelgewinn und Verkaufspreis, plus Top-Performer nach Popularität und Marge.',
     },
     globalTax: {
       title: 'Globale Steuern & Währung',
-      description: 'Legen Sie Land, Steuersystem (GST/VAT/Umsatzsteuer) und Währung in den Einstellungen fest. Alle Ausgaben passen sich an Ihre lokalen Marktanforderungen an.'
+      description:
+        'Legen Sie Land, Steuersystem (GST/VAT/Umsatzsteuer) und Währung in den Einstellungen fest. Alle Ausgaben passen sich an Ihre lokalen Marktanforderungen an.',
     },
     fastOnboarding: {
       title: 'Schnelles Onboarding',
-      description: 'Start-Tab mit Schritt-für-Schritt-Anleitung. Vorinstallierte Beispieldaten und umfassende Ressourcen, um den Ablauf in Minuten zu lernen.'
+      description:
+        'Start-Tab mit Schritt-für-Schritt-Anleitung. Vorinstallierte Beispieldaten und umfassende Ressourcen, um den Ablauf in Minuten zu lernen.',
     },
     aiMethodGenerator: {
       title: 'KI-Methodengenerator',
-      description: 'Entdecken Sie neue Kochmethoden, die Ihre Margen verbessern und Abfall reduzieren könnten. Erhalten Sie KI-gestützte Vorschläge zur Optimierung Ihrer Küchenprozesse.'
-    }
+      description:
+        'Entdecken Sie neue Kochmethoden, die Ihre Margen verbessern und Abfall reduzieren könnten. Erhalten Sie KI-gestützte Vorschläge zur Optimierung Ihrer Küchenprozesse.',
+    },
   },
-  
+
   // Landing Page Sections
   problemOutcome: {
     problem: {
@@ -302,8 +374,8 @@ export const translations = {
         'Sie wissen nicht, welche Menüpunkte tatsächlich Geld verdienen',
         'COGS-Kosten und Abfälle fressen Ihren Gewinn auf',
         'Preisgestaltung ist Raten; GST erschwert alles',
-        'Berichte sind langsam, kompliziert oder sitzen in jemand anderem Tool'
-      ]
+        'Berichte sind langsam, kompliziert oder sitzen in jemand anderem Tool',
+      ],
     },
     outcome: {
       title: 'Das Ergebnis',
@@ -311,48 +383,56 @@ export const translations = {
         'Sehen Sie Artikel-Margen und Gewinn sofort',
         'Erkennen Sie "Gewinner" und "Gewinnlecks" auf einen Blick',
         'Preise mit Vertrauen anpassen (GST-bewusst)',
-        'Alles in Google Sheets ausführen — keine neue Software zu lernen'
-      ]
-    }
+        'Alles in Google Sheets ausführen — keine neue Software zu lernen',
+      ],
+    },
   },
 
   contributingMargin: {
     title: 'Beitragsmarge — Die wahre Gewinnstory',
-    subtitle: 'Sehen Sie über den Bruttogewinn hinaus, um zu verstehen, was jedes Gericht wirklich zu Ihrem Unternehmen beiträgt',
+    subtitle:
+      'Sehen Sie über den Bruttogewinn hinaus, um zu verstehen, was jedes Gericht wirklich zu Ihrem Unternehmen beiträgt',
     grossProfit: {
       title: 'Bruttogewinn',
-      description: 'Was Sie denken, dass Sie verdienen'
+      description: 'Was Sie denken, dass Sie verdienen',
     },
     contributingMargin: {
       title: 'Beitragsmarge',
-      description: 'Was Sie tatsächlich beitragen'
+      description: 'Was Sie tatsächlich beitragen',
     },
     actionPlan: {
       title: 'Aktionsplan',
-      description: 'Was Sie dagegen tun können'
+      description: 'Was Sie dagegen tun können',
     },
-    explanation: 'PrepFlow hilft Ihnen zu sehen: Dieser 15$ Burger könnte eine 60% GP haben, aber nach Vorbereitungszeit, Abfall und Komplexität trägt er vielleicht nur 2,50$ zu Ihrer Gewinnmarge bei. Währenddessen könnte dieses einfache 8$ Beilagengericht 4,00$ beitragen.',
-    disclaimer: '*Beispiel zur Veranschaulichung - tatsächliche Ergebnisse hängen von Ihrer spezifischen Menüstruktur und Kosten ab'
+    explanation:
+      'PrepFlow hilft Ihnen zu sehen: Dieser 15$ Burger könnte eine 60% GP haben, aber nach Vorbereitungszeit, Abfall und Komplexität trägt er vielleicht nur 2,50$ zu Ihrer Gewinnmarge bei. Währenddessen könnte dieses einfache 8$ Beilagengericht 4,00$ beitragen.',
+    disclaimer:
+      '*Beispiel zur Veranschaulichung - tatsächliche Ergebnisse hängen von Ihrer spezifischen Menüstruktur und Kosten ab',
   },
 
   journey: {
     title: 'Meine Reise bei der Erstellung von PrepFlow',
-    subtitle: 'Das ist nicht nur ein weiteres Tool - es ist meine persönliche Lösung für echte Küchenprobleme, verfeinert über 20 Jahre Arbeit in Restaurants in ganz Europa und Australien.',
+    subtitle:
+      'Das ist nicht nur ein weiteres Tool - es ist meine persönliche Lösung für echte Küchenprobleme, verfeinert über 20 Jahre Arbeit in Restaurants in ganz Europa und Australien.',
     earlyExperience: {
       title: '2008-2012 - Frühe Erfahrung',
-      description: 'Began als Sous Chef bei Krautwells GmbH, verwaltete vegane Küche und trainierte Nachwuchsköche'
+      description:
+        'Began als Sous Chef bei Krautwells GmbH, verwaltete vegane Küche und trainierte Nachwuchsköche',
     },
     europeanLeadership: {
       title: '2012-2018 - Europäische Führung',
-      description: 'Gründete KSK-Küchenspezialkräfte veganes Catering, leitete Teams von 21 Mitarbeitern, bediente 1.200+ täglich'
+      description:
+        'Gründete KSK-Küchenspezialkräfte veganes Catering, leitete Teams von 21 Mitarbeitern, bediente 1.200+ täglich',
     },
     australianExcellence: {
       title: '2018-2024 - Australische Exzellenz',
-      description: 'Executive Chef Rollen, Head Chef bei ALH Hotels, leitete Teams von 9 Köchen mit KI-Integration'
+      description:
+        'Executive Chef Rollen, Head Chef bei ALH Hotels, leitete Teams von 9 Köchen mit KI-Integration',
     },
     readyToShare: {
       title: '2024 - Bereit zum Teilen',
-      description: 'Teile jetzt das perfektionierte Tool mit Kollegen und Gastronomen, die vor den gleichen Herausforderungen stehen wie ich'
+      description:
+        'Teile jetzt das perfektionierte Tool mit Kollegen und Gastronomen, die vor den gleichen Herausforderungen stehen wie ich',
     },
     whyCreated: {
       title: 'Warum ich PrepFlow erstellt habe',
@@ -360,46 +440,51 @@ export const translations = {
         'Über 20 Jahre als Koch habe ich alles von kleinen Cafés bis hin zu groß angelegten Catering-Betrieben mit 1.200+ Gästen täglich geleitet. Ich stand vor den gleichen Herausforderungen wie Sie: Menükosten, Abfallmanagement, Gewinnanalyse und Teameffizienz.',
         'Als Head Chef bei ALH Hotels suchte ich ständig nach besseren Wegen, Kosten zu verwalten, Vorbereitungssysteme zu optimieren und unsere Menüauswahl zu verbessern. Bestehende Lösungen waren entweder zu komplex, zu teuer oder verstanden echte Küchenoperationen nicht.',
         'Also baute ich meine eigene Lösung - eine einfache Google Sheets Vorlage, die COGS-Berechnungen handhaben, Zutatenkosten verfolgen und mir genau zeigen konnte, welche Menüpunkte profitabel waren und welche Geld verloren.',
-        'Nach der Arbeit in ganz Europa und Australien habe ich es perfekt für Veranstaltungsorte weltweit verfeinert - mit GST-Unterstützung für australische Märkte, Multi-Währungsoptionen und der Flexibilität, sich an die Bedürfnisse jeder Küche anzupassen. Es ist das Tool, das ich mir gewünscht hätte, als ich anfing, und jetzt teile ich es mit Ihnen.'
-      ]
-    }
+        'Nach der Arbeit in ganz Europa und Australien habe ich es perfekt für Veranstaltungsorte weltweit verfeinert - mit GST-Unterstützung für australische Märkte, Multi-Währungsoptionen und der Flexibilität, sich an die Bedürfnisse jeder Küche anzupassen. Es ist das Tool, das ich mir gewünscht hätte, als ich anfing, und jetzt teile ich es mit Ihnen.',
+      ],
+    },
   },
 
   globalFeatures: {
     title: 'Versteckte Gewinne aufdecken — Ein Blatt, jede Antwort',
-    subtitle: 'Während andere Tausende für komplizierte Restaurantsoftware verlangen, bietet PrepFlow ähnliche Gewinneinblicke in einer einfachen Google Sheet für einen einmaligen Kauf.',
+    subtitle:
+      'Während andere Tausende für komplizierte Restaurantsoftware verlangen, bietet PrepFlow ähnliche Gewinneinblicke in einer einfachen Google Sheet für einen einmaligen Kauf.',
     multiCurrency: {
       title: 'Multi-Währung',
-      description: 'USD, EUR, GBP, AUD, SGD und mehr. Währungen sofort wechseln.'
+      description: 'USD, EUR, GBP, AUD, SGD und mehr. Währungen sofort wechseln.',
     },
     taxSystems: {
       title: 'Steuersysteme',
-      description: 'GST, MwSt, Umsatzsteuer, HST. Konfigurieren Sie für Ihre lokalen Anforderungen.'
+      description:
+        'GST, MwSt, Umsatzsteuer, HST. Konfigurieren Sie für Ihre lokalen Anforderungen.',
     },
     access24_7: {
       title: '24/7 Zugang',
-      description: 'Cloud-basierte Google Sheets. Von überall, jederzeit zugreifen.'
+      description: 'Cloud-basierte Google Sheets. Von überall, jederzeit zugreifen.',
     },
     noConsultants: {
       title: 'Keine Berater',
-      description: 'Richten Sie sich selbst in unter einer Stunde ein. Keine teuren Implementierungsgebühren.'
+      description:
+        'Richten Sie sich selbst in unter einer Stunde ein. Keine teuren Implementierungsgebühren.',
     },
-    conclusion: 'Ein Blatt. Schlüsseleinsichten, die Ihre Küche braucht. Identifizieren Sie Gewinnmöglichkeiten in Ihrem Menü mit Einblicken ähnlich teurer Software — aber in einer einfachen Google Sheet, die Sie selbst einrichten können.'
+    conclusion:
+      'Ein Blatt. Schlüsseleinsichten, die Ihre Küche braucht. Identifizieren Sie Gewinnmöglichkeiten in Ihrem Menü mit Einblicken ähnlich teurer Software — aber in einer einfachen Google Sheet, die Sie selbst einrichten können.',
   },
 
   howItWorks: {
     title: 'Ergebnisse in 3 einfachen Schritten',
     step1: {
       title: 'Einrichtung (5–10 Min)',
-      description: 'GST aktivieren, Zutaten, Ausbeuten und Lieferantenkosten hinzufügen.'
+      description: 'GST aktivieren, Zutaten, Ausbeuten und Lieferantenkosten hinzufügen.',
     },
     step2: {
       title: 'Verkäufe importieren',
-      description: 'Fügen Sie Ihren POS-Export in den Verkaufs-Tab ein.'
+      description: 'Fügen Sie Ihren POS-Export in den Verkaufs-Tab ein.',
     },
     step3: {
       title: 'Entscheiden & handeln',
-      description: 'Dashboard sortiert Artikel nach Gewinn und Beliebtheit; Preise, Portionierung oder Menüauswahl korrigieren.'
+      description:
+        'Dashboard sortiert Artikel nach Gewinn und Beliebtheit; Preise, Portionierung oder Menüauswahl korrigieren.',
     },
     checklist: {
       title: '60-Sekunden-Checkliste',
@@ -408,9 +493,9 @@ export const translations = {
         'Zutatenausbeuten/Abfall eingegeben?',
         'Verkäufe eingefügt?',
         'Top 5 Niedrigmargen-Artikel überprüft?',
-        'Dashboard morgen erneut prüfen'
-      ]
-    }
+        'Dashboard morgen erneut prüfen',
+      ],
+    },
   },
 
   leadMagnet: {
@@ -424,8 +509,9 @@ export const translations = {
       sampleLabel: 'Holen Sie sich Ihr Beispiel-Dashboard',
       sampleDescription: 'Beispiel-Dashboard',
       submitButton: 'Beispiel-Dashboard senden',
-      disclaimer: 'Kein Spam. Keine Bindung. Ihre Daten bleiben privat.\nWir senden Ihnen nur E-Mails über PrepFlow-Updates.'
-    }
+      disclaimer:
+        'Kein Spam. Keine Bindung. Ihre Daten bleiben privat.\nWir senden Ihnen nur E-Mails über PrepFlow-Updates.',
+    },
   },
 
   howItWorksPractice: {
@@ -434,35 +520,40 @@ export const translations = {
     before: {
       title: 'Vor PrepFlow',
       status: 'Unklare Margen',
-      description: 'Blinde Preisgestaltung, Bauchgefühl, unklare Margen überall'
+      description: 'Blinde Preisgestaltung, Bauchgefühl, unklare Margen überall',
     },
     after: {
       title: 'Nach PrepFlow',
       status: 'Klare Einblicke',
-      description: 'Datengesteuerte Entscheidungen, Margeneinblicke enthüllt, Klarheit erreicht'
+      description: 'Datengesteuerte Entscheidungen, Margeneinblicke enthüllt, Klarheit erreicht',
     },
-    explanation: 'PrepFlow hilft Ihnen zu identifizieren, wo Ihr Menü Gewinnpotenzial hat und wo Kosten in Ihre Margen fressen könnten',
-    disclaimer: '*Ergebnisse hängen von Ihrer aktuellen Menüstruktur und wie Sie die Einblicke umsetzen ab'
+    explanation:
+      'PrepFlow hilft Ihnen zu identifizieren, wo Ihr Menü Gewinnpotenzial hat und wo Kosten in Ihre Margen fressen könnten',
+    disclaimer:
+      '*Ergebnisse hängen von Ihrer aktuellen Menüstruktur und wie Sie die Einblicke umsetzen ab',
   },
 
   benefits: {
     title: 'Was PrepFlow Ihnen hilft zu erreichen',
     betterPricing: {
       title: 'Bessere Preisentscheidungen',
-      description: 'Sehen Sie genau, wie Zutatenkosten, Ausbeuten und Abfall Ihre Margen beeinflussen. Treffen Sie informierte Preisentscheidungen anstatt zu raten.'
+      description:
+        'Sehen Sie genau, wie Zutatenkosten, Ausbeuten und Abfall Ihre Margen beeinflussen. Treffen Sie informierte Preisentscheidungen anstatt zu raten.',
     },
     identifyOpportunities: {
       title: 'Gewinnmöglichkeiten identifizieren',
-      description: 'Erkennen Sie, welche Menüpunkte unterperformen und welche verstecktes Potenzial haben. Konzentrieren Sie Ihre Bemühungen dort, wo sie die größte Wirkung haben.'
+      description:
+        'Erkennen Sie, welche Menüpunkte unterperformen und welche verstecktes Potenzial haben. Konzentrieren Sie Ihre Bemühungen dort, wo sie die größte Wirkung haben.',
     },
     streamlineOperations: {
       title: 'Operationen optimieren',
-      description: 'Verstehen Sie Ihre wahren Kosten und optimieren Sie Ihre Menüauswahl. Reduzieren Sie Abfall, verbessern Sie die Effizienz und steigern Sie Ihre Gewinnmarge.'
+      description:
+        'Verstehen Sie Ihre wahren Kosten und optimieren Sie Ihre Menüauswahl. Reduzieren Sie Abfall, verbessern Sie die Effizienz und steigern Sie Ihre Gewinnmarge.',
     },
     cta: {
       text: 'Sehen Sie PrepFlow in Aktion',
-      button: 'Beispiel holen'
-    }
+      button: 'Beispiel holen',
+    },
   },
 
   faq: {
@@ -470,21 +561,25 @@ export const translations = {
     questions: [
       {
         question: 'Brauche ich technische Fähigkeiten?',
-        answer: 'Keine Tabellenkalkulationsformeln erforderlich. Wenn Sie Google Sheets verwenden können, sind Sie bereit.'
+        answer:
+          'Keine Tabellenkalkulationsformeln erforderlich. Wenn Sie Google Sheets verwenden können, sind Sie bereit.',
       },
       {
         question: 'Funktioniert es weltweit?',
-        answer: 'Gebaut für globale Veranstaltungsorte — enthält GST, MwSt, Umsatzsteuer-Toggles, Multi-Währungsunterstützung und exportbereite Berichte für jeden Markt.'
+        answer:
+          'Gebaut für globale Veranstaltungsorte — enthält GST, MwSt, Umsatzsteuer-Toggles, Multi-Währungsunterstützung und exportbereite Berichte für jeden Markt.',
       },
       {
         question: 'Was ist, wenn es für mich nicht funktioniert?',
-        answer: 'Wenn Sie mit den Einblicken und der Klarheit, die PrepFlow in 7 Tagen bietet, nicht zufrieden sind, erhalten Sie jeden Cent zurück. Kein Ärger.'
+        answer:
+          'Wenn Sie mit den Einblicken und der Klarheit, die PrepFlow in 7 Tagen bietet, nicht zufrieden sind, erhalten Sie jeden Cent zurück. Kein Ärger.',
       },
       {
         question: 'Wird mich das verlangsamen?',
-        answer: 'Die Einrichtung dauert typischerweise 1-2 Stunden. Danach sparen Sie Zeit bei der Menüplanung und Kostenanalyse.'
-      }
-    ]
+        answer:
+          'Die Einrichtung dauert typischerweise 1-2 Stunden. Danach sparen Sie Zeit bei der Menüplanung und Kostenanalyse.',
+      },
+    ],
   },
 
   builtFor: {
@@ -492,14 +587,14 @@ export const translations = {
     features: [
       'Funktioniert mit Google Sheets',
       '7-Tage-Rückerstattungsrichtlinie',
-      'Für AU-Markt gemacht'
-    ]
+      'Für AU-Markt gemacht',
+    ],
   },
 
   trustBar: {
-    text: 'Hören Sie auf zu raten. Beginnen Sie zu wissen. PrepFlow ist nicht nur eine Tabelle — es ist das Röntgengerät für die Rentabilität Ihres Menüs.'
+    text: 'Hören Sie auf zu raten. Beginnen Sie zu wissen. PrepFlow ist nicht nur eine Tabelle — es ist das Röntgengerät für die Rentabilität Ihres Menüs.',
   },
-  
+
   // Common
   common: {
     loading: 'Lädt...',
@@ -771,14 +866,14 @@ export const translations = {
     operational: 'Operativ',
     running: 'Laufend',
     operating: 'Betrieb',
-    functioning: 'Funktionierend'
+    functioning: 'Funktionierend',
   },
 
   // Floating CTA Banner
   floatingCta: {
     mainButton: 'PrepFlow holen',
     price: 'AUD $29',
-    sampleButton: 'Kostenlose Probe'
+    sampleButton: 'Kostenlose Probe',
   },
 
   // Footer
@@ -786,12 +881,11 @@ export const translations = {
     copyright: `© ${new Date().getFullYear()} PrepFlow. Alle Rechte vorbehalten.`,
     terms: 'AGB',
     privacy: 'Datenschutz',
-    support: 'Support'
+    support: 'Support',
   },
 
   // Logo
   logo: {
-    alt: 'PrepFlow Logo'
+    alt: 'PrepFlow Logo',
   },
-
 };

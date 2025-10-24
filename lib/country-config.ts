@@ -15,22 +15,22 @@ export interface CountryConfig {
 }
 
 export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
-  'AU': {
+  AU: {
     code: 'AU',
     name: 'Australia',
     currency: 'AUD',
     locale: 'en-AU',
-    taxRate: 0.10,
+    taxRate: 0.1,
     taxName: 'GST',
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: '.',
-      thousandsSeparator: ','
+      thousandsSeparator: ',',
     },
     phoneFormat: '+61 X XXXX XXXX',
-    addressFormat: ['Street Address', 'Suburb', 'State Postcode', 'Australia']
+    addressFormat: ['Street Address', 'Suburb', 'State Postcode', 'Australia'],
   },
-  'US': {
+  US: {
     code: 'US',
     name: 'United States',
     currency: 'USD',
@@ -40,27 +40,27 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'MM/DD/YYYY',
     numberFormat: {
       decimalSeparator: '.',
-      thousandsSeparator: ','
+      thousandsSeparator: ',',
     },
     phoneFormat: '+1 (XXX) XXX-XXXX',
-    addressFormat: ['Street Address', 'City, State ZIP', 'United States']
+    addressFormat: ['Street Address', 'City, State ZIP', 'United States'],
   },
-  'GB': {
+  GB: {
     code: 'GB',
     name: 'United Kingdom',
     currency: 'GBP',
     locale: 'en-GB',
-    taxRate: 0.20,
+    taxRate: 0.2,
     taxName: 'VAT',
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: '.',
-      thousandsSeparator: ','
+      thousandsSeparator: ',',
     },
     phoneFormat: '+44 XXXX XXX XXX',
-    addressFormat: ['Street Address', 'City', 'Postcode', 'United Kingdom']
+    addressFormat: ['Street Address', 'City', 'Postcode', 'United Kingdom'],
   },
-  'DE': {
+  DE: {
     code: 'DE',
     name: 'Germany',
     currency: 'EUR',
@@ -70,27 +70,27 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'DD.MM.YYYY',
     numberFormat: {
       decimalSeparator: ',',
-      thousandsSeparator: '.'
+      thousandsSeparator: '.',
     },
     phoneFormat: '+49 XXX XXXXXXX',
-    addressFormat: ['Street Address', 'Postcode City', 'Germany']
+    addressFormat: ['Street Address', 'Postcode City', 'Germany'],
   },
-  'FR': {
+  FR: {
     code: 'FR',
     name: 'France',
     currency: 'EUR',
     locale: 'fr-FR',
-    taxRate: 0.20,
+    taxRate: 0.2,
     taxName: 'TVA',
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: ',',
-      thousandsSeparator: ' '
+      thousandsSeparator: ' ',
     },
     phoneFormat: '+33 X XX XX XX XX',
-    addressFormat: ['Street Address', 'Postcode City', 'France']
+    addressFormat: ['Street Address', 'Postcode City', 'France'],
   },
-  'ES': {
+  ES: {
     code: 'ES',
     name: 'Spain',
     currency: 'EUR',
@@ -100,12 +100,12 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: ',',
-      thousandsSeparator: '.'
+      thousandsSeparator: '.',
     },
     phoneFormat: '+34 XXX XXX XXX',
-    addressFormat: ['Street Address', 'Postcode City', 'Spain']
+    addressFormat: ['Street Address', 'Postcode City', 'Spain'],
   },
-  'CA': {
+  CA: {
     code: 'CA',
     name: 'Canada',
     currency: 'CAD',
@@ -115,12 +115,12 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: '.',
-      thousandsSeparator: ','
+      thousandsSeparator: ',',
     },
     phoneFormat: '+1 (XXX) XXX-XXXX',
-    addressFormat: ['Street Address', 'City, Province Postal Code', 'Canada']
+    addressFormat: ['Street Address', 'City, Province Postal Code', 'Canada'],
   },
-  'NZ': {
+  NZ: {
     code: 'NZ',
     name: 'New Zealand',
     currency: 'NZD',
@@ -130,12 +130,12 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: '.',
-      thousandsSeparator: ','
+      thousandsSeparator: ',',
     },
     phoneFormat: '+64 XX XXX XXXX',
-    addressFormat: ['Street Address', 'Suburb', 'City Postcode', 'New Zealand']
+    addressFormat: ['Street Address', 'Suburb', 'City Postcode', 'New Zealand'],
   },
-  'IT': {
+  IT: {
     code: 'IT',
     name: 'Italy',
     currency: 'EUR',
@@ -145,12 +145,12 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'DD/MM/YYYY',
     numberFormat: {
       decimalSeparator: ',',
-      thousandsSeparator: '.'
+      thousandsSeparator: '.',
     },
     phoneFormat: '+39 XXX XXX XXXX',
-    addressFormat: ['Street Address', 'Postcode City', 'Italy']
+    addressFormat: ['Street Address', 'Postcode City', 'Italy'],
   },
-  'NL': {
+  NL: {
     code: 'NL',
     name: 'Netherlands',
     currency: 'EUR',
@@ -160,11 +160,11 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     dateFormat: 'DD-MM-YYYY',
     numberFormat: {
       decimalSeparator: ',',
-      thousandsSeparator: '.'
+      thousandsSeparator: '.',
     },
     phoneFormat: '+31 XX XXX XXXX',
-    addressFormat: ['Street Address', 'Postcode City', 'Netherlands']
-  }
+    addressFormat: ['Street Address', 'Postcode City', 'Netherlands'],
+  },
 };
 
 export const getCountryConfig = (countryCode: string): CountryConfig => {
@@ -186,24 +186,24 @@ export const detectCountryFromLocale = (locale: string): string => {
     'fr-FR': 'FR',
     'es-ES': 'ES',
     'it-IT': 'IT',
-    'nl-NL': 'NL'
+    'nl-NL': 'NL',
   };
-  
+
   return localeToCountry[locale] || 'AU';
 };
 
 export const formatCurrencyWithTax = (
-  amount: number, 
-  countryCode: string, 
-  includeTax: boolean = true
+  amount: number,
+  countryCode: string,
+  includeTax: boolean = true,
 ): string => {
   const config = getCountryConfig(countryCode);
   const taxAmount = amount * config.taxRate;
   const totalAmount = includeTax ? amount + taxAmount : amount;
-  
+
   return new Intl.NumberFormat(config.locale, {
     style: 'currency',
-    currency: config.currency
+    currency: config.currency,
   }).format(totalAmount);
 };
 
@@ -211,7 +211,7 @@ export const getTaxBreakdown = (amount: number, countryCode: string) => {
   const config = getCountryConfig(countryCode);
   const taxAmount = amount * config.taxRate;
   const totalAmount = amount + taxAmount;
-  
+
   return {
     subtotal: amount,
     taxRate: config.taxRate,
@@ -219,6 +219,6 @@ export const getTaxBreakdown = (amount: number, countryCode: string) => {
     total: totalAmount,
     taxName: config.taxName,
     currency: config.currency,
-    locale: config.locale
+    locale: config.locale,
   };
 };

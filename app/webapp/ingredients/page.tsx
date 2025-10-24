@@ -2,11 +2,28 @@
 
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState, useMemo } from 'react';
-import { convertIngredientCost, convertUnit, getAllUnits, isVolumeUnit, isWeightUnit } from '@/lib/unit-conversion';
-import { formatIngredientName, formatBrandName, formatSupplierName, formatStorageLocation, formatTextInput } from '@/lib/text-utils';
+import {
+  convertIngredientCost,
+  convertUnit,
+  getAllUnits,
+  isVolumeUnit,
+  isWeightUnit,
+} from '@/lib/unit-conversion';
+import {
+  formatIngredientName,
+  formatBrandName,
+  formatSupplierName,
+  formatStorageLocation,
+  formatTextInput,
+} from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import { useSmartLoading } from '@/hooks/useSmartLoading';
-import { PageSkeleton, LoadingSkeleton, TableSkeleton, FormSkeleton } from '@/components/ui/LoadingSkeleton';
+import {
+  PageSkeleton,
+  LoadingSkeleton,
+  TableSkeleton,
+  FormSkeleton,
+} from '@/components/ui/LoadingSkeleton';
 
 // Direct imports to eliminate skeleton flashes
 import IngredientTable from './components/IngredientTable';
@@ -76,20 +93,22 @@ export default function IngredientsPage() {
     product_code: '',
     storage_location: '',
     min_stock_level: 0,
-    current_stock: 0
+    current_stock: 0,
   });
 
   // Filter and sort ingredients
   useMemo(() => {
     let filtered = ingredients.filter(ingredient => {
-      const matchesSearch = !searchTerm || 
+      const matchesSearch =
+        !searchTerm ||
         ingredient.ingredient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (ingredient.brand && ingredient.brand.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (ingredient.supplier && ingredient.supplier.toLowerCase().includes(searchTerm.toLowerCase()));
-      
+        (ingredient.supplier &&
+          ingredient.supplier.toLowerCase().includes(searchTerm.toLowerCase()));
+
       const matchesSupplier = !supplierFilter || ingredient.supplier === supplierFilter;
       const matchesStorage = !storageFilter || ingredient.storage_location === storageFilter;
-      
+
       return matchesSearch && matchesSupplier && matchesStorage;
     });
 
@@ -131,10 +150,7 @@ export default function IngredientsPage() {
 
   const fetchSuppliers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('suppliers')
-        .select('*')
-        .order('name');
+      const { data, error } = await supabase.from('suppliers').select('*').order('name');
 
       if (error) throw error;
       setSuppliers(data || []);
@@ -152,18 +168,24 @@ export default function IngredientsPage() {
     try {
       const { data, error } = await supabase
         .from('ingredients')
-        .insert([{
-          ...ingredientData,
-          ingredient_name: formatIngredientName(ingredientData.ingredient_name || ''),
-          brand: ingredientData.brand ? formatBrandName(ingredientData.brand) : null,
-          supplier: ingredientData.supplier ? formatSupplierName(ingredientData.supplier) : null,
-          storage_location: ingredientData.storage_location ? formatStorageLocation(ingredientData.storage_location) : null,
-          product_code: ingredientData.product_code ? formatTextInput(ingredientData.product_code) : null
-        }])
+        .insert([
+          {
+            ...ingredientData,
+            ingredient_name: formatIngredientName(ingredientData.ingredient_name || ''),
+            brand: ingredientData.brand ? formatBrandName(ingredientData.brand) : null,
+            supplier: ingredientData.supplier ? formatSupplierName(ingredientData.supplier) : null,
+            storage_location: ingredientData.storage_location
+              ? formatStorageLocation(ingredientData.storage_location)
+              : null,
+            product_code: ingredientData.product_code
+              ? formatTextInput(ingredientData.product_code)
+              : null,
+          },
+        ])
         .select();
 
       if (error) throw error;
-      
+
       setIngredients(prev => [...prev, ...(data || [])]);
       setShowAddForm(false);
       setWizardStep(1);
@@ -179,7 +201,7 @@ export default function IngredientsPage() {
         product_code: '',
         storage_location: '',
         min_stock_level: 0,
-        current_stock: 0
+        current_stock: 0,
       });
     } catch (error) {
       setError('Failed to add ingredient');
@@ -192,18 +214,22 @@ export default function IngredientsPage() {
         .from('ingredients')
         .update({
           ...updates,
-          ingredient_name: updates.ingredient_name ? formatIngredientName(updates.ingredient_name) : undefined,
+          ingredient_name: updates.ingredient_name
+            ? formatIngredientName(updates.ingredient_name)
+            : undefined,
           brand: updates.brand ? formatBrandName(updates.brand) : undefined,
           supplier: updates.supplier ? formatSupplierName(updates.supplier) : undefined,
-          storage_location: updates.storage_location ? formatStorageLocation(updates.storage_location) : undefined,
-          product_code: updates.product_code ? formatTextInput(updates.product_code) : undefined
+          storage_location: updates.storage_location
+            ? formatStorageLocation(updates.storage_location)
+            : undefined,
+          product_code: updates.product_code ? formatTextInput(updates.product_code) : undefined,
         })
         .eq('id', id)
         .select();
 
       if (error) throw error;
-      
-      setIngredients(prev => prev.map(ing => ing.id === id ? { ...ing, ...updates } : ing));
+
+      setIngredients(prev => prev.map(ing => (ing.id === id ? { ...ing, ...updates } : ing)));
       setEditingIngredient(null);
     } catch (error) {
       setError('Failed to update ingredient');
@@ -212,13 +238,10 @@ export default function IngredientsPage() {
 
   const handleDeleteIngredient = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('ingredients')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('ingredients').delete().eq('id', id);
 
       if (error) throw error;
-      
+
       setIngredients(prev => prev.filter(ing => ing.id !== id));
     } catch (error) {
       setError('Failed to delete ingredient');
@@ -233,7 +256,7 @@ export default function IngredientsPage() {
         .in('id', Array.from(selectedIngredients));
 
       if (error) throw error;
-      
+
       setIngredients(prev => prev.filter(ing => !selectedIngredients.has(ing.id)));
       setSelectedIngredients(new Set());
     } catch (error) {
@@ -243,21 +266,36 @@ export default function IngredientsPage() {
 
   const exportToCSV = () => {
     const csvContent = [
-      ['Ingredient Name', 'Brand', 'Pack Size', 'Pack Size Unit', 'Pack Price', 'Unit', 'Cost Per Unit', 'Supplier', 'Product Code', 'Storage Location', 'Min Stock Level', 'Current Stock'].join(','),
-      ...filteredIngredients.map(ingredient => [
-        ingredient.ingredient_name,
-        ingredient.brand || '',
-        ingredient.pack_size || '',
-        ingredient.pack_size_unit || '',
-        ingredient.pack_price || 0,
-        ingredient.unit || '',
-        ingredient.cost_per_unit || 0,
-        ingredient.supplier || '',
-        ingredient.product_code || '',
-        ingredient.storage_location || '',
-        ingredient.min_stock_level || 0,
-        ingredient.current_stock || 0
-      ].join(','))
+      [
+        'Ingredient Name',
+        'Brand',
+        'Pack Size',
+        'Pack Size Unit',
+        'Pack Price',
+        'Unit',
+        'Cost Per Unit',
+        'Supplier',
+        'Product Code',
+        'Storage Location',
+        'Min Stock Level',
+        'Current Stock',
+      ].join(','),
+      ...filteredIngredients.map(ingredient =>
+        [
+          ingredient.ingredient_name,
+          ingredient.brand || '',
+          ingredient.pack_size || '',
+          ingredient.pack_size_unit || '',
+          ingredient.pack_price || 0,
+          ingredient.unit || '',
+          ingredient.cost_per_unit || 0,
+          ingredient.supplier || '',
+          ingredient.product_code || '',
+          ingredient.storage_location || '',
+          ingredient.min_stock_level || 0,
+          ingredient.current_stock || 0,
+        ].join(','),
+      ),
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -272,21 +310,25 @@ export default function IngredientsPage() {
   const handleCSVImport = async () => {
     try {
       setImporting(true);
-      
+
       const { data, error } = await supabase
         .from('ingredients')
-        .insert(parsedIngredients.map(ingredient => ({
-          ...ingredient,
-          ingredient_name: formatIngredientName(ingredient.ingredient_name || ''),
-          brand: ingredient.brand ? formatBrandName(ingredient.brand) : null,
-          supplier: ingredient.supplier ? formatSupplierName(ingredient.supplier) : null,
-          storage_location: ingredient.storage_location ? formatStorageLocation(ingredient.storage_location) : null,
-          product_code: ingredient.product_code ? formatTextInput(ingredient.product_code) : null
-        })))
+        .insert(
+          parsedIngredients.map(ingredient => ({
+            ...ingredient,
+            ingredient_name: formatIngredientName(ingredient.ingredient_name || ''),
+            brand: ingredient.brand ? formatBrandName(ingredient.brand) : null,
+            supplier: ingredient.supplier ? formatSupplierName(ingredient.supplier) : null,
+            storage_location: ingredient.storage_location
+              ? formatStorageLocation(ingredient.storage_location)
+              : null,
+            product_code: ingredient.product_code ? formatTextInput(ingredient.product_code) : null,
+          })),
+        )
         .select();
 
       if (error) throw error;
-      
+
       setIngredients(prev => [...prev, ...(data || [])]);
       setShowCSVImport(false);
       setCsvData('');
@@ -322,22 +364,26 @@ export default function IngredientsPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">🥘 {t('ingredients.title', 'Ingredients Management')}</h1>
-              <p className="text-gray-400">{t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')}</p>
+              <h1 className="mb-2 text-3xl font-bold text-white">
+                🥘 {t('ingredients.title', 'Ingredients Management')}
+              </h1>
+              <p className="text-gray-400">
+                {t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')}
+              </p>
             </div>
-            
+
             {/* Unit Selector */}
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-gray-300">Display costs in:</label>
               <select
                 value={displayUnit}
-                onChange={(e) => setDisplayUnit(e.target.value)}
-                className="px-4 py-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent min-h-[44px] flex items-center justify-center"
+                onChange={e => setDisplayUnit(e.target.value)}
+                className="flex min-h-[44px] items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               >
                 <optgroup label="Weight">
                   <option value="g">Grams (g)</option>
@@ -358,7 +404,7 @@ export default function IngredientsPage() {
         </div>
 
         {error && (
-          <div className="bg-red-900/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
+          <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
             {error}
           </div>
         )}
@@ -379,7 +425,23 @@ export default function IngredientsPage() {
         {showAddForm && (
           <IngredientWizard
             suppliers={suppliers}
-            availableUnits={['g', 'kg', 'oz', 'lb', 'ml', 'l', 'tsp', 'tbsp', 'cup', 'pc', 'box', 'pack', 'bag', 'bottle', 'can']}
+            availableUnits={[
+              'g',
+              'kg',
+              'oz',
+              'lb',
+              'ml',
+              'l',
+              'tsp',
+              'tbsp',
+              'cup',
+              'pc',
+              'box',
+              'pack',
+              'bag',
+              'bottle',
+              'can',
+            ]}
             onSave={handleAddIngredient}
             onCancel={() => {
               setShowAddForm(false);
@@ -396,7 +458,7 @@ export default function IngredientsPage() {
                 product_code: '',
                 storage_location: '',
                 min_stock_level: 0,
-                current_stock: 0
+                current_stock: 0,
               });
             }}
             onAddSupplier={async (name: string) => {
@@ -439,16 +501,32 @@ export default function IngredientsPage() {
           <IngredientForm
             ingredient={editingIngredient}
             suppliers={suppliers}
-            availableUnits={['g', 'kg', 'oz', 'lb', 'ml', 'l', 'tsp', 'tbsp', 'cup', 'pc', 'box', 'pack', 'bag', 'bottle', 'can']}
+            availableUnits={[
+              'g',
+              'kg',
+              'oz',
+              'lb',
+              'ml',
+              'l',
+              'tsp',
+              'tbsp',
+              'cup',
+              'pc',
+              'box',
+              'pack',
+              'bag',
+              'bottle',
+              'can',
+            ]}
             onSave={async (ingredientData: Partial<Ingredient>) => {
               if (!editingIngredient?.id) return;
-              
+
               try {
                 const { data, error } = await supabase
                   .from('ingredients')
                   .update({
                     ...ingredientData,
-                    updated_at: new Date().toISOString()
+                    updated_at: new Date().toISOString(),
                   })
                   .eq('id', editingIngredient.id)
                   .select()
@@ -457,8 +535,8 @@ export default function IngredientsPage() {
                 if (error) throw error;
 
                 // Update local state
-                setIngredients(prev => 
-                  prev.map(ing => ing.id === editingIngredient.id ? data : ing)
+                setIngredients(prev =>
+                  prev.map(ing => (ing.id === editingIngredient.id ? data : ing)),
                 );
                 setEditingIngredient(null);
               } catch (error) {

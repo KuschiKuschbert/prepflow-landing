@@ -1,7 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { CountryConfig, getCountryConfig, detectCountryFromLocale, COUNTRY_CONFIGS } from '@/lib/country-config';
+import {
+  CountryConfig,
+  getCountryConfig,
+  detectCountryFromLocale,
+  COUNTRY_CONFIGS,
+} from '@/lib/country-config';
 
 interface CountryContextType {
   selectedCountry: string;
@@ -62,14 +67,10 @@ export function CountryProvider({ children }: CountryProviderProps) {
     selectedCountry,
     countryConfig,
     setCountry,
-    isLoading
+    isLoading,
   };
 
-  return (
-    <CountryContext.Provider value={value}>
-      {children}
-    </CountryContext.Provider>
-  );
+  return <CountryContext.Provider value={value}>{children}</CountryContext.Provider>;
 }
 
 export function useCountry() {

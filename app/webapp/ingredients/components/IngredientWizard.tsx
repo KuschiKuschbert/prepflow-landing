@@ -16,10 +16,10 @@ export default function IngredientWizardRefactored({
   onSave,
   onCancel,
   onAddSupplier,
-  loading = false
+  loading = false,
 }: IngredientWizardProps) {
   const { t } = useTranslation();
-  
+
   const [wizardStep, setWizardStep] = useState(1);
   const [formData, setFormData] = useState<Partial<Ingredient>>({
     ingredient_name: '',
@@ -37,18 +37,23 @@ export default function IngredientWizardRefactored({
     product_code: '',
     storage_location: '',
     min_stock_level: 0,
-    current_stock: 0
+    current_stock: 0,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Calculate cost per unit from pack price and pack size
-  const calculateCostPerUnit = (packPrice: number, packSize: number, packSizeUnit: string, targetUnit: string): number => {
+  const calculateCostPerUnit = (
+    packPrice: number,
+    packSize: number,
+    packSizeUnit: string,
+    targetUnit: string,
+  ): number => {
     if (packPrice === 0 || packSize === 0) return 0;
-    
+
     const conversion = convertUnit(1, packSizeUnit, targetUnit);
     const packSizeInTargetUnit = packSize * conversion.conversionFactor;
-    
+
     return packPrice / packSizeInTargetUnit;
   };
 
@@ -59,14 +64,14 @@ export default function IngredientWizardRefactored({
         formData.pack_price,
         parseFloat(formData.pack_size),
         formData.pack_size_unit,
-        formData.unit
+        formData.unit,
       );
-      
+
       setFormData(prev => ({
         ...prev,
         cost_per_unit: calculatedCost,
         cost_per_unit_as_purchased: calculatedCost,
-        cost_per_unit_incl_trim: calculatedCost / ((prev.yield_percentage || 100) / 100)
+        cost_per_unit_incl_trim: calculatedCost / ((prev.yield_percentage || 100) / 100),
       }));
     }
   };
@@ -74,31 +79,55 @@ export default function IngredientWizardRefactored({
   // AI-powered wastage calculation based on ingredient name
   const calculateWastagePercentage = (ingredientName: string): number => {
     const name = ingredientName.toLowerCase();
-    
+
     // High wastage ingredients (30-50%)
-    if (name.includes('onion') || name.includes('garlic') || name.includes('celery') || 
-        name.includes('carrot') || name.includes('leek') || name.includes('fennel')) {
+    if (
+      name.includes('onion') ||
+      name.includes('garlic') ||
+      name.includes('celery') ||
+      name.includes('carrot') ||
+      name.includes('leek') ||
+      name.includes('fennel')
+    ) {
       return 35;
     }
-    
+
     // Medium wastage ingredients (15-30%)
-    if (name.includes('tomato') || name.includes('cucumber') || name.includes('bell pepper') ||
-        name.includes('capsicum') || name.includes('eggplant') || name.includes('zucchini')) {
+    if (
+      name.includes('tomato') ||
+      name.includes('cucumber') ||
+      name.includes('bell pepper') ||
+      name.includes('capsicum') ||
+      name.includes('eggplant') ||
+      name.includes('zucchini')
+    ) {
       return 20;
     }
-    
+
     // Low wastage ingredients (5-15%)
-    if (name.includes('potato') || name.includes('apple') || name.includes('banana') ||
-        name.includes('orange') || name.includes('lemon') || name.includes('lime')) {
+    if (
+      name.includes('potato') ||
+      name.includes('apple') ||
+      name.includes('banana') ||
+      name.includes('orange') ||
+      name.includes('lemon') ||
+      name.includes('lime')
+    ) {
       return 10;
     }
-    
+
     // Very low wastage ingredients (0-5%)
-    if (name.includes('rice') || name.includes('pasta') || name.includes('flour') ||
-        name.includes('sugar') || name.includes('salt') || name.includes('oil')) {
+    if (
+      name.includes('rice') ||
+      name.includes('pasta') ||
+      name.includes('flour') ||
+      name.includes('sugar') ||
+      name.includes('salt') ||
+      name.includes('oil')
+    ) {
       return 2;
     }
-    
+
     // Default for unknown ingredients
     return 15;
   };
@@ -117,14 +146,14 @@ export default function IngredientWizardRefactored({
   const handleInputChange = (field: keyof Ingredient, value: string | number) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
-        [field]: ''
+        [field]: '',
       }));
     }
 
@@ -140,7 +169,7 @@ export default function IngredientWizardRefactored({
         ...prev,
         trim_peel_waste_percentage: suggestedWastage,
         yield_percentage: 100 - suggestedWastage,
-        cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / ((100 - suggestedWastage) / 100)
+        cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / ((100 - suggestedWastage) / 100),
       }));
     }
   };
@@ -148,24 +177,24 @@ export default function IngredientWizardRefactored({
   const handleWastagePercentageChange = (wastage: number) => {
     const clampedWastage = Math.max(0, Math.min(100, Math.round(wastage)));
     const yieldPercentage = 100 - clampedWastage;
-    
+
     setFormData(prev => ({
       ...prev,
       trim_peel_waste_percentage: clampedWastage,
       yield_percentage: yieldPercentage,
-      cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (yieldPercentage / 100)
+      cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (yieldPercentage / 100),
     }));
   };
 
   const handleYieldPercentageChange = (yieldPercent: number) => {
     const clampedYield = Math.max(0, Math.min(100, Math.round(yieldPercent)));
     const wastagePercentage = 100 - clampedYield;
-    
+
     setFormData(prev => ({
       ...prev,
       yield_percentage: clampedYield,
       trim_peel_waste_percentage: wastagePercentage,
-      cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (clampedYield / 100)
+      cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (clampedYield / 100),
     }));
   };
 
@@ -173,10 +202,12 @@ export default function IngredientWizardRefactored({
     const newErrors: Record<string, string> = {};
 
     if (step === 1) {
-      if (!formData.ingredient_name?.trim()) newErrors.ingredient_name = 'Ingredient name is required';
+      if (!formData.ingredient_name?.trim())
+        newErrors.ingredient_name = 'Ingredient name is required';
       if (!formData.pack_size?.trim()) newErrors.pack_size = 'Pack size is required';
       if (!formData.pack_size_unit) newErrors.pack_size_unit = 'Pack unit is required';
-      if (!formData.pack_price || formData.pack_price <= 0) newErrors.pack_price = 'Pack price must be greater than 0';
+      if (!formData.pack_price || formData.pack_price <= 0)
+        newErrors.pack_price = 'Pack price must be greater than 0';
       if (!formData.unit) newErrors.unit = 'Working unit is required';
     }
 
@@ -212,7 +243,7 @@ export default function IngredientWizardRefactored({
       product_code: '',
       storage_location: '',
       min_stock_level: 0,
-      current_stock: 0
+      current_stock: 0,
     });
     setErrors({});
   };
@@ -227,7 +258,9 @@ export default function IngredientWizardRefactored({
         ingredient_name: formatIngredientName(formData.ingredient_name || ''),
         brand: formData.brand ? formatIngredientName(formData.brand) : undefined,
         supplier: formData.supplier ? formatIngredientName(formData.supplier) : undefined,
-        storage_location: formData.storage_location ? formatIngredientName(formData.storage_location) : undefined
+        storage_location: formData.storage_location
+          ? formatIngredientName(formData.storage_location)
+          : undefined,
       };
 
       await onSave(capitalizedIngredient);
@@ -248,15 +281,15 @@ export default function IngredientWizardRefactored({
     onWastagePercentageChange: handleWastagePercentageChange,
     onYieldPercentageChange: handleYieldPercentageChange,
     onAddSupplier,
-    formatCost
+    formatCost,
   };
 
   return (
-    <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] mb-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+      <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-white">🥘 Add New Ingredient</h2>
         <div className="flex items-center space-x-2">
-          <div className="w-2 h-2 bg-[#29E7CD] rounded-full"></div>
+          <div className="h-2 w-2 rounded-full bg-[#29E7CD]"></div>
           <span className="text-xs text-gray-400">Guided Setup</span>
         </div>
       </div>
@@ -264,24 +297,30 @@ export default function IngredientWizardRefactored({
       {/* Wizard Progress */}
       <div className="mb-8">
         <div className="flex items-center justify-center space-x-4">
-          {[1, 2, 3].map((step) => (
+          {[1, 2, 3].map(step => (
             <div key={step} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
-                step <= wizardStep 
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white' 
-                  : 'bg-[#2a2a2a] text-gray-400'
-              }`}>
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 ${
+                  step <= wizardStep
+                    ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white'
+                    : 'bg-[#2a2a2a] text-gray-400'
+                }`}
+              >
                 {step}
               </div>
               {step < 3 && (
-                <div className={`w-12 h-1 mx-2 transition-all duration-200 ${
-                  step < wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'
-                }`} />
+                <div
+                  className={`mx-2 h-1 w-12 transition-all duration-200 ${
+                    step < wizardStep
+                      ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]'
+                      : 'bg-[#2a2a2a]'
+                  }`}
+                />
               )}
             </div>
           ))}
         </div>
-        <div className="flex justify-center mt-4">
+        <div className="mt-4 flex justify-center">
           <div className="text-sm text-gray-400">
             {wizardStep === 1 && '📦 Basic Information'}
             {wizardStep === 2 && '⚙️ Advanced Settings'}

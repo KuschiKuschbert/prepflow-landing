@@ -24,20 +24,20 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
   const initializeGtag = () => {
     if (typeof window !== 'undefined' && !window.gtag) {
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function() {
+      window.gtag = function () {
         window.dataLayer.push(arguments);
       };
-      
+
       // Initialize with current date
       window.gtag('js', new Date());
-      
+
       // Configure with measurement ID
       window.gtag('config', measurementId, {
         page_title: document.title,
         page_location: window.location.href,
         send_page_view: false, // We'll handle page views manually
       });
-      
+
       hasInitialized.current = true;
       console.log('✅ Google Analytics initialized with ID:', measurementId);
     }
@@ -52,7 +52,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
         page_location: window.location.href,
         page_path: pathname + (searchParams.toString() ? `?${searchParams.toString()}` : ''),
       });
-      
+
       console.log('📊 GA4 Page View tracked:', pathname);
     }
   }, [pathname, searchParams]);
@@ -68,7 +68,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
         setTimeout(checkGtag, 100);
       }
     };
-    
+
     checkGtag();
   }, [measurementId]);
 
@@ -86,7 +86,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
           console.error('❌ Failed to load Google Analytics script');
         }}
       />
-      
+
       {/* Initialize gtag function */}
       <Script
         id="google-analytics-init"

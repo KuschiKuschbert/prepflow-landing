@@ -17,13 +17,13 @@ export const translations = {
     featuresAria: 'View PrepFlow features',
     howItWorksAria: 'Learn how PrepFlow works',
     pricingAria: 'View PrepFlow pricing',
-    faqAria: 'Frequently asked questions'
+    faqAria: 'Frequently asked questions',
   },
 
   // WebApp Dashboard
   dashboard: {
     title: 'Kitchen Management Dashboard',
-    subtitle: 'Welcome back! Here\'s your kitchen overview',
+    subtitle: "Welcome back! Here's your kitchen overview",
     totalIngredients: 'Total Ingredients',
     totalRecipes: 'Total Recipes',
     menuDishes: 'Menu Dishes',
@@ -41,10 +41,11 @@ export const translations = {
     calculateCOGSDesc: 'Analyze costs & margins',
     calculateCOGSSubtitle: 'Calculate Cost of Goods Sold and profit margins',
     gettingStarted: 'Getting Started with PrepFlow',
-    gettingStartedDesc: 'Welcome to your kitchen management hub! Start by adding your ingredients to build your inventory, then create recipes to calculate your Cost of Goods Sold (COGS) and optimize your profit margins.',
+    gettingStartedDesc:
+      'Welcome to your kitchen management hub! Start by adding your ingredients to build your inventory, then create recipes to calculate your Cost of Goods Sold (COGS) and optimize your profit margins.',
     realTimeAnalytics: 'Real-time Analytics',
     profitOptimization: 'Profit Optimization',
-    smartInsights: 'Smart Insights'
+    smartInsights: 'Smart Insights',
   },
 
   // WebApp Performance Analysis
@@ -62,7 +63,7 @@ export const translations = {
     popularityCat: 'Popularity Cat',
     menuItemClass: 'Menu Item Class',
     allCategories: 'All Categories',
-    chefsKiss: 'Chef\'s Kiss',
+    chefsKiss: "Chef's Kiss",
     hiddenGem: 'Hidden Gem',
     bargainBucket: 'Bargain Bucket',
     burntToast: 'Burnt Toast',
@@ -73,15 +74,17 @@ export const translations = {
     importSalesData: 'Import Sales Data',
     exportCSV: 'Export CSV',
     importModalTitle: 'Import Sales Data',
-    importModalDesc: 'Paste your CSV data below. Make sure it has columns for Dish, Number Sold, and Popularity.',
-    importPlaceholder: 'Dish,Number Sold,Popularity\nDouble Cheese Burger,175,10.85\nHot Dog,158,9.80',
+    importModalDesc:
+      'Paste your CSV data below. Make sure it has columns for Dish, Number Sold, and Popularity.',
+    importPlaceholder:
+      'Dish,Number Sold,Popularity\nDouble Cheese Burger,175,10.85\nHot Dog,158,9.80',
     importing: 'Importing...',
     importData: 'Import Data',
     cancel: 'Cancel',
     high: 'High',
     low: 'Low',
     performanceOverview: 'Performance Overview',
-    categoryDistribution: 'Category Distribution'
+    categoryDistribution: 'Category Distribution',
   },
 
   // WebApp Ingredients
@@ -108,7 +111,7 @@ export const translations = {
     liveData: 'Live Data',
     noIngredientsFound: 'No ingredients found',
     noIngredientsDesc: 'Add your first ingredient to start building your kitchen inventory',
-    noIngredientsFilterDesc: 'Try adjusting your search filters to find what you\'re looking for',
+    noIngredientsFilterDesc: "Try adjusting your search filters to find what you're looking for",
     addFirstIngredient: 'Add Your First Ingredient',
     ingredient: 'Ingredient',
     packSize: 'Pack Size',
@@ -134,7 +137,7 @@ export const translations = {
     addNewIngredient: 'Add New Ingredient',
     guidedSetup: 'Guided Setup',
     basicInformation: 'Basic Information',
-    basicInformationDesc: 'Let\'s start with the essential details',
+    basicInformationDesc: "Let's start with the essential details",
     packagingInformation: 'Packaging Information',
     packSizeRequired: 'Pack Size *',
     packUnitRequired: 'Pack Unit *',
@@ -152,7 +155,8 @@ export const translations = {
     bag: 'Bag',
     bottle: 'Bottle',
     can: 'Can',
-    packPriceHelper: 'Enter the total pack price (e.g., $13.54 for a 5L tub of yogurt). The system will automatically calculate the price per unit.',
+    packPriceHelper:
+      'Enter the total pack price (e.g., $13.54 for a 5L tub of yogurt). The system will automatically calculate the price per unit.',
     pricePerUnit: 'Price per {unit}: ${cost}',
     nextStep: 'Next Step →',
     advancedSettings: 'Advanced Settings',
@@ -187,50 +191,85 @@ export const translations = {
     volume: 'Volume',
     teaspoons: 'Teaspoons (tsp)',
     tablespoons: 'Tablespoons (tbsp)',
-    cups: 'Cups'
+    cups: 'Cups',
   },
-  
+
   // Hero Section
   hero: {
-    title: 'Stop Guessing Your Menu\'s Profit',
-    subtitle: 'See exactly which dishes make money and which eat your profit. Built from 20 years of real kitchen experience.',
+    title: "Stop Guessing Your Menu's Profit",
+    subtitle:
+      'See exactly which dishes make money and which eat your profit. Built from 20 years of real kitchen experience.',
     ctaPrimary: 'Get PrepFlow Now - $29 AUD',
     ctaSecondary: 'Get Free Sample',
     dashboardAlt: 'PrepFlow Dashboard showing COGS analysis and profit insights',
-    disclaimer: 'Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.',
-    
+    disclaimer:
+      'Works for cafés, food trucks, small restaurants. No lock-in. 7-day refund policy. Results may vary based on your current menu and operations.',
+
     // A/B Test Variants
     variantA: {
       title: 'Stop losing money on your menu.',
-      subtitle: 'Most restaurants don\'t know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.',
-      bullet1: { title: 'Stop the Bleeding', description: 'identify which menu items are costing you money' },
-      bullet2: { title: 'Real Cost Analysis', description: 'see true ingredient costs including waste and yields' },
-      bullet3: { title: 'Profit Optimization', description: 'know which dishes to promote, fix, or remove' },
-      bullet4: { title: 'GST Compliance', description: 'price correctly for Australian tax requirements' },
-      bullet5: { title: 'Smart Menu Decisions', description: 'data-driven choices about your menu mix' },
-      bullet6: { title: 'AI Kitchen Insights', description: 'discover new methods to improve margins' },
+      subtitle:
+        "Most restaurants don't know which dishes are profitable. PrepFlow shows you exactly where your money is going — and how to fix it.",
+      bullet1: {
+        title: 'Stop the Bleeding',
+        description: 'identify which menu items are costing you money',
+      },
+      bullet2: {
+        title: 'Real Cost Analysis',
+        description: 'see true ingredient costs including waste and yields',
+      },
+      bullet3: {
+        title: 'Profit Optimization',
+        description: 'know which dishes to promote, fix, or remove',
+      },
+      bullet4: {
+        title: 'GST Compliance',
+        description: 'price correctly for Australian tax requirements',
+      },
+      bullet5: {
+        title: 'Smart Menu Decisions',
+        description: 'data-driven choices about your menu mix',
+      },
+      bullet6: {
+        title: 'AI Kitchen Insights',
+        description: 'discover new methods to improve margins',
+      },
       ctaPrimary: 'Get Sample Dashboard',
       ctaSecondary: 'Get Free Sample',
-      disclaimer: 'Built for Australian cafés and restaurants. No lock-in. 7-day refund policy.'
+      disclaimer: 'Built for Australian cafés and restaurants. No lock-in. 7-day refund policy.',
     },
-    
+
     variantB: {
       title: 'Turn your menu into a profit machine.',
-      subtitle: 'Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.',
-      bullet1: { title: 'Profit Maximization', description: 'identify your highest-margin opportunities' },
-      bullet2: { title: 'Cost Transparency', description: 'see exactly what each dish costs to make' },
+      subtitle:
+        'Transform guesswork into data-driven decisions. PrepFlow gives you the insights to maximize every dollar on your menu.',
+      bullet1: {
+        title: 'Profit Maximization',
+        description: 'identify your highest-margin opportunities',
+      },
+      bullet2: {
+        title: 'Cost Transparency',
+        description: 'see exactly what each dish costs to make',
+      },
       bullet3: { title: 'Menu Optimization', description: 'know which items to feature or remove' },
-      bullet4: { title: 'Tax Compliance', description: 'GST-ready pricing for Australian businesses' },
-      bullet5: { title: 'Performance Tracking', description: 'monitor which dishes drive your profit' },
+      bullet4: {
+        title: 'Tax Compliance',
+        description: 'GST-ready pricing for Australian businesses',
+      },
+      bullet5: {
+        title: 'Performance Tracking',
+        description: 'monitor which dishes drive your profit',
+      },
       bullet6: { title: 'AI Optimization', description: 'get suggestions to improve your margins' },
       ctaPrimary: 'Get Sample Dashboard',
       ctaSecondary: 'Try Sample Sheet',
-      disclaimer: 'Designed for Australian hospitality. Simple setup. 7-day refund guarantee.'
+      disclaimer: 'Designed for Australian hospitality. Simple setup. 7-day refund guarantee.',
     },
-    
+
     variantC: {
       title: 'Know your menu costs. Make more profit.',
-      subtitle: 'PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.',
+      subtitle:
+        'PrepFlow shows you exactly what each dish costs and how much profit it makes. Simple Google Sheet. Real results.',
       bullet1: { title: 'Cost Breakdown', description: 'see exactly what each dish costs to make' },
       bullet2: { title: 'Profit Calculation', description: 'know your margin on every item' },
       bullet3: { title: 'Menu Decisions', description: 'decide what to keep, change, or remove' },
@@ -239,10 +278,10 @@ export const translations = {
       bullet6: { title: 'Smart Insights', description: 'AI suggestions to improve your margins' },
       ctaPrimary: 'Get Sample Dashboard',
       ctaSecondary: 'Free Sample',
-      disclaimer: 'For Australian cafés and restaurants. 7-day refund policy.'
-    }
+      disclaimer: 'For Australian cafés and restaurants. 7-day refund policy.',
+    },
   },
-  
+
   // Pricing
   pricing: {
     title: 'Simple, Honest Pricing',
@@ -256,54 +295,61 @@ export const translations = {
       multiCurrency: 'Multi-currency support',
       gstVat: 'GST/VAT calculations',
       lifetimeUpdates: 'Lifetime updates',
-      moneyBack: '7-day money-back guarantee'
+      moneyBack: '7-day money-back guarantee',
     },
     cta: 'Get PrepFlow Now',
-    instantAccess: 'Instant access via Gumroad'
+    instantAccess: 'Instant access via Gumroad',
   },
-  
+
   // Features
   features: {
     stockList: {
       title: 'Stock List (infinite)',
-      description: 'Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit.'
+      description:
+        'Centralise ingredients with pack size, unit, supplier, storage, product code. Capture trim/waste and yields to get true cost per unit.',
     },
     cogsRecipes: {
       title: 'COGS Recipes',
-      description: 'Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly.'
+      description:
+        'Build recipes that auto‑pull ingredient costs (incl. yield/trim). See dish cost, COGS%, GP$ and GP% instantly.',
     },
     itemPerformance: {
       title: 'Item Performance',
-      description: 'Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef\'s Kiss, Hidden Gem or Bargain Bucket.'
+      description:
+        "Paste sales. We calculate popularity, profit margin, total profit ex‑GST and classify items as Chef's Kiss, Hidden Gem or Bargain Bucket.",
     },
     dashboardKpis: {
       title: 'Dashboard KPIs',
-      description: 'At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin.'
+      description:
+        'At a glance: average GP%, food cost %, average item profit and sale price, plus top performers by popularity and margin.',
     },
     globalTax: {
       title: 'Global Tax & Currency',
-      description: 'Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements.'
+      description:
+        'Set country, tax system (GST/VAT/Sales Tax), and currency in Settings. All outputs adapt to your local market requirements.',
     },
     fastOnboarding: {
       title: 'Fast Onboarding',
-      description: 'Start tab with step‑by‑step guidance. Pre‑loaded sample data and comprehensive resources to learn the flow in minutes.'
+      description:
+        'Start tab with step‑by‑step guidance. Pre‑loaded sample data and comprehensive resources to learn the flow in minutes.',
     },
     aiMethodGenerator: {
       title: 'AI Method Generator',
-      description: 'Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes.'
-    }
+      description:
+        'Discover new cooking methods that could improve your margins and reduce waste. Get AI-powered suggestions for optimizing your kitchen processes.',
+    },
   },
-  
+
   // Landing Page Sections
   problemOutcome: {
     problem: {
       title: 'The Problem',
       points: [
-        'You don\'t know which menu items actually make money',
+        "You don't know which menu items actually make money",
         'COGS creep and waste eat your profit',
         'Pricing is guesswork; GST adds friction',
-        'Reports are slow, complicated, or sit in someone else\'s tool'
-      ]
+        "Reports are slow, complicated, or sit in someone else's tool",
+      ],
     },
     outcome: {
       title: 'The Outcome',
@@ -311,95 +357,105 @@ export const translations = {
         'See item-level margins and profit instantly',
         'Spot "winners" and "profit leaks" at a glance',
         'Adjust pricing with confidence (GST-aware)',
-        'Run everything in Google Sheets — no new software to learn'
-      ]
-    }
+        'Run everything in Google Sheets — no new software to learn',
+      ],
+    },
   },
 
   contributingMargin: {
     title: 'Contributing Margin — The Real Profit Story',
-    subtitle: 'See beyond gross profit to understand what each dish truly contributes to your business',
+    subtitle:
+      'See beyond gross profit to understand what each dish truly contributes to your business',
     grossProfit: {
       title: 'Gross Profit',
-      description: 'What you think you\'re making'
+      description: "What you think you're making",
     },
     contributingMargin: {
       title: 'Contributing Margin',
-      description: 'What you\'re actually contributing'
+      description: "What you're actually contributing",
     },
     actionPlan: {
       title: 'Action Plan',
-      description: 'What to do about it'
+      description: 'What to do about it',
     },
-    explanation: 'PrepFlow helps you see: That $15 burger might have a 60% GP, but after prep time, waste, and complexity, it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.',
-    disclaimer: '*Example for illustration - actual results depend on your specific menu and costs'
+    explanation:
+      'PrepFlow helps you see: That $15 burger might have a 60% GP, but after prep time, waste, and complexity, it might only be contributing $2.50 to your bottom line. Meanwhile, that simple $8 side dish might be contributing $4.00.',
+    disclaimer: '*Example for illustration - actual results depend on your specific menu and costs',
   },
 
   journey: {
     title: 'My Journey Creating PrepFlow',
-    subtitle: 'This isn\'t just another tool - it\'s my personal solution to real kitchen problems, refined over 20 years of working in restaurants across Europe and Australia.',
+    subtitle:
+      "This isn't just another tool - it's my personal solution to real kitchen problems, refined over 20 years of working in restaurants across Europe and Australia.",
     earlyExperience: {
       title: '2008-2012 - Early Experience',
-      description: 'Started as Sous Chef at Krautwells GmbH, managing vegan cuisine and training junior chefs'
+      description:
+        'Started as Sous Chef at Krautwells GmbH, managing vegan cuisine and training junior chefs',
     },
     europeanLeadership: {
       title: '2012-2018 - European Leadership',
-      description: 'Founded KSK-Küchenspezialkräfte vegan catering, managed teams of 21 staff, served 1,200+ daily'
+      description:
+        'Founded KSK-Küchenspezialkräfte vegan catering, managed teams of 21 staff, served 1,200+ daily',
     },
     australianExcellence: {
       title: '2018-2024 - Australian Excellence',
-      description: 'Executive Chef roles, Head Chef at ALH Hotels, leading teams of 9 chefs with AI integration'
+      description:
+        'Executive Chef roles, Head Chef at ALH Hotels, leading teams of 9 chefs with AI integration',
     },
     readyToShare: {
       title: '2024 - Ready to Share',
-      description: 'Now sharing the perfected tool with fellow chefs and restaurateurs who face the same challenges I did'
+      description:
+        'Now sharing the perfected tool with fellow chefs and restaurateurs who face the same challenges I did',
     },
     whyCreated: {
       title: 'Why I Created PrepFlow',
       paragraphs: [
-        'Over 20 years as a chef, I\'ve managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. I\'ve faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.',
-        'As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. Existing solutions were either too complex, too expensive, or didn\'t understand real kitchen operations.',
+        "Over 20 years as a chef, I've managed everything from small cafés to large-scale catering operations serving 1,200+ guests daily. I've faced the same challenges you do: menu costing, waste management, profitability analysis, and team efficiency.",
+        "As Head Chef at ALH Hotels, I was constantly looking for better ways to manage costs, streamline prep systems, and optimize our menu mix. Existing solutions were either too complex, too expensive, or didn't understand real kitchen operations.",
         'So I built my own solution - a simple Google Sheets template that could handle COGS calculations, track ingredient costs, and show me exactly which menu items were profitable and which were losing money.',
-        'Having worked across Europe and Australia, I\'ve refined it to work perfectly for venues worldwide - with GST support for Australian markets, multi-currency options, and the flexibility to adapt to any kitchen\'s needs. It\'s the tool I wish I had when I started, and now I\'m sharing it with you.'
-      ]
-    }
+        "Having worked across Europe and Australia, I've refined it to work perfectly for venues worldwide - with GST support for Australian markets, multi-currency options, and the flexibility to adapt to any kitchen's needs. It's the tool I wish I had when I started, and now I'm sharing it with you.",
+      ],
+    },
   },
 
   globalFeatures: {
     title: 'Expose Hidden Profits — One Sheet, Every Answer',
-    subtitle: 'While others charge thousands for complicated restaurant software, PrepFlow provides similar profit insights in a simple Google Sheet for a one-time purchase.',
+    subtitle:
+      'While others charge thousands for complicated restaurant software, PrepFlow provides similar profit insights in a simple Google Sheet for a one-time purchase.',
     multiCurrency: {
       title: 'Multi-Currency',
-      description: 'USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.'
+      description: 'USD, EUR, GBP, AUD, SGD, and more. Switch currencies instantly.',
     },
     taxSystems: {
       title: 'Tax Systems',
-      description: 'GST, VAT, Sales Tax, HST. Configure for your local requirements.'
+      description: 'GST, VAT, Sales Tax, HST. Configure for your local requirements.',
     },
     access24_7: {
       title: '24/7 Access',
-      description: 'Cloud-based Google Sheets. Access from anywhere, anytime.'
+      description: 'Cloud-based Google Sheets. Access from anywhere, anytime.',
     },
     noConsultants: {
       title: 'No Consultants',
-      description: 'Set up yourself in under an hour. No expensive implementation fees.'
+      description: 'Set up yourself in under an hour. No expensive implementation fees.',
     },
-    conclusion: 'One sheet. Key insights your kitchen needs. Identify profit opportunities in your menu with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.'
+    conclusion:
+      'One sheet. Key insights your kitchen needs. Identify profit opportunities in your menu with insights similar to expensive software — but in a simple Google Sheet you can set up yourself.',
   },
 
   howItWorks: {
     title: 'Get Results in 3 Simple Steps',
     step1: {
       title: 'Set up (5–10 min)',
-      description: 'Turn on GST, add ingredients, yields, and supplier costs.'
+      description: 'Turn on GST, add ingredients, yields, and supplier costs.',
     },
     step2: {
       title: 'Import sales',
-      description: 'Paste your POS export into the Sales tab.'
+      description: 'Paste your POS export into the Sales tab.',
     },
     step3: {
       title: 'Decide & act',
-      description: 'Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix.'
+      description:
+        'Dashboard ranks items by profit and popularity; fix pricing, portioning, or menu mix.',
     },
     checklist: {
       title: '60-Second Checklist',
@@ -408,14 +464,14 @@ export const translations = {
         'Ingredient yields/waste entered?',
         'Sales pasted?',
         'Review top 5 low-margin items?',
-        'Re-check dashboard tomorrow'
-      ]
-    }
+        'Re-check dashboard tomorrow',
+      ],
+    },
   },
 
   leadMagnet: {
     title: 'See PrepFlow before you buy',
-    subtitle: 'Get a sample dashboard — we\'ll email it to you.',
+    subtitle: "Get a sample dashboard — we'll email it to you.",
     form: {
       nameLabel: 'Your name *',
       namePlaceholder: 'Your name',
@@ -424,45 +480,50 @@ export const translations = {
       sampleLabel: 'Get your sample dashboard',
       sampleDescription: 'Sample Dashboard',
       submitButton: 'Send me the sample dashboard',
-      disclaimer: 'No spam. No lock-in. Your data stays private.\nWe\'ll only email you about PrepFlow updates.'
-    }
+      disclaimer:
+        "No spam. No lock-in. Your data stays private.\nWe'll only email you about PrepFlow updates.",
+    },
   },
 
   howItWorksPractice: {
     title: 'How PrepFlow Works in Practice',
-    subtitle: 'From guesswork to data-driven clarity - here\'s what you can expect',
+    subtitle: "From guesswork to data-driven clarity - here's what you can expect",
     before: {
       title: 'Before PrepFlow',
       status: 'Unclear margins',
-      description: 'Blind pricing, gut feeling, unclear margins everywhere'
+      description: 'Blind pricing, gut feeling, unclear margins everywhere',
     },
     after: {
       title: 'After PrepFlow',
       status: 'Clear insights',
-      description: 'Data-driven decisions, margin insights revealed, clarity achieved'
+      description: 'Data-driven decisions, margin insights revealed, clarity achieved',
     },
-    explanation: 'PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins',
-    disclaimer: '*Results depend on your current menu structure and how you implement the insights'
+    explanation:
+      'PrepFlow helps you identify where your menu has profit potential and where costs might be eating into your margins',
+    disclaimer: '*Results depend on your current menu structure and how you implement the insights',
   },
 
   benefits: {
     title: 'What PrepFlow Helps You Achieve',
     betterPricing: {
       title: 'Better Pricing Decisions',
-      description: 'See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing.'
+      description:
+        'See exactly how ingredient costs, yields, and waste affect your margins. Make informed pricing decisions instead of guessing.',
     },
     identifyOpportunities: {
       title: 'Identify Profit Opportunities',
-      description: 'Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they\'ll have the biggest impact.'
+      description:
+        "Spot which menu items are underperforming and which have hidden potential. Focus your efforts where they'll have the biggest impact.",
     },
     streamlineOperations: {
       title: 'Streamline Operations',
-      description: 'Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line.'
+      description:
+        'Understand your true costs and optimize your menu mix. Reduce waste, improve efficiency, and increase your bottom line.',
     },
     cta: {
       text: 'See PrepFlow in action',
-      button: 'Get Sample'
-    }
+      button: 'Get Sample',
+    },
   },
 
   faq: {
@@ -470,36 +531,35 @@ export const translations = {
     questions: [
       {
         question: 'Do I need tech skills?',
-        answer: 'Zero spreadsheet formulas required. If you can use Google Sheets, you\'re good.'
+        answer: "Zero spreadsheet formulas required. If you can use Google Sheets, you're good.",
       },
       {
         question: 'Does it work worldwide?',
-        answer: 'Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market.'
+        answer:
+          'Built for global venues — includes GST, VAT, Sales Tax toggles, multi-currency support, and export-ready reports for any market.',
       },
       {
-        question: 'What if it doesn\'t work for me?',
-        answer: 'If you\'re not satisfied with the insights and clarity PrepFlow provides in 7 days, you\'ll get every cent back. No hassle.'
+        question: "What if it doesn't work for me?",
+        answer:
+          "If you're not satisfied with the insights and clarity PrepFlow provides in 7 days, you'll get every cent back. No hassle.",
       },
       {
         question: 'Will this slow me down?',
-        answer: 'Setup typically takes 1-2 hours. After that, you\'ll save time on menu planning and cost analysis.'
-      }
-    ]
+        answer:
+          "Setup typically takes 1-2 hours. After that, you'll save time on menu planning and cost analysis.",
+      },
+    ],
   },
 
   builtFor: {
     title: 'Built for Independent Venues & Small Kitchens',
-    features: [
-      'Works with Google Sheets',
-      '7-Day Refund Policy',
-      'Made for AU Market'
-    ]
+    features: ['Works with Google Sheets', '7-Day Refund Policy', 'Made for AU Market'],
   },
 
   trustBar: {
-    text: 'Stop guessing. Start knowing. PrepFlow isn\'t just a spreadsheet — it\'s the X-ray machine for your menu\'s profitability.'
+    text: "Stop guessing. Start knowing. PrepFlow isn't just a spreadsheet — it's the X-ray machine for your menu's profitability.",
   },
-  
+
   // Common
   common: {
     loading: 'Loading...',
@@ -771,14 +831,14 @@ export const translations = {
     operational: 'Operational',
     running: 'Running',
     operating: 'Operating',
-    functioning: 'Functioning'
+    functioning: 'Functioning',
   },
 
   // Floating CTA Banner
   floatingCta: {
     mainButton: 'Get PrepFlow',
     price: 'AUD $29',
-    sampleButton: 'Free Sample'
+    sampleButton: 'Free Sample',
   },
 
   // Footer
@@ -786,12 +846,11 @@ export const translations = {
     copyright: `© ${new Date().getFullYear()} PrepFlow. All rights reserved.`,
     terms: 'Terms',
     privacy: 'Privacy',
-    support: 'Support'
+    support: 'Support',
   },
 
   // Logo
   logo: {
-    alt: 'PrepFlow Logo'
+    alt: 'PrepFlow Logo',
   },
-
 };

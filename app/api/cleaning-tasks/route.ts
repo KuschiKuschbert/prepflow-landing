@@ -4,9 +4,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -16,7 +19,8 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseAdmin
       .from('cleaning_tasks')
-      .select(`
+      .select(
+        `
         *,
         cleaning_areas (
           id,
@@ -24,7 +28,8 @@ export async function GET(request: NextRequest) {
           description,
           frequency_days
         )
-      `)
+      `,
+      )
       .order('assigned_date', { ascending: false });
 
     if (areaId) {
@@ -41,23 +46,28 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Error fetching cleaning tasks:', error);
-      return NextResponse.json({ 
-        error: 'Failed to fetch cleaning tasks',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to fetch cleaning tasks',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
-
   } catch (error) {
     console.error('Cleaning tasks fetch error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to fetch cleaning tasks',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to fetch cleaning tasks',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -67,16 +77,22 @@ export async function POST(request: NextRequest) {
     const { area_id, assigned_date, notes } = body;
 
     if (!area_id || !assigned_date) {
-      return NextResponse.json({ 
-        error: 'Required fields missing',
-        message: 'Please provide area_id and assigned_date'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Required fields missing',
+          message: 'Please provide area_id and assigned_date',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
@@ -85,9 +101,10 @@ export async function POST(request: NextRequest) {
         area_id,
         assigned_date,
         notes: notes || null,
-        status: 'pending'
+        status: 'pending',
       })
-      .select(`
+      .select(
+        `
         *,
         cleaning_areas (
           id,
@@ -95,29 +112,35 @@ export async function POST(request: NextRequest) {
           description,
           frequency_days
         )
-      `)
+      `,
+      )
       .single();
 
     if (error) {
       console.error('Error creating cleaning task:', error);
-      return NextResponse.json({ 
-        error: 'Failed to create cleaning task',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to create cleaning task',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       message: 'Cleaning task created successfully',
-      data
+      data,
     });
-
   } catch (error) {
     console.error('Cleaning task creation error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to create cleaning task',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to create cleaning task',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -127,10 +150,13 @@ export async function PUT(request: NextRequest) {
     const { id, status, completed_date, notes, photo_url } = body;
 
     if (!id) {
-      return NextResponse.json({ 
-        error: 'ID is required',
-        message: 'Please provide an ID for the cleaning task to update'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'ID is required',
+          message: 'Please provide an ID for the cleaning task to update',
+        },
+        { status: 400 },
+      );
     }
 
     const updateData: any = {};
@@ -145,16 +171,20 @@ export async function PUT(request: NextRequest) {
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
       .from('cleaning_tasks')
       .update(updateData)
       .eq('id', id)
-      .select(`
+      .select(
+        `
         *,
         cleaning_areas (
           id,
@@ -162,29 +192,35 @@ export async function PUT(request: NextRequest) {
           description,
           frequency_days
         )
-      `)
+      `,
+      )
       .single();
 
     if (error) {
       console.error('Error updating cleaning task:', error);
-      return NextResponse.json({ 
-        error: 'Failed to update cleaning task',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to update cleaning task',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       message: 'Cleaning task updated successfully',
-      data
+      data,
     });
-
   } catch (error) {
     console.error('Cleaning task update error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to update cleaning task',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to update cleaning task',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -194,41 +230,49 @@ export async function DELETE(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ 
-        error: 'ID is required',
-        message: 'Please provide an ID for the cleaning task to delete'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'ID is required',
+          message: 'Please provide an ID for the cleaning task to delete',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
-    const { error } = await supabaseAdmin
-      .from('cleaning_tasks')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabaseAdmin.from('cleaning_tasks').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting cleaning task:', error);
-      return NextResponse.json({ 
-        error: 'Failed to delete cleaning task',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to delete cleaning task',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Cleaning task deleted successfully'
+      message: 'Cleaning task deleted successfully',
     });
-
   } catch (error) {
     console.error('Cleaning task deletion error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to delete cleaning task',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to delete cleaning task',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

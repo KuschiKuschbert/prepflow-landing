@@ -67,7 +67,7 @@ export function useRefreshDashboard() {
         queryClient.invalidateQueries({ queryKey: ['dashboard', 'overview'] }),
       ]);
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, ['dashboard']);
       console.error('Failed to refresh dashboard:', errorMessage);
     },
@@ -111,7 +111,7 @@ export function useMarkNotificationAsRead() {
       // Invalidate notifications cache
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'notifications'] });
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, ['dashboard', 'notifications']);
       console.error('Failed to mark notification as read:', errorMessage);
     },
@@ -165,11 +165,11 @@ export function useExecuteQuickAction() {
       } else if (actionId.includes('performance')) {
         invalidateQueries.performance();
       }
-      
+
       // Always refresh dashboard stats after any action
       queryClient.invalidateQueries({ queryKey: queryKeys.dashboardStats });
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, ['dashboard', 'quick-actions']);
       console.error('Failed to execute quick action:', errorMessage);
     },

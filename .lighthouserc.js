@@ -45,16 +45,16 @@ module.exports = {
         'categories:accessibility': ['error', { minScore: 0.9 }],
         'categories:best-practices': ['error', { minScore: 0.8 }],
         'categories:seo': ['error', { minScore: 0.8 }],
-        
+
         // Specific metrics
         'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
         'first-input-delay': ['error', { maxNumericValue: 100 }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
         'first-contentful-paint': ['error', { maxNumericValue: 1800 }],
         'speed-index': ['error', { maxNumericValue: 3000 }],
-        'interactive': ['error', { maxNumericValue: 3800 }],
+        interactive: ['error', { maxNumericValue: 3800 }],
         'total-blocking-time': ['error', { maxNumericValue: 300 }],
-        
+
         // Resource optimization
         'unused-css-rules': ['warn', { maxLength: 0 }],
         'unused-javascript': ['warn', { maxLength: 0 }],
@@ -62,17 +62,17 @@ module.exports = {
         'uses-optimized-images': ['error', { maxLength: 0 }],
         'uses-text-compression': ['error', { maxLength: 0 }],
         'uses-responsive-images': ['error', { maxLength: 0 }],
-        
+
         // Bundle size
         'total-byte-weight': ['error', { maxNumericValue: 500000 }], // 500KB
         'mainthread-work-breakdown': ['error', { maxNumericValue: 2000 }],
-        
+
         // Accessibility
         'color-contrast': ['error', { maxLength: 0 }],
         'image-alt': ['error', { maxLength: 0 }],
-        'label': ['error', { maxLength: 0 }],
+        label: ['error', { maxLength: 0 }],
         'link-name': ['error', { maxLength: 0 }],
-        
+
         // SEO
         'meta-description': ['error', { maxLength: 0 }],
         'document-title': ['error', { maxLength: 0 }],

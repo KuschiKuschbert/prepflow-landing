@@ -13,7 +13,7 @@ export function useSmartLoading(initialLoading = false, minLoadingDelay = 100) {
   useEffect(() => {
     setIsMounted(true);
     mountedTimeRef.current = Date.now();
-    
+
     return () => {
       setIsMounted(false);
       if (loadingTimeoutRef.current) {
@@ -24,7 +24,7 @@ export function useSmartLoading(initialLoading = false, minLoadingDelay = 100) {
 
   const setSmartLoading = (newLoading: boolean) => {
     if (!isMounted) return;
-    
+
     if (newLoading) {
       // Only show loading if component has been mounted for minimum time
       const timeSinceMount = Date.now() - mountedTimeRef.current;

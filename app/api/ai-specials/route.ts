@@ -7,10 +7,13 @@ export async function POST(request: NextRequest) {
     const { userId, imageData, prompt } = body;
 
     if (!userId || !imageData) {
-      return NextResponse.json({ 
-        error: 'Missing required fields',
-        message: 'User ID and image data are required'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Missing required fields',
+          message: 'User ID and image data are required',
+        },
+        { status: 400 },
+      );
     }
 
     // For now, we'll simulate AI processing
@@ -19,9 +22,12 @@ export async function POST(request: NextRequest) {
 
     // Save the AI analysis to database
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data: aiRecord, error: aiError } = await supabaseAdmin
@@ -33,35 +39,40 @@ export async function POST(request: NextRequest) {
         ai_response: aiResponse,
         status: 'completed',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
 
     if (aiError) {
       console.error('Error saving AI analysis:', aiError);
-      return NextResponse.json({ 
-        error: 'Failed to save AI analysis',
-        message: 'Could not save AI processing results'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to save AI analysis',
+          message: 'Could not save AI processing results',
+        },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'AI specials generated successfully',
       data: {
         aiRecord,
         suggestions: aiResponse.suggestions,
-        ingredients: aiResponse.ingredients
-      }
+        ingredients: aiResponse.ingredients,
+      },
     });
-
   } catch (error) {
     console.error('AI specials API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -78,21 +89,21 @@ async function processImageWithAI(imageData: string, prompt?: string) {
     'Garlic',
     'Red onions',
     'Bell peppers',
-    'Fresh herbs'
+    'Fresh herbs',
   ];
 
   const mockSuggestions = [
     'Caprese Salad - Perfect for showcasing fresh tomatoes and mozzarella',
     'Mediterranean Bruschetta - Great use of tomatoes, basil, and garlic',
     'Grilled Vegetable Platter - Highlight the bell peppers and onions',
-    'Herb-Infused Oil - Feature the fresh herbs and olive oil'
+    'Herb-Infused Oil - Feature the fresh herbs and olive oil',
   ];
 
   return {
     ingredients: mockIngredients,
     suggestions: mockSuggestions,
     confidence: 0.85,
-    processing_time: 2.1
+    processing_time: 2.1,
   };
 }
 
@@ -102,16 +113,22 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     if (!userId) {
-      return NextResponse.json({ 
-        error: 'User ID is required',
-        message: 'Please provide a valid user ID'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'User ID is required',
+          message: 'Please provide a valid user ID',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
@@ -122,22 +139,27 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Error fetching AI specials:', error);
-      return NextResponse.json({ 
-        error: 'Failed to fetch AI specials',
-        message: 'Could not retrieve AI analysis data'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to fetch AI specials',
+          message: 'Could not retrieve AI analysis data',
+        },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
-
   } catch (error) {
     console.error('AI specials API error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      message: 'An unexpected error occurred'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 },
+    );
   }
 }

@@ -10,12 +10,13 @@ const TestWarningButton: React.FC = () => {
     addWarning({
       type: 'warning',
       title: 'Temperature Monitoring Alert',
-      message: 'No food items have been temperature checked today. Ensure all food items are properly monitored for safety compliance.',
+      message:
+        'No food items have been temperature checked today. Ensure all food items are properly monitored for safety compliance.',
       action: {
         label: 'Go to Temperature Logs',
         onClick: () => {
           window.location.href = '/webapp/temperature';
-        }
+        },
       },
       dismissible: true,
       autoHide: false,
@@ -25,7 +26,7 @@ const TestWarningButton: React.FC = () => {
   return (
     <button
       onClick={testWarning}
-      className="px-4 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-400 transition-colors"
+      className="rounded-lg bg-yellow-500 px-4 py-2 text-black transition-colors hover:bg-yellow-400"
     >
       Test Global Warning
     </button>

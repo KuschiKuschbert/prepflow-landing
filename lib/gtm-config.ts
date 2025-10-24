@@ -20,20 +20,20 @@ export const GTM_EVENTS = {
   // Page tracking
   PAGE_VIEW: 'page_view',
   PAGE_LOAD: 'page_load',
-  
+
   // User engagement
   ENGAGEMENT: 'engagement',
   SCROLL_DEPTH: 'scroll_depth',
   TIME_ON_PAGE: 'time_on_page',
   SECTION_VIEW: 'section_view',
-  
+
   // User interactions
   CLICK: 'click',
   FORM_SUBMIT: 'form_submit',
   VIDEO_PLAY: 'video_play',
   VIDEO_PAUSE: 'video_pause',
   VIDEO_COMPLETE: 'video_complete',
-  
+
   // Conversions
   CONVERSION: 'conversion',
   CTA_CLICK: 'cta_click',
@@ -41,17 +41,17 @@ export const GTM_EVENTS = {
   PRICING_VIEW: 'pricing_view',
   PURCHASE_START: 'purchase_start',
   PURCHASE_COMPLETE: 'purchase_complete',
-  
+
   // A/B Testing
   VARIANT_ASSIGNED: 'variant_assigned',
   VARIANT_VIEW: 'variant_view',
   VARIANT_CONVERSION: 'variant_conversion',
-  
+
   // Performance
   PERFORMANCE_METRIC: 'performance_metric',
   CORE_WEB_VITAL: 'core_web_vital',
   SLOW_RESOURCE: 'slow_resource',
-  
+
   // Exit intent
   EXIT_INTENT: 'exit_intent',
   PAGE_UNLOAD: 'page_unload',
@@ -65,27 +65,27 @@ export const GTM_VARIABLES = {
   PAGE_LOCATION: 'page_location',
   PAGE_PATH: 'page_path',
   PAGE_REFERRER: 'page_referrer',
-  
+
   // User information
   USER_ID: 'user_id',
   SESSION_ID: 'session_id',
   USER_AGENT: 'user_agent',
-  
+
   // Event information
   EVENT_CATEGORY: 'event_category',
   EVENT_ACTION: 'event_action',
   EVENT_LABEL: 'event_label',
   EVENT_VALUE: 'event_value',
-  
+
   // Custom parameters
   CUSTOM_PARAMETER: 'custom_parameter',
   TIMESTAMP: 'timestamp',
-  
+
   // A/B Testing
   TEST_ID: 'test_id',
   VARIANT_ID: 'variant_id',
   VARIANT_NAME: 'variant_name',
-  
+
   // Performance
   PERFORMANCE_TYPE: 'performance_type',
   PERFORMANCE_VALUE: 'performance_value',
@@ -95,11 +95,13 @@ export const GTM_VARIABLES = {
 // Predefined data layer objects for common events
 export const GTM_TEMPLATES = {
   // Page view template
-  pageView: (pageData: {
-    title?: string;
-    path?: string;
-    referrer?: string;
-  } = {}) => ({
+  pageView: (
+    pageData: {
+      title?: string;
+      path?: string;
+      referrer?: string;
+    } = {},
+  ) => ({
     event: GTM_EVENTS.PAGE_VIEW,
     page_title: pageData.title || document.title,
     page_location: window.location.href,
@@ -175,12 +177,12 @@ export function validateGTMConfig(): boolean {
     console.error('❌ GTM Container ID not configured. Please update gtm-config.ts');
     return false;
   }
-  
+
   if (!gtmConfig.ga4MeasurementId) {
     console.error('❌ GA4 Measurement ID not configured');
     return false;
   }
-  
+
   return true;
 }
 

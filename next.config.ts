@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 // Bundle analyzer
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -8,11 +8,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig: NextConfig = {
   // Enable compression
   compress: true,
-  
+
   // Performance optimizations
   poweredByHeader: false,
   generateEtags: true,
-  
+
   // Image optimization with advanced settings
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -22,15 +22,14 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  
+
   // Experimental features for performance
   experimental: {
     optimizePackageImports: ['@supabase/supabase-js', '@vercel/analytics'],
     // Enable modern bundling
     esmExternals: true,
   },
-  
-  
+
   // Remove dev tools from production
   ...(process.env.NODE_ENV === 'production' && {
     webpack: (config, { dev, isServer }) => {
@@ -39,11 +38,11 @@ const nextConfig: NextConfig = {
         ...config.resolve.alias,
         'next/dist/compiled/next-dev-tools': false,
       };
-      
+
       return config;
     },
   }),
-  
+
   // Turbopack configuration (moved from experimental)
   turbopack: {
     rules: {
@@ -53,7 +52,7 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  
+
   // Webpack configuration with advanced optimizations
   webpack: (config, { dev, isServer }) => {
     // Production optimizations
@@ -106,15 +105,15 @@ const nextConfig: NextConfig = {
           },
         },
       };
-      
+
       // Tree shaking optimization
       config.optimization.usedExports = true;
       config.optimization.sideEffects = false;
-      
+
       // Module concatenation
       config.optimization.concatenateModules = true;
     }
-    
+
     // Font optimization
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -126,10 +125,10 @@ const nextConfig: NextConfig = {
         },
       },
     });
-    
+
     return config;
   },
-  
+
   // Headers for performance and security
   async headers() {
     return [
@@ -138,87 +137,87 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'on',
           },
           {
             key: 'X-Frame-Options',
-            value: 'DENY'
+            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'origin-when-cross-origin',
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
+            value: 'camera=(), microphone=(), geolocation=()',
           },
           {
             key: 'Content-Encoding',
-            value: 'gzip, br'
-          }
-        ]
+            value: 'gzip, br',
+          },
+        ],
       },
       {
         source: '/api/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'private, no-cache, no-store, max-age=0, must-revalidate'
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
           },
           {
             key: 'Content-Encoding',
-            value: 'gzip, br'
-          }
-        ]
+            value: 'gzip, br',
+          },
+        ],
       },
       {
         source: '/images/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
+            value: 'public, max-age=31536000, immutable',
           },
           {
             key: 'Vary',
-            value: 'Accept'
-          }
-        ]
+            value: 'Accept',
+          },
+        ],
       },
       {
         source: '/_next/static/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
       {
         source: '/sw.js',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate'
+            value: 'public, max-age=0, must-revalidate',
           },
           {
             key: 'Service-Worker-Allowed',
-            value: '/'
-          }
-        ]
+            value: '/',
+          },
+        ],
       },
       {
         source: '/manifest.json',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400'
-          }
-        ]
-      }
+            value: 'public, max-age=86400',
+          },
+        ],
+      },
     ];
   },
 };

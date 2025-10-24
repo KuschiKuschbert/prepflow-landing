@@ -4,7 +4,7 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 export async function POST(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
-    
+
     // SQL script to create all tables
     const createTablesSQL = `
       -- Create ingredients table
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
           product_code VARCHAR(100),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );`
+        );`,
       },
       {
         name: 'recipes',
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
           instructions TEXT,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );`
+        );`,
       },
       {
         name: 'recipe_ingredients',
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
           unit VARCHAR(50) NOT NULL,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );`
+        );`,
       },
       {
         name: 'menu_dishes',
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
           selling_price DECIMAL(10,2),
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );`
+        );`,
       },
       {
         name: 'users',
@@ -157,12 +157,12 @@ export async function POST(request: NextRequest) {
           locked_until TIMESTAMP WITH TIME ZONE,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );`
-      }
+        );`,
+      },
     ];
 
     const results = [];
-    
+
     for (const table of tables) {
       try {
         // Check if table already exists
@@ -174,12 +174,12 @@ export async function POST(request: NextRequest) {
         if (checkError && checkError.code === 'PGRST204') {
           // Table doesn't exist, try to create it using a simple approach
           console.log(`Table ${table.name} doesn't exist, attempting to create...`);
-          
+
           // For now, we'll return instructions for manual creation
-          results.push({ 
-            table: table.name, 
+          results.push({
+            table: table.name,
             status: 'needs_manual_creation',
-            message: 'Please create this table manually in Supabase dashboard'
+            message: 'Please create this table manually in Supabase dashboard',
           });
         } else if (!checkError) {
           results.push({ table: table.name, status: 'already_exists' });
@@ -188,22 +188,29 @@ export async function POST(request: NextRequest) {
         }
       } catch (err) {
         console.error(`Error checking table ${table.name}:`, err);
-        results.push({ table: table.name, status: 'error', error: err instanceof Error ? err.message : 'Unknown error' });
+        results.push({
+          table: table.name,
+          status: 'error',
+          error: err instanceof Error ? err.message : 'Unknown error',
+        });
       }
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       message: 'Table status checked. Some tables may need manual creation.',
       results: results,
-      instructions: 'Visit Supabase dashboard to create missing tables using the SQL script from /api/create-tables'
+      instructions:
+        'Visit Supabase dashboard to create missing tables using the SQL script from /api/create-tables',
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      details: err instanceof Error ? err.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

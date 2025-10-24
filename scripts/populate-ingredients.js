@@ -2,142 +2,141 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Supabase configuration
 const supabaseUrl = 'https://dulkrqgjfohsuxhsmofo.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bGtycWdqZm9oc3V4aHNtb2ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYwMDMsImV4cCI6MjA3MjU1MjAwM30.b_P98mAantymNfWy1Qz18SaR-LwrPjuaebO2Uj_5JK8';
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bGtycWdqZm9oc3V4aHNtb2ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYwMDMsImV4cCI6MjA3MjU1MjAwM30.b_P98mAantymNfWy1Qz18SaR-LwrPjuaebO2Uj_5JK8';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Sample ingredients data (first 20 items for testing)
 const ingredientsData = [
   {
-    name: "Burger Patties",
-    brand: "Angel Bay",
+    name: 'Burger Patties',
+    brand: 'Angel Bay',
     pack_size: 45,
-    unit: "PC",
-    cost_per_unit: 2.690,
-    trim_peel_waste_percent: 1.00,
-    yield_percent: 99.00,
-    supplier: "PFD",
-    storage: "FROZEN",
-    product_code: ""
+    unit: 'PC',
+    cost_per_unit: 2.69,
+    trim_peel_waste_percent: 1.0,
+    yield_percent: 99.0,
+    supplier: 'PFD',
+    storage: 'FROZEN',
+    product_code: '',
   },
   {
-    name: "Aioli",
-    brand: "",
+    name: 'Aioli',
+    brand: '',
     pack_size: 2500,
-    unit: "ML",
+    unit: 'ML',
     cost_per_unit: 0.009,
-    trim_peel_waste_percent: 1.00,
-    yield_percent: 99.00,
-    supplier: "BIDFOOD",
-    storage: "COLDROOM",
-    product_code: ""
+    trim_peel_waste_percent: 1.0,
+    yield_percent: 99.0,
+    supplier: 'BIDFOOD',
+    storage: 'COLDROOM',
+    product_code: '',
   },
   {
-    name: "Anchovy Fillets",
-    brand: "",
+    name: 'Anchovy Fillets',
+    brand: '',
     pack_size: 720,
-    unit: "GM",
+    unit: 'GM',
     cost_per_unit: 0.018,
-    trim_peel_waste_percent: 34.00,
-    yield_percent: 66.00,
-    supplier: "PFD",
-    storage: "DRYSTORE",
-    product_code: ""
+    trim_peel_waste_percent: 34.0,
+    yield_percent: 66.0,
+    supplier: 'PFD',
+    storage: 'DRYSTORE',
+    product_code: '',
   },
   {
-    name: "Apple Juice",
-    brand: "",
+    name: 'Apple Juice',
+    brand: '',
     pack_size: 2000,
-    unit: "ML",
+    unit: 'ML',
     cost_per_unit: 0.002,
-    trim_peel_waste_percent: 8.00,
-    yield_percent: 92.00,
-    supplier: "PFD",
-    storage: "DRYSTORE",
-    product_code: ""
+    trim_peel_waste_percent: 8.0,
+    yield_percent: 92.0,
+    supplier: 'PFD',
+    storage: 'DRYSTORE',
+    product_code: '',
   },
   {
-    name: "Apples",
-    brand: "",
+    name: 'Apples',
+    brand: '',
     pack_size: 1000,
-    unit: "GM",
+    unit: 'GM',
     cost_per_unit: 0.004,
-    trim_peel_waste_percent: 5.00,
-    yield_percent: 95.00,
-    supplier: "GROWERS",
-    storage: "COLDROOM",
-    product_code: ""
+    trim_peel_waste_percent: 5.0,
+    yield_percent: 95.0,
+    supplier: 'GROWERS',
+    storage: 'COLDROOM',
+    product_code: '',
   },
   {
-    name: "Avocado",
-    brand: "",
+    name: 'Avocado',
+    brand: '',
     pack_size: 1,
-    unit: "PC",
-    cost_per_unit: 2.300,
-    trim_peel_waste_percent: 16.00,
-    yield_percent: 84.00,
-    supplier: "GROWERS",
-    storage: "COLDROOM",
-    product_code: ""
+    unit: 'PC',
+    cost_per_unit: 2.3,
+    trim_peel_waste_percent: 16.0,
+    yield_percent: 84.0,
+    supplier: 'GROWERS',
+    storage: 'COLDROOM',
+    product_code: '',
   },
   {
-    name: "Balsamic Glaze",
-    brand: "",
+    name: 'Balsamic Glaze',
+    brand: '',
     pack_size: 500,
-    unit: "GM",
+    unit: 'GM',
     cost_per_unit: 0.023,
-    trim_peel_waste_percent: 34.00,
-    yield_percent: 66.00,
-    supplier: "PFD",
-    storage: "DRYSTORE",
-    product_code: ""
+    trim_peel_waste_percent: 34.0,
+    yield_percent: 66.0,
+    supplier: 'PFD',
+    storage: 'DRYSTORE',
+    product_code: '',
   },
   {
-    name: "Balsamic Vinegar",
-    brand: "",
+    name: 'Balsamic Vinegar',
+    brand: '',
     pack_size: 5000,
-    unit: "ML",
+    unit: 'ML',
     cost_per_unit: 0.004,
-    trim_peel_waste_percent: 25.00,
-    yield_percent: 75.00,
-    supplier: "PFD",
-    storage: "DRYSTORE",
-    product_code: ""
+    trim_peel_waste_percent: 25.0,
+    yield_percent: 75.0,
+    supplier: 'PFD',
+    storage: 'DRYSTORE',
+    product_code: '',
   },
   {
-    name: "Banana",
-    brand: "",
+    name: 'Banana',
+    brand: '',
     pack_size: 1000,
-    unit: "GM",
+    unit: 'GM',
     cost_per_unit: 0.003,
-    trim_peel_waste_percent: 19.00,
-    yield_percent: 81.00,
-    supplier: "GROWERS",
-    storage: "FRUIT/VEG",
-    product_code: ""
+    trim_peel_waste_percent: 19.0,
+    yield_percent: 81.0,
+    supplier: 'GROWERS',
+    storage: 'FRUIT/VEG',
+    product_code: '',
   },
   {
-    name: "Barramundi Fillet Skin Off",
-    brand: "",
+    name: 'Barramundi Fillet Skin Off',
+    brand: '',
     pack_size: 5000,
-    unit: "GM",
+    unit: 'GM',
     cost_per_unit: 0.016,
-    trim_peel_waste_percent: 17.00,
-    yield_percent: 83.00,
-    supplier: "PFD",
-    storage: "FISH FROZEN",
-    product_code: ""
-  }
+    trim_peel_waste_percent: 17.0,
+    yield_percent: 83.0,
+    supplier: 'PFD',
+    storage: 'FISH FROZEN',
+    product_code: '',
+  },
 ];
 
 async function populateIngredients() {
   try {
     console.log('Starting to populate ingredients...');
-    
+
     // Insert ingredients in batches
-    const { data, error } = await supabase
-      .from('ingredients')
-      .insert(ingredientsData);
+    const { data, error } = await supabase.from('ingredients').insert(ingredientsData);
 
     if (error) {
       console.error('Error inserting ingredients:', error);
@@ -147,9 +146,10 @@ async function populateIngredients() {
     console.log(`Successfully inserted ${ingredientsData.length} ingredients!`);
     console.log('Sample ingredients added:');
     ingredientsData.forEach(ingredient => {
-      console.log(`- ${ingredient.name} (${ingredient.brand || 'No brand'}) - $${ingredient.cost_per_unit}/${ingredient.unit}`);
+      console.log(
+        `- ${ingredient.name} (${ingredient.brand || 'No brand'}) - $${ingredient.cost_per_unit}/${ingredient.unit}`,
+      );
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
   }

@@ -61,7 +61,7 @@ export default function RecipesPage() {
 
     // Calculate total cost per serving
     let totalCostPerServing = 0;
-    
+
     ingredients.forEach(ri => {
       const ingredient = ri.ingredients;
       const quantity = ri.quantity;
@@ -71,30 +71,30 @@ export default function RecipesPage() {
         baseCostPerUnit,
         ingredient.unit || 'g',
         ri.unit || 'g',
-        ingredient.ingredient_name
+        ingredient.ingredient_name,
       );
       const wastePercent = ingredient.trim_peel_waste_percentage || 0;
       const yieldPercent = ingredient.yield_percentage || 100;
-      
+
       // Calculate cost with waste and yield adjustments
       const baseCost = quantity * costPerUnit;
       const wasteAdjustedCost = baseCost * (1 + wastePercent / 100);
       const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
-      
+
       totalCostPerServing += yieldAdjustedCost;
     });
 
     // Apply 30% food cost target (industry standard)
     const targetFoodCostPercent = 30;
     const recommendedPrice = totalCostPerServing / (targetFoodCostPercent / 100);
-    
+
     // Apply charm pricing (round to nearest .95)
     const charmPrice = Math.floor(recommendedPrice) + 0.95;
-    
+
     return {
       costPerServing: totalCostPerServing,
       recommendedPrice: charmPrice,
-      foodCostPercent: (totalCostPerServing / charmPrice) * 100
+      foodCostPercent: (totalCostPerServing / charmPrice) * 100,
     };
   };
   const [showAddForm, setShowAddForm] = useState(false);
@@ -115,7 +115,9 @@ export default function RecipesPage() {
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [selectedRecipes, setSelectedRecipes] = useState<Set<string>>(new Set());
   const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
-  const [recipePrices, setRecipePrices] = useState<Record<string, {costPerServing: number, recommendedPrice: number, foodCostPercent: number}>>({});
+  const [recipePrices, setRecipePrices] = useState<
+    Record<string, { costPerServing: number; recommendedPrice: number; foodCostPercent: number }>
+  >({});
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
   const [shareLoading, setShareLoading] = useState(false);
@@ -131,18 +133,19 @@ export default function RecipesPage() {
     // Subscribe to ingredient table changes
     const subscription = supabase
       .channel('ingredient-price-changes')
-      .on('postgres_changes', 
-        { 
-          event: 'UPDATE', 
-          schema: 'public', 
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
           table: 'ingredients',
-          filter: 'cost_per_unit=neq.null' // Only trigger on cost_per_unit changes
-        }, 
-        (payload) => {
+          filter: 'cost_per_unit=neq.null', // Only trigger on cost_per_unit changes
+        },
+        payload => {
           console.log('Ingredient price changed:', payload);
           // Refresh recipe prices when any ingredient price changes
           refreshRecipePrices();
-        }
+        },
       )
       .subscribe();
 
@@ -160,7 +163,7 @@ export default function RecipesPage() {
         setError(result.error || 'Failed to fetch recipes');
       } else {
         setRecipes(result.recipes || []);
-        
+
         // Calculate prices for each recipe
         await calculateAllRecipePrices(result.recipes || []);
       }
@@ -173,8 +176,11 @@ export default function RecipesPage() {
 
   // Calculate prices for all recipes
   const calculateAllRecipePrices = async (recipesData: Recipe[]) => {
-    const prices: Record<string, {costPerServing: number, recommendedPrice: number, foodCostPercent: number}> = {};
-    
+    const prices: Record<
+      string,
+      { costPerServing: number; recommendedPrice: number; foodCostPercent: number }
+    > = {};
+
     for (const recipe of recipesData) {
       try {
         const ingredients = await fetchRecipeIngredients(recipe.id);
@@ -186,14 +192,14 @@ export default function RecipesPage() {
         console.log(`Failed to calculate price for recipe ${recipe.id}:`, err);
       }
     }
-    
+
     setRecipePrices(prices);
   };
 
   // Refresh recipe prices (for auto-updates)
   const refreshRecipePrices = async () => {
     if (recipes.length === 0) return;
-    
+
     try {
       await calculateAllRecipePrices(recipes);
     } catch (err) {
@@ -205,7 +211,8 @@ export default function RecipesPage() {
     try {
       const { data: ingredientsData, error: ingredientsError } = await supabase
         .from('recipe_ingredients')
-        .select(`
+        .select(
+          `
           id,
           recipe_id,
           ingredient_id,
@@ -219,7 +226,8 @@ export default function RecipesPage() {
             trim_peel_waste_percentage,
             yield_percentage
           )
-        `)
+        `,
+        )
         .eq('recipe_id', recipeId);
 
       if (ingredientsError) {
@@ -237,9 +245,7 @@ export default function RecipesPage() {
   const handleAddRecipe = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { error } = await supabase
-        .from('recipes')
-        .insert([newRecipe]);
+      const { error } = await supabase.from('recipes').insert([newRecipe]);
 
       if (error) {
         setError(error.message);
@@ -262,7 +268,7 @@ export default function RecipesPage() {
     try {
       // Fetch recipe ingredients
       const ingredients = await fetchRecipeIngredients(recipe.id);
-      
+
       // Convert to COGSCalculation format
       const calculations: COGSCalculation[] = ingredients.map(ri => {
         const ingredient = ri.ingredients;
@@ -285,18 +291,21 @@ export default function RecipesPage() {
           costPerUnit: costPerUnit,
           totalCost: totalCost,
           wasteAdjustedCost: wasteAdjustedCost,
-          yieldAdjustedCost: yieldAdjustedCost
+          yieldAdjustedCost: yieldAdjustedCost,
         };
       });
 
       // Store data in sessionStorage for COGS page
-      sessionStorage.setItem('editingRecipe', JSON.stringify({
-        recipe,
-        calculations,
-        dishName: recipe.name,
-        dishPortions: recipe.yield,
-        dishNameLocked: true
-      }));
+      sessionStorage.setItem(
+        'editingRecipe',
+        JSON.stringify({
+          recipe,
+          calculations,
+          dishName: recipe.name,
+          dishPortions: recipe.yield,
+          dishNameLocked: true,
+        }),
+      );
 
       // Navigate to COGS page
       router.push('/webapp/cogs');
@@ -332,7 +341,7 @@ export default function RecipesPage() {
           ingredientName: ingredient.ingredient_name,
           quantity: quantity,
           unit: ri.unit,
-          costPerUnit: costPerUnit
+          costPerUnit: costPerUnit,
         });
 
         return {
@@ -344,21 +353,24 @@ export default function RecipesPage() {
           costPerUnit: costPerUnit,
           totalCost: totalCost,
           wasteAdjustedCost: wasteAdjustedCost,
-          yieldAdjustedCost: yieldAdjustedCost
+          yieldAdjustedCost: yieldAdjustedCost,
         };
       });
 
       console.log('🔍 DEBUG: Final calculations array:', calculations);
 
       // Store data in sessionStorage for COGS page
-      sessionStorage.setItem('editingRecipe', JSON.stringify({
-        recipe: selectedRecipe,
-        recipeId: selectedRecipe.id, // Pass the specific recipe ID
-        calculations,
-        dishName: selectedRecipe.name,
-        dishPortions: selectedRecipe.yield,
-        dishNameLocked: true
-      }));
+      sessionStorage.setItem(
+        'editingRecipe',
+        JSON.stringify({
+          recipe: selectedRecipe,
+          recipeId: selectedRecipe.id, // Pass the specific recipe ID
+          calculations,
+          dishName: selectedRecipe.name,
+          dishPortions: selectedRecipe.yield,
+          dishNameLocked: true,
+        }),
+      );
 
       // Close the preview modal
       setShowPreview(false);
@@ -380,7 +392,7 @@ export default function RecipesPage() {
       setRecipeIngredients(ingredients);
       setPreviewYield(recipe.yield); // Initialize with original yield
       setShowPreview(true);
-      
+
       // Generate AI instructions
       await generateAIInstructions(recipe, ingredients);
     } catch (err) {
@@ -414,72 +426,80 @@ export default function RecipesPage() {
 
   const formatQuantity = (quantity: number, unit: string) => {
     const adjustedQuantity = calculateAdjustedQuantity(quantity);
-    
+
     // Smart conversions for common units
-    if (unit.toLowerCase() === 'gm' || unit.toLowerCase() === 'g' || unit.toLowerCase() === 'gram') {
+    if (
+      unit.toLowerCase() === 'gm' ||
+      unit.toLowerCase() === 'g' ||
+      unit.toLowerCase() === 'gram'
+    ) {
       if (adjustedQuantity >= 1000) {
         return {
           value: (adjustedQuantity / 1000).toFixed(1),
           unit: 'kg',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`
+          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
         };
       }
     }
-    
+
     if (unit.toLowerCase() === 'ml' || unit.toLowerCase() === 'milliliter') {
       if (adjustedQuantity >= 1000) {
         return {
           value: (adjustedQuantity / 1000).toFixed(1),
           unit: 'L',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`
+          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
         };
       }
     }
-    
+
     if (unit.toLowerCase() === 'mg' || unit.toLowerCase() === 'milligram') {
       if (adjustedQuantity >= 1000) {
         return {
           value: (adjustedQuantity / 1000).toFixed(1),
           unit: 'g',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`
+          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
         };
       }
     }
-    
+
     if (unit.toLowerCase() === 'kg' || unit.toLowerCase() === 'kilogram') {
       if (adjustedQuantity >= 1000) {
         return {
           value: (adjustedQuantity / 1000).toFixed(1),
           unit: 'tonne',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`
+          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
         };
       }
     }
-    
-    if (unit.toLowerCase() === 'l' || unit.toLowerCase() === 'liter' || unit.toLowerCase() === 'litre') {
+
+    if (
+      unit.toLowerCase() === 'l' ||
+      unit.toLowerCase() === 'liter' ||
+      unit.toLowerCase() === 'litre'
+    ) {
       if (adjustedQuantity >= 1000) {
         return {
           value: (adjustedQuantity / 1000).toFixed(1),
           unit: 'kL',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`
+          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
         };
       }
     }
-    
+
     // For smaller quantities, show more precision
     if (adjustedQuantity < 1) {
       return {
         value: adjustedQuantity.toFixed(2),
         unit: unit,
-        original: `${adjustedQuantity.toFixed(2)} ${unit}`
+        original: `${adjustedQuantity.toFixed(2)} ${unit}`,
       };
     }
-    
+
     // Default formatting
     return {
       value: adjustedQuantity.toFixed(1),
       unit: unit,
-      original: `${adjustedQuantity.toFixed(1)} ${unit}`
+      original: `${adjustedQuantity.toFixed(1)} ${unit}`,
     };
   };
 
@@ -491,21 +511,39 @@ export default function RecipesPage() {
       // Analyze ingredients to determine cooking method
       const ingredientNames = ingredients.map(ri => ri.ingredients.ingredient_name.toLowerCase());
       console.log('🤖 DEBUG: Ingredient names:', ingredientNames);
-      const hasProtein = ingredientNames.some(name => 
-        name.includes('beef') || name.includes('chicken') || name.includes('pork') || 
-        name.includes('fish') || name.includes('lamb') || name.includes('mince')
+      const hasProtein = ingredientNames.some(
+        name =>
+          name.includes('beef') ||
+          name.includes('chicken') ||
+          name.includes('pork') ||
+          name.includes('fish') ||
+          name.includes('lamb') ||
+          name.includes('mince'),
       );
-      const hasVegetables = ingredientNames.some(name => 
-        name.includes('carrot') || name.includes('onion') || name.includes('garlic') ||
-        name.includes('tomato') || name.includes('pepper') || name.includes('celery')
+      const hasVegetables = ingredientNames.some(
+        name =>
+          name.includes('carrot') ||
+          name.includes('onion') ||
+          name.includes('garlic') ||
+          name.includes('tomato') ||
+          name.includes('pepper') ||
+          name.includes('celery'),
       );
-      const hasDairy = ingredientNames.some(name => 
-        name.includes('cheese') || name.includes('milk') || name.includes('cream') ||
-        name.includes('butter') || name.includes('yogurt')
+      const hasDairy = ingredientNames.some(
+        name =>
+          name.includes('cheese') ||
+          name.includes('milk') ||
+          name.includes('cream') ||
+          name.includes('butter') ||
+          name.includes('yogurt'),
       );
-      const hasGrains = ingredientNames.some(name => 
-        name.includes('rice') || name.includes('pasta') || name.includes('bread') ||
-        name.includes('flour') || name.includes('quinoa')
+      const hasGrains = ingredientNames.some(
+        name =>
+          name.includes('rice') ||
+          name.includes('pasta') ||
+          name.includes('bread') ||
+          name.includes('flour') ||
+          name.includes('quinoa'),
       );
 
       // Determine recipe type and cooking method
@@ -513,11 +551,17 @@ export default function RecipesPage() {
       let cookingMethod = 'stovetop';
       let primaryTechnique = 'sautéing';
 
-      if (recipe.name.toLowerCase().includes('burger') || recipe.name.toLowerCase().includes('patty')) {
+      if (
+        recipe.name.toLowerCase().includes('burger') ||
+        recipe.name.toLowerCase().includes('patty')
+      ) {
         recipeType = 'burger';
         cookingMethod = 'grill/pan';
         primaryTechnique = 'grilling/pan-frying';
-      } else if (recipe.name.toLowerCase().includes('soup') || recipe.name.toLowerCase().includes('stew')) {
+      } else if (
+        recipe.name.toLowerCase().includes('soup') ||
+        recipe.name.toLowerCase().includes('stew')
+      ) {
         recipeType = 'soup';
         cookingMethod = 'stovetop';
         primaryTechnique = 'simmering';
@@ -525,7 +569,10 @@ export default function RecipesPage() {
         recipeType = 'salad';
         cookingMethod = 'cold prep';
         primaryTechnique = 'mixing';
-      } else if (recipe.name.toLowerCase().includes('pasta') || recipe.name.toLowerCase().includes('noodle')) {
+      } else if (
+        recipe.name.toLowerCase().includes('pasta') ||
+        recipe.name.toLowerCase().includes('noodle')
+      ) {
         recipeType = 'pasta';
         cookingMethod = 'stovetop';
         primaryTechnique = 'boiling/sautéing';
@@ -543,14 +590,26 @@ export default function RecipesPage() {
 3. Preheat ${cookingMethod === 'grill/pan' ? 'grill or large skillet' : 'cooking surface'} to medium-high heat
 
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('beef') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('mince')
-)?.ingredients.ingredient_name || 'main protein'} - season and form into patties` : ''}
+${
+  hasProtein
+    ? `1. Prepare protein: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('mince'),
+        )?.ingredients.ingredient_name || 'main protein'
+      } - season and form into patties`
+    : ''
+}
 ${hasVegetables ? `2. Prep vegetables: Wash, peel, and chop all vegetables as needed` : ''}
-${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('cheese')
-)?.ingredients.ingredient_name || 'cheese'} - slice or grate as needed` : ''}
+${
+  hasDairy
+    ? `3. Prepare dairy: ${
+        ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('cheese'))
+          ?.ingredients.ingredient_name || 'cheese'
+      } - slice or grate as needed`
+    : ''
+}
 
 **Cooking Method:**
 1. Heat cooking surface to medium-high (375°F/190°C)
@@ -569,7 +628,6 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 - Don't press patties while cooking
 - Let meat rest 2-3 minutes before serving
 - Keep ingredients warm during assembly`;
-
       } else if (recipeType === 'soup') {
         generatedInstructions = `**Soup Preparation:**
 
@@ -579,15 +637,29 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 3. Have stock or broth ready at room temperature
 
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: Cut ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('beef') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('chicken')
-)?.ingredients.ingredient_name || 'protein'} into bite-sized pieces` : ''}
+${
+  hasProtein
+    ? `1. Prepare protein: Cut ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('chicken'),
+        )?.ingredients.ingredient_name || 'protein'
+      } into bite-sized pieces`
+    : ''
+}
 ${hasVegetables ? `2. Prep vegetables: Dice aromatics (onions, carrots, celery) uniformly` : ''}
-${hasGrains ? `3. Prepare grains: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('rice') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('pasta')
-)?.ingredients.ingredient_name || 'grains'} - rinse if needed` : ''}
+${
+  hasGrains
+    ? `3. Prepare grains: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('rice') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('pasta'),
+        )?.ingredients.ingredient_name || 'grains'
+      } - rinse if needed`
+    : ''
+}
 
 **Cooking Method:**
 1. Heat large pot over medium heat
@@ -608,7 +680,6 @@ ${hasGrains ? `3. Prepare grains: ${ingredients.find(ri =>
 - Simmer gently to avoid breaking ingredients
 - Taste frequently and adjust seasoning
 - Cool quickly if storing`;
-
       } else {
         // General recipe instructions
         generatedInstructions = `**${recipe.name} Preparation:**
@@ -619,16 +690,30 @@ ${hasGrains ? `3. Prepare grains: ${ingredients.find(ri =>
 3. Preheat cooking equipment as needed
 
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('beef') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('chicken') ||
-  ri.ingredients.ingredient_name.toLowerCase().includes('mince')
-)?.ingredients.ingredient_name || 'main protein'} - cut, season, or prepare as needed` : ''}
+${
+  hasProtein
+    ? `1. Prepare protein: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('chicken') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('mince'),
+        )?.ingredients.ingredient_name || 'main protein'
+      } - cut, season, or prepare as needed`
+    : ''
+}
 ${hasVegetables ? `2. Prep vegetables: Wash, peel, and cut vegetables uniformly` : ''}
-${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('cheese') ||
-  ri.ingredients.ingredient_name.toLowerCase().includes('milk')
-)?.ingredients.ingredient_name || 'dairy products'} - prepare as needed` : ''}
+${
+  hasDairy
+    ? `3. Prepare dairy: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('cheese') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('milk'),
+        )?.ingredients.ingredient_name || 'dairy products'
+      } - prepare as needed`
+    : ''
+}
 
 **Cooking Method:**
 1. Heat cooking surface to appropriate temperature
@@ -681,11 +766,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
         ingredients: recipeIngredients.map(ri => ({
           name: ri.ingredients.ingredient_name,
           quantity: ri.quantity,
-          unit: ri.unit
+          unit: ri.unit,
         })),
         aiInstructions: aiInstructions,
         created_at: selectedRecipe.created_at,
-        shared_at: new Date().toISOString()
+        shared_at: new Date().toISOString(),
       };
 
       // Call the recipe share API
@@ -696,7 +781,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
         },
         body: JSON.stringify({
           recipeData,
-          userId: 'user-123' // You can get this from auth context
+          userId: 'user-123', // You can get this from auth context
         }),
       });
 
@@ -747,15 +832,16 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
       // Refresh the recipes list
       await fetchRecipes();
-      
+
       // Show success message
-      setSuccessMessage(`Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`);
+      setSuccessMessage(
+        `Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`,
+      );
       setTimeout(() => setSuccessMessage(null), 3000);
 
       // Close the confirmation modal
       setShowDeleteConfirm(false);
       setRecipeToDelete(null);
-
     } catch (err) {
       setError('Failed to delete recipe');
     }
@@ -797,7 +883,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
     try {
       const selectedRecipeIds = Array.from(selectedRecipes);
-      
+
       // Delete all recipe ingredients for selected recipes
       const { error: ingredientsError } = await supabase
         .from('recipe_ingredients')
@@ -822,15 +908,16 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
       // Refresh the recipes list
       await fetchRecipes();
-      
+
       // Show success message
-      setSuccessMessage(`${selectedRecipes.size} recipe${selectedRecipes.size > 1 ? 's' : ''} deleted successfully!`);
+      setSuccessMessage(
+        `${selectedRecipes.size} recipe${selectedRecipes.size > 1 ? 's' : ''} deleted successfully!`,
+      );
       setTimeout(() => setSuccessMessage(null), 3000);
 
       // Clear selection and close modal
       setSelectedRecipes(new Set());
       setShowBulkDeleteConfirm(false);
-
     } catch (err) {
       setError('Failed to delete recipes');
     }
@@ -846,10 +933,10 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="mb-4 flex items-center gap-4">
             <Image
               src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
@@ -858,24 +945,22 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
               className="rounded-lg"
               priority
             />
-            <h1 className="text-4xl font-bold text-white">
-            📖 Recipe Book
-          </h1>
+            <h1 className="text-4xl font-bold text-white">📖 Recipe Book</h1>
           </div>
           <p className="text-gray-400">Manage your saved recipes and create new ones</p>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="mb-8 flex flex-wrap gap-3">
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white px-6 py-3 rounded-2xl hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
           >
             {showAddForm ? 'Cancel' : '+ Add Manual Recipe'}
           </button>
           <a
             href="/webapp/cogs"
-            className="bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] text-white px-6 py-3 rounded-2xl hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+            className="rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
           >
             Create Recipe from COGS
           </a>
@@ -884,270 +969,286 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
               setLoading(true);
               fetchRecipes();
             }}
-            className="bg-gradient-to-r from-[#D925C7] to-[#3B82F6] text-white px-6 py-3 rounded-2xl hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
+            className="rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
           >
             🔄 Refresh Recipes
           </button>
         </div>
 
-      {/* Recipe Book Description */}
-      <div className="bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 border border-[#29E7CD]/30 p-4 sm:p-6 rounded-xl mb-6">
-        <h2 className="text-lg font-semibold text-white mb-2">How Recipe Book Works</h2>
-        <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-300">
+        {/* Recipe Book Description */}
+        <div className="mb-6 rounded-xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-4 sm:p-6">
+          <h2 className="mb-2 text-lg font-semibold text-white">How Recipe Book Works</h2>
+          <div className="grid gap-4 text-sm text-gray-300 md:grid-cols-2">
             <div>
-              <h3 className="font-medium text-[#3B82F6] mb-2">✍️ Manual Recipes</h3>
-              <p>Add recipes manually with instructions and portion counts. Perfect for documenting cooking methods and procedures.</p>
+              <h3 className="mb-2 font-medium text-[#3B82F6]">✍️ Manual Recipes</h3>
+              <p>
+                Add recipes manually with instructions and portion counts. Perfect for documenting
+                cooking methods and procedures.
+              </p>
             </div>
-          <div>
-            <h3 className="font-medium text-[#29E7CD] mb-2">📊 From COGS Calculations</h3>
-            <p>Create cost calculations in the COGS screen, then save them as recipes. These recipes include all ingredient costs and portion calculations.</p>
+            <div>
+              <h3 className="mb-2 font-medium text-[#29E7CD]">📊 From COGS Calculations</h3>
+              <p>
+                Create cost calculations in the COGS screen, then save them as recipes. These
+                recipes include all ingredient costs and portion calculations.
+              </p>
             </div>
           </div>
         </div>
 
         {/* Bulk Actions Bar */}
         {selectedRecipes.size > 0 && (
-          <div className="bg-gradient-to-r from-[#ef4444]/10 to-[#dc2626]/10 border border-[#ef4444]/30 p-4 rounded-xl mb-6">
+          <div className="mb-6 rounded-xl border border-[#ef4444]/30 bg-gradient-to-r from-[#ef4444]/10 to-[#dc2626]/10 p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-r from-[#ef4444] to-[#dc2626] rounded-full flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-sm">{selectedRecipes.size}</span>
-          </div>
-          <div>
-                  <h3 className="text-white font-semibold">
+                <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
+                  <span className="text-sm font-bold text-white">{selectedRecipes.size}</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">
                     {selectedRecipes.size} recipe{selectedRecipes.size > 1 ? 's' : ''} selected
                   </h3>
-                  <p className="text-gray-400 text-sm">Choose an action for the selected recipes</p>
-          </div>
-        </div>
+                  <p className="text-sm text-gray-400">Choose an action for the selected recipes</p>
+                </div>
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={handleBulkDelete}
-                  className="bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white px-4 py-2 rounded-lg hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+                  className="rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
                 >
                   🗑️ Delete Selected
                 </button>
                 <button
                   onClick={() => setSelectedRecipes(new Set())}
-                  className="bg-[#2a2a2a] text-gray-300 px-4 py-2 rounded-lg hover:bg-[#3a3a3a] transition-all duration-200 font-medium"
+                  className="rounded-lg bg-[#2a2a2a] px-4 py-2 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
                 >
                   Clear Selection
                 </button>
-      </div>
+              </div>
             </div>
           </div>
         )}
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+            {error}
+          </div>
+        )}
 
         {successMessage && (
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-6 flex items-center">
+          <div className="mb-6 flex items-center rounded border border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-3 text-green-700">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <svg className="mr-2 h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
               <span className="font-medium">{successMessage}</span>
             </div>
-        </div>
-      )}
+          </div>
+        )}
 
-      {showAddForm && (
-        <div className="bg-[#1f1f1f] p-4 sm:p-6 rounded-lg shadow mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">Add New Recipe</h2>
-          <form onSubmit={handleAddRecipe} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Recipe Name *
-              </label>
-              <input
-                type="text"
-                required
-                value={newRecipe.name}
-                onChange={(e) => setNewRecipe({ ...newRecipe, name: e.target.value })}
-                className="w-full px-3 py-2 border border-[#2a2a2a] rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
-                placeholder="e.g., Chicken Stir-fry"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Yield Portions
-              </label>
-              <input
-                type="number"
-                min="1"
+        {showAddForm && (
+          <div className="mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold sm:text-xl">Add New Recipe</h2>
+            <form onSubmit={handleAddRecipe} className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-300">
+                  Recipe Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newRecipe.name}
+                  onChange={e => setNewRecipe({ ...newRecipe, name: e.target.value })}
+                  className="w-full rounded-md border border-[#2a2a2a] px-3 py-2 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                  placeholder="e.g., Chicken Stir-fry"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-300">
+                  Yield Portions
+                </label>
+                <input
+                  type="number"
+                  min="1"
                   value={newRecipe.yield}
-                  onChange={(e) => setNewRecipe({ ...newRecipe, yield: parseInt(e.target.value) })}
-                className="w-full px-3 py-2 border border-[#2a2a2a] rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">
-                Instructions
-              </label>
-              <textarea
-                value={newRecipe.instructions}
-                onChange={(e) => setNewRecipe({ ...newRecipe, instructions: e.target.value })}
-                rows={4}
-                className="w-full px-3 py-2 border border-[#2a2a2a] rounded-md focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
-                placeholder="Step-by-step cooking instructions..."
-              />
-            </div>
-            <button
-              type="submit"
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Add Recipe
-            </button>
-          </form>
-        </div>
-      )}
+                  onChange={e => setNewRecipe({ ...newRecipe, yield: parseInt(e.target.value) })}
+                  className="w-full rounded-md border border-[#2a2a2a] px-3 py-2 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-300">Instructions</label>
+                <textarea
+                  value={newRecipe.instructions}
+                  onChange={e => setNewRecipe({ ...newRecipe, instructions: e.target.value })}
+                  rows={4}
+                  className="w-full rounded-md border border-[#2a2a2a] px-3 py-2 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                  placeholder="Step-by-step cooking instructions..."
+                />
+              </div>
+              <button
+                type="submit"
+                className="rounded-lg bg-green-600 px-6 py-2 text-white transition-colors hover:bg-green-700"
+              >
+                Add Recipe
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* Recipes List */}
-      <div className="bg-[#1f1f1f] rounded-lg shadow overflow-hidden">
-          <div className="sticky top-0 z-10 bg-[#1f1f1f] px-4 sm:px-6 py-4 border-b border-[#2a2a2a]">
+        <div className="overflow-hidden rounded-lg bg-[#1f1f1f] shadow">
+          <div className="sticky top-0 z-10 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 sm:px-6">
             <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">
-            Recipes ({recipes.length})
-          </h2>
+              <h2 className="text-lg font-semibold text-white">Recipes ({recipes.length})</h2>
               {selectedRecipes.size > 0 && (
                 <div className="flex items-center">
-                  <div className="w-6 h-6 bg-gradient-to-r from-[#ef4444] to-[#dc2626] rounded-full flex items-center justify-center mr-2">
-                    <span className="text-white font-bold text-xs">{selectedRecipes.size}</span>
+                  <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
+                    <span className="text-xs font-bold text-white">{selectedRecipes.size}</span>
                   </div>
-                  <span className="text-sm text-gray-300">
-                    {selectedRecipes.size} selected
-                  </span>
+                  <span className="text-sm text-gray-300">{selectedRecipes.size} selected</span>
                 </div>
               )}
             </div>
-        </div>
-        
-        {/* Mobile Card Layout */}
-        <div className="block md:hidden">
+          </div>
+
+          {/* Mobile Card Layout */}
+          <div className="block md:hidden">
             <div className="divide-y divide-[#2a2a2a]">
-            {recipes.map((recipe) => (
-                <div key={recipe.id} className="p-4 hover:bg-[#2a2a2a]/20 transition-colors">
-                  <div className="flex items-start justify-between mb-2">
+              {recipes.map(recipe => (
+                <div key={recipe.id} className="p-4 transition-colors hover:bg-[#2a2a2a]/20">
+                  <div className="mb-2 flex items-start justify-between">
                     <div className="flex items-center">
                       <input
                         type="checkbox"
                         checked={selectedRecipes.has(recipe.id)}
                         onChange={() => handleSelectRecipe(recipe.id)}
-                        className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2 mr-3"
+                        className="mr-3 h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
                       />
-                      <h3 className="text-sm font-medium text-white cursor-pointer" onClick={() => handlePreviewRecipe(recipe)}>
-                    {capitalizeRecipeName(recipe.name)}
-                  </h3>
+                      <h3
+                        className="cursor-pointer text-sm font-medium text-white"
+                        onClick={() => handlePreviewRecipe(recipe)}
+                      >
+                        {capitalizeRecipeName(recipe.name)}
+                      </h3>
                     </div>
-                  <span className="text-xs text-gray-500">
-                    {new Date(recipe.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-                
-                  <div className="space-y-1 text-xs text-gray-500 mb-3 ml-7">
-                  <div>
-                      <span className="font-medium">Recommended Price:</span> 
+                    <span className="text-xs text-gray-500">
+                      {new Date(recipe.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
+                    <div>
+                      <span className="font-medium">Recommended Price:</span>
                       {recipePrices[recipe.id] ? (
-                        <span className="text-white font-semibold ml-1">
+                        <span className="ml-1 font-semibold text-white">
                           ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
                         </span>
                       ) : (
-                        <span className="text-gray-500 ml-1">Calculating...</span>
+                        <span className="ml-1 text-gray-500">Calculating...</span>
                       )}
+                    </div>
+                    {recipePrices[recipe.id] && (
+                      <div>
+                        <span className="font-medium">Food Cost:</span>
+                        <span className="ml-1 text-gray-400">
+                          {recipePrices[recipe.id].foodCostPercent.toFixed(1)}%
+                        </span>
+                      </div>
+                    )}
+                    {recipe.instructions && (
+                      <div>
+                        <span className="font-medium">Instructions:</span>
+                        <p className="mt-1 line-clamp-2 text-gray-400">{recipe.instructions}</p>
+                      </div>
+                    )}
                   </div>
-                  {recipePrices[recipe.id] && (
-                    <div>
-                      <span className="font-medium">Food Cost:</span> 
-                      <span className="text-gray-400 ml-1">
-                        {recipePrices[recipe.id].foodCostPercent.toFixed(1)}%
-                      </span>
-                    </div>
-                  )}
-                  {recipe.instructions && (
-                    <div>
-                      <span className="font-medium">Instructions:</span>
-                      <p className="mt-1 text-gray-400 line-clamp-2">
-                        {recipe.instructions}
-                      </p>
-                    </div>
-                  )}
-                </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2 ml-7">
+                  <div className="ml-7 flex gap-2">
                     <button
                       onClick={() => handleEditRecipe(recipe)}
-                      className="flex-1 bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-3 py-2 rounded-lg text-xs font-medium hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200"
+                      className="flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
                     >
                       ✏️ Edit in COGS
                     </button>
                     <button
                       onClick={() => handleDeleteRecipe(recipe)}
-                      className="flex-1 bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white px-3 py-2 rounded-lg text-xs font-medium hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 transition-all duration-200"
+                      className="flex-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
                     >
                       🗑️ Delete
                     </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Desktop Table Layout */}
-        <div className="hidden md:block overflow-x-auto">
+          {/* Desktop Table Layout */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full divide-y divide-[#2a2a2a]">
               <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                     <div className="flex items-center">
                       <input
                         type="checkbox"
                         checked={selectedRecipes.size === recipes.length && recipes.length > 0}
                         onChange={handleSelectAll}
-                        className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                        className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
                       />
                       <span className="ml-2">Select</span>
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Name
-                </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                     Recommended Price
-                </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Instructions
-                </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Created
-                </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                    Instructions
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                    Created
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                     Actions
-                </th>
-              </tr>
-            </thead>
-              <tbody className="bg-[#1f1f1f] divide-y divide-[#2a2a2a]">
-              {recipes.map((recipe) => (
-                  <tr key={recipe.id} className="hover:bg-[#2a2a2a]/20 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white" onClick={(e) => e.stopPropagation()}>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+                {recipes.map(recipe => (
+                  <tr key={recipe.id} className="transition-colors hover:bg-[#2a2a2a]/20">
+                    <td
+                      className="px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
+                      onClick={e => e.stopPropagation()}
+                    >
                       <input
                         type="checkbox"
                         checked={selectedRecipes.has(recipe.id)}
                         onChange={() => handleSelectRecipe(recipe.id)}
-                        className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                        className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
                       />
-                  </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white cursor-pointer" onClick={() => handlePreviewRecipe(recipe)}>
-                    {capitalizeRecipeName(recipe.name)}
-                  </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 cursor-pointer" onClick={() => handlePreviewRecipe(recipe)}>
+                    </td>
+                    <td
+                      className="cursor-pointer px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
+                      onClick={() => handlePreviewRecipe(recipe)}
+                    >
+                      {capitalizeRecipeName(recipe.name)}
+                    </td>
+                    <td
+                      className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
+                      onClick={() => handlePreviewRecipe(recipe)}
+                    >
                       {recipePrices[recipe.id] ? (
                         <div className="flex flex-col">
-                          <span className="text-white font-semibold">${recipePrices[recipe.id].recommendedPrice.toFixed(2)}</span>
+                          <span className="font-semibold text-white">
+                            ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
+                          </span>
                           <span className="text-xs text-gray-400">
                             {recipePrices[recipe.id].foodCostPercent.toFixed(1)}% food cost
                           </span>
@@ -1155,135 +1256,148 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                       ) : (
                         <span className="text-gray-500">Calculating...</span>
                       )}
-                  </td>
-                    <td className="px-6 py-4 text-sm text-gray-300 cursor-pointer" onClick={() => handlePreviewRecipe(recipe)}>
-                    {recipe.instructions ? (
-                      <div className="max-w-xs truncate">
-                        {recipe.instructions}
-                      </div>
-                    ) : (
-                      '-'
-                    )}
-                  </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 cursor-pointer" onClick={() => handlePreviewRecipe(recipe)}>
-                    {new Date(recipe.created_at).toLocaleDateString()}
-                  </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                    </td>
+                    <td
+                      className="cursor-pointer px-6 py-4 text-sm text-gray-300"
+                      onClick={() => handlePreviewRecipe(recipe)}
+                    >
+                      {recipe.instructions ? (
+                        <div className="max-w-xs truncate">{recipe.instructions}</div>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
+                    <td
+                      className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
+                      onClick={() => handlePreviewRecipe(recipe)}
+                    >
+                      {new Date(recipe.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+                      <div className="flex gap-2" onClick={e => e.stopPropagation()}>
                         <button
                           onClick={() => handleEditRecipe(recipe)}
-                          className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-3 py-1 rounded-lg text-xs font-medium hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200"
+                          className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
                         >
                           ✏️ Edit
                         </button>
                         <button
                           onClick={() => handleDeleteRecipe(recipe)}
-                          className="bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white px-3 py-1 rounded-lg text-xs font-medium hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 transition-all duration-200"
+                          className="rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
                         >
                           🗑️ Delete
                         </button>
                       </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      {recipes.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-gray-400 text-6xl mb-4">🍳</div>
-          <h3 className="text-lg font-medium text-white mb-2">No recipes yet</h3>
-          <p className="text-gray-500 mb-4">
-            Start by adding your first recipe to begin managing your kitchen costs.
-          </p>
-          <button
-            onClick={() => setShowAddForm(true)}
-            className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-4 py-2 rounded-lg hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-colors"
-          >
-            Add Your First Recipe
-          </button>
-        </div>
-      )}
+        {recipes.length === 0 && (
+          <div className="py-12 text-center">
+            <div className="mb-4 text-6xl text-gray-400">🍳</div>
+            <h3 className="mb-2 text-lg font-medium text-white">No recipes yet</h3>
+            <p className="mb-4 text-gray-500">
+              Start by adding your first recipe to begin managing your kitchen costs.
+            </p>
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-white transition-colors hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
+            >
+              Add Your First Recipe
+            </button>
+          </div>
+        )}
 
         {/* Recipe Preview Modal */}
         {showPreview && selectedRecipe && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
               {/* Header */}
-              <div className="p-6 border-b border-[#2a2a2a]">
-                <div className="flex justify-between items-start">
+              <div className="border-b border-[#2a2a2a] p-6">
+                <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-white mb-2">{capitalizeRecipeName(selectedRecipe.name)}</h2>
-                    
+                    <h2 className="mb-2 text-2xl font-bold text-white">
+                      {capitalizeRecipeName(selectedRecipe.name)}
+                    </h2>
+
                     {/* Yield Adjustment Section */}
-                    <div className="flex items-center gap-4 mb-4">
+                    <div className="mb-4 flex items-center gap-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-400 text-sm">Original Yield:</span>
-                        <span className="text-white font-medium">{selectedRecipe.yield} {selectedRecipe.yield_unit}</span>
-      </div>
-                      
+                        <span className="text-sm text-gray-400">Original Yield:</span>
+                        <span className="font-medium text-white">
+                          {selectedRecipe.yield} {selectedRecipe.yield_unit}
+                        </span>
+                      </div>
+
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-400 text-sm">Adjust for:</span>
+                        <span className="text-sm text-gray-400">Adjust for:</span>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => setPreviewYield(Math.max(1, previewYield - 1))}
-                            className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-colors"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2a2a] text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
                           >
                             −
                           </button>
                           <input
                             type="number"
                             value={previewYield}
-                            onChange={(e) => setPreviewYield(Math.max(1, parseInt(e.target.value) || 1))}
-                            className="bg-[#0a0a0a] border border-[#2a2a2a] text-white text-center w-16 h-8 rounded-lg text-sm font-medium focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                            onChange={e =>
+                              setPreviewYield(Math.max(1, parseInt(e.target.value) || 1))
+                            }
+                            className="h-8 w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                             min="1"
                           />
                           <button
                             onClick={() => setPreviewYield(previewYield + 1)}
-                            className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium transition-colors"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2a2a] text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
                           >
                             +
                           </button>
-    </div>
-                        <span className="text-white font-medium">{selectedRecipe.yield_unit}</span>
+                        </div>
+                        <span className="font-medium text-white">{selectedRecipe.yield_unit}</span>
                       </div>
-                      
+
                       {previewYield !== selectedRecipe.yield && (
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-gray-400">Scale:</span>
-                          <span className={`text-sm font-medium ${previewYield > selectedRecipe.yield ? 'text-[#29E7CD]' : 'text-[#3B82F6]'}`}>
-                            {previewYield > selectedRecipe.yield ? '+' : ''}{((previewYield / selectedRecipe.yield - 1) * 100).toFixed(0)}%
+                          <span
+                            className={`text-sm font-medium ${previewYield > selectedRecipe.yield ? 'text-[#29E7CD]' : 'text-[#3B82F6]'}`}
+                          >
+                            {previewYield > selectedRecipe.yield ? '+' : ''}
+                            {((previewYield / selectedRecipe.yield - 1) * 100).toFixed(0)}%
                           </span>
                         </div>
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleEditFromPreview()}
-                      className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200"
+                      className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
                     >
                       ✏️ Edit Recipe
                     </button>
                     <button
                       onClick={handleShareRecipe}
                       disabled={shareLoading}
-                      className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-[#10B981]/80 hover:to-[#059669]/80 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {shareLoading ? '⏳ Sharing...' : '📤 Share Recipe'}
                     </button>
                     <button
                       onClick={handlePrint}
-                      className="bg-gradient-to-r from-[#D925C7] to-[#29E7CD] text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80 transition-all duration-200"
+                      className="rounded-lg bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80"
                     >
                       🖨️ Print
                     </button>
                     <button
                       onClick={() => setShowPreview(false)}
-                      className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+                      className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
                     >
                       ✕ Close
                     </button>
@@ -1295,24 +1409,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
               <div className="p-6">
                 {/* Ingredients */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
                     <span className="text-2xl">📋</span>
                     Ingredients
-                    <span className="text-sm font-normal text-gray-400 ml-2">
+                    <span className="ml-2 text-sm font-normal text-gray-400">
                       ({recipeIngredients.length} item{recipeIngredients.length !== 1 ? 's' : ''})
                     </span>
                   </h3>
-                  
-                  <div className="bg-[#0a0a0a] rounded-xl border border-[#2a2a2a]/50 overflow-hidden">
+
+                  <div className="overflow-hidden rounded-xl border border-[#2a2a2a]/50 bg-[#0a0a0a]">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-4 py-3 border-b border-[#2a2a2a]/50">
+                    <div className="border-b border-[#2a2a2a]/50 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-4 py-3">
                       <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-300">
                         <div className="col-span-1 text-center">#</div>
                         <div className="col-span-8">Ingredient</div>
                         <div className="col-span-3 text-center">Quantity</div>
                       </div>
                     </div>
-                    
+
                     {/* Ingredients List */}
                     <div className="divide-y divide-[#2a2a2a]/30">
                       {recipeIngredients.map((ri, index) => {
@@ -1320,37 +1434,42 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                         const quantity = ri.quantity;
 
                         return (
-                          <div key={ri.id} className="px-4 py-3 hover:bg-[#2a2a2a]/20 transition-colors">
-                            <div className="grid grid-cols-12 gap-4 items-center">
+                          <div
+                            key={ri.id}
+                            className="px-4 py-3 transition-colors hover:bg-[#2a2a2a]/20"
+                          >
+                            <div className="grid grid-cols-12 items-center gap-4">
                               {/* Index */}
                               <div className="col-span-1 text-center">
-                                <span className="text-sm text-gray-400 font-mono">
+                                <span className="font-mono text-sm text-gray-400">
                                   {String(index + 1).padStart(2, '0')}
                                 </span>
                               </div>
-                              
+
                               {/* Ingredient Name */}
                               <div className="col-span-8">
-                                <div className="text-white font-medium">{ingredient.ingredient_name}</div>
+                                <div className="font-medium text-white">
+                                  {ingredient.ingredient_name}
+                                </div>
                               </div>
-                              
+
                               {/* Quantity */}
                               <div className="col-span-3 text-center">
-                                <span className="text-white font-medium">
+                                <span className="font-medium text-white">
                                   {(() => {
                                     const formatted = formatQuantity(quantity, ri.unit);
                                     const isConverted = formatted.unit !== ri.unit.toLowerCase();
-                                    
+
                                     return (
                                       <>
                                         {formatted.value} {formatted.unit}
                                         {isConverted && (
-                                          <div className="text-xs text-gray-400 mt-1">
+                                          <div className="mt-1 text-xs text-gray-400">
                                             ({formatted.original})
                                           </div>
                                         )}
                                         {previewYield !== selectedRecipe.yield && !isConverted && (
-                                          <div className="text-xs text-gray-400 mt-1">
+                                          <div className="mt-1 text-xs text-gray-400">
                                             (orig: {quantity} {ri.unit})
                                           </div>
                                         )}
@@ -1369,17 +1488,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
                 {/* AI-Generated Cooking Instructions */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-4">🤖 AI-Generated Cooking Method</h3>
-                  <div className="bg-[#0a0a0a] rounded-lg p-4">
+                  <h3 className="mb-4 text-lg font-semibold text-white">
+                    🤖 AI-Generated Cooking Method
+                  </h3>
+                  <div className="rounded-lg bg-[#0a0a0a] p-4">
                     {generatingInstructions ? (
                       <div className="flex items-center justify-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#29E7CD]"></div>
-                        <span className="ml-3 text-gray-400">Generating cooking instructions...</span>
+                        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[#29E7CD]"></div>
+                        <span className="ml-3 text-gray-400">
+                          Generating cooking instructions...
+                        </span>
                       </div>
                     ) : (
-                      <div className="text-gray-300 whitespace-pre-wrap">
-                        {aiInstructions}
-                      </div>
+                      <div className="whitespace-pre-wrap text-gray-300">{aiInstructions}</div>
                     )}
                   </div>
                 </div>
@@ -1387,9 +1508,11 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                 {/* Manual Instructions (if available) */}
                 {selectedRecipe.instructions && (
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">👨‍🍳 Manual Instructions</h3>
-                    <div className="bg-[#0a0a0a] rounded-lg p-4">
-                      <div className="text-gray-300 whitespace-pre-wrap">
+                    <h3 className="mb-4 text-lg font-semibold text-white">
+                      👨‍🍳 Manual Instructions
+                    </h3>
+                    <div className="rounded-lg bg-[#0a0a0a] p-4">
+                      <div className="whitespace-pre-wrap text-gray-300">
                         {selectedRecipe.instructions}
                       </div>
                     </div>
@@ -1402,41 +1525,55 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
         {/* Custom Delete Confirmation Modal */}
         {showDeleteConfirm && recipeToDelete && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-md w-full border border-[#2a2a2a]">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl">
               {/* Header */}
-              <div className="p-6 border-b border-[#2a2a2a]">
+              <div className="border-b border-[#2a2a2a] p-6">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#ef4444] to-[#dc2626] rounded-full flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
+                    <svg
+                      className="h-6 w-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
                     </svg>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white">Delete Recipe</h3>
-                    <p className="text-gray-400 text-sm">This action cannot be undone</p>
+                    <p className="text-sm text-gray-400">This action cannot be undone</p>
                   </div>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <p className="text-gray-300 mb-6">
-                  Are you sure you want to delete <span className="font-semibold text-white">"{capitalizeRecipeName(recipeToDelete.name)}"</span>? 
-                  This will permanently remove the recipe and all its ingredients from your Recipe Book.
+                <p className="mb-6 text-gray-300">
+                  Are you sure you want to delete{' '}
+                  <span className="font-semibold text-white">
+                    "{capitalizeRecipeName(recipeToDelete.name)}"
+                  </span>
+                  ? This will permanently remove the recipe and all its ingredients from your Recipe
+                  Book.
                 </p>
 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
                   <button
                     onClick={cancelDeleteRecipe}
-                    className="flex-1 bg-[#2a2a2a] text-gray-300 px-4 py-3 rounded-xl hover:bg-[#3a3a3a] transition-all duration-200 font-medium"
+                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmDeleteRecipe}
-                    className="flex-1 bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white px-4 py-3 rounded-xl hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
                   >
                     Delete Recipe
                   </button>
@@ -1448,38 +1585,54 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
         {/* Bulk Delete Confirmation Modal */}
         {showBulkDeleteConfirm && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-md w-full border border-[#2a2a2a]">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl">
               {/* Header */}
-              <div className="p-6 border-b border-[#2a2a2a]">
+              <div className="border-b border-[#2a2a2a] p-6">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#ef4444] to-[#dc2626] rounded-full flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
+                    <svg
+                      className="h-6 w-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white">Delete Multiple Recipes</h3>
-                    <p className="text-gray-400 text-sm">This action cannot be undone</p>
+                    <p className="text-sm text-gray-400">This action cannot be undone</p>
                   </div>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <p className="text-gray-300 mb-6">
-                  Are you sure you want to delete <span className="font-semibold text-white">{selectedRecipes.size} recipe{selectedRecipes.size > 1 ? 's' : ''}</span>? 
-                  This will permanently remove all selected recipes and their ingredients from your Recipe Book.
+                <p className="mb-6 text-gray-300">
+                  Are you sure you want to delete{' '}
+                  <span className="font-semibold text-white">
+                    {selectedRecipes.size} recipe{selectedRecipes.size > 1 ? 's' : ''}
+                  </span>
+                  ? This will permanently remove all selected recipes and their ingredients from
+                  your Recipe Book.
                 </p>
 
                 {/* Selected Recipes List */}
-                <div className="bg-[#0a0a0a] rounded-lg p-4 mb-6 max-h-32 overflow-y-auto">
-                  <h4 className="text-sm font-medium text-white mb-2">Selected Recipes:</h4>
+                <div className="mb-6 max-h-32 overflow-y-auto rounded-lg bg-[#0a0a0a] p-4">
+                  <h4 className="mb-2 text-sm font-medium text-white">Selected Recipes:</h4>
                   <div className="space-y-1">
                     {Array.from(selectedRecipes).map(recipeId => {
                       const recipe = recipes.find(r => r.id === recipeId);
                       return recipe ? (
-                        <div key={recipeId} className="text-xs text-gray-400">• {capitalizeRecipeName(recipe.name)}</div>
+                        <div key={recipeId} className="text-xs text-gray-400">
+                          • {capitalizeRecipeName(recipe.name)}
+                        </div>
                       ) : null;
                     })}
                   </div>
@@ -1489,13 +1642,13 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                 <div className="flex gap-3">
                   <button
                     onClick={cancelBulkDelete}
-                    className="flex-1 bg-[#2a2a2a] text-gray-300 px-4 py-3 rounded-xl hover:bg-[#3a3a3a] transition-all duration-200 font-medium"
+                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmBulkDelete}
-                    className="flex-1 bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white px-4 py-3 rounded-xl hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
                   >
                     Delete {selectedRecipes.size} Recipe{selectedRecipes.size > 1 ? 's' : ''}
                   </button>
@@ -1507,12 +1660,12 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
         {/* Print-Only Recipe Card */}
         {selectedRecipe && (
-          <div className="hidden print-recipe-card print:block print:fixed print:inset-0 print:bg-white print:p-8 print:z-[9999] print:m-0">
-            <div className="print:max-w-none print:w-full print:h-full print:overflow-visible print:m-0 print:p-0">
+          <div className="print-recipe-card hidden print:fixed print:inset-0 print:z-[9999] print:m-0 print:block print:bg-white print:p-8">
+            <div className="print:m-0 print:h-full print:w-full print:max-w-none print:overflow-visible print:p-0">
               {/* Print Header with Logo */}
-              <div className="print:flex print:justify-between print:items-center print:mb-8 print:border-b print:border-gray-300 print:pb-4">
+              <div className="print:mb-8 print:flex print:items-center print:justify-between print:border-b print:border-gray-300 print:pb-4">
                 <div>
-                  <h1 className="print:text-3xl print:font-bold print:text-black print:mb-2">
+                  <h1 className="print:mb-2 print:text-3xl print:font-bold print:text-black">
                     {capitalizeRecipeName(selectedRecipe.name)}
                   </h1>
                   <p className="print:text-lg print:text-gray-600">
@@ -1525,15 +1678,17 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                   </p>
                 </div>
                 <div className="print:flex print:items-center print:gap-3">
-                  <Image 
-                    src="/images/prepflow-logo.png" 
-                    alt="PrepFlow" 
+                  <Image
+                    src="/images/prepflow-logo.png"
+                    alt="PrepFlow"
                     width={64}
                     height={64}
-                    className="print:w-16 print:h-16 print:object-contain"
+                    className="print:h-16 print:w-16 print:object-contain"
                   />
                   <div className="print:text-right">
-                    <div className="print:text-sm print:font-semibold print:text-black">PrepFlow</div>
+                    <div className="print:text-sm print:font-semibold print:text-black">
+                      PrepFlow
+                    </div>
                     <div className="print:text-xs print:text-gray-500">Kitchen Management</div>
                   </div>
                 </div>
@@ -1541,7 +1696,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
               {/* Print Ingredients Section */}
               <div className="print:mb-8">
-                <h2 className="print:text-2xl print:font-bold print:text-black print:mb-4 print:border-b print:border-gray-300 print:pb-2">
+                <h2 className="print:mb-4 print:border-b print:border-gray-300 print:pb-2 print:text-2xl print:font-bold print:text-black">
                   📋 Ingredients
                 </h2>
                 <div className="print:space-y-2">
@@ -1551,16 +1706,19 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                     const formatted = formatQuantity(quantity, ri.unit);
 
                     return (
-                      <div key={ri.id} className="print:flex print:justify-between print:items-center print:py-1 print:border-b print:border-gray-100 print:last:border-b-0">
+                      <div
+                        key={ri.id}
+                        className="print:flex print:items-center print:justify-between print:border-b print:border-gray-100 print:py-1 print:last:border-b-0"
+                      >
                         <div className="print:flex print:items-center print:gap-3">
-                          <span className="print:text-sm print:text-gray-500 print:font-mono print:w-6">
+                          <span className="print:w-6 print:font-mono print:text-sm print:text-gray-500">
                             {String(index + 1).padStart(2, '0')}.
                           </span>
-                          <span className="print:text-black print:font-medium">
+                          <span className="print:font-medium print:text-black">
                             {ingredient.ingredient_name}
                           </span>
                         </div>
-                        <span className="print:text-black print:font-semibold">
+                        <span className="print:font-semibold print:text-black">
                           {formatted.value} {formatted.unit}
                         </span>
                       </div>
@@ -1571,18 +1729,20 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
               {/* Print Instructions Section */}
               <div className="print:mb-8">
-                <h2 className="print:text-2xl print:font-bold print:text-black print:mb-4 print:border-b print:border-gray-300 print:pb-2">
+                <h2 className="print:mb-4 print:border-b print:border-gray-300 print:pb-2 print:text-2xl print:font-bold print:text-black">
                   🤖 Cooking Instructions
                 </h2>
-                <div className="print:text-black print:leading-relaxed print:whitespace-pre-line">
+                <div className="print:leading-relaxed print:whitespace-pre-line print:text-black">
                   {aiInstructions}
                 </div>
               </div>
 
               {/* Print Footer */}
-              <div className="print:mt-12 print:pt-4 print:border-t print:border-gray-300 print:text-center print:text-xs print:text-gray-500">
+              <div className="print:mt-12 print:border-t print:border-gray-300 print:pt-4 print:text-center print:text-xs print:text-gray-500">
                 <p>Generated by PrepFlow Kitchen Management System</p>
-                <p>Printed on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}</p>
+                <p>
+                  Printed on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+                </p>
               </div>
             </div>
           </div>
@@ -1590,31 +1750,43 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 
         {/* Share Recipe Modal */}
         {showShareModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-md w-full border border-[#2a2a2a]">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl">
               {/* Header */}
-              <div className="p-6 border-b border-[#2a2a2a]">
+              <div className="border-b border-[#2a2a2a] p-6">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#10B981] to-[#059669] rounded-full flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#10B981] to-[#059669]">
+                    <svg
+                      className="h-6 w-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                      />
                     </svg>
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white">Recipe Shared!</h3>
-                    <p className="text-gray-400 text-sm">Your recipe is ready to share</p>
+                    <p className="text-sm text-gray-400">Your recipe is ready to share</p>
                   </div>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <p className="text-gray-300 mb-4">
-                  Your recipe <span className="font-semibold text-white">"{selectedRecipe?.name}"</span> has been shared successfully!
+                <p className="mb-4 text-gray-300">
+                  Your recipe{' '}
+                  <span className="font-semibold text-white">"{selectedRecipe?.name}"</span> has
+                  been shared successfully!
                 </p>
-                
-                <div className="bg-[#0a0a0a] rounded-lg p-4 mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+
+                <div className="mb-6 rounded-lg bg-[#0a0a0a] p-4">
+                  <label className="mb-2 block text-sm font-medium text-gray-300">
                     Share Link:
                   </label>
                   <div className="flex items-center gap-2">
@@ -1622,23 +1794,29 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                       type="text"
                       value={shareUrl}
                       readOnly
-                      className="flex-1 bg-[#2a2a2a] border border-[#3a3a3a] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#29E7CD]"
+                      className="flex-1 rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                     />
                     <button
                       onClick={() => navigator.clipboard.writeText(shareUrl)}
-                      className="bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white px-3 py-2 rounded-lg text-sm font-medium hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 transition-all duration-200"
+                      className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
                     >
                       📋 Copy
                     </button>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-[#10B981]/10 to-[#059669]/10 border border-[#10B981]/30 rounded-lg p-4 mb-6">
-                  <h4 className="text-sm font-medium text-white mb-2">📤 Share Options:</h4>
+                <div className="mb-6 rounded-lg border border-[#10B981]/30 bg-gradient-to-r from-[#10B981]/10 to-[#059669]/10 p-4">
+                  <h4 className="mb-2 text-sm font-medium text-white">📤 Share Options:</h4>
                   <div className="space-y-2 text-sm text-gray-300">
-                    <p>• <strong>Copy Link:</strong> Share the link with anyone</p>
-                    <p>• <strong>PDF Export:</strong> Generate a printable PDF</p>
-                    <p>• <strong>Social Media:</strong> Share on your platforms</p>
+                    <p>
+                      • <strong>Copy Link:</strong> Share the link with anyone
+                    </p>
+                    <p>
+                      • <strong>PDF Export:</strong> Generate a printable PDF
+                    </p>
+                    <p>
+                      • <strong>Social Media:</strong> Share on your platforms
+                    </p>
                   </div>
                 </div>
 
@@ -1646,7 +1824,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowShareModal(false)}
-                    className="flex-1 bg-[#2a2a2a] text-gray-300 px-4 py-3 rounded-xl hover:bg-[#3a3a3a] transition-all duration-200 font-medium"
+                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
                   >
                     Close
                   </button>
@@ -1656,7 +1834,7 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
                       setSuccessMessage('Share link copied to clipboard!');
                       setTimeout(() => setSuccessMessage(null), 3000);
                     }}
-                    className="flex-1 bg-gradient-to-r from-[#10B981] to-[#059669] text-white px-4 py-3 rounded-xl hover:from-[#10B981]/80 hover:to-[#059669]/80 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 hover:shadow-xl"
                   >
                     📋 Copy & Close
                   </button>

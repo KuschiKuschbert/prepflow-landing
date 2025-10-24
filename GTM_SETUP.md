@@ -25,24 +25,29 @@ This guide will help you set up Google Tag Manager (GTM) for your PrepFlow landi
 ## 🔧 **Step 2: Configure GTM Container**
 
 ### **Container Settings:**
+
 - **Container ID**: Copy the `GTM-XXXXXXX` ID
 - **Update the `gtm-config.ts` file** with your actual GTM ID
 
 ### **Data Layer Variables:**
+
 Create these variables in GTM:
 
 #### **Page Information:**
+
 - `page_title` - Page Title
 - `page_location` - Page URL
 - `page_path` - Page Path
 - `page_referrer` - Referrer URL
 
 #### **User Information:**
+
 - `user_id` - User ID
 - `session_id` - Session ID
 - `user_agent` - User Agent
 
 #### **Event Information:**
+
 - `event_category` - Event Category
 - `event_action` - Event Action
 - `event_label` - Event Label
@@ -51,12 +56,14 @@ Create these variables in GTM:
 ## 🏷️ **Step 3: Create Tags**
 
 ### **Google Analytics 4 Configuration Tag:**
+
 1. **Tag Type**: `Google Analytics: GA4 Configuration`
 2. **Measurement ID**: `G-W1D5LQXGJT`
 3. **Trigger**: `All Pages`
 4. **Name**: `GA4 - Configuration`
 
 ### **Page View Tag:**
+
 1. **Tag Type**: `Google Analytics: GA4 Event`
 2. **Measurement ID**: `G-W1D5LQXGJT`
 3. **Event Name**: `page_view`
@@ -64,21 +71,25 @@ Create these variables in GTM:
 5. **Name**: `GA4 - Page View`
 
 ### **Custom Event Tags:**
+
 Create tags for each event type:
 
 #### **Exit Intent Tag:**
+
 - **Tag Type**: `Google Analytics: GA4 Event`
 - **Event Name**: `exit_intent`
 - **Trigger**: `Custom Event` → `exit_intent`
 - **Parameters**: Use data layer variables
 
 #### **Scroll Depth Tag:**
+
 - **Tag Type**: `Google Analytics: GA4 Event`
 - **Event Name**: `scroll_depth`
 - **Trigger**: `Custom Event` → `scroll_depth`
 - **Parameters**: Use data layer variables
 
 #### **A/B Test Tag:**
+
 - **Tag Type**: `Google Analytics: GA4 Event`
 - **Event Name**: `variant_assigned`
 - **Trigger**: `Custom Event` → `variant_assigned`
@@ -87,21 +98,25 @@ Create tags for each event type:
 ## 🎯 **Step 4: Create Triggers**
 
 ### **Page View Trigger:**
+
 - **Trigger Type**: `Custom Event`
 - **Event Name**: `page_view`
 - **Fire on**: `All Custom Events`
 
 ### **Exit Intent Trigger:**
+
 - **Trigger Type**: `Custom Event`
 - **Event Name**: `exit_intent`
 - **Fire on**: `All Custom Events`
 
 ### **Scroll Depth Trigger:**
+
 - **Trigger Type**: `Custom Event`
 - **Event Name**: `scroll_depth`
 - **Fire on**: `All Custom Events`
 
 ### **Section View Trigger:**
+
 - **Trigger Type**: `Custom Event`
 - **Event Name**: `section_view`
 - **Fire on**: `All Custom Events`
@@ -109,6 +124,7 @@ Create tags for each event type:
 ## 🔍 **Step 5: Test Your Setup**
 
 ### **Preview Mode:**
+
 1. **Click "Preview"** in GTM
 2. **Enter your website URL**
 3. **Test various interactions:**
@@ -118,6 +134,7 @@ Create tags for each event type:
    - Button clicks
 
 ### **Check Data Layer:**
+
 1. **Open browser console**
 2. **Look for GTM logs:**
    - `✅ GTM Data Layer initialized`
@@ -125,6 +142,7 @@ Create tags for each event type:
    - `📤 Data pushed to GTM`
 
 ### **Verify in GA4:**
+
 1. **Go to Google Analytics**
 2. **Check Real-Time reports**
 3. **Verify events are firing**
@@ -132,16 +150,19 @@ Create tags for each event type:
 ## 📊 **Step 6: Advanced Configuration**
 
 ### **Enhanced Ecommerce:**
+
 - Configure product tracking
 - Set up conversion funnels
 - Track revenue and transactions
 
 ### **User Properties:**
+
 - Set user segments
 - Track user behavior
 - Configure custom dimensions
 
 ### **Conversion Tracking:**
+
 - Set up conversion goals
 - Track micro-conversions
 - Monitor user journey
@@ -151,21 +172,25 @@ Create tags for each event type:
 ### **Common Issues:**
 
 #### **GTM Not Loading:**
+
 - Check container ID in code
 - Verify GTM script is loading
 - Check browser console for errors
 
 #### **Events Not Firing:**
+
 - Verify triggers are configured
 - Check data layer variables
 - Test in preview mode
 
 #### **GA4 Not Receiving Data:**
+
 - Verify measurement ID
 - Check tag configuration
 - Test with GA4 Debugger
 
 ### **Debug Tools:**
+
 - **GTM Preview Mode**
 - **GA4 Debugger Chrome Extension**
 - **Data Layer Helper Chrome Extension**
@@ -173,16 +198,19 @@ Create tags for each event type:
 ## 📈 **Next Steps**
 
 ### **Immediate:**
+
 1. **Test all tracking events**
 2. **Verify data in GA4**
 3. **Set up basic reports**
 
 ### **Short-term:**
+
 1. **Create custom dashboards**
 2. **Set up conversion goals**
 3. **Configure A/B testing**
 
 ### **Long-term:**
+
 1. **Advanced user segmentation**
 2. **Predictive analytics**
 3. **Marketing automation integration**
@@ -197,6 +225,7 @@ Create tags for each event type:
 ## 📞 **Support**
 
 If you encounter issues:
+
 1. **Check this guide first**
 2. **Use GTM Preview mode**
 3. **Check browser console logs**

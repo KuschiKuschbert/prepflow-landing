@@ -324,7 +324,7 @@ export class CriticalCSSOptimizer {
     const style = document.createElement('style');
     style.id = 'non-critical-css';
     style.textContent = this.nonCriticalCSS;
-    
+
     // Load after page load
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {

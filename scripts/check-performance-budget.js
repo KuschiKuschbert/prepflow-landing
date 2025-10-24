@@ -10,43 +10,43 @@ const path = require('path');
 const PERFORMANCE_BUDGETS = {
   // Core Web Vitals budgets
   coreWebVitals: {
-    lcp: 2500,        // Largest Contentful Paint (ms)
-    fid: 100,         // First Input Delay (ms)
-    cls: 0.1,         // Cumulative Layout Shift
-    fcp: 1800,        // First Contentful Paint (ms)
-    tti: 3800,        // Time to Interactive (ms)
-    si: 3000,         // Speed Index (ms)
-    tbt: 300,         // Total Blocking Time (ms)
+    lcp: 2500, // Largest Contentful Paint (ms)
+    fid: 100, // First Input Delay (ms)
+    cls: 0.1, // Cumulative Layout Shift
+    fcp: 1800, // First Contentful Paint (ms)
+    tti: 3800, // Time to Interactive (ms)
+    si: 3000, // Speed Index (ms)
+    tbt: 300, // Total Blocking Time (ms)
   },
-  
+
   // Resource budgets
   resources: {
-    totalSize: 500000,        // Total bundle size (bytes)
-    jsSize: 200000,           // JavaScript bundle size (bytes)
-    cssSize: 50000,           // CSS bundle size (bytes)
-    imageSize: 100000,        // Image bundle size (bytes)
-    fontSize: 30000,          // Font bundle size (bytes)
-    thirdPartySize: 100000,   // Third-party scripts (bytes)
+    totalSize: 500000, // Total bundle size (bytes)
+    jsSize: 200000, // JavaScript bundle size (bytes)
+    cssSize: 50000, // CSS bundle size (bytes)
+    imageSize: 100000, // Image bundle size (bytes)
+    fontSize: 30000, // Font bundle size (bytes)
+    thirdPartySize: 100000, // Third-party scripts (bytes)
   },
-  
+
   // Performance scores
   scores: {
-    performance: 80,           // Lighthouse Performance score
-    accessibility: 90,         // Lighthouse Accessibility score
-    bestPractices: 80,         // Lighthouse Best Practices score
-    seo: 80,                   // Lighthouse SEO score
+    performance: 80, // Lighthouse Performance score
+    accessibility: 90, // Lighthouse Accessibility score
+    bestPractices: 80, // Lighthouse Best Practices score
+    seo: 80, // Lighthouse SEO score
   },
 };
 
 // Read Lighthouse CI results
 function readLighthouseResults() {
   const resultsPath = path.join(process.cwd(), '.lighthouseci', 'results.json');
-  
+
   if (!fs.existsSync(resultsPath)) {
     console.error('❌ Lighthouse CI results not found. Run "npm run lighthouse" first.');
     process.exit(1);
   }
-  
+
   try {
     const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
     return results;
@@ -59,12 +59,12 @@ function readLighthouseResults() {
 // Read bundle analysis results
 function readBundleAnalysis() {
   const bundlePath = path.join(process.cwd(), 'bundle-analysis-report.json');
-  
+
   if (!fs.existsSync(bundlePath)) {
     console.warn('⚠️ Bundle analysis report not found. Run "npm run analyze" first.');
     return null;
   }
-  
+
   try {
     const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
     return bundle;
@@ -87,11 +87,11 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
     violations: [],
     timestamp: Date.now(),
   };
-  
+
   // Check Lighthouse scores
   lighthouseResults.forEach(result => {
     const { summary } = result;
-    
+
     // Check performance score
     if (summary.performance < PERFORMANCE_BUDGETS.scores.performance) {
       const violation = {
@@ -103,7 +103,7 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       };
       violations.push(violation);
     }
-    
+
     // Check accessibility score
     if (summary.accessibility < PERFORMANCE_BUDGETS.scores.accessibility) {
       const violation = {
@@ -115,7 +115,7 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       };
       violations.push(violation);
     }
-    
+
     // Check best practices score
     if (summary['best-practices'] < PERFORMANCE_BUDGETS.scores.bestPractices) {
       const violation = {
@@ -127,7 +127,7 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       };
       violations.push(violation);
     }
-    
+
     // Check SEO score
     if (summary.seo < PERFORMANCE_BUDGETS.scores.seo) {
       const violation = {
@@ -140,7 +140,7 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       violations.push(violation);
     }
   });
-  
+
   // Check bundle analysis
   if (bundleAnalysis) {
     // Check total bundle size
@@ -154,7 +154,7 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       };
       violations.push(violation);
     }
-    
+
     // Check JavaScript size
     if (bundleAnalysis.jsSize > PERFORMANCE_BUDGETS.resources.jsSize) {
       const violation = {
@@ -166,7 +166,7 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       };
       violations.push(violation);
     }
-    
+
     // Check CSS size
     if (bundleAnalysis.cssSize > PERFORMANCE_BUDGETS.resources.cssSize) {
       const violation = {
@@ -179,30 +179,32 @@ function checkPerformanceBudget(lighthouseResults, bundleAnalysis) {
       violations.push(violation);
     }
   }
-  
+
   // Count violations by severity
   violations.forEach(violation => {
     report.totalViolations++;
     report[violation.severity + 'Violations']++;
   });
-  
+
   // Calculate overall score
-  report.score = Math.max(0, 100 - (
-    report.criticalViolations * 25 +
-    report.highViolations * 15 +
-    report.mediumViolations * 10 +
-    report.lowViolations * 5
-  ));
-  
+  report.score = Math.max(
+    0,
+    100 -
+      (report.criticalViolations * 25 +
+        report.highViolations * 15 +
+        report.mediumViolations * 10 +
+        report.lowViolations * 5),
+  );
+
   report.violations = violations;
-  
+
   return report;
 }
 
 // Get severity level
 function getSeverity(actual, budget) {
   const ratio = actual / budget;
-  
+
   if (ratio >= 2) return 'critical';
   if (ratio >= 1.5) return 'high';
   if (ratio >= 1.2) return 'medium';
@@ -213,7 +215,7 @@ function getSeverity(actual, budget) {
 function generateReport(report) {
   console.log('\n📊 Performance Budget Report');
   console.log('============================');
-  
+
   console.log(`\n📈 Overall Score: ${report.score}/100`);
   console.log(`\n🚨 Violations:`);
   console.log(`  Total: ${report.totalViolations}`);
@@ -221,17 +223,22 @@ function generateReport(report) {
   console.log(`  High: ${report.highViolations}`);
   console.log(`  Medium: ${report.mediumViolations}`);
   console.log(`  Low: ${report.lowViolations}`);
-  
+
   if (report.violations.length > 0) {
     console.log(`\n📋 Detailed Violations:`);
     report.violations.forEach((violation, index) => {
-      const emoji = violation.severity === 'critical' ? '🚨' : 
-                   violation.severity === 'high' ? '⚠️' : 
-                   violation.severity === 'medium' ? '🔶' : '🔸';
+      const emoji =
+        violation.severity === 'critical'
+          ? '🚨'
+          : violation.severity === 'high'
+            ? '⚠️'
+            : violation.severity === 'medium'
+              ? '🔶'
+              : '🔸';
       console.log(`  ${index + 1}. ${emoji} ${violation.message}`);
     });
   }
-  
+
   // Generate recommendations
   if (report.violations.length > 0) {
     console.log(`\n💡 Recommendations:`);
@@ -240,18 +247,20 @@ function generateReport(report) {
       console.log(`  ${index + 1}. ${rec}`);
     });
   }
-  
+
   return report;
 }
 
 // Generate recommendations
 function generateRecommendations(violations) {
   const recommendations = [];
-  
+
   violations.forEach(violation => {
     switch (violation.metric) {
       case 'performance_score':
-        recommendations.push('Optimize images, reduce server response time, or eliminate render-blocking resources');
+        recommendations.push(
+          'Optimize images, reduce server response time, or eliminate render-blocking resources',
+        );
         break;
       case 'accessibility_score':
         recommendations.push('Improve ARIA labels, color contrast, and keyboard navigation');
@@ -273,14 +282,14 @@ function generateRecommendations(violations) {
         break;
     }
   });
-  
+
   return [...new Set(recommendations)]; // Remove duplicates
 }
 
 // Save report to file
 function saveReport(report) {
   const reportPath = path.join(process.cwd(), 'performance-budget-report.json');
-  
+
   try {
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
     console.log(`\n💾 Report saved to: ${reportPath}`);
@@ -292,20 +301,20 @@ function saveReport(report) {
 // Main function
 function main() {
   console.log('🔍 Checking Performance Budget...');
-  
+
   // Read results
   const lighthouseResults = readLighthouseResults();
   const bundleAnalysis = readBundleAnalysis();
-  
+
   // Check budget
   const report = checkPerformanceBudget(lighthouseResults, bundleAnalysis);
-  
+
   // Generate and display report
   generateReport(report);
-  
+
   // Save report
   saveReport(report);
-  
+
   // Exit with error code if there are critical violations
   if (report.criticalViolations > 0) {
     console.log('\n❌ Critical performance budget violations detected!');

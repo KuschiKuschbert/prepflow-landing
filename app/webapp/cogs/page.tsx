@@ -46,7 +46,7 @@ function COGSPageContent() {
   // Pricing calculations
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
-  
+
   const {
     targetGrossProfit,
     pricingStrategy,
@@ -97,25 +97,25 @@ function COGSPageContent() {
     const editingData = sessionStorage.getItem('editingRecipe');
     if (editingData) {
       try {
-        const { recipe, recipeId, calculations, dishName, dishPortions, dishNameLocked } = JSON.parse(editingData);
-        
-        console.log('🔍 DEBUG: Loading from sessionStorage with recipeId:', { 
-          dishName, 
-          recipeId, 
-          calculationsCount: calculations.length 
+        const { recipe, recipeId, calculations, dishName, dishPortions, dishNameLocked } =
+          JSON.parse(editingData);
+
+        console.log('🔍 DEBUG: Loading from sessionStorage with recipeId:', {
+          dishName,
+          recipeId,
+          calculationsCount: calculations.length,
         });
-        
+
         setDishName(dishName);
         setDishPortions(dishPortions);
         setDishNameLocked(dishNameLocked);
-        
+
         // Clear the session storage
         sessionStorage.removeItem('editingRecipe');
-        
+
         // Show success message
         setSuccessMessage(`Recipe "${dishName}" loaded for editing!`);
         setTimeout(() => setSuccessMessage(null), 3000);
-        
       } catch (err) {
         console.log('Failed to parse editing data:', err);
       }
@@ -126,7 +126,10 @@ function COGSPageContent() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.ingredient-search-container') && !target.closest('.suggestions-dropdown')) {
+      if (
+        !target.closest('.ingredient-search-container') &&
+        !target.closest('.suggestions-dropdown')
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -147,7 +150,9 @@ function COGSPageContent() {
       } else if (!dishName.trim()) {
         setRecipeExists(null);
       } else {
-        console.log('🔍 DEBUG: Skipping recipe check - dish name locked (editing from recipe book)');
+        console.log(
+          '🔍 DEBUG: Skipping recipe check - dish name locked (editing from recipe book)',
+        );
       }
     }, 500);
 
@@ -202,12 +207,14 @@ function COGSPageContent() {
     try {
       // Check if ingredient already exists
       const existingIngredient = calculations.find(
-        calc => calc.ingredientId === newIngredient.ingredient_id
+        calc => calc.ingredientId === newIngredient.ingredient_id,
       );
 
       if (existingIngredient) {
         // Update existing ingredient quantity with automatic unit conversion
-        const selectedIngredientData = ingredients.find(ing => ing.id === newIngredient.ingredient_id);
+        const selectedIngredientData = ingredients.find(
+          ing => ing.id === newIngredient.ingredient_id,
+        );
         if (selectedIngredientData) {
           // Automatic unit conversion: convert user input to ingredient's base unit
           let convertedQuantity = newIngredient.quantity!;
@@ -217,12 +224,39 @@ function COGSPageContent() {
           // If user entered volume units but ingredient is measured by weight (or vice versa)
           const userUnit = (newIngredient.unit || 'kg').toLowerCase().trim();
           const ingredientUnit = (selectedIngredientData.unit || 'kg').toLowerCase().trim();
-          
+
           // Volume units
-          const volumeUnits = ['tsp', 'teaspoon', 'tbsp', 'tablespoon', 'cup', 'cups', 'ml', 'milliliter', 'l', 'liter', 'litre', 'fl oz', 'fluid ounce'];
-          // Weight units  
-          const weightUnits = ['g', 'gm', 'gram', 'grams', 'kg', 'kilogram', 'oz', 'ounce', 'lb', 'pound', 'mg', 'milligram'];
-          
+          const volumeUnits = [
+            'tsp',
+            'teaspoon',
+            'tbsp',
+            'tablespoon',
+            'cup',
+            'cups',
+            'ml',
+            'milliliter',
+            'l',
+            'liter',
+            'litre',
+            'fl oz',
+            'fluid ounce',
+          ];
+          // Weight units
+          const weightUnits = [
+            'g',
+            'gm',
+            'gram',
+            'grams',
+            'kg',
+            'kilogram',
+            'oz',
+            'ounce',
+            'lb',
+            'pound',
+            'mg',
+            'milligram',
+          ];
+
           const isUserVolume = volumeUnits.includes(userUnit);
           const isUserWeight = weightUnits.includes(userUnit);
           const isIngredientVolume = volumeUnits.includes(ingredientUnit);
@@ -230,14 +264,20 @@ function COGSPageContent() {
 
           // Convert if there's a mismatch between user input and ingredient base unit
           if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-            const conversionResult = convertUnit(newIngredient.quantity!, newIngredient.unit || 'kg', selectedIngredientData.unit || 'kg');
+            const conversionResult = convertUnit(
+              newIngredient.quantity!,
+              newIngredient.unit || 'kg',
+              selectedIngredientData.unit || 'kg',
+            );
             convertedQuantity = newIngredient.quantity! * conversionResult.conversionFactor;
             convertedUnit = selectedIngredientData.unit || 'kg';
             conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
           }
 
           // Update the calculation with new quantity
-          const currentCalc = calculations.find(calc => calc.ingredientId === newIngredient.ingredient_id);
+          const currentCalc = calculations.find(
+            calc => calc.ingredientId === newIngredient.ingredient_id,
+          );
           if (currentCalc) {
             const newQuantity = currentCalc.quantity + convertedQuantity;
             updateCalculation(newIngredient.ingredient_id!, newQuantity);
@@ -245,7 +285,9 @@ function COGSPageContent() {
         }
       } else {
         // Add new ingredient with automatic unit conversion
-        const selectedIngredientData = ingredients.find(ing => ing.id === newIngredient.ingredient_id);
+        const selectedIngredientData = ingredients.find(
+          ing => ing.id === newIngredient.ingredient_id,
+        );
         if (selectedIngredientData) {
           // Automatic unit conversion: convert user input to ingredient's base unit
           let convertedQuantity = newIngredient.quantity!;
@@ -255,12 +297,39 @@ function COGSPageContent() {
           // If user entered volume units but ingredient is measured by weight (or vice versa)
           const userUnit = (newIngredient.unit || 'kg').toLowerCase().trim();
           const ingredientUnit = (selectedIngredientData.unit || 'kg').toLowerCase().trim();
-          
+
           // Volume units
-          const volumeUnits = ['tsp', 'teaspoon', 'tbsp', 'tablespoon', 'cup', 'cups', 'ml', 'milliliter', 'l', 'liter', 'litre', 'fl oz', 'fluid ounce'];
-          // Weight units  
-          const weightUnits = ['g', 'gm', 'gram', 'grams', 'kg', 'kilogram', 'oz', 'ounce', 'lb', 'pound', 'mg', 'milligram'];
-          
+          const volumeUnits = [
+            'tsp',
+            'teaspoon',
+            'tbsp',
+            'tablespoon',
+            'cup',
+            'cups',
+            'ml',
+            'milliliter',
+            'l',
+            'liter',
+            'litre',
+            'fl oz',
+            'fluid ounce',
+          ];
+          // Weight units
+          const weightUnits = [
+            'g',
+            'gm',
+            'gram',
+            'grams',
+            'kg',
+            'kilogram',
+            'oz',
+            'ounce',
+            'lb',
+            'pound',
+            'mg',
+            'milligram',
+          ];
+
           const isUserVolume = volumeUnits.includes(userUnit);
           const isUserWeight = weightUnits.includes(userUnit);
           const isIngredientVolume = volumeUnits.includes(ingredientUnit);
@@ -268,23 +337,30 @@ function COGSPageContent() {
 
           // Convert if there's a mismatch between user input and ingredient base unit
           if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-            const conversionResult = convertUnit(newIngredient.quantity!, newIngredient.unit || 'kg', selectedIngredientData.unit || 'kg');
+            const conversionResult = convertUnit(
+              newIngredient.quantity!,
+              newIngredient.unit || 'kg',
+              selectedIngredientData.unit || 'kg',
+            );
             convertedQuantity = newIngredient.quantity! * conversionResult.conversionFactor;
             convertedUnit = selectedIngredientData.unit || 'kg';
             conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
           }
 
           // Create new calculation
-          const baseCostPerUnit = selectedIngredientData.cost_per_unit_incl_trim || selectedIngredientData.cost_per_unit || 0;
+          const baseCostPerUnit =
+            selectedIngredientData.cost_per_unit_incl_trim ||
+            selectedIngredientData.cost_per_unit ||
+            0;
           const costPerUnit = baseCostPerUnit; // Simplified for now
           const totalCost = convertedQuantity * costPerUnit;
-          
+
           // Apply waste and yield adjustments
           const wastePercent = selectedIngredientData.trim_peel_waste_percentage || 0;
           const yieldPercent = selectedIngredientData.yield_percentage || 100;
           const wasteAdjustedCost = totalCost * (1 + wastePercent / 100);
           const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
-          
+
           const newCalculation = {
             recipeId: selectedRecipe || 'temp',
             ingredientId: newIngredient.ingredient_id!,
@@ -294,16 +370,15 @@ function COGSPageContent() {
             costPerUnit: costPerUnit,
             totalCost: totalCost,
             wasteAdjustedCost: wasteAdjustedCost,
-            yieldAdjustedCost: yieldAdjustedCost
+            yieldAdjustedCost: yieldAdjustedCost,
           };
-          
+
           addCalculation(newCalculation);
         }
       }
-      
+
       // Reset form
       resetForm();
-      
     } catch (err) {
       setSaveError('Failed to add ingredient');
     }
@@ -330,50 +405,67 @@ function COGSPageContent() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            💰 COGS Calculator
-          </h1>
-          <p className="text-gray-400">Calculate Cost of Goods Sold and optimize your profit margins</p>
+          <h1 className="mb-2 text-4xl font-bold text-white">💰 COGS Calculator</h1>
+          <p className="text-gray-400">
+            Calculate Cost of Goods Sold and optimize your profit margins
+          </p>
         </div>
 
         {/* Error Display */}
         {(error || saveError) && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+          <div className="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
             {error || saveError}
           </div>
         )}
 
         {/* Success Message */}
         {successMessage && (
-          <div className="bg-gradient-to-r from-green-500 to-emerald-500 border-2 border-green-400 text-white px-6 py-5 rounded-2xl mb-6 shadow-2xl animate-in slide-in-from-top-2 duration-500 transform scale-105 hover:scale-110 transition-all duration-300">
+          <div className="animate-in slide-in-from-top-2 mb-6 scale-105 transform rounded-2xl border-2 border-green-400 bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-5 text-white shadow-2xl transition-all duration-300 duration-500 hover:scale-110">
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center animate-pulse">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                <div className="flex h-10 w-10 animate-pulse items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+                  <svg
+                    className="h-6 w-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </div>
               </div>
               <div className="flex-1">
-                <p className="font-bold text-lg text-white">{successMessage}</p>
-                <p className="text-sm text-green-100 mt-1 font-medium">🎉 Your recipe has been added to the Recipe Book and is ready to use!</p>
+                <p className="text-lg font-bold text-white">{successMessage}</p>
+                <p className="mt-1 text-sm font-medium text-green-100">
+                  🎉 Your recipe has been added to the Recipe Book and is ready to use!
+                </p>
               </div>
               <button
                 onClick={() => setSuccessMessage(null)}
-                className="flex-shrink-0 text-white/80 hover:text-white hover:bg-white/20 rounded-full p-2 transition-all duration-200"
+                className="flex-shrink-0 rounded-full p-2 text-white/80 transition-all duration-200 hover:bg-white/20 hover:text-white"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 gap-4 sm:gap-8 lg:grid-cols-2">
           {/* Left Column - Dish Creation */}
           <div>
             <DishForm
@@ -396,16 +488,16 @@ function COGSPageContent() {
               onToggleAddIngredient={handleToggleAddIngredient}
               onSearchChange={handleSearchChange}
               onIngredientSelect={handleIngredientSelect}
-              onQuantityChange={(quantity) => setNewIngredient({ ...newIngredient, quantity })}
-              onUnitChange={(unit) => setNewIngredient({ ...newIngredient, unit })}
+              onQuantityChange={quantity => setNewIngredient({ ...newIngredient, quantity })}
+              onUnitChange={unit => setNewIngredient({ ...newIngredient, unit })}
               onAddIngredient={handleAddIngredient}
             />
           </div>
 
           {/* Right Column - COGS Calculation */}
-          <div className="bg-[#1f1f1f] p-4 sm:p-6 rounded-lg shadow">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Cost Analysis</h2>
-            
+          <div className="rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold sm:text-xl">Cost Analysis</h2>
+
             <COGSTable
               calculations={calculations}
               editingIngredient={editingIngredient}
@@ -428,21 +520,19 @@ function COGSPageContent() {
               onTargetGrossProfitChange={setTargetGrossProfit}
               onPricingStrategyChange={setPricingStrategy}
             />
-            
+
             <SaveRecipeButton onSaveAsRecipe={handleSaveAsRecipe} />
           </div>
         </div>
 
         {recipes.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">📊</div>
-            <h3 className="text-lg font-medium text-white mb-2">No recipes available</h3>
-            <p className="text-gray-500 mb-4">
-              Create some recipes first to calculate their COGS.
-            </p>
+          <div className="py-12 text-center">
+            <div className="mb-4 text-6xl text-gray-400">📊</div>
+            <h3 className="mb-2 text-lg font-medium text-white">No recipes available</h3>
+            <p className="mb-4 text-gray-500">Create some recipes first to calculate their COGS.</p>
             <a
               href="/webapp/recipes"
-              className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white px-4 py-2 rounded-lg hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 transition-colors"
+              className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-white transition-colors hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
             >
               Go to Recipes
             </a>

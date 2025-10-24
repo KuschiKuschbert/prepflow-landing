@@ -7,61 +7,89 @@ export function useAIInstructions() {
   const [aiInstructions, setAiInstructions] = useState<string>('');
   const [generatingInstructions, setGeneratingInstructions] = useState(false);
 
-  const generateAIInstructions = useCallback(async (recipe: Recipe, ingredients: RecipeIngredient[]) => {
-    console.log('🤖 DEBUG: Generating AI instructions for:', recipe.name);
-    console.log('🤖 DEBUG: Ingredients:', ingredients);
-    setGeneratingInstructions(true);
-    
-    try {
-      // Analyze ingredients to determine cooking method
-      const ingredientNames = ingredients.map(ri => ri.ingredients.ingredient_name.toLowerCase());
-      console.log('🤖 DEBUG: Ingredient names:', ingredientNames);
-      
-      const hasProtein = ingredientNames.some(name => 
-        name.includes('beef') || name.includes('chicken') || name.includes('pork') || 
-        name.includes('fish') || name.includes('lamb') || name.includes('mince')
-      );
-      const hasVegetables = ingredientNames.some(name => 
-        name.includes('carrot') || name.includes('onion') || name.includes('garlic') ||
-        name.includes('tomato') || name.includes('pepper') || name.includes('celery')
-      );
-      const hasDairy = ingredientNames.some(name => 
-        name.includes('cheese') || name.includes('milk') || name.includes('cream') ||
-        name.includes('butter') || name.includes('yogurt')
-      );
-      const hasGrains = ingredientNames.some(name => 
-        name.includes('rice') || name.includes('pasta') || name.includes('bread') ||
-        name.includes('flour') || name.includes('quinoa')
-      );
+  const generateAIInstructions = useCallback(
+    async (recipe: Recipe, ingredients: RecipeIngredient[]) => {
+      console.log('🤖 DEBUG: Generating AI instructions for:', recipe.name);
+      console.log('🤖 DEBUG: Ingredients:', ingredients);
+      setGeneratingInstructions(true);
 
-      // Determine recipe type and cooking method
-      let recipeType = 'general';
-      let cookingMethod = 'stovetop';
-      let primaryTechnique = 'sautéing';
+      try {
+        // Analyze ingredients to determine cooking method
+        const ingredientNames = ingredients.map(ri => ri.ingredients.ingredient_name.toLowerCase());
+        console.log('🤖 DEBUG: Ingredient names:', ingredientNames);
 
-      if (recipe.name.toLowerCase().includes('burger') || recipe.name.toLowerCase().includes('patty')) {
-        recipeType = 'burger';
-        cookingMethod = 'grill/pan';
-        primaryTechnique = 'grilling/pan-frying';
-      } else if (recipe.name.toLowerCase().includes('soup') || recipe.name.toLowerCase().includes('stew')) {
-        recipeType = 'soup';
-        cookingMethod = 'stovetop';
-        primaryTechnique = 'simmering';
-      } else if (recipe.name.toLowerCase().includes('salad')) {
-        recipeType = 'salad';
-        cookingMethod = 'cold prep';
-        primaryTechnique = 'mixing';
-      } else if (recipe.name.toLowerCase().includes('pasta') || recipe.name.toLowerCase().includes('noodle')) {
-        recipeType = 'pasta';
-        cookingMethod = 'stovetop';
-        primaryTechnique = 'boiling/sautéing';
-      }
+        const hasProtein = ingredientNames.some(
+          name =>
+            name.includes('beef') ||
+            name.includes('chicken') ||
+            name.includes('pork') ||
+            name.includes('fish') ||
+            name.includes('lamb') ||
+            name.includes('mince'),
+        );
+        const hasVegetables = ingredientNames.some(
+          name =>
+            name.includes('carrot') ||
+            name.includes('onion') ||
+            name.includes('garlic') ||
+            name.includes('tomato') ||
+            name.includes('pepper') ||
+            name.includes('celery'),
+        );
+        const hasDairy = ingredientNames.some(
+          name =>
+            name.includes('cheese') ||
+            name.includes('milk') ||
+            name.includes('cream') ||
+            name.includes('butter') ||
+            name.includes('yogurt'),
+        );
+        const hasGrains = ingredientNames.some(
+          name =>
+            name.includes('rice') ||
+            name.includes('pasta') ||
+            name.includes('bread') ||
+            name.includes('flour') ||
+            name.includes('quinoa'),
+        );
 
-      // Generate specific instructions based on recipe analysis
-      let generatedInstructions = '';
+        // Determine recipe type and cooking method
+        let recipeType = 'general';
+        let cookingMethod = 'stovetop';
+        let primaryTechnique = 'sautéing';
 
-      if (recipeType === 'burger') {
-        generatedInstructions = `**Burger Preparation:**
+        if (
+          recipe.name.toLowerCase().includes('burger') ||
+          recipe.name.toLowerCase().includes('patty')
+        ) {
+          recipeType = 'burger';
+          cookingMethod = 'grill/pan';
+          primaryTechnique = 'grilling/pan-frying';
+        } else if (
+          recipe.name.toLowerCase().includes('soup') ||
+          recipe.name.toLowerCase().includes('stew')
+        ) {
+          recipeType = 'soup';
+          cookingMethod = 'stovetop';
+          primaryTechnique = 'simmering';
+        } else if (recipe.name.toLowerCase().includes('salad')) {
+          recipeType = 'salad';
+          cookingMethod = 'cold prep';
+          primaryTechnique = 'mixing';
+        } else if (
+          recipe.name.toLowerCase().includes('pasta') ||
+          recipe.name.toLowerCase().includes('noodle')
+        ) {
+          recipeType = 'pasta';
+          cookingMethod = 'stovetop';
+          primaryTechnique = 'boiling/sautéing';
+        }
+
+        // Generate specific instructions based on recipe analysis
+        let generatedInstructions = '';
+
+        if (recipeType === 'burger') {
+          generatedInstructions = `**Burger Preparation:**
 
 **Mise en Place:**
 1. Gather all ingredients and equipment
@@ -69,14 +97,26 @@ export function useAIInstructions() {
 3. Preheat ${cookingMethod === 'grill/pan' ? 'grill or large skillet' : 'cooking surface'} to medium-high heat
 
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('beef') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('mince')
-)?.ingredients.ingredient_name || 'main protein'} - season and form into patties` : ''}
+${
+  hasProtein
+    ? `1. Prepare protein: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('mince'),
+        )?.ingredients.ingredient_name || 'main protein'
+      } - season and form into patties`
+    : ''
+}
 ${hasVegetables ? `2. Prep vegetables: Wash, peel, and chop all vegetables as needed` : ''}
-${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('cheese')
-)?.ingredients.ingredient_name || 'cheese'} - slice or grate as needed` : ''}
+${
+  hasDairy
+    ? `3. Prepare dairy: ${
+        ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('cheese'))
+          ?.ingredients.ingredient_name || 'cheese'
+      } - slice or grate as needed`
+    : ''
+}
 
 **Cooking Method:**
 1. Heat cooking surface to medium-high (375°F/190°C)
@@ -95,9 +135,8 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 - Don't press patties while cooking
 - Let meat rest 2-3 minutes before serving
 - Keep ingredients warm during assembly`;
-
-      } else if (recipeType === 'soup') {
-        generatedInstructions = `**Soup Preparation:**
+        } else if (recipeType === 'soup') {
+          generatedInstructions = `**Soup Preparation:**
 
 **Mise en Place:**
 1. Gather all ingredients and large pot
@@ -105,15 +144,29 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 3. Have stock or broth ready at room temperature
 
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: Cut ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('beef') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('chicken')
-)?.ingredients.ingredient_name || 'protein'} into bite-sized pieces` : ''}
+${
+  hasProtein
+    ? `1. Prepare protein: Cut ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('chicken'),
+        )?.ingredients.ingredient_name || 'protein'
+      } into bite-sized pieces`
+    : ''
+}
 ${hasVegetables ? `2. Prep vegetables: Dice aromatics (onions, carrots, celery) uniformly` : ''}
-${hasGrains ? `3. Prepare grains: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('rice') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('pasta')
-)?.ingredients.ingredient_name || 'grains'} - rinse if needed` : ''}
+${
+  hasGrains
+    ? `3. Prepare grains: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('rice') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('pasta'),
+        )?.ingredients.ingredient_name || 'grains'
+      } - rinse if needed`
+    : ''
+}
 
 **Cooking Method:**
 1. Heat large pot over medium heat
@@ -134,10 +187,9 @@ ${hasGrains ? `3. Prepare grains: ${ingredients.find(ri =>
 - Simmer gently to avoid breaking ingredients
 - Taste frequently and adjust seasoning
 - Cool quickly if storing`;
-
-      } else {
-        // General recipe instructions
-        generatedInstructions = `**${recipe.name} Preparation:**
+        } else {
+          // General recipe instructions
+          generatedInstructions = `**${recipe.name} Preparation:**
 
 **Mise en Place:**
 1. Gather all ingredients and equipment
@@ -145,16 +197,30 @@ ${hasGrains ? `3. Prepare grains: ${ingredients.find(ri =>
 3. Preheat cooking equipment as needed
 
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('beef') || 
-  ri.ingredients.ingredient_name.toLowerCase().includes('chicken') ||
-  ri.ingredients.ingredient_name.toLowerCase().includes('mince')
-)?.ingredients.ingredient_name || 'main protein'} - cut, season, or prepare as needed` : ''}
+${
+  hasProtein
+    ? `1. Prepare protein: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('chicken') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('mince'),
+        )?.ingredients.ingredient_name || 'main protein'
+      } - cut, season, or prepare as needed`
+    : ''
+}
 ${hasVegetables ? `2. Prep vegetables: Wash, peel, and cut vegetables uniformly` : ''}
-${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri => 
-  ri.ingredients.ingredient_name.toLowerCase().includes('cheese') ||
-  ri.ingredients.ingredient_name.toLowerCase().includes('milk')
-)?.ingredients.ingredient_name || 'dairy products'} - prepare as needed` : ''}
+${
+  hasDairy
+    ? `3. Prepare dairy: ${
+        ingredients.find(
+          ri =>
+            ri.ingredients.ingredient_name.toLowerCase().includes('cheese') ||
+            ri.ingredients.ingredient_name.toLowerCase().includes('milk'),
+        )?.ingredients.ingredient_name || 'dairy products'
+      } - prepare as needed`
+    : ''
+}
 
 **Cooking Method:**
 1. Heat cooking surface to appropriate temperature
@@ -173,22 +239,24 @@ ${hasDairy ? `3. Prepare dairy: ${ingredients.find(ri =>
 - Use proper knife skills for uniform cuts
 - Keep work area clean and organized
 - Taste frequently and adjust seasoning`;
-      }
+        }
 
-      console.log('🤖 DEBUG: Generated instructions:', generatedInstructions);
-      setAiInstructions(generatedInstructions);
-      console.log('🤖 DEBUG: AI instructions state set');
-    } catch (err) {
-      console.error('🤖 DEBUG: Error generating instructions:', err);
-      throw new Error('Failed to generate cooking instructions');
-    } finally {
-      setGeneratingInstructions(false);
-    }
-  }, []);
+        console.log('🤖 DEBUG: Generated instructions:', generatedInstructions);
+        setAiInstructions(generatedInstructions);
+        console.log('🤖 DEBUG: AI instructions state set');
+      } catch (err) {
+        console.error('🤖 DEBUG: Error generating instructions:', err);
+        throw new Error('Failed to generate cooking instructions');
+      } finally {
+        setGeneratingInstructions(false);
+      }
+    },
+    [],
+  );
 
   return {
     aiInstructions,
     generatingInstructions,
-    generateAIInstructions
+    generateAIInstructions,
   };
 }

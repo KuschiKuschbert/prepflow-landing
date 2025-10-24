@@ -62,11 +62,11 @@ class PerformanceMonitor {
 
   private initializeTracking() {
     // Track Core Web Vitals
-    onLCP((metric) => this.updateMetric('lcp', metric));
-    onFCP((metric) => this.updateMetric('fcp', metric));
-    onCLS((metric) => this.updateMetric('cls', metric));
-    onTTFB((metric) => this.updateMetric('ttfb', metric));
-    onINP((metric) => this.updateMetric('inp', metric));
+    onLCP(metric => this.updateMetric('lcp', metric));
+    onFCP(metric => this.updateMetric('fcp', metric));
+    onCLS(metric => this.updateMetric('cls', metric));
+    onTTFB(metric => this.updateMetric('ttfb', metric));
+    onINP(metric => this.updateMetric('inp', metric));
 
     // Track custom metrics
     this.trackCustomMetrics();
@@ -181,7 +181,7 @@ class PerformanceMonitor {
       if (value !== null) {
         const budget = PERFORMANCE_BUDGETS[key as keyof PerformanceBudget];
         const goal = PERFORMANCE_GOALS[key as keyof PerformanceBudget];
-        
+
         if (budget && goal) {
           // Calculate score based on how close we are to the goal
           const ratio = Math.min(value / goal, 1);
@@ -209,7 +209,7 @@ export const performanceMonitor = new PerformanceMonitor();
 
 // Utility functions
 export const getPerformanceMetrics = () => performanceMonitor.getMetrics();
-export const subscribeToPerformance = (listener: (metrics: PerformanceMetrics) => void) => 
+export const subscribeToPerformance = (listener: (metrics: PerformanceMetrics) => void) =>
   performanceMonitor.subscribe(listener);
 export const getPerformanceScore = () => performanceMonitor.getPerformanceScore();
 export const getPerformanceGrade = () => performanceMonitor.getPerformanceGrade();

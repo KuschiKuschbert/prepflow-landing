@@ -18,39 +18,39 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
-    preference: 'sample'
+    preference: 'sample',
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isSuccess, setIsSuccess] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Track the lead generation event
       trackEvent('lead_generation', 'conversion', formData.preference, 1);
@@ -64,8 +64,8 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
         metadata: {
           conversion_type: 'lead_magnet',
           preference: formData.preference,
-          user_name: formData.name
-        }
+          user_name: formData.name,
+        },
       });
 
       // Send email via API
@@ -84,17 +84,16 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to send email');
       }
-      
+
       // Success handling
       setIsSuccess(true);
       onSuccess?.(formData);
-      
+
       // Reset form after success
       setTimeout(() => {
         setFormData({ name: '', email: '', preference: 'sample' });
         setIsSuccess(false);
       }, 3000);
-      
     } catch (error) {
       console.error('Lead magnet submission failed:', error);
       onError?.('Failed to submit. Please try again.');
@@ -113,11 +112,9 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
 
   if (isSuccess) {
     return (
-      <div className="text-center p-8">
-        <div className="text-6xl mb-4">🎉</div>
-        <h4 className="text-2xl font-bold text-[#29E7CD] mb-2">
-          Check your email!
-        </h4>
+      <div className="p-8 text-center">
+        <div className="mb-4 text-6xl">🎉</div>
+        <h4 className="mb-2 text-2xl font-bold text-[#29E7CD]">Check your email!</h4>
         <p className="text-gray-300">
           We've sent you the sample dashboard.
           <br />
@@ -130,18 +127,18 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-300">
           Your name *
         </label>
         <input
           id="name"
           type="text"
           value={formData.name}
-          onChange={(e) => handleInputChange('name', e.target.value)}
+          onChange={e => handleInputChange('name', e.target.value)}
           placeholder="Your name"
-          className={`w-full px-4 py-3 rounded-xl border bg-[#1f1f1f]/80 text-white placeholder-gray-400 focus:outline-none transition-colors ${
-            errors.name 
-              ? 'border-red-500 focus:border-red-500' 
+          className={`w-full rounded-xl border bg-[#1f1f1f]/80 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:outline-none ${
+            errors.name
+              ? 'border-red-500 focus:border-red-500'
               : 'border-gray-600 focus:border-[#29E7CD]'
           }`}
           aria-describedby={errors.name ? 'name-error' : undefined}
@@ -154,18 +151,18 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-300">
           Your email *
         </label>
         <input
           id="email"
           type="email"
           value={formData.email}
-          onChange={(e) => handleInputChange('email', e.target.value)}
+          onChange={e => handleInputChange('email', e.target.value)}
           placeholder="your@email.com"
-          className={`w-full px-4 py-3 rounded-xl border bg-[#1f1f1f]/80 text-white placeholder-gray-400 focus:outline-none transition-colors ${
-            errors.email 
-              ? 'border-red-500 focus:border-red-500' 
+          className={`w-full rounded-xl border bg-[#1f1f1f]/80 px-4 py-3 text-white placeholder-gray-400 transition-colors focus:outline-none ${
+            errors.email
+              ? 'border-red-500 focus:border-red-500'
               : 'border-gray-600 focus:border-[#29E7CD]'
           }`}
           aria-describedby={errors.email ? 'email-error' : undefined}
@@ -178,13 +175,13 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-3">
+        <label className="mb-3 block text-sm font-medium text-gray-300">
           Get your sample dashboard
         </label>
-        <div className="p-3 rounded-xl border border-gray-600 bg-[#1f1f1f]/80">
+        <div className="rounded-xl border border-gray-600 bg-[#1f1f1f]/80 p-3">
           <div className="flex items-center">
-            <div className="w-4 h-4 rounded-full border-2 mr-3 border-[#29E7CD] bg-[#29E7CD]">
-              <div className="w-2 h-2 rounded-full bg-white m-0.5" />
+            <div className="mr-3 h-4 w-4 rounded-full border-2 border-[#29E7CD] bg-[#29E7CD]">
+              <div className="m-0.5 h-2 w-2 rounded-full bg-white" />
             </div>
             <span className="text-sm text-gray-300">Sample Dashboard</span>
           </div>
@@ -196,15 +193,31 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
         disabled={isSubmitting}
         className={`w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-base font-semibold text-white shadow-lg transition-all duration-300 ${
           isSubmitting
-            ? 'opacity-50 cursor-not-allowed'
+            ? 'cursor-not-allowed opacity-50'
             : 'hover:shadow-xl hover:shadow-[#29E7CD]/25'
         }`}
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <svg
+              className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
             Sending...
           </span>
@@ -213,7 +226,7 @@ export default function LeadMagnetForm({ onSuccess, onError }: LeadMagnetFormPro
         )}
       </button>
 
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-center text-xs text-gray-400">
         No spam. No lock-in. Your data stays private.
         <br />
         We'll only email you about PrepFlow updates.

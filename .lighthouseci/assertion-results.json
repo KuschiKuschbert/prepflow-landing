@@ -3,11 +3,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": null,
-    "values": [
-      null,
-      null,
-      null
-    ],
+    "values": [null, null, null],
     "operator": ">=",
     "passed": false,
     "message": "Audit did not produce a value at all. \"minScore\" might not be a valid assertion for this audit.",
@@ -20,11 +16,7 @@
     "name": "auditRan",
     "expected": 1,
     "actual": 0,
-    "values": [
-      0,
-      0,
-      0
-    ],
+    "values": [0, 0, 0],
     "operator": ">=",
     "passed": false,
     "message": "\"first-input-delay\" is not a known audit.",
@@ -36,11 +28,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 6,
-    "values": [
-      6,
-      6,
-      6
-    ],
+    "values": [6, 6, 6],
     "operator": "<=",
     "passed": false,
     "auditId": "unused-javascript",
@@ -53,11 +41,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 2,
-    "values": [
-      2,
-      2,
-      2
-    ],
+    "values": [2, 2, 2],
     "operator": "<=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -70,11 +54,7 @@
     "name": "maxNumericValue",
     "expected": 500000,
     "actual": 2278114,
-    "values": [
-      2278114,
-      2278295,
-      2278494
-    ],
+    "values": [2278114, 2278295, 2278494],
     "operator": "<=",
     "passed": false,
     "auditId": "total-byte-weight",
@@ -87,11 +67,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": null,
-    "values": [
-      null,
-      null,
-      null
-    ],
+    "values": [null, null, null],
     "operator": ">=",
     "passed": false,
     "message": "Audit did not produce a value at all. \"minScore\" might not be a valid assertion for this audit.",
@@ -104,11 +80,7 @@
     "name": "auditRan",
     "expected": 1,
     "actual": 0,
-    "values": [
-      0,
-      0,
-      0
-    ],
+    "values": [0, 0, 0],
     "operator": ">=",
     "passed": false,
     "message": "\"first-input-delay\" is not a known audit.",
@@ -120,11 +92,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 9,
-    "values": [
-      9,
-      9,
-      9
-    ],
+    "values": [9, 9, 9],
     "operator": "<=",
     "passed": false,
     "auditId": "unused-javascript",
@@ -137,11 +105,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 2,
-    "values": [
-      2,
-      2,
-      2
-    ],
+    "values": [2, 2, 2],
     "operator": "<=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -154,11 +118,7 @@
     "name": "maxNumericValue",
     "expected": 500000,
     "actual": 4687072,
-    "values": [
-      4763421,
-      4895758,
-      4687072
-    ],
+    "values": [4763421, 4895758, 4687072],
     "operator": "<=",
     "passed": false,
     "auditId": "total-byte-weight",
@@ -171,11 +131,7 @@
     "name": "maxNumericValue",
     "expected": 2000,
     "actual": 8717.121000012936,
-    "values": [
-      8903.22400001382,
-      9213.152000015123,
-      8717.121000012936
-    ],
+    "values": [8903.22400001382, 9213.152000015123, 8717.121000012936],
     "operator": "<=",
     "passed": false,
     "auditId": "mainthread-work-breakdown",
@@ -188,11 +144,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": null,
-    "values": [
-      null,
-      null,
-      null
-    ],
+    "values": [null, null, null],
     "operator": ">=",
     "passed": false,
     "message": "Audit did not produce a value at all. \"minScore\" might not be a valid assertion for this audit.",
@@ -205,11 +157,7 @@
     "name": "auditRan",
     "expected": 1,
     "actual": 0,
-    "values": [
-      0,
-      0,
-      0
-    ],
+    "values": [0, 0, 0],
     "operator": ">=",
     "passed": false,
     "message": "\"first-input-delay\" is not a known audit.",
@@ -221,11 +169,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 10,
-    "values": [
-      10,
-      10,
-      10
-    ],
+    "values": [10, 10, 10],
     "operator": "<=",
     "passed": false,
     "auditId": "unused-javascript",
@@ -238,11 +182,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 2,
-    "values": [
-      2,
-      2,
-      2
-    ],
+    "values": [2, 2, 2],
     "operator": "<=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -255,11 +195,7 @@
     "name": "maxNumericValue",
     "expected": 500000,
     "actual": 2546879,
-    "values": [
-      2546879,
-      2547464,
-      2546903
-    ],
+    "values": [2546879, 2547464, 2546903],
     "operator": "<=",
     "passed": false,
     "auditId": "total-byte-weight",
@@ -272,11 +208,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 96,
-    "values": [
-      96,
-      96,
-      96
-    ],
+    "values": [96, 96, 96],
     "operator": "<=",
     "passed": false,
     "auditId": "label",
@@ -289,11 +221,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": null,
-    "values": [
-      null,
-      null,
-      null
-    ],
+    "values": [null, null, null],
     "operator": ">=",
     "passed": false,
     "message": "Audit did not produce a value at all. \"minScore\" might not be a valid assertion for this audit.",
@@ -306,11 +234,7 @@
     "name": "auditRan",
     "expected": 1,
     "actual": 0,
-    "values": [
-      0,
-      0,
-      0
-    ],
+    "values": [0, 0, 0],
     "operator": ">=",
     "passed": false,
     "message": "\"first-input-delay\" is not a known audit.",
@@ -322,11 +246,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 9,
-    "values": [
-      9,
-      9,
-      9
-    ],
+    "values": [9, 9, 9],
     "operator": "<=",
     "passed": false,
     "auditId": "unused-javascript",
@@ -339,11 +259,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 3,
-    "values": [
-      3,
-      3,
-      3
-    ],
+    "values": [3, 3, 3],
     "operator": "<=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -356,11 +272,7 @@
     "name": "maxNumericValue",
     "expected": 500000,
     "actual": 2560400,
-    "values": [
-      2560966,
-      2560401,
-      2560400
-    ],
+    "values": [2560966, 2560401, 2560400],
     "operator": "<=",
     "passed": false,
     "auditId": "total-byte-weight",
@@ -373,11 +285,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 14,
-    "values": [
-      14,
-      14,
-      14
-    ],
+    "values": [14, 14, 14],
     "operator": "<=",
     "passed": false,
     "auditId": "label",
@@ -390,11 +298,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": null,
-    "values": [
-      null,
-      null,
-      null
-    ],
+    "values": [null, null, null],
     "operator": ">=",
     "passed": false,
     "message": "Audit did not produce a value at all. \"minScore\" might not be a valid assertion for this audit.",
@@ -407,11 +311,7 @@
     "name": "auditRan",
     "expected": 1,
     "actual": 0,
-    "values": [
-      0,
-      0,
-      0
-    ],
+    "values": [0, 0, 0],
     "operator": ">=",
     "passed": false,
     "message": "\"first-input-delay\" is not a known audit.",
@@ -423,11 +323,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 9,
-    "values": [
-      9,
-      9,
-      9
-    ],
+    "values": [9, 9, 9],
     "operator": "<=",
     "passed": false,
     "auditId": "unused-javascript",
@@ -440,11 +336,7 @@
     "name": "maxLength",
     "expected": 0,
     "actual": 2,
-    "values": [
-      2,
-      2,
-      2
-    ],
+    "values": [2, 2, 2],
     "operator": "<=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -457,11 +349,7 @@
     "name": "maxNumericValue",
     "expected": 500000,
     "actual": 2543301,
-    "values": [
-      2543939,
-      2543301,
-      2543901
-    ],
+    "values": [2543939, 2543301, 2543901],
     "operator": "<=",
     "passed": false,
     "auditId": "total-byte-weight",

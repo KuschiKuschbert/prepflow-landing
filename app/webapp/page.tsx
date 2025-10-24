@@ -72,14 +72,13 @@ function WebAppDashboardContent() {
           .select('*', { count: 'exact', head: true });
 
         // Fetch menu dishes count and average price
-        const { data: menuDishes } = await supabase
-          .from('menu_dishes')
-          .select('selling_price');
+        const { data: menuDishes } = await supabase.from('menu_dishes').select('selling_price');
 
         const totalDishes = menuDishes?.length || 0;
-        const averagePrice = totalDishes > 0 && menuDishes
-          ? menuDishes.reduce((sum, dish) => sum + (dish.selling_price || 0), 0) / totalDishes
-          : 0;
+        const averagePrice =
+          totalDishes > 0 && menuDishes
+            ? menuDishes.reduce((sum, dish) => sum + (dish.selling_price || 0), 0) / totalDishes
+            : 0;
 
         setStats({
           totalIngredients: ingredientsCount || 0,
@@ -134,20 +133,22 @@ function WebAppDashboardContent() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="mb-2 text-4xl font-bold text-white">
             🏠 {t('dashboard.title', 'Kitchen Management Dashboard')}
           </h1>
-          <p className="text-gray-400">{t('dashboard.subtitle', 'Welcome back! Here\'s your kitchen overview')}</p>
-          
+          <p className="text-gray-400">
+            {t('dashboard.subtitle', "Welcome back! Here's your kitchen overview")}
+          </p>
+
           {/* Test Warning Button - Remove in production */}
           <div className="mt-4">
             <TestWarningButton />
           </div>
         </div>
-        
+
         {/* Dashboard Components */}
         <DashboardStats stats={stats} />
         <QuickActions />

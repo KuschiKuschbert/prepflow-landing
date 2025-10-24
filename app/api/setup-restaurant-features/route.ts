@@ -4,9 +4,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     console.log('Setting up restaurant management features...');
@@ -15,12 +18,16 @@ export async function POST(request: NextRequest) {
     const fs = require('fs');
     const path = require('path');
     const schemaPath = path.join(process.cwd(), 'supabase-restaurant-management-schema.sql');
-    
+
     if (!fs.existsSync(schemaPath)) {
-      return NextResponse.json({ 
-        error: 'Schema file not found',
-        message: 'Please ensure supabase-restaurant-management-schema.sql exists in the project root'
-      }, { status: 404 });
+      return NextResponse.json(
+        {
+          error: 'Schema file not found',
+          message:
+            'Please ensure supabase-restaurant-management-schema.sql exists in the project root',
+        },
+        { status: 404 },
+      );
     }
 
     const schemaSQL = fs.readFileSync(schemaPath, 'utf8');
@@ -51,17 +58,20 @@ export async function POST(request: NextRequest) {
     const hasErrors = results.some((result: any) => result.error);
     if (hasErrors) {
       console.error('Some statements failed during schema execution');
-      return NextResponse.json({ 
-        error: 'Some restaurant management tables failed to create',
-        message: 'Check the logs for specific errors',
-        details: results.filter((result: any) => result.error)
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Some restaurant management tables failed to create',
+          message: 'Check the logs for specific errors',
+          details: results.filter((result: any) => result.error),
+        },
+        { status: 500 },
+      );
     }
 
     // Verify tables were created by checking a few key tables
     const tablesToCheck = [
       'cleaning_areas',
-      'temperature_logs', 
+      'temperature_logs',
       'compliance_records',
       'suppliers',
       'par_levels',
@@ -70,7 +80,7 @@ export async function POST(request: NextRequest) {
       'prep_lists',
       'shared_recipes',
       'ai_specials',
-      'system_settings'
+      'system_settings',
     ];
 
     const verificationResults = [];
@@ -79,11 +89,11 @@ export async function POST(request: NextRequest) {
         .from(tableName)
         .select('id')
         .limit(1);
-      
+
       verificationResults.push({
         table: tableName,
         exists: !tableError,
-        error: tableError?.message
+        error: tableError?.message,
       });
     }
 
@@ -96,7 +106,7 @@ export async function POST(request: NextRequest) {
       details: {
         tablesCreated: successCount,
         totalTables: totalCount,
-        verification: verificationResults
+        verification: verificationResults,
       },
       nextSteps: [
         'Visit /webapp/cleaning to manage cleaning areas',
@@ -106,17 +116,19 @@ export async function POST(request: NextRequest) {
         'Visit /webapp/par-levels to set inventory levels',
         'Visit /webapp/orders to create order lists',
         'Visit /webapp/prep-lists to generate prep lists',
-        'Visit /webapp/settings to configure system settings'
-      ]
+        'Visit /webapp/settings to configure system settings',
+      ],
     });
-
   } catch (error) {
     console.error('Setup error:', error);
-    return NextResponse.json({ 
-      error: 'Setup failed',
-      message: 'An unexpected error occurred during setup',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Setup failed',
+        message: 'An unexpected error occurred during setup',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -126,7 +138,7 @@ export async function GET(request: NextRequest) {
     const tablesToCheck = [
       'cleaning_areas',
       'cleaning_tasks',
-      'temperature_logs', 
+      'temperature_logs',
       'temperature_thresholds',
       'compliance_types',
       'compliance_records',
@@ -141,7 +153,7 @@ export async function GET(request: NextRequest) {
       'prep_list_items',
       'shared_recipes',
       'ai_specials',
-      'system_settings'
+      'system_settings',
     ];
 
     const tableStatus = [];
@@ -151,21 +163,18 @@ export async function GET(request: NextRequest) {
           table: tableName,
           exists: false,
           error: 'Database connection not available',
-          hasData: false
+          hasData: false,
         });
         continue;
       }
 
-      const { data, error } = await supabaseAdmin
-        .from(tableName)
-        .select('id')
-        .limit(1);
-      
+      const { data, error } = await supabaseAdmin.from(tableName).select('id').limit(1);
+
       tableStatus.push({
         table: tableName,
         exists: !error,
         error: error?.message,
-        hasData: !error && data && data.length > 0
+        hasData: !error && data && data.length > 0,
       });
     }
 
@@ -179,20 +188,23 @@ export async function GET(request: NextRequest) {
         totalTables: tableStatus.length,
         existingTables: existingTables.length,
         tablesWithData: tablesWithData.length,
-        setupComplete: existingTables.length === tableStatus.length
+        setupComplete: existingTables.length === tableStatus.length,
       },
       tables: tableStatus,
-      recommendations: existingTables.length === tableStatus.length 
-        ? ['All tables exist! You can start using the restaurant management features.']
-        : ['Run POST /api/setup-restaurant-features to create missing tables.']
+      recommendations:
+        existingTables.length === tableStatus.length
+          ? ['All tables exist! You can start using the restaurant management features.']
+          : ['Run POST /api/setup-restaurant-features to create missing tables.'],
     });
-
   } catch (error) {
     console.error('Status check error:', error);
-    return NextResponse.json({ 
-      error: 'Status check failed',
-      message: 'Could not check restaurant management features status',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Status check failed',
+        message: 'Could not check restaurant management features status',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

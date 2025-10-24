@@ -4,9 +4,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     // Create ingredients table first
@@ -40,13 +43,13 @@ export async function POST(request: NextRequest) {
     if (ingredientsError && ingredientsError.code === 'PGRST205') {
       // Table doesn't exist, create it
       console.log('Creating ingredients table...');
-      
+
       // Use a different approach - insert a dummy record to create the table
       try {
         await supabaseAdmin.rpc('exec', { sql: createIngredientsSQL });
       } catch (rpcError) {
         console.log('RPC failed, trying alternative approach...');
-        
+
         // Alternative: Use the REST API to create the table
         // This won't work directly, so we'll return instructions
         return NextResponse.json({
@@ -56,9 +59,11 @@ export async function POST(request: NextRequest) {
             step1: 'Go to your Supabase dashboard',
             step2: 'Navigate to SQL Editor',
             step3: 'Run the provided SQL script',
-            step4: 'Then test the API endpoints again'
+            step4: 'Then test the API endpoints again',
           },
-          sqlScript: createIngredientsSQL + `
+          sqlScript:
+            createIngredientsSQL +
+            `
 -- Create recipes table
 CREATE TABLE IF NOT EXISTS recipes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -258,7 +263,7 @@ CREATE TABLE IF NOT EXISTS ai_specials_ingredients (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-          `
+          `,
         });
       }
     }
@@ -266,15 +271,17 @@ CREATE TABLE IF NOT EXISTS ai_specials_ingredients (
     return NextResponse.json({
       success: true,
       message: 'Database setup completed',
-      details: 'All required tables should now exist'
+      details: 'All required tables should now exist',
     });
-
   } catch (error) {
     console.error('Database setup error:', error);
-    return NextResponse.json({
-      error: 'Failed to setup database',
-      message: 'Could not create missing tables',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to setup database',
+        message: 'Could not create missing tables',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

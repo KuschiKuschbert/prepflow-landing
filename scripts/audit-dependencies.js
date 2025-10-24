@@ -11,10 +11,10 @@ console.log('🔍 Auditing dependencies...');
 function auditDependencies() {
   const packageJsonPath = path.join(process.cwd(), 'package.json');
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-  
+
   const dependencies = {
     ...packageJson.dependencies,
-    ...packageJson.devDependencies
+    ...packageJson.devDependencies,
   };
 
   console.log(`\n📦 Total dependencies: ${Object.keys(dependencies).length}`);
@@ -23,7 +23,7 @@ function auditDependencies() {
 
   // Analyze bundle for actual usage
   const bundleAnalysis = analyzeBundleUsage();
-  
+
   // Check for heavy dependencies
   const heavyDependencies = [
     'recharts',
@@ -38,7 +38,7 @@ function auditDependencies() {
     'react-hook-form',
     'react-select',
     'react-table',
-    'react-virtualized'
+    'react-virtualized',
   ];
 
   console.log('\n🔍 Heavy dependency analysis:');
@@ -51,14 +51,14 @@ function auditDependencies() {
 
   // Check for potential unused dependencies
   console.log('\n⚠️  Potential optimization opportunities:');
-  
+
   const potentiallyUnused = [
     'next-dev-tools',
     'eslint-config-next',
     'typescript',
     'tailwindcss',
     'postcss',
-    'autoprefixer'
+    'autoprefixer',
   ];
 
   potentiallyUnused.forEach(dep => {
@@ -78,7 +78,7 @@ function auditDependencies() {
   return {
     totalDeps: Object.keys(dependencies).length,
     heavyDeps: heavyDependencies.filter(dep => dependencies[dep]),
-    potentiallyUnused: potentiallyUnused.filter(dep => dependencies[dep])
+    potentiallyUnused: potentiallyUnused.filter(dep => dependencies[dep]),
   };
 }
 
@@ -87,31 +87,27 @@ function analyzeBundleUsage() {
   // For now, we'll provide general recommendations
   return {
     totalSize: '20.23MB',
-    largestChunks: [
-      'next-devtools: 2.9MB',
-      'recharts: 2MB',
-      'react-dom: 1.7MB'
-    ]
+    largestChunks: ['next-devtools: 2.9MB', 'recharts: 2MB', 'react-dom: 1.7MB'],
   };
 }
 
 function getEstimatedSize(dependency) {
   const sizes = {
-    'recharts': '~1MB',
+    recharts: '~1MB',
     'chart.js': '~500KB',
-    'lodash': '~70KB (full)',
-    'moment': '~67KB',
+    lodash: '~70KB (full)',
+    moment: '~67KB',
     'date-fns': '~13KB',
-    'axios': '~13KB',
+    axios: '~13KB',
     'react-query': '~25KB',
-    'zustand': '~2KB',
+    zustand: '~2KB',
     'framer-motion': '~200KB',
     'react-hook-form': '~25KB',
     'react-select': '~50KB',
     'react-table': '~100KB',
-    'react-virtualized': '~200KB'
+    'react-virtualized': '~200KB',
   };
-  
+
   return sizes[dependency] || 'Unknown';
 }
 

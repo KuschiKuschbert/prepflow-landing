@@ -22,11 +22,14 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
       if (hasTrackedInitial.current) return;
       hasTrackedInitial.current = true;
 
-      const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigationEntry = performance.getEntriesByType(
+        'navigation',
+      )[0] as PerformanceNavigationTiming;
       if (navigationEntry) {
         const metrics = {
           pageLoadTime: navigationEntry.loadEventEnd - navigationEntry.loadEventStart,
-          domContentLoaded: navigationEntry.domContentLoadedEventEnd - navigationEntry.domContentLoadedEventStart,
+          domContentLoaded:
+            navigationEntry.domContentLoadedEventEnd - navigationEntry.domContentLoadedEventStart,
           firstByte: navigationEntry.responseStart - navigationEntry.requestStart,
           domInteractive: navigationEntry.domInteractive - navigationEntry.fetchStart,
           redirectTime: navigationEntry.redirectEnd - navigationEntry.redirectStart,
@@ -37,7 +40,7 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
 
         // Track performance metrics
         trackPerformance(metrics);
-        
+
         // Send to Google Analytics
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'page_performance', {
@@ -61,16 +64,16 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
     const trackCoreWebVitals = () => {
       // Largest Contentful Paint (LCP)
       if ('PerformanceObserver' in window && !hasTrackedLCP.current) {
-        const lcpObserver = new PerformanceObserver((list) => {
+        const lcpObserver = new PerformanceObserver(list => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1] as PerformanceEntry;
-          
+
           if (lastEntry && !hasTrackedLCP.current) {
             hasTrackedLCP.current = true;
             const lcp = lastEntry.startTime;
-            
+
             trackEvent('lcp', 'performance', 'largest_contentful_paint', Math.round(lcp));
-            
+
             // Send to Google Analytics
             if (typeof window !== 'undefined' && window.gtag) {
               window.gtag('event', 'largest_contentful_paint', {
@@ -83,21 +86,21 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
             }
           }
         });
-        
+
         lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       }
 
       // First Input Delay (FID)
       if ('PerformanceObserver' in window && !hasTrackedFID.current) {
-        const fidObserver = new PerformanceObserver((list) => {
+        const fidObserver = new PerformanceObserver(list => {
           const entries = list.getEntries();
           entries.forEach((entry: any) => {
             if (!hasTrackedFID.current) {
               hasTrackedFID.current = true;
               const fid = entry.processingStart - entry.startTime;
-              
+
               trackEvent('fid', 'performance', 'first_input_delay', Math.round(fid));
-              
+
               // Send to Google Analytics
               if (typeof window !== 'undefined' && window.gtag) {
                 window.gtag('event', 'first_input_delay', {
@@ -111,14 +114,14 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
             }
           });
         });
-        
+
         fidObserver.observe({ entryTypes: ['first-input'] });
       }
 
       // Cumulative Layout Shift (CLS)
       if ('PerformanceObserver' in window && !hasTrackedCLS.current) {
         let clsValue = 0;
-        const clsObserver = new PerformanceObserver((list) => {
+        const clsObserver = new PerformanceObserver(list => {
           const entries = list.getEntries();
           entries.forEach((entry: any) => {
             if (!entry.hadRecentInput) {
@@ -126,16 +129,21 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
             }
           });
         });
-        
+
         clsObserver.observe({ entryTypes: ['layout-shift'] });
-        
+
         // Track CLS after a delay to capture the full value
         setTimeout(() => {
           if (!hasTrackedCLS.current && clsValue > 0) {
             hasTrackedCLS.current = true;
-            
-            trackEvent('cls', 'performance', 'cumulative_layout_shift', Math.round(clsValue * 1000));
-            
+
+            trackEvent(
+              'cls',
+              'performance',
+              'cumulative_layout_shift',
+              Math.round(clsValue * 1000),
+            );
+
             // Send to Google Analytics
             if (typeof window !== 'undefined' && window.gtag) {
               window.gtag('event', 'cumulative_layout_shift', {
@@ -154,7 +162,7 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
     // Track resource loading performance
     const trackResourcePerformance = () => {
       if ('PerformanceObserver' in window) {
-        const resourceObserver = new PerformanceObserver((list) => {
+        const resourceObserver = new PerformanceObserver(list => {
           list.getEntries().forEach((entry: any) => {
             if (entry.entryType === 'resource') {
               const resourceMetrics = {
@@ -167,7 +175,7 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
               // Only track slow resources (> 1 second)
               if (entry.duration > 1000) {
                 trackEvent('slow_resource', 'performance', entry.name, Math.round(entry.duration));
-                
+
                 // Send to Google Analytics
                 if (typeof window !== 'undefined' && window.gtag) {
                   window.gtag('event', 'slow_resource', {
@@ -184,7 +192,7 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
             }
           });
         });
-        
+
         resourceObserver.observe({ entryTypes: ['resource'] });
       }
     };
@@ -206,9 +214,14 @@ export default function PerformanceTracker({ onMetrics, enabled = true }: Perfor
     const trackInteractionPerformance = () => {
       if (hasTrackedInitial.current) {
         const timeSinceLoad = performance.now();
-        
-        trackEvent('user_interaction', 'performance', 'interaction_timing', Math.round(timeSinceLoad));
-        
+
+        trackEvent(
+          'user_interaction',
+          'performance',
+          'interaction_timing',
+          Math.round(timeSinceLoad),
+        );
+
         // Send to Google Analytics
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'user_interaction', {

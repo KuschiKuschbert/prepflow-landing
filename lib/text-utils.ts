@@ -2,7 +2,7 @@
 
 export function formatIngredientName(name: string): string {
   if (!name) return '';
-  
+
   return name
     .toLowerCase()
     .split(' ')
@@ -12,7 +12,7 @@ export function formatIngredientName(name: string): string {
 
 export function formatBrandName(brand: string): string {
   if (!brand) return '';
-  
+
   return brand
     .toLowerCase()
     .split(' ')
@@ -22,7 +22,7 @@ export function formatBrandName(brand: string): string {
 
 export function formatSupplierName(supplier: string): string {
   if (!supplier) return '';
-  
+
   return supplier
     .toLowerCase()
     .split(' ')
@@ -32,7 +32,7 @@ export function formatSupplierName(supplier: string): string {
 
 export function formatStorageLocation(location: string): string {
   if (!location) return '';
-  
+
   return location
     .toLowerCase()
     .split(' ')
@@ -42,7 +42,7 @@ export function formatStorageLocation(location: string): string {
 
 export function formatTextInput(text: string): string {
   if (!text) return '';
-  
+
   return text
     .toLowerCase()
     .split(' ')
@@ -52,7 +52,7 @@ export function formatTextInput(text: string): string {
 
 export function formatRecipeName(name: string): string {
   if (!name) return '';
-  
+
   return name
     .toLowerCase()
     .split(' ')
@@ -62,7 +62,7 @@ export function formatRecipeName(name: string): string {
 
 export function formatDishName(name: string): string {
   if (!name) return '';
-  
+
   return name
     .toLowerCase()
     .split(' ')

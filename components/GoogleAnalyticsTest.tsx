@@ -17,7 +17,7 @@ export default function GoogleAnalyticsTest() {
         setTimeout(checkGtag, 500);
       }
     };
-    
+
     checkGtag();
   }, []);
 
@@ -30,10 +30,10 @@ export default function GoogleAnalyticsTest() {
         custom_parameter_test: 'true',
         custom_parameter_timestamp: Date.now(),
       });
-      
+
       setTestEventSent(true);
       console.log('🧪 Test event sent to Google Analytics');
-      
+
       // Also test our analytics service
       if (typeof window !== 'undefined' && window.gtag) {
         window.gtag('event', 'analytics_test', {
@@ -51,9 +51,9 @@ export default function GoogleAnalyticsTest() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-gray-900 border border-gray-700 rounded-lg p-4 text-white text-sm z-50 max-w-xs">
-      <h4 className="font-semibold mb-2">🔍 GA4 Test Panel</h4>
-      
+    <div className="fixed right-4 bottom-4 z-50 max-w-xs rounded-lg border border-gray-700 bg-gray-900 p-4 text-sm text-white">
+      <h4 className="mb-2 font-semibold">🔍 GA4 Test Panel</h4>
+
       <div className="space-y-2 text-xs">
         <div className="flex items-center gap-2">
           <span>gtag Available:</span>
@@ -61,25 +61,23 @@ export default function GoogleAnalyticsTest() {
             {isGtagAvailable ? '✅' : '❌'}
           </span>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <span>Test Event:</span>
           <span className={testEventSent ? 'text-green-400' : 'text-gray-400'}>
             {testEventSent ? '✅ Sent' : '⏳ Pending'}
           </span>
         </div>
-        
+
         <button
           onClick={sendTestEvent}
           disabled={!isGtagAvailable}
-          className="w-full mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded text-xs transition-colors"
+          className="mt-2 w-full rounded bg-blue-600 px-3 py-1 text-xs transition-colors hover:bg-blue-700 disabled:bg-gray-600"
         >
           Send Test Event
         </button>
-        
-        <div className="text-xs text-gray-400 mt-2">
-          Check console for detailed logs
-        </div>
+
+        <div className="mt-2 text-xs text-gray-400">Check console for detailed logs</div>
       </div>
     </div>
   );

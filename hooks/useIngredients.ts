@@ -2,7 +2,12 @@
 // Provides caching, optimistic updates, and error handling
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { queryKeys, invalidateQueries, optimisticUpdates, handleQueryError } from '@/lib/react-query';
+import {
+  queryKeys,
+  invalidateQueries,
+  optimisticUpdates,
+  handleQueryError,
+} from '@/lib/react-query';
 
 // Hook to fetch all ingredients
 export function useIngredients() {
@@ -57,7 +62,7 @@ export function useCreateIngredient() {
 
       return response.json();
     },
-    onMutate: async (newIngredient) => {
+    onMutate: async newIngredient => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: [...queryKeys.ingredients] });
 
@@ -78,7 +83,7 @@ export function useCreateIngredient() {
       if (context?.previousIngredients) {
         queryClient.setQueryData([...queryKeys.ingredients], context.previousIngredients);
       }
-      
+
       // Handle error
       const errorMessage = handleQueryError(err, [...queryKeys.ingredients]);
       console.error('Failed to create ingredient:', errorMessage);
@@ -128,7 +133,7 @@ export function useUpdateIngredient() {
       if (context?.previousIngredient) {
         queryClient.setQueryData([...queryKeys.ingredient(id)], context.previousIngredient);
       }
-      
+
       // Handle error
       const errorMessage = handleQueryError(err, [...queryKeys.ingredient(id)]);
       console.error('Failed to update ingredient:', errorMessage);
@@ -157,7 +162,7 @@ export function useDeleteIngredient() {
 
       return response.json();
     },
-    onMutate: async (id) => {
+    onMutate: async id => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: [...queryKeys.ingredients] });
 
@@ -165,8 +170,9 @@ export function useDeleteIngredient() {
       const previousIngredients = queryClient.getQueryData([...queryKeys.ingredients]);
 
       // Optimistically remove the ingredient from the cache
-      queryClient.setQueryData([...queryKeys.ingredients], (old: any[]) => 
-        old?.filter(ingredient => ingredient.id !== id) || []
+      queryClient.setQueryData(
+        [...queryKeys.ingredients],
+        (old: any[]) => old?.filter(ingredient => ingredient.id !== id) || [],
       );
 
       // Return a context object with the snapshotted value
@@ -177,7 +183,7 @@ export function useDeleteIngredient() {
       if (context?.previousIngredients) {
         queryClient.setQueryData([...queryKeys.ingredients], context.previousIngredients);
       }
-      
+
       // Handle error
       const errorMessage = handleQueryError(err, [...queryKeys.ingredient(id)]);
       console.error('Failed to delete ingredient:', errorMessage);
@@ -213,7 +219,7 @@ export function useImportIngredients() {
       // Invalidate ingredients cache to refetch updated data
       invalidateQueries.ingredients();
     },
-    onError: (err) => {
+    onError: err => {
       const errorMessage = handleQueryError(err, [...queryKeys.ingredients]);
       console.error('Failed to import ingredients:', errorMessage);
     },

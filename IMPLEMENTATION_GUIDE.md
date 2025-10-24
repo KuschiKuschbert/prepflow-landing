@@ -7,6 +7,7 @@
 **Strategy**: Start with single-user MVP, then scale to full SaaS with authentication, subscriptions, and enterprise features.
 
 **Timeline**: 4 weeks to full SaaS platform
+
 - Week 1: Single-user MVP (1 hour setup + core features)
 - Week 2: Subscription tiers and authentication
 - Week 3: Multi-user management and team collaboration
@@ -17,6 +18,7 @@
 ## 🚀 **ULTIMATE TECH STACK**
 
 ### **Core Stack**
+
 ```typescript
 // Primary Technologies
 - Next.js 15.4.6 (App Router)     // React framework
@@ -29,6 +31,7 @@
 ```
 
 ### **Additional Dependencies**
+
 ```json
 {
   "dependencies": {
@@ -56,6 +59,7 @@
 The PrepFlow webapp is now **100% functional** with all core features implemented:
 
 #### **✅ Completed Features:**
+
 1. **Complete Database Schema** - All tables created with proper relationships
 2. **Ingredients Management** - Full CRUD with multi-step wizard
 3. **COGS Calculator** - Advanced pricing tool with multiple strategies
@@ -66,6 +70,7 @@ The PrepFlow webapp is now **100% functional** with all core features implemente
 8. **Dead Code Cleanup** - Optimized performance and maintainability
 
 #### **🔧 Technical Implementation:**
+
 - **Database:** Supabase PostgreSQL with complete schema
 - **Frontend:** Next.js 15.4.6 with React 19 and App Router
 - **Styling:** Tailwind CSS 4 with Material Design 3 guidelines
@@ -74,6 +79,7 @@ The PrepFlow webapp is now **100% functional** with all core features implemente
 - **Text Formatting:** Centralized utility for consistent capitalization
 
 #### **📊 Key Features:**
+
 - **Smart Unit Conversion:** Automatic conversion between volume/weight units
 - **Pricing Strategies:** Charm pricing, whole number, and real pricing
 - **Recipe Management:** Edit, preview, print, and bulk operations
@@ -82,6 +88,7 @@ The PrepFlow webapp is now **100% functional** with all core features implemente
 - **Professional UI:** Material Design 3 with dark theme and smooth animations
 
 #### **🗂️ File Structure:**
+
 ```
 app/webapp/
 ├── page.tsx              # Dashboard overview
@@ -108,6 +115,7 @@ SQL Files:
 ```
 
 #### **🔧 Technical Highlights:**
+
 - **Centralized Text Formatting:** `lib/text-utils.ts` provides consistent capitalization
 - **Automatic Unit Conversion:** `lib/unit-conversion.ts` handles all unit conversions
 - **Real-time Subscriptions:** Supabase real-time updates for live data sync
@@ -120,8 +128,9 @@ SQL Files:
 ## 🎯 **SUBSCRIPTION TIERS**
 
 ### **Starter: $19/month AUD**
+
 - Unlimited ingredients
-- Unlimited recipes  
+- Unlimited recipes
 - Full COGS calculator
 - Menu pricing optimization
 - Offline-first PWA
@@ -130,6 +139,7 @@ SQL Files:
 - Email support
 
 ### **Professional: $39/month AUD**
+
 - Everything in Starter
 - Item performance analysis
 - Team collaboration (up to 5 users)
@@ -140,6 +150,7 @@ SQL Files:
 - Priority support
 
 ### **Enterprise: $79/month AUD**
+
 - Everything in Professional
 - Unlimited team members
 - POS system integration
@@ -155,6 +166,7 @@ SQL Files:
 ## 🚀 **IMPLEMENTATION TIMELINE**
 
 ### **✅ Week 1: Single-User MVP (COMPLETED)**
+
 - ✅ Day 1: Supabase Next.js starter + database setup
 - ✅ Day 2: Ingredients management with multi-step wizard
 - ✅ Day 3: Recipe creation with editing and preview
@@ -162,6 +174,7 @@ SQL Files:
 - ✅ Day 5: Unit conversion system and text formatting
 
 ### **🔄 Week 2: Subscription Tiers (NEXT)**
+
 - 🔄 Day 1: Enable authentication with Supabase Auth
 - 🔄 Day 2: Add subscription management with Stripe
 - 🔄 Day 3: Implement feature gating and paywalls
@@ -169,6 +182,7 @@ SQL Files:
 - 🔄 Day 5: Subscription UI and billing management
 
 ### **📋 Week 3: Multi-User Management (PLANNED)**
+
 - 📋 Day 1: Team management and user roles
 - 📋 Day 2: Team collaboration features
 - 📋 Day 3: Real-time sharing and notifications
@@ -176,6 +190,7 @@ SQL Files:
 - 📋 Day 5: Team analytics and reporting
 
 ### **📋 Week 4: Enterprise Features (PLANNED)**
+
 - 📋 Day 1: POS system integration
 - 📋 Day 2: Supplier API integration
 - 📋 Day 3: Advanced analytics dashboard
@@ -187,6 +202,7 @@ SQL Files:
 ## 🎯 **NEXT STEPS**
 
 ### **🔄 Immediate Next Steps (Week 2):**
+
 1. **Enable Authentication** - Implement Supabase Auth with email/password
 2. **Add Subscription Management** - Integrate Stripe for payment processing
 3. **Implement Feature Gating** - Create paywall system for premium features
@@ -194,6 +210,7 @@ SQL Files:
 5. **Deploy to Production** - Vercel deployment with custom domain
 
 ### **📋 Future Enhancements (Weeks 3-4):**
+
 1. **Multi-User Management** - Team collaboration and user roles
 2. **Advanced Analytics** - Detailed reporting and insights
 3. **POS Integration** - Connect with existing point-of-sale systems
@@ -201,6 +218,7 @@ SQL Files:
 5. **Mobile App** - React Native version for iOS/Android
 
 ### **🚀 Current Status:**
+
 - ✅ **MVP Complete** - All core features functional
 - ✅ **Database Ready** - Complete schema with sample data
 - ✅ **UI/UX Polished** - Material Design 3 with dark theme

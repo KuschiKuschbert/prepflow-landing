@@ -13,15 +13,30 @@ const CACHE_STRATEGIES = {
   // API calls - Network First with fallback
   API: ['/api/'],
   // Pages - Stale While Revalidate
-  PAGES: ['/', '/webapp/', '/webapp/cleaning/', '/webapp/temperature/', '/webapp/compliance/', '/webapp/suppliers/', '/webapp/par-levels/', '/webapp/order-lists/', '/webapp/dish-sections/', '/webapp/prep-lists/', '/webapp/recipe-sharing/', '/webapp/ai-specials/', '/privacy-policy/', '/terms-of-service/'],
+  PAGES: [
+    '/',
+    '/webapp/',
+    '/webapp/cleaning/',
+    '/webapp/temperature/',
+    '/webapp/compliance/',
+    '/webapp/suppliers/',
+    '/webapp/par-levels/',
+    '/webapp/order-lists/',
+    '/webapp/dish-sections/',
+    '/webapp/prep-lists/',
+    '/webapp/recipe-sharing/',
+    '/webapp/ai-specials/',
+    '/privacy-policy/',
+    '/terms-of-service/',
+  ],
   // Critical resources - Cache First
-  CRITICAL: ['/images/dashboard-screenshot.png', '/images/prepflow-logo.png']
+  CRITICAL: ['/images/dashboard-screenshot.png', '/images/prepflow-logo.png'],
 };
 
 // Install event - Cache static assets
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   console.log('🔧 PrepFlow SW: Installing service worker v2.0');
-  
+
   event.waitUntil(
     Promise.all([
       // Cache static assets
@@ -34,7 +49,7 @@ self.addEventListener('install', (event) => {
           '/images/settings-screenshot.png',
           '/images/stocklist-screenshot.png',
           '/manifest.json',
-          '/favicon.ico'
+          '/favicon.ico',
         ]);
       }),
       // Cache critical API responses
@@ -55,55 +70,60 @@ self.addEventListener('install', (event) => {
           '/api/kitchen-sections',
           '/api/prep-lists',
           '/api/recipe-share',
-          '/api/ai-specials'
+          '/api/ai-specials',
         ]);
-      })
+      }),
     ]).then(() => {
       console.log('✅ PrepFlow SW: Static assets cached successfully');
       return self.skipWaiting();
-    })
+    }),
   );
 });
 
 // Activate event - Clean up old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   console.log('🚀 PrepFlow SW: Activating service worker v2.0');
-  
+
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME && 
-              cacheName !== STATIC_CACHE && 
-              cacheName !== DYNAMIC_CACHE && 
-              cacheName !== API_CACHE) {
-            console.log('🗑️ PrepFlow SW: Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      console.log('✅ PrepFlow SW: Old caches cleaned up');
-      return self.clients.claim();
-    })
+    caches
+      .keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (
+              cacheName !== CACHE_NAME &&
+              cacheName !== STATIC_CACHE &&
+              cacheName !== DYNAMIC_CACHE &&
+              cacheName !== API_CACHE
+            ) {
+              console.log('🗑️ PrepFlow SW: Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          }),
+        );
+      })
+      .then(() => {
+        console.log('✅ PrepFlow SW: Old caches cleaned up');
+        return self.clients.claim();
+      }),
   );
 });
 
 // Fetch event - Advanced caching strategies
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
-  
+
   // Skip chrome-extension and other non-http requests
   if (!url.protocol.startsWith('http')) {
     return;
   }
-  
+
   event.respondWith(handleRequest(request));
 });
 
@@ -111,45 +131,44 @@ self.addEventListener('fetch', (event) => {
 async function handleRequest(request) {
   const url = new URL(request.url);
   const pathname = url.pathname;
-  
+
   try {
     // Strategy 1: Static Assets - Cache First
     if (isStaticAsset(pathname)) {
       return await cacheFirst(request, STATIC_CACHE);
     }
-    
+
     // Strategy 2: API Calls - Network First with fallback
     if (isApiCall(pathname)) {
       return await networkFirst(request, API_CACHE);
     }
-    
+
     // Strategy 3: Critical Resources - Cache First
     if (isCriticalResource(pathname)) {
       return await cacheFirst(request, STATIC_CACHE);
     }
-    
+
     // Strategy 4: Pages - Stale While Revalidate
     if (isPage(pathname)) {
       return await staleWhileRevalidate(request, DYNAMIC_CACHE);
     }
-    
+
     // Default: Network First
     return await networkFirst(request, DYNAMIC_CACHE);
-    
   } catch (error) {
     console.error('❌ PrepFlow SW: Fetch error:', error);
-    
+
     // Fallback to cache or offline page
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     // Return offline page for navigation requests
     if (request.mode === 'navigate') {
       return caches.match('/') || new Response('Offline', { status: 503 });
     }
-    
+
     throw error;
   }
 }
@@ -160,13 +179,13 @@ async function cacheFirst(request, cacheName) {
   if (cachedResponse) {
     return cachedResponse;
   }
-  
+
   const networkResponse = await fetch(request);
   if (networkResponse.ok) {
     const cache = await caches.open(cacheName);
     cache.put(request, networkResponse.clone());
   }
-  
+
   return networkResponse;
 }
 
@@ -192,14 +211,14 @@ async function networkFirst(request, cacheName) {
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
-  
+
   const fetchPromise = fetch(request).then(networkResponse => {
     if (networkResponse.ok) {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
   });
-  
+
   return cachedResponse || fetchPromise;
 }
 
@@ -221,7 +240,7 @@ function isPage(pathname) {
 }
 
 // Background sync for offline actions
-self.addEventListener('sync', (event) => {
+self.addEventListener('sync', event => {
   if (event.tag === 'background-sync') {
     console.log('🔄 PrepFlow SW: Background sync triggered');
     event.waitUntil(doBackgroundSync());
@@ -249,7 +268,7 @@ async function getStoredRequests() {
 }
 
 // Push notifications (future feature)
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
   if (event.data) {
     const data = event.data.json();
     const options = {
@@ -258,20 +277,16 @@ self.addEventListener('push', (event) => {
       badge: '/icons/icon-192x192.png',
       vibrate: [100, 50, 100],
       data: data.data,
-      actions: data.actions || []
+      actions: data.actions || [],
     };
-    
-    event.waitUntil(
-      self.registration.showNotification(data.title, options)
-    );
+
+    event.waitUntil(self.registration.showNotification(data.title, options));
   }
 });
 
 // Notification click handler
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
   event.notification.close();
-  
-  event.waitUntil(
-    clients.openWindow(event.notification.data?.url || '/')
-  );
+
+  event.waitUntil(clients.openWindow(event.notification.data?.url || '/'));
 });

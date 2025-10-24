@@ -51,12 +51,12 @@ export default function ComplianceTrackingPage() {
     photo_url: '',
     notes: '',
     reminder_enabled: true,
-    reminder_days_before: 30
+    reminder_days_before: 30,
   });
   const [newType, setNewType] = useState({
     name: '',
     description: '',
-    renewal_frequency_days: ''
+    renewal_frequency_days: '',
   });
 
   useEffect(() => {
@@ -105,8 +105,8 @@ export default function ComplianceTrackingPage() {
         body: JSON.stringify({
           ...newRecord,
           compliance_type_id: parseInt(newRecord.compliance_type_id),
-          reminder_days_before: parseInt(newRecord.reminder_days_before.toString())
-        })
+          reminder_days_before: parseInt(newRecord.reminder_days_before.toString()),
+        }),
       });
       const data = await response.json();
       if (data.success) {
@@ -120,7 +120,7 @@ export default function ComplianceTrackingPage() {
           photo_url: '',
           notes: '',
           reminder_enabled: true,
-          reminder_days_before: 30
+          reminder_days_before: 30,
         });
         setShowAddRecord(false);
       }
@@ -137,8 +137,10 @@ export default function ComplianceTrackingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...newType,
-          renewal_frequency_days: newType.renewal_frequency_days ? parseInt(newType.renewal_frequency_days) : null
-        })
+          renewal_frequency_days: newType.renewal_frequency_days
+            ? parseInt(newType.renewal_frequency_days)
+            : null,
+        }),
       });
       const data = await response.json();
       if (data.success) {
@@ -153,17 +155,23 @@ export default function ComplianceTrackingPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'expired': return 'text-red-400 bg-red-400/10 border-red-400/20';
-      case 'pending_renewal': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
-      default: return 'text-green-400 bg-green-400/10 border-green-400/20';
+      case 'expired':
+        return 'text-red-400 bg-red-400/10 border-red-400/20';
+      case 'pending_renewal':
+        return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+      default:
+        return 'text-green-400 bg-green-400/10 border-green-400/20';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'expired': return '❌';
-      case 'pending_renewal': return '⚠️';
-      default: return '✅';
+      case 'expired':
+        return '❌';
+      case 'pending_renewal':
+        return '⚠️';
+      default:
+        return '✅';
     }
   };
 
@@ -189,9 +197,9 @@ export default function ComplianceTrackingPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto max-w-7xl">
           <LoadingSkeleton variant="stats" height="64px" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
             <LoadingSkeleton variant="card" count={4} height="120px" />
           </div>
         </div>
@@ -201,21 +209,26 @@ export default function ComplianceTrackingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="mb-2 text-4xl font-bold text-white">
             📋 {t('compliance.title', 'Compliance Tracking')}
           </h1>
-          <p className="text-gray-400">{t('compliance.subtitle', 'Track pest control, council inspections, licenses, and other compliance documents with automated reminders')}</p>
+          <p className="text-gray-400">
+            {t(
+              'compliance.subtitle',
+              'Track pest control, council inspections, licenses, and other compliance documents with automated reminders',
+            )}
+          </p>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <div className="flex space-x-1 bg-[#1f1f1f] p-1 rounded-2xl border border-[#2a2a2a]">
+          <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
             <button
               onClick={() => setActiveTab('records')}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
+              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
                 activeTab === 'records'
                   ? 'bg-[#29E7CD] text-black shadow-lg'
                   : 'text-gray-400 hover:text-white'
@@ -225,7 +238,7 @@ export default function ComplianceTrackingPage() {
             </button>
             <button
               onClick={() => setActiveTab('types')}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
+              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
                 activeTab === 'types'
                   ? 'bg-[#29E7CD] text-black shadow-lg'
                   : 'text-gray-400 hover:text-white'
@@ -240,38 +253,46 @@ export default function ComplianceTrackingPage() {
         {activeTab === 'records' && (
           <div className="space-y-6">
             {/* Filters and Add Button */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-4 sm:flex-row">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.filterType', 'Filter by Type')}</label>
+                  <label className="mb-2 block text-sm font-medium text-gray-300">
+                    {t('compliance.filterType', 'Filter by Type')}
+                  </label>
                   <select
                     value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
-                    className="px-4 py-2 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                    onChange={e => setSelectedType(e.target.value)}
+                    className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                   >
                     <option value="all">{t('compliance.allTypes', 'All Types')}</option>
-                    {types.map((type) => (
-                      <option key={type.id} value={type.id.toString()}>{getTypeIcon(type.name)} {type.name}</option>
+                    {types.map(type => (
+                      <option key={type.id} value={type.id.toString()}>
+                        {getTypeIcon(type.name)} {type.name}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.filterStatus', 'Filter by Status')}</label>
+                  <label className="mb-2 block text-sm font-medium text-gray-300">
+                    {t('compliance.filterStatus', 'Filter by Status')}
+                  </label>
                   <select
                     value={selectedStatus}
-                    onChange={(e) => setSelectedStatus(e.target.value)}
-                    className="px-4 py-2 bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                    onChange={e => setSelectedStatus(e.target.value)}
+                    className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                   >
                     <option value="all">{t('compliance.allStatuses', 'All Statuses')}</option>
                     <option value="active">✅ {t('compliance.active', 'Active')}</option>
-                    <option value="pending_renewal">⚠️ {t('compliance.pendingRenewal', 'Pending Renewal')}</option>
+                    <option value="pending_renewal">
+                      ⚠️ {t('compliance.pendingRenewal', 'Pending Renewal')}
+                    </option>
                     <option value="expired">❌ {t('compliance.expired', 'Expired')}</option>
                   </select>
                 </div>
               </div>
               <button
                 onClick={() => setShowAddRecord(true)}
-                className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black px-6 py-3 rounded-2xl font-semibold hover:shadow-xl transition-all duration-200"
+                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
               >
                 ➕ {t('compliance.addRecord', 'Add Compliance Record')}
               </button>
@@ -279,105 +300,136 @@ export default function ComplianceTrackingPage() {
 
             {/* Add Record Form */}
             {showAddRecord && (
-              <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-                <h3 className="text-xl font-semibold text-white mb-4">{t('compliance.addNewRecord', 'Add New Compliance Record')}</h3>
-                <form onSubmit={handleAddRecord} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+                <h3 className="mb-4 text-xl font-semibold text-white">
+                  {t('compliance.addNewRecord', 'Add New Compliance Record')}
+                </h3>
+                <form onSubmit={handleAddRecord} className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.complianceType', 'Compliance Type')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.complianceType', 'Compliance Type')}
+                    </label>
                     <select
                       value={newRecord.compliance_type_id}
-                      onChange={(e) => setNewRecord({ ...newRecord, compliance_type_id: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                      onChange={e =>
+                        setNewRecord({ ...newRecord, compliance_type_id: e.target.value })
+                      }
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                       required
                     >
-                      <option value="">{t('compliance.selectType', 'Choose a compliance type')}</option>
-                      {types.map((type) => (
-                        <option key={type.id} value={type.id}>{getTypeIcon(type.name)} {type.name}</option>
+                      <option value="">
+                        {t('compliance.selectType', 'Choose a compliance type')}
+                      </option>
+                      {types.map(type => (
+                        <option key={type.id} value={type.id}>
+                          {getTypeIcon(type.name)} {type.name}
+                        </option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.documentName', 'Document Name')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.documentName', 'Document Name')}
+                    </label>
                     <input
                       type="text"
                       value={newRecord.document_name}
-                      onChange={(e) => setNewRecord({ ...newRecord, document_name: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                       placeholder="e.g., Annual Pest Control Certificate"
+                      onChange={e => setNewRecord({ ...newRecord, document_name: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      placeholder="e.g., Annual Pest Control Certificate"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.issueDate', 'Issue Date')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.issueDate', 'Issue Date')}
+                    </label>
                     <input
                       type="date"
                       value={newRecord.issue_date}
-                      onChange={(e) => setNewRecord({ ...newRecord, issue_date: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                      onChange={e => setNewRecord({ ...newRecord, issue_date: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.expiryDate', 'Expiry Date')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.expiryDate', 'Expiry Date')}
+                    </label>
                     <input
                       type="date"
                       value={newRecord.expiry_date}
-                      onChange={(e) => setNewRecord({ ...newRecord, expiry_date: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                      onChange={e => setNewRecord({ ...newRecord, expiry_date: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.documentUrl', 'Document URL')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.documentUrl', 'Document URL')}
+                    </label>
                     <input
                       type="url"
                       value={newRecord.document_url}
-                      onChange={(e) => setNewRecord({ ...newRecord, document_url: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                       placeholder="Link to digital document"
+                      onChange={e => setNewRecord({ ...newRecord, document_url: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      placeholder="Link to digital document"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.reminderDays', 'Reminder Days Before')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.reminderDays', 'Reminder Days Before')}
+                    </label>
                     <input
                       type="number"
                       value={newRecord.reminder_days_before}
-                      onChange={(e) => setNewRecord({ ...newRecord, reminder_days_before: parseInt(e.target.value) })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
+                      onChange={e =>
+                        setNewRecord({
+                          ...newRecord,
+                          reminder_days_before: parseInt(e.target.value),
+                        })
+                      }
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                       min="1"
                       max="365"
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.notes', 'Notes')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.notes', 'Notes')}
+                    </label>
                     <textarea
                       value={newRecord.notes}
-                      onChange={(e) => setNewRecord({ ...newRecord, notes: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                       placeholder="Additional notes or observations"
+                      onChange={e => setNewRecord({ ...newRecord, notes: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      placeholder="Additional notes or observations"
                       rows={3}
                     />
                   </div>
-                  <div className="md:col-span-2 flex items-center space-x-4">
+                  <div className="flex items-center space-x-4 md:col-span-2">
                     <label className="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         checked={newRecord.reminder_enabled}
-                        onChange={(e) => setNewRecord({ ...newRecord, reminder_enabled: e.target.checked })}
-                        className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD]"
+                        onChange={e =>
+                          setNewRecord({ ...newRecord, reminder_enabled: e.target.checked })
+                        }
+                        className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-[#29E7CD]"
                       />
-                      <span className="text-gray-300">{t('compliance.enableReminders', 'Enable automated reminders')}</span>
+                      <span className="text-gray-300">
+                        {t('compliance.enableReminders', 'Enable automated reminders')}
+                      </span>
                     </label>
                   </div>
-                  <div className="md:col-span-2 flex space-x-4">
+                  <div className="flex space-x-4 md:col-span-2">
                     <button
                       type="submit"
-                      className="bg-[#29E7CD] text-black px-6 py-3 rounded-2xl font-semibold hover:shadow-xl transition-all duration-200"
+                      className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
                     >
                       {t('compliance.save', 'Save Record')}
                     </button>
                     <button
                       type="button"
                       onClick={() => setShowAddRecord(false)}
-                      className="bg-[#2a2a2a] text-white px-6 py-3 rounded-2xl font-semibold hover:bg-[#3a3a3a] transition-all duration-200"
+                      className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
                     >
                       {t('compliance.cancel', 'Cancel')}
                     </button>
@@ -389,102 +441,137 @@ export default function ComplianceTrackingPage() {
             {/* Records List */}
             <div className="space-y-4">
               {records.length === 0 ? (
-                <div className="bg-[#1f1f1f] p-8 rounded-3xl shadow-lg border border-[#2a2a2a] text-center">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 flex items-center justify-center mx-auto mb-4">
+                <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
+                  <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
                     <span className="text-4xl">📋</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{t('compliance.noRecords', 'No Compliance Records')}</h3>
-                  <p className="text-gray-400">{t('compliance.noRecordsDesc', 'Start tracking your compliance documents and licenses')}</p>
+                  <h3 className="mb-2 text-xl font-semibold text-white">
+                    {t('compliance.noRecords', 'No Compliance Records')}
+                  </h3>
+                  <p className="text-gray-400">
+                    {t(
+                      'compliance.noRecordsDesc',
+                      'Start tracking your compliance documents and licenses',
+                    )}
+                  </p>
                 </div>
               ) : (
-                records.map((record) => {
+                records.map(record => {
                   const daysUntilExpiry = getDaysUntilExpiry(record.expiry_date);
                   return (
-                    <div key={record.id} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] hover:shadow-xl transition-all duration-200">
-                      <div className="flex items-center justify-between mb-4">
+                    <div
+                      key={record.id}
+                      className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-200 hover:shadow-xl"
+                    >
+                      <div className="mb-4 flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 flex items-center justify-center">
-                            <span className="text-2xl">{getTypeIcon(record.compliance_types.name)}</span>
+                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+                            <span className="text-2xl">
+                              {getTypeIcon(record.compliance_types.name)}
+                            </span>
                           </div>
                           <div>
-                            <h3 className="text-xl font-semibold text-white">{record.document_name}</h3>
+                            <h3 className="text-xl font-semibold text-white">
+                              {record.document_name}
+                            </h3>
                             <p className="text-gray-400">{record.compliance_types.name}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(record.status)}`}>
-                            {getStatusIcon(record.status)} {record.status.charAt(0).toUpperCase() + record.status.slice(1).replace('_', ' ')}
+                          <span
+                            className={`rounded-full border px-3 py-1 text-xs font-medium ${getStatusColor(record.status)}`}
+                          >
+                            {getStatusIcon(record.status)}{' '}
+                            {record.status.charAt(0).toUpperCase() +
+                              record.status.slice(1).replace('_', ' ')}
                           </span>
                           {daysUntilExpiry !== null && (
-                            <span className={`text-sm font-semibold ${
-                              daysUntilExpiry < 0 ? 'text-red-400' : 
-                              daysUntilExpiry < 30 ? 'text-yellow-400' : 'text-green-400'
-                            }`}>
-                              {daysUntilExpiry < 0 ? `${Math.abs(daysUntilExpiry)} days overdue` : 
-                               daysUntilExpiry === 0 ? 'Expires today' : 
-                               `${daysUntilExpiry} days left`}
+                            <span
+                              className={`text-sm font-semibold ${
+                                daysUntilExpiry < 0
+                                  ? 'text-red-400'
+                                  : daysUntilExpiry < 30
+                                    ? 'text-yellow-400'
+                                    : 'text-green-400'
+                              }`}
+                            >
+                              {daysUntilExpiry < 0
+                                ? `${Math.abs(daysUntilExpiry)} days overdue`
+                                : daysUntilExpiry === 0
+                                  ? 'Expires today'
+                                  : `${daysUntilExpiry} days left`}
                             </span>
                           )}
                         </div>
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                      <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                         {record.issue_date && (
                           <div>
-                            <span className="text-sm text-gray-400">{t('compliance.issueDate', 'Issue Date')}: </span>
-                            <span className="text-white">{new Date(record.issue_date).toLocaleDateString()}</span>
+                            <span className="text-sm text-gray-400">
+                              {t('compliance.issueDate', 'Issue Date')}:{' '}
+                            </span>
+                            <span className="text-white">
+                              {new Date(record.issue_date).toLocaleDateString()}
+                            </span>
                           </div>
                         )}
                         {record.expiry_date && (
                           <div>
-                            <span className="text-sm text-gray-400">{t('compliance.expiryDate', 'Expiry Date')}: </span>
-                            <span className="text-white">{new Date(record.expiry_date).toLocaleDateString()}</span>
+                            <span className="text-sm text-gray-400">
+                              {t('compliance.expiryDate', 'Expiry Date')}:{' '}
+                            </span>
+                            <span className="text-white">
+                              {new Date(record.expiry_date).toLocaleDateString()}
+                            </span>
                           </div>
                         )}
                       </div>
-                      
-                      {record.notes && (
-                        <p className="text-gray-300 mb-4">{record.notes}</p>
-                      )}
-                      
+
+                      {record.notes && <p className="mb-4 text-gray-300">{record.notes}</p>}
+
                       {(record.document_url || record.photo_url) && (
                         <div className="mb-4 flex space-x-4">
                           {record.document_url && (
-                            <a 
-                              href={record.document_url} 
-                              target="_blank" 
+                            <a
+                              href={record.document_url}
+                              target="_blank"
                               rel="noopener noreferrer"
-                              className="bg-[#29E7CD] text-black px-4 py-2 rounded-xl font-semibold hover:shadow-lg transition-all duration-200"
+                              className="rounded-xl bg-[#29E7CD] px-4 py-2 font-semibold text-black transition-all duration-200 hover:shadow-lg"
                             >
                               📄 {t('compliance.viewDocument', 'View Document')}
                             </a>
                           )}
                           {record.photo_url && (
-                            <OptimizedImage 
-                              src={record.photo_url} 
-                              alt="Compliance document" 
+                            <OptimizedImage
+                              src={record.photo_url}
+                              alt="Compliance document"
                               width={128}
                               height={128}
-                              className="w-32 h-32 object-cover rounded-2xl border border-[#2a2a2a]"
+                              className="h-32 w-32 rounded-2xl border border-[#2a2a2a] object-cover"
                             />
                           )}
                         </div>
                       )}
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <span className={`w-2 h-2 rounded-full ${
-                            record.reminder_enabled ? 'bg-green-400' : 'bg-gray-400'
-                          }`}></span>
+                          <span
+                            className={`h-2 w-2 rounded-full ${
+                              record.reminder_enabled ? 'bg-green-400' : 'bg-gray-400'
+                            }`}
+                          ></span>
                           <span className="text-sm text-gray-400">
-                            {record.reminder_enabled ? t('compliance.remindersEnabled', 'Reminders enabled') : t('compliance.remindersDisabled', 'Reminders disabled')}
+                            {record.reminder_enabled
+                              ? t('compliance.remindersEnabled', 'Reminders enabled')
+                              : t('compliance.remindersDisabled', 'Reminders disabled')}
                           </span>
                         </div>
                         <div className="flex space-x-4">
-                          <button className="bg-[#2a2a2a] text-white px-4 py-2 rounded-xl font-semibold hover:bg-[#3a3a3a] transition-all duration-200">
+                          <button className="rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
                             📷 {t('compliance.addPhoto', 'Add Photo')}
                           </button>
-                          <button className="bg-[#2a2a2a] text-white px-4 py-2 rounded-xl font-semibold hover:bg-[#3a3a3a] transition-all duration-200">
+                          <button className="rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
                             ✏️ {t('compliance.edit', 'Edit')}
                           </button>
                         </div>
@@ -500,11 +587,13 @@ export default function ComplianceTrackingPage() {
         {/* Types Tab */}
         {activeTab === 'types' && (
           <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-semibold text-white">{t('compliance.manageTypes', 'Manage Compliance Types')}</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold text-white">
+                {t('compliance.manageTypes', 'Manage Compliance Types')}
+              </h2>
               <button
                 onClick={() => setShowAddType(true)}
-                className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black px-6 py-3 rounded-2xl font-semibold hover:shadow-xl transition-all duration-200"
+                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
               >
                 ➕ {t('compliance.addType', 'Add Type')}
               </button>
@@ -512,51 +601,61 @@ export default function ComplianceTrackingPage() {
 
             {/* Add Type Form */}
             {showAddType && (
-              <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
-                <h3 className="text-xl font-semibold text-white mb-4">{t('compliance.addNewType', 'Add New Compliance Type')}</h3>
+              <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+                <h3 className="mb-4 text-xl font-semibold text-white">
+                  {t('compliance.addNewType', 'Add New Compliance Type')}
+                </h3>
                 <form onSubmit={handleAddType} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.typeName', 'Type Name')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.typeName', 'Type Name')}
+                    </label>
                     <input
                       type="text"
                       value={newType.name}
-                      onChange={(e) => setNewType({ ...newType, name: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                       placeholder="e.g., Pest Control, Council Inspection"
+                      onChange={e => setNewType({ ...newType, name: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      placeholder="e.g., Pest Control, Council Inspection"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.description', 'Description')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.description', 'Description')}
+                    </label>
                     <textarea
                       value={newType.description}
-                      onChange={(e) => setNewType({ ...newType, description: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                       placeholder="Describe this compliance type"
+                      onChange={e => setNewType({ ...newType, description: e.target.value })}
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      placeholder="Describe this compliance type"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">{t('compliance.renewalFrequency', 'Renewal Frequency (days)')}</label>
+                    <label className="mb-2 block text-sm font-medium text-gray-300">
+                      {t('compliance.renewalFrequency', 'Renewal Frequency (days)')}
+                    </label>
                     <input
                       type="number"
                       value={newType.renewal_frequency_days}
-                      onChange={(e) => setNewType({ ...newType, renewal_frequency_days: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#2a2a2a] rounded-2xl text-white focus:ring-2 focus:ring-[#29E7CD] focus:border-transparent"
-                       placeholder="e.g., 365 for annual"
+                      onChange={e =>
+                        setNewType({ ...newType, renewal_frequency_days: e.target.value })
+                      }
+                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      placeholder="e.g., 365 for annual"
                     />
                   </div>
                   <div className="flex space-x-4">
                     <button
                       type="submit"
-                      className="bg-[#29E7CD] text-black px-6 py-3 rounded-2xl font-semibold hover:shadow-xl transition-all duration-200"
+                      className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
                     >
                       {t('compliance.save', 'Save Type')}
                     </button>
                     <button
                       type="button"
                       onClick={() => setShowAddType(false)}
-                      className="bg-[#2a2a2a] text-white px-6 py-3 rounded-2xl font-semibold hover:bg-[#3a3a3a] transition-all duration-200"
+                      className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
                     >
                       {t('compliance.cancel', 'Cancel')}
                     </button>
@@ -566,29 +665,39 @@ export default function ComplianceTrackingPage() {
             )}
 
             {/* Types Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {types.map((type) => (
-                <div key={type.id} className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a] hover:shadow-xl transition-all duration-200">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 flex items-center justify-center">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {types.map(type => (
+                <div
+                  key={type.id}
+                  className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-200 hover:shadow-xl"
+                >
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
                       <span className="text-2xl">{getTypeIcon(type.name)}</span>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      type.is_active ? 'bg-green-400/10 text-green-400 border border-green-400/20' : 'bg-gray-400/10 text-gray-400 border border-gray-400/20'
-                    }`}>
-                      {type.is_active ? t('compliance.active', 'Active') : t('compliance.inactive', 'Inactive')}
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        type.is_active
+                          ? 'border border-green-400/20 bg-green-400/10 text-green-400'
+                          : 'border border-gray-400/20 bg-gray-400/10 text-gray-400'
+                      }`}
+                    >
+                      {type.is_active
+                        ? t('compliance.active', 'Active')
+                        : t('compliance.inactive', 'Inactive')}
                     </span>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{type.name}</h3>
-                  <p className="text-gray-400 mb-4">{type.description || t('compliance.noDescription', 'No description provided')}</p>
+                  <h3 className="mb-2 text-xl font-semibold text-white">{type.name}</h3>
+                  <p className="mb-4 text-gray-400">
+                    {type.description || t('compliance.noDescription', 'No description provided')}
+                  </p>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">
-                      {type.renewal_frequency_days ? 
-                        `${t('compliance.everyDays', 'Every')} ${type.renewal_frequency_days} ${t('compliance.days', 'days')}` : 
-                        t('compliance.noFrequency', 'No renewal frequency set')
-                      }
+                      {type.renewal_frequency_days
+                        ? `${t('compliance.everyDays', 'Every')} ${type.renewal_frequency_days} ${t('compliance.days', 'days')}`
+                        : t('compliance.noFrequency', 'No renewal frequency set')}
                     </span>
-                    <button className="text-[#29E7CD] hover:text-[#29E7CD]/80 transition-colors">
+                    <button className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
                       {t('compliance.edit', 'Edit')}
                     </button>
                   </div>

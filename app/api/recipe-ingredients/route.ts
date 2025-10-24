@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
 
     const { data: recipeIngredients, error } = await supabaseAdmin
       .from('recipe_ingredients')
-      .select(`
+      .select(
+        `
         *,
         ingredients (
           id,
@@ -26,7 +27,8 @@ export async function GET(request: NextRequest) {
           trim_peel_waste_percentage,
           yield_percentage
         )
-      `)
+      `,
+      )
       .eq('recipe_id', recipeId);
 
     if (error) {
@@ -34,12 +36,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       recipeIngredients: recipeIngredients || [],
-      count: recipeIngredients?.length || 0
+      count: recipeIngredients?.length || 0,
     });
-
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -19,21 +19,18 @@ export default function PerformancePageContent() {
     setupRealtimeSubscription,
     handleImport,
     handleExportCSV,
-    realtimeSubscription
+    realtimeSubscription,
   } = usePerformanceData();
 
-  const {
-    filters,
-    updateFilters,
-    paginatedItems,
-    totalPages
-  } = usePerformanceFilters(state.performanceItems);
+  const { filters, updateFilters, paginatedItems, totalPages } = usePerformanceFilters(
+    state.performanceItems,
+  );
 
   // Handle realtime toggle
   const handleToggleRealtime = () => {
     const newRealtimeEnabled = !state.realtimeEnabled;
     updateState({ realtimeEnabled: newRealtimeEnabled });
-    
+
     if (newRealtimeEnabled) {
       setupRealtimeSubscription();
     } else {
@@ -68,8 +65,8 @@ export default function PerformancePageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0a] p-6 text-white">
+      <div className="mx-auto max-w-7xl">
         <PerformanceHeader
           performanceScore={state.performanceScore}
           realtimeEnabled={state.realtimeEnabled}
@@ -79,10 +76,7 @@ export default function PerformancePageContent() {
 
         <PerformanceMetadata metadata={state.metadata} />
 
-        <PerformanceFilters
-          filters={filters}
-          onFiltersChange={updateFilters}
-        />
+        <PerformanceFilters filters={filters} onFiltersChange={updateFilters} />
 
         <PerformanceActions
           showImportModal={state.showImportModal}
@@ -94,9 +88,7 @@ export default function PerformancePageContent() {
           onToggleRealtime={handleToggleRealtime}
         />
 
-        {state.showCharts && (
-          <PerformanceCharts performanceItems={state.performanceItems} />
-        )}
+        {state.showCharts && <PerformanceCharts performanceItems={state.performanceItems} />}
 
         <PerformanceTable performanceItems={paginatedItems} />
 

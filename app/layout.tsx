@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
 import { Analytics } from '@vercel/analytics/react';
 import { Suspense, lazy } from 'react';
@@ -19,34 +19,35 @@ import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights",
-  description: "Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support. Start your profit journey now.",
+  title: 'PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights',
+  description:
+    'Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support. Start your profit journey now.',
   keywords: [
-    "restaurant COGS",
-    "menu profitability", 
-    "contributing margin",
-    "gross profit optimization",
-    "global hospitality",
-    "international restaurants",
-    "multi-currency support",
-    "restaurant management",
-    "menu costing",
-    "profit analysis",
-    "worldwide restaurant software"
+    'restaurant COGS',
+    'menu profitability',
+    'contributing margin',
+    'gross profit optimization',
+    'global hospitality',
+    'international restaurants',
+    'multi-currency support',
+    'restaurant management',
+    'menu costing',
+    'profit analysis',
+    'worldwide restaurant software',
   ],
-  authors: [{ name: "PrepFlow Team" }],
-  creator: "PrepFlow",
-  publisher: "PrepFlow",
+  authors: [{ name: 'PrepFlow Team' }],
+  creator: 'PrepFlow',
+  publisher: 'PrepFlow',
   formatDetection: {
     email: false,
     address: false,
@@ -57,8 +58,9 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights",
-    description: "Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
+    title: 'PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights',
+    description:
+      'Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.',
     url: 'https://www.prepflow.org',
     siteName: 'PrepFlow',
     images: [
@@ -74,8 +76,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights",
-    description: "Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.",
+    title: 'PrepFlow – COGS & Menu Profit Tool | Get Menu Clarity & Profit Insights',
+    description:
+      'Your menu profitability tool built from 20 years of real kitchen experience. PrepFlow helps identify profit opportunities with contributing margin analysis, COGS tracking, and profit insights. Built for global hospitality with multi-currency support.',
     images: ['/images/dashboard-screenshot.png'],
   },
   robots: {
@@ -103,7 +106,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
+        />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#29E7CD" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -113,9 +119,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
       </head>
-      <body
-        className="geist-sans-variable geist-mono-variable antialiased"
-      >
+      <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>
           <PerformanceOptimizer>
             <ClientPerformanceTracker />
@@ -123,13 +127,13 @@ export default function RootLayout({
             {children}
             <PerformanceDashboard />
           </PerformanceOptimizer>
-          
+
           <Analytics />
-          
+
           {/* Temporarily use direct imports */}
           <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
           <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
-          
+
           {/* Analytics and tracking - lazy loaded after initial render */}
           {/* <Suspense fallback={null}>
             <LazyAnalytics />
@@ -139,7 +143,7 @@ export default function RootLayout({
             <LazyTracking />
           </Suspense> */}
         </ErrorBoundary>
-        
+
         {/* Advanced Performance Optimizations - DISABLED TO PREVENT CONSOLE ERRORS */}
         {/* <script
           dangerouslySetInnerHTML={{
@@ -199,7 +203,7 @@ export default function RootLayout({
             `,
           }}
         /> */}
-        
+
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{

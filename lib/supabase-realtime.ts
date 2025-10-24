@@ -6,36 +6,34 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabaseRealtime = {
   channel: () => ({
     on: () => ({
-      subscribe: () => ({})
-    })
+      subscribe: () => ({}),
+    }),
   }),
-  removeChannel: () => {}
+  removeChannel: () => {},
 };
 
 export interface RealtimeSubscription {
   unsubscribe: () => void;
 }
 
-export function subscribeToSalesData(
-  callback: (payload: any) => void
-): RealtimeSubscription {
+export function subscribeToSalesData(callback: (payload: any) => void): RealtimeSubscription {
   // Mock implementation
   console.log('Mock: Subscribing to sales data changes');
   return {
     unsubscribe: () => {
       console.log('Mock: Unsubscribing from sales data changes');
-    }
+    },
   };
 }
 
 export function subscribeToPerformanceMetrics(
-  callback: (payload: any) => void
+  callback: (payload: any) => void,
 ): RealtimeSubscription {
   // Mock implementation
   console.log('Mock: Subscribing to performance metrics');
   return {
     unsubscribe: () => {
       console.log('Mock: Unsubscribing from performance metrics');
-    }
+    },
   };
 }

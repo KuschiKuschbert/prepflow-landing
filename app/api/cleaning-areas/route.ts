@@ -4,9 +4,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
@@ -16,23 +19,28 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Error fetching cleaning areas:', error);
-      return NextResponse.json({ 
-        error: 'Failed to fetch cleaning areas',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to fetch cleaning areas',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
-
   } catch (error) {
     console.error('Cleaning areas fetch error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to fetch cleaning areas',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to fetch cleaning areas',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -42,16 +50,22 @@ export async function POST(request: NextRequest) {
     const { area_name, description, cleaning_frequency } = body;
 
     if (!area_name) {
-      return NextResponse.json({ 
-        error: 'Area name is required',
-        message: 'Please provide a name for the cleaning area'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Area name is required',
+          message: 'Please provide a name for the cleaning area',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
@@ -59,31 +73,36 @@ export async function POST(request: NextRequest) {
       .insert({
         area_name,
         description: description || null,
-        cleaning_frequency: cleaning_frequency || 'daily'
+        cleaning_frequency: cleaning_frequency || 'daily',
       })
       .select()
       .single();
 
     if (error) {
       console.error('Error creating cleaning area:', error);
-      return NextResponse.json({ 
-        error: 'Failed to create cleaning area',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to create cleaning area',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       message: 'Cleaning area created successfully',
-      data
+      data,
     });
-
   } catch (error) {
     console.error('Cleaning area creation error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to create cleaning area',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to create cleaning area',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -93,10 +112,13 @@ export async function PUT(request: NextRequest) {
     const { id, area_name, description, cleaning_frequency, is_active } = body;
 
     if (!id) {
-      return NextResponse.json({ 
-        error: 'ID is required',
-        message: 'Please provide an ID for the cleaning area to update'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'ID is required',
+          message: 'Please provide an ID for the cleaning area to update',
+        },
+        { status: 400 },
+      );
     }
 
     const updateData: any = {};
@@ -106,9 +128,12 @@ export async function PUT(request: NextRequest) {
     if (is_active !== undefined) updateData.is_active = is_active;
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin
@@ -120,24 +145,29 @@ export async function PUT(request: NextRequest) {
 
     if (error) {
       console.error('Error updating cleaning area:', error);
-      return NextResponse.json({ 
-        error: 'Failed to update cleaning area',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to update cleaning area',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       message: 'Cleaning area updated successfully',
-      data
+      data,
     });
-
   } catch (error) {
     console.error('Cleaning area update error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to update cleaning area',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to update cleaning area',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -147,41 +177,49 @@ export async function DELETE(request: NextRequest) {
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ 
-        error: 'ID is required',
-        message: 'Please provide an ID for the cleaning area to delete'
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'ID is required',
+          message: 'Please provide an ID for the cleaning area to delete',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ 
-        error: 'Database connection not available' 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection not available',
+        },
+        { status: 500 },
+      );
     }
 
-    const { error } = await supabaseAdmin
-      .from('cleaning_areas')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabaseAdmin.from('cleaning_areas').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting cleaning area:', error);
-      return NextResponse.json({ 
-        error: 'Failed to delete cleaning area',
-        message: error.message
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to delete cleaning area',
+          message: error.message,
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Cleaning area deleted successfully'
+      message: 'Cleaning area deleted successfully',
     });
-
   } catch (error) {
     console.error('Cleaning area deletion error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to delete cleaning area',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to delete cleaning area',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

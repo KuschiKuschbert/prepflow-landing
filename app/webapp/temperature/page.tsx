@@ -11,22 +11,20 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import TemperatureLogsTab from './components/TemperatureLogsTab';
 import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
 
-
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
-
 
 function TemperatureLogsPageContent() {
   const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
-  
+
   // Helper function to format time strings
   const formatTime = (timeString: string) => {
     if (!timeString) return '';
     const [hours, minutes] = timeString.split(':');
     return `${hours}:${minutes}`;
   };
-  
+
   // Helper function to format date strings
   const formatDateString = (dateString: string) => {
     if (!dateString) return '';
@@ -40,7 +38,7 @@ function TemperatureLogsPageContent() {
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton showing
   const [isInitialLoad, setIsInitialLoad] = useState(false); // Start with false to prevent skeleton flash
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
-  const [quickTempLoading, setQuickTempLoading] = useState<{[key: string]: boolean}>({});
+  const [quickTempLoading, setQuickTempLoading] = useState<{ [key: string]: boolean }>({});
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [newLog, setNewLog] = useState({
@@ -50,7 +48,7 @@ function TemperatureLogsPageContent() {
     temperature_celsius: '',
     location: '',
     notes: '',
-    logged_by: ''
+    logged_by: '',
   });
   const [showAddLog, setShowAddLog] = useState(false);
 
@@ -63,7 +61,7 @@ function TemperatureLogsPageContent() {
     { value: 'food_cooking', label: 'Food Cooking', icon: '🔥' },
     { value: 'food_hot_holding', label: 'Food Hot Holding', icon: '🍲' },
     { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '🥗' },
-    { value: 'storage', label: 'Storage', icon: '📦' }
+    { value: 'storage', label: 'Storage', icon: '📦' },
   ];
 
   const fetchLogs = async () => {
@@ -115,7 +113,6 @@ function TemperatureLogsPageContent() {
     }
   };
 
-
   const fetchEquipment = async () => {
     try {
       const response = await fetch('/api/temperature-equipment');
@@ -137,7 +134,7 @@ function TemperatureLogsPageContent() {
     setNewLog(prev => ({
       ...prev,
       log_date: now.toISOString().split('T')[0],
-      log_time: now.toTimeString().split(' ')[0].substring(0, 5)
+      log_time: now.toTimeString().split(' ')[0].substring(0, 5),
     }));
   }, []);
 
@@ -157,14 +154,10 @@ function TemperatureLogsPageContent() {
     const loadData = async () => {
       try {
         setLoading(true);
-        
+
         // Load all data in parallel for better performance
-        await Promise.all([
-          fetchLogs(),
-          fetchEquipment(),
-          fetchAllLogs()
-        ]);
-        
+        await Promise.all([fetchLogs(), fetchEquipment(), fetchAllLogs()]);
+
         // No artificial delay needed
       } catch (error) {
         console.error('Error loading temperature data:', error);
@@ -192,7 +185,7 @@ function TemperatureLogsPageContent() {
         },
         body: JSON.stringify({
           ...newLog,
-          temperature_celsius: parseFloat(newLog.temperature_celsius)
+          temperature_celsius: parseFloat(newLog.temperature_celsius),
         }),
       });
 
@@ -205,7 +198,7 @@ function TemperatureLogsPageContent() {
           temperature_celsius: '',
           location: '',
           notes: '',
-          logged_by: ''
+          logged_by: '',
         });
         setShowAddLog(false);
         fetchLogs();
@@ -232,7 +225,11 @@ function TemperatureLogsPageContent() {
     }
   };
 
-  const handleQuickTempLog = async (equipmentId: string, equipmentName: string, equipmentType: string) => {
+  const handleQuickTempLog = async (
+    equipmentId: string,
+    equipmentName: string,
+    equipmentType: string,
+  ) => {
     setQuickTempLoading(prev => ({ ...prev, [equipmentId]: true }));
     try {
       const response = await fetch('/api/temperature-logs', {
@@ -247,7 +244,7 @@ function TemperatureLogsPageContent() {
           temperature_celsius: 0, // Will be updated by user
           location: equipmentName,
           notes: 'Quick log',
-          logged_by: 'System'
+          logged_by: 'System',
         }),
       });
 
@@ -264,7 +261,10 @@ function TemperatureLogsPageContent() {
     }
   };
 
-  const handleUpdateEquipment = async (equipmentId: string, updates: Partial<TemperatureEquipment>) => {
+  const handleUpdateEquipment = async (
+    equipmentId: string,
+    updates: Partial<TemperatureEquipment>,
+  ) => {
     try {
       const response = await fetch(`/api/temperature-equipment/${equipmentId}`, {
         method: 'PUT',
@@ -283,7 +283,13 @@ function TemperatureLogsPageContent() {
     }
   };
 
-  const handleCreateEquipment = async (name: string, equipmentType: string, location: string | null, minTemp: number | null, maxTemp: number | null) => {
+  const handleCreateEquipment = async (
+    name: string,
+    equipmentType: string,
+    location: string | null,
+    minTemp: number | null,
+    maxTemp: number | null,
+  ) => {
     try {
       const response = await fetch('/api/temperature-equipment', {
         method: 'POST',
@@ -296,7 +302,7 @@ function TemperatureLogsPageContent() {
           location,
           min_temp_celsius: minTemp,
           max_temp_celsius: maxTemp,
-          is_active: true
+          is_active: true,
         }),
       });
 
@@ -324,7 +330,6 @@ function TemperatureLogsPageContent() {
     }
   };
 
-
   const getTypeIcon = (type: string) => {
     const typeInfo = temperatureTypes.find(t => t.value === type);
     return typeInfo?.icon || '🌡️';
@@ -341,7 +346,12 @@ function TemperatureLogsPageContent() {
     }
 
     if (temp < 5 || temp > 60) {
-      return { status: 'safe', message: 'Outside danger zone', color: 'text-green-400', icon: '✅' };
+      return {
+        status: 'safe',
+        message: 'Outside danger zone',
+        color: 'text-green-400',
+        icon: '✅',
+      };
     }
 
     const logDateTime = new Date(`${logDate}T${logTime}`);
@@ -349,25 +359,25 @@ function TemperatureLogsPageContent() {
     const hoursInDangerZone = (now.getTime() - logDateTime.getTime()) / (1000 * 60 * 60);
 
     if (hoursInDangerZone < 2) {
-      return { 
-        status: 'safe', 
-        message: `${(2 - hoursInDangerZone).toFixed(1)}h remaining - can refrigerate`, 
+      return {
+        status: 'safe',
+        message: `${(2 - hoursInDangerZone).toFixed(1)}h remaining - can refrigerate`,
         color: 'text-green-400',
-        icon: '✅'
+        icon: '✅',
       };
     } else if (hoursInDangerZone < 4) {
-      return { 
-        status: 'warning', 
-        message: `${(4 - hoursInDangerZone).toFixed(1)}h remaining - use immediately`, 
+      return {
+        status: 'warning',
+        message: `${(4 - hoursInDangerZone).toFixed(1)}h remaining - use immediately`,
         color: 'text-yellow-400',
-        icon: '⚠️'
+        icon: '⚠️',
       };
     } else {
-      return { 
-        status: 'danger', 
-        message: `${hoursInDangerZone.toFixed(1)}h in danger zone - DISCARD`, 
+      return {
+        status: 'danger',
+        message: `${hoursInDangerZone.toFixed(1)}h in danger zone - DISCARD`,
         color: 'text-red-400',
-        icon: '🚨'
+        icon: '🚨',
       };
     }
   };
@@ -376,7 +386,7 @@ function TemperatureLogsPageContent() {
   if (equipment.length === 0) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto max-w-7xl">
           {/* Empty state - no skeleton, just dark background */}
         </div>
       </div>
@@ -385,22 +395,26 @@ function TemperatureLogsPageContent() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
-
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="mb-2 text-4xl font-bold text-white">
             🌡️ {t('temperature.title', 'Temperature Logs')}
           </h1>
-          <p className="text-gray-400">{t('temperature.subtitle', 'Track fridge, freezer, and food temperatures for food safety compliance')}</p>
+          <p className="text-gray-400">
+            {t(
+              'temperature.subtitle',
+              'Track fridge, freezer, and food temperatures for food safety compliance',
+            )}
+          </p>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <div className="flex space-x-1 bg-[#1f1f1f] p-1 rounded-2xl border border-[#2a2a2a]">
+          <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
             <button
               onClick={() => setActiveTab('logs')}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
+              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
                 activeTab === 'logs'
                   ? 'bg-[#29E7CD] text-black shadow-lg'
                   : 'text-gray-400 hover:text-white'
@@ -412,7 +426,7 @@ function TemperatureLogsPageContent() {
             </button>
             <button
               onClick={() => setActiveTab('equipment')}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
+              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
                 activeTab === 'equipment'
                   ? 'bg-[#29E7CD] text-black shadow-lg'
                   : 'text-gray-400 hover:text-white'
@@ -424,7 +438,7 @@ function TemperatureLogsPageContent() {
             </button>
             <button
               onClick={() => setActiveTab('analytics')}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
+              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
                 activeTab === 'analytics'
                   ? 'bg-[#29E7CD] text-black shadow-lg'
                   : 'text-gray-400 hover:text-white'
@@ -466,14 +480,9 @@ function TemperatureLogsPageContent() {
           />
         )}
 
-
         {activeTab === 'analytics' && (
-          <TemperatureAnalyticsTab
-            allLogs={allLogs}
-            equipment={equipment}
-          />
+          <TemperatureAnalyticsTab allLogs={allLogs} equipment={equipment} />
         )}
-
       </div>
     </div>
   );
