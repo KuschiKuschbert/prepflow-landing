@@ -182,8 +182,13 @@ async function cacheFirst(request, cacheName) {
 
   const networkResponse = await fetch(request);
   if (networkResponse.ok) {
-    const cache = await caches.open(cacheName);
-    cache.put(request, networkResponse.clone());
+    try {
+      const cache = await caches.open(cacheName);
+      await cache.put(request, networkResponse.clone());
+    } catch (error) {
+      console.warn('Service Worker: Cache put failed:', error);
+      // Continue without caching if cache fails
+    }
   }
 
   return networkResponse;

@@ -210,17 +210,18 @@ export default function RootLayout({
             __html: `
               // FOUC prevention handled by CSS and component-level loading states
               
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                      console.log('✅ PrepFlow SW: Registration successful');
-                    })
-                    .catch(function(error) {
-                      console.log('❌ PrepFlow SW: Registration failed');
-                    });
-                });
-              }
+              // Service Worker disabled for development to avoid cache issues
+              // if ('serviceWorker' in navigator) {
+              //   window.addEventListener('load', function() {
+              //     navigator.serviceWorker.register('/sw.js')
+              //       .then(function(registration) {
+              //         console.log('✅ PrepFlow SW: Registration successful');
+              //       })
+              //       .catch(function(error) {
+              //         console.log('❌ PrepFlow SW: Registration failed');
+              //       });
+              //   });
+              // }
             `,
           }}
         />
