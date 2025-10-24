@@ -76,9 +76,11 @@ function applyPerformanceOptimizations() {
 }
 
 function preloadCriticalResources() {
+  // Font preloading handled by Next.js built-in font optimization
+  // Removed local font preloading that was causing 404 errors
+
   const criticalResources = [
-    { href: '/fonts/geist-sans.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
-    { href: '/fonts/geist-mono.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' },
+    // Add other critical resources here if needed
   ];
 
   criticalResources.forEach(resource => {
