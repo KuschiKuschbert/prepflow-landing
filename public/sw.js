@@ -1,6 +1,10 @@
 // PrepFlow Service Worker - Advanced Caching Strategy
 // Version 2.0 - Performance Optimized
 
+// Development mode detection
+const isDevelopment =
+  self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1';
+
 const CACHE_NAME = 'prepflow-v2.0';
 const STATIC_CACHE = 'prepflow-static-v2.0';
 const DYNAMIC_CACHE = 'prepflow-dynamic-v2.0';
@@ -36,6 +40,12 @@ const CACHE_STRATEGIES = {
 // Install event - Cache static assets
 self.addEventListener('install', event => {
   console.log('🔧 PrepFlow SW: Installing service worker v2.0');
+
+  if (isDevelopment) {
+    console.log('🚧 Development mode: Skipping cache installation');
+    self.skipWaiting();
+    return;
+  }
 
   event.waitUntil(
     Promise.all([
@@ -124,6 +134,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // In development mode, skip caching for better debugging
+  if (isDevelopment) {
+    console.log('🚧 Development mode: Bypassing cache for', url.pathname);
+    return;
+  }
+
   event.respondWith(handleRequest(request));
 });
 
@@ -199,8 +215,13 @@ async function networkFirst(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
+      try {
+        const cache = await caches.open(cacheName);
+        await cache.put(request, networkResponse.clone());
+      } catch (error) {
+        console.warn('Service Worker: Cache put failed in networkFirst:', error);
+        // Continue without caching if cache fails
+      }
     }
     return networkResponse;
   } catch (error) {
@@ -219,7 +240,12 @@ async function staleWhileRevalidate(request, cacheName) {
 
   const fetchPromise = fetch(request).then(networkResponse => {
     if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
+      try {
+        cache.put(request, networkResponse.clone());
+      } catch (error) {
+        console.warn('Service Worker: Cache put failed in staleWhileRevalidate:', error);
+        // Continue without caching if cache fails
+      }
     }
     return networkResponse;
   });
