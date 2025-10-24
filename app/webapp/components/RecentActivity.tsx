@@ -43,7 +43,7 @@ export default function RecentActivity() {
       // Fetch recent recipes
       const { data: recipes, error: recipesError } = await supabase
         .from('recipes')
-        .select('id, recipe_name, created_at, updated_at')
+        .select('id, name, created_at, updated_at')
         .order('updated_at', { ascending: false })
         .limit(3);
 
@@ -52,7 +52,7 @@ export default function RecentActivity() {
           activities.push({
             id: recipe.id,
             type: 'recipe',
-            name: recipe.recipe_name,
+            name: recipe.name,
             action: recipe.created_at === recipe.updated_at ? 'created' : 'updated',
             created_at: recipe.updated_at,
           });
@@ -62,7 +62,7 @@ export default function RecentActivity() {
       // Fetch recent menu dishes
       const { data: menuDishes, error: menuDishesError } = await supabase
         .from('menu_dishes')
-        .select('id, dish_name, created_at, updated_at')
+        .select('id, name, created_at, updated_at')
         .order('updated_at', { ascending: false })
         .limit(3);
 
@@ -71,7 +71,7 @@ export default function RecentActivity() {
           activities.push({
             id: dish.id,
             type: 'menu_dish',
-            name: dish.dish_name,
+            name: dish.name,
             action: dish.created_at === dish.updated_at ? 'created' : 'updated',
             created_at: dish.updated_at,
           });
