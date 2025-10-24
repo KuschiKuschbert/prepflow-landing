@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 // Animation variants for different components
 export const animationVariants = {
@@ -71,31 +71,31 @@ export const animationVariants = {
 // Custom hook for intersection observer animations
 export function useIntersectionAnimation(threshold = 0.1) {
   const [isVisible, setIsVisible] = useState(false);
-  const [ref, setRef] = useState<HTMLElement | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref) return;
+    if (!ref.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(ref);
+          observer.unobserve(ref.current!);
         }
       },
       { threshold },
     );
 
-    observer.observe(ref);
+    observer.observe(ref.current);
 
     return () => {
-      if (ref) {
-        observer.unobserve(ref);
+      if (ref.current) {
+        observer.unobserve(ref.current);
       }
     };
-  }, [ref, threshold]);
+  }, [threshold]);
 
-  return [setRef, isVisible] as const;
+  return [ref, isVisible] as const;
 }
 
 // Smooth scroll utility
@@ -166,11 +166,11 @@ export function AnimatedDiv({
   duration?: number;
   [key: string]: any;
 }) {
-  const [isVisible, setRef] = useIntersectionAnimation();
+  const [ref, isVisible] = useIntersectionAnimation();
 
   return (
     <div
-      ref={setRef}
+      ref={ref}
       className={`transition-all duration-${duration} ease-out ${isVisible ? animationClasses[animation] : 'opacity-0'} ${className} `}
       style={{
         animationDelay: `${delay}ms`,
@@ -193,10 +193,10 @@ export function StaggeredContainer({
   className?: string;
   staggerDelay?: number;
 }) {
-  const [isVisible, setRef] = useIntersectionAnimation();
+  const [ref, isVisible] = useIntersectionAnimation();
 
   return (
-    <div ref={setRef} className={className}>
+    <div ref={ref} className={className}>
       {React.Children.map(children, (child, index) => (
         <div
           className={`transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} `}
