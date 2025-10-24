@@ -6,8 +6,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig: NextConfig = {
-  // Enable compression
-  compress: true,
+  // Disable compression in development to fix Turbopack issues
+  compress: process.env.NODE_ENV === 'production',
 
   // Performance optimizations
   poweredByHeader: false,
@@ -131,7 +131,7 @@ const nextConfig: NextConfig = {
 
   // Headers for performance and security
   async headers() {
-    return [
+    const headers = [
       {
         source: '/(.*)',
         headers: [
@@ -155,10 +155,6 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
-          {
-            key: 'Content-Encoding',
-            value: 'gzip, br',
-          },
         ],
       },
       {
@@ -167,10 +163,6 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'private, no-cache, no-store, max-age=0, must-revalidate',
-          },
-          {
-            key: 'Content-Encoding',
-            value: 'gzip, br',
           },
         ],
       },
@@ -219,6 +211,20 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+
+    // Add compression headers only in production
+    if (process.env.NODE_ENV === 'production') {
+      headers.forEach(headerGroup => {
+        if (headerGroup.source === '/(.*)' || headerGroup.source === '/api/(.*)') {
+          headerGroup.headers.push({
+            key: 'Content-Encoding',
+            value: 'gzip, br',
+          });
+        }
+      });
+    }
+
+    return headers;
   },
 };
 

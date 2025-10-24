@@ -1,5 +1,5 @@
 // PrepFlow Service Worker - Advanced Caching Strategy
-// Version 2.0 - Performance Optimized
+// Version 2.2 - Fixed Development Mode Bug
 
 // Development mode detection
 const isDevelopment =
@@ -8,10 +8,10 @@ const isDevelopment =
   self.location.port === '3000' ||
   self.location.port === '3001';
 
-const CACHE_NAME = 'prepflow-v2.1';
-const STATIC_CACHE = 'prepflow-static-v2.1';
-const DYNAMIC_CACHE = 'prepflow-dynamic-v2.1';
-const API_CACHE = 'prepflow-api-v2.1';
+const CACHE_NAME = 'prepflow-v2.2';
+const STATIC_CACHE = 'prepflow-static-v2.2';
+const DYNAMIC_CACHE = 'prepflow-dynamic-v2.2';
+const API_CACHE = 'prepflow-api-v2.2';
 
 // Cache strategies
 const CACHE_STRATEGIES = {
@@ -42,7 +42,7 @@ const CACHE_STRATEGIES = {
 
 // Install event - Cache static assets
 self.addEventListener('install', event => {
-  console.log('🔧 PrepFlow SW: Installing service worker v2.1');
+  console.log('🔧 PrepFlow SW: Installing service worker v2.2');
 
   if (isDevelopment) {
     console.log('🚧 Development mode: Skipping cache installation');
@@ -95,7 +95,7 @@ self.addEventListener('install', event => {
 
 // Activate event - Clean up old caches
 self.addEventListener('activate', event => {
-  console.log('🚀 PrepFlow SW: Activating service worker v2.1');
+  console.log('🚀 PrepFlow SW: Activating service worker v2.2');
 
   event.waitUntil(
     caches
@@ -138,8 +138,8 @@ self.addEventListener('fetch', event => {
   }
 
   // Skip Turbopack and Next.js development files
-  if (pathname.includes('/_next/') || pathname.includes('/turbopack-')) {
-    console.log('🚧 Development file detected, skipping cache:', pathname);
+  if (url.pathname.includes('/_next/') || url.pathname.includes('/turbopack-')) {
+    console.log('🚧 Development file detected, skipping cache:', url.pathname);
     return;
   }
 

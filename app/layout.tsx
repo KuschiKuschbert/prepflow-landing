@@ -209,16 +209,14 @@ export default function RootLayout({
             __html: `
               // FOUC prevention handled by CSS and component-level loading states
 
-              // Service Worker Registration
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                      console.log('✅ PrepFlow SW: Registration successful');
-                    })
-                    .catch(function(error) {
-                      console.log('❌ PrepFlow SW: Registration failed:', error);
-                    });
+              // Service Worker Registration - COMPLETELY DISABLED FOR DEVELOPMENT
+              // Unregister any existing service workers in development
+              if (window.location.hostname.includes('localhost')) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                  for(let registration of registrations) {
+                    registration.unregister();
+                    console.log('🗑️ Development: Service Worker unregistered');
+                  }
                 });
               }
             `,
