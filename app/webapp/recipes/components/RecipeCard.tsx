@@ -14,7 +14,7 @@ interface RecipeCardProps {
   capitalizeRecipeName: (name: string) => string;
 }
 
-export default function RecipeCard({ 
+const RecipeCard = React.memo(function RecipeCard({ 
   recipe, 
   recipePrices, 
   selectedRecipes, 
@@ -28,12 +28,16 @@ export default function RecipeCard({
     <div className="p-4 hover:bg-[#2a2a2a]/20 transition-colors">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center">
-          <input
-            type="checkbox"
-            checked={selectedRecipes.has(recipe.id)}
-            onChange={() => onSelectRecipe(recipe.id)}
-            className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2 mr-3"
-          />
+          <label className="sr-only">
+            <input
+              type="checkbox"
+              checked={selectedRecipes.has(recipe.id)}
+              onChange={() => onSelectRecipe(recipe.id)}
+              className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2 mr-3"
+              aria-label={`Select recipe ${capitalizeRecipeName(recipe.name)}`}
+            />
+            Select {capitalizeRecipeName(recipe.name)}
+          </label>
           <h3 
             className="text-sm font-medium text-white cursor-pointer" 
             onClick={() => onPreviewRecipe(recipe)}
@@ -92,4 +96,6 @@ export default function RecipeCard({
       </div>
     </div>
   );
-}
+});
+
+export default RecipeCard;

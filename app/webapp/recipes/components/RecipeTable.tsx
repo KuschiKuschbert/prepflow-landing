@@ -15,7 +15,7 @@ interface RecipeTableProps {
   capitalizeRecipeName: (name: string) => string;
 }
 
-export default function RecipeTable({ 
+const RecipeTable = React.memo(function RecipeTable({ 
   recipes, 
   recipePrices, 
   selectedRecipes, 
@@ -33,12 +33,16 @@ export default function RecipeTable({
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={selectedRecipes.size === recipes.length && recipes.length > 0}
-                  onChange={onSelectAll}
-                  className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
-                />
+                <label className="sr-only">
+                  <input
+                    type="checkbox"
+                    checked={selectedRecipes.size === recipes.length && recipes.length > 0}
+                    onChange={onSelectAll}
+                    className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                    aria-label="Select all recipes"
+                  />
+                  Select All
+                </label>
                 <span className="ml-2">Select</span>
               </div>
             </th>
@@ -63,12 +67,16 @@ export default function RecipeTable({
           {recipes.map((recipe) => (
             <tr key={recipe.id} className="hover:bg-[#2a2a2a]/20 transition-colors">
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white" onClick={(e) => e.stopPropagation()}>
-                <input
-                  type="checkbox"
-                  checked={selectedRecipes.has(recipe.id)}
-                  onChange={() => onSelectRecipe(recipe.id)}
-                  className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
-                />
+                <label className="sr-only">
+                  <input
+                    type="checkbox"
+                    checked={selectedRecipes.has(recipe.id)}
+                    onChange={() => onSelectRecipe(recipe.id)}
+                    className="w-4 h-4 text-[#29E7CD] bg-[#0a0a0a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                    aria-label={`Select recipe ${capitalizeRecipeName(recipe.name)}`}
+                  />
+                  Select {capitalizeRecipeName(recipe.name)}
+                </label>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white cursor-pointer" onClick={() => onPreviewRecipe(recipe)}>
                 {capitalizeRecipeName(recipe.name)}
@@ -119,4 +127,6 @@ export default function RecipeTable({
       </table>
     </div>
   );
-}
+});
+
+export default RecipeTable;

@@ -1,6 +1,6 @@
 'use client';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { LineChart } from '@/components/ui/LightweightChart';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import { format } from 'date-fns';
 
@@ -137,6 +137,13 @@ export default function SimpleTemperatureChart({ logs, equipment, timeFilter }: 
     );
   }
 
+  // Convert chart data to lightweight format
+  const lightweightData = chartData.map((item, index) => ({
+    x: index,
+    y: item.temperature,
+    label: `${formatTooltipLabel(item.timestamp)}: ${item.temperature.toFixed(1)}°C`
+  }));
+
   return (
     <div className="bg-[#1f1f1f] p-6 rounded-3xl shadow-lg border border-[#2a2a2a]">
       <div className="flex items-center justify-between mb-4">
@@ -155,92 +162,31 @@ export default function SimpleTemperatureChart({ logs, equipment, timeFilter }: 
         {chartData.length} readings
       </div>
 
+      {/* Temperature thresholds display */}
+      <div className="mb-4 flex flex-wrap gap-4 text-xs">
+        {equipment.min_temp_celsius !== null && (
+          <div className="flex items-center space-x-1">
+            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <span className="text-gray-400">Min: {equipment.min_temp_celsius}°C</span>
+          </div>
+        )}
+        {equipment.max_temp_celsius !== null && (
+          <div className="flex items-center space-x-1">
+            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <span className="text-gray-400">Max: {equipment.max_temp_celsius}°C</span>
+          </div>
+        )}
+      </div>
+
       <div className="h-64 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-            
-            <XAxis
-              dataKey="timestamp"
-              tickFormatter={formatXAxisLabel}
-              stroke="#6b7280"
-              fontSize={12}
-              tick={{ fill: '#9ca3af' }}
-              axisLine={{ stroke: '#374151' }}
-            />
-            
-            <YAxis
-              stroke="#6b7280"
-              fontSize={12}
-              tick={{ fill: '#9ca3af' }}
-              axisLine={{ stroke: '#374151' }}
-              label={{ value: '°C', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#9ca3af' } }}
-            />
-            
-            <Tooltip
-              labelFormatter={formatTooltipLabel}
-              formatter={(value: number) => [formatTooltipValue(value), 'Temperature']}
-              contentStyle={{
-                backgroundColor: '#1f1f1f',
-                border: '1px solid #2a2a2a',
-                borderRadius: '8px',
-                color: '#ffffff'
-              }}
-            />
-            
-            {/* Temperature threshold lines */}
-            {equipment.min_temp_celsius !== null && (
-              <ReferenceLine
-                y={equipment.min_temp_celsius}
-                stroke="#ef4444"
-                strokeDasharray="5 5"
-                label={{ value: `Min: ${equipment.min_temp_celsius}°C`, position: "top", style: { fill: '#ef4444' } }}
-              />
-            )}
-            
-            {equipment.max_temp_celsius !== null && (
-              <ReferenceLine
-                y={equipment.max_temp_celsius}
-                stroke="#ef4444"
-                strokeDasharray="5 5"
-                label={{ value: `Max: ${equipment.max_temp_celsius}°C`, position: "top", style: { fill: '#ef4444' } }}
-              />
-            )}
-            
-            {/* Date separators for non-24h views */}
-            {timeFilter !== '24h' && getDateMarkers().map((marker, index) => (
-              <ReferenceLine
-                key={`date-${equipment.id}-${marker.date}-${index}`}
-                x={marker.timestamp}
-                stroke="#29E7CD"
-                strokeDasharray="2 2"
-                strokeOpacity={0.6}
-                label={{ value: marker.date, position: "top", style: { fill: '#29E7CD', fontSize: '10px' } }}
-              />
-            ))}
-            
-            {/* 6-hour separators for 24h view */}
-            {timeFilter === '24h' && get24HourMarkers().map((marker, index) => (
-              <ReferenceLine
-                key={`hour-${equipment.id}-${marker.hour}-${index}`}
-                x={marker.timestamp}
-                stroke="#29E7CD"
-                strokeDasharray="2 2"
-                strokeOpacity={0.6}
-                label={{ value: marker.label, position: "top", style: { fill: '#29E7CD', fontSize: '10px' } }}
-              />
-            ))}
-            
-            <Line
-              type="monotone"
-              dataKey="temperature"
-              stroke="#29E7CD"
-              strokeWidth={2}
-              dot={{ fill: '#29E7CD', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: '#29E7CD', strokeWidth: 2, fill: '#ffffff' }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        <LineChart 
+          data={lightweightData} 
+          height={256}
+          width={400}
+          showGrid={true}
+          showValues={true}
+          className="w-full"
+        />
       </div>
     </div>
   );

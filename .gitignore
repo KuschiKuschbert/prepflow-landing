@@ -38,3 +38,4 @@ temp/.next/
 # Next.js build outputs
 .next/
 .next/**
+.next/cache/

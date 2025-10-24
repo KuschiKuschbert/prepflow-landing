@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { BarChart, PieChart } from '@/components/ui/LightweightChart';
 import { PerformanceItem } from '../types';
 
 interface PerformanceChartsProps {
@@ -24,19 +24,23 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
   const chartData = [
     {
       name: 'Chef\'s Kiss',
-      profit: performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length)
+      value: performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Chef\'s Kiss').length),
+      color: '#22c55e'
     },
     {
       name: 'Hidden Gem',
-      profit: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length)
+      value: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length),
+      color: '#3b82f6'
     },
     {
       name: 'Bargain Bucket',
-      profit: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length)
+      value: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length),
+      color: '#f97316'
     },
     {
       name: 'Burnt Toast',
-      profit: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length)
+      value: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').reduce((acc, item) => acc + item.gross_profit_percentage, 0) / Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length),
+      color: '#ef4444'
     }
   ];
 
@@ -50,98 +54,25 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       {/* Bar Chart - Profit by Category */}
-      <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-4 md:p-6">
+      <div>
         <h3 className="text-lg md:text-xl font-semibold text-white mb-4">Profit by Category</h3>
-        <div className="h-64 md:h-80 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData}
-              margin={{ 
-                top: 20, 
-                right: isMobile ? 10 : 30, 
-                left: isMobile ? 10 : 20, 
-                bottom: 5 
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-              <XAxis 
-                dataKey="name" 
-                stroke="#9ca3af"
-                fontSize={isMobile ? 10 : 12}
-                tick={{ fill: '#9ca3af' }}
-                angle={isMobile ? -45 : 0}
-                textAnchor={isMobile ? 'end' : 'middle'}
-                height={isMobile ? 60 : 30}
-              />
-              <YAxis 
-                stroke="#9ca3af"
-                fontSize={isMobile ? 10 : 12}
-                tick={{ fill: '#9ca3af' }}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'rgba(31, 31, 31, 0.95)',
-                  border: '1px solid #29E7CD',
-                  borderRadius: '8px',
-                  color: '#ffffff',
-                  fontSize: isMobile ? '12px' : '14px'
-                }}
-                labelStyle={{ color: '#ffffff' }}
-                formatter={(value: any) => [`${value.toFixed(1)}%`, 'Average Profit']}
-              />
-              <Bar 
-                dataKey="profit" 
-                fill="#29E7CD"
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <BarChart 
+          data={chartData} 
+          height={isMobile ? 250 : 300}
+          showValues={true}
+          className="w-full"
+        />
       </div>
 
       {/* Pie Chart - Category Distribution */}
-      <div className="bg-[#1f1f1f] rounded-2xl border border-[#2a2a2a] p-4 md:p-6">
+      <div>
         <h3 className="text-lg md:text-xl font-semibold text-white mb-4">Category Distribution</h3>
-        <div className="h-64 md:h-80 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => isMobile ? `${name}` : `${name}: ${value}`}
-                outerRadius={isMobile ? 60 : 80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'rgba(31, 31, 31, 0.95)',
-                  border: '1px solid #29E7CD',
-                  borderRadius: '8px',
-                  color: '#ffffff',
-                  fontSize: isMobile ? '12px' : '14px'
-                }}
-                labelStyle={{ color: '#ffffff' }}
-                formatter={(value: any, name: any) => [`${value} items`, name]}
-              />
-              <Legend 
-                wrapperStyle={{ 
-                  color: '#ffffff',
-                  fontSize: isMobile ? '10px' : '12px'
-                }}
-                verticalAlign="bottom"
-                height={isMobile ? 30 : 36}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <PieChart 
+          data={pieData} 
+          size={isMobile ? 180 : 220}
+          showLabels={true}
+          className="w-full"
+        />
       </div>
     </div>
   );

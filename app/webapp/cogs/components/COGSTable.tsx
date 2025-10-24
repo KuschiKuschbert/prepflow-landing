@@ -17,7 +17,7 @@ interface COGSTableProps {
   dishPortions: number;
 }
 
-export const COGSTable: React.FC<COGSTableProps> = ({
+export const COGSTable: React.FC<COGSTableProps> = React.memo(({
   calculations,
   editingIngredient,
   editQuantity,
@@ -223,4 +223,4 @@ export const COGSTable: React.FC<COGSTableProps> = ({
       </div>
     </div>
   );
-};
+});

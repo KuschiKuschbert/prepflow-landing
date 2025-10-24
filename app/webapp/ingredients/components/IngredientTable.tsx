@@ -115,8 +115,10 @@ export default function IngredientTable({
                 checked={selectedIngredients.size === ingredients.length && ingredients.length > 0}
                 onChange={(e) => onSelectAll(e.target.checked)}
                 className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                aria-label="Select all ingredients"
+                aria-describedby="select-all-description"
               />
-              Select All
+              <span id="select-all-description">Select All</span>
             </label>
           </div>
         </div>
@@ -127,12 +129,16 @@ export default function IngredientTable({
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                <input
-                  type="checkbox"
-                  checked={selectedIngredients.size === ingredients.length && ingredients.length > 0}
-                  onChange={(e) => onSelectAll(e.target.checked)}
-                  className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
-                />
+                <label className="sr-only">
+                  <input
+                    type="checkbox"
+                    checked={selectedIngredients.size === ingredients.length && ingredients.length > 0}
+                    onChange={(e) => onSelectAll(e.target.checked)}
+                    className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                    aria-label="Select all ingredients in table"
+                  />
+                  Select All
+                </label>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Name
@@ -175,12 +181,16 @@ export default function IngredientTable({
                   className="hover:bg-[#2a2a2a]/20 transition-colors duration-200"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      checked={selectedIngredients.has(ingredient.id)}
-                      onChange={(e) => onSelectIngredient(ingredient.id, e.target.checked)}
-                      className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
-                    />
+                    <label className="sr-only">
+                      <input
+                        type="checkbox"
+                        checked={selectedIngredients.has(ingredient.id)}
+                        onChange={(e) => onSelectIngredient(ingredient.id, e.target.checked)}
+                        className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                        aria-label={`Select ingredient ${ingredient.ingredient_name}`}
+                      />
+                      Select {ingredient.ingredient_name}
+                    </label>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-white">

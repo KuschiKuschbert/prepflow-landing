@@ -271,12 +271,16 @@ export default function CSVImportModal({
                       }`}
                     >
                       <div className="flex items-center space-x-3">
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={(e) => handleSelectIngredient(index.toString(), e.target.checked)}
-                          className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
-                        />
+                        <label className="sr-only">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={(e) => handleSelectIngredient(index.toString(), e.target.checked)}
+                            className="w-4 h-4 text-[#29E7CD] bg-[#2a2a2a] border-[#2a2a2a] rounded focus:ring-[#29E7CD] focus:ring-2"
+                            aria-label={`Select ingredient ${ingredient.ingredient_name || 'Unknown'}`}
+                          />
+                          Select ingredient {ingredient.ingredient_name || 'Unknown'}
+                        </label>
                         <div className="flex-1">
                           <div className="text-white font-medium">
                             {ingredient.ingredient_name}

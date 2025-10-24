@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
@@ -107,7 +107,7 @@ function RecipesPageContent() {
   };
 
   // Event handlers
-  const handleAddRecipe = async (e: React.FormEvent) => {
+  const handleAddRecipe = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const { error } = await supabase
@@ -129,9 +129,9 @@ function RecipesPageContent() {
     } catch (err) {
       setError('Failed to add recipe');
     }
-  };
+  }, [newRecipe, setError, fetchRecipes]);
 
-  const handlePreviewRecipe = async (recipe: Recipe) => {
+  const handlePreviewRecipe = useCallback(async (recipe: Recipe) => {
     try {
       console.log('🔍 DEBUG: Fetching ingredients for recipe:', recipe.name, recipe.id);
       const ingredients = await fetchRecipeIngredients(recipe.id);
@@ -147,7 +147,7 @@ function RecipesPageContent() {
       console.error('❌ Error in handlePreviewRecipe:', err);
       setError('Failed to load recipe preview');
     }
-  };
+  }, [fetchRecipeIngredients, setError, generateAIInstructions]);
 
   const handleEditFromPreview = () => {
     if (!selectedRecipe || !recipeIngredients.length) {
@@ -208,10 +208,10 @@ function RecipesPageContent() {
     }
   };
 
-  const handleDeleteRecipe = (recipe: Recipe) => {
+  const handleDeleteRecipe = useCallback((recipe: Recipe) => {
     setRecipeToDelete(recipe);
     setShowDeleteConfirm(true);
-  };
+  }, []);
 
   const confirmDeleteRecipe = async () => {
     if (!recipeToDelete) return;
@@ -261,7 +261,7 @@ function RecipesPageContent() {
   };
 
   // Multi-selection functions
-  const handleSelectRecipe = (recipeId: string) => {
+  const handleSelectRecipe = useCallback((recipeId: string) => {
     setSelectedRecipes(prev => {
       const newSet = new Set(prev);
       if (newSet.has(recipeId)) {
@@ -271,7 +271,7 @@ function RecipesPageContent() {
       }
       return newSet;
     });
-  };
+  }, []);
 
   const handleSelectAll = () => {
     if (selectedRecipes.size === recipes.length) {

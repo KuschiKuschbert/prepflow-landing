@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { TemperatureLog, TemperatureEquipment } from '../types';
-import CleanTemperatureChart from './CleanTemperatureChart';
+import SimpleTemperatureChart from './SimpleTemperatureChart';
 import { format } from 'date-fns';
 import './temperature-charts.css';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -322,7 +322,7 @@ export default function TemperatureAnalyticsTab({ allLogs, equipment }: Temperat
             if (!selectedEquipment) return null;
             
             return (
-              <CleanTemperatureChart
+              <SimpleTemperatureChart
                 key={selectedEquipment.id}
                 logs={getFilteredLogs(selectedEquipment)}
                 equipment={selectedEquipment}
