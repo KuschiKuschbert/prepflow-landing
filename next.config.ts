@@ -6,8 +6,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig: NextConfig = {
-  // Disable compression in development to fix Turbopack issues
-  compress: process.env.NODE_ENV === 'production',
+  // Let Vercel handle compression automatically
+  compress: false,
 
   // Performance optimizations
   poweredByHeader: false,
@@ -207,10 +207,11 @@ const nextConfig: NextConfig = {
     if (process.env.NODE_ENV === 'production') {
       headers.forEach(headerGroup => {
         if (headerGroup.source === '/(.*)' || headerGroup.source === '/api/(.*)') {
-          headerGroup.headers.push({
-            key: 'Content-Encoding',
-            value: 'gzip, br',
-          });
+          // Remove explicit compression headers - let Vercel handle compression automatically
+          // headerGroup.headers.push({
+          //   key: 'Content-Encoding',
+          //   value: 'gzip, br',
+          // });
         }
       });
     }
