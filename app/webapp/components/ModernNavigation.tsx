@@ -7,6 +7,11 @@ import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
 import OptimizedImage from '../../../components/OptimizedImage';
 
+// Utility function to ensure consistent class ordering
+const cn = (...classes: (string | undefined | null | false)[]): string => {
+  return classes.filter(Boolean).join(' ');
+};
+
 interface NavigationItem {
   href: string;
   label: string;
@@ -264,13 +269,13 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   return (
     <>
       {/* Compact Header */}
-      <header className={`border-b border-[#2a2a2a] bg-[#1f1f1f] ${className}`}>
+      <header className={cn('border-b', 'border-[#2a2a2a]', 'bg-[#1f1f1f]', className)}>
         <div className="flex items-center justify-between px-4 py-2">
           {/* Left: Logo + Menu Button */}
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="rounded-lg p-1.5 transition-colors hover:bg-[#2a2a2a]/50"
+              className={cn('rounded-lg', 'p-1.5', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
               aria-label="Toggle navigation"
             >
               <svg
@@ -301,8 +306,17 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           </div>
 
           {/* Center: Breadcrumb */}
-          <div className="hidden items-center space-x-2 text-sm text-gray-400 md:flex">
-            <Link href="/webapp" className="transition-colors hover:text-[#29E7CD]">
+          <div
+            className={cn(
+              'hidden',
+              'items-center',
+              'space-x-2',
+              'text-sm',
+              'text-gray-400',
+              'md:flex',
+            )}
+          >
+            <Link href="/webapp" className={cn('transition-colors', 'hover:text-[#29E7CD]')}>
               Dashboard
             </Link>
             {pathname !== '/webapp' && (
@@ -320,7 +334,20 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="hidden items-center space-x-2 rounded-lg bg-[#2a2a2a]/30 px-3 py-1.5 text-sm text-gray-400 transition-colors hover:bg-[#2a2a2a]/50 sm:flex"
+              className={cn(
+                'hidden',
+                'items-center',
+                'space-x-2',
+                'rounded-lg',
+                'bg-[#2a2a2a]/30',
+                'px-3',
+                'py-1.5',
+                'text-sm',
+                'text-gray-400',
+                'transition-colors',
+                'hover:bg-[#2a2a2a]/50',
+                'sm:flex',
+              )}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -331,14 +358,27 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                 />
               </svg>
               <span className="hidden lg:inline">Search...</span>
-              <kbd className="hidden rounded bg-[#2a2a2a] px-1 text-xs lg:inline">⌘K</kbd>
+              <kbd
+                className={cn('hidden', 'rounded', 'bg-[#2a2a2a]', 'px-1', 'text-xs', 'lg:inline')}
+              >
+                ⌘K
+              </kbd>
             </button>
 
             <LanguageSwitcher />
 
             <Link
               href="/"
-              className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition-colors hover:bg-[#2a2a2a]/30 hover:text-[#29E7CD]"
+              className={cn(
+                'rounded-lg',
+                'px-3',
+                'py-1.5',
+                'text-sm',
+                'text-gray-400',
+                'transition-colors',
+                'hover:bg-[#2a2a2a]/30',
+                'hover:text-[#29E7CD]',
+              )}
             >
               {t('nav.backToLanding', 'Landing')}
             </Link>
@@ -349,17 +389,38 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       {/* Sidebar Navigation */}
       <div
         ref={sidebarRef}
-        className={`fixed inset-y-0 left-0 z-50 w-80 transform border-r border-[#2a2a2a] bg-[#1f1f1f] transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={cn(
+          'fixed',
+          'inset-y-0',
+          'left-0',
+          'z-50',
+          'w-80',
+          'transform',
+          'border-r',
+          'border-[#2a2a2a]',
+          'bg-[#1f1f1f]',
+          'transition-transform',
+          'duration-300',
+          'ease-in-out',
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        )}
       >
         <div className="flex h-full flex-col">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between border-b border-[#2a2a2a] p-4">
+          <div
+            className={cn(
+              'flex',
+              'items-center',
+              'justify-between',
+              'border-b',
+              'border-[#2a2a2a]',
+              'p-4',
+            )}
+          >
             <h2 className="text-lg font-semibold text-white">Navigation</h2>
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="rounded-lg p-1 transition-colors hover:bg-[#2a2a2a]/50"
+              className={cn('rounded-lg', 'p-1', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
             >
               <svg
                 className="h-5 w-5 text-gray-400"
@@ -378,17 +439,32 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           </div>
 
           {/* Search */}
-          <div className="border-b border-[#2a2a2a] p-4">
+          <div className={cn('border-b', 'border-[#2a2a2a]', 'p-4')}>
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search navigation..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 px-3 py-2 pl-10 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                className={cn(
+                  'w-full',
+                  'rounded-lg',
+                  'border',
+                  'border-[#2a2a2a]',
+                  'bg-[#2a2a2a]/30',
+                  'px-3',
+                  'py-2',
+                  'pl-10',
+                  'text-white',
+                  'placeholder-gray-400',
+                  'focus:border-transparent',
+                  'focus:ring-2',
+                  'focus:ring-[#29E7CD]',
+                  'focus:outline-none',
+                )}
               />
               <svg
-                className="absolute top-2.5 left-3 h-4 w-4 text-gray-400"
+                className={cn('absolute', 'top-2.5', 'left-3', 'h-4', 'w-4', 'text-gray-400')}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -407,7 +483,16 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           <div className="flex-1 overflow-y-auto p-4">
             {Object.entries(groupedItems).map(([category, items]) => (
               <div key={category} className="mb-6">
-                <h3 className="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">
+                <h3
+                  className={cn(
+                    'mb-3',
+                    'text-xs',
+                    'font-semibold',
+                    'tracking-wider',
+                    'text-gray-400',
+                    'uppercase',
+                  )}
+                >
                   {category === 'core' && 'Core Features'}
                   {category === 'operations' && 'Operations'}
                   {category === 'inventory' && 'Inventory'}
@@ -421,23 +506,42 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsSidebarOpen(false)}
-                      className={`group flex items-center space-x-3 rounded-lg px-3 py-2 transition-all duration-200 ${
+                      className={cn(
+                        'group',
+                        'flex',
+                        'items-center',
+                        'space-x-3',
+                        'rounded-lg',
+                        'px-3',
+                        'py-2',
+                        'transition-all',
+                        'duration-200',
                         isActive(item.href)
                           ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10'
-                          : 'hover:bg-[#2a2a2a]/50'
-                      }`}
+                          : 'hover:bg-[#2a2a2a]/50',
+                      )}
                     >
                       <span
-                        className={`${isActive(item.href) ? item.color : 'group-hover: text-gray-400' + item.color.replace('text-', 'text-')}`}
+                        className={cn(
+                          isActive(item.href)
+                            ? item.color
+                            : cn(
+                                'text-gray-400',
+                                'group-hover:',
+                                item.color.replace('text-', 'text-'),
+                              ),
+                        )}
                       >
                         {item.icon}
                       </span>
                       <span
-                        className={`text-sm font-medium ${
+                        className={cn(
+                          'text-sm',
+                          'font-medium',
                           isActive(item.href)
                             ? 'text-white'
-                            : 'text-gray-300 group-hover:text-white'
-                        }`}
+                            : 'text-gray-300 group-hover:text-white',
+                        )}
                       >
                         {item.label}
                       </span>
@@ -449,8 +553,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           </div>
 
           {/* Sidebar Footer */}
-          <div className="border-t border-[#2a2a2a] p-4">
-            <div className="text-center text-xs text-gray-500">
+          <div className={cn('border-t', 'border-[#2a2a2a]', 'p-4')}>
+            <div className={cn('text-center', 'text-xs', 'text-gray-500')}>
               Press <kbd className="rounded bg-[#2a2a2a] px-1">⌘B</kbd> to toggle sidebar
             </div>
           </div>
@@ -460,7 +564,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       {/* Search Modal */}
       {isSearchOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+          className={cn('fixed', 'inset-0', 'z-50', 'bg-black/50', 'backdrop-blur-sm')}
           onClick={() => setIsSearchOpen(false)}
         >
           <div className="flex items-start justify-center pt-20" onClick={e => e.stopPropagation()}>
