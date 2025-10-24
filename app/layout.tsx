@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
-import { Analytics } from '@vercel/analytics/react';
-import { Suspense, lazy } from 'react';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { Analytics } from '@vercel/analytics/react';
 
 // Temporarily disable lazy loading to fix build
 // const LazyAnalytics = lazy(() => import('../components/LazyAnalytics'));
@@ -12,11 +11,11 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 // Keep performance components for now (they're lightweight)
 import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
-import WebVitalsTracker from '../components/WebVitalsTracker';
-import PerformanceOptimizer from '../components/PerformanceOptimizer';
-import PerformanceDashboard from '../components/PerformanceDashboard';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
+import PerformanceDashboard from '../components/PerformanceDashboard';
+import PerformanceOptimizer from '../components/PerformanceOptimizer';
+import WebVitalsTracker from '../components/WebVitalsTracker';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -138,7 +137,7 @@ export default function RootLayout({
           {/* <Suspense fallback={null}>
             <LazyAnalytics />
           </Suspense>
-          
+
           <Suspense fallback={null}>
             <LazyTracking />
           </Suspense> */}
@@ -156,10 +155,10 @@ export default function RootLayout({
                 style.id = 'critical-css';
                 style.textContent = criticalCSS;
                 document.head.insertBefore(style, document.head.firstChild);
-                
+
                 // Resource hints initialization
                 // Resource hints removed to prevent console errors
-                
+
                 // Preconnect to external domains
                 resourceHints.preconnect.forEach(domain => {
                   const link = document.createElement('link');
@@ -168,7 +167,7 @@ export default function RootLayout({
                   link.crossOrigin = 'anonymous';
                   document.head.appendChild(link);
                 });
-                
+
                 // DNS prefetch for external domains
                 resourceHints.dnsPrefetch.forEach(domain => {
                   const link = document.createElement('link');
@@ -176,7 +175,7 @@ export default function RootLayout({
                   link.href = domain;
                   document.head.appendChild(link);
                 });
-                
+
                 // Preload critical resources
                 resourceHints.critical.forEach(resource => {
                   const link = document.createElement('link');
@@ -187,7 +186,7 @@ export default function RootLayout({
                   if (resource.priority === 'high') link.setAttribute('fetchpriority', 'high');
                   document.head.appendChild(link);
                 });
-                
+
                 // Font optimization
                 const fontLink = document.createElement('link');
                 fontLink.rel = 'preload';
@@ -197,7 +196,7 @@ export default function RootLayout({
                   this.rel = 'stylesheet';
                 };
                 document.head.appendChild(fontLink);
-                
+
                 console.log('🚀 Advanced optimizations initialized');
               })();
             `,
@@ -209,7 +208,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               // FOUC prevention handled by CSS and component-level loading states
-              
+
               // Service Worker disabled for development to avoid cache issues
               // if ('serviceWorker' in navigator) {
               //   window.addEventListener('load', function() {
