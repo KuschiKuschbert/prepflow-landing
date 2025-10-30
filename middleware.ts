@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const callback = encodeURIComponent(pathname + (search || ''));
-    return NextResponse.redirect(`${origin}/api/auth/signin?callbackUrl=${callback}`);
+    return NextResponse.redirect(`${origin}/api/auth/signin/auth0?callbackUrl=${callback}`);
   }
   const email = (token as any)?.email as string | undefined;
   if (!isEmailAllowed(email)) {

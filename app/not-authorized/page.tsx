@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
   return (
@@ -11,12 +12,12 @@ export default function NotAuthorizedPage() {
         This kitchen is for staff only. If you are the chef, sign in with the right apron.
       </p>
       <div className="flex gap-3">
-        <Link
-          href="/api/auth/signin?callbackUrl=%2Fwebapp"
+        <button
+          onClick={() => signIn('auth0', { callbackUrl: '/webapp' })}
           className="rounded-2xl bg-[#29E7CD] px-5 py-3 font-semibold text-black hover:bg-[#29E7CD]/90"
         >
           Sign in
-        </Link>
+        </button>
         <Link
           href="/"
           className="rounded-2xl border border-[#2a2a2a] px-5 py-3 font-semibold hover:bg-[#2a2a2a]/40"
