@@ -51,6 +51,13 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             >
               {t('nav.howItWorks', "How it's different")}
             </a>
+            <a
+              href="#benefits"
+              className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+              aria-label="See what the features add up to"
+            >
+              Outcomes
+            </a>
             {/* Pricing link removed for explainer-focused landing */}
             <a
               href="#faq"
