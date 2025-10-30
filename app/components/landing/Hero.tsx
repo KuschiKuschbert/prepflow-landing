@@ -12,11 +12,11 @@ export default function Hero({ onTourClick }: HeroProps) {
     <section className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-16">
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-          Profit clarity, cooked to order
+          Let’s make the numbers simple
         </h1>
         <p className="mt-4 text-lg text-gray-300">
-          Price right, move fast, stay compliant — real kitchen tooling that speaks chef, not
-          spreadsheet.
+          A small set of tools to price dishes properly, move faster, and keep within the rules. No
+          pitch. Just useful.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <button
