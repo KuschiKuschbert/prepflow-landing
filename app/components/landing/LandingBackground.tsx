@@ -27,18 +27,7 @@ const LandingBackground = React.memo(function LandingBackground() {
         }}
       />
 
-      {/* Animated diagonal sweep */}
-      <div className="pointer-events-none fixed inset-0 -z-10" style={{ mixBlendMode: 'screen' }}>
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(120deg, transparent 0%, rgba(41,231,205,0.04) 20%, rgba(217,37,199,0.05) 50%, rgba(59,130,246,0.04) 80%, transparent 100%)',
-            animation: 'pfSweep 8s linear infinite',
-            backgroundSize: '200% 200%',
-          }}
-        />
-      </div>
+      {/* Diagonal sweep removed: static background only */}
 
       {/* Corner glows */}
       <div
@@ -72,14 +61,7 @@ const LandingBackground = React.memo(function LandingBackground() {
         }}
       />
 
-      {/* Keyframes */}
-      <style>{`
-        @keyframes pfSweep {
-          0% { transform: translate3d(-20%, -20%, 0); }
-          50% { transform: translate3d(20%, 20%, 0); }
-          100% { transform: translate3d(-20%, -20%, 0); }
-        }
-      `}</style>
+      {/* No keyframes (no animation) */}
     </>
   );
 });

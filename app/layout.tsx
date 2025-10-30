@@ -8,6 +8,7 @@ import { Analytics } from '@vercel/analytics/react';
 // cleaned: Removed performance trackers on request
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
+import LandingBackground from './components/landing/LandingBackground';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -112,6 +113,7 @@ export default function RootLayout({
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>
+          <LandingBackground />
           {children}
 
           <Analytics />
