@@ -21,7 +21,7 @@ export default function WebAppLayout({
   return (
     <CountryProvider>
       <GlobalWarningProvider>
-        <div className={`${inter.className} min-h-screen bg-[#0a0a0a] text-white`}>
+        <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
           {/* Modern Navigation */}
           <ModernNavigation />
 
@@ -29,7 +29,7 @@ export default function WebAppLayout({
           <GlobalWarning />
 
           {/* Main Content */}
-          <main className="bg-[#0a0a0a]">
+          <main className="bg-transparent">
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </main>
         </div>
