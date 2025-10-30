@@ -49,13 +49,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             >
               {t('nav.howItWorks', 'How it works')}
             </a>
-            <a
-              href="#pricing"
-              className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-              aria-label={String(t('nav.pricingAria', 'View PrepFlow pricing'))}
-            >
-              {t('nav.pricing', 'Pricing')}
-            </a>
+            {/* Pricing link removed for explainer-focused landing */}
             <a
               href="#faq"
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
@@ -69,13 +63,18 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher className="mr-4" />
             <a
-              href="https://7495573591101.gumroad.com/l/prepflow"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={BUTTON_STYLES.primary}
-              onClick={() => trackEngagement('header_cta_click')}
+              href="/webapp"
+              className={BUTTON_STYLES.secondary}
+              onClick={() => trackEngagement('header_sign_in_click')}
             >
-              {t('hero.ctaPrimary', 'Get PrepFlow Now')}
+              {t('nav.signIn', 'Sign in')}
+            </a>
+            <a
+              href="/webapp"
+              className={BUTTON_STYLES.primary}
+              onClick={() => trackEngagement('header_register_click')}
+            >
+              {t('nav.register', 'Register')}
             </a>
           </div>
 

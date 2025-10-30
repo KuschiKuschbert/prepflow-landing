@@ -40,7 +40,6 @@ export default function Page() {
     isLoading,
     trackEngagement: abTrackEngagement,
     renderHero,
-    renderPricing,
   } = useLandingPageABTest(undefined, t, trackEngagement);
 
   // Performance monitoring - track page load time
@@ -148,8 +147,8 @@ export default function Page() {
         {/* Header */}
         <LandingHeader trackEngagement={trackEngagement} />
 
-        {/* Main Sections */}
-        <LandingSections renderHero={renderHero} renderPricing={renderPricing} />
+        {/* Main Sections (pricing disabled for explainer landing) */}
+        <LandingSections renderHero={renderHero} renderPricing={() => null} />
       </main>
     </>
   );
