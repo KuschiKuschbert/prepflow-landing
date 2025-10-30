@@ -23,7 +23,7 @@ export default async function middleware(req: NextRequest) {
     if (isApi) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-    return new NextResponse('Forbidden', { status: 403 });
+    return NextResponse.redirect(`${origin}/not-authorized`);
   }
   return NextResponse.next();
 }
