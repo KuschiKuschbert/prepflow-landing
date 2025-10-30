@@ -31,7 +31,6 @@
     "bundle:size": "npm run build && npm run analyze"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^4.11.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
     "@svgr/webpack": "^8.1.0",
