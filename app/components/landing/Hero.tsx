@@ -12,11 +12,11 @@ export default function Hero({ onTourClick }: HeroProps) {
     <section className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-16">
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-          Run a smarter kitchen. Know your costs. Price with confidence.
+          Profit clarity, cooked to order
         </h1>
         <p className="mt-4 text-lg text-gray-300">
-          PrepFlow helps cafés and restaurants calculate COGS, manage recipes, and optimize
-          margins—fast and accurately.
+          Price right, move fast, stay compliant — real kitchen tooling that speaks chef, not
+          spreadsheet.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <button

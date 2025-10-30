@@ -4,7 +4,7 @@ export default function HowItWorks() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">
       <h2 className="mb-10 text-center text-3xl font-bold tracking-tight md:text-4xl">
-        How it works (no spreadsheet acrobatics)
+        From pantry to profit in three steps
       </h2>
       <div className="grid gap-8 md:grid-cols-3">
         <div className="text-center">
@@ -13,7 +13,7 @@ export default function HowItWorks() {
           </div>
           <h3 className="mb-2 text-xl font-semibold">Add your data</h3>
           <p className="text-gray-300">
-            Ingredients, suppliers, recipes. Bring your prices—we do the math.
+            Ingredients, suppliers, recipes. You bring prices; we cook the math.
           </p>
         </div>
         <div className="text-center">
@@ -22,7 +22,7 @@ export default function HowItWorks() {
           </div>
           <h3 className="mb-2 text-xl font-semibold">Analyze instantly</h3>
           <p className="text-gray-300">
-            COGS and contribution margin land immediately. Performance labels follow.
+            COGS and margin appear instantly. Performance labels do the talking.
           </p>
         </div>
         <div className="text-center">
@@ -31,7 +31,7 @@ export default function HowItWorks() {
           </div>
           <h3 className="mb-2 text-xl font-semibold">Act with confidence</h3>
           <p className="text-gray-300">
-            Raise a price, trim a portion, retire the burnt toast. Margins thank you.
+            Raise a price, trim a portion, or retire the burnt toast. Margins smile.
           </p>
         </div>
       </div>
