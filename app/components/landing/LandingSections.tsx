@@ -2,7 +2,8 @@
  * Landing page sections component
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { trackEvent, trackConversion, getSessionId } from '../../../lib/analytics';
 import OptimizedImage from '../../../components/OptimizedImage';
 import { useTranslation } from '../../../lib/useTranslation';
 
@@ -337,6 +338,9 @@ const LandingSections = React.memo(function LandingSections({
                 {t('leadMagnet.download', 'Download Free Template')}
               </a>
             </div>
+
+            {/* Optional email capture for sample sheet */}
+            <LeadMagnetForm />
           </div>
         </div>
       </section>
@@ -491,3 +495,100 @@ const LandingSections = React.memo(function LandingSections({
 });
 
 export default LandingSections;
+
+function LeadMagnetForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!name.trim()) {
+      setError('Please enter your name');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      trackEvent('lead_magnet_submit', 'conversion', 'lead_magnet_form');
+      trackConversion({
+        type: 'signup_start',
+        element: 'lead_magnet_form',
+        page: typeof window !== 'undefined' ? window.location.pathname : '/',
+        timestamp: Date.now(),
+        sessionId: getSessionId(),
+        metadata: { source: 'lead_magnet_section' },
+      });
+
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, source: 'lead_magnet_section' }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.message || 'Failed to submit');
+      }
+      setIsSuccess(true);
+      setName('');
+      setEmail('');
+    } catch (err: any) {
+      setError(err?.message || 'Submission failed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="mx-auto mt-10 max-w-xl rounded-2xl border border-[#29E7CD]/20 bg-[#1f1f1f]/50 p-6">
+      {isSuccess ? (
+        <p className="text-center text-[#29E7CD]">Thanks! Check your inbox shortly.</p>
+      ) : (
+        <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-3">
+          <input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            className="rounded-xl border border-gray-700 bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-[#29E7CD] focus:outline-none"
+            aria-label="Your name"
+          />
+          <input
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="rounded-xl border border-gray-700 bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-[#29E7CD] focus:outline-none"
+            aria-label="Your email"
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-semibold text-white transition-all duration-300 ${
+              isSubmitting
+                ? 'cursor-not-allowed opacity-60'
+                : 'hover:shadow-xl hover:shadow-[#29E7CD]/25'
+            }`}
+          >
+            {isSubmitting ? 'Sending…' : 'Email me the sample'}
+          </button>
+          {error && (
+            <div className="text-sm text-red-400 md:col-span-3" role="alert">
+              {error}
+            </div>
+          )}
+        </form>
+      )}
+    </div>
+  );
+}

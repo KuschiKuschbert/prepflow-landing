@@ -15,6 +15,5 @@ export function evaluateGate(featureKey: string, req?: Request): GateResult {
   const tier: TierSlug = mockTier ?? 'starter';
   const ent = getEntitlementsForTier('anonymous', tier);
   const ok = hasFeature(ent, featureKey);
-  // Do not block yet; return allowed=true to avoid breaking flows.
-  return ok ? { allowed: true } : { allowed: true, reason: 'feature-disabled-but-not-enforced' };
+  return ok ? { allowed: true } : { allowed: false, reason: 'feature-disabled' };
 }

@@ -5,8 +5,9 @@ import { evaluateGate } from '@/lib/feature-gate';
 export async function GET(request: NextRequest) {
   try {
     const gate = evaluateGate('analytics', request);
-    // Not blocking yet; when enforced, return 403 if !gate.allowed
-    void gate;
+    if (!gate.allowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
     if (!supabaseAdmin) {
       return NextResponse.json(
         {

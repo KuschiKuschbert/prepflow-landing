@@ -367,6 +367,22 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
             <LanguageSwitcher />
 
+            <a
+              href="/api/auth/signout?callbackUrl=%2F"
+              className={cn(
+                'rounded-lg',
+                'px-3',
+                'py-1.5',
+                'text-sm',
+                'text-gray-400',
+                'transition-colors',
+                'hover:bg-[#2a2a2a]/30',
+                'hover:text-[#29E7CD]',
+              )}
+            >
+              Sign out
+            </a>
+
             <Link
               href="/"
               className={cn(
