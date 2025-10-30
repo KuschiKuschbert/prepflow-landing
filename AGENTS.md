@@ -19,6 +19,31 @@
 - Endpoints: `/api/billing/create-checkout-session`, `/api/billing/create-portal-session`, `/api/webhook/stripe`
 - Entitlements: `lib/tier-config.ts`, `lib/entitlements.ts`, `lib/feature-gate.ts`
 
+## Landing v2 (Sign‑in + Tour)
+
+### IA
+
+- Hero: concise value prop; CTAs: Sign in, Register, Tour
+- Tour: 3–5 steps (Ingredients → Recipes → COGS → Performance → Temperature)
+- Capabilities: 4 cards linking to tour anchors
+- How it works: Add → Analyze → Act
+- Security: Auth0, Supabase, privacy
+
+### Components
+
+- `app/components/landing/Hero.tsx`
+- `app/components/landing/Tour.tsx`, `TourModal.tsx`
+- `app/components/landing/Capabilities.tsx`
+- `app/components/landing/HowItWorks.tsx`
+- `app/components/landing/Security.tsx`
+
+### QA Checklist
+
+- Auth: Sign in/Register routes work; allowlist enforced
+- Tour modal: focus trap, Escape closes, arrows navigate
+- Performance: Lighthouse ≥ 90; CLS < 0.1; LCP < 2.5s
+- Analytics: tour_open/close, step navigation, CTA clicks
+
 # PrepFlow - AI Agent Instructions
 
 ## 🎯 **Project Overview**
