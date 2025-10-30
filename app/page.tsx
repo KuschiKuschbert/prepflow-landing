@@ -3,28 +3,27 @@
 import React from 'react';
 
 // External components
-import ExitIntentTracker from '../components/ExitIntentTracker';
-import PerformanceTracker from '../components/PerformanceTracker';
+// ExitIntentTracker removed per request
+// PerformanceTracker removed per request
 import ScrollTracker from '../components/ScrollTracker';
 
 // UI components
-import { FloatingCTA } from '../components/ui/FloatingCTA';
+// FloatingCTA removed per request
 import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 
 // Landing page components
+import Capabilities from './components/landing/Capabilities';
+import AppHero from './components/landing/Hero';
+import HowItWorks from './components/landing/HowItWorks';
 import LandingBackground from './components/landing/LandingBackground';
 import LandingHeader from './components/landing/LandingHeader';
-import LandingSections from './components/landing/LandingSections';
-import Hero from './components/landing/Hero';
+import Security from './components/landing/Security';
+import Tour from './components/landing/Tour';
 
 // Hooks and utilities
-import { useLandingPageABTest } from '../components/useABTest';
 import { useEngagementTracking } from '../hooks/useEngagementTracking';
-import { getVariantAssignmentInfo } from '../lib/ab-testing-analytics';
-import { isDevelopment } from '../lib/constants';
 import { useTranslation } from '../lib/useTranslation';
-import { getOrCreateUserId } from '../lib/user-utils';
 
 // Variant components are now lazy-loaded via useABTest hook
 
@@ -35,71 +34,30 @@ export default function Page() {
   // Engagement tracking
   const { trackEngagement } = useEngagementTracking();
 
-  // A/B Testing hook with lazy loading
-  const {
-    variantId,
-    isLoading,
-    trackEngagement: abTrackEngagement,
-    renderHero,
-  } = useLandingPageABTest(undefined, t, trackEngagement);
-
   // Performance monitoring - track page load time
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       const loadTime = performance.now();
       // cleaned: Removed console.log statements for production
-      if (isDevelopment) {
-        console.log(`PrepFlow landing page loaded in ${loadTime.toFixed(2)}ms`);
-        console.log(`🧪 A/B Test Variant: ${variantId}`);
-      }
-
-      // Log variant assignment info for debugging
-      const userId = getOrCreateUserId();
-      const assignmentInfo = getVariantAssignmentInfo(userId);
-      if (assignmentInfo && isDevelopment) {
-        console.log(`📊 Variant Assignment:`, {
-          variant: assignmentInfo.variantId,
-          assignedAt: assignmentInfo.assignedAt,
-          daysRemaining: assignmentInfo.daysRemaining,
-          isPersistent: assignmentInfo.isPersistent,
-        });
-      }
     }
-  }, [variantId]);
+  }, []);
 
-  // Structured data for SEO
+  // Structured data for SEO (trimmed, no pricing)
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'PrepFlow',
-    description: 'COGS & Menu Profit Tool for restaurant profitability optimization',
+    description: 'Restaurant COGS and menu profitability tool for accurate pricing.',
     url: 'https://www.prepflow.org',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web Browser',
-    offers: {
-      '@type': 'Offer',
-      price: '29',
-      priceCurrency: 'AUD',
-      priceValidUntil: '2025-12-31',
-      availability: 'https://schema.org/InStock',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '127',
-    },
   };
 
   return (
     <>
       {/* Performance & Analytics Components */}
       <ScrollProgress />
-      <ExitIntentTracker
-        onExitIntent={() => {
-          // Track exit intent for conversion optimization
-          // You could trigger a popup, offer, or other retention strategy here
-        }}
-      />
+      {/* Exit-intent disabled */}
       <ScrollTracker
         onSectionView={sectionId => {
           // Track section views for analytics
@@ -108,14 +66,9 @@ export default function Page() {
           // Track scroll depth for analytics
         }}
       />
-      <PerformanceTracker
-        onMetrics={metrics => {
-          // Track performance metrics for optimization
-        }}
-      />
+      {/* Performance tracker disabled */}
 
-      {/* Floating CTA */}
-      <FloatingCTA onEngagement={trackEngagement} t={t} />
+      {/* Floating CTA disabled */}
 
       {/* Scroll to Top - Only on landing page */}
       <ScrollToTop />
@@ -125,7 +78,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <main
-        className="min-h-screen scroll-smooth bg-[#0a0a0a] text-white"
+        className="min-h-screen scroll-smooth bg-transparent text-white"
         style={
           {
             '--primary-color': '#29E7CD',
@@ -149,10 +102,19 @@ export default function Page() {
         <LandingHeader trackEngagement={trackEngagement} />
 
         {/* Hero */}
-        <Hero />
+        <AppHero />
 
-        {/* Main Sections (pricing/FAQ disabled for explainer landing) */}
-        <LandingSections renderHero={() => null} renderPricing={() => null} />
+        {/* Tour teaser */}
+        <Tour />
+
+        {/* Capabilities */}
+        <Capabilities />
+
+        {/* How it works */}
+        <HowItWorks />
+
+        {/* Security */}
+        <Security />
       </main>
     </>
   );

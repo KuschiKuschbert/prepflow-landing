@@ -5,15 +5,9 @@ import './globals.css';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { Analytics } from '@vercel/analytics/react';
 
-// cleaned: Removed commented-out lazy loading code
-// Keep performance components for now (they're lightweight)
-import ClientPerformanceTracker from '../components/ClientPerformanceTracker';
+// cleaned: Removed performance trackers on request
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
-import PerformanceDashboard from '../components/PerformanceDashboard';
-import PerformanceOptimizer from '../components/PerformanceOptimizer';
-import ResourceOptimizer from '../components/ResourceOptimizer';
-import WebVitalsTracker from '../components/WebVitalsTracker';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -118,13 +112,7 @@ export default function RootLayout({
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>
-          <PerformanceOptimizer>
-            <ClientPerformanceTracker />
-            <WebVitalsTracker />
-            <ResourceOptimizer />
-            {children}
-            <PerformanceDashboard />
-          </PerformanceOptimizer>
+          {children}
 
           <Analytics />
 

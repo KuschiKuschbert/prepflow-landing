@@ -7,19 +7,79 @@ import React from 'react';
 const LandingBackground = React.memo(function LandingBackground() {
   return (
     <>
-      {/* Background gradient effects - optimized with CSS custom properties */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-[#29E7CD]/10 blur-3xl" />
-        <div className="absolute top-1/2 right-1/4 h-96 w-96 rounded-full bg-[#D925C7]/10 blur-3xl" />
-        <div className="absolute bottom-0 left-1/2 h-96 w-96 rounded-full bg-[#3B82F6]/10 blur-3xl" />
+      {/* Base gradient */}
+      <div
+        className="fixed inset-0 -z-10"
+        style={{
+          background: 'linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%)',
+        }}
+      />
+
+      {/* Tron-like neon grid */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(41,231,205,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          backgroundPosition: '0px 0px, 0px 0px',
+          maskImage: 'radial-gradient(120% 80% at 50% 20%, black 60%, transparent 100%)',
+        }}
+      />
+
+      {/* Animated diagonal sweep */}
+      <div className="pointer-events-none fixed inset-0 -z-10" style={{ mixBlendMode: 'screen' }}>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(120deg, transparent 0%, rgba(41,231,205,0.04) 20%, rgba(217,37,199,0.05) 50%, rgba(59,130,246,0.04) 80%, transparent 100%)',
+            animation: 'pfSweep 8s linear infinite',
+            backgroundSize: '200% 200%',
+          }}
+        />
       </div>
 
-      {/* Animated background elements */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 animate-pulse rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-transparent blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 animate-pulse rounded-full bg-gradient-to-tr from-[#D925C7]/20 to-transparent blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 h-60 w-60 animate-pulse rounded-full bg-gradient-to-r from-[#3B82F6]/20 to-transparent blur-3xl" />
-      </div>
+      {/* Corner glows */}
+      <div
+        className="pointer-events-none fixed -z-10"
+        style={{
+          left: 0,
+          top: 0,
+          width: 420,
+          height: 420,
+          background: 'radial-gradient(closest-side, rgba(41,231,205,0.18), transparent 70%)',
+        }}
+      />
+      <div
+        className="pointer-events-none fixed -z-10"
+        style={{
+          right: 0,
+          top: 120,
+          width: 400,
+          height: 400,
+          background: 'radial-gradient(closest-side, rgba(217,37,199,0.16), transparent 70%)',
+        }}
+      />
+
+      {/* Fine noise */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.02]"
+        style={{
+          backgroundImage:
+            'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="64" height="64" filter="url(%23n)" opacity="0.5"/></svg>\')',
+          backgroundSize: '256px 256px',
+        }}
+      />
+
+      {/* Keyframes */}
+      <style>{`
+        @keyframes pfSweep {
+          0% { transform: translate3d(-20%, -20%, 0); }
+          50% { transform: translate3d(20%, 20%, 0); }
+          100% { transform: translate3d(-20%, -20%, 0); }
+        }
+      `}</style>
     </>
   );
 });
