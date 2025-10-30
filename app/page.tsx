@@ -16,6 +16,7 @@ import { ScrollToTop } from '../components/ui/ScrollToTop';
 import LandingBackground from './components/landing/LandingBackground';
 import LandingHeader from './components/landing/LandingHeader';
 import LandingSections from './components/landing/LandingSections';
+import Hero from './components/landing/Hero';
 
 // Hooks and utilities
 import { useLandingPageABTest } from '../components/useABTest';
@@ -147,8 +148,11 @@ export default function Page() {
         {/* Header */}
         <LandingHeader trackEngagement={trackEngagement} />
 
-        {/* Main Sections (pricing disabled for explainer landing) */}
-        <LandingSections renderHero={renderHero} renderPricing={() => null} />
+        {/* Hero */}
+        <Hero />
+
+        {/* Main Sections (pricing/FAQ disabled for explainer landing) */}
+        <LandingSections renderHero={() => null} renderPricing={() => null} />
       </main>
     </>
   );

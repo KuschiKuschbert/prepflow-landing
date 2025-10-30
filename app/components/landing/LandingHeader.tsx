@@ -1,8 +1,10 @@
+'use client';
 /**
  * Landing page header component
  */
 
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 import React from 'react';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import OptimizedImage from '../../../components/OptimizedImage';
@@ -62,20 +64,24 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           {/* Desktop Actions */}
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher className="mr-4" />
-            <a
-              href="/api/auth/signin?callbackUrl=%2Fwebapp"
+            <button
               className={BUTTON_STYLES.secondary}
-              onClick={() => trackEngagement('header_sign_in_click')}
+              onClick={() => {
+                trackEngagement('header_sign_in_click');
+                signIn('auth0', { callbackUrl: '/webapp' });
+              }}
             >
               {t('nav.signIn', 'Sign in')}
-            </a>
-            <a
-              href="/api/auth/signin?callbackUrl=%2Fwebapp"
+            </button>
+            <button
               className={BUTTON_STYLES.primary}
-              onClick={() => trackEngagement('header_register_click')}
+              onClick={() => {
+                trackEngagement('header_register_click');
+                signIn('auth0', { callbackUrl: '/webapp' });
+              }}
             >
               {t('nav.register', 'Register')}
-            </a>
+            </button>
           </div>
 
           {/* Mobile Header */}
