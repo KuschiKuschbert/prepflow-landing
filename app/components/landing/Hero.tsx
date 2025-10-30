@@ -12,7 +12,7 @@ export default function Hero({ onTourClick }: HeroProps) {
     <section className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-16">
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-          Let’s make the numbers simple
+          Run a smarter kitchen. Know your costs. Price with confidence.
         </h1>
         <p className="mt-4 text-lg text-gray-300">
           A small set of tools to price dishes properly, move faster, and keep within the rules. No
