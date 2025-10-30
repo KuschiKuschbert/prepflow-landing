@@ -33,7 +33,7 @@ describe('PrepFlow Basic Tests', () => {
     expect(packageJson.name).toBe('prepflow-landing');
     expect(packageJson.version).toBeDefined();
     expect(packageJson.scripts.build).toBe('next build');
-    expect(packageJson.scripts.lint).toBe('next lint');
+    expect(packageJson.scripts.lint).toBe('eslint .');
   });
 });
 
