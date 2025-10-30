@@ -160,7 +160,7 @@ export default function CleaningRosterPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+      <div className="min-h-screen bg-transparent p-4 sm:p-6">
         <div className="mx-auto max-w-7xl">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -172,7 +172,7 @@ export default function CleaningRosterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+    <div className="min-h-screen bg-transparent p-4 sm:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">

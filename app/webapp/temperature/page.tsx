@@ -385,7 +385,7 @@ function TemperatureLogsPageContent() {
   // Only show content when data is ready
   if (equipment.length === 0) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+      <div className="min-h-screen bg-transparent p-4 sm:p-6">
         <div className="mx-auto max-w-7xl">
           {/* Empty state - no skeleton, just dark background */}
         </div>
@@ -394,7 +394,7 @@ function TemperatureLogsPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+    <div className="min-h-screen bg-transparent p-4 sm:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">

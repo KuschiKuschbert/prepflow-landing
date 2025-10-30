@@ -264,7 +264,7 @@ export default function PrepListsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">

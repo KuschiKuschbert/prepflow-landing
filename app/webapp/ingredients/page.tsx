@@ -363,7 +363,7 @@ export default function IngredientsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+    <div className="min-h-screen bg-transparent p-4 sm:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-6">

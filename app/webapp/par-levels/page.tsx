@@ -195,7 +195,7 @@ export default function ParLevelsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <div className="min-h-screen bg-transparent text-white">
         <div className="container mx-auto px-4 py-8">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
@@ -207,7 +207,7 @@ export default function ParLevelsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">

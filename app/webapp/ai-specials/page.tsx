@@ -119,7 +119,7 @@ export default function AISpecialsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
+      <div className="min-h-screen bg-transparent p-4 sm:p-6">
         <div className="mx-auto max-w-7xl">
           {/* Header skeleton */}
           <div className="mb-8">
@@ -141,7 +141,7 @@ export default function AISpecialsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">

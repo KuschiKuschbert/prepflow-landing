@@ -65,7 +65,7 @@ export default function PerformancePageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-6 text-white">
+    <div className="min-h-screen bg-transparent p-6 text-white">
       <div className="mx-auto max-w-7xl">
         <PerformanceHeader
           performanceScore={state.performanceScore}
