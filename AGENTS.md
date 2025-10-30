@@ -1,3 +1,24 @@
+## Auth, Allowlist, and Billing Setup
+
+### Auth (NextAuth + Auth0)
+
+- Env:
+  - `AUTH0_ISSUER_BASE_URL`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`
+  - `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+- Routes: `/api/auth/[...nextauth]`, `/api/me`
+- Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes).
+
+### Allowlist
+
+- `ALLOWED_EMAILS` (comma-separated). Only allowlisted emails can access protected routes.
+- Unauthorized pages redirect to `/not-authorized`; APIs return 401/403.
+
+### Billing (Stripe scaffolding)
+
+- Env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- Endpoints: `/api/billing/create-checkout-session`, `/api/billing/create-portal-session`, `/api/webhook/stripe`
+- Entitlements: `lib/tier-config.ts`, `lib/entitlements.ts`, `lib/feature-gate.ts`
+
 # PrepFlow - AI Agent Instructions
 
 ## 🎯 **Project Overview**
