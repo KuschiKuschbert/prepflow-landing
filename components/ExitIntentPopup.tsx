@@ -95,8 +95,16 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
         },
       });
 
-      // Simulate API call (replace with actual email service)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Submit lead to API
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, source: 'exit_intent_popup' }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.message || 'Failed to submit');
+      }
 
       // Success handling
       setIsSuccess(true);
