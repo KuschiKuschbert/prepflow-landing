@@ -42,14 +42,14 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               aria-label={String(t('nav.featuresAria', 'View PrepFlow features'))}
             >
-              {t('nav.features', 'Features')}
+              {t('nav.features', 'What it does')}
             </a>
             <a
               href="#how-it-works"
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               aria-label={String(t('nav.howItWorksAria', 'Learn how PrepFlow works'))}
             >
-              {t('nav.howItWorks', 'How it works')}
+              {t('nav.howItWorks', "How it's different")}
             </a>
             {/* Pricing link removed for explainer-focused landing */}
             <a
@@ -57,7 +57,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               aria-label={String(t('nav.faqAria', 'Frequently asked questions'))}
             >
-              {t('nav.faq', 'FAQ')}
+              {t('nav.faq', 'FAQ (the good bits)')}
             </a>
           </nav>
 

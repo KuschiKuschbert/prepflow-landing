@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { backgroundTheme } from '../../../lib/theme';
 
 const LandingBackground = React.memo(function LandingBackground() {
   return (
@@ -19,9 +20,8 @@ const LandingBackground = React.memo(function LandingBackground() {
       <div
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
-          backgroundImage:
-            'linear-gradient(rgba(41,231,205,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
+          backgroundImage: `linear-gradient(rgba(41,231,205,${backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
+          backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
           backgroundPosition: '0px 0px, 0px 0px',
           maskImage: 'radial-gradient(120% 80% at 50% 20%, black 60%, transparent 100%)',
         }}
@@ -37,7 +37,7 @@ const LandingBackground = React.memo(function LandingBackground() {
           top: 0,
           width: 420,
           height: 420,
-          background: 'radial-gradient(closest-side, rgba(41,231,205,0.18), transparent 70%)',
+          background: `radial-gradient(closest-side, rgba(41,231,205,${backgroundTheme.cornerCyanOpacity}), transparent 70%)`,
         }}
       />
       <div
@@ -47,7 +47,7 @@ const LandingBackground = React.memo(function LandingBackground() {
           top: 120,
           width: 400,
           height: 400,
-          background: 'radial-gradient(closest-side, rgba(217,37,199,0.16), transparent 70%)',
+          background: `radial-gradient(closest-side, rgba(217,37,199,${backgroundTheme.cornerMagentaOpacity}), transparent 70%)`,
         }}
       />
 
