@@ -63,14 +63,14 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher className="mr-4" />
             <a
-              href="/webapp"
+              href="/api/auth/signin?callbackUrl=%2Fwebapp"
               className={BUTTON_STYLES.secondary}
               onClick={() => trackEngagement('header_sign_in_click')}
             >
               {t('nav.signIn', 'Sign in')}
             </a>
             <a
-              href="/webapp"
+              href="/api/auth/signin?callbackUrl=%2Fwebapp"
               className={BUTTON_STYLES.primary}
               onClick={() => trackEngagement('header_register_click')}
             >
