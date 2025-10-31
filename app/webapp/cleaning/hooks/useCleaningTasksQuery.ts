@@ -20,7 +20,7 @@ export function useCleaningTasksQuery(page: number, pageSize: number) {
       if (!json.success) throw new Error(json.message || 'Failed to fetch cleaning tasks');
       return { items: json.data as CleaningTask[], total: json.total ?? json.data.length };
     },
-    keepPreviousData: true,
+    placeholderData: previousData => previousData,
     staleTime: 60_000,
   });
 }

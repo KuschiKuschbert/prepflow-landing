@@ -1,34 +1,48 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
 
 interface Ingredient {
   id: string;
   ingredient_name: string;
   brand?: string;
-  supplier?: string;
+  pack_size?: string;
+  pack_size_unit?: string;
+  pack_price?: number;
   unit?: string;
-  cost_per_unit?: number;
+  cost_per_unit: number;
+  cost_per_unit_as_purchased?: number;
+  cost_per_unit_incl_trim?: number;
+  trim_peel_waste_percentage?: number;
+  yield_percentage?: number;
+  supplier?: string;
+  product_code?: string;
   storage_location?: string;
-  category?: string;
+  min_stock_level?: number;
+  current_stock?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface IngredientsResponse {
+  items: Ingredient[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 export function useIngredientsQuery(page: number, pageSize: number) {
-  return useQuery({
+  return useQuery<IngredientsResponse, Error>({
     queryKey: ['ingredients', { page, pageSize }],
     queryFn: async () => {
-      const from = (page - 1) * pageSize;
-      const to = from + pageSize - 1;
-      const { data, error, count } = await supabase
-        .from('ingredients')
-        .select('*', { count: 'exact' })
-        .order('ingredient_name', { ascending: true })
-        .range(from, to);
-      if (error) throw error;
-      return { items: (data || []) as Ingredient[], total: count || 0 };
+      const res = await fetch(`/api/ingredients?page=${page}&pageSize=${pageSize}`, {
+        cache: 'no-store',
+      });
+      if (!res.ok) throw new Error('Failed to fetch ingredients');
+      const json = await res.json();
+      return json.data;
     },
-    staleTime: 1000 * 60,
-    keepPreviousData: true,
+    placeholderData: previousData => previousData,
   });
 }
