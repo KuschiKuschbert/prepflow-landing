@@ -227,6 +227,23 @@ class ABTestingAnalytics {
       });
     }
 
+    // Push to GTM dataLayer for enhanced tracking
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'ab_test_event',
+        event_category: 'ab_testing',
+        event_label: `${event.testId}_${event.variantId}`,
+        test_id: event.testId,
+        variant_id: event.variantId,
+        user_id: event.userId,
+        session_id: event.sessionId,
+        event_type: event.eventType,
+        event_value: event.eventValue,
+        metadata: event.metadata,
+        timestamp: event.timestamp,
+      });
+    }
+
     // Log in development
     if (process.env.NODE_ENV === 'development') {
       console.log('🧪 AB Test Event:', event);
