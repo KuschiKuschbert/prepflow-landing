@@ -22,6 +22,11 @@ import RecipeCard from './components/RecipeCard';
 import RecipeForm from './components/RecipeForm';
 import RecipePreviewModal from './components/RecipePreviewModal';
 import RecipeTable from './components/RecipeTable';
+import { DeleteConfirmationModal } from './components/DeleteConfirmationModal';
+import { BulkDeleteConfirmationModal } from './components/BulkDeleteConfirmationModal';
+
+// Utils
+import { formatQuantity as formatQuantityUtil } from './utils/formatQuantity';
 
 function RecipesPageContent() {
   const router = useRouter();
@@ -68,50 +73,9 @@ function RecipesPageContent() {
   // Success message state
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Helper functions
+  // Helper function - format quantity with yield adjustment
   const formatQuantity = (quantity: number, unit: string) => {
-    const adjustedQuantity = (previewYield / (selectedRecipe?.yield || 1)) * quantity;
-
-    // Smart conversions for common units
-    if (
-      unit.toLowerCase() === 'gm' ||
-      unit.toLowerCase() === 'g' ||
-      unit.toLowerCase() === 'gram'
-    ) {
-      if (adjustedQuantity >= 1000) {
-        return {
-          value: (adjustedQuantity / 1000).toFixed(1),
-          unit: 'kg',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
-        };
-      }
-    }
-
-    if (unit.toLowerCase() === 'ml' || unit.toLowerCase() === 'milliliter') {
-      if (adjustedQuantity >= 1000) {
-        return {
-          value: (adjustedQuantity / 1000).toFixed(1),
-          unit: 'L',
-          original: `${adjustedQuantity.toFixed(1)} ${unit}`,
-        };
-      }
-    }
-
-    // For smaller quantities, show more precision
-    if (adjustedQuantity < 1) {
-      return {
-        value: adjustedQuantity.toFixed(2),
-        unit: unit,
-        original: `${adjustedQuantity.toFixed(2)} ${unit}`,
-      };
-    }
-
-    // Default formatting
-    return {
-      value: adjustedQuantity.toFixed(1),
-      unit: unit,
-      original: `${adjustedQuantity.toFixed(1)} ${unit}`,
-    };
+    return formatQuantityUtil(quantity, unit, previewYield, selectedRecipe?.yield || 1);
   };
 
   // Event handlers
@@ -596,127 +560,23 @@ function RecipesPageContent() {
         />
 
         {/* Delete Confirmation Modal */}
-        {showDeleteConfirm && recipeToDelete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl">
-              <div className="border-b border-[#2a2a2a] p-6">
-                <div className="flex items-center">
-                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
-                    <svg
-                      className="h-6 w-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Delete Recipe</h3>
-                    <p className="text-sm text-gray-400">This action cannot be undone</p>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <p className="mb-6 text-gray-300">
-                  Are you sure you want to delete{' '}
-                  <span className="font-semibold text-white">
-                    "{capitalizeRecipeName(recipeToDelete.name)}"
-                  </span>
-                  ? This will permanently remove the recipe and all its ingredients from your Recipe
-                  Book.
-                </p>
-                <div className="flex gap-3">
-                  <button
-                    onClick={cancelDeleteRecipe}
-                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={confirmDeleteRecipe}
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
-                  >
-                    Delete Recipe
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <DeleteConfirmationModal
+          show={showDeleteConfirm}
+          recipe={recipeToDelete}
+          capitalizeRecipeName={capitalizeRecipeName}
+          onConfirm={confirmDeleteRecipe}
+          onCancel={cancelDeleteRecipe}
+        />
 
         {/* Bulk Delete Confirmation Modal */}
-        {showBulkDeleteConfirm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl">
-              <div className="border-b border-[#2a2a2a] p-6">
-                <div className="flex items-center">
-                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
-                    <svg
-                      className="h-6 w-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Delete Multiple Recipes</h3>
-                    <p className="text-sm text-gray-400">This action cannot be undone</p>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <p className="mb-6 text-gray-300">
-                  Are you sure you want to delete{' '}
-                  <span className="font-semibold text-white">
-                    {selectedRecipes.size} recipe{selectedRecipes.size > 1 ? 's' : ''}
-                  </span>
-                  ? This will permanently remove all selected recipes and their ingredients from
-                  your Recipe Book.
-                </p>
-                <div className="mb-6 max-h-32 overflow-y-auto rounded-lg bg-[#0a0a0a] p-4">
-                  <h4 className="mb-2 text-sm font-medium text-white">Selected Recipes:</h4>
-                  <div className="space-y-1">
-                    {Array.from(selectedRecipes).map(recipeId => {
-                      const recipe = recipes.find(r => r.id === recipeId);
-                      return recipe ? (
-                        <div key={recipeId} className="text-xs text-gray-400">
-                          • {capitalizeRecipeName(recipe.name)}
-                        </div>
-                      ) : null;
-                    })}
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <button
-                    onClick={cancelBulkDelete}
-                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={confirmBulkDelete}
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
-                  >
-                    Delete {selectedRecipes.size} Recipe{selectedRecipes.size > 1 ? 's' : ''}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <BulkDeleteConfirmationModal
+          show={showBulkDeleteConfirm}
+          selectedRecipeIds={selectedRecipes}
+          recipes={recipes}
+          capitalizeRecipeName={capitalizeRecipeName}
+          onConfirm={confirmBulkDelete}
+          onCancel={cancelBulkDelete}
+        />
       </div>
     </div>
   );
