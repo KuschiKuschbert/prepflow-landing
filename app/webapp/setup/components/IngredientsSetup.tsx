@@ -67,7 +67,7 @@ export default function IngredientsSetup({
 
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
-          <h4 className="mb-4 text-lg font-semibold text-white">What you'll get:</h4>
+          <h4 className="mb-4 text-lg font-semibold text-white">What you&apos;ll get:</h4>
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>

@@ -60,7 +60,7 @@ export default function CleaningRosterPage() {
     setTimeout(() => {
       fetchAreas();
     }, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   useEffect(() => {

@@ -34,7 +34,7 @@ export function AddTemperatureLogForm({
       </h3>
       <p className="mb-4 text-sm text-gray-400">
         💡 You can log multiple temperatures per day for the same equipment (e.g., morning and
-        evening checks). There's a 5-minute cooling off period between entries for the same
+        evening checks). There&apos;s a 5-minute cooling off period between entries for the same
         equipment.
       </p>
       <div className="mb-4 rounded-2xl border border-blue-400/20 bg-blue-400/10 p-4">

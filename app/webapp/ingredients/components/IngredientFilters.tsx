@@ -97,7 +97,7 @@ export default function IngredientFilters({
             <label className="mb-2 block text-sm font-medium text-gray-300">🔍 Search</label>
             <input
               type="text"
-              placeholder="Search ingredients..."
+              placeholder="Search ingredients&hellip;"
               value={searchTerm}
               onChange={e => onSearchChange(e.target.value)}
               className="w-full rounded-md border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white placeholder-gray-500 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
@@ -163,7 +163,7 @@ export default function IngredientFilters({
               <span className="text-sm text-gray-400">Active filters:</span>
               {searchTerm && (
                 <span className="inline-flex items-center rounded-full border border-[#29E7CD]/20 bg-[#29E7CD]/10 px-2 py-1 text-xs font-medium text-[#29E7CD]">
-                  Search: "{searchTerm}"
+                  Search: &quot;{searchTerm}&quot;
                 </span>
               )}
               {supplierFilter && (

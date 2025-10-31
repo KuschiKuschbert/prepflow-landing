@@ -42,8 +42,8 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
             <h3 className="mb-1 text-xl font-semibold text-white">🥘 Add Ingredients</h3>
             <p className="text-sm text-gray-400">Add ingredients manually to build your dish</p>
             <p className="mt-1 text-xs text-[#29E7CD]">
-              ✨ Automatic unit conversion: Use any unit (tsp, tbsp, cups, ml, g, kg) - we'll
-              convert to the ingredient's base unit!
+              ✨ Automatic unit conversion: Use any unit (tsp, tbsp, cups, ml, g, kg) - we&apos;ll
+              convert to the ingredient&apos;s base unit!
             </p>
           </div>
           <button
@@ -74,7 +74,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Type to search ingredients..."
+                  placeholder="Type to search ingredients&hellip;"
                   value={ingredientSearch}
                   onChange={e => onSearchChange(e.target.value)}
                   onFocus={() => onSearchChange(ingredientSearch)} // Keep suggestions visible
@@ -161,7 +161,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
             {showSuggestions && filteredIngredients.length === 0 && ingredientSearch && (
               <div className="absolute z-10 mt-1 w-full rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 shadow-lg">
                 <p className="text-center text-sm text-gray-400">
-                  🔍 No ingredients found matching "{ingredientSearch}"
+                  🔍 No ingredients found matching &quot;{ingredientSearch}&quot;
                 </p>
                 <p className="mt-1 text-center text-xs text-gray-500">
                   Try a different search term or add the ingredient to your list first

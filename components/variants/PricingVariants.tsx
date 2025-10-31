@@ -28,7 +28,7 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
                 <h4 className="mb-2 text-sm font-semibold text-[#29E7CD]">Our Refund Policy</h4>
                 <p className="text-sm leading-relaxed text-gray-300">
                   PrepFlow is a digital product with instant access. That said, we want you to feel
-                  confident. If PrepFlow isn't what you expected, you can request a full refund
+                  confident. If PrepFlow isn&apos;t what you expected, you can request a full refund
                   within 7 days of purchase. No hoops, no hassle — just reply to your purchase email
                   and let us know. After 7 days, all sales are final.
                 </p>
@@ -49,7 +49,7 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
               <div className="flex items-center gap-3">
                 <span className="text-[#29E7CD]">✅</span>
                 <span className="text-gray-300">
-                  Popularity & profit classes (Chef's Kiss etc.)
+                  Popularity & profit classes (Chef&apos;s Kiss etc.)
                 </span>
               </div>
               <div className="flex items-center gap-3">

@@ -13,7 +13,7 @@ export default function IngredientWizardStep1({
     <div className="space-y-6">
       <div className="mb-6 text-center">
         <h3 className="mb-2 text-xl font-semibold text-white">📦 Basic Information</h3>
-        <p className="text-gray-400">Let's start with the essential details</p>
+        <p className="text-gray-400">Let&apos;s start with the essential details</p>
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">

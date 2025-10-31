@@ -40,7 +40,7 @@ export function ControlHero({ t, handleEngagement }: HeroProps) {
             <strong>GST-Ready for AU</strong> — price confidently; avoid surprises
           </Bullet>
           <Bullet>
-            <strong>Menu Mix Intelligence</strong> — "Chef's Kiss / Hidden Gem / Bargain Bucket"
+            <strong>Menu Mix Intelligence</strong> — &quot;Chef&apos;s Kiss / Hidden Gem / Bargain Bucket&quot;
             categories to guide decisions
           </Bullet>
           <Bullet>

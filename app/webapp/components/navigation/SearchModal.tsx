@@ -35,7 +35,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                 </h2>
                 <input
                   type="text"
-                  placeholder="Search navigation..."
+                  placeholder="Search navigation&hellip;"
                   value={query}
                   onChange={e => onChange(e.target.value)}
                   className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-3 pl-12 text-lg text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
@@ -75,7 +75,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                   ))}
                 </div>
               ) : (
-                <div className="py-8 text-center text-gray-400">No results found for "{query}"</div>
+                <div className="py-8 text-center text-gray-400">No results found for &quot;{query}&quot;</div>
               )}
             </div>
           </div>
