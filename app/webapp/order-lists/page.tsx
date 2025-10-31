@@ -65,14 +65,15 @@ export default function OrderListsPage() {
   });
   const [page, setPage] = useState(1);
   const pageSize = 10;
+
+  // Mock user ID for now
+  const userId = 'user-123';
+
   const { data: orderListsData, isLoading: listsLoading } = useOrderListsQuery(
     page,
     pageSize,
     userId,
   );
-
-  // Mock user ID for now
-  const userId = 'user-123';
 
   useEffect(() => {
     // Keep suppliers and ingredients fetch; lists come from query

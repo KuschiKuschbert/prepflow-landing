@@ -19,8 +19,9 @@ export function getTemperatureStatus(
 ): 'low' | 'high' | 'normal' {
   const equipmentItem = equipment.find(e => e.name === location);
   if (!equipmentItem || !equipmentItem.is_active) return 'normal';
-  if (equipmentItem.min_temp_celsius && temp < equipmentItem.min_temp_celsius) return 'low';
-  if (equipmentItem.max_temp_celsius && temp > equipmentItem.max_temp_celsius) return 'high';
+  // Check for null/undefined explicitly (0 is a valid temperature)
+  if (equipmentItem.min_temp_celsius !== null && equipmentItem.min_temp_celsius !== undefined && temp < equipmentItem.min_temp_celsius) return 'low';
+  if (equipmentItem.max_temp_celsius !== null && equipmentItem.max_temp_celsius !== undefined && temp > equipmentItem.max_temp_celsius) return 'high';
   return 'normal';
 }
 

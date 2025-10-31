@@ -3,8 +3,8 @@
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
-import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
 import { TaskCard } from './components/TaskCard';
+import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
 
 interface CleaningArea {
   id: number;
@@ -43,18 +43,6 @@ export default function CleaningRosterPage() {
   const pageSize = 10;
   const { data: tasksData, isLoading: tasksLoading } = useCleaningTasksQuery(page, pageSize);
 
-  useEffect(() => {
-    fetchAreas();
-  }, []);
-
-  useEffect(() => {
-    const td = tasksData as any;
-    if (td?.items) setTasks(td.items as any);
-  }, [tasksData]);
-
-  const total = (tasksData as any)?.total || 0;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-
   const fetchAreas = async () => {
     try {
       const response = await fetch('/api/cleaning-areas');
@@ -66,6 +54,18 @@ export default function CleaningRosterPage() {
       console.error('Error fetching areas:', error);
     }
   };
+
+  useEffect(() => {
+    fetchAreas();
+  }, []);
+
+  useEffect(() => {
+    const td = tasksData as any;
+    if (td?.items) setTasks(td.items as any);
+  }, [tasksData]);
+
+  const total = (tasksData as any)?.total || 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   const handleAddArea = async (e: React.FormEvent) => {
     e.preventDefault();

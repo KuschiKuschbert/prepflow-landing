@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import {
-  formatDateString,
-  formatTime,
-  getFoodSafetyStatus,
-  getStatusColor,
-  getTemperatureStatus,
-  getTimePeriod,
-  groupLogsByTimePeriod,
+    formatDateString,
+    formatTime,
+    getFoodSafetyStatus,
+    getStatusColor,
+    getTemperatureStatus,
+    getTimePeriod,
+    groupLogsByTimePeriod,
 } from './utils';
 
 describe('temperature utils', () => {
@@ -43,8 +43,19 @@ describe('temperature utils', () => {
     const threeHoursAgo = new Date(now.getTime() - 3 * 60 * 60 * 1000);
     const fiveHoursAgo = new Date(now.getTime() - 5 * 60 * 60 * 1000);
 
-    const fmt = (d: Date) => d.toISOString().slice(0, 10);
-    const fmtT = (d: Date) => d.toISOString().slice(11, 19);
+    // Format dates consistently as local time strings to match function expectations
+    const fmt = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    const fmtT = (d: Date) => {
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const seconds = String(d.getSeconds()).padStart(2, '0');
+      return `${hours}:${minutes}:${seconds}`;
+    };
 
     // Inside danger zone (temp 25°C)
     const safe = getFoodSafetyStatus(25, fmtT(oneHourAgo), fmt(oneHourAgo), 'food_hot_holding');

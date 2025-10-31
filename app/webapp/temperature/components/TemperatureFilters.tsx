@@ -6,7 +6,7 @@ export interface TemperatureFiltersProps {
   equipment: Array<{ id?: number; name: string; equipment_type: string; is_active: boolean }>;
   temperatureTypes: Array<{ value: string; label: string; icon: string }>;
   onAddClick: () => void;
-  t: (key: string, fallback: string, vars?: Record<string, any>) => string;
+  t: (key: string, fallback: string) => string;
 }
 
 export function TemperatureFilters({

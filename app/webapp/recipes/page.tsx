@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 // UI components
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
