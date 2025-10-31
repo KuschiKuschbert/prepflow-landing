@@ -56,20 +56,20 @@ export const metadata: Metadata = {
     siteName: 'PrepFlow',
     images: [
       {
-        url: '/images/dashboard-screenshot.png',
+        url: 'https://www.prepflow.org/images/dashboard-screenshot.png',
         width: 1200,
         height: 630,
         alt: 'PrepFlow Dashboard showing COGS metrics and profit analysis',
       },
     ],
-    locale: 'en', // Changed from 'en_AU' to 'en' for global appeal
+    locale: 'en',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PrepFlow: COGS & Menu Profit Tool',
     description: 'Analyze COGS and optimize menu profit. Built by chefs.',
-    images: ['/images/dashboard-screenshot.png'],
+    images: ['https://www.prepflow.org/images/dashboard-screenshot.png'],
   },
   robots: {
     index: true,
