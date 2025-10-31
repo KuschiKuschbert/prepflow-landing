@@ -66,6 +66,44 @@ export function useRecipeManagement() {
     [],
   );
 
+  const fetchRecipeIngredients = useCallback(
+    async (recipeId: string): Promise<RecipeIngredientWithDetails[]> => {
+      try {
+        const { data: ingredientsData, error: ingredientsError } = await supabase
+          .from('recipe_ingredients')
+          .select(
+            `
+          id,
+          recipe_id,
+          ingredient_id,
+          quantity,
+          unit,
+          ingredients (
+            id,
+            ingredient_name,
+            cost_per_unit,
+            unit,
+            trim_peel_waste_percentage,
+            yield_percentage
+          )
+        `,
+          )
+          .eq('recipe_id', recipeId);
+
+        if (ingredientsError) {
+          setError(ingredientsError.message);
+          return [];
+        }
+
+        return (ingredientsData || []) as unknown as RecipeIngredientWithDetails[];
+      } catch (err) {
+        setError('Failed to fetch recipe ingredients');
+        return [];
+      }
+    },
+    [setError],
+  );
+
   // Calculate prices for all recipes
   const calculateAllRecipePrices = useCallback(
     async (recipesData: Recipe[]) => {
@@ -121,44 +159,6 @@ export function useRecipeManagement() {
       console.log('Failed to refresh recipe prices:', err);
     }
   }, [recipes, calculateAllRecipePrices]);
-
-  const fetchRecipeIngredients = useCallback(
-    async (recipeId: string): Promise<RecipeIngredientWithDetails[]> => {
-      try {
-        const { data: ingredientsData, error: ingredientsError } = await supabase
-          .from('recipe_ingredients')
-          .select(
-            `
-          id,
-          recipe_id,
-          ingredient_id,
-          quantity,
-          unit,
-          ingredients (
-            id,
-            ingredient_name,
-            cost_per_unit,
-            unit,
-            trim_peel_waste_percentage,
-            yield_percentage
-          )
-        `,
-          )
-          .eq('recipe_id', recipeId);
-
-        if (ingredientsError) {
-          setError(ingredientsError.message);
-          return [];
-        }
-
-        return (ingredientsData || []) as unknown as RecipeIngredientWithDetails[];
-      } catch (err) {
-        setError('Failed to fetch recipe ingredients');
-        return [];
-      }
-    },
-    [setError],
-  );
 
   const handleEditRecipe = useCallback(
     async (recipe: Recipe) => {
