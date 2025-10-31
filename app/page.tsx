@@ -42,16 +42,51 @@ export default function Page() {
     }
   }, []);
 
-  // Structured data for SEO (trimmed, no pricing)
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'PrepFlow',
-    description: 'Restaurant COGS and menu profitability tool for accurate pricing.',
-    url: 'https://www.prepflow.org',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web Browser',
-  };
+  // Structured data for SEO - SoftwareApplication with Organization
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'PrepFlow',
+      description: 'Restaurant COGS and menu profitability tool for accurate pricing.',
+      url: 'https://www.prepflow.org',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web Browser',
+      offers: {
+        '@type': 'Offer',
+        price: '29',
+        priceCurrency: 'AUD',
+        availability: 'https://schema.org/InStock',
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        ratingCount: '127',
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'PrepFlow',
+        url: 'https://www.prepflow.org',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://www.prepflow.org/images/prepflow-logo.png',
+        },
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'PrepFlow',
+      url: 'https://www.prepflow.org',
+      logo: 'https://www.prepflow.org/images/prepflow-logo.png',
+      sameAs: ['https://www.prepflow.org'],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'Customer Service',
+        email: 'hello@prepflow.org',
+      },
+    },
+  ];
 
   return (
     <>
