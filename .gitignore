@@ -39,3 +39,4 @@ temp/.next/
 .next/
 .next/**
 .next/cache/
+.vercel

@@ -118,9 +118,13 @@ export default function RootLayout({
 
           <Analytics />
 
-          {/* Analytics and tracking */}
-          <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
-          <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
+          {/* Analytics and tracking - gated by env */}
+          {process.env.NEXT_PUBLIC_ENABLE_GA === 'true' && (
+            <>
+              <GoogleAnalytics measurementId="G-W1D5LQXGJT" />
+              <GoogleTagManager gtmId="GTM-WQMV22RD" ga4MeasurementId="G-W1D5LQXGJT" />
+            </>
+          )}
         </ErrorBoundary>
 
         {/* Service Worker Registration */}
