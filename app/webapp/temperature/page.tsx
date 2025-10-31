@@ -13,6 +13,7 @@ import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
 
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
+import { useTemperatureLogsQuery } from './hooks/useTemperatureLogsQuery';
 
 function TemperatureLogsPageContent() {
   const { t } = useTranslation();
@@ -51,9 +52,26 @@ function TemperatureLogsPageContent() {
     logged_by: '',
   });
   const [showAddLog, setShowAddLog] = useState(false);
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
+  const { data: logsData, isLoading: logsLoading } = useTemperatureLogsQuery(
+    selectedDate,
+    selectedType,
+    page,
+    pageSize,
+  );
 
   // Initialize temperature warnings
   useTemperatureWarnings({ allLogs, equipment });
+
+  // Replace fetchLogs usage when activeTab is logs
+  useEffect(() => {
+    const ld = logsData as any;
+    if (ld?.items) setLogs(ld.items);
+  }, [logsData]);
+
+  const total = (logsData as any)?.total || 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   const temperatureTypes = [
     { value: 'fridge', label: 'Fridge', icon: '🧊' },
@@ -171,7 +189,7 @@ function TemperatureLogsPageContent() {
   // Watch for changes in selectedDate or selectedType and refetch logs
   useEffect(() => {
     if (selectedDate) {
-      fetchLogs();
+      // Query will refetch automatically via key
     }
   }, [selectedDate, selectedType]);
 
@@ -453,20 +471,44 @@ function TemperatureLogsPageContent() {
 
         {/* Tab Content */}
         {activeTab === 'logs' && (
-          <TemperatureLogsTab
-            logs={logs}
-            equipment={equipment}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            selectedType={selectedType}
-            setSelectedType={setSelectedType}
-            showAddLog={showAddLog}
-            setShowAddLog={setShowAddLog}
-            newLog={newLog}
-            setNewLog={setNewLog}
-            onAddLog={handleAddLog}
-            onRefreshLogs={fetchLogs}
-          />
+          <>
+            <TemperatureLogsTab
+              logs={logs}
+              equipment={equipment}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              showAddLog={showAddLog}
+              setShowAddLog={setShowAddLog}
+              newLog={newLog}
+              setNewLog={setNewLog}
+              onAddLog={handleAddLog}
+              onRefreshLogs={() => {}}
+            />
+            {/* Pagination */}
+            <div className="mt-4 flex items-center justify-between">
+              <span className="text-sm text-gray-400">
+                Page {page} of {totalPages} ({total} items)
+              </span>
+              <div className="space-x-2">
+                <button
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page <= 1}
+                  className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                >
+                  Prev
+                </button>
+                <button
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={page >= totalPages}
+                  className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
         )}
 
         {activeTab === 'equipment' && (
