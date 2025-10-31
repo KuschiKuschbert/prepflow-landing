@@ -20,6 +20,7 @@ import CSVImportModal from './components/CSVImportModal';
 import IngredientWizard from './components/IngredientWizard';
 import { IngredientsHeader } from './components/IngredientsHeader';
 import { useIngredientActions } from './hooks/useIngredientActions';
+import { useIngredientsQuery } from './hooks/useIngredientsQuery';
 
 interface Ingredient {
   id: string;
@@ -83,6 +84,20 @@ export default function IngredientsPage() {
     min_stock_level: 0,
     current_stock: 0,
   });
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
+  const {
+    data: ingredientsData,
+    isLoading,
+    error: queryError,
+  } = useIngredientsQuery(page, pageSize);
+
+  // Sync query data into existing state for filtering/sorting reuse
+  useEffect(() => {
+    if (ingredientsData?.items) {
+      setIngredients(ingredientsData.items as Ingredient[]);
+    }
+  }, [ingredientsData]);
 
   // Filter and sort ingredients
   useMemo(() => {
@@ -147,8 +162,8 @@ export default function IngredientsPage() {
     }
   };
 
+  // Replace initial fetch with suppliers only
   useEffect(() => {
-    fetchIngredients();
     fetchSuppliers();
   }, []);
 
@@ -182,9 +197,13 @@ export default function IngredientsPage() {
     setImporting(false);
   };
 
-  if (loading) {
+  if (loading || isLoading) {
     return <PageSkeleton />;
   }
+
+  // total pages for pagination
+  const total = ingredientsData?.total || 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
     <div className="min-h-screen bg-transparent p-4 sm:p-6">
@@ -284,6 +303,29 @@ export default function IngredientsPage() {
           onSelectAll={handleSelectAll}
           loading={loading}
         />
+
+        {/* Pagination */}
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-sm text-gray-400">
+            Page {page} of {totalPages} ({total} items)
+          </span>
+          <div className="space-x-2">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page <= 1}
+              className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages}
+              className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
 
         {/* Edit Ingredient Form */}
         {editingIngredient && (
