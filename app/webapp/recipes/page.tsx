@@ -18,12 +18,12 @@ import { COGSCalculation, Recipe, RecipeIngredientWithDetails } from './types';
 
 // Local components
 import BulkActionsBar from './components/BulkActionsBar';
+import { BulkDeleteConfirmationModal } from './components/BulkDeleteConfirmationModal';
+import { DeleteConfirmationModal } from './components/DeleteConfirmationModal';
 import RecipeCard from './components/RecipeCard';
 import RecipeForm from './components/RecipeForm';
 import RecipePreviewModal from './components/RecipePreviewModal';
 import RecipeTable from './components/RecipeTable';
-import { DeleteConfirmationModal } from './components/DeleteConfirmationModal';
-import { BulkDeleteConfirmationModal } from './components/BulkDeleteConfirmationModal';
 
 // Utils
 import { formatQuantity as formatQuantityUtil } from './utils/formatQuantity';

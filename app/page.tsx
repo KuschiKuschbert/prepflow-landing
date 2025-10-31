@@ -13,12 +13,12 @@ import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 
 // Landing page components
+import Benefits from './components/landing/Benefits';
 import Capabilities from './components/landing/Capabilities';
 import AppHero from './components/landing/Hero';
 import HowItWorks from './components/landing/HowItWorks';
-import Benefits from './components/landing/Benefits';
-import LandingHeader from './components/landing/LandingHeader';
 import LandingFooter from './components/landing/LandingFooter';
+import LandingHeader from './components/landing/LandingHeader';
 import Security from './components/landing/Security';
 import Tour from './components/landing/Tour';
 

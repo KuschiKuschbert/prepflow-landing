@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 // Auth bypass for local iteration: link directly to /webapp
 
 interface HeroProps {

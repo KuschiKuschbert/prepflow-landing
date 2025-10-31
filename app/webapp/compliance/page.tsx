@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { useTranslation } from '@/lib/useTranslation';
+import { useEffect, useState } from 'react';
+import { ComplianceRecordForm } from './components/ComplianceRecordForm';
+import { ComplianceRecordsList } from './components/ComplianceRecordsList';
+import { ComplianceTypeForm } from './components/ComplianceTypeForm';
+import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 import {
-  ComplianceType,
   ComplianceRecord,
   ComplianceRecordFormData,
+  ComplianceType,
   ComplianceTypeFormData,
 } from './types';
 import { getTypeIcon } from './utils';
-import { ComplianceRecordForm } from './components/ComplianceRecordForm';
-import { ComplianceTypeForm } from './components/ComplianceTypeForm';
-import { ComplianceRecordsList } from './components/ComplianceRecordsList';
-import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 
 export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
