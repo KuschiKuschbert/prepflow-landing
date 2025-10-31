@@ -2,20 +2,6 @@
 
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState, useMemo } from 'react';
-import {
-  convertIngredientCost,
-  convertUnit,
-  getAllUnits,
-  isVolumeUnit,
-  isWeightUnit,
-} from '@/lib/unit-conversion';
-import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-  formatTextInput,
-} from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import { useSmartLoading } from '@/hooks/useSmartLoading';
 import {
@@ -32,6 +18,8 @@ import IngredientActions from './components/IngredientActions';
 import IngredientForm from './components/IngredientForm';
 import CSVImportModal from './components/CSVImportModal';
 import IngredientWizard from './components/IngredientWizard';
+import { IngredientsHeader } from './components/IngredientsHeader';
+import { useIngredientActions } from './hooks/useIngredientActions';
 
 interface Ingredient {
   id: string;
@@ -164,198 +152,34 @@ export default function IngredientsPage() {
     fetchSuppliers();
   }, []);
 
-  const handleAddIngredient = async (ingredientData: Partial<Ingredient>) => {
-    try {
-      const { data, error } = await supabase
-        .from('ingredients')
-        .insert([
-          {
-            ...ingredientData,
-            ingredient_name: formatIngredientName(ingredientData.ingredient_name || ''),
-            brand: ingredientData.brand ? formatBrandName(ingredientData.brand) : null,
-            supplier: ingredientData.supplier ? formatSupplierName(ingredientData.supplier) : null,
-            storage_location: ingredientData.storage_location
-              ? formatStorageLocation(ingredientData.storage_location)
-              : null,
-            product_code: ingredientData.product_code
-              ? formatTextInput(ingredientData.product_code)
-              : null,
-          },
-        ])
-        .select();
-
-      if (error) throw error;
-
-      setIngredients(prev => [...prev, ...(data || [])]);
-      setShowAddForm(false);
-      setWizardStep(1);
-      setNewIngredient({
-        ingredient_name: '',
-        brand: '',
-        pack_size: '',
-        pack_size_unit: 'g',
-        pack_price: 0,
-        unit: 'g',
-        cost_per_unit: 0,
-        supplier: '',
-        product_code: '',
-        storage_location: '',
-        min_stock_level: 0,
-        current_stock: 0,
-      });
-    } catch (error) {
-      setError('Failed to add ingredient');
-    }
-  };
-
-  const handleUpdateIngredient = async (id: string, updates: Partial<Ingredient>) => {
-    try {
-      const { data, error } = await supabase
-        .from('ingredients')
-        .update({
-          ...updates,
-          ingredient_name: updates.ingredient_name
-            ? formatIngredientName(updates.ingredient_name)
-            : undefined,
-          brand: updates.brand ? formatBrandName(updates.brand) : undefined,
-          supplier: updates.supplier ? formatSupplierName(updates.supplier) : undefined,
-          storage_location: updates.storage_location
-            ? formatStorageLocation(updates.storage_location)
-            : undefined,
-          product_code: updates.product_code ? formatTextInput(updates.product_code) : undefined,
-        })
-        .eq('id', id)
-        .select();
-
-      if (error) throw error;
-
-      setIngredients(prev => prev.map(ing => (ing.id === id ? { ...ing, ...updates } : ing)));
-      setEditingIngredient(null);
-    } catch (error) {
-      setError('Failed to update ingredient');
-    }
-  };
-
-  const handleDeleteIngredient = async (id: string) => {
-    try {
-      const { error } = await supabase.from('ingredients').delete().eq('id', id);
-
-      if (error) throw error;
-
-      setIngredients(prev => prev.filter(ing => ing.id !== id));
-    } catch (error) {
-      setError('Failed to delete ingredient');
-    }
-  };
-
-  const handleBulkDelete = async () => {
-    try {
-      const { error } = await supabase
-        .from('ingredients')
-        .delete()
-        .in('id', Array.from(selectedIngredients));
-
-      if (error) throw error;
-
-      setIngredients(prev => prev.filter(ing => !selectedIngredients.has(ing.id)));
-      setSelectedIngredients(new Set());
-    } catch (error) {
-      setError('Failed to delete selected ingredients');
-    }
-  };
-
-  const exportToCSV = () => {
-    const csvContent = [
-      [
-        'Ingredient Name',
-        'Brand',
-        'Pack Size',
-        'Pack Size Unit',
-        'Pack Price',
-        'Unit',
-        'Cost Per Unit',
-        'Supplier',
-        'Product Code',
-        'Storage Location',
-        'Min Stock Level',
-        'Current Stock',
-      ].join(','),
-      ...filteredIngredients.map(ingredient =>
-        [
-          ingredient.ingredient_name,
-          ingredient.brand || '',
-          ingredient.pack_size || '',
-          ingredient.pack_size_unit || '',
-          ingredient.pack_price || 0,
-          ingredient.unit || '',
-          ingredient.cost_per_unit || 0,
-          ingredient.supplier || '',
-          ingredient.product_code || '',
-          ingredient.storage_location || '',
-          ingredient.min_stock_level || 0,
-          ingredient.current_stock || 0,
-        ].join(','),
-      ),
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'ingredients.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
+  const {
+    handleAddIngredient,
+    handleUpdateIngredient,
+    handleDeleteIngredient,
+    handleBulkDelete,
+    exportToCSV,
+    handleCSVImport: handleCSVImportAction,
+    handleSelectIngredient,
+    handleSelectAll,
+  } = useIngredientActions({
+    setIngredients,
+    setError,
+    setShowAddForm,
+    setWizardStep,
+    setNewIngredient,
+    setEditingIngredient,
+    setShowCSVImport,
+    setCsvData,
+    setParsedIngredients,
+    setSelectedIngredients,
+    selectedIngredients,
+    filteredIngredients,
+  });
 
   const handleCSVImport = async () => {
-    try {
-      setImporting(true);
-
-      const { data, error } = await supabase
-        .from('ingredients')
-        .insert(
-          parsedIngredients.map(ingredient => ({
-            ...ingredient,
-            ingredient_name: formatIngredientName(ingredient.ingredient_name || ''),
-            brand: ingredient.brand ? formatBrandName(ingredient.brand) : null,
-            supplier: ingredient.supplier ? formatSupplierName(ingredient.supplier) : null,
-            storage_location: ingredient.storage_location
-              ? formatStorageLocation(ingredient.storage_location)
-              : null,
-            product_code: ingredient.product_code ? formatTextInput(ingredient.product_code) : null,
-          })),
-        )
-        .select();
-
-      if (error) throw error;
-
-      setIngredients(prev => [...prev, ...(data || [])]);
-      setShowCSVImport(false);
-      setCsvData('');
-      setParsedIngredients([]);
-    } catch (error) {
-      setError('Failed to import ingredients');
-    } finally {
-      setImporting(false);
-    }
-  };
-
-  const handleSelectIngredient = (id: string, selected: boolean) => {
-    const newSelected = new Set(selectedIngredients);
-    if (selected) {
-      newSelected.add(id);
-    } else {
-      newSelected.delete(id);
-    }
-    setSelectedIngredients(newSelected);
-  };
-
-  const handleSelectAll = (selected: boolean) => {
-    if (selected) {
-      setSelectedIngredients(new Set(filteredIngredients.map(ing => ing.id)));
-    } else {
-      setSelectedIngredients(new Set());
-    }
+    setImporting(true);
+    await handleCSVImportAction(parsedIngredients);
+    setImporting(false);
   };
 
   if (loading) {
@@ -366,42 +190,7 @@ export default function IngredientsPage() {
     <div className="min-h-screen bg-transparent p-4 sm:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="mb-2 text-3xl font-bold text-white">
-                🥘 {t('ingredients.title', 'Ingredients Management')}
-              </h1>
-              <p className="text-gray-400">
-                {t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')}
-              </p>
-            </div>
-
-            {/* Unit Selector */}
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-300">Display costs in:</label>
-              <select
-                value={displayUnit}
-                onChange={e => setDisplayUnit(e.target.value)}
-                className="flex min-h-[44px] items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              >
-                <optgroup label="Weight">
-                  <option value="g">Grams (g)</option>
-                  <option value="kg">Kilograms (kg)</option>
-                  <option value="oz">Ounces (oz)</option>
-                  <option value="lb">Pounds (lb)</option>
-                </optgroup>
-                <optgroup label="Volume">
-                  <option value="ml">Milliliters (ml)</option>
-                  <option value="l">Liters (L)</option>
-                  <option value="tsp">Teaspoons (tsp)</option>
-                  <option value="tbsp">Tablespoons (tbsp)</option>
-                  <option value="cup">Cups</option>
-                </optgroup>
-              </select>
-            </div>
-          </div>
-        </div>
+        <IngredientsHeader displayUnit={displayUnit} setDisplayUnit={setDisplayUnit} />
 
         {error && (
           <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
