@@ -2,7 +2,7 @@
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TemperatureEquipment, TemperatureLog } from './types';
 
 // Direct imports to eliminate skeleton flashes
@@ -81,7 +81,7 @@ function TemperatureLogsPageContent() {
     { value: 'storage', label: 'Storage', icon: '📦' },
   ];
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     try {
       let url = '/api/temperature-logs';
       const params = new URLSearchParams();
@@ -114,9 +114,9 @@ function TemperatureLogsPageContent() {
     } catch (error) {
       console.error('fetchLogs - Error:', error);
     }
-  };
+  }, [selectedDate, selectedType, allLogs, setLogs, setSelectedDate]);
 
-  const fetchAllLogs = async () => {
+  const fetchAllLogs = useCallback(async () => {
     try {
       const response = await fetch('/api/temperature-logs');
       const data = await response.json();
@@ -128,9 +128,9 @@ function TemperatureLogsPageContent() {
     } catch (error) {
       console.error('fetchAllLogs - Error:', error);
     }
-  };
+  }, [setAllLogs]);
 
-  const fetchEquipment = async () => {
+  const fetchEquipment = useCallback(async () => {
     try {
       const response = await fetch('/api/temperature-equipment');
       const data = await response.json();
@@ -142,7 +142,7 @@ function TemperatureLogsPageContent() {
     } catch (error) {
       console.error('fetchEquipment - Error:', error);
     }
-  };
+  }, [setEquipment]);
 
   useEffect(() => {
     // Initialize date/time values on client side to prevent hydration mismatch
@@ -183,7 +183,7 @@ function TemperatureLogsPageContent() {
       }
     };
     loadData();
-  }, []);
+  }, [fetchLogs, fetchEquipment, fetchAllLogs]);
 
   // Watch for changes in selectedDate or selectedType and refetch logs
   useEffect(() => {

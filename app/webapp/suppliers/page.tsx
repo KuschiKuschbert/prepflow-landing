@@ -2,7 +2,7 @@
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PriceListForm } from './components/PriceListForm';
 import { PriceListsList } from './components/PriceListsList';
 import { SupplierForm } from './components/SupplierForm';
@@ -40,12 +40,7 @@ export default function SuppliersPage() {
     is_current: true,
   });
 
-  useEffect(() => {
-    fetchSuppliers();
-    fetchPriceLists();
-  }, [selectedSupplier]);
-
-  const fetchSuppliers = async () => {
+  const fetchSuppliers = useCallback(async () => {
     try {
       const response = await fetch('/api/suppliers');
       const data = await response.json();
@@ -57,9 +52,9 @@ export default function SuppliersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchPriceLists = async () => {
+  const fetchPriceLists = useCallback(async () => {
     try {
       let url = '/api/supplier-price-lists';
       if (selectedSupplier !== 'all') {
@@ -74,7 +69,12 @@ export default function SuppliersPage() {
     } catch (error) {
       console.error('Error fetching price lists:', error);
     }
-  };
+  }, [selectedSupplier]);
+
+  useEffect(() => {
+    fetchSuppliers();
+    fetchPriceLists();
+  }, [fetchSuppliers, fetchPriceLists]);
 
   const handleAddSupplier = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -2,16 +2,16 @@
 
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ComplianceRecordForm } from './components/ComplianceRecordForm';
 import { ComplianceRecordsList } from './components/ComplianceRecordsList';
 import { ComplianceTypeForm } from './components/ComplianceTypeForm';
 import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 import {
-  ComplianceRecord,
-  ComplianceRecordFormData,
-  ComplianceType,
-  ComplianceTypeFormData,
+    ComplianceRecord,
+    ComplianceRecordFormData,
+    ComplianceType,
+    ComplianceTypeFormData,
 } from './types';
 import { getTypeIcon } from './utils';
 
@@ -42,12 +42,7 @@ export default function ComplianceTrackingPage() {
     renewal_frequency_days: '',
   });
 
-  useEffect(() => {
-    fetchTypes();
-    fetchRecords();
-  }, [selectedType, selectedStatus]);
-
-  const fetchTypes = async () => {
+  const fetchTypes = useCallback(async () => {
     try {
       const response = await fetch('/api/compliance-types');
       const data = await response.json();
@@ -57,9 +52,9 @@ export default function ComplianceTrackingPage() {
     } catch (error) {
       console.error('Error fetching types:', error);
     }
-  };
+  }, []);
 
-  const fetchRecords = async () => {
+  const fetchRecords = useCallback(async () => {
     try {
       let url = '/api/compliance-records';
       const params = new URLSearchParams();
@@ -77,7 +72,12 @@ export default function ComplianceTrackingPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedType, selectedStatus]);
+
+  useEffect(() => {
+    fetchTypes();
+    fetchRecords();
+  }, [fetchTypes, fetchRecords]);
 
   const handleAddRecord = async (e: React.FormEvent) => {
     e.preventDefault();

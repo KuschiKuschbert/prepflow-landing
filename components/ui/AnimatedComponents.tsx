@@ -302,7 +302,7 @@ export function AnimationShowcase() {
   );
 }
 
-export default {
+const AnimatedComponents = {
   AnimatedCard,
   AnimatedButton,
   AnimatedSkeleton,
@@ -310,3 +310,5 @@ export default {
   AnimatedToast,
   AnimationShowcase,
 };
+
+export default AnimatedComponents;

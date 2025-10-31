@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { initializeRUM } from '../lib/advanced-rum';
 import { trackEvent, trackPerformance } from '../lib/analytics';
 import { initializePerformanceABTesting } from '../lib/performance-ab-testing';
@@ -103,6 +103,75 @@ export default function AdvancedPerformanceTracker({
       console.log('🚀 PrepFlow Performance: Starting advanced performance tracking');
     }
 
+    // Track initial page load performance (defined here for useEffect dependency)
+    const trackInitialPerformance = async () => {
+      if (hasTrackedInitial.current) return;
+      hasTrackedInitial.current = true;
+
+      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const paint = performance.getEntriesByType('paint');
+
+      if (navigation) {
+        const navigationMetrics = {
+          dns: navigation.domainLookupEnd - navigation.domainLookupStart,
+          tcp: navigation.connectEnd - navigation.connectStart,
+          request: navigation.responseStart - navigation.requestStart,
+          response: navigation.responseEnd - navigation.responseStart,
+          dom: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+          load: navigation.loadEventEnd - navigation.loadEventStart,
+          total: navigation.loadEventEnd - navigation.fetchStart,
+        };
+
+        const paintMetrics = {
+          fcp: paint.find(p => p.name === 'first-contentful-paint')?.startTime || null,
+          lcp: null, // Will be set by LCP observer
+        };
+
+        // Update metrics
+        setMetrics(prev => ({
+          ...prev,
+          navigation: navigationMetrics,
+          paint: paintMetrics,
+          lcp: null,
+          fid: null,
+          cls: null,
+          resources: { slowResources: [], totalResources: 0, averageLoadTime: 0 },
+          ux: { timeToInteractive: null, firstInputDelay: null, cumulativeLayoutShift: null },
+          network: { effectiveType: null, downlink: null, rtt: null },
+          memory: { usedJSHeapSize: null, totalJSHeapSize: null, jsHeapSizeLimit: null },
+        }));
+
+        // Track performance metrics
+        trackPerformance({
+          pageLoadTime: navigationMetrics.total,
+          firstContentfulPaint: paintMetrics.fcp || 0,
+          largestContentfulPaint: 0, // Will be updated by LCP observer
+          firstInputDelay: 0, // Will be updated by FID observer
+          cumulativeLayoutShift: 0, // Will be updated by CLS observer
+          timestamp: Date.now(),
+          page: window.location.pathname,
+          sessionId: 'session_' + Math.random().toString(36).substr(2, 9),
+        });
+
+        // Send to Google Analytics
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'page_performance', {
+            event_category: 'performance',
+            event_label: 'initial_load',
+            value: Math.round(navigationMetrics.total),
+            custom_parameter_page_load_time: Math.round(navigationMetrics.total),
+            custom_parameter_dom_content_loaded: Math.round(navigationMetrics.dom),
+            custom_parameter_first_byte: Math.round(navigationMetrics.request),
+            custom_parameter_page: window.location.pathname,
+          });
+        }
+
+        if (onMetrics) {
+          onMetrics(metrics!);
+        }
+      }
+    };
+
     // Initialize performance tracking
     const initializeTracking = async () => {
       try {
@@ -150,76 +219,8 @@ export default function AdvancedPerformanceTracker({
       if (fidObserver.current) fidObserver.current.disconnect();
       if (clsObserver.current) clsObserver.current.disconnect();
     };
-  }, [enabled, sampleRate]);
-
-  // Track initial page load performance
-  const trackInitialPerformance = async () => {
-    if (hasTrackedInitial.current) return;
-    hasTrackedInitial.current = true;
-
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    const paint = performance.getEntriesByType('paint');
-
-    if (navigation) {
-      const navigationMetrics = {
-        dns: navigation.domainLookupEnd - navigation.domainLookupStart,
-        tcp: navigation.connectEnd - navigation.connectStart,
-        request: navigation.responseStart - navigation.requestStart,
-        response: navigation.responseEnd - navigation.responseStart,
-        dom: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
-        load: navigation.loadEventEnd - navigation.loadEventStart,
-        total: navigation.loadEventEnd - navigation.fetchStart,
-      };
-
-      const paintMetrics = {
-        fcp: paint.find(p => p.name === 'first-contentful-paint')?.startTime || null,
-        lcp: null, // Will be set by LCP observer
-      };
-
-      // Update metrics
-      setMetrics(prev => ({
-        ...prev,
-        navigation: navigationMetrics,
-        paint: paintMetrics,
-        lcp: null,
-        fid: null,
-        cls: null,
-        resources: { slowResources: [], totalResources: 0, averageLoadTime: 0 },
-        ux: { timeToInteractive: null, firstInputDelay: null, cumulativeLayoutShift: null },
-        network: { effectiveType: null, downlink: null, rtt: null },
-        memory: { usedJSHeapSize: null, totalJSHeapSize: null, jsHeapSizeLimit: null },
-      }));
-
-      // Track performance metrics
-      trackPerformance({
-        pageLoadTime: navigationMetrics.total,
-        firstContentfulPaint: paintMetrics.fcp || 0,
-        largestContentfulPaint: 0, // Will be updated by LCP observer
-        firstInputDelay: 0, // Will be updated by FID observer
-        cumulativeLayoutShift: 0, // Will be updated by CLS observer
-        timestamp: Date.now(),
-        page: window.location.pathname,
-        sessionId: 'session_' + Math.random().toString(36).substr(2, 9),
-      });
-
-      // Send to Google Analytics
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'page_performance', {
-          event_category: 'performance',
-          event_label: 'initial_load',
-          value: Math.round(navigationMetrics.total),
-          custom_parameter_page_load_time: Math.round(navigationMetrics.total),
-          custom_parameter_dom_content_loaded: Math.round(navigationMetrics.dom),
-          custom_parameter_first_byte: Math.round(navigationMetrics.request),
-          custom_parameter_page: window.location.pathname,
-        });
-      }
-
-      if (onMetrics) {
-        onMetrics(metrics!);
-      }
-    }
-  };
+    // trackPerformance is an imported function (outer scope value) - stable and doesn't need to be in deps
+  }, [enabled, sampleRate, setMetrics, onMetrics, metrics]);
 
   // Track Core Web Vitals
   const trackCoreWebVitals = () => {

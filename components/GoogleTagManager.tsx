@@ -40,7 +40,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
         console.log('✅ GTM Data Layer initialized');
       }
     }
-  }, []);
+  }, [pathname]);
 
   // Track page views
   useEffect(() => {

@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback } from 'react';
 import { convertUnit } from '@/lib/unit-conversion';
-import { Ingredient, COGSCalculation } from '../types';
+import { useCallback, useMemo } from 'react';
+import { COGSCalculation, Ingredient } from '../types';
 
 interface NewIngredient {
   ingredient_id?: string;
@@ -29,36 +29,30 @@ export function useIngredientAddition({
   resetForm,
   setSaveError,
 }: UseIngredientAdditionProps) {
-  const volumeUnits = [
-    'tsp',
-    'teaspoon',
-    'tbsp',
-    'tablespoon',
-    'cup',
-    'cups',
-    'ml',
-    'milliliter',
-    'l',
-    'liter',
-    'litre',
-    'fl oz',
-    'fluid ounce',
-  ];
+  // Move constants outside component or use useMemo to prevent re-creation on every render
+  const volumeUnits = useMemo(
+    () => [
+      'tsp',
+      'teaspoon',
+      'tbsp',
+      'tablespoon',
+      'cup',
+      'cups',
+      'ml',
+      'milliliter',
+      'l',
+      'liter',
+      'litre',
+      'fl oz',
+      'fluid ounce',
+    ],
+    [],
+  );
 
-  const weightUnits = [
-    'g',
-    'gm',
-    'gram',
-    'grams',
-    'kg',
-    'kilogram',
-    'oz',
-    'ounce',
-    'lb',
-    'pound',
-    'mg',
-    'milligram',
-  ];
+  const weightUnits = useMemo(
+    () => ['g', 'gm', 'gram', 'grams', 'kg', 'kilogram', 'oz', 'ounce', 'lb', 'pound', 'mg', 'milligram'],
+    [],
+  );
 
   const handleAddIngredient = useCallback(
     async (newIngredient: NewIngredient, e?: React.FormEvent) => {
@@ -178,6 +172,8 @@ export function useIngredientAddition({
       updateCalculation,
       resetForm,
       setSaveError,
+      volumeUnits,
+      weightUnits,
     ],
   );
 

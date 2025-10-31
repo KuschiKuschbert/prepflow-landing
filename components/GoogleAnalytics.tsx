@@ -2,7 +2,7 @@
 
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense, useRef } from 'react';
+import { useCallback, useEffect, Suspense, useRef } from 'react';
 
 declare global {
   interface Window {
@@ -21,7 +21,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
   const hasInitialized = useRef(false);
 
   // Initialize gtag function
-  const initializeGtag = () => {
+  const initializeGtag = useCallback(() => {
     if (typeof window !== 'undefined' && !window.gtag) {
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () {
@@ -41,7 +41,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
       hasInitialized.current = true;
       console.log('✅ Google Analytics initialized with ID:', measurementId);
     }
-  };
+  }, [measurementId]);
 
   // Track page views
   useEffect(() => {
@@ -70,7 +70,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
     };
 
     checkGtag();
-  }, [measurementId]);
+  }, [measurementId, initializeGtag]);
 
   return (
     <>

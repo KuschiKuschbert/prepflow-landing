@@ -5,7 +5,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabase } from '@/lib/supabase';
 import { useTranslation } from '@/lib/useTranslation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface RecentActivity {
   id: string;
@@ -21,7 +21,7 @@ export default function RecentActivity() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchRecentActivity = async (): Promise<RecentActivity[]> => {
+  const fetchRecentActivity = useCallback(async (): Promise<RecentActivity[]> => {
     const activities: RecentActivity[] = [];
 
     try {
@@ -90,9 +90,9 @@ export default function RecentActivity() {
       console.error('Error fetching recent activity:', error);
       throw error;
     }
-  };
+  }, []);
 
-  const refetch = async () => {
+  const refetch = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -103,11 +103,11 @@ export default function RecentActivity() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchRecentActivity]);
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   // Show loading state only if we have no data and are loading
   if (loading && !activities) {

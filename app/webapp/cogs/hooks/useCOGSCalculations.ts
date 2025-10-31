@@ -52,26 +52,6 @@ export const useCOGSCalculations = () => {
     }
   }, []);
 
-  const fetchRecipeIngredients = useCallback(async (recipeId: string) => {
-    if (!recipeId) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('recipe_ingredients')
-        .select('*')
-        .eq('recipe_id', recipeId);
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setRecipeIngredients(data || []);
-        calculateCOGS(data || []);
-      }
-    } catch (err) {
-      setError('Failed to fetch recipe ingredients');
-    }
-  }, []);
-
   const calculateCOGS = useCallback(
     (recipeIngredients: RecipeIngredient[]) => {
       const calculations: COGSCalculation[] = recipeIngredients
@@ -123,6 +103,26 @@ export const useCOGSCalculations = () => {
     },
     [ingredients],
   );
+
+  const fetchRecipeIngredients = useCallback(async (recipeId: string) => {
+    if (!recipeId) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('recipe_ingredients')
+        .select('*')
+        .eq('recipe_id', recipeId);
+
+      if (error) {
+        setError(error.message);
+      } else {
+        setRecipeIngredients(data || []);
+        calculateCOGS(data || []);
+      }
+    } catch (err) {
+      setError('Failed to fetch recipe ingredients');
+    }
+  }, [calculateCOGS, setError]);
 
   const loadExistingRecipeIngredients = useCallback(async (recipeId: string) => {
     try {
@@ -208,6 +208,8 @@ export const useCOGSCalculations = () => {
     } catch (err) {
       console.log('Error in loadExistingRecipeIngredients:', err);
     }
+    // loadExistingRecipeIngredients doesn't use ingredients state - data comes from DB query
+     
   }, []);
 
   const checkRecipeExists = useCallback(

@@ -66,26 +66,6 @@ export function useRecipeManagement() {
     [],
   );
 
-  const fetchRecipes = useCallback(async () => {
-    try {
-      const response = await fetch('/api/recipes');
-      const result = await response.json();
-
-      if (!response.ok) {
-        setError(result.error || 'Failed to fetch recipes');
-      } else {
-        setRecipes(result.recipes || []);
-
-        // Calculate prices for each recipe
-        await calculateAllRecipePrices(result.recipes || []);
-      }
-    } catch (err) {
-      setError('Failed to fetch recipes');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   // Calculate prices for all recipes
   const calculateAllRecipePrices = useCallback(
     async (recipesData: Recipe[]) => {
@@ -105,8 +85,31 @@ export function useRecipeManagement() {
 
       setRecipePrices(prices);
     },
-    [calculateRecommendedPrice],
+    [calculateRecommendedPrice, fetchRecipeIngredients],
   );
+
+  const fetchRecipes = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/recipes');
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.error || 'Failed to fetch recipes');
+      } else {
+        setRecipes(result.recipes || []);
+
+        // Calculate prices for each recipe
+        await calculateAllRecipePrices(result.recipes || []);
+      }
+    } catch (err) {
+      setError('Failed to fetch recipes');
+    } finally {
+      setLoading(false);
+    }
+  }, [calculateAllRecipePrices]);
 
   // Refresh recipe prices (for auto-updates)
   const refreshRecipePrices = useCallback(async () => {
@@ -154,7 +157,7 @@ export function useRecipeManagement() {
         return [];
       }
     },
-    [],
+    [setError],
   );
 
   const handleEditRecipe = useCallback(

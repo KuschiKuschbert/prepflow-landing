@@ -140,7 +140,7 @@ export default function ExitIntentTracker({
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (mouseLeaveTimeout) clearTimeout(mouseLeaveTimeout);
     };
-  }, [enabled, hasTriggered, onExitIntent]);
+  }, [enabled, hasTriggered, onExitIntent, showPopup]);
 
   // Render the exit intent popup
   return (
