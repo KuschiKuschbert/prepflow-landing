@@ -17,6 +17,12 @@ import { useCOGSCalculations } from './hooks/useCOGSCalculations';
 import { useIngredientSearch } from './hooks/useIngredientSearch';
 import { usePricing } from './hooks/usePricing';
 import { useRecipeSaving } from './hooks/useRecipeSaving';
+import { useCOGSEffects } from './hooks/useCOGSEffects';
+import { useIngredientAddition } from './hooks/useIngredientAddition';
+
+// Components
+import { COGSHeader } from './components/COGSHeader';
+import { SuccessMessage } from './components/SuccessMessage';
 
 // Types
 import { DishFormData } from './types';
@@ -81,8 +87,6 @@ function COGSPageContent() {
 
   // Additional local state
   const [dishNameLocked, setDishNameLocked] = useState(false);
-  const [recipeExists, setRecipeExists] = useState<boolean | null>(null);
-  const [checkingRecipe, setCheckingRecipe] = useState(false);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
   const [editQuantity, setEditQuantity] = useState<number>(0);
@@ -92,72 +96,28 @@ function COGSPageContent() {
     fetchData();
   }, [fetchData]);
 
-  // Handle editing data from recipe book
-  useEffect(() => {
-    const editingData = sessionStorage.getItem('editingRecipe');
-    if (editingData) {
-      try {
-        const { recipe, recipeId, calculations, dishName, dishPortions, dishNameLocked } =
-          JSON.parse(editingData);
+  // COGS effects hook
+  const { recipeExists, checkingRecipe } = useCOGSEffects({
+    checkRecipeExists,
+    dishName,
+    dishNameLocked,
+    setSuccessMessage,
+    setDishName,
+    setDishPortions,
+    setDishNameLocked,
+    setShowSuggestions,
+  });
 
-        console.log('🔍 DEBUG: Loading from sessionStorage with recipeId:', {
-          dishName,
-          recipeId,
-          calculationsCount: calculations.length,
-        });
-
-        setDishName(dishName);
-        setDishPortions(dishPortions);
-        setDishNameLocked(dishNameLocked);
-
-        // Clear the session storage
-        sessionStorage.removeItem('editingRecipe');
-
-        // Show success message
-        setSuccessMessage(`Recipe "${dishName}" loaded for editing!`);
-        setTimeout(() => setSuccessMessage(null), 3000);
-      } catch (err) {
-        console.log('Failed to parse editing data:', err);
-      }
-    }
-  }, [setSuccessMessage]);
-
-  // Close suggestions when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (
-        !target.closest('.ingredient-search-container') &&
-        !target.closest('.suggestions-dropdown')
-      ) {
-        setShowSuggestions(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Debounced recipe check (only for manual dish name entry, not when editing from recipe book)
-  useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      if (dishName.trim() && !dishNameLocked) {
-        console.log('🔍 DEBUG: Running recipe check for:', dishName);
-        setCheckingRecipe(true);
-        const exists = await checkRecipeExists(dishName);
-        setRecipeExists(exists);
-        setCheckingRecipe(false);
-      } else if (!dishName.trim()) {
-        setRecipeExists(null);
-      } else {
-        console.log(
-          '🔍 DEBUG: Skipping recipe check - dish name locked (editing from recipe book)',
-        );
-      }
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, [dishName, dishNameLocked, checkRecipeExists]);
+  // Ingredient addition hook
+  const { handleAddIngredient } = useIngredientAddition({
+    calculations,
+    ingredients,
+    selectedRecipe,
+    addCalculation,
+    updateCalculation,
+    resetForm,
+    setSaveError,
+  });
 
   // Handle editing ingredient quantity
   const handleEditIngredient = (ingredientId: string, currentQuantity: number) => {
@@ -197,191 +157,8 @@ function COGSPageContent() {
     }
   };
 
-  const handleAddIngredient = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newIngredient.ingredient_id || !newIngredient.quantity) {
-      setSaveError('Please select an ingredient and enter a quantity');
-      return;
-    }
-
-    try {
-      // Check if ingredient already exists
-      const existingIngredient = calculations.find(
-        calc => calc.ingredientId === newIngredient.ingredient_id,
-      );
-
-      if (existingIngredient) {
-        // Update existing ingredient quantity with automatic unit conversion
-        const selectedIngredientData = ingredients.find(
-          ing => ing.id === newIngredient.ingredient_id,
-        );
-        if (selectedIngredientData) {
-          // Automatic unit conversion: convert user input to ingredient's base unit
-          let convertedQuantity = newIngredient.quantity!;
-          let convertedUnit = newIngredient.unit || 'kg';
-          let conversionNote = '';
-
-          // If user entered volume units but ingredient is measured by weight (or vice versa)
-          const userUnit = (newIngredient.unit || 'kg').toLowerCase().trim();
-          const ingredientUnit = (selectedIngredientData.unit || 'kg').toLowerCase().trim();
-
-          // Volume units
-          const volumeUnits = [
-            'tsp',
-            'teaspoon',
-            'tbsp',
-            'tablespoon',
-            'cup',
-            'cups',
-            'ml',
-            'milliliter',
-            'l',
-            'liter',
-            'litre',
-            'fl oz',
-            'fluid ounce',
-          ];
-          // Weight units
-          const weightUnits = [
-            'g',
-            'gm',
-            'gram',
-            'grams',
-            'kg',
-            'kilogram',
-            'oz',
-            'ounce',
-            'lb',
-            'pound',
-            'mg',
-            'milligram',
-          ];
-
-          const isUserVolume = volumeUnits.includes(userUnit);
-          const isUserWeight = weightUnits.includes(userUnit);
-          const isIngredientVolume = volumeUnits.includes(ingredientUnit);
-          const isIngredientWeight = weightUnits.includes(ingredientUnit);
-
-          // Convert if there's a mismatch between user input and ingredient base unit
-          if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-            const conversionResult = convertUnit(
-              newIngredient.quantity!,
-              newIngredient.unit || 'kg',
-              selectedIngredientData.unit || 'kg',
-            );
-            convertedQuantity = newIngredient.quantity! * conversionResult.value;
-            convertedUnit = selectedIngredientData.unit || 'kg';
-            conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
-          }
-
-          // Update the calculation with new quantity
-          const currentCalc = calculations.find(
-            calc => calc.ingredientId === newIngredient.ingredient_id,
-          );
-          if (currentCalc) {
-            const newQuantity = currentCalc.quantity + convertedQuantity;
-            updateCalculation(newIngredient.ingredient_id!, newQuantity);
-          }
-        }
-      } else {
-        // Add new ingredient with automatic unit conversion
-        const selectedIngredientData = ingredients.find(
-          ing => ing.id === newIngredient.ingredient_id,
-        );
-        if (selectedIngredientData) {
-          // Automatic unit conversion: convert user input to ingredient's base unit
-          let convertedQuantity = newIngredient.quantity!;
-          let convertedUnit = newIngredient.unit || 'kg';
-          let conversionNote = '';
-
-          // If user entered volume units but ingredient is measured by weight (or vice versa)
-          const userUnit = (newIngredient.unit || 'kg').toLowerCase().trim();
-          const ingredientUnit = (selectedIngredientData.unit || 'kg').toLowerCase().trim();
-
-          // Volume units
-          const volumeUnits = [
-            'tsp',
-            'teaspoon',
-            'tbsp',
-            'tablespoon',
-            'cup',
-            'cups',
-            'ml',
-            'milliliter',
-            'l',
-            'liter',
-            'litre',
-            'fl oz',
-            'fluid ounce',
-          ];
-          // Weight units
-          const weightUnits = [
-            'g',
-            'gm',
-            'gram',
-            'grams',
-            'kg',
-            'kilogram',
-            'oz',
-            'ounce',
-            'lb',
-            'pound',
-            'mg',
-            'milligram',
-          ];
-
-          const isUserVolume = volumeUnits.includes(userUnit);
-          const isUserWeight = weightUnits.includes(userUnit);
-          const isIngredientVolume = volumeUnits.includes(ingredientUnit);
-          const isIngredientWeight = weightUnits.includes(ingredientUnit);
-
-          // Convert if there's a mismatch between user input and ingredient base unit
-          if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-            const conversionResult = convertUnit(
-              newIngredient.quantity!,
-              newIngredient.unit || 'kg',
-              selectedIngredientData.unit || 'kg',
-            );
-            convertedQuantity = newIngredient.quantity! * conversionResult.value;
-            convertedUnit = selectedIngredientData.unit || 'kg';
-            conversionNote = ` (converted from ${newIngredient.quantity} ${newIngredient.unit || 'kg'})`;
-          }
-
-          // Create new calculation
-          const baseCostPerUnit =
-            selectedIngredientData.cost_per_unit_incl_trim ||
-            selectedIngredientData.cost_per_unit ||
-            0;
-          const costPerUnit = baseCostPerUnit; // Simplified for now
-          const totalCost = convertedQuantity * costPerUnit;
-
-          // Apply waste and yield adjustments
-          const wastePercent = selectedIngredientData.trim_peel_waste_percentage || 0;
-          const yieldPercent = selectedIngredientData.yield_percentage || 100;
-          const wasteAdjustedCost = totalCost * (1 + wastePercent / 100);
-          const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
-
-          const newCalculation = {
-            recipeId: selectedRecipe || 'temp',
-            ingredientId: newIngredient.ingredient_id!,
-            ingredientName: selectedIngredientData.ingredient_name + conversionNote,
-            quantity: convertedQuantity,
-            unit: convertedUnit,
-            costPerUnit: costPerUnit,
-            totalCost: totalCost,
-            wasteAdjustedCost: wasteAdjustedCost,
-            yieldAdjustedCost: yieldAdjustedCost,
-          };
-
-          addCalculation(newCalculation);
-        }
-      }
-
-      // Reset form
-      resetForm();
-    } catch (err) {
-      setSaveError('Failed to add ingredient');
-    }
+  const handleAddIngredientWrapper = async (e: React.FormEvent) => {
+    await handleAddIngredient(newIngredient, e);
   };
 
   const handleSaveAsRecipe = () => {
@@ -407,12 +184,7 @@ function COGSPageContent() {
     <div className="min-h-screen bg-transparent p-4 sm:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-white">💰 COGS Calculator</h1>
-          <p className="text-gray-400">
-            Calculate Cost of Goods Sold and optimize your profit margins
-          </p>
-        </div>
+        <COGSHeader />
 
         {/* Error Display */}
         {(error || saveError) && (
@@ -422,48 +194,7 @@ function COGSPageContent() {
         )}
 
         {/* Success Message */}
-        {successMessage && (
-          <div className="animate-in slide-in-from-top-2 mb-6 scale-105 transform rounded-2xl border-2 border-green-400 bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-5 text-white shadow-2xl transition-all duration-300 duration-500 hover:scale-110">
-            <div className="flex items-center space-x-4">
-              <div className="flex-shrink-0">
-                <div className="flex h-10 w-10 animate-pulse items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                  <svg
-                    className="h-6 w-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="flex-1">
-                <p className="text-lg font-bold text-white">{successMessage}</p>
-                <p className="mt-1 text-sm font-medium text-green-100">
-                  🎉 Your recipe has been added to the Recipe Book and is ready to use!
-                </p>
-              </div>
-              <button
-                onClick={() => setSuccessMessage(null)}
-                className="flex-shrink-0 rounded-full p-2 text-white/80 transition-all duration-200 hover:bg-white/20 hover:text-white"
-              >
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        )}
+        <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
 
         <div className="grid grid-cols-1 gap-4 sm:gap-8 lg:grid-cols-2">
           {/* Left Column - Dish Creation */}
@@ -490,7 +221,7 @@ function COGSPageContent() {
               onIngredientSelect={handleIngredientSelect}
               onQuantityChange={quantity => setNewIngredient({ ...newIngredient, quantity })}
               onUnitChange={unit => setNewIngredient({ ...newIngredient, unit })}
-              onAddIngredient={handleAddIngredient}
+              onAddIngredient={handleAddIngredientWrapper}
             />
           </div>
 
