@@ -24,11 +24,11 @@
     "lighthouse:desktop": "lighthouse http://localhost:3000 --view --emulated-form-factor=desktop",
     "perf:test": "npm run build && npm run lighthouse",
     "perf:analyze": "npm run build && npm run analyze",
-    "perf:optimize": "node scripts/optimize-performance.js",
     "bundle:analyze": "node scripts/analyze-bundle.js",
     "bundle:webpack": "ANALYZE=true npm run build",
     "audit:deps": "node scripts/audit-dependencies.js",
-    "bundle:size": "npm run build && npm run analyze"
+    "bundle:size": "npm run build && npm run analyze",
+    "lint:filesize": "node scripts/check-file-sizes.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",

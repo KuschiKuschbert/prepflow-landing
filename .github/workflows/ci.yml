@@ -25,6 +25,9 @@ jobs:
         run: |
           npm ci || npm i
 
+      - name: File size guard
+        run: npm run lint:filesize
+
       - name: Lint
         run: npm run lint
 
