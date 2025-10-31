@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { trackEvent, trackConversion, getSessionId } from '../lib/analytics';
+import { trackGTMEvent } from './GoogleTagManager';
 
 interface ExitIntentPopupProps {
   isVisible: boolean;
@@ -109,6 +110,13 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
       // Success handling
       setIsSuccess(true);
       onSuccess?.(formData);
+
+      // Push success to GTM
+      trackGTMEvent('lead_submit_success', {
+        event_category: 'conversion',
+        event_label: 'exit_intent_popup',
+        page_path: typeof window !== 'undefined' ? window.location.pathname : '/',
+      });
 
       // Auto-close after success
       setTimeout(() => {

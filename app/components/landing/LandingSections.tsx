@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { trackEvent, trackConversion, getSessionId } from '../../../lib/analytics';
 import OptimizedImage from '../../../components/OptimizedImage';
 import { useTranslation } from '../../../lib/useTranslation';
+import { trackGTMEvent } from '../../../components/GoogleTagManager';
 
 interface LandingSectionsProps {
   renderHero: () => React.ReactNode;
@@ -530,6 +531,12 @@ function LeadMagnetForm() {
         metadata: { source: 'lead_magnet_section' },
       });
 
+      trackGTMEvent('lead_submit', {
+        event_category: 'conversion',
+        event_label: 'lead_magnet_section',
+        page_path: typeof window !== 'undefined' ? window.location.pathname : '/',
+      });
+
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -540,6 +547,11 @@ function LeadMagnetForm() {
         throw new Error(data?.message || 'Failed to submit');
       }
       setIsSuccess(true);
+      trackGTMEvent('lead_submit_success', {
+        event_category: 'conversion',
+        event_label: 'lead_magnet_section',
+        page_path: typeof window !== 'undefined' ? window.location.pathname : '/',
+      });
       setName('');
       setEmail('');
     } catch (err: any) {
