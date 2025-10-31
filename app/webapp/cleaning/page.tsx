@@ -4,6 +4,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
+import { TaskCard } from './components/TaskCard';
 
 interface CleaningArea {
   id: number;
