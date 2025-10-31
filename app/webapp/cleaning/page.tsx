@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import OptimizedImage from '@/components/OptimizedImage';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
 
 interface CleaningArea {
   id: number;
@@ -38,11 +39,21 @@ export default function CleaningRosterPage() {
   const [showAddTask, setShowAddTask] = useState(false);
   const [newArea, setNewArea] = useState({ name: '', description: '', frequency_days: 7 });
   const [newTask, setNewTask] = useState({ area_id: '', assigned_date: '', notes: '' });
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const { data: tasksData, isLoading: tasksLoading } = useCleaningTasksQuery(page, pageSize);
 
   useEffect(() => {
     fetchAreas();
-    fetchTasks();
   }, []);
+
+  useEffect(() => {
+    const td = tasksData as any;
+    if (td?.items) setTasks(td.items as any);
+  }, [tasksData]);
+
+  const total = (tasksData as any)?.total || 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   const fetchAreas = async () => {
     try {
@@ -53,20 +64,6 @@ export default function CleaningRosterPage() {
       }
     } catch (error) {
       console.error('Error fetching areas:', error);
-    }
-  };
-
-  const fetchTasks = async () => {
-    try {
-      const response = await fetch('/api/cleaning-tasks');
-      const data = await response.json();
-      if (data.success) {
-        setTasks(data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -490,6 +487,29 @@ export default function CleaningRosterPage() {
                   </div>
                 </div>
               ))}
+
+              {/* Pagination */}
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-sm text-gray-400">
+                  Page {page} of {totalPages} ({total} items)
+                </span>
+                <div className="space-x-2">
+                  <button
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    disabled={page <= 1}
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                    disabled={page >= totalPages}
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
