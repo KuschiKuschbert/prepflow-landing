@@ -5,6 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 import { OrderListForm } from './components/OrderListForm';
 import { getStatusColor } from './utils';
+import { useOrderListsQuery } from './hooks/useOrderListsQuery';
 
 interface Supplier {
   id: string;
@@ -62,15 +63,26 @@ export default function OrderListsPage() {
       notes: string;
     }>,
   });
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const { data: orderListsData, isLoading: listsLoading } = useOrderListsQuery(
+    page,
+    pageSize,
+    userId,
+  );
 
   // Mock user ID for now
   const userId = 'user-123';
 
   useEffect(() => {
-    fetchOrderLists();
+    // Keep suppliers and ingredients fetch; lists come from query
     fetchSuppliers();
     fetchIngredients();
   }, []);
+
+  useEffect(() => {
+    if (orderListsData?.items) setOrderLists(orderListsData.items as any);
+  }, [orderListsData]);
 
   const fetchOrderLists = async () => {
     // Disable loading state to prevent skeleton flashes during API errors
@@ -232,7 +244,7 @@ export default function OrderListsPage() {
 
   // getStatusColor imported
 
-  if (loading) {
+  if (loading || listsLoading) {
     return (
       <div className="min-h-screen bg-transparent text-white">
         <div className="container mx-auto px-4 py-8">
@@ -244,6 +256,9 @@ export default function OrderListsPage() {
       </div>
     );
   }
+
+  const total = orderListsData?.total || 0;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
     <div className="min-h-screen bg-transparent text-white">
@@ -297,141 +312,165 @@ export default function OrderListsPage() {
               </button>
             </div>
           ) : (
-            orderLists.map(orderList => (
-              <div
-                key={orderList.id}
-                className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="mb-3 flex items-center space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                        <span className="text-lg">📋</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">{orderList.name}</h3>
-                        <p className="text-sm text-gray-400">{orderList.suppliers.name}</p>
-                      </div>
-                    </div>
-
-                    <div className="mb-4 flex items-center space-x-4">
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('orderLists.status', 'Status')}
-                        </p>
-                        <span
-                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(orderList.status)}`}
-                        >
-                          {orderList.status.charAt(0).toUpperCase() + orderList.status.slice(1)}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('orderLists.items', 'Items')}
-                        </p>
-                        <p className="font-semibold text-white">
-                          {orderList.order_list_items.length}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('orderLists.created', 'Created')}
-                        </p>
-                        <p className="font-semibold text-white">
-                          {new Date(orderList.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    {orderList.notes && (
-                      <p className="mb-4 text-sm text-gray-300">{orderList.notes}</p>
-                    )}
-
-                    {/* Order Items Preview */}
-                    {orderList.order_list_items.length > 0 && (
-                      <div className="rounded-xl bg-[#2a2a2a]/30 p-4">
-                        <h4 className="mb-3 text-sm font-semibold text-white">
-                          {t('orderLists.items', 'Items')}
-                        </h4>
-                        <div className="space-y-2">
-                          {orderList.order_list_items.slice(0, 3).map(item => (
-                            <div
-                              key={item.id}
-                              className="flex items-center justify-between text-sm"
-                            >
-                              <span className="text-gray-300">{item.ingredients.name}</span>
-                              <span className="font-semibold text-white">
-                                {item.quantity} {item.unit}
-                              </span>
-                            </div>
-                          ))}
-                          {orderList.order_list_items.length > 3 && (
-                            <p className="text-xs text-gray-400">
-                              +{orderList.order_list_items.length - 3} more items
-                            </p>
-                          )}
+            <>
+              {orderLists.map(orderList => (
+                <div
+                  key={orderList.id}
+                  className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
+                >
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="mb-3 flex items-center space-x-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
+                          <span className="text-lg">📋</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-white">{orderList.name}</h3>
+                          <p className="text-sm text-gray-400">{orderList.suppliers.name}</p>
                         </div>
                       </div>
-                    )}
-                  </div>
 
-                  <div className="flex flex-col space-y-2">
-                    {/* Status Dropdown */}
-                    <select
-                      value={orderList.status}
-                      onChange={e => handleStatusChange(orderList.id, e.target.value)}
-                      className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    >
-                      <option value="draft">Draft</option>
-                      <option value="sent">Sent</option>
-                      <option value="received">Received</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
+                      <div className="mb-4 flex items-center space-x-4">
+                        <div>
+                          <p className="mb-1 text-xs text-gray-400">
+                            {t('orderLists.status', 'Status')}
+                          </p>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(orderList.status)}`}
+                          >
+                            {orderList.status.charAt(0).toUpperCase() + orderList.status.slice(1)}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="mb-1 text-xs text-gray-400">
+                            {t('orderLists.items', 'Items')}
+                          </p>
+                          <p className="font-semibold text-white">
+                            {orderList.order_list_items.length}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="mb-1 text-xs text-gray-400">
+                            {t('orderLists.created', 'Created')}
+                          </p>
+                          <p className="font-semibold text-white">
+                            {new Date(orderList.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
 
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEdit(orderList)}
-                        className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
-                        title={String(t('orderLists.edit', 'Edit'))}
+                      {orderList.notes && (
+                        <p className="mb-4 text-sm text-gray-300">{orderList.notes}</p>
+                      )}
+
+                      {/* Order Items Preview */}
+                      {orderList.order_list_items.length > 0 && (
+                        <div className="rounded-xl bg-[#2a2a2a]/30 p-4">
+                          <h4 className="mb-3 text-sm font-semibold text-white">
+                            {t('orderLists.items', 'Items')}
+                          </h4>
+                          <div className="space-y-2">
+                            {orderList.order_list_items.slice(0, 3).map(item => (
+                              <div
+                                key={item.id}
+                                className="flex items-center justify-between text-sm"
+                              >
+                                <span className="text-gray-300">{item.ingredients.name}</span>
+                                <span className="font-semibold text-white">
+                                  {item.quantity} {item.unit}
+                                </span>
+                              </div>
+                            ))}
+                            {orderList.order_list_items.length > 3 && (
+                              <p className="text-xs text-gray-400">
+                                +{orderList.order_list_items.length - 3} more items
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col space-y-2">
+                      {/* Status Dropdown */}
+                      <select
+                        value={orderList.status}
+                        onChange={e => handleStatusChange(orderList.id, e.target.value)}
+                        className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                       >
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                        <option value="draft">Draft</option>
+                        <option value="sent">Sent</option>
+                        <option value="received">Received</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEdit(orderList)}
+                          className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
+                          title={String(t('orderLists.edit', 'Edit'))}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => handleDelete(orderList.id)}
-                        className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
-                        title={String(t('orderLists.delete', 'Delete'))}
-                      >
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                          <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(orderList.id)}
+                          className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
+                          title={String(t('orderLists.delete', 'Delete'))}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))}
+              {/* Pagination */}
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-sm text-gray-400">
+                  Page {page} of {totalPages} ({total} items)
+                </span>
+                <div className="space-x-2">
+                  <button
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    disabled={page <= 1}
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                    disabled={page >= totalPages}
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
-            ))
+            </>
           )}
         </div>
 
