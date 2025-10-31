@@ -14,12 +14,25 @@ interface SearchModalProps {
 export function SearchModal({ isOpen, query, onChange, onClose, filtered }: SearchModalProps) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div
+      id="search-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="search-modal-title"
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+      onClick={onClose}
+      onKeyDown={e => {
+        if (e.key === 'Escape') onClose();
+      }}
+    >
       <div className="flex items-start justify-center pt-20" onClick={e => e.stopPropagation()}>
         <div className="mx-4 w-full max-w-2xl">
           <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
             <div className="border-b border-[#2a2a2a] p-4">
               <div className="relative">
+                <h2 id="search-modal-title" className="sr-only">
+                  Search navigation
+                </h2>
                 <input
                   type="text"
                   placeholder="Search navigation..."
@@ -27,6 +40,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                   onChange={e => onChange(e.target.value)}
                   className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-3 pl-12 text-lg text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                   autoFocus
+                  aria-label="Search navigation"
                 />
                 <svg
                   className="absolute top-3.5 left-4 h-5 w-5 text-gray-400"
@@ -48,6 +62,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                 <div className="space-y-1">
                   {filtered.map(item => (
                     <Link
+                      aria-label={`Go to ${item.label}`}
                       key={item.href}
                       href={item.href}
                       onClick={onClose}

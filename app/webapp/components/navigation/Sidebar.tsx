@@ -19,7 +19,11 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
     classes.filter(Boolean).join(' ');
 
   return (
-    <div
+    <aside
+      id="app-sidebar"
+      role="navigation"
+      aria-label="Main"
+      aria-hidden={!isOpen}
       ref={sidebarRef}
       className={cn(
         'fixed',
@@ -48,8 +52,11 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
             'p-4',
           )}
         >
-          <h2 className="text-lg font-semibold text-white">Navigation</h2>
+          <h2 id="sidebar-title" className="text-lg font-semibold text-white">
+            Navigation
+          </h2>
           <button
+            aria-label="Close navigation"
             onClick={onClose}
             className={cn('rounded-lg', 'p-1', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
           >
@@ -98,6 +105,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
               <div className="space-y-1">
                 {items.map(item => (
                   <Link
+                    aria-current={isActive(item.href) ? 'page' : undefined}
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
@@ -135,6 +143,6 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
           ))}
         </div>
       </div>
-    </div>
+    </aside>
   );
 }

@@ -95,14 +95,19 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   return (
     <>
       {/* Compact Header */}
-      <header className={cn('border-b', 'border-[#2a2a2a]', 'bg-[#1f1f1f]', className)}>
+      <header
+        role="banner"
+        className={cn('border-b', 'border-[#2a2a2a]', 'bg-[#1f1f1f]', className)}
+      >
         <div className="flex items-center justify-between px-4 py-2">
           {/* Left: Logo + Menu Button */}
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className={cn('rounded-lg', 'p-1.5', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
-              aria-label="Toggle navigation"
+              aria-label="Toggle navigation sidebar"
+              aria-controls="app-sidebar"
+              aria-expanded={isSidebarOpen}
             >
               <svg
                 className="h-5 w-5 text-gray-400"
@@ -119,15 +124,15 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
               </svg>
             </button>
 
-            <Link href="/webapp" className="flex items-center">
+            <Link href="/webapp" className="flex items-center space-x-2">
               <OptimizedImage
-                src="/images/prepflow-logo.png"
+                src="/images/prepflow-logo-white.png"
                 alt="PrepFlow Logo"
-                width={120}
-                height={38}
-                className="h-8 w-auto"
-                priority={true}
+                width={24}
+                height={24}
+                className="h-6 w-6"
               />
+              <span className="text-lg font-semibold text-white">PrepFlow</span>
             </Link>
           </div>
 
@@ -155,27 +160,22 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             )}
           </div>
 
-          {/* Right: Search + Actions */}
-          <div className="flex items-center space-x-2">
+          {/* Right: Search, Language, User */}
+          <div className="flex items-center space-x-3">
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className={cn(
-                'hidden',
-                'items-center',
-                'space-x-2',
-                'rounded-lg',
-                'bg-[#2a2a2a]/30',
-                'px-3',
-                'py-1.5',
-                'text-sm',
-                'text-gray-400',
-                'transition-colors',
-                'hover:bg-[#2a2a2a]/50',
-                'sm:flex',
-              )}
+              className={cn('rounded-lg', 'p-1.5', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
+              aria-label="Open search"
+              aria-controls="search-modal"
+              aria-expanded={isSearchOpen}
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -183,44 +183,24 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-              <span className="hidden lg:inline">Search...</span>
-              <kbd
-                className={cn('hidden', 'rounded', 'bg-[#2a2a2a]', 'px-1', 'text-xs', 'lg:inline')}
-              >
-                ⌘K
-              </kbd>
             </button>
 
             <LanguageSwitcher />
-
-            <a
-              href="/api/auth/signout?callbackUrl=%2F"
-              className={cn(
-                'rounded-lg',
-                'px-3',
-                'py-1.5',
-                'text-sm',
-                'text-gray-400',
-                'transition-colors',
-                'hover:bg-[#2a2a2a]/30',
-                'hover:text-[#29E7CD]',
-              )}
-            >
-              Sign out
-            </a>
 
             <Link
               href="/"
               className={cn(
                 'rounded-lg',
+                'bg-[#2a2a2a]',
                 'px-3',
                 'py-1.5',
                 'text-sm',
-                'text-gray-400',
+                'font-medium',
+                'text-gray-300',
                 'transition-colors',
-                'hover:bg-[#2a2a2a]/30',
-                'hover:text-[#29E7CD]',
+                'hover:bg-[#2a2a2a]/80',
               )}
+              aria-label="Back to landing"
             >
               {t('nav.backToLanding', 'Landing')}
             </Link>
