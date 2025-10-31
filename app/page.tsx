@@ -18,6 +18,7 @@ import AppHero from './components/landing/Hero';
 import HowItWorks from './components/landing/HowItWorks';
 import Benefits from './components/landing/Benefits';
 import LandingHeader from './components/landing/LandingHeader';
+import LandingFooter from './components/landing/LandingFooter';
 import Security from './components/landing/Security';
 import Tour from './components/landing/Tour';
 
@@ -152,6 +153,9 @@ export default function Page() {
 
         {/* Security */}
         <Security />
+
+        {/* Footer */}
+        <LandingFooter />
       </main>
     </>
   );
