@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import SimpleTemperatureChart from './SimpleTemperatureChart';
@@ -24,41 +24,12 @@ export default function TemperatureAnalyticsTab({
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
   const [hasManuallyChangedFilter, setHasManuallyChangedFilter] = useState(false);
 
-  // Handle loading state to prevent FOUC - wait for data to be ready
-  useEffect(() => {
-    // Show content immediately to prevent FOUC
-    if (equipment.length > 0 && allLogs.length > 0) {
-      setIsLoaded(true);
-
-      // Smart equipment selection logic
-      if (!selectedEquipmentId && equipment.length > 0) {
-        // 1. First try to find equipment that is out of range
-        const outOfRangeEquipment = findOutOfRangeEquipment();
-        if (outOfRangeEquipment) {
-          setSelectedEquipmentId(outOfRangeEquipment.id);
-        } else {
-          // 2. Fallback to first equipment
-          setSelectedEquipmentId(equipment[0].id);
-        }
-      }
-
-      // Smart time filter selection - find the best filter with data (only if not manually changed)
-      if (!hasManuallyChangedFilter) {
-        const bestTimeFilter = findBestTimeFilter();
-        if (bestTimeFilter !== timeFilter) {
-          setTimeFilter(bestTimeFilter);
-        }
-      }
-    }
-  }, [equipment.length, allLogs.length, dateOffset, selectedEquipmentId, hasManuallyChangedFilter]);
-
-  const getFilteredLogs = (equipment: TemperatureEquipment) => {
+  const getFilteredLogs = useCallback((equipment: TemperatureEquipment) => {
     // Filter logs by equipment name (location field in logs matches equipment name)
     let filtered = allLogs.filter(log => log.location === equipment.name);
 
     const today = new Date();
     today.setDate(today.getDate() - dateOffset);
-    const selectedDateString = format(today, 'yyyy-MM-dd');
 
     if (timeFilter === '24h') {
       // For 24h, look at the last 24 hours from now
@@ -81,17 +52,32 @@ export default function TemperatureAnalyticsTab({
     // 'all' filter doesn't need further date filtering
 
     return filtered;
-  };
+  }, [allLogs, timeFilter, dateOffset]);
 
-  const getSelectedEquipment = () => {
-    return equipment.find(eq => eq.id === selectedEquipmentId) || null;
-  };
+  const getEquipmentStatus = useCallback((equipment: TemperatureEquipment) => {
+    const logs = getFilteredLogs(equipment);
+    if (logs.length === 0) return { status: 'no-data', color: 'text-gray-400' };
+
+    const latestLog = logs[logs.length - 1];
+    const latestTemp = latestLog.temperature_celsius;
+
+    if (equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) {
+      return { status: 'no-thresholds', color: 'text-blue-400' };
+    }
+
+    const inRange =
+      latestTemp >= equipment.min_temp_celsius && latestTemp <= equipment.max_temp_celsius;
+    return {
+      status: inRange ? 'in-range' : 'out-of-range',
+      color: inRange ? 'text-green-400' : 'text-red-400',
+      temperature: latestTemp,
+    };
+  }, [getFilteredLogs]);
 
   // Check if there's data for a specific time filter
-  const hasDataForTimeFilter = (timeFilter: '24h' | '7d' | '30d' | 'all') => {
+  const hasDataForTimeFilter = useCallback((timeFilter: '24h' | '7d' | '30d' | 'all') => {
     const today = new Date();
     today.setDate(today.getDate() - dateOffset);
-    const selectedDateString = format(today, 'yyyy-MM-dd');
 
     let filteredLogs = allLogs;
     if (timeFilter === '24h') {
@@ -114,10 +100,10 @@ export default function TemperatureAnalyticsTab({
     }
 
     return filteredLogs.length > 0;
-  };
+  }, [allLogs, dateOffset]);
 
   // Find the best time filter with data
-  const findBestTimeFilter = () => {
+  const findBestTimeFilter = useCallback(() => {
     const timeFilters: ('24h' | '7d' | '30d' | 'all')[] = ['24h', '7d', '30d', 'all'];
     for (const filter of timeFilters) {
       if (hasDataForTimeFilter(filter)) {
@@ -125,34 +111,49 @@ export default function TemperatureAnalyticsTab({
       }
     }
     return '24h'; // fallback
-  };
+  }, [hasDataForTimeFilter]);
 
   // Find equipment that is out of range
-  const findOutOfRangeEquipment = () => {
+  const findOutOfRangeEquipment = useCallback(() => {
     return equipment.find(item => {
       const status = getEquipmentStatus(item);
       return status.status === 'out-of-range';
     });
-  };
+  }, [equipment, getEquipmentStatus]);
 
-  const getEquipmentStatus = (equipment: TemperatureEquipment) => {
-    const logs = getFilteredLogs(equipment);
-    if (logs.length === 0) return { status: 'no-data', color: 'text-gray-400' };
+  // Handle loading state to prevent FOUC - wait for data to be ready
+  useEffect(() => {
+    // Show content immediately to prevent FOUC
+    if (equipment.length > 0 && allLogs.length > 0) {
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setIsLoaded(true);
 
-    const latestLog = logs[logs.length - 1];
-    const latestTemp = latestLog.temperature_celsius;
+        // Smart equipment selection logic
+        if (!selectedEquipmentId && equipment.length > 0) {
+          // 1. First try to find equipment that is out of range
+          const outOfRangeEquipment = findOutOfRangeEquipment();
+          if (outOfRangeEquipment) {
+            setSelectedEquipmentId(outOfRangeEquipment.id);
+          } else {
+            // 2. Fallback to first equipment
+            setSelectedEquipmentId(equipment[0].id);
+          }
+        }
 
-    if (equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) {
-      return { status: 'no-thresholds', color: 'text-blue-400' };
+        // Smart time filter selection - find the best filter with data (only if not manually changed)
+        if (!hasManuallyChangedFilter) {
+          const bestTimeFilter = findBestTimeFilter();
+          if (bestTimeFilter !== timeFilter) {
+            setTimeFilter(bestTimeFilter);
+          }
+        }
+      }, 0);
     }
+  }, [equipment.length, allLogs.length, dateOffset, selectedEquipmentId, hasManuallyChangedFilter, timeFilter, equipment, findOutOfRangeEquipment, findBestTimeFilter]);
 
-    const inRange =
-      latestTemp >= equipment.min_temp_celsius && latestTemp <= equipment.max_temp_celsius;
-    return {
-      status: inRange ? 'in-range' : 'out-of-range',
-      color: inRange ? 'text-green-400' : 'text-red-400',
-      temperature: latestTemp,
-    };
+  const getSelectedEquipment = () => {
+    return equipment.find(eq => eq.id === selectedEquipmentId) || null;
   };
 
   // Show loading skeleton if data isn't ready

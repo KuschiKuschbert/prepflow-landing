@@ -48,12 +48,15 @@ export const FloatingElement: React.FC<{
   className?: string;
   style?: React.CSSProperties;
 }> = ({ children, intensity = 1, duration = 2000, className = '', style = {} }) => {
+  // Use useState + useEffect to generate random delay only once per component instance
+  const [randomDelay] = React.useState(() => Math.random() * 1000);
+
   return (
     <div
       className={`animate-float ${className}`}
       style={{
         animationDuration: `${duration}ms`,
-        animationDelay: `${Math.random() * 1000}ms`,
+        animationDelay: `${randomDelay}ms`,
         ...style,
       }}
     >

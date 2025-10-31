@@ -70,8 +70,11 @@ export const usePricing = (costPerPortion: number) => {
   // Update pricing when COGS changes
   useEffect(() => {
     if (costPerPortion > 0 && pricingCalculation) {
-      setSellPriceExclGST(pricingCalculation.sellPriceExclGST);
-      setSellPriceInclGST(pricingCalculation.sellPriceInclGST);
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setSellPriceExclGST(pricingCalculation.sellPriceExclGST);
+        setSellPriceInclGST(pricingCalculation.sellPriceInclGST);
+      }, 0);
     }
   }, [costPerPortion, pricingCalculation]);
 

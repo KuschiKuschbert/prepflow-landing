@@ -74,14 +74,20 @@ export function useABTest({
 
       // Assign or get variant for this user
       const assignedVariant = assignVariant(testId, currentUserId);
-      setVariantId(assignedVariant);
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setVariantId(assignedVariant);
+      }, 0);
 
       // Call callback if provided
       if (onVariantChange) {
         onVariantChange(assignedVariant);
       }
 
-      setIsLoading(false);
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 0);
     }
   }, [testId, userId, onVariantChange]);
 

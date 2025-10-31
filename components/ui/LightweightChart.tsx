@@ -83,26 +83,35 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const colors = ['#29E7CD', '#3B82F6', '#D925C7', '#10B981', '#F59E0B', '#EF4444'];
 
-  let cumulativePercentage = 0;
+  // Calculate cumulative percentages without reassigning in render
+  const segments = data.reduce((acc, item) => {
+    const percentage = (item.value / total) * 100;
+    const previousCumulative = acc.length > 0 ? acc[acc.length - 1].cumulativePercentage + acc[acc.length - 1].percentage : 0;
+    return [
+      ...acc,
+      {
+        ...item,
+        percentage,
+        cumulativePercentage: previousCumulative,
+      },
+    ];
+  }, [] as Array<{ percentage: number; cumulativePercentage: number; [key: string]: any }>);
 
   return (
     <div className={`rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 ${className}`}>
       <div className="flex items-center justify-center">
         <div className="relative" style={{ width: size, height: size }}>
           <svg width={size} height={size} className="-rotate-90 transform">
-            {data.map((item, index) => {
-              const percentage = (item.value / total) * 100;
+            {segments.map((segment, index) => {
               const circumference = 2 * Math.PI * (size / 2 - 10);
-              const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
-              const strokeDashoffset = -((cumulativePercentage / 100) * circumference);
+              const strokeDasharray = `${(segment.percentage / 100) * circumference} ${circumference}`;
+              const strokeDashoffset = -((segment.cumulativePercentage / 100) * circumference);
 
-              cumulativePercentage += percentage;
-
-              const color = item.color || colors[index % colors.length];
+              const color = segment.color || colors[index % colors.length];
 
               return (
                 <circle
-                  key={item.name}
+                  key={segment.name}
                   cx={size / 2}
                   cy={size / 2}
                   r={size / 2 - 10}

@@ -58,6 +58,12 @@ export function useDishSectionActions({
   fetchKitchenSections,
   fetchMenuDishes,
 }: UseDishSectionActionsProps) {
+  const resetForm = useCallback(() => {
+    setFormData({ name: '', description: '', color: '#29E7CD' });
+    setShowForm(false);
+    setEditingSection(null);
+  }, [setFormData, setShowForm, setEditingSection]);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -99,7 +105,7 @@ export function useDishSectionActions({
         setError('Failed to save kitchen section');
       }
     },
-    [editingSection, formData, userId, fetchKitchenSections, setError],
+    [editingSection, formData, userId, fetchKitchenSections, resetForm, setError],
   );
 
   const handleEdit = useCallback(
@@ -164,12 +170,6 @@ export function useDishSectionActions({
     },
     [fetchMenuDishes, fetchKitchenSections, setError],
   );
-
-  const resetForm = useCallback(() => {
-    setFormData({ name: '', description: '', color: '#29E7CD' });
-    setShowForm(false);
-    setEditingSection(null);
-  }, [setFormData, setShowForm, setEditingSection]);
 
   const getUnassignedDishes = useCallback(() => {
     return menuDishes.filter(dish => !dish.kitchen_section_id);

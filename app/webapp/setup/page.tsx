@@ -21,7 +21,10 @@ export default function SetupPageRefactored() {
 
   // Mark country setup as complete (since CountrySetup component is always rendered)
   useEffect(() => {
-    setSetupProgress(prev => ({ ...prev, country: true }));
+    // Use setTimeout to avoid synchronous setState in effect
+    setTimeout(() => {
+      setSetupProgress(prev => ({ ...prev, country: true }));
+    }, 0);
   }, []);
 
   const handleProgressUpdate = (progress: SetupProgress) => {

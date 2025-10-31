@@ -7,11 +7,6 @@ export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
 
-  // Only show on landing page, not in webapp
-  if (pathname.startsWith('/webapp')) {
-    return null;
-  }
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -21,6 +16,11 @@ export function ScrollToTop() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Only show on landing page, not in webapp
+  if (pathname.startsWith('/webapp')) {
+    return null;
+  }
 
   const scrollToTop = () => {
     window.scrollTo({

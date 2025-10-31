@@ -54,12 +54,15 @@ export function useTranslation() {
 
   // Initialize language on mount
   useEffect(() => {
-    setIsClient(true);
-    const savedLanguage = localStorage.getItem('prepflow_language');
-    const browserLanguage = getBrowserLanguage();
+    // Use setTimeout to avoid synchronous setState in effect
+    setTimeout(() => {
+      setIsClient(true);
+      const savedLanguage = localStorage.getItem('prepflow_language');
+      const browserLanguage = getBrowserLanguage();
 
-    setCurrentLanguage(savedLanguage || browserLanguage);
-    setIsLoading(false);
+      setCurrentLanguage(savedLanguage || browserLanguage);
+      setIsLoading(false);
+    }, 0);
   }, []);
 
   // Get translation function

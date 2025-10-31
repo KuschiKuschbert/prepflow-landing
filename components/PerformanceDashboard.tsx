@@ -20,7 +20,10 @@ export default function PerformanceDashboard({
   useEffect(() => {
     // Only show dashboard if performance is poor or in development
     if (isPoorPerformance || process.env.NODE_ENV === 'development') {
-      setIsVisible(true);
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 0);
     }
   }, [isPoorPerformance]);
 

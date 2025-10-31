@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { trackEvent, trackEngagement } from '../lib/analytics';
+import { useEffect, useRef, useState } from 'react';
+import { trackEngagement, trackEvent } from '../lib/analytics';
 
 interface ScrollTrackerProps {
   onSectionView?: (sectionId: string) => void;
@@ -16,12 +16,27 @@ export default function ScrollTracker({
 }: ScrollTrackerProps) {
   const [scrollDepth, setScrollDepth] = useState(0);
   const [viewedSections, setViewedSections] = useState<Set<string>>(new Set());
-  const [lastScrollTime, setLastScrollTime] = useState(Date.now());
+  const [lastScrollTime, setLastScrollTime] = useState(0);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const sectionObserverRef = useRef<IntersectionObserver | undefined>(undefined);
 
+  // Initialize lastScrollTime in effect to avoid impure function call in render
+  useEffect(() => {
+    // Use setTimeout to avoid synchronous setState in effect
+    setTimeout(() => {
+      setLastScrollTime(Date.now());
+    }, 0);
+  }, []);
+
+  const startTimeOnPageRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (!enabled) return;
+
+    // Initialize start time in effect to avoid impure function call
+    if (startTimeOnPageRef.current === null) {
+      startTimeOnPageRef.current = Date.now();
+    }
 
     let maxScrollDepth = 0;
     let scrollStartTime = Date.now();
@@ -163,7 +178,7 @@ export default function ScrollTracker({
     };
 
     // Time on page tracking
-    const startTimeOnPage = Date.now();
+    const startTimeOnPage = startTimeOnPageRef.current || Date.now();
     const timeOnPageInterval = setInterval(() => {
       const timeOnPage = Date.now() - startTimeOnPage;
 

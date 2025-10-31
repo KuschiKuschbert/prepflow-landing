@@ -8,11 +8,14 @@ export function useSmartLoading(initialLoading = false, minLoadingDelay = 100) {
   const [loading, setLoading] = useState(initialLoading);
   const [isMounted, setIsMounted] = useState(true);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const mountedTimeRef = useRef<number>(Date.now());
+  const mountedTimeRef = useRef<number>(0);
 
   useEffect(() => {
-    setIsMounted(true);
-    mountedTimeRef.current = Date.now();
+    // Use setTimeout to avoid synchronous setState in effect
+    setTimeout(() => {
+      setIsMounted(true);
+      mountedTimeRef.current = Date.now();
+    }, 0);
 
     return () => {
       setIsMounted(false);

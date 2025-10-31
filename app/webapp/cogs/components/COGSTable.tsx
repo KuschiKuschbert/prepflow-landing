@@ -18,7 +18,7 @@ interface COGSTableProps {
 }
 
 export const COGSTable: React.FC<COGSTableProps> = React.memo(
-  ({
+  function COGSTable({
     calculations,
     editingIngredient,
     editQuantity,
@@ -30,7 +30,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(
     totalCOGS,
     costPerPortion,
     dishPortions,
-  }) => {
+  }) {
     if (calculations.length === 0) {
       return (
         <div className="py-8 text-center text-gray-500">
@@ -260,3 +260,5 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(
     );
   },
 );
+
+COGSTable.displayName = 'COGSTable';

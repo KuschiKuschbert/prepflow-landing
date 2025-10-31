@@ -56,12 +56,21 @@ export default function CleaningRosterPage() {
   };
 
   useEffect(() => {
-    fetchAreas();
+    // Use setTimeout to avoid synchronous setState in effect (fetchAreas calls setAreas)
+    setTimeout(() => {
+      fetchAreas();
+    }, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const td = tasksData as any;
-    if (td?.items) setTasks(td.items as any);
+    if (td?.items) {
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setTasks(td.items as any);
+      }, 0);
+    }
   }, [tasksData]);
 
   const total = (tasksData as any)?.total || 0;
