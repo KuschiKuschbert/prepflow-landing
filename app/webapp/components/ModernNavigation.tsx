@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
 import OptimizedImage from '../../../components/OptimizedImage';
 import { useNavigationItems } from './navigation/nav-items';
-import { Sidebar } from './navigation/Sidebar';
 import { SearchModal } from './navigation/SearchModal';
+import { Sidebar } from './navigation/Sidebar';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -33,7 +33,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   // Navigation items organized by category
   const navigationItems: NavigationItem[] = useNavigationItems() as NavigationItem[];

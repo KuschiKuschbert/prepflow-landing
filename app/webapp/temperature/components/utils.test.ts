@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from '@jest/globals';
+import { describe, expect, it, vi } from '@jest/globals';
 import {
-  formatTime,
   formatDateString,
-  getTemperatureStatus,
+  formatTime,
   getFoodSafetyStatus,
   getStatusColor,
+  getTemperatureStatus,
   getTimePeriod,
   groupLogsByTimePeriod,
 } from './utils';

@@ -1,22 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { useCountryFormatting } from '@/hooks/useCountryFormatting';
-import { TemperatureLog, TemperatureEquipment } from './types';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { useEffect, useState } from 'react';
+import { TemperatureEquipment, TemperatureLog } from './types';
 
 // Direct imports to eliminate skeleton flashes
-import TemperatureLogsTab from './components/TemperatureLogsTab';
 import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
+import TemperatureLogsTab from './components/TemperatureLogsTab';
 
-import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
+import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
+import { TabNavigation } from './components/TabNavigation';
+import { PageHeader } from './components/PageHeader';
 import { useTemperatureLogsQuery } from './hooks/useTemperatureLogsQuery';
 
 function TemperatureLogsPageContent() {
-  const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
 
   // Helper function to format time strings
@@ -415,59 +414,10 @@ function TemperatureLogsPageContent() {
     <div className="min-h-screen bg-transparent p-4 sm:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-white">
-            🌡️ {t('temperature.title', 'Temperature Logs')}
-          </h1>
-          <p className="text-gray-400">
-            {t(
-              'temperature.subtitle',
-              'Track fridge, freezer, and food temperatures for food safety compliance',
-            )}
-          </p>
-        </div>
+        <PageHeader />
 
         {/* Tab Navigation */}
-        <div className="mb-8">
-          <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
-            <button
-              onClick={() => setActiveTab('logs')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
-                activeTab === 'logs'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-              aria-pressed={activeTab === 'logs'}
-              aria-label="View temperature logs"
-            >
-              📝 {t('temperature.logs', 'Logs')}
-            </button>
-            <button
-              onClick={() => setActiveTab('equipment')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
-                activeTab === 'equipment'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-              aria-pressed={activeTab === 'equipment'}
-              aria-label="View temperature equipment"
-            >
-              🏭 {t('temperature.equipment', 'Equipment')}
-            </button>
-            <button
-              onClick={() => setActiveTab('analytics')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
-                activeTab === 'analytics'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-              aria-pressed={activeTab === 'analytics'}
-              aria-label="View temperature analytics"
-            >
-              📊 {t('temperature.analytics', 'Analytics')}
-            </button>
-          </div>
-        </div>
+        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
         {/* Tab Content */}
         {activeTab === 'logs' && (

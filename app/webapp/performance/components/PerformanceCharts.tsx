@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { PerformanceItem } from '../types';
+import { useEffect, useState } from 'react';
 import {
-  ResponsiveContainer,
-  BarChart as ReBarChart,
   Bar,
+  CartesianGrid,
+  Cell,
+  Pie,
+  BarChart as ReBarChart,
+  PieChart as RePieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart as RePieChart,
-  Pie,
-  Cell,
 } from 'recharts';
+import { PerformanceItem } from '../types';
 
 interface PerformanceChartsProps {
   performanceItems: PerformanceItem[];
@@ -107,16 +107,21 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
             <ReBarChart data={chartData} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
               <XAxis dataKey="name" stroke="#9ca3af" />
-              <YAxis stroke="#9ca3af" tickFormatter={v => `${v.toFixed ? v.toFixed(0) : v}%`} />
+              <YAxis
+                stroke="#9ca3af"
+                tickFormatter={(v: number | string) =>
+                  `${typeof v === 'number' ? v.toFixed(0) : v}%`
+                }
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#1f1f1f',
                   border: '1px solid #2a2a2a',
                   color: '#fff',
                 }}
-                formatter={(value: any, name) => [
+                formatter={(value: number | string, name: string) => [
                   `${(value as number).toFixed(1)}%`,
-                  name as string,
+                  name,
                 ]}
               />
               <Bar dataKey="value" radius={[6, 6, 0, 0]}>
@@ -141,7 +146,7 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
                   border: '1px solid #2a2a2a',
                   color: '#fff',
                 }}
-                formatter={(value: any, name) => [String(value), name as string]}
+                formatter={(value: number | string, name: string) => [String(value), name]}
               />
               <Pie dataKey="value" data={pieData} outerRadius={isMobile ? 80 : 100} label>
                 {pieData.map((entry, index) => (
