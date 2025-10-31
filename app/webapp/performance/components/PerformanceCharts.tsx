@@ -1,8 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BarChart, PieChart } from '@/components/ui/LightweightChart';
 import { PerformanceItem } from '../types';
+import {
+  ResponsiveContainer,
+  BarChart as ReBarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart as RePieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 
 interface PerformanceChartsProps {
   performanceItems: PerformanceItem[];
@@ -91,18 +102,55 @@ export default function PerformanceCharts({ performanceItems }: PerformanceChart
       {/* Bar Chart - Profit by Category */}
       <div>
         <h3 className="mb-4 text-lg font-semibold text-white md:text-xl">Profit by Category</h3>
-        <BarChart
-          data={chartData}
-          height={isMobile ? 250 : 300}
-          showValues={true}
-          className="w-full"
-        />
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <ReBarChart data={chartData} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
+              <XAxis dataKey="name" stroke="#9ca3af" />
+              <YAxis stroke="#9ca3af" tickFormatter={v => `${v.toFixed ? v.toFixed(0) : v}%`} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1f1f1f',
+                  border: '1px solid #2a2a2a',
+                  color: '#fff',
+                }}
+                formatter={(value: any, name) => [
+                  `${(value as number).toFixed(1)}%`,
+                  name as string,
+                ]}
+              />
+              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </ReBarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Pie Chart - Category Distribution */}
       <div>
         <h3 className="mb-4 text-lg font-semibold text-white md:text-xl">Category Distribution</h3>
-        <PieChart data={pieData} size={isMobile ? 180 : 220} showLabels={true} className="w-full" />
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <RePieChart>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1f1f1f',
+                  border: '1px solid #2a2a2a',
+                  color: '#fff',
+                }}
+                formatter={(value: any, name) => [String(value), name as string]}
+              />
+              <Pie dataKey="value" data={pieData} outerRadius={isMobile ? 80 : 100} label>
+                {pieData.map((entry, index) => (
+                  <Cell key={`pie-cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+            </RePieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
