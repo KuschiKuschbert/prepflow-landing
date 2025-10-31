@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { useDishSectionActions } from './hooks/useDishSectionActions';
+import { DishSectionsHeader } from './components/DishSectionsHeader';
+import { SectionFormModal } from './components/SectionFormModal';
 
 interface KitchenSection {
   id: string;
@@ -77,117 +80,28 @@ export default function DishSectionsPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const url = editingSection ? '/api/kitchen-sections' : '/api/kitchen-sections';
-      const method = editingSection ? 'PUT' : 'POST';
-
-      const body = editingSection
-        ? {
-            id: editingSection.id,
-            name: formData.name,
-            description: formData.description,
-            color: formData.color,
-          }
-        : {
-            userId,
-            name: formData.name,
-            description: formData.description,
-            color: formData.color,
-          };
-
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        await fetchKitchenSections();
-        resetForm();
-        setError(null);
-      } else {
-        setError(result.message || 'Failed to save kitchen section');
-      }
-    } catch (err) {
-      setError('Failed to save kitchen section');
-    }
-  };
-
-  const handleEdit = (section: KitchenSection) => {
-    setEditingSection(section);
-    setFormData({
-      name: section.name,
-      description: section.description || '',
-      color: section.color,
-    });
-    setShowForm(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (
-      !confirm(
-        'Are you sure you want to delete this kitchen section? All dishes will be unassigned.',
-      )
-    )
-      return;
-
-    try {
-      const response = await fetch(`/api/kitchen-sections?id=${id}`, {
-        method: 'DELETE',
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        await fetchKitchenSections();
-        await fetchMenuDishes();
-      } else {
-        setError(result.message || 'Failed to delete kitchen section');
-      }
-    } catch (err) {
-      setError('Failed to delete kitchen section');
-    }
-  };
-
-  const handleAssignDish = async (dishId: string, sectionId: string | null) => {
-    try {
-      const response = await fetch('/api/assign-dish-section', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dishId, sectionId }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        await fetchMenuDishes();
-        await fetchKitchenSections();
-      } else {
-        setError(result.message || 'Failed to assign dish to section');
-      }
-    } catch (err) {
-      setError('Failed to assign dish to section');
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      color: '#29E7CD',
-    });
-    setShowForm(false);
-    setEditingSection(null);
-  };
-
-  const getUnassignedDishes = () => {
-    return menuDishes.filter(dish => !dish.kitchen_section_id);
-  };
+  const {
+    handleSubmit,
+    handleEdit,
+    handleDelete,
+    handleAssignDish,
+    resetForm,
+    getUnassignedDishes,
+  } = useDishSectionActions({
+    userId,
+    kitchenSections,
+    menuDishes,
+    editingSection,
+    formData,
+    setKitchenSections,
+    setMenuDishes,
+    setError,
+    setFormData,
+    setShowForm,
+    setEditingSection,
+    fetchKitchenSections,
+    fetchMenuDishes,
+  });
 
   if (loading) {
     return (
@@ -206,22 +120,7 @@ export default function DishSectionsPage() {
     <div className="min-h-screen bg-transparent text-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="mb-2 text-3xl font-bold text-white">
-              🍽️ {t('dishSections.title', 'Dish Sections')}
-            </h1>
-            <p className="text-gray-400">
-              {t('dishSections.subtitle', 'Organize dishes by kitchen sections for prep lists')}
-            </p>
-          </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-          >
-            + {t('dishSections.addSection', 'Add Section')}
-          </button>
-        </div>
+        <DishSectionsHeader onAddClick={() => setShowForm(true)} />
 
         {/* Error Message */}
         {error && (
@@ -409,100 +308,14 @@ export default function DishSectionsPage() {
         )}
 
         {/* Add/Edit Form Modal */}
-        {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-white">
-                  {editingSection
-                    ? t('dishSections.editSection', 'Edit Section')
-                    : t('dishSections.addSection', 'Add Section')}
-                </h2>
-                <button
-                  onClick={resetForm}
-                  className="p-2 text-gray-400 transition-colors hover:text-white"
-                >
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-300">
-                    {t('dishSections.sectionName', 'Section Name')}
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    placeholder="e.g., Hot Kitchen, Cold Kitchen, Pastry"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-300">
-                    {t('dishSections.description', 'Description')}
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={e => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    rows={3}
-                    placeholder="Optional description of this section"
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-300">
-                    {t('dishSections.color', 'Color')}
-                  </label>
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="color"
-                      value={formData.color}
-                      onChange={e => setFormData({ ...formData, color: e.target.value })}
-                      className="h-12 w-12 cursor-pointer rounded-xl border border-[#2a2a2a]"
-                    />
-                    <input
-                      type="text"
-                      value={formData.color}
-                      onChange={e => setFormData({ ...formData, color: e.target.value })}
-                      className="flex-1 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      placeholder="#29E7CD"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex space-x-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
-                  >
-                    {t('dishSections.cancel', 'Cancel')}
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-                  >
-                    {editingSection
-                      ? t('dishSections.update', 'Update')
-                      : t('dishSections.create', 'Create')}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        <SectionFormModal
+          show={showForm}
+          editingSection={editingSection}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          onCancel={resetForm}
+        />
       </div>
     </div>
   );
