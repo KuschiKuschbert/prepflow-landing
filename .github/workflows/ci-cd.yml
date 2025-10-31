@@ -54,12 +54,6 @@ jobs:
     needs: quality-checks
     permissions:
       contents: read
-    # actionlint: disable=expr
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
     steps:
       - name: 📥 Checkout code
@@ -75,6 +69,12 @@ jobs:
         run: npm ci
 
       - name: 🏗️ Build application
+        # actionlint: disable=expr
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: npm run build
 
       - name: 📊 Build size analysis
@@ -91,11 +91,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
-    # actionlint: disable=expr
-    env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
     steps:
       - name: 📥 Checkout code
@@ -112,10 +107,11 @@ jobs:
 
       - name: 🚀 Deploy to Vercel
         uses: amondnet/vercel-action@v25
+        # actionlint: disable=expr
         with:
-          vercel-token: ${{ env.VERCEL_TOKEN }}
-          vercel-org-id: ${{ env.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ env.VERCEL_PROJECT_ID }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
 
   # 📊 Performance Monitoring
