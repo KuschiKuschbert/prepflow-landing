@@ -1,16 +1,15 @@
 'use client';
 
-import { TemperatureLog, TemperatureEquipment } from '../types';
-import { format } from 'date-fns';
 import {
-  LineChart as ReLineChart,
+  CartesianGrid,
   Line,
+  LineChart as ReLineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from 'recharts';
+import { TemperatureEquipment, TemperatureLog } from '../types';
 
 interface SimpleTemperatureChartProps {
   logs: TemperatureLog[];
@@ -162,7 +161,7 @@ export default function SimpleTemperatureChart({
             <YAxis
               domain={['dataMin - 1', 'dataMax + 1']}
               stroke="#9ca3af"
-              tickFormatter={v => `${v}°`}
+              tickFormatter={(v: number | string) => `${v}°`}
             />
             <Tooltip
               labelFormatter={formatTooltipLabel}

@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import {
-  formatTime,
   formatDateString,
-  getTemperatureStatus,
+  formatTime,
   getFoodSafetyStatus,
   getStatusColor,
+  getTemperatureStatus,
   getTimePeriod,
   groupLogsByTimePeriod,
 } from './utils';
@@ -16,7 +16,7 @@ describe('temperature utils', () => {
   });
 
   it('formatDateString applies formatter', () => {
-    const formatter = vi.fn((d: Date) => d.toISOString().slice(0, 10));
+    const formatter = jest.fn((d: Date) => d.toISOString().slice(0, 10));
     expect(formatDateString('2025-01-15', formatter)).toBe('2025-01-15');
     expect(formatter).toHaveBeenCalled();
   });

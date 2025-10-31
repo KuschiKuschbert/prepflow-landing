@@ -18,7 +18,7 @@ function detectCategory(filePath) {
   const p = filePath.replace(/\\/g, '/');
   if (p.includes('/app/api/')) return 'api';
   if (p.match(/\/hooks\//) || /\/hooks\/[^/]+\.(t|j)sx?$/.test(p)) return 'hook';
-  if (p.includes('/app/') && /\/page\.(t|j)sx$/.test(p)) return 'page';
+  if ((p.startsWith('app/') || p.includes('/app/')) && /\/page\.(t|j)sx$/.test(p)) return 'page';
   if (p.match(/\/(components|ui)\//)) return 'component';
   if (p.match(/\/(lib|utils?)\//) || /\/utils?\.(t|j)s$/.test(p)) return 'util';
   // default to component for safety

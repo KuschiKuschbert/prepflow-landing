@@ -5,7 +5,7 @@ import React, { RefObject } from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
-  sidebarRef: RefObject<HTMLDivElement>;
+  sidebarRef: RefObject<HTMLDivElement | null>;
   grouped: Record<
     string,
     Array<{ href: string; label: string; icon: React.ReactNode; color: string }>
