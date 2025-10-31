@@ -1,8 +1,16 @@
 'use client';
 
-import { LineChart } from '@/components/ui/LightweightChart';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import { format } from 'date-fns';
+import {
+  LineChart as ReLineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface SimpleTemperatureChartProps {
   logs: TemperatureLog[];
@@ -41,67 +49,15 @@ export default function SimpleTemperatureChart({
       : 'N/A';
   const statusColor = latestStatus === 'In Range' ? 'text-green-400' : 'text-red-400';
 
-  const getUniqueDates = () => {
-    const dates = [...new Set(chartData.map(d => d.timestamp.split(' ')[0]))].sort();
-    return dates;
-  };
-
-  const getDateMarkers = () => {
-    const uniqueDates = getUniqueDates();
-    const markers: Array<{ date: string; timestamp: string; index: number }> = [];
-
-    uniqueDates.forEach((date, index) => {
-      const dayData = chartData.filter(d => d.timestamp.startsWith(date));
-      if (dayData.length > 0) {
-        markers.push({
-          date,
-          timestamp: dayData[0].timestamp,
-          index,
-        });
-      }
-    });
-
-    return markers;
-  };
-
-  const get24HourMarkers = () => {
-    if (timeFilter !== '24h') return [];
-
-    const today = new Date();
-    const todayString = format(today, 'yyyy-MM-dd');
-    const todayData = chartData.filter(d => d.date === todayString);
-
-    const markers: Array<{ hour: number; timestamp: string; index: number; label: string }> = [];
-
-    // Create 6-hour markers (0, 6, 12, 18)
-    for (let hour = 0; hour < 24; hour += 6) {
-      const hourString = hour.toString().padStart(2, '0');
-      const closestEntry = todayData.find(d => d.time.startsWith(hourString));
-
-      if (closestEntry) {
-        markers.push({
-          hour,
-          timestamp: closestEntry.timestamp,
-          index: todayData.indexOf(closestEntry),
-          label: `${hourString}:00`,
-        });
-      }
-    }
-
-    return markers;
-  };
-
   const formatXAxisLabel = (tickItem: string) => {
     const date = new Date(tickItem);
     if (timeFilter === '24h') {
-      // Show time for 24h view
       return (
         date.getHours().toString().padStart(2, '0') +
         ':' +
         date.getMinutes().toString().padStart(2, '0')
       );
     } else {
-      // Show date for other views
       const months = [
         'Jan',
         'Feb',
@@ -182,13 +138,6 @@ export default function SimpleTemperatureChart({
     );
   }
 
-  // Convert chart data to lightweight format
-  const lightweightData = chartData.map((item, index) => ({
-    x: index,
-    y: item.temperature,
-    label: `${formatTooltipLabel(item.timestamp)}: ${item.temperature.toFixed(1)}°C`,
-  }));
-
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
@@ -205,31 +154,35 @@ export default function SimpleTemperatureChart({
 
       <div className="mb-4 text-xs text-gray-400">{chartData.length} readings</div>
 
-      {/* Temperature thresholds display */}
-      <div className="mb-4 flex flex-wrap gap-4 text-xs">
-        {equipment.min_temp_celsius !== null && (
-          <div className="flex items-center space-x-1">
-            <div className="h-2 w-2 rounded-full bg-red-500"></div>
-            <span className="text-gray-400">Min: {equipment.min_temp_celsius}°C</span>
-          </div>
-        )}
-        {equipment.max_temp_celsius !== null && (
-          <div className="flex items-center space-x-1">
-            <div className="h-2 w-2 rounded-full bg-red-500"></div>
-            <span className="text-gray-400">Max: {equipment.max_temp_celsius}°C</span>
-          </div>
-        )}
-      </div>
-
       <div className="h-64 w-full">
-        <LineChart
-          data={lightweightData}
-          height={256}
-          width={400}
-          showGrid={true}
-          showValues={true}
-          className="w-full"
-        />
+        <ResponsiveContainer width="100%" height="100%">
+          <ReLineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
+            <XAxis dataKey="timestamp" tickFormatter={formatXAxisLabel} stroke="#9ca3af" />
+            <YAxis
+              domain={['dataMin - 1', 'dataMax + 1']}
+              stroke="#9ca3af"
+              tickFormatter={v => `${v}°`}
+            />
+            <Tooltip
+              labelFormatter={formatTooltipLabel}
+              formatter={(value: any) => [formatTooltipValue(value as number), 'Temp']}
+              contentStyle={{
+                backgroundColor: '#1f1f1f',
+                border: '1px solid #2a2a2a',
+                color: '#fff',
+              }}
+            />
+            <Line
+              type="monotone"
+              dataKey="temperature"
+              stroke="#29E7CD"
+              strokeWidth={2}
+              dot={false}
+              isAnimationActive
+            />
+          </ReLineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
