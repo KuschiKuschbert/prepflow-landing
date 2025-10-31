@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">1. Introduction</h2>
               <p className="leading-relaxed text-gray-300">
-                PrepFlow ("we", "our", or "us") is committed to protecting your privacy. This
+                PrepFlow (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. This
                 Privacy Policy explains how we collect, use, disclose, and safeguard your
                 information when you use our restaurant profitability optimization tool and related
                 services.
@@ -236,7 +236,7 @@ export default function PrivacyPolicy() {
 
             {/* Children's Privacy */}
             <section>
-              <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">10. Children's Privacy</h2>
+              <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">10. Children&apos;s Privacy</h2>
               <p className="leading-relaxed text-gray-300">
                 PrepFlow is not intended for use by individuals under the age of 18. We do not
                 knowingly collect personal information from children. If you believe we have
@@ -251,8 +251,8 @@ export default function PrivacyPolicy() {
               </h2>
               <p className="leading-relaxed text-gray-300">
                 We may update this Privacy Policy from time to time. We will notify you of any
-                material changes by posting the new policy on this page and updating the "Last
-                updated" date. Your continued use of PrepFlow after such changes constitutes
+                material changes by posting the new policy on this page and updating the &quot;Last
+                updated&quot; date. Your continued use of PrepFlow after such changes constitutes
                 acceptance of the updated policy.
               </p>
             </section>

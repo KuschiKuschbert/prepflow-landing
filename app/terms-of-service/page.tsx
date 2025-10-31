@@ -49,13 +49,13 @@ export default function TermsOfService() {
             <section>
               <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">1. Acceptance of Terms</h2>
               <p className="leading-relaxed text-gray-300">
-                By accessing and using PrepFlow ("the Service"), you accept and agree to be bound by
+                By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to be bound by
                 the terms and provision of this agreement. If you do not agree to abide by the
                 above, please do not use this service.
               </p>
               <p className="mt-4 leading-relaxed text-gray-300">
-                These Terms of Service ("Terms") govern your use of PrepFlow, a restaurant
-                profitability optimization tool provided by PrepFlow ("we", "our", or "us").
+                These Terms of Service (&quot;Terms&quot;) govern your use of PrepFlow, a restaurant
+                profitability optimization tool provided by PrepFlow (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;).
               </p>
             </section>
 
@@ -109,11 +109,11 @@ export default function TermsOfService() {
               </p>
               <p className="mb-4 leading-relaxed text-gray-300">
                 <strong>Payment Processing:</strong> Payments are processed securely through
-                Gumroad, our trusted payment processor. By making a purchase, you agree to Gumroad's
+                Gumroad, our trusted payment processor. By making a purchase, you agree to Gumroad&apos;s
                 terms of service.
               </p>
               <p className="mb-4 leading-relaxed text-gray-300">
-                <strong>Refund Policy:</strong> We offer a 7-day money-back guarantee. If you're not
+                <strong>Refund Policy:</strong> We offer a 7-day money-back guarantee. If you&apos;re not
                 satisfied with PrepFlow, you may request a full refund within 7 days of purchase by
                 contacting us. After 7 days, all sales are final.
               </p>
@@ -133,7 +133,7 @@ export default function TermsOfService() {
                 <strong>Permitted Uses:</strong> You may use PrepFlow to:
               </p>
               <ul className="ml-4 list-inside list-disc space-y-2 text-gray-300">
-                <li>Analyze your restaurant's menu profitability</li>
+                <li>Analyze your restaurant&apos;s menu profitability</li>
                 <li>Calculate COGS and gross profit margins</li>
                 <li>Optimize your menu and pricing strategies</li>
                 <li>Train staff on cost management principles</li>
@@ -244,7 +244,7 @@ export default function TermsOfService() {
               <p className="leading-relaxed text-gray-300">
                 You agree to indemnify and hold harmless PrepFlow, its officers, directors,
                 employees, and agents from any claims, damages, losses, or expenses (including
-                reasonable attorneys' fees) arising from your use of the Service or violation of
+                reasonable attorneys&apos; fees) arising from your use of the Service or violation of
                 these Terms.
               </p>
             </section>
@@ -263,7 +263,7 @@ export default function TermsOfService() {
               </p>
               <p className="leading-relaxed text-gray-300">
                 <strong>Effect of Termination:</strong> Upon termination, your right to use PrepFlow
-                ceases immediately. You may retain any data you've exported, but we may delete your
+                ceases immediately. You may retain any data you&apos;ve exported, but we may delete your
                 account and associated data.
               </p>
             </section>
@@ -289,8 +289,8 @@ export default function TermsOfService() {
               <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">13. Changes to Terms</h2>
               <p className="leading-relaxed text-gray-300">
                 We reserve the right to modify these Terms at any time. We will notify you of any
-                material changes by posting the updated Terms on our website and updating the "Last
-                updated" date. Your continued use of PrepFlow after such changes constitutes
+                material changes by posting the updated Terms on our website and updating the &quot;Last
+                updated&quot; date. Your continued use of PrepFlow after such changes constitutes
                 acceptance of the updated Terms.
               </p>
             </section>

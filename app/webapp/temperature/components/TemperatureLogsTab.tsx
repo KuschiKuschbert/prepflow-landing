@@ -67,6 +67,20 @@ export default function TemperatureLogsTab({
   const getTypeLabel = (type: string) =>
     temperatureTypes.find(t => t.value === type)?.label || type;
 
+  // Convert equipment IDs from string to number for TemperatureFilters component
+  const equipmentForFilters = equipment.map(eq => ({
+    id: eq.id ? parseInt(eq.id, 10) : undefined,
+    name: eq.name,
+    equipment_type: eq.equipment_type,
+    is_active: eq.is_active,
+  }));
+
+  // Wrap t function to ensure it always returns a string
+  const tString = (key: string, fallback: string): string => {
+    const result = t(key, fallback);
+    return Array.isArray(result) ? result.join(' ') : String(result);
+  };
+
   return (
     <div className="space-y-6">
       {/* Filters and Add Button */}
@@ -75,10 +89,10 @@ export default function TemperatureLogsTab({
         setSelectedDate={setSelectedDate}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
-        equipment={equipment}
+        equipment={equipmentForFilters}
         temperatureTypes={temperatureTypes}
         onAddClick={() => setShowAddLog(true)}
-        t={t}
+        t={tString}
       />
 
       {/* Add Log Form */}
@@ -88,7 +102,7 @@ export default function TemperatureLogsTab({
         newLog={newLog}
         setNewLog={setNewLog}
         onAddLog={onAddLog}
-        equipment={equipment}
+        equipment={equipmentForFilters}
         temperatureTypes={temperatureTypes}
       />
 

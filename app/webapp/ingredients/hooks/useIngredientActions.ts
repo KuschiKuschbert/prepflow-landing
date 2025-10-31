@@ -253,7 +253,7 @@ export function useIngredientActions({
   const handleSelectIngredient = useCallback(
     (id: string, selected: boolean) => {
       if (!setSelectedIngredients) return;
-      const newSelected = new Set(selectedIngredients || new Set());
+      const newSelected = new Set<string>(selectedIngredients || new Set<string>());
       if (selected) {
         newSelected.add(id);
       } else {

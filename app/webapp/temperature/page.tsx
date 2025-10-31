@@ -10,9 +10,9 @@ import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
 import TemperatureLogsTab from './components/TemperatureLogsTab';
 
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
-import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
-import { TabNavigation } from './components/TabNavigation';
 import { PageHeader } from './components/PageHeader';
+import { TabNavigation } from './components/TabNavigation';
+import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureLogsQuery } from './hooks/useTemperatureLogsQuery';
 
 function TemperatureLogsPageContent() {

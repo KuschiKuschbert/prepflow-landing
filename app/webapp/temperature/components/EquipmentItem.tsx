@@ -162,7 +162,7 @@ export function EquipmentItem({
                   name="location"
                   defaultValue={item.location || ''}
                   className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                  placeholder={t('common.optional', 'Optional')}
+                  placeholder={String(t('common.optional', 'Optional'))}
                 />
               </div>
               <div>
@@ -175,7 +175,7 @@ export function EquipmentItem({
                   name="minTemp"
                   defaultValue={item.min_temp_celsius || ''}
                   className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                  placeholder={t('common.optional', 'Optional')}
+                  placeholder={String(t('common.optional', 'Optional'))}
                 />
               </div>
               <div>
@@ -188,7 +188,7 @@ export function EquipmentItem({
                   name="maxTemp"
                   defaultValue={item.max_temp_celsius || ''}
                   className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                  placeholder={t('common.optional', 'Optional')}
+                  placeholder={String(t('common.optional', 'Optional'))}
                 />
               </div>
             </div>
