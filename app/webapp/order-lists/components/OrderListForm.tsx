@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface Supplier {
   id: string;
@@ -41,6 +43,21 @@ export function OrderListForm({
 }: OrderListFormProps) {
   const { t } = useTranslation();
 
+  // Autosave integration
+  const entityId = (formData as any).id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(formData.supplierId && formData.name);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'order_lists',
+    entityId: entityId,
+    data: formData,
+    enabled: canAutosave,
+  });
+
   const addItem = () => {
     setFormData({
       ...formData,
@@ -66,16 +83,22 @@ export function OrderListForm({
             ? t('orderLists.editOrderList', 'Edit Order List')
             : t('orderLists.createOrderList', 'Create Order List')}
         </h2>
-        <button onClick={onClose} className="p-2 text-gray-400 transition-colors hover:text-white">
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+        <div className="flex items-center gap-3">
+          <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 transition-colors hover:text-white"
+          >
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">

@@ -3,6 +3,8 @@
 import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { ComplianceTypeFormData } from '../types';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface ComplianceTypeFormProps {
   formData: ComplianceTypeFormData;
@@ -19,11 +21,29 @@ export function ComplianceTypeForm({
 }: ComplianceTypeFormProps) {
   const { t } = useTranslation();
 
+  // Autosave integration
+  const entityId = (formData as any).id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(formData.name);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'compliance_types',
+    entityId: entityId,
+    data: formData,
+    enabled: canAutosave,
+  });
+
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-      <h3 className="mb-4 text-xl font-semibold text-white">
-        {t('compliance.addNewType', 'Add New Compliance Type')}
-      </h3>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-white">
+          {t('compliance.addNewType', 'Add New Compliance Type')}
+        </h3>
+        <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+      </div>
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">

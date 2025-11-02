@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslation } from '@/lib/useTranslation';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface KitchenSection {
   id: string;
@@ -37,6 +39,21 @@ export function SectionFormModal({
 }: SectionFormModalProps) {
   const { t } = useTranslation();
 
+  // Autosave integration
+  const entityId = editingSection?.id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(formData.name);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'dish_sections',
+    entityId: entityId,
+    data: formData,
+    enabled: canAutosave && show,
+  });
+
   if (!show) return null;
 
   return (
@@ -48,19 +65,22 @@ export function SectionFormModal({
               ? t('dishSections.editSection', 'Edit Section')
               : t('dishSections.addSection', 'Add Section')}
           </h2>
-          <button
-            onClick={onCancel}
-            className="p-2 text-gray-400 transition-colors hover:text-white"
-          >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+          <div className="flex items-center gap-3">
+            <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+            <button
+              onClick={onCancel}
+              className="p-2 text-gray-400 transition-colors hover:text-white"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-4">

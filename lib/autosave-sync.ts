@@ -26,6 +26,7 @@ export type EntityType =
   | 'prep_lists'
   | 'dish_sections'
   | 'temperature_equipment'
+  | 'temperature_logs'
   | 'cleaning_tasks'
   | 'cleaning_areas';
 

@@ -1,4 +1,6 @@
 import { useTranslation } from '@/lib/useTranslation';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 export interface AddTemperatureLogFormProps {
   show: boolean;
@@ -25,13 +27,33 @@ export function AddTemperatureLogForm({
   const getTypeLabel = (type: string) =>
     temperatureTypes.find(tt => tt.value === type)?.label || type;
 
+  // Autosave integration
+  const entityId = (newLog as any).id || 'new';
+  const canAutosave =
+    entityId !== 'new' ||
+    Boolean(newLog.equipment_id && newLog.log_date && newLog.temperature_celsius);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'temperature_logs',
+    entityId: entityId,
+    data: newLog,
+    enabled: canAutosave && show,
+  });
+
   if (!show) return null;
 
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-      <h3 className="mb-2 text-xl font-semibold text-white">
-        {t('temperature.addNewLog', 'Add New Temperature Log')}
-      </h3>
+      <div className="mb-2 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-white">
+          {t('temperature.addNewLog', 'Add New Temperature Log')}
+        </h3>
+        <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+      </div>
       <p className="mb-4 text-sm text-gray-400">
         💡 You can log multiple temperatures per day for the same equipment (e.g., morning and
         evening checks). There&apos;s a 5-minute cooling off period between entries for the same

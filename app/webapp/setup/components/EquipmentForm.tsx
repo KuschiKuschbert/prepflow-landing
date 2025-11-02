@@ -4,6 +4,8 @@ import React from 'react';
 import { NewEquipment } from '../types';
 import { equipmentTypes } from './equipment-config';
 import { getDefaultTemps, getEquipmentLabel } from './equipment-utils';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface EquipmentFormProps {
   equipment: NewEquipment;
@@ -24,9 +26,26 @@ export function EquipmentForm({
   error,
   result,
 }: EquipmentFormProps) {
+  // Autosave integration
+  const entityId = (equipment as any).id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(equipment.name);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'temperature_equipment',
+    entityId: entityId,
+    data: equipment,
+    enabled: canAutosave,
+  });
   return (
     <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
-      <h3 className="mb-4 text-xl font-semibold text-white">Add New Equipment</h3>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-white">Add New Equipment</h3>
+        <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+      </div>
       <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Name</label>

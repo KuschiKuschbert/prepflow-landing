@@ -3,6 +3,8 @@
 import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { SupplierFormData } from '../types';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface SupplierFormProps {
   formData: SupplierFormData;
@@ -14,11 +16,29 @@ interface SupplierFormProps {
 export function SupplierForm({ formData, onChange, onSubmit, onCancel }: SupplierFormProps) {
   const { t } = useTranslation();
 
+  // Autosave integration
+  const entityId = (formData as any).id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(formData.name);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'suppliers',
+    entityId: entityId,
+    data: formData,
+    enabled: canAutosave,
+  });
+
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-      <h3 className="mb-4 text-xl font-semibold text-white">
-        {t('suppliers.addNewSupplier', 'Add New Supplier')}
-      </h3>
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-xl font-semibold text-white">
+          {t('suppliers.addNewSupplier', 'Add New Supplier')}
+        </h3>
+        <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+      </div>
       <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
