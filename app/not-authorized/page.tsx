@@ -6,41 +6,49 @@ import { signIn, signOut } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
   const handleSignIn = async () => {
-    // Clear NextAuth session
-    await signOut({ redirect: false });
-
-    // Add a unique parameter to prevent Auth0 from using cached login
-    const timestamp = Date.now();
-
-    signIn('auth0', {
-      callbackUrl: '/webapp',
-      authorizationParams: {
-        prompt: 'select_account', // Force account selection screen
-        login_hint: '', // Clear any remembered email
-        // Add state parameter to make each login unique
-        state: `fresh-${timestamp}`,
-      },
-    });
+    // First, logout from Auth0 to clear their session
+    // Redirect to logout API which will clear Auth0 session then redirect back
+    const returnTo = `${window.location.origin}/not-authorized?action=signin`;
+    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
   };
 
   const handleCreateAccount = async () => {
-    // Clear NextAuth session
-    await signOut({ redirect: false });
-
-    // Add a unique parameter to prevent Auth0 from using cached login
-    const timestamp = Date.now();
-
-    signIn('auth0', {
-      callbackUrl: '/webapp',
-      authorizationParams: {
-        prompt: 'select_account', // Force account selection
-        screen_hint: 'signup',
-        login_hint: '', // Clear any remembered email
-        // Add state parameter to make each login unique
-        state: `fresh-signup-${timestamp}`,
-      },
-    });
+    // First, logout from Auth0 to clear their session
+    // Redirect to logout API which will clear Auth0 session then redirect back
+    const returnTo = `${window.location.origin}/not-authorized?action=signup`;
+    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
   };
+
+  // Handle redirect back from logout
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+
+    if (action === 'signin' || action === 'signup') {
+      // Small delay to ensure page is ready
+      const timer = setTimeout(() => {
+        // Clear NextAuth session and sign in
+        signOut({ redirect: false }).then(() => {
+          const authParams: { prompt: string; screen_hint?: string } = {
+            prompt: 'login', // Force fresh login screen
+          };
+
+          if (action === 'signup') {
+            authParams.screen_hint = 'signup';
+          }
+
+          signIn('auth0', {
+            callbackUrl: '/webapp',
+            authorizationParams: authParams,
+          });
+        });
+        // Clean up URL
+        window.history.replaceState({}, '', '/not-authorized');
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col items-center justify-center p-6 text-white">

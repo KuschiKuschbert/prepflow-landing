@@ -53,4 +53,3 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
     </div>
   );
 }
-
