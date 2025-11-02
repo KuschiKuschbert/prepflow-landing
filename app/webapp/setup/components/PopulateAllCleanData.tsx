@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 
-export default function PopulateAllCleanData() {
+interface PopulateAllCleanDataProps {
+  onDataPopulated?: () => void;
+}
+
+export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCleanDataProps) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +46,14 @@ export default function PopulateAllCleanData() {
       const data = await response.json();
 
       if (response.ok) {
-        setResult(data.message || 'Successfully populated clean test data!');
+        const successMessage =
+          data.message ||
+          `Successfully populated ${data.summary?.populated || 0} records across ${data.summary?.tables || 0} tables!`;
+        setResult(successMessage);
+        // Call callback to update parent progress
+        if (onDataPopulated) {
+          onDataPopulated();
+        }
       } else {
         setError(data.error || 'Failed to populate clean test data');
       }

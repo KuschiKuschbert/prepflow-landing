@@ -6,10 +6,8 @@ import CountrySetup from '../../../components/CountrySetup';
 import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
 import EquipmentSetup from './components/EquipmentSetup';
-import IngredientsSetup from './components/IngredientsSetup';
-import RecipesSetup from './components/RecipesSetup';
-import TestDataGenerator from './components/TestDataGenerator';
 import PopulateAllCleanData from './components/PopulateAllCleanData';
+import TestDataGenerator from './components/TestDataGenerator';
 
 export default function SetupPageRefactored() {
   // Setup completion tracking
@@ -20,16 +18,33 @@ export default function SetupPageRefactored() {
     country: false,
   });
 
+  // Track if clean data has been populated
+  const [dataPopulated, setDataPopulated] = useState(false);
+
   // Mark country setup as complete (since CountrySetup component is always rendered)
   useEffect(() => {
-    // Use setTimeout to avoid synchronous setState in effect
     setTimeout(() => {
       setSetupProgress(prev => ({ ...prev, country: true }));
     }, 0);
   }, []);
 
+  // When clean data is populated, mark ingredients and recipes as complete
+  useEffect(() => {
+    if (dataPopulated) {
+      setSetupProgress(prev => ({
+        ...prev,
+        ingredients: true,
+        recipes: true,
+      }));
+    }
+  }, [dataPopulated]);
+
   const handleProgressUpdate = (progress: SetupProgress) => {
     setSetupProgress(progress);
+  };
+
+  const handleDataPopulated = () => {
+    setDataPopulated(true);
   };
 
   return (
@@ -75,74 +90,50 @@ export default function SetupPageRefactored() {
             <CountrySetup />
           </div>
 
-          {/* Step 2: Equipment Setup */}
+          {/* Step 2: Populate All Clean Test Data (Main Method) */}
+          <div>
+            <div className="mb-8 text-center">
+              <div className="mb-4 flex items-center justify-center space-x-3">
+                <span className="text-lg">✨</span>
+                <span className="text-sm font-semibold text-white">2. Test Data</span>
+              </div>
+              <h2 className="mb-2 text-3xl font-bold text-white">✨ Populate Clean Test Data</h2>
+              <p className="text-lg text-gray-400">
+                Add a moderate set of test data to get started (~40 ingredients, ~10 recipes,
+                suppliers, equipment, and more)
+              </p>
+            </div>
+            <PopulateAllCleanData onDataPopulated={handleDataPopulated} />
+          </div>
+
+          {/* Step 3: Equipment Setup (Optional - for adding more equipment manually) */}
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
                 <span className="text-lg">🌡️</span>
-                <span className="text-sm font-semibold text-white">2. Equipment</span>
+                <span className="text-sm font-semibold text-gray-500">3. Equipment (Optional)</span>
               </div>
               <h2 className="mb-2 text-3xl font-bold text-white">🌡️ Temperature Equipment Setup</h2>
               <p className="text-lg text-gray-400">
-                Configure your fridges, freezers, and bain maries for temperature monitoring
+                Add additional temperature monitoring equipment or configure existing equipment
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                Note: Basic equipment is included in the test data above
               </p>
             </div>
             <EquipmentSetup setupProgress={setupProgress} onProgressUpdate={handleProgressUpdate} />
           </div>
 
-          {/* Step 3: Ingredients Setup */}
+          {/* Optional: Test Data Generator for Temperature Logs */}
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <span className="text-lg">🥕</span>
-                <span className="text-sm font-semibold text-white">3. Ingredients</span>
+                <span className="text-lg">📊</span>
+                <span className="text-sm font-semibold text-gray-500">Optional</span>
               </div>
-              <h2 className="mb-2 text-3xl font-bold text-white">🥕 Ingredients Database</h2>
+              <h2 className="mb-2 text-3xl font-bold text-white">📊 Temperature Test Data</h2>
               <p className="text-lg text-gray-400">
-                Populate your database with common kitchen ingredients and cost data
-              </p>
-            </div>
-            <IngredientsSetup
-              setupProgress={setupProgress}
-              onProgressUpdate={handleProgressUpdate}
-            />
-          </div>
-
-          {/* Step 4: Recipes Setup */}
-          <div>
-            <div className="mb-8 text-center">
-              <div className="mb-4 flex items-center justify-center space-x-3">
-                <span className="text-lg">🍲</span>
-                <span className="text-sm font-semibold text-white">4. Recipes</span>
-              </div>
-              <h2 className="mb-2 text-3xl font-bold text-white">🍲 Sample Recipes</h2>
-              <p className="text-lg text-gray-400">
-                Add sample recipes to get started with recipe management
-              </p>
-            </div>
-            <RecipesSetup setupProgress={setupProgress} onProgressUpdate={handleProgressUpdate} />
-          </div>
-
-          {/* Populate All Clean Test Data */}
-          <div>
-            <div className="mb-8 text-center">
-              <h2 className="mb-2 text-3xl font-bold text-white">
-                ✨ Populate All Clean Test Data
-              </h2>
-              <p className="text-lg text-gray-400">
-                Replace all existing data with a moderate, clear set of test data (~40 ingredients,
-                ~10 recipes, suppliers, equipment, etc.)
-              </p>
-            </div>
-            <PopulateAllCleanData />
-          </div>
-
-          {/* Test Data Generator (Optional) */}
-          <div>
-            <div className="mb-8 text-center">
-              <h2 className="mb-2 text-3xl font-bold text-white">📊 Optional: Test Data</h2>
-              <p className="text-lg text-gray-400">
-                Generate sample temperature data for testing and demonstration
+                Generate sample temperature log data for testing analytics and monitoring features
               </p>
             </div>
             <TestDataGenerator />
