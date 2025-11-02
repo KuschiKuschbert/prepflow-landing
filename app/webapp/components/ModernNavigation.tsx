@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
 import OptimizedImage from '../../../components/OptimizedImage';
+import { LogoutButton } from './LogoutButton';
 import { useNavigationItems } from './navigation/nav-items';
 import { SearchModal } from './navigation/SearchModal';
 import { Sidebar } from './navigation/Sidebar';
@@ -186,6 +187,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             </button>
 
             <LanguageSwitcher />
+
+            <LogoutButton />
 
             <Link
               href="/"
