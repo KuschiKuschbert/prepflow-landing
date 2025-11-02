@@ -131,7 +131,9 @@ export function useRecipeManagement() {
     setError(null);
 
     try {
-      const response = await fetch('/api/recipes');
+      const response = await fetch('/api/recipes', {
+        cache: 'no-store',
+      });
       const result = await response.json();
 
       if (!response.ok) {

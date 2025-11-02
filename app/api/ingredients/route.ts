@@ -5,10 +5,18 @@ export async function GET(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
 
-    const { data, error } = await supabaseAdmin
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('pageSize') || '20');
+
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
+
+    const { data, error, count } = await supabaseAdmin
       .from('ingredients')
-      .select('*')
-      .order('ingredient_name');
+      .select('*', { count: 'exact' })
+      .order('ingredient_name')
+      .range(start, end);
 
     if (error) {
       console.error('Error fetching ingredients:', error);
@@ -23,7 +31,13 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      ingredients: data,
+      data: {
+        items: data || [],
+        total: count || 0,
+        page,
+        pageSize,
+        totalPages: Math.ceil((count || 0) / pageSize),
+      },
     });
   } catch (err) {
     console.error('Unexpected error:', err);

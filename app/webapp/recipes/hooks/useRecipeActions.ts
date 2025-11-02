@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useNotification } from '@/contexts/NotificationContext';
 import { COGSCalculation, Recipe, RecipeIngredientWithDetails } from '../types';
 
 interface UseRecipeActionsProps {
@@ -21,6 +22,7 @@ export function useRecipeActions({
   capitalizeRecipeName,
 }: UseRecipeActionsProps) {
   const router = useRouter();
+  const { showSuccess, showError: showErrorNotification } = useNotification();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -35,23 +37,23 @@ export function useRecipeActions({
       try {
         const { error } = await supabase.from('recipes').insert([newRecipe]);
         if (error) {
-          setError(error.message);
+          showErrorNotification(error.message);
         } else {
           await fetchRecipes();
           return true;
         }
       } catch (err) {
-        setError('Failed to add recipe');
+        showErrorNotification('Failed to add recipe');
       }
       return false;
     },
-    [fetchRecipes, setError],
+    [fetchRecipes, showErrorNotification],
   );
 
   const handleEditFromPreview = useCallback(
     async (selectedRecipe: Recipe, recipeIngredients: RecipeIngredientWithDetails[]) => {
       if (!selectedRecipe || !recipeIngredients.length) {
-        setError('No recipe data available for editing');
+        showErrorNotification('No recipe data available for editing');
         return;
       }
 
@@ -97,10 +99,10 @@ export function useRecipeActions({
         router.push('/webapp/cogs');
       } catch (err) {
         console.error('❌ Error in handleEditFromPreview:', err);
-        setError('Failed to load recipe for editing');
+        showErrorNotification('Failed to load recipe for editing');
       }
     },
-    [router, setError],
+    [router, showErrorNotification],
   );
 
   const handleDeleteRecipe = useCallback((recipe: Recipe) => {
@@ -118,7 +120,7 @@ export function useRecipeActions({
         .eq('recipe_id', recipeToDelete.id);
 
       if (ingredientsError) {
-        setError(ingredientsError.message);
+        showErrorNotification(ingredientsError.message);
         return;
       }
 
@@ -128,20 +130,18 @@ export function useRecipeActions({
         .eq('id', recipeToDelete.id);
 
       if (recipeError) {
-        setError(recipeError.message);
+        showErrorNotification(recipeError.message);
         return;
       }
 
       await fetchRecipes();
-      const message = `Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`;
-      setSuccessMessage(message);
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showSuccess(`Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`);
       setShowDeleteConfirm(false);
       setRecipeToDelete(null);
     } catch (err) {
-      setError('Failed to delete recipe');
+      showErrorNotification('Failed to delete recipe');
     }
-  }, [recipeToDelete, fetchRecipes, capitalizeRecipeName, setError]);
+  }, [recipeToDelete, fetchRecipes, capitalizeRecipeName, showSuccess, showErrorNotification]);
 
   const cancelDeleteRecipe = useCallback(() => {
     setShowDeleteConfirm(false);
@@ -185,7 +185,7 @@ export function useRecipeActions({
         .in('recipe_id', selectedRecipeIds);
 
       if (ingredientsError) {
-        setError(ingredientsError.message);
+        showErrorNotification(ingredientsError.message);
         return;
       }
 
@@ -195,21 +195,20 @@ export function useRecipeActions({
         .in('id', selectedRecipeIds);
 
       if (recipesError) {
-        setError(recipesError.message);
+        showErrorNotification(recipesError.message);
         return;
       }
 
       await fetchRecipes();
-      setSuccessMessage(
+      showSuccess(
         `${selectedRecipes.size} recipe${selectedRecipes.size > 1 ? 's' : ''} deleted successfully!`,
       );
-      setTimeout(() => setSuccessMessage(null), 3000);
       setSelectedRecipes(new Set());
       setShowBulkDeleteConfirm(false);
     } catch (err) {
-      setError('Failed to delete recipes');
+      showErrorNotification('Failed to delete recipes');
     }
-  }, [selectedRecipes, fetchRecipes, setError]);
+  }, [selectedRecipes, fetchRecipes, showSuccess, showErrorNotification]);
 
   const cancelBulkDelete = useCallback(() => {
     setShowBulkDeleteConfirm(false);
@@ -222,7 +221,7 @@ export function useRecipeActions({
       aiInstructions: string,
     ) => {
       if (!selectedRecipe || !recipeIngredients.length) {
-        setError('No recipe data available for sharing');
+        showErrorNotification('No recipe data available for sharing');
         return;
       }
 
@@ -260,12 +259,12 @@ export function useRecipeActions({
         setShareUrl(result.shareUrl);
         setShowShareModal(true);
       } catch (err) {
-        setError('Failed to share recipe');
+        showErrorNotification('Failed to share recipe');
       } finally {
         setShareLoading(false);
       }
     },
-    [setError],
+    [showErrorNotification],
   );
 
   return {
