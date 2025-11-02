@@ -4,7 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useNotification } from '@/contexts/NotificationContext';
-import { COGSCalculation, Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { useRecipeBulkOperations } from './useRecipeBulkOperations';
+import { useRecipeDeleteOperations } from './useRecipeDeleteOperations';
+import { useRecipeShareOperations } from './useRecipeShareOperations';
+import { convertToCOGSCalculations } from './utils/recipeCalculationHelpers';
+import { storeRecipeForEditing } from './utils/recipeEditHelpers';
 
 interface UseRecipeActionsProps {
   recipes: Recipe[];
@@ -22,15 +27,13 @@ export function useRecipeActions({
   capitalizeRecipeName,
 }: UseRecipeActionsProps) {
   const router = useRouter();
-  const { showSuccess, showError: showErrorNotification } = useNotification();
+  const { showError: showErrorNotification } = useNotification();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
-  const [selectedRecipes, setSelectedRecipes] = useState<Set<string>>(new Set());
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-  const [shareLoading, setShareLoading] = useState(false);
+
+  // Use extracted hooks
+  const bulkOps = useRecipeBulkOperations(recipes, fetchRecipes, capitalizeRecipeName);
+  const deleteOps = useRecipeDeleteOperations(fetchRecipes, capitalizeRecipeName);
+  const shareOps = useRecipeShareOperations();
 
   const handleAddRecipe = useCallback(
     async (newRecipe: Partial<Recipe>) => {
@@ -58,44 +61,8 @@ export function useRecipeActions({
       }
 
       try {
-        const calculations: COGSCalculation[] = recipeIngredients.map(ri => {
-          const ingredient = ri.ingredients;
-          const quantity = ri.quantity;
-          const costPerUnit = ingredient.cost_per_unit;
-          const totalCost = quantity * costPerUnit;
-          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-          const yieldPercent = ingredient.yield_percentage || 100;
-          const wasteAdjustedCost = totalCost * (1 + wastePercent / 100);
-          const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
-
-          return {
-            id: ri.id,
-            ingredient_id: ingredient.id,
-            ingredientId: ingredient.id,
-            ingredient_name: ingredient.ingredient_name,
-            ingredientName: ingredient.ingredient_name,
-            quantity: quantity,
-            unit: ri.unit,
-            cost_per_unit: costPerUnit,
-            total_cost: totalCost,
-            yieldAdjustedCost: yieldAdjustedCost,
-            supplier_name: ingredient.supplier_name,
-            category: ingredient.category,
-          };
-        });
-
-        sessionStorage.setItem(
-          'editingRecipe',
-          JSON.stringify({
-            recipe: selectedRecipe,
-            recipeId: selectedRecipe.id,
-            calculations,
-            dishName: selectedRecipe.name,
-            dishPortions: selectedRecipe.yield,
-            dishNameLocked: true,
-          }),
-        );
-
+        const calculations = convertToCOGSCalculations(recipeIngredients);
+        storeRecipeForEditing(selectedRecipe, calculations);
         router.push('/webapp/cogs');
       } catch (err) {
         console.error('❌ Error in handleEditFromPreview:', err);
@@ -105,192 +72,13 @@ export function useRecipeActions({
     [router, showErrorNotification],
   );
 
-  const handleDeleteRecipe = useCallback((recipe: Recipe) => {
-    setRecipeToDelete(recipe);
-    setShowDeleteConfirm(true);
-  }, []);
-
-  const confirmDeleteRecipe = useCallback(async () => {
-    if (!recipeToDelete) return;
-
-    try {
-      const { error: ingredientsError } = await supabase
-        .from('recipe_ingredients')
-        .delete()
-        .eq('recipe_id', recipeToDelete.id);
-
-      if (ingredientsError) {
-        showErrorNotification(ingredientsError.message);
-        return;
-      }
-
-      const { error: recipeError } = await supabase
-        .from('recipes')
-        .delete()
-        .eq('id', recipeToDelete.id);
-
-      if (recipeError) {
-        showErrorNotification(recipeError.message);
-        return;
-      }
-
-      await fetchRecipes();
-      showSuccess(`Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`);
-      setShowDeleteConfirm(false);
-      setRecipeToDelete(null);
-    } catch (err) {
-      showErrorNotification('Failed to delete recipe');
-    }
-  }, [recipeToDelete, fetchRecipes, capitalizeRecipeName, showSuccess, showErrorNotification]);
-
-  const cancelDeleteRecipe = useCallback(() => {
-    setShowDeleteConfirm(false);
-    setRecipeToDelete(null);
-  }, []);
-
-  const handleSelectRecipe = useCallback((recipeId: string) => {
-    setSelectedRecipes(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(recipeId)) {
-        newSet.delete(recipeId);
-      } else {
-        newSet.add(recipeId);
-      }
-      return newSet;
-    });
-  }, []);
-
-  const handleSelectAll = useCallback(() => {
-    if (selectedRecipes.size === recipes.length) {
-      setSelectedRecipes(new Set());
-    } else {
-      setSelectedRecipes(new Set(recipes.map(r => r.id)));
-    }
-  }, [selectedRecipes.size, recipes]);
-
-  const handleBulkDelete = useCallback(() => {
-    if (selectedRecipes.size === 0) return;
-    setShowBulkDeleteConfirm(true);
-  }, [selectedRecipes.size]);
-
-  const confirmBulkDelete = useCallback(async () => {
-    if (selectedRecipes.size === 0) return;
-
-    try {
-      const selectedRecipeIds = Array.from(selectedRecipes);
-
-      const { error: ingredientsError } = await supabase
-        .from('recipe_ingredients')
-        .delete()
-        .in('recipe_id', selectedRecipeIds);
-
-      if (ingredientsError) {
-        showErrorNotification(ingredientsError.message);
-        return;
-      }
-
-      const { error: recipesError } = await supabase
-        .from('recipes')
-        .delete()
-        .in('id', selectedRecipeIds);
-
-      if (recipesError) {
-        showErrorNotification(recipesError.message);
-        return;
-      }
-
-      await fetchRecipes();
-      showSuccess(
-        `${selectedRecipes.size} recipe${selectedRecipes.size > 1 ? 's' : ''} deleted successfully!`,
-      );
-      setSelectedRecipes(new Set());
-      setShowBulkDeleteConfirm(false);
-    } catch (err) {
-      showErrorNotification('Failed to delete recipes');
-    }
-  }, [selectedRecipes, fetchRecipes, showSuccess, showErrorNotification]);
-
-  const cancelBulkDelete = useCallback(() => {
-    setShowBulkDeleteConfirm(false);
-  }, []);
-
-  const handleShareRecipe = useCallback(
-    async (
-      selectedRecipe: Recipe,
-      recipeIngredients: RecipeIngredientWithDetails[],
-      aiInstructions: string,
-    ) => {
-      if (!selectedRecipe || !recipeIngredients.length) {
-        showErrorNotification('No recipe data available for sharing');
-        return;
-      }
-
-      setShareLoading(true);
-      try {
-        const recipeData = {
-          name: selectedRecipe.name,
-          yield: selectedRecipe.yield,
-          yield_unit: selectedRecipe.yield_unit,
-          instructions: selectedRecipe.instructions,
-          ingredients: recipeIngredients.map(ri => ({
-            name: ri.ingredients.ingredient_name,
-            quantity: ri.quantity,
-            unit: ri.unit,
-          })),
-          aiInstructions: aiInstructions,
-          created_at: selectedRecipe.created_at,
-          shared_at: new Date().toISOString(),
-        };
-
-        const response = await fetch('/api/recipe-share', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            recipeData,
-            userId: 'user-123',
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to create share link');
-        }
-
-        const result = await response.json();
-        setShareUrl(result.shareUrl);
-        setShowShareModal(true);
-      } catch (err) {
-        showErrorNotification('Failed to share recipe');
-      } finally {
-        setShareLoading(false);
-      }
-    },
-    [showErrorNotification],
-  );
-
   return {
     successMessage,
     setSuccessMessage,
-    recipeToDelete,
-    showDeleteConfirm,
-    setShowDeleteConfirm,
-    showBulkDeleteConfirm,
-    setShowBulkDeleteConfirm,
-    selectedRecipes,
-    setSelectedRecipes,
-    showShareModal,
-    setShowShareModal,
-    shareUrl,
-    shareLoading,
+    ...deleteOps,
+    ...bulkOps,
+    ...shareOps,
     handleAddRecipe,
     handleEditFromPreview,
-    handleDeleteRecipe,
-    confirmDeleteRecipe,
-    cancelDeleteRecipe,
-    handleSelectRecipe,
-    handleSelectAll,
-    handleBulkDelete,
-    confirmBulkDelete,
-    cancelBulkDelete,
-    handleShareRecipe,
   };
 }
