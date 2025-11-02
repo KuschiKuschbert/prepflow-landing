@@ -1,11 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function PopulateAllCleanData() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isProduction, setIsProduction] = useState(false);
+
+  // Check if we're in production
+  useEffect(() => {
+    const isProd =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'prepflow.org' ||
+        window.location.hostname.includes('vercel.app') ||
+        process.env.NODE_ENV === 'production');
+    setIsProduction(isProd);
+  }, []);
 
   const populateAllCleanData = async () => {
     if (
@@ -75,7 +86,23 @@ export default function PopulateAllCleanData() {
           </ul>
         </div>
 
-        {error && (
+        {isProduction && (
+          <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-4 text-[#29E7CD]">
+            <div className="flex items-start space-x-2">
+              <span className="text-[#29E7CD]">ℹ️</span>
+              <div className="flex-1">
+                <p className="font-semibold">Development Feature</p>
+                <p className="mt-1 text-sm text-gray-300">
+                  Test data population is only available in development mode. In production, you
+                  should manage your data manually through the respective pages (Ingredients,
+                  Recipes, Suppliers, etc.).
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {error && !isProduction && (
           <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-900/20 p-4 text-red-300">
             <div className="flex items-center space-x-2">
               <span className="text-red-400">⚠️</span>
@@ -96,7 +123,7 @@ export default function PopulateAllCleanData() {
         <div className="text-center">
           <button
             onClick={populateAllCleanData}
-            disabled={loading}
+            disabled={loading || isProduction}
             className={`rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-200 ${
               loading
                 ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'

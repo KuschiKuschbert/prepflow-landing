@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface RecipesSetupProps {
   setupProgress: {
@@ -21,6 +21,17 @@ export default function RecipesSetup({ setupProgress, onProgressUpdate }: Recipe
   const [recipesLoading, setRecipesLoading] = useState(false);
   const [recipesResult, setRecipesResult] = useState<string | null>(null);
   const [recipesError, setRecipesError] = useState<string | null>(null);
+  const [isProduction, setIsProduction] = useState(false);
+
+  // Check if we're in production
+  useEffect(() => {
+    const isProd =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'prepflow.org' ||
+        window.location.hostname.includes('vercel.app') ||
+        process.env.NODE_ENV === 'production');
+    setIsProduction(isProd);
+  }, []);
 
   const populateRecipes = async () => {
     setRecipesLoading(true);
@@ -88,7 +99,22 @@ export default function RecipesSetup({ setupProgress, onProgressUpdate }: Recipe
           </ul>
         </div>
 
-        {recipesError && (
+        {isProduction && (
+          <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-4 text-[#29E7CD]">
+            <div className="flex items-start space-x-2">
+              <span className="text-[#29E7CD]">ℹ️</span>
+              <div className="flex-1">
+                <p className="font-semibold">Development Feature</p>
+                <p className="mt-1 text-sm text-gray-300">
+                  Test data seeding is only available in development mode. In production, you should
+                  create recipes manually through the Recipes page.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {recipesError && !isProduction && (
           <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-900/20 p-4 text-red-300">
             <div className="flex items-center space-x-2">
               <span className="text-red-400">⚠️</span>
@@ -109,7 +135,7 @@ export default function RecipesSetup({ setupProgress, onProgressUpdate }: Recipe
         <div className="text-center">
           <button
             onClick={populateRecipes}
-            disabled={recipesLoading || setupProgress.recipes}
+            disabled={recipesLoading || setupProgress.recipes || isProduction}
             className={`rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-200 ${
               setupProgress.recipes
                 ? 'cursor-not-allowed bg-green-600 text-white'
