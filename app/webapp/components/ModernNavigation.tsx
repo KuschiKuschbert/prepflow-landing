@@ -189,24 +189,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             <LanguageSwitcher />
 
             <LogoutButton />
-
-            <Link
-              href="/"
-              className={cn(
-                'rounded-lg',
-                'bg-[#2a2a2a]',
-                'px-3',
-                'py-1.5',
-                'text-sm',
-                'font-medium',
-                'text-gray-300',
-                'transition-colors',
-                'hover:bg-[#2a2a2a]/80',
-              )}
-              aria-label="Back to landing"
-            >
-              {t('nav.backToLanding', 'Landing')}
-            </Link>
           </div>
         </div>
       </header>
