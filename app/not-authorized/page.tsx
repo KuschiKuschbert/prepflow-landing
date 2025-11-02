@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { signIn, signOut } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
-  const clearAuth0AndSignIn = async (isSignup = false) => {
-    // Clear NextAuth session first
+  const handleLogout = async () => {
+    // Clear NextAuth session
     await signOut({ redirect: false });
 
     if (typeof window === 'undefined') return;
@@ -17,35 +17,37 @@ export default function NotAuthorizedPage() {
 
     const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || 'CO3VI37SuZ4e9wke1PitgWvAUyMR2HfL';
 
-    // Use hidden iframe to silently logout from Auth0
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.src = `${auth0Issuer}/v2/logout?client_id=${clientId}&returnTo=${encodeURIComponent(window.location.origin)}`;
-    document.body.appendChild(iframe);
-
-    // Wait for logout, then proceed with login
-    setTimeout(() => {
-      document.body.removeChild(iframe);
-
-      // Proceed with sign-in - use prompt: 'login' to force fresh credentials
-      signIn('auth0', {
-        callbackUrl: '/webapp',
-        authorizationParams: {
-          prompt: 'login', // This should force re-entering credentials
-          ...(isSignup && { screen_hint: 'signup' }),
-        },
-      });
-    }, 1500); // Give iframe time to clear session
+    // Redirect to Auth0 logout endpoint, then back to landing page
+    const returnTo = `${window.location.origin}/`;
+    const logoutUrl = `${auth0Issuer}/v2/logout?client_id=${clientId}&returnTo=${encodeURIComponent(returnTo)}`;
+    window.location.href = logoutUrl;
   };
 
   const handleSignIn = async () => {
-    await clearAuth0AndSignIn(false);
+    // Clear NextAuth session
+    await signOut({ redirect: false });
+
+    // Sign in with prompt to show login screen
+    signIn('auth0', {
+      callbackUrl: '/webapp',
+      authorizationParams: {
+        prompt: 'login',
+      },
+    });
   };
 
   const handleCreateAccount = async () => {
-    await clearAuth0AndSignIn(true);
+    // Clear NextAuth session
+    await signOut({ redirect: false });
+
+    // Sign in with signup hint
+    signIn('auth0', {
+      callbackUrl: '/webapp',
+      authorizationParams: {
+        prompt: 'login',
+        screen_hint: 'signup',
+      },
+    });
   };
 
   return (
@@ -68,13 +70,17 @@ export default function NotAuthorizedPage() {
         >
           Sign in
         </button>
+        <button
+          onClick={handleLogout}
+          className="rounded-2xl border border-red-500/50 bg-red-500/10 px-5 py-3 font-semibold text-red-400 transition-all duration-200 hover:bg-red-500/20"
+        >
+          Log out & clear session
+        </button>
         <Link
           href="/"
           onClick={async e => {
             // Clear NextAuth session when going back to landing
             await signOut({ redirect: false });
-            // Note: We don't redirect to Auth0 logout here to avoid interrupting navigation
-            // The select_account prompt on next login will handle account selection
           }}
           className="rounded-2xl border border-[#2a2a2a] px-5 py-3 text-center font-semibold hover:bg-[#2a2a2a]/40"
         >
