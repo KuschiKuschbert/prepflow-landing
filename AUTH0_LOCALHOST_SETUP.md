@@ -26,8 +26,12 @@ http://localhost:3001/api/auth/callback/auth0
 
 ```
 http://localhost:3000
+http://localhost:3000/
 http://localhost:3001
+http://localhost:3001/
 ```
+
+**⚠️ CRITICAL:** These URLs MUST be added to "Allowed Logout URLs" or logout will fail with `redirect_uri_mismatch` error.
 
 #### Allowed Web Origins:
 
@@ -63,6 +67,22 @@ npm run dev
 # You should be redirected to Auth0 login
 # After login, you'll be redirected back to /webapp
 ```
+
+### 6. Test Logout
+
+```bash
+# After logging in, navigate to /not-authorized or any protected route
+# Click the "Logout" button
+# Verify:
+#   - You're redirected to landing page
+#   - Session is cleared
+#   - Next login shows fresh login screen (not remembered account)
+```
+
+**Troubleshooting Logout:**
+
+- If logout doesn't work, check that `http://localhost:3000` and `http://localhost:3001` are in "Allowed Logout URLs"
+- If using Auth0 developer keys with social connections, federated logout won't work (see [AUTH0_LOGOUT_SETUP.md](../docs/AUTH0_LOGOUT_SETUP.md))
 
 ---
 
