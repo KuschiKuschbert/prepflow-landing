@@ -66,7 +66,7 @@ export default function NotAuthorizedPage() {
           onClick={handleLogout}
           className="rounded-2xl border border-red-500/50 bg-red-500/10 px-5 py-3 font-semibold text-red-400 transition-all duration-200 hover:bg-red-500/20"
         >
-          Log out & clear session
+          Logout
         </button>
         <Link
           href="/"
