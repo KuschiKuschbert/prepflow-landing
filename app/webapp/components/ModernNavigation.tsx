@@ -127,7 +127,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
             <Link href="/webapp" className="flex items-center space-x-2">
               <OptimizedImage
-                src="/images/prepflow-logo-white.png"
+                src="/images/prepflow-logo.png"
                 alt="PrepFlow Logo"
                 width={24}
                 height={24}
