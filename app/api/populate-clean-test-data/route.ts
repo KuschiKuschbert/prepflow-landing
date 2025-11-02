@@ -11,17 +11,6 @@ import {
 } from '@/lib/populate-helpers';
 
 export async function POST(request: NextRequest) {
-  // Prevent population in production
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      {
-        error: 'Test data population is not allowed in production',
-        message: 'This endpoint is only available in development mode',
-      },
-      { status: 403 },
-    );
-  }
-
   try {
     // Get country code from query parameter (default to 'AU')
     const { searchParams } = new URL(request.url);

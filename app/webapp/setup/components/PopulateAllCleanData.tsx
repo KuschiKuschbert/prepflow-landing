@@ -14,14 +14,9 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
   const [error, setError] = useState<string | null>(null);
   const [isProduction, setIsProduction] = useState(false);
 
-  // Check if we're in production
+  // Check if we're in production (disabled check - allow in all environments)
   useEffect(() => {
-    const isProd =
-      typeof window !== 'undefined' &&
-      (window.location.hostname === 'prepflow.org' ||
-        window.location.hostname.includes('vercel.app') ||
-        process.env.NODE_ENV === 'production');
-    setIsProduction(isProd);
+    setIsProduction(false);
   }, []);
 
   const populateAllCleanData = async () => {
