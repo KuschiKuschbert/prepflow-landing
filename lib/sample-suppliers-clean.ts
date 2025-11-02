@@ -1,0 +1,119 @@
+/**
+ * Clean Test Data - Suppliers
+ * 15-20 suppliers with realistic Australian business names
+ */
+
+export const cleanSampleSuppliers = [
+  {
+    supplier_name: 'Fresh Produce Co',
+    contact_person: 'John Smith',
+    email: 'john@freshproduce.com',
+    phone: '0412 345 678',
+    address: '123 Market St, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Meat Suppliers Ltd',
+    contact_person: 'Sarah Johnson',
+    email: 'sarah@meatsuppliers.com',
+    phone: '0413 456 789',
+    address: '456 Industrial Ave, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Dairy Direct',
+    contact_person: 'Mike Brown',
+    email: 'mike@dairydirect.com',
+    phone: '0414 567 890',
+    address: '789 Farm Rd, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Local Grower',
+    contact_person: 'Emma Wilson',
+    email: 'emma@localgrower.com',
+    phone: '0415 678 901',
+    address: '321 Green St, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Seafood Direct',
+    contact_person: 'Tom Davis',
+    email: 'tom@seafooddirect.com',
+    phone: '0416 789 012',
+    address: '654 Harbor View, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Bulk Foods Warehouse',
+    contact_person: 'Lisa Chen',
+    email: 'lisa@bulkfoods.com',
+    phone: '0417 890 123',
+    address: '987 Warehouse Blvd, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Coles Wholesale',
+    contact_person: 'Store Manager',
+    email: 'wholesale@coles.com',
+    phone: '1300 765 123',
+    address: 'Multiple locations',
+  },
+  {
+    supplier_name: 'Woolworths Business',
+    contact_person: 'Business Manager',
+    email: 'business@woolworths.com',
+    phone: '1300 767 123',
+    address: 'Multiple locations',
+  },
+  {
+    supplier_name: 'Local Butcher',
+    contact_person: 'Dave Roberts',
+    email: 'dave@localbutcher.com',
+    phone: '0418 901 234',
+    address: '147 Butcher St, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Masterfoods Distribution',
+    contact_person: 'Karen Lee',
+    email: 'karen@masterfoods.com',
+    phone: '0419 012 345',
+    address: '258 Spice Ave, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Bakery Supplies',
+    contact_person: 'Peter White',
+    email: 'peter@bakerysupplies.com',
+    phone: '0420 123 456',
+    address: '369 Flour Lane, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Organic Farm Direct',
+    contact_person: 'Maria Green',
+    email: 'maria@organicfarm.com',
+    phone: '0421 234 567',
+    address: '741 Organic Way, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Frozen Foods Co',
+    contact_person: 'James Frost',
+    email: 'james@frozenfoods.com',
+    phone: '0422 345 678',
+    address: '852 Cold Storage Rd, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Beverage Distributors',
+    contact_person: 'Amanda Drink',
+    email: 'amanda@beverages.com',
+    phone: '0423 456 789',
+    address: '963 Drink St, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Local Supplier',
+    contact_person: 'Robert Local',
+    email: 'robert@localsupplier.com',
+    phone: '0424 567 890',
+    address: '159 Local Ave, Brisbane QLD 4000',
+  },
+  {
+    supplier_name: 'Farm Fresh Eggs',
+    contact_person: 'Chicken Farm',
+    email: 'eggs@farmfresh.com',
+    phone: '0425 678 901',
+    address: '357 Farm Rd, Brisbane QLD 4000',
+  },
+];

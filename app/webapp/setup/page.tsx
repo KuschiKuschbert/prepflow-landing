@@ -9,6 +9,7 @@ import EquipmentSetup from './components/EquipmentSetup';
 import IngredientsSetup from './components/IngredientsSetup';
 import RecipesSetup from './components/RecipesSetup';
 import TestDataGenerator from './components/TestDataGenerator';
+import PopulateAllCleanData from './components/PopulateAllCleanData';
 
 export default function SetupPageRefactored() {
   // Setup completion tracking
@@ -120,6 +121,20 @@ export default function SetupPageRefactored() {
               </p>
             </div>
             <RecipesSetup setupProgress={setupProgress} onProgressUpdate={handleProgressUpdate} />
+          </div>
+
+          {/* Populate All Clean Test Data */}
+          <div>
+            <div className="mb-8 text-center">
+              <h2 className="mb-2 text-3xl font-bold text-white">
+                ✨ Populate All Clean Test Data
+              </h2>
+              <p className="text-lg text-gray-400">
+                Replace all existing data with a moderate, clear set of test data (~40 ingredients,
+                ~10 recipes, suppliers, equipment, etc.)
+              </p>
+            </div>
+            <PopulateAllCleanData />
           </div>
 
           {/* Test Data Generator (Optional) */}

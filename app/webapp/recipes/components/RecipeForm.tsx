@@ -40,7 +40,7 @@ export default function RecipeForm({
   return (
     <div className="mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold sm:text-xl">Add New Recipe</h2>
+        <h2 className="text-lg font-semibold sm:text-xl">Add Recipe</h2>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
       <form onSubmit={onSubmit} className="space-y-4">

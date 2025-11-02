@@ -17,84 +17,147 @@ interface COGSTableProps {
   dishPortions: number;
 }
 
-export const COGSTable: React.FC<COGSTableProps> = React.memo(
-  function COGSTable({
-    calculations,
-    editingIngredient,
-    editQuantity,
-    onEditIngredient,
-    onSaveEdit,
-    onCancelEdit,
-    onRemoveIngredient,
-    onEditQuantityChange,
-    totalCOGS,
-    costPerPortion,
-    dishPortions,
-  }) {
-    if (calculations.length === 0) {
-      return (
-        <div className="py-8 text-center text-gray-500">
-          No ingredients added yet. Add some ingredients to see COGS calculations.
-        </div>
-      );
-    }
-
+export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable({
+  calculations,
+  editingIngredient,
+  editQuantity,
+  onEditIngredient,
+  onSaveEdit,
+  onCancelEdit,
+  onRemoveIngredient,
+  onEditQuantityChange,
+  totalCOGS,
+  costPerPortion,
+  dishPortions,
+}) {
+  if (calculations.length === 0) {
     return (
-      <div className="space-y-4">
-        {/* Mobile Card Layout */}
-        <div className="block md:hidden">
-          <div className="space-y-3">
-            {calculations.map((calc, index) => (
-              <div key={index} className="rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] p-3">
-                <div className="mb-2 flex items-start justify-between">
-                  <h4 className="text-sm font-medium text-white">{calc.ingredientName}</h4>
+      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
+        <div className="mb-4 flex justify-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
+            <span className="text-3xl">🥘</span>
+          </div>
+        </div>
+        <h3 className="mb-2 text-lg font-semibold text-white">No Ingredients Added Yet</h3>
+        <p className="mb-4 text-gray-400">
+          Start by adding ingredients to your dish. Each ingredient you add will show its cost, and
+          we&apos;ll calculate the total COGS (Cost of Goods Sold) for your recipe.
+        </p>
+        <p className="text-sm text-gray-500">
+          Use the ingredient search above to add ingredients from your database, or add new ones on
+          the fly.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Mobile Card Layout */}
+      <div className="block md:hidden">
+        <div className="space-y-3">
+          {calculations.map((calc, index) => (
+            <div key={index} className="rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] p-3">
+              <div className="mb-2 flex items-start justify-between">
+                <h4 className="text-sm font-medium text-white">{calc.ingredientName}</h4>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm font-bold text-[#29E7CD]">
+                    ${calc.yieldAdjustedCost.toFixed(2)}
+                  </span>
+                  <button
+                    onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
+                    className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
+                    title="Edit quantity"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => onRemoveIngredient(calc.ingredientId)}
+                    className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
+                    title="Remove ingredient"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {editingIngredient === calc.ingredientId ? (
+                <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold text-[#29E7CD]">
-                      ${calc.yieldAdjustedCost.toFixed(2)}
-                    </span>
+                    <input
+                      type="number"
+                      value={editQuantity}
+                      onChange={e => onEditQuantityChange(parseFloat(e.target.value) || 0)}
+                      className="w-20 rounded border border-[#3a3a3a] bg-[#0a0a0a] px-2 py-1 text-sm text-white focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+                      step="0.1"
+                      min="0"
+                    />
+                    <span className="text-xs text-gray-400">{calc.unit}</span>
+                  </div>
+                  <div className="flex space-x-2">
                     <button
-                      onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
-                      className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
-                      title="Edit quantity"
+                      onClick={onSaveEdit}
+                      className="rounded bg-[#29E7CD] px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
                     >
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                        />
-                      </svg>
+                      Save
                     </button>
                     <button
-                      onClick={() => onRemoveIngredient(calc.ingredientId)}
-                      className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
-                      title="Remove ingredient"
+                      onClick={onCancelEdit}
+                      className="rounded bg-gray-600 px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
                     >
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
+                      Cancel
                     </button>
                   </div>
                 </div>
+              ) : (
+                <p className="text-xs text-gray-400">
+                  {calc.quantity} {calc.unit}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
-                {editingIngredient === calc.ingredientId ? (
-                  <div className="space-y-2">
+      {/* Desktop Table Layout */}
+      <div className="hidden overflow-x-auto md:block">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Ingredient
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Qty
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Cost
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-[#1f1f1f]">
+            {calculations.map((calc, index) => (
+              <tr key={index} className="transition-colors duration-200 hover:bg-[#2a2a2a]/50">
+                <td className="px-3 py-2 text-sm text-white">{calc.ingredientName}</td>
+                <td className="px-3 py-2 text-sm text-gray-500">
+                  {editingIngredient === calc.ingredientId ? (
                     <div className="flex items-center space-x-2">
                       <input
                         type="number"
@@ -106,159 +169,97 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(
                       />
                       <span className="text-xs text-gray-400">{calc.unit}</span>
                     </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={onSaveEdit}
-                        className="rounded bg-[#29E7CD] px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={onCancelEdit}
-                        className="rounded bg-gray-600 px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-400">
-                    {calc.quantity} {calc.unit}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Desktop Table Layout */}
-        <div className="hidden overflow-x-auto md:block">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Ingredient
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Qty
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Cost
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-[#1f1f1f]">
-              {calculations.map((calc, index) => (
-                <tr key={index} className="transition-colors duration-200 hover:bg-[#2a2a2a]/50">
-                  <td className="px-3 py-2 text-sm text-white">{calc.ingredientName}</td>
-                  <td className="px-3 py-2 text-sm text-gray-500">
+                  ) : (
+                    <span>
+                      {calc.quantity} {calc.unit}
+                    </span>
+                  )}
+                </td>
+                <td className="px-3 py-2 text-sm text-gray-500">
+                  ${calc.yieldAdjustedCost.toFixed(2)}
+                </td>
+                <td className="px-3 py-2 text-sm">
+                  <div className="flex items-center space-x-2">
                     {editingIngredient === calc.ingredientId ? (
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="number"
-                          value={editQuantity}
-                          onChange={e => onEditQuantityChange(parseFloat(e.target.value) || 0)}
-                          className="w-20 rounded border border-[#3a3a3a] bg-[#0a0a0a] px-2 py-1 text-sm text-white focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
-                          step="0.1"
-                          min="0"
-                        />
-                        <span className="text-xs text-gray-400">{calc.unit}</span>
-                      </div>
+                      <>
+                        <button
+                          onClick={onSaveEdit}
+                          className="rounded bg-[#29E7CD] px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={onCancelEdit}
+                          className="rounded bg-gray-600 px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
+                        >
+                          Cancel
+                        </button>
+                      </>
                     ) : (
-                      <span>
-                        {calc.quantity} {calc.unit}
-                      </span>
+                      <>
+                        <button
+                          onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
+                          className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
+                          title="Edit quantity"
+                        >
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => onRemoveIngredient(calc.ingredientId)}
+                          className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
+                          title="Remove ingredient"
+                        >
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
+                      </>
                     )}
-                  </td>
-                  <td className="px-3 py-2 text-sm text-gray-500">
-                    ${calc.yieldAdjustedCost.toFixed(2)}
-                  </td>
-                  <td className="px-3 py-2 text-sm">
-                    <div className="flex items-center space-x-2">
-                      {editingIngredient === calc.ingredientId ? (
-                        <>
-                          <button
-                            onClick={onSaveEdit}
-                            className="rounded bg-[#29E7CD] px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={onCancelEdit}
-                            className="rounded bg-gray-600 px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
-                            className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
-                            title="Edit quantity"
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => onRemoveIngredient(calc.ingredientId)}
-                            className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
-                            title="Remove ingredient"
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Total COGS Summary */}
-        <div className="border-t pt-4">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-lg font-medium text-white">Total COGS:</span>
-            <span className="text-lg font-bold text-[#29E7CD]">${totalCOGS.toFixed(2)}</span>
-          </div>
-          {dishPortions > 0 && (
-            <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm text-gray-400">Cost per portion:</span>
-              <span className="text-sm font-medium text-white">${costPerPortion.toFixed(2)}</span>
-            </div>
-          )}
-        </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    );
-  },
-);
+
+      {/* Total COGS Summary */}
+      <div className="border-t pt-4">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-lg font-medium text-white">Total COGS:</span>
+          <span className="text-lg font-bold text-[#29E7CD]">${totalCOGS.toFixed(2)}</span>
+        </div>
+        {dishPortions > 0 && (
+          <div className="mb-4 flex items-center justify-between">
+            <span className="text-sm text-gray-400">Cost per portion:</span>
+            <span className="text-sm font-medium text-white">${costPerPortion.toFixed(2)}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
 
 COGSTable.displayName = 'COGSTable';

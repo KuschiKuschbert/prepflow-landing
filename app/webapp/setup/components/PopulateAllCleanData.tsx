@@ -2,50 +2,38 @@
 
 import { useState } from 'react';
 
-interface IngredientsSetupProps {
-  setupProgress: {
-    ingredients: boolean;
-    recipes: boolean;
-    equipment: boolean;
-    country: boolean;
-  };
-  onProgressUpdate: (progress: {
-    ingredients: boolean;
-    recipes: boolean;
-    equipment: boolean;
-    country: boolean;
-  }) => void;
-}
-
-export default function IngredientsSetup({
-  setupProgress,
-  onProgressUpdate,
-}: IngredientsSetupProps) {
+export default function PopulateAllCleanData() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const populateIngredients = async () => {
+  const populateAllCleanData = async () => {
+    if (
+      !confirm(
+        'This will DELETE all existing test data and replace it with clean test data (~40 ingredients, ~10 recipes, suppliers, equipment, etc.). Continue?',
+      )
+    ) {
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setResult(null);
 
     try {
-      const response = await fetch('/api/setup-database', {
+      const response = await fetch('/api/populate-clean-test-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ populateIngredients: true }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setResult(data.message);
-        onProgressUpdate({ ...setupProgress, ingredients: true });
+        setResult(data.message || 'Successfully populated clean test data!');
       } else {
-        setError(data.error || 'Failed to populate ingredients');
+        setError(data.error || 'Failed to populate clean test data');
       }
     } catch (err) {
       setError('Network error occurred');
@@ -56,38 +44,33 @@ export default function IngredientsSetup({
 
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
-      <div className="mb-8 text-center">
-        <div className="mb-4 text-6xl">🥕</div>
-        <h3 className="mb-2 text-2xl font-bold text-white">Ingredients Database</h3>
-        <p className="text-lg text-gray-400">
-          Populate your database with ~40 common kitchen ingredients including costs, units, and
-          yield percentages
-        </p>
-      </div>
-
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
           <h4 className="mb-4 text-lg font-semibold text-white">What you&apos;ll get:</h4>
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>~40 common ingredients (vegetables, meats, dairy, spices)</span>
+              <span>~40 ingredients (meat, vegetables, dairy, dry goods)</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>Realistic cost data for Australian suppliers</span>
+              <span>~10 recipes with complete ingredient lists</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>Proper units (kg, g, L, mL, each, etc.)</span>
+              <span>15-20 suppliers (Australian business names)</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>Yield percentages and waste factors</span>
+              <span>15-20 temperature equipment pieces</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>Trim and peel waste calculations</span>
+              <span>Cleaning areas, tasks, compliance types, kitchen sections</span>
+            </li>
+            <li className="flex items-center space-x-2">
+              <span className="text-[#29E7CD]">✓</span>
+              <span>All data properly linked (recipes to ingredients, etc.)</span>
             </li>
           </ul>
         </div>
@@ -112,37 +95,30 @@ export default function IngredientsSetup({
 
         <div className="text-center">
           <button
-            onClick={populateIngredients}
-            disabled={loading || setupProgress.ingredients}
+            onClick={populateAllCleanData}
+            disabled={loading}
             className={`rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-200 ${
-              setupProgress.ingredients
-                ? 'cursor-not-allowed bg-green-600 text-white'
-                : loading
-                  ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
-                  : 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl'
+              loading
+                ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
+                : 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl'
             }`}
           >
-            {setupProgress.ingredients ? (
-              <span className="flex items-center justify-center space-x-2">
-                <span>✅</span>
-                <span>Ingredients Added Successfully!</span>
-              </span>
-            ) : loading ? (
+            {loading ? (
               <span className="flex items-center justify-center space-x-2">
                 <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-gray-400"></div>
-                <span>Adding Ingredients...</span>
+                <span>Populating Clean Test Data...</span>
               </span>
             ) : (
               <span className="flex items-center justify-center space-x-2">
-                <span>🥕</span>
-                <span>Add ~40 Ingredients</span>
+                <span>✨</span>
+                <span>Populate All Clean Test Data</span>
               </span>
             )}
           </button>
 
-          {!setupProgress.ingredients && (
+          {!loading && (
             <p className="mt-4 text-sm text-gray-400">
-              This will take about 10-15 seconds to complete
+              This will delete all existing data and populate clean, moderate test data
             </p>
           )}
         </div>

@@ -191,7 +191,7 @@ export default function IngredientForm({
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-white">
-          {ingredient ? 'Edit Ingredient' : 'Add New Ingredient'}
+          {ingredient ? 'Edit Ingredient' : 'Add Ingredient'}
         </h2>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
@@ -218,11 +218,7 @@ export default function IngredientForm({
               }
             }}
           >
-            {loading || status === 'saving'
-              ? 'Saving...'
-              : ingredient
-                ? 'Save Now'
-                : 'Create Ingredient'}
+            {loading || status === 'saving' ? 'Saving...' : ingredient ? 'Save' : 'Add Ingredient'}
           </button>
           <button
             type="button"

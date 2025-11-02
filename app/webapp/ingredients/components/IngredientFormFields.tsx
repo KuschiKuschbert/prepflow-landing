@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { HelpTooltip } from '@/components/ui/HelpTooltip';
+import { getHelpText } from '@/lib/terminology-help';
 
 interface Ingredient {
   id: string;
@@ -80,7 +82,10 @@ export function IngredientFormFields({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Pack Size Unit</label>
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+            Pack Size Unit
+            <HelpTooltip content={getHelpText('packSizeUnit', true)} title="Pack Size Unit" />
+          </label>
           <select
             value={formData.pack_size_unit || 'GM'}
             onChange={e => handleInputChange('pack_size_unit', e.target.value)}
@@ -112,7 +117,10 @@ export function IngredientFormFields({
       {/* Cost Information */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Cost Per Unit *</label>
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+            Cost Per Unit *
+            <HelpTooltip content={getHelpText('costPerUnit', true)} title="Cost Per Unit" />
+          </label>
           <input
             type="number"
             step="0.01"
@@ -128,7 +136,13 @@ export function IngredientFormFields({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Unit *</label>
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+            Unit *
+            <HelpTooltip
+              content="The unit you use this ingredient in recipes (e.g., GM for grams, PC for pieces). This can be different from the pack size unit."
+              title="Unit"
+            />
+          </label>
           <select
             value={formData.unit || 'GM'}
             onChange={e => handleInputChange('unit', e.target.value)}
@@ -173,8 +187,9 @@ export function IngredientFormFields({
       {/* Waste and Yield */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
             Trim/Peel Waste (%)
+            <HelpTooltip content={getHelpText('trimWaste', true)} title="Trim/Peel Waste" />
           </label>
           <input
             type="number"
@@ -191,7 +206,10 @@ export function IngredientFormFields({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Yield (%)</label>
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+            Yield (%)
+            <HelpTooltip content={getHelpText('yield', true)} title="Yield" />
+          </label>
           <input
             type="number"
             step="0.1"
@@ -208,7 +226,10 @@ export function IngredientFormFields({
       {/* Stock Information */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Min Stock Level</label>
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+            Min Stock Level
+            <HelpTooltip content={getHelpText('parLevel', true)} title="Minimum Stock Level" />
+          </label>
           <input
             type="number"
             step="0.01"

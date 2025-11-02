@@ -1,0 +1,133 @@
+/**
+ * Clean Test Data - Temperature Equipment
+ * 15-20 pieces covering all types (cold storage, freezer, hot holding)
+ */
+
+export const cleanSampleEquipment = [
+  {
+    name: 'Main Kitchen Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Kitchen',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Prep Station Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Prep Station',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Walk-in Cooler',
+    equipment_type: 'Cold Storage',
+    location: 'Storage Room',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Display Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Service Area',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Bar Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Bar Area',
+    min_temp_celsius: 2,
+    max_temp_celsius: 8,
+  },
+  {
+    name: 'Dairy Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Kitchen',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Walk-in Freezer',
+    equipment_type: 'Freezer',
+    location: 'Storage Room',
+    min_temp_celsius: -24,
+    max_temp_celsius: -18,
+  },
+  {
+    name: 'Upright Freezer',
+    equipment_type: 'Freezer',
+    location: 'Kitchen',
+    min_temp_celsius: -24,
+    max_temp_celsius: -18,
+  },
+  {
+    name: 'Ice Cream Freezer',
+    equipment_type: 'Freezer',
+    location: 'Service Area',
+    min_temp_celsius: -24,
+    max_temp_celsius: -18,
+  },
+  {
+    name: 'Hot Holding Cabinet',
+    equipment_type: 'Hot Holding',
+    location: 'Service Area',
+    min_temp_celsius: 60,
+    max_temp_celsius: 75,
+  },
+  {
+    name: 'Bain Marie Hot',
+    equipment_type: 'Hot Holding',
+    location: 'Service Area',
+    min_temp_celsius: 60,
+    max_temp_celsius: 75,
+  },
+  {
+    name: 'Hot Food Display',
+    equipment_type: 'Hot Holding',
+    location: 'Service Counter',
+    min_temp_celsius: 60,
+    max_temp_celsius: 75,
+  },
+  {
+    name: 'Wine Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Storage Room',
+    min_temp_celsius: 10,
+    max_temp_celsius: 15,
+  },
+  {
+    name: 'Beer Cooler',
+    equipment_type: 'Cold Storage',
+    location: 'Bar Area',
+    min_temp_celsius: 2,
+    max_temp_celsius: 8,
+  },
+  {
+    name: 'Ice Machine',
+    equipment_type: 'Ice Production',
+    location: 'Bar Area',
+    min_temp_celsius: -2,
+    max_temp_celsius: 0,
+  },
+  {
+    name: 'Bread Storage',
+    equipment_type: 'Cold Storage',
+    location: 'Prep Station',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Salad Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Cold Kitchen',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+  {
+    name: 'Sauce Fridge',
+    equipment_type: 'Cold Storage',
+    location: 'Kitchen',
+    min_temp_celsius: 0,
+    max_temp_celsius: 5,
+  },
+];

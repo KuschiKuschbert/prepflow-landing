@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { PricingCalculation, PricingStrategy } from '../types';
+import { HelpTooltip } from '@/components/ui/HelpTooltip';
+import { getHelpText } from '@/lib/terminology-help';
 
 interface PricingToolProps {
   costPerPortion: number;
@@ -56,8 +58,12 @@ export const PricingTool: React.FC<PricingToolProps> = ({
 
         {/* Pricing Strategy Selector */}
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
             📊 Pricing Strategy
+            <HelpTooltip
+              content="Charm: Prices ending in .95 or .99 (e.g., $19.95) - psychologically appealing. Whole: Round to nearest dollar (e.g., $20.00) - clean pricing. Real: Exact calculated price - may have cents."
+              title="Pricing Strategies"
+            />
           </label>
           <div className="grid grid-cols-3 gap-2">
             <button
@@ -142,8 +148,13 @@ export const PricingTool: React.FC<PricingToolProps> = ({
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {/* Contributing Margin */}
               <div className="rounded-xl border border-[#D925C7]/30 bg-gradient-to-br from-[#D925C7]/20 to-[#29E7CD]/20 p-3">
-                <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">
+                <div className="mb-1 flex items-center gap-2 text-xs tracking-wide text-gray-500 uppercase">
                   Contributing Margin
+                  <HelpTooltip
+                    content={getHelpText('contributingMargin', true)}
+                    title="Contributing Margin"
+                    position="top"
+                  />
                 </div>
                 <div className="text-xl font-bold text-[#D925C7]">
                   ${pricingCalculation.contributingMargin.toFixed(2)}
