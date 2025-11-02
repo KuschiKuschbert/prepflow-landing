@@ -131,6 +131,42 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
     }
   };
 
+  const handleDeleteAllEquipment = async () => {
+    if (
+      !confirm(
+        `Are you sure you want to delete ALL ${equipment.length} pieces of equipment? This action cannot be undone.`,
+      )
+    )
+      return;
+
+    try {
+      setEquipmentLoading(true);
+      setEquipmentError(null);
+      setEquipmentResult(null);
+
+      // Delete all equipment one by one
+      const deletePromises = equipment.map(eq =>
+        fetch(`/api/temperature-equipment?id=${eq.id}`, {
+          method: 'DELETE',
+        }),
+      );
+
+      const results = await Promise.all(deletePromises);
+      const allSuccess = results.every(response => response.ok);
+
+      if (allSuccess) {
+        setEquipment([]);
+        setEquipmentResult(`Successfully deleted all ${equipment.length} pieces of equipment!`);
+      } else {
+        setEquipmentError('Some equipment failed to delete. Please try again.');
+      }
+    } catch (error) {
+      setEquipmentError('Network error occurred');
+    } finally {
+      setEquipmentLoading(false);
+    }
+  };
+
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
       {/* Add Equipment Button */}
@@ -169,6 +205,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         showAll={showAllEquipment}
         onToggleShowAll={() => setShowAllEquipment(!showAllEquipment)}
         onDelete={handleDeleteEquipment}
+        onDeleteAll={handleDeleteAllEquipment}
       />
     </div>
   );

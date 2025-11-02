@@ -9,6 +9,7 @@ interface EquipmentListProps {
   showAll: boolean;
   onToggleShowAll: () => void;
   onDelete: (id: number) => void;
+  onDeleteAll?: () => void;
 }
 
 export function EquipmentList({
@@ -16,6 +17,7 @@ export function EquipmentList({
   showAll,
   onToggleShowAll,
   onDelete,
+  onDeleteAll,
 }: EquipmentListProps) {
   if (equipment.length === 0) {
     return (
@@ -33,14 +35,24 @@ export function EquipmentList({
     <div className="mb-6 space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-semibold text-white">Your Equipment ({equipment.length})</h3>
-        {equipment.length > 6 && (
-          <button
-            onClick={onToggleShowAll}
-            className="font-medium text-[#29E7CD] hover:text-[#29E7CD]/80"
-          >
-            {showAll ? 'Show Less' : 'Show All'}
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {equipment.length > 6 && (
+            <button
+              onClick={onToggleShowAll}
+              className="font-medium text-[#29E7CD] hover:text-[#29E7CD]/80"
+            >
+              {showAll ? 'Show Less' : 'Show All'}
+            </button>
+          )}
+          {onDeleteAll && equipment.length > 0 && (
+            <button
+              onClick={onDeleteAll}
+              className="rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-500/20"
+            >
+              🗑️ Delete All
+            </button>
+          )}
+        </div>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {(showAll ? equipment : equipment.slice(0, 6)).map(eq => (
