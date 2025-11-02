@@ -403,82 +403,7 @@ export async function POST() {
       }
     }
 
-    // Step 7: Populate Temperature Equipment
-    console.log('🌡️ Populating temperature equipment...');
-    const temperatureEquipment = [
-      {
-        name: 'Main Refrigerator',
-        equipment_type: 'Cold Storage',
-        location: 'Kitchen',
-        min_temp_celsius: 0,
-        max_temp_celsius: 5,
-      },
-      {
-        name: 'Walk-in Freezer',
-        equipment_type: 'Freezer',
-        location: 'Storage Room',
-        min_temp_celsius: -24,
-        max_temp_celsius: -18,
-      },
-      {
-        name: 'Hot Holding Cabinet',
-        equipment_type: 'Hot Holding',
-        location: 'Service Area',
-        min_temp_celsius: 60,
-        max_temp_celsius: 75,
-      },
-      {
-        name: 'Display Fridge',
-        equipment_type: 'Cold Storage',
-        location: 'Service Area',
-        min_temp_celsius: 0,
-        max_temp_celsius: 5,
-      },
-      {
-        name: 'Ice Machine',
-        equipment_type: 'Ice Production',
-        location: 'Bar Area',
-        min_temp_celsius: -2,
-        max_temp_celsius: 0,
-      },
-      {
-        name: 'Beer Cooler',
-        equipment_type: 'Cold Storage',
-        location: 'Bar Area',
-        min_temp_celsius: 2,
-        max_temp_celsius: 8,
-      },
-      {
-        name: 'Wine Fridge',
-        equipment_type: 'Cold Storage',
-        location: 'Storage Room',
-        min_temp_celsius: 10,
-        max_temp_celsius: 15,
-      },
-      {
-        name: 'Prep Fridge',
-        equipment_type: 'Cold Storage',
-        location: 'Prep Station',
-        min_temp_celsius: 0,
-        max_temp_celsius: 5,
-      },
-    ];
-
-    for (const equipment of temperatureEquipment) {
-      const { error } = await supabaseAdmin
-        .from('temperature_equipment')
-        .upsert(equipment, { onConflict: 'name' });
-
-      if (error) {
-        results.errors.push({
-          step: 'temperature_equipment',
-          equipment: equipment.name,
-          error: error.message,
-        });
-      }
-    }
-
-    // Step 8: Create sample compliance records for today
+    // Step 7: Create sample compliance records for today
     console.log('📝 Creating compliance records...');
     const { data: complianceTypesData } = await supabaseAdmin.from('compliance_types').select('*');
     const today = new Date().toISOString().split('T')[0];
@@ -558,7 +483,6 @@ export async function POST() {
       { table: 'suppliers', count: suppliers.length },
       { table: 'compliance_types', count: complianceTypes.length },
       { table: 'kitchen_sections', count: kitchenSections.length },
-      { table: 'temperature_equipment', count: temperatureEquipment.length },
       { table: 'compliance_records', count: complianceTypesData?.length || 0 },
       { table: 'prep_lists', count: sections?.length || 0 },
       { table: 'order_lists', count: sampleSuppliers.length },

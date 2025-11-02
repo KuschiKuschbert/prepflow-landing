@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
 
     console.log('🌡️ Starting temperature log generation...');
 
-    // First, get all active equipment
-    const { data: equipment, error: equipmentError } = await supabaseAdmin
+    // First, check if equipment exists
+    let { data: equipment, error: equipmentError } = await supabaseAdmin
       .from('temperature_equipment')
       .select('*')
       .eq('is_active', true);
@@ -37,14 +37,70 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // If no equipment exists, create 5 sample equipment items
     if (!equipment || equipment.length === 0) {
-      return NextResponse.json(
+      console.log('No equipment found. Creating 5 sample equipment items...');
+      const sampleEquipment = [
         {
-          error: 'No active equipment found',
-          message: 'Please add some temperature equipment first in the setup page',
+          name: 'Main Refrigerator',
+          equipment_type: 'Cold Storage',
+          location: 'Kitchen',
+          min_temp_celsius: 0,
+          max_temp_celsius: 5,
+          is_active: true,
         },
-        { status: 400 },
-      );
+        {
+          name: 'Walk-in Freezer',
+          equipment_type: 'Freezer',
+          location: 'Storage Room',
+          min_temp_celsius: -24,
+          max_temp_celsius: -18,
+          is_active: true,
+        },
+        {
+          name: 'Hot Holding Cabinet',
+          equipment_type: 'Hot Holding',
+          location: 'Service Area',
+          min_temp_celsius: 60,
+          max_temp_celsius: 75,
+          is_active: true,
+        },
+        {
+          name: 'Display Fridge',
+          equipment_type: 'Cold Storage',
+          location: 'Service Area',
+          min_temp_celsius: 0,
+          max_temp_celsius: 5,
+          is_active: true,
+        },
+        {
+          name: 'Ice Machine',
+          equipment_type: 'Ice Production',
+          location: 'Bar Area',
+          min_temp_celsius: -2,
+          max_temp_celsius: 0,
+          is_active: true,
+        },
+      ];
+
+      const { data: insertedEquipment, error: insertError } = await supabaseAdmin
+        .from('temperature_equipment')
+        .insert(sampleEquipment)
+        .select();
+
+      if (insertError) {
+        console.error('Error creating sample equipment:', insertError);
+        return NextResponse.json(
+          {
+            error: 'Failed to create sample equipment',
+            message: insertError.message,
+          },
+          { status: 500 },
+        );
+      }
+
+      console.log(`✅ Created ${insertedEquipment.length} sample equipment items`);
+      equipment = insertedEquipment;
     }
 
     console.log(`📊 Found ${equipment.length} active equipment items`);
