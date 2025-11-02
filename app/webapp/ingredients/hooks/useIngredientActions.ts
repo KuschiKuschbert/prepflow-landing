@@ -9,6 +9,7 @@ import {
   formatStorageLocation,
   formatTextInput,
 } from '@/lib/text-utils';
+import { convertUnit, isVolumeUnit, isWeightUnit } from '@/lib/unit-conversion';
 
 interface Ingredient {
   id: string;
@@ -64,27 +65,130 @@ export function useIngredientActions({
   const handleAddIngredient = useCallback(
     async (ingredientData: Partial<Ingredient>) => {
       try {
-        const { data, error } = await supabase
-          .from('ingredients')
-          .insert([
-            {
-              ...ingredientData,
-              ingredient_name: formatIngredientName(ingredientData.ingredient_name || ''),
-              brand: ingredientData.brand ? formatBrandName(ingredientData.brand) : null,
-              supplier: ingredientData.supplier
-                ? formatSupplierName(ingredientData.supplier)
-                : null,
-              storage_location: ingredientData.storage_location
-                ? formatStorageLocation(ingredientData.storage_location)
-                : null,
-              product_code: ingredientData.product_code
-                ? formatTextInput(ingredientData.product_code)
-                : null,
-            },
-          ])
-          .select();
+        // Validate required fields
+        if (!ingredientData.ingredient_name?.trim()) {
+          setError('Ingredient name is required');
+          return;
+        }
+        if (!ingredientData.unit) {
+          setError('Unit is required');
+          return;
+        }
+        if (!ingredientData.cost_per_unit || ingredientData.cost_per_unit <= 0) {
+          setError('Cost per unit must be greater than 0');
+          return;
+        }
 
-        if (error) throw error;
+        // Convert string fields to proper types
+        const packSize =
+          typeof ingredientData.pack_size === 'string'
+            ? parseFloat(ingredientData.pack_size) || null
+            : ingredientData.pack_size || null;
+
+        const packPrice =
+          typeof ingredientData.pack_price === 'string'
+            ? parseFloat(String(ingredientData.pack_price)) || 0
+            : ingredientData.pack_price || 0;
+
+        const costPerUnit =
+          typeof ingredientData.cost_per_unit === 'string'
+            ? parseFloat(String(ingredientData.cost_per_unit))
+            : ingredientData.cost_per_unit || 0;
+
+        const costPerUnitAsPurchased =
+          typeof ingredientData.cost_per_unit_as_purchased === 'string'
+            ? parseFloat(String(ingredientData.cost_per_unit_as_purchased)) || costPerUnit
+            : ingredientData.cost_per_unit_as_purchased || costPerUnit;
+
+        const costPerUnitInclTrim =
+          typeof ingredientData.cost_per_unit_incl_trim === 'string'
+            ? parseFloat(String(ingredientData.cost_per_unit_incl_trim)) || costPerUnit
+            : ingredientData.cost_per_unit_incl_trim || costPerUnit;
+
+        const trimPeelWastePercentage =
+          typeof ingredientData.trim_peel_waste_percentage === 'string'
+            ? parseFloat(String(ingredientData.trim_peel_waste_percentage)) || 0
+            : ingredientData.trim_peel_waste_percentage || 0;
+
+        const yieldPercentage =
+          typeof ingredientData.yield_percentage === 'string'
+            ? parseFloat(String(ingredientData.yield_percentage)) || 100
+            : ingredientData.yield_percentage || 100;
+
+        const minStockLevel =
+          typeof ingredientData.min_stock_level === 'string'
+            ? parseInt(String(ingredientData.min_stock_level), 10) || 0
+            : ingredientData.min_stock_level || 0;
+
+        const currentStock =
+          typeof ingredientData.current_stock === 'string'
+            ? parseInt(String(ingredientData.current_stock), 10) || 0
+            : ingredientData.current_stock || 0;
+
+        // Normalize unit to base units (GM for weight, ML for volume)
+        const inputUnit = ingredientData.unit || 'g';
+        let normalizedUnit = inputUnit.toUpperCase();
+        let normalizedCostPerUnit = costPerUnit;
+        let normalizedCostPerUnitAsPurchased = costPerUnitAsPurchased;
+        let normalizedCostPerUnitInclTrim = costPerUnitInclTrim;
+
+        // Convert to base units: GM for weight, ML for volume
+        if (isWeightUnit(inputUnit.toLowerCase()) && normalizedUnit !== 'GM') {
+          // Convert to GM (grams)
+          const conversion = convertUnit(1, inputUnit.toLowerCase(), 'g');
+          normalizedUnit = 'GM';
+          normalizedCostPerUnit = costPerUnit / conversion.value;
+          normalizedCostPerUnitAsPurchased = costPerUnitAsPurchased / conversion.value;
+          normalizedCostPerUnitInclTrim = costPerUnitInclTrim / conversion.value;
+          console.log(
+            `Normalized weight unit from ${inputUnit} to GM: cost ${costPerUnit} -> ${normalizedCostPerUnit}`,
+          );
+        } else if (isVolumeUnit(inputUnit.toLowerCase()) && normalizedUnit !== 'ML') {
+          // Convert to ML (milliliters)
+          const conversion = convertUnit(1, inputUnit.toLowerCase(), 'ml');
+          normalizedUnit = 'ML';
+          normalizedCostPerUnit = costPerUnit / conversion.value;
+          normalizedCostPerUnitAsPurchased = costPerUnitAsPurchased / conversion.value;
+          normalizedCostPerUnitInclTrim = costPerUnitInclTrim / conversion.value;
+          console.log(
+            `Normalized volume unit from ${inputUnit} to ML: cost ${costPerUnit} -> ${normalizedCostPerUnit}`,
+          );
+        }
+
+        // Prepare data for insert
+        const insertData = {
+          ingredient_name: formatIngredientName(ingredientData.ingredient_name.trim()),
+          unit: normalizedUnit,
+          cost_per_unit: normalizedCostPerUnit,
+          cost_per_unit_as_purchased: normalizedCostPerUnitAsPurchased,
+          cost_per_unit_incl_trim: normalizedCostPerUnitInclTrim,
+          trim_peel_waste_percentage: trimPeelWastePercentage,
+          yield_percentage: yieldPercentage,
+          pack_size: packSize,
+          pack_size_unit: ingredientData.pack_size_unit || null,
+          pack_price: packPrice,
+          brand: ingredientData.brand ? formatBrandName(ingredientData.brand) : null,
+          supplier: ingredientData.supplier ? formatSupplierName(ingredientData.supplier) : null,
+          storage_location: ingredientData.storage_location
+            ? formatStorageLocation(ingredientData.storage_location)
+            : null,
+          product_code: ingredientData.product_code
+            ? formatTextInput(ingredientData.product_code)
+            : null,
+          min_stock_level: minStockLevel,
+          current_stock: currentStock,
+        };
+
+        console.log('Inserting ingredient:', insertData);
+
+        const { data, error } = await supabase.from('ingredients').insert([insertData]).select();
+
+        if (error) {
+          console.error('Supabase error inserting ingredient:', error);
+          throw error;
+        }
+
+        console.log('Ingredient inserted successfully:', data);
         setIngredients(prev => [...prev, ...(data || [])]);
         if (setShowAddForm) setShowAddForm(false);
         if (setWizardStep) setWizardStep(1);
@@ -104,8 +208,13 @@ export function useIngredientActions({
             current_stock: 0,
           });
         }
-      } catch (error) {
-        setError('Failed to add ingredient');
+      } catch (error: any) {
+        console.error('Error in handleAddIngredient:', error);
+        const errorMessage =
+          error?.message ||
+          (error?.code ? `Database error (${error.code})` : 'Failed to add ingredient');
+        setError(`Failed to add ingredient: ${errorMessage}`);
+        throw error; // Re-throw to allow wizard to handle it
       }
     },
     [setIngredients, setError, setShowAddForm, setWizardStep, setNewIngredient],

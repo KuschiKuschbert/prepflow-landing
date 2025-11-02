@@ -53,6 +53,7 @@ function WebAppDashboardContent() {
     averageDishPrice: 0,
   });
   const [loading, setLoading] = useState(false); // Completely disabled to prevent skeleton flashes
+  const [statsError, setStatsError] = useState<string | null>(null);
   const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
 
@@ -60,19 +61,42 @@ function WebAppDashboardContent() {
     const fetchStats = async () => {
       // Completely disabled loading state to prevent skeleton flashes
       // setLoading(true);
+      setStatsError(null);
       try {
         // Fetch ingredients count
-        const { count: ingredientsCount } = await supabase
+        const { count: ingredientsCount, error: ingredientsError } = await supabase
           .from('ingredients')
           .select('*', { count: 'exact', head: true });
 
+        if (ingredientsError) {
+          console.error('Error fetching ingredients count:', ingredientsError);
+          setStatsError(`Failed to load ingredients: ${ingredientsError.message}`);
+        }
+
         // Fetch recipes count
-        const { count: recipesCount } = await supabase
+        const { count: recipesCount, error: recipesError } = await supabase
           .from('recipes')
           .select('*', { count: 'exact', head: true });
 
+        if (recipesError) {
+          console.error('Error fetching recipes count:', recipesError);
+          setStatsError(
+            prev => `${prev ? prev + ' ' : ''}Failed to load recipes: ${recipesError.message}`,
+          );
+        }
+
         // Fetch menu dishes count and average price
-        const { data: menuDishes } = await supabase.from('menu_dishes').select('selling_price');
+        const { data: menuDishes, error: menuDishesError } = await supabase
+          .from('menu_dishes')
+          .select('selling_price');
+
+        if (menuDishesError) {
+          console.error('Error fetching menu dishes:', menuDishesError);
+          setStatsError(
+            prev =>
+              `${prev ? prev + ' ' : ''}Failed to load menu dishes: ${menuDishesError.message}`,
+          );
+        }
 
         const totalDishes = menuDishes?.length || 0;
         const averagePrice =
@@ -87,7 +111,8 @@ function WebAppDashboardContent() {
           averageDishPrice: averagePrice,
         });
       } catch (error) {
-        // Handle error gracefully
+        console.error('Unexpected error fetching dashboard stats:', error);
+        setStatsError(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       } finally {
         // Completely disabled loading state to prevent skeleton flashes
         // setLoading(false);
@@ -148,6 +173,32 @@ function WebAppDashboardContent() {
             <TestWarningButton />
           </div>
         </div>
+
+        {/* Error Message */}
+        {statsError && (
+          <div className="mb-6 rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3 text-red-400">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span className="font-medium">Dashboard Stats Error</span>
+            </div>
+            <p className="mt-1 text-sm">{statsError}</p>
+            <p className="mt-2 text-xs text-red-400/70">
+              Check browser console for detailed error messages. This may be due to database permissions or table access issues.
+            </p>
+          </div>
+        )}
 
         {/* Dashboard Components */}
         <DashboardStats stats={stats} />

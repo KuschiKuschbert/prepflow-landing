@@ -32,9 +32,22 @@ export default function BulkActionsBar({
         <div className="flex gap-2">
           <button
             onClick={onBulkDelete}
-            className="rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
           >
-            🗑️ Delete Selected
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+            Delete Selected
           </button>
           <button
             onClick={onClearSelection}

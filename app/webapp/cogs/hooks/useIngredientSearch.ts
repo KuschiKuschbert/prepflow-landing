@@ -66,14 +66,17 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
   const handleSearchChange = useCallback(
     (value: string) => {
       setIngredientSearch(value);
-      setShowSuggestions(value.length > 0);
-      setSelectedIngredient(null);
-      setNewIngredient({
-        ...newIngredient,
-        ingredient_id: '',
-      });
+      // Show suggestions if there's a search term OR if we want to show initial list
+      setShowSuggestions(value.length > 0 || ingredients.length > 0);
+      if (value.length === 0) {
+        setSelectedIngredient(null);
+        setNewIngredient({
+          ...newIngredient,
+          ingredient_id: '',
+        });
+      }
     },
-    [newIngredient],
+    [newIngredient, ingredients.length],
   );
 
   const resetForm = useCallback(() => {

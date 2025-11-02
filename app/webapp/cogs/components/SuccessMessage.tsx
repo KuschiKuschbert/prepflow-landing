@@ -6,6 +6,50 @@ interface SuccessMessageProps {
 export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
   if (!message) return null;
 
+  // Check if this is a recipe loaded message (smaller) vs recipe saved message (larger)
+  const isRecipeLoaded = message.toLowerCase().includes('loaded for editing');
+  const isRecipeSaved = message.toLowerCase().includes('saved successfully') || message.toLowerCase().includes('added to the recipe book');
+
+  // Smaller notification for recipe loaded
+  if (isRecipeLoaded) {
+    return (
+      <div className="mb-4 animate-in slide-in-from-top-2 rounded-lg border border-green-400/50 bg-green-500/20 px-4 py-2.5 text-sm text-green-200 shadow-md transition-all duration-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg
+              className="h-4 w-4 text-green-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <p className="font-medium">{message}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="ml-2 rounded-full p-1 text-green-300 transition-colors hover:bg-green-500/30 hover:text-green-200"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Larger notification for recipe saved
   return (
     <div className="animate-in slide-in-from-top-2 mb-6 scale-105 transform rounded-2xl border-2 border-green-400 bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-5 text-white shadow-2xl transition-all duration-300 duration-500 hover:scale-110">
       <div className="flex items-center space-x-4">
@@ -28,9 +72,11 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
         </div>
         <div className="flex-1">
           <p className="text-lg font-bold text-white">{message}</p>
-          <p className="mt-1 text-sm font-medium text-green-100">
-            🎉 Your recipe has been added to the Recipe Book and is ready to use!
-          </p>
+          {isRecipeSaved && (
+            <p className="mt-1 text-sm font-medium text-green-100">
+              Your recipe has been added to the Recipe Book and is ready to use!
+            </p>
+          )}
         </div>
         <button
           onClick={onClose}

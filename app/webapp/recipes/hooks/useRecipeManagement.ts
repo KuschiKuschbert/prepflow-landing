@@ -54,9 +54,9 @@ export function useRecipeManagement() {
   const handleEditRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
-        const ingredients = await fetchRecipeIngredients(recipe.id);
-        const calculations = convertToCOGSCalculations(ingredients);
-        storeRecipeForEditing(recipe, calculations);
+      const ingredients = await fetchRecipeIngredients(recipe.id);
+      const calculations = convertToCOGSCalculations(ingredients, recipe.id);
+      storeRecipeForEditing(recipe, calculations);
         router.push('/webapp/cogs');
       } catch (err) {
         setError('Failed to load recipe for editing');

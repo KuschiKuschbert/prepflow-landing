@@ -41,6 +41,7 @@ function COGSPageContent() {
     updateCalculation,
     removeCalculation,
     addCalculation,
+    loadCalculations,
     checkRecipeExists,
     setError,
   } = useCOGSCalculations();
@@ -106,6 +107,7 @@ function COGSPageContent() {
     setDishPortions,
     setDishNameLocked,
     setShowSuggestions,
+    loadCalculations,
   });
 
   // Ingredient addition hook

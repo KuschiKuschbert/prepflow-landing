@@ -54,8 +54,16 @@ export const convertIngredientCost = (
   toUnit: string,
   quantity: number = 1,
 ): number => {
-  const conversion = convertUnit(quantity, fromUnit, toUnit);
-  return (cost / quantity) * conversion.value;
+  // Convert cost per unit from one unit to another
+  // If cost is per `fromUnit`, convert to cost per `toUnit`
+  // Example: $5 per kg -> cost per g = $5 / 1000 = $0.005 per g
+
+  // First, find how many `toUnit` are in 1 `fromUnit`
+  const conversion = convertUnit(1, fromUnit, toUnit);
+
+  // Cost per toUnit = cost per fromUnit / (how many toUnits in 1 fromUnit)
+  // For example: $5/kg -> $5/1000 = $0.005/g (because 1kg = 1000g)
+  return cost / conversion.value;
 };
 
 export const formatUnit = (value: number, unit: string): string => {

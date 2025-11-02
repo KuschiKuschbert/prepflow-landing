@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { convertUnit } from '@/lib/unit-conversion';
 
+import { COGSCalculation } from '../types';
+
 interface UseCOGSEffectsProps {
   checkRecipeExists: (name: string) => Promise<boolean | null>;
   dishName: string;
@@ -12,6 +14,7 @@ interface UseCOGSEffectsProps {
   setDishPortions: (portions: number) => void;
   setDishNameLocked: (locked: boolean) => void;
   setShowSuggestions: (show: boolean) => void;
+  loadCalculations: (calculations: COGSCalculation[]) => void;
 }
 
 export function useCOGSEffects({
@@ -23,6 +26,7 @@ export function useCOGSEffects({
   setDishPortions,
   setDishNameLocked,
   setShowSuggestions,
+  loadCalculations,
 }: UseCOGSEffectsProps) {
   const [recipeExists, setRecipeExists] = useState<boolean | null>(null);
   const [checkingRecipe, setCheckingRecipe] = useState(false);
@@ -35,23 +39,39 @@ export function useCOGSEffects({
         const { recipe, recipeId, calculations, dishName, dishPortions, dishNameLocked } =
           JSON.parse(editingData);
 
-        console.log('🔍 DEBUG: Loading from sessionStorage with recipeId:', {
+        console.log('🔍 DEBUG: Loading from sessionStorage:', {
           dishName,
-          recipeId,
-          calculationsCount: calculations.length,
+          recipeId: recipeId || recipe?.id,
+          calculationsCount: calculations?.length || 0,
+          calculations,
         });
 
-        setDishName(dishName);
-        setDishPortions(dishPortions);
-        setDishNameLocked(dishNameLocked);
+        if (dishName) {
+          setDishName(dishName);
+        }
+        if (dishPortions) {
+          setDishPortions(dishPortions);
+        }
+        if (dishNameLocked !== undefined) {
+          setDishNameLocked(dishNameLocked);
+        }
+
+        // Load calculations if they exist
+        if (calculations && Array.isArray(calculations) && calculations.length > 0) {
+          console.log('Loading calculations into COGS:', calculations);
+          loadCalculations(calculations);
+        } else {
+          console.warn('No calculations found in editing data');
+        }
+
         sessionStorage.removeItem('editingRecipe');
         setSuccessMessage(`Recipe "${dishName}" loaded for editing!`);
         setTimeout(() => setSuccessMessage(null), 3000);
       } catch (err) {
-        console.log('Failed to parse editing data:', err);
+        console.error('Failed to parse editing data:', err);
       }
     }
-  }, [setSuccessMessage, setDishName, setDishPortions, setDishNameLocked]);
+  }, [setSuccessMessage, setDishName, setDishPortions, setDishNameLocked, loadCalculations]);
 
   // Close suggestions when clicking outside
   useEffect(() => {

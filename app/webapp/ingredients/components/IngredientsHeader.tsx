@@ -22,7 +22,7 @@ export function IngredientsHeader({ displayUnit, setDisplayUnit }: IngredientsHe
 
         {/* Unit Selector */}
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-gray-300">Display costs in:</label>
+          <label className="text-sm font-medium text-gray-300">Show costs per:</label>
           <select
             value={displayUnit}
             onChange={e => setDisplayUnit(e.target.value)}

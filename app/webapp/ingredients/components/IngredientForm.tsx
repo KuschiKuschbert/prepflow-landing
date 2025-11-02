@@ -3,7 +3,7 @@
 import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
 import { useTranslation } from '@/lib/useTranslation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { IngredientFormFields } from './IngredientFormFields';
@@ -76,6 +76,52 @@ export default function IngredientForm({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Update form data when ingredient prop changes (for editing)
+  useEffect(() => {
+    if (ingredient) {
+      setFormData({
+        ingredient_name: ingredient.ingredient_name || '',
+        brand: ingredient.brand || '',
+        pack_size: ingredient.pack_size || '',
+        pack_size_unit: ingredient.pack_size_unit || 'GM',
+        pack_price: ingredient.pack_price || 0,
+        unit: ingredient.unit || 'GM',
+        cost_per_unit: ingredient.cost_per_unit || 0,
+        cost_per_unit_as_purchased: ingredient.cost_per_unit_as_purchased || ingredient.cost_per_unit || 0,
+        cost_per_unit_incl_trim: ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0,
+        trim_peel_waste_percentage: ingredient.trim_peel_waste_percentage || 0,
+        yield_percentage: ingredient.yield_percentage || 100,
+        supplier: ingredient.supplier || '',
+        product_code: ingredient.product_code || '',
+        storage_location: ingredient.storage_location || '',
+        min_stock_level: ingredient.min_stock_level || 0,
+        current_stock: ingredient.current_stock || 0,
+      });
+    } else {
+      // Reset form when ingredient is null (new ingredient)
+      setFormData({
+        ingredient_name: '',
+        brand: '',
+        pack_size: '',
+        pack_size_unit: 'GM',
+        pack_price: 0,
+        unit: 'GM',
+        cost_per_unit: 0,
+        cost_per_unit_as_purchased: 0,
+        cost_per_unit_incl_trim: 0,
+        trim_peel_waste_percentage: 0,
+        yield_percentage: 100,
+        supplier: '',
+        product_code: '',
+        storage_location: '',
+        min_stock_level: 0,
+        current_stock: 0,
+      });
+    }
+    // Clear errors when ingredient changes
+    setErrors({});
+  }, [ingredient]);
 
   // Autosave integration - only enable for valid entities or new ingredients with required fields
   const entityId = ingredient?.id || 'new';

@@ -42,7 +42,14 @@ export function useRecipeDeleteOperations(
         return;
       }
 
+      // Force a fresh fetch by clearing cache and refetching
       await fetchRecipes();
+
+      // Small delay to ensure state updates propagate
+      setTimeout(() => {
+        fetchRecipes();
+      }, 100);
+
       showSuccess(`Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`);
       setShowDeleteConfirm(false);
       setRecipeToDelete(null);

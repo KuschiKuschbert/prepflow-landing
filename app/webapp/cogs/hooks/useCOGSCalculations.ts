@@ -32,7 +32,8 @@ export const useCOGSCalculations = () => {
         .order('name');
 
       if (ingredientsError) {
-        console.log('Ingredients table not found or empty:', ingredientsError.message);
+        console.error('Error fetching ingredients:', ingredientsError);
+        setError(`Failed to load ingredients: ${ingredientsError.message}`);
         setIngredients([]);
       } else {
         console.log('Ingredients fetched:', ingredientsData?.length || 0, 'items');
@@ -40,9 +41,11 @@ export const useCOGSCalculations = () => {
       }
 
       if (recipesError) {
-        console.log('Recipes table not found or empty:', recipesError.message);
+        console.error('Error fetching recipes:', recipesError);
+        setError(prev => `${prev ? prev + ' ' : ''}Failed to load recipes: ${recipesError.message}`);
         setRecipes([]);
       } else {
+        console.log('Recipes fetched:', recipesData?.length || 0, 'items');
         setRecipes(recipesData || []);
       }
     } catch (err) {
@@ -209,7 +212,7 @@ export const useCOGSCalculations = () => {
       console.log('Error in loadExistingRecipeIngredients:', err);
     }
     // loadExistingRecipeIngredients doesn't use ingredients state - data comes from DB query
-     
+
   }, []);
 
   const checkRecipeExists = useCallback(
@@ -292,6 +295,22 @@ export const useCOGSCalculations = () => {
     setRecipeIngredients([]);
   }, []);
 
+  const loadCalculations = useCallback((newCalculations: COGSCalculation[]) => {
+    setCalculations(newCalculations);
+    // Also update recipeIngredients state for consistency
+    const loadedRecipeIngredients: RecipeIngredient[] = newCalculations.map(calc => ({
+      id: calc.ingredientId,
+      recipe_id: calc.recipeId || '',
+      ingredient_id: calc.ingredientId,
+      ingredient_name: calc.ingredientName,
+      quantity: calc.quantity,
+      unit: calc.unit,
+      cost_per_unit: calc.costPerUnit,
+      total_cost: calc.totalCost,
+    }));
+    setRecipeIngredients(loadedRecipeIngredients);
+  }, []);
+
   // Auto-fetch when selectedRecipe changes
   useEffect(() => {
     if (selectedRecipe) {
@@ -326,6 +345,7 @@ export const useCOGSCalculations = () => {
     removeCalculation,
     addCalculation,
     clearCalculations,
+    loadCalculations,
     setSelectedRecipe,
     setError,
   };

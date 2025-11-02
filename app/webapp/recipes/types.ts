@@ -28,6 +28,7 @@ export interface RecipeIngredientWithDetails extends RecipeIngredient {
     id: string;
     ingredient_name: string;
     cost_per_unit: number;
+    cost_per_unit_incl_trim?: number;
     unit: string;
     trim_peel_waste_percentage?: number;
     yield_percentage?: number;

@@ -66,7 +66,7 @@ export default function IngredientFilters({
       {/* Unit Selector */}
       <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-gray-300">Display costs in:</label>
+          <label className="text-sm font-medium text-gray-300">Show costs per:</label>
           <select
             value={displayUnit}
             onChange={e => onDisplayUnitChange(e.target.value)}

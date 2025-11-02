@@ -65,7 +65,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
         {showAddIngredient && (
           <form
             onSubmit={onAddIngredient}
-            className="space-y-3 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-4"
+            className="relative space-y-3 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-4"
           >
             <div className="ingredient-search-container relative">
               <label className="mb-2 block text-sm font-medium text-gray-300">
@@ -116,13 +116,18 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                 <div className="mt-2 text-xs text-gray-400">
                   {filteredIngredients.length} ingredient
                   {filteredIngredients.length !== 1 ? 's' : ''} found
+                  {ingredients.length === 0 && (
+                    <span className="ml-2 text-yellow-400">
+                      (No ingredients available - check database connection)
+                    </span>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Autocomplete Suggestions */}
             {showSuggestions && filteredIngredients.length > 0 && (
-              <div className="suggestions-dropdown absolute z-10 mt-1 max-h-60 w-full max-w-md overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+              <div className="suggestions-dropdown relative z-50 mt-1 max-h-60 w-full max-w-md overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
                 {filteredIngredients.slice(0, 10).map(ingredient => {
                   const displayCost =
                     ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
@@ -159,7 +164,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
 
             {/* No results message */}
             {showSuggestions && filteredIngredients.length === 0 && ingredientSearch && (
-              <div className="absolute z-10 mt-1 w-full rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 shadow-lg">
+              <div className="relative z-50 mt-1 w-full rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 shadow-lg">
                 <p className="text-center text-sm text-gray-400">
                   🔍 No ingredients found matching &quot;{ingredientSearch}&quot;
                 </p>

@@ -18,7 +18,6 @@ import BulkActionsBar from './components/BulkActionsBar';
 import { BulkDeleteConfirmationModal } from './components/BulkDeleteConfirmationModal';
 import { DeleteConfirmationModal } from './components/DeleteConfirmationModal';
 import RecipeCard from './components/RecipeCard';
-import RecipeForm from './components/RecipeForm';
 import RecipePreviewModal from './components/RecipePreviewModal';
 import RecipeTable from './components/RecipeTable';
 import { RecipesHeader } from './components/RecipesHeader';
@@ -78,15 +77,6 @@ function RecipesPageContent() {
     capitalizeRecipeName,
   });
 
-  // Form state
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newRecipe, setNewRecipe] = useState<Partial<Recipe>>({
-    name: '',
-    yield: 1,
-    yield_unit: 'servings',
-    instructions: '',
-  });
-
   // Preview state
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
@@ -99,18 +89,6 @@ function RecipesPageContent() {
   };
 
   // Event handlers
-  const handleAddRecipe = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      const success = await handleAddRecipeAction(newRecipe);
-      if (success) {
-        setShowAddForm(false);
-        setNewRecipe({ name: '', yield: 1, yield_unit: 'servings', instructions: '' });
-      }
-    },
-    [newRecipe, handleAddRecipeAction],
-  );
-
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
@@ -154,11 +132,7 @@ function RecipesPageContent() {
         <RecipesHeader />
 
         {/* Action Buttons */}
-        <RecipesActionButtons
-          showAddForm={showAddForm}
-          onToggleAddForm={() => setShowAddForm(!showAddForm)}
-          onRefresh={fetchRecipes}
-        />
+        <RecipesActionButtons onRefresh={fetchRecipes} />
 
         {/* Recipe Book Description */}
         <RecipeBookDescription />
@@ -179,15 +153,6 @@ function RecipesPageContent() {
 
         {/* Success Message */}
         <SuccessMessage message={successMessage} />
-
-        {/* Recipe Form */}
-        <RecipeForm
-          showForm={showAddForm}
-          newRecipe={newRecipe}
-          onToggleForm={() => setShowAddForm(!showAddForm)}
-          onUpdateRecipe={setNewRecipe}
-          onSubmit={handleAddRecipe}
-        />
 
         {/* Recipes List */}
         <div className="overflow-hidden rounded-lg bg-[#1f1f1f] shadow">
@@ -246,12 +211,12 @@ function RecipesPageContent() {
             <p className="mb-4 text-gray-500">
               Start by adding your first recipe to begin managing your kitchen costs.
             </p>
-            <button
-              onClick={() => setShowAddForm(true)}
+            <a
+              href="/webapp/cogs"
               className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-white transition-colors hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
             >
               Add Your First Recipe
-            </button>
+            </a>
           </div>
         )}
 

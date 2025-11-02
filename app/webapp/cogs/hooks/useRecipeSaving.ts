@@ -84,12 +84,36 @@ export const useRecipeSaving = () => {
         }
 
         // Handle recipe ingredients
-        const recipeIngredientInserts = calculations.map(calc => ({
+        // Validate calculations have required fields
+        const validCalculations = calculations.filter(calc => {
+          if (!calc.ingredientId) {
+            console.warn('Calculation missing ingredientId:', calc);
+            return false;
+          }
+          if (!calc.quantity || calc.quantity <= 0) {
+            console.warn('Calculation has invalid quantity:', calc);
+            return false;
+          }
+          if (!calc.unit) {
+            console.warn('Calculation missing unit:', calc);
+            return false;
+          }
+          return true;
+        });
+
+        if (validCalculations.length === 0) {
+          setError('No valid ingredients to save. Please ensure all ingredients have valid IDs and quantities.');
+          return;
+        }
+
+        const recipeIngredientInserts = validCalculations.map(calc => ({
           recipe_id: recipeData.id,
           ingredient_id: calc.ingredientId,
           quantity: calc.quantity,
           unit: calc.unit,
         }));
+
+        console.log('Inserting recipe ingredients:', recipeIngredientInserts);
 
         if (existingRecipe && !checkError) {
           // Recipe exists - replace all ingredients (delete old ones first, then insert new ones)
@@ -101,29 +125,40 @@ export const useRecipeSaving = () => {
             .eq('recipe_id', existingRecipe.id);
 
           if (deleteError) {
-            setError(deleteError.message);
+            console.error('Error deleting old recipe ingredients:', deleteError);
+            setError(`Failed to update recipe ingredients: ${deleteError.message}`);
             return;
           }
+
+          console.log('Deleted old recipe ingredients, now inserting new ones');
 
           // Then insert the current ingredients (complete updated recipe)
-          const { error: ingredientsError } = await supabase
+          const { data: insertedIngredients, error: ingredientsError } = await supabase
             .from('recipe_ingredients')
-            .insert(recipeIngredientInserts);
+            .insert(recipeIngredientInserts)
+            .select();
 
           if (ingredientsError) {
-            setError(ingredientsError.message);
+            console.error('Error inserting recipe ingredients:', ingredientsError);
+            setError(`Failed to save recipe ingredients: ${ingredientsError.message}`);
             return;
           }
+
+          console.log('Recipe ingredients inserted successfully:', insertedIngredients);
         } else {
           // New recipe - insert all ingredients
-          const { error: ingredientsError } = await supabase
+          const { data: insertedIngredients, error: ingredientsError } = await supabase
             .from('recipe_ingredients')
-            .insert(recipeIngredientInserts);
+            .insert(recipeIngredientInserts)
+            .select();
 
           if (ingredientsError) {
-            setError(ingredientsError.message);
+            console.error('Error inserting recipe ingredients:', ingredientsError);
+            setError(`Failed to save recipe ingredients: ${ingredientsError.message}`);
             return;
           }
+
+          console.log('Recipe ingredients inserted successfully:', insertedIngredients);
         }
 
         // Clear any existing error and show success message
@@ -133,9 +168,11 @@ export const useRecipeSaving = () => {
 
         // Clear success message after 5 seconds
         setTimeout(() => setSuccessMessage(null), 5000);
-      } catch (err) {
-        console.log('Recipe save error:', err);
-        setError('Failed to save recipe');
+      } catch (err: any) {
+        console.error('Recipe save error:', err);
+        const errorMessage =
+          err?.message || (err?.code ? `Database error (${err.code})` : 'Failed to save recipe');
+        setError(`Failed to save recipe: ${errorMessage}`);
         setSuccessMessage(null);
       } finally {
         setLoading(false);

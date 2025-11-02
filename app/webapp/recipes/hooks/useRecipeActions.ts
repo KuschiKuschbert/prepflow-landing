@@ -61,7 +61,7 @@ export function useRecipeActions({
       }
 
       try {
-        const calculations = convertToCOGSCalculations(recipeIngredients);
+        const calculations = convertToCOGSCalculations(recipeIngredients, selectedRecipe.id);
         storeRecipeForEditing(selectedRecipe, calculations);
         router.push('/webapp/cogs');
       } catch (err) {

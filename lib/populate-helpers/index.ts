@@ -44,12 +44,17 @@ export async function cleanExistingData(
   let cleaned = 0;
   for (const table of tablesToClean) {
     try {
-      const { error } = await supabaseAdmin.from(table).delete().neq('id', '0');
+      // Delete all rows - use a condition that matches all rows with valid IDs
+      // Using gte('id', 0) will match all rows (assuming IDs are >= 0)
+      const { error } = await supabaseAdmin.from(table).delete().gte('id', 0);
       if (!error) {
         cleaned++;
+      } else {
+        console.warn(`Error cleaning table ${table}:`, error);
       }
     } catch (err) {
       // Table might not exist, continue
+      console.warn(`Table ${table} might not exist, continuing...`);
     }
   }
   return cleaned;
