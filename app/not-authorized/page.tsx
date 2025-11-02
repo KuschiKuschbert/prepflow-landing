@@ -5,32 +5,47 @@ import Link from 'next/link';
 import { signIn, signOut } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
-  const handleSignIn = async () => {
-    // Clear NextAuth session
+  const clearAuth0AndSignIn = async (isSignup = false) => {
+    // Clear NextAuth session first
     await signOut({ redirect: false });
 
-    // Use prompt: 'login' to force fresh login screen
-    // This bypasses Auth0's cached session and requires user to enter credentials
-    signIn('auth0', {
-      callbackUrl: '/webapp',
-      authorizationParams: {
-        prompt: 'login', // Forces Auth0 to show login form even if session exists
-      },
-    });
+    if (typeof window === 'undefined') return;
+
+    // Get Auth0 issuer from environment or use known value
+    const auth0Issuer =
+      process.env.NEXT_PUBLIC_AUTH0_ISSUER_BASE_URL || 'https://dev-7myakdl4itf644km.us.auth0.com';
+
+    const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || 'CO3VI37SuZ4e9wke1PitgWvAUyMR2HfL';
+
+    // Use hidden iframe to silently logout from Auth0
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.src = `${auth0Issuer}/v2/logout?client_id=${clientId}&returnTo=${encodeURIComponent(window.location.origin)}`;
+    document.body.appendChild(iframe);
+
+    // Wait for logout, then proceed with login
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+
+      // Proceed with sign-in - use prompt: 'login' to force fresh credentials
+      signIn('auth0', {
+        callbackUrl: '/webapp',
+        authorizationParams: {
+          prompt: 'login', // This should force re-entering credentials
+          ...(isSignup && { screen_hint: 'signup' }),
+        },
+      });
+    }, 1500); // Give iframe time to clear session
+  };
+
+  const handleSignIn = async () => {
+    await clearAuth0AndSignIn(false);
   };
 
   const handleCreateAccount = async () => {
-    // Clear NextAuth session
-    await signOut({ redirect: false });
-
-    // Use prompt: 'login' with screen_hint: 'signup' to show signup screen
-    signIn('auth0', {
-      callbackUrl: '/webapp',
-      authorizationParams: {
-        prompt: 'login', // Force fresh login screen
-        screen_hint: 'signup', // Show signup form
-      },
-    });
+    await clearAuth0AndSignIn(true);
   };
 
   return (
