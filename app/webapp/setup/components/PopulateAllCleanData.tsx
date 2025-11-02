@@ -95,7 +95,7 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>15-20 temperature equipment pieces</span>
+              <span>~18 temperature equipment pieces with logs</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>

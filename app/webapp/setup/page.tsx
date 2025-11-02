@@ -114,10 +114,10 @@ export default function SetupPageRefactored() {
               </div>
               <h2 className="mb-2 text-3xl font-bold text-white">🌡️ Temperature Equipment Setup</h2>
               <p className="text-lg text-gray-400">
-                Add additional temperature monitoring equipment or configure existing equipment
+                Add your temperature monitoring equipment or configure existing equipment
               </p>
               <p className="mt-2 text-sm text-gray-500">
-                Note: Basic equipment is included in the test data above
+                Tip: Basic equipment (~18 pieces) is created when you populate test data above
               </p>
             </div>
             <EquipmentSetup setupProgress={setupProgress} onProgressUpdate={handleProgressUpdate} />
