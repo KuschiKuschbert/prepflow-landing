@@ -6,9 +6,9 @@ import { signIn, signOut } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
   const handleLogout = async () => {
-    // Clear NextAuth session and redirect to landing
-    // We'll rely on prompt: 'login' on next sign-in to force fresh credentials
-    // This avoids Auth0 logout endpoint errors
+    // SignOut will trigger the signOut callback in authOptions
+    // The callback will redirect to Auth0 logout endpoint, which clears Auth0 session
+    // Auth0 will then redirect back to the landing page
     await signOut({
       redirect: true,
       callbackUrl: '/',
