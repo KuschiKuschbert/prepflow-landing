@@ -43,10 +43,10 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">1. Introduction</h2>
               <p className="leading-relaxed text-gray-300">
-                PrepFlow (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. This
-                Privacy Policy explains how we collect, use, disclose, and safeguard your
-                information when you use our restaurant profitability optimization tool and related
-                services.
+                PrepFlow (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to
+                protecting your privacy. This Privacy Policy explains how we collect, use, disclose,
+                and safeguard your information when you use our restaurant profitability
+                optimization tool and related services.
               </p>
               <p className="mt-4 leading-relaxed text-gray-300">
                 By using PrepFlow, you agree to the collection and use of information in accordance
@@ -179,8 +179,8 @@ export default function PrivacyPolicy() {
               </ul>
               <p className="mt-4 leading-relaxed text-gray-300">
                 To exercise these rights, please contact us at{' '}
-                <a href="mailto:privacy@prepflow.org" className="text-[#29E7CD] hover:underline">
-                  privacy@prepflow.org
+                <a href="mailto:hello@prepflow.org" className="text-[#29E7CD] hover:underline">
+                  hello@prepflow.org
                 </a>
               </p>
             </section>
@@ -236,7 +236,9 @@ export default function PrivacyPolicy() {
 
             {/* Children's Privacy */}
             <section>
-              <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">10. Children&apos;s Privacy</h2>
+              <h2 className="mb-4 text-2xl font-semibold text-[#29E7CD]">
+                10. Children&apos;s Privacy
+              </h2>
               <p className="leading-relaxed text-gray-300">
                 PrepFlow is not intended for use by individuals under the age of 18. We do not
                 knowingly collect personal information from children. If you believe we have
@@ -267,12 +269,12 @@ export default function PrivacyPolicy() {
               <div className="rounded-xl border border-gray-700 bg-[#1f1f1f] p-6">
                 <p className="mb-2 text-gray-300">
                   <strong>Email:</strong>{' '}
-                  <a href="mailto:privacy@prepflow.org" className="text-[#29E7CD] hover:underline">
-                    privacy@prepflow.org
+                  <a href="mailto:hello@prepflow.org" className="text-[#29E7CD] hover:underline">
+                    hello@prepflow.org
                   </a>
                 </p>
                 <p className="mb-2 text-gray-300">
-                  <strong>Data Protection Officer:</strong> privacy@prepflow.org
+                  <strong>Data Protection Officer:</strong> hello@prepflow.org
                 </p>
                 <p className="text-gray-300">
                   <strong>Response Time:</strong> We aim to respond to all inquiries within 48 hours
