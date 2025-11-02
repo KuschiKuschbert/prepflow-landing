@@ -7,14 +7,19 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useSession } from 'next-auth/react';
 
 export function DraftRecovery() {
-  const { data: session } = useSession();
-  const userId = session?.user?.email || null;
+  const session = useSession();
+  // Safely destructure session data, handling undefined during SSR
+  const sessionData = session?.data;
+  const userId = sessionData?.user?.email || null;
   const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
   const [showDialog, setShowDialog] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0 });
 
   useEffect(() => {
+    // Only check drafts on client side after hydration
+    if (typeof window === 'undefined') return;
+
     // Check for unsynced drafts on mount
     const checkDrafts = () => {
       const allDrafts = getAllDrafts(userId);

@@ -6,8 +6,10 @@ import { clearAllDrafts } from '@/lib/autosave-storage';
 import { useSession } from 'next-auth/react';
 
 export function LogoutButton() {
-  const { data: session } = useSession();
-  const userId = session?.user?.email || null;
+  const session = useSession();
+  // Safely destructure session data, handling undefined during SSR
+  const sessionData = session?.data;
+  const userId = sessionData?.user?.email || null;
 
   const handleLogout = async () => {
     // Clear all autosave drafts

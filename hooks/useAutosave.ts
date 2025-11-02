@@ -39,8 +39,10 @@ export function useAutosave({
   onError,
   onConflict,
 }: UseAutosaveOptions): UseAutosaveReturn {
-  const { data: session } = useSession();
-  const userId = session?.user?.email || null;
+  const session = useSession();
+  // Safely destructure session data, handling undefined during SSR
+  const sessionData = session?.data;
+  const userId = sessionData?.user?.email || null;
 
   const [status, setStatus] = useState<SaveStatus>('idle');
   const [error, setError] = useState<string | null>(null);
