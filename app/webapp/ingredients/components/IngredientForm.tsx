@@ -4,6 +4,9 @@ import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
 import { useTranslation } from '@/lib/useTranslation';
 import { useState } from 'react';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { IngredientFormFields } from './IngredientFormFields';
 
 interface Ingredient {
   id: string;
@@ -73,6 +76,29 @@ export default function IngredientForm({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Autosave integration - only enable for valid entities or new ingredients with required fields
+  const entityId = ingredient?.id || 'new';
+  const canAutosave =
+    entityId !== 'new' ||
+    Boolean(formData.ingredient_name && formData.pack_price && formData.pack_size);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'ingredients',
+    entityId: entityId,
+    data: formData,
+    enabled: canAutosave,
+    onSave: async savedData => {
+      // Optionally handle successful save
+      if (ingredient && onSave) {
+        await onSave(savedData as Partial<Ingredient>);
+      }
+    },
+  });
 
   // Calculate cost per unit from pack price and pack size
   const calculateCostPerUnit = (
@@ -163,223 +189,40 @@ export default function IngredientForm({
 
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-      <h2 className="mb-6 text-2xl font-bold text-white">
-        {ingredient ? 'Edit Ingredient' : 'Add New Ingredient'}
-      </h2>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-white">
+          {ingredient ? 'Edit Ingredient' : 'Add New Ingredient'}
+        </h2>
+        <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Information */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
-              Ingredient Name *
-            </label>
-            <input
-              type="text"
-              value={formData.ingredient_name || ''}
-              onChange={e => handleInputChange('ingredient_name', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., Tomatoes"
-              required
-            />
-            {errors.ingredient_name && (
-              <p className="mt-1 text-sm text-red-400">{errors.ingredient_name}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Brand</label>
-            <input
-              type="text"
-              value={formData.brand || ''}
-              onChange={e => handleInputChange('brand', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., Coles"
-            />
-          </div>
-        </div>
-
-        {/* Pack Information */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Pack Size *</label>
-            <input
-              type="number"
-              step="0.01"
-              value={formData.pack_size || ''}
-              onChange={e => handleInputChange('pack_size', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., 5"
-              required
-            />
-            {errors.pack_size && <p className="mt-1 text-sm text-red-400">{errors.pack_size}</p>}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Pack Size Unit</label>
-            <select
-              value={formData.pack_size_unit || 'GM'}
-              onChange={e => handleInputChange('pack_size_unit', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            >
-              {availableUnits.map(unit => (
-                <option key={unit} value={unit}>
-                  {unit}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Pack Price *</label>
-            <input
-              type="number"
-              step="0.01"
-              value={formData.pack_price || ''}
-              onChange={e => handleInputChange('pack_price', parseFloat(e.target.value) || 0)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., 12.50"
-              required
-            />
-            {errors.pack_price && <p className="mt-1 text-sm text-red-400">{errors.pack_price}</p>}
-          </div>
-        </div>
-
-        {/* Cost Information */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Cost Per Unit *</label>
-            <input
-              type="number"
-              step="0.01"
-              value={formData.cost_per_unit || ''}
-              onChange={e => handleInputChange('cost_per_unit', parseFloat(e.target.value) || 0)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="Auto-calculated"
-              required
-            />
-            {errors.cost_per_unit && (
-              <p className="mt-1 text-sm text-red-400">{errors.cost_per_unit}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Unit *</label>
-            <select
-              value={formData.unit || 'GM'}
-              onChange={e => handleInputChange('unit', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              required
-            >
-              {availableUnits.map(unit => (
-                <option key={unit} value={unit}>
-                  {unit}
-                </option>
-              ))}
-            </select>
-            {errors.unit && <p className="mt-1 text-sm text-red-400">{errors.unit}</p>}
-          </div>
-        </div>
-
-        {/* Additional Information */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Supplier</label>
-            <input
-              type="text"
-              value={formData.supplier || ''}
-              onChange={e => handleInputChange('supplier', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., Coles"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Storage Location</label>
-            <input
-              type="text"
-              value={formData.storage_location || ''}
-              onChange={e => handleInputChange('storage_location', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., Coolroom"
-            />
-          </div>
-        </div>
-
-        {/* Waste and Yield */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
-              Trim/Peel Waste (%)
-            </label>
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="100"
-              value={formData.trim_peel_waste_percentage || 0}
-              onChange={e =>
-                handleInputChange('trim_peel_waste_percentage', parseFloat(e.target.value) || 0)
-              }
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., 10"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Yield (%)</label>
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="100"
-              value={formData.yield_percentage || 100}
-              onChange={e =>
-                handleInputChange('yield_percentage', parseFloat(e.target.value) || 100)
-              }
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., 90"
-            />
-          </div>
-        </div>
-
-        {/* Stock Information */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Min Stock Level</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.min_stock_level || 0}
-              onChange={e => handleInputChange('min_stock_level', parseFloat(e.target.value) || 0)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., 5"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Current Stock</label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.current_stock || 0}
-              onChange={e => handleInputChange('current_stock', parseFloat(e.target.value) || 0)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="e.g., 10"
-            />
-          </div>
-        </div>
+        <IngredientFormFields
+          formData={formData}
+          errors={errors}
+          availableUnits={availableUnits}
+          handleInputChange={handleInputChange}
+        />
 
         {/* Actions */}
         <div className="flex gap-4 pt-6">
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || status === 'saving'}
             className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            onClick={async e => {
+              e.preventDefault();
+              if (validateForm()) {
+                await saveNow();
+                await onSave(formData);
+              }
+            }}
           >
-            {loading ? 'Saving...' : ingredient ? 'Update Ingredient' : 'Add Ingredient'}
+            {loading || status === 'saving'
+              ? 'Saving...'
+              : ingredient
+                ? 'Save Now'
+                : 'Create Ingredient'}
           </button>
           <button
             type="button"

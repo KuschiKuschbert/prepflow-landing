@@ -6,9 +6,9 @@ import { useTranslation } from '@/lib/useTranslation';
 import { Inter } from 'next/font/google';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider } from '../../contexts/GlobalWarningContext';
-import { UnsavedChangesProvider } from '../../contexts/UnsavedChangesContext';
 import '../globals.css';
 import ModernNavigation from './components/ModernNavigation';
+import { DraftRecovery } from './components/DraftRecovery';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,20 +22,21 @@ export default function WebAppLayout({
   return (
     <CountryProvider>
       <GlobalWarningProvider>
-        <UnsavedChangesProvider>
-          <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
-            {/* Modern Navigation */}
-            <ModernNavigation />
+        <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
+          {/* Modern Navigation */}
+          <ModernNavigation />
 
-            {/* Global Warning System */}
-            <GlobalWarning />
+          {/* Global Warning System */}
+          <GlobalWarning />
 
-            {/* Main Content */}
-            <main className="bg-transparent">
-              <ReactQueryProvider>{children}</ReactQueryProvider>
-            </main>
-          </div>
-        </UnsavedChangesProvider>
+          {/* Draft Recovery */}
+          <DraftRecovery />
+
+          {/* Main Content */}
+          <main className="bg-transparent">
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </main>
+        </div>
       </GlobalWarningProvider>
     </CountryProvider>
   );

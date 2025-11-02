@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Recipe } from '../types';
+import { useAutosave } from '@/hooks/useAutosave';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface RecipeFormProps {
   showForm: boolean;
@@ -18,11 +20,29 @@ export default function RecipeForm({
   onUpdateRecipe,
   onSubmit,
 }: RecipeFormProps) {
+  // Autosave integration
+  const entityId = newRecipe.id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(newRecipe.name);
+
+  const {
+    status,
+    error: autosaveError,
+    saveNow,
+  } = useAutosave({
+    entityType: 'recipes',
+    entityId: entityId,
+    data: newRecipe,
+    enabled: canAutosave && showForm,
+  });
+
   if (!showForm) return null;
 
   return (
     <div className="mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
-      <h2 className="mb-4 text-lg font-semibold sm:text-xl">Add New Recipe</h2>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold sm:text-xl">Add New Recipe</h2>
+        <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
+      </div>
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-300">Recipe Name *</label>
