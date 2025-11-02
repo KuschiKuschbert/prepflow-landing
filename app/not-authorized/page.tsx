@@ -6,13 +6,13 @@ import { signIn, signOut } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
   const handleLogout = async () => {
-    // SignOut will trigger the signOut callback in authOptions
-    // The callback will redirect to Auth0 logout endpoint, which clears Auth0 session
+    // Clear NextAuth session first
+    await signOut({ redirect: false });
+
+    // Then redirect to our custom logout API which handles Auth0 logout
+    // The API will redirect to Auth0 logout endpoint, which clears Auth0 session
     // Auth0 will then redirect back to the landing page
-    await signOut({
-      redirect: true,
-      callbackUrl: '/',
-    });
+    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(window.location.origin + '/')}`;
   };
 
   const handleSignIn = async () => {
