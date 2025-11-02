@@ -165,7 +165,9 @@ export default function TemperatureLogsTab({
                               {log.location || getTypeLabel(log.temperature_type)}
                             </h4>
                             <div className="flex items-center space-x-2">
-                              <p className="text-sm text-gray-400">{log.log_time}</p>
+                              <p className="text-sm text-gray-400">
+                                {formatDateString(log.log_date)} at {log.log_time}
+                              </p>
                               <span className="text-xs text-gray-500">•</span>
                               <p className="text-xs text-gray-500">
                                 {getTypeLabel(log.temperature_type)}

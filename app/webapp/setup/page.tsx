@@ -7,7 +7,6 @@ import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
 import EquipmentSetup from './components/EquipmentSetup';
 import PopulateAllCleanData from './components/PopulateAllCleanData';
-import TestDataGenerator from './components/TestDataGenerator';
 
 export default function SetupPageRefactored() {
   // Setup completion tracking
@@ -122,21 +121,6 @@ export default function SetupPageRefactored() {
               </p>
             </div>
             <EquipmentSetup setupProgress={setupProgress} onProgressUpdate={handleProgressUpdate} />
-          </div>
-
-          {/* Optional: Test Data Generator for Temperature Logs */}
-          <div>
-            <div className="mb-8 text-center">
-              <div className="mb-4 flex items-center justify-center space-x-3">
-                <span className="text-lg">📊</span>
-                <span className="text-sm font-semibold text-gray-500">Optional</span>
-              </div>
-              <h2 className="mb-2 text-3xl font-bold text-white">📊 Temperature Test Data</h2>
-              <p className="text-lg text-gray-400">
-                Generate sample temperature log data for testing analytics and monitoring features
-              </p>
-            </div>
-            <TestDataGenerator />
           </div>
         </div>
 

@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useCountry } from '@/contexts/CountryContext';
 
 interface PopulateAllCleanDataProps {
   onDataPopulated?: () => void;
 }
 
 export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCleanDataProps) {
+  const { selectedCountry, countryConfig } = useCountry();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +38,9 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
     setResult(null);
 
     try {
-      const response = await fetch('/api/populate-clean-test-data', {
+      // Pass country code to API for regional temperature standards
+      const url = `/api/populate-clean-test-data?countryCode=${encodeURIComponent(selectedCountry)}`;
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +72,14 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
-          <h4 className="mb-4 text-lg font-semibold text-white">What you&apos;ll get:</h4>
+          <div className="mb-4 flex items-center justify-between">
+            <h4 className="text-lg font-semibold text-white">What you&apos;ll get:</h4>
+            <span className="text-sm text-gray-400">
+              Generating data for{' '}
+              <span className="font-medium text-[#29E7CD]">{countryConfig.name}</span> temperature
+              standards
+            </span>
+          </div>
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>

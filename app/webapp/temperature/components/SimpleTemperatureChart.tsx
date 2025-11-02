@@ -1,15 +1,16 @@
 'use client';
 
 import {
-    CartesianGrid,
-    Line,
-    LineChart as ReLineChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
+  CartesianGrid,
+  Line,
+  LineChart as ReLineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 import { TemperatureEquipment, TemperatureLog } from '../types';
+import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 
 interface SimpleTemperatureChartProps {
   logs: TemperatureLog[];
@@ -22,6 +23,7 @@ export default function SimpleTemperatureChart({
   equipment,
   timeFilter,
 }: SimpleTemperatureChartProps) {
+  const { formatDate } = useCountryFormatting();
   const chartData = logs
     .map(log => ({
       timestamp: `${log.log_date} ${log.log_time}`,
@@ -57,43 +59,18 @@ export default function SimpleTemperatureChart({
         date.getMinutes().toString().padStart(2, '0')
       );
     } else {
-      const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      return months[date.getMonth()] + ' ' + date.getDate();
+      // Use regional date formatting for x-axis
+      return formatDate(date, { month: 'short', day: 'numeric' });
     }
   };
 
   const formatTooltipLabel = (label: string) => {
     const date = new Date(label);
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}, ${hours}:${minutes}`;
+    // Use regional date formatting for tooltip
+    const formattedDate = formatDate(date, { year: 'numeric', month: 'short', day: 'numeric' });
+    return `${formattedDate}, ${hours}:${minutes}`;
   };
 
   const formatTooltipValue = (value: number) => {

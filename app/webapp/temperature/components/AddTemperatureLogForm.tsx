@@ -1,6 +1,7 @@
 import { useTranslation } from '@/lib/useTranslation';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 
 export interface AddTemperatureLogFormProps {
   show: boolean;
@@ -22,6 +23,7 @@ export function AddTemperatureLogForm({
   temperatureTypes,
 }: AddTemperatureLogFormProps) {
   const { t } = useTranslation();
+  const { countryConfig } = useCountryFormatting();
   const getTypeIcon = (type: string) =>
     temperatureTypes.find(tt => tt.value === type)?.icon || '🌡️';
   const getTypeLabel = (type: string) =>
@@ -81,6 +83,7 @@ export function AddTemperatureLogForm({
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('temperature.date', 'Date')}
+            <span className="ml-2 text-xs text-gray-500">({countryConfig.dateFormat})</span>
           </label>
           <input
             type="date"
