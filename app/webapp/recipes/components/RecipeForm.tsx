@@ -3,6 +3,7 @@
 import React from 'react';
 import { Recipe } from '../types';
 import { useAutosave } from '@/hooks/useAutosave';
+import { deriveAutosaveId } from '@/lib/autosave-id';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface RecipeFormProps {
@@ -21,8 +22,10 @@ export default function RecipeForm({
   onSubmit,
 }: RecipeFormProps) {
   // Autosave integration
-  const entityId = newRecipe.id || 'new';
-  const canAutosave = entityId !== 'new' || Boolean(newRecipe.name);
+  const entityId = deriveAutosaveId('recipes', newRecipe.id as string | undefined, [
+    newRecipe.name || '',
+  ]);
+  const canAutosave = Boolean(newRecipe.name);
 
   const {
     status,

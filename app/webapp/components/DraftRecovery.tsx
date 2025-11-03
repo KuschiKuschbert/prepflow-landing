@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getAllDrafts, DraftMetadata } from '@/lib/autosave-storage';
+import { getAllDrafts, DraftMetadata, clearDraft } from '@/lib/autosave-storage';
 import { syncAllDrafts } from '@/lib/autosave-sync';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useSession } from 'next-auth/react';
@@ -23,10 +23,30 @@ export function DraftRecovery() {
     // Check for unsynced drafts on mount
     const checkDrafts = () => {
       const allDrafts = getAllDrafts(userId);
-      // Filter drafts older than 1 minute (assuming they're unsynced)
+      const now = Date.now();
+
+      // Purge very stale drafts (>24h)
+      const staleThreshold = 24 * 60 * 60 * 1000;
+      allDrafts.forEach(d => {
+        if (now - d.timestamp > staleThreshold) {
+          clearDraft(d.entityType, d.entityId, d.userId);
+        }
+      });
+
+      // Filter drafts that are likely meaningful and older than 10 minutes
       const unsyncedDrafts = allDrafts.filter(draft => {
-        const age = Date.now() - draft.timestamp;
-        return age > 60000; // Older than 1 minute
+        const age = now - draft.timestamp;
+        if (age < 10 * 60 * 1000) return false; // younger than 10 minutes
+        // Minimal signal per entity type to avoid false prompts
+        const data = draft.data as Record<string, unknown> | null;
+        if (!data || Object.keys(data).length === 0) return false;
+        if (draft.entityType === 'ingredients') {
+          return Boolean((data as any).ingredient_name);
+        }
+        if (draft.entityType === 'recipes') {
+          return Boolean((data as any).name);
+        }
+        return true;
       });
 
       if (unsyncedDrafts.length > 0) {
