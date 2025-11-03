@@ -44,18 +44,45 @@ export async function cleanExistingData(
   let cleaned = 0;
   for (const table of tablesToClean) {
     try {
-      // Delete all rows - use a condition that matches all rows with valid IDs
-      // Using gte('id', 0) will match all rows (assuming IDs are >= 0)
-      const { error } = await supabaseAdmin.from(table).delete().gte('id', 0);
-      if (!error) {
+      // Delete all rows - handle both UUID and integer primary keys
+      // Strategy: Try multiple filters to ensure we match all rows regardless of ID type
+
+      // First try: UUID filter (matches all real UUIDs)
+      let { error } = await supabaseAdmin
+        .from(table)
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000');
+
+      // If UUID filter fails with type error, try integer filter
+      if (
+        error &&
+        (error.message?.includes('operator does not exist') ||
+          error.message?.includes('invalid input syntax') ||
+          error.message?.includes('uuid'))
+      ) {
+        console.log(`Table ${table} appears to use integer IDs, trying integer filter...`);
+        const { error: error2 } = await supabaseAdmin.from(table).delete().gte('id', 0); // Fallback for integer IDs
+        if (!error2) {
+          cleaned++;
+          console.log(`✅ Cleaned table ${table} (integer IDs)`);
+        } else {
+          console.warn(`❌ Error cleaning table ${table} (both methods failed):`, error2);
+        }
+      } else if (!error) {
         cleaned++;
+        console.log(`✅ Cleaned table ${table} (UUID IDs)`);
       } else {
-        console.warn(`Error cleaning table ${table}:`, error);
+        console.warn(`❌ Error cleaning table ${table}:`, error);
+        // Try one more fallback: delete without filter if table is empty-safe
+        if (error.message?.includes('must have at least one')) {
+          console.warn(`Table ${table} requires a filter, but all filters failed. Skipping.`);
+        }
       }
     } catch (err) {
       // Table might not exist, continue
-      console.warn(`Table ${table} might not exist, continuing...`);
+      console.warn(`⚠️ Table ${table} might not exist or error occurred, continuing...`, err);
     }
   }
+  console.log(`🧹 Cleanup complete: ${cleaned} of ${tablesToClean.length} tables cleaned`);
   return cleaned;
 }
