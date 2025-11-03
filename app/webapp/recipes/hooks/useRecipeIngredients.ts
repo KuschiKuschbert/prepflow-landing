@@ -20,21 +20,7 @@ export function useRecipeIngredients(setError: (error: string) => void) {
       const { data: ingredientsData, error: ingredientsError } = await supabase
         .from('recipe_ingredients')
         .select(
-          `
-        id,
-        recipe_id,
-        ingredient_id,
-        quantity,
-        unit,
-        ingredients (
-          id,
-          ingredient_name,
-          cost_per_unit,
-          unit,
-          trim_peel_waste_percentage,
-          yield_percentage
-        )
-      `,
+          'id, recipe_id, ingredient_id, quantity, unit, ingredients ( id, ingredient_name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage )',
         )
         .eq('recipe_id', recipeId);
 
@@ -74,8 +60,27 @@ export function useRecipeIngredients(setError: (error: string) => void) {
           console.log('🔍 Fetching recipe ingredients for recipeId:', recipeId);
         }
         const fromApi = await fetchFromApi(recipeId);
-        if (fromApi) return fromApi;
+        if (Array.isArray(fromApi)) {
+          if (fromApi.length > 0) {
+            return fromApi;
+          }
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(
+              '⚠️ API returned zero ingredients for recipeId:',
+              recipeId,
+              '- falling back to client join',
+            );
+          }
+        }
+
         const fromClient = await fetchFromClientJoin(recipeId);
+        if (fromClient.length === 0 && process.env.NODE_ENV === 'development') {
+          console.warn(
+            '⚠️ No recipe_ingredients found for recipeId:',
+            recipeId,
+            '- verify this recipe was saved from COGS and has linked ingredients.',
+          );
+        }
         return fromClient;
       } catch (err) {
         console.error('❌ Exception fetching recipe ingredients:', err);
