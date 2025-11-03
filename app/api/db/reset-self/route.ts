@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   } catch {}
 
   const userId = (body?.userId as string) || '';
-  const reseed = body?.reseed !== false; // default true
+  const reseed = false; // reseed disabled by consolidation plan
 
   if (!userId) {
     return NextResponse.json(
@@ -159,65 +159,9 @@ export async function POST(request: NextRequest) {
       await deleteByUser(t);
     }
 
-    // Optionally reseed minimal per-user samples
-    let reseeded = false;
-    if (!dryRun && reseed) {
-      // Insert a tiny deterministic sample for this user in user-owned tables
-      const now = new Date().toISOString();
-      // Sample order list
-      const { data: ol, error: olErr } = await supabase
-        .from('order_lists')
-        .insert({
-          user_id: userId,
-          supplier_id: null,
-          name: 'Sample Order List',
-          notes: 'Auto-seeded',
-          status: 'draft',
-          created_at: now,
-          updated_at: now,
-        })
-        .select()
-        .single();
-      if (!olErr && ol?.id) {
-        await supabase.from('order_list_items').insert({
-          order_list_id: ol.id,
-          ingredient_id: null,
-          quantity: 1,
-          unit: 'EA',
-          notes: 'Example item',
-        });
-      }
-
-      // Sample prep list
-      const { data: pl, error: plErr } = await supabase
-        .from('prep_lists')
-        .insert({
-          user_id: userId,
-          kitchen_section_id: null,
-          name: 'Sample Prep List',
-          notes: 'Auto-seeded',
-          status: 'draft',
-          created_at: now,
-          updated_at: now,
-        })
-        .select()
-        .single();
-      if (!plErr && pl?.id) {
-        await supabase.from('prep_list_items').insert({
-          prep_list_id: pl.id,
-          ingredient_id: null,
-          quantity: 1,
-          unit: 'EA',
-          notes: 'Example item',
-        });
-      }
-
-      reseeded = true;
-    }
-
     const payload: DeleteSummary = {
       dryRun,
-      reseeded,
+      reseeded: false,
       deletedCountsByTable,
     };
 
