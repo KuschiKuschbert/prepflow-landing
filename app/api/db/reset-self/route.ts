@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
 
   const userId = (body?.userId as string) || '';
   const reseed = body?.reseed !== false; // default true
-  const password = (body?.password as string) || '';
 
   if (!userId) {
     return NextResponse.json(
@@ -34,13 +33,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Minimal password check (Auth0 re-auth is not available in this setup)
-  if (!password || password.trim().length < 4) {
-    return NextResponse.json(
-      { error: 'Invalid password', message: 'Please enter your account password to confirm' },
-      { status: 400 },
-    );
-  }
+  // No password required; user must be authenticated via session
 
   // Collect IDs for child tables dependent on parent scoped by user_id
   const getIds = async (table: string, idColumn: string) => {
@@ -147,15 +140,13 @@ export async function POST(request: NextRequest) {
         .select()
         .single();
       if (!olErr && ol?.id) {
-        await supabase
-          .from('order_list_items')
-          .insert({
-            order_list_id: ol.id,
-            ingredient_id: null,
-            quantity: 1,
-            unit: 'EA',
-            notes: 'Example item',
-          });
+        await supabase.from('order_list_items').insert({
+          order_list_id: ol.id,
+          ingredient_id: null,
+          quantity: 1,
+          unit: 'EA',
+          notes: 'Example item',
+        });
       }
 
       // Sample prep list
@@ -173,15 +164,13 @@ export async function POST(request: NextRequest) {
         .select()
         .single();
       if (!plErr && pl?.id) {
-        await supabase
-          .from('prep_list_items')
-          .insert({
-            prep_list_id: pl.id,
-            ingredient_id: null,
-            quantity: 1,
-            unit: 'EA',
-            notes: 'Example item',
-          });
+        await supabase.from('prep_list_items').insert({
+          prep_list_id: pl.id,
+          ingredient_id: null,
+          quantity: 1,
+          unit: 'EA',
+          notes: 'Example item',
+        });
       }
 
       reseeded = true;
