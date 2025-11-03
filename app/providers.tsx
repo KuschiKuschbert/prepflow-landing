@@ -8,6 +8,8 @@ import { deriveAutosaveId } from '@/lib/autosave-id';
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
+  // Run one-time draft migration on client
+  useDraftMigration();
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
