@@ -7,6 +7,7 @@ import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
 import EquipmentSetup from './components/EquipmentSetup';
 import PopulateAllCleanData from './components/PopulateAllCleanData';
+import ResetSelfDataCard from './components/ResetSelfDataCard';
 
 export default function SetupPageRefactored() {
   // Setup completion tracking
@@ -121,6 +122,21 @@ export default function SetupPageRefactored() {
               </p>
             </div>
             <EquipmentSetup setupProgress={setupProgress} onProgressUpdate={handleProgressUpdate} />
+          </div>
+
+          {/* Danger Zone: Self reset */}
+          <div>
+            <div className="mb-6 text-center">
+              <div className="mb-3 flex items-center justify-center space-x-3">
+                <span className="text-lg">⚠️</span>
+                <span className="text-sm font-semibold text-white">Danger zone</span>
+              </div>
+              <h2 className="mb-2 text-3xl font-bold text-white">Reset your data</h2>
+              <p className="text-lg text-gray-400">
+                Delete your lists and shares. Does not affect global recipes/ingredients.
+              </p>
+            </div>
+            <ResetSelfDataCard defaultReseed={true} />
           </div>
         </div>
 

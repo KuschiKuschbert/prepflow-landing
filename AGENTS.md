@@ -49,6 +49,7 @@
 - Reset and Seed (dev-only):
   - `POST /api/db/reset` — wipes domain tables in FK-safe order.
   - `POST /api/db/seed` — seeds deterministic recipes-first dataset.
+  - `POST /api/db/reset-self` — authenticated self-reset that deletes only the current user's data (`user_id` scoped). Supports `?dry=1` and optional reseed for per-user sample lists.
   - Both require header `X-Admin-Key: $SEED_ADMIN_KEY` and are blocked in production.
   - Optional `?dry=1` for a dry-run plan.
 
