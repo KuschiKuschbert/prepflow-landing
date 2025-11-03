@@ -10,8 +10,14 @@ export function useRecipePriceSubscription(
   refreshRecipePrices: (
     recipes: Recipe[],
     fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>,
   fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+  fetchBatchRecipeIngredients?: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
 ) {
   useEffect(() => {
     if (recipes.length === 0) return;
@@ -28,7 +34,7 @@ export function useRecipePriceSubscription(
         },
         payload => {
           console.log('Ingredient price changed:', payload);
-          refreshRecipePrices(recipes, fetchRecipeIngredients);
+          refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients);
         },
       )
       .subscribe();
@@ -36,5 +42,5 @@ export function useRecipePriceSubscription(
     return () => {
       subscription.unsubscribe();
     };
-  }, [recipes, refreshRecipePrices, fetchRecipeIngredients]);
+  }, [recipes, refreshRecipePrices, fetchRecipeIngredients, fetchBatchRecipeIngredients]);
 }

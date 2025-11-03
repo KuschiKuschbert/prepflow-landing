@@ -31,8 +31,7 @@ export function useRecipeIngredients(setError: (error: string) => void) {
       }
 
       let rows: any[] = ingredientsData || [];
-      const needsLookup = rows.some(r => !r.ingredients);
-      if (needsLookup && rows.length > 0) {
+      if (rows.some(r => !r.ingredients) && rows.length > 0) {
         const uniqueIds = Array.from(new Set(rows.map(r => r.ingredient_id).filter(Boolean)));
         if (uniqueIds.length > 0) {
           const { data: ingRows } = await supabase
@@ -60,26 +59,10 @@ export function useRecipeIngredients(setError: (error: string) => void) {
           console.log('🔍 Fetching recipe ingredients for recipeId:', recipeId);
         }
         const fromApi = await fetchFromApi(recipeId);
-        if (Array.isArray(fromApi)) {
-          if (fromApi.length > 0) {
-            return fromApi;
-          }
-          if (process.env.NODE_ENV === 'development') {
-            console.warn(
-              '⚠️ API returned zero ingredients for recipeId:',
-              recipeId,
-              '- falling back to client join',
-            );
-          }
-        }
-
+        if (Array.isArray(fromApi) && fromApi.length > 0) return fromApi;
         const fromClient = await fetchFromClientJoin(recipeId);
         if (fromClient.length === 0 && process.env.NODE_ENV === 'development') {
-          console.warn(
-            '⚠️ No recipe_ingredients found for recipeId:',
-            recipeId,
-            '- verify this recipe was saved from COGS and has linked ingredients.',
-          );
+          console.warn('⚠️ No recipe_ingredients found for recipeId:', recipeId);
         }
         return fromClient;
       } catch (err) {
@@ -91,5 +74,35 @@ export function useRecipeIngredients(setError: (error: string) => void) {
     [fetchFromApi, fetchFromClientJoin, setError],
   );
 
-  return { fetchRecipeIngredients };
+  const fetchBatchRecipeIngredients = useCallback(
+    async (recipeIds: string[]): Promise<Record<string, RecipeIngredientWithDetails[]>> => {
+      if (recipeIds.length === 0) return {};
+      try {
+        if (process.env.NODE_ENV === 'development')
+          console.log('🔍 Batch fetching recipe ingredients for recipeIds:', recipeIds);
+        const response = await fetch('/api/recipes/ingredients/batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recipeIds }),
+          cache: 'no-store',
+        });
+        if (!response.ok) {
+          console.error('❌ Batch fetch error:', await response.json());
+          setError('Failed to batch fetch recipe ingredients');
+          return {};
+        }
+        return ((await response.json())?.items || {}) as Record<
+          string,
+          RecipeIngredientWithDetails[]
+        >;
+      } catch (err) {
+        console.error('❌ Exception batch fetching recipe ingredients:', err);
+        setError('Failed to batch fetch recipe ingredients');
+        return {};
+      }
+    },
+    [setError],
+  );
+
+  return { fetchRecipeIngredients, fetchBatchRecipeIngredients };
 }

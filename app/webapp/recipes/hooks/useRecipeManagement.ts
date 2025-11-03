@@ -24,7 +24,7 @@ export function useRecipeManagement() {
     useRecipePricing();
 
   // Use ingredients hook
-  const { fetchRecipeIngredients } = useRecipeIngredients(setError);
+  const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
 
   const fetchRecipes = useCallback(async () => {
     setLoading(true);
@@ -38,25 +38,35 @@ export function useRecipeManagement() {
 
       if (!response.ok) {
         setError(result.error || 'Failed to fetch recipes');
+        setLoading(false);
       } else {
-        setRecipes(result.recipes || []);
+        const recipesList = result.recipes || [];
+        // Show recipes immediately (non-blocking)
+        setRecipes(recipesList);
+        setLoading(false);
 
-        // Calculate prices for each recipe
-        await calculateAllRecipePrices(result.recipes || [], fetchRecipeIngredients);
+        // Calculate prices in background (non-blocking)
+        // This allows the UI to render recipes immediately while prices calculate
+        calculateAllRecipePrices(
+          recipesList,
+          fetchRecipeIngredients,
+          fetchBatchRecipeIngredients,
+        ).catch(err => {
+          console.error('Background price calculation failed:', err);
+        });
       }
     } catch (err) {
       setError('Failed to fetch recipes');
-    } finally {
       setLoading(false);
     }
-  }, [calculateAllRecipePrices, fetchRecipeIngredients]);
+  }, [calculateAllRecipePrices, fetchRecipeIngredients, fetchBatchRecipeIngredients]);
 
   const handleEditRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
-      const ingredients = await fetchRecipeIngredients(recipe.id);
-      const calculations = convertToCOGSCalculations(ingredients, recipe.id);
-      storeRecipeForEditing(recipe, calculations);
+        const ingredients = await fetchRecipeIngredients(recipe.id);
+        const calculations = convertToCOGSCalculations(ingredients, recipe.id);
+        storeRecipeForEditing(recipe, calculations);
         router.push('/webapp/cogs');
       } catch (err) {
         setError('Failed to load recipe for editing');
@@ -66,7 +76,12 @@ export function useRecipeManagement() {
   );
 
   // Listen for ingredient price changes and update recipe prices automatically
-  useRecipePriceSubscription(recipes, refreshRecipePrices, fetchRecipeIngredients);
+  useRecipePriceSubscription(
+    recipes,
+    refreshRecipePrices,
+    fetchRecipeIngredients,
+    fetchBatchRecipeIngredients,
+  );
 
   useEffect(() => {
     fetchRecipes();
@@ -83,7 +98,8 @@ export function useRecipeManagement() {
     handleEditRecipe,
     calculateRecommendedPrice,
     calculateAllRecipePrices,
-    refreshRecipePrices: () => refreshRecipePrices(recipes, fetchRecipeIngredients),
+    refreshRecipePrices: () =>
+      refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients),
     setError,
   };
 }

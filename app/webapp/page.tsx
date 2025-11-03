@@ -54,62 +54,55 @@ function WebAppDashboardContent() {
   const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
 
+  // Fetch dashboard data in parallel for better performance
   useEffect(() => {
-    const fetchStats = async () => {
-      // Completely disabled loading state to prevent skeleton flashes
-      // setLoading(true);
+    const fetchDashboardData = async () => {
       setStatsError(null);
       try {
-        const res = await fetch('/api/dashboard/stats', { cache: 'no-store' });
-        const json = await res.json();
-        if (!res.ok || !json?.success) {
-          setStatsError(json?.error || 'Failed to load stats');
+        // Fetch stats and temperature data in parallel
+        const [statsResponse, logsResult, equipmentResult] = await Promise.all([
+          fetch('/api/dashboard/stats', { cache: 'no-store' }),
+          supabase
+            .from('temperature_logs')
+            .select('*')
+            .order('log_date', { ascending: false })
+            .order('log_time', { ascending: false }),
+          supabase.from('temperature_equipment').select('*').eq('is_active', true),
+        ]);
+
+        // Process stats response
+        const statsJson = await statsResponse.json();
+        if (!statsResponse.ok || !statsJson?.success) {
+          setStatsError(statsJson?.error || 'Failed to load stats');
         } else {
           setStats({
-            totalIngredients: json.totalIngredients || 0,
-            totalRecipes: json.totalRecipes || 0,
-            averageDishPrice: json.averageDishPrice || 0,
+            totalIngredients: statsJson.totalIngredients || 0,
+            totalRecipes: statsJson.totalRecipes || 0,
+            averageDishPrice: statsJson.averageDishPrice || 0,
           });
         }
+
+        // Process temperature data
+        if (logsResult.error) {
+          console.error('Error fetching temperature logs:', logsResult.error);
+        } else {
+          setAllLogs(logsResult.data || []);
+        }
+
+        if (equipmentResult.error) {
+          console.error('Error fetching temperature equipment:', equipmentResult.error);
+        } else {
+          setEquipment(equipmentResult.data || []);
+        }
       } catch (error) {
-        console.error('Unexpected error fetching dashboard stats:', error);
+        console.error('Unexpected error fetching dashboard data:', error);
         setStatsError(
           `Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`,
         );
-      } finally {
-        // Completely disabled loading state to prevent skeleton flashes
-        // setLoading(false);
       }
     };
 
-    fetchStats();
-  }, []);
-
-  // Fetch temperature data for warnings
-  useEffect(() => {
-    const fetchTemperatureData = async () => {
-      try {
-        // Fetch temperature logs
-        const { data: logs } = await supabase
-          .from('temperature_logs')
-          .select('*')
-          .order('log_date', { ascending: false })
-          .order('log_time', { ascending: false });
-
-        // Fetch temperature equipment
-        const { data: equipmentData } = await supabase
-          .from('temperature_equipment')
-          .select('*')
-          .eq('is_active', true);
-
-        setAllLogs(logs || []);
-        setEquipment(equipmentData || []);
-      } catch (error) {
-        console.error('Error fetching temperature data:', error);
-      }
-    };
-
-    fetchTemperatureData();
+    fetchDashboardData();
   }, []);
 
   // Use temperature warnings hook
