@@ -1,5 +1,6 @@
 'use client';
 
+import { prefetchRecipes } from '@/lib/cache/recipe-cache';
 import Link from 'next/link';
 import React, { RefObject } from 'react';
 
@@ -109,6 +110,12 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                     key={item.href}
                     href={item.href}
                     onClick={onClose}
+                    onMouseEnter={() => {
+                      // Prefetch recipes API when hovering over recipes link
+                      if (item.href === '/webapp/recipes') {
+                        prefetchRecipes();
+                      }
+                    }}
                     className={cn(
                       'group',
                       'flex',

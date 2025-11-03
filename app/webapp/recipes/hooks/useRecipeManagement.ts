@@ -1,6 +1,7 @@
 'use client';
 
 import { formatRecipeName } from '@/lib/text-utils';
+import { cacheRecipes, getCachedRecipes, prefetchRecipes } from '@/lib/cache/recipe-cache';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Recipe } from '../types';
@@ -12,7 +13,8 @@ import { storeRecipeForEditing } from './utils/recipeEditHelpers';
 
 export function useRecipeManagement() {
   const router = useRouter();
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  // Initialize with cached recipes for instant display
+  const [recipes, setRecipes] = useState<Recipe[]>(() => getCachedRecipes() || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,26 +29,21 @@ export function useRecipeManagement() {
   const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
 
   const fetchRecipes = useCallback(async () => {
+    const cached = getCachedRecipes();
+    if (cached && cached.length > 0) setRecipes(cached);
     setLoading(true);
     setError(null);
-
     try {
-      const response = await fetch('/api/recipes', {
-        cache: 'no-store',
-      });
+      const response = await fetch('/api/recipes', { cache: 'no-store' });
       const result = await response.json();
-
       if (!response.ok) {
         setError(result.error || 'Failed to fetch recipes');
         setLoading(false);
       } else {
         const recipesList = result.recipes || [];
-        // Show recipes immediately (non-blocking)
+        cacheRecipes(recipesList);
         setRecipes(recipesList);
         setLoading(false);
-
-        // Calculate prices in background (non-blocking)
-        // This allows the UI to render recipes immediately while prices calculate
         calculateAllRecipePrices(
           recipesList,
           fetchRecipeIngredients,
@@ -75,15 +72,14 @@ export function useRecipeManagement() {
     [fetchRecipeIngredients, router, setError],
   );
 
-  // Listen for ingredient price changes and update recipe prices automatically
   useRecipePriceSubscription(
     recipes,
     refreshRecipePrices,
     fetchRecipeIngredients,
     fetchBatchRecipeIngredients,
   );
-
   useEffect(() => {
+    prefetchRecipes();
     fetchRecipes();
   }, [fetchRecipes]);
 

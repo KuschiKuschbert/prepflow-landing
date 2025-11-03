@@ -55,15 +55,13 @@ export function useRecipeIngredients(setError: (error: string) => void) {
   const fetchRecipeIngredients = useCallback(
     async (recipeId: string): Promise<RecipeIngredientWithDetails[]> => {
       try {
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development')
           console.log('🔍 Fetching recipe ingredients for recipeId:', recipeId);
-        }
         const fromApi = await fetchFromApi(recipeId);
         if (Array.isArray(fromApi) && fromApi.length > 0) return fromApi;
         const fromClient = await fetchFromClientJoin(recipeId);
-        if (fromClient.length === 0 && process.env.NODE_ENV === 'development') {
+        if (fromClient.length === 0 && process.env.NODE_ENV === 'development')
           console.warn('⚠️ No recipe_ingredients found for recipeId:', recipeId);
-        }
         return fromClient;
       } catch (err) {
         console.error('❌ Exception fetching recipe ingredients:', err);
@@ -87,8 +85,10 @@ export function useRecipeIngredients(setError: (error: string) => void) {
           cache: 'no-store',
         });
         if (!response.ok) {
-          console.error('❌ Batch fetch error:', await response.json());
-          setError('Failed to batch fetch recipe ingredients');
+          if (process.env.NODE_ENV === 'development') {
+            const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+            console.warn('⚠️ Batch fetch failed, falling back to individual fetches:', error);
+          }
           return {};
         }
         return ((await response.json())?.items || {}) as Record<
@@ -96,12 +96,12 @@ export function useRecipeIngredients(setError: (error: string) => void) {
           RecipeIngredientWithDetails[]
         >;
       } catch (err) {
-        console.error('❌ Exception batch fetching recipe ingredients:', err);
-        setError('Failed to batch fetch recipe ingredients');
+        if (process.env.NODE_ENV === 'development')
+          console.warn('⚠️ Batch fetch exception, falling back to individual fetches:', err);
         return {};
       }
     },
-    [setError],
+    [],
   );
 
   return { fetchRecipeIngredients, fetchBatchRecipeIngredients };
