@@ -1218,3 +1218,30 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - In App Router, `context.params` is a Promise. Handlers must await it:
   - `export async function GET(req, context: { params: Promise<{ id: string }> }) { const { id } = await context.params; }`
 - Prefer proxy over middleware per deprecation notice. Middleware is still present for prod allowlist, but should be migrated to proxy when feasible.
+
+## Autosave & Drafts (Global)
+
+- Standardize IDs: Use `deriveAutosaveId(entityType, serverId?, keyFields)` for new entities to avoid `"new"` key churn.
+- Flush Behavior: Autosave flushes on data change debounce, visibility change, pagehide, and beforeunload.
+- Global Indicator: Header shows Saving/Saved/Error via a global event (`autosave:status`).
+- Draft Recovery: Suppresses prompts for drafts younger than 10 minutes, empty drafts, and drafts without minimal signal (e.g., missing `ingredient_name` or `name`).
+- Purge Policy: Client migration purges drafts older than 7 days and re-keys `"new"`/`tmp_*` entries to stable IDs on startup.
+- Server Parity: Demo saves clear drafts; production keeps drafts on 4xx/5xx and surfaces an error.
+- UI Contracts:
+  - Forms using autosave must pass a stable `entityId` (prefer server ID; otherwise `deriveAutosaveId`).
+  - After successful save, drafts must be cleared (handled centrally in `useAutosave`).
+
+### Implemented
+
+- `hooks/useAutosave.ts`: status broadcasting + flush on lifecycle.
+- `lib/autosave-id.ts`: stable ID derivation.
+- `app/providers.tsx`: one-time migration (purge/re-key) on startup.
+- `app/webapp/components/DraftRecovery.tsx`: prompt suppression and purge of >24h drafts.
+- `app/webapp/components/ModernNavigation.tsx` + `AutosaveGlobalIndicator`: global status.
+- Key forms updated to stable IDs: `RecipeForm`, `IngredientForm`.
+
+### Action Items for New Forms
+
+- Import and use `deriveAutosaveId` with meaningful key fields.
+- Avoid passing `"new"` as `entityId` to `useAutosave`.
+- Ensure minimal field validation so autosave is only enabled when meaningful.
