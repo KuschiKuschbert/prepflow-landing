@@ -3,6 +3,7 @@
 import { ApiErrorDisplay } from '@/components/ui/ApiErrorDisplay';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { supabase } from '@/lib/supabase';
 import { useTranslation } from '@/lib/useTranslation';
 import { useCallback, useEffect, useState } from 'react';
@@ -17,23 +18,39 @@ interface RecentActivity {
 
 export default function RecentActivity() {
   const { t } = useTranslation();
-  const [activities, setActivities] = useState<RecentActivity[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Initialize with cached data for instant display
+  const [activities, setActivities] = useState<RecentActivity[]>(
+    () => getCachedData<RecentActivity[]>('dashboard_recent_activity') || [],
+  );
+  const [loading, setLoading] = useState(false); // Start false since we have cached data
   const [error, setError] = useState<string | null>(null);
 
   const fetchRecentActivity = useCallback(async (): Promise<RecentActivity[]> => {
     const activities: RecentActivity[] = [];
 
     try {
-      // Fetch recent ingredients
-      const { data: ingredients, error: ingredientsError } = await supabase
-        .from('ingredients')
-        .select('id, ingredient_name, created_at, updated_at')
-        .order('updated_at', { ascending: false })
-        .limit(3);
+      // Fetch all data in parallel for better performance
+      const [ingredientsResult, recipesResult, menuDishesResult] = await Promise.all([
+        supabase
+          .from('ingredients')
+          .select('id, ingredient_name, created_at, updated_at')
+          .order('updated_at', { ascending: false })
+          .limit(3),
+        supabase
+          .from('recipes')
+          .select('id, name, created_at, updated_at')
+          .order('updated_at', { ascending: false })
+          .limit(3),
+        supabase
+          .from('menu_dishes')
+          .select('id, name, created_at, updated_at')
+          .order('updated_at', { ascending: false })
+          .limit(3),
+      ]);
 
-      if (!ingredientsError && ingredients) {
-        ingredients.forEach(ingredient => {
+      // Process ingredients
+      if (!ingredientsResult.error && ingredientsResult.data) {
+        ingredientsResult.data.forEach(ingredient => {
           activities.push({
             id: ingredient.id,
             type: 'ingredient',
@@ -44,15 +61,9 @@ export default function RecentActivity() {
         });
       }
 
-      // Fetch recent recipes
-      const { data: recipes, error: recipesError } = await supabase
-        .from('recipes')
-        .select('id, name, created_at, updated_at')
-        .order('updated_at', { ascending: false })
-        .limit(3);
-
-      if (!recipesError && recipes) {
-        recipes.forEach(recipe => {
+      // Process recipes
+      if (!recipesResult.error && recipesResult.data) {
+        recipesResult.data.forEach(recipe => {
           activities.push({
             id: recipe.id,
             type: 'recipe',
@@ -63,15 +74,9 @@ export default function RecentActivity() {
         });
       }
 
-      // Fetch recent menu dishes
-      const { data: menuDishes, error: menuDishesError } = await supabase
-        .from('menu_dishes')
-        .select('id, name, created_at, updated_at')
-        .order('updated_at', { ascending: false })
-        .limit(3);
-
-      if (!menuDishesError && menuDishes) {
-        menuDishes.forEach(dish => {
+      // Process menu dishes
+      if (!menuDishesResult.error && menuDishesResult.data) {
+        menuDishesResult.data.forEach(dish => {
           activities.push({
             id: dish.id,
             type: 'menu_dish',
@@ -83,9 +88,10 @@ export default function RecentActivity() {
       }
 
       // Sort all activities by date
-      return activities.sort(
+      const sorted = activities.sort(
         (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       );
+      return sorted;
     } catch (error) {
       console.error('Error fetching recent activity:', error);
       throw error;
@@ -98,6 +104,8 @@ export default function RecentActivity() {
     try {
       const data = await fetchRecentActivity();
       setActivities(data);
+      // Cache the activity data
+      cacheData('dashboard_recent_activity', data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch recent activity');
     } finally {

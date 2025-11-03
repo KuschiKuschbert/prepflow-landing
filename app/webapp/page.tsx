@@ -72,14 +72,23 @@ function WebAppDashboardContent() {
       setStatsError(null);
       try {
         // Fetch stats and temperature data in parallel
+        // Limit temperature logs to recent entries only (last 20) for better performance
         const [statsResponse, logsResult, equipmentResult] = await Promise.all([
           fetch('/api/dashboard/stats', { cache: 'no-store' }),
           supabase
             .from('temperature_logs')
-            .select('*')
+            .select(
+              'id, log_date, log_time, temperature_type, temperature_celsius, location, notes',
+            )
             .order('log_date', { ascending: false })
-            .order('log_time', { ascending: false }),
-          supabase.from('temperature_equipment').select('*').eq('is_active', true),
+            .order('log_time', { ascending: false })
+            .limit(20), // Only fetch last 20 logs for dashboard
+          supabase
+            .from('temperature_equipment')
+            .select(
+              'id, name, equipment_type, location, min_temp_celsius, max_temp_celsius, is_active',
+            )
+            .eq('is_active', true),
         ]);
 
         // Process stats response

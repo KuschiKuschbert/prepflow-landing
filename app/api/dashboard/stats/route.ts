@@ -5,10 +5,11 @@ export async function GET(_req: NextRequest) {
   try {
     if (!supabaseAdmin) return NextResponse.json({ error: 'DB unavailable' }, { status: 500 });
 
+    // Use head: true for counts and only select selling_price column (not all columns)
     const [{ count: ing }, { count: rec }, { data: prices }] = await Promise.all([
       supabaseAdmin.from('ingredients').select('*', { count: 'exact', head: true }),
       supabaseAdmin.from('recipes').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('recipes').select('selling_price'),
+      supabaseAdmin.from('recipes').select('selling_price').not('selling_price', 'is', null),
     ]);
 
     const valid = (prices || []).map((r: any) => Number(r.selling_price || 0)).filter(v => v > 0);
