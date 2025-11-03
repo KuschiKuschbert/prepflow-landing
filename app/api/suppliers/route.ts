@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const active = searchParams.get('active');
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
 
     let query = supabaseAdmin.from('suppliers').select('*').order('supplier_name');
 
@@ -21,7 +25,7 @@ export async function GET(request: NextRequest) {
       query = query.eq('is_active', active === 'true');
     }
 
-    const { data, error } = await query;
+    const { data, error, count } = await query.select('*', { count: 'exact' }).range(start, end);
 
     if (error) {
       console.error('Error fetching suppliers:', error);
@@ -37,6 +41,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: data || [],
+      page,
+      pageSize,
+      total: count || 0,
     });
   } catch (error) {
     console.error('Suppliers fetch error:', error);
