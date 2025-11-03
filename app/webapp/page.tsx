@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import TestWarningButton from '@/components/TestWarningButton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import DashboardStats from './components/DashboardStats';
 import QuickActions from './components/QuickActions';
@@ -131,11 +130,6 @@ function WebAppDashboardContent() {
           <p className="text-gray-400">
             {t('dashboard.subtitle', "Welcome back! Here's your kitchen overview")}
           </p>
-
-          {/* Test Warning Button - Remove in production */}
-          <div className="mt-4">
-            <TestWarningButton />
-          </div>
         </div>
 
         {/* Error Message */}
