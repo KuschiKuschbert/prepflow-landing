@@ -73,7 +73,7 @@ export function useParallelFetch<T, K extends string | number>(
       } else {
         const error =
           result.reason instanceof Error ? result.reason : new Error(String(result.reason));
-        newErrors.set(resultItem, error);
+        newErrors.set(item, error);
         if (onError) {
           onError(error, item);
         }
