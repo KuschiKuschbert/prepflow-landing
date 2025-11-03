@@ -153,14 +153,16 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Minimal sales_data to exercise performance classification
+  // Minimal sales_data to exercise performance classification (ignore if table missing)
   for (const r of source) {
     const dishId = generateDeterministicId('dish', r.key);
-    // optional table, insert only if exists
-    await supabase
+    const { error: salesError } = await supabase
       .from('sales_data')
-      .insert({ dish_id: dishId, number_sold: 10 })
-      .catch(() => {});
+      .insert({ dish_id: dishId, number_sold: 10 });
+    // Ignore if table is missing; continue silently in demo/local schemas
+    if (salesError) {
+      // no-op
+    }
   }
 
   return NextResponse.json({

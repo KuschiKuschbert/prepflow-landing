@@ -52,6 +52,13 @@
   - Both require header `X-Admin-Key: $SEED_ADMIN_KEY` and are blocked in production.
   - Optional `?dry=1` for a dry-run plan.
 
+### Supabase TypeScript Gotcha (Vercel Build)
+
+- Do not chain `.catch()` on Supabase query builders; they are not Promises until awaited.
+- Always use:
+  - `const { data, error } = await supabase.from('table').insert(row);`
+- Handle `error` explicitly; avoid `.catch()` which breaks type checks on Vercel.
+
 # PrepFlow - AI Agent Instructions
 
 ## 🎯 **Project Overview**
