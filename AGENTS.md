@@ -1197,3 +1197,9 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - Canonical ingredient field name: `ingredient_name`.
 - Historical references to `ingredients.name` may exist; when reading, alias or normalize to `ingredient_name`.
 - Prefer the server endpoint `GET /api/recipes/[id]/ingredients` for normalized joins.
+
+## Next.js 16 Route Handlers
+
+- In App Router, `context.params` is a Promise. Handlers must await it:
+  - `export async function GET(req, context: { params: Promise<{ id: string }> }) { const { id } = await context.params; }`
+- Prefer proxy over middleware per deprecation notice. Middleware is still present for prod allowlist, but should be migrated to proxy when feasible.

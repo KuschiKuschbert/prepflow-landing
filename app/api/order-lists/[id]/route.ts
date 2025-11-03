@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
     }
 
-    const id = params.id;
+    const { id } = await context.params;
     const body = await request.json();
     const { supplierId, name, notes, status, items } = body;
 
@@ -63,13 +63,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
     }
 
-    const id = params.id;
+    const { id } = await context.params;
     if (!id) {
       return NextResponse.json(
         { error: 'Missing ID', message: 'Order list ID is required' },
