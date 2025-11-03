@@ -114,8 +114,25 @@ export default function RecentActivity() {
   }, [fetchRecentActivity]);
 
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    // If we have cached data, fetch in background without showing loading state
+    // Otherwise, show loading while fetching
+    const hasCachedData = activities.length > 0;
+    if (hasCachedData) {
+      // Non-blocking: fetch fresh data in background without loading state
+      fetchRecentActivity()
+        .then(data => {
+          setActivities(data);
+          cacheData('dashboard_recent_activity', data);
+        })
+        .catch(() => {
+          // Silently fail - we already have cached data displayed
+        });
+    } else {
+      // No cached data, fetch with loading state
+      refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount
 
   // Show loading state only if we have no data and are loading
   if (loading && !activities) {
