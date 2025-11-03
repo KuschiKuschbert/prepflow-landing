@@ -44,6 +44,14 @@
 - Performance: Lighthouse ≥ 90; CLS < 0.1; LCP < 2.5s
 - Analytics: tour_open/close, step navigation, CTA clicks
 
+## Development Utilities
+
+- Reset and Seed (dev-only):
+  - `POST /api/db/reset` — wipes domain tables in FK-safe order.
+  - `POST /api/db/seed` — seeds deterministic recipes-first dataset.
+  - Both require header `X-Admin-Key: $SEED_ADMIN_KEY` and are blocked in production.
+  - Optional `?dry=1` for a dry-run plan.
+
 # PrepFlow - AI Agent Instructions
 
 ## 🎯 **Project Overview**

@@ -7,6 +7,7 @@ import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
 import EquipmentSetup from './components/EquipmentSetup';
 import PopulateAllCleanData from './components/PopulateAllCleanData';
+import DemoModeToggle from './components/DemoModeToggle';
 
 export default function SetupPageRefactored() {
   // Setup completion tracking
@@ -74,6 +75,21 @@ export default function SetupPageRefactored() {
 
         {/* Setup Steps */}
         <div className="space-y-12">
+          {/* Global Demo Mode */}
+          <div>
+            <div className="mb-8 text-center">
+              <div className="mb-4 flex items-center justify-center space-x-3">
+                <span className="text-lg">🧪</span>
+                <span className="text-sm font-semibold text-white">Demo Mode</span>
+              </div>
+              <h2 className="mb-2 text-3xl font-bold text-white">🧪 Enable Read‑only Demo Mode</h2>
+              <p className="text-lg text-gray-400">
+                Instantly explore PrepFlow with built‑in demo data. No data is written to your
+                database.
+              </p>
+            </div>
+            <DemoModeToggle />
+          </div>
           {/* Step 1: Country & Tax Setup */}
           <div>
             <div className="mb-8 text-center">
