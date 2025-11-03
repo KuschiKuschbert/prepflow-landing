@@ -19,13 +19,17 @@ export async function GET(request: NextRequest) {
     const start = (page - 1) * pageSize;
     const end = start + pageSize - 1;
 
-    let query = supabaseAdmin.from('suppliers').select('*').order('supplier_name');
+    // Build query with count option at the initial select to satisfy types
+    let query = supabaseAdmin
+      .from('suppliers')
+      .select('*', { count: 'exact' })
+      .order('supplier_name');
 
     if (active !== null) {
       query = query.eq('is_active', active === 'true');
     }
 
-    const { data, error, count } = await query.select('*', { count: 'exact' }).range(start, end);
+    const { data, error, count } = await query.range(start, end);
 
     if (error) {
       console.error('Error fetching suppliers:', error);
