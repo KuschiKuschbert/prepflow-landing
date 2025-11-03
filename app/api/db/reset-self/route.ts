@@ -35,13 +35,27 @@ export async function POST(request: NextRequest) {
 
   // No password required; user must be authenticated via session
 
+  const isMissingTableError = (msg: string | undefined) => {
+    if (!msg) return false;
+    const m = msg.toLowerCase();
+    return (
+      m.includes('could not find the table') ||
+      (m.includes('does not exist') && (m.includes('relation') || m.includes('table'))) ||
+      m.includes('schema cache')
+    );
+  };
+
   // Collect IDs for child tables dependent on parent scoped by user_id (skip if column missing)
   const getIds = async (table: string, idColumn: string) => {
     const { data, error } = await supabase
       .from(table)
       .select(`${idColumn}`, { head: false })
       .eq('user_id', userId);
-    if (error && /column .*user_id.* does not exist/i.test(error.message)) {
+    if (
+      error &&
+      (isMissingTableError(error.message) ||
+        /column .*user_id.* does not exist/i.test(error.message))
+    ) {
       return [] as string[];
     }
     if (error) return [] as string[];
@@ -112,7 +126,11 @@ export async function POST(request: NextRequest) {
           .from(table)
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId);
-        if (error && /column .*user_id.* does not exist/i.test(error.message)) {
+        if (
+          error &&
+          (isMissingTableError(error.message) ||
+            /column .*user_id.* does not exist/i.test(error.message))
+        ) {
           // Column missing: skip table
           deletedCountsByTable[table] = 0;
           return;
@@ -122,7 +140,11 @@ export async function POST(request: NextRequest) {
         return;
       }
       const { error } = await supabase.from(table).delete().eq('user_id', userId);
-      if (error && /column .*user_id.* does not exist/i.test(error.message)) {
+      if (
+        error &&
+        (isMissingTableError(error.message) ||
+          /column .*user_id.* does not exist/i.test(error.message))
+      ) {
         // Column missing: skip table safely
         deletedCountsByTable[table] = 0;
         return;
