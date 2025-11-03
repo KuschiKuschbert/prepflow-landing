@@ -10,6 +10,7 @@ const LIMITS = {
   api: 200,
   util: 150,
   hook: 100,
+  data: 2000, // Data files with arrays can be larger
 };
 
 const exts = new Set(['.ts', '.tsx', '.js', '.jsx']);
@@ -20,6 +21,8 @@ function detectCategory(filePath) {
   if (p.match(/\/hooks\//) || /\/hooks\/[^/]+\.(t|j)sx?$/.test(p)) return 'hook';
   if ((p.startsWith('app/') || p.includes('/app/')) && /\/page\.(t|j)sx$/.test(p)) return 'page';
   if (p.match(/\/(components|ui)\//)) return 'component';
+  // Check for data files (translations, seed data, sample data)
+  if (p.includes('-data.ts') || p.includes('sample-') || p.includes('translations/')) return 'data';
   if (p.match(/\/(lib|utils?)\//) || /\/utils?\.(t|j)s$/.test(p)) return 'util';
   // default to component for safety
   return 'component';
