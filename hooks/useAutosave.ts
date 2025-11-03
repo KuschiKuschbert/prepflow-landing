@@ -98,6 +98,17 @@ export function useAutosave({
     setStatus('saving');
     setError(null);
 
+    // Broadcast status for global indicators
+    try {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('autosave:status', {
+            detail: { status: 'saving', entityType, entityId },
+          }),
+        );
+      }
+    } catch {}
+
     try {
       // Check for conflicts first (only for existing entities)
       if (entityId && entityId !== 'new' && entityId !== null && entityId !== undefined) {
@@ -119,6 +130,17 @@ export function useAutosave({
         setHasUnsavedChanges(false);
         clearDraft(entityType, entityId, userId);
 
+        // Broadcast saved
+        try {
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+              new CustomEvent('autosave:status', {
+                detail: { status: 'saved', entityType, entityId },
+              }),
+            );
+          }
+        } catch {}
+
         // Clear saved status after 2 seconds
         setTimeout(() => {
           setStatus(prev => (prev === 'saved' ? 'idle' : prev));
@@ -134,6 +156,17 @@ export function useAutosave({
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setStatus('error');
       setError(errorMessage);
+
+      // Broadcast error
+      try {
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('autosave:status', {
+              detail: { status: 'error', entityType, entityId, error: errorMessage },
+            }),
+          );
+        }
+      } catch {}
 
       if (onError) {
         onError(errorMessage);
@@ -154,9 +187,40 @@ export function useAutosave({
 
   // Cleanup on unmount
   useEffect(() => {
+    const flushIfPending = async () => {
+      if (hasUnsavedChanges) {
+        await saveNow();
+      }
+    };
+
+    const handleVisibility = async () => {
+      if (document.visibilityState === 'hidden') {
+        await flushIfPending();
+      }
+    };
+
+    const handlePageHide = async () => {
+      await flushIfPending();
+    };
+
+    const handleBeforeUnload = () => {
+      // Fire-and-forget; synchronous save not guaranteed but we attempted earlier
+    };
+
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', handleVisibility);
+      window.addEventListener('pagehide', handlePageHide);
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
     return () => {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
+      }
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibility);
+        window.removeEventListener('pagehide', handlePageHide);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
       }
     };
   }, []);
