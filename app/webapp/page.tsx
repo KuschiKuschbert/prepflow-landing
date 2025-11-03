@@ -86,7 +86,7 @@ function WebAppDashboardContent() {
           supabase
             .from('temperature_equipment')
             .select(
-              'id, name, equipment_type, location, min_temp_celsius, max_temp_celsius, is_active',
+              'id, name, equipment_type, location, min_temp_celsius, max_temp_celsius, is_active, created_at, updated_at',
             )
             .eq('is_active', true),
         ]);
