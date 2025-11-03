@@ -11,7 +11,6 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
   const userId = useMemo(() => getOrCreateUserId(), []);
   const [open, setOpen] = useState(false);
   const [confirmText, setConfirmText] = useState('');
-  const [reseed, setReseed] = useState<boolean>(defaultReseed);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
@@ -20,7 +19,7 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
   const handleOpen = () => {
     if (typeof window !== 'undefined') {
       (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({ event: 'reset_self_open', reseed });
+      (window as any).dataLayer.push({ event: 'reset_self_open' });
     }
     setOpen(true);
   };
@@ -38,14 +37,14 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
 
     if (typeof window !== 'undefined') {
       (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({ event: 'reset_self_confirm', reseed });
+      (window as any).dataLayer.push({ event: 'reset_self_confirm' });
     }
 
     try {
       const res = await fetch('/api/db/reset-self', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, reseed }),
+        body: JSON.stringify({ userId }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -53,7 +52,7 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       }
       setResult('Success');
       if (typeof window !== 'undefined') {
-        (window as any).dataLayer.push({ event: 'reset_self_success', reseed });
+        (window as any).dataLayer.push({ event: 'reset_self_success' });
       }
       // Auto-close after short delay to confirm success visually
       setTimeout(() => {
@@ -64,7 +63,7 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
     } catch (e: any) {
       setResult(e?.message || 'Error');
       if (typeof window !== 'undefined') {
-        (window as any).dataLayer.push({ event: 'reset_self_error', reseed });
+        (window as any).dataLayer.push({ event: 'reset_self_error' });
       }
     } finally {
       setLoading(false);
@@ -77,20 +76,9 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       <h3 className="mb-2 text-2xl font-bold text-white">Clean the bench (my data)</h3>
       <p className="mb-4 text-gray-400">
         This will clear your personal prep lists, order lists, shares and AI notes — like wiping
-        down your station. It won’t touch the house recipes or pantry (global data). By default,
-        we’ll lay out a fresh sample mise en place.
+        down your station. It won’t touch the house recipes or pantry (global data).
       </p>
-      <div className="mb-4 flex items-center gap-3 text-sm text-gray-300">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            className="h-4 w-4"
-            checked={reseed}
-            onChange={e => setReseed(e.target.checked)}
-          />
-          Re-seed sample data after reset
-        </label>
-      </div>
+
       <button
         onClick={handleOpen}
         className="rounded-2xl bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-4 py-2 text-white transition-all duration-200 hover:opacity-90"

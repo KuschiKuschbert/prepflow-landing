@@ -99,8 +99,9 @@ export default function SetupPageRefactored() {
               </div>
               <h2 className="mb-2 text-3xl font-bold text-white">✨ Populate Clean Test Data</h2>
               <p className="text-lg text-gray-400">
-                Add a moderate set of test data to get started (~40 ingredients, ~10 recipes,
-                suppliers, equipment, and more)
+                This is the one and only way we auto-create data in the app. It will replace any
+                existing data with a tidy, linked demo set (ingredients, recipes, suppliers,
+                equipment, cleaning, compliance).
               </p>
             </div>
             <PopulateAllCleanData onDataPopulated={handleDataPopulated} />
