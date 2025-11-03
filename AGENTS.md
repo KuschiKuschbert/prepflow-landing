@@ -1245,3 +1245,5 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - Import and use `deriveAutosaveId` with meaningful key fields.
 - Avoid passing `"new"` as `entityId` to `useAutosave`.
 - Ensure minimal field validation so autosave is only enabled when meaningful.
+
+<!-- redeploy: noop update at 2025-11-03 23:55Z -->
