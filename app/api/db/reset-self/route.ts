@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { cleanExistingData } from '@/lib/populate-helpers';
 
 type DeleteSummary = {
   dryRun: boolean;
@@ -24,9 +25,10 @@ export async function POST(request: NextRequest) {
   } catch {}
 
   const userId = (body?.userId as string) || '';
+  const wipeAll = body?.all === true;
   const reseed = false; // reseed disabled by consolidation plan
 
-  if (!userId) {
+  if (!wipeAll && !userId) {
     return NextResponse.json(
       { error: 'Missing userId', message: 'userId is required in body' },
       { status: 400 },
@@ -44,6 +46,24 @@ export async function POST(request: NextRequest) {
       m.includes('schema cache')
     );
   };
+
+  // If wiping everything, delegate to centralized cleaner (FK-safe order across domain tables)
+  if (!dryRun && wipeAll) {
+    try {
+      const cleaned = await cleanExistingData(supabase);
+      const payload: DeleteSummary = {
+        dryRun: false,
+        reseeded: false,
+        deletedCountsByTable: { all_tables: cleaned },
+      };
+      return NextResponse.json({ success: true, ...payload });
+    } catch (e: any) {
+      return NextResponse.json(
+        { error: 'Global reset failed', message: e?.message || 'Unknown error' },
+        { status: 500 },
+      );
+    }
+  }
 
   // Collect IDs for child tables dependent on parent scoped by user_id (skip if column missing)
   const getIds = async (table: string, idColumn: string) => {

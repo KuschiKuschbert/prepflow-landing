@@ -44,7 +44,7 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       const res = await fetch('/api/db/reset-self', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({ userId, all: true }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -75,8 +75,9 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       <div className="mb-3 text-sm font-semibold text-white">Danger Zone</div>
       <h3 className="mb-2 text-2xl font-bold text-white">Clean the bench (my data)</h3>
       <p className="mb-4 text-gray-400">
-        This will clear your personal prep lists, order lists, shares and AI notes — like wiping
-        down your station. It won’t touch the house recipes or pantry (global data).
+        Wipe the kitchen clean: this will clear all demo data in the workspace (ingredients,
+        recipes, suppliers, equipment, logs, lists). Use the Populate Clean Test Data button to
+        restore the tidy demo set.
       </p>
 
       <button
