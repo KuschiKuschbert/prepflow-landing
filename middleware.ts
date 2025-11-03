@@ -5,18 +5,15 @@ import { isEmailAllowed } from '@/lib/allowlist';
 
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
+  const isProduction = process.env.NODE_ENV === 'production';
 
-  // Allow auth routes
-  if (pathname.startsWith('/api/auth')) {
+  // Always allow auth and selected public APIs
+  if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/leads')) {
     return NextResponse.next();
   }
 
-  // Development mode: Allow localhost to bypass authentication
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const isLocalhost = origin.includes('localhost') || origin.includes('127.0.0.1');
-
-  if (isDevelopment && isLocalhost) {
-    // In development on localhost, allow access without authentication
+  // Only enforce in production; allow everything in dev/preview
+  if (!isProduction) {
     return NextResponse.next();
   }
 

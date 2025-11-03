@@ -5,6 +5,10 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
 
     if (!userId) {
       return NextResponse.json(
@@ -25,14 +29,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabaseAdmin
+    const { data, error, count } = await supabaseAdmin
       .from('order_lists')
       .select(
         `
         *,
         suppliers (
           id,
-          name,
+          supplier_name,
           contact_person,
           phone,
           email
@@ -45,15 +49,18 @@ export async function GET(request: NextRequest) {
           notes,
           ingredients (
             id,
+            ingredient_name,
             name,
             unit,
             category
           )
         )
       `,
+        { count: 'exact' },
       )
       .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(start, end);
 
     if (error) {
       console.error('Error fetching order lists:', error);
@@ -66,9 +73,29 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Normalize nested ingredient_name
+    const items = (data || []).map((ol: any) => ({
+      ...ol,
+      suppliers: ol.suppliers
+        ? { ...ol.suppliers, supplier_name: ol.suppliers.supplier_name || ol.suppliers.name }
+        : null,
+      order_list_items: (ol.order_list_items || []).map((it: any) => ({
+        ...it,
+        ingredients: it.ingredients
+          ? {
+              ...it.ingredients,
+              ingredient_name: it.ingredients.ingredient_name || it.ingredients.name,
+            }
+          : null,
+      })),
+    }));
+
     return NextResponse.json({
       success: true,
-      data: data || [],
+      data: items,
+      page,
+      pageSize,
+      total: count || 0,
     });
   } catch (error) {
     console.error('Order lists API error:', error);
@@ -167,146 +194,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { id, supplierId, name, notes, status, items } = body;
-
-    if (!id) {
-      return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'Order list ID is required',
-        },
-        { status: 400 },
-      );
-    }
-
-    const updateData: any = {
-      updated_at: new Date().toISOString(),
-    };
-
-    if (supplierId !== undefined) updateData.supplier_id = supplierId;
-    if (name !== undefined) updateData.name = name;
-    if (notes !== undefined) updateData.notes = notes;
-    if (status !== undefined) updateData.status = status;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    const { data, error } = await supabaseAdmin
-      .from('order_lists')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating order list:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to update order list',
-          message: 'Could not update order list data',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Update items if provided
-    if (items !== undefined) {
-      // Delete existing items
-      await supabaseAdmin.from('order_list_items').delete().eq('order_list_id', id);
-
-      // Add new items
-      if (items.length > 0) {
-        const orderItems = items.map((item: any) => ({
-          order_list_id: id,
-          ingredient_id: item.ingredientId,
-          quantity: item.quantity,
-          unit: item.unit,
-          notes: item.notes,
-        }));
-
-        await supabaseAdmin.from('order_list_items').insert(orderItems);
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Order list updated successfully',
-      data,
-    });
-  } catch (error) {
-    console.error('Order lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        {
-          error: 'Missing ID',
-          message: 'Order list ID is required',
-        },
-        { status: 400 },
-      );
-    }
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Delete order list items first (foreign key constraint)
-    await supabaseAdmin.from('order_list_items').delete().eq('order_list_id', id);
-
-    // Delete the order list
-    const { error } = await supabaseAdmin.from('order_lists').delete().eq('id', id);
-
-    if (error) {
-      console.error('Error deleting order list:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to delete order list',
-          message: 'Could not remove order list',
-        },
-        { status: 500 },
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Order list deleted successfully',
-    });
-  } catch (error) {
-    console.error('Order lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
-  }
-}
+// PUT and DELETE moved to /api/order-lists/[id]
