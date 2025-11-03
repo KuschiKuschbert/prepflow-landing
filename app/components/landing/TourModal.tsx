@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { trackEvent } from '@/lib/analytics';
 
 interface Step {
   key: string;
@@ -20,6 +21,11 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
   React.useEffect(() => {
     if (isOpen) setIndex(0);
   }, [isOpen]);
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const step = steps[index];
+    trackEvent('tour_step', 'engagement', step?.key || String(index), index);
+  }, [index, isOpen, steps]);
   React.useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -51,7 +57,10 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
             <button
               className="rounded-2xl border border-[#2a2a2a] px-4 py-2 disabled:opacity-50"
               disabled={index === 0}
-              onClick={() => setIndex(i => Math.max(i - 1, 0))}
+              onClick={() => {
+                trackEvent('tour_prev', 'engagement', steps[index]?.key, index);
+                setIndex(i => Math.max(i - 1, 0));
+              }}
             >
               Back
             </button>
@@ -65,7 +74,15 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
             </div>
             <button
               className="rounded-2xl bg-[#29E7CD] px-4 py-2 text-black"
-              onClick={() => (index === last ? onClose() : setIndex(i => Math.min(i + 1, last)))}
+              onClick={() => {
+                if (index === last) {
+                  trackEvent('tour_complete', 'engagement');
+                  onClose();
+                } else {
+                  trackEvent('tour_next', 'engagement', steps[index]?.key, index + 1);
+                  setIndex(i => Math.min(i + 1, last));
+                }
+              }}
             >
               {index === last ? 'Done' : 'Next'}
             </button>
