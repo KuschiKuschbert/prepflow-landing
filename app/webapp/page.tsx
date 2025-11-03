@@ -78,7 +78,7 @@ function WebAppDashboardContent() {
           supabase
             .from('temperature_logs')
             .select(
-              'id, log_date, log_time, temperature_type, temperature_celsius, location, notes',
+              'id, log_date, log_time, temperature_type, temperature_celsius, location, notes, photo_url, logged_by, created_at, updated_at',
             )
             .order('log_date', { ascending: false })
             .order('log_time', { ascending: false })
