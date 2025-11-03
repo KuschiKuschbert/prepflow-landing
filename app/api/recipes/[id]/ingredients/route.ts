@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { CANONICAL_RECIPES } from '@/lib/seed/recipes';
-import { generateDeterministicId, normalizeIngredientName } from '@/lib/seed/helpers';
+// Demo helpers intentionally not used in core endpoint to avoid divergence
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -11,45 +10,13 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       return NextResponse.json({ error: 'Missing recipe id' }, { status: 400 });
     }
 
-    const cookieDemo = _req.cookies.get('pf_demo')?.value === '1';
-    const demoMode =
-      cookieDemo || process.env.NEXT_PUBLIC_DEMO_MODE === '1' || process.env.DEMO_MODE === '1';
-    if (demoMode) {
-      const recipe = CANONICAL_RECIPES.find(
-        r => generateDeterministicId('recipe', r.key) === recipeId,
-      );
-      if (!recipe) {
-        return NextResponse.json({ items: [] });
-      }
-      const items = recipe.lines.map((l, idx) => {
-        const ingredientName = normalizeIngredientName(l.ingredientName);
-        const ingId = generateDeterministicId('ingredient', ingredientName.toLowerCase());
-        const rowId = generateDeterministicId('ri', `${recipe.key}:${idx}`);
-        return {
-          id: rowId,
-          recipe_id: recipeId,
-          ingredient_id: ingId,
-          quantity: l.quantity,
-          unit: l.unit,
-          ingredients: {
-            id: ingId,
-            ingredient_name: ingredientName,
-            cost_per_unit: 0.01,
-            unit: l.unit === 'PC' ? 'PC' : l.unit,
-            trim_peel_waste_percentage: 0,
-            yield_percentage: 100,
-            category: null,
-            supplier_name: null,
-          },
-        };
-      });
-      return NextResponse.json({ items });
-    }
+    // Demo mode disabled in core endpoint: always fetch from DB
 
     if (!supabaseAdmin) {
       return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
     }
 
+    const normalizedId = String(recipeId).trim();
     const { data, error } = await supabaseAdmin
       .from('recipe_ingredients')
       .select(
@@ -72,7 +39,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         )
       `,
       )
-      .eq('recipe_id', recipeId);
+      .eq('recipe_id', normalizedId);
 
     if (error) {
       return NextResponse.json(
@@ -85,7 +52,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (!data || data.length === 0) {
       console.warn(
         '[recipes/:id/ingredients] No recipe_ingredients found for recipe_id=',
-        recipeId,
+        normalizedId,
       );
       return NextResponse.json({ items: [] });
     }
@@ -95,6 +62,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     let rows: any[] = data;
     const missingNested = rows.some(r => !r.ingredients);
     if (missingNested) {
+      console.warn(
+        '[recipes/:id/ingredients] Missing nested ingredients join; applying backfill for recipe_id=',
+        recipeId,
+      );
       const uniqueIds = Array.from(
         new Set(rows.map(r => r.ingredient_id).filter((v: any) => Boolean(v))),
       );
@@ -126,9 +97,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         ingredients: {
           id: ing.id,
           // Normalize name field so clients can rely on ingredient_name
-          ingredient_name: ing.ingredient_name || ing.name,
+          ingredient_name: ing.ingredient_name || ing.name || 'Unknown',
           cost_per_unit: ing.cost_per_unit,
-          unit: ing.unit,
+          unit: ing.unit || row.unit || null,
           trim_peel_waste_percentage: ing.trim_peel_waste_percentage,
           yield_percentage: ing.yield_percentage,
           category: ing.category,
