@@ -24,13 +24,16 @@ export async function POST(req: NextRequest) {
       .select('id, ingredient_name, supplier, brand, pack_size, unit, cost_per_unit, updated_at');
     if (ingErr) throw ingErr;
 
-    const { data: riAgg, error: riErr } = await supabaseAdmin
+    const { data: riRows, error: riErr } = await supabaseAdmin
       .from('recipe_ingredients')
-      .select('ingredient_id, count:ingredient_id(count)')
-      .group('ingredient_id');
+      .select('ingredient_id');
     if (riErr) throw riErr;
     const usageByIng: Record<string, number> = {};
-    (riAgg || []).forEach((r: any) => (usageByIng[r.ingredient_id] = Number(r.count || 0)));
+    (riRows || []).forEach((r: any) => {
+      const id = r.ingredient_id;
+      if (!id) return;
+      usageByIng[id] = (usageByIng[id] || 0) + 1;
+    });
 
     const ingGroups: Record<string, { ids: string[]; survivor?: string }> = {};
     (ingredients || []).forEach(row => {
@@ -83,11 +86,14 @@ export async function POST(req: NextRequest) {
 
     const { data: riByRecipe, error: riRecErr } = await supabaseAdmin
       .from('recipe_ingredients')
-      .select('recipe_id, count:recipe_id(count)')
-      .group('recipe_id');
+      .select('recipe_id');
     if (riRecErr) throw riRecErr;
     const usageByRecipe: Record<string, number> = {};
-    (riByRecipe || []).forEach((r: any) => (usageByRecipe[r.recipe_id] = Number(r.count || 0)));
+    (riByRecipe || []).forEach((r: any) => {
+      const id = r.recipe_id;
+      if (!id) return;
+      usageByRecipe[id] = (usageByRecipe[id] || 0) + 1;
+    });
 
     const recGroups: Record<string, { ids: string[]; survivor?: string }> = {};
     (recipes || []).forEach(row => {
