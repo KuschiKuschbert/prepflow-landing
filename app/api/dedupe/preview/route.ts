@@ -71,3 +71,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: e?.message || String(e) }, { status: 500 });
   }
 }
+
+// Convenience: allow GET in browser to view the preview JSON directly
+export async function GET(req: NextRequest) {
+  return POST(req);
+}
