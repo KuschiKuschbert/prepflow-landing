@@ -5,6 +5,8 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get('date');
   const type = searchParams.get('type');
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
 
   try {
     if (!supabaseAdmin) {
@@ -14,9 +16,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Build base query with filters
     let query = supabaseAdmin
       .from('temperature_logs')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('log_date', { ascending: false })
       .order('log_time', { ascending: false });
 
@@ -28,7 +31,12 @@ export async function GET(request: NextRequest) {
       query = query.eq('temperature_type', type);
     }
 
-    const { data, error } = await query;
+    // Apply pagination
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    query = query.range(from, to);
+
+    const { data, error, count } = await query;
 
     if (error) {
       console.error('Error fetching temperature logs:', error);
@@ -38,7 +46,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true, data: data || [] });
+    const total = count || 0;
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        items: data || [],
+        total,
+        page,
+        pageSize,
+        totalPages,
+      },
+    });
   } catch (error) {
     console.error('Server error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });

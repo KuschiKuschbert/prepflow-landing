@@ -1,6 +1,7 @@
 'use client';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useCallback, useEffect, useState } from 'react';
 import { TemperatureEquipment, TemperatureLog } from './types';
@@ -33,10 +34,16 @@ function TemperatureLogsPageContent() {
   };
 
   const [logs, setLogs] = useState<TemperatureLog[]>([]);
-  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
-  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton showing
-  const [isInitialLoad, setIsInitialLoad] = useState(false); // Start with false to prevent skeleton flash
+  // Only fetch allLogs when analytics tab is active - lazy load for performance
+  const [allLogs, setAllLogs] = useState<TemperatureLog[]>(
+    () => getCachedData<TemperatureLog[]>('temperature_all_logs') || [],
+  );
+  // Initialize with cached equipment for instant display
+  const [equipment, setEquipment] = useState<TemperatureEquipment[]>(
+    () => getCachedData<TemperatureEquipment[]>('temperature_equipment') || [],
+  );
+  const [loading, setLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(false);
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
   const [quickTempLoading, setQuickTempLoading] = useState<{ [key: string]: boolean }>({});
   const [selectedDate, setSelectedDate] = useState('');
@@ -81,68 +88,44 @@ function TemperatureLogsPageContent() {
     { value: 'storage', label: 'Storage', icon: '📦' },
   ];
 
+  // fetchLogs is now handled by useTemperatureLogsQuery hook
+  // Keep this for fallback date switching logic only
   const fetchLogs = useCallback(async () => {
-    try {
-      let url = '/api/temperature-logs';
-      const params = new URLSearchParams();
-      if (selectedDate) params.append('date', selectedDate);
-      if (selectedType !== 'all') params.append('type', selectedType);
-      if (params.toString()) url += `?${params.toString()}`;
+    // This is handled by useTemperatureLogsQuery - no need to duplicate
+    // Only kept for potential date fallback logic if needed
+  }, []);
 
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.success) {
-        // If no data for selected date, automatically switch to most recent date with data
-        if (data.data.length === 0 && allLogs.length > 0) {
-          const datesWithLogs = [...new Set(allLogs.map(log => log.log_date))].sort().reverse();
-          if (datesWithLogs.length > 0) {
-            const mostRecentDate = datesWithLogs[0];
-            console.log(`No data for ${selectedDate}, switching to ${mostRecentDate}`);
-            setSelectedDate(mostRecentDate);
-            // Fetch logs for the most recent date
-            const fallbackUrl = `/api/temperature-logs?date=${mostRecentDate}${selectedType !== 'all' ? `&type=${selectedType}` : ''}`;
-            const fallbackResponse = await fetch(fallbackUrl);
-            const fallbackData = await fallbackResponse.json();
-            if (fallbackData.success) {
-              setLogs(fallbackData.data);
-            }
-            return;
-          }
-        }
-        setLogs(data.data);
-      }
-    } catch (error) {
-      console.error('fetchLogs - Error:', error);
-    }
-  }, [selectedDate, selectedType, allLogs, setLogs, setSelectedDate]);
-
-  const fetchAllLogs = useCallback(async () => {
+  // Only fetch all logs when needed (analytics tab) - use pagination if needed
+  const fetchAllLogs = useCallback(async (limit?: number) => {
     try {
-      const response = await fetch('/api/temperature-logs');
+      // Fetch with reasonable limit for analytics (last 1000 logs should be enough)
+      const limitParam = limit ? `&pageSize=${limit}` : '';
+      const response = await fetch(`/api/temperature-logs?page=1${limitParam}`);
       const data = await response.json();
-      console.log('fetchAllLogs - API response:', data);
-      if (data.success && data.data) {
-        console.log('fetchAllLogs - Setting allLogs:', data.data.length, 'logs');
-        setAllLogs(data.data);
+      if (data.success && data.data?.items) {
+        const logs = data.data.items;
+        setAllLogs(logs);
+        // Cache for analytics tab
+        cacheData('temperature_all_logs', logs);
       }
     } catch (error) {
       console.error('fetchAllLogs - Error:', error);
     }
-  }, [setAllLogs]);
+  }, []);
 
   const fetchEquipment = useCallback(async () => {
     try {
       const response = await fetch('/api/temperature-equipment');
       const data = await response.json();
-      console.log('fetchEquipment - API response:', data);
-      if (data.success) {
-        console.log('fetchEquipment - Setting equipment:', data.data.length, 'equipment');
+      if (data.success && data.data) {
         setEquipment(data.data);
+        // Cache equipment for instant display on next visit
+        cacheData('temperature_equipment', data.data);
       }
     } catch (error) {
       console.error('fetchEquipment - Error:', error);
     }
-  }, [setEquipment]);
+  }, []);
 
   useEffect(() => {
     // Initialize date/time values on client side to prevent hydration mismatch
@@ -168,14 +151,16 @@ function TemperatureLogsPageContent() {
   }, [allLogs, isInitialLoad]);
 
   useEffect(() => {
+    // Prefetch equipment API
+    prefetchApis(['/api/temperature-equipment']);
+
     const loadData = async () => {
       try {
         setLoading(true);
-
-        // Load all data in parallel for better performance
-        await Promise.all([fetchLogs(), fetchEquipment(), fetchAllLogs()]);
-
-        // No artificial delay needed
+        // Only load essential data - equipment and paginated logs
+        // Don't load allLogs unless analytics tab is active
+        await Promise.all([fetchEquipment()]);
+        // fetchLogs is handled by useTemperatureLogsQuery hook
       } catch (error) {
         console.error('Error loading temperature data:', error);
       } finally {
@@ -183,7 +168,17 @@ function TemperatureLogsPageContent() {
       }
     };
     loadData();
-  }, [fetchLogs, fetchEquipment, fetchAllLogs]);
+  }, [fetchEquipment]);
+
+  // Lazy load allLogs only when analytics tab becomes active
+  useEffect(() => {
+    if (activeTab === 'analytics' && allLogs.length === 0) {
+      // Fetch limited logs for analytics (last 1000 should be enough)
+      fetchAllLogs(1000).catch(() => {
+        // Silent fail - analytics will show empty state
+      });
+    }
+  }, [activeTab, allLogs.length, fetchAllLogs]);
 
   // Watch for changes in selectedDate or selectedType and refetch logs
   useEffect(() => {
@@ -218,8 +213,11 @@ function TemperatureLogsPageContent() {
           logged_by: '',
         });
         setShowAddLog(false);
-        fetchLogs();
-        fetchAllLogs();
+        // Refresh logs - query will refetch automatically via React Query
+        // Only refresh allLogs if analytics tab is active
+        if (activeTab === 'analytics') {
+          fetchAllLogs(1000).catch(() => {});
+        }
       }
     } catch (error) {
       // Handle add log error gracefully
@@ -267,8 +265,11 @@ function TemperatureLogsPageContent() {
 
       const data = await response.json();
       if (data.success) {
-        fetchLogs();
-        fetchAllLogs();
+        // Refresh logs - query will refetch automatically via React Query
+        // Only refresh allLogs if analytics tab is active
+        if (activeTab === 'analytics') {
+          fetchAllLogs(1000).catch(() => {});
+        }
       }
     } catch (error) {
       // Handle logging error gracefully
