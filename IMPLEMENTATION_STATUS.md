@@ -12,6 +12,7 @@
 - [x] **Sample Data** - 300+ realistic kitchen ingredients ready
 - [x] **Environment Configuration** - All API keys and settings configured
 - [x] **Implementation Guide** - Integrated into AGENTS.md for consistency
+- [x] **Self Reset (My Data)** - `POST /api/db/reset-self` deletes only current user's data with dry-run and reseed; UI button and analytics added to `/webapp/setup`.
 
 ### **🔄 In Progress - New Features Implementation**
 
