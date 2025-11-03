@@ -14,6 +14,7 @@ import RecentActivity from './components/RecentActivity';
 interface DashboardStats {
   totalIngredients: number;
   totalRecipes: number;
+  totalMenuDishes: number; // retained for component compatibility (always 0)
   averageDishPrice: number;
 }
 
@@ -48,6 +49,7 @@ function WebAppDashboardContent() {
   const [stats, setStats] = useState<DashboardStats>({
     totalIngredients: 0,
     totalRecipes: 0,
+    totalMenuDishes: 0,
     averageDishPrice: 0,
   });
   const [loading, setLoading] = useState(false); // Completely disabled to prevent skeleton flashes
@@ -93,6 +95,7 @@ function WebAppDashboardContent() {
         setStats({
           totalIngredients: ingredientsCount || 0,
           totalRecipes: recipesCount || 0,
+          totalMenuDishes: 0,
           averageDishPrice: averagePrice,
         });
       } catch (error) {
