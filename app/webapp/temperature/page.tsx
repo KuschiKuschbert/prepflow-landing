@@ -232,8 +232,11 @@ function TemperatureLogsPageContent() {
 
       const data = await response.json();
       if (data.success) {
-        fetchLogs();
-        fetchAllLogs();
+        // Refresh logs - query will refetch automatically via React Query
+        // Only refresh allLogs if analytics tab is active
+        if (activeTab === 'analytics') {
+          fetchAllLogs(1000).catch(() => {});
+        }
       }
     } catch (error) {
       // Handle delete error gracefully
