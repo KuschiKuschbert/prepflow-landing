@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const recipeId = params?.id;
+    const { id } = await context.params;
+    const recipeId = id;
     if (!recipeId) {
       return NextResponse.json({ error: 'Missing recipe id' }, { status: 400 });
     }
