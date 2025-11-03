@@ -1,48 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-import { CANONICAL_RECIPES } from '@/lib/seed/recipes';
-import { generateDeterministicId } from '@/lib/seed/helpers';
 
 export async function GET(request: NextRequest) {
   try {
-    const cookieDemo = request.cookies.get('pf_demo')?.value === '1';
-    const demoMode =
-      cookieDemo || process.env.NEXT_PUBLIC_DEMO_MODE === '1' || process.env.DEMO_MODE === '1';
-
-    if (demoMode) {
-      const { searchParams } = new URL(request.url);
-      const page = parseInt(searchParams.get('page') || '1');
-      const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
-      const start = (page - 1) * pageSize;
-      const end = start + pageSize;
-
-      const seen = new Set<string>();
-      const mapped = CANONICAL_RECIPES.filter(r => {
-        const k = r.name.toLowerCase();
-        if (seen.has(k)) return false;
-        seen.add(k);
-        return true;
-      }).map(r => ({
-        id: generateDeterministicId('recipe', r.key),
-        name: r.name,
-        description: r.description,
-        yield: r.yield,
-        yield_unit: r.yieldUnit,
-        instructions: r.instructions,
-        // Provide a stable example selling price for demo
-        selling_price: r.sellingPrice ?? null,
-        total_cost: null,
-        cost_per_serving: null,
-      }));
-      const slice = mapped.slice(start, end);
-      return NextResponse.json({
-        success: true,
-        recipes: slice,
-        count: mapped.length,
-        page,
-        pageSize,
-      });
-    }
+    // Demo mode disabled in core endpoint: always fetch from DB
 
     if (!supabaseAdmin) {
       return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });

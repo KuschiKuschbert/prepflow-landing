@@ -15,10 +15,10 @@ export async function POST(req: NextRequest) {
 
     // Optional: only allow in non-production to be safe
     if (process.env.NODE_ENV === 'production') {
-      return NextResponse.json(
-        { error: 'Dedupe preview is disabled in production' },
-        { status: 403 },
-      );
+      const adminKey = req.headers.get('x-admin-key');
+      if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
+        return NextResponse.json({ error: 'Admin key required' }, { status: 403 });
+      }
     }
 
     const { data: ingredients, error: ingErr } = await supabaseAdmin
