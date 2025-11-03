@@ -1,6 +1,7 @@
 'use client';
 
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import AutosaveGlobalIndicator from './AutosaveGlobalIndicator';
 import { useTranslation } from '@/lib/useTranslation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -134,6 +135,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                 className="h-6 w-6"
               />
               <span className="text-lg font-semibold text-white">PrepFlow</span>
+              {/* Global Autosave Status Indicator */}
+              <AutosaveGlobalIndicator />
             </Link>
           </div>
 
