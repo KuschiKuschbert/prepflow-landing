@@ -1191,3 +1191,9 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 ---
 
 **Remember:** PrepFlow is a high-converting landing page that needs to balance technical excellence with conversion optimization. Every change should be measured and optimized for maximum impact on both user experience and business results.
+
+## Data & Schema Standards
+
+- Canonical ingredient field name: `ingredient_name`.
+- Historical references to `ingredients.name` may exist; when reading, alias or normalize to `ingredient_name`.
+- Prefer the server endpoint `GET /api/recipes/[id]/ingredients` for normalized joins.

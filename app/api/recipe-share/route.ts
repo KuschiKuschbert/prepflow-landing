@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
           notes,
           ingredients (
             id,
+            ingredient_name,
             name,
             unit,
             category
@@ -87,7 +88,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate PDF content (simplified for now)
-    const pdfContent = generateRecipePDF(recipe);
+    // Normalize ingredient_name for PDF/content
+    const normalized = {
+      ...recipe,
+      recipe_ingredients: (recipe as any).recipe_ingredients.map((ri: any) => ({
+        ...ri,
+        ingredients: {
+          ...ri.ingredients,
+          ingredient_name: ri.ingredients?.ingredient_name || ri.ingredients?.name,
+        },
+      })),
+    } as any;
+
+    const pdfContent = generateRecipePDF(normalized);
 
     return NextResponse.json({
       success: true,
