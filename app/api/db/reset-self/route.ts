@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
   const wipeAll = body?.all === true;
   const reseed = false; // reseed disabled by consolidation plan
 
+  console.log('Reset request:', { userId, wipeAll, dryRun, hasSession: !!session?.user });
+
   if (!wipeAll && !userId) {
     return NextResponse.json(
       { error: 'Missing userId', message: 'userId is required in body' },
@@ -50,7 +52,9 @@ export async function POST(request: NextRequest) {
   // If wiping everything, delegate to centralized cleaner (FK-safe order across domain tables)
   if (!dryRun && wipeAll) {
     try {
+      console.log('🧹 Starting global wipe via cleanExistingData...');
       const cleaned = await cleanExistingData(supabase);
+      console.log(`✅ Global wipe completed: ${cleaned} tables cleaned`);
       const payload: DeleteSummary = {
         dryRun: false,
         reseeded: false,
@@ -58,6 +62,7 @@ export async function POST(request: NextRequest) {
       };
       return NextResponse.json({ success: true, ...payload });
     } catch (e: any) {
+      console.error('❌ Global reset failed:', e);
       return NextResponse.json(
         { error: 'Global reset failed', message: e?.message || 'Unknown error' },
         { status: 500 },
