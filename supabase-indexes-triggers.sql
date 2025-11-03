@@ -1,3 +1,18 @@
+-- Uniqueness for ingredients: case-insensitive name + supplier, brand, pack_size, unit, cost_per_unit
+create unique index if not exists ingredients_unique_composite
+  on public.ingredients (
+    lower(ingredient_name),
+    coalesce(supplier, ''),
+    coalesce(brand, ''),
+    coalesce(pack_size, ''),
+    coalesce(unit, ''),
+    coalesce(cost_per_unit, 0)
+  );
+
+-- Uniqueness for recipes by case-insensitive name
+create unique index if not exists recipes_unique_name
+  on public.recipes (lower(name));
+
 -- Indexes and Triggers for PrepFlow Database
 
 -- Create indexes for better performance

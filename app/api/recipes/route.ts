@@ -16,13 +16,21 @@ export async function GET(request: NextRequest) {
       const start = (page - 1) * pageSize;
       const end = start + pageSize;
 
-      const mapped = CANONICAL_RECIPES.map(r => ({
+      const seen = new Set<string>();
+      const mapped = CANONICAL_RECIPES.filter(r => {
+        const k = r.name.toLowerCase();
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      }).map(r => ({
         id: generateDeterministicId('recipe', r.key),
         name: r.name,
         description: r.description,
         yield: r.yield,
         yield_unit: r.yieldUnit,
         instructions: r.instructions,
+        // Provide a stable example selling price for demo
+        selling_price: r.sellingPrice ?? null,
         total_cost: null,
         cost_per_serving: null,
       }));

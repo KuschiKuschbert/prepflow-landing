@@ -14,7 +14,6 @@ import RecentActivity from './components/RecentActivity';
 interface DashboardStats {
   totalIngredients: number;
   totalRecipes: number;
-  totalMenuDishes: number;
   averageDishPrice: number;
 }
 
@@ -49,7 +48,6 @@ function WebAppDashboardContent() {
   const [stats, setStats] = useState<DashboardStats>({
     totalIngredients: 0,
     totalRecipes: 0,
-    totalMenuDishes: 0,
     averageDishPrice: 0,
   });
   const [loading, setLoading] = useState(false); // Completely disabled to prevent skeleton flashes
@@ -73,7 +71,7 @@ function WebAppDashboardContent() {
           setStatsError(`Failed to load ingredients: ${ingredientsError.message}`);
         }
 
-        // Fetch recipes count
+        // Fetch recipes count and selling prices
         const { count: recipesCount, error: recipesError } = await supabase
           .from('recipes')
           .select('*', { count: 'exact', head: true });
@@ -85,34 +83,23 @@ function WebAppDashboardContent() {
           );
         }
 
-        // Fetch menu dishes count and average price
-        const { data: menuDishes, error: menuDishesError } = await supabase
-          .from('menu_dishes')
-          .select('selling_price');
-
-        if (menuDishesError) {
-          console.error('Error fetching menu dishes:', menuDishesError);
-          setStatsError(
-            prev =>
-              `${prev ? prev + ' ' : ''}Failed to load menu dishes: ${menuDishesError.message}`,
-          );
-        }
-
-        const totalDishes = menuDishes?.length || 0;
-        const averagePrice =
-          totalDishes > 0 && menuDishes
-            ? menuDishes.reduce((sum, dish) => sum + (dish.selling_price || 0), 0) / totalDishes
-            : 0;
+        // Average dish price from recipes' selling_price (exclude null/0)
+        const { data: recipePrices } = await supabase.from('recipes').select('selling_price');
+        const valid = (recipePrices || [])
+          .map(r => Number(r.selling_price || 0))
+          .filter(v => v > 0);
+        const averagePrice = valid.length > 0 ? valid.reduce((a, b) => a + b, 0) / valid.length : 0;
 
         setStats({
           totalIngredients: ingredientsCount || 0,
           totalRecipes: recipesCount || 0,
-          totalMenuDishes: totalDishes,
           averageDishPrice: averagePrice,
         });
       } catch (error) {
         console.error('Unexpected error fetching dashboard stats:', error);
-        setStatsError(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        setStatsError(
+          `Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        );
       } finally {
         // Completely disabled loading state to prevent skeleton flashes
         // setLoading(false);
@@ -178,12 +165,7 @@ function WebAppDashboardContent() {
         {statsError && (
           <div className="mb-6 rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3 text-red-400">
             <div className="flex items-center gap-2">
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -195,7 +177,8 @@ function WebAppDashboardContent() {
             </div>
             <p className="mt-1 text-sm">{statsError}</p>
             <p className="mt-2 text-xs text-red-400/70">
-              Check browser console for detailed error messages. This may be due to database permissions or table access issues.
+              Check browser console for detailed error messages. This may be due to database
+              permissions or table access issues.
             </p>
           </div>
         )}

@@ -1,0 +1,73 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
+
+/**
+ * Dev-only endpoint to preview duplicate ingredients and recipes.
+ * Groups:
+ *  - Ingredients: lower(name), supplier, brand, pack_size, unit, cost_per_unit
+ *  - Recipes: lower(name)
+ */
+export async function POST(req: NextRequest) {
+  try {
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Database not available' }, { status: 500 });
+    }
+
+    // Optional: only allow in non-production to be safe
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        { error: 'Dedupe preview is disabled in production' },
+        { status: 403 },
+      );
+    }
+
+    const { data: ingredients, error: ingErr } = await supabaseAdmin
+      .from('ingredients')
+      .select('id, ingredient_name, supplier, brand, pack_size, unit, cost_per_unit, updated_at');
+    if (ingErr) throw ingErr;
+
+    const ingredientGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
+    (ingredients || []).forEach(row => {
+      const key = [
+        String(row.ingredient_name || '')
+          .toLowerCase()
+          .trim(),
+        row.supplier || '',
+        row.brand || '',
+        row.pack_size || '',
+        row.unit || '',
+        row.cost_per_unit ?? '',
+      ].join('|');
+      if (!ingredientGroups[key]) ingredientGroups[key] = { key, ids: [], sample: row };
+      ingredientGroups[key].ids.push(row.id);
+    });
+    const ingredientDuplicates = Object.values(ingredientGroups)
+      .filter(g => g.ids.length > 1)
+      .map(g => ({ key: g.key, count: g.ids.length, ids: g.ids, sample: g.sample }));
+
+    const { data: recipes, error: recErr } = await supabaseAdmin
+      .from('recipes')
+      .select('id, name, updated_at');
+    if (recErr) throw recErr;
+
+    const recipeGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
+    (recipes || []).forEach(row => {
+      const key = String(row.name || '')
+        .toLowerCase()
+        .trim();
+      if (!recipeGroups[key]) recipeGroups[key] = { key, ids: [], sample: row };
+      recipeGroups[key].ids.push(row.id);
+    });
+    const recipeDuplicates = Object.values(recipeGroups)
+      .filter(g => g.ids.length > 1)
+      .map(g => ({ key: g.key, count: g.ids.length, ids: g.ids, sample: g.sample }));
+
+    return NextResponse.json({
+      success: true,
+      ingredients: { duplicates: ingredientDuplicates, total: ingredients?.length || 0 },
+      recipes: { duplicates: recipeDuplicates, total: recipes?.length || 0 },
+    });
+  } catch (e: any) {
+    return NextResponse.json({ error: e?.message || String(e) }, { status: 500 });
+  }
+}

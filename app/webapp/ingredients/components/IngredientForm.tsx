@@ -2,7 +2,6 @@
 
 import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
-import { useTranslation } from '@/lib/useTranslation';
 import { useState, useEffect } from 'react';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
@@ -34,7 +33,6 @@ interface Ingredient {
 interface Supplier {
   id: string;
   name: string;
-  created_at: string;
 }
 
 interface IngredientFormProps {
@@ -54,8 +52,6 @@ export default function IngredientForm({
   onCancel,
   loading = false,
 }: IngredientFormProps) {
-  const { t } = useTranslation();
-
   const [formData, setFormData] = useState<Partial<Ingredient>>({
     ingredient_name: '',
     brand: '',
@@ -126,7 +122,6 @@ export default function IngredientForm({
     setErrors({});
   }, [ingredient]);
 
-  // Autosave integration - only enable for valid entities or new ingredients with required fields
   const entityId = deriveAutosaveId('ingredients', ingredient?.id, [
     formData.ingredient_name || '',
     formData.supplier || '',
@@ -234,6 +229,22 @@ export default function IngredientForm({
     if (!validateForm()) return;
 
     try {
+      // Client-side duplicate check
+      const qs = new URLSearchParams({
+        ingredient_name: (formData.ingredient_name || '').toString().toLowerCase(),
+        supplier: (formData.supplier || '').toString(),
+        brand: (formData.brand || '').toString(),
+        pack_size: (formData.pack_size || '').toString(),
+        unit: (formData.unit || '').toString(),
+        cost_per_unit: String(formData.cost_per_unit || 0),
+      }).toString();
+      const existsRes = await fetch(`/api/ingredients/exists?${qs}`, { cache: 'no-store' });
+      const existsJson = await existsRes.json();
+      if (existsJson?.exists) {
+        setErrors(prev => ({ ...prev, ingredient_name: 'This ingredient already exists' }));
+        return;
+      }
+
       await onSave(formData);
     } catch (error) {
       console.error('Error saving ingredient:', error);
@@ -257,7 +268,6 @@ export default function IngredientForm({
           handleInputChange={handleInputChange}
         />
 
-        {/* Actions */}
         <div className="flex gap-4 pt-6">
           <button
             type="submit"
