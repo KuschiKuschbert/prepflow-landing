@@ -35,9 +35,15 @@ export async function POST(request: NextRequest) {
 
   // No password required; user must be authenticated via session
 
-  // Collect IDs for child tables dependent on parent scoped by user_id
+  // Collect IDs for child tables dependent on parent scoped by user_id (skip if column missing)
   const getIds = async (table: string, idColumn: string) => {
-    const { data, error } = await supabase.from(table).select(`${idColumn}`).eq('user_id', userId);
+    const { data, error } = await supabase
+      .from(table)
+      .select(`${idColumn}`, { head: false })
+      .eq('user_id', userId);
+    if (error && /column .*user_id.* does not exist/i.test(error.message)) {
+      return [] as string[];
+    }
     if (error) return [] as string[];
     return (data || []).map((r: any) => r[idColumn]) as string[];
   };
@@ -102,14 +108,25 @@ export async function POST(request: NextRequest) {
     // Parent tables and other user-owned tables
     const deleteByUser = async (table: string) => {
       if (dryRun) {
-        const { count } = await supabase
+        const { count, error } = await supabase
           .from(table)
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId);
+        if (error && /column .*user_id.* does not exist/i.test(error.message)) {
+          // Column missing: skip table
+          deletedCountsByTable[table] = 0;
+          return;
+        }
+        if (error) throw new Error(error.message);
         deletedCountsByTable[table] = count || 0;
         return;
       }
       const { error } = await supabase.from(table).delete().eq('user_id', userId);
+      if (error && /column .*user_id.* does not exist/i.test(error.message)) {
+        // Column missing: skip table safely
+        deletedCountsByTable[table] = 0;
+        return;
+      }
       if (error) throw new Error(error.message);
       // Count unknown after delete; set to 0 to indicate success without count
       deletedCountsByTable[table] = deletedCountsByTable[table] || 0;
