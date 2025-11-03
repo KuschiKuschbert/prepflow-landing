@@ -1,5 +1,11 @@
-import { NextRequest } from 'next/server';
-import * as route from '@/app/api/recipes/[id]/ingredients/route';
+jest.mock('next/server', () => {
+  return {
+    NextRequest: class {},
+    NextResponse: {
+      json: (body: any) => ({ json: async () => body }),
+    },
+  };
+});
 
 jest.mock('@/lib/supabase', () => {
   const rows = [
@@ -27,10 +33,16 @@ jest.mock('@/lib/supabase', () => {
 
 describe('GET /api/recipes/[id]/ingredients (no demo)', () => {
   it('returns items with normalized ingredient_name and backfilled nested join', async () => {
+    // Polyfill minimal Request to satisfy Next internals during import
+    (global as any).Request = class {};
+    (global as any).Response = class {
+      static json(body: any, init?: any) {
+        return { body, init };
+      }
+    };
+    const route = await import('@/app/api/recipes/[id]/ingredients/route');
     // Arrange: mock supabaseAdmin calls inside the route via spies
-    const req = new NextRequest('http://localhost/api/recipes/r1/ingredients', {
-      headers: { cookie: 'pf_demo=1' }, // should be ignored
-    } as any);
+    const req: any = {};
 
     // Mock first query to recipe_ingredients
     const supabase = require('@/lib/supabase');
