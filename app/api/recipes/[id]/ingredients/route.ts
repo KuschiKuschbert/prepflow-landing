@@ -81,9 +81,43 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       );
     }
 
-    const items = (data || []).map((row: any) => {
+    // Diagnostics: if no rows, log to help detect recipe_id mismatches
+    if (!data || data.length === 0) {
+      console.warn(
+        '[recipes/:id/ingredients] No recipe_ingredients found for recipe_id=',
+        recipeId,
+      );
+      return NextResponse.json({ items: [] });
+    }
+
+    // Server-side fallback: if nested ingredients join is missing/null for some rows,
+    // do a bulk lookup from ingredients and merge to ensure uniform shape
+    let rows: any[] = data;
+    const missingNested = rows.some(r => !r.ingredients);
+    if (missingNested) {
+      const uniqueIds = Array.from(
+        new Set(rows.map(r => r.ingredient_id).filter((v: any) => Boolean(v))),
+      );
+      if (uniqueIds.length > 0) {
+        const { data: ingRows, error: ingError } = await supabaseAdmin
+          .from('ingredients')
+          .select(
+            'id, ingredient_name, name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage, category, supplier_name',
+          )
+          .in('id', uniqueIds);
+        if (!ingError && ingRows) {
+          const byId: Record<string, any> = {};
+          ingRows.forEach(ir => {
+            byId[ir.id] = ir;
+          });
+          rows = rows.map(r => ({ ...r, ingredients: r.ingredients || byId[r.ingredient_id] }));
+        }
+      }
+    }
+
+    const items = rows.map((row: any) => {
       const ing = row.ingredients || {};
-      const normalized = {
+      return {
         id: row.id,
         recipe_id: row.recipe_id,
         ingredient_id: row.ingredient_id,
@@ -91,7 +125,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         unit: row.unit,
         ingredients: {
           id: ing.id,
-          ingredient_name: ing.ingredient_name || ing.name, // normalize field
+          // Normalize name field so clients can rely on ingredient_name
+          ingredient_name: ing.ingredient_name || ing.name,
           cost_per_unit: ing.cost_per_unit,
           unit: ing.unit,
           trim_peel_waste_percentage: ing.trim_peel_waste_percentage,
@@ -100,7 +135,6 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
           supplier_name: ing.supplier_name,
         },
       };
-      return normalized;
     });
 
     return NextResponse.json({ items });
