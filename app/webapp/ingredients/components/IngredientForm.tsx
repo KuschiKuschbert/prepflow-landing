@@ -6,6 +6,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useState, useEffect } from 'react';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { deriveAutosaveId } from '@/lib/autosave-id';
 import { IngredientFormFields } from './IngredientFormFields';
 
 interface Ingredient {
@@ -88,8 +89,10 @@ export default function IngredientForm({
         pack_price: ingredient.pack_price || 0,
         unit: ingredient.unit || 'GM',
         cost_per_unit: ingredient.cost_per_unit || 0,
-        cost_per_unit_as_purchased: ingredient.cost_per_unit_as_purchased || ingredient.cost_per_unit || 0,
-        cost_per_unit_incl_trim: ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0,
+        cost_per_unit_as_purchased:
+          ingredient.cost_per_unit_as_purchased || ingredient.cost_per_unit || 0,
+        cost_per_unit_incl_trim:
+          ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0,
         trim_peel_waste_percentage: ingredient.trim_peel_waste_percentage || 0,
         yield_percentage: ingredient.yield_percentage || 100,
         supplier: ingredient.supplier || '',
@@ -124,10 +127,14 @@ export default function IngredientForm({
   }, [ingredient]);
 
   // Autosave integration - only enable for valid entities or new ingredients with required fields
-  const entityId = ingredient?.id || 'new';
-  const canAutosave =
-    entityId !== 'new' ||
-    Boolean(formData.ingredient_name && formData.pack_price && formData.pack_size);
+  const entityId = deriveAutosaveId('ingredients', ingredient?.id, [
+    formData.ingredient_name || '',
+    formData.supplier || '',
+    formData.product_code || '',
+  ]);
+  const canAutosave = Boolean(
+    formData.ingredient_name && formData.pack_price && formData.pack_size,
+  );
 
   const {
     status,
