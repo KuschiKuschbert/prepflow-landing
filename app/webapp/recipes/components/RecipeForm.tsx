@@ -56,6 +56,20 @@ export default function RecipeForm({
             onChange={e => onUpdateRecipe({ name: e.target.value })}
             className="w-full rounded-md border border-[#2a2a2a] px-3 py-2 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             placeholder="e.g., Chicken Stir-fry"
+            onBlur={async e => {
+              const name = e.target.value.trim().toLowerCase();
+              if (!name) return;
+              try {
+                const res = await fetch(`/api/recipes/exists?name=${encodeURIComponent(name)}`, {
+                  cache: 'no-store',
+                });
+                const json = await res.json();
+                if (json?.exists) {
+                  // Simple alert; the table also enforces uniqueness
+                  alert('A recipe with this name already exists.');
+                }
+              } catch {}
+            }}
           />
         </div>
         <div>
