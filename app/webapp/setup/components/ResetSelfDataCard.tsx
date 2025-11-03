@@ -55,6 +55,12 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       if (typeof window !== 'undefined') {
         (window as any).dataLayer.push({ event: 'reset_self_success', reseed });
       }
+      // Auto-close after short delay to confirm success visually
+      setTimeout(() => {
+        setOpen(false);
+        setConfirmText('');
+        setResult(null);
+      }, 1200);
     } catch (e: any) {
       setResult(e?.message || 'Error');
       if (typeof window !== 'undefined') {
