@@ -1,5 +1,6 @@
 'use client';
 
+import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
 import React from 'react';
 
@@ -66,6 +67,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                       key={item.href}
                       href={item.href}
                       onClick={onClose}
+                      onMouseEnter={() => prefetchRoute(item.href)}
                       className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[#2a2a2a]/50"
                     >
                       <span className="text-gray-400">{item.icon}</span>
@@ -75,7 +77,9 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                   ))}
                 </div>
               ) : (
-                <div className="py-8 text-center text-gray-400">No results found for &quot;{query}&quot;</div>
+                <div className="py-8 text-center text-gray-400">
+                  No results found for &quot;{query}&quot;
+                </div>
               )}
             </div>
           </div>

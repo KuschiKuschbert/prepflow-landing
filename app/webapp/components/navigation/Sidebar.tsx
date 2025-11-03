@@ -1,6 +1,6 @@
 'use client';
 
-import { prefetchRecipes } from '@/lib/cache/recipe-cache';
+import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
 import React, { RefObject } from 'react';
 
@@ -111,10 +111,8 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                     href={item.href}
                     onClick={onClose}
                     onMouseEnter={() => {
-                      // Prefetch recipes API when hovering over recipes link
-                      if (item.href === '/webapp/recipes') {
-                        prefetchRecipes();
-                      }
+                      // Prefetch API endpoints when hovering over any link
+                      prefetchRoute(item.href);
                     }}
                     className={cn(
                       'group',

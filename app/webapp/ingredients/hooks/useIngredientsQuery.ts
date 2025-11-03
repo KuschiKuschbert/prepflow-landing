@@ -1,5 +1,6 @@
 'use client';
 
+import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { useQuery } from '@tanstack/react-query';
 
 interface Ingredient {
@@ -33,6 +34,11 @@ interface IngredientsResponse {
 }
 
 export function useIngredientsQuery(page: number, pageSize: number) {
+  // Prefetch on first page
+  if (page === 1) {
+    prefetchApi('/api/ingredients?page=1&pageSize=20');
+  }
+
   return useQuery<IngredientsResponse, Error>({
     queryKey: ['ingredients', { page, pageSize }],
     queryFn: async () => {
@@ -41,8 +47,30 @@ export function useIngredientsQuery(page: number, pageSize: number) {
       });
       if (!res.ok) throw new Error('Failed to fetch ingredients');
       const json = await res.json();
-      return json.data;
+      const data = json.data;
+      // Cache first page for instant display
+      if (page === 1 && data?.items) {
+        cacheData('ingredients_page_1', data.items);
+      }
+      return data;
     },
     placeholderData: previousData => previousData,
+    // Use cached data as initial data if available
+    initialData:
+      page === 1
+        ? (() => {
+            const cached = getCachedData<any[]>('ingredients_page_1');
+            if (cached) {
+              return {
+                items: cached,
+                total: cached.length,
+                page: 1,
+                pageSize,
+                totalPages: 1,
+              } as IngredientsResponse;
+            }
+            return undefined;
+          })()
+        : undefined,
   });
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { useQuery } from '@tanstack/react-query';
 import { TemperatureLog } from '../types';
 
@@ -17,6 +18,13 @@ export function useTemperatureLogsQuery(
   page: number,
   pageSize: number,
 ) {
+  // Prefetch first page with default filters
+  if (page === 1 && !date && type === 'all') {
+    prefetchApi('/api/temperature-logs?page=1&pageSize=20');
+  }
+
+  const cacheKey = `temperature_logs_${date}_${type}_${page}`;
+
   return useQuery<TemperatureLogsResponse, Error>({
     queryKey: ['temperature-logs', { date, type, page, pageSize }],
     queryFn: async () => {
@@ -31,8 +39,30 @@ export function useTemperatureLogsQuery(
       });
       if (!res.ok) throw new Error('Failed to fetch temperature logs');
       const json = await res.json();
-      return json.data;
+      const data = json.data;
+      // Cache first page for instant display
+      if (page === 1 && data?.items) {
+        cacheData(cacheKey, data.items);
+      }
+      return data;
     },
     placeholderData: previousData => previousData,
+    // Use cached data as initial data if available
+    initialData:
+      page === 1
+        ? (() => {
+            const cached = getCachedData<TemperatureLog[]>(cacheKey);
+            if (cached) {
+              return {
+                items: cached,
+                total: cached.length,
+                page: 1,
+                pageSize,
+                totalPages: 1,
+              } as TemperatureLogsResponse;
+            }
+            return undefined;
+          })()
+        : undefined,
   });
 }

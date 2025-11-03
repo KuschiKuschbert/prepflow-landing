@@ -1,11 +1,12 @@
 'use client';
 
-import { supabase } from '@/lib/supabase';
-import { useEffect, useState } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
+import { supabase } from '@/lib/supabase';
+import { useTranslation } from '@/lib/useTranslation';
+import { useEffect, useState } from 'react';
 import DashboardStats from './components/DashboardStats';
 import QuickActions from './components/QuickActions';
 import RecentActivity from './components/RecentActivity';
@@ -44,18 +45,29 @@ interface TemperatureEquipment {
 
 function WebAppDashboardContent() {
   const { t } = useTranslation();
-  const [stats, setStats] = useState<DashboardStats>({
-    totalIngredients: 0,
-    totalRecipes: 0,
-    averageDishPrice: 0,
-  });
-  const [loading, setLoading] = useState(false); // Completely disabled to prevent skeleton flashes
+  // Initialize with cached data for instant display
+  const [stats, setStats] = useState<DashboardStats>(
+    () =>
+      getCachedData<DashboardStats>('dashboard_stats') || {
+        totalIngredients: 0,
+        totalRecipes: 0,
+        averageDishPrice: 0,
+      },
+  );
+  const [loading, setLoading] = useState(false);
   const [statsError, setStatsError] = useState<string | null>(null);
-  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
-  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
+  const [allLogs, setAllLogs] = useState<TemperatureLog[]>(
+    () => getCachedData<TemperatureLog[]>('dashboard_temperature_logs') || [],
+  );
+  const [equipment, setEquipment] = useState<TemperatureEquipment[]>(
+    () => getCachedData<TemperatureEquipment[]>('dashboard_temperature_equipment') || [],
+  );
 
   // Fetch dashboard data in parallel for better performance
   useEffect(() => {
+    // Prefetch dashboard APIs
+    prefetchApis(['/api/dashboard/stats']);
+
     const fetchDashboardData = async () => {
       setStatsError(null);
       try {
@@ -75,24 +87,30 @@ function WebAppDashboardContent() {
         if (!statsResponse.ok || !statsJson?.success) {
           setStatsError(statsJson?.error || 'Failed to load stats');
         } else {
-          setStats({
+          const newStats = {
             totalIngredients: statsJson.totalIngredients || 0,
             totalRecipes: statsJson.totalRecipes || 0,
             averageDishPrice: statsJson.averageDishPrice || 0,
-          });
+          };
+          setStats(newStats);
+          cacheData('dashboard_stats', newStats);
         }
 
         // Process temperature data
         if (logsResult.error) {
           console.error('Error fetching temperature logs:', logsResult.error);
         } else {
-          setAllLogs(logsResult.data || []);
+          const logs = logsResult.data || [];
+          setAllLogs(logs);
+          cacheData('dashboard_temperature_logs', logs);
         }
 
         if (equipmentResult.error) {
           console.error('Error fetching temperature equipment:', equipmentResult.error);
         } else {
-          setEquipment(equipmentResult.data || []);
+          const equip = equipmentResult.data || [];
+          setEquipment(equip);
+          cacheData('dashboard_temperature_equipment', equip);
         }
       } catch (error) {
         console.error('Unexpected error fetching dashboard data:', error);
