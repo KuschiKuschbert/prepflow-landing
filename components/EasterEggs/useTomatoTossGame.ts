@@ -41,7 +41,7 @@ export const useTomatoTossGame = () => {
   const startTimestampRef = useRef<number | null>(null);
   const lastSecondRef = useRef<number>(0);
   const sounds = useTomatoTossSounds();
-  const MAX_SPLATTERS = 50;
+  const MAX_SPLATTERS = 150;
   const GAME_DURATION = 20; // 20 seconds
 
   // Check for reduced motion preference
@@ -111,6 +111,9 @@ export const useTomatoTossGame = () => {
     };
   }, [sounds]);
 
+  // Easing function for aggressive, fast throws
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
   // Handle tomato throw
   const handleThrow = useCallback(
     (clientX: number, clientY: number, wallBounds: DOMRect) => {
@@ -142,13 +145,14 @@ export const useTomatoTossGame = () => {
 
       setTomatoes(prev => [...prev, newTomato]);
 
-      // Animate tomato
-      const duration = reducedMotion ? 0.2 : 0.4;
+      // Animate tomato (aggressive straight throw, 0.3s ease-out)
+      const duration = reducedMotion ? 0.2 : 0.3;
       const startTime = Date.now();
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / (duration * 1000), 1);
+        const linear = Math.min(elapsed / (duration * 1000), 1);
+        const progress = easeOutCubic(linear);
 
         setTomatoes(prev => prev.map(t => (t.id === tomatoId ? { ...t, progress } : t)));
 
@@ -158,22 +162,40 @@ export const useTomatoTossGame = () => {
           // Impact - create splatter
           sounds.playSplatSound();
 
-          const splatter: Splatter = {
+          // Aggressive splash: core splat + radial droplets
+          const now = Date.now();
+          const newSplatters: Splatter[] = [];
+
+          // Core splat
+          newSplatters.push({
             x: endX,
             y: endY,
-            rotation: Math.random() * 90 - 45, // -45 to 45 degrees
-            scale: Math.random() * 0.4 + 0.8, // 0.8 to 1.2
-            opacity: Math.random() * 0.3 + 0.7, // 0.7 to 1.0
-            id: `splatter-${Date.now()}-${Math.random()}`,
-          };
+            rotation: Math.random() * 20 - 10,
+            scale: 1.4,
+            opacity: 0.95,
+            id: `splatter-core-${now}-${Math.random()}`,
+          });
+
+          // Radial droplets
+          const dropletCount = 16;
+          for (let i = 0; i < dropletCount; i++) {
+            const angle = (i / dropletCount) * Math.PI * 2 + Math.random() * 0.3;
+            const distance = 20 + Math.random() * 40; // px
+            const dx = Math.cos(angle) * distance;
+            const dy = Math.sin(angle) * distance;
+            newSplatters.push({
+              x: endX + dx,
+              y: endY + dy,
+              rotation: Math.random() * 180 - 90,
+              scale: Math.random() * 0.5 + 0.4,
+              opacity: Math.random() * 0.4 + 0.5,
+              id: `splatter-drop-${now}-${i}-${Math.random()}`,
+            });
+          }
 
           setSplatters(prev => {
-            const updated = [...prev, splatter];
-            // Limit splatters to prevent memory issues
-            if (updated.length > MAX_SPLATTERS) {
-              return updated.slice(-MAX_SPLATTERS);
-            }
-            return updated;
+            const updated = [...prev, ...newSplatters];
+            return updated.length > MAX_SPLATTERS ? updated.slice(-MAX_SPLATTERS) : updated;
           });
 
           setThrows(prev => {

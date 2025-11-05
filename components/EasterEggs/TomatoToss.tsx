@@ -48,13 +48,10 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
     return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
   }, []);
 
-  // Auto-close after 20 seconds
+  // Auto-close after 20 seconds (immediate)
   useEffect(() => {
     if (gameFinished) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, 2000); // Give 2 seconds to see the finish message
-      return () => clearTimeout(timer);
+      onClose();
     }
   }, [gameFinished, onClose]);
 
@@ -102,18 +99,9 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
     endY: number;
     progress: number;
   }) => {
+    // Straight, aggressive path (no arc)
     const x = tomato.startX + (tomato.endX - tomato.startX) * tomato.progress;
-    // Arc trajectory: higher at midpoint
-    const arcHeight = 100;
-    const midpoint = 0.5;
-    const arcProgress =
-      tomato.progress < midpoint
-        ? tomato.progress / midpoint
-        : (1 - tomato.progress) / (1 - midpoint);
-    const y =
-      tomato.startY +
-      (tomato.endY - tomato.startY) * tomato.progress -
-      Math.sin(arcProgress * Math.PI) * arcHeight;
+    const y = tomato.startY + (tomato.endY - tomato.startY) * tomato.progress;
     return { x, y };
   };
 
@@ -195,20 +183,6 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
                     left: `${pos.x}px`,
                     top: `${pos.y}px`,
                     transform: 'translate(-50%, -50%)',
-                  }}
-                  animate={
-                    reducedMotion
-                      ? {}
-                      : {
-                          rotate: [0, 180, 360],
-                        }
-                  }
-                  transition={{
-                    rotate: {
-                      duration: 0.4,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    },
                   }}
                 >
                   🍅
