@@ -112,12 +112,6 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
       <div className="pointer-events-none fixed inset-0 z-30 bg-black/40 backdrop-blur-md" />
       {showConfetti && <Confetti />}
       <ArcadeMuteButton className="top-16" />
-      <GameScoreboard
-        sessionScore={throws}
-        globalScore={globalStats.tomatoes}
-        tipText="Aim fast — the wall won't wait!"
-        icon="🍅"
-      />
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0 }}

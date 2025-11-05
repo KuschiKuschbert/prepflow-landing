@@ -47,13 +47,6 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
     <>
       <WebAppBackground />
       <ArcadeMuteButton />
-      <GameScoreboard
-        sessionScore={caught}
-        globalScore={globalStats.dockets}
-        time={playTime}
-        tipText="Click the dockets to catch them!"
-        icon="🧾"
-      />
       <motion.div
         ref={containerRef}
         initial={{ opacity: 0 }}

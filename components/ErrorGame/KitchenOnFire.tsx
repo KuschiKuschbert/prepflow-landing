@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useKitchenFireGame } from './useKitchenFireGame';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import { GameScoreboard } from '@/components/Arcade/GameScoreboard';
 import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import { throwConfetti } from '@/hooks/useConfetti';
 
@@ -52,14 +51,7 @@ const KitchenOnFire: React.FC = () => {
     <>
       <WebAppBackground />
       <ArcadeMuteButton />
-      <GameScoreboard
-        sessionScore={extinguished ? 1 : 0}
-        flamesRemaining={flames}
-        time={playTime}
-        tipText={extinguished ? 'Fire out! Back to service ✅' : 'Click to extinguish flames'}
-        icon="🔥"
-        variant="flames"
-      />
+      {/* Score/Timer UI removed per request */}
       <main className="fixed inset-0 flex min-h-screen items-center justify-center p-6 text-white">
         <div className="flex max-w-2xl flex-col items-center text-center">
           <AnimatePresence mode="wait">
@@ -116,15 +108,7 @@ const KitchenOnFire: React.FC = () => {
                   ))}
                 </motion.div>
 
-                {/* Flames remaining counter */}
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="mb-6 text-2xl font-semibold text-[#29E7CD]"
-                >
-                  {flames} flame{flames !== 1 ? 's' : ''} remaining
-                </motion.p>
+                {/* Flames remaining counter removed per request */}
 
                 {/* Spray Water Button */}
                 <motion.div

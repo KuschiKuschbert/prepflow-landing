@@ -4,10 +4,10 @@
  * Hook for managing Tomato Toss game logic
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useTomatoTossSounds } from './useTomatoTossSounds';
-import { addStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { throwConfetti } from '@/hooks/useConfetti';
+import { addStat, STAT_KEYS } from '@/lib/arcadeStats';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTomatoTossSounds } from './useTomatoTossSounds';
 
 interface Splatter {
   x: number;
