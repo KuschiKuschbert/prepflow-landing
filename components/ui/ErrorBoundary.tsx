@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import KitchenOnFire from '@/components/ErrorGame/KitchenOnFire';
 
 interface Props {
   children: ReactNode;
@@ -45,40 +46,8 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      return (
-        <main className="mx-auto flex min-h-[70vh] max-w-3xl flex-col items-center justify-center p-6 text-white">
-          <h1 className="mb-4 text-4xl font-extrabold">Oops — Something Spilled</h1>
-          <p className="mb-6 text-center text-gray-300">
-            Things went sideways in the kitchen. Probably time for a quick cry in the walk-in. We'll
-            clean this up and get you back on the line.
-          </p>
-          <div className="flex gap-3">
-            <button
-              onClick={() => window.location.reload()}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-5 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
-            >
-              Wipe down & reload
-            </button>
-            <button
-              onClick={() => this.setState({ hasError: false, error: undefined })}
-              className="rounded-2xl border border-[#2a2a2a] px-5 py-3 font-semibold hover:bg-[#2a2a2a]/40"
-            >
-              Try again
-            </button>
-          </div>
-          <p className="mt-6 text-sm text-gray-500">
-            We've all been there. The walk-in is a judgment-free zone. 🍳
-          </p>
-          {process.env.NODE_ENV === 'development' && this.state.error && (
-            <details className="mt-6 w-full max-w-2xl rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
-              <summary className="cursor-pointer text-gray-400">Error Details (Dev Only)</summary>
-              <pre className="mt-2 overflow-auto text-xs text-red-400">
-                {this.state.error.stack}
-              </pre>
-            </details>
-          )}
-        </main>
-      );
+      // Use KitchenOnFire as default fallback
+      return <KitchenOnFire />;
     }
 
     return this.props.children;
