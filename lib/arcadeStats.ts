@@ -130,6 +130,20 @@ export const setSessionStat = (key: string, value: number): void => {
 };
 
 /**
+ * Clear all arcade stats from localStorage (called on logout)
+ */
+export const clearArcadeStats = (): void => {
+  if (typeof window === 'undefined') return;
+
+  Object.values(STAT_KEYS).forEach(key => {
+    localStorage.removeItem(key);
+  });
+
+  // Dispatch update event to refresh UI
+  window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+};
+
+/**
  * Export stat keys for use in components
  */
 export { STAT_KEYS };

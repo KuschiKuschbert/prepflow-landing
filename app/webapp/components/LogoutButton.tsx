@@ -3,6 +3,7 @@
 import React from 'react';
 import { signOut } from 'next-auth/react';
 import { clearAllDrafts } from '@/lib/autosave-storage';
+import { clearArcadeStats } from '@/lib/arcadeStats';
 import { useSession } from 'next-auth/react';
 
 export function LogoutButton() {
@@ -14,6 +15,9 @@ export function LogoutButton() {
   const handleLogout = async () => {
     // Clear all autosave drafts
     clearAllDrafts(userId);
+
+    // Clear arcade stats (reset scores on logout)
+    clearArcadeStats();
 
     // Clear NextAuth session
     await signOut({ redirect: false });
