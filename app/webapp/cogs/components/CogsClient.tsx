@@ -24,6 +24,7 @@ import { SuccessMessage } from '../components/SuccessMessage';
 
 // Types
 import { DishFormData } from '../types';
+import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 
 export default function CogsClient() {
   // Main COGS calculations hook
@@ -175,6 +176,18 @@ export default function CogsClient() {
     recipeExists: recipeExists ?? false,
     checkingRecipe,
   };
+
+  // Gate the arcade overlay while COGS data is loading
+  useEffect(() => {
+    if (loading) {
+      startLoadingGate('cogs');
+    } else {
+      stopLoadingGate('cogs');
+    }
+    return () => {
+      stopLoadingGate('cogs');
+    };
+  }, [loading]);
 
   if (loading) {
     return <PageSkeleton />;

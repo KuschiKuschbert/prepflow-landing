@@ -10,6 +10,7 @@ import { NotificationProvider } from '../../contexts/NotificationContext';
 import '../globals.css';
 import ModernNavigation from './components/ModernNavigation';
 import { DraftRecovery } from './components/DraftRecovery';
+import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -38,6 +39,9 @@ export default function WebAppLayout({
             <main className="bg-transparent">
               <ReactQueryProvider>{children}</ReactQueryProvider>
             </main>
+
+            {/* Arcade Loading Overlay */}
+            <CatchTheDocketOverlay />
           </div>
         </GlobalWarningProvider>
       </CountryProvider>
