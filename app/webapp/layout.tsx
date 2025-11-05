@@ -11,7 +11,7 @@ import '../globals.css';
 import ModernNavigation from './components/ModernNavigation';
 import { DraftRecovery } from './components/DraftRecovery';
 import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
-import { SessionTimeoutWarning } from './components/SessionTimeoutWarning';
+import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 
 const inter = Inter({ subsets: ['latin'] });
