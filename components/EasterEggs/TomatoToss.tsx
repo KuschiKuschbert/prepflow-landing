@@ -109,7 +109,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
     <>
       <WebAppBackground />
       {/* Blurred dark overlay to separate game from background */}
-      <div className="fixed inset-0 z-30 bg-black/40 backdrop-blur-md" />
+      <div className="pointer-events-none fixed inset-0 z-30 bg-black/40 backdrop-blur-md" />
       {showConfetti && <Confetti />}
       <ArcadeMuteButton className="top-16" />
       <GameScoreboard
