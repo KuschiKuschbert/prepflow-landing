@@ -1,6 +1,7 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { supabase } from '@/lib/supabase';
 import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
@@ -93,6 +94,19 @@ export default function IngredientsClient() {
     isLoading,
     error: queryError,
   } = useIngredientsQuery(page, pageSize);
+
+  // Gate the arcade overlay while initial data loads
+  useEffect(() => {
+    const active = loading || isLoading;
+    if (active) {
+      startLoadingGate('ingredients');
+    } else {
+      stopLoadingGate('ingredients');
+    }
+    return () => {
+      stopLoadingGate('ingredients');
+    };
+  }, [loading, isLoading]);
 
   useEffect(() => {
     if (ingredientsData?.items) {

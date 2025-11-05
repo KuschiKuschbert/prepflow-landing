@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // UI components
@@ -24,6 +24,7 @@ import { SuccessMessage } from './SuccessMessage';
 
 // Utils
 import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
+import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 
 export default function RecipesClient() {
   const router = useRouter();
@@ -117,6 +118,18 @@ export default function RecipesClient() {
   const handlePrint = () => {
     window.print();
   };
+
+  // Gate the arcade overlay while recipes are loading
+  useEffect(() => {
+    if (loading) {
+      startLoadingGate('recipes');
+    } else {
+      stopLoadingGate('recipes');
+    }
+    return () => {
+      stopLoadingGate('recipes');
+    };
+  }, [loading]);
 
   if (loading) {
     return <PageSkeleton />;
