@@ -11,6 +11,9 @@ import OptimizedImage from '../../../components/OptimizedImage';
 import { MobileNavigation } from '../../../components/ui/MobileNavigation';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
+import TomatoToss from '../../../components/EasterEggs/TomatoToss';
+import { AchievementsDropdown } from '../../../components/Arcade/AchievementsDropdown';
+import { useLogoInteractions } from '../../../hooks/useLogoInteractions';
 
 interface LandingHeaderProps {
   trackEngagement: (event: string) => void;
@@ -19,20 +22,41 @@ interface LandingHeaderProps {
 const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: LandingHeaderProps) {
   const { t } = useTranslation();
 
+  // Logo interactions hook
+  const {
+    showTomatoToss,
+    setShowTomatoToss,
+    showAchievements,
+    setShowAchievements,
+    handleLogoClick,
+    handleLogoMouseDown,
+    handleLogoMouseUp,
+    handleLogoMouseLeave,
+  } = useLogoInteractions();
+
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
-            <OptimizedImage
-              src="/images/prepflow-logo.png"
-              alt="PrepFlow Logo"
-              width={140}
-              height={45}
-              className="h-9 w-auto"
-              priority={true}
-            />
+            <button
+              onClick={handleLogoClick}
+              onMouseDown={handleLogoMouseDown}
+              onMouseUp={handleLogoMouseUp}
+              onMouseLeave={handleLogoMouseLeave}
+              className="cursor-pointer"
+              aria-label="PrepFlow Logo"
+            >
+              <OptimizedImage
+                src="/images/prepflow-logo.png"
+                alt="PrepFlow Logo"
+                width={140}
+                height={45}
+                className="h-9 w-auto"
+                priority={true}
+              />
+            </button>
           </Link>
 
           {/* Desktop Navigation */}
@@ -98,6 +122,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           </div>
         </div>
       </div>
+
+      {/* Tomato Toss Easter Egg */}
+      {showTomatoToss && <TomatoToss onClose={() => setShowTomatoToss(false)} />}
+
+      {/* Achievements Dropdown */}
+      <AchievementsDropdown isOpen={showAchievements} onClose={() => setShowAchievements(false)} />
     </header>
   );
 });

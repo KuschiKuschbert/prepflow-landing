@@ -6,6 +6,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTomatoTossSounds } from './useTomatoTossSounds';
+import { addStat, STAT_KEYS } from '@/lib/arcadeStats';
+import { throwConfetti } from '@/hooks/useConfetti';
 
 interface Splatter {
   x: number;
@@ -33,10 +35,12 @@ export const useTomatoTossGame = () => {
   const [tomatoes, setTomatoes] = useState<Tomato[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [audioReady, setAudioReady] = useState(false);
+  const [gameFinished, setGameFinished] = useState(false);
 
   const playTimeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const sounds = useTomatoTossSounds();
   const MAX_SPLATTERS = 50;
+  const GAME_DURATION = 20; // 20 seconds
 
   // Check for reduced motion preference
   useEffect(() => {
@@ -64,10 +68,19 @@ export const useTomatoTossGame = () => {
     playTimeIntervalRef.current = setInterval(() => {
       setPlayTime(prev => {
         const newTime = prev + 1;
+
+        // Auto-finish after 20 seconds
+        if (newTime >= GAME_DURATION && !gameFinished) {
+          setGameFinished(true);
+          sounds.playAlertSound();
+        }
+
+        // Alert after 30 seconds (legacy)
         if (newTime >= 30 && !alertShown) {
           setAlertShown(true);
           sounds.playAlertSound();
         }
+
         return newTime;
       });
     }, 1000);
@@ -77,7 +90,7 @@ export const useTomatoTossGame = () => {
         clearInterval(playTimeIntervalRef.current);
       }
     };
-  }, [alertShown, sounds]);
+  }, [alertShown, sounds, gameFinished]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -156,10 +169,23 @@ export const useTomatoTossGame = () => {
 
           setThrows(prev => {
             const newThrows = prev + 1;
-            // Play confetti sound at >20 throws
+
+            // Update stats
+            const newTotal = addStat(STAT_KEYS.TOMATOES, 1);
+
+            // Check milestones and trigger confetti
+            if ([10, 25, 50, 100].includes(newTotal)) {
+              throwConfetti(1.5);
+            } else if ([10, 25, 50, 100].includes(newThrows)) {
+              // Session milestones too
+              throwConfetti(1);
+            }
+
+            // Play confetti sound at >20 throws (legacy)
             if (newThrows === 21) {
               sounds.playConfettiSound();
             }
+
             return newThrows;
           });
 
@@ -181,5 +207,6 @@ export const useTomatoTossGame = () => {
     alertShown,
     reducedMotion,
     handleThrow,
+    gameFinished,
   };
 };

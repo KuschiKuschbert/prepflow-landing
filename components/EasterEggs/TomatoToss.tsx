@@ -12,18 +12,51 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTomatoTossGame } from './useTomatoTossGame';
 import { Confetti } from './Confetti';
+import WebAppBackground from '@/components/Arcade/WebAppBackground';
+import { GameScoreboard } from '@/components/Arcade/GameScoreboard';
+import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
+import { getArcadeStats } from '@/lib/arcadeStats';
 
 interface TomatoTossProps {
   onClose: () => void;
 }
 
 const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
-  const { throws, splatters, tomatoes, playTime, alertShown, reducedMotion, handleThrow } =
-    useTomatoTossGame();
+  const {
+    throws,
+    splatters,
+    tomatoes,
+    playTime,
+    alertShown,
+    reducedMotion,
+    handleThrow,
+    gameFinished,
+  } = useTomatoTossGame();
 
   const wallRef = useRef<HTMLDivElement>(null);
   const [showConfetti, setShowConfetti] = React.useState(false);
   const confettiShownRef = React.useRef(false);
+  const [globalStats, setGlobalStats] = React.useState(() => getArcadeStats());
+
+  // Update global stats when they change
+  useEffect(() => {
+    const handleStatsUpdate = () => {
+      setGlobalStats(getArcadeStats());
+    };
+
+    window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
+    return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
+  }, []);
+
+  // Auto-close after 20 seconds
+  useEffect(() => {
+    if (gameFinished) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 2000); // Give 2 seconds to see the finish message
+      return () => clearTimeout(timer);
+    }
+  }, [gameFinished, onClose]);
 
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -86,13 +119,22 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
 
   return (
     <>
+      <WebAppBackground />
       {showConfetti && <Confetti />}
+      <ArcadeMuteButton className="top-16" />
+      <GameScoreboard
+        sessionScore={throws}
+        globalScore={globalStats.tomatoes}
+        time={playTime}
+        tipText="Aim fast — the wall won't wait!"
+        icon="🍅"
+      />
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex min-h-screen flex-col items-center justify-center bg-[#0a0a0a] p-6 text-white"
+          className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-white"
         >
           {/* Header */}
           <motion.div
@@ -102,23 +144,6 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
           >
             <h1 className="mb-2 text-4xl font-extrabold md:text-5xl">🍅 Tomato Toss!</h1>
             <p className="text-lg text-gray-300">Let it all out, Chef — aim for the wall.</p>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="mb-4 flex items-center space-x-6 text-center"
-          >
-            <div>
-              <div className="text-2xl font-semibold text-[#29E7CD]">{throws}</div>
-              <div className="text-sm text-gray-400">Tomatoes thrown</div>
-            </div>
-            <div>
-              <div className="text-2xl font-semibold text-[#D925C7]">{playTime}s</div>
-              <div className="text-sm text-gray-400">Time</div>
-            </div>
           </motion.div>
 
           {/* Wall Area */}
@@ -219,8 +244,23 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             )}
           </motion.div>
 
+          {/* Game Finished Message */}
+          {gameFinished && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 space-y-4"
+            >
+              <div className="rounded-xl border border-[#29E7CD] bg-[#29E7CD]/10 px-6 py-4">
+                <p className="text-lg font-semibold text-[#29E7CD]">
+                  Time's up! You threw {throws} tomatoes! 🍅
+                </p>
+              </div>
+            </motion.div>
+          )}
+
           {/* Alert Message */}
-          {alertShown && (
+          {alertShown && !gameFinished && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

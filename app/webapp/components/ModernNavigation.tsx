@@ -12,6 +12,9 @@ import { useNavigationItems } from './navigation/nav-items';
 import { SearchModal } from './navigation/SearchModal';
 import { Sidebar } from './navigation/Sidebar';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
+import { NavbarStats } from '@/components/Arcade/NavbarStats';
+import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
+import { useLogoInteractions } from '@/hooks/useLogoInteractions';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -38,10 +41,17 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const [searchQuery, setSearchQuery] = useState('');
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
-  // Tomato Toss Easter Egg state
-  const [logoClicks, setLogoClicks] = useState(0);
-  const [showTomatoToss, setShowTomatoToss] = useState(false);
-  const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Logo interactions hook
+  const {
+    showTomatoToss,
+    setShowTomatoToss,
+    showAchievements,
+    setShowAchievements,
+    handleLogoClick,
+    handleLogoMouseDown,
+    handleLogoMouseUp,
+    handleLogoMouseLeave,
+  } = useLogoInteractions();
 
   // Navigation items organized by category
   const navigationItems: NavigationItem[] = useNavigationItems() as NavigationItem[];
@@ -95,44 +105,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isSidebarOpen]);
 
-  // Logo click handler for Tomato Toss Easter Egg
-  const handleLogoClick = (e: React.MouseEvent) => {
-    // Clear existing timer
-    if (clickTimerRef.current) {
-      clearTimeout(clickTimerRef.current);
-    }
-
-    const newClicks = logoClicks + 1;
-    setLogoClicks(newClicks);
-
-    // If we've reached 9 clicks, open the game and prevent navigation
-    if (newClicks >= 9) {
-      e.preventDefault();
-      e.stopPropagation();
-      setShowTomatoToss(true);
-      setLogoClicks(0);
-      if (clickTimerRef.current) {
-        clearTimeout(clickTimerRef.current);
-        clickTimerRef.current = null;
-      }
-    } else {
-      // Reset timer: 6 seconds to click again
-      clickTimerRef.current = setTimeout(() => {
-        setLogoClicks(0);
-        clickTimerRef.current = null;
-      }, 6000);
-    }
-  };
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (clickTimerRef.current) {
-        clearTimeout(clickTimerRef.current);
-      }
-    };
-  }, []);
-
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
     return pathname.startsWith(href);
@@ -173,6 +145,9 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             <Link href="/webapp" className="flex items-center space-x-2">
               <button
                 onClick={handleLogoClick}
+                onMouseDown={handleLogoMouseDown}
+                onMouseUp={handleLogoMouseUp}
+                onMouseLeave={handleLogoMouseLeave}
                 className="cursor-pointer"
                 aria-label="PrepFlow Logo"
               >
@@ -214,8 +189,10 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             )}
           </div>
 
-          {/* Right: Search, Language, User */}
+          {/* Right: Stats, Search, Language, User */}
           <div className="flex items-center space-x-3">
+            {/* Navbar Stats */}
+            <NavbarStats />
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -274,6 +251,9 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
       {/* Tomato Toss Easter Egg */}
       {showTomatoToss && <TomatoToss onClose={() => setShowTomatoToss(false)} />}
+
+      {/* Achievements Dropdown */}
+      <AchievementsDropdown isOpen={showAchievements} onClose={() => setShowAchievements(false)} />
     </>
   );
 });

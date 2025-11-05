@@ -6,6 +6,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useKitchenFireSounds } from './useKitchenFireSounds';
+import { addStat, STAT_KEYS } from '@/lib/arcadeStats';
+import { throwConfetti } from '@/hooks/useConfetti';
 
 export const useKitchenFireGame = () => {
   const [flames, setFlames] = useState(() => Math.floor(Math.random() * 8) + 8);
@@ -97,6 +99,12 @@ export const useKitchenFireGame = () => {
         setExtinguished(true);
         sounds.stopFireLoop();
         sounds.playSuccessSound();
+
+        // Update stats
+        addStat(STAT_KEYS.FIRES, 1);
+
+        // Trigger confetti
+        throwConfetti(1.5);
 
         if (typeof window !== 'undefined') {
           const currentBest = fastestTime;
