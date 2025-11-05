@@ -5,7 +5,7 @@
  */
 
 import { throwConfetti } from '@/hooks/useConfetti';
-import { addStat, STAT_KEYS } from '@/lib/arcadeStats';
+import { addStat, addSessionStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTomatoTossSounds } from './useTomatoTossSounds';
 
@@ -213,14 +213,21 @@ export const useTomatoTossGame = () => {
           setThrows(prev => {
             const newThrows = prev + 1;
 
-            // Update stats
-            const newTotal = addStat(STAT_KEYS.TOMATOES, 1);
+            // Update both global and session stats simultaneously
+            const newGlobalTotal = addStat(STAT_KEYS.TOMATOES, 1);
+            const newSessionTotal = addSessionStat(STAT_KEYS.TOMATOES, 1);
 
             // Check milestones and trigger confetti
-            if ([10, 25, 50, 100].includes(newTotal)) {
+            // Global milestones (persistent)
+            if ([10, 25, 50, 100].includes(newGlobalTotal)) {
               throwConfetti(1.5);
-            } else if ([10, 25, 50, 100].includes(newThrows)) {
-              // Session milestones too
+            }
+            // Session milestones (current session)
+            if ([10, 25, 50, 100].includes(newSessionTotal)) {
+              throwConfetti(1);
+            }
+            // Legacy session throws milestone
+            if ([10, 25, 50, 100].includes(newThrows)) {
               throwConfetti(1);
             }
 

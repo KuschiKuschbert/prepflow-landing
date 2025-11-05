@@ -1,9 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import { getArcadeStats } from '@/lib/arcadeStats';
+import React, { useEffect, useState } from 'react';
 
 export default function SettingsPage() {
   const [busy, setBusy] = useState(false);
+  const [arcadeStats, setArcadeStats] = useState(() => getArcadeStats());
+
   const request = async (path: string, method: 'GET' | 'POST') => {
     setBusy(true);
     try {
@@ -14,6 +17,16 @@ export default function SettingsPage() {
       setBusy(false);
     }
   };
+
+  // Update arcade stats when they change
+  useEffect(() => {
+    const handleStatsUpdate = () => {
+      setArcadeStats(getArcadeStats());
+    };
+
+    window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
+    return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
+  }, []);
 
   return (
     <div className="mx-auto max-w-3xl p-6 text-white">
@@ -38,6 +51,36 @@ export default function SettingsPage() {
           >
             Request deletion
           </button>
+        </div>
+      </div>
+
+      {/* Arcade Stats - Fun Feature */}
+      <div className="mt-8 rounded-2xl border border-[#2a2a2a]/30 bg-[#1f1f1f]/30 p-6">
+        <h2 className="mb-2 text-lg font-semibold text-gray-400">Arcade Stats</h2>
+        <p className="mb-4 text-sm text-gray-500">
+          Your all-time stats across all sessions. Just for fun! 🎮
+        </p>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
+            <div className="mb-1 text-2xl">🍅</div>
+            <div className="mb-1 text-xs text-gray-500">Tomatoes Thrown</div>
+            <div className="text-xl font-bold text-[#29E7CD]">{arcadeStats.tomatoes}</div>
+          </div>
+          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
+            <div className="mb-1 text-2xl">📋</div>
+            <div className="mb-1 text-xs text-gray-500">Dockets Caught</div>
+            <div className="text-xl font-bold text-[#3B82F6]">{arcadeStats.dockets}</div>
+          </div>
+          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
+            <div className="mb-1 text-2xl">🔥</div>
+            <div className="mb-1 text-xs text-gray-500">Fires Extinguished</div>
+            <div className="text-xl font-bold text-[#E74C3C]">{arcadeStats.fires}</div>
+          </div>
+          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
+            <div className="mb-1 text-2xl">⭐</div>
+            <div className="mb-1 text-xs text-gray-500">Best Run</div>
+            <div className="text-xl font-bold text-[#D925C7]">{arcadeStats.bestRun}</div>
+          </div>
         </div>
       </div>
     </div>

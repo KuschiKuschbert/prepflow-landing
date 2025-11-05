@@ -11,7 +11,7 @@
 import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import { GameScoreboard } from '@/components/Arcade/GameScoreboard';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import { getArcadeStats } from '@/lib/arcadeStats';
+import { getSessionStats } from '@/lib/arcadeStats';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import { Confetti } from './Confetti';
@@ -36,16 +36,16 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
   const wallRef = useRef<HTMLDivElement>(null);
   const [showConfetti, setShowConfetti] = React.useState(false);
   const confettiShownRef = React.useRef(false);
-  const [globalStats, setGlobalStats] = React.useState(() => getArcadeStats());
+  const [sessionStats, setSessionStats] = React.useState(() => getSessionStats());
 
-  // Update global stats when they change
+  // Update session stats when they change
   useEffect(() => {
     const handleStatsUpdate = () => {
-      setGlobalStats(getArcadeStats());
+      setSessionStats(getSessionStats());
     };
 
-    window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
-    return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
+    window.addEventListener('arcade:sessionStatsUpdated', handleStatsUpdate);
+    return () => window.removeEventListener('arcade:sessionStatsUpdated', handleStatsUpdate);
   }, []);
 
   // Auto-close after 20 seconds (immediate)
@@ -112,6 +112,12 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
       <div className="pointer-events-none fixed inset-0 z-30 bg-black/40 backdrop-blur-md" />
       {showConfetti && <Confetti />}
       <ArcadeMuteButton className="top-16" />
+      <GameScoreboard
+        sessionScore={throws}
+        time={playTime}
+        icon="🍅"
+        tipText="Click anywhere to throw tomatoes!"
+      />
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0 }}
