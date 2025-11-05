@@ -189,10 +189,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             )}
           </div>
 
-          {/* Right: Stats, Search, Language, User */}
+          {/* Right: Search, Stats, Language, User */}
           <div className="flex items-center space-x-3">
-            {/* Navbar Stats */}
-            <NavbarStats />
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -215,6 +213,9 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                 />
               </svg>
             </button>
+
+            {/* Navbar Stats (placed between search and language) */}
+            <NavbarStats />
 
             <LanguageSwitcher />
 
