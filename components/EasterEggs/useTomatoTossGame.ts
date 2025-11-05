@@ -42,7 +42,7 @@ export const useTomatoTossGame = () => {
   const lastSecondRef = useRef<number>(0);
   const sounds = useTomatoTossSounds();
   const MAX_SPLATTERS = 150;
-  const GAME_DURATION = 20; // 20 seconds
+  const GAME_DURATION = 10; // 10 seconds
 
   // Check for reduced motion preference
   useEffect(() => {

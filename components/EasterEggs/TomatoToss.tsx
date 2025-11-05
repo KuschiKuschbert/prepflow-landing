@@ -115,7 +115,6 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
       <GameScoreboard
         sessionScore={throws}
         globalScore={globalStats.tomatoes}
-        time={playTime}
         tipText="Aim fast — the wall won't wait!"
         icon="🍅"
       />
@@ -150,9 +149,9 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             {splatters.map(splatter => (
               <motion.div
                 key={splatter.id}
-                initial={{ opacity: 0, scale: 0 }}
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: splatter.opacity, scale: splatter.scale }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.15 }}
                 className="absolute"
                 style={{
                   left: `${splatter.x}px`,
@@ -160,14 +159,31 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
                   transform: `translate(-50%, -50%) rotate(${splatter.rotation}deg)`,
                 }}
               >
-                <div
-                  className="text-6xl"
-                  style={{
-                    filter: 'blur(2px)',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                  }}
-                >
-                  🍅
+                {/* Sauce splash blob */}
+                <div className="relative" style={{ width: 28, height: 28 }}>
+                  <div
+                    className="absolute rounded-full"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      background: 'radial-gradient(circle at 30% 30%, #ff6b6b, #e53935)',
+                      boxShadow: '0 0 12px rgba(229,57,53,0.6)',
+                      filter: 'blur(0.5px)',
+                    }}
+                  />
+                  {/* small droplets */}
+                  <div
+                    className="absolute rounded-full"
+                    style={{ width: 10, height: 10, left: -10, top: 4, background: '#e74c3c' }}
+                  />
+                  <div
+                    className="absolute rounded-full"
+                    style={{ width: 8, height: 8, right: -8, top: -2, background: '#ff5252' }}
+                  />
+                  <div
+                    className="absolute rounded-full"
+                    style={{ width: 6, height: 6, right: -6, bottom: -4, background: '#e53935' }}
+                  />
                 </div>
               </motion.div>
             ))}

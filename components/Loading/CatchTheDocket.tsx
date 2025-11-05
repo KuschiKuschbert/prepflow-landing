@@ -83,7 +83,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
         {dockets.map(docket => (
           <motion.div
             key={docket.id}
-            className="absolute cursor-pointer text-4xl transition-transform hover:scale-125"
+            className="absolute cursor-pointer text-4xl transition-transform hover:scale-125 md:text-6xl"
             style={{
               left: `${docket.x}px`,
               top: `${docket.y}px`,
