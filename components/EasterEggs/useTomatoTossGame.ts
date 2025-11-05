@@ -44,7 +44,7 @@ export const useTomatoTossGame = () => {
   const alertShownRef = useRef<boolean>(false);
   const sounds = useTomatoTossSounds();
   const MAX_SPLATTERS = 150;
-  const GAME_DURATION = 10; // 10 seconds
+  const GAME_DURATION = 5; // 5 seconds
 
   // Check for reduced motion preference
   useEffect(() => {
@@ -127,6 +127,8 @@ export const useTomatoTossGame = () => {
   // Handle tomato throw
   const handleThrow = useCallback(
     (clientX: number, clientY: number, wallBounds: DOMRect) => {
+      // Ignore input when game has finished
+      if (gameFinishedRef.current) return;
       if (!audioReady) {
         const initialized = sounds.initAudio();
         setAudioReady(initialized);
