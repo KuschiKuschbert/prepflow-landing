@@ -15,6 +15,8 @@ import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
 import { useLogoInteractions } from '@/hooks/useLogoInteractions';
+import CatchTheDocket from '@/components/Loading/CatchTheDocket';
+import { useCatchTheDocketTrigger } from '@/hooks/useCatchTheDocketTrigger';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -52,6 +54,9 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     handleLogoMouseUp,
     handleLogoMouseLeave,
   } = useLogoInteractions();
+
+  // CatchTheDocket trigger hook
+  const { showDocketOverlay, setShowDocketOverlay } = useCatchTheDocketTrigger();
 
   // Navigation items organized by category
   const navigationItems: NavigationItem[] = useNavigationItems() as NavigationItem[];
@@ -255,6 +260,11 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
       {/* Achievements Dropdown */}
       <AchievementsDropdown isOpen={showAchievements} onClose={() => setShowAchievements(false)} />
+
+      {/* Global CatchTheDocket overlay */}
+      {showDocketOverlay && (
+        <CatchTheDocket isLoading={true} onLoadComplete={() => setShowDocketOverlay(false)} />
+      )}
     </>
   );
 });

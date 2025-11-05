@@ -120,6 +120,8 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
   return (
     <>
       <WebAppBackground />
+      {/* Blurred dark overlay to separate game from background */}
+      <div className="fixed inset-0 z-30 bg-black/40 backdrop-blur-md" />
       {showConfetti && <Confetti />}
       <ArcadeMuteButton className="top-16" />
       <GameScoreboard
@@ -154,23 +156,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             transition={{ delay: 0.3 }}
             onClick={handleWallClick}
             onTouchEnd={handleWallTouch}
-            className="relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border-4 border-[#2a2a2a] bg-gradient-to-b from-gray-200 to-gray-300 shadow-2xl md:h-[500px]"
-            style={{
-              backgroundImage: `repeating-linear-gradient(
-                0deg,
-                #ddd 0px,
-                #ddd 40px,
-                #ccc 40px,
-                #ccc 41px
-              ),
-              repeating-linear-gradient(
-                90deg,
-                #ddd 0px,
-                #ddd 40px,
-                #ccc 40px,
-                #ccc 41px
-              )`,
-            }}
+            className="relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/40 shadow-2xl backdrop-blur-sm md:h-[500px]"
           >
             {/* Splatters */}
             {splatters.map(splatter => (

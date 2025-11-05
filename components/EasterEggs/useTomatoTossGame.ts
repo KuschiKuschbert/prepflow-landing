@@ -37,7 +37,9 @@ export const useTomatoTossGame = () => {
   const [audioReady, setAudioReady] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
 
-  const playTimeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const startTimestampRef = useRef<number | null>(null);
+  const lastSecondRef = useRef<number>(0);
   const sounds = useTomatoTossSounds();
   const MAX_SPLATTERS = 50;
   const GAME_DURATION = 20; // 20 seconds
@@ -63,32 +65,39 @@ export const useTomatoTossGame = () => {
     setAudioReady(initialized);
   }, [sounds]);
 
-  // Initialize timer on mount
+  // Initialize timer on mount (click-independent via requestAnimationFrame)
   useEffect(() => {
-    playTimeIntervalRef.current = setInterval(() => {
-      setPlayTime(prev => {
-        const newTime = prev + 1;
+    startTimestampRef.current = performance.now();
+    const tick = () => {
+      if (startTimestampRef.current == null) return;
+      const elapsedMs = performance.now() - startTimestampRef.current;
+      const elapsedSec = Math.floor(elapsedMs / 1000);
+
+      if (elapsedSec !== lastSecondRef.current) {
+        lastSecondRef.current = elapsedSec;
+        setPlayTime(elapsedSec);
 
         // Auto-finish after 20 seconds
-        if (newTime >= GAME_DURATION && !gameFinished) {
+        if (elapsedSec >= GAME_DURATION && !gameFinished) {
           setGameFinished(true);
           sounds.playAlertSound();
         }
 
         // Alert after 30 seconds (legacy)
-        if (newTime >= 30 && !alertShown) {
+        if (elapsedSec >= 30 && !alertShown) {
           setAlertShown(true);
           sounds.playAlertSound();
         }
-
-        return newTime;
-      });
-    }, 1000);
-
-    return () => {
-      if (playTimeIntervalRef.current) {
-        clearInterval(playTimeIntervalRef.current);
       }
+
+      if (!gameFinished) {
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [alertShown, sounds, gameFinished]);
 
@@ -96,8 +105,8 @@ export const useTomatoTossGame = () => {
   useEffect(() => {
     return () => {
       sounds.cleanup();
-      if (playTimeIntervalRef.current) {
-        clearInterval(playTimeIntervalRef.current);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
       }
     };
   }, [sounds]);
