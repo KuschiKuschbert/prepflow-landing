@@ -40,6 +40,8 @@ export const useTomatoTossGame = () => {
   const rafRef = useRef<number | null>(null);
   const startTimestampRef = useRef<number | null>(null);
   const lastSecondRef = useRef<number>(0);
+  const gameFinishedRef = useRef<boolean>(false);
+  const alertShownRef = useRef<boolean>(false);
   const sounds = useTomatoTossSounds();
   const MAX_SPLATTERS = 150;
   const GAME_DURATION = 10; // 10 seconds
@@ -77,20 +79,20 @@ export const useTomatoTossGame = () => {
         lastSecondRef.current = elapsedSec;
         setPlayTime(elapsedSec);
 
-        // Auto-finish after 20 seconds
-        if (elapsedSec >= GAME_DURATION && !gameFinished) {
+        // Auto-finish after 10 seconds
+        if (elapsedSec >= GAME_DURATION && !gameFinishedRef.current) {
           setGameFinished(true);
           sounds.playAlertSound();
         }
 
         // Alert after 30 seconds (legacy)
-        if (elapsedSec >= 30 && !alertShown) {
+        if (elapsedSec >= 30 && !alertShownRef.current) {
           setAlertShown(true);
           sounds.playAlertSound();
         }
       }
 
-      if (!gameFinished) {
+      if (!gameFinishedRef.current) {
         rafRef.current = requestAnimationFrame(tick);
       }
     };
@@ -99,7 +101,15 @@ export const useTomatoTossGame = () => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [alertShown, sounds, gameFinished]);
+  }, []);
+
+  // Keep refs in sync with state (avoid restarting effect)
+  useEffect(() => {
+    gameFinishedRef.current = gameFinished;
+  }, [gameFinished]);
+  useEffect(() => {
+    alertShownRef.current = alertShown;
+  }, [alertShown]);
 
   // Cleanup on unmount
   useEffect(() => {

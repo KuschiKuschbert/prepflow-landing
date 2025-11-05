@@ -8,14 +8,14 @@
  * Web Audio API for a fully self-contained experience.
  */
 
-import React, { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTomatoTossGame } from './useTomatoTossGame';
-import { Confetti } from './Confetti';
-import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import { GameScoreboard } from '@/components/Arcade/GameScoreboard';
 import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
+import { GameScoreboard } from '@/components/Arcade/GameScoreboard';
+import WebAppBackground from '@/components/Arcade/WebAppBackground';
 import { getArcadeStats } from '@/lib/arcadeStats';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { Confetti } from './Confetti';
+import { useTomatoTossGame } from './useTomatoTossGame';
 
 interface TomatoTossProps {
   onClose: () => void;
