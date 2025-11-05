@@ -130,7 +130,23 @@ export const setSessionStat = (key: string, value: number): void => {
 };
 
 /**
- * Clear all arcade stats from localStorage (called on logout)
+ * Clear all session stats from sessionStorage (called on logout)
+ * This resets the navbar display but keeps persistent stats in Settings
+ */
+export const clearSessionStats = (): void => {
+  if (typeof window === 'undefined') return;
+
+  Object.values(STAT_KEYS).forEach(key => {
+    sessionStorage.removeItem(key);
+  });
+
+  // Dispatch update event to refresh UI
+  window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+};
+
+/**
+ * Clear all persistent stats from localStorage (for admin/debugging purposes)
+ * Note: This is NOT called on logout - persistent stats should remain
  */
 export const clearArcadeStats = (): void => {
   if (typeof window === 'undefined') return;

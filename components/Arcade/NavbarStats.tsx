@@ -1,27 +1,28 @@
 /**
  * Navbar Stats Badges
  *
- * Persistent stats display in the navbar showing all arcade game scores.
+ * Session stats display in the navbar showing current session arcade game scores.
+ * These reset on logout but persist during the current browser session.
  */
 
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getArcadeStats, ArcadeStats } from '@/lib/arcadeStats';
+import { getSessionStats, ArcadeStats } from '@/lib/arcadeStats';
 
 export const NavbarStats: React.FC = () => {
-  const [stats, setStats] = useState<ArcadeStats>(() => getArcadeStats());
+  const [stats, setStats] = useState<ArcadeStats>(() => getSessionStats());
 
   useEffect(() => {
     const handleStatsUpdate = () => {
-      setStats(getArcadeStats());
+      setStats(getSessionStats());
     };
 
-    window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
-    setStats(getArcadeStats()); // Initial load
+    window.addEventListener('arcade:sessionStatsUpdated', handleStatsUpdate);
+    setStats(getSessionStats()); // Initial load
 
     return () => {
-      window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
+      window.removeEventListener('arcade:sessionStatsUpdated', handleStatsUpdate);
     };
   }, []);
 

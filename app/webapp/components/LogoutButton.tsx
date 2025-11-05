@@ -1,10 +1,8 @@
 'use client';
 
-import React from 'react';
-import { signOut } from 'next-auth/react';
+import { clearSessionStats } from '@/lib/arcadeStats';
 import { clearAllDrafts } from '@/lib/autosave-storage';
-import { clearArcadeStats } from '@/lib/arcadeStats';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export function LogoutButton() {
   const session = useSession();
@@ -16,8 +14,8 @@ export function LogoutButton() {
     // Clear all autosave drafts
     clearAllDrafts(userId);
 
-    // Clear arcade stats (reset scores on logout)
-    clearArcadeStats();
+    // Clear session stats (reset navbar scores on logout, but keep persistent stats in Settings)
+    clearSessionStats();
 
     // Clear NextAuth session
     await signOut({ redirect: false });

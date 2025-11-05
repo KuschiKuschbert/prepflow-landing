@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useKitchenFireSounds } from './useKitchenFireSounds';
-import { addStat, STAT_KEYS } from '@/lib/arcadeStats';
+import { addStat, addSessionStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { throwConfetti } from '@/hooks/useConfetti';
 
 export const useKitchenFireGame = () => {
@@ -100,8 +100,9 @@ export const useKitchenFireGame = () => {
         sounds.stopFireLoop();
         sounds.playSuccessSound();
 
-        // Update stats
+        // Update stats (both persistent and session)
         addStat(STAT_KEYS.FIRES, 1);
+        addSessionStat(STAT_KEYS.FIRES, 1);
 
         // Trigger confetti
         throwConfetti(1.5);

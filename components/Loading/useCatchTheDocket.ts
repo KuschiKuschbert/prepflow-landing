@@ -4,7 +4,14 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Howl } from 'howler';
-import { addStat, setStat, STAT_KEYS, getArcadeStats } from '@/lib/arcadeStats';
+import {
+  addStat,
+  addSessionStat,
+  setStat,
+  setSessionStat,
+  STAT_KEYS,
+  getArcadeStats,
+} from '@/lib/arcadeStats';
 import { throwConfetti } from '@/hooks/useConfetti';
 import { isArcadeMuted } from '@/lib/arcadeMute';
 
@@ -228,9 +235,11 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
       setGameFinished(true);
 
       const newTotal = addStat(STAT_KEYS.DOCKETS, caught);
+      addSessionStat(STAT_KEYS.DOCKETS, caught);
       const currentBest = globalStats.bestRun;
       if (caught > currentBest) {
         setStat(STAT_KEYS.BEST_RUN, caught);
+        setSessionStat(STAT_KEYS.BEST_RUN, caught);
       }
 
       if ([10, 25, 50, 100].includes(newTotal)) {
@@ -267,6 +276,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
         const newCaught = prev + 1;
 
         const newTotal = addStat(STAT_KEYS.DOCKETS, 1);
+        addSessionStat(STAT_KEYS.DOCKETS, 1);
         if ([10, 25, 50, 100].includes(newTotal)) {
           throwConfetti(1);
         }
