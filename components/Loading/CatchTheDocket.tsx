@@ -60,17 +60,17 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
           }
         }}
       >
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 text-center"
-        >
-          <h1 className="mb-2 text-4xl font-extrabold md:text-5xl">🧾 Catch the Docket!</h1>
-          <p className="text-lg text-gray-300">
-            {isLoading ? 'Loading... Catch dockets while you wait!' : `Caught ${caught} dockets!`}
-          </p>
-        </motion.div>
+        {/* Minimal counter (appears only after first tap) */}
+        {caught > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="pointer-events-none absolute top-6 right-6 z-50 rounded-full border border-[#2a2a2a] bg-[#1f1f1f]/70 px-3 py-1 text-sm text-white backdrop-blur-sm"
+            title="Dockets caught"
+          >
+            🧾 {caught}
+          </motion.div>
+        )}
 
         {/* Dockets */}
         {dockets.map(docket => (
@@ -102,35 +102,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
           </motion.div>
         ))}
 
-        {/* Alert Message */}
-        {alertShown && isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-6 space-y-4"
-          >
-            <div className="rounded-xl border border-[#D925C7] bg-[#D925C7]/10 px-6 py-4">
-              <p className="text-lg font-semibold text-[#D925C7]">
-                Still loading? Hang tight, Chef! 🔪
-              </p>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Completion Message */}
-        {gameFinished && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mt-6 space-y-4"
-          >
-            <div className="rounded-xl border border-[#29E7CD] bg-[#29E7CD]/10 px-6 py-4">
-              <p className="text-lg font-semibold text-[#29E7CD]">
-                Great catch! You caught {caught} docket{caught !== 1 ? 's' : ''}! 🎉
-              </p>
-            </div>
-          </motion.div>
-        )}
+        {/* No instructional or completion messaging */}
       </motion.div>
     </>
   );
