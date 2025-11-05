@@ -11,6 +11,7 @@ import { LogoutButton } from './LogoutButton';
 import { useNavigationItems } from './navigation/nav-items';
 import { SearchModal } from './navigation/SearchModal';
 import { Sidebar } from './navigation/Sidebar';
+import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -36,6 +37,11 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const sidebarRef = useRef<HTMLDivElement | null>(null);
+
+  // Tomato Toss Easter Egg state
+  const [logoClicks, setLogoClicks] = useState(0);
+  const [showTomatoToss, setShowTomatoToss] = useState(false);
+  const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Navigation items organized by category
   const navigationItems: NavigationItem[] = useNavigationItems() as NavigationItem[];
@@ -89,6 +95,44 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isSidebarOpen]);
 
+  // Logo click handler for Tomato Toss Easter Egg
+  const handleLogoClick = (e: React.MouseEvent) => {
+    // Clear existing timer
+    if (clickTimerRef.current) {
+      clearTimeout(clickTimerRef.current);
+    }
+
+    const newClicks = logoClicks + 1;
+    setLogoClicks(newClicks);
+
+    // If we've reached 9 clicks, open the game and prevent navigation
+    if (newClicks >= 9) {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowTomatoToss(true);
+      setLogoClicks(0);
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
+        clickTimerRef.current = null;
+      }
+    } else {
+      // Reset timer: 6 seconds to click again
+      clickTimerRef.current = setTimeout(() => {
+        setLogoClicks(0);
+        clickTimerRef.current = null;
+      }, 6000);
+    }
+  };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
+      }
+    };
+  }, []);
+
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
     return pathname.startsWith(href);
@@ -127,13 +171,19 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             </button>
 
             <Link href="/webapp" className="flex items-center space-x-2">
-              <OptimizedImage
-                src="/images/prepflow-logo.png"
-                alt="PrepFlow Logo"
-                width={24}
-                height={24}
-                className="h-6 w-6"
-              />
+              <button
+                onClick={handleLogoClick}
+                className="cursor-pointer"
+                aria-label="PrepFlow Logo"
+              >
+                <OptimizedImage
+                  src="/images/prepflow-logo.png"
+                  alt="PrepFlow Logo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6"
+                />
+              </button>
               <span className="text-lg font-semibold text-white">PrepFlow</span>
               {/* Global Autosave Status Indicator */}
               <AutosaveGlobalIndicator />
@@ -221,6 +271,9 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
+
+      {/* Tomato Toss Easter Egg */}
+      {showTomatoToss && <TomatoToss onClose={() => setShowTomatoToss(false)} />}
     </>
   );
 });
