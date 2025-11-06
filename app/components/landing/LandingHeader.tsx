@@ -20,15 +20,15 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 md:space-x-3">
+          <Link href="/" className="flex shrink-0 items-center">
             <OptimizedImage
               src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
               width={140}
               height={45}
-              className="h-8 w-auto md:h-12"
+              className="h-6 w-auto max-w-[100px] md:h-12 md:max-w-none"
               priority={true}
             />
           </Link>
@@ -100,9 +100,9 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           </div>
 
           {/* Mobile Header - Simplified: Just logo and CTA */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex flex-1 items-center justify-end gap-2 md:hidden">
             <button
-              className={BUTTON_STYLES.primary}
+              className="flex min-h-[40px] items-center justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               onClick={() => {
                 trackEngagement('mobile_header_register_click');
                 try {
