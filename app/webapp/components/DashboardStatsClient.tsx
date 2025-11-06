@@ -3,6 +3,7 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
+import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import DashboardStats from './DashboardStats';
@@ -157,10 +158,16 @@ export default function DashboardStatsClient() {
     }
   };
 
+  // Loading gate integration - trigger docket catch game on slow loads
+  useEffect(() => {
+    if (loading) startLoadingGate('dashboard');
+    else stopLoadingGate('dashboard');
+    return () => stopLoadingGate('dashboard');
+  }, [loading]);
+
   useEffect(() => {
     // Prefetch dashboard APIs
     prefetchApis(['/api/dashboard/stats']);
-
     fetchDashboardData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

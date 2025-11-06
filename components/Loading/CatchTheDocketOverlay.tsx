@@ -19,19 +19,18 @@ const CatchTheDocketOverlay: React.FC = () => {
   const [active, setActive] = useState(false);
   const disabled = useMemo(() => {
     const path = routePath();
-    const d = prefersReducedMotion() || isArcadeDisabled() || isTouchDevice() || isAuthRoute(path);
+    // Enable on touch devices, only disable for reduced motion, arcade disabled flag, or auth routes
+    const d = prefersReducedMotion() || isArcadeDisabled() || isAuthRoute(path);
     if (d && typeof window !== 'undefined') {
       const payload = {
-        event: 'arcade_disabled_mobile',
+        event: 'arcade_disabled',
         event_category: 'arcade',
         page_path: path,
         reason: isAuthRoute(path)
           ? 'auth_route'
           : prefersReducedMotion()
             ? 'reduced_motion'
-            : isArcadeDisabled()
-              ? 'flag'
-              : 'touch_device',
+            : 'flag',
       } as const;
       (window as any).dataLayer?.push(payload);
       window.dispatchEvent(new CustomEvent('gtm:event', { detail: payload }));
@@ -41,10 +40,10 @@ const CatchTheDocketOverlay: React.FC = () => {
 
   useEffect(() => {
     // Double-check disabled state on every render to prevent race conditions
-    if (disabled || isTouchDevice() || isArcadeDisabled() || prefersReducedMotion()) return;
+    if (disabled || isArcadeDisabled() || prefersReducedMotion()) return;
     return subscribeLoadingGate(isVisible => {
       // Additional safety check before showing overlay
-      if (isVisible && (isTouchDevice() || isArcadeDisabled() || prefersReducedMotion())) {
+      if (isVisible && (isArcadeDisabled() || prefersReducedMotion())) {
         return;
       }
 
@@ -54,7 +53,8 @@ const CatchTheDocketOverlay: React.FC = () => {
           event: 'arcade_loading_start',
           event_category: 'arcade',
           page_path: routePath(),
-          threshold_ms: 300,
+          threshold_ms: 800,
+          is_touch_device: isTouchDevice(),
         } as const;
         (window as any).dataLayer?.push(startPayload);
         window.dispatchEvent(new CustomEvent('gtm:event', { detail: startPayload }));
@@ -65,6 +65,7 @@ const CatchTheDocketOverlay: React.FC = () => {
           event: 'arcade_loading_end',
           event_category: 'arcade',
           page_path: routePath(),
+          is_touch_device: isTouchDevice(),
         } as const;
         (window as any).dataLayer?.push(endPayload);
         window.dispatchEvent(new CustomEvent('gtm:event', { detail: endPayload }));
@@ -74,8 +75,8 @@ const CatchTheDocketOverlay: React.FC = () => {
     });
   }, [disabled, active]);
 
-  // Multiple safety checks to prevent rendering on mobile
-  if (disabled || isTouchDevice() || isArcadeDisabled() || prefersReducedMotion()) return null;
+  // Safety checks - only disable for reduced motion, arcade disabled flag, or auth routes
+  if (disabled || isArcadeDisabled() || prefersReducedMotion()) return null;
 
   return (
     <AnimatePresence>

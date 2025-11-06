@@ -27,18 +27,30 @@ export const NavbarStats: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex gap-1.5 text-[10px] text-white/80 md:gap-3 md:text-xs">
-      <div title="Tomatoes Thrown" className="flex items-center gap-0.5 md:gap-1">
-        <span>🍅</span>
-        <span className="text-[9px] md:text-xs">{stats.tomatoes}</span>
+    <div className="flex items-center gap-1 text-white/80 sm:gap-1.5 md:gap-2">
+      <div
+        title="Tomatoes Thrown"
+        className="flex items-center gap-0.5 sm:gap-1"
+        style={{ fontSize: '14px' }}
+      >
+        <span className="text-sm leading-none sm:text-base md:text-lg">🍅</span>
+        <span className="text-[10px] leading-none sm:text-[11px] md:text-xs">{stats.tomatoes}</span>
       </div>
-      <div title="Dockets Caught" className="flex items-center gap-0.5 md:gap-1">
-        <span>🧾</span>
-        <span className="text-[9px] md:text-xs">{stats.dockets}</span>
+      <div
+        title="Dockets Caught"
+        className="flex items-center gap-0.5 sm:gap-1"
+        style={{ fontSize: '14px' }}
+      >
+        <span className="text-sm leading-none sm:text-base md:text-lg">🧾</span>
+        <span className="text-[10px] leading-none sm:text-[11px] md:text-xs">{stats.dockets}</span>
       </div>
-      <div title="Fires Extinguished" className="flex items-center gap-0.5 md:gap-1">
-        <span>🔥</span>
-        <span className="text-[9px] md:text-xs">{stats.fires}</span>
+      <div
+        title="Fires Extinguished"
+        className="flex items-center gap-0.5 sm:gap-1"
+        style={{ fontSize: '14px' }}
+      >
+        <span className="text-sm leading-none sm:text-base md:text-lg">🔥</span>
+        <span className="text-[10px] leading-none sm:text-[11px] md:text-xs">{stats.fires}</span>
       </div>
     </div>
   );

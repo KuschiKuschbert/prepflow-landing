@@ -25,11 +25,12 @@ export default function WebAppLayout({
   children: React.ReactNode;
 }>) {
   const { t } = useTranslation();
-  // Initialize as disabled on touch devices to prevent any initial render
+  // Initialize as disabled only for auth routes to prevent any initial render
   const [disableArcadeOverlay, setDisableArcadeOverlay] = useState(() => {
     if (typeof window === 'undefined') return false;
     try {
-      return isTouchDevice();
+      const path = window.location.pathname;
+      return path.startsWith('/api/auth') || path.startsWith('/login') || path.startsWith('/auth');
     } catch {
       return false;
     }
@@ -57,12 +58,9 @@ export default function WebAppLayout({
     enabled: true,
   });
 
-  // Disable arcade overlay when coming from Auth0 or when auth error is present
+  // Disable arcade overlay only when coming from Auth0 or when auth error is present
   useEffect(() => {
     try {
-      // Use centralized touch detection (includes Android UA fallback)
-      const isTouch = isTouchDevice();
-
       const search = typeof window !== 'undefined' ? window.location.search : '';
       const fromAuth =
         typeof window !== 'undefined' ? window.location.pathname.startsWith('/api/auth') : false;
@@ -72,7 +70,7 @@ export default function WebAppLayout({
           ? sessionStorage.getItem('PF_AUTH_IN_PROGRESS') === '1'
           : false;
 
-      if (isTouch || fromAuth || hasAuthError || authFlag) {
+      if (fromAuth || hasAuthError || authFlag) {
         setDisableArcadeOverlay(true);
       }
 

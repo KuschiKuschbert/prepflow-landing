@@ -36,8 +36,13 @@ export function NavigationHeader({
   navigationItems,
   isActive,
 }: NavigationHeaderProps) {
-  const { handleLogoClick, handleLogoMouseDown, handleLogoMouseUp, handleLogoMouseLeave } =
-    useLogoInteractions();
+  const {
+    handleLogoClick,
+    handleLogoTouchEnd,
+    handleLogoMouseDown,
+    handleLogoMouseUp,
+    handleLogoMouseLeave,
+  } = useLogoInteractions();
 
   return (
     <header
@@ -88,26 +93,31 @@ export function NavigationHeader({
               />
             </svg>
           </button>
-          <Link href="/webapp" className="flex items-center space-x-2">
-            <button
-              onClick={handleLogoClick}
-              onMouseDown={handleLogoMouseDown}
-              onMouseUp={handleLogoMouseUp}
-              onMouseLeave={handleLogoMouseLeave}
-              className="flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center"
-              aria-label="PrepFlow Logo"
-            >
-              <OptimizedImage
-                src="/images/prepflow-logo.png"
-                alt="PrepFlow Logo"
-                width={24}
-                height={24}
-                className="h-6 w-6"
-              />
-            </button>
-            <span className="hidden text-lg font-semibold text-white md:inline">PrepFlow</span>
+          <div className="flex items-center space-x-2">
+            <Link href="/webapp" className="flex items-center">
+              <button
+                onClick={handleLogoClick}
+                onTouchEnd={handleLogoTouchEnd}
+                onMouseDown={handleLogoMouseDown}
+                onMouseUp={handleLogoMouseUp}
+                onMouseLeave={handleLogoMouseLeave}
+                className="flex min-h-[44px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center"
+                aria-label="PrepFlow Logo"
+              >
+                <OptimizedImage
+                  src="/images/prepflow-logo.png"
+                  alt="PrepFlow Logo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6"
+                />
+              </button>
+            </Link>
+            <Link href="/webapp" className="hidden md:inline">
+              <span className="text-lg font-semibold text-white">PrepFlow</span>
+            </Link>
             <AutosaveGlobalIndicator />
-          </Link>
+          </div>
         </div>
         <div
           className={cn(

@@ -12,9 +12,9 @@ export const useLogoInteractions = () => {
   const logoHoldTimerRef = useRef<NodeJS.Timeout | null>(null);
   const logoHoldStartRef = useRef<number | null>(null);
 
-  // Logo click handler for Tomato Toss Easter Egg
-  const handleLogoClick = useCallback(
-    (e: React.MouseEvent) => {
+  // Shared click/tap handler logic
+  const handleLogoInteraction = useCallback(
+    (shouldPreventDefault: boolean = false) => {
       if (clickTimerRef.current) {
         clearTimeout(clickTimerRef.current);
       }
@@ -23,22 +23,51 @@ export const useLogoInteractions = () => {
       setLogoClicks(newClicks);
 
       if (newClicks >= 9) {
-        e.preventDefault();
-        e.stopPropagation();
-        setShowTomatoToss(true);
+        // On 9th click, prevent navigation and show game
+        if (shouldPreventDefault) {
+          setShowTomatoToss(true);
+        }
         setLogoClicks(0);
         if (clickTimerRef.current) {
           clearTimeout(clickTimerRef.current);
           clickTimerRef.current = null;
         }
+        return true; // Indicates we should prevent default
       } else {
         clickTimerRef.current = setTimeout(() => {
           setLogoClicks(0);
           clickTimerRef.current = null;
         }, 6000);
+        return false; // Allow normal navigation
       }
     },
     [logoClicks],
+  );
+
+  // Logo click handler for Tomato Toss Easter Egg (desktop)
+  const handleLogoClick = useCallback(
+    (e: React.MouseEvent) => {
+      const shouldPrevent = handleLogoInteraction(true);
+      if (shouldPrevent) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      // Otherwise allow normal Link navigation
+    },
+    [handleLogoInteraction],
+  );
+
+  // Logo touch handler for Tomato Toss Easter Egg (mobile)
+  const handleLogoTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const shouldPrevent = handleLogoInteraction(true);
+      if (shouldPrevent) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      // Otherwise allow normal Link navigation
+    },
+    [handleLogoInteraction],
   );
 
   // Logo hold handler for Achievements Dropdown
@@ -97,6 +126,7 @@ export const useLogoInteractions = () => {
     showAchievements,
     setShowAchievements,
     handleLogoClick,
+    handleLogoTouchEnd,
     handleLogoMouseDown,
     handleLogoMouseUp,
     handleLogoMouseLeave,
