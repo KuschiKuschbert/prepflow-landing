@@ -10,7 +10,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useKitchenFireGame } from './useKitchenFireGame';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
@@ -19,6 +19,7 @@ import { throwConfetti } from '@/hooks/useConfetti';
 
 const KitchenOnFire: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const {
     flames,
     extinguished,
@@ -46,6 +47,16 @@ const KitchenOnFire: React.FC = () => {
   const handleReturnToDashboard = () => {
     router.push('/webapp');
   };
+
+  // Suppress error game on auth-related routes (Auth0/NextAuth/login flows)
+  if (
+    pathname &&
+    (pathname.startsWith('/api/auth') ||
+      pathname.startsWith('/login') ||
+      pathname.startsWith('/auth'))
+  ) {
+    return null;
+  }
 
   return (
     <>

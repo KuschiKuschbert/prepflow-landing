@@ -35,20 +35,27 @@ const routePath = () => {
   return window.location.pathname;
 };
 
+const isAuthRoute = (path: string) => {
+  return path.startsWith('/api/auth') || path.startsWith('/login') || path.startsWith('/auth');
+};
+
 const CatchTheDocketOverlay: React.FC = () => {
   const [active, setActive] = useState(false);
   const disabled = useMemo(() => {
-    const d = prefersReducedMotion() || isArcadeDisabled() || isTouchDevice();
+    const path = routePath();
+    const d = prefersReducedMotion() || isArcadeDisabled() || isTouchDevice() || isAuthRoute(path);
     if (d && typeof window !== 'undefined') {
       const payload = {
         event: 'arcade_disabled_mobile',
         event_category: 'arcade',
-        page_path: routePath(),
-        reason: prefersReducedMotion()
-          ? 'reduced_motion'
-          : isArcadeDisabled()
-            ? 'flag'
-            : 'touch_device',
+        page_path: path,
+        reason: isAuthRoute(path)
+          ? 'auth_route'
+          : prefersReducedMotion()
+            ? 'reduced_motion'
+            : isArcadeDisabled()
+              ? 'flag'
+              : 'touch_device',
       } as const;
       (window as any).dataLayer?.push(payload);
       window.dispatchEvent(new CustomEvent('gtm:event', { detail: payload }));
