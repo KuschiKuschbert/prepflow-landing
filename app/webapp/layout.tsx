@@ -15,6 +15,7 @@ import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
 import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import { isTouchDevice } from '@/lib/arcadeGuards';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -51,11 +52,8 @@ export default function WebAppLayout({
   // Disable arcade overlay when coming from Auth0 or when auth error is present
   useEffect(() => {
     try {
-      // Always disable on touch/mobile devices
-      const isTouch =
-        typeof navigator !== 'undefined' &&
-        (navigator.maxTouchPoints > 0 ||
-          (typeof window !== 'undefined' && (window as any).ontouchstart !== undefined));
+      // Use centralized touch detection (includes Android UA fallback)
+      const isTouch = isTouchDevice();
 
       const search = typeof window !== 'undefined' ? window.location.search : '';
       const fromAuth =
