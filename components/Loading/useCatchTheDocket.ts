@@ -36,34 +36,18 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
   const whooshSound = useRef<Howl | null>(null);
   const successSound = useRef<Howl | null>(null);
   const alertSound = useRef<Howl | null>(null);
+  const soundsInitialized = useRef<boolean>(false);
 
-  // Initialize sounds
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
+  const initSounds = useCallback(() => {
+    if (typeof window === 'undefined' || soundsInitialized.current) return;
     try {
-      clickSound.current = new Howl({
-        src: ['/sfx/click.mp3'],
-        volume: 0.5,
-        preload: false,
-      });
-      whooshSound.current = new Howl({
-        src: ['/sfx/whoosh.mp3'],
-        volume: 0.3,
-        preload: false,
-      });
-      successSound.current = new Howl({
-        src: ['/sfx/success.mp3'],
-        volume: 0.6,
-        preload: false,
-      });
-      alertSound.current = new Howl({
-        src: ['/sfx/alert.mp3'],
-        volume: 0.7,
-        preload: false,
-      });
+      clickSound.current = new Howl({ src: ['/sfx/click.mp3'], volume: 0.5, preload: false });
+      whooshSound.current = new Howl({ src: ['/sfx/whoosh.mp3'], volume: 0.3, preload: false });
+      successSound.current = new Howl({ src: ['/sfx/success.mp3'], volume: 0.6, preload: false });
+      alertSound.current = new Howl({ src: ['/sfx/alert.mp3'], volume: 0.7, preload: false });
+      soundsInitialized.current = true;
     } catch (error) {
-      console.warn('Failed to load sounds, using fallback');
+      // ignore; will fall back to silent
     }
   }, []);
 
@@ -96,12 +80,17 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
           // Silently fail
         }
       }
+    } else {
+      // If sounds are not initialized, skip fallback to avoid gesture errors
+      if (!soundsInitialized.current) return;
     }
   }, []);
 
   // Spawn new docket
   const spawnDocket = useCallback(() => {
     if (!containerRef.current || gameFinished) return;
+    // Cap number of active dockets to reduce load
+    if (dockets.length >= 6) return;
 
     const container = containerRef.current.getBoundingClientRect();
     const side = Math.floor(Math.random() * 4);
@@ -148,11 +137,15 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
 
     setDockets(prev => [...prev, newDocket]);
     playSound(whooshSound.current, 600);
-  }, [gameFinished, containerRef, playSound]);
+  }, [gameFinished, containerRef, playSound, dockets.length]);
 
   // Update dockets animation
   useEffect(() => {
     if (!isLoading || gameFinished) return;
+
+    const reduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const animate = () => {
       setDockets(prev =>
@@ -161,7 +154,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
             ...docket,
             x: docket.x + docket.vx,
             y: docket.y + docket.vy,
-            rotation: docket.rotation + 5,
+            rotation: reduced ? docket.rotation : docket.rotation + 5,
           }))
           .filter(docket => {
             if (!containerRef.current) return false;
@@ -190,9 +183,10 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
   useEffect(() => {
     if (!isLoading || gameFinished) return;
 
+    const interval = Math.floor(2600 + Math.random() * 800);
     const spawnInterval = setInterval(() => {
       spawnDocket();
-    }, 2000);
+    }, interval);
 
     return () => clearInterval(spawnInterval);
   }, [isLoading, gameFinished, spawnDocket]);
@@ -269,5 +263,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
     gameFinished,
     spawnDocket,
     handleDocketClick,
+    initSounds,
+    soundsReady: soundsInitialized.current,
   };
 };

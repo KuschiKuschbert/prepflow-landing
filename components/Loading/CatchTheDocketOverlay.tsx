@@ -19,6 +19,17 @@ const isArcadeDisabled = () => {
   }
 };
 
+const isTouchDevice = () => {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
+  try {
+    const hasTouch = navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
+    const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
+    return hasTouch && !forceEnable;
+  } catch (_) {
+    return false;
+  }
+};
+
 const routePath = () => {
   if (typeof window === 'undefined') return '/';
   return window.location.pathname;
@@ -26,7 +37,24 @@ const routePath = () => {
 
 const CatchTheDocketOverlay: React.FC = () => {
   const [active, setActive] = useState(false);
-  const disabled = useMemo(() => prefersReducedMotion() || isArcadeDisabled(), []);
+  const disabled = useMemo(() => {
+    const d = prefersReducedMotion() || isArcadeDisabled() || isTouchDevice();
+    if (d && typeof window !== 'undefined') {
+      const payload = {
+        event: 'arcade_disabled_mobile',
+        event_category: 'arcade',
+        page_path: routePath(),
+        reason: prefersReducedMotion()
+          ? 'reduced_motion'
+          : isArcadeDisabled()
+            ? 'flag'
+            : 'touch_device',
+      } as const;
+      (window as any).dataLayer?.push(payload);
+      window.dispatchEvent(new CustomEvent('gtm:event', { detail: payload }));
+    }
+    return d;
+  }, []);
 
   useEffect(() => {
     if (disabled) return;

@@ -8,7 +8,11 @@
 import React from 'react';
 import { backgroundTheme } from '@/lib/theme';
 
-const WebAppBackground: React.FC = () => {
+interface WebAppBackgroundProps {
+  compact?: boolean;
+}
+
+const WebAppBackground: React.FC<WebAppBackgroundProps> = ({ compact = false }) => {
   return (
     <>
       {/* Base gradient */}
@@ -23,8 +27,8 @@ const WebAppBackground: React.FC = () => {
       <div
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
-          backgroundImage: `linear-gradient(rgba(41,231,205,${backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
-          backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
+          backgroundImage: `linear-gradient(rgba(41,231,205,${compact ? backgroundTheme.gridCyanOpacity * 0.5 : backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${compact ? backgroundTheme.gridBlueOpacity * 0.5 : backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
+          backgroundSize: `${compact ? backgroundTheme.gridSizePx * 1.2 : backgroundTheme.gridSizePx}px ${compact ? backgroundTheme.gridSizePx * 1.2 : backgroundTheme.gridSizePx}px`,
           backgroundPosition: '0px 0px, 0px 0px',
           maskImage: 'radial-gradient(120% 80% at 50% 20%, black 60%, transparent 100%)',
         }}
@@ -36,9 +40,9 @@ const WebAppBackground: React.FC = () => {
         style={{
           left: 0,
           top: 0,
-          width: 420,
-          height: 420,
-          background: `radial-gradient(closest-side, rgba(41,231,205,${backgroundTheme.cornerCyanOpacity}), transparent 70%)`,
+          width: compact ? 280 : 420,
+          height: compact ? 280 : 420,
+          background: `radial-gradient(closest-side, rgba(41,231,205,${compact ? backgroundTheme.cornerCyanOpacity * 0.6 : backgroundTheme.cornerCyanOpacity}), transparent 70%)`,
         }}
       />
       <div
@@ -46,9 +50,9 @@ const WebAppBackground: React.FC = () => {
         style={{
           right: 0,
           top: 120,
-          width: 400,
-          height: 400,
-          background: `radial-gradient(closest-side, rgba(217,37,199,${backgroundTheme.cornerMagentaOpacity}), transparent 70%)`,
+          width: compact ? 260 : 400,
+          height: compact ? 260 : 400,
+          background: `radial-gradient(closest-side, rgba(217,37,199,${compact ? backgroundTheme.cornerMagentaOpacity * 0.6 : backgroundTheme.cornerMagentaOpacity}), transparent 70%)`,
         }}
       />
 
