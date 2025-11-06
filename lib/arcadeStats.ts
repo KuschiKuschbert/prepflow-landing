@@ -11,14 +11,12 @@ export interface ArcadeStats {
   tomatoes: number;
   dockets: number;
   fires: number;
-  bestRun: number;
 }
 
 const STAT_KEYS = {
   TOMATOES: 'prepflow_tomatoes_thrown',
   DOCKETS: 'prepflow_dockets_total',
   FIRES: 'prepflow_fires_extinguished',
-  BEST_RUN: 'prepflow_best_docket_run',
 } as const;
 
 // Global stats (localStorage) - persistent across sessions
@@ -27,14 +25,13 @@ const STAT_KEYS = {
  */
 export const getArcadeStats = (): ArcadeStats => {
   if (typeof window === 'undefined') {
-    return { tomatoes: 0, dockets: 0, fires: 0, bestRun: 0 };
+    return { tomatoes: 0, dockets: 0, fires: 0 };
   }
 
   return {
     tomatoes: Number(localStorage.getItem(STAT_KEYS.TOMATOES) || 0),
     dockets: Number(localStorage.getItem(STAT_KEYS.DOCKETS) || 0),
     fires: Number(localStorage.getItem(STAT_KEYS.FIRES) || 0),
-    bestRun: Number(localStorage.getItem(STAT_KEYS.BEST_RUN) || 0),
   };
 };
 
@@ -81,14 +78,13 @@ export const setStat = (key: string, value: number): void => {
  */
 export const getSessionStats = (): ArcadeStats => {
   if (typeof window === 'undefined') {
-    return { tomatoes: 0, dockets: 0, fires: 0, bestRun: 0 };
+    return { tomatoes: 0, dockets: 0, fires: 0 };
   }
 
   return {
     tomatoes: Number(sessionStorage.getItem(STAT_KEYS.TOMATOES) || 0),
     dockets: Number(sessionStorage.getItem(STAT_KEYS.DOCKETS) || 0),
     fires: Number(sessionStorage.getItem(STAT_KEYS.FIRES) || 0),
-    bestRun: Number(sessionStorage.getItem(STAT_KEYS.BEST_RUN) || 0),
   };
 };
 

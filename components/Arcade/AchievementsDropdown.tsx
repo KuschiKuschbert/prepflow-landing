@@ -126,18 +126,6 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                 </div>
                 <div className="text-2xl font-bold text-[#4CAF50]">{stats.fires}</div>
               </div>
-
-              {/* Best Run */}
-              <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">⭐</span>
-                  <div>
-                    <div className="font-semibold text-white">Best Docket Run</div>
-                    <div className="text-sm text-gray-400">Peak shift performance.</div>
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-[#4CAF50]">{stats.bestRun}</div>
-              </div>
             </div>
 
             {/* Confetti Preview */}

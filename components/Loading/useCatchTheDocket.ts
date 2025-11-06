@@ -4,14 +4,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Howl } from 'howler';
-import {
-  addStat,
-  addSessionStat,
-  setStat,
-  setSessionStat,
-  STAT_KEYS,
-  getArcadeStats,
-} from '@/lib/arcadeStats';
+import { addStat, addSessionStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { throwConfetti } from '@/hooks/useConfetti';
 import { isArcadeMuted } from '@/lib/arcadeMute';
 
@@ -35,7 +28,6 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
   const [playTime, setPlayTime] = useState(0);
   const [alertShown, setAlertShown] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
-  const [globalStats, setGlobalStats] = useState(() => getArcadeStats());
   const animationRef = useRef<number | null>(null);
   const timeIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -236,11 +228,6 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
 
       const newTotal = addStat(STAT_KEYS.DOCKETS, caught);
       addSessionStat(STAT_KEYS.DOCKETS, caught);
-      const currentBest = globalStats.bestRun;
-      if (caught > currentBest) {
-        setStat(STAT_KEYS.BEST_RUN, caught);
-        setSessionStat(STAT_KEYS.BEST_RUN, caught);
-      }
 
       if ([10, 25, 50, 100].includes(newTotal)) {
         throwConfetti(1.5);
@@ -249,22 +236,8 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
       }
 
       playSound(successSound.current, 1000);
-
-      setTimeout(() => {
-        setGlobalStats(getArcadeStats());
-      }, 1000);
     }
-  }, [isLoading, gameFinished, caught, globalStats.bestRun, playSound]);
-
-  // Update global stats
-  useEffect(() => {
-    const handleStatsUpdate = () => {
-      setGlobalStats(getArcadeStats());
-    };
-
-    window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
-    return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
-  }, []);
+  }, [isLoading, gameFinished, caught, playSound]);
 
   // Handle docket click
   const handleDocketClick = useCallback(
@@ -294,7 +267,6 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
     playTime,
     alertShown,
     gameFinished,
-    globalStats,
     spawnDocket,
     handleDocketClick,
   };

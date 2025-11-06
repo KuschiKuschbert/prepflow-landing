@@ -40,10 +40,6 @@ export const NavbarStats: React.FC = () => {
         <span>🔥</span>
         <span className="hidden sm:inline">{stats.fires}</span>
       </div>
-      <div title="Best Docket Run" className="flex items-center gap-0.5 md:gap-1">
-        <span>⭐</span>
-        <span className="hidden sm:inline">{stats.bestRun}</span>
-      </div>
     </div>
   );
 };
