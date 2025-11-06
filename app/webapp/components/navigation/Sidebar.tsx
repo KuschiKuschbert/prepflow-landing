@@ -27,7 +27,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
       role="navigation"
       aria-label="Main"
       aria-hidden={!isOpen}
-      inert={!isOpen ? '' : undefined}
+      {...(!isOpen && { inert: true })}
       ref={sidebarRef}
       className={cn(
         'fixed',
