@@ -28,7 +28,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               alt="PrepFlow Logo"
               width={140}
               height={45}
-              className="h-12 w-auto"
+              className="h-8 w-auto md:h-12"
               priority={true}
             />
           </Link>
