@@ -38,31 +38,35 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-      <div className="mb-6">
-        <h2 className="mb-2 text-2xl font-semibold text-white">🚀 Quick Actions</h2>
-        <p className="text-gray-400">Get started with your kitchen management</p>
+    <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg md:mb-8 md:rounded-3xl md:p-6">
+      <div className="mb-4 md:mb-6">
+        <h2 className="mb-1 text-xl font-semibold text-white md:mb-2 md:text-2xl">
+          🚀 Quick Actions
+        </h2>
+        <p className="text-sm text-gray-400 md:text-base">
+          Get started with your kitchen management
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
         {actions.map((action, index) => (
           <Link
             key={action.title}
             href={action.href}
-            className="group rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg hover:shadow-[#29E7CD]/10"
+            className="group min-h-[44px] rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg hover:shadow-[#29E7CD]/10 active:scale-[0.98] md:rounded-2xl md:p-6"
           >
-            <div className="flex flex-col items-center space-y-4 text-center">
+            <div className="flex flex-col items-center space-y-3 text-center md:space-y-4">
               <div
-                className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}
+                className={`h-12 w-12 rounded-xl bg-gradient-to-br md:h-16 md:w-16 md:rounded-2xl ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}
               >
-                <span className="text-3xl">{action.icon}</span>
+                <span className="text-2xl md:text-3xl">{action.icon}</span>
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-white transition-colors duration-200 group-hover:text-[#29E7CD]">
+                <h3 className="text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#29E7CD] md:text-lg">
                   {action.title}
                 </h3>
-                <p className="mt-1 text-sm text-gray-400">{action.description}</p>
+                <p className="mt-1 text-xs text-gray-400 md:text-sm">{action.description}</p>
               </div>
             </div>
           </Link>

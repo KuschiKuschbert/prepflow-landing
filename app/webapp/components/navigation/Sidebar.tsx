@@ -3,6 +3,8 @@
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
 import React, { RefObject } from 'react';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { LogoutButton } from '../LogoutButton';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,7 +33,8 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'inset-y-0',
         'left-0',
         'z-50',
-        'w-80',
+        'w-72',
+        'md:w-80',
         'transform',
         'border-r',
         'border-[#2a2a2a]',
@@ -50,7 +53,8 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
             'justify-between',
             'border-b',
             'border-[#2a2a2a]',
-            'p-4',
+            'p-3',
+            'md:p-4',
           )}
         >
           <h2 id="sidebar-title" className="text-lg font-semibold text-white">
@@ -59,7 +63,14 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
           <button
             aria-label="Close navigation"
             onClick={onClose}
-            className={cn('rounded-lg', 'p-1', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
+            className={cn(
+              'rounded-lg',
+              'p-1',
+              'min-h-[44px]',
+              'min-w-[44px]',
+              'transition-colors',
+              'hover:bg-[#2a2a2a]/50',
+            )}
           >
             <svg
               className="h-5 w-5 text-gray-400"
@@ -77,18 +88,19 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
           </button>
         </div>
 
-        <div className={cn('border-b', 'border-[#2a2a2a]', 'p-4')}>
+        <div className={cn('hidden', 'md:block', 'border-b', 'border-[#2a2a2a]', 'p-4')}>
           <div className="text-xs text-gray-500">
             Press <kbd className="rounded bg-[#2a2a2a] px-1">⌘B</kbd> to toggle
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-3 md:p-4">
           {Object.entries(grouped).map(([category, items]) => (
-            <div key={category} className="mb-6">
+            <div key={category} className="mb-4 md:mb-6">
               <h3
                 className={cn(
-                  'mb-3',
+                  'mb-2',
+                  'md:mb-3',
                   'text-xs',
                   'font-semibold',
                   'tracking-wider',
@@ -121,7 +133,8 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                       'space-x-3',
                       'rounded-lg',
                       'px-3',
-                      'py-2',
+                      'py-2.5',
+                      'min-h-[44px]',
                       'transition-all',
                       'duration-200',
                       isActive(item.href)
@@ -146,6 +159,23 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Mobile-only: Language and Logout */}
+        <div className="space-y-3 border-t border-[#2a2a2a] p-4 md:hidden">
+          <div>
+            <div className="mb-2 text-xs tracking-wider text-gray-400 uppercase">Settings</div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-300">Language</span>
+                <LanguageSwitcher />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-300">Account</span>
+                <LogoutButton />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </aside>

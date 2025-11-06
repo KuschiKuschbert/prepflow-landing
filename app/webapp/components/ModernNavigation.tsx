@@ -122,12 +122,19 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         role="banner"
         className={cn('border-b', 'border-[#2a2a2a]', 'bg-[#1f1f1f]', className)}
       >
-        <div className="flex items-center justify-between px-4 py-2">
+        <div className="flex items-center justify-between px-3 py-2 md:px-4">
           {/* Left: Logo + Menu Button */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 md:space-x-3">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className={cn('rounded-lg', 'p-1.5', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
+              className={cn(
+                'rounded-lg',
+                'p-1.5',
+                'min-h-[44px]',
+                'min-w-[44px]',
+                'transition-colors',
+                'hover:bg-[#2a2a2a]/50',
+              )}
               aria-label="Toggle navigation sidebar"
               aria-controls="app-sidebar"
               aria-expanded={isSidebarOpen}
@@ -153,7 +160,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                 onMouseDown={handleLogoMouseDown}
                 onMouseUp={handleLogoMouseUp}
                 onMouseLeave={handleLogoMouseLeave}
-                className="cursor-pointer"
+                className="flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center"
                 aria-label="PrepFlow Logo"
               >
                 <OptimizedImage
@@ -164,7 +171,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                   className="h-6 w-6"
                 />
               </button>
-              <span className="text-lg font-semibold text-white">PrepFlow</span>
+              <span className="hidden text-lg font-semibold text-white md:inline">PrepFlow</span>
               {/* Global Autosave Status Indicator */}
               <AutosaveGlobalIndicator />
             </Link>
@@ -195,11 +202,18 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           </div>
 
           {/* Right: Search, Stats, Language, User */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 md:space-x-3">
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className={cn('rounded-lg', 'p-1.5', 'transition-colors', 'hover:bg-[#2a2a2a]/50')}
+              className={cn(
+                'rounded-lg',
+                'p-1.5',
+                'min-h-[44px]',
+                'min-w-[44px]',
+                'transition-colors',
+                'hover:bg-[#2a2a2a]/50',
+              )}
               aria-label="Open search"
               aria-controls="search-modal"
               aria-expanded={isSearchOpen}
@@ -219,12 +233,14 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
               </svg>
             </button>
 
-            {/* Navbar Stats (placed between search and language) */}
+            {/* Navbar Stats - compact on mobile */}
             <NavbarStats />
 
-            <LanguageSwitcher />
-
-            <LogoutButton />
+            {/* Language and Logout - hidden on mobile (available in sidebar) */}
+            <div className="hidden items-center space-x-2 md:flex">
+              <LanguageSwitcher />
+              <LogoutButton />
+            </div>
           </div>
         </div>
       </header>

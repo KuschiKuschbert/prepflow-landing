@@ -403,6 +403,27 @@
   .animate-float-strong {
     animation: none !important;
   }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  /* Reduce transform animations on mobile for better performance */
+  .group-hover\:scale-110:hover {
+    transform: scale(1.05);
+  }
+
+  /* Optimize transitions on mobile */
+  * {
+    transition-timing-function: ease-out;
+  }
 }
 
 /* Hide any stray chart elements that might appear in corners */

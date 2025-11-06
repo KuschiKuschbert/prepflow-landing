@@ -27,22 +27,22 @@ export const NavbarStats: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex gap-3 text-xs text-white/80">
-      <div title="Tomatoes Thrown" className="flex items-center gap-1">
+    <div className="flex gap-1.5 text-[10px] text-white/80 md:gap-3 md:text-xs">
+      <div title="Tomatoes Thrown" className="flex items-center gap-0.5 md:gap-1">
         <span>🍅</span>
-        <span>{stats.tomatoes}</span>
+        <span className="hidden sm:inline">{stats.tomatoes}</span>
       </div>
-      <div title="Dockets Caught" className="flex items-center gap-1">
+      <div title="Dockets Caught" className="flex items-center gap-0.5 md:gap-1">
         <span>🧾</span>
-        <span>{stats.dockets}</span>
+        <span className="hidden sm:inline">{stats.dockets}</span>
       </div>
-      <div title="Fires Extinguished" className="flex items-center gap-1">
+      <div title="Fires Extinguished" className="flex items-center gap-0.5 md:gap-1">
         <span>🔥</span>
-        <span>{stats.fires}</span>
+        <span className="hidden sm:inline">{stats.fires}</span>
       </div>
-      <div title="Best Docket Run" className="flex items-center gap-1">
+      <div title="Best Docket Run" className="flex items-center gap-0.5 md:gap-1">
         <span>⭐</span>
-        <span>{stats.bestRun}</span>
+        <span className="hidden sm:inline">{stats.bestRun}</span>
       </div>
     </div>
   );

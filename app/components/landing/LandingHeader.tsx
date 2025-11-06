@@ -36,16 +36,16 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-6 py-4">
+      <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-2 md:space-x-3">
             <button
               onClick={handleLogoClick}
               onMouseDown={handleLogoMouseDown}
               onMouseUp={handleLogoMouseUp}
               onMouseLeave={handleLogoMouseLeave}
-              className="cursor-pointer"
+              className="flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center"
               aria-label="PrepFlow Logo"
             >
               <OptimizedImage
@@ -53,7 +53,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                 alt="PrepFlow Logo"
                 width={140}
                 height={45}
-                className="h-9 w-auto"
+                className="h-7 w-auto md:h-9"
                 priority={true}
               />
             </button>
@@ -116,8 +116,10 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           </div>
 
           {/* Mobile Header */}
-          <div className="flex items-center gap-3 md:hidden">
-            <LanguageSwitcher className="scale-90" showFlag={true} showName={true} size="sm" />
+          <div className="flex items-center gap-2 md:hidden">
+            <div className="flex min-h-[44px] min-w-[44px] items-center justify-center">
+              <LanguageSwitcher className="scale-90" showFlag={true} showName={true} size="sm" />
+            </div>
             <MobileNavigation onEngagement={trackEngagement} />
           </div>
         </div>
