@@ -40,8 +40,14 @@ const CatchTheDocketOverlay: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (disabled) return;
+    // Double-check disabled state on every render to prevent race conditions
+    if (disabled || isTouchDevice() || isArcadeDisabled() || prefersReducedMotion()) return;
     return subscribeLoadingGate(isVisible => {
+      // Additional safety check before showing overlay
+      if (isVisible && (isTouchDevice() || isArcadeDisabled() || prefersReducedMotion())) {
+        return;
+      }
+
       // analytics hooks
       if (isVisible && !active) {
         const startPayload = {
@@ -68,7 +74,8 @@ const CatchTheDocketOverlay: React.FC = () => {
     });
   }, [disabled, active]);
 
-  if (disabled) return null;
+  // Multiple safety checks to prevent rendering on mobile
+  if (disabled || isTouchDevice() || isArcadeDisabled() || prefersReducedMotion()) return null;
 
   return (
     <AnimatePresence>

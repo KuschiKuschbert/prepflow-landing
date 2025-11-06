@@ -25,7 +25,15 @@ export default function WebAppLayout({
   children: React.ReactNode;
 }>) {
   const { t } = useTranslation();
-  const [disableArcadeOverlay, setDisableArcadeOverlay] = useState(false);
+  // Initialize as disabled on touch devices to prevent any initial render
+  const [disableArcadeOverlay, setDisableArcadeOverlay] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return isTouchDevice();
+    } catch {
+      return false;
+    }
+  });
 
   // Session timeout configuration
   // 4 hours timeout with 15-minute warning (kitchen-optimized)
@@ -79,7 +87,7 @@ export default function WebAppLayout({
     <NotificationProvider>
       <CountryProvider>
         <GlobalWarningProvider>
-          <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
+          <div className={`${inter.className} min-h-screen bg-[#0a0a0a] text-white`}>
             {/* Modern Navigation */}
             <ErrorBoundary>
               <ModernNavigation />
@@ -92,7 +100,7 @@ export default function WebAppLayout({
             <DraftRecovery />
 
             {/* Main Content */}
-            <main className="bg-transparent">
+            <main className="bg-[#0a0a0a]">
               <ReactQueryProvider>{children}</ReactQueryProvider>
             </main>
 
