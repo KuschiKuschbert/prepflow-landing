@@ -11,7 +11,9 @@ export function PersonalitySettingsPanel() {
   const { settings, set, applyPreset, silenceFor24h } = usePersonality();
   const { showInfo } = useNotification();
 
-  const handlePreview = (kind: 'mindful' | 'meta' | 'metrics' | 'chaos' | 'chefHabits') => {
+  const handlePreview = (
+    kind: 'mindful' | 'meta' | 'metrics' | 'chaos' | 'chefHabits' | 'moodShift',
+  ) => {
     const msg = dispatchToast.pick(kind);
     if (msg) {
       showInfo(msg);
