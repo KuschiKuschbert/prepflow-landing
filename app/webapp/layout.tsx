@@ -51,6 +51,12 @@ export default function WebAppLayout({
   // Disable arcade overlay when coming from Auth0 or when auth error is present
   useEffect(() => {
     try {
+      // Always disable on touch/mobile devices
+      const isTouch =
+        typeof navigator !== 'undefined' &&
+        (navigator.maxTouchPoints > 0 ||
+          (typeof window !== 'undefined' && (window as any).ontouchstart !== undefined));
+
       const search = typeof window !== 'undefined' ? window.location.search : '';
       const fromAuth =
         typeof window !== 'undefined' ? window.location.pathname.startsWith('/api/auth') : false;
@@ -60,7 +66,7 @@ export default function WebAppLayout({
           ? sessionStorage.getItem('PF_AUTH_IN_PROGRESS') === '1'
           : false;
 
-      if (fromAuth || hasAuthError || authFlag) {
+      if (isTouch || fromAuth || hasAuthError || authFlag) {
         setDisableArcadeOverlay(true);
       }
 

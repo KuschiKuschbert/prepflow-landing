@@ -9,13 +9,12 @@
  * Web Audio API for a fully self-contained experience.
  */
 
-import React, { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useKitchenFireGame } from './useKitchenFireGame';
-import WebAppBackground from '@/components/Arcade/WebAppBackground';
 import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
-import { throwConfetti } from '@/hooks/useConfetti';
+import WebAppBackground from '@/components/Arcade/WebAppBackground';
+import { AnimatePresence, motion } from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { useKitchenFireGame } from './useKitchenFireGame';
 
 const KitchenOnFire: React.FC = () => {
   const router = useRouter();
