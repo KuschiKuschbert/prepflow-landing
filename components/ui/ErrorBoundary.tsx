@@ -48,14 +48,21 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      // Default fallback, but suppress on auth routes
+      // Default fallback, but suppress on auth routes or mobile devices
       const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
       const disableArcadeErrors = (() => {
         try {
-          return (
-            typeof window !== 'undefined' &&
-            localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1'
-          );
+          if (typeof window === 'undefined') return false;
+          // Check explicit flag first
+          if (localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1') return true;
+          // Auto-disable on mobile/touch devices
+          if (typeof navigator !== 'undefined') {
+            const hasTouch =
+              navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
+            const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
+            if (hasTouch && !forceEnable) return true;
+          }
+          return false;
         } catch (_) {
           return false;
         }

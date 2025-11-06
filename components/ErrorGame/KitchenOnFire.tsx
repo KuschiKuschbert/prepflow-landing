@@ -23,7 +23,15 @@ const KitchenOnFire: React.FC = () => {
   const isArcadeErrorsDisabled = () => {
     if (typeof window === 'undefined') return false;
     try {
-      return localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1';
+      // Check explicit flag first
+      if (localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1') return true;
+      // Auto-disable on mobile/touch devices
+      if (typeof navigator !== 'undefined') {
+        const hasTouch = navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
+        const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
+        if (hasTouch && !forceEnable) return true;
+      }
+      return false;
     } catch (_) {
       return false;
     }
