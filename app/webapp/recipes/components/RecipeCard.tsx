@@ -81,14 +81,9 @@ const RecipeCard = React.memo(function RecipeCard({
       <div className="ml-7 flex gap-2">
         <button
           onClick={() => onEditRecipe(recipe)}
-          className="flex items-center justify-center gap-1.5 flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
         >
-          <svg
-            className="h-3.5 w-3.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -100,14 +95,9 @@ const RecipeCard = React.memo(function RecipeCard({
         </button>
         <button
           onClick={() => onDeleteRecipe(recipe)}
-          className="flex items-center justify-center gap-1.5 flex-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
         >
-          <svg
-            className="h-3.5 w-3.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -35,4 +38,3 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }
-

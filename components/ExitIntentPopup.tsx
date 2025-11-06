@@ -168,7 +168,9 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
           <div className="text-center">
             <div className="mb-4 text-6xl">🎉</div>
             <h3 className="mb-2 text-2xl font-bold text-[#29E7CD]">Don&apos;t go yet!</h3>
-            <p className="mb-4 text-gray-300">We&apos;ve sent the sample dashboard to your email.</p>
+            <p className="mb-4 text-gray-300">
+              We&apos;ve sent the sample dashboard to your email.
+            </p>
             <p className="text-sm text-gray-500">Check your inbox in the next few minutes.</p>
           </div>
         ) : (

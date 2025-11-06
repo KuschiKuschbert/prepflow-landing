@@ -60,7 +60,6 @@ export default function CleaningRosterPage() {
     setTimeout(() => {
       fetchAreas();
     }, 0);
-     
   }, []);
 
   useEffect(() => {

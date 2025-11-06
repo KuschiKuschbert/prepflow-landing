@@ -49,8 +49,10 @@ export function DeleteConfirmationModal({
         <div className="p-6">
           <p className="mb-6 text-gray-300">
             Are you sure you want to delete{' '}
-            <span className="font-semibold text-white">&quot;{capitalizeRecipeName(recipe.name)}&quot;</span>?
-            This will permanently remove the recipe and all its ingredients from your Recipe Book.
+            <span className="font-semibold text-white">
+              &quot;{capitalizeRecipeName(recipe.name)}&quot;
+            </span>
+            ? This will permanently remove the recipe and all its ingredients from your Recipe Book.
           </p>
           <div className="flex gap-3">
             <button

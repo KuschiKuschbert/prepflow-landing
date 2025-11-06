@@ -60,9 +60,7 @@ export async function populateBasicData(
     .from('ingredients')
     .select('ingredient_name');
   const existingIngredientNames = new Set(
-    (existingIngredients || [])
-      .map(i => i.ingredient_name?.toLowerCase().trim())
-      .filter(Boolean),
+    (existingIngredients || []).map(i => i.ingredient_name?.toLowerCase().trim()).filter(Boolean),
   );
 
   const ingredientsToInsert = cleanSampleIngredients.filter(
@@ -137,83 +135,81 @@ export async function populateBasicData(
 
   // Recipe Ingredients
   if (recipesData && ingredientsData) {
-      // Create case-insensitive maps for matching
-      const recipeMap = new Map<string, string>();
-      recipesData.forEach(r => {
-        recipeMap.set(r.name.toLowerCase().trim(), r.id);
-        recipeMap.set(r.name, r.id); // Also include exact match
-      });
+    // Create case-insensitive maps for matching
+    const recipeMap = new Map<string, string>();
+    recipesData.forEach(r => {
+      recipeMap.set(r.name.toLowerCase().trim(), r.id);
+      recipeMap.set(r.name, r.id); // Also include exact match
+    });
 
-      const ingredientMap = new Map<string, string>();
-      ingredientsData.forEach(i => {
-        const nameKey = i.ingredient_name?.toLowerCase().trim() || '';
-        ingredientMap.set(nameKey, i.id);
-        ingredientMap.set(i.ingredient_name || '', i.id); // Also include exact match
-      });
+    const ingredientMap = new Map<string, string>();
+    ingredientsData.forEach(i => {
+      const nameKey = i.ingredient_name?.toLowerCase().trim() || '';
+      ingredientMap.set(nameKey, i.id);
+      ingredientMap.set(i.ingredient_name || '', i.id); // Also include exact match
+    });
 
-      const recipeIngredientsToInsert: Array<{
-        recipe_id: string;
-        ingredient_id: string;
-        quantity: number;
-        unit: string;
-      }> = [];
-      const skippedIngredients: string[] = [];
+    const recipeIngredientsToInsert: Array<{
+      recipe_id: string;
+      ingredient_id: string;
+      quantity: number;
+      unit: string;
+    }> = [];
+    const skippedIngredients: string[] = [];
 
-      for (const [recipeName, mappings] of Object.entries(recipeIngredientMappings)) {
+    for (const [recipeName, mappings] of Object.entries(recipeIngredientMappings)) {
+      // Try exact match first, then case-insensitive
+      const recipeId = recipeMap.get(recipeName) || recipeMap.get(recipeName.toLowerCase().trim());
+      if (!recipeId) {
+        console.warn(`Recipe "${recipeName}" not found in recipes data`);
+        continue;
+      }
+
+      for (const mapping of mappings) {
         // Try exact match first, then case-insensitive
-        const recipeId =
-          recipeMap.get(recipeName) || recipeMap.get(recipeName.toLowerCase().trim());
-        if (!recipeId) {
-          console.warn(`Recipe "${recipeName}" not found in recipes data`);
+        const ingredientNameKey = mapping.ingredient_name?.toLowerCase().trim() || '';
+        const ingredientId =
+          ingredientMap.get(mapping.ingredient_name) || ingredientMap.get(ingredientNameKey);
+
+        if (!ingredientId) {
+          skippedIngredients.push(mapping.ingredient_name);
+          console.warn(
+            `Ingredient "${mapping.ingredient_name}" not found when linking to recipe "${recipeName}"`,
+          );
           continue;
         }
 
-        for (const mapping of mappings) {
-          // Try exact match first, then case-insensitive
-          const ingredientNameKey = mapping.ingredient_name?.toLowerCase().trim() || '';
-          const ingredientId =
-            ingredientMap.get(mapping.ingredient_name) ||
-            ingredientMap.get(ingredientNameKey);
-
-          if (!ingredientId) {
-            skippedIngredients.push(mapping.ingredient_name);
-            console.warn(
-              `Ingredient "${mapping.ingredient_name}" not found when linking to recipe "${recipeName}"`,
-            );
-            continue;
-          }
-
-          recipeIngredientsToInsert.push({
-            recipe_id: recipeId,
-            ingredient_id: ingredientId,
-            quantity: mapping.quantity,
-            unit: mapping.unit,
-          });
-        }
-      }
-
-      if (skippedIngredients.length > 0) {
-        console.warn(
-          `Skipped ${skippedIngredients.length} ingredient(s) that could not be matched:`,
-          [...new Set(skippedIngredients)],
-        );
-      }
-
-      if (recipeIngredientsToInsert.length > 0) {
-        const { error: riError } = await supabaseAdmin
-          .from('recipe_ingredients')
-          .insert(recipeIngredientsToInsert);
-
-        if (riError) {
-          results.errors.push({ table: 'recipe_ingredients', error: riError.message });
-        } else {
-          results.populated.push({
-            table: 'recipe_ingredients',
-            count: recipeIngredientsToInsert.length,
-          });
-        }
+        recipeIngredientsToInsert.push({
+          recipe_id: recipeId,
+          ingredient_id: ingredientId,
+          quantity: mapping.quantity,
+          unit: mapping.unit,
+        });
       }
     }
+
+    if (skippedIngredients.length > 0) {
+      console.warn(
+        `Skipped ${skippedIngredients.length} ingredient(s) that could not be matched:`,
+        [...new Set(skippedIngredients)],
+      );
+    }
+
+    if (recipeIngredientsToInsert.length > 0) {
+      const { error: riError } = await supabaseAdmin
+        .from('recipe_ingredients')
+        .insert(recipeIngredientsToInsert);
+
+      if (riError) {
+        results.errors.push({ table: 'recipe_ingredients', error: riError.message });
+      } else {
+        results.populated.push({
+          table: 'recipe_ingredients',
+          count: recipeIngredientsToInsert.length,
+        });
+      }
+    }
+  }
 
   return {
     suppliersData: suppliersData || undefined,

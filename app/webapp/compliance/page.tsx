@@ -8,10 +8,10 @@ import { ComplianceRecordsList } from './components/ComplianceRecordsList';
 import { ComplianceTypeForm } from './components/ComplianceTypeForm';
 import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 import {
-    ComplianceRecord,
-    ComplianceRecordFormData,
-    ComplianceType,
-    ComplianceTypeFormData,
+  ComplianceRecord,
+  ComplianceRecordFormData,
+  ComplianceType,
+  ComplianceTypeFormData,
 } from './types';
 import { getTypeIcon } from './utils';
 

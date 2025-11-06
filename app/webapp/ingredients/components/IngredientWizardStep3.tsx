@@ -129,8 +129,8 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
                     ? formatCost(formData.cost_per_unit_incl_trim)
                     : '0.000'}
                 </strong>
-                after accounting for {String(formData.trim_peel_waste_percentage ?? 0)}% wastage. This is
-                the cost you should use for COGS calculations.
+                after accounting for {String(formData.trim_peel_waste_percentage ?? 0)}% wastage.
+                This is the cost you should use for COGS calculations.
               </p>
             </div>
           </div>

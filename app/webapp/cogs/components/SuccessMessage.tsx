@@ -8,12 +8,14 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
 
   // Check if this is a recipe loaded message (smaller) vs recipe saved message (larger)
   const isRecipeLoaded = message.toLowerCase().includes('loaded for editing');
-  const isRecipeSaved = message.toLowerCase().includes('saved successfully') || message.toLowerCase().includes('added to the recipe book');
+  const isRecipeSaved =
+    message.toLowerCase().includes('saved successfully') ||
+    message.toLowerCase().includes('added to the recipe book');
 
   // Smaller notification for recipe loaded
   if (isRecipeLoaded) {
     return (
-      <div className="mb-4 animate-in slide-in-from-top-2 rounded-lg border border-green-400/50 bg-green-500/20 px-4 py-2.5 text-sm text-green-200 shadow-md transition-all duration-200">
+      <div className="animate-in slide-in-from-top-2 mb-4 rounded-lg border border-green-400/50 bg-green-500/20 px-4 py-2.5 text-sm text-green-200 shadow-md transition-all duration-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <svg

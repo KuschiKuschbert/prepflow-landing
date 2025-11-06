@@ -11,8 +11,7 @@ export function convertToCOGSCalculations(
     const ingredient = ri.ingredients;
     const quantity = ri.quantity;
     // Use cost_per_unit_incl_trim if available, otherwise cost_per_unit
-    const baseCostPerUnit =
-      ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+    const baseCostPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
     const costPerUnit = baseCostPerUnit;
     const totalCost = quantity * costPerUnit;
 

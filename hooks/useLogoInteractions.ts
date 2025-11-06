@@ -2,7 +2,7 @@
  * Hook for managing logo interactions (Tomato Toss and Achievements)
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useLogoInteractions = () => {
   const [logoClicks, setLogoClicks] = useState(0);

@@ -84,18 +84,24 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
   const colors = ['#29E7CD', '#3B82F6', '#D925C7', '#10B981', '#F59E0B', '#EF4444'];
 
   // Calculate cumulative percentages without reassigning in render
-  const segments = data.reduce((acc, item) => {
-    const percentage = (item.value / total) * 100;
-    const previousCumulative = acc.length > 0 ? acc[acc.length - 1].cumulativePercentage + acc[acc.length - 1].percentage : 0;
-    return [
-      ...acc,
-      {
-        ...item,
-        percentage,
-        cumulativePercentage: previousCumulative,
-      },
-    ];
-  }, [] as Array<{ percentage: number; cumulativePercentage: number; [key: string]: any }>);
+  const segments = data.reduce(
+    (acc, item) => {
+      const percentage = (item.value / total) * 100;
+      const previousCumulative =
+        acc.length > 0
+          ? acc[acc.length - 1].cumulativePercentage + acc[acc.length - 1].percentage
+          : 0;
+      return [
+        ...acc,
+        {
+          ...item,
+          percentage,
+          cumulativePercentage: previousCumulative,
+        },
+      ];
+    },
+    [] as Array<{ percentage: number; cumulativePercentage: number; [key: string]: any }>,
+  );
 
   return (
     <div className={`rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 ${className}`}>

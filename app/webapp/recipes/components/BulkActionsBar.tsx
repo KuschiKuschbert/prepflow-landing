@@ -34,12 +34,7 @@ export default function BulkActionsBar({
             onClick={onBulkDelete}
             className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

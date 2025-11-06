@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import {
-    formatDateString,
-    formatTime,
-    getFoodSafetyStatus,
-    getStatusColor,
-    getTemperatureStatus,
-    getTimePeriod,
-    groupLogsByTimePeriod,
+  formatDateString,
+  formatTime,
+  getFoodSafetyStatus,
+  getStatusColor,
+  getTemperatureStatus,
+  getTimePeriod,
+  groupLogsByTimePeriod,
 } from './utils';
 
 describe('temperature utils', () => {
