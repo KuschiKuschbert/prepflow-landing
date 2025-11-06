@@ -16,6 +16,7 @@ import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
 import { useLogoInteractions } from '@/hooks/useLogoInteractions';
 import CatchTheDocket from '@/components/Loading/CatchTheDocket';
 import { useCatchTheDocketTrigger } from '@/hooks/useCatchTheDocketTrigger';
+import { prefersReducedMotion, isArcadeDisabled, isTouchDevice } from '@/lib/arcadeGuards';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -288,7 +289,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       <AchievementsDropdown isOpen={showAchievements} onClose={() => setShowAchievements(false)} />
 
       {/* Global CatchTheDocket overlay */}
-      {showDocketOverlay && (
+      {showDocketOverlay && !prefersReducedMotion() && !isArcadeDisabled() && !isTouchDevice() && (
         <CatchTheDocket isLoading={true} onLoadComplete={() => setShowDocketOverlay(false)} />
       )}
     </>
