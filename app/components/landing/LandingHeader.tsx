@@ -34,8 +34,6 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
     handleLogoMouseLeave,
   } = useLogoInteractions();
 
-  const authEnabled = process.env.NEXT_PUBLIC_AUTH_ENABLED === '1';
-
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
@@ -101,11 +99,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               className={BUTTON_STYLES.secondary}
               onClick={() => {
                 trackEngagement('header_sign_in_click');
-                if (authEnabled) {
-                  signIn('auth0', { callbackUrl: '/webapp' });
-                } else {
-                  window.location.href = '/webapp';
-                }
+                signIn('auth0', { callbackUrl: '/webapp' });
               }}
             >
               {t('nav.signIn', 'Sign in')}
@@ -114,11 +108,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               className={BUTTON_STYLES.primary}
               onClick={() => {
                 trackEngagement('header_register_click');
-                if (authEnabled) {
-                  signIn('auth0', { callbackUrl: '/webapp' });
-                } else {
-                  window.location.href = '/webapp';
-                }
+                signIn('auth0', { callbackUrl: '/webapp' });
               }}
             >
               {t('nav.register', 'Register')}
