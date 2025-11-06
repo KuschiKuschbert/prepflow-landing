@@ -38,10 +38,12 @@ export function NavigationHeader({
 }: NavigationHeaderProps) {
   const {
     handleLogoClick,
+    handleLogoTouchStart,
     handleLogoTouchEnd,
     handleLogoMouseDown,
     handleLogoMouseUp,
     handleLogoMouseLeave,
+    shouldPreventNavigation,
   } = useLogoInteractions();
 
   return (
@@ -94,14 +96,26 @@ export function NavigationHeader({
             </svg>
           </button>
           <div className="flex items-center space-x-2">
-            <Link href="/webapp" className="flex items-center">
+            <Link
+              href="/webapp"
+              className="flex items-center"
+              onClick={e => {
+                // Prevent navigation if Easter egg is triggered
+                if (shouldPreventNavigation.current) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+            >
               <button
                 onClick={handleLogoClick}
+                onTouchStart={handleLogoTouchStart}
                 onTouchEnd={handleLogoTouchEnd}
                 onMouseDown={handleLogoMouseDown}
                 onMouseUp={handleLogoMouseUp}
                 onMouseLeave={handleLogoMouseLeave}
                 className="flex min-h-[44px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center"
+                style={{ touchAction: 'manipulation' }}
                 aria-label="PrepFlow Logo"
               >
                 <OptimizedImage

@@ -11,6 +11,7 @@ export const useLogoInteractions = () => {
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
   const logoHoldTimerRef = useRef<NodeJS.Timeout | null>(null);
   const logoHoldStartRef = useRef<number | null>(null);
+  const preventNavigationRef = useRef<boolean>(false);
 
   // Shared click/tap handler logic
   const handleLogoInteraction = useCallback(
@@ -25,7 +26,12 @@ export const useLogoInteractions = () => {
       if (newClicks >= 9) {
         // On 9th click, prevent navigation and show game
         if (shouldPreventDefault) {
+          preventNavigationRef.current = true;
           setShowTomatoToss(true);
+          // Reset flag after a short delay to allow Link click handler to check it
+          setTimeout(() => {
+            preventNavigationRef.current = false;
+          }, 100);
         }
         setLogoClicks(0);
         if (clickTimerRef.current) {
@@ -34,6 +40,7 @@ export const useLogoInteractions = () => {
         }
         return true; // Indicates we should prevent default
       } else {
+        preventNavigationRef.current = false;
         clickTimerRef.current = setTimeout(() => {
           setLogoClicks(0);
           clickTimerRef.current = null;
@@ -57,7 +64,20 @@ export const useLogoInteractions = () => {
     [handleLogoInteraction],
   );
 
-  // Logo touch handler for Tomato Toss Easter Egg (mobile)
+  // Logo touch start handler for Tomato Toss Easter Egg (mobile/Android)
+  // Android needs touchstart to prevent Link navigation early
+  const handleLogoTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      const shouldPrevent = handleLogoInteraction(true);
+      if (shouldPrevent) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [handleLogoInteraction],
+  );
+
+  // Logo touch end handler for Tomato Toss Easter Egg (mobile)
   const handleLogoTouchEnd = useCallback(
     (e: React.TouchEvent) => {
       const shouldPrevent = handleLogoInteraction(true);
@@ -126,9 +146,11 @@ export const useLogoInteractions = () => {
     showAchievements,
     setShowAchievements,
     handleLogoClick,
+    handleLogoTouchStart,
     handleLogoTouchEnd,
     handleLogoMouseDown,
     handleLogoMouseUp,
     handleLogoMouseLeave,
+    shouldPreventNavigation: preventNavigationRef,
   };
 };
