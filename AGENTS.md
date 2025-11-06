@@ -139,7 +139,11 @@ components/
 │   ├── PaywallOverlay.tsx # Paywall overlay
 │   └── SubscriptionManager.tsx # Subscription management
 ├── variants/            # A/B testing variant components
-│   ├── HeroVariants.tsx # Hero section variants
+│   ├── HeroVariants.tsx # Hero section variants (orchestrator)
+│   ├── HeroContent.tsx # Hero content rendering (title, subtitle)
+│   ├── HeroBullets.tsx # Hero bullet points rendering
+│   ├── HeroCTA.tsx     # Hero call-to-action buttons
+│   ├── HeroImageGallery.tsx # Hero image gallery section
 │   └── PricingVariants.tsx # Pricing section variants
 ├── GoogleAnalytics.tsx # GA4 integration
 ├── GoogleTagManager.tsx # GTM integration
@@ -154,7 +158,11 @@ lib/
 ├── email-service.ts    # Email service
 ├── analytics.ts        # Analytics service
 ├── gtm-config.ts      # GTM configuration
-└── ab-testing-analytics.ts # A/B testing system
+├── ab-testing-analytics.ts # A/B testing system
+└── ingredients/        # Ingredient data normalization utilities
+    ├── normalizeIngredientData.ts      # Core parsing and unit normalization
+    ├── buildInsertData.ts              # Data builder for database inserts
+    └── normalizeIngredientDataMain.ts # Main orchestrator function
 
 hooks/
 ├── useAuth.ts          # Authentication hook
@@ -715,10 +723,109 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 
 **Code Quality Enforcement:**
 
-- **Pre-commit hooks:** Automatically check file sizes
+- **Pre-commit hooks:** Automatically check file sizes via `scripts/check-file-sizes.js`
 - **CI/CD pipeline:** Fail builds if files exceed limits
 - **Code reviews:** Mandatory review of refactored code
 - **Performance monitoring:** Track bundle size impact
+
+**Recent Refactoring Examples (January 2025):**
+
+#### **Ingredient Normalization Utilities Refactoring**
+
+**Before:** Single large utility file (203 lines)
+
+- `app/webapp/ingredients/hooks/utils/normalizeIngredientData.ts` (203 lines, exceeded 150-line utility limit)
+
+**After:** Split into 3 focused utilities (all under 150 lines)
+
+- `lib/ingredients/normalizeIngredientData.ts` (101 lines) - Core parsing and unit normalization utilities
+- `lib/ingredients/buildInsertData.ts` (73 lines) - Data builder for database inserts
+- `lib/ingredients/normalizeIngredientDataMain.ts` (76 lines) - Main orchestrator function
+
+**Benefits:**
+
+- ✅ Each file has a single, clear responsibility
+- ✅ Easier to test individual utilities
+- ✅ Better tree-shaking and code splitting
+- ✅ Improved maintainability
+
+#### **COGS Hooks Refactoring**
+
+**Before:** Large hooks exceeding 100-line limit
+
+- `useCOGSCalculations.ts`: 104 lines
+- `useCOGSCalculationLogic.ts`: 105 lines
+- `useRecipeIngredientLoading.ts`: 105 lines
+- `useIngredientAddition.ts`: 127 lines
+
+**After:** Trimmed and optimized hooks (all under 100 lines)
+
+- `useCOGSCalculations.ts`: 81 lines - Orchestrator hook
+- `useCOGSCalculationLogic.ts`: 86 lines - Core calculation logic
+- `useRecipeIngredientLoading.ts`: 76 lines - Recipe ingredient loading
+- `useIngredientAddition.ts`: 91 lines - Ingredient addition logic
+- `useCOGSDataFetching.ts`: New hook for data fetching (extracted)
+- `useIngredientConversion.ts`: New hook for unit conversions (extracted)
+
+**Benefits:**
+
+- ✅ All hooks meet 100-line limit
+- ✅ Clear separation of concerns
+- ✅ Improved code reusability
+- ✅ Better testability
+
+#### **Ingredient Management Hooks Refactoring**
+
+**Before:** Large hooks exceeding 100-line limit
+
+- `useIngredientActions.ts`: 187+ lines (exceeded limit)
+- `useIngredientCRUD.ts`: 158 lines
+- `useIngredientCSV.ts`: 135 lines
+
+**After:** Split into specialized hooks (all under 100 lines)
+
+- `useIngredientActions.ts`: Orchestrator hook (delegates to specialized hooks)
+- `useIngredientCRUD.ts`: 93 lines - Create, Read, Update, Delete operations
+- `useIngredientCSV.ts`: 82 lines - CSV import/export functionality
+- `useIngredientBulkActions.ts`: New hook for bulk operations (extracted)
+- `useIngredientFormLogic.ts`: New hook for form state management (extracted)
+
+**Benefits:**
+
+- ✅ All hooks meet 100-line limit
+- ✅ Clear separation: CRUD, CSV, Bulk Actions, Form Logic
+- ✅ Improved maintainability and testability
+- ✅ Better code organization
+
+#### **Hero Variants Component Refactoring**
+
+**Before:** Large component file (342+ lines)
+
+- `components/variants/HeroVariants.tsx`: Exceeded 300-line component limit
+
+**After:** Split into focused components (all under 300 lines)
+
+- `HeroVariants.tsx`: Main orchestrator component
+- `HeroContent.tsx`: Content rendering (title, subtitle)
+- `HeroBullets.tsx`: Bullet points rendering
+- `HeroCTA.tsx`: Call-to-action buttons
+- `HeroImageGallery.tsx`: Image gallery section
+
+**Benefits:**
+
+- ✅ Each component has single responsibility
+- ✅ Easier to maintain and test
+- ✅ Better code reusability
+- ✅ Improved readability
+
+**Refactoring Techniques Used:**
+
+1. **Extract Helper Functions:** Moved complex logic to separate utility functions
+2. **Split Large Hooks:** Broke down hooks into smaller, focused hooks
+3. **Extract Constants:** Moved constants to module-level for reuse
+4. **Consolidate Code:** Removed unnecessary blank lines and comments
+5. **Inline Simple Functions:** Inlined small helper functions to save lines
+6. **Extract Types:** Moved complex interfaces to separate type files when needed
 
 **Benefits of Mandatory Refactoring:**
 
