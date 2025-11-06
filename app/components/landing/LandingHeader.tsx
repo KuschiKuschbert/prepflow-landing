@@ -8,7 +8,6 @@ import { signIn } from 'next-auth/react';
 import React from 'react';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import OptimizedImage from '../../../components/OptimizedImage';
-import { MobileNavigation } from '../../../components/ui/MobileNavigation';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 interface LandingHeaderProps {
@@ -100,12 +99,22 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             </button>
           </div>
 
-          {/* Mobile Header */}
+          {/* Mobile Header - Simplified: Just logo and CTA */}
           <div className="flex items-center gap-2 md:hidden">
-            <div className="flex min-h-[44px] min-w-[44px] items-center justify-center">
-              <LanguageSwitcher className="scale-90" showFlag={true} showName={true} size="sm" />
-            </div>
-            <MobileNavigation onEngagement={trackEngagement} />
+            <button
+              className={BUTTON_STYLES.primary}
+              onClick={() => {
+                trackEngagement('mobile_header_register_click');
+                try {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                  }
+                } catch (_) {}
+                signIn('auth0', { callbackUrl: '/webapp' });
+              }}
+            >
+              {t('nav.register', 'Get Started')}
+            </button>
           </div>
         </div>
       </div>
