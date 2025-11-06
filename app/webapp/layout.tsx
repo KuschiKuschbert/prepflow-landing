@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import GlobalWarning from '@/components/GlobalWarning';
 import ReactQueryProvider from '@/components/ReactQueryProvider';
 import { useTranslation } from '@/lib/useTranslation';
@@ -23,7 +24,7 @@ export default function WebAppLayout({
   children: React.ReactNode;
 }>) {
   const { t } = useTranslation();
-  const [disableArcadeOverlay, setDisableArcadeOverlay] = React.useState(false);
+  const [disableArcadeOverlay, setDisableArcadeOverlay] = useState(false);
 
   // Session timeout configuration
   // 4 hours timeout with 15-minute warning (kitchen-optimized)
@@ -48,7 +49,7 @@ export default function WebAppLayout({
   });
 
   // Disable arcade overlay when coming from Auth0 or when auth error is present
-  React.useEffect(() => {
+  useEffect(() => {
     try {
       const search = typeof window !== 'undefined' ? window.location.search : '';
       const fromAuth =
