@@ -3,8 +3,8 @@
  * Landing page header component
  */
 
-import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import React from 'react';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import OptimizedImage from '../../../components/OptimizedImage';
@@ -28,7 +28,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               alt="PrepFlow Logo"
               width={140}
               height={45}
-              className="h-6 w-auto max-w-[100px] md:h-12 md:max-w-none"
+              className="h-10 w-auto md:h-12 md:max-w-none"
               priority={true}
             />
           </Link>
