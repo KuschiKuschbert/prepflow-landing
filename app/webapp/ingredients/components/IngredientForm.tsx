@@ -32,7 +32,9 @@ interface Ingredient {
 
 interface Supplier {
   id: string;
-  name: string;
+  supplier_name?: string; // Actual column name in database
+  name?: string; // Fallback for compatibility
+  created_at?: string;
 }
 
 interface IngredientFormProps {

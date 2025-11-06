@@ -45,8 +45,9 @@ interface Ingredient {
 
 interface Supplier {
   id: string;
-  name: string;
-  created_at: string;
+  supplier_name?: string; // Actual column name in database
+  name?: string; // Fallback for compatibility
+  created_at?: string;
 }
 
 export default function IngredientsClient() {
