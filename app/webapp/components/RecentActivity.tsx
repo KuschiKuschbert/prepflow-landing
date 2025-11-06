@@ -187,14 +187,15 @@ export default function RecentActivity() {
   }
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white">Recent Activity</h2>
+    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg md:rounded-3xl md:p-6">
+      <div className="mb-4 flex items-center justify-between md:mb-6">
+        <h2 className="text-lg font-semibold text-white md:text-xl">Recent Activity</h2>
 
         <button
           onClick={refetch}
-          className="text-[#29E7CD] transition-colors duration-200 hover:text-[#D925C7]"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[#29E7CD] transition-colors duration-200 hover:text-[#D925C7]"
           title="Refresh activity"
+          aria-label="Refresh activity"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -207,15 +208,15 @@ export default function RecentActivity() {
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {activities.slice(0, 5).map(activity => (
           <div
             key={activity.id}
-            className="flex items-center space-x-4 rounded-2xl bg-[#2a2a2a]/30 p-3 transition-colors duration-200 hover:bg-[#2a2a2a]/50"
+            className="flex items-center space-x-3 rounded-xl bg-[#2a2a2a]/30 p-3 transition-colors duration-200 hover:bg-[#2a2a2a]/50 md:space-x-4 md:rounded-2xl md:p-3"
           >
             <div className="flex-shrink-0">
               <div
-                className={`flex h-10 w-10 items-center justify-center rounded-full ${
+                className={`flex h-8 w-8 items-center justify-center rounded-full md:h-10 md:w-10 ${
                   activity.type === 'ingredient'
                     ? 'bg-blue-500/20'
                     : activity.type === 'recipe'
@@ -224,7 +225,7 @@ export default function RecentActivity() {
                 }`}
               >
                 <svg
-                  className={`h-5 w-5 ${
+                  className={`h-4 w-4 md:h-5 md:w-5 ${
                     activity.type === 'ingredient'
                       ? 'text-blue-400'
                       : activity.type === 'recipe'
@@ -264,8 +265,10 @@ export default function RecentActivity() {
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate font-medium text-white">{activity.name}</p>
-              <p className="text-sm text-gray-400">
+              <p className="truncate text-sm font-medium text-white md:text-base">
+                {activity.name}
+              </p>
+              <p className="text-xs text-gray-400 md:text-sm">
                 {activity.action === 'created' ? 'Created' : 'Updated'} •{' '}
                 {new Date(activity.created_at).toLocaleDateString()}
               </p>

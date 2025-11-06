@@ -9,8 +9,8 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, icon, showLogo = false }: PageHeaderProps) {
   return (
-    <div className="mb-8">
-      <div className="mb-4 flex items-center gap-4">
+    <div className="mb-6 md:mb-8">
+      <div className="mb-3 flex items-center gap-3 md:mb-4 md:gap-4">
         {showLogo && (
           <Image
             src="/images/prepflow-logo.png"
@@ -21,12 +21,12 @@ export function PageHeader({ title, subtitle, icon, showLogo = false }: PageHead
             priority
           />
         )}
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-2xl font-bold text-white md:text-4xl">
           {icon && <span className="mr-2">{icon}</span>}
           {title}
         </h1>
       </div>
-      {subtitle && <p className="text-gray-400">{subtitle}</p>}
+      {subtitle && <p className="text-sm text-gray-400 md:text-base">{subtitle}</p>}
     </div>
   );
 }

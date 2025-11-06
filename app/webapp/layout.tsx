@@ -100,7 +100,7 @@ export default function WebAppLayout({
             <DraftRecovery />
 
             {/* Main Content */}
-            <main className="bg-[#0a0a0a]">
+            <main className="bg-[#0a0a0a] pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] md:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))]">
               <ReactQueryProvider>{children}</ReactQueryProvider>
             </main>
 

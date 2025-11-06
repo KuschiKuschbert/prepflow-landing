@@ -6,8 +6,8 @@ import { PageHeader } from './components/static/PageHeader';
 export default function WebAppDashboard() {
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-transparent p-4 sm:p-6">
-        <div className="mx-auto max-w-7xl">
+      <div className="min-h-screen overflow-x-hidden bg-transparent p-4 sm:p-6">
+        <div className="mx-auto w-full max-w-7xl">
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Kitchen Management Dashboard"

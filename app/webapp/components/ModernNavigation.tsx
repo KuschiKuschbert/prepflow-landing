@@ -1,17 +1,12 @@
 'use client';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import AutosaveGlobalIndicator from './AutosaveGlobalIndicator';
 import { useTranslation } from '@/lib/useTranslation';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
-import OptimizedImage from '../../../components/OptimizedImage';
-import { LogoutButton } from './LogoutButton';
 import { useNavigationItems } from './navigation/nav-items';
 import { SearchModal } from './navigation/SearchModal';
 import { Sidebar } from './navigation/Sidebar';
+import { NavigationHeader } from './navigation/NavigationHeader';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
-import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
 import { useLogoInteractions } from '@/hooks/useLogoInteractions';
 import CatchTheDocket from '@/components/Loading/CatchTheDocket';
@@ -45,16 +40,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Logo interactions hook
-  const {
-    showTomatoToss,
-    setShowTomatoToss,
-    showAchievements,
-    setShowAchievements,
-    handleLogoClick,
-    handleLogoMouseDown,
-    handleLogoMouseUp,
-    handleLogoMouseLeave,
-  } = useLogoInteractions();
+  const { showTomatoToss, setShowTomatoToss, showAchievements, setShowAchievements } =
+    useLogoInteractions();
 
   // CatchTheDocket trigger hook
   const { showDocketOverlay, setShowDocketOverlay } = useCatchTheDocketTrigger();
@@ -78,16 +65,21 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     {} as Record<string, NavigationItem[]>,
   );
 
-  // Close sidebar when clicking outside
+  // Close sidebar when clicking/touching outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsSidebarOpen(false);
       }
     };
 
+    // Support both mouse and touch events for mobile compatibility
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   // Focus management: when closing sidebar, move focus back to menu button
@@ -128,133 +120,17 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
   return (
     <>
-      {/* Compact Header */}
-      <header
-        role="banner"
-        className={cn('border-b', 'border-[#2a2a2a]', 'bg-[#1f1f1f]', className)}
-      >
-        <div className="flex items-center justify-between px-3 py-2 md:px-4">
-          {/* Left: Logo + Menu Button */}
-          <div className="flex items-center space-x-2 md:space-x-3">
-            <button
-              ref={menuButtonRef}
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className={cn(
-                'rounded-lg',
-                'p-1.5',
-                'min-h-[44px]',
-                'min-w-[44px]',
-                'transition-colors',
-                'hover:bg-[#2a2a2a]/50',
-              )}
-              aria-label="Toggle navigation sidebar"
-              aria-controls="app-sidebar"
-              aria-expanded={isSidebarOpen}
-            >
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
-
-            <Link href="/webapp" className="flex items-center space-x-2">
-              <button
-                onClick={handleLogoClick}
-                onMouseDown={handleLogoMouseDown}
-                onMouseUp={handleLogoMouseUp}
-                onMouseLeave={handleLogoMouseLeave}
-                className="flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center"
-                aria-label="PrepFlow Logo"
-              >
-                <OptimizedImage
-                  src="/images/prepflow-logo.png"
-                  alt="PrepFlow Logo"
-                  width={24}
-                  height={24}
-                  className="h-6 w-6"
-                />
-              </button>
-              <span className="hidden text-lg font-semibold text-white md:inline">PrepFlow</span>
-              <AutosaveGlobalIndicator />
-            </Link>
-          </div>
-
-          {/* Center: Breadcrumb */}
-          <div
-            className={cn(
-              'hidden',
-              'items-center',
-              'space-x-2',
-              'text-sm',
-              'text-gray-400',
-              'md:flex',
-            )}
-          >
-            <Link href="/webapp" className={cn('transition-colors', 'hover:text-[#29E7CD]')}>
-              Dashboard
-            </Link>
-            {pathname !== '/webapp' && (
-              <>
-                <span>/</span>
-                <span className="text-[#29E7CD]">
-                  {navigationItems.find(item => isActive(item.href))?.label || 'Page'}
-                </span>
-              </>
-            )}
-          </div>
-
-          {/* Right: Search, Stats, Language, User */}
-          <div className="flex items-center space-x-2 md:space-x-3">
-            {/* Search Button */}
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className={cn(
-                'rounded-lg',
-                'p-1.5',
-                'min-h-[44px]',
-                'min-w-[44px]',
-                'transition-colors',
-                'hover:bg-[#2a2a2a]/50',
-              )}
-              aria-label="Open search"
-              aria-controls="search-modal"
-              aria-expanded={isSearchOpen}
-            >
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
-
-            {/* Navbar Stats - compact on mobile */}
-            <NavbarStats />
-
-            {/* Language and Logout - hidden on mobile (available in sidebar) */}
-            <div className="hidden items-center space-x-2 md:flex">
-              <LanguageSwitcher />
-              <LogoutButton />
-            </div>
-          </div>
-        </div>
-      </header>
+      <NavigationHeader
+        className={className}
+        menuButtonRef={menuButtonRef}
+        onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        isSidebarOpen={isSidebarOpen}
+        onSearchClick={() => setIsSearchOpen(true)}
+        isSearchOpen={isSearchOpen}
+        pathname={pathname}
+        navigationItems={navigationItems}
+        isActive={isActive}
+      />
 
       {/* Sidebar Navigation */}
       <Sidebar
@@ -277,8 +153,10 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       {/* Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm"
           onClick={() => setIsSidebarOpen(false)}
+          onTouchStart={() => setIsSidebarOpen(false)}
+          aria-hidden="true"
         />
       )}
 

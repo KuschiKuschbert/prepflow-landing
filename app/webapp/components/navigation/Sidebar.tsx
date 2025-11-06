@@ -33,7 +33,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'fixed',
         'inset-y-0',
         'left-0',
-        'z-50',
+        'z-[60]',
         'w-72',
         'md:w-80',
         'transform',
@@ -43,10 +43,13 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'transition-transform',
         'duration-300',
         'ease-in-out',
+        'will-change-transform',
+        'pt-[var(--header-height-mobile)]',
+        'md:pt-[var(--header-height-desktop)]',
         isOpen ? 'translate-x-0' : '-translate-x-full',
       )}
     >
-      <div className="flex h-full flex-col">
+      <div className="flex h-full flex-col overflow-y-auto">
         <div
           className={cn(
             'flex',

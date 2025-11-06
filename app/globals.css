@@ -8,6 +8,16 @@
   --accent: #d925c7;
   --muted: #1f1f1f;
   --border: #2a2a2a;
+
+  /* Header height variables for mobile and desktop */
+  --header-height-mobile: 56px;
+  --header-height-desktop: 64px;
+
+  /* Safe area insets for iOS devices with notches */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
 }
 
 /* Print Styles for Recipe Cards */
@@ -423,6 +433,53 @@
   /* Optimize transitions on mobile */
   * {
     transition-timing-function: ease-out;
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Prevent double-tap zoom on buttons */
+  button,
+  a[role='button'],
+  [role='button'] {
+    touch-action: manipulation;
+  }
+
+  /* Ensure smooth scrolling on mobile */
+  html {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Ensure minimum font size for readability */
+  body {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Ensure max-w containers don't cause overflow on mobile */
+  .max-w-7xl,
+  .max-w-6xl,
+  .max-w-5xl,
+  .max-w-4xl,
+  .max-w-3xl,
+  .max-w-2xl,
+  .max-w-xl {
+    max-width: calc(100% - 2rem);
+  }
+
+  /* Ensure all containers respect viewport width */
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
   }
 }
 
