@@ -2,6 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import KitchenOnFire from '@/components/ErrorGame/KitchenOnFire';
+import { usePathname } from 'next/navigation';
 
 interface Props {
   children: ReactNode;
@@ -42,11 +43,23 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
+      // Use provided fallback if any
       if (this.props.fallback) {
         return this.props.fallback;
       }
 
-      // Use KitchenOnFire as default fallback
+      // Default fallback, but suppress on auth routes
+      const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+      if (
+        pathname.startsWith('/api/auth') ||
+        pathname.startsWith('/auth') ||
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/callback') ||
+        pathname.startsWith('/authorize')
+      ) {
+        return null;
+      }
+
       return <KitchenOnFire />;
     }
 
