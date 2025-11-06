@@ -26,9 +26,9 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             <OptimizedImage
               src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
-              width={140}
-              height={45}
-              className="h-10 w-auto md:h-12 md:max-w-none"
+              width={1024}
+              height={1024}
+              className="h-[40px] w-[40px] object-contain md:h-12 md:w-auto"
               priority={true}
             />
           </Link>
