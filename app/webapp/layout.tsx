@@ -13,6 +13,7 @@ import { DraftRecovery } from './components/DraftRecovery';
 import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
 import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -51,7 +52,9 @@ export default function WebAppLayout({
         <GlobalWarningProvider>
           <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
             {/* Modern Navigation */}
-            <ModernNavigation />
+            <ErrorBoundary>
+              <ModernNavigation />
+            </ErrorBoundary>
 
             {/* Global Warning System */}
             <GlobalWarning />
@@ -65,7 +68,9 @@ export default function WebAppLayout({
             </main>
 
             {/* Arcade Loading Overlay */}
-            <CatchTheDocketOverlay />
+            <ErrorBoundary>
+              <CatchTheDocketOverlay />
+            </ErrorBoundary>
 
             {/* Session Timeout Warning */}
             <SessionTimeoutWarning
