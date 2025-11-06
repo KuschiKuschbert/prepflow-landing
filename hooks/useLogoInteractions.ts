@@ -65,19 +65,22 @@ export const useLogoInteractions = () => {
   );
 
   // Logo touch start handler for Tomato Toss Easter Egg (mobile/Android)
-  // Android needs touchstart to prevent Link navigation early
+  // Android needs touchstart to prevent Link navigation early, but don't count clicks here
   const handleLogoTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      const shouldPrevent = handleLogoInteraction(true);
-      if (shouldPrevent) {
+      // Only prevent navigation if we're already at 9 clicks, don't increment counter
+      if (logoClicks >= 8) {
+        // We're about to hit 9 on touchend, so prevent navigation now
+        preventNavigationRef.current = true;
         e.preventDefault();
         e.stopPropagation();
       }
     },
-    [handleLogoInteraction],
+    [logoClicks],
   );
 
   // Logo touch end handler for Tomato Toss Easter Egg (mobile)
+  // This is where we actually count the tap (only once per tap)
   const handleLogoTouchEnd = useCallback(
     (e: React.TouchEvent) => {
       const shouldPrevent = handleLogoInteraction(true);
