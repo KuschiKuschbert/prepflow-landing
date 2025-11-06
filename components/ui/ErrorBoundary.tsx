@@ -50,7 +50,18 @@ export class ErrorBoundary extends Component<Props, State> {
 
       // Default fallback, but suppress on auth routes
       const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+      const disableArcadeErrors = (() => {
+        try {
+          return (
+            typeof window !== 'undefined' &&
+            localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1'
+          );
+        } catch (_) {
+          return false;
+        }
+      })();
       if (
+        disableArcadeErrors ||
         pathname.startsWith('/api/auth') ||
         pathname.startsWith('/auth') ||
         pathname.startsWith('/login') ||

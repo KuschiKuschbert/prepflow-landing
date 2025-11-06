@@ -20,6 +20,14 @@ import { throwConfetti } from '@/hooks/useConfetti';
 const KitchenOnFire: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const isArcadeErrorsDisabled = () => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1';
+    } catch (_) {
+      return false;
+    }
+  };
   const {
     flames,
     extinguished,
@@ -48,12 +56,13 @@ const KitchenOnFire: React.FC = () => {
     router.push('/webapp');
   };
 
-  // Suppress error game on auth-related routes (Auth0/NextAuth/login flows)
+  // Suppress error game on auth-related routes (Auth0/NextAuth/login flows) or when globally disabled
   if (
-    pathname &&
-    (pathname.startsWith('/api/auth') ||
-      pathname.startsWith('/login') ||
-      pathname.startsWith('/auth'))
+    isArcadeErrorsDisabled() ||
+    (pathname &&
+      (pathname.startsWith('/api/auth') ||
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/auth')))
   ) {
     return null;
   }
