@@ -7,7 +7,6 @@ import { useRef } from 'react';
 import OptimizedImage from '../../../../components/OptimizedImage';
 import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
-import { useLogoInteractions } from '@/hooks/useLogoInteractions';
 
 interface NavigationHeaderProps {
   className?: string;
@@ -19,6 +18,14 @@ interface NavigationHeaderProps {
   pathname: string;
   navigationItems: Array<{ href: string; label: string }>;
   isActive: (href: string) => boolean;
+  // Logo interaction handlers from parent
+  handleLogoClick: (e: React.MouseEvent) => void;
+  handleLogoTouchStart: (e: React.TouchEvent) => void;
+  handleLogoTouchEnd: (e: React.TouchEvent) => void;
+  handleLogoMouseDown: () => void;
+  handleLogoMouseUp: () => void;
+  handleLogoMouseLeave: () => void;
+  shouldPreventNavigation: React.RefObject<boolean>;
 }
 
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -35,17 +42,14 @@ export function NavigationHeader({
   pathname,
   navigationItems,
   isActive,
+  handleLogoClick,
+  handleLogoTouchStart,
+  handleLogoTouchEnd,
+  handleLogoMouseDown,
+  handleLogoMouseUp,
+  handleLogoMouseLeave,
+  shouldPreventNavigation,
 }: NavigationHeaderProps) {
-  const {
-    handleLogoClick,
-    handleLogoTouchStart,
-    handleLogoTouchEnd,
-    handleLogoMouseDown,
-    handleLogoMouseUp,
-    handleLogoMouseLeave,
-    shouldPreventNavigation,
-  } = useLogoInteractions();
-
   return (
     <header
       role="banner"

@@ -40,8 +40,19 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Logo interactions hook
-  const { showTomatoToss, setShowTomatoToss, showAchievements, setShowAchievements } =
-    useLogoInteractions();
+  const {
+    showTomatoToss,
+    setShowTomatoToss,
+    showAchievements,
+    setShowAchievements,
+    handleLogoClick,
+    handleLogoTouchStart,
+    handleLogoTouchEnd,
+    handleLogoMouseDown,
+    handleLogoMouseUp,
+    handleLogoMouseLeave,
+    shouldPreventNavigation,
+  } = useLogoInteractions();
 
   // CatchTheDocket trigger hook
   const { showDocketOverlay, setShowDocketOverlay } = useCatchTheDocketTrigger();
@@ -130,6 +141,13 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         pathname={pathname}
         navigationItems={navigationItems}
         isActive={isActive}
+        handleLogoClick={handleLogoClick}
+        handleLogoTouchStart={handleLogoTouchStart}
+        handleLogoTouchEnd={handleLogoTouchEnd}
+        handleLogoMouseDown={handleLogoMouseDown}
+        handleLogoMouseUp={handleLogoMouseUp}
+        handleLogoMouseLeave={handleLogoMouseLeave}
+        shouldPreventNavigation={shouldPreventNavigation}
       />
 
       {/* Sidebar Navigation */}
