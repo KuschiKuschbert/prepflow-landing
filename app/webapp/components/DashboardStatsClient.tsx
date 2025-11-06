@@ -1,6 +1,5 @@
 'use client';
 
-import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
@@ -8,38 +7,11 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
-
-interface DashboardStatsData {
-  totalIngredients: number;
-  totalRecipes: number;
-  averageDishPrice: number;
-}
-
-interface TemperatureLog {
-  id: string;
-  log_date: string;
-  log_time: string;
-  temperature_type: string;
-  temperature_celsius: number;
-  location: string | null;
-  notes: string | null;
-  photo_url: string | null;
-  logged_by: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface TemperatureEquipment {
-  id: string;
-  name: string;
-  equipment_type: string;
-  location: string | null;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import type {
+  DashboardStatsData,
+  TemperatureLog,
+  TemperatureEquipment,
+} from './types/dashboard-stats';
 
 export default function DashboardStatsClient() {
   // Initialize with cached data for instant display
@@ -52,10 +24,13 @@ export default function DashboardStatsClient() {
       },
   );
   // Check if we have cached data to determine initial loading state
+  const cachedStats = getCachedData<DashboardStatsData>('dashboard_stats');
+  const cachedLogs = getCachedData<TemperatureLog[]>('dashboard_temperature_logs');
+  const cachedEquipment = getCachedData<TemperatureEquipment[]>('dashboard_temperature_equipment');
   const hasCachedData =
-    getCachedData<DashboardStatsData>('dashboard_stats') ||
-    getCachedData<TemperatureLog[]>('dashboard_temperature_logs')?.length > 0 ||
-    getCachedData<TemperatureEquipment[]>('dashboard_temperature_equipment')?.length > 0;
+    Boolean(cachedStats) ||
+    (cachedLogs && cachedLogs.length > 0) ||
+    (cachedEquipment && cachedEquipment.length > 0);
   const [loading, setLoading] = useState(!hasCachedData);
   const [statsError, setStatsError] = useState<string | null>(null);
   const [temperatureLogsError, setTemperatureLogsError] = useState<string | null>(null);

@@ -34,10 +34,10 @@ export interface WizardStepProps {
 }
 
 export interface IngredientWizardProps {
-  suppliers: any[];
-  availableUnits: string[];
+  suppliers?: any[];
+  availableUnits?: string[];
   onSave: (ingredient: Ingredient) => void;
   onCancel: () => void;
-  onAddSupplier: (supplier: any) => void;
+  onAddSupplier?: (supplier: any) => void;
   loading?: boolean;
 }
