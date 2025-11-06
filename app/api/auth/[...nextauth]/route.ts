@@ -1,30 +1,7 @@
 import NextAuth from 'next-auth';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 import { authOptions } from '@/lib/auth-options';
 
-const nextAuthHandler = NextAuth(authOptions);
+// Use the standard NextAuth route handlers to ensure correct behavior
+const handler = NextAuth(authOptions);
 
-export async function GET(req: NextRequest): Promise<Response> {
-  try {
-    // Delegate to NextAuth
-    return await nextAuthHandler(req);
-  } catch (error) {
-    console.error('NextAuth GET error:', error);
-    const url = new URL('/webapp', req.url);
-    url.searchParams.set('auth_error', '1');
-    return NextResponse.redirect(url);
-  }
-}
-
-export async function POST(req: NextRequest): Promise<Response> {
-  try {
-    // Delegate to NextAuth
-    return await nextAuthHandler(req);
-  } catch (error) {
-    console.error('NextAuth POST error:', error);
-    const url = new URL('/webapp', req.url);
-    url.searchParams.set('auth_error', '1');
-    return NextResponse.redirect(url);
-  }
-}
+export { handler as GET, handler as POST };
