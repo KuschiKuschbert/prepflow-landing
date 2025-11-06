@@ -23,6 +23,7 @@ export default function WebAppLayout({
   children: React.ReactNode;
 }>) {
   const { t } = useTranslation();
+  const [disableArcadeOverlay, setDisableArcadeOverlay] = React.useState(false);
 
   // Session timeout configuration
   // 4 hours timeout with 15-minute warning (kitchen-optimized)
@@ -46,6 +47,29 @@ export default function WebAppLayout({
     enabled: true,
   });
 
+  // Disable arcade overlay when coming from Auth0 or when auth error is present
+  React.useEffect(() => {
+    try {
+      const search = typeof window !== 'undefined' ? window.location.search : '';
+      const fromAuth =
+        typeof window !== 'undefined' ? window.location.pathname.startsWith('/api/auth') : false;
+      const hasAuthError = search.includes('auth_error=1');
+      const authFlag =
+        typeof window !== 'undefined'
+          ? sessionStorage.getItem('PF_AUTH_IN_PROGRESS') === '1'
+          : false;
+
+      if (fromAuth || hasAuthError || authFlag) {
+        setDisableArcadeOverlay(true);
+      }
+
+      // Clear the flag after landing on webapp
+      if (authFlag) {
+        sessionStorage.removeItem('PF_AUTH_IN_PROGRESS');
+      }
+    } catch (_) {}
+  }, []);
+
   return (
     <NotificationProvider>
       <CountryProvider>
@@ -67,10 +91,12 @@ export default function WebAppLayout({
               <ReactQueryProvider>{children}</ReactQueryProvider>
             </main>
 
-            {/* Arcade Loading Overlay */}
-            <ErrorBoundary>
-              <CatchTheDocketOverlay />
-            </ErrorBoundary>
+            {/* Arcade Loading Overlay (disabled around auth flows) */}
+            {!disableArcadeOverlay && (
+              <ErrorBoundary>
+                <CatchTheDocketOverlay />
+              </ErrorBoundary>
+            )}
 
             {/* Session Timeout Warning */}
             <SessionTimeoutWarning
