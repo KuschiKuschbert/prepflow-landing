@@ -11,7 +11,7 @@ import { useLogoInteractions } from '@/hooks/useLogoInteractions';
 
 interface NavigationHeaderProps {
   className?: string;
-  menuButtonRef: React.RefObject<HTMLButtonElement>;
+  menuButtonRef: React.RefObject<HTMLButtonElement | null>;
   onMenuClick: () => void;
   isSidebarOpen: boolean;
   onSearchClick: () => void;
