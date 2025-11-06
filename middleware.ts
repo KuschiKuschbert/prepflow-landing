@@ -6,14 +6,20 @@ import { isEmailAllowed } from '@/lib/allowlist';
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
   const isProduction = process.env.NODE_ENV === 'production';
+  const authConfigured = Boolean(
+    process.env.NEXTAUTH_SECRET &&
+      process.env.AUTH0_ISSUER_BASE_URL &&
+      process.env.AUTH0_CLIENT_ID &&
+      process.env.AUTH0_CLIENT_SECRET,
+  );
 
   // Always allow auth and selected public APIs
   if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/leads')) {
     return NextResponse.next();
   }
 
-  // Only enforce in production; allow everything in dev/preview
-  if (!isProduction) {
+  // Only enforce in production AND when auth is configured; allow everything in dev/preview
+  if (!isProduction || !authConfigured) {
     return NextResponse.next();
   }
 
