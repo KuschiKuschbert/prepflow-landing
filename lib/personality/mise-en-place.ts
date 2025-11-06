@@ -63,20 +63,38 @@ export function useMiseEnPlaceEasterEgg() {
   const COOLDOWN_MS = 5000; // 5 second cooldown between triggers
 
   useEffect(() => {
-    if (!settings.enabled || !settings.footerEasterEggs) return;
+    if (!settings.enabled || !settings.footerEasterEggs) {
+      // Debug: Log why it's not active
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Mise en Place] Disabled:', {
+          enabled: settings.enabled,
+          footerEasterEggs: settings.footerEasterEggs,
+        });
+      }
+      return;
+    }
 
     const handleInput = (e: Event) => {
       const target = e.target as HTMLInputElement | HTMLTextAreaElement;
       if (!target || (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA')) return;
 
-      const value = target.value.toLowerCase().trim();
+      const value = target.value.toLowerCase();
 
-      // Check if "mise en place" was just typed (case-insensitive)
+      // Check if "mise en place" appears anywhere in the input (case-insensitive)
       if (value.includes(MISE_EN_PLACE_TRIGGER)) {
         const now = Date.now();
-        if (now - lastTriggerRef.current < COOLDOWN_MS) return; // Cooldown
+        if (now - lastTriggerRef.current < COOLDOWN_MS) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[Mise en Place] Cooldown active');
+          }
+          return; // Cooldown
+        }
 
         lastTriggerRef.current = now;
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Mise en Place] Triggered!', value);
+        }
 
         // Trigger vegetable confetti
         throwVegetableConfetti();
@@ -92,6 +110,10 @@ export function useMiseEnPlaceEasterEgg() {
 
     // Listen to input events on all input fields
     document.addEventListener('input', handleInput, true);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Mise en Place] Hook active, listening for input events');
+    }
 
     return () => {
       document.removeEventListener('input', handleInput, true);
