@@ -99,6 +99,11 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               className={BUTTON_STYLES.secondary}
               onClick={() => {
                 trackEngagement('header_sign_in_click');
+                try {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                  }
+                } catch (_) {}
                 signIn('auth0', { callbackUrl: '/webapp' });
               }}
             >
@@ -108,6 +113,11 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               className={BUTTON_STYLES.primary}
               onClick={() => {
                 trackEngagement('header_register_click');
+                try {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                  }
+                } catch (_) {}
                 signIn('auth0', { callbackUrl: '/webapp' });
               }}
             >
