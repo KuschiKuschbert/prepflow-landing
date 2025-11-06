@@ -30,15 +30,15 @@ export const NavbarStats: React.FC = () => {
     <div className="flex gap-1.5 text-[10px] text-white/80 md:gap-3 md:text-xs">
       <div title="Tomatoes Thrown" className="flex items-center gap-0.5 md:gap-1">
         <span>🍅</span>
-        <span className="hidden sm:inline">{stats.tomatoes}</span>
+        <span className="text-[9px] md:text-xs">{stats.tomatoes}</span>
       </div>
       <div title="Dockets Caught" className="flex items-center gap-0.5 md:gap-1">
         <span>🧾</span>
-        <span className="hidden sm:inline">{stats.dockets}</span>
+        <span className="text-[9px] md:text-xs">{stats.dockets}</span>
       </div>
       <div title="Fires Extinguished" className="flex items-center gap-0.5 md:gap-1">
         <span>🔥</span>
-        <span className="hidden sm:inline">{stats.fires}</span>
+        <span className="text-[9px] md:text-xs">{stats.fires}</span>
       </div>
     </div>
   );

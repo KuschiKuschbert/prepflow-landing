@@ -31,46 +31,50 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.3 }}
-      className="fixed top-4 right-20 z-50 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-4 shadow-xl backdrop-blur-md"
+      className="fixed top-20 right-4 left-4 z-50 max-w-[200px] rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 shadow-xl backdrop-blur-md md:top-4 md:right-20 md:left-auto md:max-w-none md:p-4"
     >
-      <div className="flex flex-col gap-2 text-sm">
+      <div className="flex flex-col gap-2 text-xs md:text-sm">
         {/* Session Score */}
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{icon}</span>
+        <div className="flex items-center gap-1.5 md:gap-2">
+          <span className="text-lg md:text-xl">{icon}</span>
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400">Session</span>
-            <span className="text-lg font-semibold text-[#29E7CD]">{sessionScore}</span>
+            <span className="text-[10px] text-gray-400 md:text-xs">Session</span>
+            <span className="text-base font-semibold text-[#29E7CD] md:text-lg">
+              {sessionScore}
+            </span>
           </div>
         </div>
 
         {/* Global Score */}
         {globalScore !== undefined && (
-          <div className="flex items-center gap-2 border-t border-[#2a2a2a] pt-2">
-            <span className="text-xs text-gray-400">Total:</span>
-            <span className="font-semibold text-white">{globalScore}</span>
+          <div className="flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5 md:gap-2 md:pt-2">
+            <span className="text-[10px] text-gray-400 md:text-xs">Total:</span>
+            <span className="text-xs font-semibold text-white md:text-sm">{globalScore}</span>
           </div>
         )}
 
         {/* Flames Remaining (variant) */}
         {variant === 'flames' && flamesRemaining !== undefined && (
-          <div className="flex items-center gap-2 border-t border-[#2a2a2a] pt-2">
-            <span className="text-xs text-gray-400">Flames:</span>
-            <span className="font-semibold text-[#E74C3C]">{flamesRemaining}</span>
+          <div className="flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5 md:gap-2 md:pt-2">
+            <span className="text-[10px] text-gray-400 md:text-xs">Flames:</span>
+            <span className="text-xs font-semibold text-[#E74C3C] md:text-sm">
+              {flamesRemaining}
+            </span>
           </div>
         )}
 
         {/* Time */}
         {time !== undefined && (
-          <div className="flex items-center gap-2 border-t border-[#2a2a2a] pt-2">
-            <span className="text-xs text-gray-400">Time:</span>
-            <span className="font-semibold text-[#D925C7]">{time}s</span>
+          <div className="flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5 md:gap-2 md:pt-2">
+            <span className="text-[10px] text-gray-400 md:text-xs">Time:</span>
+            <span className="text-xs font-semibold text-[#D925C7] md:text-sm">{time}s</span>
           </div>
         )}
 
         {/* Tip Text */}
         {tipText && (
-          <div className="mt-2 border-t border-[#2a2a2a] pt-2">
-            <p className="text-xs text-gray-500 italic">{tipText}</p>
+          <div className="mt-1.5 border-t border-[#2a2a2a] pt-1.5 md:mt-2 md:pt-2">
+            <p className="text-[10px] text-gray-500 italic md:text-xs">{tipText}</p>
           </div>
         )}
       </div>
