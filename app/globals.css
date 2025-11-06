@@ -558,3 +558,119 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
+
+/* PrepFlow Personality System - Visual Effects */
+
+/* Steam Puff Animation */
+@keyframes steamPuff {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1.2);
+  }
+}
+
+.pf-steam-on::before {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(41, 231, 205, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  animation: steamPuff 2s ease-out forwards;
+  transform: translate(-50%, -50%);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pf-steam-on::before {
+    animation: none;
+    display: none;
+  }
+}
+
+/* Seasonal Logo Overlays */
+.pf-seasonal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Santa Hat (Dec 24-26) */
+[data-seasonal='santaHat'] .pf-seasonal-overlay.pf-seasonal-santaHat::before {
+  content: '🎅';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* Lightsaber Glow (May 4) */
+[data-seasonal='lightsaber'] .pf-seasonal-overlay.pf-seasonal-lightsaber::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(41, 231, 205, 0.4) 0%,
+    rgba(41, 231, 205, 0.2) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+[data-seasonal='lightsaber'] .pf-seasonal-overlay.pf-seasonal-lightsaber::after {
+  content: '⚡';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 12px;
+}
+
+/* Chef's Toque (Oct 20) */
+[data-seasonal='toque'] .pf-seasonal-overlay.pf-seasonal-toque::before {
+  content: '👨‍🍳';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+/* Respect reduced motion for seasonal animations */
+@media (prefers-reduced-motion: reduce) {
+  [data-seasonal] .pf-seasonal-overlay::before,
+  [data-seasonal] .pf-seasonal-overlay::after {
+    animation: none !important;
+  }
+}

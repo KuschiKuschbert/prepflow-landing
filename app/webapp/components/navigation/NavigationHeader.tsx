@@ -4,7 +4,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import AutosaveGlobalIndicator from '../AutosaveGlobalIndicator';
 import Link from 'next/link';
 import { useRef } from 'react';
-import OptimizedImage from '../../../../components/OptimizedImage';
+import { BrandMark } from '@/components/BrandMark';
 import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 
@@ -111,25 +111,19 @@ export function NavigationHeader({
                 }
               }}
             >
-              <button
+              <BrandMark
+                src="/images/prepflow-logo.png"
+                alt="PrepFlow Logo"
+                width={24}
+                height={24}
+                className="flex h-6 min-h-[44px] w-6 min-w-[44px] cursor-pointer touch-manipulation items-center justify-center"
                 onClick={handleLogoClick}
                 onTouchStart={handleLogoTouchStart}
                 onTouchEnd={handleLogoTouchEnd}
                 onMouseDown={handleLogoMouseDown}
                 onMouseUp={handleLogoMouseUp}
                 onMouseLeave={handleLogoMouseLeave}
-                className="flex min-h-[44px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center"
-                style={{ touchAction: 'manipulation' }}
-                aria-label="PrepFlow Logo"
-              >
-                <OptimizedImage
-                  src="/images/prepflow-logo.png"
-                  alt="PrepFlow Logo"
-                  width={24}
-                  height={24}
-                  className="h-6 w-6"
-                />
-              </button>
+              />
             </Link>
             <Link href="/webapp" className="hidden md:inline">
               <span className="text-lg font-semibold text-white">PrepFlow</span>

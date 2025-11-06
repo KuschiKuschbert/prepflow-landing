@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface Notification {
   id: string;
@@ -28,6 +28,18 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     }, 3000);
   };
 
+  // Listen for personality toast events
+  React.useEffect(() => {
+    const handlePersonalityToast = (event: CustomEvent<{ message: string }>) => {
+      addNotification('info', event.detail.message);
+    };
+
+    window.addEventListener('personality:addToast', handlePersonalityToast as EventListener);
+    return () => {
+      window.removeEventListener('personality:addToast', handlePersonalityToast as EventListener);
+    };
+  }, []);
+
   return (
     <NotificationContext.Provider
       value={{
@@ -47,7 +59,11 @@ function NotificationContainer({ notifications }: { notifications: Notification[
   if (notifications.length === 0) return null;
 
   return (
-    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-md w-full px-4">
+    <div
+      role="status"
+      aria-live="polite"
+      className="fixed top-20 left-1/2 z-50 flex w-full max-w-md -translate-x-1/2 flex-col gap-2 px-4"
+    >
       {notifications.map(n => (
         <Toast key={n.id} type={n.type} message={n.message} />
       ))}
@@ -76,7 +92,9 @@ function Toast({ type, message }: ToastProps) {
   };
 
   return (
-    <div className={`rounded-xl border px-4 py-2.5 shadow-md backdrop-blur-sm ${styles[type]} animate-in slide-in-from-top duration-200`}>
+    <div
+      className={`rounded-xl border px-4 py-2.5 shadow-md backdrop-blur-sm ${styles[type]} animate-in slide-in-from-top duration-200`}
+    >
       <div className="flex items-center gap-2">
         <span className="text-sm">{icons[type]}</span>
         <span className="text-sm font-medium">{message}</span>
@@ -90,4 +108,3 @@ export function useNotification() {
   if (!context) throw new Error('useNotification must be used within NotificationProvider');
   return context;
 }
-

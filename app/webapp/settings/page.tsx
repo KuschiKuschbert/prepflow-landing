@@ -2,6 +2,7 @@
 
 import { getArcadeStats } from '@/lib/arcadeStats';
 import React, { useEffect, useState } from 'react';
+import { PersonalitySettingsPanel } from './components/PersonalitySettingsPanel';
 
 export default function SettingsPage() {
   const [busy, setBusy] = useState(false);
@@ -78,6 +79,9 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* PrepFlow Personality Settings */}
+      <PersonalitySettingsPanel />
     </div>
   );
 }

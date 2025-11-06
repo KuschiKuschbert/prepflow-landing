@@ -16,6 +16,7 @@ import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { isTouchDevice } from '@/lib/arcadeGuards';
+import { PersonalityScheduler } from './components/PersonalityScheduler';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -96,6 +97,9 @@ export default function WebAppLayout({
 
             {/* Draft Recovery */}
             <DraftRecovery />
+
+            {/* Personality System Scheduler */}
+            <PersonalityScheduler />
 
             {/* Main Content */}
             <main className="bg-[#0a0a0a] pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] md:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))]">

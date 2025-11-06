@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
-import OptimizedImage from '../../../components/OptimizedImage';
+import { BrandMark } from '../../../components/BrandMark';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 interface LandingHeaderProps {
@@ -23,13 +23,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
         <div className="flex items-center justify-between gap-2">
           {/* Logo */}
           <Link href="/" className="flex shrink-0 items-center">
-            <OptimizedImage
+            <BrandMark
               src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
               width={1024}
               height={1024}
-              className="h-[40px] w-[40px] object-contain md:h-12 md:w-auto"
-              priority={true}
+              className="h-[40px] w-[40px] md:h-12 md:w-auto"
             />
           </Link>
 
