@@ -50,11 +50,14 @@ export default function IngredientWizardStep2({
                   className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 >
                   <option value="">Select supplier</option>
-                  {suppliers?.map(supplier => (
-                    <option key={supplier.id} value={supplier.name}>
-                      {supplier.name}
-                    </option>
-                  ))}
+                  {suppliers?.map(supplier => {
+                    const supplierName = supplier.supplier_name || supplier.name || 'Unknown';
+                    return (
+                      <option key={supplier.id} value={supplierName}>
+                        {supplierName}
+                      </option>
+                    );
+                  })}
                 </select>
                 <button
                   type="button"
@@ -179,7 +182,7 @@ export default function IngredientWizardStep2({
               />
               <div className="w-20 text-center">
                 <div className="text-2xl font-bold text-[#29E7CD]">
-                  {formData.trim_peel_waste_percentage || 0}%
+                  {String(formData.trim_peel_waste_percentage ?? 0)}%
                 </div>
                 <div className="text-xs text-gray-400">Waste</div>
               </div>
@@ -202,7 +205,7 @@ export default function IngredientWizardStep2({
               />
               <div className="w-20 text-center">
                 <div className="text-2xl font-bold text-[#29E7CD]">
-                  {formData.yield_percentage || 100}%
+                  {String(formData.yield_percentage ?? 100)}%
                 </div>
                 <div className="text-xs text-gray-400">Yield</div>
               </div>

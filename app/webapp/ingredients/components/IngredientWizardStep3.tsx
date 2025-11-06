@@ -35,7 +35,7 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Pack Price:</span>
-              <span className="text-white">${formData.pack_price || '0.00'}</span>
+              <span className="text-white">${String(formData.pack_price ?? 0)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Working Unit:</span>
@@ -71,13 +71,13 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
             <div className="flex justify-between">
               <span className="text-gray-400">Min Stock:</span>
               <span className="text-white">
-                {formData.min_stock_level || '0'} {formData.unit || ''}
+                {String(formData.min_stock_level ?? 0)} {formData.unit || ''}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Current Stock:</span>
               <span className="text-white">
-                {formData.current_stock || '0'} {formData.unit || ''}
+                {String(formData.current_stock ?? 0)} {formData.unit || ''}
               </span>
             </div>
           </div>
@@ -92,14 +92,14 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           <div className="text-center">
             <div className="mb-2 text-3xl font-bold text-[#D925C7]">
-              {formData.trim_peel_waste_percentage || 0}%
+              {String(formData.trim_peel_waste_percentage ?? 0)}%
             </div>
             <div className="text-sm text-gray-400">Wastage</div>
             <div className="mt-1 text-xs text-gray-500">Lost during prep</div>
           </div>
           <div className="text-center">
             <div className="mb-2 text-3xl font-bold text-[#29E7CD]">
-              {formData.yield_percentage || 100}%
+              {String(formData.yield_percentage ?? 100)}%
             </div>
             <div className="text-sm text-gray-400">Yield</div>
             <div className="mt-1 text-xs text-gray-500">Usable portion</div>
@@ -129,7 +129,7 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
                     ? formatCost(formData.cost_per_unit_incl_trim)
                     : '0.000'}
                 </strong>
-                after accounting for {formData.trim_peel_waste_percentage || 0}% wastage. This is
+                after accounting for {String(formData.trim_peel_waste_percentage ?? 0)}% wastage. This is
                 the cost you should use for COGS calculations.
               </p>
             </div>

@@ -10,7 +10,7 @@ import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
 import { Ingredient, IngredientWizardProps } from './types';
 
-export default function IngredientWizardRefactored({
+export default function IngredientWizard({
   suppliers,
   availableUnits,
   onSave,
@@ -263,10 +263,25 @@ export default function IngredientWizardRefactored({
           : undefined,
       };
 
+      console.log('Wizard saving ingredient:', capitalizedIngredient);
       await onSave(capitalizedIngredient);
       resetWizard();
-    } catch (error) {
-      console.error('Error saving ingredient:', error);
+    } catch (error: any) {
+      console.error('Error saving ingredient in wizard:', {
+        error,
+        message: error?.message,
+        code: error?.code,
+        details: error?.details,
+        hint: error?.hint,
+        formData,
+      });
+
+      // Set error state to show user-friendly message
+      const errorMessage = error?.message || error?.details || 'Failed to save ingredient. Please try again.';
+      setErrors({ submit: errorMessage });
+
+      // Scroll to top to show error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -328,6 +343,16 @@ export default function IngredientWizardRefactored({
           </div>
         </div>
       </div>
+
+      {/* Error Display */}
+      {errors.submit && (
+        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
+          <div className="flex items-center space-x-2">
+            <span className="text-lg">⚠️</span>
+            <span>{errors.submit}</span>
+          </div>
+        </div>
+      )}
 
       {/* Step Content */}
       {wizardStep === 1 && <IngredientWizardStep1 {...stepProps} />}
