@@ -1,5 +1,4 @@
 'use client';
-
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import AutosaveGlobalIndicator from './AutosaveGlobalIndicator';
 import { useTranslation } from '@/lib/useTranslation';
@@ -42,6 +41,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Logo interactions hook
   const {
@@ -89,6 +89,16 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Focus management: when closing sidebar, move focus back to menu button
+  useEffect(() => {
+    if (!isSidebarOpen) {
+      const active = document.activeElement as HTMLElement | null;
+      if (active && sidebarRef.current && sidebarRef.current.contains(active)) {
+        menuButtonRef.current?.focus();
+      }
+    }
+  }, [isSidebarOpen]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -126,6 +136,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           {/* Left: Logo + Menu Button */}
           <div className="flex items-center space-x-2 md:space-x-3">
             <button
+              ref={menuButtonRef}
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className={cn(
                 'rounded-lg',
@@ -172,7 +183,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
                 />
               </button>
               <span className="hidden text-lg font-semibold text-white md:inline">PrepFlow</span>
-              {/* Global Autosave Status Indicator */}
               <AutosaveGlobalIndicator />
             </Link>
           </div>
