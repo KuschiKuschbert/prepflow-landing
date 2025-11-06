@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { signIn } from 'next-auth/react';
 import { trackEvent } from '@/lib/analytics';
 
 interface Step {
@@ -78,13 +79,20 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
                 if (index === last) {
                   trackEvent('tour_complete', 'engagement');
                   onClose();
+                  // Redirect to login/register after tour completion
+                  try {
+                    if (typeof window !== 'undefined') {
+                      sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                    }
+                  } catch (_) {}
+                  signIn('auth0', { callbackUrl: '/webapp' });
                 } else {
                   trackEvent('tour_next', 'engagement', steps[index]?.key, index + 1);
                   setIndex(i => Math.min(i + 1, last));
                 }
               }}
             >
-              {index === last ? 'Done' : 'Next'}
+              {index === last ? 'Get Started' : 'Next'}
             </button>
           </div>
         </div>

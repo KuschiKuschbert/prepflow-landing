@@ -137,7 +137,7 @@ export default function Page() {
         <LandingHeader trackEngagement={trackEngagement} />
 
         {/* Hero */}
-        <AppHero />
+        <AppHero trackEngagement={trackEngagement} />
 
         {/* Tour teaser */}
         <Tour />
