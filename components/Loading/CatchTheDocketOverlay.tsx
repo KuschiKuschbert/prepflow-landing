@@ -2,33 +2,9 @@
 
 import CatchTheDocket from '@/components/Loading/CatchTheDocket';
 import { subscribeLoadingGate } from '@/lib/loading-gate';
+import { prefersReducedMotion, isArcadeDisabled, isTouchDevice } from '@/lib/arcadeGuards';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useMemo, useState } from 'react';
-
-const prefersReducedMotion = () => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-};
-
-const isArcadeDisabled = () => {
-  if (typeof window === 'undefined') return false;
-  try {
-    return localStorage.getItem('PF_DISABLE_ARCADE_LOADING') === '1';
-  } catch (_) {
-    return false;
-  }
-};
-
-const isTouchDevice = () => {
-  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
-  try {
-    const hasTouch = navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
-    const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
-    return hasTouch && !forceEnable;
-  } catch (_) {
-    return false;
-  }
-};
 
 const routePath = () => {
   if (typeof window === 'undefined') return '/';

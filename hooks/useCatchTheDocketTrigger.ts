@@ -2,35 +2,11 @@
  * Hook for managing CatchTheDocket overlay triggers
  * - Shift+D manual trigger
  * - URL param ?arcade=docket trigger
- * - Adaptive long-load trigger based on fastest load time
+ * - Removed adaptive trigger; rely on global loading gate only
  */
 
 import { useState, useEffect } from 'react';
-
-const prefersReducedMotion = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-};
-
-const isArcadeDisabled = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  try {
-    return localStorage.getItem('PF_DISABLE_ARCADE_LOADING') === '1';
-  } catch (_) {
-    return false;
-  }
-};
-
-const isTouchDevice = (): boolean => {
-  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
-  try {
-    const hasTouch = navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
-    const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
-    return hasTouch && !forceEnable;
-  } catch (_) {
-    return false;
-  }
-};
+import { prefersReducedMotion, isArcadeDisabled, isTouchDevice } from '@/lib/arcadeGuards';
 
 export const useCatchTheDocketTrigger = () => {
   const [showDocketOverlay, setShowDocketOverlay] = useState(false);
