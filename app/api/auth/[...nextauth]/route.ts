@@ -8,7 +8,6 @@ const nextAuthHandler = NextAuth(authOptions);
 export async function GET(req: NextRequest): Promise<Response> {
   try {
     // Delegate to NextAuth
-    // @ts-expect-error – NextAuth handler is compatible with route handlers
     return await nextAuthHandler(req);
   } catch (error) {
     console.error('NextAuth GET error:', error);
@@ -21,7 +20,6 @@ export async function GET(req: NextRequest): Promise<Response> {
 export async function POST(req: NextRequest): Promise<Response> {
   try {
     // Delegate to NextAuth
-    // @ts-expect-error – NextAuth handler is compatible with route handlers
     return await nextAuthHandler(req);
   } catch (error) {
     console.error('NextAuth POST error:', error);
