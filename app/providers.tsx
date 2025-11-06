@@ -5,6 +5,7 @@ import { SessionProvider } from 'next-auth/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { getAllDrafts, saveDraft, clearDraft } from '@/lib/autosave-storage';
 import { deriveAutosaveId } from '@/lib/autosave-id';
+import { SeasonalEvaluator } from '@/components/SeasonalEvaluator';
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -12,7 +13,10 @@ export function Providers({ children }: { children: ReactNode }) {
   useDraftMigration();
   return (
     <SessionProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <SeasonalEvaluator />
+        {children}
+      </QueryClientProvider>
     </SessionProvider>
   );
 }
