@@ -22,8 +22,16 @@ interface CatchTheDocketProps {
 const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { dockets, caught, playTime, alertShown, gameFinished, spawnDocket, handleDocketClick } =
-    useCatchTheDocket({ isLoading, containerRef });
+  const {
+    dockets,
+    caught,
+    playTime,
+    alertShown,
+    gameFinished,
+    spawnDocket,
+    handleDocketClick,
+    initSounds,
+  } = useCatchTheDocket({ isLoading, containerRef });
 
   useEffect(() => {
     if (gameFinished && onLoadComplete) {
@@ -37,7 +45,12 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
 
   return (
     <>
-      <WebAppBackground />
+      <WebAppBackground
+        compact={
+          typeof window !== 'undefined' &&
+          (navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined)
+        }
+      />
       <ArcadeMuteButton />
       <motion.div
         ref={containerRef}
@@ -45,6 +58,9 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-white"
+        onPointerDown={e => {
+          initSounds();
+        }}
         onClick={e => {
           // Click anywhere to spawn docket (for testing)
           if (e.target === containerRef.current) {
@@ -74,21 +90,8 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
               top: `${docket.y}px`,
               transform: `translate(-50%, -50%) rotate(${docket.rotation}deg)`,
             }}
+            onPointerDown={() => handleDocketClick(docket.id)}
             onClick={() => handleDocketClick(docket.id)}
-            animate={
-              gameFinished
-                ? {}
-                : {
-                    rotate: docket.rotation + 360,
-                  }
-            }
-            transition={{
-              rotate: {
-                duration: 2,
-                repeat: Infinity,
-                ease: 'linear',
-              },
-            }}
           >
             🧾
           </motion.div>

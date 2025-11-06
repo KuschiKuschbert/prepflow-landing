@@ -14,7 +14,17 @@ export const initArcadeMute = (): boolean => {
 
   if (!('arcadeMuted' in window)) {
     const stored = localStorage.getItem(MUTE_KEY);
-    (window as any).arcadeMuted = stored === 'true';
+    if (stored === null) {
+      // Default mute on iOS mobile due to autoplay restrictions
+      const ua = navigator.userAgent || '';
+      const isIOS =
+        /iPad|iPhone|iPod/.test(ua) ||
+        (navigator.platform === 'MacIntel' && (navigator as any).maxTouchPoints > 1);
+      (window as any).arcadeMuted = isIOS ? true : false;
+      if (isIOS) localStorage.setItem(MUTE_KEY, 'true');
+    } else {
+      (window as any).arcadeMuted = stored === 'true';
+    }
   }
 
   return (window as any).arcadeMuted || false;
