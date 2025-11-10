@@ -48,25 +48,25 @@ export default function QuickActions() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4 lg:grid-cols-4">
         {actions.map((action, index) => (
           <Link
             key={action.title}
             href={action.href}
-            className="group min-h-[44px] rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg hover:shadow-[#29E7CD]/10 active:scale-[0.98] md:rounded-2xl md:p-6"
+            className="group min-h-[44px] rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg hover:shadow-[#29E7CD]/10 active:scale-[0.98] md:rounded-2xl md:p-6"
           >
-            <div className="flex flex-col items-center space-y-3 text-center md:space-y-4">
+            <div className="flex flex-col items-center space-y-2 text-center md:space-y-4">
               <div
-                className={`h-12 w-12 rounded-xl bg-gradient-to-br md:h-16 md:w-16 md:rounded-2xl ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}
+                className={`h-10 w-10 rounded-xl bg-gradient-to-br md:h-16 md:w-16 md:rounded-2xl ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}
               >
-                <span className="text-2xl md:text-3xl">{action.icon}</span>
+                <span className="text-xl md:text-3xl">{action.icon}</span>
               </div>
 
               <div>
-                <h3 className="text-base font-semibold text-white transition-colors duration-200 group-hover:text-[#29E7CD] md:text-lg">
+                <h3 className="text-sm font-semibold text-white transition-colors duration-200 group-hover:text-[#29E7CD] md:text-lg">
                   {action.title}
                 </h3>
-                <p className="mt-1 text-xs text-gray-400 md:text-sm">{action.description}</p>
+                <p className="mt-0.5 text-xs text-gray-400 md:text-sm">{action.description}</p>
               </div>
             </div>
           </Link>
