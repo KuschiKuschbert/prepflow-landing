@@ -126,7 +126,10 @@ export function NavigationHeader({
           )}
         </div>
         <div className="flex items-center space-x-2 md:space-x-3">
-          <NewButton />
+          {/* Hide NewButton on mobile - FAB will handle it */}
+          <div className="hidden md:block">
+            <NewButton />
+          </div>
           <button
             onClick={onSearchClick}
             className={cn(
