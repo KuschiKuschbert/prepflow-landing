@@ -18,7 +18,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Only enforce in production AND when auth is configured; allow everything in dev/preview
+  // Skip all auth checks in development or if auth is not configured
   if (!isProduction || !authConfigured) {
     return NextResponse.next();
   }
@@ -35,8 +35,10 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(`${origin}/api/auth/signin/auth0?callbackUrl=${callback}`);
   }
 
+  // Check allowlist only in production
+  // In development, all authenticated users are allowed (early return above handles this)
   const email = (token as any)?.email as string | undefined;
-  if (!isEmailAllowed(email)) {
+  if (isProduction && !isEmailAllowed(email)) {
     if (isApi) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
