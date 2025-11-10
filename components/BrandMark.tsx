@@ -2,9 +2,9 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
 import OptimizedImage from '@/components/OptimizedImage';
 import { checkSeasonalMatch } from '@/lib/personality/utils';
+import { useEffect, useState } from 'react';
 
 interface BrandMarkProps {
   src?: string;
@@ -45,7 +45,9 @@ export function BrandMark({
   }, []);
 
   return (
-    <div className={`relative inline-block ${className}`}>
+    <div
+      className={`relative inline-flex items-center justify-center overflow-hidden ${className}`}
+    >
       <div
         onClick={onClick}
         onTouchStart={onTouchStart}
@@ -53,9 +55,21 @@ export function BrandMark({
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseLeave}
-        className="relative z-10"
+        className="relative z-10 h-full w-full"
       >
-        <OptimizedImage src={src} alt={alt} width={width} height={height} />
+        <OptimizedImage
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          style={{
+            width: '100%',
+            height: '100%',
+            maxWidth: '100%',
+            maxHeight: '100%',
+            objectFit: 'contain',
+          }}
+        />
       </div>
       {/* Seasonal overlays rendered via CSS based on data-seasonal attribute */}
       {seasonalEffect && (

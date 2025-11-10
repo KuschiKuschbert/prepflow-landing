@@ -6,8 +6,8 @@
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
-import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { BrandMark } from '../../../components/BrandMark';
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 interface LandingHeaderProps {
@@ -26,9 +26,9 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             <BrandMark
               src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
-              width={1024}
-              height={1024}
-              className="h-[40px] w-[40px] md:h-12 md:w-auto"
+              width={48}
+              height={48}
+              className="h-10 w-10 md:h-12 md:w-12"
             />
           </Link>
 
