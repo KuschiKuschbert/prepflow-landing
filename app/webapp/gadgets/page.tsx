@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PageHeader } from '../components/static/PageHeader';
 import { KitchenTimer } from './components/KitchenTimer';
@@ -23,6 +23,9 @@ type GadgetTab =
 function GadgetsContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<GadgetTab>('timer');
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   // Check for tab parameter from URL
   useEffect(() => {
@@ -53,6 +56,51 @@ function GadgetsContent() {
     { id: 'substitution', label: 'Substitutions', icon: '🔄' },
   ];
 
+  // Swipe navigation handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    // Prevent default scrolling if we're doing a horizontal swipe
+    if (touchStartX.current !== null && touchStartY.current !== null) {
+      const deltaX = Math.abs(e.touches[0].clientX - touchStartX.current);
+      const deltaY = Math.abs(e.touches[0].clientY - touchStartY.current);
+
+      // If horizontal swipe is more dominant than vertical, prevent scroll
+      if (deltaX > deltaY && deltaX > 10) {
+        e.preventDefault();
+      }
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartX.current;
+    const deltaY = Math.abs(touchEndY - touchStartY.current);
+    const minSwipeDistance = 50; // Minimum distance for a swipe
+
+    // Only process if horizontal swipe is more dominant than vertical
+    if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > minSwipeDistance) {
+      const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+
+      if (deltaX > 0 && currentIndex > 0) {
+        // Swipe right - go to previous tab
+        setActiveTab(tabs[currentIndex - 1].id);
+      } else if (deltaX < 0 && currentIndex < tabs.length - 1) {
+        // Swipe left - go to next tab
+        setActiveTab(tabs[currentIndex + 1].id);
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#0a0a0a] text-white">
       <div className="mx-auto w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 lg:px-8 lg:py-8">
@@ -81,21 +129,30 @@ function GadgetsContent() {
                 }`}
               >
                 <span className="text-sm sm:text-base">{tab.icon}</span>
-                <span className="xs:inline hidden sm:inline">{tab.label}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Gadget Content - Compact Padding */}
-        <div className="w-full rounded-xl bg-[#1f1f1f] p-2 sm:rounded-2xl sm:p-4 md:p-6 lg:p-8">
-          {activeTab === 'timer' && <KitchenTimer />}
-          {activeTab === 'unit' && <UnitConverter />}
-          {activeTab === 'temperature' && <TemperatureConverter />}
-          {activeTab === 'cooking-time' && <CookingTimeCalculator />}
-          {activeTab === 'yield' && <YieldPortionCalculator />}
-          {activeTab === 'volume-weight' && <VolumeToWeightConverter />}
-          {activeTab === 'substitution' && <IngredientSubstitutionGuide />}
+        {/* Gadget Content - Compact Padding with Swipe Support */}
+        <div
+          ref={contentRef}
+          className="w-full touch-pan-y rounded-xl bg-[#1f1f1f] p-2 sm:rounded-2xl sm:p-4 md:p-6 lg:p-8"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{ touchAction: 'pan-y' }}
+        >
+          <div className="transition-opacity duration-200">
+            {activeTab === 'timer' && <KitchenTimer />}
+            {activeTab === 'unit' && <UnitConverter />}
+            {activeTab === 'temperature' && <TemperatureConverter />}
+            {activeTab === 'cooking-time' && <CookingTimeCalculator />}
+            {activeTab === 'yield' && <YieldPortionCalculator />}
+            {activeTab === 'volume-weight' && <VolumeToWeightConverter />}
+            {activeTab === 'substitution' && <IngredientSubstitutionGuide />}
+          </div>
         </div>
       </div>
     </div>
