@@ -60,6 +60,29 @@
   - `const { data, error } = await supabase.from('table').insert(row);`
 - Handle `error` explicitly; avoid `.catch()` which breaks type checks on Vercel.
 
+### TypeScript Ref Types (React useRef)
+
+- **MANDATORY**: Always use `RefObject<HTMLElement | null>` when declaring ref types in interfaces or function return types.
+- When using `useRef<HTMLElement>(null)`, TypeScript infers the type as `RefObject<HTMLElement | null>`, not `RefObject<HTMLElement>`.
+- **Correct pattern:**
+
+  ```typescript
+  interface MyHookReturn {
+    elementRef: React.RefObject<HTMLDivElement | null>; // ✅ Correct
+  }
+
+  const elementRef = useRef<HTMLDivElement>(null); // Returns RefObject<HTMLDivElement | null>
+  ```
+
+- **Incorrect pattern:**
+  ```typescript
+  interface MyHookReturn {
+    elementRef: React.RefObject<HTMLDivElement>; // ❌ Causes build errors
+  }
+  ```
+- This prevents TypeScript build errors on Vercel: `Type 'RefObject<HTMLDivElement | null>' is not assignable to type 'RefObject<HTMLDivElement>'`.
+- Always check ref types in hook return interfaces and component prop types.
+
 # PrepFlow - AI Agent Instructions
 
 ## 🎯 **Project Overview**
@@ -209,6 +232,8 @@ mobile/                 # React Native app (future)
 ### **Code Quality Requirements**
 
 - **TypeScript:** Strict typing, no `any` types without justification
+  - **Ref Types:** Always use `RefObject<HTMLElement | null>` in interfaces (see TypeScript Ref Types section above)
+  - **useRef Pattern:** `useRef<HTMLElement>(null)` returns `RefObject<HTMLElement | null>`, always type accordingly
 - **React Patterns:** Functional components with hooks, proper error boundaries
 - **Performance:** Lazy loading, image optimization, Core Web Vitals optimization
 - **Accessibility:** ARIA labels, semantic HTML, keyboard navigation support
