@@ -3,8 +3,13 @@
 import { useGlobalWarning } from '@/contexts/GlobalWarningContext';
 import React from 'react';
 
-const GlobalWarning: React.FC = () => {
+interface GlobalWarningProps {
+  onHeightChange?: (height: number) => void;
+}
+
+const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   const { warnings, removeWarning } = useGlobalWarning();
+  const warningRef = React.useRef<HTMLDivElement | null>(null);
 
   if (warnings.length === 0) {
     return null;
@@ -12,6 +17,32 @@ const GlobalWarning: React.FC = () => {
 
   // Show only the first warning in the bar
   const warning = warnings[0];
+
+  // Measure height and notify parent when it changes
+  React.useEffect(() => {
+    if (warningRef.current && onHeightChange) {
+      const updateHeight = () => {
+        const height = warningRef.current?.offsetHeight || 0;
+        onHeightChange(height);
+      };
+
+      // Initial measurement
+      updateHeight();
+
+      // Set up ResizeObserver for dynamic height changes
+      const resizeObserver = new ResizeObserver(updateHeight);
+      resizeObserver.observe(warningRef.current);
+
+      // Fallback: measure after a short delay
+      const timeoutId = setTimeout(updateHeight, 100);
+
+      return () => {
+        resizeObserver.disconnect();
+        clearTimeout(timeoutId);
+        onHeightChange(0); // Reset height when warning is removed
+      };
+    }
+  }, [warning, onHeightChange]);
 
   const getWarningStyles = (type: string) => {
     switch (type) {
@@ -106,7 +137,10 @@ const GlobalWarning: React.FC = () => {
   const styles = getWarningStyles(warning.type);
 
   return (
-    <div className={`w-full border-b backdrop-blur-sm ${styles.container}`}>
+    <div
+      ref={warningRef}
+      className={`fixed right-0 left-0 z-40 w-full border-b backdrop-blur-sm ${styles.container} top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] md:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))]`}
+    >
       <div className="mx-auto max-w-7xl px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
