@@ -160,7 +160,7 @@ export function CookingTimeCalculator() {
 
         <button
           onClick={calculateTime}
-          className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20"
+          className="w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 sm:rounded-2xl sm:px-6 sm:py-3"
         >
           Calculate Cooking Time
         </button>
