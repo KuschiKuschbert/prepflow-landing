@@ -19,6 +19,7 @@ const categoryLabels: Record<string, string> = {
   operations: 'Operations',
   inventory: 'Inventory',
   kitchen: 'Kitchen',
+  gadgets: 'Kitchen Gadgets',
   tools: 'Tools',
   other: 'Other',
 };

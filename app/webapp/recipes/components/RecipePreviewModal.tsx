@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 
@@ -108,6 +109,20 @@ export default function RecipePreviewModal({
             </div>
 
             <div className="flex gap-2">
+              <Link
+                href="/webapp/gadgets?tab=unit"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  />
+                </svg>
+                Convert Units
+              </Link>
               <button
                 onClick={onEditFromPreview}
                 className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
