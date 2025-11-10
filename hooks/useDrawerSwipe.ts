@@ -12,8 +12,8 @@ interface UseDrawerSwipeReturn {
   dragY: number;
   isDragging: boolean;
   canDrag: boolean;
-  drawerRef: React.RefObject<HTMLDivElement>;
-  contentRef: React.RefObject<HTMLDivElement>;
+  drawerRef: React.RefObject<HTMLDivElement | null>;
+  contentRef: React.RefObject<HTMLDivElement | null>;
   handleHandleTouchStart: (e: React.TouchEvent) => void;
   handleContentTouchStart: (e: React.TouchEvent) => void;
   handleTouchMove: (e: React.TouchEvent) => void;
