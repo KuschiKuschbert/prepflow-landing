@@ -133,156 +133,154 @@ function GadgetsContent() {
   return (
     <div className="w-full bg-[#0a0a0a] text-white">
       <div className="mx-auto w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6">
+        {/* Compact Header for Mobile */}
+        <div className="mb-2 flex-shrink-0 sm:mb-4">
+          <h1 className="text-base font-bold text-white sm:text-xl md:text-2xl">
+            <span className="mr-1 sm:mr-2">🔧</span>
+            Kitchen Gadgets
+          </h1>
+          <p className="hidden text-xs text-gray-400 sm:block sm:text-sm">
+            Useful digital tools for your kitchen
+          </p>
+        </div>
+
+        {/* Compact Tab Navigation */}
+        <div className="mb-2 w-full flex-shrink-0 overflow-x-auto sm:mb-4">
+          <div className="flex w-full space-x-1 border-b border-[#2a2a2a] sm:space-x-2">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex flex-shrink-0 items-center gap-1 border-b-2 px-2 py-2 text-xs font-medium transition-colors sm:gap-2 sm:px-3 sm:py-2.5 sm:text-sm ${
+                  activeTab === tab.id
+                    ? 'border-[#29E7CD] text-[#29E7CD]'
+                    : 'border-transparent text-gray-400 hover:border-gray-500 hover:text-gray-300'
+                }`}
+              >
+                <span className="text-sm sm:text-base">{tab.icon}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Swipe Indicators */}
+        <div className="mb-2 flex flex-shrink-0 items-center justify-center gap-1.5 sm:mb-4 sm:gap-2">
+          {tabs.map((tab, index) => {
+            const currentIndex = tabs.findIndex(t => t.id === activeTab);
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`h-1 rounded-full transition-all duration-200 ${
+                  index === currentIndex
+                    ? 'w-5 bg-[#29E7CD] sm:w-6'
+                    : 'w-1 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50 sm:w-1.5'
+                }`}
+                aria-label={`Go to ${tab.label}`}
+              />
+            );
+          })}
+        </div>
+
+        {/* Swipe Hint (shown on first load) */}
+        {showSwipeHint && (
+          <div className="mb-2 flex flex-shrink-0 items-center justify-center gap-1.5 text-xs text-gray-400 sm:mb-4 sm:gap-2 sm:text-sm">
+            <svg
+              className="h-3 w-3 animate-pulse sm:h-4 sm:w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 16l-4-4m0 0l4-4m-4 4h18"
+              />
+            </svg>
+            <span>Swipe to navigate</span>
+            <svg
+              className="h-3 w-3 animate-pulse sm:h-4 sm:w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </div>
+        )}
+
+        {/* Gadget Content Card - Only the gadget itself */}
         <GadgetsCard>
-          <div className="flex h-full w-full flex-col overflow-hidden">
-            {/* Compact Header for Mobile */}
-            <div className="flex-shrink-0 border-b border-[#2a2a2a] px-3 py-2 sm:px-4 sm:py-3">
-              <h1 className="text-base font-bold text-white sm:text-xl md:text-2xl">
-                <span className="mr-1 sm:mr-2">🔧</span>
-                Kitchen Gadgets
-              </h1>
-              <p className="hidden text-xs text-gray-400 sm:block sm:text-sm">
-                Useful digital tools for your kitchen
-              </p>
-            </div>
-
-            {/* Compact Tab Navigation */}
-            <div className="w-full flex-shrink-0 overflow-x-auto border-b border-[#2a2a2a]">
-              <div className="flex w-full space-x-1 sm:space-x-2">
-                {tabs.map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex flex-shrink-0 items-center gap-1 border-b-2 px-2 py-2 text-xs font-medium transition-colors sm:gap-2 sm:px-3 sm:py-2.5 sm:text-sm ${
-                      activeTab === tab.id
-                        ? 'border-[#29E7CD] text-[#29E7CD]'
-                        : 'border-transparent text-gray-400 hover:border-gray-500 hover:text-gray-300'
-                    }`}
-                  >
-                    <span className="text-sm sm:text-base">{tab.icon}</span>
-                    <span className="hidden sm:inline">{tab.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Swipe Indicators */}
-            <div className="flex flex-shrink-0 items-center justify-center gap-1.5 border-b border-[#2a2a2a] py-2 sm:gap-2">
-              {tabs.map((tab, index) => {
-                const currentIndex = tabs.findIndex(t => t.id === activeTab);
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`h-1 rounded-full transition-all duration-200 ${
-                      index === currentIndex
-                        ? 'w-5 bg-[#29E7CD] sm:w-6'
-                        : 'w-1 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50 sm:w-1.5'
-                    }`}
-                    aria-label={`Go to ${tab.label}`}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Swipe Hint (shown on first load) */}
-            {showSwipeHint && (
-              <div className="flex flex-shrink-0 items-center justify-center gap-1.5 border-b border-[#2a2a2a] py-1.5 text-xs text-gray-400 sm:gap-2 sm:py-2 sm:text-sm">
-                <svg
-                  className="h-3 w-3 animate-pulse sm:h-4 sm:w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 16l-4-4m0 0l4-4m-4 4h18"
-                  />
-                </svg>
-                <span>Swipe to navigate</span>
-                <svg
-                  className="h-3 w-3 animate-pulse sm:h-4 sm:w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </div>
+          <div
+            ref={contentRef}
+            className="relative flex h-full w-full touch-pan-y overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{ touchAction: 'pan-y' }}
+          >
+            {/* Swipe Direction Arrows (shown during swipe) */}
+            {isSwiping && (
+              <>
+                {swipeOffset < -20 && (
+                  <div className="pointer-events-none absolute top-1/2 right-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
+                    <svg
+                      className="h-6 w-6 text-[#29E7CD] sm:h-8 sm:w-8"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                )}
+                {swipeOffset > 20 && (
+                  <div className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
+                    <svg
+                      className="h-6 w-6 text-[#29E7CD] sm:h-8 sm:w-8"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </>
             )}
 
-            {/* Gadget Content - Full Height with Swipe Support */}
+            {/* Content with swipe transform - Full Height */}
             <div
-              ref={contentRef}
-              className="relative flex flex-1 touch-pan-y overflow-hidden"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{ touchAction: 'pan-y' }}
+              className="flex h-full w-full flex-col transition-all duration-200"
+              style={{
+                transform: isSwiping ? `translateX(${swipeOffset}px)` : 'translateX(0)',
+                opacity: isSwiping ? 1 - Math.abs(swipeOffset) / 200 : 1,
+              }}
             >
-              {/* Swipe Direction Arrows (shown during swipe) */}
-              {isSwiping && (
-                <>
-                  {swipeOffset < -20 && (
-                    <div className="pointer-events-none absolute top-1/2 right-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
-                      <svg
-                        className="h-6 w-6 text-[#29E7CD] sm:h-8 sm:w-8"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                  )}
-                  {swipeOffset > 20 && (
-                    <div className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
-                      <svg
-                        className="h-6 w-6 text-[#29E7CD] sm:h-8 sm:w-8"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Content with swipe transform - Full Height */}
-              <div
-                className="flex h-full w-full flex-col transition-all duration-200"
-                style={{
-                  transform: isSwiping ? `translateX(${swipeOffset}px)` : 'translateX(0)',
-                  opacity: isSwiping ? 1 - Math.abs(swipeOffset) / 200 : 1,
-                }}
-              >
-                {activeTab === 'timer' && <KitchenTimer />}
-                {activeTab === 'unit' && <UnitConverter />}
-                {activeTab === 'temperature' && <TemperatureConverter />}
-                {activeTab === 'cooking-time' && <CookingTimeCalculator />}
-                {activeTab === 'yield' && <YieldPortionCalculator />}
-                {activeTab === 'volume-weight' && <VolumeToWeightConverter />}
-                {activeTab === 'substitution' && <IngredientSubstitutionGuide />}
-              </div>
+              {activeTab === 'timer' && <KitchenTimer />}
+              {activeTab === 'unit' && <UnitConverter />}
+              {activeTab === 'temperature' && <TemperatureConverter />}
+              {activeTab === 'cooking-time' && <CookingTimeCalculator />}
+              {activeTab === 'yield' && <YieldPortionCalculator />}
+              {activeTab === 'volume-weight' && <VolumeToWeightConverter />}
+              {activeTab === 'substitution' && <IngredientSubstitutionGuide />}
             </div>
           </div>
         </GadgetsCard>
