@@ -28,7 +28,7 @@ export function BottomNavBar({ onMoreClick }: BottomNavBarProps) {
 
   return (
     <nav
-      className="fixed right-0 bottom-0 left-0 z-[60] border-t border-[#2a2a2a]/50 bg-[#1f1f1f]/95 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl"
+      className="fixed right-0 bottom-0 left-0 z-[60] border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/70 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl"
       aria-label="Bottom navigation"
     >
       <div className="grid h-14 grid-cols-5">
