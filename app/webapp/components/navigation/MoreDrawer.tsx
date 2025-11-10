@@ -1,12 +1,13 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useNavigationItems } from './nav-items';
 import { CategorySection } from './CategorySection';
 import { SearchModal } from './SearchModal';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { LogoutButton } from '../LogoutButton';
+import { useDrawerSwipe } from '@/hooks/useDrawerSwipe';
 
 interface MoreDrawerProps {
   isOpen: boolean;
@@ -16,9 +17,21 @@ interface MoreDrawerProps {
 
 export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) {
   const pathname = usePathname();
-  const drawerRef = useRef<HTMLDivElement>(null);
-
   const allItems = useNavigationItems();
+
+  // Swipe gesture hook
+  const {
+    dragY,
+    isDragging,
+    canDrag,
+    drawerRef,
+    contentRef,
+    handleHandleTouchStart,
+    handleContentTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    handleDrawerTouchStart,
+  } = useDrawerSwipe({ isOpen, onClose });
 
   // Group items by category
   const groupedItems = allItems.reduce(
@@ -65,9 +78,17 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
         onClick={onClose}
-        onTouchStart={onClose}
+        onTouchStart={e => {
+          // Only close on backdrop, not when touching drawer
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
+        style={{
+          opacity: isDragging ? Math.max(0.3, 1 - dragY / 500) : 1,
+        }}
         aria-hidden="true"
       />
 
@@ -78,14 +99,34 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
         role="dialog"
         aria-modal="true"
         aria-label="More navigation options"
+        style={{
+          transform: `translateY(${Math.max(0, dragY)}px)`,
+          transition:
+            isDragging && canDrag ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+        onTouchStart={handleDrawerTouchStart}
       >
-        {/* Handle bar */}
-        <div className="flex items-center justify-center pt-3 pb-2">
+        {/* Handle bar - drag target */}
+        <div
+          className="flex cursor-grab items-center justify-center pt-3 pb-2 select-none active:cursor-grabbing"
+          onTouchStart={handleHandleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{ touchAction: 'none' }}
+        >
           <div className="h-1 w-12 rounded-full bg-gray-600" />
         </div>
 
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
+        {/* Header - also draggable when content is at top */}
+        <div
+          className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3 select-none"
+          onTouchStart={e => {
+            // Allow dragging from header area when content is at top
+            handleContentTouchStart(e);
+          }}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <h2 className="text-lg font-semibold text-white">Navigation</h2>
           <button
             onClick={onClose}
@@ -132,7 +173,27 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
         </div>
 
         {/* Navigation items */}
-        <div className="overflow-y-auto px-4 py-4" style={{ maxHeight: 'calc(90vh - 200px)' }}>
+        <div
+          ref={contentRef}
+          className="overflow-y-auto px-4 py-4"
+          style={{
+            maxHeight: 'calc(90vh - 200px)',
+            touchAction: isDragging && canDrag ? 'none' : 'pan-y',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch',
+          }}
+          onTouchStart={e => {
+            // Check if we should start dragging or allow scrolling
+            handleContentTouchStart(e);
+          }}
+          onTouchMove={e => {
+            // If dragging, handle drag; otherwise allow scroll
+            if (isDragging && canDrag) {
+              handleTouchMove(e);
+            }
+          }}
+          onTouchEnd={handleTouchEnd}
+        >
           {Object.entries(groupedItems).map(([category, items]) => (
             <CategorySection
               key={category}
