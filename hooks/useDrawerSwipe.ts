@@ -19,6 +19,10 @@ interface UseDrawerSwipeReturn {
   handleTouchMove: (e: React.TouchEvent) => void;
   handleTouchEnd: () => void;
   handleDrawerTouchStart: (e: React.TouchEvent) => void;
+  // Visual feedback state
+  isAtTop: boolean;
+  upwardMovement: number;
+  dragProgress: number; // 0-1, progress toward close threshold
 }
 
 export function useDrawerSwipe({
@@ -38,6 +42,9 @@ export function useDrawerSwipe({
   const [velocity, setVelocity] = useState(0);
   const [canDrag, setCanDrag] = useState(false);
   const maxUpwardMovementRef = useRef(0);
+  const [isAtTop, setIsAtTop] = useState(false);
+  const [upwardMovement, setUpwardMovement] = useState(0);
+  const [dragProgress, setDragProgress] = useState(0);
 
   useEffect(() => {
     if (!isOpen) {
@@ -46,7 +53,28 @@ export function useDrawerSwipe({
       setVelocity(0);
       setCanDrag(false);
       maxUpwardMovementRef.current = 0;
+      setIsAtTop(false);
+      setUpwardMovement(0);
+      setDragProgress(0);
+    } else if (contentRef.current) {
+      // Update isAtTop when drawer opens
+      setIsAtTop(contentRef.current.scrollTop <= 5);
     }
+  }, [isOpen]);
+
+  // Update isAtTop on scroll
+  useEffect(() => {
+    if (!isOpen || !contentRef.current) return;
+
+    const handleScroll = () => {
+      if (contentRef.current) {
+        setIsAtTop(contentRef.current.scrollTop <= 5);
+      }
+    };
+
+    const content = contentRef.current;
+    content.addEventListener('scroll', handleScroll, { passive: true });
+    return () => content.removeEventListener('scroll', handleScroll);
   }, [isOpen]);
 
   const startDrag = (touchY: number) => {
@@ -68,7 +96,7 @@ export function useDrawerSwipe({
 
   const handleContentTouchStart = (e: React.TouchEvent) => {
     if (!contentRef.current || !drawerRef.current) return;
-    const isAtTop = contentRef.current.scrollTop <= 5;
+    const atTop = contentRef.current.scrollTop <= 5;
     const touchY = e.touches[0].clientY;
     const drawerRect = drawerRef.current.getBoundingClientRect();
     const touchRelativeToDrawer = touchY - drawerRect.top;
@@ -78,9 +106,12 @@ export function useDrawerSwipe({
     setLastY(touchY);
     setLastTime(now);
     maxUpwardMovementRef.current = 0;
+    setIsAtTop(atTop);
+    setUpwardMovement(0);
+    setDragProgress(0);
 
     // When at top, enable gesture detection for both upward (close) and downward (swipe)
-    if (isAtTop) {
+    if (atTop) {
       setIsDragging(true);
       setCanDrag(touchRelativeToDrawer < contentTopDragArea);
       setDragY(0);
@@ -96,46 +127,88 @@ export function useDrawerSwipe({
 
     const currentY = e.touches[0].clientY;
     const currentTime = Date.now();
-    const isAtTop = contentRef.current.scrollTop <= 5;
+    const atTop = contentRef.current.scrollTop <= 5;
     const deltaY = currentY - startY;
 
     setLastY(currentY);
     setLastTime(currentTime);
+    setIsAtTop(atTop);
 
     // When at top, detect upward gesture to close drawer (priority over swipe-down)
-    if (isAtTop && isDragging) {
+    if (atTop && isDragging) {
       if (deltaY < 0) {
-        const upwardMovement = Math.abs(deltaY);
-        maxUpwardMovementRef.current = Math.max(maxUpwardMovementRef.current, upwardMovement);
-      }
-      // Close immediately if upward movement exceeds threshold (reduced for better sensitivity)
-      if (deltaY < -15) {
+        // Upward gesture detected - prioritize closing
+        const upwardMovementValue = Math.abs(deltaY);
+        maxUpwardMovementRef.current = Math.max(maxUpwardMovementRef.current, upwardMovementValue);
+        setUpwardMovement(upwardMovementValue);
+        // Calculate progress: 0-1 based on 15px threshold
+        setDragProgress(Math.min(1, upwardMovementValue / 15));
+        setDragY(0); // Clear downward drag
+        setVelocity(0);
+        // Close immediately if upward movement exceeds threshold
+        if (deltaY < -15) {
+          e.preventDefault();
+          e.stopPropagation();
+          onClose();
+          setIsDragging(false);
+          setCanDrag(false);
+          setDragY(0);
+          setVelocity(0);
+          maxUpwardMovementRef.current = 0;
+          setUpwardMovement(0);
+          setDragProgress(0);
+          return;
+        }
+      } else if (deltaY > 5 && canDrag) {
+        // Downward gesture when at top and in drag area
+        setUpwardMovement(0);
+        setDragY(deltaY);
+        // Calculate progress for downward swipe
+        if (drawerRef.current) {
+          const drawerHeight = drawerRef.current.offsetHeight;
+          const progress = Math.min(1, deltaY / (drawerHeight * threshold));
+          setDragProgress(progress);
+        }
+        if (lastTime > 0) {
+          const timeDelta = currentTime - lastTime;
+          if (timeDelta > 0) setVelocity(Math.abs((currentY - lastY) / timeDelta));
+        }
         e.preventDefault();
         e.stopPropagation();
-        onClose();
-        setIsDragging(false);
+      } else {
+        // Neutral or small movement
+        setUpwardMovement(0);
+        setDragProgress(0);
+        setDragY(0);
+      }
+    } else {
+      // Not at top - handle downward swipe normally
+      setUpwardMovement(0);
+
+      if (isDragging && canDrag && deltaY > 5) {
+        // Downward swipe gesture
+        setDragY(deltaY);
+        if (drawerRef.current) {
+          const drawerHeight = drawerRef.current.offsetHeight;
+          const progress = Math.min(1, deltaY / (drawerHeight * threshold));
+          setDragProgress(progress);
+        }
+        if (lastTime > 0) {
+          const timeDelta = currentTime - lastTime;
+          if (timeDelta > 0) setVelocity(Math.abs((currentY - lastY) / timeDelta));
+        }
+        e.preventDefault();
+        e.stopPropagation();
+      } else if (isDragging && canDrag && deltaY < -5) {
+        // Upward movement when not at top - cancel drag
         setCanDrag(false);
+        setIsDragging(false);
         setDragY(0);
         setVelocity(0);
-        maxUpwardMovementRef.current = 0;
-        return;
+        setDragProgress(0);
+      } else if (!isDragging || !canDrag) {
+        setDragProgress(0);
       }
-    }
-
-    // Handle downward swipe gesture (existing behavior)
-    if (isDragging && canDrag && deltaY > 5) {
-      e.preventDefault();
-      e.stopPropagation();
-      setDragY(deltaY);
-      if (lastTime > 0) {
-        const timeDelta = currentTime - lastTime;
-        if (timeDelta > 0) setVelocity(Math.abs((currentY - lastY) / timeDelta));
-      }
-    } else if (isDragging && canDrag && deltaY < -5 && !isAtTop) {
-      setCanDrag(false);
-      setIsDragging(false);
-      setDragY(0);
-      setVelocity(0);
     }
   };
 
@@ -200,5 +273,8 @@ export function useDrawerSwipe({
     handleTouchMove,
     handleTouchEnd,
     handleDrawerTouchStart,
+    isAtTop,
+    upwardMovement,
+    dragProgress,
   };
 }

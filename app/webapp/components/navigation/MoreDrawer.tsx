@@ -2,14 +2,16 @@
 
 import { useDrawerAutoClose } from '@/hooks/useDrawerAutoClose';
 import { useDrawerSwipe } from '@/hooks/useDrawerSwipe';
+import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { DrawerContent } from './DrawerContent';
 import { DrawerFooter } from './DrawerFooter';
+import { DrawerHandle } from './DrawerHandle';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerSearchButton } from './DrawerSearchButton';
+import { SwipeIndicator } from './SwipeIndicator';
 import { useNavigationItems } from './nav-items';
-import { useSession } from 'next-auth/react';
 
 interface MoreDrawerProps {
   isOpen: boolean;
@@ -36,6 +38,9 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
     handleTouchMove,
     handleTouchEnd,
     handleDrawerTouchStart,
+    isAtTop,
+    upwardMovement,
+    dragProgress,
   } = useDrawerSwipe({ isOpen, onClose });
 
   // Group items by category
@@ -118,27 +123,37 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
           transform: `translateY(${Math.max(0, dragY)}px)`,
           transition:
             isDragging && canDrag ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: upwardMovement > 0 ? Math.max(0.7, 1 - upwardMovement / 50) : 1,
         }}
         onTouchStart={handleDrawerTouchStart}
       >
         {/* Flex container for proper layout */}
         <div className="flex h-full flex-col">
+          {/* Swipe indicator overlay */}
+          <SwipeIndicator
+            isAtTop={isAtTop}
+            dragProgress={dragProgress}
+            upwardMovement={upwardMovement}
+            isDragging={isDragging}
+            direction={isAtTop ? 'both' : 'down'}
+          />
+
           {/* Handle bar - drag target */}
-          <div
-            className="flex flex-shrink-0 cursor-grab items-center justify-center pt-2 pb-1.5 select-none active:cursor-grabbing"
+          <DrawerHandle
             onTouchStart={handleHandleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            style={{ touchAction: 'none' }}
-          >
-            <div className="h-1 w-10 rounded-full bg-gray-500/60" />
-          </div>
+            dragProgress={dragProgress}
+            isDragging={isDragging}
+          />
 
           <DrawerHeader
             onClose={onClose}
             onContentTouchStart={handleContentTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            isAtTop={isAtTop}
+            upwardMovement={upwardMovement}
           />
 
           <DrawerSearchButton onSearchClick={onSearchClick} />

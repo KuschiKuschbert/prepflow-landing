@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export function KitchenTimer() {
   const [timeLeft, setTimeLeft] = useState(0); // in seconds
