@@ -200,7 +200,7 @@ export default function CSVImportModal({
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4 backdrop-blur-sm">
+    <div className="bg-opacity-50 fixed inset-0 z-[70] flex items-center justify-center bg-black p-4 backdrop-blur-sm">
       <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
         {/* Header */}
         <div className="border-b border-[#2a2a2a] p-6">

@@ -20,7 +20,7 @@ export default function PerformanceImportModal({
   if (!showImportModal) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50">
       <div className="w-full max-w-2xl rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
         <h3 className="mb-4 text-xl font-semibold text-white">Import Sales Data</h3>
         <p className="mb-4 text-gray-300">

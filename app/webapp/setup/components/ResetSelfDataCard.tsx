@@ -88,7 +88,7 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-4">
           <div className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
             <h4 className="mb-2 text-xl font-bold text-white">Confirm cleanup</h4>
             <p className="mb-4 text-sm text-gray-400">

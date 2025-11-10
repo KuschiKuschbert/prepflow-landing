@@ -193,19 +193,37 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
             const target = e.target as HTMLElement;
             const link = target.closest('a');
             if (link) {
-              // Allow link to handle its own touch event
+              // Allow link to handle its own touch event - don't interfere with navigation
+              // Stop event propagation to prevent drag handlers from interfering
+              e.stopPropagation();
               return;
             }
             // Check if we should start dragging or allow scrolling
             handleContentTouchStart(e);
           }}
           onTouchMove={e => {
+            // Don't interfere with link touches
+            const target = e.target as HTMLElement;
+            const link = target.closest('a');
+            if (link) {
+              e.stopPropagation();
+              return;
+            }
             // If dragging, handle drag; otherwise allow scroll
             if (isDragging && canDrag) {
               handleTouchMove(e);
             }
           }}
-          onTouchEnd={handleTouchEnd}
+          onTouchEnd={e => {
+            // Don't interfere with link touches
+            const target = e.target as HTMLElement;
+            const link = target.closest('a');
+            if (link) {
+              e.stopPropagation();
+              return;
+            }
+            handleTouchEnd();
+          }}
         >
           {Object.entries(groupedItems).map(([category, items]) => (
             <CategorySection

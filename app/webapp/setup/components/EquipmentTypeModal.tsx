@@ -14,7 +14,7 @@ export function EquipmentTypeModal({ isOpen, onClose, onSelect }: EquipmentTypeM
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
       <div className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
         <div className="mb-6 flex items-center justify-between">
           <h3 className="text-2xl font-bold text-white">Select Equipment Type</h3>
