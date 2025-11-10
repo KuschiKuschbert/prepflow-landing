@@ -8,10 +8,31 @@
 - Routes: `/api/auth/[...nextauth]`, `/api/me`
 - Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes).
 
-### Allowlist
+### Allowlist Configuration
 
-- `ALLOWED_EMAILS` (comma-separated). Only allowlisted emails can access protected routes.
-- Unauthorized pages redirect to `/not-authorized`; APIs return 401/403.
+- **Option 1: Development Mode** (Default)
+  - In development (`NODE_ENV=development`), allowlist is automatically bypassed
+  - All authenticated users are allowed
+  - No configuration needed
+
+- **Option 2: Disable Allowlist**
+  - Set `DISABLE_ALLOWLIST=true` in environment variables
+  - All authenticated users can access (useful for testing/friend access)
+  - Works in both development and production
+
+- **Option 3: Email Allowlist**
+  - `ALLOWED_EMAILS` (comma-separated). Only allowlisted emails can access protected routes.
+  - Format: `email1@example.com,email2@example.com,email3@example.com`
+  - Unauthorized pages redirect to `/not-authorized`; APIs return 401/403.
+  - Most secure option for production
+
+### Shared Workspace
+
+- **Current Configuration**: Shared workspace - all authenticated users access the same data
+- **No User Isolation**: All users see and modify the same ingredients, recipes, menu dishes, etc.
+- **User Display**: Current user's name/email is displayed in navigation header (desktop only)
+- **Use Case**: Testing and friend access - not suitable for production with multiple customers
+- **Documentation**: See `docs/FRIEND_ACCESS.md` for detailed configuration and usage instructions
 
 ### Billing (Stripe scaffolding)
 

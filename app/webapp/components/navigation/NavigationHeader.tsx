@@ -7,6 +7,7 @@ import { useRef } from 'react';
 import { BrandMark } from '@/components/BrandMark';
 import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
+import { useSession } from 'next-auth/react';
 
 interface NavigationHeaderProps {
   className?: string;
@@ -50,6 +51,10 @@ export function NavigationHeader({
   handleLogoMouseLeave,
   shouldPreventNavigation,
 }: NavigationHeaderProps) {
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
+  const userName = session?.user?.name || userEmail?.split('@')[0];
+
   return (
     <header
       role="banner"
@@ -155,6 +160,15 @@ export function NavigationHeader({
           </button>
           <NavbarStats />
           <div className="hidden items-center space-x-2 md:flex">
+            {userName && (
+              <span
+                className="text-xs text-gray-400"
+                title={userEmail || 'Logged in user'}
+                aria-label={`Logged in as ${userName}`}
+              >
+                {userName}
+              </span>
+            )}
             <LanguageSwitcher />
             <LogoutButton />
           </div>

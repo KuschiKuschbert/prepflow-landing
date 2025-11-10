@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { LogoutButton } from '../LogoutButton';
 import { CategorySection } from './CategorySection';
 import { useNavigationItems } from './nav-items';
+import { useSession } from 'next-auth/react';
 
 interface MoreDrawerProps {
   isOpen: boolean;
@@ -17,6 +18,9 @@ interface MoreDrawerProps {
 export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) {
   const pathname = usePathname();
   const allItems = useNavigationItems();
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
+  const userName = session?.user?.name || userEmail?.split('@')[0];
 
   // Swipe gesture hook
   const {
@@ -238,6 +242,14 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
 
         {/* Footer with settings */}
         <div className="border-t border-[#2a2a2a] p-4">
+          {userName && (
+            <div className="mb-3 rounded-lg bg-[#2a2a2a]/30 px-3 py-2">
+              <div className="text-xs text-gray-400">Logged in as</div>
+              <div className="text-sm font-medium text-white" title={userEmail || 'Logged in user'}>
+                {userName}
+              </div>
+            </div>
+          )}
           <div className="mb-2 text-xs tracking-wider text-gray-400 uppercase">Settings</div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">

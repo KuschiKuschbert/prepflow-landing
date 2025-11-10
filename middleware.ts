@@ -35,10 +35,12 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(`${origin}/api/auth/signin/auth0?callbackUrl=${callback}`);
   }
 
-  // Check allowlist only in production
+  // Check allowlist only in production and if allowlist is enabled
   // In development, all authenticated users are allowed (early return above handles this)
+  // Allowlist can be disabled by setting DISABLE_ALLOWLIST=true for testing/friend access
+  const allowlistEnabled = process.env.DISABLE_ALLOWLIST !== 'true';
   const email = (token as any)?.email as string | undefined;
-  if (isProduction && !isEmailAllowed(email)) {
+  if (isProduction && allowlistEnabled && !isEmailAllowed(email)) {
     if (isApi) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
