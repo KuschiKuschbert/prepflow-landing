@@ -58,8 +58,8 @@ export function TemperatureConverter() {
 
       {/* Converter Interface */}
       <div className="grid w-full gap-2 sm:grid-cols-2 sm:gap-4">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">Celsius (°C)</label>
+        <div className="space-y-1 sm:space-y-2">
+          <label className="block text-xs font-medium text-gray-300 sm:text-sm">Celsius (°C)</label>
           <input
             type="number"
             value={celsius}
@@ -69,24 +69,26 @@ export function TemperatureConverter() {
             className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
           />
           {celsius && !isNaN(parseFloat(celsius)) && (
-            <div className="text-2xl font-bold text-[#29E7CD]">
+            <div className="text-lg font-bold text-[#29E7CD] sm:text-2xl">
               {parseFloat(celsius).toFixed(1)}°C
             </div>
           )}
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">Fahrenheit (°F)</label>
+        <div className="space-y-1 sm:space-y-2">
+          <label className="block text-xs font-medium text-gray-300 sm:text-sm">
+            Fahrenheit (°F)
+          </label>
           <input
             type="number"
             value={fahrenheit}
             onChange={e => setFahrenheit(e.target.value)}
             placeholder="Enter temperature"
             step="0.1"
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
           />
           {fahrenheit && !isNaN(parseFloat(fahrenheit)) && (
-            <div className="text-2xl font-bold text-[#D925C7]">
+            <div className="text-lg font-bold text-[#D925C7] sm:text-2xl">
               {parseFloat(fahrenheit).toFixed(1)}°F
             </div>
           )}

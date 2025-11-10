@@ -161,16 +161,16 @@ export function IngredientSubstitutionGuide() {
     : filteredSubstitutions;
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
+    <div className="w-full space-y-2 sm:space-y-4">
+      <div className="hidden sm:block">
+        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
           Ingredient Substitution Guide
         </h2>
-        <p className="text-xs text-gray-400 sm:text-sm">Find alternatives for common ingredients</p>
+        <p className="text-xs text-gray-400">Find alternatives for common ingredients</p>
       </div>
 
       {/* Search and Filters */}
-      <div className="w-full space-y-4">
+      <div className="w-full space-y-2 sm:space-y-4">
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
             Search Ingredient
