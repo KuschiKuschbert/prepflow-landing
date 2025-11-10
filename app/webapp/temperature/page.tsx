@@ -415,7 +415,7 @@ function TemperatureLogsPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent p-4 sm:p-6">
+    <div className="min-h-screen bg-transparent p-4 pb-24 sm:p-6 sm:pb-6">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <PageHeader />
