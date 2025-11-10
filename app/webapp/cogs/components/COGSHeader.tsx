@@ -3,22 +3,21 @@
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
 import { useState } from 'react';
+import { PageHeader } from '../../components/static/PageHeader';
 
 export function COGSHeader() {
   const [showGuide, setShowGuide] = useState(false);
 
   return (
     <div className="mb-8">
-      <div className="mb-4 flex items-center gap-2">
-        <h1 className="text-4xl font-bold text-white">💰 COGS Calculator</h1>
-        <HelpTooltip content={getHelpText('cogs', true, true)} title="What is COGS?" />
-      </div>
-      <p className="mb-4 text-gray-400">
-        Calculate Cost of Goods Sold and optimize your profit margins
-      </p>
+      <PageHeader
+        title="COGS Calculator"
+        subtitle="Calculate Cost of Goods Sold and optimize your profit margins"
+        icon="💰"
+        actions={<HelpTooltip content={getHelpText('cogs', true, true)} title="What is COGS?" />}
+      />
 
-      {/* Intro Banner */}
-      <div className="mb-6 rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#3B82F6]/10 p-6">
+      <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#3B82F6]/10 p-6">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">💡 Why COGS Matters</h2>
           <button

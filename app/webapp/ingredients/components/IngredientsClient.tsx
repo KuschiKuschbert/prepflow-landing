@@ -3,7 +3,6 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { supabase } from '@/lib/supabase';
-import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 
 // Direct imports to eliminate skeleton flashes
@@ -19,7 +18,10 @@ import IngredientForm from './IngredientForm';
 import IngredientPagination from './IngredientPagination';
 import IngredientTable from './IngredientTable';
 import IngredientWizard from './IngredientWizard';
-import { IngredientsHeader } from './IngredientsHeader';
+import { useTranslation } from '@/lib/useTranslation';
+import { PageHeader } from '../../components/static/PageHeader';
+import { AVAILABLE_UNITS } from './ingredient-units';
+import { DisplayUnitSelect } from './DisplayUnitSelect';
 
 interface Ingredient {
   id: string;
@@ -144,24 +146,6 @@ export default function IngredientsClient() {
     await handleCSVImportAction(parsedIngredients);
     setImporting(false);
   };
-  const availableUnits = [
-    'g',
-    'kg',
-    'oz',
-    'lb',
-    'ml',
-    'l',
-    'tsp',
-    'tbsp',
-    'cup',
-    'pc',
-    'box',
-    'pack',
-    'bag',
-    'bottle',
-    'can',
-  ];
-
   if (loading || isLoading) {
     return <PageSkeleton />;
   }
@@ -170,8 +154,12 @@ export default function IngredientsClient() {
 
   return (
     <>
-      {/* Header */}
-      <IngredientsHeader displayUnit={displayUnit} setDisplayUnit={setDisplayUnit} />
+      <PageHeader
+        title={t('ingredients.title', 'Ingredients Management')}
+        subtitle={t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')}
+        icon="🥘"
+        actions={<DisplayUnitSelect value={displayUnit} onChange={setDisplayUnit} />}
+      />
 
       {error && (
         <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
@@ -193,7 +181,7 @@ export default function IngredientsClient() {
       {showAddForm && (
         <IngredientWizard
           suppliers={suppliers}
-          availableUnits={availableUnits}
+          availableUnits={AVAILABLE_UNITS}
           onSave={handleAddIngredient}
           onCancel={() => {
             setShowAddForm(false);
@@ -244,7 +232,7 @@ export default function IngredientsClient() {
         <IngredientForm
           ingredient={editingIngredient}
           suppliers={suppliers}
-          availableUnits={availableUnits}
+          availableUnits={AVAILABLE_UNITS}
           onSave={async (ingredientData: Partial<Ingredient>) => {
             if (!editingIngredient?.id) return;
 

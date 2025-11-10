@@ -1,5 +1,6 @@
 'use client';
 
+import { PageHeader } from '../../components/static/PageHeader';
 import { PerformanceAlert } from '../types';
 
 interface PerformanceHeaderProps {
@@ -15,44 +16,43 @@ export default function PerformanceHeader({
   lastUpdate,
   performanceAlerts,
 }: PerformanceHeaderProps) {
+  const performanceScoreColor =
+    performanceScore >= 90
+      ? 'text-green-400'
+      : performanceScore >= 70
+        ? 'text-yellow-400'
+        : 'text-red-400';
+
+  const metrics = (
+    <div className="flex items-center gap-4">
+      <div className="text-right">
+        <div className="text-sm text-gray-400">Performance Score</div>
+        <div className={`text-2xl font-bold ${performanceScoreColor}`}>{performanceScore}/100</div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div
+          className={`h-3 w-3 rounded-full ${realtimeEnabled ? 'animate-pulse bg-green-400' : 'bg-gray-400'}`}
+        />
+        <span className="text-sm text-gray-300">{realtimeEnabled ? 'Live' : 'Offline'}</span>
+      </div>
+      {lastUpdate && (
+        <div className="text-right">
+          <div className="text-xs text-gray-400">Last Update</div>
+          <div className="text-xs text-gray-300">{lastUpdate.toLocaleTimeString()}</div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="mb-8">
-      <div className="mb-4 flex items-start justify-between">
-        <div>
-          <h1 className="mb-2 text-4xl font-bold text-white">Performance Analysis</h1>
-          <p className="text-lg text-gray-300">Analyze your menu performance and profitability</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="text-right">
-            <div className="text-sm text-gray-400">Performance Score</div>
-            <div
-              className={`text-2xl font-bold ${
-                performanceScore >= 90
-                  ? 'text-green-400'
-                  : performanceScore >= 70
-                    ? 'text-yellow-400'
-                    : 'text-red-400'
-              }`}
-            >
-              {performanceScore}/100
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div
-              className={`h-3 w-3 rounded-full ${
-                realtimeEnabled ? 'animate-pulse bg-green-400' : 'bg-gray-400'
-              }`}
-            ></div>
-            <span className="text-sm text-gray-300">{realtimeEnabled ? 'Live' : 'Offline'}</span>
-          </div>
-          {lastUpdate && (
-            <div className="text-right">
-              <div className="text-xs text-gray-400">Last Update</div>
-              <div className="text-xs text-gray-300">{lastUpdate.toLocaleTimeString()}</div>
-            </div>
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title="Performance Analysis"
+        subtitle="Analyze your menu performance and profitability"
+        icon="📊"
+        actions={metrics}
+      />
+
       {performanceAlerts.length > 0 && (
         <div className="mb-4 rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-4">
           <div className="mb-2 flex items-center space-x-2">
