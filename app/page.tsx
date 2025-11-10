@@ -3,12 +3,9 @@
 import React from 'react';
 
 // External components
-// ExitIntentTracker removed per request
-// PerformanceTracker removed per request
 import ScrollTracker from '../components/ScrollTracker';
 
 // UI components
-// FloatingCTA removed per request
 import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 
@@ -93,7 +90,6 @@ export default function Page() {
     <>
       {/* Performance & Analytics Components */}
       <ScrollProgress />
-      {/* Exit-intent disabled */}
       <ScrollTracker
         onSectionView={sectionId => {
           // Track section views for analytics
@@ -102,11 +98,6 @@ export default function Page() {
           // Track scroll depth for analytics
         }}
       />
-      {/* Performance tracker disabled */}
-
-      {/* Floating CTA disabled */}
-
-      {/* Scroll to Top - Only on landing page */}
       <ScrollToTop />
 
       <script

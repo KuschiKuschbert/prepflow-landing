@@ -47,8 +47,9 @@ describe('GET /api/recipes/[id]/ingredients (no demo)', () => {
     // Mock first query to recipe_ingredients
     const supabase = require('@/lib/supabase');
     const fromSpy = jest.spyOn(supabase.supabaseAdmin, 'from');
-    fromSpy.mockImplementation((table: string) => {
-      if (table === 'recipe_ingredients') {
+    fromSpy.mockImplementation((table: unknown) => {
+      const tableName = table as string;
+      if (tableName === 'recipe_ingredients') {
         return {
           select: () => ({
             eq: () => ({
