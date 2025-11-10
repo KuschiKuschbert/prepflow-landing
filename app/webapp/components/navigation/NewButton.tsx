@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface NewItemOption {
   href: string;
@@ -214,12 +214,14 @@ export function NewButton() {
                     'text-left',
                     'text-sm',
                     'text-gray-300',
-                    'bg-[#1f1f1f]',
+                    // Mobile: Individual card styling
                     'border',
                     'border-[#2a2a2a]',
+                    'bg-[#1f1f1f]',
+                    'shadow-md',
+                    // Desktop: Remove card styling
                     'lg:border-0',
                     'lg:bg-transparent',
-                    'shadow-md',
                     'lg:shadow-none',
                     'transition-all',
                     'duration-200',

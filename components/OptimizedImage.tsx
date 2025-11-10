@@ -1,5 +1,5 @@
 import Image, { ImageProps } from 'next/image';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 
 interface OptimizedImageProps extends Omit<ImageProps, 'src'> {
   src: string;
@@ -59,6 +59,14 @@ export default function OptimizedImage({
   const optimized = getOptimizedSrc(src);
   const initialSrc = optimized.avif || optimized.webp || optimized.original;
 
+  const { style: incomingStyle, ...restProps } = props;
+
+  const combinedStyle: CSSProperties = {
+    opacity: isLoading ? 0 : 1,
+    transition: 'opacity 0.3s ease-in-out',
+    ...incomingStyle,
+  };
+
   return (
     <div className="relative">
       {isLoading && (
@@ -77,11 +85,8 @@ export default function OptimizedImage({
         priority={priority}
         onError={handleError}
         onLoad={handleLoad}
-        style={{
-          opacity: isLoading ? 0 : 1,
-          transition: 'opacity 0.3s ease-in-out',
-        }}
-        {...props}
+        style={combinedStyle}
+        {...restProps}
       />
     </div>
   );

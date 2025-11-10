@@ -8,7 +8,7 @@ interface CategorySectionProps {
   category: string;
   items: NavigationItemConfig[];
   isActive: (href: string) => boolean;
-  onItemClick?: () => void;
+  onItemClick?: (href: string) => void;
   showLabels?: boolean;
   iconSize?: 'sm' | 'md' | 'lg';
 }
@@ -46,7 +46,7 @@ export function CategorySection({
             icon={item.icon}
             color={item.color}
             isActive={isActive(item.href)}
-            onClick={onItemClick}
+            onClick={onItemClick ? () => onItemClick(item.href) : undefined}
             iconSize={iconSize}
             showLabel={showLabels}
           />

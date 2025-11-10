@@ -6,9 +6,9 @@ import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
+import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
-import { DashboardErrorAlert } from './DashboardErrorAlert';
 import type {
   DashboardStatsData,
   TemperatureEquipment,

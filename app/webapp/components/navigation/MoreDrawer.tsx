@@ -1,13 +1,12 @@
 'use client';
 
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useDrawerSwipe } from '@/hooks/useDrawerSwipe';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { useNavigationItems } from './nav-items';
-import { CategorySection } from './CategorySection';
-import { SearchModal } from './SearchModal';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { LogoutButton } from '../LogoutButton';
-import { useDrawerSwipe } from '@/hooks/useDrawerSwipe';
+import { CategorySection } from './CategorySection';
+import { useNavigationItems } from './nav-items';
 
 interface MoreDrawerProps {
   isOpen: boolean;
@@ -72,6 +71,12 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
     };
   }, [isOpen]);
 
+  // Handle item click - close drawer, let Link handle navigation
+  const handleItemClick = (href: string) => {
+    // Close drawer - Link will handle navigation
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -88,6 +93,7 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
         }}
         style={{
           opacity: isDragging ? Math.max(0.3, 1 - dragY / 500) : 1,
+          pointerEvents: isOpen ? 'auto' : 'none',
         }}
         aria-hidden="true"
       />
@@ -183,6 +189,13 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
             WebkitOverflowScrolling: 'touch',
           }}
           onTouchStart={e => {
+            // Don't interfere with Link clicks - check if target is a link
+            const target = e.target as HTMLElement;
+            const link = target.closest('a');
+            if (link) {
+              // Allow link to handle its own touch event
+              return;
+            }
             // Check if we should start dragging or allow scrolling
             handleContentTouchStart(e);
           }}
@@ -200,7 +213,7 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
               category={category}
               items={items}
               isActive={isActive}
-              onItemClick={onClose}
+              onItemClick={handleItemClick}
             />
           ))}
         </div>
