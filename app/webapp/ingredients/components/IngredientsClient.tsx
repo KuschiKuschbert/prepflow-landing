@@ -151,12 +151,19 @@ export default function IngredientsClient() {
   }
   const total = ingredientsData?.total || 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const translateText = (key: string, fallback: string): string => {
+    const result = t(key, fallback);
+    return Array.isArray(result) ? result.join('') : result;
+  };
 
   return (
     <>
       <PageHeader
-        title={t('ingredients.title', 'Ingredients Management')}
-        subtitle={t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')}
+        title={translateText('ingredients.title', 'Ingredients Management')}
+        subtitle={translateText(
+          'ingredients.subtitle',
+          'Manage your kitchen ingredients and inventory',
+        )}
         icon="🥘"
         actions={<DisplayUnitSelect value={displayUnit} onChange={setDisplayUnit} />}
       />
