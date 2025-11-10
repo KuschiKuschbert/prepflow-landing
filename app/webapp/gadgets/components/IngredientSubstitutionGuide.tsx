@@ -180,13 +180,15 @@ export function IngredientSubstitutionGuide() {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Type ingredient name..."
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
           />
         </div>
 
         <div className="flex w-full flex-wrap gap-4">
           <div className="min-w-[200px] flex-1 sm:min-w-[250px]">
-            <label className="mb-2 block text-sm font-medium text-gray-300">Category</label>
+            <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+              Category
+            </label>
             <select
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
@@ -203,7 +205,7 @@ export function IngredientSubstitutionGuide() {
             </select>
           </div>
           <div className="flex items-end">
-            <label className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3">
+            <label className="flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-xs sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-sm">
               <input
                 type="checkbox"
                 checked={showAllergenFriendly}
