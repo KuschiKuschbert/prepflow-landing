@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { OrderListForm } from './components/OrderListForm';
 import { getStatusColor } from './utils';
 import { useOrderListsQuery } from './hooks/useOrderListsQuery';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 interface Supplier {
   id: string;
@@ -247,14 +248,14 @@ export default function OrderListsPage() {
 
   if (loading || listsLoading) {
     return (
-      <div className="min-h-screen bg-transparent text-white">
-        <div className="container mx-auto px-4 py-8">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
@@ -262,8 +263,8 @@ export default function OrderListsPage() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <div className="min-h-screen bg-transparent text-white">
-      <div className="container mx-auto px-4 py-8">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -490,6 +491,6 @@ export default function OrderListsPage() {
           </div>
         )}
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

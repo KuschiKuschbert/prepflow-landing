@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 interface Recipe {
   id: string;
@@ -155,20 +156,20 @@ export default function RecipeSharingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-transparent text-white">
-        <div className="container mx-auto px-4 py-8">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-white">
-      <div className="container mx-auto px-4 py-8">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -384,6 +385,6 @@ export default function RecipeSharingPage() {
           </div>
         )}
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

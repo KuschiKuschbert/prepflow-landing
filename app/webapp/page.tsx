@@ -2,12 +2,13 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import DashboardStatsClient from './components/DashboardStatsClient';
 import QuickActions from './components/QuickActions';
 import { PageHeader } from './components/static/PageHeader';
+import { AdaptiveContainer } from './components/AdaptiveContainer';
 
 export default function WebAppDashboard() {
   return (
     <ErrorBoundary>
-      <div className="min-h-screen overflow-x-hidden bg-transparent p-4 sm:p-6">
-        <div className="mx-auto w-full max-w-7xl">
+      <AdaptiveContainer>
+        <div className="min-h-screen overflow-x-hidden bg-transparent py-4 sm:py-6">
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Kitchen Management Dashboard"
@@ -21,7 +22,7 @@ export default function WebAppDashboard() {
           {/* Dynamic Content - Loads After Initial Render */}
           <DashboardStatsClient />
         </div>
-      </div>
+      </AdaptiveContainer>
     </ErrorBoundary>
   );
 }

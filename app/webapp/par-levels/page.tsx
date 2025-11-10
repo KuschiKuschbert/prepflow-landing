@@ -6,6 +6,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
 import { ParLevelFormModal } from './components/ParLevelFormModal';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 interface Ingredient {
   id: string;
@@ -198,20 +199,20 @@ export default function ParLevelsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-transparent text-white">
-        <div className="container mx-auto px-4 py-8">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-white">
-      <div className="container mx-auto px-4 py-8">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -375,6 +376,6 @@ export default function ParLevelsPage() {
           onFormDataChange={(field, value) => setFormData({ ...formData, [field]: value })}
         />
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

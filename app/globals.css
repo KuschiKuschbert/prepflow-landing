@@ -13,6 +13,10 @@
   --header-height-mobile: 56px;
   --header-height-desktop: 64px;
 
+  /* Navigation dimensions */
+  --bottom-navbar-height: 64px;
+  --sidebar-width: 256px;
+
   /* Safe area insets for iOS devices with notches */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -679,4 +683,45 @@ body {
 .touch-manipulation {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Adaptive Grid Utility - Best Practice for Responsive Layouts */
+.adaptive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* Responsive gaps - scales with screen size */
+@media (min-width: 640px) {
+  .adaptive-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .adaptive-grid {
+    gap: 2rem;
+  }
+}
+
+/* Adaptive Container - Full-width container with responsive padding */
+.adaptive-container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .adaptive-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .adaptive-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }

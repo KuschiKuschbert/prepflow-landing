@@ -1,15 +1,16 @@
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import IngredientsClient from './components/IngredientsClient';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 export default function IngredientsPage() {
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-transparent p-4 sm:p-6">
-        <div className="mx-auto max-w-7xl">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-4 sm:py-6">
           {/* Page Content */}
           <IngredientsClient />
         </div>
-      </div>
+      </AdaptiveContainer>
     </ErrorBoundary>
   );
 }

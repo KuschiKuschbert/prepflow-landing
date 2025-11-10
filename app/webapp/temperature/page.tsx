@@ -5,6 +5,7 @@ import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useCallback, useEffect, useState } from 'react';
 import { TemperatureEquipment, TemperatureLog } from './types';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 // Direct imports to eliminate skeleton flashes
 import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
@@ -406,17 +407,17 @@ function TemperatureLogsPageContent() {
   // Only show content when data is ready
   if (equipment.length === 0) {
     return (
-      <div className="min-h-screen bg-transparent p-4 sm:p-6">
-        <div className="mx-auto max-w-7xl">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-4 sm:py-6">
           {/* Empty state - no skeleton, just dark background */}
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-transparent p-4 pb-24 sm:p-6 sm:pb-6">
-      <div className="mx-auto max-w-7xl">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-4 pb-24 sm:py-6 sm:pb-6">
         {/* Header */}
         <PageHeader />
 
@@ -480,7 +481,7 @@ function TemperatureLogsPageContent() {
           <TemperatureAnalyticsTab allLogs={allLogs} equipment={equipment} />
         )}
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }
 

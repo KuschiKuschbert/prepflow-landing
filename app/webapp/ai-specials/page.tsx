@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 interface AISpecial {
   id: string;
@@ -119,8 +120,8 @@ export default function AISpecialsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-transparent p-4 sm:p-6">
-        <div className="mx-auto max-w-7xl">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-4 sm:py-6">
           {/* Header skeleton */}
           <div className="mb-8">
             <LoadingSkeleton variant="stats" height="64px" />
@@ -136,13 +137,13 @@ export default function AISpecialsPage() {
             <LoadingSkeleton variant="card" count={3} height="120px" />
           </div>
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-white">
-      <div className="container mx-auto px-4 py-8">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -346,6 +347,6 @@ export default function AISpecialsPage() {
           )}
         </div>
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

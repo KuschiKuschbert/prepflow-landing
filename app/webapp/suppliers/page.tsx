@@ -7,6 +7,7 @@ import { PriceListForm } from './components/PriceListForm';
 import { PriceListsList } from './components/PriceListsList';
 import { SupplierForm } from './components/SupplierForm';
 import { SuppliersGrid } from './components/SuppliersGrid';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 import { PriceListFormData, Supplier, SupplierFormData, SupplierPriceList } from './types';
 
 export default function SuppliersPage() {
@@ -141,8 +142,8 @@ export default function SuppliersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent p-4 sm:p-6">
-      <div className="mx-auto max-w-7xl">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-4 sm:py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-4xl font-bold text-white">
@@ -259,6 +260,6 @@ export default function SuppliersPage() {
           </div>
         )}
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

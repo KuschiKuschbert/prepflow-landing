@@ -6,6 +6,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useDishSectionActions } from './hooks/useDishSectionActions';
 import { DishSectionsHeader } from './components/DishSectionsHeader';
 import { SectionFormModal } from './components/SectionFormModal';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 interface KitchenSection {
   id: string;
@@ -105,20 +106,20 @@ export default function DishSectionsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-transparent text-white">
-        <div className="container mx-auto px-4 py-8">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-white">
-      <div className="container mx-auto px-4 py-8">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <DishSectionsHeader onAddClick={() => setShowForm(true)} />
 
@@ -317,6 +318,6 @@ export default function DishSectionsPage() {
           onCancel={resetForm}
         />
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

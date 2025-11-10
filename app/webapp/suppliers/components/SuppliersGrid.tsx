@@ -13,7 +13,7 @@ export function SuppliersGrid({ suppliers }: SuppliersGridProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="adaptive-grid">
       {suppliers.map(supplier => (
         <div
           key={supplier.id}

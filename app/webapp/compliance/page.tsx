@@ -7,6 +7,7 @@ import { ComplianceRecordForm } from './components/ComplianceRecordForm';
 import { ComplianceRecordsList } from './components/ComplianceRecordsList';
 import { ComplianceTypeForm } from './components/ComplianceTypeForm';
 import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 import {
   ComplianceRecord,
   ComplianceRecordFormData,
@@ -138,20 +139,20 @@ export default function ComplianceTrackingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-6">
-        <div className="mx-auto max-w-7xl">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-[#0a0a0a] py-4 sm:py-6">
           <LoadingSkeleton variant="stats" height="64px" />
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="adaptive-grid mt-8">
             <LoadingSkeleton variant="card" count={4} height="120px" />
           </div>
         </div>
-      </div>
+      </AdaptiveContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-transparent p-4 sm:p-6">
-      <div className="mx-auto max-w-7xl">
+    <AdaptiveContainer>
+      <div className="min-h-screen bg-transparent py-4 sm:py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-4xl font-bold text-white">
@@ -286,6 +287,6 @@ export default function ComplianceTrackingPage() {
           </div>
         )}
       </div>
-    </div>
+    </AdaptiveContainer>
   );
 }

@@ -2,12 +2,13 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookDescription } from './components/RecipeBookDescription';
 import RecipesClient from './components/RecipesClient';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 export default function RecipesPage() {
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-transparent p-4 sm:p-6">
-        <div className="mx-auto max-w-7xl">
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-4 sm:py-6">
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Recipe Book"
@@ -22,7 +23,7 @@ export default function RecipesPage() {
           {/* Dynamic Content - Loads After Initial Render */}
           <RecipesClient />
         </div>
-      </div>
+      </AdaptiveContainer>
     </ErrorBoundary>
   );
 }
