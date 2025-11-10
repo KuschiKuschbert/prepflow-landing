@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 import { isEmailAllowed } from '@/lib/allowlist';
+import { getToken } from 'next-auth/jwt';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
