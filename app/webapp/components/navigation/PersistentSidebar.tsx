@@ -5,6 +5,7 @@ import { useNavigationItems } from './nav-items';
 import { CategorySection } from './CategorySection';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { LogoutButton } from '../LogoutButton';
+import { NewButton } from './NewButton';
 
 export function PersistentSidebar() {
   const pathname = usePathname();
@@ -34,6 +35,11 @@ export function PersistentSidebar() {
       aria-label="Main navigation"
     >
       <div className="flex h-full flex-col overflow-hidden">
+        {/* New Button - positioned at top like Google Drive */}
+        <div className="border-b border-[#2a2a2a] p-3 md:p-4">
+          <NewButton />
+        </div>
+
         {/* Collapsible content */}
         <div className="flex-1 overflow-y-auto p-3 md:p-4">
           {Object.entries(groupedItems).map(([category, items]) => (

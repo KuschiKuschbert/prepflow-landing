@@ -129,17 +129,19 @@ export function NewButton() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           'flex',
+          'w-full',
           'items-center',
+          'justify-center',
           'gap-2',
           'rounded-lg',
-          'px-3',
-          'py-1.5',
+          'px-4',
+          'py-2.5',
           'min-h-[44px]',
           'bg-gradient-to-r',
           'from-[#29E7CD]',
@@ -150,8 +152,8 @@ export function NewButton() {
           'transition-all',
           'duration-200',
           'hover:shadow-lg',
-          'hover:scale-105',
-          'active:scale-95',
+          'hover:scale-[1.02]',
+          'active:scale-[0.98]',
           'focus:outline-none',
           'focus:ring-2',
           'focus:ring-[#29E7CD]',
@@ -162,10 +164,10 @@ export function NewButton() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
         </svg>
-        <span className="hidden md:inline">New</span>
+        <span>New</span>
       </button>
 
       {isOpen && (
@@ -173,10 +175,10 @@ export function NewButton() {
           ref={dropdownRef}
           className={cn(
             'absolute',
-            'right-0',
+            'left-0',
             'top-full',
             'mt-2',
-            'w-64',
+            'w-full',
             'rounded-2xl',
             'bg-[#1f1f1f]',
             'border',

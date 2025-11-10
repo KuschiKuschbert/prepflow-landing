@@ -7,7 +7,6 @@ import { useRef } from 'react';
 import { BrandMark } from '@/components/BrandMark';
 import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
-import { NewButton } from './NewButton';
 
 interface NavigationHeaderProps {
   className?: string;
@@ -126,10 +125,6 @@ export function NavigationHeader({
           )}
         </div>
         <div className="flex items-center space-x-2 md:space-x-3">
-          {/* Hide NewButton on mobile - FAB will handle it */}
-          <div className="hidden md:block">
-            <NewButton />
-          </div>
           <button
             onClick={onSearchClick}
             className={cn(
