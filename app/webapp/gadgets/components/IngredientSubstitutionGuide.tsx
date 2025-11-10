@@ -217,17 +217,22 @@ export function IngredientSubstitutionGuide() {
       </div>
 
       {/* Substitutions List */}
-      <div className="w-full space-y-4">
+      <div className="w-full space-y-2 sm:space-y-4">
         {allergenFriendlySubs.length > 0 ? (
           allergenFriendlySubs.map(sub => (
             <div
               key={sub.ingredient}
-              className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6"
+              className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 sm:rounded-2xl sm:p-6"
             >
-              <h3 className="mb-4 text-lg font-semibold text-white">{sub.ingredient}</h3>
-              <div className="space-y-3">
+              <h3 className="mb-2 text-base font-semibold text-white sm:mb-4 sm:text-lg">
+                {sub.ingredient}
+              </h3>
+              <div className="space-y-2 sm:space-y-3">
                 {sub.substitutes.map((substitute, idx) => (
-                  <div key={idx} className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
+                  <div
+                    key={idx}
+                    className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2 sm:rounded-xl sm:p-4"
+                  >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
@@ -250,7 +255,7 @@ export function IngredientSubstitutionGuide() {
             </div>
           ))
         ) : (
-          <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-8 text-center text-gray-400">
+          <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center text-xs text-gray-400 sm:rounded-xl sm:p-8 sm:text-sm">
             No substitutions found. Try a different search term.
           </div>
         )}

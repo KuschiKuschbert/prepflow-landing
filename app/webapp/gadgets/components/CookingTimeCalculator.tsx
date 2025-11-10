@@ -117,7 +117,9 @@ export function CookingTimeCalculator() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Cooking Method</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            Cooking Method
+          </label>
           <select
             value={method}
             onChange={e => setMethod(e.target.value as CookingMethod)}
@@ -132,7 +134,9 @@ export function CookingTimeCalculator() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Weight (grams)</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            Weight (grams)
+          </label>
           <input
             type="number"
             value={weight}
@@ -162,10 +166,12 @@ export function CookingTimeCalculator() {
         </button>
 
         {calculatedTime !== null && (
-          <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-6 text-center">
-            <div className="text-sm text-gray-400">Estimated Cooking Time</div>
-            <div className="mt-2 text-4xl font-bold text-[#29E7CD]">{calculatedTime} minutes</div>
-            <div className="mt-2 text-sm text-gray-400">
+          <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
+            <div className="text-xs text-gray-400 sm:text-sm">Estimated Cooking Time</div>
+            <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
+              {calculatedTime} minutes
+            </div>
+            <div className="mt-1 text-xs text-gray-400 sm:mt-2 sm:text-sm">
               ({Math.floor(calculatedTime / 60)}h {calculatedTime % 60}m)
             </div>
           </div>

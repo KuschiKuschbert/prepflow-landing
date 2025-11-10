@@ -42,18 +42,16 @@ export function YieldPortionCalculator() {
   const presets = [100, 150, 200, 250, 300];
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
+    <div className="w-full space-y-2 sm:space-y-4">
+      <div className="hidden sm:block">
+        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
           Yield/Portion Calculator
         </h2>
-        <p className="text-xs text-gray-400 sm:text-sm">
-          Calculate portions from yield or vice versa
-        </p>
+        <p className="text-xs text-gray-400">Calculate portions from yield or vice versa</p>
       </div>
 
       {/* Mode Toggle */}
-      <div className="flex w-full gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1">
+      <div className="flex w-full gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-0.5 sm:gap-2 sm:rounded-xl sm:p-1">
         <button
           onClick={() => {
             setCalculationMode('yield-to-portions');
@@ -147,9 +145,9 @@ export function YieldPortionCalculator() {
               </div>
             </div>
             {numberOfPortions && (
-              <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-6 text-center">
-                <div className="text-sm text-gray-400">Number of Portions</div>
-                <div className="mt-2 text-4xl font-bold text-[#29E7CD]">
+              <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
+                <div className="text-xs text-gray-400 sm:text-sm">Number of Portions</div>
+                <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
                   {parseFloat(numberOfPortions).toFixed(1)}
                 </div>
               </div>
@@ -219,9 +217,9 @@ export function YieldPortionCalculator() {
               </div>
             </div>
             {totalYield && (
-              <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-6 text-center">
-                <div className="text-sm text-gray-400">Total Recipe Yield</div>
-                <div className="mt-2 text-4xl font-bold text-[#29E7CD]">
+              <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
+                <div className="text-xs text-gray-400 sm:text-sm">Total Recipe Yield</div>
+                <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
                   {parseFloat(totalYield).toFixed(1)}g
                 </div>
               </div>

@@ -129,9 +129,11 @@ export function VolumeToWeightConverter() {
       )}
 
       {/* Volume Input */}
-      <div className="grid w-full gap-4 sm:grid-cols-2">
+      <div className="grid w-full gap-2 sm:grid-cols-2 sm:gap-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Volume</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            Volume
+          </label>
           <input
             type="number"
             value={volume}
@@ -140,16 +142,18 @@ export function VolumeToWeightConverter() {
             min="0"
             step="0.1"
             disabled={!selectedIngredient}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Unit</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            Unit
+          </label>
           <select
             value={volumeUnit}
             onChange={e => setVolumeUnit(e.target.value as 'cup' | 'tbsp' | 'tsp' | 'ml')}
             disabled={!selectedIngredient}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
           >
             {volumeUnits.map(unit => (
               <option key={unit.value} value={unit.value}>
@@ -162,10 +166,14 @@ export function VolumeToWeightConverter() {
 
       {/* Weight Result */}
       {weight !== null && selectedIngredient && (
-        <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-6 text-center">
-          <div className="text-sm text-gray-400">Weight</div>
-          <div className="mt-2 text-4xl font-bold text-[#29E7CD]">{weight.toFixed(1)}g</div>
-          <div className="mt-2 text-sm text-gray-400">{(weight / 28.35).toFixed(1)} oz</div>
+        <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
+          <div className="text-xs text-gray-400 sm:text-sm">Weight</div>
+          <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
+            {weight.toFixed(1)}g
+          </div>
+          <div className="mt-1 text-xs text-gray-400 sm:mt-2 sm:text-sm">
+            {(weight / 28.35).toFixed(1)} oz
+          </div>
         </div>
       )}
     </div>
