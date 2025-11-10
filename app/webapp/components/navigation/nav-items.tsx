@@ -174,7 +174,7 @@ export function useNavigationItems(): NavigationItemConfig[] {
         </svg>
       ),
       color: 'text-[#D925C7]',
-      category: 'gadgets',
+      category: 'kitchen',
     },
     {
       href: '/webapp/setup',
