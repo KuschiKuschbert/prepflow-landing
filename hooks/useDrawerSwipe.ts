@@ -26,7 +26,7 @@ export function useDrawerSwipe({
   onClose,
   threshold = 0.25,
   velocityThreshold = 0.3,
-  contentTopDragArea = 120,
+  contentTopDragArea = 100,
 }: UseDrawerSwipeOptions): UseDrawerSwipeReturn {
   const drawerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);

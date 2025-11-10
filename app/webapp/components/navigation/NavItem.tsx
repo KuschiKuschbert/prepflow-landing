@@ -14,6 +14,7 @@ interface NavItemProps {
   className?: string;
   iconSize?: 'sm' | 'md' | 'lg';
   showLabel?: boolean;
+  compact?: boolean;
 }
 
 export function NavItem({
@@ -26,12 +27,44 @@ export function NavItem({
   className = '',
   iconSize = 'md',
   showLabel = true,
+  compact = false,
 }: NavItemProps) {
   const iconSizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-5 w-5',
     lg: 'h-6 w-6',
   };
+
+  if (compact) {
+    return (
+      <Link
+        href={href}
+        onClick={onClick}
+        onMouseEnter={() => prefetchRoute(href)}
+        className={`group flex min-h-[36px] items-center space-x-2 rounded-lg px-2 py-1.5 transition-all duration-200 ${
+          isActive
+            ? `border border-[#29E7CD]/20 bg-[#29E7CD]/10 ${className}`
+            : `hover:bg-[#2a2a2a]/30 ${className}`
+        }`}
+        aria-current={isActive ? 'page' : undefined}
+      >
+        <span
+          className={`${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} flex items-center justify-center ${iconSizeClasses.sm}`}
+        >
+          {icon}
+        </span>
+        {showLabel && (
+          <span
+            className={`text-xs font-medium ${
+              isActive ? 'text-white/90' : 'text-gray-300/90 group-hover:text-white'
+            }`}
+          >
+            {label}
+          </span>
+        )}
+      </Link>
+    );
+  }
 
   return (
     <Link

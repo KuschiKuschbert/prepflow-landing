@@ -11,6 +11,7 @@ interface CategorySectionProps {
   onItemClick?: (href: string) => void;
   showLabels?: boolean;
   iconSize?: 'sm' | 'md' | 'lg';
+  compact?: boolean;
 }
 
 const categoryLabels: Record<string, string> = {
@@ -29,15 +30,16 @@ export function CategorySection({
   onItemClick,
   showLabels = true,
   iconSize = 'md',
+  compact = false,
 }: CategorySectionProps) {
   return (
-    <div className="mb-4 md:mb-6">
+    <div className="mb-3">
       {showLabels && (
-        <h3 className="mb-2 text-xs font-semibold tracking-wider text-gray-400 uppercase md:mb-3">
+        <h3 className="mb-1.5 text-[10px] font-semibold tracking-wider text-gray-500 uppercase">
           {categoryLabels[category] || category}
         </h3>
       )}
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {items.map(item => (
           <NavItem
             key={item.href}
@@ -49,6 +51,7 @@ export function CategorySection({
             onClick={onItemClick ? () => onItemClick(item.href) : undefined}
             iconSize={iconSize}
             showLabel={showLabels}
+            compact={compact}
           />
         ))}
       </div>
