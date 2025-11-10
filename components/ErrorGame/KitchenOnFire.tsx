@@ -24,12 +24,8 @@ const KitchenOnFire: React.FC = () => {
     try {
       // Check explicit flag first
       if (localStorage.getItem('PF_DISABLE_ARCADE_ERRORS') === '1') return true;
-      // Auto-disable on mobile/touch devices
-      if (typeof navigator !== 'undefined') {
-        const hasTouch = navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
-        const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
-        if (hasTouch && !forceEnable) return true;
-      }
+      // Mobile/touch devices are now enabled by default
+      // Users can still disable via PF_DISABLE_ARCADE_ERRORS if needed
       return false;
     } catch (_) {
       return false;
@@ -96,9 +92,10 @@ const KitchenOnFire: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="mb-8 text-lg text-gray-300"
+                  className="mb-8 text-base text-gray-300 md:text-lg"
                 >
-                  Click to extinguish before service resumes.
+                  <span className="hidden md:inline">Click</span>
+                  <span className="md:hidden">Tap</span> to extinguish before service resumes.
                 </motion.p>
 
                 {/* Animated flames */}
@@ -147,7 +144,7 @@ const KitchenOnFire: React.FC = () => {
                     onClick={handleSprayWater}
                     whileHover={reducedMotion ? {} : { scale: 1.05 }}
                     whileTap={reducedMotion ? {} : { scale: 0.95, x: [0, -5, 5, -5, 0] }}
-                    className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-xl font-semibold text-black shadow-lg transition-all duration-200 hover:shadow-xl focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+                    className="touch-manipulation rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3.5 text-lg font-semibold text-black shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none active:scale-95 md:px-8 md:py-4 md:text-xl md:hover:shadow-xl"
                     aria-label={`Spray water to extinguish flames. ${flames} flames remaining.`}
                   >
                     🧯 Spray Water
@@ -172,7 +169,7 @@ const KitchenOnFire: React.FC = () => {
                       whileHover={reducedMotion ? {} : { scale: 1.05 }}
                       whileTap={reducedMotion ? {} : { scale: 0.95 }}
                       onClick={handleReturnToDashboard}
-                      className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+                      className="touch-manipulation rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-5 py-2.5 text-base font-semibold text-white transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none active:scale-95 md:px-6 md:py-3 md:text-lg md:hover:bg-[#2a2a2a]/60"
                     >
                       Return to Dashboard
                     </motion.button>
@@ -223,7 +220,7 @@ const KitchenOnFire: React.FC = () => {
                   whileHover={reducedMotion ? {} : { scale: 1.05 }}
                   whileTap={reducedMotion ? {} : { scale: 0.95 }}
                   onClick={handleReturnToDashboard}
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-xl font-semibold text-black shadow-lg transition-all duration-200 hover:shadow-xl focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+                  className="touch-manipulation rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3.5 text-lg font-semibold text-black shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none active:scale-95 md:px-8 md:py-4 md:text-xl md:hover:shadow-xl"
                 >
                   Return to Dashboard
                 </motion.button>

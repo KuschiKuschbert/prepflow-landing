@@ -674,3 +674,9 @@ body {
     animation: none !important;
   }
 }
+
+/* Touch manipulation utility for better mobile touch performance */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
