@@ -149,10 +149,10 @@ export function CookingTimeCalculator() {
 
         {temperature && (
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
               Recommended Temperature (°C)
             </label>
-            <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white">
+            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white sm:rounded-xl sm:px-4 sm:py-3">
               {temperature}°C
             </div>
           </div>
