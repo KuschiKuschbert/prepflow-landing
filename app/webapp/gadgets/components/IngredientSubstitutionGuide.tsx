@@ -172,7 +172,9 @@ export function IngredientSubstitutionGuide() {
       {/* Search and Filters */}
       <div className="w-full space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Search Ingredient</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            Search Ingredient
+          </label>
           <input
             type="text"
             value={searchQuery}

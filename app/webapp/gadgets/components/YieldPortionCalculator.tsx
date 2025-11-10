@@ -59,7 +59,7 @@ export function YieldPortionCalculator() {
             setCalculationMode('yield-to-portions');
             setNumberOfPortions('');
           }}
-          className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+          className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:rounded-lg sm:px-4 sm:py-2 sm:text-sm ${
             calculationMode === 'yield-to-portions'
               ? 'bg-[#29E7CD] text-white'
               : 'text-gray-400 hover:text-white'
@@ -72,7 +72,7 @@ export function YieldPortionCalculator() {
             setCalculationMode('portions-to-yield');
             setTotalYield('');
           }}
-          className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+          className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:rounded-lg sm:px-4 sm:py-2 sm:text-sm ${
             calculationMode === 'portions-to-yield'
               ? 'bg-[#29E7CD] text-white'
               : 'text-gray-400 hover:text-white'
@@ -82,11 +82,11 @@ export function YieldPortionCalculator() {
         </button>
       </div>
 
-      <div className="w-full space-y-4">
+      <div className="w-full space-y-2 sm:space-y-4">
         {calculationMode === 'yield-to-portions' ? (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
                 Total Recipe Yield (g or ml)
               </label>
               <input
@@ -107,11 +107,11 @@ export function YieldPortionCalculator() {
                 placeholder="Enter total yield"
                 min="0"
                 step="0.1"
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
                 Portion Size (g or ml per serving)
               </label>
               <input
@@ -132,7 +132,7 @@ export function YieldPortionCalculator() {
                 placeholder="Enter portion size"
                 min="0"
                 step="0.1"
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
               />
               <div className="mt-2 flex flex-wrap gap-2">
                 {presets.map(size => (
@@ -158,7 +158,7 @@ export function YieldPortionCalculator() {
         ) : (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
                 Number of Portions
               </label>
               <input
@@ -179,11 +179,11 @@ export function YieldPortionCalculator() {
                 placeholder="Enter number of portions"
                 min="0"
                 step="0.1"
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
                 Portion Size (g or ml per serving)
               </label>
               <input
@@ -204,7 +204,7 @@ export function YieldPortionCalculator() {
                 placeholder="Enter portion size"
                 min="0"
                 step="0.1"
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
               />
               <div className="mt-2 flex flex-wrap gap-2">
                 {presets.map(size => (

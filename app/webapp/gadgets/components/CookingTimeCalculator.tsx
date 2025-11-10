@@ -94,7 +94,9 @@ export function CookingTimeCalculator() {
 
       <div className="w-full space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Food Type</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            Food Type
+          </label>
           <select
             value={foodType}
             onChange={e => {
@@ -104,7 +106,7 @@ export function CookingTimeCalculator() {
                 setMethod(newMethods[0] as CookingMethod);
               }
             }}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
           >
             <option value="meat">Meat</option>
             <option value="poultry">Poultry</option>
@@ -121,7 +123,7 @@ export function CookingTimeCalculator() {
           <select
             value={method}
             onChange={e => setMethod(e.target.value as CookingMethod)}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
           >
             {availableMethods.map(m => (
               <option key={m} value={m}>

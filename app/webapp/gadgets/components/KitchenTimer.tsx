@@ -82,45 +82,53 @@ export function KitchenTimer() {
   const displayTime = timeLeft > 0 ? timeLeft : hours * 3600 + minutes * 60 + seconds;
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">Kitchen Timer</h2>
-        <p className="text-xs text-gray-400 sm:text-sm">Set a timer for your cooking tasks</p>
+    <div className="w-full space-y-2 sm:space-y-4">
+      <div className="hidden sm:block">
+        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+          Kitchen Timer
+        </h2>
+        <p className="text-xs text-gray-400">Set a timer for your cooking tasks</p>
       </div>
 
-      {/* Large Time Display */}
-      <div className="flex w-full items-center justify-center rounded-2xl bg-[#2a2a2a] p-6 sm:p-8 md:p-12">
+      {/* Large Time Display - Compact for Mobile */}
+      <div className="flex w-full items-center justify-center rounded-xl bg-[#2a2a2a] p-3 sm:rounded-2xl sm:p-6 md:p-8">
         <div className="w-full text-center">
-          <div className="text-5xl font-bold text-[#29E7CD] sm:text-6xl md:text-7xl lg:text-8xl">
+          <div className="text-4xl font-bold text-[#29E7CD] sm:text-5xl md:text-6xl lg:text-8xl">
             {formatTime(displayTime)}
           </div>
           {timeLeft > 0 && (
-            <div className="mt-4 text-sm text-gray-400">{isRunning ? 'Running...' : 'Paused'}</div>
+            <div className="mt-1 text-xs text-gray-400 sm:mt-2 sm:text-sm">
+              {isRunning ? 'Running...' : 'Paused'}
+            </div>
           )}
         </div>
       </div>
 
-      {/* Preset Buttons */}
+      {/* Preset Buttons - Compact */}
       <div className="w-full">
-        <label className="mb-2 block text-sm font-medium text-gray-300">Quick Presets</label>
-        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+        <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          Quick Presets
+        </label>
+        <div className="grid w-full grid-cols-5 gap-1 sm:gap-2">
           {[5, 10, 15, 30, 60].map(mins => (
             <button
               key={mins}
               onClick={() => handlePreset(mins)}
               disabled={isRunning}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-1 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50 sm:rounded-xl sm:px-2 sm:py-2 sm:text-sm"
             >
-              {mins} min
+              {mins}m
             </button>
           ))}
         </div>
       </div>
 
-      {/* Time Input */}
-      <div className="grid w-full grid-cols-3 gap-3 sm:gap-4">
+      {/* Time Input - Compact */}
+      <div className="grid w-full grid-cols-3 gap-2">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Hours</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            H
+          </label>
           <input
             type="number"
             min="0"
@@ -128,11 +136,13 @@ export function KitchenTimer() {
             value={hours}
             onChange={e => setHours(Math.max(0, parseInt(e.target.value) || 0))}
             disabled={isRunning}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Minutes</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            M
+          </label>
           <input
             type="number"
             min="0"
@@ -140,11 +150,13 @@ export function KitchenTimer() {
             value={minutes}
             onChange={e => setMinutes(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
             disabled={isRunning}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Seconds</label>
+          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            S
+          </label>
           <input
             type="number"
             min="0"
@@ -152,32 +164,32 @@ export function KitchenTimer() {
             value={seconds}
             onChange={e => setSeconds(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
             disabled={isRunning}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
           />
         </div>
       </div>
 
-      {/* Control Buttons */}
-      <div className="flex gap-4">
+      {/* Control Buttons - Compact */}
+      <div className="flex gap-2">
         {!isRunning ? (
           <button
             onClick={handleStart}
             disabled={displayTime === 0}
-            className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50 sm:rounded-2xl sm:px-6 sm:py-3"
           >
             Start
           </button>
         ) : (
           <button
             onClick={handlePause}
-            className="flex-1 rounded-2xl bg-[#3B82F6] px-6 py-3 font-semibold text-white transition-all hover:bg-[#3B82F6]/80"
+            className="flex-1 rounded-xl bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-[#3B82F6]/80 sm:rounded-2xl sm:px-6 sm:py-3"
           >
             Pause
           </button>
         )}
         <button
           onClick={handleReset}
-          className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-6 py-3 font-semibold text-white transition-colors hover:bg-[#2a2a2a]"
+          className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2a2a2a] sm:rounded-2xl sm:px-4 sm:py-3"
         >
           Reset
         </button>

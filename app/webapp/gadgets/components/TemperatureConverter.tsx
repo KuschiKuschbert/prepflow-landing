@@ -48,14 +48,16 @@ export function TemperatureConverter() {
   };
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">Temperature Converter</h2>
-        <p className="text-xs text-gray-400 sm:text-sm">Convert between Celsius and Fahrenheit</p>
+    <div className="w-full space-y-2 sm:space-y-4">
+      <div className="hidden sm:block">
+        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+          Temperature Converter
+        </h2>
+        <p className="text-xs text-gray-400">Convert between Celsius and Fahrenheit</p>
       </div>
 
       {/* Converter Interface */}
-      <div className="grid w-full gap-4 sm:grid-cols-2">
+      <div className="grid w-full gap-2 sm:grid-cols-2 sm:gap-4">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-300">Celsius (°C)</label>
           <input
@@ -64,7 +66,7 @@ export function TemperatureConverter() {
             onChange={e => setCelsius(e.target.value)}
             placeholder="Enter temperature"
             step="0.1"
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
           />
           {celsius && !isNaN(parseFloat(celsius)) && (
             <div className="text-2xl font-bold text-[#29E7CD]">
@@ -93,13 +95,15 @@ export function TemperatureConverter() {
 
       {/* Presets */}
       <div className="w-full">
-        <label className="mb-2 block text-sm font-medium text-gray-300">Common Temperatures</label>
-        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+        <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          Common Temperatures
+        </label>
+        <div className="grid w-full grid-cols-2 gap-1 sm:grid-cols-3 sm:gap-2 md:grid-cols-4">
           {presets.map(preset => (
             <button
               key={preset.label}
               onClick={() => handlePreset(preset.celsius)}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-2 text-left text-sm transition-colors hover:bg-[#2a2a2a]"
+              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-left text-xs transition-colors hover:bg-[#2a2a2a] sm:rounded-xl sm:px-3 sm:py-2 sm:text-sm"
             >
               <div className="font-medium text-white">{preset.label}</div>
               <div className="text-xs text-gray-400">

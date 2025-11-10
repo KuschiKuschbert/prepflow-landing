@@ -52,15 +52,17 @@ export function UnitConverter() {
   };
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">Unit Converter</h2>
-        <p className="text-xs text-gray-400 sm:text-sm">Convert between weight and volume units</p>
+    <div className="w-full space-y-2 sm:space-y-4">
+      <div className="hidden sm:block">
+        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+          Unit Converter
+        </h2>
+        <p className="text-xs text-gray-400">Convert between weight and volume units</p>
       </div>
 
-      {/* Recipe Integration Link */}
-      <div className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-        <p className="text-sm text-gray-300">
+      {/* Recipe Integration Link - Hidden on mobile */}
+      <div className="hidden w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2 sm:block sm:p-4">
+        <p className="text-xs text-gray-300 sm:text-sm">
           Need to convert recipe ingredients?{' '}
           <Link href="/webapp/recipes" className="text-[#29E7CD] hover:underline">
             Go to Recipes
@@ -69,23 +71,23 @@ export function UnitConverter() {
       </div>
 
       {/* Converter Interface */}
-      <div className="w-full space-y-4">
-        <div className="grid w-full gap-4 sm:grid-cols-2">
+      <div className="w-full space-y-2 sm:space-y-4">
+        <div className="grid w-full gap-2 sm:grid-cols-2 sm:gap-4">
           {/* From */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-300">From</label>
+          <div className="space-y-1 sm:space-y-2">
+            <label className="block text-xs font-medium text-gray-300 sm:text-sm">From</label>
             <input
               type="number"
               value={value}
               onChange={e => setValue(e.target.value)}
-              placeholder="Enter value"
+              placeholder="Value"
               step="any"
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
             />
             <select
               value={fromUnit}
               onChange={e => setFromUnit(e.target.value)}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
             >
               {allUnits.map(unit => (
                 <option key={unit} value={unit}>
@@ -96,15 +98,15 @@ export function UnitConverter() {
           </div>
 
           {/* To */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-300">To</label>
-            <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white">
+          <div className="space-y-1 sm:space-y-2">
+            <label className="block text-xs font-medium text-gray-300 sm:text-sm">To</label>
+            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white sm:rounded-xl sm:px-3 sm:py-2.5">
               {convertedValue !== null ? convertedValue.toFixed(4) : '—'}
             </div>
             <select
               value={toUnit}
               onChange={e => setToUnit(e.target.value)}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
             >
               {allUnits.map(unit => (
                 <option key={unit} value={unit}>
@@ -118,13 +120,13 @@ export function UnitConverter() {
         {/* Swap Button */}
         <button
           onClick={handleSwap}
-          className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2a2a2a]"
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2a2a2a] sm:rounded-xl sm:px-4 sm:py-2 sm:text-sm"
         >
           ↕ Swap Units
         </button>
 
-        {/* Unit Categories */}
-        <div className="grid w-full gap-4 sm:grid-cols-2">
+        {/* Unit Categories - Hidden on mobile */}
+        <div className="hidden grid-cols-2 gap-4 sm:grid">
           <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
             <h3 className="mb-2 text-sm font-semibold text-gray-300">Weight Units</h3>
             <div className="flex flex-wrap gap-2">
