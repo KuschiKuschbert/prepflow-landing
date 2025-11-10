@@ -82,13 +82,17 @@ export function CookingTimeCalculator() {
     foodType && cookingTimes[foodType] ? Object.keys(cookingTimes[foodType]) : [];
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Cooking Time Calculator</h2>
-        <p className="text-sm text-gray-400">Estimate cooking time based on food type and method</p>
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
+          Cooking Time Calculator
+        </h2>
+        <p className="text-xs text-gray-400 sm:text-sm">
+          Estimate cooking time based on food type and method
+        </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="w-full space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Food Type</label>
           <select

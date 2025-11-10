@@ -48,14 +48,14 @@ export function TemperatureConverter() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Temperature Converter</h2>
-        <p className="text-sm text-gray-400">Convert between Celsius and Fahrenheit</p>
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">Temperature Converter</h2>
+        <p className="text-xs text-gray-400 sm:text-sm">Convert between Celsius and Fahrenheit</p>
       </div>
 
       {/* Converter Interface */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid w-full gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-300">Celsius (°C)</label>
           <input
@@ -92,9 +92,9 @@ export function TemperatureConverter() {
       </div>
 
       {/* Presets */}
-      <div>
+      <div className="w-full">
         <label className="mb-2 block text-sm font-medium text-gray-300">Common Temperatures</label>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
           {presets.map(preset => (
             <button
               key={preset.label}

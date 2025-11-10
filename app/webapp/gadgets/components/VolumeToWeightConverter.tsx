@@ -70,16 +70,18 @@ export function VolumeToWeightConverter() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Volume to Weight Converter</h2>
-        <p className="text-sm text-gray-400">
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
+          Volume to Weight Converter
+        </h2>
+        <p className="text-xs text-gray-400 sm:text-sm">
           Convert volume measurements to weight for common ingredients
         </p>
       </div>
 
       {/* Ingredient Search */}
-      <div>
+      <div className="w-full">
         <label className="mb-2 block text-sm font-medium text-gray-300">Search Ingredient</label>
         <input
           type="text"
@@ -125,7 +127,7 @@ export function VolumeToWeightConverter() {
       )}
 
       {/* Volume Input */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid w-full gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Volume</label>
           <input

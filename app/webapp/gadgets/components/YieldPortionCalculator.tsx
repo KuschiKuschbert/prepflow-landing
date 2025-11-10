@@ -42,14 +42,18 @@ export function YieldPortionCalculator() {
   const presets = [100, 150, 200, 250, 300];
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Yield/Portion Calculator</h2>
-        <p className="text-sm text-gray-400">Calculate portions from yield or vice versa</p>
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
+          Yield/Portion Calculator
+        </h2>
+        <p className="text-xs text-gray-400 sm:text-sm">
+          Calculate portions from yield or vice versa
+        </p>
       </div>
 
       {/* Mode Toggle */}
-      <div className="flex gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1">
+      <div className="flex w-full gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1">
         <button
           onClick={() => {
             setCalculationMode('yield-to-portions');
@@ -78,7 +82,7 @@ export function YieldPortionCalculator() {
         </button>
       </div>
 
-      <div className="space-y-4">
+      <div className="w-full space-y-4">
         {calculationMode === 'yield-to-portions' ? (
           <>
             <div>

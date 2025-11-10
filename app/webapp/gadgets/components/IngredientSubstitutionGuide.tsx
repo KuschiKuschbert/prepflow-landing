@@ -161,14 +161,16 @@ export function IngredientSubstitutionGuide() {
     : filteredSubstitutions;
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Ingredient Substitution Guide</h2>
-        <p className="text-sm text-gray-400">Find alternatives for common ingredients</p>
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
+          Ingredient Substitution Guide
+        </h2>
+        <p className="text-xs text-gray-400 sm:text-sm">Find alternatives for common ingredients</p>
       </div>
 
       {/* Search and Filters */}
-      <div className="space-y-4">
+      <div className="w-full space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Search Ingredient</label>
           <input
@@ -180,8 +182,8 @@ export function IngredientSubstitutionGuide() {
           />
         </div>
 
-        <div className="flex flex-wrap gap-4">
-          <div className="min-w-[200px] flex-1">
+        <div className="flex w-full flex-wrap gap-4">
+          <div className="min-w-[200px] flex-1 sm:min-w-[250px]">
             <label className="mb-2 block text-sm font-medium text-gray-300">Category</label>
             <select
               value={selectedCategory}
@@ -213,7 +215,7 @@ export function IngredientSubstitutionGuide() {
       </div>
 
       {/* Substitutions List */}
-      <div className="space-y-4">
+      <div className="w-full space-y-4">
         {allergenFriendlySubs.length > 0 ? (
           allergenFriendlySubs.map(sub => (
             <div

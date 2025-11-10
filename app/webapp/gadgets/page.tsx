@@ -54,8 +54,8 @@ function GadgetsContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+    <div className="min-h-screen w-full bg-[#0a0a0a] text-white">
+      <div className="mx-auto w-full px-4 py-6 md:px-6 md:py-8 lg:px-8">
         <PageHeader
           title="Kitchen Gadgets"
           subtitle="Useful digital tools for your kitchen"
@@ -63,13 +63,13 @@ function GadgetsContent() {
         />
 
         {/* Tab Navigation */}
-        <div className="mb-6 overflow-x-auto">
-          <div className="flex space-x-2 border-b border-[#2a2a2a]">
+        <div className="mb-6 w-full overflow-x-auto">
+          <div className="flex w-full space-x-2 border-b border-[#2a2a2a]">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+                className={`flex flex-shrink-0 items-center gap-2 border-b-2 px-3 py-3 text-sm font-medium transition-colors sm:px-4 ${
                   activeTab === tab.id
                     ? 'border-[#29E7CD] text-[#29E7CD]'
                     : 'border-transparent text-gray-400 hover:border-gray-500 hover:text-gray-300'
@@ -82,8 +82,8 @@ function GadgetsContent() {
           </div>
         </div>
 
-        {/* Gadget Content */}
-        <div className="rounded-2xl bg-[#1f1f1f] p-6 md:p-8">
+        {/* Gadget Content - Full Width */}
+        <div className="w-full rounded-2xl bg-[#1f1f1f] p-4 sm:p-6 md:p-8 lg:p-10">
           {activeTab === 'timer' && <KitchenTimer />}
           {activeTab === 'unit' && <UnitConverter />}
           {activeTab === 'temperature' && <TemperatureConverter />}

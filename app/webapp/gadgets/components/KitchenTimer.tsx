@@ -82,16 +82,16 @@ export function KitchenTimer() {
   const displayTime = timeLeft > 0 ? timeLeft : hours * 3600 + minutes * 60 + seconds;
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Kitchen Timer</h2>
-        <p className="text-sm text-gray-400">Set a timer for your cooking tasks</p>
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">Kitchen Timer</h2>
+        <p className="text-xs text-gray-400 sm:text-sm">Set a timer for your cooking tasks</p>
       </div>
 
       {/* Large Time Display */}
-      <div className="flex items-center justify-center rounded-2xl bg-[#2a2a2a] p-8">
-        <div className="text-center">
-          <div className="text-6xl font-bold text-[#29E7CD] md:text-8xl">
+      <div className="flex w-full items-center justify-center rounded-2xl bg-[#2a2a2a] p-6 sm:p-8 md:p-12">
+        <div className="w-full text-center">
+          <div className="text-5xl font-bold text-[#29E7CD] sm:text-6xl md:text-7xl lg:text-8xl">
             {formatTime(displayTime)}
           </div>
           {timeLeft > 0 && (
@@ -101,15 +101,15 @@ export function KitchenTimer() {
       </div>
 
       {/* Preset Buttons */}
-      <div>
+      <div className="w-full">
         <label className="mb-2 block text-sm font-medium text-gray-300">Quick Presets</label>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
           {[5, 10, 15, 30, 60].map(mins => (
             <button
               key={mins}
               onClick={() => handlePreset(mins)}
               disabled={isRunning}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {mins} min
             </button>
@@ -118,7 +118,7 @@ export function KitchenTimer() {
       </div>
 
       {/* Time Input */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid w-full grid-cols-3 gap-3 sm:gap-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Hours</label>
           <input

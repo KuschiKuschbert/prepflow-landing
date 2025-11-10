@@ -52,14 +52,14 @@ export function UnitConverter() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-white">Unit Converter</h2>
-        <p className="text-sm text-gray-400">Convert between weight and volume units</p>
+        <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">Unit Converter</h2>
+        <p className="text-xs text-gray-400 sm:text-sm">Convert between weight and volume units</p>
       </div>
 
       {/* Recipe Integration Link */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
+      <div className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
         <p className="text-sm text-gray-300">
           Need to convert recipe ingredients?{' '}
           <Link href="/webapp/recipes" className="text-[#29E7CD] hover:underline">
@@ -69,8 +69,8 @@ export function UnitConverter() {
       </div>
 
       {/* Converter Interface */}
-      <div className="space-y-4">
-        <div className="grid gap-4 md:grid-cols-2">
+      <div className="w-full space-y-4">
+        <div className="grid w-full gap-4 sm:grid-cols-2">
           {/* From */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-300">From</label>
@@ -124,7 +124,7 @@ export function UnitConverter() {
         </button>
 
         {/* Unit Categories */}
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid w-full gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
             <h3 className="mb-2 text-sm font-semibold text-gray-300">Weight Units</h3>
             <div className="flex flex-wrap gap-2">
