@@ -25,6 +25,28 @@
 
   /* Warning bar height (default 0 when no warnings, ~60-70px when visible) */
   --warning-height: 0px;
+
+  /* Gadgets card height calculation */
+  --gadgets-card-padding: 1rem;
+}
+
+/* Gadgets card container - responsive height calculation */
+.gadgets-card-container {
+  /* Mobile/Tablet: account for header + bottom navbar + safe areas + padding */
+  height: calc(
+    100vh - var(--header-height-mobile) - var(--bottom-navbar-height) - var(--safe-area-inset-top) -
+      var(--safe-area-inset-bottom) - var(--gadgets-card-padding) * 2
+  );
+}
+
+@media (min-width: 768px) {
+  .gadgets-card-container {
+    /* Desktop: account for header + safe area + padding (no bottom nav, sidebar handled by margin) */
+    height: calc(
+      100vh - var(--header-height-desktop) - var(--safe-area-inset-top) -
+        var(--gadgets-card-padding) * 2
+    );
+  }
 }
 
 /* WebApp main content responsive padding with warning support */

@@ -42,7 +42,7 @@ export function YieldPortionCalculator() {
   const presets = [100, 150, 200, 250, 300];
 
   return (
-    <div className="flex h-full w-full flex-col space-y-1.5 overflow-y-auto sm:space-y-2">
+    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 sm:space-y-2 sm:px-4 sm:py-4">
       <div className="hidden sm:block">
         <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
           Yield/Portion Calculator
