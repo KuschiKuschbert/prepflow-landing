@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGlobalWarning } from '@/contexts/GlobalWarningContext';
 
 interface TemperatureLog {
@@ -36,6 +36,7 @@ interface UseTemperatureWarningsProps {
 
 export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWarningsProps) => {
   const { addWarning } = useGlobalWarning();
+  const warningsShown = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     // Check for "no food items temped today" warning
@@ -52,7 +53,13 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
       );
 
       // If no food items were temped today, show warning
-      if (foodLogsToday.length === 0 && allLogs.length > 0) {
+      const warningKey = 'food-temp-today';
+      if (
+        foodLogsToday.length === 0 &&
+        allLogs.length > 0 &&
+        !warningsShown.current.has(warningKey)
+      ) {
+        warningsShown.current.add(warningKey);
         addWarning({
           type: 'warning',
           title: 'Temperature Monitoring Alert',
@@ -104,20 +111,24 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
       if (uncheckedEquipment.length > 0) {
         const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
         const isMultiple = uncheckedEquipment.length > 1;
+        const warningKey = `equipment-check-${equipmentNames}`;
 
-        addWarning({
-          type: 'warning',
-          title: 'Equipment Temperature Check Required',
-          message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentNames} ${isMultiple ? 'have' : 'has'} not been temperature checked in the last 8 hours. Ensure all active equipment is monitored for safety compliance.`,
-          action: {
-            label: 'Go to Temperature Logs',
-            onClick: () => {
-              window.location.href = '/webapp/temperature';
+        if (!warningsShown.current.has(warningKey)) {
+          warningsShown.current.add(warningKey);
+          addWarning({
+            type: 'warning',
+            title: 'Equipment Temperature Check Required',
+            message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentNames} ${isMultiple ? 'have' : 'has'} not been temperature checked in the last 8 hours. Ensure all active equipment is monitored for safety compliance.`,
+            action: {
+              label: 'Go to Temperature Logs',
+              onClick: () => {
+                window.location.href = '/webapp/temperature';
+              },
             },
-          },
-          dismissible: true,
-          autoHide: false,
-        });
+            dismissible: true,
+            autoHide: false,
+          });
+        }
       }
     };
 
@@ -140,29 +151,34 @@ export const useTemperatureWarnings = ({ allLogs, equipment }: UseTemperatureWar
           );
 
           if (outOfRangeLogs.length > 0) {
-            addWarning({
-              type: 'error',
-              title: 'Temperature Out of Range',
-              message: `${eq.name} has recorded ${outOfRangeLogs.length} temperature reading(s) outside the safe range (${eq.min_temp_celsius}°C - ${eq.max_temp_celsius}°C).`,
-              action: {
-                label: 'View Details',
-                onClick: () => {
-                  window.location.href = '/webapp/temperature';
+            const warningKey = `out-of-range-${eq.id}`;
+            if (!warningsShown.current.has(warningKey)) {
+              warningsShown.current.add(warningKey);
+              addWarning({
+                type: 'error',
+                title: 'Temperature Out of Range',
+                message: `${eq.name} has recorded ${outOfRangeLogs.length} temperature reading(s) outside the safe range (${eq.min_temp_celsius}°C - ${eq.max_temp_celsius}°C).`,
+                action: {
+                  label: 'View Details',
+                  onClick: () => {
+                    window.location.href = '/webapp/temperature';
+                  },
                 },
-              },
-              dismissible: true,
-              autoHide: false,
-            });
+                dismissible: true,
+                autoHide: false,
+              });
+            }
           }
         }
       });
     };
 
     // Only run checks if we have data
+    // Use lengths instead of full arrays to prevent infinite loops
     if (allLogs.length > 0 && equipment.length > 0) {
       checkFoodTemperatureWarning();
       checkEquipmentTemperatureWarning();
       checkEquipmentWarnings();
     }
-  }, [allLogs, equipment, addWarning]);
+  }, [allLogs.length, equipment.length, addWarning]);
 };

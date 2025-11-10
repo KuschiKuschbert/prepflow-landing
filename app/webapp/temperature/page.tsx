@@ -148,7 +148,7 @@ function TemperatureLogsPageContent() {
         setIsInitialLoad(true); // Mark as processed
       }
     }
-  }, [allLogs, isInitialLoad]);
+  }, [allLogs.length, isInitialLoad]); // Use length instead of full array
 
   useEffect(() => {
     // Prefetch equipment API
