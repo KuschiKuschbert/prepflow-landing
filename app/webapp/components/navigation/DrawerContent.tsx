@@ -64,13 +64,9 @@ export function DrawerContent({
   };
 
   // Determine touch action based on state
-  // When at top, allow both pan-y (scroll) and gesture detection
-  // When dragging downward, disable touch actions
-  const touchAction = isAtTop(contentRef)
-    ? 'pan-y' // Allow scrolling and gesture detection when at top
-    : isDragging && canDrag
-      ? 'none' // Disable touch when actively dragging down
-      : 'pan-y'; // Allow normal scrolling
+  // Always allow pan-y for scrolling - gesture handlers will prevent default when needed
+  // This allows users to scroll normally, but also drag to close when at top
+  const touchAction = 'pan-y';
 
   return (
     <div
