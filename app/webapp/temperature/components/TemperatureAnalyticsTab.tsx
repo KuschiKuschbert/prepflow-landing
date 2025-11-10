@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import SimpleTemperatureChart from './SimpleTemperatureChart';
@@ -26,6 +26,7 @@ export default function TemperatureAnalyticsTab({
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
   const [hasManuallyChangedFilter, setHasManuallyChangedFilter] = useState(false);
+  const hasInitialized = useRef(false);
 
   const { getFilteredLogs, hasDataForTimeFilter } = useTemperatureFilters(
     allLogs,
@@ -77,13 +78,13 @@ export default function TemperatureAnalyticsTab({
 
   // Handle loading state to prevent FOUC - wait for data to be ready
   useEffect(() => {
-    // Show content immediately to prevent FOUC
-    if (equipment.length > 0 && allLogs.length > 0) {
+    // Only initialize once when data becomes available
+    if (equipment.length > 0 && allLogs.length > 0 && !hasInitialized.current) {
       // Use setTimeout to avoid synchronous setState in effect
       setTimeout(() => {
         setIsLoaded(true);
 
-        // Smart equipment selection logic
+        // Smart equipment selection logic (only if not already selected)
         if (!selectedEquipmentId && equipment.length > 0) {
           // 1. First try to find equipment that is out of range
           const outOfRangeEquipment = findOutOfRangeEquipment();
@@ -102,18 +103,17 @@ export default function TemperatureAnalyticsTab({
             setTimeFilter(bestTimeFilter);
           }
         }
+
+        hasInitialized.current = true;
       }, 0);
     }
   }, [
-    equipment.length,
-    allLogs.length,
-    dateOffset,
+    equipment.length, // Only length, not full array
+    allLogs.length, // Only length, not full array
     selectedEquipmentId,
     hasManuallyChangedFilter,
     timeFilter,
-    equipment,
-    findOutOfRangeEquipment,
-    findBestTimeFilter,
+    // Removed: equipment, findOutOfRangeEquipment, findBestTimeFilter, dateOffset
   ]);
 
   const getSelectedEquipment = () => {
