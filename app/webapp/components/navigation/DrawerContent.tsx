@@ -16,6 +16,10 @@ interface DrawerContentProps {
   onTouchEnd: () => void;
 }
 
+function isAtTop(contentRef: React.RefObject<HTMLDivElement | null>): boolean {
+  return contentRef.current ? contentRef.current.scrollTop <= 5 : false;
+}
+
 export function DrawerContent({
   contentRef,
   groupedItems,
@@ -44,9 +48,9 @@ export function DrawerContent({
       e.stopPropagation();
       return;
     }
-    if (isDragging && canDrag) {
-      onTouchMove(e);
-    }
+    // Always call onTouchMove to allow upward gesture detection when at top
+    // The hook will determine if it's an upward or downward gesture
+    onTouchMove(e);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -59,12 +63,21 @@ export function DrawerContent({
     onTouchEnd();
   };
 
+  // Determine touch action based on state
+  // When at top, allow both pan-y (scroll) and gesture detection
+  // When dragging downward, disable touch actions
+  const touchAction = isAtTop(contentRef)
+    ? 'pan-y' // Allow scrolling and gesture detection when at top
+    : isDragging && canDrag
+      ? 'none' // Disable touch when actively dragging down
+      : 'pan-y'; // Allow normal scrolling
+
   return (
     <div
       ref={contentRef}
       className="min-h-0 flex-1 overflow-y-auto px-3 py-2"
       style={{
-        touchAction: isDragging && canDrag ? 'none' : 'pan-y',
+        touchAction,
         overscrollBehavior: 'contain',
         WebkitOverflowScrolling: 'touch',
       }}

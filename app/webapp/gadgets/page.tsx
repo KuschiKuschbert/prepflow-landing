@@ -130,27 +130,27 @@ function GadgetsContent() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#0a0a0a] text-white">
-      <div className="mx-auto w-full px-2 py-2 sm:px-4 sm:py-4 md:px-6 md:py-6 lg:px-8 lg:py-8">
+    <div className="flex h-screen w-full flex-col bg-[#0a0a0a] text-white">
+      <div className="flex flex-1 flex-col overflow-hidden px-1 py-1 sm:px-2 sm:py-2">
         {/* Compact Header for Mobile */}
-        <div className="mb-2 sm:mb-4">
-          <h1 className="text-lg font-bold text-white sm:text-2xl md:text-4xl">
+        <div className="mb-1 flex-shrink-0 sm:mb-2">
+          <h1 className="text-base font-bold text-white sm:text-xl md:text-2xl">
             <span className="mr-1 sm:mr-2">🔧</span>
             Kitchen Gadgets
           </h1>
-          <p className="hidden text-xs text-gray-400 sm:block sm:text-sm md:text-base">
+          <p className="hidden text-xs text-gray-400 sm:block sm:text-sm">
             Useful digital tools for your kitchen
           </p>
         </div>
 
         {/* Compact Tab Navigation */}
-        <div className="mb-2 w-full overflow-x-auto sm:mb-4">
+        <div className="mb-1 w-full flex-shrink-0 overflow-x-auto sm:mb-2">
           <div className="flex w-full space-x-1 border-b border-[#2a2a2a] sm:space-x-2">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-shrink-0 items-center gap-1 border-b-2 px-2 py-1.5 text-xs font-medium transition-colors sm:gap-2 sm:px-3 sm:py-2 sm:text-sm ${
+                className={`flex flex-shrink-0 items-center gap-1 border-b-2 px-2 py-1 text-xs font-medium transition-colors sm:gap-2 sm:px-3 sm:py-1.5 sm:text-sm ${
                   activeTab === tab.id
                     ? 'border-[#29E7CD] text-[#29E7CD]'
                     : 'border-transparent text-gray-400 hover:border-gray-500 hover:text-gray-300'
@@ -164,17 +164,17 @@ function GadgetsContent() {
         </div>
 
         {/* Swipe Indicators */}
-        <div className="mb-2 flex items-center justify-center gap-2 sm:mb-4">
+        <div className="mb-1 flex flex-shrink-0 items-center justify-center gap-1.5 sm:mb-2 sm:gap-2">
           {tabs.map((tab, index) => {
             const currentIndex = tabs.findIndex(t => t.id === activeTab);
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`h-1.5 rounded-full transition-all duration-200 ${
+                className={`h-1 rounded-full transition-all duration-200 ${
                   index === currentIndex
-                    ? 'w-6 bg-[#29E7CD]'
-                    : 'w-1.5 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50'
+                    ? 'w-5 bg-[#29E7CD] sm:w-6'
+                    : 'w-1 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50 sm:w-1.5'
                 }`}
                 aria-label={`Go to ${tab.label}`}
               />
@@ -184,9 +184,9 @@ function GadgetsContent() {
 
         {/* Swipe Hint (shown on first load) */}
         {showSwipeHint && (
-          <div className="mb-2 flex items-center justify-center gap-2 text-xs text-gray-400 sm:mb-4 sm:text-sm">
+          <div className="mb-1 flex flex-shrink-0 items-center justify-center gap-1.5 text-xs text-gray-400 sm:mb-2 sm:gap-2 sm:text-sm">
             <svg
-              className="h-4 w-4 animate-pulse sm:h-5 sm:w-5"
+              className="h-3 w-3 animate-pulse sm:h-4 sm:w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -200,7 +200,7 @@ function GadgetsContent() {
             </svg>
             <span>Swipe to navigate</span>
             <svg
-              className="h-4 w-4 animate-pulse sm:h-5 sm:w-5"
+              className="h-3 w-3 animate-pulse sm:h-4 sm:w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -215,10 +215,10 @@ function GadgetsContent() {
           </div>
         )}
 
-        {/* Gadget Content - Compact Padding with Swipe Support */}
+        {/* Gadget Content - Full Height with Swipe Support */}
         <div
           ref={contentRef}
-          className="relative w-full touch-pan-y overflow-hidden rounded-xl bg-[#1f1f1f] p-2 sm:rounded-2xl sm:p-4 md:p-6 lg:p-8"
+          className="relative flex flex-1 touch-pan-y overflow-hidden rounded-lg bg-[#1f1f1f] p-1.5 sm:rounded-xl sm:p-2 md:p-3 lg:p-4"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -264,9 +264,9 @@ function GadgetsContent() {
             </>
           )}
 
-          {/* Content with swipe transform */}
+          {/* Content with swipe transform - Full Height */}
           <div
-            className="transition-all duration-200"
+            className="flex h-full w-full flex-col transition-all duration-200"
             style={{
               transform: isSwiping ? `translateX(${swipeOffset}px)` : 'translateX(0)',
               opacity: isSwiping ? 1 - Math.abs(swipeOffset) / 200 : 1,

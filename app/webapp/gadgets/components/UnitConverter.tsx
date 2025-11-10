@@ -52,7 +52,7 @@ export function UnitConverter() {
   };
 
   return (
-    <div className="w-full space-y-2 sm:space-y-4">
+    <div className="flex h-full w-full flex-col space-y-1.5 overflow-y-auto sm:space-y-2">
       <div className="hidden sm:block">
         <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
           Unit Converter
