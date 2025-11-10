@@ -117,13 +117,15 @@ export function VolumeToWeightConverter() {
 
       {/* Selected Ingredient */}
       {selectedIngredient && (
-        <div className="rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/10 p-4">
-          <div className="font-medium text-white">{selectedIngredient.name}</div>
+        <div className="rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/10 p-2 sm:rounded-xl sm:p-4">
+          <div className="text-sm font-medium text-white sm:text-base">
+            {selectedIngredient.name}
+          </div>
           {selectedIngredient.notes && (
-            <div className="mt-1 text-xs text-gray-400">{selectedIngredient.notes}</div>
+            <div className="mt-0.5 text-xs text-gray-400 sm:mt-1">{selectedIngredient.notes}</div>
           )}
           {selectedIngredient.packed && (
-            <div className="mt-1 text-xs text-[#29E7CD]">Use packed measurement</div>
+            <div className="mt-0.5 text-xs text-[#29E7CD] sm:mt-1">Use packed measurement</div>
           )}
         </div>
       )}
