@@ -25,8 +25,8 @@ export function YieldPortionCalculator() {
     const portionsNum = parseFloat(numberOfPortions);
     const portionNum = parseFloat(portionSize);
     if (!isNaN(portionsNum) && !isNaN(portionNum) && portionNum > 0) {
-      const yield = portionsNum * portionNum;
-      setTotalYield(yield.toFixed(1));
+      const calculatedYield = portionsNum * portionNum;
+      setTotalYield(calculatedYield.toFixed(1));
     } else {
       setTotalYield('');
     }
