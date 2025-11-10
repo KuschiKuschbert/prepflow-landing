@@ -26,6 +26,9 @@ function GadgetsContent() {
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
 
   // Check for tab parameter from URL
   useEffect(() => {
@@ -56,27 +59,49 @@ function GadgetsContent() {
     { id: 'substitution', label: 'Substitutions', icon: '🔄' },
   ];
 
+  // Hide swipe hint after first interaction
+  useEffect(() => {
+    if (showSwipeHint) {
+      const timer = setTimeout(() => setShowSwipeHint(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSwipeHint]);
+
   // Swipe navigation handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
+    setIsSwiping(false);
+    setSwipeOffset(0);
+    setShowSwipeHint(false);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     // Prevent default scrolling if we're doing a horizontal swipe
     if (touchStartX.current !== null && touchStartY.current !== null) {
-      const deltaX = Math.abs(e.touches[0].clientX - touchStartX.current);
-      const deltaY = Math.abs(e.touches[0].clientY - touchStartY.current);
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const deltaX = Math.abs(currentX - touchStartX.current);
+      const deltaY = Math.abs(currentY - touchStartY.current);
 
-      // If horizontal swipe is more dominant than vertical, prevent scroll
+      // If horizontal swipe is more dominant than vertical, prevent scroll and show movement
       if (deltaX > deltaY && deltaX > 10) {
         e.preventDefault();
+        setIsSwiping(true);
+        const offset = currentX - touchStartX.current;
+        // Limit offset to prevent over-swiping
+        const maxOffset = 100;
+        setSwipeOffset(Math.max(-maxOffset, Math.min(maxOffset, offset)));
       }
     }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
+    if (touchStartX.current === null || touchStartY.current === null) {
+      setIsSwiping(false);
+      setSwipeOffset(0);
+      return;
+    }
 
     const touchEndX = e.changedTouches[0].clientX;
     const touchEndY = e.changedTouches[0].clientY;
@@ -97,6 +122,9 @@ function GadgetsContent() {
       }
     }
 
+    // Reset swipe state
+    setIsSwiping(false);
+    setSwipeOffset(0);
     touchStartX.current = null;
     touchStartY.current = null;
   };
@@ -135,16 +163,115 @@ function GadgetsContent() {
           </div>
         </div>
 
+        {/* Swipe Indicators */}
+        <div className="mb-2 flex items-center justify-center gap-2 sm:mb-4">
+          {tabs.map((tab, index) => {
+            const currentIndex = tabs.findIndex(t => t.id === activeTab);
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`h-1.5 rounded-full transition-all duration-200 ${
+                  index === currentIndex
+                    ? 'w-6 bg-[#29E7CD]'
+                    : 'w-1.5 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50'
+                }`}
+                aria-label={`Go to ${tab.label}`}
+              />
+            );
+          })}
+        </div>
+
+        {/* Swipe Hint (shown on first load) */}
+        {showSwipeHint && (
+          <div className="mb-2 flex items-center justify-center gap-2 text-xs text-gray-400 sm:mb-4 sm:text-sm">
+            <svg
+              className="h-4 w-4 animate-pulse sm:h-5 sm:w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 16l-4-4m0 0l4-4m-4 4h18"
+              />
+            </svg>
+            <span>Swipe to navigate</span>
+            <svg
+              className="h-4 w-4 animate-pulse sm:h-5 sm:w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </div>
+        )}
+
         {/* Gadget Content - Compact Padding with Swipe Support */}
         <div
           ref={contentRef}
-          className="w-full touch-pan-y rounded-xl bg-[#1f1f1f] p-2 sm:rounded-2xl sm:p-4 md:p-6 lg:p-8"
+          className="relative w-full touch-pan-y overflow-hidden rounded-xl bg-[#1f1f1f] p-2 sm:rounded-2xl sm:p-4 md:p-6 lg:p-8"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           style={{ touchAction: 'pan-y' }}
         >
-          <div className="transition-opacity duration-200">
+          {/* Swipe Direction Arrows (shown during swipe) */}
+          {isSwiping && (
+            <>
+              {swipeOffset < -20 && (
+                <div className="pointer-events-none absolute top-1/2 right-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
+                  <svg
+                    className="h-6 w-6 text-[#29E7CD] sm:h-8 sm:w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              )}
+              {swipeOffset > 20 && (
+                <div className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
+                  <svg
+                    className="h-6 w-6 text-[#29E7CD] sm:h-8 sm:w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Content with swipe transform */}
+          <div
+            className="transition-all duration-200"
+            style={{
+              transform: isSwiping ? `translateX(${swipeOffset}px)` : 'translateX(0)',
+              opacity: isSwiping ? 1 - Math.abs(swipeOffset) / 200 : 1,
+            }}
+          >
             {activeTab === 'timer' && <KitchenTimer />}
             {activeTab === 'unit' && <UnitConverter />}
             {activeTab === 'temperature' && <TemperatureConverter />}
