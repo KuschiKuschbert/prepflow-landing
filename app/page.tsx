@@ -10,14 +10,14 @@ import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 
 // Landing page components
-import Benefits from './components/landing/Benefits';
-import Capabilities from './components/landing/Capabilities';
 import AppHero from './components/landing/Hero';
+import Comparison from './components/landing/Comparison';
 import HowItWorks from './components/landing/HowItWorks';
 import LandingFooter from './components/landing/LandingFooter';
 import LandingHeader from './components/landing/LandingHeader';
-import Security from './components/landing/Security';
-import Tour from './components/landing/Tour';
+import ProductFeatures from './components/landing/ProductFeatures';
+import Resources from './components/landing/Resources';
+import UseCases from './components/landing/UseCases';
 
 // Hooks and utilities
 import { useEngagementTracking } from '../hooks/useEngagementTracking';
@@ -46,7 +46,8 @@ export default function Page() {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: 'PrepFlow',
-      description: 'Restaurant COGS and menu profitability tool for accurate pricing.',
+      description:
+        'Kitchen project management software for restaurants, cafés, and food trucks. Track ingredients, manage recipes, calculate COGS, and optimize pricing.',
       url: 'https://www.prepflow.org',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web Browser',
@@ -130,20 +131,20 @@ export default function Page() {
         {/* Hero */}
         <AppHero trackEngagement={trackEngagement} />
 
-        {/* Tour teaser */}
-        <Tour />
+        {/* Product Features */}
+        <ProductFeatures />
 
-        {/* Capabilities */}
-        <Capabilities />
-
-        {/* Outcomes / Benefits */}
-        <Benefits />
+        {/* Use Cases */}
+        <UseCases />
 
         {/* How it works */}
         <HowItWorks />
 
-        {/* Security */}
-        <Security />
+        {/* Comparison */}
+        <Comparison />
+
+        {/* Resources */}
+        <Resources />
 
         {/* Footer */}
         <LandingFooter />

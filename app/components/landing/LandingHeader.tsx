@@ -37,31 +37,16 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             <a
               href="#features"
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-              aria-label={String(t('nav.featuresAria', 'View PrepFlow features'))}
+              aria-label="View PrepFlow features"
             >
-              {t('nav.features', 'What it does')}
+              Features
             </a>
             <a
               href="#how-it-works"
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-              aria-label={String(t('nav.howItWorksAria', 'Learn how PrepFlow works'))}
+              aria-label="Learn how PrepFlow works"
             >
-              {t('nav.howItWorks', "How it's different")}
-            </a>
-            <a
-              href="#benefits"
-              className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-              aria-label="See what the features add up to"
-            >
-              Outcomes
-            </a>
-            {/* Pricing link removed for explainer-focused landing */}
-            <a
-              href="#faq"
-              className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-              aria-label={String(t('nav.faqAria', 'Frequently asked questions'))}
-            >
-              {t('nav.faq', 'FAQ (the good bits)')}
+              How it works
             </a>
           </nav>
 

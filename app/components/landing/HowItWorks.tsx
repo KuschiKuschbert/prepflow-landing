@@ -1,37 +1,77 @@
+'use client';
+
 import React from 'react';
 
 export default function HowItWorks() {
+  const steps = [
+    {
+      number: 1,
+      title: 'Add ingredients',
+      description: 'Add ingredients with costs and suppliers. Enter your current prices.',
+      example: "Add 'Tomatoes' at $2.50/kg",
+      color: '#29E7CD',
+    },
+    {
+      number: 2,
+      title: 'Create recipes',
+      description:
+        'Build recipes with portions and yields. PrepFlow calculates costs automatically.',
+      example: "Create 'Margherita Pizza' recipe",
+      color: '#3B82F6',
+    },
+    {
+      number: 3,
+      title: 'See COGS & performance',
+      description:
+        "View dish COGS and contribution margin instantly. Classify as Chef's Kiss, Hidden Gem, Bargain Bucket, or Burnt Toast.",
+      example: 'See $4.20 COGS → Classify as "Chef\'s Kiss" → Price at $18.00',
+      color: '#D925C7',
+    },
+  ];
+
   return (
-    <section className="mx-auto max-w-7xl px-6 py-16">
-      <h2 className="mb-10 text-center text-3xl font-bold tracking-tight md:text-4xl">
-        How it works
-      </h2>
-      <div className="grid gap-8 md:grid-cols-3">
-        <div className="text-center">
-          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#29E7CD]/20 text-xl font-bold text-[#29E7CD]">
-            1
+    <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-16">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">How it works</h2>
+        <p className="mt-4 text-lg text-gray-300">From idea to menu in minutes, not meetings</p>
+      </div>
+
+      <div className="mt-12 grid gap-8 md:grid-cols-3">
+        {steps.map((step, index) => (
+          <div key={step.number} className="relative">
+            {/* Connector arrow for desktop */}
+            {index < steps.length - 1 && (
+              <div className="absolute top-14 right-0 hidden h-0.5 w-full translate-x-1/2 bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent md:block" />
+            )}
+
+            <div className="text-center">
+              <div
+                className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold"
+                style={{
+                  backgroundColor: `${step.color}20`,
+                  color: step.color,
+                }}
+              >
+                {step.number}
+              </div>
+              <h3 className="mb-2 text-xl font-semibold">{step.title}</h3>
+              <p className="mb-3 text-gray-300">{step.description}</p>
+              <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f]/30 p-3">
+                <p className="text-sm text-gray-400">{step.example}</p>
+              </div>
+            </div>
           </div>
-          <h3 className="mb-2 text-xl font-semibold">Add your data</h3>
-          <p className="text-gray-300">
-            Add ingredients, suppliers, and recipes. Enter your current prices.
+        ))}
+      </div>
+
+      {/* Workflow summary */}
+      <div className="mt-12 text-center">
+        <div className="mx-auto max-w-2xl rounded-2xl border border-[#2a2a2a] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-6">
+          <p className="text-lg font-medium text-white">
+            Add ingredients → Create recipes → See COGS & performance
           </p>
-        </div>
-        <div className="text-center">
-          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#3B82F6]/20 text-xl font-bold text-[#3B82F6]">
-            2
-          </div>
-          <h3 className="mb-2 text-xl font-semibold">Analyze instantly</h3>
-          <p className="text-gray-300">
-            See COGS and contribution margin immediately, with clear performance labels.
-          </p>
-        </div>
-        <div className="text-center">
-          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#D925C7]/20 text-xl font-bold text-[#D925C7]">
-            3
-          </div>
-          <h3 className="mb-2 text-xl font-semibold">Act with confidence</h3>
-          <p className="text-gray-300">
-            Adjust prices or portions and monitor impact. Make changes with confidence.
+          <p className="mt-2 text-sm text-gray-400">
+            That's it. No spreadsheets, no guesswork, no 2 AM formula errors.
           </p>
         </div>
       </div>

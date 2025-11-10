@@ -1,0 +1,81 @@
+'use client';
+
+import Image from 'next/image';
+
+export default function ProductFeatures() {
+  const features = [
+    {
+      name: 'Dashboard',
+      description: 'See your kitchen at a glance',
+      screenshot: '/images/dashboard-screenshot.png',
+      alt: 'PrepFlow Dashboard showing kitchen overview',
+      color: '#29E7CD',
+    },
+    {
+      name: 'Recipes',
+      description: 'Build recipes with live cost calculations',
+      screenshot: '/images/recipe-screenshot.png',
+      alt: 'PrepFlow Recipe management with ingredient costs',
+      color: '#3B82F6',
+    },
+    {
+      name: 'Performance Analysis',
+      description: "Chef's Kiss, Hidden Gem, Bargain Bucket, Burnt Toast",
+      screenshot: '/images/dashboard-screenshot.png',
+      alt: 'PrepFlow Performance analysis showing menu item classifications',
+      color: '#D925C7',
+    },
+    {
+      name: 'Temperature Monitoring',
+      description: 'QLD-compliant monitoring with smart thresholds',
+      screenshot: '/images/dashboard-screenshot.png',
+      alt: 'PrepFlow Temperature monitoring dashboard',
+      color: '#29E7CD',
+    },
+    {
+      name: 'Ingredients & Stock',
+      description: 'Track costs, suppliers, and par levels',
+      screenshot: '/images/stocklist-screenshot.png',
+      alt: 'PrepFlow Ingredients and stock management',
+      color: '#3B82F6',
+    },
+  ];
+
+  return (
+    <section id="features" className="mx-auto max-w-7xl px-6 py-16">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Everything you need</h2>
+        <p className="mt-4 text-lg text-gray-300">
+          From ingredients to pricing decisions, all in one place
+        </p>
+      </div>
+
+      <div className="mt-12 space-y-16">
+        {features.map((feature, index) => (
+          <div key={feature.name} className="grid gap-8 md:grid-cols-2 md:items-center">
+            {/* Screenshot */}
+            <div className={index % 2 === 1 ? 'md:order-2' : ''}>
+              <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-2 shadow-xl">
+                <Image
+                  src={feature.screenshot}
+                  alt={feature.alt}
+                  width={600}
+                  height={400}
+                  className="w-full rounded-xl"
+                />
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className={index % 2 === 1 ? 'md:order-1' : ''}>
+              <h3 className="text-2xl font-bold md:text-3xl" style={{ color: feature.color }}>
+                {feature.name}
+              </h3>
+              <p className="mt-4 text-lg text-gray-300">{feature.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}

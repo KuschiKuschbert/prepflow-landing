@@ -39,7 +39,7 @@
 
 ### QA Checklist
 
-- Auth: Sign in/Register routes work; allowlist enforced
+- Auth: NextAuth + Auth0 working; allowlist enforced on `/webapp/**` routes
 - Tour modal: focus trap, Escape closes, arrows navigate
 - Performance: Lighthouse ≥ 90; CLS < 0.1; LCP < 2.5s
 - Analytics: tour_open/close, step navigation, CTA clicks
@@ -98,23 +98,23 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 
 ### **Framework & Stack**
 
-- **Frontend:** Next.js 15.4.6 with React 19 (App Router)
+- **Frontend:** Next.js 16.0.0 with React 19 (App Router)
 - **Styling:** Tailwind CSS 4 with custom CSS variables
 - **Analytics:** Google Analytics 4, Google Tag Manager, Vercel Analytics
 - **Deployment:** Vercel platform
 - **Payment:** Stripe integration
 - **Database:** Supabase PostgreSQL
-- **Authentication:** Supabase Auth with JWT
+- **Authentication:** NextAuth + Auth0 (user authentication), Supabase (database only)
 - **Email:** Resend integration
 - **Mobile:** React Native + Expo (future)
 
 ### **Key Components**
 
-- **Analytics Stack:** ExitIntentTracker, ScrollTracker, PerformanceTracker
+- **Analytics Stack:** ScrollTracker, GoogleAnalytics, GoogleTagManager
 - **GTM Integration:** GoogleTagManager with data layer management
 - **SEO Components:** Structured data, meta tags, OpenGraph
 - **UI Components:** Custom Button, Card, and form components
-- **UX Components:** LoadingSkeleton, ModernNavigation, FloatingCTA, ScrollToTop, ScrollProgress
+- **UX Components:** LoadingSkeleton, ModernNavigation, ScrollToTop, ScrollProgress
 
 ### **File Structure**
 
@@ -122,46 +122,62 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 app/
 ├── layout.tsx          # Root layout with metadata and analytics
 ├── page.tsx            # Main landing page
-├── login/              # Authentication pages
-│   ├── page.tsx        # Login page
-│   └── register/page.tsx # Registration page
-├── verify-email/       # Email verification
-│   └── page.tsx        # Email verification page
-├── dashboard/          # Protected webapp area
+├── components/landing/  # Landing page components
+│   ├── Hero.tsx        # Hero section
+│   ├── Tour.tsx        # Tour modal
+│   ├── Capabilities.tsx # Features showcase
+│   ├── HowItWorks.tsx  # Process explanation
+│   ├── Benefits.tsx    # Outcomes section
+│   ├── Security.tsx    # Security features
+│   └── sections/       # Landing page sections
+├── webapp/             # Protected webapp area
 │   ├── page.tsx        # Main dashboard
+│   ├── layout.tsx      # WebApp layout with navigation
 │   ├── ingredients/    # Stock management
 │   ├── recipes/        # Recipe management
 │   ├── cogs/           # COG calculator
-│   └── settings/       # User settings
+│   ├── performance/    # Performance analysis
+│   ├── temperature/    # Temperature monitoring
+│   ├── cleaning/       # Cleaning management
+│   ├── compliance/     # Compliance records
+│   ├── suppliers/      # Supplier management
+│   ├── dish-sections/  # Menu sections
+│   ├── par-levels/     # Par level management
+│   ├── order-lists/    # Order lists
+│   ├── prep-lists/     # Prep lists
+│   ├── ai-specials/    # AI specials
+│   ├── recipe-sharing/ # Recipe sharing
+│   ├── settings/       # User settings
+│   ├── setup/          # Database setup
+│   └── components/     # WebApp components
+│       ├── ModernNavigation.tsx # Main navigation
+│       ├── DashboardStatsClient.tsx
+│       ├── DraftRecovery.tsx
+│       └── navigation/ # Navigation components
 ├── api/                # API routes
-│   ├── auth/           # Authentication endpoints
+│   ├── auth/           # NextAuth authentication endpoints
+│   ├── billing/        # Stripe billing
+│   ├── ingredients/    # Ingredients CRUD
+│   ├── recipes/        # Recipes CRUD
 │   ├── dashboard/      # Dashboard APIs
-│   └── webhook/stripe/ # Payment processing
+│   ├── performance/    # Performance analysis
+│   ├── temperature-*/  # Temperature endpoints
+│   ├── cleaning-*/     # Cleaning endpoints
+│   ├── compliance-*/   # Compliance endpoints
+│   ├── suppliers/      # Supplier endpoints
+│   ├── db/             # Database management
+│   └── webhook/        # Webhook handlers
 └── globals.css         # Global styles and CSS variables
 
 components/
 ├── ui/                 # Universal UI components
 │   ├── Button.tsx      # Universal button component
-│   ├── Input.tsx       # Universal input component
 │   ├── Card.tsx        # Universal card component
 │   ├── LoadingSkeleton.tsx # Loading skeleton components
-│   ├── ModernNavigation.tsx # Modern webapp navigation system
-│   ├── FloatingCTA.tsx # Floating CTA buttons
+│   ├── ErrorBoundary.tsx # Error boundary component
 │   ├── ScrollToTop.tsx # Scroll to top button
 │   └── ScrollProgress.tsx # Scroll progress indicator
-├── auth/               # Authentication components
-│   ├── LoginForm.tsx   # Login form
-│   ├── RegisterForm.tsx # Registration form
-│   └── EmailVerification.tsx # Email verification
-├── dashboard/          # Webapp components
-│   ├── DashboardLayout.tsx # Dashboard layout
-│   ├── IngredientsTable.tsx # Ingredients management
-│   ├── RecipeForm.tsx  # Recipe creation/editing
-│   └── COGCalculator.tsx # COG calculator
-├── paywall/            # Subscription components
-│   ├── PaywallOverlay.tsx # Paywall overlay
-│   └── SubscriptionManager.tsx # Subscription management
-├── variants/            # A/B testing variant components
+├── variants/           # A/B testing variant components
 │   ├── HeroVariants.tsx # Hero section variants (orchestrator)
 │   ├── HeroContent.tsx # Hero content rendering (title, subtitle)
 │   ├── HeroBullets.tsx # Hero bullet points rendering
@@ -170,28 +186,36 @@ components/
 │   └── PricingVariants.tsx # Pricing section variants
 ├── GoogleAnalytics.tsx # GA4 integration
 ├── GoogleTagManager.tsx # GTM integration
-├── ExitIntentTracker.tsx # User exit detection
 ├── ScrollTracker.tsx   # Scroll depth tracking
-└── PerformanceTracker.tsx # Core Web Vitals
+├── Arcade/             # Arcade/easter eggs
+├── EasterEggs/         # Easter egg games
+├── ErrorGame/          # Error page games
+└── Loading/            # Loading components
 
 lib/
-├── supabase.ts         # Supabase client
-├── auth.ts             # Authentication utilities
+├── supabase.ts         # Supabase client (database only)
+├── auth-options.ts    # NextAuth configuration
 ├── stripe.ts           # Payment integration
-├── email-service.ts    # Email service
 ├── analytics.ts        # Analytics service
-├── gtm-config.ts      # GTM configuration
 ├── ab-testing-analytics.ts # A/B testing system
-└── ingredients/        # Ingredient data normalization utilities
-    ├── normalizeIngredientData.ts      # Core parsing and unit normalization
-    ├── buildInsertData.ts              # Data builder for database inserts
-    └── normalizeIngredientDataMain.ts # Main orchestrator function
+├── cache/              # Caching utilities
+│   ├── data-cache.ts   # Generic data cache
+│   ├── prefetch-config.ts # Prefetch configuration
+│   └── recipe-cache.ts # Recipe-specific cache
+├── api/                # API utilities
+│   └── batch-utils.ts  # Batch fetching utilities
+├── ingredients/        # Ingredient data normalization utilities
+│   ├── normalizeIngredientData.ts      # Core parsing and unit normalization
+│   ├── buildInsertData.ts              # Data builder for database inserts
+│   └── normalizeIngredientDataMain.ts # Main orchestrator function
+├── personality/        # Personality system
+└── populate-helpers/    # Data population helpers
 
 hooks/
-├── useAuth.ts          # Authentication hook
-├── usePlatform.ts      # Platform detection
-├── useSubscription.ts  # Subscription management
-└── useResponsive.ts    # Responsive design
+├── useAutosave.ts      # Autosave hook
+├── useParallelFetch.ts # Parallel fetching hook
+├── useSessionTimeout.ts # Session timeout hook
+└── ...                 # Additional hooks as needed
 
 types/
 ├── auth.ts             # Authentication types
@@ -215,10 +239,11 @@ mobile/                 # React Native app (future)
 
 ### **Authentication Flow**
 
-- **Supabase Auth:** Email/password with JWT tokens
-- **Email Verification:** Required for account activation
-- **Session Management:** Secure token storage and refresh
-- **Role-Based Access:** User and admin permissions
+- **NextAuth + Auth0:** User authentication via NextAuth with Auth0 provider
+- **Supabase:** Database only (PostgreSQL) - not used for user authentication
+- **Session Management:** Secure token storage and refresh via NextAuth
+- **Allowlist Enforcement:** Middleware enforces email allowlist on `/webapp/**` and `/api/**` routes
+- **Role-Based Access:** User and admin permissions managed via Auth0
 
 ### **Subscription Management**
 
@@ -372,7 +397,6 @@ mobile/                 # React Native app (future)
 
 - **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Material Design 3 principles
 - **Mobile Navigation:** Material 3 navigation rail with proper spacing
-- **Floating CTAs:** Elevated buttons with shadow and hover effects
 - **Accessibility:** Focus rings, ARIA labels, keyboard navigation
 - **Smooth Transitions:** 200-300ms transitions for all interactions
 - **Touch Targets:** Minimum 44px for mobile, proper spacing
@@ -551,28 +575,18 @@ The application uses sessionStorage-based caching and intelligent prefetching to
 
 #### **Best Practices for Future Development**
 
-1. **Always batch related fetches**: When fetching multiple items, use batch endpoints
-2. **Use parallel fetching**: Independent requests should use `Promise.all()`
-3. **Non-blocking calculations**: Show UI immediately, calculate expensive operations in background
-4. **Implement fallbacks**: Always have fallback strategies if optimizations fail
-5. **Cache first page data**: Use sessionStorage for instant display on paginated lists
-6. **Prefetch on user intent**: Prefetch API endpoints when user hovers over navigation links
-7. **Initialize with cached data**: Use `getCachedData()` in useState initializer for instant display
-8. **Cache after fetch**: Always call `cacheData()` after successful data fetch
-9. **Monitor performance**: Use browser DevTools to identify sequential bottlenecks
-10. **Consider pagination**: For large datasets, implement pagination instead of fetching all items
+1. Always batch related fetches using batch endpoints
+2. Use parallel fetching with `Promise.all()` for independent requests
+3. Show UI immediately, calculate expensive operations in background
+4. Implement fallbacks for all optimizations
+5. Cache first page data using sessionStorage for instant display
+6. Prefetch API endpoints on navigation link hover
+7. Initialize state with cached data using `getCachedData()` in useState
+8. Cache after fetch: always call `cacheData()` after successful data fetch
+9. Monitor performance using browser DevTools
+10. Consider pagination for large datasets
 
-#### **Implementation Guidelines**
-
-When creating new features:
-
-1. **Identify N+1 patterns**: Look for loops that make sequential API calls
-2. **Create batch endpoints**: For fetching multiple related items
-3. **Use parallel hooks**: Leverage `useParallelFetch` for independent data
-4. **Implement caching**: Use `cacheData()` and `getCachedData()` for instant display
-5. **Add prefetching**: Add route to `PREFETCH_MAP` in `prefetch-config.ts`
-6. **Test performance**: Measure before/after to validate improvements
-7. **Document patterns**: Update this section with new optimization patterns
+**Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, test performance, document patterns.
 
 **Example Caching Pattern:**
 
@@ -675,14 +689,13 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 
 **ALL development work MUST follow this workflow to prevent code destruction:**
 
-1. **Create Feature Branch:** `git checkout -b improvement/feature-name`
-2. **Implement & Test:** Make incremental changes and test each change
-3. **Commit Changes:** `git add -A && git commit -m "feat: descriptive message"`
-4. **Test Branch:** Verify all functionality works on the branch
-5. **Merge to Main:** `git checkout main && git merge improvement/feature-name`
-6. **Test Main:** Verify functionality on main branch
-7. **Create Next Branch:** Start new branch for next improvement
-8. **Push Changes:** `git push origin main` when ready
+1. Create feature branch: `git checkout -b improvement/feature-name`
+2. Implement & test incrementally
+3. Commit changes: `git add -A && git commit -m "feat: descriptive message"`
+4. Test branch functionality
+5. Merge to main: `git checkout main && git merge improvement/feature-name`
+6. Test main branch
+7. Push changes: `git push origin main`
 
 **NEVER work directly on main branch for improvements!**
 
@@ -718,13 +731,11 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 
 **Refactoring Workflow:**
 
-1. **Create refactoring branch:** `git checkout -b refactor/component-name`
-2. **Analyze current structure:** Identify logical separation points
-3. **Create new files:** Components, hooks, types, utilities
-4. **Update imports:** Fix all import statements
-5. **Test thoroughly:** Ensure functionality remains intact
-6. **Update documentation:** Keep AGENTS.md current
-7. **Merge and clean:** Merge to main, delete old files
+1. Create refactoring branch: `git checkout -b refactor/component-name`
+2. Analyze structure and identify separation points
+3. Create new files (components, hooks, types, utilities)
+4. Update imports and test thoroughly
+5. Update documentation and merge to main
 
 **Example Refactoring Pattern:**
 
@@ -935,7 +946,7 @@ const nextConfig: NextConfig = {
 
 ### **Conversion Optimization**
 
-- **Floating CTAs:** FloatingCTA component appears after 50% scroll
+- **Lead Generation:** ExitIntentPopup with lead magnet offer
 - **Dual CTA Strategy:** Main purchase + free sample options
 - **Strategic Placement:** CTAs positioned for maximum engagement
 - **Engagement Tracking:** Analytics for CTA performance optimization
@@ -1062,17 +1073,14 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 
 ### **Immediate Fixes Required**
 
-1. **Lead Magnet Form:** Currently non-functional, needs email capture
-2. **Image Optimization:** Large images without proper sizing
-3. **Legal Pages:** Privacy Policy and Terms of Service missing
-4. **Performance:** Core Web Vitals optimization needed
+1. **Image Optimization:** Large images without proper sizing
+2. **Performance:** Core Web Vitals optimization needed
 
 ### **Conversion Blockers**
 
-1. **No Exit-Intent Capture:** Users leaving without lead capture
-2. **Form Validation:** No error handling or success states
-3. **Trust Indicators:** Missing security badges and company info
-4. **Urgency Elements:** No real countdown or scarcity triggers
+1. **Form Validation:** Error handling and success states needed
+2. **Trust Indicators:** Security badges and company info
+3. **Urgency Elements:** Countdown or scarcity triggers
 
 ### **UX Improvements Completed ✅**
 
@@ -1081,7 +1089,7 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 3. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
 4. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Material Design 3 styling across the entire webapp
 5. **Modern Navigation System:** Collapsible sidebar with organized categories and smart search
-6. **Floating CTAs:** Strategic CTA placement for better conversion
+6. **Lead Generation:** ExitIntentPopup with lead magnet offer
 7. **Accessibility:** Focus management and keyboard navigation
 8. **Smooth Scrolling:** Enhanced navigation with progress indicators
 9. **Visual Feedback:** Hover effects and smooth transitions
@@ -1101,7 +1109,7 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 
 **Core Infrastructure:**
 
-1. **Unified Project Structure** - Next.js 15.4.6 with React 19 (App Router)
+1. **Unified Project Structure** - Next.js 16.0.0 with React 19 (App Router)
 2. **Supabase Integration** - Database connection and API keys configured
 3. **Authentication System** - NextAuth + Auth0 with allowlist enforcement
 4. **Billing System** - Stripe integration with checkout and portal sessions
@@ -1142,9 +1150,9 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 
 #### **📊 Database Population Complete**
 
-- **🧽 Cleaning Areas**: 24 areas (Kitchen Floor, Prep Station, Storage Area, etc.)
-- **🚚 Suppliers**: 20 suppliers (Fresh Produce Co, Meat Suppliers, Dairy Direct, etc.)
-- **🌡️ Temperature Equipment**: 76 pieces of equipment (Refrigerators, Freezers, Hot Holding, etc.)
+- **🧽 Cleaning Areas**: 24 areas
+- **🚚 Suppliers**: 20 suppliers
+- **🌡️ Temperature Equipment**: 76 pieces of equipment
 - **🍽️ Menu Dishes**: 16 dishes (linked to recipes)
 - **📖 Recipes**: 14 recipes with full instructions
 - **🥬 Ingredients**: 95 ingredients with cost data
@@ -1152,36 +1160,11 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 #### **🔧 Technical Improvements**
 
 1. **Database Structure**: Fixed table schema and column naming issues
-2. **API Endpoints**: All endpoints tested and working correctly
+2. **API Endpoints**: All endpoints tested and working correctly (43 endpoints)
 3. **Component Architecture**: Split large components (Recipes: 1,670 → 673 lines, COGS: 1,634 → 459 lines)
 4. **Error Boundaries**: Implemented React error boundaries for better error handling
 5. **Loading States**: Comprehensive skeleton system with Material Design 3 compliance
 6. **Modern Navigation Experience**: Touch-friendly navigation and responsive charts
-
-#### **🎉 Database Population Success (Latest Update)**
-
-**Date**: January 2025
-**Status**: ✅ COMPLETE
-
-**What Was Accomplished:**
-
-- **Table Structure Fix**: Resolved schema mismatches and missing columns
-- **Data Population**: Successfully populated all tables with realistic test data
-- **API Fixes**: Updated API endpoints to use correct column names
-- **Testing**: All API endpoints tested and working correctly
-
-**Data Summary:**
-
-- **Total Records**: 245+ records across 6 main tables
-- **API Endpoints**: 15+ endpoints tested and functional
-- **Error Rate**: 0% - All endpoints working without errors
-
-**Technical Details:**
-
-- Fixed column name mismatches (`name` → `area_name`, `supplier_name`, etc.)
-- Created comprehensive test data population API
-- Implemented proper error handling and validation
-- All tables now have proper structure and relationships
 
 #### **📋 Next Steps**
 
@@ -1221,11 +1204,7 @@ The following unused components have been removed to reduce bundle size and impr
 - **Bundle Optimization:** Webpack chunk splitting for vendors, analytics, Supabase, React
 - **Code Splitting:** Route-based code splitting with dynamic imports
 
-**React Optimization Usage:**
-
-- **React.memo:** 214 instances across 63 files for component memoization
-- **useMemo/useCallback:** Extensive usage for expensive computations and callbacks
-- **Optimization Patterns:** Proper dependency arrays, stable references, memoized selectors
+**React Optimization:** React.memo (214 instances), useMemo/useCallback for expensive computations, proper dependency arrays and stable references
 
 ### **Development Workflow & Standards**
 
@@ -1343,9 +1322,11 @@ prepflow-landing/
 │   ├── variants/                  # A/B testing variants
 │   └── ...
 ├── lib/
-│   ├── supabase.ts                # Supabase client
+│   ├── supabase.ts                # Supabase client (database only)
 │   ├── auth-options.ts            # NextAuth configuration
 │   ├── stripe.ts                  # Stripe integration
+│   ├── analytics.ts               # Analytics service
+│   ├── ab-testing-analytics.ts    # A/B testing system
 │   ├── cache/                     # Caching utilities
 │   │   ├── data-cache.ts          # Generic data cache
 │   │   ├── prefetch-config.ts     # Prefetch configuration
@@ -1360,7 +1341,7 @@ prepflow-landing/
 │   ├── useAutosave.ts             # Autosave hook
 │   ├── useParallelFetch.ts       # Parallel fetching hook
 │   ├── useSessionTimeout.ts      # Session timeout hook
-│   └── ...
+│   └── ...                        # Additional hooks
 └── .env.local                     # Environment variables
 ```
 
@@ -1534,14 +1515,9 @@ if (error) {
 
 1. **🚨 MANDATORY: Create feature branch** - Never work directly on main
 2. **🚨 MANDATORY: Check file sizes** - Refactor if any file exceeds limits
-3. **Test locally first** - Always test changes locally
-4. **Check environment variables** - Ensure all keys are loaded
-5. **Verify database connection** - Test Supabase connectivity
-6. **Test API endpoints** - Use curl or Postman for testing
-7. **Commit and test branch** - Verify functionality before merging
-8. **Merge to main and test** - Ensure stability after merge
-9. **Update documentation** - Keep AGENTS.md current with changes
-10. **Clean up refactored files** - Delete old files after successful refactoring
+3. Test locally first, check environment variables, verify database connection
+4. Test API endpoints, commit and test branch before merging
+5. Merge to main, test, update documentation, clean up refactored files
 
 #### **Current Known Issues & Solutions**
 
