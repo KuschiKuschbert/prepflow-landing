@@ -1,21 +1,20 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import GlobalWarning from '@/components/GlobalWarning';
+import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
 import ReactQueryProvider from '@/components/ReactQueryProvider';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning';
+import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { useTranslation } from '@/lib/useTranslation';
 import { Inter } from 'next/font/google';
+import React, { useEffect, useState } from 'react';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider } from '../../contexts/GlobalWarningContext';
 import { NotificationProvider } from '../../contexts/NotificationContext';
 import '../globals.css';
-import ModernNavigation from './components/ModernNavigation';
 import { DraftRecovery } from './components/DraftRecovery';
-import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
-import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning';
-import { useSessionTimeout } from '@/hooks/useSessionTimeout';
-import ErrorBoundary from '@/components/ui/ErrorBoundary';
-import { isTouchDevice } from '@/lib/arcadeGuards';
+import ModernNavigation from './components/ModernNavigation';
 import { PersonalityScheduler } from './components/PersonalityScheduler';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -102,7 +101,7 @@ export default function WebAppLayout({
             <PersonalityScheduler />
 
             {/* Main Content */}
-            <main className="bg-[#0a0a0a] pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] md:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))]">
+            <main className="bg-[#0a0a0a] pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1.25rem)] pb-20 md:ml-64 md:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top)+1.5rem)] md:pb-0">
               <ReactQueryProvider>{children}</ReactQueryProvider>
             </main>
 

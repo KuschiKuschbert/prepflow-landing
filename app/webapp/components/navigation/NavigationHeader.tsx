@@ -70,35 +70,6 @@ export function NavigationHeader({
     >
       <div className="flex items-center justify-between px-3 py-2 md:px-4">
         <div className="flex items-center space-x-2 md:space-x-3">
-          <button
-            ref={menuButtonRef}
-            onClick={onMenuClick}
-            className={cn(
-              'rounded-lg',
-              'p-1.5',
-              'min-h-[44px]',
-              'min-w-[44px]',
-              'transition-colors',
-              'hover:bg-[#2a2a2a]/50',
-            )}
-            aria-label="Toggle navigation sidebar"
-            aria-controls="app-sidebar"
-            aria-expanded={isSidebarOpen}
-          >
-            <svg
-              className="h-5 w-5 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
           <div className="flex items-center space-x-2">
             <Link
               href="/webapp"

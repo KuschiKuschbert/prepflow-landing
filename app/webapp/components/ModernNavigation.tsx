@@ -4,8 +4,11 @@ import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
 import { useNavigationItems } from './navigation/nav-items';
 import { SearchModal } from './navigation/SearchModal';
-import { Sidebar } from './navigation/Sidebar';
 import { NavigationHeader } from './navigation/NavigationHeader';
+import { BottomNavBar } from './navigation/BottomNavBar';
+import { MoreDrawer } from './navigation/MoreDrawer';
+import { PersistentSidebar } from './navigation/PersistentSidebar';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
 import { useLogoInteractions } from '@/hooks/useLogoInteractions';
@@ -33,11 +36,13 @@ interface ModernNavigationProps {
 const ModernNavigation = memo(function ModernNavigation({ className = '' }: ModernNavigationProps) {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const sidebarRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  // Detect if we're on desktop (768px+)
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // Logo interactions hook
   const {
@@ -65,44 +70,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     item.label.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  // Group items by category
-  const groupedItems = filteredItems.reduce(
-    (acc, item) => {
-      const category = item.category || 'other';
-      if (!acc[category]) acc[category] = [];
-      acc[category].push(item);
-      return acc;
-    },
-    {} as Record<string, NavigationItem[]>,
-  );
-
-  // Close sidebar when clicking/touching outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        setIsSidebarOpen(false);
-      }
-    };
-
-    // Support both mouse and touch events for mobile compatibility
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, []);
-
-  // Focus management: when closing sidebar, move focus back to menu button
-  useEffect(() => {
-    if (!isSidebarOpen) {
-      const active = document.activeElement as HTMLElement | null;
-      if (active && sidebarRef.current && sidebarRef.current.contains(active)) {
-        menuButtonRef.current?.focus();
-      }
-    }
-  }, [isSidebarOpen]);
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -113,8 +80,11 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             setIsSearchOpen(true);
             break;
           case 'b':
-            event.preventDefault();
-            setIsSidebarOpen(!isSidebarOpen);
+            // Toggle sidebar collapse on desktop (if we add that feature)
+            // For now, just prevent default
+            if (isDesktop) {
+              event.preventDefault();
+            }
             break;
         }
       }
@@ -122,7 +92,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isSidebarOpen]);
+  }, [isDesktop]);
 
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
@@ -134,8 +104,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       <NavigationHeader
         className={className}
         menuButtonRef={menuButtonRef}
-        onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        isSidebarOpen={isSidebarOpen}
+        onMenuClick={() => {}} // No burger menu anymore
+        isSidebarOpen={false}
         onSearchClick={() => setIsSearchOpen(true)}
         isSearchOpen={isSearchOpen}
         pathname={pathname}
@@ -150,14 +120,23 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         shouldPreventNavigation={shouldPreventNavigation}
       />
 
-      {/* Sidebar Navigation */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        sidebarRef={sidebarRef}
-        grouped={groupedItems}
-        isActive={isActive}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+      {/* Desktop: Persistent Sidebar */}
+      {isDesktop && <PersistentSidebar />}
+
+      {/* Mobile: Bottom Navigation Bar */}
+      {!isDesktop && <BottomNavBar onMoreClick={() => setIsMoreDrawerOpen(true)} />}
+
+      {/* Mobile: More Drawer */}
+      {!isDesktop && (
+        <MoreDrawer
+          isOpen={isMoreDrawerOpen}
+          onClose={() => setIsMoreDrawerOpen(false)}
+          onSearchClick={() => {
+            setIsMoreDrawerOpen(false);
+            setIsSearchOpen(true);
+          }}
+        />
+      )}
 
       {/* Search Modal */}
       <SearchModal
@@ -167,16 +146,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         onClose={() => setIsSearchOpen(false)}
         filtered={filteredItems}
       />
-
-      {/* Overlay */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm"
-          onClick={() => setIsSidebarOpen(false)}
-          onTouchStart={() => setIsSidebarOpen(false)}
-          aria-hidden="true"
-        />
-      )}
 
       {/* Tomato Toss Easter Egg */}
       {showTomatoToss && <TomatoToss onClose={() => setShowTomatoToss(false)} />}
