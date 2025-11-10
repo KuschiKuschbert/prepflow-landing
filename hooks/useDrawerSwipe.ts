@@ -111,14 +111,18 @@ export function useDrawerSwipe({
     setDragProgress(0);
 
     // When at top, enable gesture detection for both upward (close) and downward (swipe)
+    // Allow downward swipe anywhere when at top, not just in drag area
     if (atTop) {
       setIsDragging(true);
-      setCanDrag(touchRelativeToDrawer < contentTopDragArea);
+      // Enable dragging everywhere when at top so user can pull down from any element
+      setCanDrag(true);
       setDragY(0);
       setVelocity(0);
     } else {
-      setCanDrag(false);
-      setIsDragging(false);
+      // Not at top - only enable dragging in the top drag area
+      const inDragArea = touchRelativeToDrawer < contentTopDragArea;
+      setIsDragging(inDragArea);
+      setCanDrag(inDragArea);
     }
   };
 
