@@ -4,6 +4,7 @@ import './globals.css';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // cleaned: Removed performance trackers on request
 import GoogleAnalytics from '../components/GoogleAnalytics';
@@ -116,6 +117,7 @@ export default function RootLayout({
           <Providers>{children}</Providers>
 
           <Analytics />
+          <SpeedInsights />
 
           {/* Analytics and tracking - gated by env */}
           {process.env.NEXT_PUBLIC_ENABLE_GA === 'true' && (

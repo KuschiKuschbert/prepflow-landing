@@ -56,7 +56,8 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
                 <div className="mb-2 text-4xl">⏰</div>
                 <h2 className="mb-2 text-2xl font-bold text-white">Session Timeout Warning</h2>
                 <p className="text-gray-400">
-                  You've been inactive for a while. You'll be logged out soon for security.
+                  You&apos;ve been inactive for a while. You&apos;ll be logged out soon for
+                  security.
                 </p>
               </div>
 

@@ -47,7 +47,7 @@ export default function NotAuthorizedPage() {
       <h1 className="mb-4 text-4xl font-extrabold">403 — Not Authorized</h1>
       <p className="mb-6 text-center text-gray-300">
         This kitchen is for staff only. Need to sign in or create a new account? Grab your apron and
-        let's get you set up.
+        let&apos;s get you set up.
       </p>
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <button

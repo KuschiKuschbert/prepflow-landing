@@ -136,7 +136,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                 className="mt-6 rounded-xl border border-[#4CAF50]/30 bg-[#4CAF50]/10 p-4 text-center"
               >
                 <p className="text-sm text-[#4CAF50]">
-                  🎉 You've reached milestone achievements! Keep it up!
+                  🎉 You&apos;ve reached milestone achievements! Keep it up!
                 </p>
               </motion.div>
             )}

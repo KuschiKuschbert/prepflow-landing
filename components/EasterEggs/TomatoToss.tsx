@@ -210,7 +210,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             >
               <div className="rounded-xl border border-[#29E7CD] bg-[#29E7CD]/10 px-6 py-4">
                 <p className="text-lg font-semibold text-[#29E7CD]">
-                  Time's up! You threw {throws} tomatoes! 🍅
+                  Time&apos;s up! You threw {throws} tomatoes! 🍅
                 </p>
               </div>
             </motion.div>

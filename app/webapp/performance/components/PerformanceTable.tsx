@@ -33,7 +33,7 @@ export default function PerformanceTable({ performanceItems }: PerformanceTableP
         <div className="flex flex-wrap gap-3 text-xs">
           <div className="flex items-center gap-2">
             <span className="flex h-3 w-3 rounded-full border border-green-500/30 bg-green-500/20"></span>
-            <span className="text-gray-300">Chef's Kiss: High profit & high popularity</span>
+            <span className="text-gray-300">Chef&apos;s Kiss: High profit & high popularity</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="flex h-3 w-3 rounded-full border border-blue-500/30 bg-blue-500/20"></span>

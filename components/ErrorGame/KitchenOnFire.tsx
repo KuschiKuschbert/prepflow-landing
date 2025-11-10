@@ -89,7 +89,7 @@ const KitchenOnFire: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mb-4 text-4xl font-extrabold md:text-5xl"
                 >
-                  Uh oh! The kitchen's on fire 🔥
+                  Uh oh! The kitchen&apos;s on fire 🔥
                 </motion.h1>
 
                 <motion.p
