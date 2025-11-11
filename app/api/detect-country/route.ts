@@ -7,7 +7,7 @@ import { detectCountryFromLocale } from '@/lib/country-config';
 export async function GET(request: NextRequest) {
   try {
     // Vercel automatically provides geolocation headers
-    const countryCode = request.headers.get('x-vercel-ip-country') || request.geo?.country || null;
+    const countryCode = request.headers.get('x-vercel-ip-country') || null;
 
     // Fallback to browser locale if IP detection fails
     const acceptLanguage = request.headers.get('accept-language');
