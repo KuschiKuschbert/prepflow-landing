@@ -81,9 +81,6 @@ export default function IngredientFilters({
             <optgroup label="Volume">
               <option value="ml">Milliliters (ml)</option>
               <option value="l">Liters (L)</option>
-              <option value="tsp">Teaspoons (tsp)</option>
-              <option value="tbsp">Tablespoons (tbsp)</option>
-              <option value="cup">Cups</option>
             </optgroup>
           </select>
         </div>
