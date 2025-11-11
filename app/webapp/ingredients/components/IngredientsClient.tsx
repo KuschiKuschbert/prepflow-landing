@@ -16,9 +16,8 @@ import CSVImportModal from './CSVImportModal';
 import IngredientActions from './IngredientActions';
 import IngredientEditModal from './IngredientEditModal';
 import IngredientPagination from './IngredientPagination';
-import IngredientTable from './IngredientTable';
+import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-import ModernIngredientFilters from './ModernIngredientFilters';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useRegionalUnits } from '../hooks/useRegionalUnits';
@@ -55,11 +54,10 @@ interface Supplier {
 function extractSupabaseError(error: unknown): string {
   if (error && typeof error === 'object' && 'message' in error) {
     const err = error as { message?: string; details?: string; hint?: string };
-    let msg = err.message || err.details || err.hint || 'Failed to update ingredient';
-    if (err.details && err.details !== err.message) {
-      msg = `${err.message || 'Update failed'}: ${err.details}`;
-    }
-    if (err.hint && err.hint !== err.details) msg += ` (${err.hint})`;
+    const msg = err.message || err.details || err.hint || 'Failed to update ingredient';
+    if (err.details && err.details !== err.message)
+      return `${err.message || 'Update failed'}: ${err.details}`;
+    if (err.hint && err.hint !== err.details) return `${msg} (${err.hint})`;
     return msg;
   }
   return error instanceof Error ? error.message : 'Failed to update ingredient';
@@ -163,7 +161,9 @@ export default function IngredientsClient() {
     await handleCSVImportAction(parsedIngredients);
     setImporting(false);
   };
+
   if (loading || isLoading) return <PageSkeleton />;
+
   const total = ingredientsData?.total || 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const translateText = (key: string, fallback: string): string => {
@@ -213,30 +213,24 @@ export default function IngredientsClient() {
         />
       )}
 
-      {/* Modern Embedded Filters */}
-      <ModernIngredientFilters
-        ingredients={ingredients}
+      {/* Integrated Table with Filters */}
+      <IngredientTableWithFilters
+        ingredients={filteredIngredients}
+        displayUnit={displayUnit}
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
         storageFilter={storageFilter}
         sortBy={sortBy}
-        displayUnit={displayUnit}
+        selectedIngredients={selectedIngredients}
+        onEdit={setEditingIngredient}
+        onDelete={handleDeleteIngredient}
+        onSelectIngredient={handleSelectIngredient}
+        onSelectAll={handleSelectAll}
         onSearchChange={setSearchTerm}
         onSupplierFilterChange={setSupplierFilter}
         onStorageFilterChange={setStorageFilter}
         onSortChange={setSortBy}
         onDisplayUnitChange={setDisplayUnit}
-      />
-
-      {/* Ingredients Table */}
-      <IngredientTable
-        ingredients={filteredIngredients}
-        displayUnit={displayUnit}
-        onEdit={setEditingIngredient}
-        onDelete={handleDeleteIngredient}
-        selectedIngredients={selectedIngredients}
-        onSelectIngredient={handleSelectIngredient}
-        onSelectAll={handleSelectAll}
         loading={loading}
       />
 
@@ -266,9 +260,14 @@ export default function IngredientsClient() {
               })
               .eq('id', editingIngredient.id)
               .select()
-              .single();
+              .maybeSingle();
 
             if (error) throw new Error(extractSupabaseError(error));
+            if (!data) {
+              setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
+              setEditingIngredient(null);
+              return;
+            }
             setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? data : ing)));
             setEditingIngredient(null);
           } catch (error) {
