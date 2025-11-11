@@ -153,17 +153,40 @@ export function useAutosave({
         throw new Error(result.error || 'Failed to save');
       }
     } catch (err) {
-      // Extract detailed error message with better error handling
-      let errorMessage = 'Unknown error';
-      if (err instanceof Error) {
-        errorMessage = err.message;
-      } else if (err && typeof err === 'object' && 'message' in err) {
-        errorMessage = String(err.message);
+      // Extract detailed error message with comprehensive error handling
+      let errorMessage = 'Failed to save changes';
+
+      // Handle Supabase PostgrestError and other structured errors
+      if (err && typeof err === 'object') {
+        const errorObj = err as Record<string, unknown>;
+
+        // Supabase errors have message, details, hint, and code
+        if (errorObj.message) {
+          errorMessage = String(errorObj.message);
+          // Add details if available
+          if (errorObj.details && String(errorObj.details).trim()) {
+            errorMessage += `: ${errorObj.details}`;
+          }
+          // Add hint if available
+          if (errorObj.hint && String(errorObj.hint).trim()) {
+            errorMessage += ` (${errorObj.hint})`;
+          }
+        } else if (errorObj.details) {
+          errorMessage = String(errorObj.details);
+        } else if (errorObj.hint) {
+          errorMessage = String(errorObj.hint);
+        } else if ('code' in errorObj && errorObj.code) {
+          errorMessage = `Database error (${String(errorObj.code)})`;
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message || 'Failed to save changes';
       } else if (typeof err === 'string') {
         errorMessage = err;
       }
 
+      // Log full error for debugging
       console.error(`Autosave error for ${entityType}/${entityId}:`, err);
+      console.error('Full error object:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
 
       setStatus('error');
       setError(errorMessage);

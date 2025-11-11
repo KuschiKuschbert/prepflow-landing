@@ -14,15 +14,14 @@ import { useIngredientsQuery } from '../hooks/useIngredientsQuery';
 import { useIngredientMigration } from '../hooks/useIngredientMigration';
 import CSVImportModal from './CSVImportModal';
 import IngredientActions from './IngredientActions';
-import IngredientFilters from './IngredientFilters';
 import IngredientEditModal from './IngredientEditModal';
 import IngredientPagination from './IngredientPagination';
 import IngredientTable from './IngredientTable';
 import IngredientWizard from './IngredientWizard';
+import ModernIngredientFilters from './ModernIngredientFilters';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useRegionalUnits } from '../hooks/useRegionalUnits';
-import { DisplayUnitSelect } from './DisplayUnitSelect';
 
 interface Ingredient {
   id: string;
@@ -48,9 +47,22 @@ interface Ingredient {
 
 interface Supplier {
   id: string;
-  supplier_name?: string; // Actual column name in database
-  name?: string; // Fallback for compatibility
+  supplier_name?: string;
+  name?: string;
   created_at?: string;
+}
+
+function extractSupabaseError(error: unknown): string {
+  if (error && typeof error === 'object' && 'message' in error) {
+    const err = error as { message?: string; details?: string; hint?: string };
+    let msg = err.message || err.details || err.hint || 'Failed to update ingredient';
+    if (err.details && err.details !== err.message) {
+      msg = `${err.message || 'Update failed'}: ${err.details}`;
+    }
+    if (err.hint && err.hint !== err.details) msg += ` (${err.hint})`;
+    return msg;
+  }
+  return error instanceof Error ? error.message : 'Failed to update ingredient';
 }
 
 export default function IngredientsClient() {
@@ -151,9 +163,7 @@ export default function IngredientsClient() {
     await handleCSVImportAction(parsedIngredients);
     setImporting(false);
   };
-  if (loading || isLoading) {
-    return <PageSkeleton />;
-  }
+  if (loading || isLoading) return <PageSkeleton />;
   const total = ingredientsData?.total || 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const translateText = (key: string, fallback: string): string => {
@@ -170,7 +180,6 @@ export default function IngredientsClient() {
           'Manage your kitchen ingredients and inventory',
         )}
         icon="🥘"
-        actions={<DisplayUnitSelect value={displayUnit} onChange={setDisplayUnit} />}
       />
 
       {error && (
@@ -204,8 +213,8 @@ export default function IngredientsClient() {
         />
       )}
 
-      {/* Filters */}
-      <IngredientFilters
+      {/* Modern Embedded Filters */}
+      <ModernIngredientFilters
         ingredients={ingredients}
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
@@ -259,14 +268,13 @@ export default function IngredientsClient() {
               .select()
               .single();
 
-            if (error) throw error;
-
-            // Update local state
+            if (error) throw new Error(extractSupabaseError(error));
             setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? data : ing)));
             setEditingIngredient(null);
           } catch (error) {
             console.error('Error updating ingredient:', error);
-            setError('Failed to update ingredient');
+            setError(extractSupabaseError(error));
+            throw error;
           }
         }}
         onClose={() => setEditingIngredient(null)}

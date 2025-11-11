@@ -44,6 +44,31 @@ interface ConflictInfo {
 }
 
 /**
+ * Extract detailed error message from Supabase error
+ */
+function extractSupabaseErrorMessage(error: unknown, defaultMessage: string): string {
+  if (error && typeof error === 'object') {
+    const err = error as Record<string, unknown>;
+    if (err.message) {
+      let msg = String(err.message);
+      if (err.details && String(err.details).trim() && err.details !== err.message) {
+        msg += `: ${err.details}`;
+      }
+      if (err.hint && String(err.hint).trim() && err.hint !== err.details) {
+        msg += ` (${err.hint})`;
+      }
+      return msg;
+    }
+    if (err.details) return String(err.details);
+    if (err.hint) return String(err.hint);
+    if ('code' in err && err.code) return `Database error (${String(err.code)})`;
+  }
+  if (error instanceof Error) return error.message || defaultMessage;
+  if (typeof error === 'string') return error;
+  return defaultMessage;
+}
+
+/**
  * Sync a single draft to database
  */
 export async function syncToDatabase(
@@ -94,10 +119,12 @@ export async function syncToDatabase(
         .single();
 
       if (error) {
-        const errorMessage =
-          error.message || error.details || error.hint || 'Database update failed';
+        const errorMessage = extractSupabaseErrorMessage(error, 'Database update failed');
+        const errorCode = (error as { code?: string })?.code
+          ? ` (Code: ${(error as { code: string }).code})`
+          : '';
         console.error(`Supabase update error for ${entityType}/${entityId}:`, error);
-        throw new Error(`${errorMessage} (Code: ${error.code || 'unknown'})`);
+        throw new Error(`${errorMessage}${errorCode}`);
       }
       savedEntityId = updatedData?.id || entityId;
     } else {
@@ -109,10 +136,12 @@ export async function syncToDatabase(
         .single();
 
       if (error) {
-        const errorMessage =
-          error.message || error.details || error.hint || 'Database insert failed';
+        const errorMessage = extractSupabaseErrorMessage(error, 'Database insert failed');
+        const errorCode = (error as { code?: string })?.code
+          ? ` (Code: ${(error as { code: string }).code})`
+          : '';
         console.error(`Supabase insert error for ${entityType}/${entityId}:`, error);
-        throw new Error(`${errorMessage} (Code: ${error.code || 'unknown'})`);
+        throw new Error(`${errorMessage}${errorCode}`);
       }
       savedEntityId = newData?.id || entityId;
     }
@@ -132,21 +161,9 @@ export async function syncToDatabase(
     };
   } catch (error) {
     console.error(`Error syncing ${entityType} ${entityId}:`, error);
-
-    // Extract detailed error message
-    let errorMessage = 'Unknown error';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (error && typeof error === 'object' && 'message' in error) {
-      errorMessage = String(error.message);
-    } else if (typeof error === 'string') {
-      errorMessage = error;
-    }
-
-    return {
-      success: false,
-      error: errorMessage,
-    };
+    const errorMessage = extractSupabaseErrorMessage(error, 'Failed to save changes');
+    console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    return { success: false, error: errorMessage };
   }
 }
 

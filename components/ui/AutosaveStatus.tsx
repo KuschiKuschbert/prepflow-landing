@@ -66,7 +66,12 @@ export function AutosaveStatus({
 
       {status === 'error' && (
         <div className="flex items-center gap-2 rounded-lg bg-red-500/10 px-3 py-1.5 text-sm text-red-400">
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="h-4 w-4 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -74,11 +79,13 @@ export function AutosaveStatus({
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-          <span className="mr-2">{error || 'Save failed'}</span>
+          <span className="mr-2 max-w-md truncate" title={error || 'Save failed'}>
+            {error || 'Save failed'}
+          </span>
           {onRetry && (
             <button
               onClick={onRetry}
-              className="rounded px-2 py-0.5 text-xs font-medium hover:bg-red-500/20"
+              className="flex-shrink-0 rounded px-2 py-0.5 text-xs font-medium hover:bg-red-500/20 focus:ring-2 focus:ring-red-500/50 focus:outline-none"
               aria-label="Retry save"
             >
               Retry
