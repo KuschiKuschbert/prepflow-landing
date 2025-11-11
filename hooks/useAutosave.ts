@@ -153,7 +153,18 @@ export function useAutosave({
         throw new Error(result.error || 'Failed to save');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      // Extract detailed error message with better error handling
+      let errorMessage = 'Unknown error';
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (err && typeof err === 'object' && 'message' in err) {
+        errorMessage = String(err.message);
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      }
+
+      console.error(`Autosave error for ${entityType}/${entityId}:`, err);
+
       setStatus('error');
       setError(errorMessage);
 

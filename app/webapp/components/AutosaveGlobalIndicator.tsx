@@ -54,7 +54,12 @@ export function AutosaveGlobalIndicator() {
       <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
       <span>{label}</span>
       {status === 'error' && error && (
-        <span className="max-w-[140px] truncate text-[10px] text-gray-400">{error}</span>
+        <span
+          className="max-w-[200px] cursor-help truncate text-[10px] text-gray-400"
+          title={error}
+        >
+          {error}
+        </span>
       )}
     </span>
   );

@@ -93,7 +93,12 @@ export async function syncToDatabase(
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        const errorMessage =
+          error.message || error.details || error.hint || 'Database update failed';
+        console.error(`Supabase update error for ${entityType}/${entityId}:`, error);
+        throw new Error(`${errorMessage} (Code: ${error.code || 'unknown'})`);
+      }
       savedEntityId = updatedData?.id || entityId;
     } else {
       // Create new entity
@@ -103,7 +108,12 @@ export async function syncToDatabase(
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        const errorMessage =
+          error.message || error.details || error.hint || 'Database insert failed';
+        console.error(`Supabase insert error for ${entityType}/${entityId}:`, error);
+        throw new Error(`${errorMessage} (Code: ${error.code || 'unknown'})`);
+      }
       savedEntityId = newData?.id || entityId;
     }
 
@@ -122,9 +132,20 @@ export async function syncToDatabase(
     };
   } catch (error) {
     console.error(`Error syncing ${entityType} ${entityId}:`, error);
+
+    // Extract detailed error message
+    let errorMessage = 'Unknown error';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = String(error.message);
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    }
+
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: errorMessage,
     };
   }
 }
