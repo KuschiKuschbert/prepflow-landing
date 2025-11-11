@@ -15,7 +15,7 @@ import { useIngredientMigration } from '../hooks/useIngredientMigration';
 import CSVImportModal from './CSVImportModal';
 import IngredientActions from './IngredientActions';
 import IngredientFilters from './IngredientFilters';
-import IngredientForm from './IngredientForm';
+import IngredientEditModal from './IngredientEditModal';
 import IngredientPagination from './IngredientPagination';
 import IngredientTable from './IngredientTable';
 import IngredientWizard from './IngredientWizard';
@@ -238,42 +238,39 @@ export default function IngredientsClient() {
         onPageChange={setPage}
       />
 
-      {/* Edit Ingredient Form */}
-      {editingIngredient && (
-        <IngredientForm
-          ingredient={editingIngredient}
-          suppliers={suppliers}
-          availableUnits={AVAILABLE_UNITS}
-          onSave={async (ingredientData: Partial<Ingredient>) => {
-            if (!editingIngredient?.id) return;
+      {/* Edit Ingredient Modal */}
+      <IngredientEditModal
+        isOpen={!!editingIngredient}
+        ingredient={editingIngredient}
+        suppliers={suppliers}
+        availableUnits={AVAILABLE_UNITS}
+        onSave={async (ingredientData: Partial<Ingredient>) => {
+          if (!editingIngredient?.id) return;
 
-            try {
-              const { data, error } = await supabase
-                .from('ingredients')
-                .update({
-                  ...ingredientData,
-                  updated_at: new Date().toISOString(),
-                })
-                .eq('id', editingIngredient.id)
-                .select()
-                .single();
+          try {
+            const { data, error } = await supabase
+              .from('ingredients')
+              .update({
+                ...ingredientData,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', editingIngredient.id)
+              .select()
+              .single();
 
-              if (error) throw error;
+            if (error) throw error;
 
-              // Update local state
-              setIngredients(prev =>
-                prev.map(ing => (ing.id === editingIngredient.id ? data : ing)),
-              );
-              setEditingIngredient(null);
-            } catch (error) {
-              console.error('Error updating ingredient:', error);
-              setError('Failed to update ingredient');
-            }
-          }}
-          onCancel={() => setEditingIngredient(null)}
-          loading={loading}
-        />
-      )}
+            // Update local state
+            setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? data : ing)));
+            setEditingIngredient(null);
+          } catch (error) {
+            console.error('Error updating ingredient:', error);
+            setError('Failed to update ingredient');
+          }
+        }}
+        onClose={() => setEditingIngredient(null)}
+        loading={loading}
+      />
 
       {/* CSV Import Modal */}
       {showCSVImport && (

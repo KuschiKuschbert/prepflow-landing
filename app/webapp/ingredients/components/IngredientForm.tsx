@@ -85,11 +85,9 @@ export default function IngredientForm({
   });
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div>
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">
-          {ingredient ? 'Edit Ingredient' : 'Add Ingredient'}
-        </h2>
+        {!ingredient && <h2 className="text-2xl font-bold text-white">Add Ingredient</h2>}
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
 
