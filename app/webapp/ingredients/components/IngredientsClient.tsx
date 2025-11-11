@@ -21,7 +21,7 @@ import IngredientTable from './IngredientTable';
 import IngredientWizard from './IngredientWizard';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageHeader } from '../../components/static/PageHeader';
-import { AVAILABLE_UNITS } from './ingredient-units';
+import { useRegionalUnits } from '../hooks/useRegionalUnits';
 import { DisplayUnitSelect } from './DisplayUnitSelect';
 
 interface Ingredient {
@@ -63,6 +63,7 @@ export default function IngredientsClient() {
   const [storageFilter, setStorageFilter] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'cost_asc' | 'cost_desc' | 'supplier'>('name');
 
+  const { availableUnits } = useRegionalUnits();
   const { suppliers, loading, error, setError } = useIngredientData();
   const {
     showAddForm,
@@ -192,7 +193,7 @@ export default function IngredientsClient() {
       {showAddForm && (
         <IngredientWizard
           suppliers={suppliers}
-          availableUnits={AVAILABLE_UNITS}
+          availableUnits={availableUnits}
           onSave={handleAddIngredient}
           onCancel={() => {
             setShowAddForm(false);

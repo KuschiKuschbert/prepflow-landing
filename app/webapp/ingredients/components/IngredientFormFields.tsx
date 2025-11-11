@@ -192,31 +192,17 @@ export function IngredientFormFields({
         </div>
       </div>
 
-      {/* Waste and Yield */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div>
-          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-            Trim/Peel Waste (%)
-            <HelpTooltip content={getHelpText('trimWaste', true)} title="Trim/Peel Waste" />
-          </label>
-          <input
-            type="number"
-            step="0.1"
-            min="0"
-            max="100"
-            value={formData.trim_peel_waste_percentage || 0}
-            onChange={e =>
-              handleInputChange('trim_peel_waste_percentage', parseFloat(e.target.value) || 0)
-            }
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            placeholder="e.g., 10"
-          />
-        </div>
-
+      {/* Yield - Auto-calculates waste (waste = 100 - yield) */}
+      <div className="grid grid-cols-1 gap-6">
         <div>
           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
             Yield (%)
-            <HelpTooltip content={getHelpText('yield', true)} title="Yield" />
+            <HelpTooltip
+              content={
+                getHelpText('yield', true) + ' Waste is automatically calculated as 100% - Yield%.'
+              }
+              title="Yield"
+            />
           </label>
           <input
             type="number"
@@ -224,10 +210,20 @@ export function IngredientFormFields({
             min="0"
             max="100"
             value={formData.yield_percentage || 100}
-            onChange={e => handleInputChange('yield_percentage', parseFloat(e.target.value) || 100)}
+            onChange={e => {
+              const yieldValue = parseFloat(e.target.value) || 100;
+              const wasteValue = Math.max(0, 100 - yieldValue);
+              handleInputChange('yield_percentage', yieldValue);
+              handleInputChange('trim_peel_waste_percentage', wasteValue);
+            }}
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             placeholder="e.g., 90"
           />
+          {formData.yield_percentage !== undefined && formData.yield_percentage !== 100 && (
+            <p className="mt-1 text-xs text-gray-400">
+              Waste: {100 - (formData.yield_percentage || 100)}%
+            </p>
+          )}
         </div>
       </div>
 

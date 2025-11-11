@@ -3,10 +3,14 @@
 import { getArcadeStats } from '@/lib/arcadeStats';
 import React, { useEffect, useState } from 'react';
 import { PersonalitySettingsPanel } from './components/PersonalitySettingsPanel';
+import { useCountry } from '@/contexts/CountryContext';
+import { getAvailableCountries } from '@/lib/country-config';
 
 export default function SettingsPage() {
   const [busy, setBusy] = useState(false);
   const [arcadeStats, setArcadeStats] = useState(() => getArcadeStats());
+  const { selectedCountry, countryConfig, setCountry } = useCountry();
+  const availableCountries = getAvailableCountries();
 
   const request = async (path: string, method: 'GET' | 'POST') => {
     setBusy(true);
@@ -32,6 +36,44 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-3xl p-6 text-white">
       <h1 className="mb-4 text-3xl font-bold">Settings</h1>
+
+      {/* Country/Region Selection */}
+      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+        <h2 className="text-xl font-semibold">Region & Units</h2>
+        <p className="text-sm text-gray-300">
+          Select your country to automatically configure units (metric/imperial) and regional
+          settings.
+        </p>
+        <div>
+          <label htmlFor="country-select" className="mb-2 block text-sm font-medium text-gray-300">
+            Country
+          </label>
+          <select
+            id="country-select"
+            value={selectedCountry}
+            onChange={e => setCountry(e.target.value)}
+            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+          >
+            {availableCountries.map(country => (
+              <option key={country.code} value={country.code}>
+                {country.name} (
+                {country.unitSystem === 'metric'
+                  ? 'Metric (g/ml)'
+                  : country.unitSystem === 'imperial'
+                    ? 'Imperial (oz/lb)'
+                    : 'Mixed'}
+                )
+              </option>
+            ))}
+          </select>
+          <p className="mt-2 text-xs text-gray-400">
+            Current unit system: <span className="font-medium">{countryConfig.unitSystem}</span> •
+            Currency: {countryConfig.currency} • Tax: {countryConfig.taxName}{' '}
+            {(countryConfig.taxRate * 100).toFixed(1)}%
+          </p>
+        </div>
+      </div>
+
       <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
         <h2 className="text-xl font-semibold">Privacy controls</h2>
         <p className="text-gray-300">

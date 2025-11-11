@@ -131,18 +131,18 @@ export default function IngredientEditModal({
       {/* Backdrop with blur */}
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" />
 
-      {/* Modal Card */}
+      {/* Modal Card - Responsive */}
       <div
         ref={modalRef}
-        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300"
+        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[95vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300 sm:max-h-[90vh]"
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="ingredient-edit-modal-title"
       >
-        {/* Header with close button */}
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-6 py-4 backdrop-blur-sm">
-          <h2 id="ingredient-edit-modal-title" className="text-2xl font-bold text-white">
+        {/* Header with close button - Responsive */}
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-4 py-3 backdrop-blur-sm sm:px-6 sm:py-4">
+          <h2 id="ingredient-edit-modal-title" className="text-xl font-bold text-white sm:text-2xl">
             Edit Ingredient
           </h2>
           <button
@@ -161,9 +161,9 @@ export default function IngredientEditModal({
           </button>
         </div>
 
-        {/* Scrollable content */}
-        <div className="max-h-[calc(90vh-80px)] overflow-y-auto">
-          <div className="p-6">
+        {/* Scrollable content - Responsive */}
+        <div className="max-h-[calc(95vh-64px)] overflow-y-auto sm:max-h-[calc(90vh-80px)]">
+          <div className="p-4 sm:p-6">
             <IngredientForm
               ingredient={ingredient}
               suppliers={suppliers}

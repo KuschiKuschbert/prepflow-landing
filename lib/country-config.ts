@@ -12,6 +12,7 @@ export interface CountryConfig {
   };
   phoneFormat?: string;
   addressFormat?: string[];
+  unitSystem: 'metric' | 'imperial' | 'mixed'; // Metric (g/ml), Imperial (oz/lb), or Mixed (both)
 }
 
 export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
@@ -29,6 +30,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+61 X XXXX XXXX',
     addressFormat: ['Street Address', 'Suburb', 'State Postcode', 'Australia'],
+    unitSystem: 'metric',
   },
   US: {
     code: 'US',
@@ -44,6 +46,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+1 (XXX) XXX-XXXX',
     addressFormat: ['Street Address', 'City, State ZIP', 'United States'],
+    unitSystem: 'imperial',
   },
   GB: {
     code: 'GB',
@@ -59,6 +62,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+44 XXXX XXX XXX',
     addressFormat: ['Street Address', 'City', 'Postcode', 'United Kingdom'],
+    unitSystem: 'mixed',
   },
   DE: {
     code: 'DE',
@@ -74,6 +78,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+49 XXX XXXXXXX',
     addressFormat: ['Street Address', 'Postcode City', 'Germany'],
+    unitSystem: 'metric',
   },
   FR: {
     code: 'FR',
@@ -89,6 +94,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+33 X XX XX XX XX',
     addressFormat: ['Street Address', 'Postcode City', 'France'],
+    unitSystem: 'metric',
   },
   ES: {
     code: 'ES',
@@ -104,6 +110,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+34 XXX XXX XXX',
     addressFormat: ['Street Address', 'Postcode City', 'Spain'],
+    unitSystem: 'metric',
   },
   CA: {
     code: 'CA',
@@ -119,6 +126,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+1 (XXX) XXX-XXXX',
     addressFormat: ['Street Address', 'City, Province Postal Code', 'Canada'],
+    unitSystem: 'mixed',
   },
   NZ: {
     code: 'NZ',
@@ -134,6 +142,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+64 XX XXX XXXX',
     addressFormat: ['Street Address', 'Suburb', 'City Postcode', 'New Zealand'],
+    unitSystem: 'metric',
   },
   IT: {
     code: 'IT',
@@ -149,6 +158,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+39 XXX XXX XXXX',
     addressFormat: ['Street Address', 'Postcode City', 'Italy'],
+    unitSystem: 'metric',
   },
   NL: {
     code: 'NL',
@@ -164,6 +174,7 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
     },
     phoneFormat: '+31 XX XXX XXXX',
     addressFormat: ['Street Address', 'Postcode City', 'Netherlands'],
+    unitSystem: 'metric',
   },
 };
 
