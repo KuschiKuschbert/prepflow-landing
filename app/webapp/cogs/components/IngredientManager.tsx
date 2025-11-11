@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Ingredient, RecipeIngredient } from '../types';
+import { RecipeUnitSelect } from './RecipeUnitSelect';
 
 interface IngredientManagerProps {
   showAddIngredient: boolean;
@@ -232,39 +233,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
               </div>
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-300">📏 Unit</label>
-                <div className="relative">
-                  <select
-                    value={newIngredient.unit || 'kg'}
-                    onChange={e => onUnitChange(e.target.value)}
-                    className="w-full cursor-pointer appearance-none rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-                  >
-                    <option value="kg">kg</option>
-                    <option value="g">g</option>
-                    <option value="L">L</option>
-                    <option value="mL">mL</option>
-                    <option value="pcs">pcs</option>
-                    <option value="box">box</option>
-                    <option value="GM">GM</option>
-                    <option value="PC">PC</option>
-                    <option value="PACK">PACK</option>
-                    <option value="BAG">BAG</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                <RecipeUnitSelect value={newIngredient.unit || 'kg'} onChange={onUnitChange} />
               </div>
             </div>
 
