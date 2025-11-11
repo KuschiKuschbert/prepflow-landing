@@ -45,7 +45,7 @@ export const UNIT_GROUPS: UnitGroup[] = [
   },
 ];
 
-const ADDITIONAL_UNITS = ['pc', 'box', 'pack', 'bag', 'bottle', 'can'];
+const ADDITIONAL_UNITS = ['pc', 'box', 'pack', 'bag', 'bottle', 'can', 'bunch'];
 
 export const AVAILABLE_UNITS: string[] = [
   ...UNIT_GROUPS.flatMap(group => group.options.map(option => option.value)),

@@ -1,7 +1,16 @@
 // PrepFlow - Ingredient Data Normalization Utilities
 // Extracted from useIngredientCRUD.ts to meet file size limits
 
-import { convertUnit, isVolumeUnit, isWeightUnit } from '@/lib/unit-conversion';
+import {
+  convertUnit,
+  convertToStandardUnit,
+  isVolumeUnit,
+  isWeightUnit,
+  isPieceUnit,
+  getUnitCategory,
+  STANDARD_UNITS,
+  normalizeUnit,
+} from '@/lib/unit-conversion';
 import {
   formatIngredientName,
   formatBrandName,
@@ -46,6 +55,8 @@ export interface NormalizedIngredientData {
   yield_percentage?: number;
   min_stock_level?: number;
   current_stock?: number;
+  standard_unit?: string;
+  original_unit?: string;
 }
 
 export function parseNumeric(value: string | number | undefined, defaultValue: number): number {
@@ -81,31 +92,47 @@ export function normalizeUnitAndCosts(
   costPerUnitAsPurchased: number;
   costPerUnitInclTrim: number;
 } {
-  let unit = inputUnit.toUpperCase();
-  let normalizedCostPerUnit = costPerUnit;
-  let normalizedCostPerUnitAsPurchased = costPerUnitAsPurchased;
-  let normalizedCostPerUnitInclTrim = costPerUnitInclTrim;
+  const normalizedInput = normalizeUnit(inputUnit);
+  const category = getUnitCategory(normalizedInput);
 
-  if (isWeightUnit(inputUnit.toLowerCase()) && unit !== 'GM') {
-    const conversion = convertUnit(1, inputUnit.toLowerCase(), 'g');
-    unit = 'GM';
-    const divisor = conversion.value;
-    normalizedCostPerUnit = costPerUnit / divisor;
-    normalizedCostPerUnitAsPurchased = costPerUnitAsPurchased / divisor;
-    normalizedCostPerUnitInclTrim = costPerUnitInclTrim / divisor;
-  } else if (isVolumeUnit(inputUnit.toLowerCase()) && unit !== 'ML') {
-    const conversion = convertUnit(1, inputUnit.toLowerCase(), 'ml');
-    unit = 'ML';
-    const divisor = conversion.value;
-    normalizedCostPerUnit = costPerUnit / divisor;
-    normalizedCostPerUnitAsPurchased = costPerUnitAsPurchased / divisor;
-    normalizedCostPerUnitInclTrim = costPerUnitInclTrim / divisor;
+  // Determine standard unit based on category
+  let standardUnit: string;
+  switch (category) {
+    case 'weight':
+      standardUnit = STANDARD_UNITS.WEIGHT.toUpperCase();
+      break;
+    case 'volume':
+      standardUnit = STANDARD_UNITS.VOLUME.toUpperCase();
+      break;
+    case 'piece':
+      standardUnit = STANDARD_UNITS.PIECE.toUpperCase();
+      break;
+    default:
+      standardUnit = STANDARD_UNITS.PIECE.toUpperCase();
   }
 
+  // If already in standard unit, no conversion needed
+  if (
+    (category === 'weight' && normalizedInput === 'g') ||
+    (category === 'volume' && normalizedInput === 'ml') ||
+    (category === 'piece' && normalizedInput === 'pc')
+  ) {
+    return {
+      unit: standardUnit,
+      costPerUnit,
+      costPerUnitAsPurchased,
+      costPerUnitInclTrim,
+    };
+  }
+
+  // Convert to standard unit
+  const conversion = convertToStandardUnit(1, normalizedInput);
+  const divisor = conversion.value;
+
   return {
-    unit,
-    costPerUnit: normalizedCostPerUnit,
-    costPerUnitAsPurchased: normalizedCostPerUnitAsPurchased,
-    costPerUnitInclTrim: normalizedCostPerUnitInclTrim,
+    unit: standardUnit,
+    costPerUnit: costPerUnit / divisor,
+    costPerUnitAsPurchased: costPerUnitAsPurchased / divisor,
+    costPerUnitInclTrim: costPerUnitInclTrim / divisor,
   };
 }

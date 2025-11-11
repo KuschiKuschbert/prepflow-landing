@@ -3,6 +3,7 @@
 import React from 'react';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
+import { useUnitConversionHints } from './hooks/useUnitConversionHints';
 
 interface Ingredient {
   id: string;
@@ -34,6 +35,11 @@ export function IngredientFormFields({
   availableUnits,
   handleInputChange,
 }: IngredientFormFieldsProps) {
+  const { packSizeUnitHint, unitHint } = useUnitConversionHints(
+    formData.pack_size_unit,
+    formData.unit,
+  );
+
   return (
     <>
       {/* Basic Information */}
@@ -97,6 +103,7 @@ export function IngredientFormFields({
               </option>
             ))}
           </select>
+          {packSizeUnitHint && <p className="mt-1 text-xs text-gray-400">{packSizeUnitHint}</p>}
         </div>
 
         <div>
@@ -155,6 +162,7 @@ export function IngredientFormFields({
               </option>
             ))}
           </select>
+          {unitHint && <p className="mt-1 text-xs text-gray-400">{unitHint}</p>}
           {errors.unit && <p className="mt-1 text-sm text-red-400">{errors.unit}</p>}
         </div>
       </div>

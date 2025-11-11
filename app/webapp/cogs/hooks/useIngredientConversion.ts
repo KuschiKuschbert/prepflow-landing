@@ -4,7 +4,12 @@
 'use client';
 
 import { useMemo } from 'react';
-import { convertUnit } from '@/lib/unit-conversion';
+import {
+  convertUnit,
+  convertToStandardUnit,
+  normalizeUnit,
+  getUnitCategory,
+} from '@/lib/unit-conversion';
 
 export function useIngredientConversion() {
   const volumeUnits = useMemo(
@@ -49,27 +54,45 @@ export function useIngredientConversion() {
     userUnit: string,
     ingredientUnit: string,
   ): { convertedQuantity: number; convertedUnit: string; conversionNote: string } => {
-    const userUnitLower = userUnit.toLowerCase().trim();
-    const ingredientUnitLower = ingredientUnit.toLowerCase().trim();
+    const normalizedUserUnit = normalizeUnit(userUnit);
+    const normalizedIngredientUnit = normalizeUnit(ingredientUnit);
+    const userCategory = getUnitCategory(normalizedUserUnit);
+    const ingredientCategory = getUnitCategory(normalizedIngredientUnit);
 
-    const isUserVolume = volumeUnits.includes(userUnitLower);
-    const isUserWeight = weightUnits.includes(userUnitLower);
-    const isIngredientVolume = volumeUnits.includes(ingredientUnitLower);
-    const isIngredientWeight = weightUnits.includes(ingredientUnitLower);
-
-    if ((isUserVolume && isIngredientWeight) || (isUserWeight && isIngredientVolume)) {
-      const conversionResult = convertUnit(quantity, userUnit, ingredientUnit);
+    if (userCategory !== ingredientCategory) {
+      const conversionResult = convertUnit(quantity, normalizedUserUnit, normalizedIngredientUnit);
+      if (
+        conversionResult.value !== quantity ||
+        conversionResult.unit !== normalizedIngredientUnit
+      ) {
+        return {
+          convertedQuantity: conversionResult.value,
+          convertedUnit: ingredientUnit,
+          conversionNote: ` (converted from ${quantity} ${userUnit})`,
+        };
+      }
       return {
-        convertedQuantity: quantity * conversionResult.value,
-        convertedUnit: ingredientUnit,
-        conversionNote: ` (converted from ${quantity} ${userUnit})`,
+        convertedQuantity: quantity,
+        convertedUnit: userUnit,
+        conversionNote: ` (cannot convert ${userCategory} to ${ingredientCategory})`,
       };
     }
 
+    const userStandard = convertToStandardUnit(quantity, normalizedUserUnit);
+    const conversionResult = convertUnit(
+      userStandard.value,
+      userStandard.unit,
+      normalizedIngredientUnit,
+    );
+
+    if (conversionResult.value === quantity && conversionResult.unit === normalizedIngredientUnit) {
+      return { convertedQuantity: quantity, convertedUnit: userUnit, conversionNote: '' };
+    }
+
     return {
-      convertedQuantity: quantity,
-      convertedUnit: userUnit,
-      conversionNote: '',
+      convertedQuantity: conversionResult.value,
+      convertedUnit: ingredientUnit,
+      conversionNote: ` (converted from ${quantity} ${userUnit})`,
     };
   };
 

@@ -7,6 +7,7 @@ import {
   formatStorageLocation,
   formatTextInput,
 } from '@/lib/text-utils';
+import { getUnitCategory, normalizeUnit, STANDARD_UNITS } from '@/lib/unit-conversion';
 import type { IngredientData, NormalizedIngredientData } from './normalizeIngredientData';
 
 export function buildInsertData(
@@ -22,11 +23,33 @@ export function buildInsertData(
   minStockLevel: number,
   currentStock: number,
 ): NormalizedIngredientData {
+  // Determine standard unit and preserve original unit
+  const originalUnit = ingredientData.unit || ingredientData.pack_size_unit || 'pc';
+  const normalizedOriginal = normalizeUnit(originalUnit);
+  const category = getUnitCategory(normalizedOriginal);
+
+  let standardUnit: string;
+  switch (category) {
+    case 'weight':
+      standardUnit = STANDARD_UNITS.WEIGHT.toUpperCase();
+      break;
+    case 'volume':
+      standardUnit = STANDARD_UNITS.VOLUME.toUpperCase();
+      break;
+    case 'piece':
+      standardUnit = STANDARD_UNITS.PIECE.toUpperCase();
+      break;
+    default:
+      standardUnit = STANDARD_UNITS.PIECE.toUpperCase();
+  }
+
   const insertData: NormalizedIngredientData = {
     ingredient_name: ingredientData.ingredient_name!,
     unit: normalizedUnit,
     cost_per_unit: normalizedCostPerUnit,
-  };
+    standard_unit: standardUnit,
+    original_unit: originalUnit,
+  } as NormalizedIngredientData;
 
   if (normalizedCostPerUnitAsPurchased !== normalizedCostPerUnit) {
     insertData.cost_per_unit_as_purchased = normalizedCostPerUnitAsPurchased;

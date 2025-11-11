@@ -1,7 +1,14 @@
-import { convertUnit } from '@/lib/unit-conversion';
+import {
+  convertUnit,
+  convertToStandardUnit,
+  STANDARD_UNITS,
+  normalizeUnit,
+  getUnitCategory,
+} from '@/lib/unit-conversion';
 import { Ingredient } from '../components/types';
 
 // Calculate cost per unit from pack price and pack size
+// Returns cost in standard unit (g/ml/pc)
 export function calculateCostPerUnit(
   packPrice: number,
   packSize: number,
@@ -10,10 +17,23 @@ export function calculateCostPerUnit(
 ): number {
   if (packPrice === 0 || packSize === 0) return 0;
 
-  const conversion = convertUnit(1, packSizeUnit, targetUnit);
-  const packSizeInTargetUnit = packSize * conversion.value;
+  // Convert pack size to standard unit first
+  const packSizeStandard = convertToStandardUnit(packSize, packSizeUnit);
 
-  return packPrice / packSizeInTargetUnit;
+  // Convert target unit to standard unit
+  const targetStandard = convertToStandardUnit(1, targetUnit);
+
+  // Calculate cost per standard unit
+  const costPerStandardUnit = packPrice / packSizeStandard.value;
+
+  // If target is already standard unit, return as is
+  if (targetStandard.unit === packSizeStandard.unit) {
+    return costPerStandardUnit;
+  }
+
+  // Convert cost to target unit
+  const conversion = convertUnit(1, packSizeStandard.unit, targetStandard.unit);
+  return costPerStandardUnit * conversion.value;
 }
 
 // AI-powered wastage calculation based on ingredient name

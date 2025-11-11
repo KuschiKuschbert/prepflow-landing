@@ -11,6 +11,7 @@ import { useIngredientData } from '../hooks/useIngredientData';
 import { useIngredientFiltering } from '../hooks/useIngredientFiltering';
 import { useIngredientFormState } from '../hooks/useIngredientFormState';
 import { useIngredientsQuery } from '../hooks/useIngredientsQuery';
+import { useIngredientMigration } from '../hooks/useIngredientMigration';
 import CSVImportModal from './CSVImportModal';
 import IngredientActions from './IngredientActions';
 import IngredientFilters from './IngredientFilters';
@@ -97,6 +98,9 @@ export default function IngredientsClient() {
     isLoading,
     error: queryError,
   } = useIngredientsQuery(page, pageSize);
+
+  // Automatic migration check on first load
+  useIngredientMigration(loading, isLoading, ingredientsData);
 
   // Gate the arcade overlay while initial data loads
   useEffect(() => {
