@@ -244,7 +244,7 @@ export default function IngredientsClient() {
         isOpen={!!editingIngredient}
         ingredient={editingIngredient}
         suppliers={suppliers}
-        availableUnits={AVAILABLE_UNITS}
+        availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
           if (!editingIngredient?.id) return;
 
