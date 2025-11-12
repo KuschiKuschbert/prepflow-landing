@@ -53,9 +53,9 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
         </div>
         <button
           onClick={onToggleAddIngredient}
-          className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-xl"
+          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-xs font-medium text-white shadow-md transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-lg"
         >
-          <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
+          <Icon icon={Plus} size="xs" className="text-white" aria-hidden={true} />
           <span>{showAddIngredient ? 'Cancel' : 'Add Ingredient'}</span>
         </button>
       </div>
