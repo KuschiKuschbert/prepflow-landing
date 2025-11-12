@@ -33,18 +33,6 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
     }
   };
 
-  const { activeId, handleDragStart, handleDragEnd } = useMenuDragDrop({
-    menuId: menu.id,
-    menuItems,
-    setMenuItems,
-    onStatisticsUpdate: refreshStatistics,
-    onMenuDataReload: loadMenuData,
-  });
-
-  useEffect(() => {
-    loadMenuData();
-  }, [menu.id]);
-
   const loadMenuData = async () => {
     setLoading(true);
     try {
@@ -81,6 +69,18 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
       setLoading(false);
     }
   };
+
+  const { activeId, handleDragStart, handleDragEnd } = useMenuDragDrop({
+    menuId: menu.id,
+    menuItems,
+    setMenuItems,
+    onStatisticsUpdate: refreshStatistics,
+    onMenuDataReload: loadMenuData,
+  });
+
+  useEffect(() => {
+    loadMenuData();
+  }, [menu.id]);
 
   const handleAddCategory = () => {
     if (newCategory.trim() && !categories.includes(newCategory.trim())) {
