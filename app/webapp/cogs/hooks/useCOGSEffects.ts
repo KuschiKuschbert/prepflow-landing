@@ -34,28 +34,21 @@ export function useCOGSEffects({
   // Handle editing data from recipe book
   useEffect(() => {
     const editingData = sessionStorage.getItem('editingRecipe');
-    if (editingData) {
-      try {
-        const { recipe, recipeId, calculations, dishName, dishPortions, dishNameLocked } =
-          JSON.parse(editingData);
-
-        const actualRecipeId = recipeId || recipe?.id;
-        if (dishName) setDishName(dishName);
-        if (dishPortions) setDishPortions(dishPortions);
-        if (dishNameLocked !== undefined) setDishNameLocked(dishNameLocked);
-        if (actualRecipeId) setSelectedRecipe(actualRecipeId);
-        if (calculations?.length > 0) {
-          loadCalculations(calculations);
-        } else {
-          console.warn('No calculations found in editing data');
-        }
-
-        sessionStorage.removeItem('editingRecipe');
-        setSuccessMessage(`Recipe "${dishName}" loaded for editing!`);
-        setTimeout(() => setSuccessMessage(null), 3000);
-      } catch (err) {
-        console.error('Failed to parse editing data:', err);
-      }
+    if (!editingData) return;
+    try {
+      const { recipe, recipeId, calculations, dishName, dishPortions, dishNameLocked } =
+        JSON.parse(editingData);
+      const actualRecipeId = recipeId || recipe?.id;
+      if (dishName) setDishName(dishName);
+      if (dishPortions) setDishPortions(dishPortions);
+      if (dishNameLocked !== undefined) setDishNameLocked(dishNameLocked);
+      if (actualRecipeId) setSelectedRecipe(actualRecipeId);
+      if (calculations?.length > 0) loadCalculations(calculations);
+      sessionStorage.removeItem('editingRecipe');
+      setSuccessMessage(`Recipe "${dishName}" loaded for editing!`);
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      console.error('Failed to parse editing data:', err);
     }
   }, [
     setSuccessMessage,
@@ -82,14 +75,18 @@ export function useCOGSEffects({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [setShowSuggestions]);
 
-  // Debounced recipe check
+  // Debounced recipe check - skip if name is locked
   useEffect(() => {
+    if (dishNameLocked) return;
     const timeoutId = setTimeout(async () => {
-      if (dishName.trim() && !dishNameLocked) {
+      if (dishName.trim()) {
         setCheckingRecipe(true);
-        setRecipeExists(await checkRecipeExists(dishName));
+        const exists = await checkRecipeExists(dishName);
+        if (!dishNameLocked) setRecipeExists(exists);
         setCheckingRecipe(false);
-      } else if (!dishName.trim()) setRecipeExists(null);
+      } else {
+        setRecipeExists(null);
+      }
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [dishName, dishNameLocked, checkRecipeExists]);

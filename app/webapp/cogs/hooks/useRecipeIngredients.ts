@@ -49,37 +49,34 @@ export function useRecipeIngredients({
     [loadExistingRecipeIngredients, setError],
   );
 
-  const checkRecipeExists = useCallback(
-    async (recipeName: string) => {
-      if (!recipeName.trim()) {
-        return null;
+  const checkRecipeExists = useCallback(async (recipeName: string) => {
+    if (!recipeName.trim()) {
+      return null;
+    }
+
+    try {
+      const { data: existingRecipes, error } = await supabase
+        .from('recipes')
+        .select('id, name')
+        .ilike('name', recipeName.trim());
+
+      const existingRecipe =
+        existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
+
+      if (error && error.code === 'PGRST116') {
+        return false;
+      } else if (existingRecipe) {
+        // Don't load ingredients when just checking if recipe exists
+        // Only return true/false to indicate existence
+        return true;
+      } else {
+        return false;
       }
-
-      try {
-        const { data: existingRecipes, error } = await supabase
-          .from('recipes')
-          .select('id, name')
-          .ilike('name', recipeName.trim());
-
-        const existingRecipe =
-          existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
-
-        if (error && error.code === 'PGRST116') {
-          return false;
-        } else if (existingRecipe) {
-          // Don't load ingredients when just checking if recipe exists
-          // Only return true/false to indicate existence
-          return true;
-        } else {
-          return false;
-        }
-      } catch (err) {
-        console.log('Error checking recipe:', err);
-        return null;
-      }
-    },
-    [loadExistingRecipeIngredients],
-  );
+    } catch (err) {
+      console.log('Error checking recipe:', err);
+      return null;
+    }
+  }, []);
 
   return {
     fetchRecipeIngredients,
