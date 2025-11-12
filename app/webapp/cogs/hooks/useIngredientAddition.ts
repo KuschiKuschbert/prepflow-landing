@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback } from 'react';
-import { COGSCalculation, Ingredient } from '../types';
+import { Ingredient } from '../types';
 import { useIngredientConversion } from './useIngredientConversion';
+import { createCalculation } from './utils/createCalculation';
 
 interface NewIngredient {
   ingredient_id?: string;
@@ -11,10 +12,10 @@ interface NewIngredient {
 }
 
 interface UseIngredientAdditionProps {
-  calculations: COGSCalculation[];
+  calculations: import('../types').COGSCalculation[];
   ingredients: Ingredient[];
   selectedRecipe: string | null;
-  addCalculation: (calc: COGSCalculation) => void;
+  addCalculation: (calc: import('../types').COGSCalculation) => void;
   updateCalculation: (ingredientId: string, quantity: number) => void;
   resetForm: () => void;
   setSaveError: (error: string) => void;
@@ -33,8 +34,12 @@ export function useIngredientAddition({
   const handleAddIngredient = useCallback(
     async (newIngredient: NewIngredient, e?: React.FormEvent) => {
       if (e) e.preventDefault();
-      if (!newIngredient.ingredient_id || !newIngredient.quantity) {
-        setSaveError('Please select an ingredient and enter a quantity');
+      if (!newIngredient.ingredient_id) {
+        setSaveError('Please select an ingredient');
+        return;
+      }
+      if (!newIngredient.quantity || newIngredient.quantity <= 0) {
+        setSaveError('Please enter a quantity greater than 0');
         return;
       }
       try {
@@ -48,12 +53,12 @@ export function useIngredientAddition({
           setSaveError('Ingredient not found');
           return;
         }
+        const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantity(
+          newIngredient.quantity!,
+          newIngredient.unit || 'kg',
+          selectedIngredientData.unit || 'kg',
+        );
         if (existingIngredient) {
-          const { convertedQuantity } = convertIngredientQuantity(
-            newIngredient.quantity!,
-            newIngredient.unit || 'kg',
-            selectedIngredientData.unit || 'kg',
-          );
           const currentCalc = calculations.find(
             calc => calc.ingredientId === newIngredient.ingredient_id,
           );
@@ -62,36 +67,19 @@ export function useIngredientAddition({
               newIngredient.ingredient_id!,
               currentCalc.quantity + convertedQuantity,
             );
+            resetForm();
           }
-        } else {
-          const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantity(
-            newIngredient.quantity!,
-            newIngredient.unit || 'kg',
-            selectedIngredientData.unit || 'kg',
-          );
-          const baseCostPerUnit =
-            selectedIngredientData.cost_per_unit_incl_trim ||
-            selectedIngredientData.cost_per_unit ||
-            0;
-          const totalCost = convertedQuantity * baseCostPerUnit;
-          const wastePercent = selectedIngredientData.trim_peel_waste_percentage || 0;
-          const yieldPercent = selectedIngredientData.yield_percentage || 100;
-          addCalculation({
-            recipeId: selectedRecipe || 'temp',
-            ingredientId: newIngredient.ingredient_id!,
-            ingredientName: selectedIngredientData.ingredient_name + conversionNote,
-            quantity: convertedQuantity,
-            unit: convertedUnit,
-            costPerUnit: baseCostPerUnit,
-            totalCost,
-            wasteAdjustedCost: totalCost * (1 + wastePercent / 100),
-            yieldAdjustedCost: (totalCost * (1 + wastePercent / 100)) / (yieldPercent / 100),
-            ingredient_id: newIngredient.ingredient_id!,
-            ingredient_name: selectedIngredientData.ingredient_name + conversionNote,
-            cost_per_unit: baseCostPerUnit,
-            total_cost: totalCost,
-          });
+          return;
         }
+        const newCalc = createCalculation(
+          newIngredient.ingredient_id!,
+          selectedIngredientData,
+          convertedQuantity,
+          convertedUnit,
+          conversionNote,
+          selectedRecipe,
+        );
+        addCalculation(newCalc);
         resetForm();
       } catch (err) {
         setSaveError('Failed to add ingredient');

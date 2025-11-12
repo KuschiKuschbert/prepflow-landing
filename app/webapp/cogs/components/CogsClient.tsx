@@ -147,6 +147,8 @@ export default function CogsClient() {
   };
 
   const handleAddIngredientWrapper = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Use the current newIngredient state directly
     await handleAddIngredient(newIngredient, e);
   };
 
