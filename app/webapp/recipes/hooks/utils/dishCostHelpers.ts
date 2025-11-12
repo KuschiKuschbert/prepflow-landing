@@ -33,9 +33,8 @@ export function calculateRecipeCost(
     if (ingredient) {
       const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
       const quantity = typeof ri.quantity === 'string' ? parseFloat(ri.quantity) : ri.quantity || 0;
-      const qty =
-        typeof recipeQuantity === 'string' ? parseFloat(recipeQuantity) : recipeQuantity || 1;
-      cost += quantity * qty * costPerUnit;
+      // Use single portion cost (quantity = 1) regardless of recipeQuantity
+      cost += quantity * costPerUnit;
     }
   });
   return cost;

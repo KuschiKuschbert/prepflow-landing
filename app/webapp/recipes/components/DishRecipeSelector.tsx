@@ -3,6 +3,7 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { Recipe } from '../types';
+import DishRecipeCombobox from './DishRecipeCombobox';
 
 interface SelectedRecipe {
   recipe_id: string;
@@ -34,6 +35,20 @@ export default function DishRecipeSelector({
     onRecipesChange(selectedRecipes.filter((_, i) => i !== index));
   };
 
+  const handleRecipeSelect = (index: number, recipe: Recipe) => {
+    onRecipesChange(
+      selectedRecipes.map((r, i) =>
+        i === index
+          ? {
+              recipe_id: recipe.id,
+              quantity: r.quantity,
+              recipe_name: recipe.name,
+            }
+          : r,
+      ),
+    );
+  };
+
   return (
     <div className="mb-6">
       <div className="mb-3 flex items-center justify-between">
@@ -50,30 +65,11 @@ export default function DishRecipeSelector({
       <div className="space-y-3">
         {selectedRecipes.map((sr, index) => (
           <div key={index} className="flex gap-3 rounded-lg bg-[#2a2a2a]/30 p-3">
-            <select
-              value={sr.recipe_id}
-              onChange={e => {
-                const recipe = recipes.find(r => r.id === e.target.value);
-                onRecipesChange(
-                  selectedRecipes.map((r, i) =>
-                    i === index
-                      ? {
-                          recipe_id: e.target.value,
-                          quantity: r.quantity,
-                          recipe_name: recipe?.name,
-                        }
-                      : r,
-                  ),
-                );
-              }}
-              className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-white"
-            >
-              {recipes.map(r => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
+            <DishRecipeCombobox
+              recipes={recipes}
+              selectedRecipe={sr}
+              onSelect={recipe => handleRecipeSelect(index, recipe)}
+            />
             <input
               type="number"
               step="0.1"

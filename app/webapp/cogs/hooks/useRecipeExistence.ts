@@ -12,14 +12,15 @@ interface UseRecipeExistenceResult {
  * Hook to check if a recipe exists in the database
  * Caches results to avoid redundant queries
  */
-export function useRecipeExistence(recipeId: string | null): UseRecipeExistenceResult {
+export function useRecipeExistence(recipeId: string | null | undefined): UseRecipeExistenceResult {
   const [exists, setExists] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const cacheRef = useRef<Map<string, boolean>>(new Map());
   const currentRecipeIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!recipeId) {
+    // Handle null, undefined, or empty string
+    if (!recipeId || recipeId.trim() === '') {
       setExists(false);
       setLoading(false);
       currentRecipeIdRef.current = null;
@@ -44,12 +45,14 @@ export function useRecipeExistence(recipeId: string | null): UseRecipeExistenceR
     setLoading(true);
     currentRecipeIdRef.current = recipeId;
 
-    supabase
-      .from('recipes')
-      .select('id')
-      .eq('id', recipeId)
-      .maybeSingle()
-      .then(({ data, error }) => {
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('recipes')
+          .select('id')
+          .eq('id', recipeId)
+          .maybeSingle();
+
         // Only update if this is still the current recipe
         if (currentRecipeIdRef.current === recipeId) {
           const recipeExists = !error && Boolean(data);
@@ -57,13 +60,13 @@ export function useRecipeExistence(recipeId: string | null): UseRecipeExistenceR
           setLoading(false);
           cacheRef.current.set(recipeId, recipeExists);
         }
-      })
-      .catch(() => {
+      } catch {
         if (currentRecipeIdRef.current === recipeId) {
           setExists(false);
           setLoading(false);
         }
-      });
+      }
+    })();
   }, [recipeId]);
 
   return { exists, loading };

@@ -1,12 +1,21 @@
 'use client';
 
 import AppleStyleFeatures from './AppleStyleFeatures';
-import { Leaf, DollarSign, BarChart3, Sparkles, Thermometer, Settings } from 'lucide-react';
+import {
+  Leaf,
+  DollarSign,
+  BarChart3,
+  Sparkles,
+  Thermometer,
+  Settings,
+  LucideIcon,
+} from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Feature {
   title: string;
   description: string;
-  icon: string; // Keep as string for AppleStyleFeatures compatibility
+  icon: LucideIcon; // Use Lucide icon component instead of emoji string
   screenshot: string;
   screenshotAlt: string;
   details: string[];
@@ -17,9 +26,10 @@ const features: Feature[] = [
   {
     title: 'Ingredients & Stock',
     description: 'Track costs, suppliers, and inventory.',
-    icon: '🥬', // Keep emoji for now - AppleStyleFeatures expects string
+    icon: Leaf, // Lucide icon instead of emoji
     screenshot: '/images/ingredients-management-screenshot.png',
-    screenshotAlt: 'PrepFlow Ingredients Management showing inventory tracking with costs, suppliers, and stock levels',
+    screenshotAlt:
+      'PrepFlow Ingredients Management showing inventory tracking with costs, suppliers, and stock levels',
     details: [
       'Real-time inventory tracking with cost calculations',
       'Supplier management with price lists',
@@ -32,7 +42,7 @@ const features: Feature[] = [
   {
     title: 'COGS Calculator',
     description: 'Build recipes with live cost calculations and pricing recommendations.',
-    icon: '💰',
+    icon: DollarSign, // Lucide icon instead of emoji
     screenshot: '/images/cogs-calculator-screenshot.png',
     screenshotAlt: 'PrepFlow COGS Calculator showing Create Dish and Cost Analysis sections',
     details: [
@@ -47,9 +57,10 @@ const features: Feature[] = [
   {
     title: 'Performance Analysis',
     description: "Dynamic menu analysis with Chef's Kiss, Hidden Gem, and more.",
-    icon: '📊',
+    icon: BarChart3, // Lucide icon instead of emoji
     screenshot: '/images/dashboard-screenshot.png',
-    screenshotAlt: 'PrepFlow Performance Analysis showing menu item classifications and profitability metrics',
+    screenshotAlt:
+      'PrepFlow Performance Analysis showing menu item classifications and profitability metrics',
     details: [
       'Dynamic profit threshold analysis',
       'Popularity-based menu item classification',
@@ -63,7 +74,7 @@ const features: Feature[] = [
   {
     title: 'Cleaning & Compliance',
     description: 'Track cleaning tasks and compliance records with audit trails.',
-    icon: '🧹',
+    icon: Sparkles, // Lucide icon instead of emoji
     screenshot: '/images/cleaning-roster-screenshot.png',
     screenshotAlt: 'PrepFlow Cleaning Roster showing cleaning areas and task management',
     details: [
@@ -78,7 +89,7 @@ const features: Feature[] = [
   {
     title: 'Temperature Monitoring',
     description: 'QLD-compliant monitoring with smart thresholds and alerts.',
-    icon: '🌡️',
+    icon: Thermometer, // Lucide icon instead of emoji
     screenshot: '/images/dashboard-screenshot.png',
     screenshotAlt: 'PrepFlow Temperature Monitoring showing equipment tracking and compliance',
     details: [
@@ -93,7 +104,7 @@ const features: Feature[] = [
   {
     title: 'Settings & Configuration',
     description: 'Customize region, currency, units, and privacy settings.',
-    icon: '⚙️',
+    icon: Settings, // Lucide icon instead of emoji
     screenshot: '/images/settings-screenshot.png',
     screenshotAlt: 'PrepFlow Settings showing region & units configuration and privacy controls',
     details: [
