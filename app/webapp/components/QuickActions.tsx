@@ -2,6 +2,8 @@
 
 import { useTranslation } from '@/lib/useTranslation';
 import Link from 'next/link';
+import { Utensils, BookOpen, DollarSign, Settings, Rocket } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export default function QuickActions() {
   const { t } = useTranslation();
@@ -10,28 +12,28 @@ export default function QuickActions() {
     {
       title: 'Add Ingredient',
       description: 'Add new ingredients to your inventory',
-      icon: '🥘',
+      icon: Utensils,
       href: '/webapp/ingredients',
       color: 'from-[#29E7CD] to-[#D925C7]',
     },
     {
       title: 'Create Recipe',
       description: 'Build new recipes with cost calculation',
-      icon: '📖',
+      icon: BookOpen,
       href: '/webapp/recipes',
       color: 'from-[#3B82F6] to-[#29E7CD]',
     },
     {
       title: 'Calculate COGS',
       description: 'Optimize menu pricing and margins',
-      icon: '💰',
+      icon: DollarSign,
       href: '/webapp/cogs',
       color: 'from-[#D925C7] to-[#3B82F6]',
     },
     {
       title: 'Setup Database',
       description: 'Initialize your kitchen management system',
-      icon: '⚙️',
+      icon: Settings,
       href: '/webapp/setup',
       color: 'from-[#F59E0B] to-[#D925C7]',
     },
@@ -40,8 +42,9 @@ export default function QuickActions() {
   return (
     <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg md:mb-8 md:rounded-3xl md:p-6">
       <div className="mb-4 md:mb-6">
-        <h2 className="mb-1 text-xl font-semibold text-white md:mb-2 md:text-2xl">
-          🚀 Quick Actions
+        <h2 className="mb-1 flex items-center gap-2 text-xl font-semibold text-white md:mb-2 md:text-2xl">
+          <Icon icon={Rocket} size="md" className="text-[#29E7CD]" aria-hidden="true" />
+          Quick Actions
         </h2>
         <p className="text-sm text-gray-400 md:text-base">
           Get started with your kitchen management
@@ -59,7 +62,7 @@ export default function QuickActions() {
               <div
                 className={`h-10 w-10 rounded-xl bg-gradient-to-br md:h-16 md:w-16 md:rounded-2xl ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}
               >
-                <span className="text-xl md:text-3xl">{action.icon}</span>
+                <Icon icon={action.icon} size="lg" className="text-white md:h-8 md:w-8" aria-hidden="true" />
               </div>
 
               <div>

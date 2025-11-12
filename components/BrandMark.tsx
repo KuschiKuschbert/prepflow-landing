@@ -21,7 +21,7 @@ interface BrandMarkProps {
 }
 
 export function BrandMark({
-  src = '/images/prepflow-logo.png',
+  src = '/images/prepflow-logo.svg',
   alt = 'PrepFlow Logo',
   width = 24,
   height = 24,

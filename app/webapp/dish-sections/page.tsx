@@ -7,6 +7,8 @@ import { useDishSectionActions } from './hooks/useDishSectionActions';
 import { DishSectionsHeader } from './components/DishSectionsHeader';
 import { SectionFormModal } from './components/SectionFormModal';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { UtensilsCrossed } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface KitchenSection {
   id: string;
@@ -135,7 +137,7 @@ export default function DishSectionsPage() {
           {kitchenSections.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <span className="text-3xl">🍽️</span>
+                <Icon icon={UtensilsCrossed} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('dishSections.noSections', 'No Kitchen Sections')}
@@ -165,7 +167,7 @@ export default function DishSectionsPage() {
                       className="flex h-12 w-12 items-center justify-center rounded-xl"
                       style={{ backgroundColor: `${section.color}20` }}
                     >
-                      <span className="text-lg">🍽️</span>
+                      <Icon icon={UtensilsCrossed} size="md" className="text-current" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-white">{section.name}</h3>

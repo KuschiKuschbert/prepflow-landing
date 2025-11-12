@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientTableRow } from './IngredientTableRow';
 import { IngredientTableFilterBar } from './IngredientTableFilterBar';
+import { type SortOption } from '../hooks/useIngredientFiltering';
+import { ChevronUp, ChevronDown, Plus, Upload, Download, Zap, Trash2, Store, MapPin, Target } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Ingredient {
   id: string;
@@ -33,7 +36,7 @@ interface IngredientTableWithFiltersProps {
   searchTerm: string;
   supplierFilter: string;
   storageFilter: string;
-  sortBy: 'name' | 'cost_asc' | 'cost_desc' | 'supplier';
+  sortBy: SortOption;
   selectedIngredients: Set<string>;
   onEdit: (ingredient: Ingredient) => void;
   onDelete: (id: string) => Promise<void>;
@@ -42,8 +45,16 @@ interface IngredientTableWithFiltersProps {
   onSearchChange: (term: string) => void;
   onSupplierFilterChange: (supplier: string) => void;
   onStorageFilterChange: (storage: string) => void;
-  onSortChange: (sort: 'name' | 'cost_asc' | 'cost_desc' | 'supplier') => void;
+  onSortChange: (sort: SortOption) => void;
   onDisplayUnitChange: (unit: string) => void;
+  itemsPerPage: number;
+  onItemsPerPageChange: (itemsPerPage: number) => void;
+  totalFiltered?: number;
+  onAddIngredient?: () => void;
+  onImportCSV?: () => void;
+  onExportCSV?: () => void;
+  onBulkDelete?: (ids: string[]) => Promise<void>;
+  onBulkUpdate?: (ids: string[], updates: Partial<Ingredient>) => Promise<void>;
   loading?: boolean;
 }
 
@@ -64,9 +75,132 @@ export default function IngredientTableWithFilters({
   onStorageFilterChange,
   onSortChange,
   onDisplayUnitChange,
+  itemsPerPage,
+  onItemsPerPageChange,
+  totalFiltered,
+  onAddIngredient,
+  onImportCSV,
+  onExportCSV,
+  onBulkDelete,
+  onBulkUpdate,
   loading = false,
 }: IngredientTableWithFiltersProps) {
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+  const [showBulkMenu, setShowBulkMenu] = useState(false);
+
+  const selectedCount = selectedIngredients.size;
+  const filteredIngredientsData = ingredients; // Use ingredients prop for bulk operations
+
+  const handleBulkDelete = async () => {
+    if (selectedCount === 0 || !onBulkDelete) return;
+
+    const confirmMessage = `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}?`;
+    if (!window.confirm(confirmMessage)) return;
+
+    setBulkActionLoading(true);
+    try {
+      await onBulkDelete(Array.from(selectedIngredients));
+    } finally {
+      setBulkActionLoading(false);
+      setShowBulkMenu(false);
+    }
+  };
+
+  const handleBulkUpdateSupplier = async () => {
+    if (selectedCount === 0 || !onBulkUpdate) return;
+
+    const newSupplier = window.prompt(
+      `Enter new supplier for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
+    );
+    if (!newSupplier?.trim()) return;
+
+    setBulkActionLoading(true);
+    try {
+      await onBulkUpdate(Array.from(selectedIngredients), { supplier: newSupplier.trim() });
+    } finally {
+      setBulkActionLoading(false);
+      setShowBulkMenu(false);
+    }
+  };
+
+  const handleBulkUpdateStorage = async () => {
+    if (selectedCount === 0 || !onBulkUpdate) return;
+
+    const newStorage = window.prompt(
+      `Enter new storage location for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
+    );
+    if (!newStorage?.trim()) return;
+
+    setBulkActionLoading(true);
+    try {
+      await onBulkUpdate(Array.from(selectedIngredients), { storage_location: newStorage.trim() });
+    } finally {
+      setBulkActionLoading(false);
+      setShowBulkMenu(false);
+    }
+  };
+
+  const handleBulkUpdateWastage = async () => {
+    if (selectedCount === 0 || !onBulkUpdate) return;
+
+    const wastageInput = window.prompt(
+      `Enter wastage percentage (0-100) for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
+    );
+    if (!wastageInput) return;
+
+    const wastage = parseFloat(wastageInput);
+    if (isNaN(wastage) || wastage < 0 || wastage > 100) {
+      alert('Please enter a valid percentage between 0 and 100');
+      return;
+    }
+
+    setBulkActionLoading(true);
+    try {
+      await onBulkUpdate(Array.from(selectedIngredients), {
+        trim_peel_waste_percentage: wastage,
+        yield_percentage: 100 - wastage,
+      });
+    } finally {
+      setBulkActionLoading(false);
+      setShowBulkMenu(false);
+    }
+  };
+
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showBulkMenu) {
+        setShowBulkMenu(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showBulkMenu]);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleColumnSort = (column: 'name' | 'brand' | 'pack_size' | 'cost' | 'supplier' | 'stock') => {
+    const currentAsc = `${column}_asc` as SortOption;
+    const currentDesc = `${column}_desc` as SortOption;
+
+    if (sortBy === currentAsc) {
+      onSortChange(currentDesc);
+    } else {
+      onSortChange(currentAsc);
+    }
+  };
+
+  const getSortIcon = (column: 'name' | 'brand' | 'pack_size' | 'cost' | 'supplier' | 'stock') => {
+    const currentAsc = `${column}_asc` as SortOption;
+    const currentDesc = `${column}_desc` as SortOption;
+
+    if (sortBy === currentAsc) {
+      return <Icon icon={ChevronUp} size="xs" className="ml-1 text-[#29E7CD]" />;
+    }
+    if (sortBy === currentDesc) {
+      return <Icon icon={ChevronDown} size="xs" className="ml-1 text-[#29E7CD]" />;
+    }
+    return null;
+  };
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this ingredient?')) {
@@ -99,14 +233,48 @@ export default function IngredientTableWithFilters({
           storageFilter={storageFilter}
           sortBy={sortBy}
           displayUnit={displayUnit}
+          itemsPerPage={itemsPerPage}
           onSearchChange={onSearchChange}
           onSupplierFilterChange={onSupplierFilterChange}
           onStorageFilterChange={onStorageFilterChange}
           onSortChange={onSortChange}
           onDisplayUnitChange={onDisplayUnitChange}
+          onItemsPerPageChange={onItemsPerPageChange}
         />
 
         {/* Empty State */}
+        <div className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-white">Ingredients (0)</h2>
+            {/* Action Buttons */}
+            {onAddIngredient && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={onAddIngredient}
+                  className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
+                >
+                  + Add
+                </button>
+                {onImportCSV && (
+                  <button
+                    onClick={onImportCSV}
+                    className="rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
+                  >
+                    📁 Import
+                  </button>
+                )}
+                {onExportCSV && (
+                  <button
+                    onClick={onExportCSV}
+                    className="rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
+                  >
+                    📤 Export
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
         <div className="p-12 text-center">
           <div className="mb-4 text-gray-400">
             <svg className="mx-auto mb-4 h-16 w-16" fill="currentColor" viewBox="0 0 20 20">
@@ -142,29 +310,144 @@ export default function IngredientTableWithFilters({
         onStorageFilterChange={onStorageFilterChange}
         onSortChange={onSortChange}
         onDisplayUnitChange={onDisplayUnitChange}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={onItemsPerPageChange}
       />
 
       {/* Table Header */}
       <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">
-            Ingredients ({filteredIngredients.length})
-          </h2>
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-sm text-gray-300">
-              <input
-                type="checkbox"
-                checked={
-                  selectedIngredients.size === filteredIngredients.length &&
-                  filteredIngredients.length > 0
-                }
-                onChange={e => onSelectAll(e.target.checked)}
-                className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <h2 className="text-xl font-semibold text-white">
+              Ingredients {totalFiltered !== undefined ? `(${totalFiltered} total, showing ${ingredients.length})` : `(${ingredients.length})`}
+            </h2>
+            {/* Action Buttons */}
+            {onAddIngredient && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={onAddIngredient}
+                  className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
+                >
+                  <Icon icon={Plus} size="xs" className="text-current" aria-hidden="true" />
+                  <span>Add</span>
+                </button>
+                {onImportCSV && (
+                  <button
+                    onClick={onImportCSV}
+                    className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
+                  >
+                    <Icon icon={Upload} size="xs" className="text-current" aria-hidden="true" />
+                    <span>Import</span>
+                  </button>
+                )}
+                {onExportCSV && (
+                  <button
+                    onClick={onExportCSV}
+                    className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
+                  >
+                    <Icon icon={Download} size="xs" className="text-current" aria-hidden="true" />
+                    <span>Export</span>
+                  </button>
+                )}
+                {/* Bulk Actions Button */}
+                {selectedCount > 0 && onBulkDelete && (
+                  <div className="relative z-[60]">
+                    <button
+                      onClick={() => setShowBulkMenu(!showBulkMenu)}
+                      disabled={bulkActionLoading}
+                      className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl disabled:opacity-50"
+                    >
+                      <Icon icon={Zap} size="xs" className="text-current" aria-hidden="true" />
+                      <span>Bulk Actions ({selectedCount})</span>
+                    </button>
+
+                    {showBulkMenu && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-[55]"
+                          onClick={() => setShowBulkMenu(false)}
+                          aria-hidden="true"
+                        />
+                        <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+                          <div className="p-1.5">
+                            <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
+                              {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
+                            </div>
+
+                            <div className="mt-1.5 space-y-0.5">
+                              <button
+                                onClick={handleBulkDelete}
+                                disabled={bulkActionLoading}
+                                className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+                              >
+                                <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden="true" />
+                                <span>Delete Selected</span>
+                              </button>
+
+                              {onBulkUpdate && (
+                                <>
+                                  <button
+                                    onClick={handleBulkUpdateSupplier}
+                                    disabled={bulkActionLoading}
+                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                                  >
+                                    <Icon icon={Store} size="xs" className="text-current" aria-hidden="true" />
+                                    <span>Update Supplier</span>
+                                  </button>
+
+                                  <button
+                                    onClick={handleBulkUpdateStorage}
+                                    disabled={bulkActionLoading}
+                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                                  >
+                                    <Icon icon={MapPin} size="xs" className="text-current" aria-hidden="true" />
+                                    <span>Update Storage Location</span>
+                                  </button>
+
+                                  <button
+                                    onClick={handleBulkUpdateWastage}
+                                    disabled={bulkActionLoading}
+                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                                  >
+                                    <Icon icon={Target} size="xs" className="text-current" aria-hidden="true" />
+                                    <span>Update Wastage %</span>
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {selectedIngredients.size > 0 ? (
+              <button
+                onClick={() => onSelectAll(false)}
+                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
+                aria-label="Deselect all ingredients"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{selectedIngredients.size} selected</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => onSelectAll(true)}
+                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
                 aria-label="Select all ingredients"
-                aria-describedby="select-all-description"
-              />
-              <span id="select-all-description">Select All</span>
-            </label>
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Select All</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -175,37 +458,73 @@ export default function IngredientTableWithFilters({
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <label className="sr-only">
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedIngredients.size === filteredIngredients.length &&
-                      filteredIngredients.length > 0
-                    }
-                    onChange={e => onSelectAll(e.target.checked)}
-                    className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-                    aria-label="Select all ingredients in table"
-                  />
-                  Select All
-                </label>
+                <button
+                  onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
+                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                  aria-label={selectedIngredients.size === ingredients.length ? "Deselect all" : "Select all"}
+                >
+                  {selectedIngredients.size === ingredients.length && ingredients.length > 0 ? (
+                    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                  )}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Name
+                <button
+                  onClick={() => handleColumnSort('name')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                >
+                  Name
+                  {getSortIcon('name')}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Brand
+                <button
+                  onClick={() => handleColumnSort('brand')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                >
+                  Brand
+                  {getSortIcon('brand')}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Pack Size
+                <button
+                  onClick={() => handleColumnSort('pack_size')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                >
+                  Pack Size
+                  {getSortIcon('pack_size')}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Cost/Unit
+                <button
+                  onClick={() => handleColumnSort('cost')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                >
+                  Cost/Unit
+                  {getSortIcon('cost')}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Supplier
+                <button
+                  onClick={() => handleColumnSort('supplier')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                >
+                  Supplier
+                  {getSortIcon('supplier')}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Stock
+                <button
+                  onClick={() => handleColumnSort('stock')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                >
+                  Stock
+                  {getSortIcon('stock')}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Actions
@@ -213,7 +532,7 @@ export default function IngredientTableWithFilters({
             </tr>
           </thead>
           <tbody className="divide-y divide-[#2a2a2a]">
-            {filteredIngredients.map(ingredient => (
+            {ingredients.map(ingredient => (
               <IngredientTableRow
                 key={ingredient.id}
                 ingredient={ingredient}

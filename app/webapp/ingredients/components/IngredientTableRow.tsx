@@ -5,6 +5,8 @@
 
 import { convertIngredientCost } from '@/lib/unit-conversion';
 import { getStandardUnit } from '../utils/getStandardUnit';
+import { Edit, Trash2, Info } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Ingredient {
   id: string;
@@ -75,16 +77,19 @@ export function IngredientTableRow({
   return (
     <tr className="transition-colors duration-200 hover:bg-[#2a2a2a]/20">
       <td className="px-6 py-4 whitespace-nowrap">
-        <label className="sr-only">
-          <input
-            type="checkbox"
-            checked={selectedIngredients.has(ingredient.id)}
-            onChange={e => onSelectIngredient(ingredient.id, e.target.checked)}
-            className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-            aria-label={`Select ingredient ${ingredient.ingredient_name}`}
-          />
-          Select {ingredient.ingredient_name}
-        </label>
+        <button
+          onClick={() => onSelectIngredient(ingredient.id, !selectedIngredients.has(ingredient.id))}
+          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+          aria-label={`${selectedIngredients.has(ingredient.id) ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name}`}
+        >
+          {selectedIngredients.has(ingredient.id) ? (
+            <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+          )}
+        </button>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="text-sm font-medium text-white">{ingredient.ingredient_name}</div>
@@ -105,7 +110,7 @@ export function IngredientTableRow({
               className="cursor-help text-xs text-gray-500"
               title={`Original unit: ${originalUnit}, Standard: ${standardUnit}`}
             >
-              ℹ️
+              <Icon icon={Info} size="xs" className="text-gray-500" aria-hidden="true" />
             </span>
           )}
         </div>
@@ -140,14 +145,7 @@ export function IngredientTableRow({
             className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
             aria-label={`Edit ${ingredient.ingredient_name}`}
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
+            <Icon icon={Edit} size="sm" className="text-[#29E7CD]" aria-hidden="true" />
           </button>
           <button
             onClick={handleDelete}
@@ -158,14 +156,7 @@ export function IngredientTableRow({
             {deletingId === ingredient.id ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
             ) : (
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
+              <Icon icon={Trash2} size="sm" className="text-red-400" aria-hidden="true" />
             )}
           </button>
         </div>

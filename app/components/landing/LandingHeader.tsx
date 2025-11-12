@@ -24,7 +24,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           {/* Logo */}
           <Link href="/" className="flex shrink-0 items-center">
             <BrandMark
-              src="/images/prepflow-logo.png"
+              src="/images/prepflow-logo.svg"
               alt="PrepFlow Logo"
               width={48}
               height={48}

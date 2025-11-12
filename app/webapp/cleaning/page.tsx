@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { TaskCard } from './components/TaskCard';
 import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { Sparkles, ClipboardCheck, MapPin, Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface CleaningArea {
   id: number;
@@ -160,8 +162,9 @@ export default function CleaningRosterPage() {
       <div className="min-h-screen bg-transparent py-4 sm:py-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-white">
-            🧹 {t('cleaning.title', 'Cleaning Roster')}
+          <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
+            <Icon icon={Sparkles} size="lg" aria-hidden="true" />
+            {t('cleaning.title', 'Cleaning Roster')}
           </h1>
           <p className="text-gray-400">
             {t(
@@ -182,17 +185,19 @@ export default function CleaningRosterPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              📍 {t('cleaning.areas', 'Cleaning Areas')}
+              <MapPin className="mr-2 inline h-4 w-4" />
+              {t('cleaning.areas', 'Cleaning Areas')}
             </button>
             <button
               onClick={() => setActiveTab('tasks')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
+              className={`flex items-center rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
                 activeTab === 'tasks'
                   ? 'bg-[#29E7CD] text-black shadow-lg'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              📋 {t('cleaning.tasks', 'Cleaning Tasks')}
+              <Icon icon={ClipboardCheck} size="sm" className="mr-2" aria-hidden="true" />
+              {t('cleaning.tasks', 'Cleaning Tasks')}
             </button>
           </div>
         </div>
@@ -209,7 +214,8 @@ export default function CleaningRosterPage() {
                 onClick={() => setShowAddArea(true)}
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
               >
-                ➕ {t('cleaning.addArea', 'Add Area')}
+                <Icon icon={Plus} size="sm" className="mr-2" aria-hidden="true" />
+                {t('cleaning.addArea', 'Add Area')}
               </button>
             </div>
 
@@ -288,7 +294,7 @@ export default function CleaningRosterPage() {
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                      <span className="text-2xl">🧹</span>
+                      <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden="true" />
                     </div>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-medium ${

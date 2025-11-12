@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslation } from '@/lib/useTranslation';
+import { Utensils, BookOpen, DollarSign } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface DashboardStatsProps {
   stats: {
@@ -23,7 +25,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
             <p className="text-2xl font-bold text-white md:text-3xl">{stats.totalIngredients}</p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 md:h-12 md:w-12 md:rounded-2xl">
-            <span className="text-xl md:text-2xl">🥘</span>
+            <Icon icon={Utensils} size="md" className="text-[#29E7CD]" aria-hidden="true" />
           </div>
         </div>
         <div className="mt-3 md:mt-4">
@@ -39,7 +41,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
             <p className="text-2xl font-bold text-white md:text-3xl">{stats.totalRecipes}</p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/10 md:h-12 md:w-12 md:rounded-2xl">
-            <span className="text-xl md:text-2xl">📖</span>
+            <Icon icon={BookOpen} size="md" className="text-[#3B82F6]" aria-hidden="true" />
           </div>
         </div>
         <div className="mt-3 md:mt-4">
@@ -57,7 +59,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
             </p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/10 md:h-12 md:w-12 md:rounded-2xl">
-            <span className="text-xl md:text-2xl">💰</span>
+            <Icon icon={DollarSign} size="md" className="text-[#F59E0B]" aria-hidden="true" />
           </div>
         </div>
         <div className="mt-3 md:mt-4">

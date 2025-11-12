@@ -8,6 +8,8 @@ import { PrepListCard } from './components/PrepListCard';
 import { usePrepListsQuery } from './hooks/usePrepListsQuery';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
 import type { KitchenSection, Ingredient, PrepList, PrepListFormData } from './types';
+import { ListChecks } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export default function PrepListsPage() {
   const { t } = useTranslation();
@@ -231,8 +233,9 @@ export default function PrepListsPage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white">
-              📝 {t('prepLists.title', 'Prep Lists')}
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+              <Icon icon={ListChecks} size="lg" aria-hidden="true" />
+              {t('prepLists.title', 'Prep Lists')}
             </h1>
             <p className="text-gray-400">
               {t('prepLists.subtitle', 'Create and manage kitchen prep lists by section')}
@@ -258,7 +261,7 @@ export default function PrepListsPage() {
           {prepLists.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <span className="text-3xl">📝</span>
+                <Icon icon={ListChecks} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('prepLists.noPrepLists', 'No Prep Lists')}

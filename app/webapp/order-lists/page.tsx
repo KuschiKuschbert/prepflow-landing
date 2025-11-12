@@ -7,6 +7,8 @@ import { OrderListForm } from './components/OrderListForm';
 import { getStatusColor } from './utils';
 import { useOrderListsQuery } from './hooks/useOrderListsQuery';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ClipboardCheck } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Supplier {
   id: string;
@@ -268,8 +270,9 @@ export default function OrderListsPage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white">
-              📋 {t('orderLists.title', 'Order Lists')}
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+              <Icon icon={ClipboardCheck} size="lg" aria-hidden="true" />
+              {t('orderLists.title', 'Order Lists')}
             </h1>
             <p className="text-gray-400">
               {t('orderLists.subtitle', 'Create and manage supplier order lists')}
@@ -295,7 +298,7 @@ export default function OrderListsPage() {
           {orderLists.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <span className="text-3xl">📋</span>
+                <Icon icon={ClipboardCheck} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('orderLists.noOrderLists', 'No Order Lists')}
@@ -324,7 +327,7 @@ export default function OrderListsPage() {
                     <div className="flex-1">
                       <div className="mb-3 flex items-center space-x-4">
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                          <span className="text-lg">📋</span>
+                          <Icon icon={ClipboardCheck} size="md" className="text-[#29E7CD]" aria-hidden="true" />
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-white">{orderList.name}</h3>

@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { Thermometer, Package, BookOpen, Calculator, Sparkles, Truck, Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface NewItemOption {
   href: string;
@@ -25,64 +27,37 @@ export function NewButton() {
     {
       href: '/webapp/temperature?action=new',
       label: 'Temp Log',
-      icon: <span className="text-sm">🌡️</span>,
+      icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden="true" />,
       category: 'Temperature',
     },
     {
       href: '/webapp/ingredients?action=new',
       label: 'Ingredient',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-          />
-        </svg>
-      ),
+      icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden="true" />,
       category: 'Ingredients',
     },
     {
       href: '/webapp/recipes?action=new',
       label: 'Recipe',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-          />
-        </svg>
-      ),
+      icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden="true" />,
       category: 'Recipes',
     },
     {
       href: '/webapp/cogs?action=new',
       label: 'COGS',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-          />
-        </svg>
-      ),
+      icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden="true" />,
       category: 'COGS',
     },
     {
       href: '/webapp/cleaning?action=new',
       label: 'Cleaning Task',
-      icon: <span className="text-sm">🧹</span>,
+      icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden="true" />,
       category: 'Cleaning',
     },
     {
       href: '/webapp/suppliers?action=new',
       label: 'Supplier',
-      icon: <span className="text-sm">🚚</span>,
+      icon: <Icon icon={Truck} size="sm" className="text-current" aria-hidden="true" />,
       category: 'Suppliers',
     },
   ];
@@ -164,9 +139,7 @@ export function NewButton() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-        </svg>
+        <Icon icon={Plus} size="md" className="text-white" aria-hidden="true" />
         <span>New</span>
       </button>
 

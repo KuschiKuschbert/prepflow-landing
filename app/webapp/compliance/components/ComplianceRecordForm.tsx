@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { ComplianceRecordFormData, ComplianceType } from '../types';
-import { getTypeIcon } from '../utils';
+import { getTypeIconEmoji } from '../utils';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
@@ -62,7 +62,7 @@ export function ComplianceRecordForm({
             <option value="">{t('compliance.selectType', 'Choose a compliance type')}</option>
             {types.map(type => (
               <option key={type.id} value={type.id}>
-                {getTypeIcon(type.name)} {type.name}
+                {getTypeIconEmoji(type.name)} {type.name}
               </option>
             ))}
           </select>

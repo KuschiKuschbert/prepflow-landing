@@ -1,5 +1,6 @@
 'use client';
 
+import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -560,8 +561,8 @@ export default function AppleStyleFeatures({
                   className="relative flex text-left w-fit border focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
                   style={{
                     opacity: isVisible ? 1 : 0,
-                    transform: isVisible 
-                      ? 'translateZ(0) scale(1) translateY(0)' 
+                    transform: isVisible
+                      ? 'translateZ(0) scale(1) translateY(0)'
                       : 'translateZ(0) scale(0.98) translateY(10px)', // GPU acceleration + initial fade-in
                     display: 'flex',
                     flexDirection: 'row',
@@ -694,17 +695,7 @@ export default function AppleStyleFeatures({
                       transition: `transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`,
                     }}
                   >
-                    <svg
-                      className="h-4 w-4 text-white md:h-5 md:w-5"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M12 4v16m8-8H4" />
-                    </svg>
+                    <Plus className="h-4 w-4 text-white md:h-5 md:w-5" aria-hidden="true" />
                   </div>
                 </button>
               );

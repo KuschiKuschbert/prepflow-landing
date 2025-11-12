@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { Bot } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface AISpecial {
   id: string;
@@ -147,8 +149,9 @@ export default function AISpecialsPage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white">
-              🤖 {t('aiSpecials.title', 'AI Specials Generator')}
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+              <Icon icon={Bot} size="lg" aria-hidden="true" />
+              {t('aiSpecials.title', 'AI Specials Generator')}
             </h1>
             <p className="text-gray-400">
               {t('aiSpecials.subtitle', 'Generate specials from ingredient photos using AI')}
@@ -223,7 +226,7 @@ export default function AISpecialsPage() {
           {aiSpecials.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <span className="text-3xl">🤖</span>
+                <Icon icon={Bot} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('aiSpecials.noResults', 'No AI Specials Generated')}
@@ -243,7 +246,7 @@ export default function AISpecialsPage() {
               >
                 <div className="mb-4 flex items-start space-x-4">
                   <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                    <span className="text-lg">🤖</span>
+                    <Icon icon={Bot} size="lg" className="text-[#29E7CD]" aria-hidden="true" />
                   </div>
 
                   <div className="flex-1">

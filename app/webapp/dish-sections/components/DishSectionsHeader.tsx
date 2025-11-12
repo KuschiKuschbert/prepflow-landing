@@ -1,4 +1,6 @@
 import { useTranslation } from '@/lib/useTranslation';
+import { UtensilsCrossed } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface DishSectionsHeaderProps {
   onAddClick: () => void;
@@ -10,8 +12,9 @@ export function DishSectionsHeader({ onAddClick }: DishSectionsHeaderProps) {
   return (
     <div className="mb-8 flex items-center justify-between">
       <div>
-        <h1 className="mb-2 text-3xl font-bold text-white">
-          🍽️ {t('dishSections.title', 'Dish Sections')}
+        <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+          <Icon icon={UtensilsCrossed} size="lg" aria-hidden="true" />
+          {t('dishSections.title', 'Dish Sections')}
         </h1>
         <p className="text-gray-400">
           {t('dishSections.subtitle', 'Organize dishes by kitchen sections for prep lists')}

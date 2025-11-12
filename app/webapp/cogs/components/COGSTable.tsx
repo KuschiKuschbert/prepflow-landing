@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { COGSCalculation } from '../types';
+import { Edit, Trash2, Utensils } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface COGSTableProps {
   calculations: COGSCalculation[];
@@ -35,7 +37,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
       <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
         <div className="mb-4 flex justify-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
-            <span className="text-3xl">🥘</span>
+            <Icon icon={Utensils} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
           </div>
         </div>
         <h3 className="mb-2 text-lg font-semibold text-white">No Ingredients Added Yet</h3>
@@ -69,28 +71,14 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                     className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
                     title="Edit quantity"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
+                    <Icon icon={Edit} size="sm" className="text-gray-400" aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => onRemoveIngredient(calc.ingredientId)}
                     className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
                     title="Remove ingredient"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
+                    <Icon icon={Trash2} size="sm" className="text-gray-400" aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -202,38 +190,14 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                           className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
                           title="Edit quantity"
                         >
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                          </svg>
+                          <Icon icon={Edit} size="sm" className="text-gray-400" aria-hidden="true" />
                         </button>
                         <button
                           onClick={() => onRemoveIngredient(calc.ingredientId)}
                           className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
                           title="Remove ingredient"
                         >
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
+                          <Icon icon={Trash2} size="sm" className="text-gray-400" aria-hidden="true" />
                         </button>
                       </>
                     )}

@@ -14,7 +14,9 @@ import {
   ComplianceType,
   ComplianceTypeFormData,
 } from './types';
-import { getTypeIcon } from './utils';
+import { getTypeIconEmoji } from './utils';
+import { ClipboardCheck } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
@@ -155,8 +157,9 @@ export default function ComplianceTrackingPage() {
       <div className="min-h-screen bg-transparent py-4 sm:py-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-white">
-            📋 {t('compliance.title', 'Compliance Tracking')}
+          <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
+            <Icon icon={ClipboardCheck} size="lg" aria-hidden="true" />
+            {t('compliance.title', 'Compliance Tracking')}
           </h1>
           <p className="text-gray-400">
             {t(
@@ -210,7 +213,7 @@ export default function ComplianceTrackingPage() {
                     <option value="all">{t('compliance.allTypes', 'All Types')}</option>
                     {types.map(type => (
                       <option key={type.id} value={type.id.toString()}>
-                        {getTypeIcon(type.name)} {type.name}
+                        {getTypeIconEmoji(type.name)} {type.name}
                       </option>
                     ))}
                   </select>

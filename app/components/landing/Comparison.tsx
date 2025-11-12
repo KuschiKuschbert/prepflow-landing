@@ -1,5 +1,8 @@
 'use client';
 
+import { BarChart3, Clock, ChefHat } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+
 export default function Comparison() {
   const comparisons = [
     {
@@ -8,14 +11,14 @@ export default function Comparison() {
       description:
         'Stop fighting with Excel at 2 AM. PrepFlow calculates everything automatically and updates in real-time.',
       color: '#29E7CD',
-      icon: '📊',
+      icon: BarChart3,
     },
     {
       title: 'vs Manual Methods',
       benefit: 'Save hours every week',
       description: 'From hours of calculations to minutes. Focus on cooking, not spreadsheets.',
       color: '#3B82F6',
-      icon: '⏱️',
+      icon: Clock,
     },
     {
       title: 'vs Generic Tools',
@@ -23,7 +26,7 @@ export default function Comparison() {
       description:
         'Designed specifically for restaurant workflows. QLD-compliant temperature monitoring, kitchen-focused features.',
       color: '#D925C7',
-      icon: '🍳',
+      icon: ChefHat,
     },
   ];
 
@@ -40,7 +43,9 @@ export default function Comparison() {
             key={comparison.title}
             className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6 transition-all hover:border-[#2a2a2a]/60 hover:bg-[#1f1f1f]/70"
           >
-            <div className="mb-4 text-4xl">{comparison.icon}</div>
+            <div className="mb-4">
+              <Icon icon={comparison.icon} size="xl" style={{ color: comparison.color }} aria-hidden="true" />
+            </div>
             <h3 className="mb-2 text-xl font-semibold" style={{ color: comparison.color }}>
               {comparison.title}
             </h3>

@@ -3,6 +3,8 @@
 import React from 'react';
 import { Ingredient, RecipeIngredient } from '../types';
 import { RecipeUnitSelect } from './RecipeUnitSelect';
+import { Plus, Search, X, Utensils } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface IngredientManagerProps {
   showAddIngredient: boolean;
@@ -40,7 +42,10 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
       <div className="rounded-2xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-4">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h3 className="mb-1 text-xl font-semibold text-white">🥘 Add Ingredients</h3>
+            <h3 className="mb-1 flex items-center gap-2 text-xl font-semibold text-white">
+              <Icon icon={Utensils} size="md" className="text-[#29E7CD]" aria-hidden="true" />
+              Add Ingredients
+            </h3>
             <p className="text-sm text-gray-400">Add ingredients manually to build your dish</p>
             <p className="mt-1 text-xs text-[#29E7CD]">
               ✨ Automatic unit conversion: Use any unit (tsp, tbsp, cups, ml, g, kg) - we&apos;ll
@@ -51,14 +56,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
             onClick={onToggleAddIngredient}
             className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
+            <Icon icon={Plus} size="sm" className="text-white" aria-hidden="true" />
             <span>{showAddIngredient ? 'Cancel' : 'Add Ingredient'}</span>
           </button>
         </div>
@@ -69,8 +67,9 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
             className="relative space-y-3 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-4"
           >
             <div className="ingredient-search-container relative">
-              <label className="mb-2 block text-sm font-medium text-gray-300">
-                🔍 Search & Select Ingredient
+              <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+                <Icon icon={Search} size="sm" className="text-gray-400" aria-hidden="true" />
+                Search & Select Ingredient
               </label>
               <div className="relative">
                 <input
@@ -82,19 +81,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                   className="w-full max-w-md rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] py-3 pr-4 pl-10 text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 />
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
+                  <Icon icon={Search} size="sm" className="text-gray-400" aria-hidden="true" />
                 </div>
                 {ingredientSearch && (
                   <button
@@ -102,14 +89,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                     onClick={() => onSearchChange('')}
                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition-colors hover:text-white"
                   >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
+                    <Icon icon={X} size="sm" className="text-gray-400" aria-hidden="true" />
                   </button>
                 )}
               </div>

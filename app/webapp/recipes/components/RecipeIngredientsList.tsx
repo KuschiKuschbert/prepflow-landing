@@ -1,6 +1,8 @@
 'use client';
 
 import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Package } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface RecipeIngredientsListProps {
   recipeIngredients: RecipeIngredientWithDetails[];
@@ -37,20 +39,8 @@ export function RecipeIngredientsList({
       <div className="divide-y divide-[#2a2a2a]/30">
         {recipeIngredients.length === 0 ? (
           <div className="px-4 py-8 text-center">
-            <div className="mb-2 text-gray-400">
-              <svg
-                className="mx-auto h-12 w-12"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                />
-              </svg>
+            <div className="mb-2 flex justify-center text-gray-400">
+              <Icon icon={Package} size="xl" className="text-gray-400" aria-hidden="true" />
             </div>
             <p className="text-sm text-gray-400">No ingredients found for this recipe</p>
             <p className="mt-1 text-xs text-gray-500">

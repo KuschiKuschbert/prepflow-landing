@@ -355,6 +355,78 @@ mobile/                 # React Native app (future)
 - **Focus States:** Cyan ring with smooth transitions
 - **Validation:** Color-coded feedback with Material 3 styling
 
+#### **Selection Controls & Checkboxes**
+
+- **Modern Button-Style Toggle:** All selection checkboxes use a button-style toggle design, not native HTML checkboxes
+- **Unselected State:** Empty box with `border border-[#2a2a2a]` and `bg-[#0a0a0a]`
+- **Selected State:** Checkmark icon (`M5 13l4 4L19 7`) in cyan (`text-[#29E7CD]`)
+- **Hover Effects:** Border highlights on hover (`hover:border-[#29E7CD]/50`)
+- **Transitions:** Smooth 200ms transitions for all state changes
+- **Accessibility:** Use `<button>` elements with proper `aria-label` attributes, not `<input type="checkbox">`
+- **Implementation Pattern:**
+
+```typescript
+<button
+  onClick={() => handleToggle(id)}
+  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+  aria-label={`${isSelected ? 'Deselect' : 'Select'} item ${name}`}
+>
+  {isSelected ? (
+    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+  ) : (
+    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+  )}
+</button>
+```
+
+- **Where Used:** Table row selection, bulk selection, card selection, import preview selection
+- **Components Updated:** `IngredientTableWithFilters`, `IngredientTableRow`, `RecipeTable`, `RecipeCard`, `CSVImportModal`
+
+#### **Icon Standards**
+
+- **Icon Library:** Use Lucide React icons exclusively (no emoji icons)
+- **Icon Component:** Use the standardized `Icon` component from `components/ui/Icon.tsx`
+- **Icon Sizes:** `xs` (12px), `sm` (16px), `md` (20px - default), `lg` (24px), `xl` (32px)
+- **Icon Colors:** Inherit from parent text color or use theme colors (`text-[#29E7CD]`, `text-gray-400`)
+- **Implementation Pattern:**
+
+```typescript
+import { Icon } from '@/components/ui/Icon';
+import { Zap, Store, MapPin } from 'lucide-react';
+
+// Basic usage with size
+<Icon icon={Zap} size="sm" className="text-[#29E7CD]" />
+
+// With accessibility (decorative - auto-hides from screen readers)
+<Icon icon={Store} size="md" aria-hidden="true" />
+
+// With accessibility (interactive - includes label)
+<Icon icon={MapPin} size="lg" aria-label="Filter by storage location" />
+```
+
+- **Automatic Accessibility:** The Icon component automatically sets `aria-hidden` when no `aria-label` is provided, and sets `role="img"` when `aria-label` is present
+- **Common Icons:**
+  - **Actions:** `Zap` (bulk actions), `Trash2` (delete), `Store` (supplier), `MapPin` (storage/location), `Target` (filter)
+  - **Navigation:** `ChevronDown` (dropdowns), `Type` (sort by name), `Tag` (sort by brand), `DollarSign` (sort by cost), `Package` (sort by stock)
+- **Migration Notes:**
+  - **Bulk Actions Icons:** All bulk action buttons use Lucide icons (replaced emoji icons: ⚡→`Zap`, 🗑️→`Trash2`, 🏪→`Store`, 📍→`MapPin`, 🎯→`Target`)
+  - **Filter Dropdown Icons:** Supplier filters use `Store`, Storage filters use `MapPin` (replaced emoji icons)
+- **Component Location:** `components/ui/Icon.tsx` - Standardized wrapper for consistent sizing and accessibility
+
+#### **Z-Index Hierarchy**
+
+- **Modals (Search, More Drawer):** `z-[65]` - Highest priority overlays
+- **Bulk Actions Dropdown:** `z-[60]` - Action menus above content
+- **Sidebar:** `z-[60]` - Navigation drawer
+- **Bulk Actions Backdrop:** `z-[55]` - Blocks interactions behind dropdowns
+- **Sort/Filter Dropdowns:** `z-50` - Filter and sort menus
+- **Filter Bar:** `z-30` - Sticky filter bar above table content
+- **Persistent Sidebar:** `z-40` - Desktop sidebar navigation
+
+**Implementation Note:** Always ensure dropdowns and modals have proper z-index values to prevent clipping behind other elements. Use backdrop divs with appropriate z-index to block interactions when dropdowns are open.
+
 ### **Material Design 3 Animation System**
 
 ```css

@@ -1,17 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { Zap, Rocket, Plug, Laptop, Mail, ChevronDown, LucideIcon } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface SpecCategory {
   title: string;
   items: string[];
-  icon: string;
+  icon: LucideIcon;
 }
 
 const specCategories: SpecCategory[] = [
   {
     title: 'Core Features',
-    icon: '⚡',
+    icon: Zap,
     items: [
       'Ingredients Management',
       'Recipe Builder',
@@ -25,7 +27,7 @@ const specCategories: SpecCategory[] = [
   },
   {
     title: 'Capabilities',
-    icon: '🚀',
+    icon: Rocket,
     items: [
       'Real-time cost calculations',
       'AI-powered menu optimization',
@@ -39,17 +41,17 @@ const specCategories: SpecCategory[] = [
   },
   {
     title: 'Integrations',
-    icon: '🔌',
+    icon: Plug,
     items: ['Supabase (Database)', 'Stripe (Payments)', 'Auth0 (Authentication)', 'Resend (Email)'],
   },
   {
     title: 'Requirements',
-    icon: '💻',
+    icon: Laptop,
     items: ['Modern web browser', 'Internet connection', 'JavaScript enabled'],
   },
   {
     title: 'Support',
-    icon: '📧',
+    icon: Mail,
     items: ['Email support', 'Documentation', 'Help center', 'Community forum'],
   },
 ];
@@ -89,24 +91,12 @@ export default function TechnicalSpecs() {
                   aria-expanded={isExpanded}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{category.icon}</span>
+                    <Icon icon={category.icon} size="lg" className="text-[#29E7CD]" aria-hidden="true" />
                     <h3 className="text-lg font-semibold text-white">{category.title}</h3>
                   </div>
 
                   {/* Expand/Collapse Icon */}
-                  <svg
-                    className={`h-5 w-5 text-white transition-transform duration-300 ${
-                      isExpanded ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <Icon icon={ChevronDown} size="sm" className={`text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
 
                 {/* Items List */}

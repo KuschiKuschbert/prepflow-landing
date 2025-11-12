@@ -1,11 +1,12 @@
 'use client';
 
 import AppleStyleFeatures from './AppleStyleFeatures';
+import { Leaf, DollarSign, BarChart3, Sparkles, Thermometer, Settings } from 'lucide-react';
 
 interface Feature {
   title: string;
   description: string;
-  icon: string;
+  icon: string; // Keep as string for AppleStyleFeatures compatibility
   screenshot: string;
   screenshotAlt: string;
   details: string[];
@@ -16,7 +17,7 @@ const features: Feature[] = [
   {
     title: 'Ingredients & Stock',
     description: 'Track costs, suppliers, and inventory.',
-    icon: '🥬',
+    icon: '🥬', // Keep emoji for now - AppleStyleFeatures expects string
     screenshot: '/images/ingredients-management-screenshot.png',
     screenshotAlt: 'PrepFlow Ingredients Management showing inventory tracking with costs, suppliers, and stock levels',
     details: [

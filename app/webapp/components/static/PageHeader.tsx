@@ -24,7 +24,7 @@ export function PageHeader({
         <div className="flex items-center gap-3 md:gap-4">
           {showLogo && (
             <Image
-              src="/images/prepflow-logo.png"
+              src="/images/prepflow-logo.svg"
               alt="PrepFlow Logo"
               width={40}
               height={40}

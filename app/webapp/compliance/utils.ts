@@ -1,4 +1,34 @@
-export function getTypeIcon(typeName: string): string {
+import {
+  Bug,
+  Flame,
+  Hospital,
+  Building2,
+  Shield,
+  Briefcase,
+  Wine,
+  UtensilsCrossed,
+  ClipboardCheck,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  LucideIcon
+} from 'lucide-react';
+
+export function getTypeIcon(typeName: string): LucideIcon {
+  const name = typeName.toLowerCase();
+  if (name.includes('pest') || name.includes('exterminat')) return Bug;
+  if (name.includes('fire') || name.includes('safety')) return Flame;
+  if (name.includes('health') || name.includes('hygiene')) return Hospital;
+  if (name.includes('council') || name.includes('license')) return Building2;
+  if (name.includes('insurance')) return Shield;
+  if (name.includes('tax') || name.includes('gst')) return Briefcase;
+  if (name.includes('liquor') || name.includes('alcohol')) return Wine;
+  if (name.includes('food') || name.includes('safety')) return UtensilsCrossed;
+  return ClipboardCheck;
+}
+
+export function getTypeIconEmoji(typeName: string): string {
+  // Keep for select options where React components can't be used
   const name = typeName.toLowerCase();
   if (name.includes('pest') || name.includes('exterminat')) return '🐛';
   if (name.includes('fire') || name.includes('safety')) return '🔥';
@@ -24,7 +54,21 @@ export function getStatusColor(status: 'active' | 'expired' | 'pending_renewal')
   }
 }
 
-export function getStatusIcon(status: 'active' | 'expired' | 'pending_renewal'): string {
+export function getStatusIcon(status: 'active' | 'expired' | 'pending_renewal'): LucideIcon {
+  switch (status) {
+    case 'active':
+      return CheckCircle;
+    case 'expired':
+      return XCircle;
+    case 'pending_renewal':
+      return AlertTriangle;
+    default:
+      return ClipboardCheck;
+  }
+}
+
+export function getStatusIconEmoji(status: 'active' | 'expired' | 'pending_renewal'): string {
+  // Keep for select options where React components can't be used
   switch (status) {
     case 'active':
       return '✅';

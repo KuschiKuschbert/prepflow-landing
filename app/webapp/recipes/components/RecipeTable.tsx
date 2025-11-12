@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
+import { Edit, Trash2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface RecipeTableProps {
   recipes: Recipe[];
@@ -32,19 +34,19 @@ const RecipeTable = React.memo(function RecipeTable({
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              <div className="flex items-center">
-                <label className="sr-only">
-                  <input
-                    type="checkbox"
-                    checked={selectedRecipes.size === recipes.length && recipes.length > 0}
-                    onChange={onSelectAll}
-                    className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-                    aria-label="Select all recipes"
-                  />
-                  Select All
-                </label>
-                <span className="ml-2">Select</span>
-              </div>
+              <button
+                onClick={onSelectAll}
+                className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                aria-label={selectedRecipes.size === recipes.length ? "Deselect all" : "Select all"}
+              >
+                {selectedRecipes.size === recipes.length && recipes.length > 0 ? (
+                  <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                )}
+              </button>
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               Name
@@ -70,16 +72,19 @@ const RecipeTable = React.memo(function RecipeTable({
                 className="px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
                 onClick={e => e.stopPropagation()}
               >
-                <label className="sr-only">
-                  <input
-                    type="checkbox"
-                    checked={selectedRecipes.has(recipe.id)}
-                    onChange={() => onSelectRecipe(recipe.id)}
-                    className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-                    aria-label={`Select recipe ${capitalizeRecipeName(recipe.name)}`}
-                  />
-                  Select {capitalizeRecipeName(recipe.name)}
-                </label>
+                <button
+                  onClick={() => onSelectRecipe(recipe.id)}
+                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                  aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
+                >
+                  {selectedRecipes.has(recipe.id) ? (
+                    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                  )}
+                </button>
               </td>
               <td
                 className="cursor-pointer px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
@@ -126,38 +131,14 @@ const RecipeTable = React.memo(function RecipeTable({
                     onClick={() => onEditRecipe(recipe)}
                     className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
                   >
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
+                    <Icon icon={Edit} size="xs" className="text-white" aria-hidden="true" />
                     Edit
                   </button>
                   <button
                     onClick={() => onDeleteRecipe(recipe)}
                     className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
                   >
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
+                    <Icon icon={Trash2} size="xs" className="text-white" aria-hidden="true" />
                     Delete
                   </button>
                 </div>

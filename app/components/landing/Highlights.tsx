@@ -2,11 +2,13 @@
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
+import { Leaf, Bot, Thermometer, BookOpen, BarChart3, LucideIcon } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Highlight {
   name: string;
   description: string;
-  icon: string;
+  icon: LucideIcon;
   screenshot?: string;
   color: string;
 }
@@ -15,35 +17,35 @@ const highlights: Highlight[] = [
   {
     name: 'Ingredients Management',
     description: 'Track costs, suppliers, and inventory in real-time',
-    icon: '🥬',
+    icon: Leaf,
     screenshot: '/images/ingredients-management-screenshot.png',
     color: '#29E7CD',
   },
   {
     name: 'AI-Powered Analysis',
     description: 'Smart COGS calculations and menu optimization',
-    icon: '🤖',
+    icon: Bot,
     screenshot: '/images/dashboard-screenshot.png',
     color: '#D925C7',
   },
   {
     name: 'Real-Time Monitoring',
     description: 'Temperature, cleaning, and compliance tracking',
-    icon: '🌡️',
+    icon: Thermometer,
     screenshot: '/images/dashboard-screenshot.png',
     color: '#3B82F6',
   },
   {
     name: 'Recipe Management',
     description: 'Build recipes with live cost calculations',
-    icon: '📖',
+    icon: BookOpen,
     screenshot: '/images/cogs-calculator-screenshot.png',
     color: '#29E7CD',
   },
   {
     name: 'Performance Analytics',
     description: "Chef's Kiss, Hidden Gem, Bargain Bucket classification",
-    icon: '📊',
+    icon: BarChart3,
     screenshot: '/images/dashboard-screenshot.png',
     color: '#D925C7',
   },
@@ -77,7 +79,9 @@ export default function Highlights() {
                 className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-6 transition-all duration-300 hover:border-white/20 hover:bg-[#1f1f1f]/50"
               >
                 {/* Icon */}
-                <div className="mb-4 text-5xl">{highlight.icon}</div>
+                <div className="mb-4">
+                  <Icon icon={highlight.icon} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
+                </div>
 
                 {/* Title */}
                 <h3 className="mb-2 text-xl font-semibold text-white">{highlight.name}</h3>

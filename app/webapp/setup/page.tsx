@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { Rocket } from 'lucide-react';
 import CountrySetup from '../../../components/CountrySetup';
 import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
@@ -54,7 +55,7 @@ export default function SetupPageRefactored() {
         <div className="mb-8">
           <div className="mb-6 flex items-center space-x-4">
             <Image
-              src="/images/prepflow-logo.png"
+              src="/images/prepflow-logo.svg"
               alt="PrepFlow Logo"
               width={120}
               height={40}
@@ -62,7 +63,10 @@ export default function SetupPageRefactored() {
             />
             <div className="h-8 w-px bg-[#2a2a2a]"></div>
             <div>
-              <h1 className="mb-2 text-4xl font-bold text-white">🚀 PrepFlow Setup</h1>
+              <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
+                <Rocket className="h-8 w-8" />
+                PrepFlow Setup
+              </h1>
               <p className="text-gray-400">
                 Get your restaurant management system up and running in minutes
               </p>

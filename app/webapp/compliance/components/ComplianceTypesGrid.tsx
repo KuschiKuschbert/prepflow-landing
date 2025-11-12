@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { ComplianceType } from '../types';
 import { getTypeIcon } from '../utils';
+import { Icon } from '@/components/ui/Icon';
 
 interface ComplianceTypesGridProps {
   types: ComplianceType[];
@@ -21,7 +22,7 @@ export function ComplianceTypesGrid({ types }: ComplianceTypesGridProps) {
         >
           <div className="mb-4 flex items-center justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <span className="text-2xl">{getTypeIcon(type.name)}</span>
+              <Icon icon={getTypeIcon(type.name)} size="md" className="text-[#29E7CD]" aria-hidden="true" />
             </div>
             <span
               className={`rounded-full px-3 py-1 text-xs font-medium ${

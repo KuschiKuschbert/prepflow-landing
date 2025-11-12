@@ -93,18 +93,30 @@ export default function IngredientTable({
       <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-white">Ingredients ({ingredients.length})</h2>
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-sm text-gray-300">
-              <input
-                type="checkbox"
-                checked={selectedIngredients.size === ingredients.length && ingredients.length > 0}
-                onChange={e => onSelectAll(e.target.checked)}
-                className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+          <div className="flex items-center gap-2">
+            {selectedIngredients.size > 0 ? (
+              <button
+                onClick={() => onSelectAll(false)}
+                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
+                aria-label="Deselect all ingredients"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{selectedIngredients.size} selected</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => onSelectAll(true)}
+                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
                 aria-label="Select all ingredients"
-                aria-describedby="select-all-description"
-              />
-              <span id="select-all-description">Select All</span>
-            </label>
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Select All</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -114,18 +126,19 @@ export default function IngredientTable({
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <label className="sr-only">
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedIngredients.size === ingredients.length && ingredients.length > 0
-                    }
-                    onChange={e => onSelectAll(e.target.checked)}
-                    className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-                    aria-label="Select all ingredients in table"
-                  />
-                  Select All
-                </label>
+                <button
+                  onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
+                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                  aria-label={selectedIngredients.size === ingredients.length ? "Deselect all" : "Select all"}
+                >
+                  {selectedIngredients.size === ingredients.length && ingredients.length > 0 ? (
+                    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                  )}
+                </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Name

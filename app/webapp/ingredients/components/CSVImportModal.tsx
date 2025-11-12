@@ -281,18 +281,19 @@ export default function CSVImportModal({
                       }`}
                     >
                       <div className="flex items-center space-x-3">
-                        <label className="sr-only">
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={e =>
-                              handleSelectIngredient(index.toString(), e.target.checked)
-                            }
-                            className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-                            aria-label={`Select ingredient ${ingredient.ingredient_name || 'Unknown'}`}
-                          />
-                          Select ingredient {ingredient.ingredient_name || 'Unknown'}
-                        </label>
+                        <button
+                          onClick={() => handleSelectIngredient(index.toString(), !isSelected)}
+                          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                          aria-label={`${isSelected ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name || 'Unknown'}`}
+                        >
+                          {isSelected ? (
+                            <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          ) : (
+                            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                          )}
+                        </button>
                         <div className="flex-1">
                           <div className="font-medium text-white">{ingredient.ingredient_name}</div>
                           <div className="text-sm text-gray-400">

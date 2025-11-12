@@ -3,6 +3,8 @@
 import { useTranslation } from '@/lib/useTranslation';
 import { PrepList } from '../types';
 import { getStatusColor } from '../utils';
+import { ListChecks, Edit, Trash2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface PrepListCardProps {
   prepList: PrepList;
@@ -23,7 +25,7 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               className="flex h-12 w-12 items-center justify-center rounded-xl"
               style={{ backgroundColor: `${prepList.kitchen_sections.color}20` }}
             >
-              <span className="text-lg">📝</span>
+              <Icon icon={ListChecks} size="md" className="text-current" aria-hidden="true" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">{prepList.name}</h3>
@@ -95,29 +97,17 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               onClick={() => onEdit(prepList)}
               className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
               title={String(t('prepLists.edit', 'Edit'))}
+              aria-label={String(t('prepLists.edit', 'Edit'))}
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
+              <Icon icon={Edit} size="md" aria-hidden="true" />
             </button>
             <button
               onClick={() => onDelete(prepList.id)}
               className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
               title={String(t('prepLists.delete', 'Delete'))}
+              aria-label={String(t('prepLists.delete', 'Delete'))}
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
+              <Icon icon={Trash2} size="md" aria-hidden="true" />
             </button>
           </div>
         </div>

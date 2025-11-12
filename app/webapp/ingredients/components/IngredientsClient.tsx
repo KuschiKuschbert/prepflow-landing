@@ -8,12 +8,11 @@ import { useEffect, useState } from 'react';
 // Direct imports to eliminate skeleton flashes
 import { useIngredientActions } from '../hooks/useIngredientActions';
 import { useIngredientData } from '../hooks/useIngredientData';
-import { useIngredientFiltering } from '../hooks/useIngredientFiltering';
+import { useIngredientFiltering, type SortOption } from '../hooks/useIngredientFiltering';
 import { useIngredientFormState } from '../hooks/useIngredientFormState';
 import { useIngredientsQuery } from '../hooks/useIngredientsQuery';
 import { useIngredientMigration } from '../hooks/useIngredientMigration';
 import CSVImportModal from './CSVImportModal';
-import IngredientActions from './IngredientActions';
 import IngredientEditModal from './IngredientEditModal';
 import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
@@ -71,7 +70,7 @@ export default function IngredientsClient() {
   const [searchTerm, setSearchTerm] = useState('');
   const [supplierFilter, setSupplierFilter] = useState('');
   const [storageFilter, setStorageFilter] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'cost_asc' | 'cost_desc' | 'supplier'>('name');
+  const [sortBy, setSortBy] = useState<SortOption>('name_asc');
 
   const { availableUnits } = useRegionalUnits();
   const { suppliers, loading, error, setError } = useIngredientData();
@@ -103,12 +102,20 @@ export default function IngredientsClient() {
     sortBy,
   });
   const [page, setPage] = useState(1);
-  const pageSize = 20;
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+
+  // Fetch all ingredients for client-side filtering (use large pageSize)
+  // Since filtering happens client-side, we need all data
   const {
     data: ingredientsData,
     isLoading,
     error: queryError,
-  } = useIngredientsQuery(page, pageSize);
+  } = useIngredientsQuery(1, 10000); // Fetch all ingredients
+
+  // Reset to page 1 when items per page or filters change
+  useEffect(() => {
+    setPage(1);
+  }, [itemsPerPage, searchTerm, supplierFilter, storageFilter]);
 
   // Automatic migration check on first load
   useIngredientMigration(loading, isLoading, ingredientsData);
@@ -162,10 +169,24 @@ export default function IngredientsClient() {
     setImporting(false);
   };
 
+  // Calculate pagination based on filtered results
+  const filteredTotal = filteredIngredients?.length || 0;
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / itemsPerPage));
+
+  // Slice filtered ingredients for current page
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedIngredients = filteredIngredients?.slice(startIndex, endIndex) || [];
+
+  // Reset to page 1 if current page is out of bounds
+  useEffect(() => {
+    if (page > totalPages && totalPages > 0) {
+      setPage(1);
+    }
+  }, [page, totalPages]);
+
   if (loading || isLoading) return <PageSkeleton />;
 
-  const total = ingredientsData?.total || 0;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const translateText = (key: string, fallback: string): string => {
     const result = t(key, fallback);
     return Array.isArray(result) ? result.join('') : result;
@@ -187,16 +208,6 @@ export default function IngredientsClient() {
           {error}
         </div>
       )}
-      <IngredientActions
-        selectedIngredients={selectedIngredients}
-        filteredIngredients={filteredIngredients}
-        onAddIngredient={() => setShowAddForm(true)}
-        onImportCSV={() => setShowCSVImport(true)}
-        onExportCSV={exportToCSV}
-        onBulkDelete={handleBulkDelete}
-        onBulkUpdate={async () => {}}
-        loading={loading}
-      />
 
       {/* Add Ingredient Wizard */}
       {showAddForm && (
@@ -215,7 +226,12 @@ export default function IngredientsClient() {
 
       {/* Integrated Table with Filters */}
       <IngredientTableWithFilters
-        ingredients={filteredIngredients}
+        ingredients={paginatedIngredients}
+        onBulkDelete={handleBulkDelete}
+        onBulkUpdate={async (ids, updates) => {
+          // Bulk update handler - can be implemented later
+          console.log('Bulk update:', ids, updates);
+        }}
         displayUnit={displayUnit}
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
@@ -231,6 +247,12 @@ export default function IngredientsClient() {
         onStorageFilterChange={setStorageFilter}
         onSortChange={setSortBy}
         onDisplayUnitChange={setDisplayUnit}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={setItemsPerPage}
+        totalFiltered={filteredTotal}
+        onAddIngredient={() => setShowAddForm(true)}
+        onImportCSV={() => setShowCSVImport(true)}
+        onExportCSV={exportToCSV}
         loading={loading}
       />
 
@@ -238,7 +260,7 @@ export default function IngredientsClient() {
       <IngredientPagination
         page={page}
         totalPages={totalPages}
-        total={total}
+        total={filteredTotal}
         onPageChange={setPage}
       />
 

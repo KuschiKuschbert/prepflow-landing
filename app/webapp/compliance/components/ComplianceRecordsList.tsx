@@ -2,9 +2,11 @@
 
 import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import { ClipboardCheck } from 'lucide-react';
 import OptimizedImage from '@/components/OptimizedImage';
 import { ComplianceRecord } from '../types';
-import { getTypeIcon, getStatusColor, getStatusIcon, getDaysUntilExpiry } from '../utils';
+import { getTypeIcon, getStatusColor, getStatusIcon, getStatusIconEmoji, getDaysUntilExpiry } from '../utils';
+import { Icon } from '@/components/ui/Icon';
 
 interface ComplianceRecordsListProps {
   records: ComplianceRecord[];
@@ -17,7 +19,7 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
     return (
       <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
         <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-          <span className="text-4xl">📋</span>
+          <ClipboardCheck className="h-10 w-10 text-[#29E7CD]" aria-hidden="true" />
         </div>
         <h3 className="mb-2 text-xl font-semibold text-white">
           {t('compliance.noRecords', 'No Compliance Records')}
@@ -41,7 +43,7 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                  <span className="text-2xl">{getTypeIcon(record.compliance_types.name)}</span>
+                  <Icon icon={getTypeIcon(record.compliance_types.name)} size="md" className="text-[#29E7CD]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white">{record.document_name}</h3>
@@ -50,9 +52,9 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
               </div>
               <div className="flex items-center space-x-3">
                 <span
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${getStatusColor(record.status)}`}
+                  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${getStatusColor(record.status)}`}
                 >
-                  {getStatusIcon(record.status)}{' '}
+                  <Icon icon={getStatusIcon(record.status)} size="xs" aria-hidden="true" />
                   {record.status.charAt(0).toUpperCase() + record.status.slice(1).replace('_', ' ')}
                 </span>
                 {daysUntilExpiry !== null && (

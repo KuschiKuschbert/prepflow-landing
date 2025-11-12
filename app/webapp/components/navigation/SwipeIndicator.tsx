@@ -1,5 +1,8 @@
 'use client';
 
+import { ChevronUp } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+
 interface SwipeIndicatorProps {
   isAtTop: boolean;
   dragProgress: number;
@@ -40,19 +43,7 @@ export function SwipeIndicator({
               boxShadow: `0 4px 12px rgba(41, 231, 205, ${upwardOpacity * 0.3})`,
             }}
           >
-            <svg
-              className="h-3.5 w-3.5 text-[#29E7CD] transition-transform duration-200"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M5 15l7-7 7 7"
-              />
-            </svg>
+            <Icon icon={ChevronUp} size="xs" className="text-[#29E7CD] transition-transform duration-200" aria-hidden="true" />
             <span className="text-[11px] font-semibold text-[#29E7CD]">
               {upwardMovement > 12 ? 'Release to close' : 'Swipe up to close'}
             </span>

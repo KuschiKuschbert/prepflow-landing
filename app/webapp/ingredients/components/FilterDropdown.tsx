@@ -1,8 +1,11 @@
 'use client';
 
+import { ChevronDown, LucideIcon } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+
 interface FilterDropdownProps {
   label: string;
-  icon: string;
+  icon: LucideIcon;
   value: string;
   options: string[];
   isOpen: boolean;
@@ -27,34 +30,27 @@ export function FilterDropdown({
     <div className="relative w-full sm:w-auto">
       <button
         onClick={onToggle}
-        className={`flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all duration-200 sm:w-auto ${
+        className={`flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 sm:w-auto ${
           value
             ? `${activeColor} ${activeBg}`
             : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
         }`}
       >
-        <span>{icon}</span>
+        <Icon icon={icon} size="sm" className="text-current" aria-hidden="true" />
         <span className="truncate">{value || label}</span>
-        <svg
-          className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <Icon icon={ChevronDown} size="xs" className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
       </button>
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={onToggle} aria-hidden="true" />
-          <div className="absolute top-full left-0 z-50 mt-2 max-h-60 w-64 overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-            <div className="p-2">
+          <div className="absolute top-full left-0 z-50 mt-1.5 max-h-60 w-56 overflow-y-auto rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+            <div className="p-1.5">
               <button
                 onClick={() => {
                   onChange('');
                   onToggle();
                 }}
-                className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                   !value ? `${activeBg} ${activeColor}` : 'text-gray-300 hover:bg-[#2a2a2a]'
                 }`}
               >
@@ -67,7 +63,7 @@ export function FilterDropdown({
                     onChange(option);
                     onToggle();
                   }}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                  className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                     value === option
                       ? `${activeBg} ${activeColor}`
                       : 'text-gray-300 hover:bg-[#2a2a2a]'
@@ -83,5 +79,3 @@ export function FilterDropdown({
     </div>
   );
 }
-
-

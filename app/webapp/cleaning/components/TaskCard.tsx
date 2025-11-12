@@ -2,6 +2,8 @@
 
 import OptimizedImage from '@/components/OptimizedImage';
 import { useTranslation } from '@/lib/useTranslation';
+import { CheckCircle, AlertTriangle, ClipboardCheck, Camera, Edit } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface CleaningTask {
   id: number;
@@ -32,11 +34,11 @@ interface TaskCardProps {
 function getStatusIcon(status: string) {
   switch (status) {
     case 'completed':
-      return '✅';
+      return <Icon icon={CheckCircle} size="lg" className="text-green-400" aria-hidden="true" />;
     case 'overdue':
-      return '⚠️';
+      return <Icon icon={AlertTriangle} size="lg" className="text-red-400" aria-hidden="true" />;
     default:
-      return '📋';
+      return <Icon icon={ClipboardCheck} size="lg" className="text-yellow-400" aria-hidden="true" />;
   }
 }
 
@@ -59,7 +61,7 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-            <span className="text-2xl">{getStatusIcon(task.status)}</span>
+            {getStatusIcon(task.status)}
           </div>
           <div>
             <h3 className="text-xl font-semibold text-white">{task.cleaning_areas.name}</h3>
@@ -76,9 +78,9 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
       {task.notes && <p className="mb-4 text-gray-300">{task.notes}</p>}
 
       {task.completed_date && (
-        <p className="mb-4 text-sm text-green-400">
-          ✅ {t('cleaning.completedOn', 'Completed on')}{' '}
-          {new Date(task.completed_date).toLocaleString()}
+        <p className="mb-4 flex items-center gap-2 text-sm text-green-400">
+          <Icon icon={CheckCircle} size="sm" aria-hidden="true" />
+          {t('cleaning.completedOn', 'Completed on')} {new Date(task.completed_date).toLocaleString()}
         </p>
       )}
 
@@ -98,20 +100,21 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
         {task.status === 'pending' && (
           <button
             onClick={() => onComplete(task.id)}
-            className="rounded-xl bg-[#29E7CD] px-4 py-2 font-semibold text-black transition-all duration-200 hover:shadow-lg"
+            className="flex items-center gap-2 rounded-xl bg-[#29E7CD] px-4 py-2 font-semibold text-black transition-all duration-200 hover:shadow-lg"
           >
-            ✅ {t('cleaning.markComplete', 'Mark Complete')}
+            <Icon icon={CheckCircle} size="sm" aria-hidden="true" />
+            {t('cleaning.markComplete', 'Mark Complete')}
           </button>
         )}
-        <button className="rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
-          📷 {t('cleaning.addPhoto', 'Add Photo')}
+        <button className="flex items-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
+          <Icon icon={Camera} size="sm" aria-hidden="true" />
+          {t('cleaning.addPhoto', 'Add Photo')}
         </button>
-        <button className="rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
-          ✏️ {t('cleaning.edit', 'Edit')}
+        <button className="flex items-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
+          <Icon icon={Edit} size="sm" aria-hidden="true" />
+          {t('cleaning.edit', 'Edit')}
         </button>
       </div>
     </div>
   );
 }
-
-

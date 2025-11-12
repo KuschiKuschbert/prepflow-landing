@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import { Trash2, Store, MapPin, Target, Zap } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Ingredient {
   id: string;
@@ -28,9 +30,6 @@ interface Ingredient {
 interface IngredientActionsProps {
   selectedIngredients: Set<string>;
   filteredIngredients: Ingredient[];
-  onAddIngredient: () => void;
-  onImportCSV: () => void;
-  onExportCSV: () => void;
   onBulkDelete: (ids: string[]) => Promise<void>;
   onBulkUpdate: (ids: string[], updates: Partial<Ingredient>) => Promise<void>;
   loading?: boolean;
@@ -39,9 +38,6 @@ interface IngredientActionsProps {
 export default function IngredientActions({
   selectedIngredients,
   filteredIngredients,
-  onAddIngredient,
-  onImportCSV,
-  onExportCSV,
   onBulkDelete,
   onBulkUpdate,
   loading = false,
@@ -130,82 +126,83 @@ export default function IngredientActions({
     }
   };
 
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showBulkMenu) {
+        setShowBulkMenu(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [showBulkMenu]);
+
   return (
     <div className="mb-6 flex flex-wrap gap-3">
-      {/* Primary Actions */}
-      <button
-        onClick={onAddIngredient}
-        className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
-      >
-        + Add Ingredient
-      </button>
-
-      <button
-        onClick={onImportCSV}
-        className="rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
-      >
-        📁 Import CSV
-      </button>
-
-      <button
-        onClick={onExportCSV}
-        className="rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
-      >
-        📤 Export CSV
-      </button>
-
       {/* Bulk Actions */}
       {selectedCount > 0 && (
-        <div className="relative">
+        <div className="relative z-[60]">
           <button
             onClick={() => setShowBulkMenu(!showBulkMenu)}
-            className="rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl"
           >
-            ⚡ Bulk Actions ({selectedCount})
+            <Icon icon={Zap} size="sm" className="text-current" aria-hidden="true" />
+            <span>Bulk Actions ({selectedCount})</span>
           </button>
 
           {showBulkMenu && (
-            <div className="absolute top-full left-0 z-10 mt-2 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-              <div className="p-2">
-                <div className="border-b border-[#2a2a2a] px-3 py-2 text-xs text-gray-400">
-                  {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
-                </div>
+            <>
+              <div
+                className="fixed inset-0 z-[55]"
+                onClick={() => setShowBulkMenu(false)}
+                aria-hidden="true"
+              />
+              <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+                <div className="p-1.5">
+                  <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
+                    {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
+                  </div>
 
-                <div className="mt-2 space-y-1">
-                  <button
-                    onClick={handleBulkDelete}
-                    disabled={bulkActionLoading}
-                    className="w-full rounded px-3 py-2 text-left text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
-                  >
-                    🗑️ Delete Selected
-                  </button>
+                  <div className="mt-1.5 space-y-0.5">
+                    <button
+                      onClick={handleBulkDelete}
+                      disabled={bulkActionLoading}
+                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+                    >
+                      <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden="true" />
+                      <span>Delete Selected</span>
+                    </button>
 
-                  <button
-                    onClick={handleBulkUpdateSupplier}
-                    disabled={bulkActionLoading}
-                    className="w-full rounded px-3 py-2 text-left text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                  >
-                    🏪 Update Supplier
-                  </button>
+                    <button
+                      onClick={handleBulkUpdateSupplier}
+                      disabled={bulkActionLoading}
+                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                    >
+                      <Icon icon={Store} size="xs" className="text-current" aria-hidden="true" />
+                      <span>Update Supplier</span>
+                    </button>
 
-                  <button
-                    onClick={handleBulkUpdateStorage}
-                    disabled={bulkActionLoading}
-                    className="w-full rounded px-3 py-2 text-left text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                  >
-                    📍 Update Storage Location
-                  </button>
+                    <button
+                      onClick={handleBulkUpdateStorage}
+                      disabled={bulkActionLoading}
+                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                    >
+                      <Icon icon={MapPin} size="xs" className="text-current" aria-hidden="true" />
+                      <span>Update Storage Location</span>
+                    </button>
 
-                  <button
-                    onClick={handleBulkUpdateWastage}
-                    disabled={bulkActionLoading}
-                    className="w-full rounded px-3 py-2 text-left text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                  >
-                    🎯 Update Wastage %
-                  </button>
+                    <button
+                      onClick={handleBulkUpdateWastage}
+                      disabled={bulkActionLoading}
+                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                    >
+                      <Icon icon={Target} size="xs" className="text-current" aria-hidden="true" />
+                      <span>Update Wastage %</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       )}

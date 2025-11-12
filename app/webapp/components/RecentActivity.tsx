@@ -7,6 +7,8 @@ import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { supabase } from '@/lib/supabase';
 import { useTranslation } from '@/lib/useTranslation';
 import { useCallback, useEffect, useState } from 'react';
+import { Clock, RefreshCw, Package, BookOpen, UtensilsCrossed } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface RecentActivity {
   id: string;
@@ -161,19 +163,7 @@ export default function RecentActivity() {
       <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]">
-            <svg
-              className="h-6 w-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <Icon icon={Clock} size="lg" className="text-white" aria-hidden="true" />
           </div>
         </div>
 
@@ -197,14 +187,7 @@ export default function RecentActivity() {
           title="Refresh activity"
           aria-label="Refresh activity"
         >
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
+          <Icon icon={RefreshCw} size="sm" className="text-[#29E7CD]" aria-hidden="true" />
         </button>
       </div>
 
@@ -224,43 +207,15 @@ export default function RecentActivity() {
                       : 'bg-purple-500/20'
                 }`}
               >
-                <svg
-                  className={`h-4 w-4 md:h-5 md:w-5 ${
-                    activity.type === 'ingredient'
-                      ? 'text-blue-400'
-                      : activity.type === 'recipe'
-                        ? 'text-green-400'
-                        : 'text-purple-400'
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {activity.type === 'ingredient' && (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  )}
-                  {activity.type === 'recipe' && (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  )}
-                  {activity.type === 'menu_dish' && (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  )}
-                </svg>
+                {activity.type === 'ingredient' && (
+                  <Icon icon={Package} size="sm" className="text-blue-400" aria-hidden="true" />
+                )}
+                {activity.type === 'recipe' && (
+                  <Icon icon={BookOpen} size="sm" className="text-green-400" aria-hidden="true" />
+                )}
+                {activity.type === 'menu_dish' && (
+                  <Icon icon={UtensilsCrossed} size="sm" className="text-purple-400" aria-hidden="true" />
+                )}
               </div>
             </div>
 
