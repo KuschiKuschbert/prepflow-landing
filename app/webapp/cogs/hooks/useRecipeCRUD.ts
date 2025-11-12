@@ -4,7 +4,6 @@
 'use client';
 
 import { useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
 import { formatDishName } from '@/lib/text-utils';
 
 interface UseRecipeCRUDProps {
@@ -15,47 +14,30 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
   const createOrUpdateRecipe = useCallback(
     async (recipeName: string, dishPortions: number) => {
       const formattedName = formatDishName(recipeName);
-      const { data: existingRecipes, error: checkError } = await supabase
-        .from('recipes')
-        .select('id, name')
-        .ilike('name', formattedName);
 
-      const existingRecipe =
-        existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
-
-      if (existingRecipe && !checkError) {
-        const { data: updatedRecipe, error: updateError } = await supabase
-          .from('recipes')
-          .update({
-            yield: dishPortions || 1,
-            yield_unit: 'servings',
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', existingRecipe.id)
-          .select()
-          .single();
-
-        if (updateError) {
-          setError(updateError.message);
-          return null;
-        }
-        return { recipe: updatedRecipe, isNew: false };
-      } else {
-        const { data: newRecipe, error: createError } = await supabase
-          .from('recipes')
-          .insert({
+      try {
+        const response = await fetch('/api/recipes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             name: formattedName,
             yield: dishPortions || 1,
             yield_unit: 'servings',
-          })
-          .select()
-          .single();
+          }),
+        });
 
-        if (createError) {
-          setError(createError.message);
+        const result = await response.json();
+
+        if (!response.ok) {
+          setError(result.message || result.error || 'Failed to save recipe');
           return null;
         }
-        return { recipe: newRecipe, isNew: true };
+
+        return { recipe: result.recipe, isNew: result.isNew };
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to save recipe';
+        setError(errorMessage);
+        return null;
       }
     },
     [setError],
@@ -63,27 +45,28 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
 
   const saveRecipeIngredients = useCallback(
     async (recipeId: string, recipeIngredientInserts: any[], isUpdate: boolean) => {
-      if (isUpdate) {
-        const { error: deleteError } = await supabase
-          .from('recipe_ingredients')
-          .delete()
-          .eq('recipe_id', recipeId);
+      try {
+        const response = await fetch(`/api/recipes/${recipeId}/ingredients`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ingredients: recipeIngredientInserts,
+            isUpdate,
+          }),
+        });
 
-        if (deleteError) {
-          return { error: `Failed to update recipe ingredients: ${deleteError.message}` };
+        const result = await response.json();
+
+        if (!response.ok) {
+          return { error: result.message || result.error || 'Failed to save recipe ingredients' };
         }
+
+        return { success: true };
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to save recipe ingredients';
+        return { error: errorMessage };
       }
-
-      const { error: ingredientsError } = await supabase
-        .from('recipe_ingredients')
-        .insert(recipeIngredientInserts)
-        .select();
-
-      if (ingredientsError) {
-        return { error: `Failed to save recipe ingredients: ${ingredientsError.message}` };
-      }
-
-      return { success: true };
     },
     [],
   );
