@@ -401,9 +401,9 @@ export default function IngredientTableWithFilters({
                     <span>Export</span>
                   </button>
                 )}
-                {/* Bulk Actions Button */}
+                {/* Bulk Actions Button - Desktop: in action buttons section */}
                 {selectedCount > 0 && onBulkDelete && (
-                  <div className="relative z-[60]">
+                  <div className="relative z-[60] hidden md:block">
                     <button
                       onClick={() => setShowBulkMenu(!showBulkMenu)}
                       disabled={bulkActionLoading}
@@ -478,16 +478,90 @@ export default function IngredientTableWithFilters({
           </div>
           <div className="flex items-center gap-2">
             {selectedIngredients.size > 0 ? (
-              <button
-                onClick={() => onSelectAll(false)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
-                aria-label="Deselect all ingredients"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>{selectedIngredients.size} selected</span>
-              </button>
+              <>
+                <button
+                  onClick={() => onSelectAll(false)}
+                  className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
+                  aria-label="Deselect all ingredients"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{selectedIngredients.size} selected</span>
+                </button>
+                {/* Bulk Actions Button - Mobile: next to selected count */}
+                {selectedCount > 0 && onBulkDelete && (
+                  <div className="relative z-[60] md:hidden">
+                    <button
+                      onClick={() => setShowBulkMenu(!showBulkMenu)}
+                      disabled={bulkActionLoading}
+                      className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl disabled:opacity-50"
+                    >
+                      <Icon icon={Zap} size="xs" className="text-current" aria-hidden={true} />
+                      <span>Actions</span>
+                    </button>
+
+                    {showBulkMenu && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-[55]"
+                          onClick={() => setShowBulkMenu(false)}
+                          aria-hidden={true}
+                        />
+                        <div className="absolute top-full right-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+                          <div className="p-1.5">
+                            <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
+                              {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
+                            </div>
+
+                            <div className="mt-1.5 space-y-0.5">
+                              <button
+                                onClick={handleBulkDelete}
+                                disabled={bulkActionLoading}
+                                className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+                              >
+                                <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
+                                <span>Delete Selected</span>
+                              </button>
+
+                              {onBulkUpdate && (
+                                <>
+                                  <button
+                                    onClick={handleBulkUpdateSupplier}
+                                    disabled={bulkActionLoading}
+                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                                  >
+                                    <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
+                                    <span>Update Supplier</span>
+                                  </button>
+
+                                  <button
+                                    onClick={handleBulkUpdateStorage}
+                                    disabled={bulkActionLoading}
+                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                                  >
+                                    <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
+                                    <span>Update Storage Location</span>
+                                  </button>
+
+                                  <button
+                                    onClick={handleBulkUpdateWastage}
+                                    disabled={bulkActionLoading}
+                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                                  >
+                                    <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
+                                    <span>Update Wastage %</span>
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </>
             ) : (
               <button
                 onClick={() => onSelectAll(true)}
