@@ -7,6 +7,8 @@ import { convertIngredientCost } from '@/lib/unit-conversion';
 import { getStandardUnit } from '../utils/getStandardUnit';
 import { Edit, Trash2, Info } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useState, useRef } from 'react';
 
 interface Ingredient {
   id: string;
@@ -33,6 +35,10 @@ interface IngredientTableRowProps {
   onEdit: (ingredient: Ingredient) => void;
   onDelete: (id: string) => Promise<void>;
   deletingId: string | null;
+  isSelectionMode?: boolean;
+  onStartLongPress?: () => void;
+  onCancelLongPress?: () => void;
+  onEnterSelectionMode?: () => void;
 }
 
 export function IngredientTableRow({
@@ -43,6 +49,10 @@ export function IngredientTableRow({
   onEdit,
   onDelete,
   deletingId,
+  isSelectionMode = false,
+  onStartLongPress,
+  onCancelLongPress,
+  onEnterSelectionMode,
 }: IngredientTableRowProps) {
   const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
   const convertedCost = convertIngredientCost(
@@ -68,14 +78,102 @@ export function IngredientTableRow({
     }).format(amount);
   };
 
-  const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this ingredient?')) {
-      await onDelete(ingredient.id);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartTimeRef = useRef<number | null>(null);
+  const hasMovedRef = useRef(false);
+
+  const handleDelete = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowDeleteConfirm(false);
+    await onDelete(ingredient.id);
+  };
+
+  const isSelected = selectedIngredients.has(ingredient.id);
+
+  // Long press handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isSelectionMode) {
+      // In selection mode, tap to toggle
+      e.preventDefault();
+      onSelectIngredient(ingredient.id, !isSelected);
+      return;
+    }
+
+    touchStartTimeRef.current = Date.now();
+    hasMovedRef.current = false;
+    onStartLongPress?.();
+
+    longPressTimerRef.current = setTimeout(() => {
+      if (!hasMovedRef.current) {
+        // Enter selection mode
+        onEnterSelectionMode?.();
+        // Select this item when entering selection mode
+        if (!isSelected) {
+          onSelectIngredient(ingredient.id, true);
+        }
+      }
+      longPressTimerRef.current = null;
+    }, 500);
+  };
+
+  const handleTouchMove = () => {
+    hasMovedRef.current = true;
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+      onCancelLongPress?.();
     }
   };
 
+  const handleTouchEnd = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+      onCancelLongPress?.();
+    }
+    touchStartTimeRef.current = null;
+    hasMovedRef.current = false;
+  };
+
+  // Click handler - in selection mode, toggle selection
+  const handleRowClick = (e: React.MouseEvent) => {
+    if (isSelectionMode) {
+      e.preventDefault();
+      onSelectIngredient(ingredient.id, !isSelected);
+    }
+  };
+
+  // Prevent edit/delete clicks when in selection mode
+  const handleEditClick = (e: React.MouseEvent) => {
+    if (isSelectionMode) {
+      e.stopPropagation();
+      return;
+    }
+    onEdit(ingredient);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    if (isSelectionMode) {
+      e.stopPropagation();
+      return;
+    }
+    handleDelete();
+  };
+
   return (
-    <tr className="transition-colors duration-200 hover:bg-[#2a2a2a]/20">
+    <tr
+      className={`transition-colors duration-200 ${
+        isSelectionMode ? 'cursor-pointer' : 'hover:bg-[#2a2a2a]/20'
+      } ${isSelected && isSelectionMode ? 'bg-[#29E7CD]/10' : ''}`}
+      onClick={handleRowClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <td className="px-6 py-4 whitespace-nowrap">
         <button
           onClick={() => onSelectIngredient(ingredient.id, !selectedIngredients.has(ingredient.id))}
@@ -141,16 +239,17 @@ export function IngredientTableRow({
       <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => onEdit(ingredient)}
-            className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
+            onClick={handleEditClick}
+            disabled={isSelectionMode}
+            className={`text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80 ${isSelectionMode ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label={`Edit ${ingredient.ingredient_name}`}
           >
             <Icon icon={Edit} size="sm" className="text-[#29E7CD]" aria-hidden="true" />
           </button>
           <button
-            onClick={handleDelete}
-            disabled={deletingId === ingredient.id}
-            className="text-red-400 transition-colors hover:text-red-300 disabled:opacity-50"
+            onClick={handleDeleteClick}
+            disabled={deletingId === ingredient.id || isSelectionMode}
+            className={`text-red-400 transition-colors hover:text-red-300 disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
             aria-label={`Delete ${ingredient.ingredient_name}`}
           >
             {deletingId === ingredient.id ? (
@@ -161,6 +260,17 @@ export function IngredientTableRow({
           </button>
         </div>
       </td>
+      {/* Confirm Delete Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Ingredient"
+        message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+        variant="danger"
+      />
     </tr>
   );
 }

@@ -20,6 +20,8 @@ import IngredientWizard from './IngredientWizard';
 import { useTranslation } from '@/lib/useTranslation';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useRegionalUnits } from '../hooks/useRegionalUnits';
+import { useNotification } from '@/contexts/NotificationContext';
+import { useSelectionMode } from '../hooks/useSelectionMode';
 
 interface Ingredient {
   id: string;
@@ -64,6 +66,13 @@ function extractSupabaseError(error: unknown): string {
 
 export default function IngredientsClient() {
   const { t } = useTranslation();
+  const { showSuccess, showError } = useNotification();
+  const {
+    isSelectionMode,
+    startLongPress,
+    cancelLongPress,
+    exitSelectionMode,
+  } = useSelectionMode();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [displayUnit, setDisplayUnit] = useState('g');
@@ -110,6 +119,7 @@ export default function IngredientsClient() {
     data: ingredientsData,
     isLoading,
     error: queryError,
+    refetch: refetchIngredients,
   } = useIngredientsQuery(1, 10000); // Fetch all ingredients
 
   // Reset to page 1 when items per page or filters change
@@ -229,8 +239,37 @@ export default function IngredientsClient() {
         ingredients={paginatedIngredients}
         onBulkDelete={handleBulkDelete}
         onBulkUpdate={async (ids, updates) => {
-          // Bulk update handler - can be implemented later
-          console.log('Bulk update:', ids, updates);
+          try {
+            const response = await fetch('/api/ingredients/bulk-update', {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ ids, updates }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.error || 'Failed to update ingredients');
+            }
+
+            // Refetch ingredients to get latest data from database
+            await refetchIngredients();
+
+            // Clear selections after successful update
+            setSelectedIngredients(new Set());
+
+            // Exit selection mode after bulk action
+            exitSelectionMode();
+
+            // Show success notification
+            showSuccess(data.message || `Successfully updated ${ids.length} ingredient${ids.length !== 1 ? 's' : ''}`);
+          } catch (error) {
+            console.error('Bulk update error:', error);
+            showError(error instanceof Error ? error.message : 'Failed to update ingredients');
+            throw error;
+          }
         }}
         displayUnit={displayUnit}
         searchTerm={searchTerm}
@@ -254,6 +293,11 @@ export default function IngredientsClient() {
         onImportCSV={() => setShowCSVImport(true)}
         onExportCSV={exportToCSV}
         loading={loading}
+        isSelectionMode={isSelectionMode}
+        onStartLongPress={startLongPress}
+        onCancelLongPress={cancelLongPress}
+        onEnterSelectionMode={exitSelectionMode}
+        onExitSelectionMode={exitSelectionMode}
       />
 
       {/* Pagination */}

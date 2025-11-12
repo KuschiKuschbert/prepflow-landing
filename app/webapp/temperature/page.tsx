@@ -16,9 +16,11 @@ import { PageHeader } from './components/PageHeader';
 import { TabNavigation } from './components/TabNavigation';
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureLogsQuery } from './hooks/useTemperatureLogsQuery';
+import { useNotification } from '@/contexts/NotificationContext';
 
 function TemperatureLogsPageContent() {
   const { formatDate } = useCountryFormatting();
+  const { showError } = useNotification();
 
   // Helper function to format time strings
   const formatTime = (timeString: string) => {
@@ -276,8 +278,7 @@ function TemperatureLogsPageContent() {
         }
       }
     } catch (error) {
-      // Handle logging error gracefully
-      alert('Failed to log temperature. Please try again.');
+      showError('Failed to log temperature. Please try again.');
     } finally {
       setQuickTempLoading(prev => ({ ...prev, [equipmentId]: false }));
     }

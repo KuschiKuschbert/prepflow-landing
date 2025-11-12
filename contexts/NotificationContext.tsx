@@ -1,6 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { CheckCircle2, XCircle, AlertTriangle, Info } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Notification {
   id: string;
@@ -77,28 +79,54 @@ interface ToastProps {
 }
 
 function Toast({ type, message }: ToastProps) {
+  const [isVisible, setIsVisible] = useState(true);
+
   const styles = {
-    success: 'border-green-500/30 bg-green-500/5 text-green-400',
-    error: 'border-red-500/30 bg-red-500/5 text-red-400',
-    warning: 'border-yellow-500/30 bg-yellow-500/5 text-yellow-400',
-    info: 'border-[#29E7CD]/30 bg-[#29E7CD]/5 text-[#29E7CD]',
+    success: {
+      container: 'border-green-500/30 bg-green-500/10 text-green-400',
+      icon: 'text-green-400',
+    },
+    error: {
+      container: 'border-red-500/30 bg-red-500/10 text-red-400',
+      icon: 'text-red-400',
+    },
+    warning: {
+      container: 'border-yellow-500/30 bg-yellow-500/10 text-yellow-400',
+      icon: 'text-yellow-400',
+    },
+    info: {
+      container: 'border-[#29E7CD]/30 bg-[#29E7CD]/10 text-[#29E7CD]',
+      icon: 'text-[#29E7CD]',
+    },
   };
 
   const icons = {
-    success: '✓',
-    error: '✕',
-    warning: '⚠',
-    info: 'ℹ',
+    success: CheckCircle2,
+    error: XCircle,
+    warning: AlertTriangle,
+    info: Info,
   };
+
+  const style = styles[type];
+  const IconComponent = icons[type];
+
+  if (!isVisible) return null;
 
   return (
     <div
-      className={`rounded-xl border px-4 py-2.5 shadow-md backdrop-blur-sm ${styles[type]} animate-in slide-in-from-top duration-200`}
+      className={`flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-lg backdrop-blur-sm transition-all duration-300 ${style.container} animate-in slide-in-from-top fade-in duration-200`}
+      role="alert"
+      aria-live="polite"
     >
-      <div className="flex items-center gap-2">
-        <span className="text-sm">{icons[type]}</span>
-        <span className="text-sm font-medium">{message}</span>
-      </div>
+      <Icon icon={IconComponent} size="sm" className={style.icon} aria-hidden="true" />
+      <span className="flex-1 text-sm font-medium">{message}</span>
+      <button
+        onClick={() => setIsVisible(false)}
+        className="text-gray-400 transition-colors hover:text-white"
+        aria-label="Close notification"
+      >
+        <Icon icon={XCircle} size="xs" className="text-current" aria-hidden="true" />
+      </button>
     </div>
   );
 }

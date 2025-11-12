@@ -1,19 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useNotification } from '@/contexts/NotificationContext';
 
 export default function TestDataGenerator() {
   const [isGeneratingTestData, setIsGeneratingTestData] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const { showSuccess, showError } = useNotification();
 
-  const handleGenerateTestData = async () => {
-    if (
-      !confirm(
-        'This will generate 3 months of test temperature data. This may take a few minutes. Continue?',
-      )
-    ) {
-      return;
-    }
+  const handleGenerateTestData = () => {
+    setShowConfirmDialog(true);
+  };
 
+  const confirmGenerateTestData = async () => {
+    setShowConfirmDialog(false);
     setIsGeneratingTestData(true);
     try {
       const response = await fetch('/api/generate-test-temperature-logs', {
@@ -23,14 +24,14 @@ export default function TestDataGenerator() {
 
       const data = await response.json();
       if (data.success) {
-        alert(
+        showSuccess(
           `Successfully generated ${data.data.totalLogs} temperature log entries for the last 3 months!`,
         );
       } else {
-        alert(`Error: ${data.error || 'Failed to generate test data'}`);
+        showError(`Error: ${data.error || 'Failed to generate test data'}`);
       }
     } catch (error) {
-      alert('Network error occurred while generating test data');
+      showError('Network error occurred while generating test data');
     } finally {
       setIsGeneratingTestData(false);
     }
@@ -75,6 +76,18 @@ export default function TestDataGenerator() {
           )}
         </button>
       </div>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        title="Generate Test Data"
+        message="This will generate 3 months of test temperature data. This may take a few minutes. Continue?"
+        confirmLabel="Generate"
+        cancelLabel="Cancel"
+        onConfirm={confirmGenerateTestData}
+        onCancel={() => setShowConfirmDialog(false)}
+        variant="info"
+      />
     </div>
   );
 }

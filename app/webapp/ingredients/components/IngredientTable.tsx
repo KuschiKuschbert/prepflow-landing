@@ -4,6 +4,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useState } from 'react';
 import { IngredientTableRow } from './IngredientTableRow';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 interface Ingredient {
   id: string;
@@ -51,14 +52,23 @@ export default function IngredientTable({
   const { t } = useTranslation();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this ingredient?')) {
-      setDeletingId(id);
-      try {
-        await onDelete(id);
-      } finally {
-        setDeletingId(null);
-      }
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleDelete = (id: string) => {
+    setDeleteConfirmId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
+    setShowDeleteConfirm(false);
+    setDeletingId(deleteConfirmId);
+    try {
+      await onDelete(deleteConfirmId);
+    } finally {
+      setDeletingId(null);
+      setDeleteConfirmId(null);
     }
   };
 
@@ -179,6 +189,21 @@ export default function IngredientTable({
           </tbody>
         </table>
       </div>
+
+      {/* Confirm Delete Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Ingredient"
+        message="Are you sure you want to delete this ingredient? This action cannot be undone."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onConfirm={confirmDelete}
+        onCancel={() => {
+          setShowDeleteConfirm(false);
+          setDeleteConfirmId(null);
+        }}
+        variant="danger"
+      />
     </div>
   );
 }

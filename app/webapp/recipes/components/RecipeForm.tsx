@@ -5,6 +5,7 @@ import { Recipe } from '../types';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useNotification } from '@/contexts/NotificationContext';
 
 interface RecipeFormProps {
   showForm: boolean;
@@ -21,6 +22,7 @@ export default function RecipeForm({
   onUpdateRecipe,
   onSubmit,
 }: RecipeFormProps) {
+  const { showWarning } = useNotification();
   // Autosave integration
   const entityId = deriveAutosaveId('recipes', newRecipe.id as string | undefined, [
     newRecipe.name || '',
@@ -65,8 +67,7 @@ export default function RecipeForm({
                 });
                 const json = await res.json();
                 if (json?.exists) {
-                  // Simple alert; the table also enforces uniqueness
-                  alert('A recipe with this name already exists.');
+                  showWarning('A recipe with this name already exists.');
                 }
               } catch {}
             }}

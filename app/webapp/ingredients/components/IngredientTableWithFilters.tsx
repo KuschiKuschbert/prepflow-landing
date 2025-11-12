@@ -7,6 +7,8 @@ import { IngredientTableFilterBar } from './IngredientTableFilterBar';
 import { type SortOption } from '../hooks/useIngredientFiltering';
 import { ChevronUp, ChevronDown, Plus, Upload, Download, Zap, Trash2, Store, MapPin, Target } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { InputDialog } from '@/components/ui/InputDialog';
 
 interface Ingredient {
   id: string;
@@ -56,6 +58,11 @@ interface IngredientTableWithFiltersProps {
   onBulkDelete?: (ids: string[]) => Promise<void>;
   onBulkUpdate?: (ids: string[], updates: Partial<Ingredient>) => Promise<void>;
   loading?: boolean;
+  isSelectionMode?: boolean;
+  onStartLongPress?: () => void;
+  onCancelLongPress?: () => void;
+  onEnterSelectionMode?: () => void;
+  onExitSelectionMode?: () => void;
 }
 
 export default function IngredientTableWithFilters({
@@ -84,86 +91,122 @@ export default function IngredientTableWithFilters({
   onBulkDelete,
   onBulkUpdate,
   loading = false,
+  isSelectionMode = false,
+  onStartLongPress,
+  onCancelLongPress,
+  onEnterSelectionMode,
+  onExitSelectionMode,
 }: IngredientTableWithFiltersProps) {
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   const [showBulkMenu, setShowBulkMenu] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showInputDialog, setShowInputDialog] = useState(false);
+  const [inputDialogConfig, setInputDialogConfig] = useState<{
+    title: string;
+    message: string;
+    placeholder?: string;
+    type?: 'text' | 'number';
+    min?: number;
+    max?: number;
+    onConfirm: (value: string) => void;
+  } | null>(null);
 
   const selectedCount = selectedIngredients.size;
   const filteredIngredientsData = ingredients; // Use ingredients prop for bulk operations
 
   const handleBulkDelete = async () => {
     if (selectedCount === 0 || !onBulkDelete) return;
+    setShowBulkMenu(false);
+    setShowConfirmDialog(true);
+  };
 
-    const confirmMessage = `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}?`;
-    if (!window.confirm(confirmMessage)) return;
-
+  const confirmBulkDelete = async () => {
+    if (!onBulkDelete) return;
+    setShowConfirmDialog(false);
     setBulkActionLoading(true);
     try {
       await onBulkDelete(Array.from(selectedIngredients));
     } finally {
       setBulkActionLoading(false);
-      setShowBulkMenu(false);
     }
   };
 
-  const handleBulkUpdateSupplier = async () => {
+  const handleBulkUpdateSupplier = () => {
     if (selectedCount === 0 || !onBulkUpdate) return;
-
-    const newSupplier = window.prompt(
-      `Enter new supplier for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-    );
-    if (!newSupplier?.trim()) return;
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkUpdate(Array.from(selectedIngredients), { supplier: newSupplier.trim() });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
+    setShowBulkMenu(false);
+    setInputDialogConfig({
+      title: 'Update Supplier',
+      message: `Enter new supplier for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
+      placeholder: 'Supplier name',
+      type: 'text',
+      onConfirm: async (newSupplier: string) => {
+        if (!newSupplier.trim() || !onBulkUpdate) return;
+        setShowInputDialog(false);
+        setInputDialogConfig(null);
+        setBulkActionLoading(true);
+        try {
+          await onBulkUpdate(Array.from(selectedIngredients), { supplier: newSupplier.trim() });
+        } finally {
+          setBulkActionLoading(false);
+        }
+      },
+    });
+    setShowInputDialog(true);
   };
 
-  const handleBulkUpdateStorage = async () => {
+  const handleBulkUpdateStorage = () => {
     if (selectedCount === 0 || !onBulkUpdate) return;
-
-    const newStorage = window.prompt(
-      `Enter new storage location for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-    );
-    if (!newStorage?.trim()) return;
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkUpdate(Array.from(selectedIngredients), { storage_location: newStorage.trim() });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
+    setShowBulkMenu(false);
+    setInputDialogConfig({
+      title: 'Update Storage Location',
+      message: `Enter new storage location for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
+      placeholder: 'Storage location',
+      type: 'text',
+      onConfirm: async (newStorage: string) => {
+        if (!newStorage.trim() || !onBulkUpdate) return;
+        setShowInputDialog(false);
+        setInputDialogConfig(null);
+        setBulkActionLoading(true);
+        try {
+          await onBulkUpdate(Array.from(selectedIngredients), { storage_location: newStorage.trim() });
+        } finally {
+          setBulkActionLoading(false);
+        }
+      },
+    });
+    setShowInputDialog(true);
   };
 
-  const handleBulkUpdateWastage = async () => {
+  const handleBulkUpdateWastage = () => {
     if (selectedCount === 0 || !onBulkUpdate) return;
-
-    const wastageInput = window.prompt(
-      `Enter wastage percentage (0-100) for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-    );
-    if (!wastageInput) return;
-
-    const wastage = parseFloat(wastageInput);
-    if (isNaN(wastage) || wastage < 0 || wastage > 100) {
-      alert('Please enter a valid percentage between 0 and 100');
-      return;
-    }
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkUpdate(Array.from(selectedIngredients), {
-        trim_peel_waste_percentage: wastage,
-        yield_percentage: 100 - wastage,
-      });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
+    setShowBulkMenu(false);
+    setInputDialogConfig({
+      title: 'Update Wastage Percentage',
+      message: `Enter wastage percentage (0-100) for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
+      placeholder: '0-100',
+      type: 'number',
+      min: 0,
+      max: 100,
+      onConfirm: async (wastageInput: string) => {
+        if (!onBulkUpdate) return;
+        const wastage = parseFloat(wastageInput);
+        if (isNaN(wastage) || wastage < 0 || wastage > 100) {
+          return; // Validation handled by InputDialog
+        }
+        setShowInputDialog(false);
+        setInputDialogConfig(null);
+        setBulkActionLoading(true);
+        try {
+          await onBulkUpdate(Array.from(selectedIngredients), {
+            trim_peel_waste_percentage: wastage,
+            yield_percentage: 100 - wastage,
+          });
+        } finally {
+          setBulkActionLoading(false);
+        }
+      },
+    });
+    setShowInputDialog(true);
   };
 
   // Close dropdown on Escape key
@@ -202,14 +245,22 @@ export default function IngredientTableWithFilters({
     return null;
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this ingredient?')) {
-      setDeletingId(id);
-      try {
-        await onDelete(id);
-      } finally {
-        setDeletingId(null);
-      }
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
+  const handleDelete = (id: string) => {
+    setDeleteConfirmId(id);
+    setShowConfirmDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
+    setShowConfirmDialog(false);
+    setDeletingId(deleteConfirmId);
+    try {
+      await onDelete(deleteConfirmId);
+    } finally {
+      setDeletingId(null);
+      setDeleteConfirmId(null);
     }
   };
 
@@ -313,6 +364,33 @@ export default function IngredientTableWithFilters({
         itemsPerPage={itemsPerPage}
         onItemsPerPageChange={onItemsPerPageChange}
       />
+
+      {/* Selection Mode Indicator */}
+      {isSelectionMode && (
+        <div className="bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 border-b border-[#29E7CD]/30 px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />
+              <span className="text-sm font-medium text-[#29E7CD]">
+                Selection Mode - Tap items to select
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                // Exit selection mode by clearing all selections
+                onSelectAll(false);
+                // Call exit handler if available
+                if (onExitSelectionMode) {
+                  onExitSelectionMode();
+                }
+              }}
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Table Header */}
       <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
@@ -459,11 +537,22 @@ export default function IngredientTableWithFilters({
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 <button
-                  onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
+                  onClick={() => {
+                    const allSelected = totalFiltered !== undefined
+                      ? selectedIngredients.size === totalFiltered && totalFiltered > 0
+                      : selectedIngredients.size === ingredients.length && ingredients.length > 0;
+                    onSelectAll(!allSelected);
+                  }}
                   className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-                  aria-label={selectedIngredients.size === ingredients.length ? "Deselect all" : "Select all"}
+                  aria-label={
+                    totalFiltered !== undefined && selectedIngredients.size === totalFiltered && totalFiltered > 0
+                      ? "Deselect all"
+                      : "Select all"
+                  }
                 >
-                  {selectedIngredients.size === ingredients.length && ingredients.length > 0 ? (
+                  {(totalFiltered !== undefined
+                    ? selectedIngredients.size === totalFiltered && totalFiltered > 0
+                    : selectedIngredients.size === ingredients.length && ingredients.length > 0) ? (
                     <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
@@ -542,11 +631,55 @@ export default function IngredientTableWithFilters({
                 onEdit={onEdit}
                 onDelete={handleDelete}
                 deletingId={deletingId}
+                isSelectionMode={isSelectionMode}
+                onStartLongPress={onStartLongPress}
+                onCancelLongPress={onCancelLongPress}
+                onEnterSelectionMode={onEnterSelectionMode}
               />
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Confirm Dialog for Delete */}
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        title={deleteConfirmId ? 'Delete Ingredient' : `Delete ${selectedCount} Ingredient${selectedCount > 1 ? 's' : ''}`}
+        message={
+          deleteConfirmId
+            ? 'Are you sure you want to delete this ingredient? This action cannot be undone.'
+            : `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}? This action cannot be undone.`
+        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onConfirm={deleteConfirmId ? confirmDelete : confirmBulkDelete}
+        onCancel={() => {
+          setShowConfirmDialog(false);
+          setDeleteConfirmId(null);
+        }}
+        variant="danger"
+      />
+
+      {/* Input Dialog for Bulk Updates */}
+      {inputDialogConfig && (
+        <InputDialog
+          isOpen={showInputDialog}
+          title={inputDialogConfig.title}
+          message={inputDialogConfig.message}
+          placeholder={inputDialogConfig.placeholder}
+          type={inputDialogConfig.type}
+          min={inputDialogConfig.min}
+          max={inputDialogConfig.max}
+          confirmLabel="Update"
+          cancelLabel="Cancel"
+          onConfirm={inputDialogConfig.onConfirm}
+          onCancel={() => {
+            setShowInputDialog(false);
+            setInputDialogConfig(null);
+          }}
+          variant="info"
+        />
+      )}
     </div>
   );
 }

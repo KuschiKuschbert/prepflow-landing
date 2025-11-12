@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { PersonalitySettingsPanel } from './components/PersonalitySettingsPanel';
 import { useCountry } from '@/contexts/CountryContext';
 import { getAvailableCountries } from '@/lib/country-config';
+import { useNotification } from '@/contexts/NotificationContext';
 
 export default function SettingsPage() {
   const [busy, setBusy] = useState(false);
@@ -12,12 +13,18 @@ export default function SettingsPage() {
   const { selectedCountry, countryConfig, setCountry } = useCountry();
   const availableCountries = getAvailableCountries();
 
+  const { showSuccess, showError } = useNotification();
+
   const request = async (path: string, method: 'GET' | 'POST') => {
     setBusy(true);
     try {
       const res = await fetch(path, { method });
       const data = await res.json();
-      alert(data.message || (res.ok ? 'Done' : 'Error'));
+      if (res.ok) {
+        showSuccess(data.message || 'Done');
+      } else {
+        showError(data.message || 'Error');
+      }
     } finally {
       setBusy(false);
     }

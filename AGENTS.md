@@ -1032,6 +1032,26 @@ const nextConfig: NextConfig = {
 
 - **Collapsible Sidebar:** ModernNavigation component with organized categories
 - **Touch-Friendly:** Minimum 44px touch targets for mobile interactions
+
+### **Mobile Long-Press Selection Mode ✅**
+
+- **Long-Press to Enter:** Long press (500ms) on any table row enters selection mode
+- **Tap to Select:** Once in selection mode, tap any row to toggle selection
+- **Visual Feedback:** Selection mode banner with pulsing indicator, selected rows highlighted with `bg-[#29E7CD]/10`
+- **Auto-Exit:** Exits automatically after bulk actions complete or on scroll
+- **Manual Exit:** "Done" button in selection mode banner clears selections and exits
+- **Implementation:**
+  - Hook: `app/webapp/ingredients/hooks/useSelectionMode.ts` - Manages selection mode state
+  - Component: `IngredientTableRow` - Handles touch events and long-press detection
+  - Visual Indicator: Selection mode banner in `IngredientTableWithFilters`
+- **Usage Pattern:**
+  1. Long press any ingredient row → enters selection mode
+  2. Tap other rows → selects/deselects them
+  3. Use bulk actions → perform actions on selected items
+  4. Tap "Done" or complete bulk action → exits selection mode
+- **Touch Event Handling:** Uses `onTouchStart`, `onTouchMove`, `onTouchEnd` for mobile support
+- **Movement Detection:** Cancels long-press if user moves finger during press
+- **Cross-Platform:** Works on both mobile (touch) and desktop (click) devices
 - **Smart Search:** Quick access to any feature with ⌘K shortcut
 - **Keyboard Shortcuts:** ⌘B to toggle sidebar, ⌘K for search
 - **Breadcrumb Navigation:** Context-aware navigation on desktop
@@ -1253,7 +1273,7 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 #### **🔧 Technical Improvements**
 
 1. **Database Structure**: Fixed table schema and column naming issues
-2. **API Endpoints**: All endpoints tested and working correctly (43 endpoints)
+2. **API Endpoints**: All endpoints tested and working correctly (44 endpoints)
 3. **Component Architecture**: Split large components (Recipes: 1,670 → 673 lines, COGS: 1,634 → 459 lines)
 4. **Error Boundaries**: Implemented React error boundaries for better error handling
 5. **Loading States**: Comprehensive skeleton system with Material Design 3 compliance
@@ -1460,7 +1480,7 @@ FROM_NAME=PrepFlow Team
 4. **menu_dishes** - Menu items with selling prices
 5. **users** - User management with subscriptions
 
-### **API Endpoints Reference (43 Endpoints)**
+### **API Endpoints Reference (44 Endpoints)**
 
 **Authentication & User:**
 
@@ -1487,6 +1507,7 @@ FROM_NAME=PrepFlow Team
 - `PUT /api/ingredients` - Update ingredient
 - `DELETE /api/ingredients` - Delete ingredient
 - `GET /api/ingredients/exists` - Check if ingredient exists
+- `PUT /api/ingredients/bulk-update` - Bulk update multiple ingredients (supplier, storage_location, wastage, etc.)
 
 **Recipes:**
 
