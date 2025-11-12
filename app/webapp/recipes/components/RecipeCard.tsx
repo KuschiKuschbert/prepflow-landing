@@ -4,6 +4,7 @@ import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
 import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { formatRecipeDate } from '../utils/formatDate';
 
 interface RecipeCardProps {
   recipe: Recipe;
