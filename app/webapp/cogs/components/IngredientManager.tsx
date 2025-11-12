@@ -38,26 +38,15 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
   onAddIngredient,
 }) => {
   return (
-    <div className="mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h3 className="mb-1 flex items-center gap-2 text-lg font-semibold text-white sm:text-xl">
-            <Icon icon={Utensils} size="md" className="text-[#29E7CD]" aria-hidden={true} />
-            Add Ingredients
-          </h3>
-          <p className="text-sm text-gray-400">Add ingredients manually to build your dish</p>
-          <p className="mt-1 text-xs text-[#29E7CD]">
-            ✨ Automatic unit conversion: Use any unit (tsp, tbsp, cups, ml, g, kg) - we&apos;ll
-            convert to the ingredient&apos;s base unit!
-          </p>
-        </div>
-        <button
-          onClick={onToggleAddIngredient}
-          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-xs font-medium text-white shadow-md transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-lg"
-        >
-          <Icon icon={Plus} size="xs" className="text-white" aria-hidden={true} />
-          <span>{showAddIngredient ? 'Cancel' : 'Add Ingredient'}</span>
-        </button>
+    <div className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/50 p-4">
+      <div className="mb-3">
+        <h4 className="mb-1 flex items-center gap-2 text-sm font-semibold text-white">
+          <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+          Add Ingredients
+        </h4>
+        <p className="text-xs text-gray-400">
+          ✨ Automatic unit conversion: Use any unit (tsp, tbsp, cups, ml, g, kg)
+        </p>
       </div>
 
       {showAddIngredient && (

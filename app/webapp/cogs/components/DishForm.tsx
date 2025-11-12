@@ -1,21 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { formatDishName } from '@/lib/text-utils';
-import { DishFormData, Recipe, COGSCalculation } from '../types';
-import { Edit, Trash2, Check, X } from 'lucide-react';
+import { DishFormData, Recipe, COGSCalculation, Ingredient, RecipeIngredient } from '../types';
+import { Edit, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { IngredientManager } from './IngredientManager';
+import { IngredientsList } from './IngredientsList';
 
 interface DishFormProps {
   formData: DishFormData;
   recipes: Recipe[];
   selectedRecipe: string;
   calculations: COGSCalculation[];
+  showAddIngredient: boolean;
+  ingredients: Ingredient[];
+  ingredientSearch: string;
+  showSuggestions: boolean;
+  filteredIngredients: Ingredient[];
+  selectedIngredient: Ingredient | null;
+  newIngredient: Partial<RecipeIngredient>;
   onDishNameChange: (name: string) => void;
   onDishPortionsChange: (portions: number) => void;
   onRecipeSelect: (recipeId: string) => void;
   onUpdateCalculation: (ingredientId: string, newQuantity: number) => void;
   onRemoveCalculation: (ingredientId: string) => void;
+  onToggleAddIngredient: () => void;
+  onSearchChange: (value: string) => void;
+  onIngredientSelect: (ingredient: Ingredient) => void;
+  onQuantityChange: (quantity: number) => void;
+  onUnitChange: (unit: string) => void;
+  onAddIngredient: (e: React.FormEvent) => void;
 }
 
 export const DishForm: React.FC<DishFormProps> = ({
@@ -23,24 +38,26 @@ export const DishForm: React.FC<DishFormProps> = ({
   recipes,
   selectedRecipe,
   calculations,
+  showAddIngredient,
+  ingredients,
+  ingredientSearch,
+  showSuggestions,
+  filteredIngredients,
+  selectedIngredient,
+  newIngredient,
   onDishNameChange,
   onDishPortionsChange,
   onRecipeSelect,
   onUpdateCalculation,
   onRemoveCalculation,
+  onToggleAddIngredient,
+  onSearchChange,
+  onIngredientSelect,
+  onQuantityChange,
+  onUnitChange,
+  onAddIngredient,
 }) => {
   const { dishName, dishPortions, dishNameLocked, recipeExists, checkingRecipe } = formData;
-  const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
-  const [editQuantity, setEditQuantity] = useState<number>(0);
-
-  // Debug: Log recipes prop to verify data is being passed
-  React.useEffect(() => {
-    console.log('🔍 DEBUG DishForm: recipes prop received', {
-      recipesCount: recipes?.length || 0,
-      recipes: recipes,
-      selectedRecipe,
-    });
-  }, [recipes, selectedRecipe]);
 
   return (
     <div className="rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
@@ -174,7 +191,7 @@ export const DishForm: React.FC<DishFormProps> = ({
         <label className="mb-2 block text-sm font-medium text-gray-300">
           🍽️ Number of Portions
         </label>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           <input
             type="number"
             min="1"
@@ -184,93 +201,50 @@ export const DishForm: React.FC<DishFormProps> = ({
             className="w-24 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-center font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           />
           <span className="text-sm text-gray-400">portions</span>
+          <button
+            onClick={onToggleAddIngredient}
+            className="ml-auto flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-xs font-medium text-white shadow-md transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-lg"
+          >
+            <Icon
+              icon={showAddIngredient ? X : Edit}
+              size="xs"
+              className="text-white"
+              aria-hidden={true}
+            />
+            <span>{showAddIngredient ? 'Cancel' : 'Add Ingredient'}</span>
+          </button>
         </div>
         <p className="mt-2 text-xs text-gray-500">
           This determines the cost per portion for your pricing calculations
         </p>
 
-        {/* Ingredients List */}
-        {calculations && calculations.length > 0 && (
-          <div className="mt-4 rounded-xl border border-[#2a2a2a]/50 bg-[#0a0a0a]/50 p-3">
-            <h4 className="mb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">
-              Ingredients ({calculations.length})
-            </h4>
-            <div className="space-y-1.5">
-              {calculations.map((calc, index) => (
-                <div
-                  key={calc.ingredientId || index}
-                  className="group flex items-center justify-between rounded-lg bg-[#1f1f1f]/50 px-2 py-1.5 text-sm transition-colors hover:bg-[#2a2a2a]/50"
-                >
-                  <span className="text-gray-300">{calc.ingredientName}</span>
-                  <div className="flex items-center gap-2">
-                    {editingIngredient === calc.ingredientId ? (
-                      <>
-                        <div className="flex items-center gap-1">
-                          <input
-                            type="number"
-                            value={editQuantity}
-                            onChange={e => setEditQuantity(parseFloat(e.target.value) || 0)}
-                            className="w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-1 text-xs text-white focus:border-[#29E7CD] focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
-                            step="0.1"
-                            min="0"
-                            autoFocus
-                          />
-                          <span className="text-xs text-gray-400">{calc.unit}</span>
-                        </div>
-                        <button
-                          onClick={() => {
-                            if (editQuantity > 0) {
-                              onUpdateCalculation(calc.ingredientId, editQuantity);
-                            }
-                            setEditingIngredient(null);
-                            setEditQuantity(0);
-                          }}
-                          className="rounded-lg bg-[#29E7CD] p-1 text-white transition-colors hover:bg-[#29E7CD]/80"
-                          aria-label="Save"
-                        >
-                          <Icon icon={Check} size="xs" aria-hidden={true} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingIngredient(null);
-                            setEditQuantity(0);
-                          }}
-                          className="rounded-lg bg-gray-600 p-1 text-white transition-colors hover:bg-gray-500"
-                          aria-label="Cancel"
-                        >
-                          <Icon icon={X} size="xs" aria-hidden={true} />
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <span className="font-medium text-gray-400">
-                          {calc.quantity} {calc.unit}
-                        </span>
-                        <button
-                          onClick={() => {
-                            setEditingIngredient(calc.ingredientId);
-                            setEditQuantity(calc.quantity);
-                          }}
-                          className="rounded-lg p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
-                          aria-label="Edit quantity"
-                        >
-                          <Icon icon={Edit} size="xs" aria-hidden={true} />
-                        </button>
-                        <button
-                          onClick={() => onRemoveCalculation(calc.ingredientId)}
-                          className="rounded-lg p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-500/20 hover:text-red-400"
-                          aria-label="Remove ingredient"
-                        >
-                          <Icon icon={Trash2} size="xs" aria-hidden={true} />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Add Ingredients Section */}
+        {showAddIngredient && (
+          <div className="mt-4">
+            <IngredientManager
+              showAddIngredient={showAddIngredient}
+              ingredients={ingredients}
+              ingredientSearch={ingredientSearch}
+              showSuggestions={showSuggestions}
+              filteredIngredients={filteredIngredients}
+              selectedIngredient={selectedIngredient}
+              newIngredient={newIngredient}
+              onToggleAddIngredient={onToggleAddIngredient}
+              onSearchChange={onSearchChange}
+              onIngredientSelect={onIngredientSelect}
+              onQuantityChange={onQuantityChange}
+              onUnitChange={onUnitChange}
+              onAddIngredient={onAddIngredient}
+            />
           </div>
         )}
+
+        {/* Ingredients List */}
+        <IngredientsList
+          calculations={calculations}
+          onUpdateCalculation={onUpdateCalculation}
+          onRemoveCalculation={onRemoveCalculation}
+        />
       </div>
     </div>
   );

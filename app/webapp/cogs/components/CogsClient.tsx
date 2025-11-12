@@ -223,14 +223,6 @@ export default function CogsClient() {
             recipes={recipes}
             selectedRecipe={selectedRecipe}
             calculations={calculations}
-            onDishNameChange={setDishName}
-            onDishPortionsChange={setDishPortions}
-            onRecipeSelect={handleRecipeSelect}
-            onUpdateCalculation={updateCalculation}
-            onRemoveCalculation={removeCalculation}
-          />
-
-          <IngredientManager
             showAddIngredient={showAddIngredient}
             ingredients={ingredients}
             ingredientSearch={ingredientSearch}
@@ -238,6 +230,11 @@ export default function CogsClient() {
             filteredIngredients={filteredIngredients}
             selectedIngredient={selectedIngredient}
             newIngredient={newIngredient}
+            onDishNameChange={setDishName}
+            onDishPortionsChange={setDishPortions}
+            onRecipeSelect={handleRecipeSelect}
+            onUpdateCalculation={updateCalculation}
+            onRemoveCalculation={removeCalculation}
             onToggleAddIngredient={handleToggleAddIngredient}
             onSearchChange={handleSearchChange}
             onIngredientSelect={handleIngredientSelect}
