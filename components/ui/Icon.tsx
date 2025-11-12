@@ -19,6 +19,7 @@ export interface IconProps {
   className?: string;
   'aria-label'?: string;
   'aria-hidden'?: boolean;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -26,7 +27,17 @@ export interface IconProps {
  * Provides consistent sizing and accessibility support
  */
 export const Icon = forwardRef<SVGSVGElement, IconProps>(
-  ({ icon: IconComponent, size = 'md', className = '', 'aria-label': ariaLabel, 'aria-hidden': ariaHidden, ...props }, ref) => {
+  (
+    {
+      icon: IconComponent,
+      size = 'md',
+      className = '',
+      'aria-label': ariaLabel,
+      'aria-hidden': ariaHidden,
+      ...props
+    },
+    ref,
+  ) => {
     return (
       <IconComponent
         ref={ref}
