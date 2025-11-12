@@ -45,6 +45,10 @@ export function useRecipeIngredientsAutosave({
     if (result.success) {
       console.log('[Autosave] Save successful:', { recipeId, count: calculations.length });
       setStatus('saved');
+      // Set sessionStorage flag to trigger recipe book refresh
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
+      }
       if (onSave) onSave();
       setTimeout(() => setStatus(prev => (prev === 'saved' ? 'idle' : prev)), 2000);
     } else {

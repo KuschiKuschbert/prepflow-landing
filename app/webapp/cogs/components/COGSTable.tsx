@@ -203,7 +203,12 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                           />
                         </button>
                         <button
-                          onClick={() => onRemoveIngredient(calc.ingredientId)}
+                          type="button"
+                          onClick={async e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            await onRemoveIngredient(calc.ingredientId);
+                          }}
                           className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
                           title="Remove ingredient"
                         >
