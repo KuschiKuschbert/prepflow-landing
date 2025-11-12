@@ -47,6 +47,7 @@ export default function AppleStyleFeatures({
   const [newImageLoaded, setNewImageLoaded] = useState(false); // Track when new image is loaded
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
+  const [buttonsVisible, setButtonsVisible] = useState<boolean[]>([]); // Track which buttons have appeared
   const contentRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const containerRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -55,11 +56,13 @@ export default function AppleStyleFeatures({
 
   // Unified animation constants - Apple-style smooth morphing
   // Apple uses ~400-500ms with smooth easing for button morphing
-  const ANIMATION_DURATION = 450; // Optimized duration for smooth feel
-  // Use smoother easing for all transitions to prevent jank
-  const ANIMATION_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // Smoother easing for all transitions
+  const ANIMATION_DURATION = 500; // Slightly longer for smoother feel
+  // Apple's refined easing curve for ultra-smooth transitions
+  const ANIMATION_EASING = 'cubic-bezier(0.28, 0.11, 0.32, 1)'; // Apple's refined easing - smoother acceleration/deceleration
   // Border-radius uses same easing for consistency
-  const BORDER_RADIUS_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // Consistent easing for border-radius morphing
+  const BORDER_RADIUS_EASING = 'cubic-bezier(0.28, 0.11, 0.32, 1)'; // Consistent easing for border-radius morphing
+  // Stagger delay for initial appearance
+  const STAGGER_DELAY = 30; // 30ms stagger for smooth sequential appearance
 
   const handleToggle = (index: number) => {
     const willExpand = expandedIndex !== index;
@@ -478,6 +481,27 @@ export default function AppleStyleFeatures({
     return () => clearTimeout(timeoutId);
   }, [features, initialWidths, buttonHeights]);
 
+  // Staggered fade-in animation for buttons on initial appearance
+  useEffect(() => {
+    if (prefersReducedMotion()) {
+      // Skip animation if user prefers reduced motion
+      setButtonsVisible(new Array(features.length).fill(true));
+      return;
+    }
+
+    // Trigger staggered fade-in for each button
+    features.forEach((_, index) => {
+      const delay = index * STAGGER_DELAY;
+      setTimeout(() => {
+        setButtonsVisible(prev => {
+          const newVisible = [...prev];
+          newVisible[index] = true;
+          return newVisible;
+        });
+      }, delay);
+    });
+  }, [features]);
+
   return (
     <section className="relative bg-transparent py-16 md:py-20">
       {/* Wrapped Container for Better Space Utilization */}
@@ -508,6 +532,7 @@ export default function AppleStyleFeatures({
             {features.map((feature, index) => {
               const isExpanded = expandedIndex === index;
               const isCurrentlyTransitioning = isTransitioning === index;
+              const isVisible = buttonsVisible[index] !== false; // Default to true, false only during initial fade-in
 
               return (
                 <button
@@ -518,8 +543,26 @@ export default function AppleStyleFeatures({
                     buttonRefs.current[index] = el;
                   }}
                   onClick={() => handleToggle(index)}
+                  onMouseEnter={(e) => {
+                    if (!isExpanded && !isCurrentlyTransitioning) {
+                      e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
+                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isExpanded && !isCurrentlyTransitioning) {
+                      e.currentTarget.style.transform = 'translateZ(0) scale(1)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    }
+                  }}
                   className="relative flex text-left w-fit border focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
                   style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible 
+                      ? 'translateZ(0) scale(1) translateY(0)' 
+                      : 'translateZ(0) scale(0.98) translateY(10px)', // GPU acceleration + initial fade-in
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -558,17 +601,19 @@ export default function AppleStyleFeatures({
                     })(),
                     // Apple's technique: Proper containment to minimize layout thrashing
                     contain: 'layout style paint',
-                    transform: 'translateZ(0)',
                     backfaceVisibility: 'hidden',
-                    willChange: isCurrentlyTransitioning ? 'width, max-height, border-radius, padding, border-color, background-color' : 'auto',
+                    willChange: isCurrentlyTransitioning ? 'width, max-height, border-radius, padding, border-color, background-color, transform, opacity' : 'auto',
                     // CRITICAL: All transitions MUST be synchronized with same duration and easing
-                    // maxHeight transition allows natural expansion while maintaining smooth animation
+                    // Consolidated transition property - handles all states
                     transition: isCurrentlyTransitioning
-                      ? `width ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, max-height ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}, padding ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, background-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`
-                      : `border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}`, // Always allow border-radius to transition
+                      ? `opacity 400ms ${ANIMATION_EASING}, transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, width ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, max-height ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}, padding ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, background-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`
+                      : isVisible
+                        ? `opacity 400ms ${ANIMATION_EASING}, transform 400ms ${ANIMATION_EASING}, border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}, border-color 200ms ${ANIMATION_EASING}, background-color 200ms ${ANIMATION_EASING}`
+                        : `opacity 400ms ${ANIMATION_EASING}, transform 400ms ${ANIMATION_EASING}`,
                     borderColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
                     borderWidth: '1px',
                     backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.1)',
+                    cursor: 'pointer',
                     padding: isExpanded ? '0.75rem 1rem' : '0.625rem 0.875rem', // More concise padding
                     overflow: 'hidden', // Ensure text doesn't overflow button boundaries
                     // Allow natural height expansion when expanded
