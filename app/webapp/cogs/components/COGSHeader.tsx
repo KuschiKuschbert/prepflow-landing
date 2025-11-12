@@ -4,7 +4,7 @@ import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
 import { useState } from 'react';
 import { PageHeader } from '../../components/static/PageHeader';
-import { DollarSign, Lightbulb } from 'lucide-react';
+import { Calculator, Lightbulb } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 export function COGSHeader() {
@@ -15,7 +15,7 @@ export function COGSHeader() {
       <PageHeader
         title="COGS Calculator"
         subtitle="Calculate Cost of Goods Sold and optimize your profit margins"
-        icon={DollarSign}
+        icon={Calculator}
         actions={<HelpTooltip content={getHelpText('cogs', true, true)} title="What is COGS?" />}
       />
 
