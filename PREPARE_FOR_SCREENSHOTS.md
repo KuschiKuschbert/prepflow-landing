@@ -26,6 +26,7 @@ Once the files are in place, the landing page will automatically use them. No co
 ## 💡 Pro Tip
 
 Use Chrome DevTools to take full-page screenshots:
+
 1. Open the page
 2. Press `Cmd + Option + I` (DevTools)
 3. Press `Cmd + Shift + P` (Command palette)
@@ -36,5 +37,3 @@ Use Chrome DevTools to take full-page screenshots:
 ## ❓ Need Help?
 
 If you have the files saved somewhere else, just tell me the file paths and I'll copy them to the right place!
-
-

@@ -3,11 +3,13 @@
 ## Current Screenshot Usage
 
 ### Hero Section
+
 - **Dashboard Screenshot** → `/images/dashboard-screenshot.png`
   - Shows: Kitchen Management Dashboard with quick actions and statistics
   - Used in: Hero section (large, full-width)
 
 ### Highlights Section (5 Cards)
+
 1. **Ingredients Management** → `/images/stocklist-screenshot.png`
    - Shows: Ingredients table with costs, suppliers, stock levels
 
@@ -24,6 +26,7 @@
    - Shows: Performance metrics and analytics
 
 ### Take a Closer Look Section (6 Expandable Features)
+
 1. **Ingredients & Stock** → `/images/stocklist-screenshot.png`
    - Shows: Ingredients Management interface
 
@@ -46,11 +49,13 @@
 ## Missing Screenshots
 
 ### Recommended to Add:
+
 - **Cleaning Roster Screenshot** (`cleaning-screenshot.png`)
   - Should show: Cleaning areas with cards, task management interface
   - Will replace: Dashboard screenshot placeholder in "Cleaning & Compliance" section
 
 ### Optional to Add:
+
 - **Temperature Monitoring Screenshot** (`temperature-screenshot.png`)
   - Should show: Temperature monitoring dashboard with equipment tracking
   - Will replace: Dashboard screenshot in "Temperature Monitoring" section
@@ -86,5 +91,3 @@
 ✅ **All existing screenshots are being used correctly**
 ✅ **Components are mapped to appropriate screenshots**
 ⚠️ **Cleaning Roster uses dashboard as placeholder** (ready to replace when screenshot is available)
-
-

@@ -11,16 +11,19 @@
 Based on your images, we need these 3 files in `public/images/`:
 
 ### 1. Ingredients Management Screenshot
+
 - **File name:** `ingredients-management-screenshot.png`
 - **What it shows:** Ingredients Management table with ingredients, costs, suppliers, stock levels, and actions (Add Ingredient, Import CSV, Export CSV buttons)
 - **Location to save:** `public/images/ingredients-management-screenshot.png`
 
 ### 2. COGS Calculator Screenshot
+
 - **File name:** `cogs-calculator-screenshot.png`
 - **What it shows:** COGS Calculator with "Create Dish" section (left) and "Cost Analysis" section (right)
 - **Location to save:** `public/images/cogs-calculator-screenshot.png`
 
 ### 3. Cleaning Roster Screenshot
+
 - **File name:** `cleaning-roster-screenshot.png`
 - **What it shows:** Cleaning Roster with cleaning areas cards (Bar counter, Bathrooms, Walk-in cooler)
 - **Location to save:** `public/images/cleaning-roster-screenshot.png`
@@ -28,6 +31,7 @@ Based on your images, we need these 3 files in `public/images/`:
 ## How to Add the Screenshots
 
 ### Option 1: Using File Explorer/Finder
+
 1. Open the `public/images/` folder in your file explorer
 2. Copy your screenshot files into this folder
 3. Rename them to match the exact file names above:
@@ -36,6 +40,7 @@ Based on your images, we need these 3 files in `public/images/`:
    - `cleaning-roster-screenshot.png`
 
 ### Option 2: Using Terminal
+
 If you have the screenshots saved elsewhere on your computer:
 
 ```bash
@@ -46,6 +51,7 @@ cp SOURCE_PATH/cleaning-roster-screenshot.png public/images/
 ```
 
 ### Option 3: Drag and Drop in VS Code/Cursor
+
 1. Open the `public/images/` folder in your editor
 2. Drag your screenshot files into the folder
 3. Rename them to match the required names
@@ -67,6 +73,7 @@ ls -lh public/images/*-screenshot.png
 ```
 
 You should see:
+
 - `dashboard-screenshot.png` (already exists)
 - `settings-screenshot.png` (already exists)
 - `ingredients-management-screenshot.png` (new)
@@ -76,6 +83,7 @@ You should see:
 ## Testing
 
 Once files are added, the landing page will automatically use them. Test by:
+
 1. Restarting the dev server: `npm run dev`
 2. Visiting `http://localhost:3000`
 3. Checking that images load correctly in:
@@ -86,11 +94,10 @@ Once files are added, the landing page will automatically use them. Test by:
 ## Need Help?
 
 If you need to:
+
 - Capture new screenshots from your webapp
 - Optimize existing screenshots
 - Convert formats
 - Resize images
 
 Let me know and I can help with the specific steps!
-
-

@@ -11,5 +11,3 @@ export const FloatingElement = ({ children, ...props }: any) =>
   React.createElement('div', props, children);
 export const StaggeredContainer = ({ children, ...props }: any) =>
   React.createElement('div', props, children);
-
-

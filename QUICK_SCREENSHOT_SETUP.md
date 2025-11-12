@@ -17,7 +17,9 @@ Based on your images, we need these 3 screenshot files:
 ## Options to Add Screenshots
 
 ### Option 1: If you have the files saved somewhere
+
 Tell me the file path and I'll copy them to the right location:
+
 ```bash
 # Example: If files are in Downloads
 cp ~/Downloads/ingredients-management-screenshot.png public/images/
@@ -26,6 +28,7 @@ cp ~/Downloads/cleaning-roster-screenshot.png public/images/
 ```
 
 ### Option 2: Capture from your webapp
+
 1. Make sure your dev server is running: `npm run dev`
 2. Visit each page:
    - http://localhost:3000/webapp/ingredients
@@ -35,6 +38,7 @@ cp ~/Downloads/cleaning-roster-screenshot.png public/images/
 4. Save them to `public/images/` with the exact names above
 
 ### Option 3: If files are already in the project
+
 If you've already added the files, just tell me and I'll verify they're in the right place!
 
 ## Next Steps
@@ -42,5 +46,3 @@ If you've already added the files, just tell me and I'll verify they're in the r
 Once the files are added, the landing page will automatically use them. No code changes needed - everything is already set up!
 
 **Where are your screenshot files located?** I can help you move them to the right place.
-
-

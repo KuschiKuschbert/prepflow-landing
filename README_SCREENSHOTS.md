@@ -22,19 +22,25 @@ Based on your image descriptions, we need these 3 files in `public/images/`:
 ## How to Add Them
 
 ### Step 1: Capture Screenshots
+
 From your logged-in webapp session, take screenshots of:
+
 - `/webapp/ingredients` page
 - `/webapp/cogs` page
 - `/webapp/cleaning` page
 
 ### Step 2: Save Files
+
 Save them to `public/images/` with these exact names:
+
 - `ingredients-management-screenshot.png`
 - `cogs-calculator-screenshot.png`
 - `cleaning-roster-screenshot.png`
 
 ### Step 3: Verify
+
 Run this command to check:
+
 ```bash
 ls -lh public/images/*-screenshot.png
 ```
@@ -46,5 +52,3 @@ You should see 5 files total (including the existing dashboard and settings scre
 The landing page will automatically use the new screenshots - no code changes needed!
 
 **Do you have the screenshot files ready to add, or do you need help capturing them?**
-
-

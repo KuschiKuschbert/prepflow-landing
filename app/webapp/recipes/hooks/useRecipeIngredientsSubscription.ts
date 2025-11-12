@@ -34,14 +34,27 @@ export function useRecipeIngredientsSubscription(
           table: 'recipe_ingredients',
         },
         payload => {
-          console.log('Recipe ingredients changed:', payload);
-          const recipeId = (payload.new as { recipe_id?: string })?.recipe_id || (payload.old as { recipe_id?: string })?.recipe_id;
+          const eventType = payload.eventType; // INSERT, UPDATE, DELETE
+          const recipeId =
+            (payload.new as { recipe_id?: string })?.recipe_id ||
+            (payload.old as { recipe_id?: string })?.recipe_id;
+          console.log(
+            `[Recipe Ingredients Subscription] ${eventType} event for recipe_id: ${recipeId}`,
+            payload,
+          );
+          if (!recipeId) {
+            console.warn(
+              '[Recipe Ingredients Subscription] No recipe_id found in payload',
+              payload,
+            );
+            return;
+          }
           refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients).catch(
             err => {
               console.error('Failed to refresh recipe prices after ingredient change:', err);
             },
           );
-          if (recipeId && onIngredientsChange) {
+          if (onIngredientsChange) {
             onIngredientsChange(recipeId);
           }
         },
@@ -51,5 +64,11 @@ export function useRecipeIngredientsSubscription(
     return () => {
       subscription.unsubscribe();
     };
-  }, [recipes, refreshRecipePrices, fetchRecipeIngredients, fetchBatchRecipeIngredients, onIngredientsChange]);
+  }, [
+    recipes,
+    refreshRecipePrices,
+    fetchRecipeIngredients,
+    fetchBatchRecipeIngredients,
+    onIngredientsChange,
+  ]);
 }

@@ -5,7 +5,9 @@
 Based on your images, you need to capture 3 screenshots from your PrepFlow webapp:
 
 ### 1. Ingredients Management Screenshot
+
 **What to capture:**
+
 - Go to `/webapp/ingredients` in your browser
 - Take a full-page screenshot showing:
   - Title "Ingredients Management"
@@ -15,7 +17,9 @@ Based on your images, you need to capture 3 screenshots from your PrepFlow webap
 - Save as: `ingredients-management-screenshot.png`
 
 ### 2. COGS Calculator Screenshot
+
 **What to capture:**
+
 - Go to `/webapp/cogs` in your browser
 - Take a full-page screenshot showing:
   - "Create Dish" section on the left
@@ -25,7 +29,9 @@ Based on your images, you need to capture 3 screenshots from your PrepFlow webap
 - Save as: `cogs-calculator-screenshot.png`
 
 ### 3. Cleaning Roster Screenshot
+
 **What to capture:**
+
 - Go to `/webapp/cleaning` in your browser
 - Take a full-page screenshot showing:
   - Title "Cleaning Roster"
@@ -37,6 +43,7 @@ Based on your images, you need to capture 3 screenshots from your PrepFlow webap
 ## How to Take Screenshots
 
 ### On macOS:
+
 1. **Full page screenshot:** Cmd + Shift + 4, then press Spacebar, click the browser window
 2. **Or use browser extension:** Use a full-page screenshot extension
 3. **Or use developer tools:**
@@ -46,7 +53,9 @@ Based on your images, you need to capture 3 screenshots from your PrepFlow webap
    - Save the screenshot
 
 ### Recommended: Browser Extension
+
 Install a full-page screenshot extension like:
+
 - **Full Page Screen Capture** (Chrome/Edge)
 - **FireShot** (Chrome/Firefox)
 - **Awesome Screenshot** (Chrome/Firefox)
@@ -54,11 +63,13 @@ Install a full-page screenshot extension like:
 ## Where to Save
 
 Save all screenshots to:
+
 ```
 /Users/danielkuschmierz/prepflow-landing/public/images/
 ```
 
 With these exact names:
+
 - `ingredients-management-screenshot.png`
 - `cogs-calculator-screenshot.png`
 - `cleaning-roster-screenshot.png`
@@ -72,6 +83,7 @@ ls -lh public/images/*-screenshot.png
 ```
 
 You should see all 5 files:
+
 - ✅ dashboard-screenshot.png
 - ✅ settings-screenshot.png
 - ✅ ingredients-management-screenshot.png (new)
@@ -79,5 +91,3 @@ You should see all 5 files:
 - ✅ cleaning-roster-screenshot.png (new)
 
 Then restart your server and check the landing page!
-
-

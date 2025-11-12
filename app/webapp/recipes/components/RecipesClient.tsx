@@ -36,6 +36,9 @@ export default function RecipesClient() {
   const [showPreview, setShowPreview] = useState(false);
   const [previewYield, setPreviewYield] = useState<number>(1);
 
+  // Track recipe IDs that have had ingredient changes
+  const [changedRecipeIds, setChangedRecipeIds] = useState<Set<string>>(new Set());
+
   // Use ref to store callback that can access fetchRecipeIngredients after it's available
   const handleIngredientsChangeRef = useRef<((recipeId: string) => void) | null>(null);
 
@@ -50,26 +53,44 @@ export default function RecipesClient() {
     handleEditRecipe,
     setError,
   } = useRecipeManagement((recipeId: string) => {
-    // This callback will be called by the subscription
+    // This callback will be called by the subscription when ingredients change
+    // Track that this recipe has changed
+    setChangedRecipeIds(prev => new Set(prev).add(recipeId));
+    // If preview modal is open for this recipe, refresh immediately
     if (handleIngredientsChangeRef.current) {
       handleIngredientsChangeRef.current(recipeId);
     }
   });
 
-  // Update the ref callback to use fetchRecipeIngredients
+  const clearChangedFlag = useCallback((recipeId: string) => {
+    setChangedRecipeIds(prev => {
+      const next = new Set(prev);
+      next.delete(recipeId);
+      return next;
+    });
+  }, []);
   useEffect(() => {
     handleIngredientsChangeRef.current = (recipeId: string) => {
       if (showPreview && selectedRecipe && selectedRecipe.id === recipeId) {
         fetchRecipeIngredients(recipeId)
           .then(ingredients => {
             setRecipeIngredients(ingredients);
+            clearChangedFlag(recipeId);
           })
-          .catch(err => {
-            console.error('Failed to refresh preview ingredients:', err);
-          });
+          .catch(err => console.error('Failed to refresh preview ingredients:', err));
       }
     };
-  }, [showPreview, selectedRecipe, fetchRecipeIngredients]);
+  }, [showPreview, selectedRecipe, fetchRecipeIngredients, clearChangedFlag]);
+  useEffect(() => {
+    if (showPreview && selectedRecipe && changedRecipeIds.has(selectedRecipe.id)) {
+      fetchRecipeIngredients(selectedRecipe.id)
+        .then(ingredients => {
+          setRecipeIngredients(ingredients);
+          clearChangedFlag(selectedRecipe.id);
+        })
+        .catch(err => console.error('Failed to refresh ingredients when opening preview:', err));
+    }
+  }, [showPreview, selectedRecipe, changedRecipeIds, fetchRecipeIngredients, clearChangedFlag]);
 
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
 
@@ -106,12 +127,11 @@ export default function RecipesClient() {
     capitalizeRecipeName,
   });
 
-  // Helper function - format quantity with yield adjustment
-  const formatQuantity = (quantity: number, unit: string) => {
-    return formatQuantityUtil(quantity, unit, previewYield, selectedRecipe?.yield || 1);
-  };
+  const formatQuantity = useCallback(
+    (q: number, u: string) => formatQuantityUtil(q, u, previewYield, selectedRecipe?.yield || 1),
+    [previewYield, selectedRecipe?.yield],
+  );
 
-  // Event handlers
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
@@ -120,13 +140,14 @@ export default function RecipesClient() {
         setRecipeIngredients(ingredients);
         setPreviewYield(recipe.yield);
         setShowPreview(true);
+        clearChangedFlag(recipe.id);
         await generateAIInstructions(recipe, ingredients);
       } catch (err) {
         console.error('❌ Error in handlePreviewRecipe:', err);
         setError('Failed to load recipe preview');
       }
     },
-    [fetchRecipeIngredients, setError, generateAIInstructions],
+    [fetchRecipeIngredients, setError, generateAIInstructions, clearChangedFlag],
   );
 
   const handleEditFromPreviewWrapper = () => {
@@ -134,26 +155,16 @@ export default function RecipesClient() {
     handleEditFromPreview(selectedRecipe, recipeIngredients);
     setShowPreview(false);
   };
-
   const handleShareRecipeWrapper = () => {
     if (!selectedRecipe || !recipeIngredients.length) return;
     handleShareRecipe(selectedRecipe, recipeIngredients, aiInstructions);
   };
+  const handlePrint = () => window.print();
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  // Gate the arcade overlay while recipes are loading
   useEffect(() => {
-    if (loading) {
-      startLoadingGate('recipes');
-    } else {
-      stopLoadingGate('recipes');
-    }
-    return () => {
-      stopLoadingGate('recipes');
-    };
+    if (loading) startLoadingGate('recipes');
+    else stopLoadingGate('recipes');
+    return () => stopLoadingGate('recipes');
   }, [loading]);
 
   if (loading) {
@@ -162,10 +173,7 @@ export default function RecipesClient() {
 
   return (
     <>
-      {/* Action Buttons */}
       <RecipesActionButtons onRefresh={fetchRecipes} />
-
-      {/* Bulk Actions Bar */}
       <BulkActionsBar
         selectedCount={selectedRecipes.size}
         onBulkDelete={handleBulkDelete}
@@ -181,8 +189,6 @@ export default function RecipesClient() {
 
       {/* Success Message */}
       <SuccessMessage message={successMessage} />
-
-      {/* Recipes List */}
       <div className="overflow-hidden rounded-lg bg-[#1f1f1f] shadow">
         <div className="sticky top-0 z-10 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
@@ -197,8 +203,6 @@ export default function RecipesClient() {
             )}
           </div>
         </div>
-
-        {/* Mobile Card Layout */}
         <div className="block md:hidden">
           <div className="divide-y divide-[#2a2a2a]">
             {recipes.map(recipe => (
@@ -216,8 +220,6 @@ export default function RecipesClient() {
             ))}
           </div>
         </div>
-
-        {/* Desktop Table Layout */}
         <RecipeTable
           recipes={recipes}
           recipePrices={recipePrices}
@@ -231,7 +233,6 @@ export default function RecipesClient() {
         />
       </div>
 
-      {/* Empty State */}
       {recipes.length === 0 && (
         <div className="py-12 text-center">
           <div className="mb-4 flex justify-center">
@@ -250,7 +251,6 @@ export default function RecipesClient() {
         </div>
       )}
 
-      {/* Recipe Preview Modal */}
       <RecipePreviewModal
         showPreview={showPreview}
         selectedRecipe={selectedRecipe}
@@ -268,7 +268,6 @@ export default function RecipesClient() {
         formatQuantity={formatQuantity}
       />
 
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
         show={showDeleteConfirm}
         recipe={recipeToDelete}
@@ -277,7 +276,6 @@ export default function RecipesClient() {
         onCancel={cancelDeleteRecipe}
       />
 
-      {/* Bulk Delete Confirmation Modal */}
       <BulkDeleteConfirmationModal
         show={showBulkDeleteConfirm}
         selectedRecipeIds={selectedRecipes}

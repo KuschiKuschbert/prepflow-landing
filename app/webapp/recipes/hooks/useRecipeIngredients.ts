@@ -7,10 +7,12 @@ import { RecipeIngredientWithDetails } from '../types';
 export function useRecipeIngredients(setError: (error: string) => void) {
   const fetchFromApi = useCallback(
     async (recipeId: string): Promise<RecipeIngredientWithDetails[] | null> => {
-      const res = await fetch(`/api/recipes/${recipeId}/ingredients`, { cache: 'no-store' });
+      const res = await fetch(`/api/recipes/${recipeId}/ingredients?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', Pragma: 'no-cache' },
+      });
       if (!res.ok) return null;
-      const json = await res.json();
-      return (json?.items || []) as RecipeIngredientWithDetails[];
+      return ((await res.json())?.items || []) as RecipeIngredientWithDetails[];
     },
     [],
   );
@@ -55,14 +57,9 @@ export function useRecipeIngredients(setError: (error: string) => void) {
   const fetchRecipeIngredients = useCallback(
     async (recipeId: string): Promise<RecipeIngredientWithDetails[]> => {
       try {
-        if (process.env.NODE_ENV === 'development')
-          console.log('🔍 Fetching recipe ingredients for recipeId:', recipeId);
         const fromApi = await fetchFromApi(recipeId);
         if (Array.isArray(fromApi) && fromApi.length > 0) return fromApi;
-        const fromClient = await fetchFromClientJoin(recipeId);
-        if (fromClient.length === 0 && process.env.NODE_ENV === 'development')
-          console.warn('⚠️ No recipe_ingredients found for recipeId:', recipeId);
-        return fromClient;
+        return await fetchFromClientJoin(recipeId);
       } catch (err) {
         console.error('❌ Exception fetching recipe ingredients:', err);
         setError('Failed to fetch recipe ingredients');
@@ -76,28 +73,18 @@ export function useRecipeIngredients(setError: (error: string) => void) {
     async (recipeIds: string[]): Promise<Record<string, RecipeIngredientWithDetails[]>> => {
       if (recipeIds.length === 0) return {};
       try {
-        if (process.env.NODE_ENV === 'development')
-          console.log('🔍 Batch fetching recipe ingredients for recipeIds:', recipeIds);
         const response = await fetch('/api/recipes/ingredients/batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ recipeIds }),
           cache: 'no-store',
         });
-        if (!response.ok) {
-          if (process.env.NODE_ENV === 'development') {
-            const error = await response.json().catch(() => ({ error: 'Unknown error' }));
-            console.warn('⚠️ Batch fetch failed, falling back to individual fetches:', error);
-          }
-          return {};
-        }
+        if (!response.ok) return {};
         return ((await response.json())?.items || {}) as Record<
           string,
           RecipeIngredientWithDetails[]
         >;
       } catch (err) {
-        if (process.env.NODE_ENV === 'development')
-          console.warn('⚠️ Batch fetch exception, falling back to individual fetches:', err);
         return {};
       }
     },

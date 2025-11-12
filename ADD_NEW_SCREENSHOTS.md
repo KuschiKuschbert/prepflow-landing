@@ -5,6 +5,7 @@
 Please add these new screenshot files to `public/images/` directory:
 
 ### 1. Ingredients Management Screenshot
+
 - **File names:**
   - `ingredients-management-screenshot.png`
   - `ingredients-management-screenshot.webp` (optional, for optimization)
@@ -16,6 +17,7 @@ Please add these new screenshot files to `public/images/` directory:
   - Closer Look section (Ingredients & Stock expandable feature)
 
 ### 2. COGS Calculator Screenshot
+
 - **File names:**
   - `cogs-calculator-screenshot.png`
   - `cogs-calculator-screenshot.webp` (optional)
@@ -27,6 +29,7 @@ Please add these new screenshot files to `public/images/` directory:
   - Closer Look section (COGS Calculator expandable feature)
 
 ### 3. Cleaning Roster Screenshot
+
 - **File names:**
   - `cleaning-roster-screenshot.png`
   - `cleaning-roster-screenshot.webp` (optional)
@@ -45,6 +48,7 @@ Please add these new screenshot files to `public/images/` directory:
 ## Old Screenshots (Already Deleted)
 
 ✅ **Deleted:**
+
 - `recipe-screenshot.png` (replaced with `cogs-calculator-screenshot.png`)
 - `stocklist-screenshot.png` (replaced with `ingredients-management-screenshot.png`)
 
@@ -70,11 +74,10 @@ Please add these new screenshot files to `public/images/` directory:
 ## Component References Updated
 
 All component references have been updated to use the new screenshot names:
+
 - ✅ `app/components/landing/CloserLook.tsx`
 - ✅ `app/components/landing/Highlights.tsx`
 - ✅ `app/components/landing/ProductFeatures.tsx`
 - ✅ `components/variants/HeroImageGallery.tsx`
 
 Once you add the new screenshot files, the landing page will automatically use them!
-
-

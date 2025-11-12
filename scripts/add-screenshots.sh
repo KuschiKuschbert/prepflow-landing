@@ -51,3 +51,4 @@ echo "  2. Save them to public/images/ with the exact names above"
 echo "  3. Run this script again to verify"
 
 
+
