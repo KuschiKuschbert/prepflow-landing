@@ -366,33 +366,6 @@ export default function IngredientTableWithFilters({
         onItemsPerPageChange={onItemsPerPageChange}
       />
 
-      {/* Selection Mode Indicator */}
-      {isSelectionMode && (
-        <div className="bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 border-b border-[#29E7CD]/30 px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />
-              <span className="text-sm font-medium text-[#29E7CD]">
-                Selection Mode - Tap items to select
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                // Exit selection mode by clearing all selections
-                onSelectAll(false);
-                // Call exit handler if available
-                if (onExitSelectionMode) {
-                  onExitSelectionMode();
-                }
-              }}
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Done
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Table Header */}
       <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -530,6 +503,33 @@ export default function IngredientTableWithFilters({
           </div>
         </div>
       </div>
+
+      {/* Selection Mode Indicator */}
+      {isSelectionMode && (
+        <div className="bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 border-b border-[#29E7CD]/30 px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />
+              <span className="text-sm font-medium text-[#29E7CD]">
+                Selection Mode - Tap items to select
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                // Exit selection mode by clearing all selections
+                onSelectAll(false);
+                // Call exit handler if available
+                if (onExitSelectionMode) {
+                  onExitSelectionMode();
+                }
+              }}
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Card Layout */}
       <div className="block md:hidden space-y-2">
