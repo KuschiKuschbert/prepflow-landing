@@ -17,6 +17,7 @@ import { useIngredientAddition } from '../hooks/useIngredientAddition';
 import { useIngredientEditing } from '../hooks/useIngredientEditing';
 import { useIngredientSearch } from '../hooks/useIngredientSearch';
 import { usePricing } from '../hooks/usePricing';
+import { usePortionHandling } from '../hooks/usePortionHandling';
 import { useRecipeCRUD } from '../hooks/useRecipeCRUD';
 import { useRecipeHandlers } from '../hooks/useRecipeHandlers';
 import { COGSEmptyState } from '../components/COGSEmptyState';
@@ -49,6 +50,13 @@ export default function CogsClient() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  const {
+    hasManualPortionsRef,
+    lastPortionChangeTimeRef,
+    handleDishPortionsChange,
+    handleDishPortionsFromRecipe,
+  } = usePortionHandling({ setDishPortions });
 
   const { createOrUpdateRecipe } = useRecipeCRUD({ setError: setSaveError });
 
@@ -104,7 +112,6 @@ export default function CogsClient() {
     loadCalculations,
     setSelectedRecipe,
   });
-
   useEffect(() => {
     if (selectedRecipe && selectedRecipeData) {
       if (hasManualIngredientsRef?.current) {
@@ -116,7 +123,13 @@ export default function CogsClient() {
         console.log('[CogsClient] Skipping loadExistingRecipeIngredients - recent change detected');
         return;
       }
-      setDishPortions(selectedRecipeData.yield || 1);
+      // Only reset portions if they haven't been manually changed
+      if (!hasManualPortionsRef.current) {
+        const timeSincePortionChange = Date.now() - (lastPortionChangeTimeRef.current || 0);
+        if (timeSincePortionChange > 10000) {
+          handleDishPortionsFromRecipe(selectedRecipeData.yield || 1);
+        }
+      }
       loadExistingRecipeIngredients(selectedRecipe);
     }
   }, [
@@ -125,8 +138,10 @@ export default function CogsClient() {
     loadExistingRecipeIngredients,
     hasManualIngredientsRef,
     lastManualChangeTimeRef,
+    hasManualPortionsRef,
+    lastPortionChangeTimeRef,
+    handleDishPortionsFromRecipe,
   ]);
-
   const { handleToggleAddIngredient } = useDishHandlers({
     showAddIngredient,
     dishName: selectedRecipeData?.name || '',
@@ -140,7 +155,6 @@ export default function CogsClient() {
     setDishNameLocked: () => {}, // Not used anymore
     setSelectedRecipe,
   });
-
   const { handleAddIngredient } = useIngredientAddition({
     calculations,
     ingredients,
@@ -164,7 +178,6 @@ export default function CogsClient() {
     removeCalculation,
     saveNow: saveNowAutosave,
   });
-
   const handleAddIngredientWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleAddIngredient(newIngredient, e);
@@ -176,7 +189,7 @@ export default function CogsClient() {
       dishPortions,
       calculations,
       setSelectedRecipe,
-      setDishPortions,
+      setDishPortions: handleDishPortionsFromRecipe,
       setShowCreateModal,
       createOrUpdateRecipe,
       fetchData,
@@ -184,9 +197,7 @@ export default function CogsClient() {
       saveNow: saveNowAutosave,
       setSaveError,
     });
-
   useCOGSLoadingGate(loading);
-
   if (loading) {
     return <PageSkeleton />;
   }
@@ -236,7 +247,7 @@ export default function CogsClient() {
             autosaveStatus={autosaveStatus}
             onRecipeSelect={handleRecipeSelect}
             onCreateNewRecipe={handleCreateNewRecipe}
-            onDishPortionsChange={setDishPortions}
+            onDishPortionsChange={handleDishPortionsChange}
             onUpdateCalculation={updateCalculation}
             onRemoveCalculation={removeCalculation}
             onToggleAddIngredient={handleToggleAddIngredient}

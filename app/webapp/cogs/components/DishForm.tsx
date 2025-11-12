@@ -123,9 +123,16 @@ export const DishForm: React.FC<DishFormProps> = ({
             <input
               type="number"
               min="1"
+              step="1"
               placeholder="1"
-              value={dishPortions}
-              onChange={e => onDishPortionsChange(Number(e.target.value))}
+              value={dishPortions || ''}
+              onChange={e => {
+                const value = e.target.value;
+                const numValue = value === '' ? 1 : Number(value);
+                if (!isNaN(numValue) && numValue > 0) {
+                  onDishPortionsChange(numValue);
+                }
+              }}
               className="w-24 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-center font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             />
             <span className="text-sm text-gray-400">portions</span>
