@@ -80,15 +80,13 @@ export default function RecipesClient() {
           .catch(err => console.error('Failed to refresh preview ingredients:', err));
       }
     };
-  }, [showPreview, selectedRecipe, fetchRecipeIngredients, clearChangedFlag]);
-  useEffect(() => {
     if (showPreview && selectedRecipe && changedRecipeIds.has(selectedRecipe.id)) {
       fetchRecipeIngredients(selectedRecipe.id)
         .then(ingredients => {
           setRecipeIngredients(ingredients);
           clearChangedFlag(selectedRecipe.id);
         })
-        .catch(err => console.error('Failed to refresh ingredients when opening preview:', err));
+        .catch(err => console.error('Failed to refresh on open:', err));
     }
   }, [showPreview, selectedRecipe, changedRecipeIds, fetchRecipeIngredients, clearChangedFlag]);
 
@@ -131,11 +129,12 @@ export default function RecipesClient() {
     (q: number, u: string) => formatQuantityUtil(q, u, previewYield, selectedRecipe?.yield || 1),
     [previewYield, selectedRecipe?.yield],
   );
-
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
+        console.log('[RecipesClient] Opening preview:', recipe.id);
         const ingredients = await fetchRecipeIngredients(recipe.id);
+        console.log('[RecipesClient] Fetched:', ingredients.length);
         setSelectedRecipe(recipe);
         setRecipeIngredients(ingredients);
         setPreviewYield(recipe.yield);
@@ -149,7 +148,6 @@ export default function RecipesClient() {
     },
     [fetchRecipeIngredients, setError, generateAIInstructions, clearChangedFlag],
   );
-
   const handleEditFromPreviewWrapper = () => {
     if (!selectedRecipe || !recipeIngredients.length) return;
     handleEditFromPreview(selectedRecipe, recipeIngredients);
@@ -160,17 +158,33 @@ export default function RecipesClient() {
     handleShareRecipe(selectedRecipe, recipeIngredients, aiInstructions);
   };
   const handlePrint = () => window.print();
-
   useEffect(() => {
     if (loading) startLoadingGate('recipes');
     else stopLoadingGate('recipes');
     return () => stopLoadingGate('recipes');
   }, [loading]);
-
-  if (loading) {
-    return <PageSkeleton />;
-  }
-
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && changedRecipeIds.size > 0) {
+        console.log('[RecipesClient] Page visible, refreshing:', changedRecipeIds);
+        fetchRecipes().catch(err => console.error('Failed to refresh:', err));
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [changedRecipeIds, fetchRecipes]);
+  useEffect(() => {
+    const lastChangeTime = sessionStorage.getItem('recipe_ingredients_last_change');
+    if (lastChangeTime) {
+      const timeSinceChange = Date.now() - parseInt(lastChangeTime, 10);
+      if (timeSinceChange < 5 * 60 * 1000 && !loading) {
+        console.log('[RecipesClient] Recent changes detected, refreshing');
+        fetchRecipes().catch(err => console.error('Failed to refresh:', err));
+        sessionStorage.removeItem('recipe_ingredients_last_change');
+      }
+    }
+  }, [loading, fetchRecipes]);
+  if (loading) return <PageSkeleton />;
   return (
     <>
       <RecipesActionButtons onRefresh={fetchRecipes} />
@@ -180,14 +194,11 @@ export default function RecipesClient() {
         onClearSelection={() => setSelectedRecipes(new Set())}
       />
 
-      {/* Error Message */}
       {error && (
         <div className="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
           {error}
         </div>
       )}
-
-      {/* Success Message */}
       <SuccessMessage message={successMessage} />
       <div className="overflow-hidden rounded-lg bg-[#1f1f1f] shadow">
         <div className="sticky top-0 z-10 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 sm:px-6">

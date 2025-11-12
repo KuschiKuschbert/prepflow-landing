@@ -34,17 +34,21 @@ export function useRecipeIngredientsAutosave({
   const calculationsString = serializeCalculations(calculations);
 
   const performSave = useCallback(async () => {
-    if (!recipeId || !enabled) return;
-
+    if (!recipeId || !enabled) {
+      console.log('[Autosave] Save skipped:', { recipeId, enabled });
+      return;
+    }
+    console.log('[Autosave] Starting save:', { recipeId, count: calculations.length });
     setStatus('saving');
     setError(null);
-
     const result = await saveRecipeIngredients(recipeId, calculations);
     if (result.success) {
+      console.log('[Autosave] Save successful:', { recipeId, count: calculations.length });
       setStatus('saved');
       if (onSave) onSave();
       setTimeout(() => setStatus(prev => (prev === 'saved' ? 'idle' : prev)), 2000);
     } else {
+      console.error('[Autosave] Save failed:', result.error);
       setStatus('error');
       setError(result.error || 'Failed to save');
       if (onError && result.error) onError(result.error);
@@ -73,6 +77,7 @@ export function useRecipeIngredientsAutosave({
   }, [calculationsString, recipeId, enabled, debounceMs, performSave]);
 
   const saveNow = useCallback(async () => {
+    console.log('[Autosave] saveNow called');
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
