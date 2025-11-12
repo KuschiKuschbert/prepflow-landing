@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { COGSCalculation, RecipeIngredient } from '../types';
 import { mergeCalculations, mergeRecipeIngredients } from './utils/mergeCalculations';
 import {
   mapApiItemsToCalculations,
