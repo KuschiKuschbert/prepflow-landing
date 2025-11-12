@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { COGSCalculation } from '../types';
 
 interface UseCOGSEffectsProps {
-  checkRecipeExists: (name: string) => Promise<boolean | null>;
+  checkRecipeExists: (name: string) => Promise<{ exists: boolean | null; recipeId: any }>;
   dishName: string;
   dishNameLocked: boolean;
   setSuccessMessage: (msg: string | null) => void;
