@@ -4,21 +4,33 @@ import React from 'react';
 import { Recipe } from '../types';
 
 interface DeleteConfirmationModalProps {
-  show: boolean;
-  recipe: Recipe | null;
-  capitalizeRecipeName: (name: string) => string;
+  show?: boolean;
+  recipe?: Recipe | null;
+  itemName?: string;
+  itemType?: string;
+  capitalizeRecipeName?: (name: string) => string;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 export function DeleteConfirmationModal({
-  show,
+  show = true,
   recipe,
+  itemName,
+  itemType = 'item',
   capitalizeRecipeName,
   onConfirm,
   onCancel,
 }: DeleteConfirmationModalProps) {
-  if (!show || !recipe) return null;
+  const displayName = recipe
+    ? capitalizeRecipeName
+      ? capitalizeRecipeName(recipe.name)
+      : recipe.name
+    : itemName || 'this item';
+
+  const itemTypeLabel = recipe ? 'recipe' : itemType;
+
+  if (!show && !recipe && !itemName) return null;
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
@@ -41,7 +53,9 @@ export function DeleteConfirmationModal({
               </svg>
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">Delete Recipe</h3>
+              <h3 className="text-xl font-bold text-white">
+                Delete {itemTypeLabel.charAt(0).toUpperCase() + itemTypeLabel.slice(1)}
+              </h3>
               <p className="text-sm text-gray-400">This action cannot be undone</p>
             </div>
           </div>
@@ -49,10 +63,8 @@ export function DeleteConfirmationModal({
         <div className="p-6">
           <p className="mb-6 text-gray-300">
             Are you sure you want to delete{' '}
-            <span className="font-semibold text-white">
-              &quot;{capitalizeRecipeName(recipe.name)}&quot;
-            </span>
-            ? This will permanently remove the recipe and all its ingredients from your Recipe Book.
+            <span className="font-semibold text-white">&quot;{displayName}&quot;</span>? This will
+            permanently remove the {itemTypeLabel} and all its associated data.
           </p>
           <div className="flex gap-3">
             <button
@@ -65,7 +77,7 @@ export function DeleteConfirmationModal({
               onClick={onConfirm}
               className="flex-1 rounded-xl bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
             >
-              Delete Recipe
+              Delete {itemTypeLabel.charAt(0).toUpperCase() + itemTypeLabel.slice(1)}
             </button>
           </div>
         </div>

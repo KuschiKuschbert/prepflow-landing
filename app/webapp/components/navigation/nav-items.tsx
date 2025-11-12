@@ -15,6 +15,7 @@ import {
   Wrench,
   Settings,
   Settings2,
+  FileText,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
@@ -112,6 +113,13 @@ export function useNavigationItems(): NavigationItemConfig[] {
       label: t('nav.dishSections', 'Dish Sections') as string,
       icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
       color: 'text-[#29E7CD]',
+      category: 'kitchen',
+    },
+    {
+      href: '/webapp/menu-builder',
+      label: t('nav.menuBuilder', 'Menu Builder') as string,
+      icon: <Icon icon={FileText} size="sm" className="text-current" aria-hidden={true} />,
+      color: 'text-[#D925C7]',
       category: 'kitchen',
     },
     {

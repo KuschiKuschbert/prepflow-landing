@@ -1,7 +1,7 @@
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookDescription } from './components/RecipeBookDescription';
-import RecipesClient from './components/RecipesClient';
+import { RecipeBookContent } from './components/RecipeBookContent';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
 
 export default function RecipesPage() {
@@ -12,7 +12,7 @@ export default function RecipesPage() {
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Recipe Book"
-            subtitle="Manage your saved recipes and create new ones"
+            subtitle="Manage your saved recipes and create new dishes"
             icon="📖"
             showLogo={true}
           />
@@ -21,7 +21,7 @@ export default function RecipesPage() {
           <RecipeBookDescription />
 
           {/* Dynamic Content - Loads After Initial Render */}
-          <RecipesClient />
+          <RecipeBookContent />
         </div>
       </AdaptiveContainer>
     </ErrorBoundary>

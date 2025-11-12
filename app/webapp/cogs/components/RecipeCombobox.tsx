@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { ChevronDown, Search, Plus } from 'lucide-react';
+import { ChevronDown, Plus, Search } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { Recipe } from '../types';
 
 interface RecipeComboboxProps {

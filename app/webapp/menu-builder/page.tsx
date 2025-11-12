@@ -1,0 +1,22 @@
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { PageHeader } from '../components/static/PageHeader';
+import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import MenuBuilderClient from './components/MenuBuilderClient';
+
+export default function MenuBuilderPage() {
+  return (
+    <ErrorBoundary>
+      <AdaptiveContainer>
+        <div className="min-h-screen bg-transparent py-4 sm:py-6">
+          <PageHeader
+            title="Menu Builder"
+            subtitle="Create and manage your menus with drag-and-drop"
+            icon="📋"
+            showLogo={true}
+          />
+          <MenuBuilderClient />
+        </div>
+      </AdaptiveContainer>
+    </ErrorBoundary>
+  );
+}

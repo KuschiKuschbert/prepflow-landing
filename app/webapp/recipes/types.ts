@@ -62,3 +62,54 @@ export interface RecipePriceData {
   contributingMargin: number;
   contributingMarginPercent: number;
 }
+
+// Dish Types
+export interface Dish {
+  id: string;
+  dish_name: string;
+  description?: string;
+  selling_price: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DishRecipe {
+  id: string;
+  dish_id: string;
+  recipe_id: string;
+  quantity: number;
+  recipes?: {
+    id: string;
+    name: string;
+    description?: string;
+    yield: number;
+    yield_unit: string;
+  };
+}
+
+export interface DishIngredient {
+  id: string;
+  dish_id: string;
+  ingredient_id: string;
+  quantity: number;
+  unit: string;
+  ingredients?: {
+    id: string;
+    ingredient_name: string;
+    cost_per_unit: number;
+    unit: string;
+  };
+}
+
+export interface DishWithDetails extends Dish {
+  recipes?: DishRecipe[];
+  ingredients?: DishIngredient[];
+}
+
+export interface DishCostData {
+  total_cost: number;
+  selling_price: number;
+  gross_profit: number;
+  gross_profit_margin: number;
+  food_cost_percent: number;
+}

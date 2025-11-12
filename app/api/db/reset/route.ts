@@ -20,8 +20,13 @@ export async function POST(request: NextRequest) {
   // FK-safe delete order
   const tablesInOrder = [
     'sales_data',
-    'recipe_ingredients',
+    'menu_items',
     'menu_dishes',
+    'dish_ingredients',
+    'dish_recipes',
+    'dishes',
+    'menus',
+    'recipe_ingredients',
     'recipes',
     'ingredients',
   ];

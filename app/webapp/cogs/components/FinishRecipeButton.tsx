@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { CheckCircle2, Sparkles } from 'lucide-react';
+import { useState } from 'react';
 
 interface FinishRecipeButtonProps {
   onFinish: () => void;
