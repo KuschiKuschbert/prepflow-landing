@@ -12,7 +12,7 @@ interface UseIntersectionObserverOptions {
 export function useIntersectionObserver<T extends HTMLElement = HTMLDivElement>(
   options: UseIntersectionObserverOptions = {}
 ): [React.RefObject<T | null>, boolean] {
-  const { threshold = 0.1, root = null, rootMargin = '0px', triggerOnce = false } = options;
+  const { threshold = 0.05, root = null, rootMargin = '50px', triggerOnce = false } = options;
   const [isIntersecting, setIsIntersecting] = useState(false);
   const elementRef = useRef<T | null>(null);
 
