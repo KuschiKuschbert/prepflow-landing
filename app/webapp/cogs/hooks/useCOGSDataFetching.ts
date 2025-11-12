@@ -43,9 +43,15 @@ export function useCOGSDataFetching() {
         );
         setRecipes([]);
       } else {
+        // Debug: Log recipes data to verify fetch is working
+        console.log('🔍 DEBUG useCOGSDataFetching: Recipes fetched', {
+          recipesCount: recipesData?.length || 0,
+          recipes: recipesData,
+        });
         setRecipes(recipesData || []);
       }
     } catch (err) {
+      console.error('Failed to fetch data:', err);
       setError('Failed to fetch data');
     } finally {
       setLoading(false);

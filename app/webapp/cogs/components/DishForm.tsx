@@ -23,6 +23,15 @@ export const DishForm: React.FC<DishFormProps> = ({
 }) => {
   const { dishName, dishPortions, dishNameLocked, recipeExists, checkingRecipe } = formData;
 
+  // Debug: Log recipes prop to verify data is being passed
+  React.useEffect(() => {
+    console.log('🔍 DEBUG DishForm: recipes prop received', {
+      recipesCount: recipes?.length || 0,
+      recipes: recipes,
+      selectedRecipe,
+    });
+  }, [recipes, selectedRecipe]);
+
   return (
     <div className="rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
       <h2 className="mb-6 text-lg font-semibold sm:text-xl">Create Dish</h2>
@@ -135,11 +144,17 @@ export const DishForm: React.FC<DishFormProps> = ({
             className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#D925C7] focus:ring-2 focus:ring-[#D925C7] focus:outline-none"
           >
             <option value="">Create new dish from scratch...</option>
-            {recipes.map(recipe => (
-              <option key={recipe.id} value={recipe.id}>
-                {recipe.name}
+            {recipes && recipes.length > 0 ? (
+              recipes.map(recipe => (
+                <option key={recipe.id} value={recipe.id}>
+                  {recipe.name}
+                </option>
+              ))
+            ) : (
+              <option value="" disabled>
+                No recipes available
               </option>
-            ))}
+            )}
           </select>
         </div>
       </div>

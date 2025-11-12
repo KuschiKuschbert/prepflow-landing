@@ -11,6 +11,7 @@ export function storeRecipeForEditing(
     'editingRecipe',
     JSON.stringify({
       recipe,
+      recipeId: recipe.id,
       calculations,
       dishName: recipe.name,
       dishPortions: recipe.yield,

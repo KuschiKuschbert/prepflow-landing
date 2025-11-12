@@ -96,6 +96,15 @@ export default function CogsClient() {
     fetchData();
   }, [fetchData]);
 
+  // Debug: Log recipes from hook to verify data flow
+  useEffect(() => {
+    console.log('🔍 DEBUG CogsClient: recipes from useCOGSCalculations', {
+      recipesCount: recipes?.length || 0,
+      recipes: recipes,
+      selectedRecipe,
+    });
+  }, [recipes, selectedRecipe]);
+
   // COGS effects hook
   const { recipeExists, checkingRecipe } = useCOGSEffects({
     checkRecipeExists,
@@ -107,6 +116,7 @@ export default function CogsClient() {
     setDishNameLocked,
     setShowSuggestions,
     loadCalculations,
+    setSelectedRecipe,
   });
 
   // Ingredient addition hook
