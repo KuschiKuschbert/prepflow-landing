@@ -45,7 +45,7 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
       ingredient_id: ingredient.id,
       unit: ingredient.unit || 'kg',
     }));
-    setIngredientSearch(ingredient.ingredient_name);
+    setIngredientSearch(ingredient.ingredient_name.toLowerCase());
     setShowSuggestions(false);
   }, []);
 
