@@ -5,6 +5,9 @@ interface UseDishHandlersProps {
   showAddIngredient: boolean;
   dishName: string;
   recipes: Recipe[];
+  recipeExists: boolean | null;
+  selectedRecipe: string;
+  loadExistingRecipeIngredients: (recipeId: string) => Promise<void>;
   setShowAddIngredient: (show: boolean) => void;
   setDishName: (name: string) => void;
   setDishPortions: (portions: number) => void;
@@ -16,21 +19,44 @@ export function useDishHandlers({
   showAddIngredient,
   dishName,
   recipes,
+  recipeExists,
+  selectedRecipe,
+  loadExistingRecipeIngredients,
   setShowAddIngredient,
   setDishName,
   setDishPortions,
   setDishNameLocked,
   setSelectedRecipe,
 }: UseDishHandlersProps) {
-  const handleToggleAddIngredient = useCallback(() => {
-    setShowAddIngredient(!showAddIngredient);
-    if (!showAddIngredient && dishName.trim()) {
+  const handleToggleAddIngredient = useCallback(async () => {
+    const newShowAddIngredient = !showAddIngredient;
+    setShowAddIngredient(newShowAddIngredient);
+
+    if (!newShowAddIngredient && dishName.trim()) {
       setDishNameLocked(true);
+
+      // If recipe exists and we're opening the add ingredient dialog, load the recipe
+      if (recipeExists === true && selectedRecipe) {
+        try {
+          await loadExistingRecipeIngredients(selectedRecipe);
+        } catch (err) {
+          console.error('Failed to load existing recipe ingredients:', err);
+        }
+      }
     }
-    if (showAddIngredient) {
+
+    if (newShowAddIngredient) {
       setDishNameLocked(false);
     }
-  }, [showAddIngredient, dishName, setShowAddIngredient, setDishNameLocked]);
+  }, [
+    showAddIngredient,
+    dishName,
+    recipeExists,
+    selectedRecipe,
+    loadExistingRecipeIngredients,
+    setShowAddIngredient,
+    setDishNameLocked,
+  ]);
 
   const handleRecipeSelect = useCallback(
     (recipeId: string) => {

@@ -51,7 +51,7 @@ export function useRecipeIngredients({
 
   const checkRecipeExists = useCallback(async (recipeName: string) => {
     if (!recipeName.trim()) {
-      return null;
+      return { exists: null, recipeId: null };
     }
 
     try {
@@ -64,17 +64,15 @@ export function useRecipeIngredients({
         existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
 
       if (error && error.code === 'PGRST116') {
-        return false;
+        return { exists: false, recipeId: null };
       } else if (existingRecipe) {
-        // Don't load ingredients when just checking if recipe exists
-        // Only return true/false to indicate existence
-        return true;
+        return { exists: true, recipeId: existingRecipe.id };
       } else {
-        return false;
+        return { exists: false, recipeId: null };
       }
     } catch (err) {
       console.log('Error checking recipe:', err);
-      return null;
+      return { exists: null, recipeId: null };
     }
   }, []);
 

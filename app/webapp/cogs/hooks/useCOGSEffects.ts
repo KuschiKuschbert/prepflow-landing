@@ -81,15 +81,18 @@ export function useCOGSEffects({
     const timeoutId = setTimeout(async () => {
       if (dishName.trim()) {
         setCheckingRecipe(true);
-        const exists = await checkRecipeExists(dishName);
-        if (!dishNameLocked) setRecipeExists(exists);
+        const result = await checkRecipeExists(dishName);
+        if (!dishNameLocked) {
+          setRecipeExists(result.exists);
+          if (result.exists === true && result.recipeId) setSelectedRecipe(result.recipeId);
+        }
         setCheckingRecipe(false);
       } else {
         setRecipeExists(null);
       }
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [dishName, dishNameLocked, checkRecipeExists]);
+  }, [dishName, dishNameLocked, checkRecipeExists, setSelectedRecipe]);
 
   return { recipeExists, checkingRecipe };
 }
