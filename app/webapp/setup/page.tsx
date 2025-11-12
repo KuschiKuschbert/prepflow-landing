@@ -186,7 +186,13 @@ export default function SetupPageRefactored() {
                     href="/webapp"
                     className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
                   >
-                    🚀 Go to Dashboard
+                    <Icon
+                      icon={Rocket}
+                      size="sm"
+                      className="mr-1 inline text-white"
+                      aria-hidden={true}
+                    />{' '}
+                    Go to Dashboard
                   </a>
                   <a
                     href="/webapp/recipes"
