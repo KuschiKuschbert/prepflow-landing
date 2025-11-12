@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Recipe } from '../types';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { useRecipeIngredientsSubscription } from './useRecipeIngredientsSubscription';
+import { useRecipeMetadataSubscription } from './useRecipeMetadataSubscription';
 import { useRecipePriceSubscription } from './useRecipePriceSubscription';
 import { useRecipePricing } from './useRecipePricing';
 import { convertToCOGSCalculations } from './utils/recipeCalculationHelpers';
@@ -44,9 +45,7 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
           recipesList,
           fetchRecipeIngredients,
           fetchBatchRecipeIngredients,
-        ).catch(err => {
-          console.error('Background price calculation failed:', err);
-        });
+        ).catch(err => console.error('Background price calculation failed:', err));
       }
     } catch (err) {
       setError('Failed to fetch recipes');
@@ -67,7 +66,6 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
     },
     [fetchRecipeIngredients, router, setError],
   );
-
   useRecipePriceSubscription(
     recipes,
     refreshRecipePrices,
@@ -81,6 +79,7 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
     fetchBatchRecipeIngredients,
     onIngredientsChange,
   );
+  useRecipeMetadataSubscription({ recipes, onRecipeUpdated: () => {}, fetchRecipes });
   useEffect(() => {
     prefetchRecipes();
     fetchRecipes();

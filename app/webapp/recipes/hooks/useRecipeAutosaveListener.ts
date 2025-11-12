@@ -15,9 +15,17 @@ export function useRecipeAutosaveListener({ onRecipeSaved }: UseRecipeAutosaveLi
     const handleAutosaveStatus = (event: CustomEvent) => {
       const { status, entityType, entityId } = event.detail;
       // Refresh recipes when recipe metadata (yield) is saved
-      if (status === 'saved' && entityType === 'recipes' && entityId) {
-        console.log('[useRecipeAutosaveListener] Recipe metadata saved, refreshing recipes list');
-        onRecipeSaved();
+      // entityId can be either the recipe ID directly or a derived ID
+      // We check for 'recipes' entityType and any non-null entityId
+      if (status === 'saved' && entityType === 'recipes' && entityId && entityId !== 'new') {
+        console.log('[useRecipeAutosaveListener] Recipe metadata saved, refreshing recipes list', {
+          entityId,
+          entityType,
+        });
+        // Debounce to avoid multiple rapid refreshes
+        setTimeout(() => {
+          onRecipeSaved();
+        }, 100);
       }
     };
 
