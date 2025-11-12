@@ -13,6 +13,7 @@ import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider, useGlobalWarning } from '../../contexts/GlobalWarningContext';
 import { NotificationProvider } from '../../contexts/NotificationContext';
 import '../globals.css';
+import SafeAnimatedBackground from '../components/landing/SafeAnimatedBackground';
 import { DraftRecovery } from './components/DraftRecovery';
 import ModernNavigation from './components/ModernNavigation';
 import { PersonalityScheduler } from './components/PersonalityScheduler';
@@ -135,6 +136,9 @@ function WebAppLayoutContent({
 
   return (
     <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
+      {/* Pulsating Concentric Circles Background */}
+      <SafeAnimatedBackground />
+
       {/* Modern Navigation */}
       <ErrorBoundary>
         <ModernNavigation />
