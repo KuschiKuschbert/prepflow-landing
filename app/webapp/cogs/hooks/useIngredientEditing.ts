@@ -38,7 +38,7 @@ export function useIngredientEditing({
   const handleRemoveIngredient = useCallback(
     async (ingredientId: string) => {
       console.log('[useIngredientEditing] Removing ingredient:', ingredientId);
-      // Use flushSync to ensure state update is committed synchronously
+      // Use flushSync to ensure state update is committed synchronously before async save
       flushSync(() => {
         removeCalculation(ingredientId);
       });

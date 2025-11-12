@@ -78,10 +78,11 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                   </button>
                   <button
                     type="button"
-                    onClick={async e => {
+                    onClick={e => {
                       e.preventDefault();
                       e.stopPropagation();
-                      await onRemoveIngredient(calc.ingredientId);
+                      // Don't await - let the handler manage async operations
+                      void onRemoveIngredient(calc.ingredientId);
                     }}
                     className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
                     title="Remove ingredient"
@@ -210,10 +211,11 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                         </button>
                         <button
                           type="button"
-                          onClick={async e => {
+                          onClick={e => {
                             e.preventDefault();
                             e.stopPropagation();
-                            await onRemoveIngredient(calc.ingredientId);
+                            // Don't await - let the handler manage async operations
+                            void onRemoveIngredient(calc.ingredientId);
                           }}
                           className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
                           title="Remove ingredient"

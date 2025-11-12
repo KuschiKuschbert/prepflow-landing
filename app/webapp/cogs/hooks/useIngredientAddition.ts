@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import { Ingredient } from '../types';
 import { useIngredientConversion } from './useIngredientConversion';
 import { createCalculation } from './utils/createCalculation';
@@ -31,6 +32,11 @@ export function useIngredientAddition({
   setSaveError,
 }: UseIngredientAdditionProps) {
   const { convertIngredientQuantity } = useIngredientConversion();
+  const calculationsRef = useRef(calculations);
+  useEffect(() => {
+    calculationsRef.current = calculations;
+  }, [calculations]);
+
   const handleAddIngredient = useCallback(
     async (newIngredient: NewIngredient, e?: React.FormEvent) => {
       if (e) e.preventDefault();
@@ -43,7 +49,8 @@ export function useIngredientAddition({
         return;
       }
       try {
-        const existingIngredient = calculations.find(
+        const currentCalculations = calculationsRef.current;
+        const existingIngredient = currentCalculations.find(
           calc => calc.ingredientId === newIngredient.ingredient_id,
         );
         const selectedIngredientData = ingredients.find(
@@ -59,14 +66,16 @@ export function useIngredientAddition({
           selectedIngredientData.unit || 'kg',
         );
         if (existingIngredient) {
-          const currentCalc = calculations.find(
+          const currentCalc = currentCalculations.find(
             calc => calc.ingredientId === newIngredient.ingredient_id,
           );
           if (currentCalc) {
-            updateCalculation(
-              newIngredient.ingredient_id!,
-              currentCalc.quantity + convertedQuantity,
-            );
+            flushSync(() => {
+              updateCalculation(
+                newIngredient.ingredient_id!,
+                currentCalc.quantity + convertedQuantity,
+              );
+            });
             resetForm();
           }
           return;
@@ -79,14 +88,15 @@ export function useIngredientAddition({
           conversionNote,
           selectedRecipe,
         );
-        addCalculation(newCalc);
+        flushSync(() => {
+          addCalculation(newCalc);
+        });
         resetForm();
       } catch (err) {
         setSaveError('Failed to add ingredient');
       }
     },
     [
-      calculations,
       ingredients,
       selectedRecipe,
       addCalculation,
