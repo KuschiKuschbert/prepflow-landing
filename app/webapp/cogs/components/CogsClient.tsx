@@ -14,6 +14,7 @@ import { SaveRecipeButton } from '../components/SaveRecipeButton';
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
 import { useCOGSEffects } from '../hooks/useCOGSEffects';
 import { useIngredientAddition } from '../hooks/useIngredientAddition';
+import { useIngredientEditing } from '../hooks/useIngredientEditing';
 import { useIngredientSearch } from '../hooks/useIngredientSearch';
 import { usePricing } from '../hooks/usePricing';
 import { useRecipeSaving } from '../hooks/useRecipeSaving';
@@ -88,8 +89,6 @@ export default function CogsClient() {
   // Additional local state
   const [dishNameLocked, setDishNameLocked] = useState(false);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
-  const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
-  const [editQuantity, setEditQuantity] = useState<number>(0);
 
   // Initialize data
   useEffect(() => {
@@ -100,7 +99,6 @@ export default function CogsClient() {
   useEffect(() => {
     console.log('🔍 DEBUG CogsClient: recipes from useCOGSCalculations', {
       recipesCount: recipes?.length || 0,
-      recipes: recipes,
       selectedRecipe,
     });
   }, [recipes, selectedRecipe]);
@@ -130,31 +128,19 @@ export default function CogsClient() {
     setSaveError,
   });
 
-  // Handle editing ingredient quantity
-  const handleEditIngredient = (ingredientId: string, currentQuantity: number) => {
-    setEditingIngredient(ingredientId);
-    setEditQuantity(currentQuantity);
-  };
-
-  // Save edited ingredient quantity
-  const handleSaveEdit = () => {
-    if (editingIngredient && editQuantity > 0) {
-      updateCalculation(editingIngredient, editQuantity);
-    }
-    setEditingIngredient(null);
-    setEditQuantity(0);
-  };
-
-  // Cancel editing
-  const handleCancelEdit = () => {
-    setEditingIngredient(null);
-    setEditQuantity(0);
-  };
-
-  // Remove ingredient from calculations
-  const handleRemoveIngredient = (ingredientId: string) => {
-    removeCalculation(ingredientId);
-  };
+  // Ingredient editing hook
+  const {
+    editingIngredient,
+    editQuantity,
+    setEditQuantity,
+    handleEditIngredient,
+    handleSaveEdit,
+    handleCancelEdit,
+    handleRemoveIngredient,
+  } = useIngredientEditing({
+    updateCalculation,
+    removeCalculation,
+  });
 
   const handleToggleAddIngredient = () => {
     setShowAddIngredient(!showAddIngredient);
@@ -176,6 +162,23 @@ export default function CogsClient() {
     saveAsRecipe(calculations, dishName, dishPortions);
     // Unlock dish name after successful save
     setDishNameLocked(false);
+  };
+
+  // Handle recipe selection from dropdown
+  const handleRecipeSelect = (recipeId: string) => {
+    setSelectedRecipe(recipeId);
+    if (recipeId) {
+      // Find the selected recipe and set dish name and portions
+      const selectedRecipeData = recipes.find(r => r.id === recipeId);
+      if (selectedRecipeData) {
+        setDishName(selectedRecipeData.name);
+        setDishPortions(selectedRecipeData.yield || 1);
+      }
+    } else {
+      // Clear dish name when "Create new dish from scratch" is selected
+      setDishName('');
+      setDishPortions(1);
+    }
   };
 
   // Prepare form data for DishForm
@@ -227,7 +230,7 @@ export default function CogsClient() {
             selectedRecipe={selectedRecipe}
             onDishNameChange={setDishName}
             onDishPortionsChange={setDishPortions}
-            onRecipeSelect={setSelectedRecipe}
+            onRecipeSelect={handleRecipeSelect}
           />
 
           <IngredientManager

@@ -31,22 +31,15 @@ export function useRecipeIngredients({
       if (!recipeId) return;
 
       try {
-        const { data, error } = await supabase
-          .from('recipe_ingredients')
-          .select('*')
-          .eq('recipe_id', recipeId);
-
-        if (error) {
-          setError(error.message);
-        } else {
-          setRecipeIngredients(data || []);
-          calculateCOGS(data || []);
-        }
+        // Use loadExistingRecipeIngredients which properly joins with ingredients table
+        // and calculates COGS with all necessary data
+        await loadExistingRecipeIngredients(recipeId);
       } catch (err) {
+        console.error('Failed to fetch recipe ingredients:', err);
         setError('Failed to fetch recipe ingredients');
       }
     },
-    [calculateCOGS, setError, setRecipeIngredients],
+    [loadExistingRecipeIngredients, setError],
   );
 
   const checkRecipeExists = useCallback(
