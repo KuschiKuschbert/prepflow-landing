@@ -532,7 +532,7 @@ export default function IngredientTableWithFilters({
       </div>
 
       {/* Mobile Card Layout */}
-      <div className="block md:hidden space-y-3">
+      <div className="block md:hidden space-y-2">
         {ingredients.map(ingredient => (
           <IngredientCard
             key={ingredient.id}
