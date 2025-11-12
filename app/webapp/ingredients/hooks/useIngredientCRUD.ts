@@ -114,7 +114,14 @@ export function useIngredientCRUD({
           .eq('id', id)
           .select();
         if (error) throw error;
-        setIngredients(prev => prev.map(ing => (ing.id === id ? { ...ing, ...updates } : ing)));
+        if (!data || data.length === 0) {
+          setError('Ingredient not found. It may have been deleted.');
+          if (setEditingIngredient) setEditingIngredient(null);
+          // Remove from local state since it doesn't exist in database
+          setIngredients(prev => prev.filter(ing => ing.id !== id));
+          return;
+        }
+        setIngredients(prev => prev.map(ing => (ing.id === id ? data[0] : ing)));
         if (setEditingIngredient) setEditingIngredient(null);
       } catch (error) {
         setError('Failed to update ingredient');

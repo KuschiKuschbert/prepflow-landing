@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { AnimatedDiv, FloatingElement, StaggeredContainer } from '../../lib/animations';
+import { AnimatedDiv, FloatingElement, StaggeredContainer } from '../../lib/animation-stubs';
 
 interface AnimatedCardProps {
   title: string;

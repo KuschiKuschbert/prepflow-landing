@@ -14,7 +14,7 @@ export default function ProductFeatures() {
     {
       name: 'Recipes',
       description: 'Build recipes with live cost calculations',
-      screenshot: '/images/recipe-screenshot.png',
+      screenshot: '/images/cogs-calculator-screenshot.png',
       alt: 'PrepFlow Recipe management with ingredient costs',
       color: '#3B82F6',
     },
@@ -35,7 +35,7 @@ export default function ProductFeatures() {
     {
       name: 'Ingredients & Stock',
       description: 'Track costs, suppliers, and par levels',
-      screenshot: '/images/stocklist-screenshot.png',
+      screenshot: '/images/ingredients-management-screenshot.png',
       alt: 'PrepFlow Ingredients and stock management',
       color: '#3B82F6',
     },

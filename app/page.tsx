@@ -10,14 +10,16 @@ import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 
 // Landing page components
+import CloserLook from './components/landing/CloserLook';
+import FinalCTA from './components/landing/FinalCTA';
 import AppHero from './components/landing/Hero';
-import Comparison from './components/landing/Comparison';
-import HowItWorks from './components/landing/HowItWorks';
+import Highlights from './components/landing/Highlights';
 import LandingFooter from './components/landing/LandingFooter';
 import LandingHeader from './components/landing/LandingHeader';
-import ProductFeatures from './components/landing/ProductFeatures';
-import Resources from './components/landing/Resources';
-import UseCases from './components/landing/UseCases';
+import Performance from './components/landing/Performance';
+import SafeAnimatedBackground from './components/landing/SafeAnimatedBackground';
+import SafeGradientOrbs from './components/landing/SafeGradientOrbs';
+import TechnicalSpecs from './components/landing/TechnicalSpecs';
 
 // Hooks and utilities
 import { useEngagementTracking } from '../hooks/useEngagementTracking';
@@ -106,7 +108,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <main
-        className="min-h-screen scroll-smooth bg-transparent text-white"
+        className="relative min-h-screen scroll-smooth bg-transparent text-white"
         style={
           {
             '--primary-color': '#29E7CD',
@@ -123,31 +125,40 @@ export default function Page() {
           } as React.CSSProperties
         }
       >
-        {/* Background effects now applied globally in RootLayout */}
+        {/* Base background color */}
+        <div className="fixed inset-0 -z-20 bg-[#0a0a0a]" aria-hidden="true" />
+
+        {/* Animated Background Effects - Apple-style */}
+        <SafeAnimatedBackground />
+        <SafeGradientOrbs />
+
+        {/* Content overlay - ensures content is above background */}
+        <div className="relative z-10">
 
         {/* Header */}
         <LandingHeader trackEngagement={trackEngagement} />
 
-        {/* Hero */}
+        {/* Hero - Full-viewport with product title and large dashboard screenshot */}
         <AppHero trackEngagement={trackEngagement} />
 
-        {/* Product Features */}
-        <ProductFeatures />
+        {/* Get the Highlights - 5 key features with icons and descriptions */}
+        <Highlights />
 
-        {/* Use Cases */}
-        <UseCases />
+        {/* Take a Closer Look - 6 expandable feature sections with screenshots */}
+        <CloserLook />
 
-        {/* How it works */}
-        <HowItWorks />
+        {/* Performance - Visual comparisons and performance metrics */}
+        <Performance />
 
-        {/* Comparison */}
-        <Comparison />
+        {/* Technical Specs - Organized capabilities and features */}
+        <TechnicalSpecs />
 
-        {/* Resources */}
-        <Resources />
+        {/* Final CTA - Register/Buy buttons */}
+        <FinalCTA trackEngagement={trackEngagement} />
 
         {/* Footer */}
         <LandingFooter />
+        </div>
       </main>
     </>
   );

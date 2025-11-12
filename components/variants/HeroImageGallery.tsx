@@ -3,7 +3,6 @@
 
 'use client';
 
-import React from 'react';
 import OptimizedImage from '../OptimizedImage';
 
 interface HeroImageGalleryProps {
@@ -65,7 +64,7 @@ export function HeroImageGallery({
             sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
           />
           <OptimizedImage
-            src="/images/recipe-screenshot.png"
+            src="/images/cogs-calculator-screenshot.png"
             alt="PrepFlow Recipe costing for Double Cheese Burger"
             width={200}
             height={96}
@@ -73,7 +72,7 @@ export function HeroImageGallery({
             sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
           />
           <OptimizedImage
-            src="/images/stocklist-screenshot.png"
+            src="/images/ingredients-management-screenshot.png"
             alt="PrepFlow Infinite Stock List with ingredient management"
             width={200}
             height={96}

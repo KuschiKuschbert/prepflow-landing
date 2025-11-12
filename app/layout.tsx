@@ -9,7 +9,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 // cleaned: Removed performance trackers on request
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
-import LandingBackground from './components/landing/LandingBackground';
+// LandingBackground now handled in page.tsx with AnimatedBackground and GradientOrbs
 import { Providers } from './providers';
 
 const geistSans = Geist({
@@ -113,7 +113,6 @@ export default function RootLayout({
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         <ErrorBoundary>
-          <LandingBackground />
           <Providers>{children}</Providers>
 
           <Analytics />
