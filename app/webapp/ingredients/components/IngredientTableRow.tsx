@@ -104,6 +104,8 @@ export function IngredientTableRow({
       if (target.closest('button') || target.closest('a')) {
         return;
       }
+      // Always reset movement tracking for new touch
+      hasMovedRef.current = false;
       // Store touch start for tap detection
       touchStartTimeRef.current = Date.now();
       const touch = e.touches[0];
@@ -181,7 +183,9 @@ export function IngredientTableRow({
         if (touchDuration < 300) {
           e.preventDefault();
           e.stopPropagation();
-          onSelectIngredient(ingredient.id, !isSelected);
+          // Get current selection state directly from the Set to avoid stale closure
+          const currentlySelected = selectedIngredients.has(ingredient.id);
+          onSelectIngredient(ingredient.id, !currentlySelected);
         }
       }
       touchStartTimeRef.current = null;
@@ -210,7 +214,9 @@ export function IngredientTableRow({
       }
       e.preventDefault();
       e.stopPropagation();
-      onSelectIngredient(ingredient.id, !isSelected);
+      // Get current selection state directly from the Set to avoid stale closure
+      const currentlySelected = selectedIngredients.has(ingredient.id);
+      onSelectIngredient(ingredient.id, !currentlySelected);
     }
   };
 
