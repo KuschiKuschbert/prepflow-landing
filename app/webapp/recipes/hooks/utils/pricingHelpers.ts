@@ -60,6 +60,7 @@ export function calculateRecommendedPrice(totalCostPerServing: number): RecipePr
 
 /**
  * Calculate price data for a single recipe
+ * All metrics are calculated per single serving/portion
  */
 export function calculateRecipePrice(
   recipe: Recipe,
@@ -67,6 +68,13 @@ export function calculateRecipePrice(
 ): RecipePriceData | null {
   if (!ingredients || ingredients.length === 0) return null;
 
-  const totalCost = calculateTotalCostPerServing(ingredients);
-  return calculateRecommendedPrice(totalCost);
+  // Calculate total cost for the entire recipe
+  const totalCostForRecipe = calculateTotalCostPerServing(ingredients);
+
+  // Divide by recipe yield to get cost per single serving
+  const recipeYield = recipe.yield || 1;
+  const costPerSingleServing = totalCostForRecipe / recipeYield;
+
+  // Calculate all pricing metrics per single serving
+  return calculateRecommendedPrice(costPerSingleServing);
 }

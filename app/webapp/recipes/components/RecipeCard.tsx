@@ -70,15 +70,14 @@ const RecipeCard = React.memo(function RecipeCard({
           <span className="font-medium">Recommended Price:</span>
           {recipePrices[recipe.id] ? (
             <span className="ml-1 font-semibold text-white">
-              {recipe.yield > 1 ? (
+              ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
+              {recipe.yield > 1 && (
                 <>
-                  ${(recipePrices[recipe.id].recommendedPrice / recipe.yield).toFixed(2)}/portion
+                  <span className="ml-1">/portion</span>
                   <span className="ml-1 text-xs font-normal text-gray-400">
-                    (${recipePrices[recipe.id].recommendedPrice.toFixed(2)} total)
+                    (${(recipePrices[recipe.id].recommendedPrice * recipe.yield).toFixed(2)} total)
                   </span>
                 </>
-              ) : (
-                `$${recipePrices[recipe.id].recommendedPrice.toFixed(2)}`
               )}
             </span>
           ) : (
@@ -93,7 +92,7 @@ const RecipeCard = React.memo(function RecipeCard({
                 {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
               </span>
               <span className="ml-1 text-gray-400">
-                (${recipePrices[recipe.id].gross_profit.toFixed(2)} profit)
+                (${recipePrices[recipe.id].gross_profit.toFixed(2)} profit/portion)
               </span>
             </div>
             <div>
@@ -102,7 +101,7 @@ const RecipeCard = React.memo(function RecipeCard({
                 ${recipePrices[recipe.id].contributingMargin.toFixed(2)}
               </span>
               <span className="ml-1 text-gray-400">
-                ({recipePrices[recipe.id].contributingMarginPercent.toFixed(1)}% of revenue)
+                ({recipePrices[recipe.id].contributingMarginPercent.toFixed(1)}% of revenue/portion)
               </span>
             </div>
           </>
