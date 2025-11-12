@@ -18,15 +18,15 @@ export function useCOGSDataFetching() {
       setLoading(true);
       setError(null);
 
+      // Fetch ingredients using Supabase client
       const { data: ingredientsData, error: ingredientsError } = await supabase
         .from('ingredients')
         .select('*')
         .order('ingredient_name');
 
-      const { data: recipesData, error: recipesError } = await supabase
-        .from('recipes')
-        .select('*')
-        .order('name');
+      // Fetch recipes using API endpoint (same as recipes page) to avoid RLS issues
+      const recipesResponse = await fetch('/api/recipes?pageSize=1000', { cache: 'no-store' });
+      const recipesResult = await recipesResponse.json();
 
       if (ingredientsError) {
         console.error('Error fetching ingredients:', ingredientsError);
@@ -36,19 +36,21 @@ export function useCOGSDataFetching() {
         setIngredients(ingredientsData || []);
       }
 
-      if (recipesError) {
-        console.error('Error fetching recipes:', recipesError);
+      if (!recipesResponse.ok || recipesResult.error) {
+        console.error('Error fetching recipes:', recipesResult.error);
         setError(
-          prev => `${prev ? prev + ' ' : ''}Failed to load recipes: ${recipesError.message}`,
+          prev =>
+            `${prev ? prev + ' ' : ''}Failed to load recipes: ${recipesResult.error || 'Unknown error'}`,
         );
         setRecipes([]);
       } else {
+        const recipesData = recipesResult.recipes || [];
         // Debug: Log recipes data to verify fetch is working
         console.log('🔍 DEBUG useCOGSDataFetching: Recipes fetched', {
-          recipesCount: recipesData?.length || 0,
+          recipesCount: recipesData.length,
           recipes: recipesData,
         });
-        setRecipes(recipesData || []);
+        setRecipes(recipesData);
       }
     } catch (err) {
       console.error('Failed to fetch data:', err);
