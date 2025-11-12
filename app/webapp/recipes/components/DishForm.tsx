@@ -44,7 +44,7 @@ export default function DishForm({ dish, onClose, onSave }: DishFormProps) {
       fetch('/api/ingredients?pageSize=1000').then(r => r.json()),
     ]).then(([recipesData, ingredientsData]) => {
       if (recipesData.success) setRecipes(recipesData.recipes || []);
-      if (ingredientsData.success) setIngredients(ingredientsData.ingredients || []);
+      if (ingredientsData.success) setIngredients(ingredientsData.data?.items || []);
     });
 
     // Load dish data if editing

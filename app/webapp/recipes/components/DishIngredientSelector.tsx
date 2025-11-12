@@ -23,15 +23,18 @@ export default function DishIngredientSelector({
 }: DishIngredientSelectorProps) {
   const handleAddIngredient = () => {
     if (ingredients.length > 0) {
+      const firstIngredient = ingredients[0];
       onIngredientsChange([
         ...selectedIngredients,
         {
-          ingredient_id: ingredients[0].id,
+          ingredient_id: firstIngredient.id,
           quantity: 0,
-          unit: ingredients[0].unit || 'kg',
-          ingredient_name: ingredients[0].ingredient_name,
+          unit: firstIngredient.unit || 'kg',
+          ingredient_name: firstIngredient.ingredient_name || firstIngredient.name || 'Unknown',
         },
       ]);
+    } else {
+      console.warn('No ingredients available to add');
     }
   };
 

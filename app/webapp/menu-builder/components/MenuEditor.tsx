@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
-import { Menu, MenuItem, Dish, MenuStatistics } from '../types';
+import { ArrowLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useMenuDragDrop } from '../hooks/useMenuDragDrop';
+import { Dish, Menu, MenuItem, MenuStatistics } from '../types';
+import CategoryManager from './CategoryManager';
 import DishPalette from './DishPalette';
 import MenuCategory from './MenuCategory';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
-import CategoryManager from './CategoryManager';
-import { useMenuDragDrop } from '../hooks/useMenuDragDrop';
 
 interface MenuEditorProps {
   menu: Menu;
