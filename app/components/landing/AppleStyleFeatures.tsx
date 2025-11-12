@@ -695,7 +695,7 @@ export default function AppleStyleFeatures({
                       transition: `transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`,
                     }}
                   >
-                    <Plus className="h-4 w-4 text-white md:h-5 md:w-5" aria-hidden="true" />
+                    <Plus className="h-4 w-4 text-white md:h-5 md:w-5" aria-hidden={true} />
                   </div>
                 </button>
               );

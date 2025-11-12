@@ -55,7 +55,7 @@ export default function IngredientTable({
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string): Promise<void> => {
     setDeleteConfirmId(id);
     setShowDeleteConfirm(true);
   };

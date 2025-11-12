@@ -43,7 +43,7 @@ export default function QuickActions() {
     <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg md:mb-8 md:rounded-3xl md:p-6">
       <div className="mb-4 md:mb-6">
         <h2 className="mb-1 flex items-center gap-2 text-xl font-semibold text-white md:mb-2 md:text-2xl">
-          <Icon icon={Rocket} size="md" className="text-[#29E7CD]" aria-hidden="true" />
+          <Icon icon={Rocket} size="md" className="text-[#29E7CD]" aria-hidden={true} />
           Quick Actions
         </h2>
         <p className="text-sm text-gray-400 md:text-base">
@@ -62,7 +62,7 @@ export default function QuickActions() {
               <div
                 className={`h-10 w-10 rounded-xl bg-gradient-to-br md:h-16 md:w-16 md:rounded-2xl ${action.color} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}
               >
-                <Icon icon={action.icon} size="lg" className="text-white md:h-8 md:w-8" aria-hidden="true" />
+                <Icon icon={action.icon} size="lg" className="text-white md:h-8 md:w-8" aria-hidden={true} />
               </div>
 
               <div>

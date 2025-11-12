@@ -208,7 +208,7 @@ export function IngredientTableRow({
               className="cursor-help text-xs text-gray-500"
               title={`Original unit: ${originalUnit}, Standard: ${standardUnit}`}
             >
-              <Icon icon={Info} size="xs" className="text-gray-500" aria-hidden="true" />
+              <Icon icon={Info} size="xs" className="text-gray-500" aria-hidden={true} />
             </span>
           )}
         </div>
@@ -244,7 +244,7 @@ export function IngredientTableRow({
             className={`text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80 ${isSelectionMode ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label={`Edit ${ingredient.ingredient_name}`}
           >
-            <Icon icon={Edit} size="sm" className="text-[#29E7CD]" aria-hidden="true" />
+            <Icon icon={Edit} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
           </button>
           <button
             onClick={handleDeleteClick}
@@ -255,7 +255,7 @@ export function IngredientTableRow({
             {deletingId === ingredient.id ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
             ) : (
-              <Icon icon={Trash2} size="sm" className="text-red-400" aria-hidden="true" />
+              <Icon icon={Trash2} size="sm" className="text-red-400" aria-hidden={true} />
             )}
           </button>
         </div>

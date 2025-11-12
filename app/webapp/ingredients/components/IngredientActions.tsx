@@ -146,7 +146,7 @@ export default function IngredientActions({
             onClick={() => setShowBulkMenu(!showBulkMenu)}
             className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl"
           >
-            <Icon icon={Zap} size="sm" className="text-current" aria-hidden="true" />
+            <Icon icon={Zap} size="sm" className="text-current" aria-hidden={true} />
             <span>Bulk Actions ({selectedCount})</span>
           </button>
 
@@ -155,7 +155,7 @@ export default function IngredientActions({
               <div
                 className="fixed inset-0 z-[55]"
                 onClick={() => setShowBulkMenu(false)}
-                aria-hidden="true"
+                aria-hidden={true}
               />
               <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
                 <div className="p-1.5">
@@ -169,7 +169,7 @@ export default function IngredientActions({
                       disabled={bulkActionLoading}
                       className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
                     >
-                      <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden="true" />
+                      <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
                       <span>Delete Selected</span>
                     </button>
 
@@ -178,7 +178,7 @@ export default function IngredientActions({
                       disabled={bulkActionLoading}
                       className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
                     >
-                      <Icon icon={Store} size="xs" className="text-current" aria-hidden="true" />
+                      <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
                       <span>Update Supplier</span>
                     </button>
 
@@ -187,7 +187,7 @@ export default function IngredientActions({
                       disabled={bulkActionLoading}
                       className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
                     >
-                      <Icon icon={MapPin} size="xs" className="text-current" aria-hidden="true" />
+                      <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
                       <span>Update Storage Location</span>
                     </button>
 
@@ -196,7 +196,7 @@ export default function IngredientActions({
                       disabled={bulkActionLoading}
                       className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
                     >
-                      <Icon icon={Target} size="xs" className="text-current" aria-hidden="true" />
+                      <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
                       <span>Update Wastage %</span>
                     </button>
                   </div>

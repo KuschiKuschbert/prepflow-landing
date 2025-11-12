@@ -36,7 +36,7 @@ export default function BulkActionsBar({
             onClick={onBulkDelete}
             className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
           >
-            <Icon icon={Trash2} size="sm" className="text-white" aria-hidden="true" />
+            <Icon icon={Trash2} size="sm" className="text-white" aria-hidden={true} />
             Delete Selected
           </button>
           <button

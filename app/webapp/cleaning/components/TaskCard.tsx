@@ -34,11 +34,11 @@ interface TaskCardProps {
 function getStatusIcon(status: string) {
   switch (status) {
     case 'completed':
-      return <Icon icon={CheckCircle} size="lg" className="text-green-400" aria-hidden="true" />;
+      return <Icon icon={CheckCircle} size="lg" className="text-green-400" aria-hidden={true} />;
     case 'overdue':
-      return <Icon icon={AlertTriangle} size="lg" className="text-red-400" aria-hidden="true" />;
+      return <Icon icon={AlertTriangle} size="lg" className="text-red-400" aria-hidden={true} />;
     default:
-      return <Icon icon={ClipboardCheck} size="lg" className="text-yellow-400" aria-hidden="true" />;
+      return <Icon icon={ClipboardCheck} size="lg" className="text-yellow-400" aria-hidden={true} />;
   }
 }
 
@@ -79,7 +79,7 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
 
       {task.completed_date && (
         <p className="mb-4 flex items-center gap-2 text-sm text-green-400">
-          <Icon icon={CheckCircle} size="sm" aria-hidden="true" />
+          <Icon icon={CheckCircle} size="sm" aria-hidden={true} />
           {t('cleaning.completedOn', 'Completed on')} {new Date(task.completed_date).toLocaleString()}
         </p>
       )}
@@ -102,16 +102,16 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
             onClick={() => onComplete(task.id)}
             className="flex items-center gap-2 rounded-xl bg-[#29E7CD] px-4 py-2 font-semibold text-black transition-all duration-200 hover:shadow-lg"
           >
-            <Icon icon={CheckCircle} size="sm" aria-hidden="true" />
+            <Icon icon={CheckCircle} size="sm" aria-hidden={true} />
             {t('cleaning.markComplete', 'Mark Complete')}
           </button>
         )}
         <button className="flex items-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
-          <Icon icon={Camera} size="sm" aria-hidden="true" />
+          <Icon icon={Camera} size="sm" aria-hidden={true} />
           {t('cleaning.addPhoto', 'Add Photo')}
         </button>
         <button className="flex items-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
-          <Icon icon={Edit} size="sm" aria-hidden="true" />
+          <Icon icon={Edit} size="sm" aria-hidden={true} />
           {t('cleaning.edit', 'Edit')}
         </button>
       </div>

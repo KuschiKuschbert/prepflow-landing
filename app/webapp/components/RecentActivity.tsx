@@ -163,7 +163,7 @@ export default function RecentActivity() {
       <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]">
-            <Icon icon={Clock} size="lg" className="text-white" aria-hidden="true" />
+            <Icon icon={Clock} size="lg" className="text-white" aria-hidden={true} />
           </div>
         </div>
 
@@ -187,7 +187,7 @@ export default function RecentActivity() {
           title="Refresh activity"
           aria-label="Refresh activity"
         >
-          <Icon icon={RefreshCw} size="sm" className="text-[#29E7CD]" aria-hidden="true" />
+          <Icon icon={RefreshCw} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
         </button>
       </div>
 
@@ -208,13 +208,13 @@ export default function RecentActivity() {
                 }`}
               >
                 {activity.type === 'ingredient' && (
-                  <Icon icon={Package} size="sm" className="text-blue-400" aria-hidden="true" />
+                  <Icon icon={Package} size="sm" className="text-blue-400" aria-hidden={true} />
                 )}
                 {activity.type === 'recipe' && (
-                  <Icon icon={BookOpen} size="sm" className="text-green-400" aria-hidden="true" />
+                  <Icon icon={BookOpen} size="sm" className="text-green-400" aria-hidden={true} />
                 )}
                 {activity.type === 'menu_dish' && (
-                  <Icon icon={UtensilsCrossed} size="sm" className="text-purple-400" aria-hidden="true" />
+                  <Icon icon={UtensilsCrossed} size="sm" className="text-purple-400" aria-hidden={true} />
                 )}
               </div>
             </div>

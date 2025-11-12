@@ -33,37 +33,37 @@ export function FloatingActionButton() {
     {
       href: '/webapp/temperature?action=new',
       label: 'Temp Log',
-      icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden="true" />,
+      icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Temperature',
     },
     {
       href: '/webapp/ingredients?action=new',
       label: 'Ingredient',
-      icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden="true" />,
+      icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Ingredients',
     },
     {
       href: '/webapp/recipes?action=new',
       label: 'Recipe',
-      icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden="true" />,
+      icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Recipes',
     },
     {
       href: '/webapp/cogs?action=new',
       label: 'COGS',
-      icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden="true" />,
+      icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
       category: 'COGS',
     },
     {
       href: '/webapp/cleaning?action=new',
       label: 'Cleaning Task',
-      icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden="true" />,
+      icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Cleaning',
     },
     {
       href: '/webapp/suppliers?action=new',
       label: 'Supplier',
-      icon: <Icon icon={Truck} size="sm" className="text-current" aria-hidden="true" />,
+      icon: <Icon icon={Truck} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Suppliers',
     },
   ];
@@ -251,7 +251,7 @@ export function FloatingActionButton() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Icon icon={Plus} size="lg" className="text-white" aria-hidden="true" />
+        <Icon icon={Plus} size="lg" className="text-white" aria-hidden={true} />
       </button>
     </div>
   );

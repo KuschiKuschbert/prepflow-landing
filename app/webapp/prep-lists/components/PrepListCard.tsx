@@ -25,7 +25,7 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               className="flex h-12 w-12 items-center justify-center rounded-xl"
               style={{ backgroundColor: `${prepList.kitchen_sections.color}20` }}
             >
-              <Icon icon={ListChecks} size="md" className="text-current" aria-hidden="true" />
+              <Icon icon={ListChecks} size="md" className="text-current" aria-hidden={true} />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">{prepList.name}</h3>
@@ -99,7 +99,7 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               title={String(t('prepLists.edit', 'Edit'))}
               aria-label={String(t('prepLists.edit', 'Edit'))}
             >
-              <Icon icon={Edit} size="md" aria-hidden="true" />
+              <Icon icon={Edit} size="md" aria-hidden={true} />
             </button>
             <button
               onClick={() => onDelete(prepList.id)}
@@ -107,7 +107,7 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               title={String(t('prepLists.delete', 'Delete'))}
               aria-label={String(t('prepLists.delete', 'Delete'))}
             >
-              <Icon icon={Trash2} size="md" aria-hidden="true" />
+              <Icon icon={Trash2} size="md" aria-hidden={true} />
             </button>
           </div>
         </div>

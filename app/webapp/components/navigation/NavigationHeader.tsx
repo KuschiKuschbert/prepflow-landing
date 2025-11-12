@@ -146,7 +146,7 @@ export function NavigationHeader({
             aria-controls="search-modal"
             aria-expanded={isSearchOpen}
           >
-            <Icon icon={Search} size="md" className="text-gray-400" aria-hidden="true" />
+            <Icon icon={Search} size="md" className="text-gray-400" aria-hidden={true} />
           </button>
           <NavbarStats />
           <div className="hidden items-center space-x-2 md:flex">

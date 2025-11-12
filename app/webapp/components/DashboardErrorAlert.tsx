@@ -49,7 +49,7 @@ export function DashboardErrorAlert({
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <Icon icon={icon} size="sm" className="flex-shrink-0" aria-hidden="true" />
+            <Icon icon={icon} size="sm" className="flex-shrink-0" aria-hidden={true} />
             <span className="font-medium">{title}</span>
           </div>
           <p className="mt-1 text-sm">{message}</p>

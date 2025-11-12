@@ -36,13 +36,13 @@ export function FilterDropdown({
             : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
         }`}
       >
-        <Icon icon={icon} size="sm" className="text-current" aria-hidden="true" />
+        <Icon icon={icon} size="sm" className="text-current" aria-hidden={true} />
         <span className="truncate">{value || label}</span>
-        <Icon icon={ChevronDown} size="xs" className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+        <Icon icon={ChevronDown} size="xs" className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden={true} />
       </button>
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-40" onClick={onToggle} aria-hidden="true" />
+          <div className="fixed inset-0 z-40" onClick={onToggle} aria-hidden={true} />
           <div className="absolute top-full left-0 z-50 mt-1.5 max-h-60 w-56 overflow-y-auto rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
             <div className="p-1.5">
               <button

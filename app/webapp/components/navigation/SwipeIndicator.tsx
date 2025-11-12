@@ -43,7 +43,7 @@ export function SwipeIndicator({
               boxShadow: `0 4px 12px rgba(41, 231, 205, ${upwardOpacity * 0.3})`,
             }}
           >
-            <Icon icon={ChevronUp} size="xs" className="text-[#29E7CD] transition-transform duration-200" aria-hidden="true" />
+            <Icon icon={ChevronUp} size="xs" className="text-[#29E7CD] transition-transform duration-200" aria-hidden={true} />
             <span className="text-[11px] font-semibold text-[#29E7CD]">
               {upwardMovement > 12 ? 'Release to close' : 'Swipe up to close'}
             </span>

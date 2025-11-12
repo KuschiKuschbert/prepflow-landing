@@ -247,7 +247,7 @@ export default function IngredientTableWithFilters({
 
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string): Promise<void> => {
     setDeleteConfirmId(id);
     setShowConfirmDialog(true);
   };
@@ -406,7 +406,7 @@ export default function IngredientTableWithFilters({
                   onClick={onAddIngredient}
                   className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
                 >
-                  <Icon icon={Plus} size="xs" className="text-current" aria-hidden="true" />
+                  <Icon icon={Plus} size="xs" className="text-current" aria-hidden={true} />
                   <span>Add</span>
                 </button>
                 {onImportCSV && (
@@ -414,7 +414,7 @@ export default function IngredientTableWithFilters({
                     onClick={onImportCSV}
                     className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
                   >
-                    <Icon icon={Upload} size="xs" className="text-current" aria-hidden="true" />
+                    <Icon icon={Upload} size="xs" className="text-current" aria-hidden={true} />
                     <span>Import</span>
                   </button>
                 )}
@@ -423,7 +423,7 @@ export default function IngredientTableWithFilters({
                     onClick={onExportCSV}
                     className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
                   >
-                    <Icon icon={Download} size="xs" className="text-current" aria-hidden="true" />
+                    <Icon icon={Download} size="xs" className="text-current" aria-hidden={true} />
                     <span>Export</span>
                   </button>
                 )}
@@ -435,7 +435,7 @@ export default function IngredientTableWithFilters({
                       disabled={bulkActionLoading}
                       className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl disabled:opacity-50"
                     >
-                      <Icon icon={Zap} size="xs" className="text-current" aria-hidden="true" />
+                      <Icon icon={Zap} size="xs" className="text-current" aria-hidden={true} />
                       <span>Bulk Actions ({selectedCount})</span>
                     </button>
 
@@ -444,7 +444,7 @@ export default function IngredientTableWithFilters({
                         <div
                           className="fixed inset-0 z-[55]"
                           onClick={() => setShowBulkMenu(false)}
-                          aria-hidden="true"
+                          aria-hidden={true}
                         />
                         <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
                           <div className="p-1.5">
@@ -458,7 +458,7 @@ export default function IngredientTableWithFilters({
                                 disabled={bulkActionLoading}
                                 className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
                               >
-                                <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden="true" />
+                                <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
                                 <span>Delete Selected</span>
                               </button>
 
@@ -469,7 +469,7 @@ export default function IngredientTableWithFilters({
                                     disabled={bulkActionLoading}
                                     className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
                                   >
-                                    <Icon icon={Store} size="xs" className="text-current" aria-hidden="true" />
+                                    <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
                                     <span>Update Supplier</span>
                                   </button>
 
@@ -478,7 +478,7 @@ export default function IngredientTableWithFilters({
                                     disabled={bulkActionLoading}
                                     className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
                                   >
-                                    <Icon icon={MapPin} size="xs" className="text-current" aria-hidden="true" />
+                                    <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
                                     <span>Update Storage Location</span>
                                   </button>
 
@@ -487,7 +487,7 @@ export default function IngredientTableWithFilters({
                                     disabled={bulkActionLoading}
                                     className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
                                   >
-                                    <Icon icon={Target} size="xs" className="text-current" aria-hidden="true" />
+                                    <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
                                     <span>Update Wastage %</span>
                                   </button>
                                 </>

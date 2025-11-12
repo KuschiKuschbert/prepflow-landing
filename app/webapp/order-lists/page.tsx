@@ -271,7 +271,7 @@ export default function OrderListsPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
-              <Icon icon={ClipboardCheck} size="lg" aria-hidden="true" />
+              <Icon icon={ClipboardCheck} size="lg" aria-hidden={true} />
               {t('orderLists.title', 'Order Lists')}
             </h1>
             <p className="text-gray-400">
@@ -298,7 +298,7 @@ export default function OrderListsPage() {
           {orderLists.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon icon={ClipboardCheck} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
+                <Icon icon={ClipboardCheck} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('orderLists.noOrderLists', 'No Order Lists')}
@@ -327,7 +327,7 @@ export default function OrderListsPage() {
                     <div className="flex-1">
                       <div className="mb-3 flex items-center space-x-4">
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                          <Icon icon={ClipboardCheck} size="md" className="text-[#29E7CD]" aria-hidden="true" />
+                          <Icon icon={ClipboardCheck} size="md" className="text-[#29E7CD]" aria-hidden={true} />
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-white">{orderList.name}</h3>

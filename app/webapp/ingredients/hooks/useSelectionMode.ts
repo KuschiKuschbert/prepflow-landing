@@ -72,6 +72,5 @@ export function useSelectionMode() {
     startLongPress,
     cancelLongPress,
     exitSelectionMode,
-    setEnterSelectionModeCallback,
   };
 }

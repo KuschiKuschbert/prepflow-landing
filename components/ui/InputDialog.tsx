@@ -134,7 +134,7 @@ export function InputDialog({
             icon={variant === 'warning' ? AlertCircle : CheckCircle2}
             size="lg"
             className={styles.icon}
-            aria-hidden="true"
+            aria-hidden={true}
           />
         </div>
 

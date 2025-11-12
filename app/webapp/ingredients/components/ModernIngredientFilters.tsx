@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState, useEffect, useCallback } from 'react';
+import { Store, MapPin, Type, DollarSign, ChevronDown } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FilterDropdown } from './FilterDropdown';
 import { ActiveFilterChips } from './ActiveFilterChips';
@@ -97,10 +99,10 @@ export default function ModernIngredientFilters({
   }, [onSearchChange, onSupplierFilterChange, onStorageFilterChange]);
 
   const sortOptions = [
-    { value: 'name' as const, label: 'Name', icon: '🔤' },
-    { value: 'cost_asc' as const, label: 'Cost ↑', icon: '💰' },
-    { value: 'cost_desc' as const, label: 'Cost ↓', icon: '💰' },
-    { value: 'supplier' as const, label: 'Supplier', icon: '🏪' },
+    { value: 'name' as const, label: 'Name', icon: Type },
+    { value: 'cost_asc' as const, label: 'Cost ↑', icon: DollarSign },
+    { value: 'cost_desc' as const, label: 'Cost ↓', icon: DollarSign },
+    { value: 'supplier' as const, label: 'Supplier', icon: Store },
   ];
 
   const currentSortOption = sortOptions.find(opt => opt.value === sortBy) || sortOptions[0];
@@ -146,7 +148,7 @@ export default function ModernIngredientFilters({
 
         <FilterDropdown
           label="Supplier"
-          icon="🏪"
+          icon={Store}
           value={supplierFilter}
           options={uniqueSuppliers}
           isOpen={showSupplierMenu}
@@ -162,7 +164,7 @@ export default function ModernIngredientFilters({
 
         <FilterDropdown
           label="Storage"
-          icon="📍"
+          icon={MapPin}
           value={storageFilter}
           options={uniqueStorageLocations}
           isOpen={showStorageMenu}
@@ -185,28 +187,16 @@ export default function ModernIngredientFilters({
             }}
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD] sm:w-auto"
           >
-            <span>{currentSortOption.icon}</span>
+            <Icon icon={currentSortOption.icon} size="sm" className="text-current" aria-hidden={true} />
             <span className="truncate">{currentSortOption.label}</span>
-            <svg
-              className={`h-4 w-4 transition-transform ${showSortMenu ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            <Icon icon={ChevronDown} size="xs" className={`transition-transform ${showSortMenu ? 'rotate-180' : ''}`} aria-hidden={true} />
           </button>
           {showSortMenu && (
             <>
               <div
                 className="fixed inset-0 z-40"
                 onClick={() => setShowSortMenu(false)}
-                aria-hidden="true"
+                aria-hidden={true}
               />
               <div className="absolute top-full left-0 z-50 mt-2 w-48 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
                 <div className="p-2">
@@ -223,7 +213,7 @@ export default function ModernIngredientFilters({
                           : 'text-gray-300 hover:bg-[#2a2a2a]'
                       }`}
                     >
-                      <span>{option.icon}</span>
+                      <Icon icon={option.icon} size="sm" className="text-current" aria-hidden={true} />
                       <span>{option.label}</span>
                       {sortBy === option.value && <span className="ml-auto text-[#29E7CD]">✓</span>}
                     </button>

@@ -47,7 +47,7 @@ export function AutosaveGlobalIndicator() {
         viewBox="0 0 24 24"
         fill="currentColor"
         className="h-3.5 w-3.5 text-gray-400"
-        aria-hidden="true"
+        aria-hidden={true}
       >
         <path d="M6 19a4 4 0 0 1-.88-7.91A6 6 0 0 1 17.92 9H18a4 4 0 0 1 .8 7.94L18.5 17H7a2 2 0 1 0-.06 4H17a1 1 0 1 0 0-2H6z" />
       </svg>

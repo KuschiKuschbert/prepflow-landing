@@ -109,7 +109,7 @@ export function MoreDrawer({ isOpen, onClose, onSearchClick }: MoreDrawerProps) 
           opacity: isDragging ? Math.max(0.1, 1 - dragY / 500) : 1,
           pointerEvents: isOpen ? 'auto' : 'none',
         }}
-        aria-hidden="true"
+        aria-hidden={true}
       />
 
       {/* Drawer */}

@@ -40,7 +40,7 @@ export function RecipeIngredientsList({
         {recipeIngredients.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <div className="mb-2 flex justify-center text-gray-400">
-              <Icon icon={Package} size="xl" className="text-gray-400" aria-hidden="true" />
+              <Icon icon={Package} size="xl" className="text-gray-400" aria-hidden={true} />
             </div>
             <p className="text-sm text-gray-400">No ingredients found for this recipe</p>
             <p className="mt-1 text-xs text-gray-500">

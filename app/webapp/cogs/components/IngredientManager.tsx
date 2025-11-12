@@ -43,7 +43,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h3 className="mb-1 flex items-center gap-2 text-xl font-semibold text-white">
-              <Icon icon={Utensils} size="md" className="text-[#29E7CD]" aria-hidden="true" />
+              <Icon icon={Utensils} size="md" className="text-[#29E7CD]" aria-hidden={true} />
               Add Ingredients
             </h3>
             <p className="text-sm text-gray-400">Add ingredients manually to build your dish</p>
@@ -56,7 +56,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
             onClick={onToggleAddIngredient}
             className="flex items-center space-x-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
           >
-            <Icon icon={Plus} size="sm" className="text-white" aria-hidden="true" />
+            <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
             <span>{showAddIngredient ? 'Cancel' : 'Add Ingredient'}</span>
           </button>
         </div>
@@ -68,7 +68,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
           >
             <div className="ingredient-search-container relative">
               <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-                <Icon icon={Search} size="sm" className="text-gray-400" aria-hidden="true" />
+                <Icon icon={Search} size="sm" className="text-gray-400" aria-hidden={true} />
                 Search & Select Ingredient
               </label>
               <div className="relative">
@@ -81,7 +81,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                   className="w-full max-w-md rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] py-3 pr-4 pl-10 text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 />
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <Icon icon={Search} size="sm" className="text-gray-400" aria-hidden="true" />
+                  <Icon icon={Search} size="sm" className="text-gray-400" aria-hidden={true} />
                 </div>
                 {ingredientSearch && (
                   <button
@@ -89,7 +89,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                     onClick={() => onSearchChange('')}
                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 transition-colors hover:text-white"
                   >
-                    <Icon icon={X} size="sm" className="text-gray-400" aria-hidden="true" />
+                    <Icon icon={X} size="sm" className="text-gray-400" aria-hidden={true} />
                   </button>
                 )}
               </div>

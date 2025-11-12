@@ -234,7 +234,7 @@ export default function PrepListsPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
-              <Icon icon={ListChecks} size="lg" aria-hidden="true" />
+              <Icon icon={ListChecks} size="lg" aria-hidden={true} />
               {t('prepLists.title', 'Prep Lists')}
             </h1>
             <p className="text-gray-400">
@@ -261,7 +261,7 @@ export default function PrepListsPage() {
           {prepLists.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon icon={ListChecks} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
+                <Icon icon={ListChecks} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('prepLists.noPrepLists', 'No Prep Lists')}

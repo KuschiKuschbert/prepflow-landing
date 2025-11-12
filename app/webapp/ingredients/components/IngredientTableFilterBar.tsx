@@ -201,14 +201,14 @@ export function IngredientTableFilterBar({
           >
             {currentSortOption.icon}
             <span className="truncate">{currentSortOption.label}</span>
-            <Icon icon={ChevronDown} size="xs" className={`transition-transform ${showSortMenu ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <Icon icon={ChevronDown} size="xs" className={`transition-transform ${showSortMenu ? 'rotate-180' : ''}`} aria-hidden={true} />
           </button>
           {showSortMenu && (
             <>
               <div
                 className="fixed inset-0 z-40"
                 onClick={() => setShowSortMenu(false)}
-                aria-hidden="true"
+                aria-hidden={true}
               />
               <div className="absolute top-full left-0 z-50 mt-1.5 w-44 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
                 <div className="p-1.5">

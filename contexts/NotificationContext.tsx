@@ -118,14 +118,14 @@ function Toast({ type, message }: ToastProps) {
       role="alert"
       aria-live="polite"
     >
-      <Icon icon={IconComponent} size="sm" className={style.icon} aria-hidden="true" />
+      <Icon icon={IconComponent} size="sm" className={style.icon} aria-hidden={true} />
       <span className="flex-1 text-sm font-medium">{message}</span>
       <button
         onClick={() => setIsVisible(false)}
         className="text-gray-400 transition-colors hover:text-white"
         aria-label="Close notification"
       >
-        <Icon icon={XCircle} size="xs" className="text-current" aria-hidden="true" />
+        <Icon icon={XCircle} size="xs" className="text-current" aria-hidden={true} />
       </button>
     </div>
   );

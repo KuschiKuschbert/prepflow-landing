@@ -158,7 +158,7 @@ export default function ComplianceTrackingPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
-            <Icon icon={ClipboardCheck} size="lg" aria-hidden="true" />
+            <Icon icon={ClipboardCheck} size="lg" aria-hidden={true} />
             {t('compliance.title', 'Compliance Tracking')}
           </h1>
           <p className="text-gray-400">

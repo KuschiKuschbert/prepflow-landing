@@ -13,7 +13,7 @@ export function DishSectionsHeader({ onAddClick }: DishSectionsHeaderProps) {
     <div className="mb-8 flex items-center justify-between">
       <div>
         <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
-          <Icon icon={UtensilsCrossed} size="lg" aria-hidden="true" />
+          <Icon icon={UtensilsCrossed} size="lg" aria-hidden={true} />
           {t('dishSections.title', 'Dish Sections')}
         </h1>
         <p className="text-gray-400">

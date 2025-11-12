@@ -163,7 +163,7 @@ export default function CleaningRosterPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
-            <Icon icon={Sparkles} size="lg" aria-hidden="true" />
+            <Icon icon={Sparkles} size="lg" aria-hidden={true} />
             {t('cleaning.title', 'Cleaning Roster')}
           </h1>
           <p className="text-gray-400">
@@ -196,7 +196,7 @@ export default function CleaningRosterPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              <Icon icon={ClipboardCheck} size="sm" className="mr-2" aria-hidden="true" />
+              <Icon icon={ClipboardCheck} size="sm" className="mr-2" aria-hidden={true} />
               {t('cleaning.tasks', 'Cleaning Tasks')}
             </button>
           </div>
@@ -214,7 +214,7 @@ export default function CleaningRosterPage() {
                 onClick={() => setShowAddArea(true)}
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
               >
-                <Icon icon={Plus} size="sm" className="mr-2" aria-hidden="true" />
+                <Icon icon={Plus} size="sm" className="mr-2" aria-hidden={true} />
                 {t('cleaning.addArea', 'Add Area')}
               </button>
             </div>
@@ -294,7 +294,7 @@ export default function CleaningRosterPage() {
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                      <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden="true" />
+                      <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
                     </div>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-medium ${

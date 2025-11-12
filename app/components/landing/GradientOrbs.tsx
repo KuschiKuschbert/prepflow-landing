@@ -7,7 +7,7 @@ interface GradientOrbsProps {
 
 export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
   return (
-    <div className={`pointer-events-none fixed inset-0 -z-10 overflow-hidden ${className}`} aria-hidden="true">
+    <div className={`pointer-events-none fixed inset-0 -z-10 overflow-hidden ${className}`} aria-hidden={true}>
       {/* Primary Cyan Orb - Top Left */}
       <div
         className="absolute -left-1/4 -top-1/4 h-[800px] w-[800px] rounded-full bg-[#29E7CD] opacity-10 blur-3xl"

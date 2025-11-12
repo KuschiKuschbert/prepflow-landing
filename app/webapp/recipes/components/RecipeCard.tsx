@@ -88,14 +88,14 @@ const RecipeCard = React.memo(function RecipeCard({
           onClick={() => onEditRecipe(recipe)}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
         >
-          <Icon icon={Edit} size="xs" className="text-white" aria-hidden="true" />
+          <Icon icon={Edit} size="xs" className="text-white" aria-hidden={true} />
           Edit in COGS
         </button>
         <button
           onClick={() => onDeleteRecipe(recipe)}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
         >
-          <Icon icon={Trash2} size="xs" className="text-white" aria-hidden="true" />
+          <Icon icon={Trash2} size="xs" className="text-white" aria-hidden={true} />
           Delete
         </button>
       </div>
