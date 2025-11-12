@@ -40,7 +40,7 @@ export async function syncToDatabase(
     const isUpdate = entityId !== 'new' && entityId !== null && entityId !== undefined;
     const formattedData = formatEntityData(
       entityType,
-      typeof data === 'object' && data !== null ? data : {},
+      (typeof data === 'object' && data !== null ? data : {}) as Record<string, unknown>,
     );
 
     let savedEntityId = entityId;
