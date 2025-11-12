@@ -6,29 +6,13 @@
 import { saveDraft, clearDraft, getAllDrafts, DraftMetadata } from './autosave-storage';
 import { supabase } from './supabase';
 import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-  formatTextInput,
-} from './text-utils';
+  extractSupabaseErrorMessage,
+  formatEntityData,
+  checkEntityExists,
+  type EntityType,
+} from './autosave-sync-utils';
 
-export type EntityType =
-  | 'ingredients'
-  | 'recipes'
-  | 'recipes_ingredients'
-  | 'menu_dishes'
-  | 'suppliers'
-  | 'supplier_price_lists'
-  | 'compliance_records'
-  | 'compliance_types'
-  | 'order_lists'
-  | 'prep_lists'
-  | 'dish_sections'
-  | 'temperature_equipment'
-  | 'temperature_logs'
-  | 'cleaning_tasks'
-  | 'cleaning_areas';
+export type { EntityType };
 
 interface SyncResult {
   success: boolean;
@@ -44,31 +28,6 @@ interface ConflictInfo {
 }
 
 /**
- * Extract detailed error message from Supabase error
- */
-function extractSupabaseErrorMessage(error: unknown, defaultMessage: string): string {
-  if (error && typeof error === 'object') {
-    const err = error as Record<string, unknown>;
-    if (err.message) {
-      let msg = String(err.message);
-      if (err.details && String(err.details).trim() && err.details !== err.message) {
-        msg += `: ${err.details}`;
-      }
-      if (err.hint && String(err.hint).trim() && err.hint !== err.details) {
-        msg += ` (${err.hint})`;
-      }
-      return msg;
-    }
-    if (err.details) return String(err.details);
-    if (err.hint) return String(err.hint);
-    if ('code' in err && err.code) return `Database error (${String(err.code)})`;
-  }
-  if (error instanceof Error) return error.message || defaultMessage;
-  if (typeof error === 'string') return error;
-  return defaultMessage;
-}
-
-/**
  * Sync a single draft to database
  */
 export async function syncToDatabase(
@@ -78,38 +37,21 @@ export async function syncToDatabase(
   userId: string | null = null,
 ): Promise<SyncResult> {
   try {
-    // Determine if this is an update or create operation
     const isUpdate = entityId !== 'new' && entityId !== null && entityId !== undefined;
-
-    // Prepare data with formatting for ingredients
-    let formattedData: Record<string, unknown> = {
-      ...(typeof data === 'object' && data !== null ? data : {}),
-    };
-
-    // Apply formatting for ingredients
-    if (entityType === 'ingredients') {
-      if (formattedData.ingredient_name) {
-        formattedData.ingredient_name = formatIngredientName(String(formattedData.ingredient_name));
-      }
-      if (formattedData.brand) {
-        formattedData.brand = formatBrandName(String(formattedData.brand));
-      }
-      if (formattedData.supplier) {
-        formattedData.supplier = formatSupplierName(String(formattedData.supplier));
-      }
-      if (formattedData.storage_location) {
-        formattedData.storage_location = formatStorageLocation(
-          String(formattedData.storage_location),
-        );
-      }
-      if (formattedData.product_code) {
-        formattedData.product_code = formatTextInput(String(formattedData.product_code));
-      }
-    }
+    const formattedData = formatEntityData(
+      entityType,
+      typeof data === 'object' && data !== null ? data : {},
+    );
 
     let savedEntityId = entityId;
 
     if (isUpdate) {
+      const exists = await checkEntityExists(entityType, entityId);
+      if (!exists) {
+        console.warn(`Entity ${entityType}/${entityId} does not exist, skipping update`);
+        return { success: true, entityId };
+      }
+
       // Update existing entity
       const { data: updatedData, error } = await supabase
         .from(entityType)
@@ -228,8 +170,9 @@ export async function checkForConflicts(
       .from(entityType)
       .select('updated_at')
       .eq('id', entityId)
-      .single();
+      .maybeSingle();
 
+    // If entity doesn't exist, no conflict (entity may have been deleted)
     if (error || !serverData) return null;
 
     const serverTimestamp = serverData.updated_at ? new Date(serverData.updated_at).getTime() : 0;
