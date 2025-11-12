@@ -8,7 +8,6 @@ import { COGSTable } from '../components/COGSTable';
 import { CreateRecipeModal } from '../components/CreateRecipeModal';
 import { DishForm } from '../components/DishForm';
 import { PricingTool } from '../components/PricingTool';
-// Hooks
 import { useCOGSAutosave } from '../hooks/useCOGSAutosave';
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
 import { useCOGSEffects } from '../hooks/useCOGSEffects';
@@ -20,14 +19,11 @@ import { useIngredientSearch } from '../hooks/useIngredientSearch';
 import { usePricing } from '../hooks/usePricing';
 import { useRecipeCRUD } from '../hooks/useRecipeCRUD';
 import { useRecipeHandlers } from '../hooks/useRecipeHandlers';
-
-// Components
 import { COGSEmptyState } from '../components/COGSEmptyState';
 import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
 import { COGSHeader } from '../components/COGSHeader';
 import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
 import { SuccessMessage } from '../components/SuccessMessage';
-
 export default function CogsClient() {
   // Main COGS calculations hook
   const {
@@ -45,6 +41,8 @@ export default function CogsClient() {
     loadCalculations,
     loadExistingRecipeIngredients,
     setError,
+    hasManualIngredientsRef,
+    lastManualChangeTimeRef,
   } = useCOGSCalculations();
 
   // Local state
@@ -118,13 +116,21 @@ export default function CogsClient() {
     setSelectedRecipe,
   });
 
-  // Load recipe data when selected
+  // Load recipe data when selected (but skip if we have manual changes)
   useEffect(() => {
     if (selectedRecipe && selectedRecipeData) {
+      const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
+      if (hasManualIngredientsRef?.current || timeSinceLastChange < 3000) return;
       setDishPortions(selectedRecipeData.yield || 1);
       loadExistingRecipeIngredients(selectedRecipe);
     }
-  }, [selectedRecipe, selectedRecipeData, loadExistingRecipeIngredients]);
+  }, [
+    selectedRecipe,
+    selectedRecipeData,
+    loadExistingRecipeIngredients,
+    hasManualIngredientsRef,
+    lastManualChangeTimeRef,
+  ]);
 
   // Dish handlers hook (simplified - only for toggle add ingredient)
   const { handleToggleAddIngredient } = useDishHandlers({

@@ -6,8 +6,12 @@ export function removeCalculationHelper(
   setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>,
   hasManualIngredientsRef: React.MutableRefObject<boolean>,
+  lastManualChangeTimeRef?: React.MutableRefObject<number>,
 ): void {
   hasManualIngredientsRef.current = true;
+  if (lastManualChangeTimeRef) {
+    lastManualChangeTimeRef.current = Date.now();
+  }
   setCalculations(prev => {
     const filtered = prev.filter(calc => calc.ingredientId !== ingredientId);
     if (filtered.length === 0) {

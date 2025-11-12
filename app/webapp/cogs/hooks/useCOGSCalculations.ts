@@ -16,6 +16,7 @@ export const useCOGSCalculations = () => {
   const [calculations, setCalculations] = useState<COGSCalculation[]>([]);
   const isLoadingFromApiRef = useRef(false);
   const hasManualIngredientsRef = useRef(false);
+  const lastManualChangeTimeRef = useRef<number>(0);
   const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
     ingredients,
     setCalculations,
@@ -37,6 +38,7 @@ export const useCOGSCalculations = () => {
       setCalculations,
       setRecipeIngredients,
       hasManualIngredientsRef,
+      lastManualChangeTimeRef,
     );
   };
   const addCalculation = (calculation: COGSCalculation) => {
@@ -72,9 +74,8 @@ export const useCOGSCalculations = () => {
       isLoadingFromApiRef.current = false;
       return;
     }
-    if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0) {
+    if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0)
       calculateCOGS(recipeIngredients);
-    }
   }, [recipeIngredients, calculateCOGS, calculations.length, ingredients.length]);
   return {
     ingredients,
@@ -95,5 +96,7 @@ export const useCOGSCalculations = () => {
     loadCalculations,
     setSelectedRecipe,
     setError,
+    hasManualIngredientsRef,
+    lastManualChangeTimeRef,
   };
 };
