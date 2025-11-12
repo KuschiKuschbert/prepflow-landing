@@ -24,6 +24,7 @@ export function useRecipeIngredients({
   const { loadExistingRecipeIngredients } = useRecipeIngredientLoading({
     setCalculations,
     setRecipeIngredients,
+    setError,
   });
 
   const fetchRecipeIngredients = useCallback(
