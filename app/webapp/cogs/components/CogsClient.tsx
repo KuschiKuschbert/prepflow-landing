@@ -224,6 +224,8 @@ export default function CogsClient() {
             onDishNameChange={setDishName}
             onDishPortionsChange={setDishPortions}
             onRecipeSelect={handleRecipeSelect}
+            onUpdateCalculation={updateCalculation}
+            onRemoveCalculation={removeCalculation}
           />
 
           <IngredientManager

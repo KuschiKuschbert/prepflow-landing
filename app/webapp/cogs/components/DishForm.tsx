@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { formatDishName } from '@/lib/text-utils';
 import { DishFormData, Recipe, COGSCalculation } from '../types';
+import { Edit, Trash2, Check, X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface DishFormProps {
   formData: DishFormData;
@@ -12,6 +14,8 @@ interface DishFormProps {
   onDishNameChange: (name: string) => void;
   onDishPortionsChange: (portions: number) => void;
   onRecipeSelect: (recipeId: string) => void;
+  onUpdateCalculation: (ingredientId: string, newQuantity: number) => void;
+  onRemoveCalculation: (ingredientId: string) => void;
 }
 
 export const DishForm: React.FC<DishFormProps> = ({
@@ -22,8 +26,12 @@ export const DishForm: React.FC<DishFormProps> = ({
   onDishNameChange,
   onDishPortionsChange,
   onRecipeSelect,
+  onUpdateCalculation,
+  onRemoveCalculation,
 }) => {
   const { dishName, dishPortions, dishNameLocked, recipeExists, checkingRecipe } = formData;
+  const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
+  const [editQuantity, setEditQuantity] = useState<number>(0);
 
   // Debug: Log recipes prop to verify data is being passed
   React.useEffect(() => {
@@ -191,12 +199,73 @@ export const DishForm: React.FC<DishFormProps> = ({
               {calculations.map((calc, index) => (
                 <div
                   key={calc.ingredientId || index}
-                  className="flex items-center justify-between rounded-lg bg-[#1f1f1f]/50 px-2 py-1.5 text-sm"
+                  className="group flex items-center justify-between rounded-lg bg-[#1f1f1f]/50 px-2 py-1.5 text-sm transition-colors hover:bg-[#2a2a2a]/50"
                 >
                   <span className="text-gray-300">{calc.ingredientName}</span>
-                  <span className="font-medium text-gray-400">
-                    {calc.quantity} {calc.unit}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {editingIngredient === calc.ingredientId ? (
+                      <>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={editQuantity}
+                            onChange={e => setEditQuantity(parseFloat(e.target.value) || 0)}
+                            className="w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-1 text-xs text-white focus:border-[#29E7CD] focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+                            step="0.1"
+                            min="0"
+                            autoFocus
+                          />
+                          <span className="text-xs text-gray-400">{calc.unit}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            if (editQuantity > 0) {
+                              onUpdateCalculation(calc.ingredientId, editQuantity);
+                            }
+                            setEditingIngredient(null);
+                            setEditQuantity(0);
+                          }}
+                          className="rounded-lg bg-[#29E7CD] p-1 text-white transition-colors hover:bg-[#29E7CD]/80"
+                          aria-label="Save"
+                        >
+                          <Icon icon={Check} size="xs" aria-hidden={true} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingIngredient(null);
+                            setEditQuantity(0);
+                          }}
+                          className="rounded-lg bg-gray-600 p-1 text-white transition-colors hover:bg-gray-500"
+                          aria-label="Cancel"
+                        >
+                          <Icon icon={X} size="xs" aria-hidden={true} />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-medium text-gray-400">
+                          {calc.quantity} {calc.unit}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setEditingIngredient(calc.ingredientId);
+                            setEditQuantity(calc.quantity);
+                          }}
+                          className="rounded-lg p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                          aria-label="Edit quantity"
+                        >
+                          <Icon icon={Edit} size="xs" aria-hidden={true} />
+                        </button>
+                        <button
+                          onClick={() => onRemoveCalculation(calc.ingredientId)}
+                          className="rounded-lg p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-500/20 hover:text-red-400"
+                          aria-label="Remove ingredient"
+                        >
+                          <Icon icon={Trash2} size="xs" aria-hidden={true} />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
