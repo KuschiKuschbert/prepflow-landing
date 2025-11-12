@@ -3,6 +3,7 @@ import DashboardStatsClient from './components/DashboardStatsClient';
 import QuickActions from './components/QuickActions';
 import { PageHeader } from './components/static/PageHeader';
 import { AdaptiveContainer } from './components/AdaptiveContainer';
+import { Home } from 'lucide-react';
 
 export default function WebAppDashboard() {
   return (
@@ -13,7 +14,7 @@ export default function WebAppDashboard() {
           <PageHeader
             title="Kitchen Management Dashboard"
             subtitle="Welcome back! Here's your kitchen overview"
-            icon="🏠"
+            icon={Home}
           />
 
           {/* Static Quick Actions - Renders Instantly */}

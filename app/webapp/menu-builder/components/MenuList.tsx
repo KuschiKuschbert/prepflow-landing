@@ -1,7 +1,7 @@
 'use client';
 
 import { Menu } from '../types';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 interface MenuListProps {
@@ -28,7 +28,9 @@ export default function MenuList({ menus, onSelectMenu, onEditMenu, onDeleteMenu
   if (menus.length === 0) {
     return (
       <div className="py-12 text-center">
-        <div className="mb-4 text-6xl text-gray-400">📋</div>
+        <div className="mb-4 flex justify-center">
+          <Icon icon={FileText} size="xl" className="text-gray-400" aria-hidden={true} />
+        </div>
         <h3 className="mb-2 text-lg font-medium text-white">No menus yet</h3>
         <p className="mb-4 text-gray-500">Create your first menu to get started.</p>
       </div>

@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import { ReactNode } from 'react';
+import { LucideIcon } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
-  icon?: string;
+  icon?: LucideIcon; // Use LucideIcon instead of emoji string
   showLogo?: boolean;
   actions?: ReactNode;
   children?: ReactNode;
@@ -32,8 +34,8 @@ export function PageHeader({
               priority
             />
           )}
-          <h1 className="text-2xl font-bold text-white md:text-4xl">
-            {icon && <span className="mr-2">{icon}</span>}
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-white md:text-4xl">
+            {icon && <Icon icon={icon} size="lg" className="text-[#29E7CD]" aria-hidden={true} />}
             {title}
           </h1>
         </div>

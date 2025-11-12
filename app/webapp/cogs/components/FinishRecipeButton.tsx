@@ -11,11 +11,11 @@ interface FinishRecipeButtonProps {
 }
 
 const finishMessages = [
-  "🎉 Recipe's Done, Chef!",
-  '✅ Lock It Down!',
-  '🔒 Seal the Deal!',
-  '✨ Recipe Complete!',
-  '🎯 Nailed It!',
+  "Recipe's Done, Chef!",
+  'Lock It Down!',
+  'Seal the Deal!',
+  'Recipe Complete!',
+  'Nailed It!',
 ];
 
 export function FinishRecipeButton({

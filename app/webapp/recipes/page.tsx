@@ -3,6 +3,7 @@ import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookDescription } from './components/RecipeBookDescription';
 import { RecipeBookContent } from './components/RecipeBookContent';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { BookOpen } from 'lucide-react';
 
 export default function RecipesPage() {
   return (
@@ -13,7 +14,7 @@ export default function RecipesPage() {
           <PageHeader
             title="Recipe Book"
             subtitle="Manage your saved recipes and create new dishes"
-            icon="📖"
+            icon={BookOpen}
             showLogo={true}
           />
 

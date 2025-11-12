@@ -2,7 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Rocket } from 'lucide-react';
+import {
+  Rocket,
+  Thermometer,
+  Globe,
+  Sparkles,
+  AlertTriangle,
+  PartyPopper,
+  ChefHat,
+} from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import CountrySetup from '../../../components/CountrySetup';
 import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
@@ -83,10 +92,13 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <span className="text-lg">🌍</span>
+                <Icon icon={Globe} size="md" className="text-[#29E7CD]" aria-hidden={true} />
                 <span className="text-sm font-semibold text-white">1. Country</span>
               </div>
-              <h2 className="mb-2 text-3xl font-bold text-white">🌍 Country & Tax Configuration</h2>
+              <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+                <Icon icon={Globe} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+                Country & Tax Configuration
+              </h2>
               <p className="text-lg text-gray-400">
                 Set up your country settings and tax rates for accurate calculations
               </p>
@@ -98,10 +110,13 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <span className="text-lg">✨</span>
+                <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
                 <span className="text-sm font-semibold text-white">2. Test Data</span>
               </div>
-              <h2 className="mb-2 text-3xl font-bold text-white">✨ Populate Clean Test Data</h2>
+              <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+                <Icon icon={Sparkles} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+                Populate Clean Test Data
+              </h2>
               <p className="text-lg text-gray-400">
                 This is the one and only way we auto-create data in the app. It will replace any
                 existing data with a tidy, linked demo set (ingredients, recipes, suppliers,
@@ -115,10 +130,13 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <span className="text-lg">🌡️</span>
+                <Icon icon={Thermometer} size="md" className="text-[#29E7CD]" aria-hidden={true} />
                 <span className="text-sm font-semibold text-gray-500">3. Equipment (Optional)</span>
               </div>
-              <h2 className="mb-2 text-3xl font-bold text-white">🌡️ Temperature Equipment Setup</h2>
+              <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+                <Icon icon={Thermometer} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+                Temperature Equipment Setup
+              </h2>
               <p className="text-lg text-gray-400">
                 Add your temperature monitoring equipment or configure existing equipment
               </p>
@@ -133,7 +151,12 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-6 text-center">
               <div className="mb-3 flex items-center justify-center space-x-3">
-                <span className="text-lg">⚠️</span>
+                <Icon
+                  icon={AlertTriangle}
+                  size="md"
+                  className="text-yellow-400"
+                  aria-hidden={true}
+                />
                 <span className="text-sm font-semibold text-white">Danger zone</span>
               </div>
               <h2 className="mb-2 text-3xl font-bold text-white">Reset your data</h2>
@@ -169,7 +192,13 @@ export default function SetupPageRefactored() {
                     href="/webapp/recipes"
                     className="rounded-2xl bg-[#2a2a2a] px-8 py-4 text-lg font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a]"
                   >
-                    🍲 Manage Recipes
+                    <Icon
+                      icon={ChefHat}
+                      size="sm"
+                      className="mr-1 inline text-[#29E7CD]"
+                      aria-hidden={true}
+                    />{' '}
+                    Manage Recipes
                   </a>
                 </div>
               </div>

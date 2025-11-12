@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { WizardStepProps } from './types';
+import { Settings, Package, Target, Lightbulb } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export default function IngredientWizardStep2({
   formData,
@@ -30,7 +32,10 @@ export default function IngredientWizardStep2({
   return (
     <div className="space-y-6">
       <div className="mb-6 text-center">
-        <h3 className="mb-2 text-xl font-semibold text-white">⚙️ Advanced Settings</h3>
+        <h3 className="mb-2 flex items-center gap-2 text-xl font-semibold text-white">
+          <Icon icon={Settings} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          Advanced Settings
+        </h3>
         <p className="text-gray-400">Configure supplier, storage, and yield information</p>
       </div>
 
@@ -116,8 +121,9 @@ export default function IngredientWizardStep2({
         </div>
 
         <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
-          <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
-            📦 Storage & Stock
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+            <Icon icon={Package} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            Storage & Stock
           </h3>
 
           <div className="space-y-4">
@@ -162,8 +168,9 @@ export default function IngredientWizardStep2({
       </div>
 
       <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
-        <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
-          🎯 Yield & Wastage
+        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+          <Icon icon={Target} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+          Yield & Wastage
         </h3>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -218,7 +225,7 @@ export default function IngredientWizardStep2({
 
         <div className="mt-4 rounded-xl border border-[#29E7CD]/20 bg-[#1f1f1f] p-4">
           <div className="flex items-center space-x-2 text-sm">
-            <span className="text-[#29E7CD]">💡</span>
+            <Icon icon={Lightbulb} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
             <span className="text-gray-300">
               <strong>Tip:</strong> These percentages are linked - adjusting one automatically
               adjusts the other. For example, if you waste 20%, you get 80% yield.

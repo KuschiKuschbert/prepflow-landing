@@ -2,6 +2,8 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { Lightbulb } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export interface AddTemperatureLogFormProps {
   show: boolean;
@@ -57,9 +59,14 @@ export function AddTemperatureLogForm({
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
       <p className="mb-4 text-sm text-gray-400">
-        💡 You can log multiple temperatures per day for the same equipment (e.g., morning and
-        evening checks). There&apos;s a 5-minute cooling off period between entries for the same
-        equipment.
+        <Icon
+          icon={Lightbulb}
+          size="sm"
+          className="mr-1 inline text-[#29E7CD]"
+          aria-hidden={true}
+        />{' '}
+        You can log multiple temperatures per day for the same equipment (e.g., morning and evening
+        checks). There&apos;s a 5-minute cooling off period between entries for the same equipment.
       </p>
       <div className="mb-4 rounded-2xl border border-blue-400/20 bg-blue-400/10 p-4">
         <h4 className="mb-2 text-sm font-semibold text-blue-400">
@@ -187,7 +194,13 @@ export function AddTemperatureLogForm({
             newLog.temperature_type,
           ) && (
             <p className="mt-1 text-xs text-gray-400">
-              💡 Specify the exact food item for proper 2-hour/4-hour rule tracking
+              <Icon
+                icon={Lightbulb}
+                size="xs"
+                className="mr-1 inline text-[#29E7CD]"
+                aria-hidden={true}
+              />{' '}
+              Specify the exact food item for proper 2-hour/4-hour rule tracking
             </p>
           )}
         </div>

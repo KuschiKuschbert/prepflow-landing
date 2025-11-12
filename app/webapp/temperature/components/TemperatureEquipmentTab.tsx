@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { CreateEquipmentForm } from './CreateEquipmentForm';
 import { EquipmentItem } from './EquipmentItem';
+import { Thermometer } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface TemperatureEquipment {
   id: string;
@@ -159,7 +161,9 @@ export default function TemperatureEquipmentTab({
       <div className="space-y-4">
         {equipment.length === 0 ? (
           <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
-            <div className="mb-4 text-4xl">🌡️</div>
+            <div className="mb-4 flex justify-center">
+              <Icon icon={Thermometer} size="xl" className="text-gray-400" aria-hidden={true} />
+            </div>
             <h3 className="mb-2 text-lg font-semibold text-white">No Equipment Added</h3>
             <p className="mb-4 text-gray-400">
               Add temperature monitoring equipment to start tracking

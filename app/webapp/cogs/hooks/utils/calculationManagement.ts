@@ -7,10 +7,11 @@ export function removeCalculationHelper(
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>,
   hasManualIngredientsRef: React.MutableRefObject<boolean>,
 ): void {
+  hasManualIngredientsRef.current = true;
   setCalculations(prev => {
     const filtered = prev.filter(calc => calc.ingredientId !== ingredientId);
     if (filtered.length === 0) {
-      hasManualIngredientsRef.current = false;
+      hasManualIngredientsRef.current = true; // Keep true even when empty to preserve manual changes
     }
     return filtered;
   });

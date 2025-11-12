@@ -34,7 +34,7 @@ export function useRecipeIngredientsAutosave({
   const calculationsString = serializeCalculations(calculations);
 
   const performSave = useCallback(async () => {
-    if (!recipeId || !enabled || calculations.length === 0) return;
+    if (!recipeId || !enabled) return;
 
     setStatus('saving');
     setError(null);
@@ -53,15 +53,15 @@ export function useRecipeIngredientsAutosave({
 
   // Clear error when autosave is disabled or recipe changes
   useEffect(() => {
-    if (!enabled || !recipeId || calculations.length === 0) {
+    if (!enabled || !recipeId) {
       setError(null);
       setStatus('idle');
       return;
     }
-  }, [enabled, recipeId, calculations.length]);
+  }, [enabled, recipeId]);
 
   useEffect(() => {
-    if (!enabled || !recipeId || calculations.length === 0) return;
+    if (!enabled || !recipeId) return;
     if (calculationsString === previousCalculationsRef.current) return;
 
     previousCalculationsRef.current = calculationsString;

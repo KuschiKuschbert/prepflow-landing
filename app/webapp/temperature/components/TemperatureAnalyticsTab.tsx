@@ -9,6 +9,8 @@ import { EquipmentStatusCard } from './EquipmentStatusCard';
 import { useTemperatureFilters } from './useTemperatureFilters';
 import './temperature-charts.css';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { BarChart3 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface TemperatureAnalyticsTabProps {
   allLogs: TemperatureLog[];
@@ -247,7 +249,9 @@ export default function TemperatureAnalyticsTab({
       ) : (
         <div className="flex h-64 w-full items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
           <div className="text-center">
-            <div className="mb-4 text-4xl">📊</div>
+            <div className="mb-4 flex justify-center">
+              <Icon icon={BarChart3} size="xl" className="text-gray-400" aria-hidden={true} />
+            </div>
             <p className="mb-2 text-gray-400">Select an equipment to view its temperature chart</p>
             <p className="text-sm text-gray-500">
               Click on any equipment card above to see detailed analytics

@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslation } from '@/lib/useTranslation';
+import { BarChart3 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface Ingredient {
   id: string;
@@ -137,7 +139,10 @@ export default function IngredientFilters({
 
           {/* Sort By */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">📊 Sort By</label>
+            <label className="mb-2 block flex items-center gap-1 text-sm font-medium text-gray-300">
+              <Icon icon={BarChart3} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+              Sort By
+            </label>
             <select
               value={sortBy}
               onChange={e =>

@@ -5,11 +5,13 @@ import { useState, useCallback } from 'react';
 interface UseIngredientEditingProps {
   updateCalculation: (ingredientId: string, newQuantity: number) => void;
   removeCalculation: (ingredientId: string) => void;
+  saveNow?: () => Promise<void>;
 }
 
 export function useIngredientEditing({
   updateCalculation,
   removeCalculation,
+  saveNow,
 }: UseIngredientEditingProps) {
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
   const [editQuantity, setEditQuantity] = useState<number>(0);
@@ -33,10 +35,18 @@ export function useIngredientEditing({
   }, []);
 
   const handleRemoveIngredient = useCallback(
-    (ingredientId: string) => {
+    async (ingredientId: string) => {
       removeCalculation(ingredientId);
+      // Trigger immediate save to persist removal before any potential reload
+      if (saveNow) {
+        try {
+          await saveNow();
+        } catch (err) {
+          console.error('Failed to save after removal:', err);
+        }
+      }
     },
-    [removeCalculation],
+    [removeCalculation, saveNow],
   );
 
   return {

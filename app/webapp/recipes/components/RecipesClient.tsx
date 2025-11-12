@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ChefHat } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 // UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -209,7 +211,9 @@ export default function RecipesClient() {
       {/* Empty State */}
       {recipes.length === 0 && (
         <div className="py-12 text-center">
-          <div className="mb-4 text-6xl text-gray-400">🍳</div>
+          <div className="mb-4 flex justify-center">
+            <Icon icon={ChefHat} size="xl" className="text-gray-400" aria-hidden={true} />
+          </div>
           <h3 className="mb-2 text-lg font-medium text-white">No recipes yet</h3>
           <p className="mb-4 text-gray-500">
             Start by adding your first recipe to begin managing your kitchen costs.

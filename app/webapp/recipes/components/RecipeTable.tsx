@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 interface RecipeTableProps {
@@ -40,19 +40,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 aria-label={selectedRecipes.size === recipes.length ? 'Deselect all' : 'Select all'}
               >
                 {selectedRecipes.size === recipes.length && recipes.length > 0 ? (
-                  <svg
-                    className="h-4 w-4 text-[#29E7CD]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
                 ) : (
                   <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
                 )}
@@ -91,19 +79,7 @@ const RecipeTable = React.memo(function RecipeTable({
                   aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
                 >
                   {selectedRecipes.has(recipe.id) ? (
-                    <svg
-                      className="h-4 w-4 text-[#29E7CD]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                    <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
                   ) : (
                     <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
                   )}
@@ -126,7 +102,9 @@ const RecipeTable = React.memo(function RecipeTable({
                       {recipe.yield > 1 && (
                         <span className="ml-1 text-xs font-normal text-gray-400">
                           /portion ($
-                          {(recipePrices[recipe.id].recommendedPrice * recipe.yield).toFixed(2)}{' '}
+                          {(recipePrices[recipe.id].recommendedPrice * recipe.yield).toFixed(
+                            2,
+                          )}{' '}
                           total)
                         </span>
                       )}

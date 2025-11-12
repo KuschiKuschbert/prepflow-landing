@@ -4,6 +4,8 @@ import React from 'react';
 import { PricingCalculation } from '../types';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
+import { DollarSign, Target, BarChart3 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface PricingToolProps {
   costPerPortion: number;
@@ -53,11 +55,15 @@ export const PricingTool: React.FC<PricingToolProps> = ({
         {/* Header with Title and Target Gross Profit */}
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="flex items-center text-lg font-semibold text-white">
-            💰 Costing Tool
+            <Icon icon={DollarSign} size="md" className="mr-2 text-[#29E7CD]" aria-hidden={true} />
+            Costing Tool
             <div className="ml-2 h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]"></div>
           </h3>
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-300">🎯 Target Gross Profit %</label>
+            <label className="flex items-center gap-1 text-sm font-medium text-gray-300">
+              <Icon icon={Target} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+              Target Gross Profit %
+            </label>
             <div className="flex space-x-2">
               {[60, 65, 70, 75, 80].map(gp => (
                 <button
@@ -79,7 +85,8 @@ export const PricingTool: React.FC<PricingToolProps> = ({
         {/* Pricing Strategy Selector with Dynamic Prices */}
         <div className="mb-4">
           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-            📊 Pricing Strategy
+            <Icon icon={BarChart3} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            Pricing Strategy
             <HelpTooltip
               content="Charm: Prices ending in .95 or .99 - psychologically appealing. Whole: Round to nearest dollar - clean pricing. Real: Exact calculated price - may have cents."
               title="Pricing Strategies"

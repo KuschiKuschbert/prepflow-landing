@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslation } from '@/lib/useTranslation';
+import { FileText, Factory, BarChart3 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface TabNavigationProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
@@ -23,7 +25,8 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
           aria-pressed={activeTab === 'logs'}
           aria-label="View temperature logs"
         >
-          📝 {t('temperature.logs', 'Logs')}
+          <Icon icon={FileText} size="sm" className="mr-1 inline" aria-hidden={true} />{' '}
+          {t('temperature.logs', 'Logs')}
         </button>
         <button
           onClick={() => onTabChange('equipment')}
@@ -35,7 +38,8 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
           aria-pressed={activeTab === 'equipment'}
           aria-label="View temperature equipment"
         >
-          🏭 {t('temperature.equipment', 'Equipment')}
+          <Icon icon={Factory} size="sm" className="mr-1 inline" aria-hidden={true} />{' '}
+          {t('temperature.equipment', 'Equipment')}
         </button>
         <button
           onClick={() => onTabChange('analytics')}
@@ -47,11 +51,10 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
           aria-pressed={activeTab === 'analytics'}
           aria-label="View temperature analytics"
         >
-          📊 {t('temperature.analytics', 'Analytics')}
+          <Icon icon={BarChart3} size="sm" className="mr-1 inline" aria-hidden={true} />{' '}
+          {t('temperature.analytics', 'Analytics')}
         </button>
       </div>
     </div>
   );
 }
-
-

@@ -1,6 +1,8 @@
 'use client';
 
 import { TemperatureEquipment } from '../types';
+import { AlertTriangle, Settings } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface EquipmentStatusCardProps {
   equipment: TemperatureEquipment;
@@ -87,13 +89,13 @@ export function EquipmentStatusCard({
         <div className="border-t border-[#2a2a2a] pt-3">
           {isOutOfRange && (
             <div className="flex items-center space-x-1.5 text-xs text-red-400">
-              <span>⚠️</span>
+              <Icon icon={AlertTriangle} size="xs" className="text-yellow-400" aria-hidden={true} />
               <span>Attention required</span>
             </div>
           )}
           {needsSetup && (
             <div className="flex items-center space-x-1.5 text-xs text-yellow-400">
-              <span>⚙️</span>
+              <Icon icon={Settings} size="xs" className="text-yellow-400" aria-hidden={true} />
               <span>Configure thresholds</span>
             </div>
           )}
@@ -103,7 +105,7 @@ export function EquipmentStatusCard({
       {/* Compact mode critical indicators */}
       {isCompact && isOutOfRange && (
         <div className="flex items-center justify-center text-xs text-red-400">
-          <span>⚠️</span>
+          <Icon icon={AlertCircle} size="xs" className="text-red-400" aria-hidden={true} />
         </div>
       )}
     </button>

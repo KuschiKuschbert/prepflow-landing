@@ -7,6 +7,8 @@ import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { TemperatureLog, TemperatureEquipment } from '../types';
 import { TemperatureFilters } from './TemperatureFilters';
 import { AddTemperatureLogForm } from './AddTemperatureLogForm';
+import { Thermometer } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import {
   formatTime as formatTimeUtil,
   formatDateString as formatDateStringUtil,
@@ -111,7 +113,7 @@ export default function TemperatureLogsTab({
         {logs.length === 0 ? (
           <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <span className="text-4xl">🌡️</span>
+              <Icon icon={Thermometer} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
             </div>
             <h3 className="mb-2 text-xl font-semibold text-white">
               {t('temperature.noLogs', 'No Temperature Logs')}

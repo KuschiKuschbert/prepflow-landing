@@ -2,6 +2,7 @@
 
 import { PageHeader } from '../../components/static/PageHeader';
 import { PerformanceAlert } from '../types';
+import { BarChart3 } from 'lucide-react';
 
 interface PerformanceHeaderProps {
   performanceScore: number;
@@ -49,7 +50,7 @@ export default function PerformanceHeader({
       <PageHeader
         title="Performance Analysis"
         subtitle="Analyze your menu performance and profitability"
-        icon="📊"
+        icon={BarChart3}
         actions={metrics}
       />
 

@@ -2,6 +2,7 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
 import MenuBuilderClient from './components/MenuBuilderClient';
+import { FileText } from 'lucide-react';
 
 export default function MenuBuilderPage() {
   return (
@@ -11,7 +12,7 @@ export default function MenuBuilderPage() {
           <PageHeader
             title="Menu Builder"
             subtitle="Create and manage your menus with drag-and-drop"
-            icon="📋"
+            icon={FileText}
             showLogo={true}
           />
           <MenuBuilderClient />

@@ -1,6 +1,8 @@
 'use client';
 
 import { SetupProgress as SetupProgressType } from '../types';
+import { Globe, Thermometer, Carrot, ChefHat, PartyPopper } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface SetupProgressProps {
   setupProgress: SetupProgressType;
@@ -8,10 +10,10 @@ interface SetupProgressProps {
 
 export default function SetupProgress({ setupProgress }: SetupProgressProps) {
   const steps = [
-    { key: 'country', label: 'Country Setup', icon: '🌍', number: 1 },
-    { key: 'equipment', label: 'Equipment Setup', icon: '🌡️', number: 2 },
-    { key: 'ingredients', label: 'Ingredients Setup', icon: '🥕', number: 3 },
-    { key: 'recipes', label: 'Recipes Setup', icon: '🍲', number: 4 },
+    { key: 'country', label: 'Country Setup', icon: Globe, number: 1 },
+    { key: 'equipment', label: 'Equipment Setup', icon: Thermometer, number: 2 },
+    { key: 'ingredients', label: 'Ingredients Setup', icon: Carrot, number: 3 },
+    { key: 'recipes', label: 'Recipes Setup', icon: ChefHat, number: 4 },
   ];
 
   const completedCount = Object.values(setupProgress).filter(Boolean).length;
@@ -70,9 +72,14 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
           ></div>
         </div>
         <p className="mt-2 text-center text-sm text-gray-400">
-          {completedCount === 4
-            ? '🎉 Setup Complete! Ready to use PrepFlow.'
-            : 'Complete all steps to finish setup'}
+          {completedCount === 4 ? (
+            <span className="flex items-center justify-center gap-2">
+              <Icon icon={PartyPopper} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+              Setup Complete! Ready to use PrepFlow.
+            </span>
+          ) : (
+            'Complete all steps to finish setup'
+          )}
         </p>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
 import { useState } from 'react';
 import { PageHeader } from '../../components/static/PageHeader';
+import { DollarSign, Lightbulb } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export function COGSHeader() {
   const [showGuide, setShowGuide] = useState(false);
@@ -13,13 +15,16 @@ export function COGSHeader() {
       <PageHeader
         title="COGS Calculator"
         subtitle="Calculate Cost of Goods Sold and optimize your profit margins"
-        icon="💰"
+        icon={DollarSign}
         actions={<HelpTooltip content={getHelpText('cogs', true, true)} title="What is COGS?" />}
       />
 
       <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#3B82F6]/10 p-6">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">💡 Why COGS Matters</h2>
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+            <Icon icon={Lightbulb} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            Why COGS Matters
+          </h2>
           <button
             onClick={() => setShowGuide(!showGuide)}
             className="text-sm text-[#29E7CD] hover:underline"

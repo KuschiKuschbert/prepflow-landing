@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useNotification } from '@/contexts/NotificationContext';
+import { BarChart3 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export default function TestDataGenerator() {
   const [isGeneratingTestData, setIsGeneratingTestData] = useState(false);
@@ -40,7 +42,9 @@ export default function TestDataGenerator() {
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
       <div className="text-center">
-        <div className="mb-4 text-4xl">📊</div>
+        <div className="mb-4 flex justify-center">
+          <Icon icon={BarChart3} size="xl" className="text-gray-400" aria-hidden={true} />
+        </div>
         <h3 className="mb-2 text-xl font-bold text-white">Test Data Generator</h3>
         <p className="mb-6 text-gray-400">
           Generate 3 months of realistic temperature log data for testing and demonstration
@@ -70,7 +74,7 @@ export default function TestDataGenerator() {
             </span>
           ) : (
             <span className="flex items-center justify-center space-x-2">
-              <span>📊</span>
+              <Icon icon={BarChart3} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
               <span>Generate Test Data</span>
             </span>
           )}
