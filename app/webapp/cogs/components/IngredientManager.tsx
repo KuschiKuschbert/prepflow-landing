@@ -64,7 +64,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                 type="text"
                 placeholder="Type to search ingredients&hellip;"
                 value={ingredientSearch}
-                onChange={e => onSearchChange(e.target.value)}
+                onChange={e => onSearchChange(e.target.value.toLowerCase())}
                 onFocus={() => {
                   // Show suggestions when input is focused, even if search is empty
                   if (ingredients.length > 0) {
