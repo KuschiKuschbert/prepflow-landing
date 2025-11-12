@@ -20,17 +20,16 @@ export const useCOGSCalculations = () => {
     ingredients,
     setCalculations,
   });
-  const { fetchRecipeIngredients, loadExistingRecipeIngredients, checkRecipeExists } =
-    useRecipeIngredients({
-      setRecipeIngredients,
-      setCalculations,
-      calculateCOGS,
-      setError,
-      setIsLoadingFromApi: (loading: boolean) => {
-        isLoadingFromApiRef.current = loading;
-      },
-      shouldPreserveManualIngredients: () => hasManualIngredientsRef.current,
-    });
+  const { fetchRecipeIngredients, loadExistingRecipeIngredients } = useRecipeIngredients({
+    setRecipeIngredients,
+    setCalculations,
+    calculateCOGS,
+    setError,
+    setIsLoadingFromApi: (loading: boolean) => {
+      isLoadingFromApiRef.current = loading;
+    },
+    shouldPreserveManualIngredients: () => hasManualIngredientsRef.current,
+  });
 
   const removeCalculation = (ingredientId: string) => {
     removeCalculationHelper(
@@ -60,7 +59,6 @@ export const useCOGSCalculations = () => {
   };
   const updateCalculationWrapper = (ingredientId: string, newQuantity: number) =>
     updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
-
   const selectedRecipeRef = useRef<string>('');
   useEffect(() => {
     if (selectedRecipe && selectedRecipe !== selectedRecipeRef.current) {
@@ -78,7 +76,6 @@ export const useCOGSCalculations = () => {
       calculateCOGS(recipeIngredients);
     }
   }, [recipeIngredients, calculateCOGS, calculations.length, ingredients.length]);
-
   return {
     ingredients,
     recipes,
@@ -91,7 +88,6 @@ export const useCOGSCalculations = () => {
     fetchRecipeIngredients,
     calculateCOGS,
     loadExistingRecipeIngredients,
-    checkRecipeExists,
     updateCalculation: updateCalculationWrapper,
     removeCalculation,
     addCalculation,
