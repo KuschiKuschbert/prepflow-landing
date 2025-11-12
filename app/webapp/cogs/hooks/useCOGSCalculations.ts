@@ -56,10 +56,15 @@ export const useCOGSCalculations = () => {
   useEffect(() => {
     // Only recalculate if we have recipeIngredients but no calculations yet
     // This prevents overwriting calculations that were already set by loadExistingRecipeIngredients
-    if (recipeIngredients.length > 0 && calculations.length === 0) {
+    // Also ensure ingredients array is populated before calculating
+    if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0) {
+      console.log('🔍 DEBUG: Calling calculateCOGS with recipeIngredients', {
+        recipeIngredientsCount: recipeIngredients.length,
+        ingredientsCount: ingredients.length,
+      });
       calculateCOGS(recipeIngredients);
     }
-  }, [recipeIngredients, calculateCOGS, calculations.length]);
+  }, [recipeIngredients, calculateCOGS, calculations.length, ingredients.length]);
 
   return {
     ingredients,

@@ -41,9 +41,8 @@ export function useRecipeIngredientLoading({
         });
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-          const errorMessage = errorData.error || `Failed to fetch ingredients: ${response.status}`;
-          console.error('❌ Error fetching recipe ingredients:', errorMessage);
-          if (setError) setError(errorMessage);
+          if (setError)
+            setError(errorData.error || `Failed to fetch ingredients: ${response.status}`);
           return;
         }
         const result = await response.json();
@@ -95,12 +94,10 @@ export function useRecipeIngredientLoading({
           };
         });
         setCalculations(loadedCalculations);
-        setRecipeIngredients(recipeIngredients);
+        Promise.resolve().then(() => setRecipeIngredients(recipeIngredients));
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to load recipe ingredients';
-        console.error('❌ Error in loadExistingRecipeIngredients:', err);
-        if (setError) setError(errorMessage);
+        if (setError)
+          setError(err instanceof Error ? err.message : 'Failed to load recipe ingredients');
       }
     },
     [setCalculations, setRecipeIngredients, setError],
