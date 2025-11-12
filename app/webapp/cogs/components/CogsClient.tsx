@@ -13,6 +13,8 @@ import { SaveRecipeButton } from '../components/SaveRecipeButton';
 // Hooks
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
 import { useCOGSEffects } from '../hooks/useCOGSEffects';
+import { useDishHandlers } from '../hooks/useDishHandlers';
+import { useDishNameLocking } from '../hooks/useDishNameLocking';
 import { useIngredientAddition } from '../hooks/useIngredientAddition';
 import { useIngredientEditing } from '../hooks/useIngredientEditing';
 import { useIngredientSearch } from '../hooks/useIngredientSearch';
@@ -112,6 +114,26 @@ export default function CogsClient() {
     setSelectedRecipe,
   });
 
+  // Auto-lock dish name when recipe exists
+  useDishNameLocking({
+    recipeExists,
+    dishName,
+    dishNameLocked,
+    setDishNameLocked,
+  });
+
+  // Dish handlers hook
+  const { handleToggleAddIngredient, handleRecipeSelect } = useDishHandlers({
+    showAddIngredient,
+    dishName,
+    recipes,
+    setShowAddIngredient,
+    setDishName,
+    setDishPortions,
+    setDishNameLocked,
+    setSelectedRecipe,
+  });
+
   // Ingredient addition hook
   const { handleAddIngredient } = useIngredientAddition({
     calculations,
@@ -137,45 +159,14 @@ export default function CogsClient() {
     removeCalculation,
   });
 
-  const handleToggleAddIngredient = () => {
-    setShowAddIngredient(!showAddIngredient);
-    // Lock dish name when starting to add ingredients
-    if (!showAddIngredient && dishName.trim()) {
-      setDishNameLocked(true);
-    }
-    // Unlock dish name when canceling add ingredient
-    if (showAddIngredient) {
-      setDishNameLocked(false);
-    }
-  };
-
   const handleAddIngredientWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Use the current newIngredient state directly
     await handleAddIngredient(newIngredient, e);
   };
 
   const handleSaveAsRecipe = () => {
     saveAsRecipe(calculations, dishName, dishPortions);
-    // Unlock dish name after successful save
     setDishNameLocked(false);
-  };
-
-  // Handle recipe selection from dropdown
-  const handleRecipeSelect = (recipeId: string) => {
-    setSelectedRecipe(recipeId);
-    if (recipeId) {
-      // Find the selected recipe and set dish name and portions
-      const selectedRecipeData = recipes.find(r => r.id === recipeId);
-      if (selectedRecipeData) {
-        setDishName(selectedRecipeData.name);
-        setDishPortions(selectedRecipeData.yield || 1);
-      }
-    } else {
-      // Clear dish name when "Create new dish from scratch" is selected
-      setDishName('');
-      setDishPortions(1);
-    }
   };
 
   // Prepare form data for DishForm
