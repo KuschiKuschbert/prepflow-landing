@@ -45,6 +45,7 @@ export default function CogsClient() {
     addCalculation,
     loadCalculations,
     checkRecipeExists,
+    loadExistingRecipeIngredients,
     setError,
   } = useCOGSCalculations();
 
