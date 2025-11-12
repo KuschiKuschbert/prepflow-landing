@@ -59,4 +59,6 @@ export interface RecipePriceData {
   cost_per_serving: number;
   recommendedPrice: number;
   foodCostPercent: number;
+  contributingMargin: number;
+  contributingMarginPercent: number;
 }

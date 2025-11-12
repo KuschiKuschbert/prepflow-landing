@@ -37,11 +37,21 @@ const RecipeTable = React.memo(function RecipeTable({
               <button
                 onClick={onSelectAll}
                 className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-                aria-label={selectedRecipes.size === recipes.length ? "Deselect all" : "Select all"}
+                aria-label={selectedRecipes.size === recipes.length ? 'Deselect all' : 'Select all'}
               >
                 {selectedRecipes.size === recipes.length && recipes.length > 0 ? (
-                  <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg
+                    className="h-4 w-4 text-[#29E7CD]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 ) : (
                   <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
@@ -55,7 +65,10 @@ const RecipeTable = React.memo(function RecipeTable({
               Recommended Price
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Instructions
+              Profit Margin
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              Contributing Margin
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               Created
@@ -78,8 +91,18 @@ const RecipeTable = React.memo(function RecipeTable({
                   aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
                 >
                   {selectedRecipes.has(recipe.id) ? (
-                    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="h-4 w-4 text-[#29E7CD]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   ) : (
                     <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
@@ -99,7 +122,17 @@ const RecipeTable = React.memo(function RecipeTable({
                 {recipePrices[recipe.id] ? (
                   <div className="flex flex-col">
                     <span className="font-semibold text-white">
-                      ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
+                      {recipe.yield > 1 ? (
+                        <>
+                          ${(recipePrices[recipe.id].recommendedPrice / recipe.yield).toFixed(2)}
+                          /portion
+                          <span className="ml-1 text-xs font-normal text-gray-400">
+                            (${recipePrices[recipe.id].recommendedPrice.toFixed(2)} total)
+                          </span>
+                        </>
+                      ) : (
+                        `$${recipePrices[recipe.id].recommendedPrice.toFixed(2)}`
+                      )}
                     </span>
                     <span className="text-xs text-gray-400">
                       {recipePrices[recipe.id].foodCostPercent.toFixed(1)}% food cost
@@ -110,13 +143,37 @@ const RecipeTable = React.memo(function RecipeTable({
                 )}
               </td>
               <td
-                className="cursor-pointer px-6 py-4 text-sm text-gray-300"
+                className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
                 onClick={() => onPreviewRecipe(recipe)}
               >
-                {recipe.instructions ? (
-                  <div className="max-w-xs truncate">{recipe.instructions}</div>
+                {recipePrices[recipe.id] ? (
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-white">
+                      {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      ${recipePrices[recipe.id].gross_profit.toFixed(2)} profit
+                    </span>
+                  </div>
                 ) : (
-                  '-'
+                  <span className="text-gray-500">-</span>
+                )}
+              </td>
+              <td
+                className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
+                onClick={() => onPreviewRecipe(recipe)}
+              >
+                {recipePrices[recipe.id] ? (
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-[#D925C7]">
+                      ${recipePrices[recipe.id].contributingMargin.toFixed(2)}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {recipePrices[recipe.id].contributingMarginPercent.toFixed(1)}% of revenue
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-gray-500">-</span>
                 )}
               </td>
               <td

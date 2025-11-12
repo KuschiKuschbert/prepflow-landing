@@ -36,8 +36,18 @@ const RecipeCard = React.memo(function RecipeCard({
             aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
           >
             {selectedRecipes.has(recipe.id) ? (
-              <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4 text-[#29E7CD]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             ) : (
               <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
@@ -60,25 +70,42 @@ const RecipeCard = React.memo(function RecipeCard({
           <span className="font-medium">Recommended Price:</span>
           {recipePrices[recipe.id] ? (
             <span className="ml-1 font-semibold text-white">
-              ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
+              {recipe.yield > 1 ? (
+                <>
+                  ${(recipePrices[recipe.id].recommendedPrice / recipe.yield).toFixed(2)}/portion
+                  <span className="ml-1 text-xs font-normal text-gray-400">
+                    (${recipePrices[recipe.id].recommendedPrice.toFixed(2)} total)
+                  </span>
+                </>
+              ) : (
+                `$${recipePrices[recipe.id].recommendedPrice.toFixed(2)}`
+              )}
             </span>
           ) : (
             <span className="ml-1 text-gray-500">Calculating...</span>
           )}
         </div>
         {recipePrices[recipe.id] && (
-          <div>
-            <span className="font-medium">Food Cost:</span>
-            <span className="ml-1 text-gray-400">
-              {recipePrices[recipe.id].foodCostPercent.toFixed(1)}%
-            </span>
-          </div>
-        )}
-        {recipe.instructions && (
-          <div>
-            <span className="font-medium">Instructions:</span>
-            <p className="mt-1 line-clamp-2 text-gray-400">{recipe.instructions}</p>
-          </div>
+          <>
+            <div>
+              <span className="font-medium">Profit Margin:</span>
+              <span className="ml-1 text-white">
+                {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
+              </span>
+              <span className="ml-1 text-gray-400">
+                (${recipePrices[recipe.id].gross_profit.toFixed(2)} profit)
+              </span>
+            </div>
+            <div>
+              <span className="font-medium">Contributing Margin:</span>
+              <span className="ml-1 font-semibold text-[#D925C7]">
+                ${recipePrices[recipe.id].contributingMargin.toFixed(2)}
+              </span>
+              <span className="ml-1 text-gray-400">
+                ({recipePrices[recipe.id].contributingMarginPercent.toFixed(1)}% of revenue)
+              </span>
+            </div>
+          </>
         )}
       </div>
 

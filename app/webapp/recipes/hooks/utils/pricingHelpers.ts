@@ -38,6 +38,14 @@ export function calculateRecommendedPrice(totalCostPerServing: number): RecipePr
   const recommendedPrice = totalCostPerServing / (targetFoodCostPercent / 100);
   const charmPrice = Math.floor(recommendedPrice) + 0.95;
 
+  // Calculate GST-exclusive price (10% GST in Australia)
+  const gstRate = 0.1;
+  const priceExclGST = charmPrice / (1 + gstRate);
+
+  // Calculate contributing margin (Revenue excl GST - Food Cost)
+  const contributingMargin = priceExclGST - totalCostPerServing;
+  const contributingMarginPercent = (contributingMargin / priceExclGST) * 100;
+
   return {
     cost_per_serving: totalCostPerServing,
     recommendedPrice: charmPrice,
@@ -45,6 +53,8 @@ export function calculateRecommendedPrice(totalCostPerServing: number): RecipePr
     selling_price: charmPrice,
     gross_profit: charmPrice - totalCostPerServing,
     gross_profit_margin: ((charmPrice - totalCostPerServing) / charmPrice) * 100,
+    contributingMargin: contributingMargin,
+    contributingMarginPercent: contributingMarginPercent,
   };
 }
 
