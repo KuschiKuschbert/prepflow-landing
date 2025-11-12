@@ -477,6 +477,25 @@ export default function IngredientTableWithFilters({
             )}
           </div>
           <div className="flex items-center gap-2">
+            {/* Items Per Page Selector */}
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="items-per-page-header" className="text-xs text-gray-400 whitespace-nowrap">
+                Show:
+              </label>
+              <select
+                id="items-per-page-header"
+                value={itemsPerPage}
+                onChange={e => onItemsPerPageChange(Number(e.target.value))}
+                className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-2.5 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                title="Items per page"
+              >
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+              </select>
+            </div>
             {selectedIngredients.size > 0 ? (
               <>
                 <button

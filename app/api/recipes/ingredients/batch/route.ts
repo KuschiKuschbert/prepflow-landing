@@ -35,13 +35,10 @@ export async function POST(request: NextRequest) {
         ingredients (
           id,
           ingredient_name,
-          name,
           unit,
           cost_per_unit,
           trim_peel_waste_percentage,
-          yield_percentage,
-          category,
-          supplier_name
+          yield_percentage
         )
       `,
       )
@@ -76,7 +73,7 @@ export async function POST(request: NextRequest) {
         const { data: ingRows, error: ingError } = await supabaseAdmin
           .from('ingredients')
           .select(
-            'id, ingredient_name, name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage, category, supplier_name',
+            'id, ingredient_name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage',
           )
           .in('id', uniqueIds);
         if (!ingError && ingRows) {
@@ -100,14 +97,12 @@ export async function POST(request: NextRequest) {
         unit: row.unit,
         ingredients: {
           id: ing.id,
-          // Normalize name field so clients can rely on ingredient_name
-          ingredient_name: ing.ingredient_name || ing.name || 'Unknown',
+          // Use ingredient_name as the canonical field
+          ingredient_name: ing.ingredient_name || 'Unknown',
           cost_per_unit: ing.cost_per_unit,
           unit: ing.unit || row.unit || null,
           trim_peel_waste_percentage: ing.trim_peel_waste_percentage,
           yield_percentage: ing.yield_percentage,
-          category: ing.category,
-          supplier_name: ing.supplier_name,
         },
       };
     });

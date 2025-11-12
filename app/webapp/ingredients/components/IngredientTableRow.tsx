@@ -251,7 +251,15 @@ export function IngredientTableRow({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onSelectIngredient(ingredient.id, !selectedIngredients.has(ingredient.id));
+            const isCurrentlySelected = selectedIngredients.has(ingredient.id);
+            const willBeSelected = !isCurrentlySelected;
+
+            // Enter selection mode when selecting an item (not deselecting)
+            if (willBeSelected && !isSelectionMode && onEnterSelectionMode) {
+              onEnterSelectionMode();
+            }
+
+            onSelectIngredient(ingredient.id, willBeSelected);
           }}
           onTouchStart={(e) => {
             if (isSelectionMode) {
