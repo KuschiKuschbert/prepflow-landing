@@ -156,10 +156,10 @@ export function IngredientCard({
               {ingredient.supplier}
             </span>
           )}
-          {ingredient.pack_size && (
+          {ingredient.pack_size != null && (
             <span className="flex items-center gap-1">
               <Icon icon={MapPin} size="xs" className="text-gray-500" aria-hidden={true} />
-              {ingredient.pack_size} {packSizeUnit}
+              {String(ingredient.pack_size)} {packSizeUnit}
               {showUnitTooltip && (
                 <span className="text-gray-500">({standardUnit})</span>
               )}
@@ -171,7 +171,7 @@ export function IngredientCard({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className={`text-xs font-medium truncate ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}>
-              Stock: {ingredient.current_stock || 0} {ingredient.unit || ''}
+              Stock: {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'} {ingredient.unit || ''}
             </span>
             {isLowStock && (
               <span className="inline-flex items-center rounded-full bg-red-900/20 px-1.5 py-0.5 text-xs font-medium text-red-400 flex-shrink-0">

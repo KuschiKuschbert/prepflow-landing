@@ -290,7 +290,7 @@ export function IngredientTableRow({
       <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
         <div className="flex items-center gap-1">
           <span>
-            {ingredient.pack_size} {packSizeUnit}
+            {ingredient.pack_size != null ? `${ingredient.pack_size} ${packSizeUnit}` : '-'}
           </span>
           {showUnitTooltip && (
             <span
@@ -316,7 +316,7 @@ export function IngredientTableRow({
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center gap-2">
           <span className={`text-sm ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}>
-            {ingredient.current_stock || 0} {ingredient.unit}
+            {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'} {ingredient.unit || ''}
           </span>
           {isLowStock && (
             <span className="inline-flex items-center rounded-full bg-red-900/20 px-2 py-1 text-xs font-medium text-red-400">
