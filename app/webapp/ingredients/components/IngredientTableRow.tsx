@@ -247,7 +247,7 @@ export function IngredientTableRow({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
         <button
           onClick={(e) => {
             e.stopPropagation();
