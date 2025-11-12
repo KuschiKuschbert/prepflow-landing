@@ -14,6 +14,7 @@ interface UseRecipeIngredientsProps {
   calculateCOGS: (recipeIngredients: RecipeIngredient[]) => void;
   setError: (error: string) => void;
   setIsLoadingFromApi?: (loading: boolean) => void;
+  shouldPreserveManualIngredients?: () => boolean;
 }
 
 export function useRecipeIngredients({
@@ -22,12 +23,14 @@ export function useRecipeIngredients({
   calculateCOGS,
   setError,
   setIsLoadingFromApi,
+  shouldPreserveManualIngredients,
 }: UseRecipeIngredientsProps) {
   const { loadExistingRecipeIngredients } = useRecipeIngredientLoading({
     setCalculations,
     setRecipeIngredients,
     setError,
     setIsLoadingFromApi,
+    preserveManualIngredients: shouldPreserveManualIngredients?.() || false,
   });
 
   const fetchRecipeIngredients = useCallback(
@@ -64,7 +67,8 @@ export function useRecipeIngredients({
         if (error && error.code === 'PGRST116') {
           return false;
         } else if (existingRecipe) {
-          await loadExistingRecipeIngredients(existingRecipe.id);
+          // Don't load ingredients when just checking if recipe exists
+          // Only return true/false to indicate existence
           return true;
         } else {
           return false;

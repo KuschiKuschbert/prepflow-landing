@@ -5,6 +5,8 @@ import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useCOGSCalculationLogic } from './useCOGSCalculationLogic';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { COGSCalculation, RecipeIngredient } from '../types';
+import { createRecipeIngredientFromCalculation } from './utils/syncRecipeIngredients';
+import { mapCalculationsToRecipeIngredients } from './utils/mapCalculationsToRecipeIngredients';
 
 export const useCOGSCalculations = () => {
   const { ingredients, recipes, loading, error, setError, fetchData, setIngredients, setRecipes } =
@@ -13,6 +15,7 @@ export const useCOGSCalculations = () => {
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>([]);
   const [calculations, setCalculations] = useState<COGSCalculation[]>([]);
   const isLoadingFromApiRef = useRef(false);
+  const hasManualIngredientsRef = useRef(false);
   const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
     ingredients,
     setCalculations,
@@ -26,46 +29,46 @@ export const useCOGSCalculations = () => {
       setIsLoadingFromApi: (loading: boolean) => {
         isLoadingFromApiRef.current = loading;
       },
+      shouldPreserveManualIngredients: () => hasManualIngredientsRef.current,
     });
 
-  const removeCalculation = (ingredientId: string) =>
+  const removeCalculation = (ingredientId: string) => {
     setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
-  const addCalculation = (calculation: COGSCalculation) =>
+    setRecipeIngredients(prev => prev.filter(ri => ri.ingredient_id !== ingredientId));
+  };
+  const addCalculation = (calculation: COGSCalculation) => {
+    hasManualIngredientsRef.current = true;
     setCalculations(prev => [...prev, calculation]);
+    setRecipeIngredients(prev => {
+      if (prev.some(ri => ri.ingredient_id === calculation.ingredientId)) return prev;
+      return [...prev, createRecipeIngredientFromCalculation(calculation, selectedRecipe)];
+    });
+  };
   const clearCalculations = () => {
     setCalculations([]);
     setRecipeIngredients([]);
   };
   const loadCalculations = (newCalculations: COGSCalculation[]) => {
+    hasManualIngredientsRef.current = false;
     setCalculations(newCalculations);
-    setRecipeIngredients(
-      newCalculations.map(calc => ({
-        id: calc.ingredientId,
-        recipe_id: calc.recipeId || '',
-        ingredient_id: calc.ingredientId,
-        ingredient_name: calc.ingredientName,
-        quantity: calc.quantity,
-        unit: calc.unit,
-        cost_per_unit: calc.costPerUnit,
-        total_cost: calc.totalCost,
-      })),
-    );
+    setRecipeIngredients(mapCalculationsToRecipeIngredients(newCalculations));
   };
   const updateCalculationWrapper = (ingredientId: string, newQuantity: number) =>
     updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
 
+  const selectedRecipeRef = useRef<string>('');
   useEffect(() => {
-    if (selectedRecipe) fetchRecipeIngredients(selectedRecipe);
+    if (selectedRecipe && selectedRecipe !== selectedRecipeRef.current) {
+      selectedRecipeRef.current = selectedRecipe;
+      hasManualIngredientsRef.current = false;
+      fetchRecipeIngredients(selectedRecipe);
+    }
   }, [selectedRecipe, fetchRecipeIngredients]);
   useEffect(() => {
-    // Skip calculateCOGS if we're loading from API (calculations already set)
     if (isLoadingFromApiRef.current) {
       isLoadingFromApiRef.current = false;
       return;
     }
-    // Only recalculate if we have recipeIngredients but no calculations yet
-    // This prevents overwriting calculations that were already set by loadExistingRecipeIngredients
-    // Also ensure ingredients array is populated before calculating
     if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0) {
       calculateCOGS(recipeIngredients);
     }
