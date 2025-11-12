@@ -38,13 +38,16 @@ export function useCOGSAutosave({
     enabled: Boolean(selectedRecipe && recipeMetadata),
   });
 
-  const { status: ingredientsAutosaveStatus, error: ingredientsAutosaveError } =
-    useRecipeIngredientsAutosave({
-      recipeId: selectedRecipe,
-      calculations,
-      enabled: Boolean(selectedRecipe && calculations.length > 0),
-      onError,
-    });
+  const {
+    status: ingredientsAutosaveStatus,
+    error: ingredientsAutosaveError,
+    saveNow: saveIngredientsNow,
+  } = useRecipeIngredientsAutosave({
+    recipeId: selectedRecipe,
+    calculations,
+    enabled: Boolean(selectedRecipe && calculations.length > 0),
+    onError,
+  });
 
   const autosaveStatus =
     ingredientsAutosaveStatus !== 'idle' ? ingredientsAutosaveStatus : recipeMetadataStatus;
@@ -52,5 +55,6 @@ export function useCOGSAutosave({
   return {
     autosaveStatus,
     ingredientsAutosaveError,
+    saveNow: saveIngredientsNow,
   };
 }

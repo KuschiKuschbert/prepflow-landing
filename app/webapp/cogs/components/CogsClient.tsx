@@ -61,7 +61,11 @@ export default function CogsClient() {
   const selectedRecipeData = recipes.find(r => r.id === selectedRecipe);
 
   // Autosave logic
-  const { autosaveStatus, ingredientsAutosaveError } = useCOGSAutosave({
+  const {
+    autosaveStatus,
+    ingredientsAutosaveError,
+    saveNow: saveNowAutosave,
+  } = useCOGSAutosave({
     selectedRecipe,
     selectedRecipeData,
     dishPortions,
@@ -164,19 +168,21 @@ export default function CogsClient() {
     e.preventDefault();
     await handleAddIngredient(newIngredient, e);
   };
-
   // Recipe handlers
   const { handleRecipeSelect, handleCreateNewRecipe, handleCreateRecipe, handleFinishRecipe } =
     useRecipeHandlers({
       recipes,
       selectedRecipe,
       dishPortions,
+      calculations,
       setSelectedRecipe,
       setDishPortions,
       setShowCreateModal,
       createOrUpdateRecipe,
       fetchData,
       setSuccessMessage,
+      saveNow: saveNowAutosave,
+      setSaveError,
     });
 
   // Gate the arcade overlay while COGS data is loading

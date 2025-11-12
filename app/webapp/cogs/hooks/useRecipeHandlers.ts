@@ -7,6 +7,7 @@ interface UseRecipeHandlersProps {
   recipes: Recipe[];
   selectedRecipe: string;
   dishPortions: number;
+  calculations: import('../types').COGSCalculation[];
   setSelectedRecipe: (id: string) => void;
   setDishPortions: (portions: number) => void;
   setShowCreateModal: (show: boolean) => void;
@@ -16,18 +17,23 @@ interface UseRecipeHandlersProps {
   ) => Promise<{ recipe: Recipe; isNew: boolean } | null>;
   fetchData: () => Promise<void>;
   setSuccessMessage: (msg: string | null) => void;
+  saveNow?: () => Promise<void>;
+  setSaveError?: (error: string) => void;
 }
 
 export function useRecipeHandlers({
   recipes,
   selectedRecipe,
   dishPortions,
+  calculations,
   setSelectedRecipe,
   setDishPortions,
   setShowCreateModal,
   createOrUpdateRecipe,
   fetchData,
   setSuccessMessage,
+  saveNow,
+  setSaveError,
 }: UseRecipeHandlersProps) {
   const handleRecipeSelect = useCallback(
     (recipeId: string) => {
@@ -69,13 +75,20 @@ export function useRecipeHandlers({
     ],
   );
 
-  const handleFinishRecipe = useCallback(() => {
+  const handleFinishRecipe = useCallback(async () => {
     const selectedRecipeData = recipes.find(r => r.id === selectedRecipe);
-    if (selectedRecipeData) {
+    if (!selectedRecipeData || calculations.length === 0) return;
+    try {
+      if (saveNow) await saveNow();
       setSuccessMessage(`Recipe "${selectedRecipeData.name}" is complete! 🎉`);
       setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (err) {
+      const errorMsg = 'Failed to save recipe. Please try again.';
+      if (setSaveError) setSaveError(errorMsg);
+      setSuccessMessage(errorMsg);
+      setTimeout(() => setSuccessMessage(null), 3000);
     }
-  }, [recipes, selectedRecipe, setSuccessMessage]);
+  }, [recipes, selectedRecipe, calculations, saveNow, setSuccessMessage, setSaveError]);
 
   return {
     handleRecipeSelect,
