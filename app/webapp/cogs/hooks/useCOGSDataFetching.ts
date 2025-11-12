@@ -32,7 +32,7 @@ export function useCOGSDataFetching() {
         setError(`Failed to load ingredients: ${ingredientsResult.error || 'Unknown error'}`);
         setIngredients([]);
       } else {
-        const ingredientsData = ingredientsResult.ingredients || [];
+        const ingredientsData = ingredientsResult.data?.items || [];
         console.log('🔍 DEBUG useCOGSDataFetching: Ingredients fetched', {
           ingredientsCount: ingredientsData.length,
         });
