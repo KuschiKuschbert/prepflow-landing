@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { backgroundTheme } from '../../../lib/theme';
+import { backgroundTheme } from '@/lib/theme';
 
 const LandingBackground = React.memo(function LandingBackground() {
   return (
@@ -23,7 +23,6 @@ const LandingBackground = React.memo(function LandingBackground() {
           backgroundImage: `linear-gradient(rgba(41,231,205,${backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
           backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
           backgroundPosition: '0px 0px, 0px 0px',
-          maskImage: 'radial-gradient(120% 80% at 50% 20%, black 60%, transparent 100%)',
         }}
       />
 

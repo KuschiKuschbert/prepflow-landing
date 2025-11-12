@@ -401,7 +401,15 @@ export default function IngredientTableWithFilters({
                     <span>Export</span>
                   </button>
                 )}
-                {/* Bulk Actions Button - Desktop: in action buttons section */}
+                {/* Selection Mode Indicator + Bulk Actions Button - Desktop: in action buttons section */}
+                {isSelectionMode && (
+                  <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10">
+                    <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />
+                    <span className="text-sm font-medium text-[#29E7CD]">
+                      Selection Mode
+                    </span>
+                  </div>
+                )}
                 {selectedCount > 0 && onBulkDelete && (
                   <div className="relative z-[60] hidden md:block">
                     <button
@@ -603,9 +611,9 @@ export default function IngredientTableWithFilters({
         </div>
       </div>
 
-      {/* Selection Mode Indicator */}
+      {/* Selection Mode Indicator - Mobile only (desktop shows inline with bulk actions) */}
       {isSelectionMode && (
-        <div className="bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 border-b border-[#29E7CD]/30 px-6 py-3">
+        <div className="bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 border-b border-[#29E7CD]/30 px-6 py-3 md:hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />

@@ -134,7 +134,7 @@ function WebAppLayoutContent({
   }, [hasWarnings]);
 
   return (
-    <div className={`${inter.className} min-h-screen bg-[#0a0a0a] text-white`}>
+    <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
       {/* Modern Navigation */}
       <ErrorBoundary>
         <ModernNavigation />
@@ -150,7 +150,7 @@ function WebAppLayoutContent({
       <PersonalityScheduler />
 
       {/* Main Content - dynamically adjust padding based on warning visibility */}
-      <main className="webapp-main-content bg-[#0a0a0a] pb-20 md:ml-64 md:pb-0">
+      <main className="webapp-main-content bg-transparent pb-20 md:ml-64 md:pb-0">
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </main>
 
