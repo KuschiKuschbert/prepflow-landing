@@ -58,9 +58,9 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
       {/* Mobile Card Layout */}
       <div className="block md:hidden">
         <div className="space-y-3">
-          {calculations.map(calc => (
+          {calculations.map((calc, index) => (
             <div
-              key={calc.ingredientId}
+              key={calc.ingredientId || `calc-${index}`}
               className="rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] p-3"
             >
               <div className="mb-2 flex items-start justify-between">
@@ -149,9 +149,9 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-[#1f1f1f]">
-            {calculations.map(calc => (
+            {calculations.map((calc, index) => (
               <tr
-                key={calc.ingredientId}
+                key={calc.ingredientId || `calc-${index}`}
                 className="transition-colors duration-200 hover:bg-[#2a2a2a]/50"
               >
                 <td className="px-3 py-2 text-sm text-white">{calc.ingredientName}</td>
