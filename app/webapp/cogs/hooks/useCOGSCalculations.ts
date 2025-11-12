@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useCOGSCalculationLogic } from './useCOGSCalculationLogic';
 import { useRecipeIngredients } from './useRecipeIngredients';
@@ -12,6 +12,7 @@ export const useCOGSCalculations = () => {
   const [selectedRecipe, setSelectedRecipe] = useState<string>('');
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>([]);
   const [calculations, setCalculations] = useState<COGSCalculation[]>([]);
+  const isLoadingFromApiRef = useRef(false);
   const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
     ingredients,
     setCalculations,
@@ -22,6 +23,9 @@ export const useCOGSCalculations = () => {
       setCalculations,
       calculateCOGS,
       setError,
+      setIsLoadingFromApi: (loading: boolean) => {
+        isLoadingFromApiRef.current = loading;
+      },
     });
 
   const removeCalculation = (ingredientId: string) =>
@@ -54,14 +58,15 @@ export const useCOGSCalculations = () => {
     if (selectedRecipe) fetchRecipeIngredients(selectedRecipe);
   }, [selectedRecipe, fetchRecipeIngredients]);
   useEffect(() => {
+    // Skip calculateCOGS if we're loading from API (calculations already set)
+    if (isLoadingFromApiRef.current) {
+      isLoadingFromApiRef.current = false;
+      return;
+    }
     // Only recalculate if we have recipeIngredients but no calculations yet
     // This prevents overwriting calculations that were already set by loadExistingRecipeIngredients
     // Also ensure ingredients array is populated before calculating
     if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0) {
-      console.log('🔍 DEBUG: Calling calculateCOGS with recipeIngredients', {
-        recipeIngredientsCount: recipeIngredients.length,
-        ingredientsCount: ingredients.length,
-      });
       calculateCOGS(recipeIngredients);
     }
   }, [recipeIngredients, calculateCOGS, calculations.length, ingredients.length]);

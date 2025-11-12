@@ -8,6 +8,7 @@ interface UseRecipeIngredientLoadingProps {
   setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>;
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>;
   setError?: (error: string) => void;
+  setIsLoadingFromApi?: (loading: boolean) => void;
 }
 
 type ApiIngredientItem = {
@@ -30,6 +31,7 @@ export function useRecipeIngredientLoading({
   setCalculations,
   setRecipeIngredients,
   setError,
+  setIsLoadingFromApi,
 }: UseRecipeIngredientLoadingProps) {
   const loadExistingRecipeIngredients = useCallback(
     async (recipeId: string) => {
@@ -63,6 +65,7 @@ export function useRecipeIngredientLoading({
           const totalCost = item.quantity * costPerUnit;
           const wastePercent = ing.trim_peel_waste_percentage || 0;
           const yieldPercent = ing.yield_percentage || 100;
+          const wasteAdjusted = totalCost * (1 + wastePercent / 100);
           return {
             recipeId: item.recipe_id || recipeId,
             ingredientId: ing.id,
@@ -71,8 +74,8 @@ export function useRecipeIngredientLoading({
             unit: item.unit,
             costPerUnit,
             totalCost,
-            wasteAdjustedCost: totalCost * (1 + wastePercent / 100),
-            yieldAdjustedCost: (totalCost * (1 + wastePercent / 100)) / (yieldPercent / 100),
+            wasteAdjustedCost: wasteAdjusted,
+            yieldAdjustedCost: wasteAdjusted / (yieldPercent / 100),
             id: item.id,
             ingredient_id: ing.id,
             ingredient_name: ing.ingredient_name,
@@ -80,27 +83,28 @@ export function useRecipeIngredientLoading({
             total_cost: totalCost,
           };
         });
-        const recipeIngredients: RecipeIngredient[] = items.map(item => {
-          const ing = item.ingredients;
-          return {
-            id: item.id,
-            recipe_id: item.recipe_id || recipeId,
-            ingredient_id: ing.id,
-            ingredient_name: ing.ingredient_name,
-            quantity: item.quantity,
-            unit: item.unit,
-            cost_per_unit: ing.cost_per_unit || 0,
-            total_cost: item.quantity * (ing.cost_per_unit || 0),
-          };
-        });
+        const recipeIngredients: RecipeIngredient[] = items.map(item => ({
+          id: item.id,
+          recipe_id: item.recipe_id || recipeId,
+          ingredient_id: item.ingredients.id,
+          ingredient_name: item.ingredients.ingredient_name,
+          quantity: item.quantity,
+          unit: item.unit,
+          cost_per_unit: item.ingredients.cost_per_unit || 0,
+          total_cost: item.quantity * (item.ingredients.cost_per_unit || 0),
+        }));
+        if (setIsLoadingFromApi) setIsLoadingFromApi(true);
         setCalculations(loadedCalculations);
-        Promise.resolve().then(() => setRecipeIngredients(recipeIngredients));
+        Promise.resolve().then(() => {
+          setRecipeIngredients(recipeIngredients);
+          if (setIsLoadingFromApi) setIsLoadingFromApi(false);
+        });
       } catch (err) {
         if (setError)
           setError(err instanceof Error ? err.message : 'Failed to load recipe ingredients');
       }
     },
-    [setCalculations, setRecipeIngredients, setError],
+    [setCalculations, setRecipeIngredients, setError, setIsLoadingFromApi],
   );
   return { loadExistingRecipeIngredients };
 }

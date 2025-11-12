@@ -13,6 +13,7 @@ interface UseRecipeIngredientsProps {
   setCalculations: React.Dispatch<React.SetStateAction<any[]>>;
   calculateCOGS: (recipeIngredients: RecipeIngredient[]) => void;
   setError: (error: string) => void;
+  setIsLoadingFromApi?: (loading: boolean) => void;
 }
 
 export function useRecipeIngredients({
@@ -20,11 +21,13 @@ export function useRecipeIngredients({
   setCalculations,
   calculateCOGS,
   setError,
+  setIsLoadingFromApi,
 }: UseRecipeIngredientsProps) {
   const { loadExistingRecipeIngredients } = useRecipeIngredientLoading({
     setCalculations,
     setRecipeIngredients,
     setError,
+    setIsLoadingFromApi,
   });
 
   const fetchRecipeIngredients = useCallback(
