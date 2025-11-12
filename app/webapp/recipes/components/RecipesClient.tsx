@@ -1,17 +1,17 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ChefHat } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { ChefHat } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Local hooks and types
 import { useAIInstructions } from '../hooks/useAIInstructions';
-import { useRecipeManagement } from '../hooks/useRecipeManagement';
 import { useRecipeActions } from '../hooks/useRecipeActions';
+import { useRecipeManagement } from '../hooks/useRecipeManagement';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 
 // Local components
@@ -25,11 +25,20 @@ import { RecipesActionButtons } from './RecipesActionButtons';
 import { SuccessMessage } from './SuccessMessage';
 
 // Utils
-import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
+import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
 
 export default function RecipesClient() {
   const router = useRouter();
+  // Preview state
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewYield, setPreviewYield] = useState<number>(1);
+
+  // Use ref to store callback that can access fetchRecipeIngredients after it's available
+  const handleIngredientsChangeRef = useRef<((recipeId: string) => void) | null>(null);
+
   const {
     recipes,
     loading,
@@ -40,7 +49,27 @@ export default function RecipesClient() {
     fetchRecipeIngredients,
     handleEditRecipe,
     setError,
-  } = useRecipeManagement();
+  } = useRecipeManagement((recipeId: string) => {
+    // This callback will be called by the subscription
+    if (handleIngredientsChangeRef.current) {
+      handleIngredientsChangeRef.current(recipeId);
+    }
+  });
+
+  // Update the ref callback to use fetchRecipeIngredients
+  useEffect(() => {
+    handleIngredientsChangeRef.current = (recipeId: string) => {
+      if (showPreview && selectedRecipe && selectedRecipe.id === recipeId) {
+        fetchRecipeIngredients(recipeId)
+          .then(ingredients => {
+            setRecipeIngredients(ingredients);
+          })
+          .catch(err => {
+            console.error('Failed to refresh preview ingredients:', err);
+          });
+      }
+    };
+  }, [showPreview, selectedRecipe, fetchRecipeIngredients]);
 
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
 
@@ -76,12 +105,6 @@ export default function RecipesClient() {
     setError,
     capitalizeRecipeName,
   });
-
-  // Preview state
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewYield, setPreviewYield] = useState<number>(1);
 
   // Helper function - format quantity with yield adjustment
   const formatQuantity = (quantity: number, unit: string) => {

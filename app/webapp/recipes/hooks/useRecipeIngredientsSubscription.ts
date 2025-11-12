@@ -17,6 +17,7 @@ export function useRecipeIngredientsSubscription(
   fetchBatchRecipeIngredients?: (
     recipeIds: string[],
   ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
+  onIngredientsChange?: (recipeId: string) => void,
 ) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -34,11 +35,15 @@ export function useRecipeIngredientsSubscription(
         },
         payload => {
           console.log('Recipe ingredients changed:', payload);
+          const recipeId = (payload.new as { recipe_id?: string })?.recipe_id || (payload.old as { recipe_id?: string })?.recipe_id;
           refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients).catch(
             err => {
               console.error('Failed to refresh recipe prices after ingredient change:', err);
             },
           );
+          if (recipeId && onIngredientsChange) {
+            onIngredientsChange(recipeId);
+          }
         },
       )
       .subscribe();
@@ -46,5 +51,5 @@ export function useRecipeIngredientsSubscription(
     return () => {
       subscription.unsubscribe();
     };
-  }, [recipes, refreshRecipePrices, fetchRecipeIngredients, fetchBatchRecipeIngredients]);
+  }, [recipes, refreshRecipePrices, fetchRecipeIngredients, fetchBatchRecipeIngredients, onIngredientsChange]);
 }

@@ -22,6 +22,7 @@ import { PageHeader } from '../../components/static/PageHeader';
 import { useRegionalUnits } from '../hooks/useRegionalUnits';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useSelectionMode } from '../hooks/useSelectionMode';
+import { Package } from 'lucide-react';
 
 interface Ingredient {
   id: string;
@@ -189,6 +190,7 @@ export default function IngredientsClient() {
           'ingredients.subtitle',
           'Manage your kitchen ingredients and inventory',
         )}
+        icon={Package}
       />
       {error && (
         <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">

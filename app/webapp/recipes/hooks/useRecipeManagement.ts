@@ -1,28 +1,25 @@
 'use client';
 
-import { formatRecipeName } from '@/lib/text-utils';
 import { cacheRecipes, getCachedRecipes, prefetchRecipes } from '@/lib/cache/recipe-cache';
+import { formatRecipeName } from '@/lib/text-utils';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Recipe } from '../types';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { useRecipeIngredientsSubscription } from './useRecipeIngredientsSubscription';
-import { useRecipePricing } from './useRecipePricing';
 import { useRecipePriceSubscription } from './useRecipePriceSubscription';
+import { useRecipePricing } from './useRecipePricing';
 import { convertToCOGSCalculations } from './utils/recipeCalculationHelpers';
 import { storeRecipeForEditing } from './utils/recipeEditHelpers';
 
-export function useRecipeManagement() {
+export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => void) {
   const router = useRouter();
   // Initialize with cached recipes for instant display
   const [recipes, setRecipes] = useState<Recipe[]>(() => getCachedRecipes() || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Use centralized formatting utility
   const capitalizeRecipeName = formatRecipeName;
-
-  // Use pricing hook
   const { recipePrices, calculateRecommendedPrice, calculateAllRecipePrices, refreshRecipePrices } =
     useRecipePricing();
 
@@ -84,6 +81,7 @@ export function useRecipeManagement() {
     refreshRecipePrices,
     fetchRecipeIngredients,
     fetchBatchRecipeIngredients,
+    onIngredientsChange,
   );
   useEffect(() => {
     prefetchRecipes();
@@ -101,8 +99,7 @@ export function useRecipeManagement() {
     handleEditRecipe,
     calculateRecommendedPrice,
     calculateAllRecipePrices,
-    refreshRecipePrices: () =>
-      refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients),
+    refreshRecipePrices: () => refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients),
     setError,
   };
 }
