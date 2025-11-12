@@ -12,18 +12,18 @@ import { PricingTool } from '../components/PricingTool';
 import { useCOGSAutosave } from '../hooks/useCOGSAutosave';
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
 import { useCOGSEffects } from '../hooks/useCOGSEffects';
+import { useCOGSLoadingGate } from '../hooks/useCOGSLoadingGate';
 import { useDishHandlers } from '../hooks/useDishHandlers';
 import { useIngredientAddition } from '../hooks/useIngredientAddition';
 import { useIngredientEditing } from '../hooks/useIngredientEditing';
 import { useIngredientSearch } from '../hooks/useIngredientSearch';
 import { usePricing } from '../hooks/usePricing';
-import { useCOGSLoadingGate } from '../hooks/useCOGSLoadingGate';
 import { useRecipeCRUD } from '../hooks/useRecipeCRUD';
 import { useRecipeHandlers } from '../hooks/useRecipeHandlers';
 
 // Components
-import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
 import { COGSEmptyState } from '../components/COGSEmptyState';
+import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
 import { COGSHeader } from '../components/COGSHeader';
 import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
 import { SuccessMessage } from '../components/SuccessMessage';
