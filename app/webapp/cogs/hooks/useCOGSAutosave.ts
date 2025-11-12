@@ -4,6 +4,7 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { COGSCalculation, Recipe } from '../types';
 import { useRecipeIngredientsAutosave } from './useRecipeIngredientsAutosave';
+import { useRecipeExistence } from './useRecipeExistence';
 
 interface UseCOGSAutosaveProps {
   selectedRecipe: string;
@@ -20,6 +21,9 @@ export function useCOGSAutosave({
   calculations,
   onError,
 }: UseCOGSAutosaveProps) {
+  // Check if recipe exists in database before enabling autosave
+  const { exists: recipeExists } = useRecipeExistence(selectedRecipe);
+
   const recipeMetadata = selectedRecipeData
     ? {
         yield: dishPortions,
@@ -35,7 +39,7 @@ export function useCOGSAutosave({
     entityType: 'recipes',
     entityId: recipeMetadataAutosaveId || null,
     data: recipeMetadata,
-    enabled: Boolean(selectedRecipe && recipeMetadata),
+    enabled: Boolean(selectedRecipe && recipeMetadata && recipeExists),
   });
 
   const {
@@ -45,7 +49,7 @@ export function useCOGSAutosave({
   } = useRecipeIngredientsAutosave({
     recipeId: selectedRecipe,
     calculations,
-    enabled: Boolean(selectedRecipe && calculations.length > 0),
+    enabled: Boolean(selectedRecipe && calculations.length > 0 && recipeExists),
     onError,
   });
 

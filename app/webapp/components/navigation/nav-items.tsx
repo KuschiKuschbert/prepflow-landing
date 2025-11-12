@@ -60,13 +60,6 @@ export function useNavigationItems(): NavigationItemConfig[] {
       category: 'core',
     },
     {
-      href: '/webapp/dish-cogs',
-      label: t('nav.dishCogs', 'Dish COGS') as string,
-      icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#D925C7]',
-      category: 'core',
-    },
-    {
       href: '/webapp/performance',
       label: t('nav.performance', 'Performance') as string,
       icon: <Icon icon={BarChart3} size="sm" className="text-current" aria-hidden={true} />,
