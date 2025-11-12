@@ -5,8 +5,8 @@ import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useCOGSCalculationLogic } from './useCOGSCalculationLogic';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { COGSCalculation, RecipeIngredient } from '../types';
-import { createRecipeIngredientFromCalculation } from './utils/syncRecipeIngredients';
 import { mapCalculationsToRecipeIngredients } from './utils/mapCalculationsToRecipeIngredients';
+import { removeCalculationHelper, addCalculationHelper } from './utils/calculationManagement';
 
 export const useCOGSCalculations = () => {
   const { ingredients, recipes, loading, error, setError, fetchData, setIngredients, setRecipes } =
@@ -33,16 +33,21 @@ export const useCOGSCalculations = () => {
     });
 
   const removeCalculation = (ingredientId: string) => {
-    setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
-    setRecipeIngredients(prev => prev.filter(ri => ri.ingredient_id !== ingredientId));
+    removeCalculationHelper(
+      ingredientId,
+      setCalculations,
+      setRecipeIngredients,
+      hasManualIngredientsRef,
+    );
   };
   const addCalculation = (calculation: COGSCalculation) => {
-    hasManualIngredientsRef.current = true;
-    setCalculations(prev => [...prev, calculation]);
-    setRecipeIngredients(prev => {
-      if (prev.some(ri => ri.ingredient_id === calculation.ingredientId)) return prev;
-      return [...prev, createRecipeIngredientFromCalculation(calculation, selectedRecipe)];
-    });
+    addCalculationHelper(
+      calculation,
+      selectedRecipe,
+      setCalculations,
+      setRecipeIngredients,
+      hasManualIngredientsRef,
+    );
   };
   const clearCalculations = () => {
     setCalculations([]);

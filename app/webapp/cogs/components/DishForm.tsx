@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
-import { formatDishName } from '@/lib/text-utils';
-import { DishFormData, Recipe, COGSCalculation, Ingredient, RecipeIngredient } from '../types';
-import { Edit, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { formatDishName } from '@/lib/text-utils';
+import { Edit, X } from 'lucide-react';
+import React from 'react';
+import { COGSCalculation, DishFormData, Ingredient, Recipe, RecipeIngredient } from '../types';
 import { IngredientManager } from './IngredientManager';
 import { IngredientsList } from './IngredientsList';
 
@@ -19,6 +19,7 @@ interface DishFormProps {
   showSuggestions: boolean;
   filteredIngredients: Ingredient[];
   selectedIngredient: Ingredient | null;
+  highlightedIndex: number;
   newIngredient: Partial<RecipeIngredient>;
   onDishNameChange: (name: string) => void;
   onDishPortionsChange: (portions: number) => void;
@@ -28,6 +29,7 @@ interface DishFormProps {
   onToggleAddIngredient: () => void;
   onSearchChange: (value: string) => void;
   onIngredientSelect: (ingredient: Ingredient) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, filteredIngredients: Ingredient[]) => void;
   onQuantityChange: (quantity: number) => void;
   onUnitChange: (unit: string) => void;
   onAddIngredient: (e: React.FormEvent) => void;
@@ -44,6 +46,7 @@ export const DishForm: React.FC<DishFormProps> = ({
   showSuggestions,
   filteredIngredients,
   selectedIngredient,
+  highlightedIndex,
   newIngredient,
   onDishNameChange,
   onDishPortionsChange,
@@ -53,6 +56,7 @@ export const DishForm: React.FC<DishFormProps> = ({
   onToggleAddIngredient,
   onSearchChange,
   onIngredientSelect,
+  onKeyDown,
   onQuantityChange,
   onUnitChange,
   onAddIngredient,
@@ -228,10 +232,12 @@ export const DishForm: React.FC<DishFormProps> = ({
               showSuggestions={showSuggestions}
               filteredIngredients={filteredIngredients}
               selectedIngredient={selectedIngredient}
+              highlightedIndex={highlightedIndex}
               newIngredient={newIngredient}
               onToggleAddIngredient={onToggleAddIngredient}
               onSearchChange={onSearchChange}
               onIngredientSelect={onIngredientSelect}
+              onKeyDown={onKeyDown}
               onQuantityChange={onQuantityChange}
               onUnitChange={onUnitChange}
               onAddIngredient={onAddIngredient}

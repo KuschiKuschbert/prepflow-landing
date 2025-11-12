@@ -2,41 +2,24 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { Ingredient, RecipeIngredient } from '../types';
+import { handleKeyboardNavigation } from './utils/keyboardNavigation';
+import { filterIngredients } from './utils/ingredientFiltering';
 
 export const useIngredientSearch = (ingredients: Ingredient[]) => {
   const [ingredientSearch, setIngredientSearch] = useState<string>('');
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const [newIngredient, setNewIngredient] = useState<Partial<RecipeIngredient>>({
     ingredient_id: '',
     quantity: 0,
     unit: 'kg',
   });
 
-  // Live search with Material Design 3 guidelines - instant filtering
-  const filteredIngredients = useMemo(() => {
-    if (!ingredientSearch.trim()) {
-      return ingredients.slice(0, 50); // Show first 50 ingredients when no search
-    }
-    const searchTerm = ingredientSearch.toLowerCase().trim();
-    const filtered = ingredients
-      .filter(
-        ingredient =>
-          ingredient.ingredient_name.toLowerCase().includes(searchTerm) ||
-          (ingredient.unit && ingredient.unit.toLowerCase().includes(searchTerm)),
-      )
-      .sort((a, b) => {
-        const aName = a.ingredient_name.toLowerCase();
-        const bName = b.ingredient_name.toLowerCase();
-        if (aName.startsWith(searchTerm) && !bName.startsWith(searchTerm)) return -1;
-        if (!aName.startsWith(searchTerm) && bName.startsWith(searchTerm)) return 1;
-        if (aName === searchTerm && bName !== searchTerm) return -1;
-        if (aName !== searchTerm && bName === searchTerm) return 1;
-        return aName.localeCompare(bName);
-      })
-      .slice(0, 20);
-    return filtered;
-  }, [ingredients, ingredientSearch]);
+  const filteredIngredients = useMemo(
+    () => filterIngredients(ingredients, ingredientSearch),
+    [ingredients, ingredientSearch],
+  );
 
   const handleIngredientSelect = useCallback((ingredient: Ingredient) => {
     setSelectedIngredient(ingredient);
@@ -47,6 +30,7 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
     }));
     setIngredientSearch(ingredient.ingredient_name.toLowerCase());
     setShowSuggestions(false);
+    setHighlightedIndex(-1);
   }, []);
 
   const handleSearchChange = useCallback(
@@ -55,6 +39,7 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
       // Always show suggestions when there are ingredients available
       // This ensures users can see the list even when search is empty
       setShowSuggestions(ingredients.length > 0);
+      setHighlightedIndex(-1); // Reset highlight when search changes
       if (value.length === 0) {
         setSelectedIngredient(null);
         setNewIngredient(prev => ({
@@ -64,6 +49,22 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
       }
     },
     [ingredients.length],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>, filteredIngredients: Ingredient[]) => {
+      handleKeyboardNavigation(
+        e,
+        filteredIngredients,
+        highlightedIndex,
+        showSuggestions,
+        selectedIngredient,
+        setHighlightedIndex,
+        setShowSuggestions,
+        handleIngredientSelect,
+      );
+    },
+    [showSuggestions, selectedIngredient, highlightedIndex, handleIngredientSelect],
   );
 
   const resetForm = useCallback(() => {
@@ -83,11 +84,13 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
     selectedIngredient,
     newIngredient,
     filteredIngredients,
+    highlightedIndex,
     setIngredientSearch,
     setShowSuggestions,
     setNewIngredient,
     handleIngredientSelect,
     handleSearchChange,
+    handleKeyDown,
     resetForm,
   };
 };

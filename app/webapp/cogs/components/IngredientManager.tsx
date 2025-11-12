@@ -13,10 +13,12 @@ interface IngredientManagerProps {
   showSuggestions: boolean;
   filteredIngredients: Ingredient[];
   selectedIngredient: Ingredient | null;
+  highlightedIndex: number;
   newIngredient: Partial<RecipeIngredient>;
   onToggleAddIngredient: () => void;
   onSearchChange: (value: string) => void;
   onIngredientSelect: (ingredient: Ingredient) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, filteredIngredients: Ingredient[]) => void;
   onQuantityChange: (quantity: number) => void;
   onUnitChange: (unit: string) => void;
   onAddIngredient: (e: React.FormEvent) => void;
@@ -29,10 +31,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
   showSuggestions,
   filteredIngredients,
   selectedIngredient,
+  highlightedIndex,
   newIngredient,
   onToggleAddIngredient,
   onSearchChange,
   onIngredientSelect,
+  onKeyDown,
   onQuantityChange,
   onUnitChange,
   onAddIngredient,
@@ -65,6 +69,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                 placeholder="Type to search ingredients&hellip;"
                 value={ingredientSearch}
                 onChange={e => onSearchChange(e.target.value.toLowerCase())}
+                onKeyDown={e => onKeyDown(e, filteredIngredients)}
                 onFocus={() => {
                   // Show suggestions when input is focused, even if search is empty
                   if (ingredients.length > 0) {
@@ -103,9 +108,10 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
           {/* Autocomplete Suggestions */}
           {showSuggestions && filteredIngredients.length > 0 && (
             <div className="suggestions-dropdown relative z-[60] mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
-              {filteredIngredients.slice(0, 10).map(ingredient => {
+              {filteredIngredients.slice(0, 10).map((ingredient, index) => {
                 const displayCost =
                   ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+                const isHighlighted = highlightedIndex === index;
                 return (
                   <button
                     key={ingredient.id}
@@ -115,11 +121,19 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                       e.stopPropagation();
                       onIngredientSelect(ingredient);
                     }}
-                    className="w-full border-b border-[#2a2a2a] px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[#2a2a2a]/50"
+                    className={`w-full border-b border-[#2a2a2a] px-4 py-3 text-left transition-colors last:border-b-0 ${
+                      isHighlighted
+                        ? 'bg-[#29E7CD]/20 hover:bg-[#29E7CD]/30'
+                        : 'hover:bg-[#2a2a2a]/50'
+                    }`}
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-medium text-white">{ingredient.ingredient_name}</div>
+                        <div
+                          className={`font-medium ${isHighlighted ? 'text-[#29E7CD]' : 'text-white'}`}
+                        >
+                          {ingredient.ingredient_name}
+                        </div>
                         <div className="text-xs text-gray-400">
                           {ingredient.unit && `${ingredient.unit} • `}${displayCost.toFixed(2)}/
                           {ingredient.unit || 'unit'}

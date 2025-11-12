@@ -69,8 +69,10 @@ export default function CogsClient() {
     selectedIngredient,
     newIngredient,
     filteredIngredients,
+    highlightedIndex,
     handleIngredientSelect,
     handleSearchChange,
+    handleKeyDown,
     resetForm,
     setNewIngredient,
     setShowSuggestions,
@@ -238,6 +240,8 @@ export default function CogsClient() {
             onToggleAddIngredient={handleToggleAddIngredient}
             onSearchChange={handleSearchChange}
             onIngredientSelect={handleIngredientSelect}
+            onKeyDown={(e, filteredIngredients) => handleKeyDown(e, filteredIngredients)}
+            highlightedIndex={highlightedIndex}
             onQuantityChange={quantity => setNewIngredient({ ...newIngredient, quantity })}
             onUnitChange={unit => setNewIngredient({ ...newIngredient, unit })}
             onAddIngredient={handleAddIngredientWrapper}
