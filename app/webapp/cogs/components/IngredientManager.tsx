@@ -113,7 +113,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
 
           {/* Autocomplete Suggestions */}
           {showSuggestions && filteredIngredients.length > 0 && (
-            <div className="suggestions-dropdown relative z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+            <div className="suggestions-dropdown relative z-[60] mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
               {filteredIngredients.slice(0, 10).map(ingredient => {
                 const displayCost =
                   ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
