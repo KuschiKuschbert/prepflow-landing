@@ -17,6 +17,7 @@ export default function DishFormPricing({
   sellingPrice,
   costLoading,
   priceOverride,
+  onPriceChange,
   onPriceOverride,
   onUseAutoPrice,
 }: DishFormPricingProps) {
