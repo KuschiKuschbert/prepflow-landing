@@ -11,6 +11,7 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 // Local hooks and types
 import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeActions } from '../hooks/useRecipeActions';
+import { useRecipeAutosaveListener } from '../hooks/useRecipeAutosaveListener';
 import { useRecipeManagement } from '../hooks/useRecipeManagement';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 
@@ -30,16 +31,11 @@ import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
 
 export default function RecipesClient() {
   const router = useRouter();
-  // Preview state
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [previewYield, setPreviewYield] = useState<number>(1);
-
-  // Track recipe IDs that have had ingredient changes
   const [changedRecipeIds, setChangedRecipeIds] = useState<Set<string>>(new Set());
-
-  // Use ref to store callback that can access fetchRecipeIngredients after it's available
   const handleIngredientsChangeRef = useRef<((recipeId: string) => void) | null>(null);
 
   const {
@@ -61,7 +57,6 @@ export default function RecipesClient() {
       handleIngredientsChangeRef.current(recipeId);
     }
   });
-
   const clearChangedFlag = useCallback((recipeId: string) => {
     setChangedRecipeIds(prev => {
       const next = new Set(prev);
@@ -89,9 +84,13 @@ export default function RecipesClient() {
         .catch(err => console.error('Failed to refresh on open:', err));
     }
   }, [showPreview, selectedRecipe, changedRecipeIds, fetchRecipeIngredients, clearChangedFlag]);
-
+  // Listen for autosave completion events to refresh recipes when yield/portions are updated
+  useRecipeAutosaveListener({
+    onRecipeSaved: () => {
+      fetchRecipes().catch(err => console.error('Failed to refresh recipes after autosave:', err));
+    },
+  });
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
-
   const {
     successMessage,
     setSuccessMessage,
