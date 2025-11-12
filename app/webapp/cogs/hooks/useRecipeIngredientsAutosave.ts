@@ -33,38 +33,38 @@ export function useRecipeIngredientsAutosave({
 
   const calculationsString = serializeCalculations(calculations);
 
-  const performSave = useCallback(async () => {
-    if (!recipeId || !enabled) {
-      console.log('[Autosave] Save skipped:', { recipeId, enabled });
-      return;
-    }
-    console.log('[Autosave] Starting save:', { recipeId, count: calculations.length });
-    setStatus('saving');
-    setError(null);
-    const result = await saveRecipeIngredients(recipeId, calculations);
-    if (result.success) {
-      console.log('[Autosave] Save successful:', { recipeId, count: calculations.length });
-      setStatus('saved');
-      // Set sessionStorage flag to trigger recipe book refresh
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
+  const performSave = useCallback(
+    async (force = false) => {
+      if (!recipeId || (!enabled && !force)) {
+        console.log('[Autosave] Save skipped:', { recipeId, enabled, force });
+        return;
       }
-      if (onSave) onSave();
-      setTimeout(() => setStatus(prev => (prev === 'saved' ? 'idle' : prev)), 2000);
-    } else {
-      console.error('[Autosave] Save failed:', result.error);
-      setStatus('error');
-      setError(result.error || 'Failed to save');
-      if (onError && result.error) onError(result.error);
-    }
-  }, [recipeId, calculations, enabled, onSave, onError]);
+      console.log('[Autosave] Starting save:', { recipeId, count: calculations.length, force });
+      setStatus('saving');
+      setError(null);
+      const result = await saveRecipeIngredients(recipeId, calculations);
+      if (result.success) {
+        console.log('[Autosave] Save successful:', { recipeId, count: calculations.length });
+        setStatus('saved');
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
+        }
+        if (onSave) onSave();
+        setTimeout(() => setStatus(prev => (prev === 'saved' ? 'idle' : prev)), 2000);
+      } else {
+        console.error('[Autosave] Save failed:', result.error);
+        setStatus('error');
+        setError(result.error || 'Failed to save');
+        if (onError && result.error) onError(result.error);
+      }
+    },
+    [recipeId, calculations, enabled, onSave, onError],
+  );
 
-  // Clear error when autosave is disabled or recipe changes
   useEffect(() => {
     if (!enabled || !recipeId) {
       setError(null);
       setStatus('idle');
-      return;
     }
   }, [enabled, recipeId]);
 
@@ -81,12 +81,12 @@ export function useRecipeIngredientsAutosave({
   }, [calculationsString, recipeId, enabled, debounceMs, performSave]);
 
   const saveNow = useCallback(async () => {
-    console.log('[Autosave] saveNow called');
+    console.log('[Autosave] saveNow called (force save)');
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
     }
-    await performSave();
+    await performSave(true);
   }, [performSave]);
 
   useEffect(() => {

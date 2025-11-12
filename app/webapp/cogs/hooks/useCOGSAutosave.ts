@@ -22,7 +22,7 @@ export function useCOGSAutosave({
   onError,
 }: UseCOGSAutosaveProps) {
   // Check if recipe exists in database before enabling autosave
-  const { exists: recipeExists } = useRecipeExistence(selectedRecipe);
+  const { exists: recipeExists, loading: recipeExistsLoading } = useRecipeExistence(selectedRecipe);
 
   const recipeMetadata = selectedRecipeData
     ? {
@@ -42,6 +42,11 @@ export function useCOGSAutosave({
     enabled: Boolean(selectedRecipe && recipeMetadata && recipeExists),
   });
 
+  // Enable autosave optimistically when loading (recipeExists might be false initially)
+  // or when recipe exists. This prevents losing changes while checking recipe existence.
+  const ingredientsAutosaveEnabled =
+    Boolean(selectedRecipe && calculations.length > 0) && (recipeExists || recipeExistsLoading);
+
   const {
     status: ingredientsAutosaveStatus,
     error: ingredientsAutosaveError,
@@ -49,7 +54,7 @@ export function useCOGSAutosave({
   } = useRecipeIngredientsAutosave({
     recipeId: selectedRecipe,
     calculations,
-    enabled: Boolean(selectedRecipe && calculations.length > 0 && recipeExists),
+    enabled: ingredientsAutosaveEnabled,
     onError,
   });
 

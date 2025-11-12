@@ -28,8 +28,12 @@ export function addCalculationHelper(
   setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>,
   hasManualIngredientsRef: React.MutableRefObject<boolean>,
+  lastManualChangeTimeRef?: React.MutableRefObject<number>,
 ): void {
   hasManualIngredientsRef.current = true;
+  if (lastManualChangeTimeRef) {
+    lastManualChangeTimeRef.current = Date.now();
+  }
   setCalculations(prev => [...prev, calculation]);
   setRecipeIngredients(prev => {
     if (prev.some(ri => ri.ingredient_id === calculation.ingredientId)) return prev;

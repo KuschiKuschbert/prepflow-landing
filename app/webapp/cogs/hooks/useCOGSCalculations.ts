@@ -48,6 +48,7 @@ export const useCOGSCalculations = () => {
       setCalculations,
       setRecipeIngredients,
       hasManualIngredientsRef,
+      lastManualChangeTimeRef,
     );
   };
   const clearCalculations = () => {
@@ -59,16 +60,27 @@ export const useCOGSCalculations = () => {
     setCalculations(newCalculations);
     setRecipeIngredients(mapCalculationsToRecipeIngredients(newCalculations));
   };
-  const updateCalculationWrapper = (ingredientId: string, newQuantity: number) =>
+  const updateCalculationWrapper = (ingredientId: string, newQuantity: number) => {
+    hasManualIngredientsRef.current = true;
+    lastManualChangeTimeRef.current = Date.now();
     updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
+  };
   const selectedRecipeRef = useRef<string>('');
   useEffect(() => {
     if (selectedRecipe && selectedRecipe !== selectedRecipeRef.current) {
+      const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
+      if (hasManualIngredientsRef.current && timeSinceLastChange < 10000) {
+        console.log(
+          '[useCOGSCalculations] Skipping fetchRecipeIngredients - manual changes detected',
+        );
+        selectedRecipeRef.current = selectedRecipe;
+        return;
+      }
       selectedRecipeRef.current = selectedRecipe;
       hasManualIngredientsRef.current = false;
       fetchRecipeIngredients(selectedRecipe);
     }
-  }, [selectedRecipe, fetchRecipeIngredients]);
+  }, [selectedRecipe, fetchRecipeIngredients, lastManualChangeTimeRef]);
   useEffect(() => {
     if (isLoadingFromApiRef.current) {
       isLoadingFromApiRef.current = false;

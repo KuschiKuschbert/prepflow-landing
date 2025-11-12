@@ -25,7 +25,6 @@ import { COGSHeader } from '../components/COGSHeader';
 import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
 import { SuccessMessage } from '../components/SuccessMessage';
 export default function CogsClient() {
-  // Main COGS calculations hook
   const {
     ingredients,
     recipes,
@@ -45,20 +44,16 @@ export default function CogsClient() {
     lastManualChangeTimeRef,
   } = useCOGSCalculations();
 
-  // Local state
   const [dishPortions, setDishPortions] = useState<number>(1);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  // Recipe CRUD operations
   const { createOrUpdateRecipe } = useRecipeCRUD({ setError: setSaveError });
 
-  // Get selected recipe data
   const selectedRecipeData = recipes.find(r => r.id === selectedRecipe);
 
-  // Autosave logic
   const {
     autosaveStatus,
     ingredientsAutosaveError,
@@ -71,9 +66,7 @@ export default function CogsClient() {
     onError: err => setSaveError(err),
   });
 
-  // Check if selected recipe exists in local recipes list
   const recipeExistsLocally = Boolean(selectedRecipeData);
-  // Pricing calculations
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
 
@@ -86,7 +79,6 @@ export default function CogsClient() {
     setPricingStrategy,
   } = usePricing(costPerPortion);
 
-  // Ingredient search functionality
   const {
     ingredientSearch,
     showSuggestions,
@@ -102,12 +94,9 @@ export default function CogsClient() {
     setShowSuggestions,
   } = useIngredientSearch(ingredients);
 
-  // Initialize data
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  // COGS effects hook (for recipe book editing)
   useCOGSEffects({
     setSuccessMessage,
     setDishPortions,
@@ -116,11 +105,17 @@ export default function CogsClient() {
     setSelectedRecipe,
   });
 
-  // Load recipe data when selected (but skip if we have manual changes)
   useEffect(() => {
     if (selectedRecipe && selectedRecipeData) {
+      if (hasManualIngredientsRef?.current) {
+        console.log('[CogsClient] Skipping loadExistingRecipeIngredients - manual changes exist');
+        return;
+      }
       const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
-      if (hasManualIngredientsRef?.current || timeSinceLastChange < 3000) return;
+      if (timeSinceLastChange < 10000) {
+        console.log('[CogsClient] Skipping loadExistingRecipeIngredients - recent change detected');
+        return;
+      }
       setDishPortions(selectedRecipeData.yield || 1);
       loadExistingRecipeIngredients(selectedRecipe);
     }
@@ -132,7 +127,6 @@ export default function CogsClient() {
     lastManualChangeTimeRef,
   ]);
 
-  // Dish handlers hook (simplified - only for toggle add ingredient)
   const { handleToggleAddIngredient } = useDishHandlers({
     showAddIngredient,
     dishName: selectedRecipeData?.name || '',
@@ -147,7 +141,6 @@ export default function CogsClient() {
     setSelectedRecipe,
   });
 
-  // Ingredient addition hook
   const { handleAddIngredient } = useIngredientAddition({
     calculations,
     ingredients,
@@ -158,7 +151,6 @@ export default function CogsClient() {
     setSaveError,
   });
 
-  // Ingredient editing hook
   const {
     editingIngredient,
     editQuantity,
@@ -177,7 +169,6 @@ export default function CogsClient() {
     e.preventDefault();
     await handleAddIngredient(newIngredient, e);
   };
-  // Recipe handlers
   const { handleRecipeSelect, handleCreateNewRecipe, handleCreateRecipe, handleFinishRecipe } =
     useRecipeHandlers({
       recipes,
@@ -194,7 +185,6 @@ export default function CogsClient() {
       setSaveError,
     });
 
-  // Gate the arcade overlay while COGS data is loading
   useCOGSLoadingGate(loading);
 
   if (loading) {
@@ -205,14 +195,11 @@ export default function CogsClient() {
     <>
       <COGSHeader />
 
-      {/* Error Display */}
       <COGSErrorDisplay
         error={error}
         saveError={saveError}
         ingredientsAutosaveError={ingredientsAutosaveError}
       />
-
-      {/* Recipe Not Found Warning */}
       {selectedRecipe && !recipeExistsLocally && (
         <RecipeNotFoundWarning
           onClearAndRefresh={() => {
@@ -222,7 +209,6 @@ export default function CogsClient() {
         />
       )}
 
-      {/* Success Message */}
       <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
 
       <CreateRecipeModal
@@ -233,7 +219,6 @@ export default function CogsClient() {
       />
 
       <div className="grid grid-cols-1 gap-4 sm:gap-8 lg:grid-cols-2">
-        {/* Left Column - Recipe & Ingredients */}
         <div>
           <DishForm
             recipes={recipes}
@@ -265,10 +250,8 @@ export default function CogsClient() {
           />
         </div>
 
-        {/* Right Column - COGS Calculation */}
         <div className="rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
           <h2 className="mb-4 text-lg font-semibold sm:text-xl">Cost Analysis</h2>
-
           {selectedRecipe ? (
             <>
               <COGSTable
