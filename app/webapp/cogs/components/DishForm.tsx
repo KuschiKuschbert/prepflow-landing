@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { formatDishName } from '@/lib/text-utils';
-import { DishFormData, Recipe } from '../types';
+import { DishFormData, Recipe, COGSCalculation } from '../types';
 
 interface DishFormProps {
   formData: DishFormData;
   recipes: Recipe[];
   selectedRecipe: string;
+  calculations: COGSCalculation[];
   onDishNameChange: (name: string) => void;
   onDishPortionsChange: (portions: number) => void;
   onRecipeSelect: (recipeId: string) => void;
@@ -17,6 +18,7 @@ export const DishForm: React.FC<DishFormProps> = ({
   formData,
   recipes,
   selectedRecipe,
+  calculations,
   onDishNameChange,
   onDishPortionsChange,
   onRecipeSelect,
@@ -178,6 +180,28 @@ export const DishForm: React.FC<DishFormProps> = ({
         <p className="mt-2 text-xs text-gray-500">
           This determines the cost per portion for your pricing calculations
         </p>
+
+        {/* Ingredients List */}
+        {calculations && calculations.length > 0 && (
+          <div className="mt-4 rounded-xl border border-[#2a2a2a]/50 bg-[#0a0a0a]/50 p-3">
+            <h4 className="mb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">
+              Ingredients ({calculations.length})
+            </h4>
+            <div className="space-y-1.5">
+              {calculations.map((calc, index) => (
+                <div
+                  key={calc.ingredientId || index}
+                  className="flex items-center justify-between rounded-lg bg-[#1f1f1f]/50 px-2 py-1.5 text-sm"
+                >
+                  <span className="text-gray-300">{calc.ingredientName}</span>
+                  <span className="font-medium text-gray-400">
+                    {calc.quantity} {calc.unit}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

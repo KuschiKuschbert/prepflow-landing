@@ -220,6 +220,7 @@ export default function CogsClient() {
             formData={dishFormData}
             recipes={recipes}
             selectedRecipe={selectedRecipe}
+            calculations={calculations}
             onDishNameChange={setDishName}
             onDishPortionsChange={setDishPortions}
             onRecipeSelect={handleRecipeSelect}
