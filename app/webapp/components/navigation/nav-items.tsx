@@ -1,24 +1,24 @@
+import { Icon } from '@/components/ui/Icon';
+import { useTranslation } from '@/lib/useTranslation';
 import {
-  LayoutDashboard,
-  Package,
-  BookOpen,
-  Calculator,
   BarChart3,
-  Sparkles,
-  Thermometer,
-  ClipboardCheck,
-  Truck,
-  Package2,
-  UtensilsCrossed,
-  ListChecks,
+  BookOpen,
   Bot,
-  Wrench,
+  Calculator,
+  ClipboardCheck,
+  FileText,
+  LayoutDashboard,
+  ListChecks,
+  Package,
+  Package2,
   Settings,
   Settings2,
-  FileText,
+  Sparkles,
+  Thermometer,
+  Truck,
+  UtensilsCrossed,
+  Wrench,
 } from 'lucide-react';
-import { useTranslation } from '@/lib/useTranslation';
-import { Icon } from '@/components/ui/Icon';
 
 export interface NavigationItemConfig {
   href: string;
@@ -56,6 +56,13 @@ export function useNavigationItems(): NavigationItemConfig[] {
       href: '/webapp/cogs',
       label: t('nav.cogs', 'COGS') as string,
       icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
+      color: 'text-[#D925C7]',
+      category: 'core',
+    },
+    {
+      href: '/webapp/dish-cogs',
+      label: t('nav.dishCogs', 'Dish COGS') as string,
+      icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
       color: 'text-[#D925C7]',
       category: 'core',
     },
