@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { Wrench } from 'lucide-react';
 import { PageHeader } from '../components/static/PageHeader';
 import { CookingTimeCalculator } from './components/CookingTimeCalculator';
 import { IngredientSubstitutionGuide } from './components/IngredientSubstitutionGuide';
@@ -298,7 +299,7 @@ export default function GadgetsPage() {
             <PageHeader
               title="Kitchen Gadgets"
               subtitle="Useful digital tools for your kitchen"
-              icon="🔧"
+              icon={Wrench}
             />
             <div className="rounded-2xl bg-[#1f1f1f] p-6 md:p-8">
               <div className="animate-pulse text-center text-gray-400">Loading gadgets...</div>

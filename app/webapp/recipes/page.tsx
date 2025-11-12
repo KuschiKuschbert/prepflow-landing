@@ -5,6 +5,8 @@ import { RecipeBookContent } from './components/RecipeBookContent';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
 import { BookOpen } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default function RecipesPage() {
   return (
     <ErrorBoundary>

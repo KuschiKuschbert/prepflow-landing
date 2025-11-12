@@ -113,25 +113,16 @@ export default function IngredientsClient() {
   });
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
-
-  // Fetch all ingredients for client-side filtering (use large pageSize)
-  // Since filtering happens client-side, we need all data
   const {
     data: ingredientsData,
     isLoading,
     error: queryError,
     refetch: refetchIngredients,
-  } = useIngredientsQuery(1, 10000); // Fetch all ingredients
-
-  // Reset to page 1 when items per page or filters change
+  } = useIngredientsQuery(1, 10000);
   useEffect(() => {
     setPage(1);
   }, [itemsPerPage, searchTerm, supplierFilter, storageFilter]);
-
-  // Automatic migration check on first load
   useIngredientMigration(loading, isLoading, ingredientsData);
-
-  // Gate the arcade overlay while initial data loads
   useEffect(() => {
     const active = loading || isLoading;
     if (active) {
@@ -143,13 +134,9 @@ export default function IngredientsClient() {
       stopLoadingGate('ingredients');
     };
   }, [loading, isLoading]);
-
   useEffect(() => {
-    if (ingredientsData?.items) {
-      setIngredients(ingredientsData.items as Ingredient[]);
-    }
+    if (ingredientsData?.items) setIngredients(ingredientsData.items as Ingredient[]);
   }, [ingredientsData]);
-
   const {
     handleAddIngredient,
     handleUpdateIngredient,
@@ -173,43 +160,27 @@ export default function IngredientsClient() {
     selectedIngredients,
     filteredIngredients,
   });
-
   const handleCSVImport = async () => {
     setImporting(true);
     await handleCSVImportAction(parsedIngredients);
     setImporting(false);
   };
-
-  // Calculate pagination based on filtered results
   const filteredTotal = filteredIngredients?.length || 0;
   const totalPages = Math.max(1, Math.ceil(filteredTotal / itemsPerPage));
-
-  // Slice filtered ingredients for current page
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedIngredients = filteredIngredients?.slice(startIndex, endIndex) || [];
-
-  // Reset to page 1 if current page is out of bounds
   useEffect(() => {
-    if (page > totalPages && totalPages > 0) {
-      setPage(1);
-    }
+    if (page > totalPages && totalPages > 0) setPage(1);
   }, [page, totalPages]);
-
-  // Auto-exit selection mode when all items are deselected
   useEffect(() => {
-    if (isSelectionMode && selectedIngredients.size === 0) {
-      exitSelectionMode();
-    }
+    if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
   }, [selectedIngredients.size, isSelectionMode, exitSelectionMode]);
-
   if (loading || isLoading) return <PageSkeleton />;
-
   const translateText = (key: string, fallback: string): string => {
     const result = t(key, fallback);
     return Array.isArray(result) ? result.join('') : result;
   };
-
   return (
     <>
       <PageHeader
@@ -218,16 +189,12 @@ export default function IngredientsClient() {
           'ingredients.subtitle',
           'Manage your kitchen ingredients and inventory',
         )}
-        icon="🥘"
       />
-
       {error && (
         <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
           {error}
         </div>
       )}
-
-      {/* Add Ingredient Wizard */}
       {showAddForm && (
         <IngredientWizard
           suppliers={suppliers}
@@ -241,8 +208,6 @@ export default function IngredientsClient() {
           loading={loading}
         />
       )}
-
-      {/* Integrated Table with Filters */}
       <IngredientTableWithFilters
         ingredients={paginatedIngredients}
         onBulkDelete={handleBulkDelete}
@@ -250,31 +215,19 @@ export default function IngredientsClient() {
           try {
             const response = await fetch('/api/ingredients/bulk-update', {
               method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ ids, updates }),
             });
-
             const data = await response.json();
-
-            if (!response.ok) {
-              throw new Error(data.error || 'Failed to update ingredients');
-            }
-
-            // Refetch ingredients to get latest data from database
+            if (!response.ok) throw new Error(data.error || 'Failed to update ingredients');
             await refetchIngredients();
-
-            // Clear selections after successful update
             setSelectedIngredients(new Set());
-
-            // Exit selection mode after bulk action
             exitSelectionMode();
-
-            // Show success notification
-            showSuccess(data.message || `Successfully updated ${ids.length} ingredient${ids.length !== 1 ? 's' : ''}`);
+            showSuccess(
+              data.message ||
+                `Successfully updated ${ids.length} ingredient${ids.length !== 1 ? 's' : ''}`,
+            );
           } catch (error) {
-            console.error('Bulk update error:', error);
             showError(error instanceof Error ? error.message : 'Failed to update ingredients');
             throw error;
           }
@@ -307,16 +260,12 @@ export default function IngredientsClient() {
         onEnterSelectionMode={enterSelectionMode}
         onExitSelectionMode={exitSelectionMode}
       />
-
-      {/* Pagination */}
       <IngredientPagination
         page={page}
         totalPages={totalPages}
         total={filteredTotal}
         onPageChange={setPage}
       />
-
-      {/* Edit Ingredient Modal */}
       <IngredientEditModal
         isOpen={!!editingIngredient}
         ingredient={editingIngredient}
@@ -324,18 +273,13 @@ export default function IngredientsClient() {
         availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
           if (!editingIngredient?.id) return;
-
           try {
             const { data, error } = await supabase
               .from('ingredients')
-              .update({
-                ...ingredientData,
-                updated_at: new Date().toISOString(),
-              })
+              .update({ ...ingredientData, updated_at: new Date().toISOString() })
               .eq('id', editingIngredient.id)
               .select()
               .maybeSingle();
-
             if (error) throw new Error(extractSupabaseError(error));
             if (!data) {
               setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
@@ -345,7 +289,6 @@ export default function IngredientsClient() {
             setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? data : ing)));
             setEditingIngredient(null);
           } catch (error) {
-            console.error('Error updating ingredient:', error);
             setError(extractSupabaseError(error));
             throw error;
           }
@@ -353,8 +296,6 @@ export default function IngredientsClient() {
         onClose={() => setEditingIngredient(null)}
         loading={loading}
       />
-
-      {/* CSV Import Modal */}
       {showCSVImport && (
         <CSVImportModal
           isOpen={showCSVImport}

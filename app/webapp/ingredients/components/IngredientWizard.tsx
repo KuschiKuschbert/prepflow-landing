@@ -8,6 +8,8 @@ import IngredientWizardStep1 from './IngredientWizardStep1';
 import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
 import { Ingredient, IngredientWizardProps } from './types';
+import { Package, Settings, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import {
   calculateCostPerUnit,
   calculateWastagePercentage,
@@ -47,7 +49,6 @@ export default function IngredientWizard({
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   // Auto-calculate cost per unit when pack price or pack size changes
   const updateCostPerUnit = () => {
     if (formData.pack_price && formData.pack_size && formData.pack_size_unit && formData.unit) {
@@ -121,14 +122,11 @@ export default function IngredientWizard({
       cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / (clampedYield / 100),
     }));
   };
-
-  // Validation function that sets errors (only call on button clicks)
   const validateStep = (step: number): boolean => {
     const newErrors = getValidationErrors(step, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const nextStep = () => {
     if (validateStep(wizardStep)) {
       setWizardStep(prev => Math.min(prev + 1, 3));
@@ -138,7 +136,6 @@ export default function IngredientWizard({
   const prevStep = () => {
     setWizardStep(prev => Math.max(prev - 1, 1));
   };
-
   const resetWizard = () => {
     setWizardStep(1);
     setFormData({
@@ -161,7 +158,6 @@ export default function IngredientWizard({
     });
     setErrors({});
   };
-
   const handleSave = async () => {
     if (!validateStep(3)) return;
 
@@ -177,30 +173,15 @@ export default function IngredientWizard({
           : undefined,
       };
 
-      console.log('Wizard saving ingredient:', capitalizedIngredient);
       await onSave(capitalizedIngredient);
       resetWizard();
     } catch (error: any) {
-      console.error('Error saving ingredient in wizard:', {
-        error,
-        message: error?.message,
-        code: error?.code,
-        details: error?.details,
-        hint: error?.hint,
-        formData,
-      });
-
-      // Set error state to show user-friendly message
       const errorMessage =
         error?.message || error?.details || 'Failed to save ingredient. Please try again.';
       setErrors({ submit: errorMessage });
-
-      // Scroll to top to show error
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
-
-  // Use useMemo to calculate canProceed without side effects
   const canProceed = useMemo(() => {
     const step = wizardStep === 3 ? 3 : wizardStep;
     return checkValidationHelper(step, formData);
@@ -212,7 +193,6 @@ export default function IngredientWizard({
     formData.pack_price,
     formData.unit,
   ]);
-
   const stepProps = {
     formData,
     suppliers,
@@ -224,7 +204,6 @@ export default function IngredientWizard({
     onAddSupplier,
     formatCost,
   };
-
   return (
     <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
       <div className="mb-6 flex items-center justify-between">
@@ -263,29 +242,38 @@ export default function IngredientWizard({
         </div>
         <div className="mt-4 flex justify-center">
           <div className="text-sm text-gray-400">
-            {wizardStep === 1 && '📦 Basic Information'}
-            {wizardStep === 2 && '⚙️ Advanced Settings'}
-            {wizardStep === 3 && '✅ Review & Save'}
+            {wizardStep === 1 && (
+              <span className="flex items-center gap-1">
+                <Icon icon={Package} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+                Basic Information
+              </span>
+            )}
+            {wizardStep === 2 && (
+              <span className="flex items-center gap-1">
+                <Icon icon={Settings} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+                Advanced Settings
+              </span>
+            )}
+            {wizardStep === 3 && (
+              <span className="flex items-center gap-1">
+                <Icon icon={CheckCircle} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+                Review & Save
+              </span>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Error Display */}
       {errors.submit && (
         <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
           <div className="flex items-center space-x-2">
-            <span className="text-lg">⚠️</span>
+            <Icon icon={AlertTriangle} size="md" className="text-red-400" aria-hidden={true} />
             <span>{errors.submit}</span>
           </div>
         </div>
       )}
-
-      {/* Step Content */}
       {wizardStep === 1 && <IngredientWizardStep1 {...stepProps} />}
       {wizardStep === 2 && <IngredientWizardStep2 {...stepProps} />}
       {wizardStep === 3 && <IngredientWizardStep3 {...stepProps} />}
-
-      {/* Navigation */}
       <IngredientWizardNavigation
         currentStep={wizardStep}
         totalSteps={3}

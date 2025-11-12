@@ -3,6 +3,7 @@
 import { TemperatureEquipment } from '../types';
 import { AlertTriangle, Settings } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { AlertCircle } from 'lucide-react';
 
 interface EquipmentStatusCardProps {
   equipment: TemperatureEquipment;

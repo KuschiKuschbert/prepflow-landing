@@ -12,7 +12,7 @@ interface COGSTableProps {
   onEditIngredient: (ingredientId: string, currentQuantity: number) => void;
   onSaveEdit: () => void;
   onCancelEdit: () => void;
-  onRemoveIngredient: (ingredientId: string) => void;
+  onRemoveIngredient: (ingredientId: string) => void | Promise<void>;
   onEditQuantityChange: (quantity: number) => void;
   totalCOGS: number;
   costPerPortion: number;
@@ -190,14 +190,24 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                           className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
                           title="Edit quantity"
                         >
-                          <Icon icon={Edit} size="sm" className="text-gray-400" aria-hidden={true} />
+                          <Icon
+                            icon={Edit}
+                            size="sm"
+                            className="text-gray-400"
+                            aria-hidden={true}
+                          />
                         </button>
                         <button
                           onClick={() => onRemoveIngredient(calc.ingredientId)}
                           className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
                           title="Remove ingredient"
                         >
-                          <Icon icon={Trash2} size="sm" className="text-gray-400" aria-hidden={true} />
+                          <Icon
+                            icon={Trash2}
+                            size="sm"
+                            className="text-gray-400"
+                            aria-hidden={true}
+                          />
                         </button>
                       </>
                     )}

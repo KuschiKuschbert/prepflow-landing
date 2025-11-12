@@ -4,6 +4,8 @@ import { AdaptiveContainer } from '../components/AdaptiveContainer';
 import MenuBuilderClient from './components/MenuBuilderClient';
 import { FileText } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default function MenuBuilderPage() {
   return (
     <ErrorBoundary>

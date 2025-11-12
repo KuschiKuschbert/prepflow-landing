@@ -164,6 +164,7 @@ export default function CogsClient() {
   } = useIngredientEditing({
     updateCalculation,
     removeCalculation,
+    saveNow: saveNowAutosave,
   });
 
   const handleAddIngredientWrapper = async (e: React.FormEvent) => {
@@ -196,7 +197,6 @@ export default function CogsClient() {
 
   return (
     <>
-      {/* Header */}
       <COGSHeader />
 
       {/* Error Display */}

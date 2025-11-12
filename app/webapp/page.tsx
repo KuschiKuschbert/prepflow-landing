@@ -5,6 +5,8 @@ import { PageHeader } from './components/static/PageHeader';
 import { AdaptiveContainer } from './components/AdaptiveContainer';
 import { Home } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default function WebAppDashboard() {
   return (
     <ErrorBoundary>

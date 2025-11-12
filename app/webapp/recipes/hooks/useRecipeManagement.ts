@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Recipe } from '../types';
 import { useRecipeIngredients } from './useRecipeIngredients';
+import { useRecipeIngredientsSubscription } from './useRecipeIngredientsSubscription';
 import { useRecipePricing } from './useRecipePricing';
 import { useRecipePriceSubscription } from './useRecipePriceSubscription';
 import { convertToCOGSCalculations } from './utils/recipeCalculationHelpers';
@@ -73,6 +74,12 @@ export function useRecipeManagement() {
   );
 
   useRecipePriceSubscription(
+    recipes,
+    refreshRecipePrices,
+    fetchRecipeIngredients,
+    fetchBatchRecipeIngredients,
+  );
+  useRecipeIngredientsSubscription(
     recipes,
     refreshRecipePrices,
     fetchRecipeIngredients,
