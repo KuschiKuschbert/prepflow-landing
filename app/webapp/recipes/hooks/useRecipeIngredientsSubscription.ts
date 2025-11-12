@@ -20,7 +20,9 @@ export function useRecipeIngredientsSubscription(
   ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
 ) {
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     if (recipes.length === 0) return;
+    if (!supabase) return;
 
     const subscription = supabase
       .channel('recipe-ingredients-changes')
@@ -33,7 +35,6 @@ export function useRecipeIngredientsSubscription(
         },
         payload => {
           console.log('Recipe ingredients changed:', payload);
-          // Refresh recipe prices when ingredients change (this will update the recipe book display)
           refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients).catch(
             err => {
               console.error('Failed to refresh recipe prices after ingredient change:', err);

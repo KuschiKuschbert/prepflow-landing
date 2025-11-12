@@ -20,7 +20,9 @@ export function useRecipePriceSubscription(
   ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
 ) {
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     if (recipes.length === 0) return;
+    if (!supabase) return;
 
     const subscription = supabase
       .channel('ingredient-price-changes')

@@ -1,3 +1,5 @@
+'use client';
+
 export function RecipeBookDescription() {
   return (
     <div className="mb-6 rounded-xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-4 sm:p-6">
