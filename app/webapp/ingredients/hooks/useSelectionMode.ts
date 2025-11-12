@@ -25,6 +25,11 @@ export function useSelectionMode() {
     touchStartTimeRef.current = null;
   }, []);
 
+  const enterSelectionMode = useCallback(() => {
+    setIsSelectionMode(true);
+    cancelLongPress();
+  }, [cancelLongPress]);
+
   const exitSelectionMode = useCallback(() => {
     setIsSelectionMode(false);
     cancelLongPress();
@@ -71,6 +76,7 @@ export function useSelectionMode() {
     isSelectionMode,
     startLongPress,
     cancelLongPress,
+    enterSelectionMode,
     exitSelectionMode,
   };
 }

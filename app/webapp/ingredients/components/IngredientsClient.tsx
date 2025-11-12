@@ -71,6 +71,7 @@ export default function IngredientsClient() {
     isSelectionMode,
     startLongPress,
     cancelLongPress,
+    enterSelectionMode,
     exitSelectionMode,
   } = useSelectionMode();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -296,7 +297,7 @@ export default function IngredientsClient() {
         isSelectionMode={isSelectionMode}
         onStartLongPress={startLongPress}
         onCancelLongPress={cancelLongPress}
-        onEnterSelectionMode={exitSelectionMode}
+        onEnterSelectionMode={enterSelectionMode}
         onExitSelectionMode={exitSelectionMode}
       />
 

@@ -81,6 +81,7 @@ export function IngredientTableRow({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartTimeRef = useRef<number | null>(null);
+  const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
   const hasMovedRef = useRef(false);
 
   const handleDelete = () => {
@@ -105,10 +106,14 @@ export function IngredientTableRow({
 
     touchStartTimeRef.current = Date.now();
     hasMovedRef.current = false;
+    const touch = e.touches[0];
+    if (touch) {
+      touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+    }
     onStartLongPress?.();
 
     longPressTimerRef.current = setTimeout(() => {
-      if (!hasMovedRef.current) {
+      if (!hasMovedRef.current && touchStartTimeRef.current) {
         // Enter selection mode
         onEnterSelectionMode?.();
         // Select this item when entering selection mode
@@ -120,12 +125,19 @@ export function IngredientTableRow({
     }, 500);
   };
 
-  const handleTouchMove = () => {
-    hasMovedRef.current = true;
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-      onCancelLongPress?.();
+  const handleTouchMove = (e: React.TouchEvent) => {
+    // Only cancel if moved significantly (more than 10px)
+    const touch = e.touches[0];
+    if (touchStartPosRef.current && touch) {
+      const moveDistance = Math.abs(touch.clientX - touchStartPosRef.current.x) + Math.abs(touch.clientY - touchStartPosRef.current.y);
+      if (moveDistance > 10) {
+        hasMovedRef.current = true;
+        if (longPressTimerRef.current) {
+          clearTimeout(longPressTimerRef.current);
+          longPressTimerRef.current = null;
+          onCancelLongPress?.();
+        }
+      }
     }
   };
 
@@ -136,6 +148,7 @@ export function IngredientTableRow({
       onCancelLongPress?.();
     }
     touchStartTimeRef.current = null;
+    touchStartPosRef.current = null;
     hasMovedRef.current = false;
   };
 
