@@ -54,8 +54,12 @@ export const useCOGSCalculations = () => {
     if (selectedRecipe) fetchRecipeIngredients(selectedRecipe);
   }, [selectedRecipe, fetchRecipeIngredients]);
   useEffect(() => {
-    if (recipeIngredients.length > 0) calculateCOGS(recipeIngredients);
-  }, [recipeIngredients, calculateCOGS]);
+    // Only recalculate if we have recipeIngredients but no calculations yet
+    // This prevents overwriting calculations that were already set by loadExistingRecipeIngredients
+    if (recipeIngredients.length > 0 && calculations.length === 0) {
+      calculateCOGS(recipeIngredients);
+    }
+  }, [recipeIngredients, calculateCOGS, calculations.length]);
 
   return {
     ingredients,
