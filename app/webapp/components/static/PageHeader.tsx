@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';

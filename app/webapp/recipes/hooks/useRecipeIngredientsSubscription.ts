@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Recipe } from '../types';
-import { RecipeIngredientWithDetails } from '../types';
+import { useEffect } from 'react';
+import { Recipe, RecipeIngredientWithDetails } from '../types';
 
 export function useRecipeIngredientsSubscription(
   recipes: Recipe[],
