@@ -1,9 +1,11 @@
+import { Suspense } from 'react';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import DashboardStatsClient from './components/DashboardStatsClient';
 import QuickActions from './components/QuickActions';
 import { PageHeader } from './components/static/PageHeader';
 import { AdaptiveContainer } from './components/AdaptiveContainer';
 import { LayoutDashboard } from 'lucide-react';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +25,9 @@ export default function WebAppDashboard() {
           <QuickActions />
 
           {/* Dynamic Content - Loads After Initial Render */}
-          <DashboardStatsClient />
+          <Suspense fallback={<PageSkeleton />}>
+            <DashboardStatsClient />
+          </Suspense>
         </div>
       </AdaptiveContainer>
     </ErrorBoundary>

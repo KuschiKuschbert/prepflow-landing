@@ -2,7 +2,6 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import KitchenOnFire from '@/components/ErrorGame/KitchenOnFire';
-import { usePathname } from 'next/navigation';
 
 interface Props {
   children: ReactNode;
