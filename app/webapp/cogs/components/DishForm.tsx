@@ -90,7 +90,7 @@ export const DishForm: React.FC<DishFormProps> = ({
       </div>
 
       {/* Autosave Status Indicator */}
-      {hasRecipe && (
+      {hasRecipe && autosaveStatus !== 'idle' && (
         <div className="mb-4 flex items-center gap-2 text-sm">
           {autosaveStatus === 'saving' && (
             <>

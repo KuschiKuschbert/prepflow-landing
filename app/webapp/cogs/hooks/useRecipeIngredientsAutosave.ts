@@ -51,6 +51,15 @@ export function useRecipeIngredientsAutosave({
     }
   }, [recipeId, calculations, enabled, onSave, onError]);
 
+  // Clear error when autosave is disabled or recipe changes
+  useEffect(() => {
+    if (!enabled || !recipeId || calculations.length === 0) {
+      setError(null);
+      setStatus('idle');
+      return;
+    }
+  }, [enabled, recipeId, calculations.length]);
+
   useEffect(() => {
     if (!enabled || !recipeId || calculations.length === 0) return;
     if (calculationsString === previousCalculationsRef.current) return;
