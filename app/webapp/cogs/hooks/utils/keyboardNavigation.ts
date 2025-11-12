@@ -10,10 +10,24 @@ export function handleKeyboardNavigation(
   setShowSuggestions: (show: boolean) => void,
   handleIngredientSelect: (ingredient: Ingredient) => void,
 ): void {
-  if (!showSuggestions || filteredIngredients.length === 0) {
-    if (e.key === 'Enter' && selectedIngredient) {
+  // Handle Enter key even when suggestions aren't showing but ingredients are available
+  if (e.key === 'Enter') {
+    if (filteredIngredients.length > 0) {
+      e.preventDefault();
+      const indexToSelect = highlightedIndex >= 0 ? highlightedIndex : 0;
+      if (indexToSelect < filteredIngredients.length) {
+        handleIngredientSelect(filteredIngredients[indexToSelect]);
+      }
       return;
     }
+    // If Enter is pressed and an ingredient is already selected, allow form submission
+    if (selectedIngredient) {
+      return;
+    }
+    return;
+  }
+
+  if (!showSuggestions || filteredIngredients.length === 0) {
     return;
   }
 
@@ -30,14 +44,6 @@ export function handleKeyboardNavigation(
     case 'ArrowUp':
       e.preventDefault();
       setHighlightedIndex(prev => (prev > 0 ? prev - 1 : -1));
-      break;
-    case 'Enter':
-      e.preventDefault();
-      if (highlightedIndex >= 0 && highlightedIndex < filteredIngredients.length) {
-        handleIngredientSelect(filteredIngredients[highlightedIndex]);
-      } else if (highlightedIndex === -1 && filteredIngredients.length > 0) {
-        handleIngredientSelect(filteredIngredients[0]);
-      }
       break;
     case 'Escape':
       e.preventDefault();
