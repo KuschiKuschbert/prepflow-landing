@@ -1,3 +1,5 @@
+'use client';
+
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookDescription } from './components/RecipeBookDescription';
