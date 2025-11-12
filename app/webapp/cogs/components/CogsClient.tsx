@@ -58,6 +58,7 @@ export default function CogsClient() {
     targetGrossProfit,
     pricingStrategy,
     pricingCalculation,
+    allStrategyPrices,
     setTargetGrossProfit,
     setPricingStrategy,
   } = usePricing(costPerPortion);
@@ -271,6 +272,7 @@ export default function CogsClient() {
             targetGrossProfit={targetGrossProfit}
             pricingStrategy={pricingStrategy}
             pricingCalculation={pricingCalculation}
+            allStrategyPrices={allStrategyPrices}
             onTargetGrossProfitChange={setTargetGrossProfit}
             onPricingStrategyChange={setPricingStrategy}
           />
