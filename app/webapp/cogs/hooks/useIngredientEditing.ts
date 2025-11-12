@@ -35,13 +35,18 @@ export function useIngredientEditing({
   }, []);
 
   const handleRemoveIngredient = useCallback(
-    (ingredientId: string) => {
+    async (ingredientId: string) => {
+      // Update state first
       removeCalculation(ingredientId);
+      // Small delay to ensure state update is committed before save
+      await new Promise(resolve => setTimeout(resolve, 0));
       // Trigger immediate save to persist removal before any potential reload
       if (saveNow) {
-        saveNow().catch(err => {
+        try {
+          await saveNow();
+        } catch (err) {
           console.error('Failed to save after removal:', err);
-        });
+        }
       }
     },
     [removeCalculation, saveNow],
