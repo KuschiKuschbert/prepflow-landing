@@ -76,7 +76,7 @@ export default function TechnicalSpecs() {
 
         {/* Specs Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {specCategories.map((category) => {
+          {specCategories.map(category => {
             const isExpanded = expandedCategory === category.title;
 
             return (
@@ -87,16 +87,26 @@ export default function TechnicalSpecs() {
                 {/* Category Header */}
                 <button
                   onClick={() => handleToggle(category.title)}
-                  className="flex w-full items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1f1f1f]"
+                  className="flex w-full items-center justify-between text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
                   aria-expanded={isExpanded}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon icon={category.icon} size="lg" className="text-[#29E7CD]" aria-hidden="true" />
+                    <Icon
+                      icon={category.icon}
+                      size="lg"
+                      className="text-[#29E7CD]"
+                      aria-hidden={true}
+                    />
                     <h3 className="text-lg font-semibold text-white">{category.title}</h3>
                   </div>
 
                   {/* Expand/Collapse Icon */}
-                  <Icon icon={ChevronDown} size="sm" className={`text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} aria-hidden="true" />
+                  <Icon
+                    icon={ChevronDown}
+                    size="sm"
+                    className={`text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                    aria-hidden={true}
+                  />
                 </button>
 
                 {/* Items List */}

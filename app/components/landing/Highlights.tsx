@@ -80,7 +80,12 @@ export default function Highlights() {
               >
                 {/* Icon */}
                 <div className="mb-4">
-                  <Icon icon={highlight.icon} size="xl" className="text-[#29E7CD]" aria-hidden="true" />
+                  <Icon
+                    icon={highlight.icon}
+                    size="xl"
+                    className="text-[#29E7CD]"
+                    aria-hidden={true}
+                  />
                 </div>
 
                 {/* Title */}

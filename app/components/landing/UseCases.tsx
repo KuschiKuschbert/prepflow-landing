@@ -55,7 +55,12 @@ export default function UseCases() {
             className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6 transition-all hover:border-[#2a2a2a]/60 hover:bg-[#1f1f1f]/70"
           >
             <div className="mb-4">
-              <Icon icon={useCase.icon} size="xl" style={{ color: useCase.color }} aria-hidden="true" />
+              <Icon
+                icon={useCase.icon}
+                size="xl"
+                style={{ color: useCase.color }}
+                aria-hidden={true}
+              />
             </div>
             <h3 className="mb-2 text-xl font-semibold" style={{ color: useCase.color }}>
               {useCase.title}
