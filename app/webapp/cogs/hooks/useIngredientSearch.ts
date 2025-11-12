@@ -38,20 +38,16 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
     return filtered;
   }, [ingredients, ingredientSearch]);
 
-  const handleIngredientSelect = useCallback(
-    (ingredient: Ingredient) => {
-      console.log('Ingredient selected:', ingredient.ingredient_name);
-      setSelectedIngredient(ingredient);
-      setNewIngredient({
-        ...newIngredient,
-        ingredient_id: ingredient.id,
-        unit: ingredient.unit || 'kg',
-      });
-      setIngredientSearch(ingredient.ingredient_name);
-      setShowSuggestions(false);
-    },
-    [newIngredient],
-  );
+  const handleIngredientSelect = useCallback((ingredient: Ingredient) => {
+    setSelectedIngredient(ingredient);
+    setNewIngredient(prev => ({
+      ...prev,
+      ingredient_id: ingredient.id,
+      unit: ingredient.unit || 'kg',
+    }));
+    setIngredientSearch(ingredient.ingredient_name);
+    setShowSuggestions(false);
+  }, []);
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -61,13 +57,13 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
       setShowSuggestions(ingredients.length > 0);
       if (value.length === 0) {
         setSelectedIngredient(null);
-        setNewIngredient({
-          ...newIngredient,
+        setNewIngredient(prev => ({
+          ...prev,
           ingredient_id: '',
-        });
+        }));
       }
     },
-    [newIngredient, ingredients.length],
+    [ingredients.length],
   );
 
   const resetForm = useCallback(() => {
