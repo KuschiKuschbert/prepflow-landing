@@ -22,8 +22,6 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
   const capitalizeRecipeName = formatRecipeName;
   const { recipePrices, calculateRecommendedPrice, calculateAllRecipePrices, refreshRecipePrices } =
     useRecipePricing();
-
-  // Use ingredients hook
   const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
 
   const fetchRecipes = useCallback(async () => {
@@ -99,7 +97,8 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
     handleEditRecipe,
     calculateRecommendedPrice,
     calculateAllRecipePrices,
-    refreshRecipePrices: () => refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients),
+    refreshRecipePrices: () =>
+      refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients),
     setError,
   };
 }
