@@ -8,7 +8,6 @@ import { COGSTable } from '../components/COGSTable';
 import { CreateRecipeModal } from '../components/CreateRecipeModal';
 import { DishForm } from '../components/DishForm';
 import { PricingTool } from '../components/PricingTool';
-
 // Hooks
 import { useCOGSAutosave } from '../hooks/useCOGSAutosave';
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
@@ -18,15 +17,16 @@ import { useIngredientAddition } from '../hooks/useIngredientAddition';
 import { useIngredientEditing } from '../hooks/useIngredientEditing';
 import { useIngredientSearch } from '../hooks/useIngredientSearch';
 import { usePricing } from '../hooks/usePricing';
+import { useCOGSLoadingGate } from '../hooks/useCOGSLoadingGate';
 import { useRecipeCRUD } from '../hooks/useRecipeCRUD';
 import { useRecipeHandlers } from '../hooks/useRecipeHandlers';
 
 // Components
+import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
+import { COGSEmptyState } from '../components/COGSEmptyState';
 import { COGSHeader } from '../components/COGSHeader';
+import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
 import { SuccessMessage } from '../components/SuccessMessage';
-
-// Types
-import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 
 export default function CogsClient() {
   // Main COGS calculations hook
@@ -73,6 +73,8 @@ export default function CogsClient() {
     onError: err => setSaveError(err),
   });
 
+  // Check if selected recipe exists in local recipes list
+  const recipeExistsLocally = Boolean(selectedRecipeData);
   // Pricing calculations
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
@@ -186,16 +188,7 @@ export default function CogsClient() {
     });
 
   // Gate the arcade overlay while COGS data is loading
-  useEffect(() => {
-    if (loading) {
-      startLoadingGate('cogs');
-    } else {
-      stopLoadingGate('cogs');
-    }
-    return () => {
-      stopLoadingGate('cogs');
-    };
-  }, [loading]);
+  useCOGSLoadingGate(loading);
 
   if (loading) {
     return <PageSkeleton />;
@@ -207,10 +200,20 @@ export default function CogsClient() {
       <COGSHeader />
 
       {/* Error Display */}
-      {(error || saveError || ingredientsAutosaveError) && (
-        <div className="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-          {error || saveError || ingredientsAutosaveError}
-        </div>
+      <COGSErrorDisplay
+        error={error}
+        saveError={saveError}
+        ingredientsAutosaveError={ingredientsAutosaveError}
+      />
+
+      {/* Recipe Not Found Warning */}
+      {selectedRecipe && !recipeExistsLocally && (
+        <RecipeNotFoundWarning
+          onClearAndRefresh={() => {
+            setSelectedRecipe('');
+            fetchData();
+          }}
+        />
       )}
 
       {/* Success Message */}
@@ -287,13 +290,7 @@ export default function CogsClient() {
               />
             </>
           ) : (
-            <div className="py-12 text-center">
-              <div className="mb-4 text-6xl text-gray-400">📊</div>
-              <h3 className="mb-2 text-lg font-medium text-white">Select a Recipe</h3>
-              <p className="text-gray-500">
-                Choose or create a recipe to see cost analysis and pricing calculations.
-              </p>
-            </div>
+            <COGSEmptyState />
           )}
         </div>
       </div>

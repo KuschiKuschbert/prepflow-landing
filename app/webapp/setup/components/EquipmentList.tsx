@@ -3,6 +3,31 @@
 import React from 'react';
 import { TemperatureEquipment } from '../types';
 import { getEquipmentIcon, getEquipmentLabel } from './equipment-utils';
+import { Icon } from '@/components/ui/Icon';
+import { Thermometer, X, Trash2, Snowflake, Home, Flame, ChefHat, LucideIcon } from 'lucide-react';
+
+// Map equipment types to Lucide icons
+function getEquipmentLucideIcon(type: string): LucideIcon {
+  const iconMap: Record<string, LucideIcon> = {
+    fridge: Snowflake,
+    freezer: Snowflake,
+    walk_in_cooler: Home,
+    walk_in_freezer: Home,
+    reach_in_cooler: Snowflake,
+    ice_machine: Snowflake,
+    bain_marie: Flame,
+    hot_holding_cabinet: Flame,
+    steam_table: Flame,
+    warming_drawer: Flame,
+    soup_kettle: ChefHat,
+    rice_cooker: ChefHat,
+    combi_oven: ChefHat,
+    sous_vide: ChefHat,
+    proofing_cabinet: ChefHat,
+    chocolate_tempering: ChefHat,
+  };
+  return iconMap[type] || Thermometer;
+}
 
 interface EquipmentListProps {
   equipment: TemperatureEquipment[];
@@ -22,7 +47,9 @@ export function EquipmentList({
   if (equipment.length === 0) {
     return (
       <div className="py-12 text-center">
-        <div className="mb-4 text-6xl">🌡️</div>
+        <div className="mb-4 flex justify-center">
+          <Icon icon={Thermometer} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+        </div>
         <h3 className="mb-2 text-xl font-semibold text-white">No Equipment Added Yet</h3>
         <p className="mb-6 text-gray-400">
           Add your first piece of temperature monitoring equipment to get started
@@ -49,7 +76,13 @@ export function EquipmentList({
               onClick={onDeleteAll}
               className="rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-500/20"
             >
-              🗑️ Delete All
+              <Icon
+                icon={Trash2}
+                size="sm"
+                className="mr-1 inline text-current"
+                aria-hidden={true}
+              />{' '}
+              Delete All
             </button>
           )}
         </div>
@@ -59,7 +92,14 @@ export function EquipmentList({
           <div key={eq.id} className="rounded-2xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
             <div className="mb-3 flex items-start justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-2xl">{getEquipmentIcon(eq.equipment_type)}</span>
+                <div className="flex items-center justify-center">
+                  <Icon
+                    icon={getEquipmentLucideIcon(eq.equipment_type)}
+                    size="lg"
+                    className="text-[#29E7CD]"
+                    aria-hidden={true}
+                  />
+                </div>
                 <div>
                   <h4 className="font-semibold text-white">{eq.name}</h4>
                   <p className="text-sm text-gray-400">{getEquipmentLabel(eq.equipment_type)}</p>
@@ -68,8 +108,9 @@ export function EquipmentList({
               <button
                 onClick={() => onDelete(eq.id!)}
                 className="text-sm text-red-400 hover:text-red-300"
+                aria-label={`Delete ${eq.name}`}
               >
-                ✕
+                <Icon icon={X} size="sm" className="text-red-400" aria-hidden={true} />
               </button>
             </div>
             <div className="space-y-2">

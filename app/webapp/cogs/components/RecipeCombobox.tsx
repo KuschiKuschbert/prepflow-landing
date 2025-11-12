@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { ChevronDown, Plus, Search } from 'lucide-react';
+import { ChevronDown, Plus, Search, Check } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Recipe } from '../types';
 
@@ -187,19 +187,12 @@ export function RecipeCombobox({
                     </div>
                     {recipe.id === selectedRecipe && (
                       <div className="ml-2 text-[#29E7CD]">
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                        <Icon
+                          icon={Check}
+                          size="md"
+                          className="text-[#29E7CD]"
+                          aria-hidden={true}
+                        />
                       </div>
                     )}
                   </button>

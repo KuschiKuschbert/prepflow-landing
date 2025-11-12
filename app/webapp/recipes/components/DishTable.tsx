@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Dish, DishCostData } from '../types';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 interface DishTableProps {
@@ -45,19 +45,7 @@ const DishTable = React.memo(function DishTable({
                 aria-label={selectedDishes.size === dishes.length ? 'Deselect all' : 'Select all'}
               >
                 {selectedDishes.size === dishes.length && dishes.length > 0 ? (
-                  <svg
-                    className="h-4 w-4 text-[#29E7CD]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
                 ) : (
                   <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
                 )}
@@ -98,19 +86,7 @@ const DishTable = React.memo(function DishTable({
                     aria-label={`${selectedDishes.has(dish.id) ? 'Deselect' : 'Select'} dish ${capitalizeDishName(dish.dish_name)}`}
                   >
                     {selectedDishes.has(dish.id) ? (
-                      <svg
-                        className="h-4 w-4 text-[#29E7CD]"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+                      <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
                     ) : (
                       <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
                     )}

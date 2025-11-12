@@ -1,6 +1,7 @@
 'use client';
 
-import { Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+import { LucideIcon, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -16,7 +17,7 @@ function prefersReducedMotion(): boolean {
 interface Feature {
   title: string;
   description: string;
-  icon: string;
+  icon: LucideIcon; // Use Lucide icon component instead of string
   screenshot: string;
   screenshotAlt: string;
   details: string[];
@@ -695,7 +696,7 @@ export default function AppleStyleFeatures({
                       transition: `transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`,
                     }}
                   >
-                    <Plus className="h-4 w-4 text-white md:h-5 md:w-5" aria-hidden={true} />
+                    <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
                   </div>
                 </button>
               );
