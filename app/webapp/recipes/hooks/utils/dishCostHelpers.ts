@@ -61,16 +61,26 @@ export function calculateRecommendedPrice(totalCost: number): {
   grossProfit: number;
   grossProfitMargin: number;
 } {
-  const targetFoodCostPercent = 30;
-  const recommendedPrice = totalCost / (targetFoodCostPercent / 100);
-  const charmPrice = Math.floor(recommendedPrice) + 0.95;
+  const targetGrossProfit = 70; // 70% gross profit = 30% food cost
+  const gstRate = 0.1;
 
-  const grossProfit = charmPrice - totalCost;
-  const grossProfitMargin = charmPrice > 0 ? (grossProfit / charmPrice) * 100 : 0;
-  const foodCostPercent = charmPrice > 0 ? (totalCost / charmPrice) * 100 : 0;
+  // Calculate GST-exclusive price first (matching COGS method)
+  const sellPriceExclGST = totalCost / (1 - targetGrossProfit / 100);
+  const gstAmount = sellPriceExclGST * gstRate;
+  const sellPriceInclGST = sellPriceExclGST + gstAmount;
+
+  // Apply charm pricing: Math.ceil() - 0.01 (matching COGS method)
+  const finalPriceInclGST = Math.ceil(sellPriceInclGST) - 0.01;
+
+  // Recalculate GST-exclusive from final price (matching COGS method)
+  const finalPriceExclGST = finalPriceInclGST / (1 + gstRate);
+
+  const grossProfit = finalPriceExclGST - totalCost;
+  const grossProfitMargin = finalPriceExclGST > 0 ? (grossProfit / finalPriceExclGST) * 100 : 0;
+  const foodCostPercent = finalPriceInclGST > 0 ? (totalCost / finalPriceInclGST) * 100 : 0;
 
   return {
-    recommendedPrice: charmPrice,
+    recommendedPrice: finalPriceInclGST,
     foodCostPercent,
     grossProfit,
     grossProfitMargin,

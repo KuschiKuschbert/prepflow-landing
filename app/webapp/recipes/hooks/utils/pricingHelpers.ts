@@ -31,28 +31,36 @@ export function calculateTotalCostPerServing(ingredients: RecipeIngredientWithDe
 }
 
 /**
- * Calculate recommended selling price with 30% food cost target and charm pricing
+ * Calculate recommended selling price matching COGS module calculation
+ * Uses 70% gross profit target (equals 30% food cost) with charm pricing
  */
 export function calculateRecommendedPrice(totalCostPerServing: number): RecipePriceData {
-  const targetFoodCostPercent = 30;
-  const recommendedPrice = totalCostPerServing / (targetFoodCostPercent / 100);
-  const charmPrice = Math.floor(recommendedPrice) + 0.95;
-
-  // Calculate GST-exclusive price (10% GST in Australia)
+  const targetGrossProfit = 70; // 70% gross profit = 30% food cost
   const gstRate = 0.1;
-  const priceExclGST = charmPrice / (1 + gstRate);
+
+  // Calculate GST-exclusive price first (matching COGS method)
+  const sellPriceExclGST = totalCostPerServing / (1 - targetGrossProfit / 100);
+  const gstAmount = sellPriceExclGST * gstRate;
+  const sellPriceInclGST = sellPriceExclGST + gstAmount;
+
+  // Apply charm pricing: Math.ceil() - 0.01 (matching COGS method)
+  const finalPriceInclGST = Math.ceil(sellPriceInclGST) - 0.01;
+
+  // Recalculate GST-exclusive from final price (matching COGS method)
+  const finalPriceExclGST = finalPriceInclGST / (1 + gstRate);
+  const finalGstAmount = finalPriceInclGST - finalPriceExclGST;
 
   // Calculate contributing margin (Revenue excl GST - Food Cost)
-  const contributingMargin = priceExclGST - totalCostPerServing;
-  const contributingMarginPercent = (contributingMargin / priceExclGST) * 100;
+  const contributingMargin = finalPriceExclGST - totalCostPerServing;
+  const contributingMarginPercent = (contributingMargin / finalPriceExclGST) * 100;
 
   return {
     cost_per_serving: totalCostPerServing,
-    recommendedPrice: charmPrice,
-    foodCostPercent: (totalCostPerServing / charmPrice) * 100,
-    selling_price: charmPrice,
-    gross_profit: charmPrice - totalCostPerServing,
-    gross_profit_margin: ((charmPrice - totalCostPerServing) / charmPrice) * 100,
+    recommendedPrice: finalPriceInclGST,
+    foodCostPercent: (totalCostPerServing / finalPriceInclGST) * 100,
+    selling_price: finalPriceInclGST,
+    gross_profit: finalPriceExclGST - totalCostPerServing,
+    gross_profit_margin: ((finalPriceExclGST - totalCostPerServing) / finalPriceExclGST) * 100,
     contributingMargin: contributingMargin,
     contributingMarginPercent: contributingMarginPercent,
   };
