@@ -126,7 +126,7 @@ export function RecipeCombobox({
             className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg p-1 text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Toggle dropdown"
           >
-            <Icon icon={ChevronDown} size="sm" aria-hidden="true" />
+            <Icon icon={ChevronDown} size="sm" aria-hidden={true} />
           </button>
         </div>
 
@@ -140,7 +140,7 @@ export function RecipeCombobox({
               className="flex w-full items-center gap-3 rounded-t-xl border-b border-[#2a2a2a] px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] focus:outline-none"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7]">
-                <Icon icon={Plus} size="sm" className="text-white" aria-hidden="true" />
+                <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
               </div>
               <div>
                 <div className="font-medium text-white">Create New Recipe</div>
