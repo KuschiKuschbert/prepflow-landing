@@ -76,7 +76,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                 placeholder="Type to search ingredients&hellip;"
                 value={ingredientSearch}
                 onChange={e => onSearchChange(e.target.value)}
-                onFocus={() => onSearchChange(ingredientSearch)}
+                onFocus={() => {
+                  // Show suggestions when input is focused, even if search is empty
+                  if (ingredients.length > 0) {
+                    onSearchChange(ingredientSearch || '');
+                  }
+                }}
                 className="w-full rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] py-3 pr-10 pl-10 text-white shadow-sm transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
               />
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
