@@ -98,9 +98,18 @@ export function IngredientTableRow({
   // Long press handlers for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isSelectionMode) {
-      // In selection mode, tap to toggle
-      e.preventDefault();
-      onSelectIngredient(ingredient.id, !isSelected);
+      // In selection mode, handle tap to toggle selection
+      const target = e.target as HTMLElement;
+      // Don't toggle if tapping on buttons or interactive elements
+      if (target.closest('button') || target.closest('a')) {
+        return;
+      }
+      // Store touch start for tap detection
+      touchStartTimeRef.current = Date.now();
+      const touch = e.touches[0];
+      if (touch) {
+        touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+      }
       return;
     }
 
@@ -126,6 +135,18 @@ export function IngredientTableRow({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    if (isSelectionMode) {
+      // In selection mode, track movement to detect if it's a scroll vs tap
+      const touch = e.touches[0];
+      if (touchStartPosRef.current && touch) {
+        const moveDistance = Math.abs(touch.clientX - touchStartPosRef.current.x) + Math.abs(touch.clientY - touchStartPosRef.current.y);
+        if (moveDistance > 10) {
+          hasMovedRef.current = true;
+        }
+      }
+      return;
+    }
+
     // Only cancel if moved significantly (more than 10px)
     const touch = e.touches[0];
     if (touchStartPosRef.current && touch) {
@@ -141,7 +162,34 @@ export function IngredientTableRow({
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isSelectionMode) {
+      // In selection mode, toggle selection on tap (if not scrolled)
+      const target = e.target as HTMLElement;
+      if (target.closest('button') || target.closest('a')) {
+        // Button will handle its own events
+        touchStartTimeRef.current = null;
+        touchStartPosRef.current = null;
+        hasMovedRef.current = false;
+        return;
+      }
+
+      // Only toggle if it was a tap (not a scroll)
+      if (!hasMovedRef.current && touchStartTimeRef.current) {
+        const touchDuration = Date.now() - touchStartTimeRef.current;
+        // Tap should be quick (< 300ms) and not moved
+        if (touchDuration < 300) {
+          e.preventDefault();
+          e.stopPropagation();
+          onSelectIngredient(ingredient.id, !isSelected);
+        }
+      }
+      touchStartTimeRef.current = null;
+      touchStartPosRef.current = null;
+      hasMovedRef.current = false;
+      return;
+    }
+
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
@@ -155,7 +203,13 @@ export function IngredientTableRow({
   // Click handler - in selection mode, toggle selection
   const handleRowClick = (e: React.MouseEvent) => {
     if (isSelectionMode) {
+      const target = e.target as HTMLElement;
+      // Don't toggle if clicking on buttons or interactive elements
+      if (target.closest('button') || target.closest('a')) {
+        return;
+      }
       e.preventDefault();
+      e.stopPropagation();
       onSelectIngredient(ingredient.id, !isSelected);
     }
   };
@@ -189,7 +243,15 @@ export function IngredientTableRow({
     >
       <td className="px-6 py-4 whitespace-nowrap">
         <button
-          onClick={() => onSelectIngredient(ingredient.id, !selectedIngredients.has(ingredient.id))}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectIngredient(ingredient.id, !selectedIngredients.has(ingredient.id));
+          }}
+          onTouchStart={(e) => {
+            if (isSelectionMode) {
+              e.stopPropagation();
+            }
+          }}
           className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
           aria-label={`${selectedIngredients.has(ingredient.id) ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name}`}
         >
