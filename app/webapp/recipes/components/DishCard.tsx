@@ -4,6 +4,7 @@ import React from 'react';
 import { Dish, DishCostData } from '../types';
 import { Edit, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { formatRecipeDate } from '../utils/formatDate';
 
 interface DishCardProps {
   dish: Dish;
@@ -65,9 +66,7 @@ const DishCard = React.memo(function DishCard({
             {capitalizeDishName(dish.dish_name)}
           </h3>
         </div>
-        <span className="text-xs text-gray-500">
-          {new Date(dish.created_at).toLocaleDateString()}
-        </span>
+        <span className="text-xs text-gray-500">{formatRecipeDate(dish.created_at)}</span>
       </div>
 
       <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">

@@ -4,6 +4,7 @@ import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
 import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { formatRecipeDate } from '../utils/formatDate';
 
 interface RecipeTableProps {
   recipes: Recipe[];
@@ -155,7 +156,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
                 onClick={() => onPreviewRecipe(recipe)}
               >
-                {new Date(recipe.created_at).toLocaleDateString()}
+                {formatRecipeDate(recipe.created_at)}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
                 <div className="flex gap-2" onClick={e => e.stopPropagation()}>

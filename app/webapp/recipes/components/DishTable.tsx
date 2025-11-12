@@ -4,6 +4,7 @@ import React from 'react';
 import { Dish, DishCostData } from '../types';
 import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { formatRecipeDate } from '../utils/formatDate';
 
 interface DishTableProps {
   dishes: Dish[];
@@ -118,7 +119,7 @@ const DishTable = React.memo(function DishTable({
                   )}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-400">
-                  {new Date(dish.created_at).toLocaleDateString()}
+                  {formatRecipeDate(dish.created_at)}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium">
                   <div className="flex gap-2">

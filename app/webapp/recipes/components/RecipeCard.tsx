@@ -48,9 +48,7 @@ const RecipeCard = React.memo(function RecipeCard({
             {capitalizeRecipeName(recipe.name)}
           </h3>
         </div>
-        <span className="text-xs text-gray-500">
-          {new Date(recipe.created_at).toLocaleDateString()}
-        </span>
+        <span className="text-xs text-gray-500">{formatRecipeDate(recipe.created_at)}</span>
       </div>
 
       <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
