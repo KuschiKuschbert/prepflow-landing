@@ -564,7 +564,13 @@ export default function IngredientTableWithFilters({
               </>
             ) : (
               <button
-                onClick={() => onSelectAll(true)}
+                onClick={() => {
+                  onSelectAll(true);
+                  // Enter selection mode when selecting all
+                  if (onEnterSelectionMode) {
+                    onEnterSelectionMode();
+                  }
+                }}
                 className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
                 aria-label="Select all ingredients"
               >
@@ -637,6 +643,10 @@ export default function IngredientTableWithFilters({
                       ? selectedIngredients.size === totalFiltered && totalFiltered > 0
                       : selectedIngredients.size === ingredients.length && ingredients.length > 0;
                     onSelectAll(!allSelected);
+                    // Enter selection mode when selecting all
+                    if (!allSelected && onEnterSelectionMode) {
+                      onEnterSelectionMode();
+                    }
                   }}
                   className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
                   aria-label={

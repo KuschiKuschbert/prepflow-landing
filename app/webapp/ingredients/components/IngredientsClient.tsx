@@ -196,6 +196,13 @@ export default function IngredientsClient() {
     }
   }, [page, totalPages]);
 
+  // Auto-exit selection mode when all items are deselected
+  useEffect(() => {
+    if (isSelectionMode && selectedIngredients.size === 0) {
+      exitSelectionMode();
+    }
+  }, [selectedIngredients.size, isSelectionMode, exitSelectionMode]);
+
   if (loading || isLoading) return <PageSkeleton />;
 
   const translateText = (key: string, fallback: string): string => {
