@@ -50,29 +50,29 @@ export const PricingTool: React.FC<PricingToolProps> = ({
   return (
     <div className="mt-6 border-t border-[#2a2a2a] pt-4">
       <div className="mb-4">
-        <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
-          💰 Costing Tool
-          <div className="ml-2 h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]"></div>
-        </h3>
-
-        {/* Hero Selling Price Card */}
-        <div className="mb-4 rounded-2xl border-2 border-[#29E7CD]/50 bg-gradient-to-br from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-6 shadow-lg">
-          <div className="mb-2 text-xs font-medium tracking-wide text-gray-400 uppercase">
-            Recommended Selling Price
-          </div>
-          <div className="mb-1 flex items-baseline gap-2">
-            <span className="text-4xl font-bold text-white">
-              ${pricingCalculation.sellPriceInclGST.toFixed(2)}
-            </span>
-            <span className="text-sm font-medium text-gray-400">incl. GST</span>
-          </div>
-          <div className="mt-2 flex items-center gap-2">
-            <span className="rounded-full bg-[#29E7CD]/20 px-2 py-1 text-xs font-medium text-[#29E7CD]">
-              {getStrategyLabel(pricingStrategy)} Pricing
-            </span>
-            <span className="text-xs text-gray-400">
-              {pricingCalculation.actualGrossProfit.toFixed(1)}% GP
-            </span>
+        {/* Header with Title and Target Gross Profit */}
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h3 className="flex items-center text-lg font-semibold text-white">
+            💰 Costing Tool
+            <div className="ml-2 h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]"></div>
+          </h3>
+          <div className="flex items-center gap-3">
+            <label className="text-sm font-medium text-gray-300">🎯 Target Gross Profit %</label>
+            <div className="flex space-x-2">
+              {[60, 65, 70, 75, 80].map(gp => (
+                <button
+                  key={gp}
+                  onClick={() => onTargetGrossProfitChange(gp)}
+                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                    targetGrossProfit === gp
+                      ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg'
+                      : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
+                  }`}
+                >
+                  {gp}%
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -122,25 +122,24 @@ export const PricingTool: React.FC<PricingToolProps> = ({
           </div>
         </div>
 
-        {/* Target Gross Profit Selector */}
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            🎯 Target Gross Profit %
-          </label>
-          <div className="flex space-x-2">
-            {[60, 65, 70, 75, 80].map(gp => (
-              <button
-                key={gp}
-                onClick={() => onTargetGrossProfitChange(gp)}
-                className={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                  targetGrossProfit === gp
-                    ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg'
-                    : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
-                }`}
-              >
-                {gp}%
-              </button>
-            ))}
+        {/* Hero Selling Price Card */}
+        <div className="mb-4 rounded-2xl border-2 border-[#29E7CD]/50 bg-gradient-to-br from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-6 shadow-lg">
+          <div className="mb-2 text-xs font-medium tracking-wide text-gray-400 uppercase">
+            Recommended Selling Price
+          </div>
+          <div className="mb-1 flex items-baseline gap-2">
+            <span className="text-4xl font-bold text-white">
+              ${pricingCalculation.sellPriceInclGST.toFixed(2)}
+            </span>
+            <span className="text-sm font-medium text-gray-400">incl. GST</span>
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="rounded-full bg-[#29E7CD]/20 px-2 py-1 text-xs font-medium text-[#29E7CD]">
+              {getStrategyLabel(pricingStrategy)} Pricing
+            </span>
+            <span className="text-xs text-gray-400">
+              {pricingCalculation.actualGrossProfit.toFixed(1)}% GP
+            </span>
           </div>
         </div>
 
