@@ -92,7 +92,7 @@ export function CreateRecipeModal({
             className="rounded-lg p-1 text-gray-400 transition-colors hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             aria-label="Close modal"
           >
-            <Icon icon={X} size="md" aria-hidden="true" />
+            <Icon icon={X} size="md" aria-hidden={true} />
           </button>
         </div>
 
