@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientTableRow } from './IngredientTableRow';
+import { IngredientCard } from './IngredientCard';
 import { IngredientTableFilterBar } from './IngredientTableFilterBar';
 import { type SortOption } from '../hooks/useIngredientFiltering';
 import { ChevronUp, ChevronDown, Plus, Upload, Download, Zap, Trash2, Store, MapPin, Target } from 'lucide-react';
@@ -530,8 +531,28 @@ export default function IngredientTableWithFilters({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Mobile Card Layout */}
+      <div className="block md:hidden space-y-3">
+        {ingredients.map(ingredient => (
+          <IngredientCard
+            key={ingredient.id}
+            ingredient={ingredient}
+            displayUnit={displayUnit}
+            selectedIngredients={selectedIngredients}
+            onSelectIngredient={onSelectIngredient}
+            onEdit={onEdit}
+            onDelete={handleDelete}
+            deletingId={deletingId}
+            isSelectionMode={isSelectionMode}
+            onStartLongPress={onStartLongPress}
+            onCancelLongPress={onCancelLongPress}
+            onEnterSelectionMode={onEnterSelectionMode}
+          />
+        ))}
+      </div>
+
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
