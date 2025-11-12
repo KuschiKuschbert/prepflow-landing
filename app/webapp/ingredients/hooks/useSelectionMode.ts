@@ -58,19 +58,8 @@ export function useSelectionMode() {
     };
   }, [isSelectionMode, exitSelectionMode]);
 
-  // Exit selection mode on scroll (mobile)
-  useEffect(() => {
-    if (!isSelectionMode) return;
-
-    const handleScroll = () => {
-      exitSelectionMode();
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [isSelectionMode, exitSelectionMode]);
+  // Note: Removed auto-exit on scroll to allow scrolling while selecting multiple items
+  // Users can exit selection mode manually using the "Done" button
 
   return {
     isSelectionMode,
