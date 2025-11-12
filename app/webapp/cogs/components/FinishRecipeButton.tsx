@@ -71,7 +71,7 @@ export function FinishRecipeButton({
             </>
           ) : (
             <>
-              <Icon icon={Sparkles} size="sm" aria-hidden="true" />
+              <Icon icon={Sparkles} size="sm" aria-hidden={true} />
               <span>{message}</span>
             </>
           )}

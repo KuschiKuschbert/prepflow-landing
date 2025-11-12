@@ -98,7 +98,7 @@ export function RecipeCombobox({
             icon={Search}
             size="sm"
             className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
-            aria-hidden="true"
+            aria-hidden={true}
           />
           <input
             ref={inputRef}
