@@ -175,7 +175,14 @@ export default function SetupPageRefactored() {
           setupProgress.country && (
             <div className="mt-12 text-center">
               <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/20 to-[#3B82F6]/20 p-8">
-                <div className="mb-4 text-6xl">🎉</div>
+                <div className="mb-4 flex justify-center">
+                  <Icon
+                    icon={PartyPopper}
+                    size="xl"
+                    className="text-[#29E7CD]"
+                    aria-hidden={true}
+                  />
+                </div>
                 <h2 className="mb-4 text-3xl font-bold text-white">Setup Complete!</h2>
                 <p className="mb-6 text-lg text-gray-300">
                   Your PrepFlow system is ready to use. You can now start managing your recipes,
