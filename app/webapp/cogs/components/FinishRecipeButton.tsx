@@ -48,7 +48,7 @@ export function FinishRecipeButton({
     return (
       <div className="mt-4 rounded-xl border border-green-500/30 bg-green-500/10 p-4 text-center">
         <div className="mb-2 flex items-center justify-center gap-2 text-green-400">
-          <Icon icon={CheckCircle2} size="md" aria-hidden="true" />
+          <Icon icon={CheckCircle2} size="md" aria-hidden={true} />
           <span className="font-semibold">Recipe Finished!</span>
         </div>
         <p className="text-sm text-gray-400">Your recipe is saved and ready to use</p>

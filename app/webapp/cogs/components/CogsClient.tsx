@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 
 // Components
 import { COGSTable } from '../components/COGSTable';
+import { CreateRecipeModal } from '../components/CreateRecipeModal';
 import { DishForm } from '../components/DishForm';
 import { PricingTool } from '../components/PricingTool';
-import { CreateRecipeModal } from '../components/CreateRecipeModal';
 
 // Hooks
+import { useCOGSAutosave } from '../hooks/useCOGSAutosave';
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
 import { useCOGSEffects } from '../hooks/useCOGSEffects';
 import { useDishHandlers } from '../hooks/useDishHandlers';
@@ -19,14 +20,12 @@ import { useIngredientSearch } from '../hooks/useIngredientSearch';
 import { usePricing } from '../hooks/usePricing';
 import { useRecipeCRUD } from '../hooks/useRecipeCRUD';
 import { useRecipeHandlers } from '../hooks/useRecipeHandlers';
-import { useCOGSAutosave } from '../hooks/useCOGSAutosave';
 
 // Components
 import { COGSHeader } from '../components/COGSHeader';
 import { SuccessMessage } from '../components/SuccessMessage';
 
 // Types
-import { Recipe } from '../types';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 
 export default function CogsClient() {

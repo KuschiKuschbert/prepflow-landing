@@ -1,10 +1,9 @@
 'use client';
 
-import { Recipe } from '../types';
-import { useRecipeIngredientsAutosave } from './useRecipeIngredientsAutosave';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
-import { COGSCalculation } from '../types';
+import { COGSCalculation, Recipe } from '../types';
+import { useRecipeIngredientsAutosave } from './useRecipeIngredientsAutosave';
 
 interface UseCOGSAutosaveProps {
   selectedRecipe: string;

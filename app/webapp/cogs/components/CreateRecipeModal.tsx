@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { X } from 'lucide-react';
 import { formatDishName } from '@/lib/text-utils';
+import { X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface CreateRecipeModalProps {
   isOpen: boolean;
