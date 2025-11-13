@@ -3,6 +3,7 @@ interface IngredientPaginationProps {
   totalPages: number;
   total: number;
   onPageChange: (page: number) => void;
+  className?: string;
 }
 
 export default function IngredientPagination({
@@ -10,9 +11,10 @@ export default function IngredientPagination({
   totalPages,
   total,
   onPageChange,
+  className = '',
 }: IngredientPaginationProps) {
   return (
-    <div className="mt-4 flex items-center justify-between">
+    <div className={`flex items-center justify-between ${className}`}>
       <span className="text-sm text-gray-400">
         Page {page} of {totalPages} ({total} items)
       </span>

@@ -8,6 +8,7 @@ import {
   Sparkles,
   Thermometer,
   Settings,
+  BookOpen,
   LucideIcon,
 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -55,19 +56,36 @@ const features: Feature[] = [
     color: '#D925C7',
   },
   {
+    title: 'Recipe Book',
+    description: 'Manage your recipe collection with pricing, margins, and profitability insights.',
+    icon: BookOpen, // Lucide icon instead of emoji
+    screenshot: '/images/recipe-book-screenshot.png',
+    screenshotAlt:
+      'PrepFlow Recipe Book showing recipes list with pricing, profit margins, and contributing margins',
+    details: [
+      'Complete recipe library with all your dishes',
+      'Recommended pricing with food cost percentages',
+      'Profit margin analysis per portion',
+      'Contributing margin calculations',
+      'Easy recipe editing and management',
+    ],
+    color: '#29E7CD',
+  },
+  {
     title: 'Performance Analysis',
     description: "Dynamic menu analysis with Chef's Kiss, Hidden Gem, and more.",
     icon: BarChart3, // Lucide icon instead of emoji
-    screenshot: '/images/dashboard-screenshot.png',
+    screenshot: '/images/performance-analysis-screenshot.png',
     screenshotAlt:
-      'PrepFlow Performance Analysis showing menu item classifications and profitability metrics',
+      "PrepFlow Performance Analysis Dashboard showing KPIs, Chef's Kiss and Bargain Bucket categorization tables, popularity donut chart, scatter plot analysis, and contributing profit margin bar chart",
     details: [
-      'Dynamic profit threshold analysis',
-      'Popularity-based menu item classification',
-      "Chef's Kiss: High profit + High popularity",
-      'Hidden Gem: High profit + Low popularity',
-      'Bargain Bucket: Low profit + High popularity',
-      'Burnt Toast: Low profit + Low popularity',
+      'Dynamic profit threshold analysis with real-time KPIs',
+      'Popularity-based menu item classification with visual charts',
+      "Chef's Kiss: High profit + High popularity (categorized in table)",
+      'Hidden Gem: High profit + Low popularity (scatter plot analysis)',
+      'Bargain Bucket: Low profit + High popularity (categorized in table)',
+      'Burnt Toast: Low profit + Low popularity (scatter plot analysis)',
+      'Comprehensive analytics with donut charts, scatter plots, and bar charts',
     ],
     color: '#3B82F6',
   },
@@ -90,14 +108,16 @@ const features: Feature[] = [
     title: 'Temperature Monitoring',
     description: 'QLD-compliant monitoring with smart thresholds and alerts.',
     icon: Thermometer, // Lucide icon instead of emoji
-    screenshot: '/images/dashboard-screenshot.png',
-    screenshotAlt: 'PrepFlow Temperature Monitoring showing equipment tracking and compliance',
+    screenshot: '/images/temperature-monitoring-screenshot.png',
+    screenshotAlt:
+      'PrepFlow Temperature Monitoring showing equipment status dashboard with color-coded cards for In Range, Out of Range, Setup Required, and No Data status',
     details: [
       'Queensland-compliant temperature thresholds',
-      'Real-time equipment monitoring',
+      'Real-time equipment monitoring with status indicators',
       'Temperature log tracking and analytics',
       'Automatic alert system for violations',
       'Compliance reporting and audit trails',
+      'Equipment status dashboard with visual indicators',
     ],
     color: '#D925C7',
   },

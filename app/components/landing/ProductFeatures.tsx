@@ -21,15 +21,15 @@ export default function ProductFeatures() {
     {
       name: 'Performance Analysis',
       description: "Chef's Kiss, Hidden Gem, Bargain Bucket, Burnt Toast",
-      screenshot: '/images/dashboard-screenshot.png',
-      alt: 'PrepFlow Performance analysis showing menu item classifications',
+      screenshot: '/images/performance-analysis-screenshot.png',
+      alt: 'PrepFlow Performance Analysis Dashboard showing KPIs, categorization tables, popularity charts, scatter plot analysis, and profit margin bar charts',
       color: '#D925C7',
     },
     {
       name: 'Temperature Monitoring',
       description: 'QLD-compliant monitoring with smart thresholds',
-      screenshot: '/images/dashboard-screenshot.png',
-      alt: 'PrepFlow Temperature monitoring dashboard',
+      screenshot: '/images/temperature-monitoring-screenshot.png',
+      alt: 'PrepFlow Temperature Monitoring showing equipment status dashboard with color-coded cards',
       color: '#29E7CD',
     },
     {

@@ -6,7 +6,7 @@ import PerformanceFilters from '../components/PerformanceFilters';
 import PerformanceHeader from '../components/PerformanceHeader';
 import PerformanceImportModal from '../components/PerformanceImportModal';
 import PerformanceMetadata from '../components/PerformanceMetadata';
-import PerformancePagination from '../components/PerformancePagination';
+import { TablePagination } from '@/components/ui/TablePagination';
 import PerformanceTable from '../components/PerformanceTable';
 import { usePerformanceData } from '../hooks/usePerformanceData';
 import { usePerformanceFilters } from '../hooks/usePerformanceFilters';
@@ -88,12 +88,20 @@ export default function PerformanceClient() {
 
       {state.showCharts && <PerformanceCharts performanceItems={state.performanceItems} />}
 
-      <PerformanceTable performanceItems={paginatedItems} />
-
-      <PerformancePagination
-        currentPage={filters.currentPage}
+      <TablePagination
+        page={filters.currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        className="mb-4"
+      />
+
+      <PerformanceTable performanceItems={paginatedItems} />
+
+      <TablePagination
+        page={filters.currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        className="mt-4"
       />
 
       <PerformanceImportModal

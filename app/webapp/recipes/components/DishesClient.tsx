@@ -161,7 +161,7 @@ export default function DishesClient() {
       <DishesActionButtons onAddDish={handleAddDish} />
 
       {/* Mobile Card Layout */}
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <div className="divide-y divide-[#2a2a2a]">
           {dishes.map(dish => (
             <DishCard

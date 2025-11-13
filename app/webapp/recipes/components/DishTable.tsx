@@ -35,7 +35,7 @@ const DishTable = React.memo(function DishTable({
   };
 
   return (
-    <div className="hidden overflow-x-auto md:block">
+    <div className="hidden overflow-x-auto lg:block">
       <table className="min-w-full divide-y divide-[#2a2a2a]">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>

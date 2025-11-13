@@ -1,7 +1,7 @@
 'use client';
 
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 interface HeroProps {
@@ -10,45 +10,63 @@ interface HeroProps {
 }
 
 export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const { ref: textRef, animationStyle: textAnimationStyle } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.2,
     triggerOnce: true,
     delay: 0,
   });
 
-  const { ref: imageRef, animationStyle: imageAnimationStyle } = useScrollAnimation<HTMLDivElement>({
-    threshold: 0.2,
-    triggerOnce: true,
-    delay: 100,
-  });
+  const { ref: imageRef, animationStyle: imageAnimationStyle } = useScrollAnimation<HTMLDivElement>(
+    {
+      threshold: 0.2,
+      triggerOnce: true,
+      delay: 100,
+    },
+  );
 
   const handleSignIn = () => {
-    if (trackEngagement) {
-      trackEngagement('hero_sign_in_click');
-    }
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+    if (isAuthenticated) {
+      if (trackEngagement) {
+        trackEngagement('hero_go_to_dashboard_click');
       }
-    } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+      window.location.href = '/webapp';
+    } else {
+      if (trackEngagement) {
+        trackEngagement('hero_sign_in_click');
+      }
+      try {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+        }
+      } catch (_) {}
+      signIn('auth0', { callbackUrl: '/webapp' });
+    }
   };
 
   const handleRegister = () => {
-    if (trackEngagement) {
-      trackEngagement('hero_register_click');
-    }
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+    if (isAuthenticated) {
+      if (trackEngagement) {
+        trackEngagement('hero_go_to_dashboard_click');
       }
-    } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+      window.location.href = '/webapp';
+    } else {
+      if (trackEngagement) {
+        trackEngagement('hero_register_click');
+      }
+      try {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+        }
+      } catch (_) {}
+      signIn('auth0', { callbackUrl: '/webapp' });
+    }
   };
 
   return (
     <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-transparent">
-      <div className="mx-auto w-full max-w-7xl px-6 py-16 md:py-20 text-center">
+      <div className="mx-auto w-full max-w-7xl px-6 py-16 text-center md:py-20">
         {/* Headline - Apple Style */}
         <div ref={textRef} style={textAnimationStyle} className="mb-8">
           <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl xl:text-8xl">
@@ -66,17 +84,17 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
             onClick={handleRegister}
-            className="rounded-full border border-white/20 bg-white px-8 py-3 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/50"
-            aria-label="Register for PrepFlow"
+            className="rounded-full border border-white/20 bg-white px-8 py-3 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Register for PrepFlow'}
           >
-            Register
+            {isAuthenticated ? 'Go to Dashboard' : 'Register'}
           </button>
           <button
             onClick={handleSignIn}
-            className="rounded-full border border-white/20 bg-transparent px-8 py-3 text-lg font-medium text-white transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50"
-            aria-label="Sign in to PrepFlow"
+            className="rounded-full border border-white/20 bg-transparent px-8 py-3 text-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
+            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Sign in to PrepFlow'}
           >
-            Sign In
+            {isAuthenticated ? 'Go to Dashboard' : 'Sign In'}
           </button>
         </div>
 

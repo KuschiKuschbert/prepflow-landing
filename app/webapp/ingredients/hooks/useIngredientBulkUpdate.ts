@@ -1,10 +1,9 @@
-'use client';
-
-import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback } from 'react';
+import { useNotification } from '@/contexts/NotificationContext';
+import { supabase } from '@/lib/supabase';
 
 interface UseIngredientBulkUpdateProps {
-  refetchIngredients: () => Promise<unknown>;
+  refetchIngredients: () => Promise<any>;
   setSelectedIngredients: React.Dispatch<React.SetStateAction<Set<string>>>;
   exitSelectionMode: () => void;
 }
@@ -17,24 +16,18 @@ export function useIngredientBulkUpdate({
   const { showSuccess, showError } = useNotification();
 
   const handleBulkUpdate = useCallback(
-    async (ids: string[], updates: Record<string, unknown>) => {
+    async (ids: string[], updates: Partial<any>) => {
       try {
-        const response = await fetch('/api/ingredients/bulk-update', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ids, updates }),
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Failed to update ingredients');
+        const { error } = await supabase.from('ingredients').update(updates).in('id', ids);
+
+        if (error) throw error;
+
         await refetchIngredients();
         setSelectedIngredients(new Set());
         exitSelectionMode();
-        showSuccess(
-          data.message ||
-            `Successfully updated ${ids.length} ingredient${ids.length !== 1 ? 's' : ''}`,
-        );
+        showSuccess('Ingredients updated successfully');
       } catch (error) {
-        showError(error instanceof Error ? error.message : 'Failed to update ingredients');
+        showError('Failed to update ingredients');
         throw error;
       }
     },

@@ -213,7 +213,7 @@ export default function RecipesClient() {
             )}
           </div>
         </div>
-        <div className="block md:hidden">
+        <div className="block lg:hidden">
           <div className="divide-y divide-[#2a2a2a]">
             {recipes.map(recipe => (
               <RecipeCard

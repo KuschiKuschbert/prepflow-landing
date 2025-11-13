@@ -208,6 +208,13 @@ export default function IngredientsClient() {
           loading={loading}
         />
       )}
+      <IngredientPagination
+        page={page}
+        totalPages={totalPages}
+        total={filteredTotal}
+        onPageChange={setPage}
+        className="mb-4"
+      />
       <IngredientTableWithFilters
         ingredients={paginatedIngredients}
         onBulkDelete={handleBulkDelete}
@@ -245,6 +252,7 @@ export default function IngredientsClient() {
         totalPages={totalPages}
         total={filteredTotal}
         onPageChange={setPage}
+        className="mt-4"
       />
       <IngredientEditModal
         isOpen={!!editingIngredient}
