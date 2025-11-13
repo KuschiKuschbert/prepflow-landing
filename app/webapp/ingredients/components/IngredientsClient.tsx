@@ -6,23 +6,23 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
 // Direct imports to eliminate skeleton flashes
+import { useNotification } from '@/contexts/NotificationContext';
+import { useTranslation } from '@/lib/useTranslation';
+import { Package } from 'lucide-react';
+import { PageHeader } from '../../components/static/PageHeader';
 import { useIngredientActions } from '../hooks/useIngredientActions';
 import { useIngredientData } from '../hooks/useIngredientData';
 import { useIngredientFiltering, type SortOption } from '../hooks/useIngredientFiltering';
 import { useIngredientFormState } from '../hooks/useIngredientFormState';
-import { useIngredientsQuery } from '../hooks/useIngredientsQuery';
 import { useIngredientMigration } from '../hooks/useIngredientMigration';
+import { useIngredientsQuery } from '../hooks/useIngredientsQuery';
+import { useRegionalUnits } from '../hooks/useRegionalUnits';
+import { useSelectionMode } from '../hooks/useSelectionMode';
 import CSVImportModal from './CSVImportModal';
 import IngredientEditModal from './IngredientEditModal';
 import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-import { useTranslation } from '@/lib/useTranslation';
-import { PageHeader } from '../../components/static/PageHeader';
-import { useRegionalUnits } from '../hooks/useRegionalUnits';
-import { useNotification } from '@/contexts/NotificationContext';
-import { useSelectionMode } from '../hooks/useSelectionMode';
-import { Package } from 'lucide-react';
 
 interface Ingredient {
   id: string;
@@ -276,18 +276,53 @@ export default function IngredientsClient() {
         onSave={async (ingredientData: Partial<Ingredient>) => {
           if (!editingIngredient?.id) return;
           try {
+            // Try direct Supabase call first (faster, simpler)
             const { data, error } = await supabase
               .from('ingredients')
               .update({ ...ingredientData, updated_at: new Date().toISOString() })
               .eq('id', editingIngredient.id)
               .select()
               .maybeSingle();
-            if (error) throw new Error(extractSupabaseError(error));
+
+            if (error) {
+              // If RLS error, fall back to API route
+              if (error.code === '42501' || error.message?.includes('row-level security')) {
+                console.warn('RLS policy blocked direct update, falling back to API route');
+                const response = await fetch('/api/ingredients', {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    id: editingIngredient.id,
+                    ...ingredientData,
+                  }),
+                });
+
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                  const errorMsg = result.details || result.error || 'Failed to update ingredient';
+                  setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
+                  setEditingIngredient(null);
+                  return;
+                }
+
+                setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? result.data : ing)));
+                setEditingIngredient(null);
+                return;
+              } else {
+                // Other error, throw it
+                throw new Error(extractSupabaseError(error));
+              }
+            }
+
+            // Success with direct call
             if (!data) {
               setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
               setEditingIngredient(null);
               return;
             }
+
             setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? data : ing)));
             setEditingIngredient(null);
           } catch (error) {

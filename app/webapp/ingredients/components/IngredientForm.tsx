@@ -1,10 +1,10 @@
 'use client';
 
-import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
-import { IngredientFormFields } from './IngredientFormFields';
 import { useOnSave } from '@/lib/personality/hooks';
+import { IngredientFormFields } from './IngredientFormFields';
 import { useIngredientFormLogic } from './useIngredientFormLogic';
 
 interface Ingredient {
@@ -78,20 +78,30 @@ export default function IngredientForm({
     data: formData,
     enabled: canAutosave,
     onSave: async savedData => {
-      if (ingredient && onSave) {
-        await onSave(savedData as Partial<Ingredient>);
+      // Autosave saves silently in the background via syncToDatabase
+      // Don't call the parent's onSave prop here - that would close the modal
+      // The onSave prop is only called when user explicitly clicks "Save" button
+      // This allows autosave to work without closing the edit modal
+      if (!ingredient) {
+        // For new ingredients (wizard), autosave can call onSave
+        // The wizard handles its own logic and won't close unexpectedly
+        if (onSave) {
+          await onSave(savedData as Partial<Ingredient>);
+        }
       }
+      // For existing ingredients (edit modal), autosave saves to DB silently
+      // The modal stays open so user can continue editing
     },
   });
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        {!ingredient && <h2 className="text-2xl font-bold text-white">Add Ingredient</h2>}
+      <div className="mb-4 flex items-center justify-between">
+        {!ingredient && <h2 className="text-xl font-bold text-white">Add Ingredient</h2>}
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
 
-      <form onSubmit={e => e.preventDefault()} className="space-y-6">
+      <form onSubmit={e => e.preventDefault()} className="space-y-4">
         <IngredientFormFields
           formData={formData}
           errors={errors}
@@ -99,11 +109,11 @@ export default function IngredientForm({
           handleInputChange={handleInputChange}
         />
 
-        <div className="flex gap-4 pt-6">
+        <div className="flex gap-3 pt-4">
           <button
             type="button"
             disabled={loading || status === 'saving'}
-            className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={async e => {
               e.preventDefault();
               if (validateForm()) {
@@ -118,7 +128,7 @@ export default function IngredientForm({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-300 hover:bg-[#3a3a3a]"
+            className="flex-1 rounded-2xl bg-[#2a2a2a] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:bg-[#3a3a3a]"
           >
             Cancel
           </button>

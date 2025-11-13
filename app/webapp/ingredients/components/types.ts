@@ -27,6 +27,7 @@ export interface WizardStepProps {
   availableUnits: string[];
   errors: Record<string, string>;
   onInputChange: (field: keyof Ingredient, value: string | number) => void;
+  onInputBlur?: (field: keyof Ingredient, value: string | number) => void;
   formatCost: (value: number) => string;
   onWastagePercentageChange?: (wastage: number) => void;
   onYieldPercentageChange?: (yieldPercent: number) => void;

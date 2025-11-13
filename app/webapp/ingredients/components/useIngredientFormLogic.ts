@@ -3,9 +3,9 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Ingredient {
   id?: string;
@@ -39,7 +39,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
     pack_size: '',
     pack_size_unit: 'GM',
     pack_price: 0,
-    unit: 'GM',
+    unit: 'GM', // Keep for backward compatibility but will use pack_size_unit for calculations
     cost_per_unit: 0,
     cost_per_unit_as_purchased: 0,
     cost_per_unit_incl_trim: 0,
@@ -48,8 +48,6 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
     supplier: '',
     product_code: '',
     storage_location: '',
-    min_stock_level: 0,
-    current_stock: 0,
     ...ingredient,
   });
 
@@ -57,13 +55,14 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
 
   useEffect(() => {
     if (ingredient) {
+      const packSizeUnit = ingredient.pack_size_unit || 'GM';
       setFormData({
         ingredient_name: ingredient.ingredient_name || '',
         brand: ingredient.brand || '',
         pack_size: ingredient.pack_size || '',
-        pack_size_unit: ingredient.pack_size_unit || 'GM',
+        pack_size_unit: packSizeUnit,
         pack_price: ingredient.pack_price || 0,
-        unit: ingredient.unit || 'GM',
+        unit: ingredient.unit || packSizeUnit, // Default to pack_size_unit
         cost_per_unit: ingredient.cost_per_unit || 0,
         cost_per_unit_as_purchased:
           ingredient.cost_per_unit_as_purchased || ingredient.cost_per_unit || 0,
@@ -74,8 +73,6 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         supplier: ingredient.supplier || '',
         product_code: ingredient.product_code || '',
         storage_location: ingredient.storage_location || '',
-        min_stock_level: ingredient.min_stock_level || 0,
-        current_stock: ingredient.current_stock || 0,
       });
     } else {
       setFormData({
@@ -84,7 +81,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         pack_size: '',
         pack_size_unit: 'GM',
         pack_price: 0,
-        unit: 'GM',
+        unit: 'GM', // Keep for backward compatibility
         cost_per_unit: 0,
         cost_per_unit_as_purchased: 0,
         cost_per_unit_incl_trim: 0,
@@ -93,8 +90,6 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         supplier: '',
         product_code: '',
         storage_location: '',
-        min_stock_level: 0,
-        current_stock: 0,
       });
     }
     setErrors({});
@@ -111,18 +106,21 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
   );
 
   const updateCostPerUnit = useCallback(() => {
-    if (formData.pack_price && formData.pack_size && formData.pack_size_unit && formData.unit) {
+    // Use pack_size_unit as the target unit (like wizard)
+    const targetUnit = formData.pack_size_unit || formData.unit || 'GM';
+    if (formData.pack_price && formData.pack_size && formData.pack_size_unit && targetUnit) {
       const calculatedCost = calculateCostPerUnit(
         formData.pack_price,
         parseFloat(formData.pack_size),
         formData.pack_size_unit,
-        formData.unit,
+        targetUnit,
       );
       setFormData(prev => ({
         ...prev,
         cost_per_unit: calculatedCost,
         cost_per_unit_as_purchased: calculatedCost,
         cost_per_unit_incl_trim: calculatedCost,
+        unit: targetUnit, // Update unit to match pack_size_unit for consistency
       }));
     }
   }, [
@@ -143,7 +141,9 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
       if (errors[field]) {
         setErrors(prev => ({ ...prev, [field]: '' }));
       }
-      if (['pack_price', 'pack_size', 'pack_size_unit', 'unit'].includes(field)) {
+      // Recalculate cost when pack_price, pack_size, or pack_size_unit changes
+      // Unit field removed, so we only trigger on pack fields
+      if (['pack_price', 'pack_size', 'pack_size_unit'].includes(field)) {
         setTimeout(updateCostPerUnit, 100);
       }
     },
@@ -161,9 +161,10 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
     if (!formData.pack_size || parseFloat(formData.pack_size) <= 0) {
       newErrors.pack_size = 'Pack size must be greater than 0';
     }
-    if (!formData.unit) {
-      newErrors.unit = 'Unit is required';
+    if (!formData.pack_size_unit) {
+      newErrors.pack_size_unit = 'Pack size unit is required';
     }
+    // Unit field removed - unit defaults to pack_size_unit
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [formData]);
@@ -174,12 +175,14 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
       if (!validateForm()) return;
 
       try {
+        // Use pack_size_unit as unit for exists check (unit field removed)
+        const unit = formData.pack_size_unit || formData.unit || 'GM';
         const qs = new URLSearchParams({
           ingredient_name: (formData.ingredient_name || '').toString().toLowerCase(),
           supplier: (formData.supplier || '').toString(),
           brand: (formData.brand || '').toString(),
           pack_size: (formData.pack_size || '').toString(),
-          unit: (formData.unit || '').toString(),
+          unit: unit.toString(),
           cost_per_unit: String(formData.cost_per_unit || 0),
         }).toString();
         const existsRes = await fetch(`/api/ingredients/exists?${qs}`, { cache: 'no-store' });

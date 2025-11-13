@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { WizardStepProps } from './types';
 
 export default function IngredientWizardStep1({
@@ -7,130 +8,168 @@ export default function IngredientWizardStep1({
   availableUnits,
   errors,
   onInputChange,
+  onInputBlur,
   formatCost,
 }: WizardStepProps) {
+  // Local state for pack price input to allow free typing
+  const [packPriceInput, setPackPriceInput] = useState<string>('');
+
+  // Sync local state with formData when it changes externally
+  useEffect(() => {
+    if (formData.pack_price) {
+      setPackPriceInput(String(formData.pack_price));
+    } else {
+      setPackPriceInput('');
+    }
+  }, [formData.pack_price]);
+  // Calculate cost per pack unit
+  const costPerPackUnit = formData.pack_price && formData.pack_size && parseFloat(formData.pack_size) > 0
+    ? formData.pack_price / parseFloat(formData.pack_size)
+    : 0;
+
+  // Calculate cost per working unit (if different from pack unit)
+  const costPerWorkingUnit = formData.cost_per_unit || 0;
+  const packUnit = formData.pack_size_unit || '';
+  const workingUnit = formData.unit || '';
+  const unitsAreDifferent = packUnit && workingUnit && packUnit !== workingUnit;
+
+  // Parse price input (remove commas and convert to number)
+  const parsePriceInput = (value: string): number => {
+    if (!value) return 0;
+    const cleaned = value.replace(/,/g, '').trim();
+    return parseFloat(cleaned) || 0;
+  };
+
+  // Format price for display (add commas for thousands)
+  const formatPriceDisplay = (value: string | number | undefined): string => {
+    if (!value) return '';
+    const numValue = typeof value === 'string' ? parsePriceInput(value) : value;
+    if (numValue === 0) return '';
+    // Format with commas for thousands, keep decimals
+    return numValue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  };
+
+  // Handle pack price change - allow free typing
+  const handlePackPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+
+    // Allow digits, commas, and decimal point - remove only invalid characters
+    const validInput = inputValue.replace(/[^\d,.]/g, '');
+
+    // Ensure only one decimal point
+    const parts = validInput.split('.');
+    const formattedInput = parts.length > 2
+      ? parts[0] + '.' + parts.slice(1).join('')
+      : validInput;
+
+    // Update local state for free typing
+    setPackPriceInput(formattedInput);
+
+    // Parse and store numeric value (commas are removed during parsing)
+    const numericValue = parsePriceInput(formattedInput);
+    onInputChange('pack_price', numericValue);
+  };
+
+  // Handle blur - format the display value
+  const handlePackPriceBlur = () => {
+    if (packPriceInput) {
+      const numericValue = parsePriceInput(packPriceInput);
+      // Format for display
+      const formatted = formatPriceDisplay(numericValue);
+      setPackPriceInput(formatted);
+      // Ensure numeric value is stored
+      if (numericValue !== formData.pack_price) {
+        onInputChange('pack_price', numericValue);
+      }
+    }
+  };
   return (
-    <div className="space-y-6">
-      <div className="mb-6 text-center">
-        <h3 className="mb-2 text-xl font-semibold text-white">📦 Basic Information</h3>
-        <p className="text-gray-400">Let&apos;s start with the essential details</p>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-300">Ingredient Name *</label>
+        <input
+          type="text"
+          required
+          value={formData.ingredient_name || ''}
+          onChange={e => onInputChange('ingredient_name', e.target.value)}
+          onBlur={e => onInputBlur?.('ingredient_name', e.target.value)}
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          placeholder="e.g., Fresh Tomatoes"
+        />
+        {errors.ingredient_name && (
+          <p className="mt-1 text-xs text-red-400">{errors.ingredient_name}</p>
+        )}
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Ingredient Name *</label>
-          <input
-            type="text"
-            required
-            value={formData.ingredient_name || ''}
-            onChange={e => onInputChange('ingredient_name', e.target.value)}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            placeholder="e.g., Fresh Tomatoes"
-          />
-          {errors.ingredient_name && (
-            <p className="mt-1 text-sm text-red-400">{errors.ingredient_name}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Brand (Optional)</label>
-          <input
-            type="text"
-            value={formData.brand || ''}
-            onChange={e => onInputChange('brand', e.target.value)}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            placeholder="e.g., Coles, Woolworths"
-          />
-        </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-300">Brand (Optional)</label>
+        <input
+          type="text"
+          value={formData.brand || ''}
+          onChange={e => onInputChange('brand', e.target.value)}
+          onBlur={e => onInputBlur?.('brand', e.target.value)}
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          placeholder="e.g., Coles, Woolworths"
+        />
       </div>
 
-      <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
-        <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
-          📦 Packaging Information
-        </h3>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Pack Size *</label>
-            <input
-              type="text"
-              required
-              value={formData.pack_size || ''}
-              onChange={e => onInputChange('pack_size', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-              placeholder="e.g., 5"
-            />
-            {errors.pack_size && <p className="mt-1 text-sm text-red-400">{errors.pack_size}</p>}
-          </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-300">Pack Size *</label>
+        <input
+          type="text"
+          required
+          value={formData.pack_size || ''}
+          onChange={e => onInputChange('pack_size', e.target.value)}
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          placeholder="e.g., 5"
+        />
+        {errors.pack_size && <p className="mt-1 text-xs text-red-400">{errors.pack_size}</p>}
+      </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Pack Unit *</label>
-            <select
-              required
-              value={formData.pack_size_unit || ''}
-              onChange={e => onInputChange('pack_size_unit', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            >
-              <option value="">Select unit</option>
-              {availableUnits.map(unit => (
-                <option key={unit} value={unit}>
-                  {unit}
-                </option>
-              ))}
-            </select>
-            {errors.pack_size_unit && (
-              <p className="mt-1 text-sm text-red-400">{errors.pack_size_unit}</p>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-300">Pack Unit *</label>
+        <select
+          required
+          value={formData.pack_size_unit || ''}
+          onChange={e => onInputChange('pack_size_unit', e.target.value)}
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+        >
+          <option value="">Select unit</option>
+          {availableUnits.map(unit => (
+            <option key={unit} value={unit}>
+              {unit}
+            </option>
+          ))}
+        </select>
+        {errors.pack_size_unit && (
+          <p className="mt-1 text-xs text-red-400">{errors.pack_size_unit}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-300">Pack Price *</label>
+        <input
+          type="text"
+          required
+          value={packPriceInput}
+          onChange={handlePackPriceChange}
+          onBlur={handlePackPriceBlur}
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          placeholder="e.g., 12.99 or 1,234.56"
+        />
+        {errors.pack_price && <p className="mt-1 text-xs text-red-400">{errors.pack_price}</p>}
+        {formData.pack_price > 0 && formData.pack_size && parseFloat(formData.pack_size) > 0 && formData.pack_size_unit && (
+          <div className="mt-0.5 space-y-0.5">
+            <p className="text-xs text-gray-500">
+              ${formatCost(costPerPackUnit)}/{packUnit}
+            </p>
+            {unitsAreDifferent && formData.unit && costPerWorkingUnit > 0 && (
+              <p className="text-xs text-gray-400">
+                = ${formatCost(costPerWorkingUnit)}/{workingUnit}
+              </p>
             )}
           </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Pack Price *</label>
-            <input
-              type="number"
-              step="0.01"
-              required
-              value={formData.pack_price || ''}
-              onChange={e => onInputChange('pack_price', parseFloat(e.target.value) || 0)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-              placeholder="e.g., 12.99"
-            />
-            {errors.pack_price && <p className="mt-1 text-sm text-red-400">{errors.pack_price}</p>}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-6">
-        <h3 className="mb-4 flex items-center text-lg font-semibold text-white">
-          🧮 Cost Calculation
-        </h3>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Working Unit *</label>
-            <select
-              required
-              value={formData.unit || ''}
-              onChange={e => onInputChange('unit', e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            >
-              <option value="">Select unit</option>
-              {availableUnits.map(unit => (
-                <option key={unit} value={unit}>
-                  {unit}
-                </option>
-              ))}
-            </select>
-            {errors.unit && <p className="mt-1 text-sm text-red-400">{errors.unit}</p>}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Cost per Unit</label>
-            <div className="w-full rounded-2xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white">
-              ${formData.cost_per_unit ? formatCost(formData.cost_per_unit) : '0.000'}
-            </div>
-            <p className="mt-1 text-xs text-gray-400">
-              Automatically calculated from pack price and size
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

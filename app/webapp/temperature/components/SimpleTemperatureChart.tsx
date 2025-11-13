@@ -3,15 +3,15 @@
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useEffect, useRef } from 'react';
 import {
-  CartesianGrid,
-  Line,
-  LineChart as ReLineChart,
-  ReferenceArea,
-  ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    CartesianGrid,
+    Line,
+    LineChart as ReLineChart,
+    ReferenceArea,
+    ReferenceLine,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from 'recharts';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 

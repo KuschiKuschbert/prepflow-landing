@@ -1,12 +1,12 @@
 'use client';
 
-import { convertIngredientCost } from '@/lib/unit-conversion';
-import { getStandardUnit } from '../utils/getStandardUnit';
-import { Edit, Trash2, Store, MapPin } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Icon } from '@/components/ui/Icon';
+import { convertIngredientCost } from '@/lib/unit-conversion';
+import { Edit, MapPin, Store, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useCardTouchHandlers } from '../hooks/useCardTouchHandlers';
+import { getStandardUnit } from '../utils/getStandardUnit';
 
 interface Ingredient {
   id: string;
@@ -183,7 +183,7 @@ export function IngredientCard({
             <button
               onClick={handleEditClick}
               disabled={isSelectionMode}
-              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 disabled:opacity-50 ${
+              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] disabled:opacity-50 ${
                 isSelectionMode ? 'cursor-not-allowed' : ''
               }`}
               aria-label={`Edit ${ingredient.ingredient_name}`}
@@ -193,7 +193,7 @@ export function IngredientCard({
             <button
               onClick={handleDeleteClick}
               disabled={deletingId === ingredient.id || isSelectionMode}
-              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 disabled:opacity-50 ${
+              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${
                 isSelectionMode ? 'cursor-not-allowed' : ''
               }`}
               aria-label={`Delete ${ingredient.ingredient_name}`}

@@ -15,7 +15,7 @@
 
   /* Navigation dimensions */
   --bottom-navbar-height: 64px;
-  --sidebar-width: 256px;
+  --sidebar-width: 288px; /* 72 * 4px = 288px for md screens */
 
   /* Safe area insets for iOS devices with notches */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
@@ -68,10 +68,14 @@
   contain-intrinsic-size: auto 500px;
   /* Prevent layout shift during hydration */
   will-change: margin-left, padding-bottom;
-  transition: margin-left 0s, padding-bottom 0s;
+  transition: margin-left 0.3s ease-in-out, padding-bottom 0s;
 }
 
 @media (min-width: 768px) {
+  :root {
+    --sidebar-width: 320px; /* 80 * 4px = 320px for md screens (w-80) */
+  }
+
   .webapp-main-content {
     /* Desktop: left margin for sidebar, no bottom padding */
     padding-top: calc(
@@ -80,7 +84,17 @@
     padding-bottom: 0;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    margin-left: 16rem; /* 256px sidebar = 16rem */
+    margin-left: 20rem; /* 320px sidebar = 20rem (w-80) for md screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --sidebar-width: 384px; /* 96 * 4px = 384px for lg screens (w-96) */
+  }
+
+  .webapp-main-content {
+    margin-left: 24rem; /* 384px sidebar = 24rem (w-96) for lg screens */
   }
 }
 

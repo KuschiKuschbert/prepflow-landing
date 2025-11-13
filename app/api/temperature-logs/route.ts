@@ -6,8 +6,10 @@ export async function GET(request: NextRequest) {
   const date = searchParams.get('date');
   const type = searchParams.get('type');
   const location = searchParams.get('location');
+  const equipmentId = searchParams.get('equipment_id');
+  const limit = searchParams.get('limit');
   const page = parseInt(searchParams.get('page') || '1', 10);
-  const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
+  const pageSize = limit ? parseInt(limit, 10) : parseInt(searchParams.get('pageSize') || '20', 10);
 
   try {
     if (!supabaseAdmin) {
@@ -34,6 +36,10 @@ export async function GET(request: NextRequest) {
 
     if (location) {
       query = query.eq('location', location);
+    }
+
+    if (equipmentId) {
+      query = query.eq('equipment_id', equipmentId);
     }
 
     // Apply pagination
@@ -81,10 +87,10 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    // Validate required fields
-    if (!body.temperature_celsius || !body.temperature_type) {
+    // Validate required fields - either equipment_id or temperature_type must be provided
+    if (!body.temperature_celsius || (!body.equipment_id && !body.temperature_type)) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
+        { success: false, error: 'Missing required fields: temperature_celsius and (equipment_id or temperature_type)' },
         { status: 400 },
       );
     }
@@ -97,15 +103,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // If equipment_id is provided, fetch equipment details for temperature_type and location
+    let temperatureType = body.temperature_type;
+    let equipmentLocation = body.location;
+
+    if (body.equipment_id) {
+      const { data: equipment } = await supabaseAdmin
+        .from('temperature_equipment')
+        .select('equipment_type, location, name')
+        .eq('id', body.equipment_id)
+        .single();
+
+      if (equipment) {
+        temperatureType = temperatureType || equipment.equipment_type;
+        equipmentLocation = equipmentLocation || equipment.location || equipment.name;
+      }
+    }
+
     const { data, error } = await supabaseAdmin
       .from('temperature_logs')
       .insert([
         {
+          equipment_id: body.equipment_id || null,
           log_date: body.log_date || new Date().toISOString().split('T')[0],
           log_time: body.log_time || new Date().toTimeString().split(' ')[0],
-          temperature_type: body.temperature_type,
+          temperature_type: temperatureType,
           temperature_celsius: body.temperature_celsius,
-          location: body.location || null,
+          location: equipmentLocation || null,
           notes: body.notes || null,
           logged_by: body.logged_by || 'System',
           created_at: new Date().toISOString(),

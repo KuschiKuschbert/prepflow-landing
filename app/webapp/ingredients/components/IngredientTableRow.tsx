@@ -3,12 +3,13 @@
 
 'use client';
 
-import { convertIngredientCost } from '@/lib/unit-conversion';
-import { getStandardUnit } from '../utils/getStandardUnit';
-import { Edit, Trash2, Info } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { useState, useRef } from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { convertIngredientCost } from '@/lib/unit-conversion';
+import { Edit, Info, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { useLongPress } from '../hooks/useLongPress';
+import { getStandardUnit } from '../utils/getStandardUnit';
 
 interface Ingredient {
   id: string;
@@ -243,9 +244,9 @@ export function IngredientTableRow({
         isSelectionMode ? 'cursor-pointer' : 'hover:bg-[#2a2a2a]/20'
       } ${isSelected && isSelectionMode ? 'bg-[#29E7CD]/10' : ''}`}
       onClick={handleRowClick}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
+      onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
+      onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
       <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
         <button
@@ -330,21 +331,21 @@ export function IngredientTableRow({
           <button
             onClick={handleEditClick}
             disabled={isSelectionMode}
-            className={`text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80 ${isSelectionMode ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`text-[#29E7CD] transition-all duration-200 hover:text-[#29E7CD] hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] ${isSelectionMode ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label={`Edit ${ingredient.ingredient_name}`}
           >
-            <Icon icon={Edit} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <Icon icon={Edit} size="sm" className="text-[#29E7CD] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)]" aria-hidden={true} />
           </button>
           <button
             onClick={handleDeleteClick}
             disabled={deletingId === ingredient.id || isSelectionMode}
-            className={`text-red-400 transition-colors hover:text-red-300 disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
+            className={`text-red-400 transition-all duration-200 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
             aria-label={`Delete ${ingredient.ingredient_name}`}
           >
             {deletingId === ingredient.id ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
             ) : (
-              <Icon icon={Trash2} size="sm" className="text-red-400" aria-hidden={true} />
+              <Icon icon={Trash2} size="sm" className="text-red-400 transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)]" aria-hidden={true} />
             )}
           </button>
         </div>

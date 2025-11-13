@@ -56,6 +56,7 @@ export default function IngredientEditModal({
 }: IngredientEditModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const scrollableContentRef = useRef<HTMLDivElement>(null);
 
   // Handle Escape key
   useEffect(() => {
@@ -77,7 +78,14 @@ export default function IngredientEditModal({
     };
   }, [isOpen, onClose]);
 
-  // Focus trap
+  // Reset scroll position when modal opens
+  useEffect(() => {
+    if (!isOpen || !scrollableContentRef.current) return;
+    // Reset scroll to top immediately when modal opens
+    scrollableContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+  }, [isOpen]);
+
+  // Focus trap and focus first input field
   useEffect(() => {
     if (!isOpen || !modalRef.current) return;
 
@@ -87,6 +95,11 @@ export default function IngredientEditModal({
     );
     const firstElement = focusableElements[0] as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+    // Find first input field (text, number, or select)
+    const firstInput = modal.querySelector(
+      'input[type="text"], input[type="number"], select',
+    ) as HTMLElement;
 
     const handleTab = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
@@ -105,7 +118,17 @@ export default function IngredientEditModal({
     };
 
     document.addEventListener('keydown', handleTab);
-    firstElement?.focus();
+
+    // Focus first input field and ensure it's visible
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      if (firstInput) {
+        firstInput.focus();
+        firstInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else if (firstElement) {
+        firstElement.focus();
+      }
+    }, 100);
 
     return () => {
       document.removeEventListener('keydown', handleTab);
@@ -123,7 +146,7 @@ export default function IngredientEditModal({
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-[10vh]"
       onClick={handleBackdropClick}
       aria-modal="true"
       aria-labelledby="ingredient-edit-modal-title"
@@ -134,15 +157,15 @@ export default function IngredientEditModal({
       {/* Modal Card - Responsive */}
       <div
         ref={modalRef}
-        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[95vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300 sm:max-h-[90vh]"
+        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 w-full max-w-4xl max-h-[calc(90vh-10vh)] overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300"
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="ingredient-edit-modal-title"
       >
         {/* Header with close button - Responsive */}
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-4 py-3 backdrop-blur-sm sm:px-6 sm:py-4">
-          <h2 id="ingredient-edit-modal-title" className="text-xl font-bold text-white sm:text-2xl">
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
+          <h2 id="ingredient-edit-modal-title" className="text-lg font-bold text-white sm:text-xl">
             Edit Ingredient
           </h2>
           <button
@@ -162,8 +185,11 @@ export default function IngredientEditModal({
         </div>
 
         {/* Scrollable content - Responsive */}
-        <div className="max-h-[calc(95vh-64px)] overflow-y-auto sm:max-h-[calc(90vh-80px)]">
-          <div className="p-4 sm:p-6">
+        <div
+          ref={scrollableContentRef}
+          className="max-h-[calc(90vh-10vh-4rem)] overflow-y-auto"
+        >
+          <div className="p-3 sm:p-4">
             <IngredientForm
               ingredient={ingredient}
               suppliers={suppliers}

@@ -1,22 +1,28 @@
 'use client';
 
-import { formatIngredientName } from '@/lib/text-utils';
+import { Icon } from '@/components/ui/Icon';
+import {
+    formatBrandName,
+    formatIngredientName,
+    formatStorageLocation,
+    formatSupplierName,
+    formatTextInput,
+} from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
-import { useState, useMemo } from 'react';
+import { AlertTriangle } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import {
+    calculateCostPerUnit,
+    calculateWastagePercentage,
+    checkValidation as checkValidationHelper,
+    formatCost,
+    getValidationErrors,
+} from '../utils/wizard-helpers';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
 import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
 import { Ingredient, IngredientWizardProps } from './types';
-import { Package, Settings, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import {
-  calculateCostPerUnit,
-  calculateWastagePercentage,
-  formatCost,
-  checkValidation as checkValidationHelper,
-  getValidationErrors,
-} from '../utils/wizard-helpers';
 
 export default function IngredientWizard({
   suppliers = [],
@@ -69,10 +75,19 @@ export default function IngredientWizard({
   };
 
   const handleInputChange = (field: keyof Ingredient, value: string | number) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        [field]: value,
+      };
+
+      // Auto-default working unit to pack unit when pack unit changes (if working unit not already set)
+      if (field === 'pack_size_unit' && typeof value === 'string' && value && !prev.unit) {
+        updated.unit = value;
+      }
+
+      return updated;
+    });
 
     // Clear error when user starts typing
     if (errors[field]) {
@@ -96,6 +111,41 @@ export default function IngredientWizard({
         yield_percentage: 100 - suggestedWastage,
         cost_per_unit_incl_trim: (prev.cost_per_unit || 0) / ((100 - suggestedWastage) / 100),
       }));
+    }
+  };
+
+  const handleInputBlur = (field: keyof Ingredient, value: string | number) => {
+    // Format text fields on blur
+    if (typeof value === 'string' && value.trim()) {
+      let formattedValue = value;
+
+      switch (field) {
+        case 'ingredient_name':
+          formattedValue = formatIngredientName(value);
+          break;
+        case 'brand':
+          formattedValue = formatBrandName(value);
+          break;
+        case 'supplier':
+          formattedValue = formatSupplierName(value);
+          break;
+        case 'storage_location':
+          formattedValue = formatStorageLocation(value);
+          break;
+        case 'product_code':
+          formattedValue = formatTextInput(value);
+          break;
+        default:
+          return; // Don't format other fields
+      }
+
+      // Only update if formatting changed the value
+      if (formattedValue !== value) {
+        setFormData(prev => ({
+          ...prev,
+          [field]: formattedValue,
+        }));
+      }
     }
   };
 
@@ -199,72 +249,26 @@ export default function IngredientWizard({
     availableUnits,
     errors,
     onInputChange: handleInputChange,
+    onInputBlur: handleInputBlur,
     onWastagePercentageChange: handleWastagePercentageChange,
     onYieldPercentageChange: handleYieldPercentageChange,
     onAddSupplier,
     formatCost,
   };
   return (
-    <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-white">🥘 Add New Ingredient</h2>
-        <div className="flex items-center space-x-2">
-          <div className="h-2 w-2 rounded-full bg-[#29E7CD]"></div>
-          <span className="text-xs text-gray-400">Guided Setup</span>
-        </div>
-      </div>
-
-      {/* Wizard Progress */}
-      <div className="mb-8">
-        <div className="flex items-center justify-center space-x-4">
+    <div className="mb-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+      <div className="mb-2"><h2 className="text-base font-semibold text-white">Add New Ingredient</h2></div>
+      <div className="mb-4">
+        <div className="flex items-center gap-1.5">
           {[1, 2, 3].map(step => (
-            <div key={step} className="flex items-center">
-              <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 ${
-                  step <= wizardStep
-                    ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white'
-                    : 'bg-[#2a2a2a] text-gray-400'
-                }`}
-              >
-                {step}
-              </div>
-              {step < 3 && (
-                <div
-                  className={`mx-2 h-1 w-12 transition-all duration-200 ${
-                    step < wizardStep
-                      ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]'
-                      : 'bg-[#2a2a2a]'
-                  }`}
-                />
-              )}
+            <div key={step} className="flex flex-1 items-center">
+              <div className={`h-1 flex-1 rounded-full transition-all duration-200 ${step <= wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'}`} />
             </div>
           ))}
         </div>
-        <div className="mt-4 flex justify-center">
-          <div className="text-sm text-gray-400">
-            {wizardStep === 1 && (
-              <span className="flex items-center gap-1">
-                <Icon icon={Package} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
-                Basic Information
-              </span>
-            )}
-            {wizardStep === 2 && (
-              <span className="flex items-center gap-1">
-                <Icon icon={Settings} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
-                Advanced Settings
-              </span>
-            )}
-            {wizardStep === 3 && (
-              <span className="flex items-center gap-1">
-                <Icon icon={CheckCircle} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
-                Review & Save
-              </span>
-            )}
-          </div>
-        </div>
       </div>
       {errors.submit && (
-        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
+        <div className="mb-3 rounded-lg border border-red-500 bg-red-900/20 px-3 py-2 text-sm text-red-400">
           <div className="flex items-center space-x-2">
             <Icon icon={AlertTriangle} size="md" className="text-red-400" aria-hidden={true} />
             <span>{errors.submit}</span>
