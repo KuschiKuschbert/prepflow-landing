@@ -1,0 +1,134 @@
+'use client';
+
+import { Icon } from '@/components/ui/Icon';
+import { convertIngredientCost } from '@/lib/unit-conversion';
+import { Info } from 'lucide-react';
+import { getStandardUnit } from '../utils/getStandardUnit';
+
+interface Ingredient {
+  id: string;
+  ingredient_name: string;
+  brand?: string;
+  pack_size?: string;
+  pack_size_unit?: string;
+  unit?: string;
+  cost_per_unit: number;
+  product_code?: string;
+  supplier?: string;
+  storage_location?: string;
+  min_stock_level?: number;
+  current_stock?: number;
+  standard_unit?: string;
+  original_unit?: string;
+}
+
+interface IngredientTableCellProps {
+  ingredient: Ingredient;
+  displayUnit: string;
+}
+
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('en-AU', {
+    style: 'currency',
+    currency: 'AUD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  }).format(amount);
+};
+
+export function IngredientNameCell({ ingredient }: { ingredient: Ingredient }) {
+  return (
+    <td className="px-6 py-4 whitespace-nowrap">
+      <div className="text-sm font-medium text-white">{ingredient.ingredient_name}</div>
+      {ingredient.product_code && (
+        <div className="text-sm text-gray-400">{ingredient.product_code}</div>
+      )}
+    </td>
+  );
+}
+
+export function IngredientBrandCell({ ingredient }: { ingredient: Ingredient }) {
+  return (
+    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">{ingredient.brand || '-'}</td>
+  );
+}
+
+export function IngredientPackSizeCell({ ingredient }: { ingredient: Ingredient }) {
+  const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
+  const originalUnit = ingredient.original_unit || packSizeUnit;
+  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
+  const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
+
+  return (
+    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+      <div className="flex items-center gap-1">
+        <span>
+          {ingredient.pack_size != null ? `${ingredient.pack_size} ${packSizeUnit}` : '-'}
+        </span>
+        {showUnitTooltip && (
+          <span
+            className="cursor-help text-xs text-gray-500"
+            title={`Original unit: ${originalUnit}, Standard: ${standardUnit}`}
+          >
+            <Icon icon={Info} size="xs" className="text-gray-500" aria-hidden={true} />
+          </span>
+        )}
+      </div>
+    </td>
+  );
+}
+
+export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableCellProps) {
+  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
+  const convertedCost = convertIngredientCost(
+    ingredient.cost_per_unit,
+    standardUnit,
+    displayUnit,
+    1,
+  );
+  const originalUnit =
+    ingredient.original_unit || ingredient.pack_size_unit || ingredient.unit || 'GM';
+  const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
+
+  return (
+    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+      <div className="flex flex-col">
+        <span>
+          {formatCurrency(convertedCost)}/{displayUnit}
+        </span>
+        {showUnitTooltip && <span className="text-xs text-gray-500">(std: {standardUnit})</span>}
+      </div>
+    </td>
+  );
+}
+
+export function IngredientSupplierCell({ ingredient }: { ingredient: Ingredient }) {
+  return (
+    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+      {ingredient.supplier || '-'}
+    </td>
+  );
+}
+
+export function IngredientStockCell({ ingredient }: { ingredient: Ingredient }) {
+  const isLowStock =
+    ingredient.min_stock_level &&
+    ingredient.current_stock &&
+    ingredient.current_stock <= ingredient.min_stock_level;
+
+  return (
+    <td className="px-6 py-4 whitespace-nowrap">
+      <div className="flex items-center gap-2">
+        <span className={`text-sm ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}>
+          {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'}{' '}
+          {ingredient.unit || ''}
+        </span>
+        {isLowStock && (
+          <span className="inline-flex items-center rounded-full bg-red-900/20 px-2 py-1 text-xs font-medium text-red-400">
+            Low Stock
+          </span>
+        )}
+      </div>
+    </td>
+  );
+}

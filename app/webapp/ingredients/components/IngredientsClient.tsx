@@ -2,7 +2,6 @@
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
-import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
 // Direct imports to eliminate skeleton flashes
@@ -11,7 +10,9 @@ import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useIngredientActions } from '../hooks/useIngredientActions';
+import { useIngredientBulkUpdate } from '../hooks/useIngredientBulkUpdate';
 import { useIngredientData } from '../hooks/useIngredientData';
+import { useIngredientEditSave } from '../hooks/useIngredientEditSave';
 import { useIngredientFiltering, type SortOption } from '../hooks/useIngredientFiltering';
 import { useIngredientFormState } from '../hooks/useIngredientFormState';
 import { useIngredientMigration } from '../hooks/useIngredientMigration';
@@ -53,21 +54,8 @@ interface Supplier {
   created_at?: string;
 }
 
-function extractSupabaseError(error: unknown): string {
-  if (error && typeof error === 'object' && 'message' in error) {
-    const err = error as { message?: string; details?: string; hint?: string };
-    const msg = err.message || err.details || err.hint || 'Failed to update ingredient';
-    if (err.details && err.details !== err.message)
-      return `${err.message || 'Update failed'}: ${err.details}`;
-    if (err.hint && err.hint !== err.details) return `${msg} (${err.hint})`;
-    return msg;
-  }
-  return error instanceof Error ? error.message : 'Failed to update ingredient';
-}
-
 export default function IngredientsClient() {
   const { t } = useTranslation();
-  const { showSuccess, showError } = useNotification();
   const {
     isSelectionMode,
     startLongPress,
@@ -161,6 +149,16 @@ export default function IngredientsClient() {
     selectedIngredients,
     filteredIngredients,
   });
+  const { handleBulkUpdate } = useIngredientBulkUpdate({
+    refetchIngredients,
+    setSelectedIngredients,
+    exitSelectionMode,
+  });
+  const { handleSave: handleEditSave } = useIngredientEditSave({
+    setIngredients,
+    setEditingIngredient,
+    setError,
+  });
   const handleCSVImport = async () => {
     setImporting(true);
     await handleCSVImportAction(parsedIngredients);
@@ -213,27 +211,7 @@ export default function IngredientsClient() {
       <IngredientTableWithFilters
         ingredients={paginatedIngredients}
         onBulkDelete={handleBulkDelete}
-        onBulkUpdate={async (ids, updates) => {
-          try {
-            const response = await fetch('/api/ingredients/bulk-update', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ ids, updates }),
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Failed to update ingredients');
-            await refetchIngredients();
-            setSelectedIngredients(new Set());
-            exitSelectionMode();
-            showSuccess(
-              data.message ||
-                `Successfully updated ${ids.length} ingredient${ids.length !== 1 ? 's' : ''}`,
-            );
-          } catch (error) {
-            showError(error instanceof Error ? error.message : 'Failed to update ingredients');
-            throw error;
-          }
-        }}
+        onBulkUpdate={handleBulkUpdate}
         displayUnit={displayUnit}
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
@@ -275,60 +253,7 @@ export default function IngredientsClient() {
         availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
           if (!editingIngredient?.id) return;
-          try {
-            // Try direct Supabase call first (faster, simpler)
-            const { data, error } = await supabase
-              .from('ingredients')
-              .update({ ...ingredientData, updated_at: new Date().toISOString() })
-              .eq('id', editingIngredient.id)
-              .select()
-              .maybeSingle();
-
-            if (error) {
-              // If RLS error, fall back to API route
-              if (error.code === '42501' || error.message?.includes('row-level security')) {
-                console.warn('RLS policy blocked direct update, falling back to API route');
-                const response = await fetch('/api/ingredients', {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    id: editingIngredient.id,
-                    ...ingredientData,
-                  }),
-                });
-
-                const result = await response.json();
-                if (!response.ok || !result.success) {
-                  const errorMsg = result.details || result.error || 'Failed to update ingredient';
-                  setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
-                  setEditingIngredient(null);
-                  return;
-                }
-
-                setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? result.data : ing)));
-                setEditingIngredient(null);
-                return;
-              } else {
-                // Other error, throw it
-                throw new Error(extractSupabaseError(error));
-              }
-            }
-
-            // Success with direct call
-            if (!data) {
-              setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
-              setEditingIngredient(null);
-              return;
-            }
-
-            setIngredients(prev => prev.map(ing => (ing.id === editingIngredient.id ? data : ing)));
-            setEditingIngredient(null);
-          } catch (error) {
-            setError(extractSupabaseError(error));
-            throw error;
-          }
+          await handleEditSave(editingIngredient.id, ingredientData);
         }}
         onClose={() => setEditingIngredient(null)}
         loading={loading}
