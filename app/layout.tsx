@@ -7,6 +7,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // cleaned: Removed performance trackers on request
+// Deployment attempt: testing Vercel limit reset
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
 import LandingBackground from './components/landing/LandingBackground';
