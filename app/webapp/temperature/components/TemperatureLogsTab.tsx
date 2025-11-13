@@ -93,12 +93,15 @@ export default function TemperatureLogsTab({
     temperatureTypes.find(t => t.value === type)?.label || type;
 
   // Convert equipment IDs from string to number for TemperatureFilters component
-  const equipmentForFilters = equipment.map((eq, index) => ({
-    id: eq.id && !isNaN(parseInt(eq.id, 10)) ? parseInt(eq.id, 10) : `eq-${index}`, // Use string fallback to avoid duplicate numeric keys
-    name: eq.name,
-    equipment_type: eq.equipment_type,
-    is_active: eq.is_active,
-  }));
+  const equipmentForFilters: Array<{ id?: number; name: string; equipment_type: string; is_active: boolean }> = equipment.map((eq) => {
+    const parsedId = eq.id && !isNaN(parseInt(eq.id, 10)) ? parseInt(eq.id, 10) : undefined;
+    return {
+      id: parsedId,
+      name: eq.name,
+      equipment_type: eq.equipment_type,
+      is_active: eq.is_active,
+    };
+  });
 
   // Wrap t function to ensure it always returns a string
   const tString = (key: string, fallback: string): string => {
