@@ -56,7 +56,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
   return (
     <div className="space-y-4">
       {/* Mobile Card Layout */}
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <div className="space-y-3">
           {calculations.map((calc, index) => (
             <div
@@ -131,32 +131,33 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
       </div>
 
       {/* Desktop Table Layout */}
-      <div className="hidden overflow-x-auto md:block">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="hidden overflow-x-auto lg:block">
+        <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+          <table className="min-w-full divide-y divide-[#2a2a2a]">
+            <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Ingredient
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Qty
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Cost
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
             {calculations.map((calc, index) => (
               <tr
                 key={calc.ingredientId || `calc-${index}`}
-                className="transition-colors duration-200 hover:bg-[#2a2a2a]/50"
+                className="transition-colors hover:bg-[#2a2a2a]/20"
               >
-                <td className="px-3 py-2 text-sm text-white">{calc.ingredientName}</td>
-                <td className="px-3 py-2 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-white">{calc.ingredientName}</td>
+                <td className="px-6 py-4 text-sm text-gray-300">
                   {editingIngredient === calc.ingredientId ? (
                     <div className="flex items-center space-x-2">
                       <input
@@ -175,10 +176,10 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
                     </span>
                   )}
                 </td>
-                <td className="px-3 py-2 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-gray-300">
                   ${calc.yieldAdjustedCost.toFixed(2)}
                 </td>
-                <td className="px-3 py-2 text-sm">
+                <td className="px-6 py-4 text-sm">
                   <div className="flex items-center space-x-2">
                     {editingIngredient === calc.ingredientId ? (
                       <>
@@ -235,6 +236,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Total COGS Summary */}

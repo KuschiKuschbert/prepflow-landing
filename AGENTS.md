@@ -344,10 +344,43 @@ mobile/                 # React Native app (future)
 
 #### **Data Tables**
 
-- **Table Headers:** `bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20`
-- **Table Rows:** `hover:bg-[#2a2a2a]/20` with smooth transitions
+- **Table Container:** `overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]`
+- **Table Headers:** `sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20`
+- **Header Cells:** `px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase`
+- **Table Body:** `divide-y divide-[#2a2a2a] bg-[#1f1f1f]`
+- **Table Rows:** `transition-colors hover:bg-[#2a2a2a]/20`
+- **Table Cells:** `px-6 py-4 text-sm text-white` (or `text-gray-300` for secondary content)
+- **Pagination:** Use `TablePagination` component from `components/ui/TablePagination.tsx` - place at both top and bottom of tables
+- **Responsive:** Tables use `lg:` (1024px) breakpoint - mobile/tablet (<1024px) shows card layout, desktop (≥1024px) shows table
 - **Progress Bars:** Gradient bars for visual data representation
 - **Chips:** `rounded-full` with `bg-[#29E7CD]/10` and `border border-[#29E7CD]/20`
+
+**Standard Table Structure:**
+```tsx
+<div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+  <table className="min-w-full divide-y divide-[#2a2a2a]">
+    <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+      <tr>
+        <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+          Header
+        </th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+      <tr className="transition-colors hover:bg-[#2a2a2a]/20">
+        <td className="px-6 py-4 text-sm text-white">Content</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+**Pagination Pattern:**
+```tsx
+<TablePagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} className="mb-4" />
+<TableComponent data={paginatedData} />
+<TablePagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} className="mt-4" />
+```
 
 #### **Forms & Inputs**
 
@@ -414,6 +447,7 @@ import { Zap, Store, MapPin } from 'lucide-react';
   - **Bulk Actions Icons:** All bulk action buttons use Lucide icons (replaced emoji icons: ⚡→`Zap`, 🗑️→`Trash2`, 🏪→`Store`, 📍→`MapPin`, 🎯→`Target`)
   - **Filter Dropdown Icons:** Supplier filters use `Store`, Storage filters use `MapPin` (replaced emoji icons)
 - **Component Location:** `components/ui/Icon.tsx` - Standardized wrapper for consistent sizing and accessibility
+- **Migration Status:** All components use Icon wrapper - direct lucide-react imports are only for icon component references, not direct usage
 
 #### **Z-Index Hierarchy**
 
@@ -1155,9 +1189,22 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 ### **Responsive Design**
 
 - **Breakpoints:** Mobile-first approach with Tailwind breakpoints
+- **Primary Breakpoint:** `lg:` (1024px) - Desktop layout starts at 1024px
+- **Tablet Behavior:** Tablets (768px-1023px) use mobile layout for better touch experience
+- **Mobile Layout:** Below `lg:` (1024px) → Mobile layout (phones + tablets)
+- **Desktop Layout:** `lg:` and above (1024px+) → Desktop layout
+- **Table Responsive Pattern:**
+  - Mobile/Tablet: `block lg:hidden` for card layouts
+  - Desktop: `hidden lg:block` for table layouts
 - **Touch Targets:** Minimum 44px for interactive elements
 - **Navigation:** Mobile-friendly hamburger menu with backdrop blur
 - **Forms:** Touch-optimized input fields with proper spacing
+
+**Responsive Patterns:**
+- Tables: `hidden lg:block` for desktop, `block lg:hidden` for mobile cards
+- Grids: `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3`
+- Text sizes: `text-sm lg:text-base xl:text-lg`
+- Padding: `p-4 lg:p-6 xl:p-8`
 
 ### **Performance**
 
@@ -1197,7 +1244,14 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 
 ### **UX Improvements Completed ✅**
 
-1. **Comprehensive Loading Skeleton System:** Unified LoadingSkeleton component with multiple variants (stats, table, form, chart, card, list, button) following Material Design 3 principles
+1. **UI Consistency Standardization (January 2025):**
+   - **Table Formatting:** All tables use consistent styling (rounded-3xl, standard headers, consistent cell padding)
+   - **Dual Pagination:** All paginated tables have pagination at both top and bottom using `TablePagination` component
+   - **Responsive Breakpoints:** Standardized to `lg:` (1024px) breakpoint - tablets use mobile layout for better UX
+   - **Icon Standardization:** All icons use Icon wrapper component for consistent sizing and accessibility
+   - **Table Components Updated:** PerformanceTable, IngredientTable, RecipeTable, DishTable, COGSTable, EquipmentTable, EquipmentListTable
+
+2. **Comprehensive Loading Skeleton System:** Unified LoadingSkeleton component with multiple variants (stats, table, form, chart, card, list, button) following Material Design 3 principles
 2. **Skeleton Positioning Fix:** Resolved skeleton positioning issues by removing unnecessary dynamic imports from dashboard components
 3. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
 4. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Material Design 3 styling across the entire webapp
