@@ -9,7 +9,7 @@ interface FinalCTAProps {
 export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
   const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
-  const handleRegister = () => {
+  const handleGetStarted = () => {
     if (isAuthenticated) {
       if (trackEngagement) {
         trackEngagement('final_cta_go_to_dashboard_click');
@@ -17,26 +17,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
       window.location.href = '/webapp';
     } else {
       if (trackEngagement) {
-        trackEngagement('final_cta_register_click');
-      }
-      try {
-        if (typeof window !== 'undefined') {
-          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
-        }
-      } catch (_) {}
-      signIn('auth0', { callbackUrl: '/webapp' });
-    }
-  };
-
-  const handleSignIn = () => {
-    if (isAuthenticated) {
-      if (trackEngagement) {
-        trackEngagement('final_cta_go_to_dashboard_click');
-      }
-      window.location.href = '/webapp';
-    } else {
-      if (trackEngagement) {
-        trackEngagement('final_cta_sign_in_click');
+        trackEngagement('final_cta_get_started_click');
       }
       try {
         if (typeof window !== 'undefined') {
@@ -60,18 +41,11 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
 
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
-            onClick={handleRegister}
+            onClick={handleGetStarted}
             className="rounded-full border border-white/20 bg-white px-8 py-4 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
-            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Register for PrepFlow'}
+            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Get Started with PrepFlow'}
           >
             {isAuthenticated ? 'Go to Dashboard' : 'Get Started'}
-          </button>
-          <button
-            onClick={handleSignIn}
-            className="rounded-full border border-white/20 bg-transparent px-8 py-4 text-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
-            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Sign in to PrepFlow'}
-          >
-            {isAuthenticated ? 'Go to Dashboard' : 'Sign In'}
           </button>
         </div>
 
