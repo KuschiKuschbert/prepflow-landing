@@ -6,22 +6,11 @@ import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
 import { Grid3x3, Sparkles, Table2, Thermometer } from 'lucide-react';
 import { useState } from 'react';
+import { TemperatureEquipment } from '../types';
 import { CreateEquipmentForm } from './CreateEquipmentForm';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
 import { EquipmentItem } from './EquipmentItem';
 import { EquipmentListTable } from './EquipmentListTable';
-
-interface TemperatureEquipment {
-  id: string;
-  name: string;
-  equipment_type: string;
-  location: string | null;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
 
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];

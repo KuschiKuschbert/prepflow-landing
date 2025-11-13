@@ -1,15 +1,6 @@
 import { useTranslation } from '@/lib/useTranslation';
+import { TemperatureEquipment } from '../types';
 import { getDefaultTemperatureRange } from '../utils/getDefaultTemperatureRange';
-
-interface TemperatureEquipment {
-  id: string;
-  name: string;
-  equipment_type: string;
-  location: string | null;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  is_active: boolean;
-}
 
 interface EquipmentItemProps {
   item: TemperatureEquipment;
