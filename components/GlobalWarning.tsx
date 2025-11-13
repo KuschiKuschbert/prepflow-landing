@@ -45,7 +45,7 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   }, [warning, onHeightChange]);
 
   // Early return AFTER hooks
-  if (warnings.length === 0) {
+  if (warnings.length === 0 || !warning) {
     return null;
   }
 
