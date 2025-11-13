@@ -56,27 +56,49 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           {/* Desktop Actions */}
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher className="mr-4" />
-            {!isLoading && (
-              <button
-                className={BUTTON_STYLES.primary}
-                onClick={() => {
-                  if (isAuthenticated) {
+            {!isLoading &&
+              (isAuthenticated ? (
+                <button
+                  className={BUTTON_STYLES.primary}
+                  onClick={() => {
                     trackEngagement('header_go_to_dashboard_click');
                     window.location.href = '/webapp';
-                  } else {
-                    trackEngagement('header_get_started_click');
-                    try {
-                      if (typeof window !== 'undefined') {
-                        sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
-                      }
-                    } catch (_) {}
-                    signIn('auth0', { callbackUrl: '/webapp' });
-                  }
-                }}
-              >
-                {isAuthenticated ? 'Go to Dashboard' : 'Get Started'}
-              </button>
-            )}
+                  }}
+                >
+                  Go to Dashboard
+                </button>
+              ) : (
+                <>
+                  <button
+                    className={BUTTON_STYLES.secondary}
+                    onClick={() => {
+                      trackEngagement('header_sign_in_click');
+                      try {
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                        }
+                      } catch (_) {}
+                      signIn('auth0', { callbackUrl: '/webapp' });
+                    }}
+                  >
+                    {t('nav.signIn', 'Sign in')}
+                  </button>
+                  <button
+                    className={BUTTON_STYLES.primary}
+                    onClick={() => {
+                      trackEngagement('header_register_click');
+                      try {
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                        }
+                      } catch (_) {}
+                      signIn('auth0', { callbackUrl: '/webapp' });
+                    }}
+                  >
+                    {t('nav.register', 'Register')}
+                  </button>
+                </>
+              ))}
           </div>
 
           {/* Mobile Header - Simplified: Just logo and CTA */}
