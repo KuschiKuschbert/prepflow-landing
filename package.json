@@ -40,6 +40,7 @@
     "@tanstack/react-query": "^5.87.4",
     "@tanstack/react-query-devtools": "^5.87.4",
     "@types/howler": "^2.2.12",
+    "@types/qrcode": "^1.5.6",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "canvas-confetti": "^1.9.4",
@@ -55,8 +56,10 @@
     "next-auth": "^4.24.13",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.7",
+    "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-qr-code": "^2.0.18",
     "recharts": "^2.8.0",
     "stripe": "^19.2.0",
     "web-vitals": "^5.1.0"
