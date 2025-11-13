@@ -1,4 +1,6 @@
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import { QrCode } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 import { getDefaultTemperatureRange } from '../utils/getDefaultTemperatureRange';
 
@@ -13,6 +15,7 @@ interface EquipmentItemProps {
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: Partial<TemperatureEquipment>) => void;
   onEquipmentClick?: (equipment: TemperatureEquipment) => void;
+  onShowQRCode?: (equipment: TemperatureEquipment) => void;
   getLastLogInfo?: (equipment: TemperatureEquipment) => {
     date: string;
     temperature: number;
@@ -32,6 +35,7 @@ export function EquipmentItem({
   onDelete,
   onUpdate,
   onEquipmentClick,
+  onShowQRCode,
   getLastLogInfo,
   formatDate,
 }: EquipmentItemProps) {
@@ -192,6 +196,19 @@ export function EquipmentItem({
               ? t('temperature.logging', 'Logging...')
               : t('temperature.quickLog', 'Quick Log')}
           </button>
+          {onShowQRCode && (
+            <button
+              onClick={e => {
+                handleButtonClick(e);
+                onShowQRCode(item);
+              }}
+              className="group relative rounded-xl border-2 border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-2.5 text-gray-300 transition-all duration-200 hover:border-[#29E7CD] hover:from-[#29E7CD]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#29E7CD]/20"
+              title="Show QR Code"
+            >
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+              <Icon icon={QrCode} size="sm" className="relative z-10" aria-hidden={true} />
+            </button>
+          )}
           <button
             onClick={e => {
               handleButtonClick(e);

@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { ArrowDown, ArrowUp, ArrowUpDown, Edit, Filter, Power, PowerOff, Search, Trash2, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Edit, Filter, Power, PowerOff, QrCode, Search, Trash2, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { TemperatureEquipment } from '../types';
 
@@ -16,6 +16,7 @@ interface EquipmentListTableProps {
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: Partial<TemperatureEquipment>) => void;
   onEquipmentClick?: (equipment: TemperatureEquipment) => void;
+  onShowQRCode?: (equipment: TemperatureEquipment) => void;
   currentPage: number;
   itemsPerPage: number;
   totalItems: number;
@@ -43,6 +44,7 @@ export function EquipmentListTable({
   onDelete,
   onUpdate,
   onEquipmentClick,
+  onShowQRCode,
   currentPage,
   itemsPerPage,
   totalItems,
@@ -489,6 +491,16 @@ export function EquipmentListTable({
                         >
                           Quick Log
                         </button>
+                        {onShowQRCode && (
+                          <button
+                            onClick={() => onShowQRCode(item)}
+                            className="group relative rounded-lg border-2 border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-1.5 text-gray-300 transition-all duration-200 hover:border-[#29E7CD] hover:from-[#29E7CD]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#29E7CD]/20"
+                            title="Show QR Code"
+                          >
+                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                            <Icon icon={QrCode} size="sm" className="relative z-10" aria-hidden={true} />
+                          </button>
+                        )}
                         <button
                           onClick={() => onToggleStatus(item.id, item.is_active)}
                           className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] p-1.5 text-gray-400 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10 hover:text-white"
@@ -819,6 +831,16 @@ export function EquipmentListTable({
               >
                 Quick Log
               </button>
+              {onShowQRCode && (
+                <button
+                  onClick={() => onShowQRCode(item)}
+                  className="group relative rounded-lg border-2 border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-2 text-gray-300 transition-all duration-200 hover:border-[#29E7CD] hover:from-[#29E7CD]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#29E7CD]/20"
+                  title="Show QR Code"
+                >
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                  <Icon icon={QrCode} size="sm" className="relative z-10" aria-hidden={true} />
+                </button>
+              )}
               <button
                 onClick={() => onToggleStatus(item.id, item.is_active)}
                 className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] p-2 text-gray-400 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10 hover:text-white"

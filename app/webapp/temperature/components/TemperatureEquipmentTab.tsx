@@ -11,6 +11,7 @@ import { CreateEquipmentForm } from './CreateEquipmentForm';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
 import { EquipmentItem } from './EquipmentItem';
 import { EquipmentListTable } from './EquipmentListTable';
+import { EquipmentQRCodeModal } from './EquipmentQRCodeModal';
 
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];
@@ -58,6 +59,8 @@ export default function TemperatureEquipmentTab({
   const [editingEquipment, setEditingEquipment] = useState<string | null>(null);
   const [selectedEquipment, setSelectedEquipment] = useState<TemperatureEquipment | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [qrCodeEquipment, setQrCodeEquipment] = useState<TemperatureEquipment | null>(null);
+  const [isQRCodeModalOpen, setIsQRCodeModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -124,6 +127,16 @@ export default function TemperatureEquipmentTab({
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
     setSelectedEquipment(null);
+  };
+
+  const handleShowQRCode = (equipment: TemperatureEquipment) => {
+    setQrCodeEquipment(equipment);
+    setIsQRCodeModalOpen(true);
+  };
+
+  const handleCloseQRCodeModal = () => {
+    setIsQRCodeModalOpen(false);
+    setQrCodeEquipment(null);
   };
 
   const getTypeIcon = (type: string) => {
@@ -349,6 +362,7 @@ export default function TemperatureEquipmentTab({
           onDelete={handleDeleteEquipment}
           onUpdate={(id, updates) => handleUpdateEquipment(id, updates)}
           onEquipmentClick={handleEquipmentClick}
+          onShowQRCode={handleShowQRCode}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           totalItems={equipment.length}
@@ -401,6 +415,7 @@ export default function TemperatureEquipmentTab({
                 onDelete={handleDeleteEquipment}
                 onUpdate={(id, updates) => handleUpdateEquipment(id, updates)}
                 onEquipmentClick={handleEquipmentClick}
+                onShowQRCode={handleShowQRCode}
                 getLastLogInfo={getLastLogInfo}
                 formatDate={formatDate}
               />
@@ -415,6 +430,16 @@ export default function TemperatureEquipmentTab({
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
       />
+
+      {/* QR Code Modal */}
+      {qrCodeEquipment && (
+        <EquipmentQRCodeModal
+          equipment={qrCodeEquipment}
+          isOpen={isQRCodeModalOpen}
+          onClose={handleCloseQRCodeModal}
+          temperatureTypes={temperatureTypes}
+        />
+      )}
     </div>
   );
 }
