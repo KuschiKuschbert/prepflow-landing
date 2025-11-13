@@ -136,7 +136,7 @@ function TemperatureLogsPageContent() {
       if (data.success && data.data?.items) {
         const logs = data.data.items;
         console.log(`✅ Fetched ${logs.length} temperature logs`, {
-          sampleLogs: logs.slice(0, 3).map(l => ({ location: l.location, date: l.log_date })),
+          sampleLogs: logs.slice(0, 3).map((l: TemperatureLog) => ({ location: l.location, date: l.log_date })),
         });
         setAllLogs(logs);
         // Cache for analytics tab
