@@ -118,7 +118,7 @@ export function EquipmentItem({
                     displayText = `≥${defaultRange.minTemp}°C`;
                   }
                 } else {
-                  displayText = t('temperature.notSet', 'Not set');
+                  displayText = String(t('temperature.notSet', 'Not set'));
                 }
 
                 return (
