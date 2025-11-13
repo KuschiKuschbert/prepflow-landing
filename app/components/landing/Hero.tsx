@@ -27,27 +27,41 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
   );
 
   const handleSignIn = () => {
-    if (trackEngagement) {
-      trackEngagement('hero_sign_in_click');
-    }
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+    if (isAuthenticated) {
+      if (trackEngagement) {
+        trackEngagement('hero_go_to_dashboard_click');
       }
-    } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+      window.location.href = '/webapp';
+    } else {
+      if (trackEngagement) {
+        trackEngagement('hero_sign_in_click');
+      }
+      try {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+        }
+      } catch (_) {}
+      signIn('auth0', { callbackUrl: '/webapp' });
+    }
   };
 
   const handleRegister = () => {
-    if (trackEngagement) {
-      trackEngagement('hero_register_click');
-    }
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+    if (isAuthenticated) {
+      if (trackEngagement) {
+        trackEngagement('hero_go_to_dashboard_click');
       }
-    } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+      window.location.href = '/webapp';
+    } else {
+      if (trackEngagement) {
+        trackEngagement('hero_register_click');
+      }
+      try {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+        }
+      } catch (_) {}
+      signIn('auth0', { callbackUrl: '/webapp' });
+    }
   };
 
   return (
@@ -71,16 +85,16 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
           <button
             onClick={handleRegister}
             className="rounded-full border border-white/20 bg-white px-8 py-3 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
-            aria-label="Register for PrepFlow"
+            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Register for PrepFlow'}
           >
-            Register
+            {isAuthenticated ? 'Go to Dashboard' : 'Register'}
           </button>
           <button
             onClick={handleSignIn}
             className="rounded-full border border-white/20 bg-transparent px-8 py-3 text-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
-            aria-label="Sign in to PrepFlow"
+            aria-label={isAuthenticated ? 'Go to Dashboard' : 'Sign in to PrepFlow'}
           >
-            Sign In
+            {isAuthenticated ? 'Go to Dashboard' : 'Sign In'}
           </button>
         </div>
 
