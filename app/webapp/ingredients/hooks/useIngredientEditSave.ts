@@ -3,14 +3,9 @@
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
 
-interface Ingredient {
-  id: string;
-  [key: string]: unknown;
-}
-
-interface UseIngredientEditSaveProps {
-  setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
-  setEditingIngredient: (ingredient: Ingredient | null) => void;
+interface UseIngredientEditSaveProps<T extends { id: string }> {
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
+  setEditingIngredient: (ingredient: T | null) => void;
   setError: (error: string) => void;
 }
 
@@ -26,13 +21,13 @@ function extractSupabaseError(error: unknown): string {
   return error instanceof Error ? error.message : 'Failed to update ingredient';
 }
 
-export function useIngredientEditSave({
+export function useIngredientEditSave<T extends { id: string }>({
   setIngredients,
   setEditingIngredient,
   setError,
-}: UseIngredientEditSaveProps) {
+}: UseIngredientEditSaveProps<T>) {
   const handleSave = useCallback(
-    async (ingredientId: string, ingredientData: Partial<Ingredient>) => {
+    async (ingredientId: string, ingredientData: Partial<T>) => {
       try {
         const { data, error } = await supabase
           .from('ingredients')

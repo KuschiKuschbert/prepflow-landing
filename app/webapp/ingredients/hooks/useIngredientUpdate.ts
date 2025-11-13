@@ -10,40 +10,42 @@ import {
 } from '@/lib/text-utils';
 import { useCallback } from 'react';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  pack_price?: number;
-  unit?: string;
-  cost_per_unit: number;
-  supplier?: string;
-  storage_location?: string;
-}
-
-interface UseIngredientUpdateProps {
-  setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
+interface UseIngredientUpdateProps<
+  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+> {
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setError: (error: string) => void;
-  setEditingIngredient?: (ingredient: Ingredient | null) => void;
+  setEditingIngredient?: (ingredient: T | null) => void;
 }
 
-export function useIngredientUpdate({
-  setIngredients,
-  setError,
-  setEditingIngredient,
-}: UseIngredientUpdateProps) {
+export function useIngredientUpdate<
+  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+>({ setIngredients, setError, setEditingIngredient }: UseIngredientUpdateProps<T>) {
   const handleUpdateIngredient = useCallback(
-    async (id: string, updates: Partial<Ingredient>) => {
+    async (id: string, updates: Partial<T>) => {
       try {
         const formattedUpdates = {
           ...updates,
-          ingredient_name: updates.ingredient_name ? formatIngredientName(updates.ingredient_name) : undefined,
-          brand: updates.brand ? formatBrandName(updates.brand) : undefined,
-          supplier: updates.supplier ? formatSupplierName(updates.supplier) : undefined,
-          storage_location: updates.storage_location ? formatStorageLocation(updates.storage_location) : undefined,
-          product_code: updates.product_code ? formatTextInput(updates.product_code) : undefined,
+          ingredient_name:
+            'ingredient_name' in updates && updates.ingredient_name
+              ? formatIngredientName(String(updates.ingredient_name))
+              : undefined,
+          brand:
+            'brand' in updates && updates.brand
+              ? formatBrandName(String(updates.brand))
+              : undefined,
+          supplier:
+            'supplier' in updates && updates.supplier
+              ? formatSupplierName(String(updates.supplier))
+              : undefined,
+          storage_location:
+            'storage_location' in updates && updates.storage_location
+              ? formatStorageLocation(String(updates.storage_location))
+              : undefined,
+          product_code:
+            'product_code' in updates && updates.product_code
+              ? formatTextInput(String(updates.product_code))
+              : undefined,
         };
 
         const { data, error } = await supabase
@@ -95,4 +97,3 @@ export function useIngredientUpdate({
 
   return { handleUpdateIngredient };
 }
-

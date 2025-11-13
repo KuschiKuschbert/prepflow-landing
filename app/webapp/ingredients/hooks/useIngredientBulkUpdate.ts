@@ -4,7 +4,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback } from 'react';
 
 interface UseIngredientBulkUpdateProps {
-  refetchIngredients: () => Promise<void>;
+  refetchIngredients: () => Promise<unknown>;
   setSelectedIngredients: React.Dispatch<React.SetStateAction<Set<string>>>;
   exitSelectionMode: () => void;
 }

@@ -1,12 +1,12 @@
 'use client';
 
 import { useRef } from 'react';
-import { TemperatureEquipment, TemperatureLog } from '../types';
-import { TemperatureChartContent } from './TemperatureChartContent';
-import { TemperatureChartEmptyState } from './TemperatureChartEmptyState';
 import { useTemperatureChartConfig } from '../hooks/useTemperatureChartConfig';
 import { useTemperatureChartData } from '../hooks/useTemperatureChartData';
+import { TemperatureEquipment, TemperatureLog } from '../types';
 import { useChartFormatters } from '../utils/chart-formatters';
+import { TemperatureChartContent } from './TemperatureChartContent';
+import { TemperatureChartEmptyState } from './TemperatureChartEmptyState';
 
 interface SimpleTemperatureChartProps {
   logs: TemperatureLog[];

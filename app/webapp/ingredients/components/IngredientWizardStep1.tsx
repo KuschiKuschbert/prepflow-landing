@@ -23,9 +23,10 @@ export default function IngredientWizardStep1({
     }
   }, [formData.pack_price]);
   // Calculate cost per pack unit
-  const costPerPackUnit = formData.pack_price && formData.pack_size && parseFloat(formData.pack_size) > 0
-    ? formData.pack_price / parseFloat(formData.pack_size)
-    : 0;
+  const costPerPackUnit =
+    formData.pack_price && formData.pack_size && parseFloat(formData.pack_size) > 0
+      ? formData.pack_price / parseFloat(formData.pack_size)
+      : 0;
 
   // Calculate cost per working unit (if different from pack unit)
   const costPerWorkingUnit = formData.cost_per_unit || 0;
@@ -58,9 +59,7 @@ export default function IngredientWizardStep1({
 
     // Ensure only one decimal point
     const parts = validInput.split('.');
-    const formattedInput = parts.length > 2
-      ? parts[0] + '.' + parts.slice(1).join('')
-      : validInput;
+    const formattedInput = parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : validInput;
 
     // Update local state for free typing
     setPackPriceInput(formattedInput);
@@ -158,18 +157,22 @@ export default function IngredientWizardStep1({
           placeholder="e.g., 12.99 or 1,234.56"
         />
         {errors.pack_price && <p className="mt-1 text-xs text-red-400">{errors.pack_price}</p>}
-        {formData.pack_price > 0 && formData.pack_size && parseFloat(formData.pack_size) > 0 && formData.pack_size_unit && (
-          <div className="mt-0.5 space-y-0.5">
-            <p className="text-xs text-gray-500">
-              ${formatCost(costPerPackUnit)}/{packUnit}
-            </p>
-            {unitsAreDifferent && formData.unit && costPerWorkingUnit > 0 && (
-              <p className="text-xs text-gray-400">
-                = ${formatCost(costPerWorkingUnit)}/{workingUnit}
+        {formData.pack_price !== undefined &&
+          formData.pack_price > 0 &&
+          formData.pack_size &&
+          parseFloat(formData.pack_size) > 0 &&
+          formData.pack_size_unit && (
+            <div className="mt-0.5 space-y-0.5">
+              <p className="text-xs text-gray-500">
+                ${formatCost(costPerPackUnit)}/{packUnit}
               </p>
-            )}
-          </div>
-        )}
+              {unitsAreDifferent && formData.unit && costPerWorkingUnit > 0 && (
+                <p className="text-xs text-gray-400">
+                  = ${formatCost(costPerWorkingUnit)}/{workingUnit}
+                </p>
+              )}
+            </div>
+          )}
       </div>
     </div>
   );

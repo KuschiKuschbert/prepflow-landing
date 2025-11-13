@@ -3,16 +3,15 @@
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
 
-interface Ingredient {
-  id: string;
-}
-
-interface UseIngredientDeleteProps {
-  setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
+interface UseIngredientDeleteProps<T extends { id: string }> {
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setError: (error: string) => void;
 }
 
-export function useIngredientDelete({ setIngredients, setError }: UseIngredientDeleteProps) {
+export function useIngredientDelete<T extends { id: string }>({
+  setIngredients,
+  setError,
+}: UseIngredientDeleteProps<T>) {
   const handleDeleteIngredient = useCallback(
     async (id: string) => {
       try {
@@ -46,4 +45,3 @@ export function useIngredientDelete({ setIngredients, setError }: UseIngredientD
 
   return { handleDeleteIngredient };
 }
-

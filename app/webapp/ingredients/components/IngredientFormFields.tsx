@@ -38,9 +38,10 @@ export function IngredientFormFields({
   handleInputChange,
 }: IngredientFormFieldsProps) {
   // Calculate cost per pack unit (like wizard Step 1)
-  const costPerPackUnit = formData.pack_price && formData.pack_size && parseFloat(formData.pack_size) > 0
-    ? formData.pack_price / parseFloat(formData.pack_size)
-    : 0;
+  const costPerPackUnit =
+    formData.pack_price && formData.pack_size && parseFloat(formData.pack_size) > 0
+      ? formData.pack_price / parseFloat(formData.pack_size)
+      : 0;
   const packUnit = formData.pack_size_unit || '';
 
   return (
@@ -120,13 +121,17 @@ export function IngredientFormFields({
             required
           />
           {errors.pack_price && <p className="mt-1 text-sm text-red-400">{errors.pack_price}</p>}
-          {formData.pack_price > 0 && formData.pack_size && parseFloat(formData.pack_size) > 0 && formData.pack_size_unit && (
-            <div className="mt-0.5 space-y-0.5">
-              <p className="text-xs text-gray-500">
-                ${formatCost(costPerPackUnit)}/{packUnit}
-              </p>
-            </div>
-          )}
+          {formData.pack_price !== undefined &&
+            formData.pack_price > 0 &&
+            formData.pack_size &&
+            parseFloat(formData.pack_size) > 0 &&
+            formData.pack_size_unit && (
+              <div className="mt-0.5 space-y-0.5">
+                <p className="text-xs text-gray-500">
+                  ${formatCost(costPerPackUnit)}/{packUnit}
+                </p>
+              </div>
+            )}
         </div>
       </div>
 
@@ -182,7 +187,6 @@ export function IngredientFormFields({
           </p>
         </div>
       </div>
-
     </>
   );
 }
