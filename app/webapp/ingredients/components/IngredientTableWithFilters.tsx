@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { IngredientTableRow } from './IngredientTableRow';
 import { IngredientCard } from './IngredientCard';
 import { IngredientTableFilterBar } from './IngredientTableFilterBar';
 import { type SortOption } from '../hooks/useIngredientFiltering';
-import { ChevronUp, ChevronDown, Plus, Upload, Download, Zap, Trash2, Store, MapPin, Target } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { InputDialog } from '@/components/ui/InputDialog';
+import { IngredientBulkActionsMenu } from './IngredientBulkActionsMenu';
+import { IngredientTableDialogs } from './IngredientTableDialogs';
+import { IngredientSelectionModeBanner } from './IngredientSelectionModeBanner';
+import { IngredientTableHeader } from './IngredientTableHeader';
+import { IngredientTableEmptyState } from './IngredientTableEmptyState';
+import { IngredientTableDesktop } from './IngredientTableDesktop';
+import { useIngredientBulkActionsDialog } from '../hooks/useIngredientBulkActionsDialog';
+import { useIngredientTableSort } from '../hooks/useIngredientTableSort';
 
 interface Ingredient {
   id: string;
@@ -98,117 +101,32 @@ export default function IngredientTableWithFilters({
   onEnterSelectionMode,
   onExitSelectionMode,
 }: IngredientTableWithFiltersProps) {
-  const [bulkActionLoading, setBulkActionLoading] = useState(false);
-  const [showBulkMenu, setShowBulkMenu] = useState(false);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [showInputDialog, setShowInputDialog] = useState(false);
-  const [inputDialogConfig, setInputDialogConfig] = useState<{
-    title: string;
-    message: string;
-    placeholder?: string;
-    type?: 'text' | 'number';
-    min?: number;
-    max?: number;
-    onConfirm: (value: string) => void;
-  } | null>(null);
-
   const selectedCount = selectedIngredients.size;
-  const filteredIngredientsData = ingredients; // Use ingredients prop for bulk operations
+  const {
+    bulkActionLoading,
+    showBulkMenu,
+    setShowBulkMenu,
+    showConfirmDialog,
+    setShowConfirmDialog,
+    showInputDialog,
+    setShowInputDialog,
+    inputDialogConfig,
+    deleteConfirmId,
+    setDeleteConfirmId,
+    handleBulkDelete,
+    confirmBulkDelete,
+    handleBulkUpdateSupplier,
+    handleBulkUpdateStorage,
+    handleBulkUpdateWastage,
+    handleDelete: handleDeleteFromHook,
+    confirmDelete: confirmDeleteFromHook,
+  } = useIngredientBulkActionsDialog({
+    selectedIngredients,
+    onBulkDelete,
+    onBulkUpdate,
+  });
 
-  const handleBulkDelete = async () => {
-    if (selectedCount === 0 || !onBulkDelete) return;
-    setShowBulkMenu(false);
-    setShowConfirmDialog(true);
-  };
-
-  const confirmBulkDelete = async () => {
-    if (!onBulkDelete) return;
-    setShowConfirmDialog(false);
-    setBulkActionLoading(true);
-    try {
-      await onBulkDelete(Array.from(selectedIngredients));
-    } finally {
-      setBulkActionLoading(false);
-    }
-  };
-
-  const handleBulkUpdateSupplier = () => {
-    if (selectedCount === 0 || !onBulkUpdate) return;
-    setShowBulkMenu(false);
-    setInputDialogConfig({
-      title: 'Update Supplier',
-      message: `Enter new supplier for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-      placeholder: 'Supplier name',
-      type: 'text',
-      onConfirm: async (newSupplier: string) => {
-        if (!newSupplier.trim() || !onBulkUpdate) return;
-        setShowInputDialog(false);
-        setInputDialogConfig(null);
-        setBulkActionLoading(true);
-        try {
-          await onBulkUpdate(Array.from(selectedIngredients), { supplier: newSupplier.trim() });
-        } finally {
-          setBulkActionLoading(false);
-        }
-      },
-    });
-    setShowInputDialog(true);
-  };
-
-  const handleBulkUpdateStorage = () => {
-    if (selectedCount === 0 || !onBulkUpdate) return;
-    setShowBulkMenu(false);
-    setInputDialogConfig({
-      title: 'Update Storage Location',
-      message: `Enter new storage location for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-      placeholder: 'Storage location',
-      type: 'text',
-      onConfirm: async (newStorage: string) => {
-        if (!newStorage.trim() || !onBulkUpdate) return;
-        setShowInputDialog(false);
-        setInputDialogConfig(null);
-        setBulkActionLoading(true);
-        try {
-          await onBulkUpdate(Array.from(selectedIngredients), { storage_location: newStorage.trim() });
-        } finally {
-          setBulkActionLoading(false);
-        }
-      },
-    });
-    setShowInputDialog(true);
-  };
-
-  const handleBulkUpdateWastage = () => {
-    if (selectedCount === 0 || !onBulkUpdate) return;
-    setShowBulkMenu(false);
-    setInputDialogConfig({
-      title: 'Update Wastage Percentage',
-      message: `Enter wastage percentage (0-100) for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-      placeholder: '0-100',
-      type: 'number',
-      min: 0,
-      max: 100,
-      onConfirm: async (wastageInput: string) => {
-        if (!onBulkUpdate) return;
-        const wastage = parseFloat(wastageInput);
-        if (isNaN(wastage) || wastage < 0 || wastage > 100) {
-          return; // Validation handled by InputDialog
-        }
-        setShowInputDialog(false);
-        setInputDialogConfig(null);
-        setBulkActionLoading(true);
-        try {
-          await onBulkUpdate(Array.from(selectedIngredients), {
-            trim_peel_waste_percentage: wastage,
-            yield_percentage: 100 - wastage,
-          });
-        } finally {
-          setBulkActionLoading(false);
-        }
-      },
-    });
-    setShowInputDialog(true);
-  };
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Close dropdown on Escape key
   useEffect(() => {
@@ -220,48 +138,20 @@ export default function IngredientTableWithFilters({
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [showBulkMenu]);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const handleColumnSort = (column: 'name' | 'brand' | 'pack_size' | 'cost' | 'supplier' | 'stock') => {
-    const currentAsc = `${column}_asc` as SortOption;
-    const currentDesc = `${column}_desc` as SortOption;
-
-    if (sortBy === currentAsc) {
-      onSortChange(currentDesc);
-    } else {
-      onSortChange(currentAsc);
-    }
-  };
-
-  const getSortIcon = (column: 'name' | 'brand' | 'pack_size' | 'cost' | 'supplier' | 'stock') => {
-    const currentAsc = `${column}_asc` as SortOption;
-    const currentDesc = `${column}_desc` as SortOption;
-
-    if (sortBy === currentAsc) {
-      return <Icon icon={ChevronUp} size="xs" className="ml-1 text-[#29E7CD]" />;
-    }
-    if (sortBy === currentDesc) {
-      return <Icon icon={ChevronDown} size="xs" className="ml-1 text-[#29E7CD]" />;
-    }
-    return null;
-  };
-
-  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const { handleColumnSort, getSortIcon } = useIngredientTableSort(sortBy, onSortChange);
 
   const handleDelete = async (id: string): Promise<void> => {
-    setDeleteConfirmId(id);
-    setShowConfirmDialog(true);
+    handleDeleteFromHook(id);
   };
 
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
-    setShowConfirmDialog(false);
     setDeletingId(deleteConfirmId);
     try {
-      await onDelete(deleteConfirmId);
+      await confirmDeleteFromHook(onDelete);
     } finally {
       setDeletingId(null);
-      setDeleteConfirmId(null);
     }
   };
 
@@ -273,78 +163,26 @@ export default function IngredientTableWithFilters({
     );
   }
 
-  const filteredIngredients = ingredients;
-
-  if (filteredIngredients.length === 0 && !loading) {
+  if (ingredients.length === 0 && !loading) {
     return (
-      <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-        <IngredientTableFilterBar
-          ingredients={ingredients}
-          searchTerm={searchTerm}
-          supplierFilter={supplierFilter}
-          storageFilter={storageFilter}
-          sortBy={sortBy}
-          displayUnit={displayUnit}
-          itemsPerPage={itemsPerPage}
-          onSearchChange={onSearchChange}
-          onSupplierFilterChange={onSupplierFilterChange}
-          onStorageFilterChange={onStorageFilterChange}
-          onSortChange={onSortChange}
-          onDisplayUnitChange={onDisplayUnitChange}
-          onItemsPerPageChange={onItemsPerPageChange}
-        />
-
-        {/* Empty State */}
-        <div className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">Ingredients (0)</h2>
-            {/* Action Buttons */}
-            {onAddIngredient && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={onAddIngredient}
-                  className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
-                >
-                  + Add
-                </button>
-                {onImportCSV && (
-                  <button
-                    onClick={onImportCSV}
-                    className="rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
-                  >
-                    📁 Import
-                  </button>
-                )}
-                {onExportCSV && (
-                  <button
-                    onClick={onExportCSV}
-                    className="rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
-                  >
-                    📤 Export
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="p-12 text-center">
-          <div className="mb-4 text-gray-400">
-            <svg className="mx-auto mb-4 h-16 w-16" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm8 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1V8z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <h3 className="mb-2 text-xl font-semibold text-white">No Ingredients Found</h3>
-            <p className="text-gray-400">
-              {searchTerm || supplierFilter || storageFilter
-                ? 'Try adjusting your filters to see more results.'
-                : 'Start by adding your first ingredient to get started.'}
-            </p>
-          </div>
-        </div>
-      </div>
+      <IngredientTableEmptyState
+        ingredients={ingredients}
+        searchTerm={searchTerm}
+        supplierFilter={supplierFilter}
+        storageFilter={storageFilter}
+        sortBy={sortBy}
+        displayUnit={displayUnit}
+        itemsPerPage={itemsPerPage}
+        onSearchChange={onSearchChange}
+        onSupplierFilterChange={onSupplierFilterChange}
+        onStorageFilterChange={onStorageFilterChange}
+        onSortChange={onSortChange}
+        onDisplayUnitChange={onDisplayUnitChange}
+        onItemsPerPageChange={onItemsPerPageChange}
+        onAddIngredient={onAddIngredient}
+        onImportCSV={onImportCSV}
+        onExportCSV={onExportCSV}
+      />
     );
   }
 
@@ -357,289 +195,49 @@ export default function IngredientTableWithFilters({
         storageFilter={storageFilter}
         sortBy={sortBy}
         displayUnit={displayUnit}
+        itemsPerPage={itemsPerPage}
         onSearchChange={onSearchChange}
         onSupplierFilterChange={onSupplierFilterChange}
         onStorageFilterChange={onStorageFilterChange}
         onSortChange={onSortChange}
         onDisplayUnitChange={onDisplayUnitChange}
-        itemsPerPage={itemsPerPage}
         onItemsPerPageChange={onItemsPerPageChange}
       />
 
-      {/* Table Header */}
-      <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <h2 className="text-xl font-semibold text-white">
-              Ingredients {totalFiltered !== undefined ? `(${totalFiltered} total, showing ${ingredients.length})` : `(${ingredients.length})`}
-            </h2>
-            {/* Action Buttons */}
-            {onAddIngredient && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={onAddIngredient}
-                  className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
-                >
-                  <Icon icon={Plus} size="xs" className="text-current" aria-hidden={true} />
-                  <span>Add</span>
-                </button>
-                {onImportCSV && (
-                  <button
-                    onClick={onImportCSV}
-                    className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
-                  >
-                    <Icon icon={Upload} size="xs" className="text-current" aria-hidden={true} />
-                    <span>Import</span>
-                  </button>
-                )}
-                {onExportCSV && (
-                  <button
-                    onClick={onExportCSV}
-                    className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
-                  >
-                    <Icon icon={Download} size="xs" className="text-current" aria-hidden={true} />
-                    <span>Export</span>
-                  </button>
-                )}
-                {/* Selection Mode Indicator + Bulk Actions Button - Desktop: in action buttons section */}
-                {isSelectionMode && (
-                  <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10">
-                    <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />
-                    <span className="text-sm font-medium text-[#29E7CD]">
-                      Selection Mode
-                    </span>
-                  </div>
-                )}
-                {selectedCount > 0 && onBulkDelete && (
-                  <div className="relative z-[60] hidden md:block">
-                    <button
-                      onClick={() => setShowBulkMenu(!showBulkMenu)}
-                      disabled={bulkActionLoading}
-                      className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl disabled:opacity-50"
-                    >
-                      <Icon icon={Zap} size="xs" className="text-current" aria-hidden={true} />
-                      <span>Bulk Actions ({selectedCount})</span>
-                    </button>
+      <IngredientTableHeader
+        totalFiltered={totalFiltered}
+        ingredientsCount={ingredients.length}
+        selectedCount={selectedCount}
+        selectedIngredients={selectedIngredients}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={onItemsPerPageChange}
+        onAddIngredient={onAddIngredient}
+        onImportCSV={onImportCSV}
+        onExportCSV={onExportCSV}
+        onBulkDelete={onBulkDelete}
+        isSelectionMode={isSelectionMode}
+        bulkActionLoading={bulkActionLoading}
+        showBulkMenu={showBulkMenu}
+        onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
+        onBulkDeleteClick={handleBulkDelete}
+        onBulkUpdateSupplier={handleBulkUpdateSupplier}
+        onBulkUpdateStorage={handleBulkUpdateStorage}
+        onBulkUpdateWastage={handleBulkUpdateWastage}
+        onSelectAll={onSelectAll}
+        onEnterSelectionMode={onEnterSelectionMode}
+      />
 
-                    {showBulkMenu && (
-                      <>
-                        <div
-                          className="fixed inset-0 z-[55]"
-                          onClick={() => setShowBulkMenu(false)}
-                          aria-hidden={true}
-                        />
-                        <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-                          <div className="p-1.5">
-                            <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
-                              {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
-                            </div>
+      <IngredientSelectionModeBanner
+        isSelectionMode={isSelectionMode}
+        onExitSelectionMode={() => {
+          onSelectAll(false);
+          if (onExitSelectionMode) {
+            onExitSelectionMode();
+          }
+        }}
+      />
 
-                            <div className="mt-1.5 space-y-0.5">
-                              <button
-                                onClick={handleBulkDelete}
-                                disabled={bulkActionLoading}
-                                className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
-                              >
-                                <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
-                                <span>Delete Selected</span>
-                              </button>
-
-                              {onBulkUpdate && (
-                                <>
-                                  <button
-                                    onClick={handleBulkUpdateSupplier}
-                                    disabled={bulkActionLoading}
-                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                                  >
-                                    <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
-                                    <span>Update Supplier</span>
-                                  </button>
-
-                                  <button
-                                    onClick={handleBulkUpdateStorage}
-                                    disabled={bulkActionLoading}
-                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                                  >
-                                    <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
-                                    <span>Update Storage Location</span>
-                                  </button>
-
-                                  <button
-                                    onClick={handleBulkUpdateWastage}
-                                    disabled={bulkActionLoading}
-                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                                  >
-                                    <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
-                                    <span>Update Wastage %</span>
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Items Per Page Selector */}
-            <div className="flex items-center gap-1.5">
-              <label htmlFor="items-per-page-header" className="text-xs text-gray-400 whitespace-nowrap">
-                Show:
-              </label>
-              <select
-                id="items-per-page-header"
-                value={itemsPerPage}
-                onChange={e => onItemsPerPageChange(Number(e.target.value))}
-                className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-2.5 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
-                title="Items per page"
-              >
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-              </select>
-            </div>
-            {selectedIngredients.size > 0 ? (
-              <>
-                <button
-                  onClick={() => onSelectAll(false)}
-                  className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
-                  aria-label="Deselect all ingredients"
-                >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>{selectedIngredients.size} selected</span>
-                </button>
-                {/* Bulk Actions Button - Mobile: next to selected count */}
-                {selectedCount > 0 && onBulkDelete && (
-                  <div className="relative z-[60] md:hidden">
-                    <button
-                      onClick={() => setShowBulkMenu(!showBulkMenu)}
-                      disabled={bulkActionLoading}
-                      className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl disabled:opacity-50"
-                    >
-                      <Icon icon={Zap} size="xs" className="text-current" aria-hidden={true} />
-                      <span>Actions</span>
-                    </button>
-
-                    {showBulkMenu && (
-                      <>
-                        <div
-                          className="fixed inset-0 z-[55]"
-                          onClick={() => setShowBulkMenu(false)}
-                          aria-hidden={true}
-                        />
-                        <div className="absolute top-full right-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-                          <div className="p-1.5">
-                            <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
-                              {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
-                            </div>
-
-                            <div className="mt-1.5 space-y-0.5">
-                              <button
-                                onClick={handleBulkDelete}
-                                disabled={bulkActionLoading}
-                                className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
-                              >
-                                <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
-                                <span>Delete Selected</span>
-                              </button>
-
-                              {onBulkUpdate && (
-                                <>
-                                  <button
-                                    onClick={handleBulkUpdateSupplier}
-                                    disabled={bulkActionLoading}
-                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                                  >
-                                    <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
-                                    <span>Update Supplier</span>
-                                  </button>
-
-                                  <button
-                                    onClick={handleBulkUpdateStorage}
-                                    disabled={bulkActionLoading}
-                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                                  >
-                                    <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
-                                    <span>Update Storage Location</span>
-                                  </button>
-
-                                  <button
-                                    onClick={handleBulkUpdateWastage}
-                                    disabled={bulkActionLoading}
-                                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                                  >
-                                    <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
-                                    <span>Update Wastage %</span>
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </>
-            ) : (
-              <button
-                onClick={() => {
-                  onSelectAll(true);
-                  // Enter selection mode when selecting all
-                  if (onEnterSelectionMode) {
-                    onEnterSelectionMode();
-                  }
-                }}
-                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
-                aria-label="Select all ingredients"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Select All</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Selection Mode Indicator - Mobile only (desktop shows inline with bulk actions) */}
-      {isSelectionMode && (
-        <div className="bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 border-b border-[#29E7CD]/30 px-6 py-3 md:hidden">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-[#29E7CD] animate-pulse" />
-              <span className="text-sm font-medium text-[#29E7CD]">
-                Selection Mode - Tap items to select
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                // Exit selection mode by clearing all selections
-                onSelectAll(false);
-                // Call exit handler if available
-                if (onExitSelectionMode) {
-                  onExitSelectionMode();
-                }
-              }}
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Done
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Card Layout */}
-      <div className="block lg:hidden space-y-2">
+      <div className="block space-y-2 lg:hidden">
         {ingredients.map(ingredient => (
           <IngredientCard
             key={ingredient.id}
@@ -658,160 +256,38 @@ export default function IngredientTableWithFilters({
         ))}
       </div>
 
-      {/* Desktop Table */}
-      <div className="hidden lg:block overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
-            <tr>
-              <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => {
-                    const allSelected = totalFiltered !== undefined
-                      ? selectedIngredients.size === totalFiltered && totalFiltered > 0
-                      : selectedIngredients.size === ingredients.length && ingredients.length > 0;
-                    onSelectAll(!allSelected);
-                    // Enter selection mode when selecting all
-                    if (!allSelected && onEnterSelectionMode) {
-                      onEnterSelectionMode();
-                    }
-                  }}
-                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-                  aria-label={
-                    totalFiltered !== undefined && selectedIngredients.size === totalFiltered && totalFiltered > 0
-                      ? "Deselect all"
-                      : "Select all"
-                  }
-                >
-                  {(totalFiltered !== undefined
-                    ? selectedIngredients.size === totalFiltered && totalFiltered > 0
-                    : selectedIngredients.size === ingredients.length && ingredients.length > 0) ? (
-                    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
-                  )}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => handleColumnSort('name')}
-                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
-                >
-                  Name
-                  {getSortIcon('name')}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => handleColumnSort('brand')}
-                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
-                >
-                  Brand
-                  {getSortIcon('brand')}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => handleColumnSort('pack_size')}
-                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
-                >
-                  Pack Size
-                  {getSortIcon('pack_size')}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => handleColumnSort('cost')}
-                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
-                >
-                  Cost/Unit
-                  {getSortIcon('cost')}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => handleColumnSort('supplier')}
-                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
-                >
-                  Supplier
-                  {getSortIcon('supplier')}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                <button
-                  onClick={() => handleColumnSort('stock')}
-                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
-                >
-                  Stock
-                  {getSortIcon('stock')}
-                </button>
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#2a2a2a]">
-            {ingredients.map(ingredient => (
-              <IngredientTableRow
-                key={ingredient.id}
-                ingredient={ingredient}
-                displayUnit={displayUnit}
-                selectedIngredients={selectedIngredients}
-                onSelectIngredient={onSelectIngredient}
-                onEdit={onEdit}
-                onDelete={handleDelete}
-                deletingId={deletingId}
-                isSelectionMode={isSelectionMode}
-                onStartLongPress={onStartLongPress}
-                onCancelLongPress={onCancelLongPress}
-                onEnterSelectionMode={onEnterSelectionMode}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Confirm Dialog for Delete */}
-      <ConfirmDialog
-        isOpen={showConfirmDialog}
-        title={deleteConfirmId ? 'Delete Ingredient' : `Delete ${selectedCount} Ingredient${selectedCount > 1 ? 's' : ''}`}
-        message={
-          deleteConfirmId
-            ? 'Are you sure you want to delete this ingredient? This action cannot be undone.'
-            : `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}? This action cannot be undone.`
-        }
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
-        onConfirm={deleteConfirmId ? confirmDelete : confirmBulkDelete}
-        onCancel={() => {
-          setShowConfirmDialog(false);
-          setDeleteConfirmId(null);
-        }}
-        variant="danger"
+      <IngredientTableDesktop
+        ingredients={ingredients}
+        displayUnit={displayUnit}
+        selectedIngredients={selectedIngredients}
+        totalFiltered={totalFiltered}
+        sortBy={sortBy}
+        onSelectIngredient={onSelectIngredient}
+        onSelectAll={onSelectAll}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        handleDelete={handleDelete}
+        deletingId={deletingId}
+        isSelectionMode={isSelectionMode}
+        onStartLongPress={onStartLongPress}
+        onCancelLongPress={onCancelLongPress}
+        onEnterSelectionMode={onEnterSelectionMode}
+        handleColumnSort={handleColumnSort}
+        getSortIcon={getSortIcon}
       />
 
-      {/* Input Dialog for Bulk Updates */}
-      {inputDialogConfig && (
-        <InputDialog
-          isOpen={showInputDialog}
-          title={inputDialogConfig.title}
-          message={inputDialogConfig.message}
-          placeholder={inputDialogConfig.placeholder}
-          type={inputDialogConfig.type}
-          min={inputDialogConfig.min}
-          max={inputDialogConfig.max}
-          confirmLabel="Update"
-          cancelLabel="Cancel"
-          onConfirm={inputDialogConfig.onConfirm}
-          onCancel={() => {
-            setShowInputDialog(false);
-            setInputDialogConfig(null);
-          }}
-          variant="info"
-        />
-      )}
+      <IngredientTableDialogs
+        showConfirmDialog={showConfirmDialog}
+        setShowConfirmDialog={setShowConfirmDialog}
+        showInputDialog={showInputDialog}
+        setShowInputDialog={setShowInputDialog}
+        inputDialogConfig={inputDialogConfig}
+        deleteConfirmId={deleteConfirmId}
+        setDeleteConfirmId={setDeleteConfirmId}
+        selectedCount={selectedCount}
+        confirmDelete={confirmDelete}
+        confirmBulkDelete={confirmBulkDelete}
+      />
     </div>
   );
 }
