@@ -81,8 +81,8 @@ export function TemperatureFilters({
             <option value="all">{t('temperature.allEquipment', 'All Equipment')}</option>
             {equipment
               .filter(eq => eq.is_active)
-              .map(item => (
-                <option key={item.id} value={item.equipment_type}>
+              .map((item, index) => (
+                <option key={item.id ?? `eq-${index}`} value={item.equipment_type}>
                   {getTypeIcon(item.equipment_type)} {item.name}
                 </option>
               ))}

@@ -13,7 +13,7 @@ interface UseRecipeIngredientLoadingProps {
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>;
   setError?: (error: string) => void;
   setIsLoadingFromApi?: (loading: boolean) => void;
-  preserveManualIngredients?: boolean;
+  preserveManualIngredients?: () => boolean;
 }
 
 export function useRecipeIngredientLoading({
@@ -21,7 +21,7 @@ export function useRecipeIngredientLoading({
   setRecipeIngredients,
   setError,
   setIsLoadingFromApi,
-  preserveManualIngredients = false,
+  preserveManualIngredients = () => false,
 }: UseRecipeIngredientLoadingProps) {
   const loadExistingRecipeIngredients = useCallback(
     async (recipeId: string) => {
@@ -47,7 +47,9 @@ export function useRecipeIngredientLoading({
         const loadedCalculations = mapApiItemsToCalculations(items, recipeId);
         const recipeIngredients = mapApiItemsToRecipeIngredients(items, recipeId);
         if (setIsLoadingFromApi) setIsLoadingFromApi(true);
-        if (preserveManualIngredients) {
+        // Call function at runtime to check if manual ingredients should be preserved
+        const shouldPreserve = preserveManualIngredients();
+        if (shouldPreserve) {
           setCalculations(prev => mergeCalculations(prev, loadedCalculations));
           setRecipeIngredients(prev => mergeRecipeIngredients(prev, recipeIngredients));
         } else {
@@ -64,7 +66,7 @@ export function useRecipeIngredientLoading({
           setError(err instanceof Error ? err.message : 'Failed to load recipe ingredients');
       }
     },
-    [setCalculations, setRecipeIngredients, setError, setIsLoadingFromApi],
+    [setCalculations, setRecipeIngredients, setError, setIsLoadingFromApi, preserveManualIngredients],
   );
   return { loadExistingRecipeIngredients };
 }

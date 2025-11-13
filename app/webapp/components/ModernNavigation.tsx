@@ -1,20 +1,20 @@
 'use client';
+import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
+import CatchTheDocket from '@/components/Loading/CatchTheDocket';
+import { useCatchTheDocketTrigger } from '@/hooks/useCatchTheDocketTrigger';
+import { useLogoInteractions } from '@/hooks/useLogoInteractions';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { isArcadeDisabled, isTouchDevice, prefersReducedMotion } from '@/lib/arcadeGuards';
 import { useTranslation } from '@/lib/useTranslation';
 import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
-import { useNavigationItems } from './navigation/nav-items';
-import { SearchModal } from './navigation/SearchModal';
-import { NavigationHeader } from './navigation/NavigationHeader';
+import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
 import { MoreDrawer } from './navigation/MoreDrawer';
+import { useNavigationItems } from './navigation/nav-items';
+import { NavigationHeader } from './navigation/NavigationHeader';
 import { PersistentSidebar } from './navigation/PersistentSidebar';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import TomatoToss from '../../../components/EasterEggs/TomatoToss';
-import { AchievementsDropdown } from '@/components/Arcade/AchievementsDropdown';
-import { useLogoInteractions } from '@/hooks/useLogoInteractions';
-import CatchTheDocket from '@/components/Loading/CatchTheDocket';
-import { useCatchTheDocketTrigger } from '@/hooks/useCatchTheDocketTrigger';
-import { prefersReducedMotion, isArcadeDisabled, isTouchDevice } from '@/lib/arcadeGuards';
+import { SearchModal } from './navigation/SearchModal';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -41,7 +41,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const [searchQuery, setSearchQuery] = useState('');
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // Detect if we're on desktop (768px+)
+  // Detect if we're on desktop (768px+) - only used for keyboard shortcuts, not layout
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // Logo interactions hook
@@ -120,14 +120,18 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         shouldPreventNavigation={shouldPreventNavigation}
       />
 
-      {/* Desktop: Persistent Sidebar */}
-      {isDesktop && <PersistentSidebar />}
+      {/* Desktop: Persistent Sidebar - CSS handles visibility */}
+      <div className="hidden md:block">
+        <PersistentSidebar />
+      </div>
 
-      {/* Mobile: Bottom Navigation Bar */}
-      {!isDesktop && <BottomNavBar onMoreClick={() => setIsMoreDrawerOpen(true)} />}
+      {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
+      <div className="block md:hidden">
+        <BottomNavBar onMoreClick={() => setIsMoreDrawerOpen(true)} />
+      </div>
 
-      {/* Mobile: More Drawer */}
-      {!isDesktop && (
+      {/* Mobile: More Drawer - CSS handles visibility */}
+      <div className="block md:hidden">
         <MoreDrawer
           isOpen={isMoreDrawerOpen}
           onClose={() => setIsMoreDrawerOpen(false)}
@@ -136,7 +140,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
             setIsSearchOpen(true);
           }}
         />
-      )}
+      </div>
 
       {/* Search Modal */}
       <SearchModal

@@ -1,26 +1,28 @@
 'use client';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { useCallback, useEffect, useState } from 'react';
-import { TemperatureEquipment, TemperatureLog } from './types';
 import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { TemperatureEquipment, TemperatureLog } from './types';
 
 // Direct imports to eliminate skeleton flashes
 import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
 import TemperatureLogsTab from './components/TemperatureLogsTab';
 
+import { useNotification } from '@/contexts/NotificationContext';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
+import { useQueryClient } from '@tanstack/react-query';
 import { PageHeader } from './components/PageHeader';
 import { TabNavigation } from './components/TabNavigation';
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { useTemperatureLogsQuery } from './hooks/useTemperatureLogsQuery';
-import { useNotification } from '@/contexts/NotificationContext';
 
 function TemperatureLogsPageContent() {
   const { formatDate } = useCountryFormatting();
   const { showError } = useNotification();
+  const queryClient = useQueryClient();
 
   // Helper function to format time strings
   const formatTime = (timeString: string) => {
@@ -47,8 +49,11 @@ function TemperatureLogsPageContent() {
   );
   const [loading, setLoading] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(false);
-  const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('analytics');
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [lastAnalyticsFetch, setLastAnalyticsFetch] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('logs');
   const [quickTempLoading, setQuickTempLoading] = useState<{ [key: string]: boolean }>({});
+  // Initialize selectedDate as empty - will be set in useEffect to prevent hydration mismatch
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [newLog, setNewLog] = useState({
@@ -76,7 +81,12 @@ function TemperatureLogsPageContent() {
   // Replace fetchLogs usage when activeTab is logs
   useEffect(() => {
     const ld = logsData as any;
-    if (ld?.items) setLogs(ld.items);
+    if (ld?.items) {
+      setLogs(ld.items);
+    } else if (logsData && !ld?.items) {
+      // Explicitly set empty array if data exists but items is missing/empty
+      setLogs([]);
+    }
   }, [logsData]);
 
   const total = (logsData as any)?.total || 0;
@@ -99,22 +109,51 @@ function TemperatureLogsPageContent() {
   }, []);
 
   // Only fetch all logs when needed (analytics tab) - use pagination if needed
-  const fetchAllLogs = useCallback(async (limit?: number) => {
+  const fetchAllLogs = useCallback(async (limit?: number, forceRefresh = false) => {
     try {
+      setAnalyticsLoading(true);
+      // Clear cache if forcing refresh
+      if (forceRefresh) {
+        // Clear cache to ensure fresh data
+        const cacheKey = 'temperature_all_logs';
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          window.sessionStorage.removeItem(cacheKey);
+        }
+      }
+
       // Fetch with reasonable limit for analytics (last 1000 logs should be enough)
-      const limitParam = limit ? `&pageSize=${limit}` : '';
-      const response = await fetch(`/api/temperature-logs?page=1${limitParam}`);
+      // Use a large pageSize to get all logs in one request
+      const pageSize = limit || 1000;
+      const response = await fetch(`/api/temperature-logs?page=1&pageSize=${pageSize}`, {
+        cache: forceRefresh ? 'no-store' : 'default',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.status}`);
+      }
+
       const data = await response.json();
       if (data.success && data.data?.items) {
         const logs = data.data.items;
+        console.log(`✅ Fetched ${logs.length} temperature logs`, {
+          sampleLogs: logs.slice(0, 3).map(l => ({ location: l.location, date: l.log_date })),
+        });
         setAllLogs(logs);
         // Cache for analytics tab
         cacheData('temperature_all_logs', logs);
+        setLastAnalyticsFetch(Date.now());
+        console.log(`✅ Loaded ${logs.length} temperature logs for analytics`);
+      } else {
+        console.warn('No temperature logs found in response:', data);
+        setAllLogs([]);
       }
     } catch (error) {
       console.error('fetchAllLogs - Error:', error);
+      showError('Failed to load temperature logs. Please try again.');
+    } finally {
+      setAnalyticsLoading(false);
     }
-  }, []);
+  }, [showError]);
 
   const fetchEquipment = useCallback(async () => {
     try {
@@ -133,13 +172,18 @@ function TemperatureLogsPageContent() {
   useEffect(() => {
     // Initialize date/time values on client side to prevent hydration mismatch
     const now = new Date();
-    setSelectedDate(now.toISOString().split('T')[0]);
+    const today = now.toISOString().split('T')[0];
+    // Set date if not already set (initial mount)
+    if (!selectedDate) {
+      setSelectedDate(today);
+    }
+    // Initialize newLog form fields
     setNewLog(prev => ({
       ...prev,
-      log_date: now.toISOString().split('T')[0],
-      log_time: now.toTimeString().split(' ')[0].substring(0, 5),
+      log_date: prev.log_date || today,
+      log_time: prev.log_time || now.toTimeString().split(' ')[0].substring(0, 5),
     }));
-  }, []);
+  }, []); // Run only once on mount
 
   // Set default date to most recent date with data after initial load
   useEffect(() => {
@@ -173,15 +217,21 @@ function TemperatureLogsPageContent() {
     loadData();
   }, [fetchEquipment]);
 
-  // Lazy load allLogs only when analytics tab becomes active
+  // Lazy load allLogs when analytics or equipment tab becomes active
+  // Always fetch if tab is active and data is stale (older than 30 seconds) or empty
   useEffect(() => {
-    if (activeTab === 'analytics' && allLogs.length === 0) {
-      // Fetch limited logs for analytics (last 1000 should be enough)
-      fetchAllLogs(1000).catch(() => {
-        // Silent fail - analytics will show empty state
-      });
+    if (activeTab === 'analytics' || activeTab === 'equipment') {
+      const isStale = Date.now() - lastAnalyticsFetch > 30000; // 30 seconds
+      const shouldFetch = allLogs.length === 0 || isStale;
+
+      if (shouldFetch && !analyticsLoading) {
+        console.log('📊 Loading analytics data...', { allLogsLength: allLogs.length, isStale, activeTab });
+        fetchAllLogs(1000, isStale).catch(() => {
+          // Error already handled in fetchAllLogs
+        });
+      }
     }
-  }, [activeTab, allLogs.length, fetchAllLogs]);
+  }, [activeTab, allLogs.length, lastAnalyticsFetch, analyticsLoading, fetchAllLogs]);
 
   // Watch for changes in selectedDate or selectedType and refetch logs
   useEffect(() => {
@@ -409,7 +459,7 @@ function TemperatureLogsPageContent() {
   if (equipment.length === 0) {
     return (
       <AdaptiveContainer>
-        <div className="min-h-screen bg-transparent py-4 sm:py-6">
+        <div className="min-h-screen bg-transparent py-4 pb-24 sm:py-6 sm:pb-6">
           {/* Empty state - no skeleton, just dark background */}
         </div>
       </AdaptiveContainer>
@@ -441,6 +491,7 @@ function TemperatureLogsPageContent() {
               setNewLog={setNewLog}
               onAddLog={handleAddLog}
               onRefreshLogs={() => {}}
+              isLoading={logsLoading}
             />
             {/* Pagination */}
             <div className="mt-4 flex items-center justify-between">
@@ -470,16 +521,42 @@ function TemperatureLogsPageContent() {
         {activeTab === 'equipment' && (
           <TemperatureEquipmentTab
             equipment={equipment}
+            allLogs={allLogs}
             quickTempLoading={quickTempLoading}
             onUpdateEquipment={handleUpdateEquipment}
             onCreateEquipment={handleCreateEquipment}
             onDeleteEquipment={handleDeleteEquipment}
             onQuickTempLog={handleQuickTempLog}
+            onRefreshLogs={async () => {
+              // Refresh all logs to show newly generated logs (force refresh)
+              console.log('🔄 Refreshing logs after generation...');
+              await fetchAllLogs(1000, true);
+              // Also refresh equipment to update last log dates
+              await fetchEquipment();
+              // Invalidate React Query cache for logs tab to show new logs
+              queryClient.invalidateQueries({ queryKey: ['temperature-logs'] });
+              // Clear equipment-specific caches
+              equipment.forEach(eq => {
+                const cacheKey = `equipment_logs_${eq.name}`;
+                if (typeof window !== 'undefined' && window.sessionStorage) {
+                  window.sessionStorage.removeItem(cacheKey);
+                }
+              });
+            }}
           />
         )}
 
         {activeTab === 'analytics' && (
-          <TemperatureAnalyticsTab allLogs={allLogs} equipment={equipment} />
+          <TemperatureAnalyticsTab
+            allLogs={allLogs}
+            equipment={equipment}
+            isLoading={analyticsLoading}
+            onRefreshLogs={() => {
+              // Force refresh all logs when sample data is generated
+              console.log('🔄 Refreshing analytics data after sample generation...');
+              fetchAllLogs(1000, true).catch(() => {});
+            }}
+          />
         )}
       </div>
     </AdaptiveContainer>

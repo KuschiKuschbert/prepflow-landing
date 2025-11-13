@@ -11,16 +11,13 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   const { warnings, removeWarning } = useGlobalWarning();
   const warningRef = React.useRef<HTMLDivElement | null>(null);
 
-  if (warnings.length === 0) {
-    return null;
-  }
-
   // Show only the first warning in the bar
-  const warning = warnings[0];
+  const warning = warnings.length > 0 ? warnings[0] : null;
 
   // Measure height and notify parent when it changes
+  // Move useEffect before early return to comply with Rules of Hooks
   React.useEffect(() => {
-    if (warningRef.current && onHeightChange) {
+    if (warningRef.current && onHeightChange && warning) {
       const updateHeight = () => {
         const height = warningRef.current?.offsetHeight || 0;
         onHeightChange(height);
@@ -41,8 +38,16 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
         clearTimeout(timeoutId);
         onHeightChange(0); // Reset height when warning is removed
       };
+    } else if (!warning && onHeightChange) {
+      // Reset height when no warnings
+      onHeightChange(0);
     }
   }, [warning, onHeightChange]);
+
+  // Early return AFTER hooks
+  if (warnings.length === 0) {
+    return null;
+  }
 
   const getWarningStyles = (type: string) => {
     switch (type) {

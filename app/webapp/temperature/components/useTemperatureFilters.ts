@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TemperatureLog, TemperatureEquipment } from '../types';
+import { TemperatureEquipment, TemperatureLog } from '../types';
 
 /**
  * Custom hook for temperature filtering logic
@@ -11,7 +11,10 @@ export function useTemperatureFilters(
 ) {
   const getFilteredLogs = useCallback(
     (equipment: TemperatureEquipment) => {
-      let filtered = allLogs.filter(log => log.location === equipment.name);
+      // Match logs by location field matching equipment name OR equipment location
+      let filtered = allLogs.filter(
+        log => log.location === equipment.name || log.location === equipment.location,
+      );
 
       const today = new Date();
       today.setDate(today.getDate() - dateOffset);

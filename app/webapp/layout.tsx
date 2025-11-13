@@ -153,8 +153,8 @@ function WebAppLayoutContent({
       {/* Personality System Scheduler */}
       <PersonalityScheduler />
 
-      {/* Main Content - dynamically adjust padding based on warning visibility */}
-      <main className="webapp-main-content bg-transparent pb-20 md:ml-64 md:pb-0">
+      {/* Main Content - responsive padding handled by CSS in globals.css */}
+      <main className="webapp-main-content bg-transparent">
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </main>
 

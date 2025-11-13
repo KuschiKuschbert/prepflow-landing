@@ -32,3 +32,5 @@ Based on the provided screenshots, we need these new files in `public/images/`:
 - `dashboard-screenshot.png`, `dashboard-screenshot.webp`, `dashboard-screenshot.avif`
 - `settings-screenshot.png`, `settings-screenshot.webp`, `settings-screenshot.avif`
 - `prepflow-logo.png`, `prepflow-logo.webp`, `prepflow-logo.avif` (logo files)
+
+

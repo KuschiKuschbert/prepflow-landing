@@ -30,85 +30,113 @@ export function EquipmentStatusCard({
   return (
     <button
       onClick={onSelect}
-      className={`group w-full rounded-xl border bg-[#1f1f1f] text-left shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl ${
-        isCompact ? 'p-3' : 'p-4'
+      className={`group relative w-full overflow-hidden rounded-3xl border bg-[#1f1f1f] text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${
+        isCompact ? 'p-3' : 'p-5'
       } ${
         isSelected
-          ? 'border-[#29E7CD] bg-[#29E7CD]/5 ring-2 ring-[#29E7CD]/20'
+          ? 'border-[#29E7CD] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/5 ring-2 ring-[#29E7CD]/30'
           : isOutOfRange
-            ? 'border-red-500/50 hover:border-red-500'
+            ? 'border-red-500/50 hover:border-red-500/70 hover:bg-red-500/5'
             : needsSetup
-              ? 'border-yellow-500/50 hover:border-yellow-500'
-              : 'border-[#2a2a2a] hover:border-[#29E7CD]/50'
+              ? 'border-yellow-500/50 hover:border-yellow-500/70 hover:bg-yellow-500/5'
+              : 'border-[#2a2a2a] hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5'
       }`}
     >
-      {/* Header with status indicator */}
-      <div className={`flex items-center justify-between ${isCompact ? 'mb-2' : 'mb-3'}`}>
-        <div className="min-w-0 flex-1">
-          <h3
-            className={`truncate font-semibold text-white transition-colors group-hover:text-[#29E7CD] ${
-              isCompact ? 'text-xs' : 'text-sm'
-            }`}
-          >
-            {equipment.name}
-          </h3>
-          <div className="mt-0.5 flex items-center space-x-1.5">
-            <div
-              className={`rounded-full ${isCompact ? 'h-1 w-1' : 'h-1.5 w-1.5'} ${
-                isOutOfRange ? 'bg-red-500' : needsSetup ? 'bg-yellow-500' : 'bg-green-500'
-              }`}
-            ></div>
-            <span
-              className={`font-medium ${isCompact ? 'text-xs' : 'text-xs'} ${
-                isOutOfRange ? 'text-red-400' : needsSetup ? 'text-yellow-400' : 'text-green-400'
+      {/* Gradient accent on hover */}
+      {!isSelected && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      )}
+      <div className="relative">
+        {/* Header with status indicator */}
+        <div className={`flex items-center justify-between ${isCompact ? 'mb-3' : 'mb-4'}`}>
+          <div className="min-w-0 flex-1">
+            <h3
+              className={`truncate font-bold text-white transition-colors group-hover:text-[#29E7CD] ${
+                isCompact ? 'text-sm' : 'text-base'
               }`}
             >
-              {status.status === 'no-data'
-                ? 'No Data'
-                : status.status === 'no-thresholds'
-                  ? 'Setup Required'
-                  : status.status === 'in-range'
-                    ? 'In Range'
-                    : 'Out of Range'}
-            </span>
+              {equipment.name}
+            </h3>
+            <div className="mt-2 flex items-center gap-2">
+              <div
+                className={`h-2 w-2 rounded-full shadow-lg ${
+                  isOutOfRange
+                    ? 'bg-red-500 animate-pulse'
+                    : needsSetup
+                      ? 'bg-yellow-500'
+                      : status.status === 'no-data'
+                        ? 'bg-gray-500'
+                        : 'bg-green-500'
+                }`}
+              />
+              <span
+                className={`text-xs font-semibold ${
+                  isOutOfRange
+                    ? 'text-red-400'
+                    : needsSetup
+                      ? 'text-yellow-400'
+                      : status.status === 'no-data'
+                        ? 'text-gray-400'
+                        : 'text-green-400'
+                }`}
+              >
+                {status.status === 'no-data'
+                  ? 'No Data'
+                  : status.status === 'no-thresholds'
+                    ? 'Setup Required'
+                    : status.status === 'in-range'
+                      ? 'In Range'
+                      : 'Out of Range'}
+              </span>
+            </div>
           </div>
         </div>
+
+        {/* Temperature display */}
+        <div className={isCompact ? 'mb-3' : 'mb-4'}>
+          <div
+            className={`font-bold text-white transition-colors group-hover:text-[#29E7CD] ${
+              isCompact ? 'mb-1 text-xl' : 'mb-2 text-3xl'
+            }`}
+          >
+            {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
+          </div>
+          <div className="flex items-center gap-2 text-xs text-gray-400">
+            <span>{logs.length} reading{logs.length !== 1 ? 's' : ''}</span>
+            {!isCompact && (
+              <>
+                <span className="text-gray-600">•</span>
+                <span className="uppercase">{timeFilter}</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Action indicators - only show in non-compact mode or if critical */}
+        {!isCompact && (isOutOfRange || needsSetup) && (
+          <div className="border-t border-[#2a2a2a] pt-3">
+            {isOutOfRange && (
+              <div className="flex items-center gap-2 text-xs text-red-400">
+                <Icon icon={AlertTriangle} size="xs" className="text-red-400" aria-hidden={true} />
+                <span>Attention required</span>
+              </div>
+            )}
+            {needsSetup && (
+              <div className="flex items-center gap-2 text-xs text-yellow-400">
+                <Icon icon={Settings} size="xs" className="text-yellow-400" aria-hidden={true} />
+                <span>Configure thresholds</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Compact mode critical indicators */}
+        {isCompact && isOutOfRange && (
+          <div className="flex items-center justify-center text-xs text-red-400">
+            <Icon icon={AlertCircle} size="xs" className="text-red-400" aria-hidden={true} />
+          </div>
+        )}
       </div>
-
-      {/* Temperature display */}
-      <div className={isCompact ? 'mb-2' : 'mb-3'}>
-        <div className={`font-bold text-white ${isCompact ? 'mb-1 text-lg' : 'mb-1 text-2xl'}`}>
-          {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
-        </div>
-        <div className="text-xs text-gray-400">
-          {logs.length} readings {isCompact ? '' : `• ${timeFilter.toUpperCase()}`}
-        </div>
-      </div>
-
-      {/* Action indicators - only show in non-compact mode or if critical */}
-      {!isCompact && (isOutOfRange || needsSetup) && (
-        <div className="border-t border-[#2a2a2a] pt-3">
-          {isOutOfRange && (
-            <div className="flex items-center space-x-1.5 text-xs text-red-400">
-              <Icon icon={AlertTriangle} size="xs" className="text-yellow-400" aria-hidden={true} />
-              <span>Attention required</span>
-            </div>
-          )}
-          {needsSetup && (
-            <div className="flex items-center space-x-1.5 text-xs text-yellow-400">
-              <Icon icon={Settings} size="xs" className="text-yellow-400" aria-hidden={true} />
-              <span>Configure thresholds</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Compact mode critical indicators */}
-      {isCompact && isOutOfRange && (
-        <div className="flex items-center justify-center text-xs text-red-400">
-          <Icon icon={AlertCircle} size="xs" className="text-red-400" aria-hidden={true} />
-        </div>
-      )}
     </button>
   );
 }

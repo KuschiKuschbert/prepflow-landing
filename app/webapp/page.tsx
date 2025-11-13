@@ -1,3 +1,5 @@
+'use client';
+
 import { Suspense } from 'react';
 import DashboardStatsClient from './components/DashboardStatsClient';
 import QuickActions from './components/QuickActions';
@@ -6,11 +8,8 @@ import { AdaptiveContainer } from './components/AdaptiveContainer';
 import { LayoutDashboard } from 'lucide-react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
-export const dynamic = 'force-dynamic';
-
 export default function WebAppDashboard() {
   // ErrorBoundary is already in app/webapp/layout.tsx wrapping all children
-  // No need to wrap here - server components cannot directly use client components
   try {
     return (
       <AdaptiveContainer>
@@ -33,8 +32,8 @@ export default function WebAppDashboard() {
       </AdaptiveContainer>
     );
   } catch (error) {
-    // Log error for debugging in Vercel logs
-    console.error('[WebAppDashboard] Server-side render error:', error);
+    // Log error for debugging
+    console.error('[WebAppDashboard] Render error:', error);
     if (error instanceof Error) {
       console.error('[WebAppDashboard] Error message:', error.message);
       console.error('[WebAppDashboard] Error stack:', error.stack);

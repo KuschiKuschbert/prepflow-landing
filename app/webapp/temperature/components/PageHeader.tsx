@@ -9,16 +9,22 @@ export function PageHeader() {
 
   return (
     <div className="mb-8">
-      <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
-        <Icon icon={Thermometer} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
-        {t('temperature.title', 'Temperature Logs')}
-      </h1>
-      <p className="text-gray-400">
-        {t(
-          'temperature.subtitle',
-          'Track fridge, freezer, and food temperatures for food safety compliance',
-        )}
-      </p>
+      <div className="mb-4 flex items-start gap-4">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 shadow-lg">
+          <Icon icon={Thermometer} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+        </div>
+        <div className="flex-1">
+          <h1 className="mb-2 text-3xl font-bold text-white sm:text-4xl">
+            {t('temperature.title', 'Temperature Monitoring')}
+          </h1>
+          <p className="text-base text-gray-400 sm:text-lg">
+            {t(
+              'temperature.subtitle',
+              'Track fridge, freezer, and food temperatures for food safety compliance',
+            )}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

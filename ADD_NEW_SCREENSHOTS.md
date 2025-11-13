@@ -81,3 +81,5 @@ All component references have been updated to use the new screenshot names:
 - ✅ `components/variants/HeroImageGallery.tsx`
 
 Once you add the new screenshot files, the landing page will automatically use them!
+
+

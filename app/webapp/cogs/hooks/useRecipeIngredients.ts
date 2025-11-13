@@ -30,7 +30,8 @@ export function useRecipeIngredients({
     setRecipeIngredients,
     setError,
     setIsLoadingFromApi,
-    preserveManualIngredients: shouldPreserveManualIngredients?.() || false,
+    // Pass function to check at runtime, not at hook creation time
+    preserveManualIngredients: shouldPreserveManualIngredients || (() => false),
   });
 
   const fetchRecipeIngredients = useCallback(

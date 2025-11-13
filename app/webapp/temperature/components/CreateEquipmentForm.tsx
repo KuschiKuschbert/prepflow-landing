@@ -1,6 +1,7 @@
 import { useTranslation } from '@/lib/useTranslation';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { getDefaultTemperatureRange } from '../utils/getDefaultTemperatureRange';
 
 interface CreateEquipmentFormProps {
   show: boolean;
@@ -73,7 +74,17 @@ export function CreateEquipmentForm({
             <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Type</label>
             <select
               value={newEquipment.equipmentType}
-              onChange={e => setNewEquipment({ ...newEquipment, equipmentType: e.target.value })}
+              onChange={e => {
+                const selectedType = e.target.value;
+                // Auto-set temperature range based on equipment type
+                const defaultRange = getDefaultTemperatureRange(selectedType, newEquipment.name);
+                setNewEquipment({
+                  ...newEquipment,
+                  equipmentType: selectedType,
+                  minTemp: defaultRange.minTemp,
+                  maxTemp: defaultRange.maxTemp,
+                });
+              }}
               className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               required
             >
@@ -84,6 +95,11 @@ export function CreateEquipmentForm({
                 </option>
               ))}
             </select>
+            {newEquipment.equipmentType && (
+              <p className="mt-1 text-xs text-gray-400">
+                Temperature range set automatically based on Queensland Food Safety Standards
+              </p>
+            )}
           </div>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

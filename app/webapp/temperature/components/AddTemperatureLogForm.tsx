@@ -1,9 +1,9 @@
-import { useTranslation } from '@/lib/useTranslation';
-import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
-import { useCountryFormatting } from '@/hooks/useCountryFormatting';
-import { Lightbulb } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useAutosave } from '@/hooks/useAutosave';
+import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { useTranslation } from '@/lib/useTranslation';
+import { Lightbulb } from 'lucide-react';
 
 export interface AddTemperatureLogFormProps {
   show: boolean;
@@ -132,8 +132,8 @@ export function AddTemperatureLogForm({
             <option value="">{t('temperature.selectEquipment', 'Select Equipment')}</option>
             {equipment
               .filter(eq => eq.is_active)
-              .map(item => (
-                <option key={item.id} value={item.equipment_type}>
+              .map((item, index) => (
+                <option key={item.id ?? `eq-${index}`} value={item.equipment_type}>
                   {getTypeIcon(item.equipment_type)} {item.name} (
                   {getTypeLabel(item.equipment_type)})
                 </option>

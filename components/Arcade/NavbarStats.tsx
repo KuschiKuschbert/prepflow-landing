@@ -11,15 +11,18 @@ import React, { useEffect, useState } from 'react';
 import { getSessionStats, ArcadeStats } from '@/lib/arcadeStats';
 
 export const NavbarStats: React.FC = () => {
-  const [stats, setStats] = useState<ArcadeStats>(() => getSessionStats());
+  // Always initialize with zeros to match SSR and prevent hydration mismatch
+  const [stats, setStats] = useState<ArcadeStats>({ tomatoes: 0, dockets: 0, fires: 0 });
 
   useEffect(() => {
+    // Update stats from sessionStorage after mount to avoid hydration mismatch
+    setStats(getSessionStats());
+
     const handleStatsUpdate = () => {
       setStats(getSessionStats());
     };
 
     window.addEventListener('arcade:sessionStatsUpdated', handleStatsUpdate);
-    setStats(getSessionStats()); // Initial load
 
     return () => {
       window.removeEventListener('arcade:sessionStatsUpdated', handleStatsUpdate);

@@ -168,17 +168,71 @@ src/
 
 ## 🚀 Deployment
 
-Ready for deployment to Vercel:
+### Automatic Deployment via GitHub Actions
 
-1. **Connect to Vercel**:
+The project is configured for automatic deployment to Vercel via GitHub Actions:
 
+1. **GitHub Actions Workflow**: `.github/workflows/ci-cd.yml`
+   - Runs on push to `main` branch
+   - Includes quality checks, build test, and deployment
+   - Requires Vercel secrets configured in GitHub
+
+2. **Required GitHub Secrets**:
+   - `VERCEL_TOKEN` - Vercel API token
+   - `VERCEL_ORG_ID` - Vercel organization/team ID
+   - `VERCEL_PROJECT_ID` - Vercel project ID
+
+3. **Vercel Dashboard Setup**:
+   - Connect GitHub repository: `KuschiKuschbert/prepflow-landing`
+   - Enable "Auto-deploy" for production branch
+   - Set production branch to `main`
+
+### Manual Deployment
+
+If automatic deployment isn't configured:
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy to production
+vercel --prod
+```
+
+### Environment Variables
+
+Set these in Vercel dashboard (Settings → Environment Variables):
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `AUTH0_ISSUER_BASE_URL`
+- `AUTH0_CLIENT_ID`
+- `AUTH0_CLIENT_SECRET`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL`
+- `RESEND_API_KEY`
+
+### Troubleshooting Deployment
+
+If deployments aren't triggering:
+
+1. **Run verification script**:
    ```bash
-   npx vercel --prod
+   ./scripts/verify-vercel-setup.sh
    ```
 
-2. **Set environment variables** in Vercel dashboard
+2. **Check diagnostic guide**: See `docs/VERCEL_DEPLOYMENT_DIAGNOSTICS.md`
 
-3. **Configure custom domain**: `app.prepflow.com`
+3. **Verify GitHub Actions**: Check workflow runs in Actions tab
+
+4. **Check Vercel Dashboard**: Verify project settings and Git integration
+
+### Custom Domain
+
+Configure custom domain in Vercel dashboard:
+- Go to Project Settings → Domains
+- Add custom domain: `app.prepflow.com`
 
 ## 📞 Support
 

@@ -105,7 +105,28 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: 🔍 Verify Vercel Secrets
+        run: |
+          echo "Checking Vercel secrets configuration..."
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "❌ ERROR: VERCEL_TOKEN secret is not configured"
+            echo "Please add VERCEL_TOKEN to GitHub repository secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.VERCEL_ORG_ID }}" ]; then
+            echo "❌ ERROR: VERCEL_ORG_ID secret is not configured"
+            echo "Please add VERCEL_ORG_ID to GitHub repository secrets"
+            exit 1
+          fi
+          if [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "❌ ERROR: VERCEL_PROJECT_ID secret is not configured"
+            echo "Please add VERCEL_PROJECT_ID to GitHub repository secrets"
+            exit 1
+          fi
+          echo "✅ All Vercel secrets are configured"
+
       - name: 🚀 Deploy to Vercel
+        id: deploy
         uses: amondnet/vercel-action@v25
         # actionlint: disable=expr
         with:
@@ -113,6 +134,27 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
+        continue-on-error: true
+
+      - name: 📊 Deployment Status
+        if: always()
+        run: |
+          if [ "${{ steps.deploy.outcome }}" == "success" ]; then
+            echo "✅ Deployment successful!"
+            echo "🚀 PrepFlow deployed to production"
+          elif [ "${{ steps.deploy.outcome }}" == "failure" ]; then
+            echo "❌ Deployment failed!"
+            echo "🔧 Check the logs above for details"
+            echo ""
+            echo "Common issues:"
+            echo "1. Verify VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID secrets are configured"
+            echo "2. Check Vercel dashboard for project settings"
+            echo "3. Ensure Vercel project is connected to GitHub repo"
+            echo "4. See docs/VERCEL_DEPLOYMENT_DIAGNOSTICS.md for troubleshooting"
+            exit 1
+          else
+            echo "⚠️ Deployment status: ${{ steps.deploy.outcome }}"
+          fi
 
   # 📊 Performance Monitoring
   # Disabled: Lighthouse requires a running server which isn't available in CI

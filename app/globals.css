@@ -50,19 +50,51 @@
 }
 
 /* WebApp main content responsive padding with warning support */
+/* Mobile-first: default mobile styles, then desktop overrides */
 .webapp-main-content {
+  /* Mobile: bottom padding for bottom nav, no left margin */
   padding-top: calc(
     var(--header-height-mobile) + var(--safe-area-inset-top) + var(--warning-height) + 1.25rem
   );
+  padding-bottom: 5rem; /* Space for bottom nav */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 0;
+  /* Prevent flash by ensuring proper initial state */
+  opacity: 1;
+  visibility: visible;
+  /* Optimize rendering performance */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+  /* Prevent layout shift during hydration */
+  will-change: margin-left, padding-bottom;
+  transition: margin-left 0s, padding-bottom 0s;
 }
 
 @media (min-width: 768px) {
   .webapp-main-content {
+    /* Desktop: left margin for sidebar, no bottom padding */
     padding-top: calc(
       var(--header-height-desktop) + var(--safe-area-inset-top) + var(--warning-height) + 1.5rem
     );
+    padding-bottom: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-left: 16rem; /* 256px sidebar = 16rem */
   }
 }
+
+/* Prevent flash of unstyled content (FOUC) */
+/* Ensure navigation components are properly positioned from the start */
+aside[role="navigation"][aria-label="Main navigation"],
+nav[aria-label="Bottom navigation"] {
+  /* Prevent layout shift during initial render */
+  contain: layout style paint;
+  /* Ensure proper stacking context */
+  isolation: isolate;
+}
+
+/* Optimize initial render performance - merged with html/body styles below */
 
 /* Print Styles for Recipe Cards */
 @media print {
@@ -557,9 +589,11 @@
 }
 
 /* Hide any stray chart elements that might appear in corners */
-.recharts-wrapper:not(.temperature-chart-container .recharts-wrapper) {
+/* Only hide recharts-wrapper that are NOT inside temperature-chart-container */
+/* Note: This rule is disabled to allow charts to render - if stray charts appear, we'll handle them individually */
+/* :not(.temperature-chart-container) .recharts-wrapper {
   display: none !important;
-}
+} */
 
 /* Ensure chart elements are properly contained */
 .recharts-surface {
@@ -612,6 +646,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  /* Prevent flash by ensuring CSS is parsed and applied immediately */
+  visibility: visible;
 }
 
 body {
@@ -619,6 +655,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  /* Prevent flash of unstyled body */
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Apple-inspired transitions */

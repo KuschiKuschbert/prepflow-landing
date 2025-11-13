@@ -1,7 +1,7 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // Components
 import { COGSTable } from '../components/COGSTable';
@@ -60,7 +60,11 @@ export default function CogsClient() {
 
   const { createOrUpdateRecipe } = useRecipeCRUD({ setError: setSaveError });
 
-  const selectedRecipeData = recipes.find(r => r.id === selectedRecipe);
+  // Memoize selectedRecipeData to prevent unnecessary re-renders and effect triggers
+  const selectedRecipeData = useMemo(
+    () => recipes.find(r => r.id === selectedRecipe),
+    [recipes, selectedRecipe],
+  );
 
   const {
     autosaveStatus,
@@ -113,28 +117,33 @@ export default function CogsClient() {
     setSelectedRecipe,
   });
   useEffect(() => {
-    if (selectedRecipe && selectedRecipeData) {
-      if (hasManualIngredientsRef?.current) {
-        console.log('[CogsClient] Skipping loadExistingRecipeIngredients - manual changes exist');
-        return;
-      }
-      const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
-      if (timeSinceLastChange < 10000) {
-        console.log('[CogsClient] Skipping loadExistingRecipeIngredients - recent change detected');
-        return;
-      }
-      // Only reset portions if they haven't been manually changed
-      if (!hasManualPortionsRef.current) {
-        const timeSincePortionChange = Date.now() - (lastPortionChangeTimeRef.current || 0);
-        if (timeSincePortionChange > 10000) {
-          handleDishPortionsFromRecipe(selectedRecipeData.yield || 1);
-        }
-      }
-      loadExistingRecipeIngredients(selectedRecipe);
+    // Only run when selectedRecipe ID changes, not when selectedRecipeData object reference changes
+    if (!selectedRecipe) return;
+
+    // Derive selectedRecipeData inside effect to avoid dependency on object reference
+    const recipeData = recipes.find(r => r.id === selectedRecipe);
+    if (!recipeData) return;
+
+    if (hasManualIngredientsRef?.current) {
+      console.log('[CogsClient] Skipping loadExistingRecipeIngredients - manual changes exist');
+      return;
     }
+    const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
+    if (timeSinceLastChange < 10000) {
+      console.log('[CogsClient] Skipping loadExistingRecipeIngredients - recent change detected');
+      return;
+    }
+    // Only reset portions if they haven't been manually changed
+    if (!hasManualPortionsRef.current) {
+      const timeSincePortionChange = Date.now() - (lastPortionChangeTimeRef.current || 0);
+      if (timeSincePortionChange > 10000) {
+        handleDishPortionsFromRecipe(recipeData.yield || 1);
+      }
+    }
+    loadExistingRecipeIngredients(selectedRecipe);
   }, [
     selectedRecipe,
-    selectedRecipeData,
+    recipes,
     loadExistingRecipeIngredients,
     hasManualIngredientsRef,
     lastManualChangeTimeRef,
