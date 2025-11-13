@@ -22,6 +22,12 @@ interface EquipmentItemProps {
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: Partial<TemperatureEquipment>) => void;
   onEquipmentClick?: (equipment: TemperatureEquipment) => void;
+  getLastLogInfo?: (equipment: TemperatureEquipment) => {
+    date: string;
+    temperature: number;
+    isInRange: boolean | null;
+  } | null;
+  formatDate?: (date: Date) => string;
 }
 
 export function EquipmentItem({
