@@ -196,7 +196,7 @@ export default function TemperatureAnalyticsTab({
         </div>
 
         {/* Equipment Cards Skeleton */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-6">
           <LoadingSkeleton variant="card" count={6} height="80px" />
         </div>
 
@@ -218,7 +218,7 @@ export default function TemperatureAnalyticsTab({
                   setTimeFilter(filter as '24h' | '7d' | '30d' | 'all');
                   setHasManuallyChangedFilter(true);
                 }}
-                className={`group relative min-h-[44px] rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+                className={`group relative min-h-[44px] rounded-2xl px-5 py-2.5 text-fluid-sm font-semibold transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
                   isActive
                     ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black shadow-xl scale-[1.02]'
                     : 'bg-transparent text-gray-400 hover:bg-[#2a2a2a] hover:text-white'
@@ -250,14 +250,14 @@ export default function TemperatureAnalyticsTab({
       <div
         className={`grid gap-3 ${
           equipment.length <= 2
-            ? 'grid-cols-1 sm:grid-cols-2'
+            ? 'grid-cols-1 tablet:grid-cols-2'
             : equipment.length <= 4
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+              ? 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4'
               : equipment.length <= 6
-                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6'
+                ? 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-6'
                 : equipment.length <= 12
-                  ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'
-                  : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
+                  ? 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-6'
+                  : 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
         }`}
       >
         {isLoaded ? (
@@ -292,8 +292,8 @@ export default function TemperatureAnalyticsTab({
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 shadow-xl">
             <Icon icon={BarChart3} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
           </div>
-          <h3 className="mb-3 text-2xl font-bold text-white">No Temperature Data</h3>
-          <p className="mb-6 max-w-md text-center text-base text-gray-400">
+          <h3 className="mb-3 text-fluid-2xl font-bold text-white">No Temperature Data</h3>
+          <p className="mb-6 max-w-md text-center text-fluid-base text-gray-400">
             Generate sample temperature logs to see analytics, charts, and insights for your equipment
           </p>
           <button

@@ -1,0 +1,181 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Calendar } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+import { DateRange, DateRangePreset } from '../types';
+
+interface PerformanceDateRangeProps {
+  dateRange: DateRange;
+  onDateRangeChange: (range: DateRange) => void;
+}
+
+const PRESETS = [
+  { value: '7d' as const, label: 'Last 7 Days' },
+  { value: '30d' as const, label: 'Last 30 Days' },
+  { value: '90d' as const, label: 'Last 90 Days' },
+  { value: 'all' as const, label: 'All Time' },
+  { value: 'custom' as const, label: 'Custom Range' },
+] as const;
+
+export default function PerformanceDateRange({
+  dateRange,
+  onDateRangeChange,
+}: PerformanceDateRangeProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handlePresetChange = (preset: DateRangePreset) => {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+
+    let startDate: Date | null = null;
+    let endDate: Date = today;
+
+    switch (preset) {
+      case '7d':
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 6);
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case '30d':
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 29);
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case '90d':
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 89);
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case 'all':
+        startDate = null;
+        break;
+      case 'custom':
+        // Keep existing dates when switching to custom
+        return;
+    }
+
+    onDateRangeChange({
+      startDate,
+      endDate,
+      preset,
+    });
+  };
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    return date.toISOString().split('T')[0];
+  };
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = e.target.value ? new Date(e.target.value) : null;
+    if (date) date.setHours(0, 0, 0, 0);
+    onDateRangeChange({
+      ...dateRange,
+      startDate: date,
+      preset: 'custom',
+    });
+  };
+
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = e.target.value ? new Date(e.target.value) : null;
+    if (date) date.setHours(23, 59, 59, 999);
+    onDateRangeChange({
+      ...dateRange,
+      endDate: date || new Date(),
+      preset: 'custom',
+    });
+  };
+
+  // Prevent hydration mismatch by only rendering after mount
+  if (!mounted) {
+    return (
+      <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <div className="h-5 w-5 rounded bg-[#2a2a2a] animate-pulse" />
+          <div className="h-6 w-32 rounded bg-[#2a2a2a] animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6">
+      <div className="mb-2 flex items-center gap-2 tablet:mb-3">
+        <Icon icon={Calendar} size="sm" className="text-[#29E7CD]" />
+        <h3 className="text-base font-semibold text-white">Time Period</h3>
+      </div>
+
+      {/* Preset Buttons */}
+      <div className="mb-3 flex flex-wrap gap-1.5">
+        {PRESETS.map(preset => (
+          <button
+            key={preset.value}
+            onClick={() => handlePresetChange(preset.value)}
+            className={`rounded-full px-2 py-1 text-xs font-medium transition-all tablet:px-3 tablet:py-1.5 ${
+              dateRange.preset === preset.value
+                ? 'border-2 border-[#29E7CD] bg-[#29E7CD]/20 text-[#29E7CD] shadow-lg shadow-[#29E7CD]/20'
+                : 'border border-[#2a2a2a] bg-[#2a2a2a] text-gray-400 hover:border-[#29E7CD]/50 hover:text-[#29E7CD]'
+            }`}
+          >
+            {preset.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Custom Date Range Inputs */}
+      {dateRange.preset === 'custom' && (
+        <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2">
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-300">Start Date</label>
+            <input
+              type="date"
+              value={formatDate(dateRange.startDate)}
+              onChange={handleStartDateChange}
+              max={formatDate(dateRange.endDate || new Date())}
+              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-base text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-300">End Date</label>
+            <input
+              type="date"
+              value={formatDate(dateRange.endDate)}
+              onChange={handleEndDateChange}
+              max={formatDate(new Date())}
+              min={formatDate(dateRange.startDate)}
+              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-base text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Display Current Range */}
+      {dateRange.preset !== 'custom' && dateRange.startDate && dateRange.endDate && (
+        <div className="mt-3 text-xs text-gray-400">
+          {dateRange.preset === 'all' ? (
+            <span>Showing all available data</span>
+          ) : (
+            <span>
+              {dateRange.startDate.toLocaleDateString('en-AU', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}{' '}
+              to{' '}
+              {dateRange.endDate.toLocaleDateString('en-AU', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

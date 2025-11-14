@@ -4,7 +4,8 @@ import { Suspense } from 'react';
 import DashboardStatsClient from './components/DashboardStatsClient';
 import QuickActions from './components/QuickActions';
 import { PageHeader } from './components/static/PageHeader';
-import { AdaptiveContainer } from './components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { DashboardSection } from '@/components/ui/DashboardSection';
 import { LayoutDashboard } from 'lucide-react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
@@ -12,8 +13,8 @@ export default function WebAppDashboard() {
   // ErrorBoundary is already in app/webapp/layout.tsx wrapping all children
   try {
     return (
-      <AdaptiveContainer>
-        <div className="min-h-screen overflow-x-hidden bg-transparent py-4 sm:py-6">
+      <ResponsivePageContainer>
+        <div className="min-h-screen overflow-x-hidden bg-transparent py-4 tablet:py-6">
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Kitchen Management Dashboard"
@@ -25,11 +26,13 @@ export default function WebAppDashboard() {
           <QuickActions />
 
           {/* Dynamic Content - Loads After Initial Render */}
-          <Suspense fallback={<PageSkeleton />}>
-            <DashboardStatsClient />
-          </Suspense>
+          <DashboardSection>
+            <Suspense fallback={<PageSkeleton />}>
+              <DashboardStatsClient />
+            </Suspense>
+          </DashboardSection>
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   } catch (error) {
     // Log error for debugging

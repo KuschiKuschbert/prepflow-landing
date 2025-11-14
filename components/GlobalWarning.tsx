@@ -19,28 +19,40 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   React.useEffect(() => {
     if (warningRef.current && onHeightChange && warning) {
       const updateHeight = () => {
-        const height = warningRef.current?.offsetHeight || 0;
-        onHeightChange(height);
+        if (warningRef.current) {
+          const height = warningRef.current.offsetHeight || 0;
+          onHeightChange(height);
+          // Also set CSS variable directly for immediate effect
+          if (typeof document !== 'undefined') {
+            document.documentElement.style.setProperty('--warning-height', `${height}px`);
+          }
+        }
       };
 
-      // Initial measurement
-      updateHeight();
+      // Initial measurement - use requestAnimationFrame for immediate update
+      requestAnimationFrame(() => {
+        updateHeight();
+        // Also measure after a short delay to catch any layout changes
+        setTimeout(updateHeight, 50);
+      });
 
       // Set up ResizeObserver for dynamic height changes
       const resizeObserver = new ResizeObserver(updateHeight);
       resizeObserver.observe(warningRef.current);
 
-      // Fallback: measure after a short delay
-      const timeoutId = setTimeout(updateHeight, 100);
-
       return () => {
         resizeObserver.disconnect();
-        clearTimeout(timeoutId);
         onHeightChange(0); // Reset height when warning is removed
+        if (typeof document !== 'undefined') {
+          document.documentElement.style.setProperty('--warning-height', '0px');
+        }
       };
     } else if (!warning && onHeightChange) {
       // Reset height when no warnings
       onHeightChange(0);
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.setProperty('--warning-height', '0px');
+      }
     }
   }, [warning, onHeightChange]);
 
@@ -144,15 +156,16 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   return (
     <div
       ref={warningRef}
-      className={`fixed right-0 left-0 z-40 w-full border-b backdrop-blur-sm ${styles.container} top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] md:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))]`}
+      className={`fixed right-0 left-0 z-[45] w-full border-b backdrop-blur-sm ${styles.container} top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] desktop:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] transition-all duration-200`}
+      style={{ pointerEvents: 'auto' }}
     >
       <div className="mx-auto max-w-7xl px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className={styles.icon}>{getWarningIcon(warning.type)}</div>
             <div>
-              <h4 className="text-sm font-semibold">{warning.title || 'Notification'}</h4>
-              <p className="text-xs opacity-90">{warning.message}</p>
+              <h4 className="text-fluid-sm font-semibold">{warning.title || 'Notification'}</h4>
+              <p className="text-fluid-xs opacity-90">{warning.message}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -162,7 +175,7 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
                   warning.action?.onClick();
                   removeWarning(warning.id);
                 }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors duration-200 focus:ring-2 focus:ring-white/20 focus:outline-none ${styles.button}`}
+                className={`rounded-lg px-3 py-1.5 text-fluid-xs font-medium transition-colors duration-200 focus:ring-2 focus:ring-white/20 focus:outline-none ${styles.button}`}
               >
                 {warning.action.label}
               </button>

@@ -42,13 +42,13 @@ export default function UseCases() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Built for your kitchen</h2>
-        <p className="mt-4 text-lg text-gray-300">
+        <h2 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">Built for your kitchen</h2>
+        <p className="mt-4 text-fluid-lg text-gray-300">
           Whether you're running a food truck or a restaurant, PrepFlow fits your workflow
         </p>
       </div>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-12 grid gap-6 desktop:grid-cols-2 large-desktop:grid-cols-4">
         {useCases.map(useCase => (
           <div
             key={useCase.title}
@@ -62,11 +62,11 @@ export default function UseCases() {
                 aria-hidden={true}
               />
             </div>
-            <h3 className="mb-2 text-xl font-semibold" style={{ color: useCase.color }}>
+            <h3 className="mb-2 text-fluid-xl font-semibold" style={{ color: useCase.color }}>
               {useCase.title}
             </h3>
             <p className="mb-3 font-medium text-white">{useCase.benefit}</p>
-            <p className="text-sm text-gray-400">{useCase.description}</p>
+            <p className="text-fluid-sm text-gray-400">{useCase.description}</p>
           </div>
         ))}
       </div>

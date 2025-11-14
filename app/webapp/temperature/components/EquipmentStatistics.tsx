@@ -25,7 +25,7 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
   return (
     <div className="space-y-4">
       {/* Statistics Grid - Compact Layout */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-1 large-desktop:grid-cols-1">
         {/* Current Status Card - Compact */}
         <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-5 shadow-lg">
           <div className="mb-3 flex items-center gap-2">

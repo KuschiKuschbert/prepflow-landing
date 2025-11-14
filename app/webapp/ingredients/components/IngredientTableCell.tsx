@@ -132,3 +132,4 @@ export function IngredientStockCell({ ingredient }: { ingredient: Ingredient }) 
     </td>
   );
 }
+

@@ -654,6 +654,67 @@ nav[aria-label="Bottom navigation"] {
   --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Custom breakpoints for responsive design (Final - Required) */
+  --breakpoint-tablet: 481px;
+  --breakpoint-desktop: 1025px;
+  --breakpoint-large-desktop: 1440px;
+  --breakpoint-xl: 1920px;
+  --breakpoint-2xl: 2560px;
+}
+
+/* Custom breakpoint media queries */
+@media (min-width: 481px) {
+  /* Tablet and up */
+}
+
+@media (min-width: 1025px) {
+  /* Desktop and up */
+}
+
+@media (min-width: 1440px) {
+  /* Large desktop and up */
+}
+
+@media (min-width: 1920px) {
+  /* Extra-Large Desktop (XL) and up */
+}
+
+@media (min-width: 2560px) {
+  /* Ultra-Wide / 2XL and up */
+}
+
+/* Fluid Typography Utility Classes - Scales from 360px to 4K displays */
+.text-fluid-xs {
+  font-size: clamp(0.625rem, 1.4vw, 0.75rem);
+}
+
+.text-fluid-sm {
+  font-size: clamp(0.75rem, 1.4vw, 0.875rem);
+}
+
+.text-fluid-base {
+  font-size: clamp(0.875rem, 1.4vw, 1rem);
+}
+
+.text-fluid-lg {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.text-fluid-xl {
+  font-size: clamp(1.25rem, 2.4vw, 1.875rem);
+}
+
+.text-fluid-2xl {
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+}
+
+.text-fluid-3xl {
+  font-size: clamp(1.875rem, 3vw, 3rem);
+}
+
+.text-fluid-4xl {
+  font-size: clamp(2.25rem, 3.6vw, 4rem);
 }
 
 /* Apple-inspired smooth scrolling */

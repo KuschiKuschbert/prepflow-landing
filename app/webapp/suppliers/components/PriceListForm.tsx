@@ -47,7 +47,7 @@ export function PriceListForm({
         </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
-      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('suppliers.selectSupplier', 'Select Supplier')}
@@ -120,7 +120,7 @@ export function PriceListForm({
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
           />
         </div>
-        <div className="md:col-span-2">
+        <div className="desktop:col-span-2">
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('suppliers.notes', 'Notes')}
           </label>
@@ -134,7 +134,7 @@ export function PriceListForm({
             rows={3}
           />
         </div>
-        <div className="flex items-center space-x-4 md:col-span-2">
+        <div className="flex items-center space-x-4 desktop:col-span-2">
           <label className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -147,7 +147,7 @@ export function PriceListForm({
             </span>
           </label>
         </div>
-        <div className="flex space-x-4 md:col-span-2">
+        <div className="flex space-x-4 desktop:col-span-2">
           <button
             type="submit"
             className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"

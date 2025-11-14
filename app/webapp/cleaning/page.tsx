@@ -5,7 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 import { TaskCard } from './components/TaskCard';
 import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { Sparkles, ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -146,20 +146,20 @@ export default function CleaningRosterPage() {
 
   if (loading) {
     return (
-      <AdaptiveContainer>
-        <div className="min-h-screen bg-transparent py-4 sm:py-6">
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="adaptive-grid mt-8">
             <LoadingSkeleton variant="card" count={4} height="120px" />
           </div>
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   }
 
   return (
-    <AdaptiveContainer>
-      <div className="min-h-screen bg-transparent py-4 sm:py-6">
+    <ResponsivePageContainer>
+      <div className="min-h-screen bg-transparent py-4 tablet:py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
@@ -445,6 +445,6 @@ export default function CleaningRosterPage() {
           </div>
         )}
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

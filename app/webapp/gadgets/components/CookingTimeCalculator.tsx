@@ -82,17 +82,17 @@ export function CookingTimeCalculator() {
     foodType && cookingTimes[foodType] ? Object.keys(cookingTimes[foodType]) : [];
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 sm:space-y-2 sm:px-4 sm:py-4">
-      <div className="hidden sm:block">
-        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
+      <div className="hidden tablet:block">
+        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
           Cooking Time Calculator
         </h2>
         <p className="text-xs text-gray-400">Estimate cooking time based on food type and method</p>
       </div>
 
-      <div className="w-full space-y-2 sm:space-y-4">
+      <div className="w-full space-y-2 tablet:space-y-4">
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             Food Type
           </label>
           <select
@@ -104,7 +104,7 @@ export function CookingTimeCalculator() {
                 setMethod(newMethods[0] as CookingMethod);
               }
             }}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           >
             <option value="meat">Meat</option>
             <option value="poultry">Poultry</option>
@@ -117,13 +117,13 @@ export function CookingTimeCalculator() {
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             Cooking Method
           </label>
           <select
             value={method}
             onChange={e => setMethod(e.target.value as CookingMethod)}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           >
             {availableMethods.map(m => (
               <option key={m} value={m}>
@@ -134,7 +134,7 @@ export function CookingTimeCalculator() {
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             Weight (grams)
           </label>
           <input
@@ -143,16 +143,16 @@ export function CookingTimeCalculator() {
             onChange={e => setWeight(e.target.value)}
             placeholder="500"
             min="1"
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           />
         </div>
 
         {temperature && (
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+            <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
               Recommended Temperature (°C)
             </label>
-            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white sm:rounded-xl sm:px-4 sm:py-3">
+            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white tablet:rounded-xl tablet:px-4 tablet:py-3">
               {temperature}°C
             </div>
           </div>
@@ -160,18 +160,18 @@ export function CookingTimeCalculator() {
 
         <button
           onClick={calculateTime}
-          className="w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 sm:rounded-2xl sm:px-6 sm:py-3"
+          className="w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 tablet:rounded-2xl tablet:px-6 tablet:py-3"
         >
           Calculate Cooking Time
         </button>
 
         {calculatedTime !== null && (
-          <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
-            <div className="text-xs text-gray-400 sm:text-sm">Estimated Cooking Time</div>
-            <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
+          <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center tablet:rounded-2xl tablet:p-6">
+            <div className="text-xs text-gray-400 tablet:text-sm">Estimated Cooking Time</div>
+            <div className="mt-1 text-2xl font-bold text-[#29E7CD] tablet:mt-2 tablet:text-4xl">
               {calculatedTime} minutes
             </div>
-            <div className="mt-1 text-xs text-gray-400 sm:mt-2 sm:text-sm">
+            <div className="mt-1 text-xs text-gray-400 tablet:mt-2 tablet:text-sm">
               ({Math.floor(calculatedTime / 60)}h {calculatedTime % 60}m)
             </div>
           </div>

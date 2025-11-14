@@ -5,12 +5,12 @@ export function FAQSection() {
 
   return (
     <section id="faq" className="py-20">
-      <h3 className="mb-12 text-center text-3xl font-bold tracking-tight md:text-4xl">
+      <h3 className="mb-12 text-center text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
         {t('faq.title', 'Frequently Asked Questions')}
       </h3>
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h4 className="mb-3 text-lg font-semibold text-[#29E7CD]">
+          <h4 className="mb-3 text-fluid-lg font-semibold text-[#29E7CD]">
             {t('faq.question1', 'How accurate are the COGS calculations?')}
           </h4>
           <p className="text-gray-300">
@@ -21,7 +21,7 @@ export function FAQSection() {
           </p>
         </div>
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h4 className="mb-3 text-lg font-semibold text-[#3B82F6]">
+          <h4 className="mb-3 text-fluid-lg font-semibold text-[#3B82F6]">
             {t('faq.question2', 'Can I import my existing data?')}
           </h4>
           <p className="text-gray-300">

@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { useCallback, useEffect, useState } from 'react';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { TemperatureEquipment, TemperatureLog } from './types';
 
 // Direct imports to eliminate skeleton flashes
@@ -458,17 +458,17 @@ function TemperatureLogsPageContent() {
   // Only show content when data is ready
   if (equipment.length === 0) {
     return (
-      <AdaptiveContainer>
-        <div className="min-h-screen bg-transparent py-4 pb-24 sm:py-6 sm:pb-6">
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-4 pb-24 tablet:py-6 tablet:pb-6">
           {/* Empty state - no skeleton, just dark background */}
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   }
 
   return (
-    <AdaptiveContainer>
-      <div className="min-h-screen bg-transparent py-4 pb-24 sm:py-6 sm:pb-6">
+    <ResponsivePageContainer>
+      <div className="min-h-screen bg-transparent py-4 pb-24 tablet:py-6 tablet:pb-6">
         {/* Header */}
         <PageHeader />
 
@@ -559,7 +559,7 @@ function TemperatureLogsPageContent() {
           />
         )}
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }
 

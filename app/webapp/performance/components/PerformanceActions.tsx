@@ -20,10 +20,10 @@ export default function PerformanceActions({
   onToggleRealtime,
 }: PerformanceActionsProps) {
   return (
-    <div className="mb-8 flex flex-wrap gap-3 sm:gap-4">
+    <div className="mb-4 flex flex-wrap gap-3 tablet:gap-4 desktop:mb-6">
       <button
         onClick={onImportClick}
-        className="flex min-h-[44px] items-center gap-2 rounded-lg bg-[#29E7CD] px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-[#29E7CD]/80 sm:px-6 sm:text-base"
+        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#29E7CD] px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-[#29E7CD]/80 tablet:w-auto tablet:px-6 tablet:text-base"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -32,12 +32,12 @@ export default function PerformanceActions({
             clipRule="evenodd"
           />
         </svg>
-        <span className="hidden sm:inline">Import Sales Data</span>
-        <span className="sm:hidden">Import</span>
+        <span className="hidden tablet:inline">Import Sales Data</span>
+        <span className="tablet:hidden">Import</span>
       </button>
       <button
         onClick={onExportCSV}
-        className="flex min-h-[44px] items-center gap-2 rounded-lg bg-[#3B82F6] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3B82F6]/80 sm:px-6 sm:text-base"
+        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#3B82F6] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3B82F6]/80 tablet:w-auto tablet:px-6 tablet:text-base"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -46,12 +46,12 @@ export default function PerformanceActions({
             clipRule="evenodd"
           />
         </svg>
-        <span className="hidden sm:inline">Export CSV</span>
-        <span className="sm:hidden">Export</span>
+        <span className="hidden tablet:inline">Export CSV</span>
+        <span className="tablet:hidden">Export</span>
       </button>
       <button
         onClick={onToggleCharts}
-        className="flex min-h-[44px] items-center gap-2 rounded-lg bg-gray-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700 sm:px-6 sm:text-base"
+        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700 tablet:w-auto tablet:px-6 tablet:text-base"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -62,12 +62,12 @@ export default function PerformanceActions({
             }
           />
         </svg>
-        <span className="hidden sm:inline">{showCharts ? 'Hide Charts' : 'Show Charts'}</span>
-        <span className="sm:hidden">{showCharts ? 'Hide' : 'Charts'}</span>
+        <span className="hidden tablet:inline">{showCharts ? 'Hide Charts' : 'Show Charts'}</span>
+        <span className="tablet:hidden">{showCharts ? 'Hide' : 'Charts'}</span>
       </button>
       <button
         onClick={onToggleRealtime}
-        className={`flex min-h-[44px] items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors sm:px-6 sm:text-base ${
+        className={`flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors tablet:w-auto tablet:px-6 tablet:text-base ${
           realtimeEnabled
             ? 'bg-green-600 text-white hover:bg-green-700'
             : 'bg-gray-600 text-white hover:bg-gray-700'
@@ -78,10 +78,10 @@ export default function PerformanceActions({
             realtimeEnabled ? 'animate-pulse bg-green-400' : 'bg-gray-400'
           }`}
         ></div>
-        <span className="hidden sm:inline">
+        <span className="hidden tablet:inline">
           {realtimeEnabled ? 'Disable Real-time' : 'Enable Real-time'}
         </span>
-        <span className="sm:hidden">{realtimeEnabled ? 'Disable' : 'Real-time'}</span>
+        <span className="tablet:hidden">{realtimeEnabled ? 'Disable' : 'Real-time'}</span>
       </button>
     </div>
   );

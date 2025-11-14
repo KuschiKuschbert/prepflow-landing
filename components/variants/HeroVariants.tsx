@@ -14,7 +14,7 @@ interface HeroProps {
 // Control Hero (Original)
 export function ControlHero({ t, handleEngagement }: HeroProps) {
   return (
-    <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
+    <section id="hero" className="grid items-center gap-12 py-16 desktop:grid-cols-2 desktop:py-24">
       <HeroContent t={t} handleEngagement={handleEngagement} variant="control">
         <HeroBullets t={t} variant="control" />
         <HeroCTA t={t} handleEngagement={handleEngagement} variant="control" />
@@ -33,7 +33,7 @@ export function ControlHero({ t, handleEngagement }: HeroProps) {
 // Variant A - Problem-Focused Hero
 export function VariantAHero({ t, handleEngagement }: HeroProps) {
   return (
-    <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
+    <section id="hero" className="grid items-center gap-12 py-16 desktop:grid-cols-2 desktop:py-24">
       <HeroContent t={t} handleEngagement={handleEngagement} variant="variantA">
         <HeroBullets t={t} variant="variantA" />
         <HeroCTA t={t} handleEngagement={handleEngagement} variant="variantA" />
@@ -52,7 +52,7 @@ export function VariantAHero({ t, handleEngagement }: HeroProps) {
 // Variant B - Results-Focused Hero
 export function VariantBHero({ t, handleEngagement }: HeroProps) {
   return (
-    <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
+    <section id="hero" className="grid items-center gap-12 py-16 desktop:grid-cols-2 desktop:py-24">
       <HeroContent t={t} handleEngagement={handleEngagement} variant="variantB">
         <HeroBullets t={t} variant="variantB" />
         <HeroCTA t={t} handleEngagement={handleEngagement} variant="variantB" />
@@ -71,7 +71,7 @@ export function VariantBHero({ t, handleEngagement }: HeroProps) {
 // Variant C - Simple/Direct Hero
 export function VariantCHero({ t, handleEngagement }: HeroProps) {
   return (
-    <section id="hero" className="grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
+    <section id="hero" className="grid items-center gap-12 py-16 desktop:grid-cols-2 desktop:py-24">
       <HeroContent t={t} handleEngagement={handleEngagement} variant="variantC">
         <HeroBullets t={t} variant="variantC" />
         <HeroCTA t={t} handleEngagement={handleEngagement} variant="variantC" />

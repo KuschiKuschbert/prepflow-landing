@@ -55,10 +55,10 @@ export default function ExpandableFeature({
         aria-controls={`feature-content-${title.replace(/\s+/g, '-').toLowerCase()}`}
       >
         <div className="flex items-center gap-4">
-          <span className="text-3xl">{icon}</span>
+          <span className="text-fluid-3xl">{icon}</span>
           <div>
-            <h3 className="text-xl font-semibold text-white md:text-2xl">{title}</h3>
-            <p className="mt-1 text-sm text-gray-400">{description}</p>
+            <h3 className="text-fluid-xl font-semibold text-white desktop:text-fluid-2xl">{title}</h3>
+            <p className="mt-1 text-fluid-sm text-gray-400">{description}</p>
           </div>
         </div>
 

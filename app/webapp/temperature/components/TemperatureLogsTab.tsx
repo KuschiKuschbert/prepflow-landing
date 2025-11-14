@@ -181,7 +181,7 @@ export default function TemperatureLogsTab({
               </div>
 
               {/* Logs for this time period */}
-              <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+              <div className="grid gap-4 tablet:grid-cols-1 large-desktop:grid-cols-2">
                 {timeGroup.logs.map(log => {
                   const status = getTemperatureStatus(log.temperature_celsius, log.location || '');
                   const foodSafety = getFoodSafetyStatus(

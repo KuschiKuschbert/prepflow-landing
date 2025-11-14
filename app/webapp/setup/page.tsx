@@ -58,7 +58,7 @@ export default function SetupPageRefactored() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent p-4 sm:p-6">
+    <div className="min-h-screen bg-transparent p-4 tablet:p-6">
       <div className="mx-auto max-w-6xl">
         {/* Header with Logo */}
         <div className="mb-8">

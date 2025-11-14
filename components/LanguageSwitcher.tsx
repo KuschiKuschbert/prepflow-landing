@@ -23,9 +23,9 @@ export default function LanguageSwitcher({
   const availableLangs = getAvailableLanguages();
 
   const sizeClasses = {
-    sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-2 text-sm',
-    lg: 'px-4 py-3 text-base',
+    sm: 'px-2 py-1 text-fluid-xs',
+    md: 'px-3 py-2 text-fluid-sm',
+    lg: 'px-4 py-3 text-fluid-base',
   };
 
   return (

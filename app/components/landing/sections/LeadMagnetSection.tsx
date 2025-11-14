@@ -72,10 +72,10 @@ export function LeadMagnetSection() {
     <section id="lead-magnet" className="py-20">
       <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-10 shadow-2xl backdrop-blur-sm">
         <div className="text-center">
-          <h2 className="mb-6 text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="mb-6 text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
             {t('leadMagnet.title', 'Get Your Free COGS Calculator')}
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-gray-300">
+          <p className="mx-auto max-w-2xl text-fluid-lg text-gray-300">
             {t(
               'leadMagnet.description',
               'Download our free Excel template to start calculating COGS immediately. No signup required.',
@@ -85,7 +85,7 @@ export function LeadMagnetSection() {
             <a
               href="/sample-cogs-calculator.xlsx"
               download
-              className="inline-flex items-center rounded-2xl bg-[#29E7CD] px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-[#29E7CD]/80 hover:shadow-xl"
+              className="inline-flex items-center rounded-2xl bg-[#29E7CD] px-8 py-4 text-fluid-lg font-semibold text-white transition-all duration-300 hover:bg-[#29E7CD]/80 hover:shadow-xl"
             >
               {t('leadMagnet.download', 'Download Free Template')}
             </a>
@@ -96,7 +96,7 @@ export function LeadMagnetSection() {
             {isSuccess ? (
               <p className="text-center text-[#29E7CD]">Thanks! Check your inbox shortly.</p>
             ) : (
-              <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-3">
+              <form onSubmit={handleSubmit} className="grid gap-4 desktop:grid-cols-3">
                 <input
                   type="text"
                   placeholder="Your name"
@@ -125,7 +125,7 @@ export function LeadMagnetSection() {
                   {isSubmitting ? 'Sending…' : 'Email me the sample'}
                 </button>
                 {error && (
-                  <div className="text-sm text-red-400 md:col-span-3" role="alert">
+                  <div className="text-fluid-sm text-red-400 desktop:col-span-3" role="alert">
                     {error}
                   </div>
                 )}

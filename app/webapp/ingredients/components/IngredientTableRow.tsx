@@ -124,7 +124,7 @@ export function IngredientTableRow({
       onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
       onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
-      <td className="hidden px-6 py-4 whitespace-nowrap lg:table-cell">
+      <td className="hidden px-6 py-4 whitespace-nowrap large-desktop:table-cell">
         <button
           onClick={e => {
             e.stopPropagation();

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { Bot } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -122,8 +122,8 @@ export default function AISpecialsPage() {
 
   if (loading) {
     return (
-      <AdaptiveContainer>
-        <div className="min-h-screen bg-transparent py-4 sm:py-6">
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
           {/* Header skeleton */}
           <div className="mb-8">
             <LoadingSkeleton variant="stats" height="64px" />
@@ -139,12 +139,12 @@ export default function AISpecialsPage() {
             <LoadingSkeleton variant="card" count={3} height="120px" />
           </div>
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   }
 
   return (
-    <AdaptiveContainer>
+    <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -350,6 +350,6 @@ export default function AISpecialsPage() {
           )}
         </div>
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

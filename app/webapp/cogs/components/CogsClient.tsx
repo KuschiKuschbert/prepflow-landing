@@ -50,6 +50,8 @@ export default function CogsClient() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<'ingredient_name' | 'quantity' | 'cost'>('ingredient_name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const {
     hasManualPortionsRef,
@@ -79,6 +81,41 @@ export default function CogsClient() {
   });
 
   const recipeExistsLocally = Boolean(selectedRecipeData);
+
+  // Sort calculations
+  const sortedCalculations = useMemo(() => {
+    const sorted = [...calculations];
+    sorted.sort((a, b) => {
+      let aValue: any;
+      let bValue: any;
+
+      switch (sortField) {
+        case 'ingredient_name':
+          aValue = a.ingredientName.toLowerCase();
+          bValue = b.ingredientName.toLowerCase();
+          break;
+        case 'quantity':
+          aValue = a.quantity;
+          bValue = b.quantity;
+          break;
+        case 'cost':
+          aValue = a.yieldAdjustedCost;
+          bValue = b.yieldAdjustedCost;
+          break;
+        default:
+          aValue = a.ingredientName.toLowerCase();
+          bValue = b.ingredientName.toLowerCase();
+      }
+
+      if (sortDirection === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+    return sorted;
+  }, [calculations, sortField, sortDirection]);
+
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
 
@@ -238,7 +275,7 @@ export default function CogsClient() {
         onSuccess={() => setShowCreateModal(false)}
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 tablet:gap-8 large-desktop:grid-cols-2">
         <div>
           <DishForm
             recipes={recipes}
@@ -270,12 +307,12 @@ export default function CogsClient() {
           />
         </div>
 
-        <div className="rounded-lg bg-[#1f1f1f] p-4 shadow sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold sm:text-xl">Cost Analysis</h2>
+        <div className="rounded-lg bg-[#1f1f1f] p-4 shadow tablet:p-6">
+          <h2 className="mb-4 text-lg font-semibold tablet:text-xl">Cost Analysis</h2>
           {selectedRecipe ? (
             <>
               <COGSTable
-                calculations={calculations}
+                calculations={sortedCalculations}
                 editingIngredient={editingIngredient}
                 editQuantity={editQuantity}
                 onEditIngredient={handleEditIngredient}
@@ -286,6 +323,12 @@ export default function CogsClient() {
                 totalCOGS={totalCOGS}
                 costPerPortion={costPerPortion}
                 dishPortions={dishPortions}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onSortChange={(field, direction) => {
+                  setSortField(field);
+                  setSortDirection(direction);
+                }}
               />
 
               <PricingTool

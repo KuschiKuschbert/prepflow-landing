@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookDescription } from './components/RecipeBookDescription';
 import { RecipeBookContent } from './components/RecipeBookContent';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { BookOpen } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -12,8 +12,8 @@ export const dynamic = 'force-dynamic';
 export default function RecipesPage() {
   return (
     <ErrorBoundary>
-      <AdaptiveContainer>
-        <div className="min-h-screen bg-transparent py-4 sm:py-6">
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Recipe Book"
@@ -28,7 +28,7 @@ export default function RecipesPage() {
           {/* Dynamic Content - Loads After Initial Render */}
           <RecipeBookContent />
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     </ErrorBoundary>
   );
 }

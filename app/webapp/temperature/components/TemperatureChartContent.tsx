@@ -193,3 +193,4 @@ export function TemperatureChartContent({
     </ResponsiveContainer>
   );
 }
+

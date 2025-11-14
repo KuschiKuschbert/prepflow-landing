@@ -52,7 +52,7 @@ export function IngredientTableHeader({
 }: IngredientTableHeaderProps) {
   return (
     <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-xl font-semibold text-white">
             Ingredients{' '}
@@ -90,7 +90,7 @@ export function IngredientTableHeader({
               )}
               {/* Selection Mode Indicator + Bulk Actions Button - Desktop: in action buttons section */}
               {isSelectionMode && (
-                <div className="hidden items-center gap-2 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 lg:flex">
+                <div className="hidden items-center gap-2 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 large-desktop:flex">
                   <div className="h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]" />
                   <span className="text-sm font-medium text-[#29E7CD]">Selection Mode</span>
                 </div>

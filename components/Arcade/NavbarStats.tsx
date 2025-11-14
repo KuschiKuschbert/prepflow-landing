@@ -30,30 +30,30 @@ export const NavbarStats: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex items-center gap-1 text-white/80 sm:gap-1.5 md:gap-2">
+    <div className="flex items-center gap-1 text-white/80 tablet:gap-1.5 desktop:gap-2">
       <div
         title="Tomatoes Thrown"
-        className="flex items-center gap-0.5 sm:gap-1"
+        className="flex items-center gap-0.5 tablet:gap-1"
         style={{ fontSize: '14px' }}
       >
-        <span className="text-sm leading-none sm:text-base md:text-lg">🍅</span>
-        <span className="text-[10px] leading-none sm:text-[11px] md:text-xs">{stats.tomatoes}</span>
+        <span className="text-fluid-sm leading-none tablet:text-fluid-base desktop:text-fluid-lg">🍅</span>
+        <span className="text-[10px] leading-none tablet:text-[11px] desktop:text-fluid-xs">{stats.tomatoes}</span>
       </div>
       <div
         title="Dockets Caught"
-        className="flex items-center gap-0.5 sm:gap-1"
+        className="flex items-center gap-0.5 tablet:gap-1"
         style={{ fontSize: '14px' }}
       >
-        <span className="text-sm leading-none sm:text-base md:text-lg">🧾</span>
-        <span className="text-[10px] leading-none sm:text-[11px] md:text-xs">{stats.dockets}</span>
+        <span className="text-fluid-sm leading-none tablet:text-fluid-base desktop:text-fluid-lg">🧾</span>
+        <span className="text-[10px] leading-none tablet:text-[11px] desktop:text-fluid-xs">{stats.dockets}</span>
       </div>
       <div
         title="Fires Extinguished"
-        className="flex items-center gap-0.5 sm:gap-1"
+        className="flex items-center gap-0.5 tablet:gap-1"
         style={{ fontSize: '14px' }}
       >
-        <span className="text-sm leading-none sm:text-base md:text-lg">🔥</span>
-        <span className="text-[10px] leading-none sm:text-[11px] md:text-xs">{stats.fires}</span>
+        <span className="text-fluid-sm leading-none tablet:text-fluid-base desktop:text-fluid-lg">🔥</span>
+        <span className="text-[10px] leading-none tablet:text-[11px] desktop:text-fluid-xs">{stats.fires}</span>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { Recipe, RecipePriceData } from '../types';
 import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { formatRecipeDate } from '../utils/formatDate';
+import { useRecipeTableSort } from '../hooks/useRecipeTableSort';
 
 interface RecipeTableProps {
   recipes: Recipe[];
@@ -16,6 +17,9 @@ interface RecipeTableProps {
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteRecipe: (recipe: Recipe) => void;
   capitalizeRecipeName: (name: string) => string;
+  sortField?: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created';
+  sortDirection?: 'asc' | 'desc';
+  onSortChange?: (field: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created', direction: 'asc' | 'desc') => void;
 }
 
 const RecipeTable = React.memo(function RecipeTable({
@@ -28,9 +32,18 @@ const RecipeTable = React.memo(function RecipeTable({
   onEditRecipe,
   onDeleteRecipe,
   capitalizeRecipeName,
+  sortField = 'name',
+  sortDirection = 'asc',
+  onSortChange,
 }: RecipeTableProps) {
+  const { handleColumnSort, getSortIcon } = useRecipeTableSort({
+    sortField,
+    sortDirection,
+    onSortChange: onSortChange || (() => {}),
+  });
+
   return (
-    <div className="hidden overflow-x-auto lg:block">
+    <div className="hidden overflow-x-auto tablet:block">
       <table className="min-w-full divide-y divide-[#2a2a2a]">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
@@ -48,19 +61,74 @@ const RecipeTable = React.memo(function RecipeTable({
               </button>
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Name
+              {onSortChange ? (
+                <button
+                  onClick={() => handleColumnSort('name')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                  aria-label="Sort by name"
+                >
+                  Name
+                  {getSortIcon('name')}
+                </button>
+              ) : (
+                'Name'
+              )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Recommended Price
+              {onSortChange ? (
+                <button
+                  onClick={() => handleColumnSort('recommended_price')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                  aria-label="Sort by recommended price"
+                >
+                  Recommended Price
+                  {getSortIcon('recommended_price')}
+                </button>
+              ) : (
+                'Recommended Price'
+              )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Profit Margin
+              {onSortChange ? (
+                <button
+                  onClick={() => handleColumnSort('profit_margin')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                  aria-label="Sort by profit margin"
+                >
+                  Profit Margin
+                  {getSortIcon('profit_margin')}
+                </button>
+              ) : (
+                'Profit Margin'
+              )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Contributing Margin
+              {onSortChange ? (
+                <button
+                  onClick={() => handleColumnSort('contributing_margin')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                  aria-label="Sort by contributing margin"
+                >
+                  Contributing Margin
+                  {getSortIcon('contributing_margin')}
+                </button>
+              ) : (
+                'Contributing Margin'
+              )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Created
+              {onSortChange ? (
+                <button
+                  onClick={() => handleColumnSort('created')}
+                  className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                  aria-label="Sort by created date"
+                >
+                  Created
+                  {getSortIcon('created')}
+                </button>
+              ) : (
+                'Created'
+              )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               Actions

@@ -13,7 +13,9 @@ import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeActions } from '../hooks/useRecipeActions';
 import { useRecipeAutosaveListener } from '../hooks/useRecipeAutosaveListener';
 import { useRecipeManagement } from '../hooks/useRecipeManagement';
+import { useRecipeFiltering } from '../hooks/useRecipeFiltering';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { TablePagination } from '@/components/ui/TablePagination';
 
 // Local components
 import BulkActionsBar from './BulkActionsBar';
@@ -124,6 +126,13 @@ export default function RecipesClient() {
     capitalizeRecipeName,
   });
 
+  const {
+    filters,
+    updateFilters,
+    paginatedRecipes,
+    totalPages,
+  } = useRecipeFiltering(recipes, recipePrices);
+
   const formatQuantity = useCallback(
     (q: number, u: string) => formatQuantityUtil(q, u, previewYield, selectedRecipe?.yield || 1),
     [previewYield, selectedRecipe?.yield],
@@ -200,7 +209,7 @@ export default function RecipesClient() {
       )}
       <SuccessMessage message={successMessage} />
       <div className="overflow-hidden rounded-lg bg-[#1f1f1f] shadow">
-        <div className="sticky top-0 z-10 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 sm:px-6">
+        <div className="sticky top-0 z-10 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 tablet:px-6">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-white">Recipes ({recipes.length})</h2>
             {selectedRecipes.size > 0 && (
@@ -213,9 +222,19 @@ export default function RecipesClient() {
             )}
           </div>
         </div>
-        <div className="block lg:hidden">
+        <TablePagination
+          page={filters.currentPage}
+          totalPages={totalPages}
+          total={recipes.length}
+          itemsPerPage={filters.itemsPerPage}
+          onPageChange={page => updateFilters({ currentPage: page })}
+          onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+          className="mb-4"
+        />
+
+        <div className="block large-desktop:hidden">
           <div className="divide-y divide-[#2a2a2a]">
-            {recipes.map(recipe => (
+            {paginatedRecipes.map(recipe => (
               <RecipeCard
                 key={recipe.id}
                 recipe={recipe}
@@ -231,7 +250,7 @@ export default function RecipesClient() {
           </div>
         </div>
         <RecipeTable
-          recipes={recipes}
+          recipes={paginatedRecipes}
           recipePrices={recipePrices}
           selectedRecipes={selectedRecipes}
           onSelectAll={handleSelectAll}
@@ -240,6 +259,19 @@ export default function RecipesClient() {
           onEditRecipe={handleEditRecipe}
           onDeleteRecipe={handleDeleteRecipe}
           capitalizeRecipeName={capitalizeRecipeName}
+          sortField={filters.sortField}
+          sortDirection={filters.sortDirection}
+          onSortChange={(field, direction) => updateFilters({ sortField: field, sortDirection: direction })}
+        />
+
+        <TablePagination
+          page={filters.currentPage}
+          totalPages={totalPages}
+          total={recipes.length}
+          itemsPerPage={filters.itemsPerPage}
+          onPageChange={page => updateFilters({ currentPage: page })}
+          onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+          className="mt-4"
         />
       </div>
 

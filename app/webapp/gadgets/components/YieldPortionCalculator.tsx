@@ -42,22 +42,22 @@ export function YieldPortionCalculator() {
   const presets = [100, 150, 200, 250, 300];
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 sm:space-y-2 sm:px-4 sm:py-4">
-      <div className="hidden sm:block">
-        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
+      <div className="hidden tablet:block">
+        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
           Yield/Portion Calculator
         </h2>
         <p className="text-xs text-gray-400">Calculate portions from yield or vice versa</p>
       </div>
 
       {/* Mode Toggle */}
-      <div className="flex w-full gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-0.5 sm:gap-2 sm:rounded-xl sm:p-1">
+      <div className="flex w-full gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-0.5 tablet:gap-2 tablet:rounded-xl tablet:p-1">
         <button
           onClick={() => {
             setCalculationMode('yield-to-portions');
             setNumberOfPortions('');
           }}
-          className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:rounded-lg sm:px-4 sm:py-2 sm:text-sm ${
+          className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors tablet:rounded-lg tablet:px-4 tablet:py-2 tablet:text-sm ${
             calculationMode === 'yield-to-portions'
               ? 'bg-[#29E7CD] text-white'
               : 'text-gray-400 hover:text-white'
@@ -70,7 +70,7 @@ export function YieldPortionCalculator() {
             setCalculationMode('portions-to-yield');
             setTotalYield('');
           }}
-          className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:rounded-lg sm:px-4 sm:py-2 sm:text-sm ${
+          className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors tablet:rounded-lg tablet:px-4 tablet:py-2 tablet:text-sm ${
             calculationMode === 'portions-to-yield'
               ? 'bg-[#29E7CD] text-white'
               : 'text-gray-400 hover:text-white'
@@ -80,11 +80,11 @@ export function YieldPortionCalculator() {
         </button>
       </div>
 
-      <div className="w-full space-y-2 sm:space-y-4">
+      <div className="w-full space-y-2 tablet:space-y-4">
         {calculationMode === 'yield-to-portions' ? (
           <>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+              <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
                 Total Recipe Yield (g or ml)
               </label>
               <input
@@ -105,11 +105,11 @@ export function YieldPortionCalculator() {
                 placeholder="Enter total yield"
                 min="0"
                 step="0.1"
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+              <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
                 Portion Size (g or ml per serving)
               </label>
               <input
@@ -130,7 +130,7 @@ export function YieldPortionCalculator() {
                 placeholder="Enter portion size"
                 min="0"
                 step="0.1"
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
               />
               <div className="mt-2 flex flex-wrap gap-2">
                 {presets.map(size => (
@@ -145,9 +145,9 @@ export function YieldPortionCalculator() {
               </div>
             </div>
             {numberOfPortions && (
-              <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
-                <div className="text-xs text-gray-400 sm:text-sm">Number of Portions</div>
-                <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
+              <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center tablet:rounded-2xl tablet:p-6">
+                <div className="text-xs text-gray-400 tablet:text-sm">Number of Portions</div>
+                <div className="mt-1 text-2xl font-bold text-[#29E7CD] tablet:mt-2 tablet:text-4xl">
                   {parseFloat(numberOfPortions).toFixed(1)}
                 </div>
               </div>
@@ -156,7 +156,7 @@ export function YieldPortionCalculator() {
         ) : (
           <>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+              <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
                 Number of Portions
               </label>
               <input
@@ -177,11 +177,11 @@ export function YieldPortionCalculator() {
                 placeholder="Enter number of portions"
                 min="0"
                 step="0.1"
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+              <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
                 Portion Size (g or ml per serving)
               </label>
               <input
@@ -202,7 +202,7 @@ export function YieldPortionCalculator() {
                 placeholder="Enter portion size"
                 min="0"
                 step="0.1"
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
               />
               <div className="mt-2 flex flex-wrap gap-2">
                 {presets.map(size => (
@@ -217,9 +217,9 @@ export function YieldPortionCalculator() {
               </div>
             </div>
             {totalYield && (
-              <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
-                <div className="text-xs text-gray-400 sm:text-sm">Total Recipe Yield</div>
-                <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
+              <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center tablet:rounded-2xl tablet:p-6">
+                <div className="text-xs text-gray-400 tablet:text-sm">Total Recipe Yield</div>
+                <div className="mt-1 text-2xl font-bold text-[#29E7CD] tablet:mt-2 tablet:text-4xl">
                   {parseFloat(totalYield).toFixed(1)}g
                 </div>
               </div>

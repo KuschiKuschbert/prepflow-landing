@@ -64,18 +64,18 @@ export default function TechnicalSpecs() {
   };
 
   return (
-    <section className="relative bg-transparent py-16 md:py-20">
+    <section className="relative bg-transparent py-16 desktop:py-20">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+          <h2 className="text-fluid-4xl font-bold tracking-tight text-white desktop:text-fluid-4xl large-desktop:text-fluid-4xl">
             Technical Specifications
           </h2>
-          <p className="mt-4 text-xl text-gray-400">Everything you need to know.</p>
+          <p className="mt-4 text-fluid-xl text-gray-400">Everything you need to know.</p>
         </div>
 
         {/* Specs Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 desktop:grid-cols-2 large-desktop:grid-cols-3">
           {specCategories.map(category => {
             const isExpanded = expandedCategory === category.title;
 
@@ -97,7 +97,7 @@ export default function TechnicalSpecs() {
                       className="text-[#29E7CD]"
                       aria-hidden={true}
                     />
-                    <h3 className="text-lg font-semibold text-white">{category.title}</h3>
+                    <h3 className="text-fluid-lg font-semibold text-white">{category.title}</h3>
                   </div>
 
                   {/* Expand/Collapse Icon */}
@@ -119,7 +119,7 @@ export default function TechnicalSpecs() {
                     {category.items.map((item, index) => (
                       <li key={index} className="flex items-start gap-2 text-gray-300">
                         <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#29E7CD]" />
-                        <span className="text-sm">{item}</span>
+                        <span className="text-fluid-sm">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -131,7 +131,7 @@ export default function TechnicalSpecs() {
 
         {/* Additional Info */}
         <div className="mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8 text-center">
-          <h3 className="text-2xl font-bold text-white">Ready to get started?</h3>
+          <h3 className="text-fluid-2xl font-bold text-white">Ready to get started?</h3>
           <p className="mt-4 text-gray-400">
             PrepFlow works in any modern web browser. No installation required. Start managing your
             kitchen in minutes.

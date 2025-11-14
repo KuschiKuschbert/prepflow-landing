@@ -89,8 +89,8 @@ export default function IngredientFilters({
       </div>
 
       {/* Search and Filter Controls */}
-      <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow sm:p-6">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow tablet:p-6">
+        <div className="grid grid-cols-1 gap-4 desktop:grid-cols-4">
           {/* Search */}
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">🔍 Search</label>

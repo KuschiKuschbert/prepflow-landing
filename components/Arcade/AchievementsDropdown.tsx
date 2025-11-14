@@ -79,7 +79,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
           >
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">🏆 Achievements</h2>
+              <h2 className="text-fluid-2xl font-bold text-white">🏆 Achievements</h2>
               <button
                 onClick={onClose}
                 className="rounded-full p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
@@ -94,37 +94,37 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
               {/* Tomatoes */}
               <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">🍅</span>
+                  <span className="text-fluid-2xl">🍅</span>
                   <div>
                     <div className="font-semibold text-white">Tomatoes Thrown</div>
-                    <div className="text-sm text-gray-400">Frustration splats.</div>
+                    <div className="text-fluid-sm text-gray-400">Frustration splats.</div>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-[#4CAF50]">{stats.tomatoes}</div>
+                <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.tomatoes}</div>
               </div>
 
               {/* Dockets */}
               <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">🧾</span>
+                  <span className="text-fluid-2xl">🧾</span>
                   <div>
                     <div className="font-semibold text-white">Dockets Caught</div>
-                    <div className="text-sm text-gray-400">Orders snatched.</div>
+                    <div className="text-fluid-sm text-gray-400">Orders snatched.</div>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-[#4CAF50]">{stats.dockets}</div>
+                <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.dockets}</div>
               </div>
 
               {/* Fires */}
               <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">🔥</span>
+                  <span className="text-fluid-2xl">🔥</span>
                   <div>
                     <div className="font-semibold text-white">Fires Extinguished</div>
-                    <div className="text-sm text-gray-400">Crises averted.</div>
+                    <div className="text-fluid-sm text-gray-400">Crises averted.</div>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-[#4CAF50]">{stats.fires}</div>
+                <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.fires}</div>
               </div>
             </div>
 
@@ -135,7 +135,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6 rounded-xl border border-[#4CAF50]/30 bg-[#4CAF50]/10 p-4 text-center"
               >
-                <p className="text-sm text-[#4CAF50]">
+                <p className="text-fluid-sm text-[#4CAF50]">
                   🎉 You&apos;ve reached milestone achievements! Keep it up!
                 </p>
               </motion.div>

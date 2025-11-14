@@ -82,22 +82,22 @@ export function KitchenTimer() {
   const displayTime = timeLeft > 0 ? timeLeft : hours * 3600 + minutes * 60 + seconds;
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col justify-center space-y-1.5 overflow-y-auto px-3 py-3 sm:space-y-2 sm:px-4 sm:py-4">
-      <div className="hidden sm:block">
-        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+    <div className="flex min-h-[600px] w-full flex-col justify-center space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
+      <div className="hidden tablet:block">
+        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
           Kitchen Timer
         </h2>
         <p className="text-xs text-gray-400">Set a timer for your cooking tasks</p>
       </div>
 
       {/* Large Time Display - Compact for Mobile */}
-      <div className="flex w-full items-center justify-center rounded-xl bg-[#2a2a2a] p-3 sm:rounded-2xl sm:p-6 md:p-8">
+      <div className="flex w-full items-center justify-center rounded-xl bg-[#2a2a2a] p-3 tablet:rounded-2xl tablet:p-6 desktop:p-8">
         <div className="w-full text-center">
-          <div className="text-4xl font-bold text-[#29E7CD] sm:text-5xl md:text-6xl lg:text-8xl">
+          <div className="text-4xl font-bold text-[#29E7CD] tablet:text-5xl desktop:text-6xl large-desktop:text-8xl">
             {formatTime(displayTime)}
           </div>
           {timeLeft > 0 && (
-            <div className="mt-1 text-xs text-gray-400 sm:mt-2 sm:text-sm">
+            <div className="mt-1 text-xs text-gray-400 tablet:mt-2 tablet:text-sm">
               {isRunning ? 'Running...' : 'Paused'}
             </div>
           )}
@@ -106,16 +106,16 @@ export function KitchenTimer() {
 
       {/* Preset Buttons - Compact */}
       <div className="w-full">
-        <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+        <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
           Quick Presets
         </label>
-        <div className="grid w-full grid-cols-5 gap-1 sm:gap-2">
+        <div className="grid w-full grid-cols-5 gap-1 tablet:gap-2">
           {[5, 10, 15, 30, 60].map(mins => (
             <button
               key={mins}
               onClick={() => handlePreset(mins)}
               disabled={isRunning}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-1 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50 sm:rounded-xl sm:px-2 sm:py-2 sm:text-sm"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-1 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50 tablet:rounded-xl tablet:px-2 tablet:py-2 tablet:text-sm"
             >
               {mins}m
             </button>
@@ -126,7 +126,7 @@ export function KitchenTimer() {
       {/* Time Input - Compact */}
       <div className="grid w-full grid-cols-3 gap-2">
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             H
           </label>
           <input
@@ -136,11 +136,11 @@ export function KitchenTimer() {
             value={hours}
             onChange={e => setHours(Math.max(0, parseInt(e.target.value) || 0))}
             disabled={isRunning}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             M
           </label>
           <input
@@ -150,11 +150,11 @@ export function KitchenTimer() {
             value={minutes}
             onChange={e => setMinutes(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
             disabled={isRunning}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             S
           </label>
           <input
@@ -164,7 +164,7 @@ export function KitchenTimer() {
             value={seconds}
             onChange={e => setSeconds(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
             disabled={isRunning}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           />
         </div>
       </div>
@@ -175,21 +175,21 @@ export function KitchenTimer() {
           <button
             onClick={handleStart}
             disabled={displayTime === 0}
-            className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50 sm:rounded-2xl sm:px-6 sm:py-3"
+            className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50 tablet:rounded-2xl tablet:px-6 tablet:py-3"
           >
             Start
           </button>
         ) : (
           <button
             onClick={handlePause}
-            className="flex-1 rounded-xl bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-[#3B82F6]/80 sm:rounded-2xl sm:px-6 sm:py-3"
+            className="flex-1 rounded-xl bg-[#3B82F6] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-[#3B82F6]/80 tablet:rounded-2xl tablet:px-6 tablet:py-3"
           >
             Pause
           </button>
         )}
         <button
           onClick={handleReset}
-          className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2a2a2a] sm:rounded-2xl sm:px-4 sm:py-3"
+          className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2a2a2a] tablet:rounded-2xl tablet:px-4 tablet:py-3"
         >
           Reset
         </button>

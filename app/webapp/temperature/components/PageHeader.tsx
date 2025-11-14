@@ -14,10 +14,10 @@ export function PageHeader() {
           <Icon icon={Thermometer} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
         </div>
         <div className="flex-1">
-          <h1 className="mb-2 text-3xl font-bold text-white sm:text-4xl">
+          <h1 className="mb-2 text-3xl font-bold text-white tablet:text-4xl">
             {t('temperature.title', 'Temperature Monitoring')}
           </h1>
-          <p className="text-base text-gray-400 sm:text-lg">
+          <p className="text-base text-gray-400 tablet:text-lg">
             {t(
               'temperature.subtitle',
               'Track fridge, freezer, and food temperatures for food safety compliance',

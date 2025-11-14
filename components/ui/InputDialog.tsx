@@ -139,12 +139,12 @@ export function InputDialog({
         </div>
 
         {/* Title */}
-        <h2 id="dialog-title" className="mb-2 text-center text-xl font-bold text-white">
+        <h2 id="dialog-title" className="mb-2 text-center text-fluid-xl font-bold text-white">
           {title}
         </h2>
 
         {/* Message */}
-        <p id="dialog-description" className="mb-4 text-center text-sm text-gray-300">
+        <p id="dialog-description" className="mb-4 text-center text-fluid-sm text-gray-300">
           {message}
         </p>
 
@@ -168,7 +168,7 @@ export function InputDialog({
             aria-describedby={error ? 'error-message' : undefined}
           />
           {error && (
-            <p id="error-message" className="mt-2 text-sm text-red-400" role="alert">
+            <p id="error-message" className="mt-2 text-fluid-sm text-red-400" role="alert">
               {error}
             </p>
           )}

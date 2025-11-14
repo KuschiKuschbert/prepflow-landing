@@ -90,7 +90,7 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
         </div>
       </div>
 
-      <h2 className="mb-2 text-center text-xl font-semibold text-white">
+      <h2 className="mb-2 text-center text-fluid-xl font-semibold text-white">
         {context ? `${context} Error` : 'API Error'}
       </h2>
 
@@ -98,7 +98,7 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
 
       {error.code && (
         <div className="mb-4 text-center">
-          <span className="inline-block rounded-full bg-[#2a2a2a] px-3 py-1 text-sm text-gray-400">
+          <span className="inline-block rounded-full bg-[#2a2a2a] px-3 py-1 text-fluid-sm text-gray-400">
             Error Code: {error.code}
           </span>
         </div>
@@ -118,7 +118,7 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
       {process.env.NODE_ENV === 'development' && error.details && (
         <details className="mt-4 rounded-xl bg-[#2a2a2a] p-3">
           <summary className="cursor-pointer text-gray-400">Error Details</summary>
-          <pre className="mt-2 overflow-auto text-xs text-red-400">
+          <pre className="mt-2 overflow-auto text-fluid-xs text-red-400">
             {JSON.stringify(error.details, null, 2)}
           </pre>
         </details>

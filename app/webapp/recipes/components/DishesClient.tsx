@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { TablePagination } from '@/components/ui/TablePagination';
 import { Dish, DishCostData } from '../types';
+import { useDishFiltering } from '../hooks/useDishFiltering';
 import DishCard from './DishCard';
 import DishTable from './DishTable';
 import { DishesActionButtons } from './DishesActionButtons';
@@ -145,6 +147,13 @@ export default function DishesClient() {
     setTimeout(() => setSuccessMessage(null), 3000);
   };
 
+  const {
+    filters,
+    updateFilters,
+    paginatedDishes,
+    totalPages,
+  } = useDishFiltering(dishes, dishCosts);
+
   if (loading) {
     return <PageSkeleton />;
   }
@@ -160,10 +169,20 @@ export default function DishesClient() {
 
       <DishesActionButtons onAddDish={handleAddDish} />
 
+      <TablePagination
+        page={filters.currentPage}
+        totalPages={totalPages}
+        total={dishes.length}
+        itemsPerPage={filters.itemsPerPage}
+        onPageChange={page => updateFilters({ currentPage: page })}
+        onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+        className="mb-4"
+      />
+
       {/* Mobile Card Layout */}
-      <div className="block lg:hidden">
+      <div className="block large-desktop:hidden">
         <div className="divide-y divide-[#2a2a2a]">
-          {dishes.map(dish => (
+          {paginatedDishes.map(dish => (
             <DishCard
               key={dish.id}
               dish={dish}
@@ -180,7 +199,7 @@ export default function DishesClient() {
 
       {/* Desktop Table Layout */}
       <DishTable
-        dishes={dishes}
+        dishes={paginatedDishes}
         dishCosts={dishCosts}
         selectedDishes={selectedDishes}
         onSelectAll={handleSelectAll}
@@ -188,6 +207,19 @@ export default function DishesClient() {
         onPreviewDish={handlePreviewDish}
         onEditDish={handleEditDish}
         onDeleteDish={handleDeleteDish}
+        sortField={filters.sortField}
+        sortDirection={filters.sortDirection}
+        onSortChange={(field, direction) => updateFilters({ sortField: field, sortDirection: direction })}
+      />
+
+      <TablePagination
+        page={filters.currentPage}
+        totalPages={totalPages}
+        total={dishes.length}
+        itemsPerPage={filters.itemsPerPage}
+        onPageChange={page => updateFilters({ currentPage: page })}
+        onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+        className="mt-4"
       />
 
       {/* Empty State */}

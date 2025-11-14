@@ -32,21 +32,21 @@ export default function HowItWorks() {
   return (
     <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-16">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">How it works</h2>
-        <p className="mt-4 text-lg text-gray-300">From idea to menu in minutes, not meetings</p>
+        <h2 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">How it works</h2>
+        <p className="mt-4 text-fluid-lg text-gray-300">From idea to menu in minutes, not meetings</p>
       </div>
 
-      <div className="mt-12 grid gap-8 md:grid-cols-3">
+      <div className="mt-12 grid gap-8 desktop:grid-cols-3">
         {steps.map((step, index) => (
           <div key={step.number} className="relative">
             {/* Connector arrow for desktop */}
             {index < steps.length - 1 && (
-              <div className="absolute top-14 right-0 hidden h-0.5 w-full translate-x-1/2 bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent md:block" />
+              <div className="absolute top-14 right-0 hidden h-0.5 w-full translate-x-1/2 bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent desktop:block" />
             )}
 
             <div className="text-center">
               <div
-                className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold"
+                className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full text-fluid-xl font-bold"
                 style={{
                   backgroundColor: `${step.color}20`,
                   color: step.color,
@@ -54,10 +54,10 @@ export default function HowItWorks() {
               >
                 {step.number}
               </div>
-              <h3 className="mb-2 text-xl font-semibold">{step.title}</h3>
+              <h3 className="mb-2 text-fluid-xl font-semibold">{step.title}</h3>
               <p className="mb-3 text-gray-300">{step.description}</p>
               <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f]/30 p-3">
-                <p className="text-sm text-gray-400">{step.example}</p>
+                <p className="text-fluid-sm text-gray-400">{step.example}</p>
               </div>
             </div>
           </div>
@@ -67,10 +67,10 @@ export default function HowItWorks() {
       {/* Workflow summary */}
       <div className="mt-12 text-center">
         <div className="mx-auto max-w-2xl rounded-2xl border border-[#2a2a2a] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-6">
-          <p className="text-lg font-medium text-white">
+          <p className="text-fluid-lg font-medium text-white">
             Add ingredients → Create recipes → See COGS & performance
           </p>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-fluid-sm text-gray-400">
             That's it. No spreadsheets, no guesswork, no 2 AM formula errors.
           </p>
         </div>

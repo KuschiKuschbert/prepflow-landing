@@ -70,9 +70,9 @@ export function VolumeToWeightConverter() {
   ];
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 sm:space-y-2 sm:px-4 sm:py-4">
-      <div className="hidden sm:block">
-        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
+      <div className="hidden tablet:block">
+        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
           Volume to Weight Converter
         </h2>
         <p className="text-xs text-gray-400">
@@ -82,7 +82,7 @@ export function VolumeToWeightConverter() {
 
       {/* Ingredient Search */}
       <div className="w-full">
-        <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+        <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
           Search Ingredient
         </label>
         <input
@@ -90,7 +90,7 @@ export function VolumeToWeightConverter() {
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Type to search..."
-          className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2.5"
+          className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
         />
         {searchQuery && (
           <div className="mt-2 max-h-48 overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50">
@@ -117,23 +117,23 @@ export function VolumeToWeightConverter() {
 
       {/* Selected Ingredient */}
       {selectedIngredient && (
-        <div className="rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/10 p-2 sm:rounded-xl sm:p-4">
-          <div className="text-sm font-medium text-white sm:text-base">
+        <div className="rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/10 p-2 tablet:rounded-xl tablet:p-4">
+          <div className="text-sm font-medium text-white tablet:text-base">
             {selectedIngredient.name}
           </div>
           {selectedIngredient.notes && (
-            <div className="mt-0.5 text-xs text-gray-400 sm:mt-1">{selectedIngredient.notes}</div>
+            <div className="mt-0.5 text-xs text-gray-400 tablet:mt-1">{selectedIngredient.notes}</div>
           )}
           {selectedIngredient.packed && (
-            <div className="mt-0.5 text-xs text-[#29E7CD] sm:mt-1">Use packed measurement</div>
+            <div className="mt-0.5 text-xs text-[#29E7CD] tablet:mt-1">Use packed measurement</div>
           )}
         </div>
       )}
 
       {/* Volume Input */}
-      <div className="grid w-full gap-2 sm:grid-cols-2 sm:gap-4">
+      <div className="grid w-full gap-2 tablet:grid-cols-2 tablet:gap-4">
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             Volume
           </label>
           <input
@@ -144,18 +144,18 @@ export function VolumeToWeightConverter() {
             min="0"
             step="0.1"
             disabled={!selectedIngredient}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-300 sm:mb-2 sm:text-sm">
+          <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
             Unit
           </label>
           <select
             value={volumeUnit}
             onChange={e => setVolumeUnit(e.target.value as 'cup' | 'tbsp' | 'tsp' | 'ml')}
             disabled={!selectedIngredient}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 sm:rounded-xl sm:px-3 sm:py-2.5"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none disabled:opacity-50 tablet:rounded-xl tablet:px-3 tablet:py-2.5"
           >
             {volumeUnits.map(unit => (
               <option key={unit.value} value={unit.value}>
@@ -168,12 +168,12 @@ export function VolumeToWeightConverter() {
 
       {/* Weight Result */}
       {weight !== null && selectedIngredient && (
-        <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center sm:rounded-2xl sm:p-6">
-          <div className="text-xs text-gray-400 sm:text-sm">Weight</div>
-          <div className="mt-1 text-2xl font-bold text-[#29E7CD] sm:mt-2 sm:text-4xl">
+        <div className="rounded-xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-3 text-center tablet:rounded-2xl tablet:p-6">
+          <div className="text-xs text-gray-400 tablet:text-sm">Weight</div>
+          <div className="mt-1 text-2xl font-bold text-[#29E7CD] tablet:mt-2 tablet:text-4xl">
             {weight.toFixed(1)}g
           </div>
-          <div className="mt-1 text-xs text-gray-400 sm:mt-2 sm:text-sm">
+          <div className="mt-1 text-xs text-gray-400 tablet:mt-2 tablet:text-sm">
             {(weight / 28.35).toFixed(1)} oz
           </div>
         </div>

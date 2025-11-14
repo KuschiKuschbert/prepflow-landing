@@ -91,15 +91,15 @@ export default function CountrySetup() {
   return (
     <div className="mx-auto max-w-3xl rounded-2xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-6">
       <div className="mb-6 text-center">
-        <h2 className="mb-2 text-2xl font-bold text-[#29E7CD]">🌍 Country & Tax Setup</h2>
-        <p className="text-sm text-gray-400">
+        <h2 className="mb-2 text-fluid-2xl font-bold text-[#29E7CD]">🌍 Country & Tax Setup</h2>
+        <p className="text-fluid-sm text-gray-400">
           Configure your country for automatic tax rates and currency formatting
         </p>
       </div>
 
       {/* Country Selection */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-4">
-        <h3 className="mb-3 text-lg font-semibold text-white">📍 Select Your Country</h3>
+        <h3 className="mb-3 text-fluid-lg font-semibold text-white">📍 Select Your Country</h3>
 
         {/* Modern Combobox Picker */}
         <div className="relative" ref={dropdownRef}>
@@ -171,12 +171,12 @@ export default function CountrySetup() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-medium">{country.name}</div>
-                        <div className="text-sm text-gray-400">
+                        <div className="text-fluid-sm text-gray-400">
                           {country.currency} • {country.taxName}{' '}
                           {(country.taxRate * 100).toFixed(0)}%
                         </div>
                       </div>
-                      <div className="text-xs text-gray-500">{country.code}</div>
+                      <div className="text-fluid-xs text-gray-500">{country.code}</div>
                     </div>
                   </button>
                 ))
@@ -187,7 +187,7 @@ export default function CountrySetup() {
           )}
         </div>
 
-        <div className="mt-3 text-sm text-gray-400">
+        <div className="mt-3 text-fluid-sm text-gray-400">
           Selected: <span className="font-medium text-[#29E7CD]">{countryConfig.name}</span> •
           Currency: <span className="text-white">{countryConfig.currency}</span> • Tax:{' '}
           <span className="text-white">
@@ -198,8 +198,8 @@ export default function CountrySetup() {
 
       {/* Current Configuration */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
-        <h3 className="mb-2 text-base font-semibold text-white">⚙️ Configuration Details</h3>
-        <div className="flex flex-wrap gap-3 text-xs">
+        <h3 className="mb-2 text-fluid-base font-semibold text-white">⚙️ Configuration Details</h3>
+        <div className="flex flex-wrap gap-3 text-fluid-xs">
           <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
             <span className="font-medium text-[#29E7CD]">Date:</span>
             <span className="text-white">{countryConfig.dateFormat}</span>
@@ -221,30 +221,30 @@ export default function CountrySetup() {
       {/* Tax Calculator */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-white">🧮 Tax Calculator</h3>
+          <h3 className="text-fluid-base font-semibold text-white">🧮 Tax Calculator</h3>
           <button
             onClick={() => setShowTaxBreakdown(!showTaxBreakdown)}
-            className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1 text-xs text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
+            className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1 text-fluid-xs text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
           >
             {showTaxBreakdown ? 'Hide' : 'Show'} Breakdown
           </button>
         </div>
 
         <div className="mb-2 flex items-center space-x-3">
-          <label className="text-xs font-medium text-white">Test Amount:</label>
+          <label className="text-fluid-xs font-medium text-white">Test Amount:</label>
           <input
             type="number"
             value={testAmount}
             onChange={e => setTestAmount(Number(e.target.value))}
-            className="w-20 rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] p-2 text-xs text-white"
+            className="w-20 rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] p-2 text-fluid-xs text-white"
             placeholder="100"
           />
-          <div className="font-mono text-xs text-white">Total: {formatPrice(testAmount, true)}</div>
+          <div className="font-mono text-fluid-xs text-white">Total: {formatPrice(testAmount, true)}</div>
         </div>
 
         {showTaxBreakdown && (
           <div className="rounded-lg bg-[#1f1f1f] p-2">
-            <div className="flex justify-between text-xs">
+            <div className="flex justify-between text-fluid-xs">
               <div className="text-center">
                 <div className="mb-1 text-gray-400">Subtotal</div>
                 <div className="font-mono text-white">
@@ -270,8 +270,8 @@ export default function CountrySetup() {
 
       {/* Formatting Examples */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
-        <h3 className="mb-2 text-base font-semibold text-white">📊 Formatting Examples</h3>
-        <div className="flex flex-wrap gap-3 text-xs">
+        <h3 className="mb-2 text-fluid-base font-semibold text-white">📊 Formatting Examples</h3>
+        <div className="flex flex-wrap gap-3 text-fluid-xs">
           <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
             <span className="font-medium text-[#29E7CD]">Currency:</span>
             <span className="text-white">{formatPrice(testAmount, false)}</span>
@@ -302,14 +302,14 @@ export default function CountrySetup() {
       <div className="rounded-xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-3">
         <div className="flex items-start space-x-2">
           <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-            <span className="text-sm">⚡</span>
+            <span className="text-fluid-sm">⚡</span>
           </div>
           <div>
-            <h4 className="mb-1 text-base font-semibold text-white">Global Impact</h4>
-            <p className="mb-2 text-xs text-gray-300">
+            <h4 className="mb-1 text-fluid-base font-semibold text-white">Global Impact</h4>
+            <p className="mb-2 text-fluid-xs text-gray-300">
               This setting automatically applies across your entire PrepFlow system:
             </p>
-            <div className="flex flex-wrap gap-2 text-xs text-gray-300">
+            <div className="flex flex-wrap gap-2 text-fluid-xs text-gray-300">
               <span>
                 • Pricing uses {countryConfig.taxName} at {(countryConfig.taxRate * 100).toFixed(0)}
                 %

@@ -7,7 +7,7 @@ import { PriceListForm } from './components/PriceListForm';
 import { PriceListsList } from './components/PriceListsList';
 import { SupplierForm } from './components/SupplierForm';
 import { SuppliersGrid } from './components/SuppliersGrid';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { PriceListFormData, Supplier, SupplierFormData, SupplierPriceList } from './types';
 
 export default function SuppliersPage() {
@@ -142,8 +142,8 @@ export default function SuppliersPage() {
   }
 
   return (
-    <AdaptiveContainer>
-      <div className="min-h-screen bg-transparent py-4 sm:py-6">
+    <ResponsivePageContainer>
+      <div className="min-h-screen bg-transparent py-4 tablet:py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-4xl font-bold text-white">
@@ -218,7 +218,7 @@ export default function SuppliersPage() {
         {activeTab === 'priceLists' && (
           <div className="space-y-6">
             {/* Filter and Add Button */}
-            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <div className="flex flex-col items-start justify-between gap-4 tablet:flex-row tablet:items-center">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-300">
                   {t('suppliers.filterSupplier', 'Filter by Supplier')}
@@ -260,6 +260,6 @@ export default function SuppliersPage() {
           </div>
         )}
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

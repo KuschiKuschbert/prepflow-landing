@@ -27,7 +27,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
       }}
     >
       <div
-        className="flex items-start justify-center pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] md:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top)+1rem)]"
+        className="flex items-start justify-center pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] desktop:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top)+1rem)]"
         onClick={e => e.stopPropagation()}
         onTouchStart={e => e.stopPropagation()}
       >

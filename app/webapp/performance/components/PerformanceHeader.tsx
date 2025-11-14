@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { PageHeader } from '../../components/static/PageHeader';
 import { PerformanceAlert } from '../types';
 import { BarChart3 } from 'lucide-react';
@@ -17,6 +18,18 @@ export default function PerformanceHeader({
   lastUpdate,
   performanceAlerts,
 }: PerformanceHeaderProps) {
+  const [lastUpdateTime, setLastUpdateTime] = useState<string>('');
+
+  // Format date on client side only to avoid hydration mismatch
+  useEffect(() => {
+    if (lastUpdate) {
+      const date = lastUpdate instanceof Date ? lastUpdate : new Date(lastUpdate);
+      setLastUpdateTime(date.toLocaleTimeString());
+    } else {
+      setLastUpdateTime('');
+    }
+  }, [lastUpdate]);
+
   const performanceScoreColor =
     performanceScore >= 90
       ? 'text-green-400'
@@ -25,7 +38,7 @@ export default function PerformanceHeader({
         : 'text-red-400';
 
   const metrics = (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col items-start gap-2 tablet:flex-row tablet:items-center tablet:gap-4">
       <div className="text-right">
         <div className="text-sm text-gray-400">Performance Score</div>
         <div className={`text-2xl font-bold ${performanceScoreColor}`}>{performanceScore}/100</div>
@@ -36,17 +49,17 @@ export default function PerformanceHeader({
         />
         <span className="text-sm text-gray-300">{realtimeEnabled ? 'Live' : 'Offline'}</span>
       </div>
-      {lastUpdate && (
+      {lastUpdateTime && (
         <div className="text-right">
           <div className="text-xs text-gray-400">Last Update</div>
-          <div className="text-xs text-gray-300">{lastUpdate.toLocaleTimeString()}</div>
+          <div className="text-xs text-gray-300">{lastUpdateTime}</div>
         </div>
       )}
     </div>
   );
 
   return (
-    <div className="mb-8">
+    <div className="mb-4 tablet:mb-6 desktop:mb-8">
       <PageHeader
         title="Performance Analysis"
         subtitle="Analyze your menu performance and profitability"

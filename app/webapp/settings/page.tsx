@@ -110,7 +110,7 @@ export default function SettingsPage() {
         <p className="mb-4 text-sm text-gray-500">
           Your all-time stats across all sessions. Just for fun! 🎮
         </p>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+        <div className="grid grid-cols-2 gap-3 desktop:grid-cols-3 desktop:gap-4">
           <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
             <div className="mb-1 text-2xl">🍅</div>
             <div className="mb-1 text-xs text-gray-500">Tomatoes Thrown</div>

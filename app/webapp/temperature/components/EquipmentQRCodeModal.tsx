@@ -220,7 +220,7 @@ export function EquipmentQRCodeModal({
     >
       <div
         ref={modalRef}
-        className="relative w-full max-w-md max-h-[95vh] rounded-2xl bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] border border-[#2a2a2a] shadow-2xl p-3 md:p-4 overflow-hidden flex flex-col"
+        className="relative w-full max-w-md max-h-[95vh] rounded-2xl bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] border border-[#2a2a2a] shadow-2xl p-3 desktop:p-4 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Gradient accent */}

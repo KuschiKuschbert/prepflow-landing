@@ -255,9 +255,9 @@ export default function TemperatureEquipmentTab({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          <h2 className="text-2xl font-bold text-white tablet:text-3xl">
             {t('temperature.equipment', 'Temperature Equipment')}
           </h2>
           <p className="mt-2 text-base text-gray-400">
@@ -277,7 +277,7 @@ export default function TemperatureEquipmentTab({
               title="Table View"
             >
               <Icon icon={Table2} size="sm" aria-hidden={true} />
-              <span className="hidden sm:inline">Table</span>
+              <span className="hidden tablet:inline">Table</span>
             </button>
             <button
               onClick={() => setViewMode('cards')}
@@ -289,7 +289,7 @@ export default function TemperatureEquipmentTab({
               title="Card View"
             >
               <Icon icon={Grid3x3} size="sm" aria-hidden={true} />
-              <span className="hidden sm:inline">Cards</span>
+              <span className="hidden tablet:inline">Cards</span>
             </button>
           </div>
           {/* Generate Sample Data Button */}
@@ -306,10 +306,10 @@ export default function TemperatureEquipmentTab({
                 className="transition-transform duration-300 group-hover:rotate-12"
                 aria-hidden={true}
               />
-              <span className="hidden sm:inline">
+              <span className="hidden tablet:inline">
                 {isGenerating ? 'Generating...' : 'Generate Sample Logs'}
               </span>
-              <span className="sm:hidden">{isGenerating ? '...' : '📊'}</span>
+              <span className="tablet:hidden">{isGenerating ? '...' : '📊'}</span>
             </button>
           )}
           <button
@@ -401,7 +401,7 @@ export default function TemperatureEquipmentTab({
             </div>
           )}
           {/* Cards Grid */}
-          <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+          <div className="grid gap-4 tablet:grid-cols-1 large-desktop:grid-cols-2">
             {equipment.slice(startIndex, endIndex).map(item => (
               <EquipmentItem
                 key={item.id}

@@ -91,8 +91,8 @@ export default function IngredientTable({
               clipRule="evenodd"
             />
           </svg>
-          <h3 className="mb-2 text-xl font-semibold text-white">No Ingredients Found</h3>
-          <p className="text-gray-400">Start by adding your first ingredient to get started.</p>
+          <h3 className="mb-2 text-fluid-xl font-semibold text-white">No Ingredients Found</h3>
+          <p className="text-fluid-sm text-gray-400">Start by adding your first ingredient to get started.</p>
         </div>
       </div>
     );
@@ -102,12 +102,12 @@ export default function IngredientTable({
     <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
       <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Ingredients ({ingredients.length})</h2>
+          <h2 className="text-fluid-xl font-semibold text-white">Ingredients ({ingredients.length})</h2>
           <div className="flex items-center gap-2">
             {selectedIngredients.size > 0 ? (
               <button
                 onClick={() => onSelectAll(false)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
+                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-fluid-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
                 aria-label="Deselect all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ export default function IngredientTable({
             ) : (
               <button
                 onClick={() => onSelectAll(true)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-fluid-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
                 aria-label="Select all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +135,7 @@ export default function IngredientTable({
         <table className="w-full">
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
-              <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="hidden tablet:table-cell px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 <button
                   onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
                   className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
@@ -150,25 +150,25 @@ export default function IngredientTable({
                   )}
                 </button>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Brand
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Pack Size
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Cost/Unit
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Supplier
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Stock
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 Actions
               </th>
             </tr>

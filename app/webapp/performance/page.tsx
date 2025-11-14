@@ -1,15 +1,15 @@
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import PerformanceClient from './components/PerformanceClient';
 
 export default function PerformancePage() {
   return (
     <ErrorBoundary>
-      <AdaptiveContainer>
-        <div className="min-h-screen bg-transparent py-4 sm:py-6">
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
           <PerformanceClient />
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     </ErrorBoundary>
   );
 }

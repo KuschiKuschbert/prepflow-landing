@@ -31,14 +31,14 @@ export default function MenuList({ menus, onSelectMenu, onEditMenu, onDeleteMenu
         <div className="mb-4 flex justify-center">
           <Icon icon={FileText} size="xl" className="text-gray-400" aria-hidden={true} />
         </div>
-        <h3 className="mb-2 text-lg font-medium text-white">No menus yet</h3>
-        <p className="mb-4 text-gray-500">Create your first menu to get started.</p>
+        <h3 className="mb-2 text-fluid-lg font-medium text-white">No menus yet</h3>
+        <p className="mb-4 text-fluid-sm text-gray-500">Create your first menu to get started.</p>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 tablet:grid-cols-2 desktop:grid-cols-3">
       {menus.map(menu => (
         <div
           key={menu.id}
@@ -46,7 +46,7 @@ export default function MenuList({ menus, onSelectMenu, onEditMenu, onDeleteMenu
           onClick={() => onSelectMenu(menu)}
         >
           <div className="mb-4 flex items-start justify-between">
-            <h3 className="text-lg font-semibold text-white">{menu.menu_name}</h3>
+            <h3 className="text-fluid-lg font-semibold text-white">{menu.menu_name}</h3>
             <div className="flex gap-2" onClick={e => e.stopPropagation()}>
               <button
                 onClick={() => onEditMenu(menu)}

@@ -121,17 +121,17 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       />
 
       {/* Desktop: Persistent Sidebar - CSS handles visibility */}
-      <div className="hidden md:block">
+      <div className="hidden desktop:block">
         <PersistentSidebar />
       </div>
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
-      <div className="block md:hidden">
+      <div className="block desktop:hidden">
         <BottomNavBar onMoreClick={() => setIsMoreDrawerOpen(true)} />
       </div>
 
       {/* Mobile: More Drawer - CSS handles visibility */}
-      <div className="block md:hidden">
+      <div className="block desktop:hidden">
         <MoreDrawer
           isOpen={isMoreDrawerOpen}
           onClose={() => setIsMoreDrawerOpen(false)}

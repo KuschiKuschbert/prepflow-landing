@@ -153,14 +153,14 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
           <div className="w-32" /> {/* Spacer */}
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 large-desktop:grid-cols-4">
           {/* Left Panel - Dish Palette */}
-          <div className="lg:col-span-1">
+          <div className="large-desktop:col-span-1">
             <DishPalette dishes={dishes} />
           </div>
 
           {/* Right Panel - Menu Builder */}
-          <div className="lg:col-span-3">
+          <div className="large-desktop:col-span-3">
             {/* Statistics */}
             {statistics && <MenuStatisticsPanel statistics={statistics} />}
 

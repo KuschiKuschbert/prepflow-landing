@@ -2,16 +2,37 @@
 
 import PerformanceActions from '../components/PerformanceActions';
 import PerformanceCharts from '../components/PerformanceCharts';
+import PerformanceDateRange from '../components/PerformanceDateRange';
+import PerformanceEmptyState from '../components/PerformanceEmptyState';
 import PerformanceFilters from '../components/PerformanceFilters';
 import PerformanceHeader from '../components/PerformanceHeader';
 import PerformanceImportModal from '../components/PerformanceImportModal';
+import PerformanceInsights from '../components/PerformanceInsights';
 import PerformanceMetadata from '../components/PerformanceMetadata';
+import PerformanceSummaryCards from '../components/PerformanceSummaryCards';
+import PerformanceTrends from '../components/PerformanceTrends';
 import { TablePagination } from '@/components/ui/TablePagination';
 import PerformanceTable from '../components/PerformanceTable';
 import { usePerformanceData } from '../hooks/usePerformanceData';
 import { usePerformanceFilters } from '../hooks/usePerformanceFilters';
+import { DateRange, DateRangePreset } from '../types';
+import { useState } from 'react';
 
 export default function PerformanceClient() {
+  // Date range state
+  const [dateRange, setDateRange] = useState<DateRange>(() => {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 29); // Default to last 30 days
+    startDate.setHours(0, 0, 0, 0);
+    return {
+      startDate,
+      endDate: today,
+      preset: '30d',
+    };
+  });
+
   const {
     state,
     updateState,
@@ -19,11 +40,15 @@ export default function PerformanceClient() {
     handleImport,
     handleExportCSV,
     realtimeSubscription,
-  } = usePerformanceData();
+    fetchPerformanceData,
+    previousPeriodData,
+  } = usePerformanceData(dateRange);
 
-  const { filters, updateFilters, paginatedItems, totalPages } = usePerformanceFilters(
+  const { filters, updateFilters, paginatedItems, totalPages, filteredAndSortedItems } = usePerformanceFilters(
     state.performanceItems,
   );
+
+  const hasData = state.performanceItems.length > 0;
 
   // Handle realtime toggle
   const handleToggleRealtime = () => {
@@ -72,37 +97,83 @@ export default function PerformanceClient() {
         performanceAlerts={state.performanceAlerts}
       />
 
-      <PerformanceMetadata metadata={state.metadata} />
+      {hasData ? (
+        <>
+          {/* Date Range Selector */}
+          <PerformanceDateRange dateRange={dateRange} onDateRangeChange={setDateRange} />
 
-      <PerformanceFilters filters={filters} onFiltersChange={updateFilters} />
+          {/* Trend Analysis - Compare to Previous Period */}
+          {previousPeriodData && previousPeriodData.length > 0 && (
+            <PerformanceTrends
+              currentItems={state.performanceItems}
+              previousItems={previousPeriodData}
+              dateRange={dateRange}
+            />
+          )}
 
-      <PerformanceActions
-        showImportModal={state.showImportModal}
-        showCharts={state.showCharts}
-        realtimeEnabled={state.realtimeEnabled}
-        onImportClick={handleImportClick}
-        onExportCSV={handleExportCSV}
-        onToggleCharts={handleToggleCharts}
-        onToggleRealtime={handleToggleRealtime}
-      />
+          {/* Summary Cards - Key Metrics */}
+          <PerformanceSummaryCards performanceItems={state.performanceItems} />
 
-      {state.showCharts && <PerformanceCharts performanceItems={state.performanceItems} />}
+          {/* Insights & Recommendations */}
+          <PerformanceInsights performanceItems={state.performanceItems} />
 
-      <TablePagination
-        page={filters.currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        className="mb-4"
-      />
+          {/* Methodology Metadata - Collapsible */}
+          <PerformanceMetadata metadata={state.metadata} />
 
-      <PerformanceTable performanceItems={paginatedItems} />
+          {/* Filters - Sticky on scroll */}
+          <PerformanceFilters
+            filters={filters}
+            performanceItems={state.performanceItems}
+            filteredAndSortedItems={filteredAndSortedItems}
+            onFiltersChange={updateFilters}
+          />
 
-      <TablePagination
-        page={filters.currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        className="mt-4"
-      />
+          {/* Actions */}
+          <PerformanceActions
+            showImportModal={state.showImportModal}
+            showCharts={state.showCharts}
+            realtimeEnabled={state.realtimeEnabled}
+            onImportClick={handleImportClick}
+            onExportCSV={handleExportCSV}
+            onToggleCharts={handleToggleCharts}
+            onToggleRealtime={handleToggleRealtime}
+          />
+
+          {/* Charts - Removed for better screen space optimization */}
+
+          {/* Table Pagination - Top */}
+          <TablePagination
+            page={filters.currentPage}
+            totalPages={totalPages}
+            total={filteredAndSortedItems.length}
+            itemsPerPage={filters.itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+            className="mb-4"
+          />
+
+          {/* Performance Table */}
+          <PerformanceTable
+            performanceItems={paginatedItems}
+            sortBy={filters.sortBy}
+            sortOrder={filters.sortOrder}
+            onSortChange={(field, order) => updateFilters({ sortBy: field, sortOrder: order })}
+          />
+
+          {/* Table Pagination - Bottom */}
+          <TablePagination
+            page={filters.currentPage}
+            totalPages={totalPages}
+            total={filteredAndSortedItems.length}
+            itemsPerPage={filters.itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+            className="mt-4"
+          />
+        </>
+      ) : (
+        <PerformanceEmptyState onDataGenerated={fetchPerformanceData} />
+      )}
 
       <PerformanceImportModal
         showImportModal={state.showImportModal}

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { PrepListForm } from './components/PrepListForm';
 import { PrepListCard } from './components/PrepListCard';
 import { usePrepListsQuery } from './hooks/usePrepListsQuery';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import type { KitchenSection, Ingredient, PrepList, PrepListFormData } from './types';
 import { ListChecks } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
@@ -228,7 +228,7 @@ export default function PrepListsPage() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <AdaptiveContainer>
+    <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -332,6 +332,6 @@ export default function PrepListsPage() {
           </div>
         )}
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

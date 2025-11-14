@@ -70,11 +70,11 @@ export function IngredientTableDesktop({
   getSortIcon,
 }: IngredientTableDesktopProps) {
   return (
-    <div className="hidden overflow-x-auto lg:block">
+    <div className="hidden overflow-x-auto large-desktop:block">
       <table className="w-full">
         <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase large-desktop:table-cell">
               <button
                 onClick={() => {
                   const allSelected =

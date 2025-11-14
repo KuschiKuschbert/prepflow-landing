@@ -41,10 +41,10 @@ export function AnimatedCard({
 
       {/* Content */}
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold text-white transition-colors duration-300 group-hover:text-[#29E7CD]">
+        <h3 className="text-fluid-lg font-semibold text-white transition-colors duration-300 group-hover:text-[#29E7CD]">
           {title}
         </h3>
-        <p className="text-sm leading-relaxed text-gray-400">{description}</p>
+        <p className="text-fluid-sm leading-relaxed text-gray-400">{description}</p>
       </div>
 
       {/* Hover Effect Overlay */}
@@ -99,9 +99,9 @@ export function AnimatedButton({
   };
 
   const sizeClasses = {
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-4 py-3 text-base',
-    lg: 'px-6 py-4 text-lg',
+    sm: 'px-3 py-2 text-fluid-sm',
+    md: 'px-4 py-3 text-fluid-base',
+    lg: 'px-6 py-4 text-fluid-lg',
   };
 
   return (
@@ -154,7 +154,7 @@ export function AnimatedProgressBar({
   return (
     <div className={`space-y-2 ${className}`}>
       {label && (
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-fluid-sm">
           <span className="text-gray-300">{label}</span>
           <span className="font-medium text-[#29E7CD]">{progress}%</span>
         </div>
@@ -204,10 +204,10 @@ export function AnimatedToast({
     >
       <div className="flex items-center space-x-3">
         <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center">
-          <span className="text-lg">{icons[type]}</span>
+          <span className="text-fluid-lg">{icons[type]}</span>
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium">{message}</p>
+          <p className="text-fluid-sm font-medium">{message}</p>
         </div>
         <button
           onClick={onClose}
@@ -241,30 +241,30 @@ export function AnimationShowcase() {
     <div className="space-y-8 p-6">
       {/* Header */}
       <AnimatedDiv animation="fadeInDown" className="text-center">
-        <h1 className="mb-4 text-4xl font-bold text-white">🎨 Modern Animation System</h1>
-        <p className="text-lg text-gray-400">
+        <h1 className="mb-4 text-fluid-4xl font-bold text-white">🎨 Modern Animation System</h1>
+        <p className="text-fluid-lg text-gray-400">
           Subtle, performant animations that enhance user experience
         </p>
       </AnimatedDiv>
 
       {/* Staggered Cards */}
-      <StaggeredContainer className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <StaggeredContainer className="grid grid-cols-1 gap-6 desktop:grid-cols-2 large-desktop:grid-cols-3">
         <AnimatedCard
           title="Performance Optimized"
           description="All animations use CSS transforms and opacity for 60fps performance"
-          icon={<span className="text-xl text-white">⚡</span>}
+          icon={<span className="text-fluid-xl text-white">⚡</span>}
           onClick={handleCardClick}
         />
         <AnimatedCard
           title="Accessibility First"
           description="Respects prefers-reduced-motion and includes proper ARIA labels"
-          icon={<span className="text-xl text-white">♿</span>}
+          icon={<span className="text-fluid-xl text-white">♿</span>}
           onClick={handleCardClick}
         />
         <AnimatedCard
           title="Modern Design"
           description="Subtle effects that enhance UX without being distracting"
-          icon={<span className="text-xl text-white">✨</span>}
+          icon={<span className="text-fluid-xl text-white">✨</span>}
           onClick={handleCardClick}
         />
       </StaggeredContainer>

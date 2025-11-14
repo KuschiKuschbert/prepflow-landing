@@ -107,12 +107,12 @@ export default function AppleStyleFeatures({
         // Create title (bold)
         const tempTitle = document.createElement('strong');
         tempTitle.style.fontWeight = '600';
-        tempTitle.style.fontSize = window.innerWidth >= 768 ? '1.125rem' : '1rem'; // md:text-lg
+        tempTitle.style.fontSize = window.innerWidth >= 768 ? '1.125rem' : '1rem'; // desktop:text-fluid-lg
         tempTitle.textContent = `${features[index].title}. `;
 
         // Create description
         const tempDesc = document.createElement('span');
-        tempDesc.style.fontSize = window.innerWidth >= 768 ? '1rem' : '0.875rem'; // md:text-base
+        tempDesc.style.fontSize = window.innerWidth >= 768 ? '1rem' : '0.875rem'; // desktop:text-fluid-base
         tempDesc.style.marginLeft = '0.25rem';
         tempDesc.textContent = features[index].description;
 
@@ -505,19 +505,19 @@ export default function AppleStyleFeatures({
   }, [features]);
 
   return (
-    <section className="relative bg-transparent py-16 md:py-20">
+    <section className="relative bg-transparent py-16 tablet:py-20">
       {/* Wrapped Container for Better Space Utilization */}
-      <div className="mx-auto w-full max-w-[95%] lg:max-w-[92%] xl:max-w-[90%] 2xl:max-w-7xl px-4 md:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[95%] desktop:max-w-[92%] xl:max-w-[90%] 2xl:max-w-7xl px-4 tablet:px-6 desktop:px-8">
         {/* Section Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+          <h2 className="text-fluid-3xl font-bold tracking-tight text-white tablet:text-fluid-4xl desktop:text-fluid-4xl">
             {sectionTitle}
           </h2>
         </div>
 
         {/* Split Layout: Buttons (Left) + Image (Right) - Optimized for Space */}
         <div
-          className="flex flex-col gap-12 lg:flex-row lg:gap-8 xl:gap-12 lg:items-stretch"
+          className="flex flex-col gap-12 desktop:flex-row desktop:gap-8 xl:gap-12 desktop:items-stretch"
           style={{
             contain: 'layout',
           }}
@@ -525,7 +525,7 @@ export default function AppleStyleFeatures({
           {/* Left: Feature Buttons - Text content expands inside, horizontally centered relative to image */}
           <div
             ref={parentContainerRef}
-            className="flex flex-col flex-shrink-0 lg:max-w-[45%] xl:max-w-[42%] w-full lg:w-auto min-w-0 lg:self-center"
+            className="flex flex-col flex-shrink-0 desktop:max-w-[45%] xl:max-w-[42%] w-full desktop:w-auto min-w-0 desktop:self-center"
             style={{
               contain: 'layout',
               gap: '0.375rem', // Tighter spacing between buttons for more concise layout
@@ -630,7 +630,7 @@ export default function AppleStyleFeatures({
                     ref={el => {
                       contentRefs.current[index] = el;
                     }}
-                    className="text-left text-sm md:text-base"
+                    className="text-left text-fluid-sm tablet:text-fluid-base"
                     style={{
                       whiteSpace: isExpanded ? 'normal' : 'nowrap',
                       overflowWrap: 'break-word',
@@ -647,7 +647,7 @@ export default function AppleStyleFeatures({
                   >
                     {/* Title - always visible, becomes bold when expanded */}
                     <span
-                      className={isExpanded ? 'font-semibold text-white text-base md:text-lg' : 'text-white/90 font-medium text-sm md:text-base'}
+                      className={isExpanded ? 'font-semibold text-white text-fluid-base tablet:text-fluid-lg' : 'text-white/90 font-medium text-fluid-sm tablet:text-fluid-base'}
                       style={{
                         display: 'inline-block',
                         opacity: 1,
@@ -662,7 +662,7 @@ export default function AppleStyleFeatures({
                     </span>
                     {/* Description - Apple-style smooth reveal, always in DOM for smooth transition */}
                     <span
-                      className="text-gray-300 text-sm md:text-base"
+                      className="text-gray-300 text-fluid-sm tablet:text-fluid-base"
                       style={{
                         display: 'inline-block', // Always in DOM for smooth transition
                         marginLeft: isExpanded ? '0.25rem' : '0',
@@ -704,7 +704,7 @@ export default function AppleStyleFeatures({
           </div>
 
           {/* Right: Image that flies in from the right - always visible, optimized for space */}
-          <div className="lg:sticky lg:top-24 lg:flex-1 lg:min-w-[55%] lg:max-w-[60%] xl:min-w-[58%] xl:max-w-[65%] lg:z-10 w-full flex items-stretch">
+          <div className="desktop:sticky desktop:top-24 desktop:flex-1 desktop:min-w-[55%] desktop:max-w-[60%] xl:min-w-[58%] xl:max-w-[65%] desktop:z-10 w-full flex items-stretch">
             <div
               ref={imageContainerRef}
               className="relative rounded-3xl bg-[#1f1f1f]/40 shadow-xl shadow-black/20 w-full flex-1 overflow-hidden"

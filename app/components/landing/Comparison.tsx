@@ -33,11 +33,11 @@ export default function Comparison() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Why PrepFlow?</h2>
-        <p className="mt-4 text-lg text-gray-300">Built for kitchens, not spreadsheets</p>
+        <h2 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">Why PrepFlow?</h2>
+        <p className="mt-4 text-fluid-lg text-gray-300">Built for kitchens, not spreadsheets</p>
       </div>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <div className="mt-12 grid gap-6 desktop:grid-cols-3">
         {comparisons.map(comparison => (
           <div
             key={comparison.title}
@@ -51,11 +51,11 @@ export default function Comparison() {
                 aria-hidden={true}
               />
             </div>
-            <h3 className="mb-2 text-xl font-semibold" style={{ color: comparison.color }}>
+            <h3 className="mb-2 text-fluid-xl font-semibold" style={{ color: comparison.color }}>
               {comparison.title}
             </h3>
             <p className="mb-3 font-medium text-white">{comparison.benefit}</p>
-            <p className="text-sm text-gray-400">{comparison.description}</p>
+            <p className="text-fluid-sm text-gray-400">{comparison.description}</p>
           </div>
         ))}
       </div>

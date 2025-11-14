@@ -4,6 +4,7 @@ import React from 'react';
 import { COGSCalculation } from '../types';
 import { Edit, Trash2, Utensils } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useCOGSTableSort } from '../hooks/useCOGSTableSort';
 
 interface COGSTableProps {
   calculations: COGSCalculation[];
@@ -17,6 +18,9 @@ interface COGSTableProps {
   totalCOGS: number;
   costPerPortion: number;
   dishPortions: number;
+  sortField?: 'ingredient_name' | 'quantity' | 'cost';
+  sortDirection?: 'asc' | 'desc';
+  onSortChange?: (field: 'ingredient_name' | 'quantity' | 'cost', direction: 'asc' | 'desc') => void;
 }
 
 export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable({
@@ -31,7 +35,15 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
   totalCOGS,
   costPerPortion,
   dishPortions,
+  sortField = 'ingredient_name',
+  sortDirection = 'asc',
+  onSortChange,
 }) {
+  const { handleColumnSort, getSortIcon } = useCOGSTableSort({
+    sortField,
+    sortDirection,
+    onSortChange: onSortChange || (() => {}),
+  });
   if (calculations.length === 0) {
     return (
       <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
@@ -56,7 +68,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
   return (
     <div className="space-y-4">
       {/* Mobile Card Layout */}
-      <div className="block lg:hidden">
+      <div className="block large-desktop:hidden">
         <div className="space-y-3">
           {calculations.map((calc, index) => (
             <div
@@ -131,19 +143,52 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
       </div>
 
       {/* Desktop Table Layout */}
-      <div className="hidden overflow-x-auto lg:block">
+      <div className="hidden overflow-x-auto large-desktop:block">
         <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
           <table className="min-w-full divide-y divide-[#2a2a2a]">
             <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Ingredient
+                {onSortChange ? (
+                  <button
+                    onClick={() => handleColumnSort('ingredient_name')}
+                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    aria-label="Sort by ingredient name"
+                  >
+                    Ingredient
+                    {getSortIcon('ingredient_name')}
+                  </button>
+                ) : (
+                  'Ingredient'
+                )}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Qty
+                {onSortChange ? (
+                  <button
+                    onClick={() => handleColumnSort('quantity')}
+                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    aria-label="Sort by quantity"
+                  >
+                    Qty
+                    {getSortIcon('quantity')}
+                  </button>
+                ) : (
+                  'Qty'
+                )}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-                Cost
+                {onSortChange ? (
+                  <button
+                    onClick={() => handleColumnSort('cost')}
+                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    aria-label="Sort by cost"
+                  >
+                    Cost
+                    {getSortIcon('cost')}
+                  </button>
+                ) : (
+                  'Cost'
+                )}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                 Actions

@@ -44,17 +44,17 @@ export default function ProductFeatures() {
   return (
     <section id="features" className="mx-auto max-w-7xl px-6 py-16">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Everything you need</h2>
-        <p className="mt-4 text-lg text-gray-300">
+        <h2 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">Everything you need</h2>
+        <p className="mt-4 text-fluid-lg text-gray-300">
           From ingredients to pricing decisions, all in one place
         </p>
       </div>
 
       <div className="mt-12 space-y-16">
         {features.map((feature, index) => (
-          <div key={feature.name} className="grid gap-8 md:grid-cols-2 md:items-center">
+          <div key={feature.name} className="grid gap-8 desktop:grid-cols-2 desktop:items-center">
             {/* Screenshot */}
-            <div className={index % 2 === 1 ? 'md:order-2' : ''}>
+            <div className={index % 2 === 1 ? 'desktop:order-2' : ''}>
               <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-2 shadow-xl">
                 <Image
                   src={feature.screenshot}
@@ -67,11 +67,11 @@ export default function ProductFeatures() {
             </div>
 
             {/* Description */}
-            <div className={index % 2 === 1 ? 'md:order-1' : ''}>
-              <h3 className="text-2xl font-bold md:text-3xl" style={{ color: feature.color }}>
+            <div className={index % 2 === 1 ? 'desktop:order-1' : ''}>
+              <h3 className="text-fluid-2xl font-bold desktop:text-fluid-3xl" style={{ color: feature.color }}>
                 {feature.name}
               </h3>
-              <p className="mt-4 text-lg text-gray-300">{feature.description}</p>
+              <p className="mt-4 text-fluid-lg text-gray-300">{feature.description}</p>
             </div>
           </div>
         ))}

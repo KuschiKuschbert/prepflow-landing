@@ -71,7 +71,7 @@ export default function DishPreviewModal({
               {costData && (
                 <div className="mb-6 rounded-xl bg-[#2a2a2a]/30 p-4">
                   <h3 className="mb-4 text-lg font-semibold text-white">Cost Information</h3>
-                  <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-4 desktop:grid-cols-4">
                     <div>
                       <div className="text-xs text-gray-400">Selling Price</div>
                       <div className="text-lg font-semibold text-white">

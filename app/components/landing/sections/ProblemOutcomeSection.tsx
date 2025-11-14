@@ -5,12 +5,12 @@ export function ProblemOutcomeSection() {
 
   return (
     <section id="problem-outcome" className="py-20">
-      <div className="grid gap-12 md:grid-cols-2">
+      <div className="grid gap-12 desktop:grid-cols-2">
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
             {t('problem.title', 'The Problem: Hidden Profit Killers')}
           </h2>
-          <div className="space-y-4 text-lg text-gray-300">
+          <div className="space-y-4 text-fluid-lg text-gray-300">
             <p>
               {t(
                 'problem.point1',
@@ -27,10 +27,10 @@ export function ProblemOutcomeSection() {
           </div>
         </div>
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
             {t('outcome.title', 'The Outcome: Profit Maximization')}
           </h2>
-          <div className="space-y-4 text-lg text-gray-300">
+          <div className="space-y-4 text-fluid-lg text-gray-300">
             <p>
               {t(
                 'outcome.point1',

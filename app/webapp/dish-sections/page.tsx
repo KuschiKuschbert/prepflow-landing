@@ -6,7 +6,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useDishSectionActions } from './hooks/useDishSectionActions';
 import { DishSectionsHeader } from './components/DishSectionsHeader';
 import { SectionFormModal } from './components/SectionFormModal';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -108,19 +108,19 @@ export default function DishSectionsPage() {
 
   if (loading) {
     return (
-      <AdaptiveContainer>
+      <ResponsivePageContainer>
         <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   }
 
   return (
-    <AdaptiveContainer>
+    <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <DishSectionsHeader onAddClick={() => setShowForm(true)} />
@@ -320,6 +320,6 @@ export default function DishSectionsPage() {
           onCancel={resetForm}
         />
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

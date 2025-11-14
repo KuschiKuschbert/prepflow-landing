@@ -27,7 +27,7 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
     : 0;
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 large-desktop:grid-cols-4">
       {/* Ingredient Name */}
       <div>
         <div className="mb-1 text-xs text-gray-400">Name</div>

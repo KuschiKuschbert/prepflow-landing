@@ -46,7 +46,7 @@ export function EquipmentForm({
         <h3 className="text-xl font-semibold text-white">Add New Equipment</h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
-      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Name</label>
           <input
@@ -107,7 +107,7 @@ export function EquipmentForm({
             {getEquipmentLabel(equipment.equipment_type)}
           </p>
         </div>
-        <div className="md:col-span-2">
+        <div className="desktop:col-span-2">
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -122,16 +122,16 @@ export function EquipmentForm({
           </div>
         </div>
         {error && (
-          <div className="rounded-2xl border border-red-500/30 bg-red-900/20 p-3 text-red-300 md:col-span-2">
+          <div className="rounded-2xl border border-red-500/30 bg-red-900/20 p-3 text-red-300 desktop:col-span-2">
             {error}
           </div>
         )}
         {result && (
-          <div className="rounded-2xl border border-green-500/30 bg-green-900/20 p-3 text-green-300 md:col-span-2">
+          <div className="rounded-2xl border border-green-500/30 bg-green-900/20 p-3 text-green-300 desktop:col-span-2">
             {result}
           </div>
         )}
-        <div className="flex space-x-4 md:col-span-2">
+        <div className="flex space-x-4 desktop:col-span-2">
           <button
             type="submit"
             disabled={loading}

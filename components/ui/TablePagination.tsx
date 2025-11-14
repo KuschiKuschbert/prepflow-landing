@@ -22,7 +22,14 @@ export function TablePagination({
   onItemsPerPageChange,
   className = '',
 }: TablePaginationProps) {
-  if (totalPages <= 1) return null;
+  // Show pagination if there are items and either multiple pages OR itemsPerPage selector is provided
+  // Always show if itemsPerPage selector is provided (even with 1 page) so users can change page size
+  const shouldShow = total !== undefined && total > 0 && (totalPages > 1 || (itemsPerPage !== undefined && onItemsPerPageChange !== undefined));
+
+  if (!shouldShow) return null;
+
+  // If only one page but itemsPerPage selector exists, still show pagination controls (just disable page navigation)
+  const showPageControls = totalPages > 1;
 
   const startItem = total && itemsPerPage ? (page - 1) * itemsPerPage + 1 : undefined;
   const endItem = total && itemsPerPage ? Math.min(page * itemsPerPage, total) : undefined;
@@ -31,7 +38,7 @@ export function TablePagination({
     <div className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-4">
         {total !== undefined && (
-          <span className="text-sm text-gray-400">
+          <span className="text-fluid-sm text-gray-400">
             {startItem !== undefined && endItem !== undefined
               ? `Showing ${startItem}-${endItem} of ${total}`
               : `Total: ${total}`}
@@ -41,7 +48,7 @@ export function TablePagination({
           <select
             value={itemsPerPage}
             onChange={e => onItemsPerPageChange(Number(e.target.value))}
-            className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-1.5 text-sm text-white focus:border-[#29E7CD] focus:outline-none focus:ring-1 focus:ring-[#29E7CD]"
+            className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-1.5 text-fluid-sm text-white focus:border-[#29E7CD] focus:outline-none focus:ring-1 focus:ring-[#29E7CD]"
           >
             <option value={10}>10 per page</option>
             <option value={25}>25 per page</option>
@@ -50,29 +57,31 @@ export function TablePagination({
           </select>
         )}
       </div>
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => onPageChange(Math.max(1, page - 1))}
-          disabled={page <= 1}
-          className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label="Previous page"
-        >
-          <Icon icon={ChevronLeft} size="sm" aria-hidden={true} />
-          <span className="hidden sm:inline">Previous</span>
-        </button>
-        <span className="px-4 py-2 text-sm text-gray-300">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-          disabled={page >= totalPages}
-          className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label="Next page"
-        >
-          <span className="hidden sm:inline">Next</span>
-          <Icon icon={ChevronRight} size="sm" aria-hidden={true} />
-        </button>
-      </div>
+      {showPageControls && (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onPageChange(Math.max(1, page - 1))}
+            disabled={page <= 1}
+            className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-fluid-sm text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous page"
+          >
+            <Icon icon={ChevronLeft} size="sm" aria-hidden={true} />
+            <span className="hidden tablet:inline">Previous</span>
+          </button>
+          <span className="px-4 py-2 text-fluid-sm text-gray-300">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+            disabled={page >= totalPages}
+            className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-fluid-sm text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next page"
+          >
+            <span className="hidden tablet:inline">Next</span>
+            <Icon icon={ChevronRight} size="sm" aria-hidden={true} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

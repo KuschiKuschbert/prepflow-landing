@@ -6,7 +6,7 @@ export interface EntitlementConfig {
 }
 
 export const TIER_TO_ENTITLEMENTS: Record<TierSlug, EntitlementConfig> = {
-  starter: { features: { cogs: true, recipes: true, analytics: false } },
+  starter: { features: { cogs: true, recipes: true, analytics: true } }, // Enabled for development/testing
   pro: { features: { cogs: true, recipes: true, analytics: true } },
   business: { features: { cogs: true, recipes: true, analytics: true } },
 };

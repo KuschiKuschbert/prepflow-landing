@@ -23,9 +23,9 @@ export function PageHeader({
   children,
 }: PageHeaderProps) {
   return (
-    <div className="mb-6 md:mb-8">
-      <div className="mb-3 flex flex-col gap-3 md:mb-4 md:flex-row md:items-center md:justify-between md:gap-6">
-        <div className="flex items-center gap-3 md:gap-4">
+    <div className="mb-4 tablet:mb-6 desktop:mb-8">
+      <div className="mb-2 flex flex-col gap-2 tablet:mb-3 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 desktop:mb-4 desktop:gap-6">
+        <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
           {showLogo && (
             <Image
               src="/images/prepflow-logo.svg"
@@ -36,14 +36,14 @@ export function PageHeader({
               priority
             />
           )}
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-white md:text-4xl">
+          <h1 className="flex items-center gap-2 font-bold text-white text-fluid-xl tablet:text-fluid-2xl">
             {icon && <Icon icon={icon} size="lg" className="text-[#29E7CD]" aria-hidden={true} />}
             {title}
           </h1>
         </div>
-        {actions && <div className="flex items-center justify-start md:justify-end">{actions}</div>}
+        {actions && <div className="flex items-center justify-start tablet:justify-end">{actions}</div>}
       </div>
-      {subtitle && <p className="text-sm text-gray-400 md:text-base">{subtitle}</p>}
+      {subtitle && <p className="text-gray-400 text-fluid-base">{subtitle}</p>}
       {children}
     </div>
   );

@@ -44,7 +44,7 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
       <div className="mx-auto mt-20 w-full max-w-2xl" onClick={e => e.stopPropagation()}>
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-xl">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-xl font-semibold">{step.title}</h3>
+            <h3 className="text-fluid-xl font-semibold">{step.title}</h3>
             <button
               className="rounded-lg p-2 hover:bg-[#2a2a2a]/50"
               aria-label="Close"

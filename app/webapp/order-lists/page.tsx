@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { OrderListForm } from './components/OrderListForm';
 import { getStatusColor } from './utils';
 import { useOrderListsQuery } from './hooks/useOrderListsQuery';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -250,14 +250,14 @@ export default function OrderListsPage() {
 
   if (loading || listsLoading) {
     return (
-      <AdaptiveContainer>
+      <ResponsivePageContainer>
         <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   }
 
@@ -265,7 +265,7 @@ export default function OrderListsPage() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <AdaptiveContainer>
+    <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -494,6 +494,6 @@ export default function OrderListsPage() {
           </div>
         )}
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

@@ -42,21 +42,21 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
   };
 
   return (
-    <section className="relative bg-transparent py-16 md:py-20">
+    <section className="relative bg-transparent py-16 tablet:py-20">
       <div className="mx-auto max-w-4xl px-6 text-center">
-        <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+        <h2 className="text-fluid-4xl font-bold tracking-tight text-white tablet:text-fluid-4xl desktop:text-fluid-4xl">
           Ready to transform your kitchen?
         </h2>
-        <p className="mt-6 text-xl text-gray-400">
+        <p className="mt-6 text-fluid-xl text-gray-400">
           Join restaurants, cafés, and food trucks using PrepFlow to optimize their menu
           profitability.
         </p>
 
-        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 tablet:flex-row">
           {isAuthenticated ? (
             <button
               onClick={handleGoToDashboard}
-              className="rounded-full border border-white/20 bg-white px-8 py-4 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+              className="rounded-full border border-white/20 bg-white px-8 py-4 text-fluid-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
               aria-label="Go to Dashboard"
             >
               Go to Dashboard
@@ -65,14 +65,14 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
             <>
               <button
                 onClick={handleRegister}
-                className="rounded-full border border-white/20 bg-white px-8 py-4 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="rounded-full border border-white/20 bg-white px-8 py-4 text-fluid-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Register for PrepFlow"
               >
                 Get Started
               </button>
               <button
                 onClick={handleSignIn}
-                className="rounded-full border border-white/20 bg-transparent px-8 py-4 text-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="rounded-full border border-white/20 bg-transparent px-8 py-4 text-fluid-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Sign in to PrepFlow"
               >
                 Sign In
@@ -81,7 +81,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
           )}
         </div>
 
-        <p className="mt-8 text-sm text-gray-500">
+        <p className="mt-8 text-fluid-sm text-gray-500">
           No credit card required. Start your free trial today.
         </p>
       </div>

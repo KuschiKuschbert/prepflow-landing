@@ -28,7 +28,7 @@ export function EquipmentTypeModal({ isOpen, onClose, onSelect }: EquipmentTypeM
             <Icon icon={X} size="lg" className="text-gray-400" aria-hidden={true} />
           </button>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
           {equipmentTypes.map(type => (
             <button
               key={type.value}

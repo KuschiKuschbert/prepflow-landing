@@ -10,7 +10,7 @@ export default function MenuStatisticsPanel({ statistics }: MenuStatisticsPanelP
   return (
     <div className="mb-6 rounded-xl bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 p-6">
       <h3 className="mb-4 text-lg font-semibold text-white">Menu Statistics</h3>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 desktop:grid-cols-5">
         <div>
           <div className="text-xs text-gray-400">Total Dishes</div>
           <div className="text-2xl font-bold text-white">{statistics.total_dishes}</div>

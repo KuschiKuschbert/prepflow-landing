@@ -7,17 +7,17 @@ export function MyStorySection() {
   return (
     <section className="border-t border-gray-700 py-20">
       <div className="mb-16 text-center">
-        <h2 className="mb-6 text-3xl font-bold tracking-tight md:text-4xl">
+        <h2 className="mb-6 text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
           {t('story.title', 'My Story: From Frustration to Solution')}
         </h2>
-        <p className="mx-auto max-w-3xl text-lg text-gray-300">
+        <p className="mx-auto max-w-3xl text-fluid-lg text-gray-300">
           {t('story.subtitle', "I've been where you are. Here's how PrepFlow came to be.")}
         </p>
       </div>
-      <div className="grid gap-12 md:grid-cols-2">
+      <div className="grid gap-12 desktop:grid-cols-2">
         <div className="space-y-6">
           <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-            <h3 className="mb-3 text-xl font-semibold text-[#29E7CD]">
+            <h3 className="mb-3 text-fluid-xl font-semibold text-[#29E7CD]">
               {t('story.frustration.title', 'The Frustration')}
             </h3>
             <p className="text-gray-300">
@@ -28,7 +28,7 @@ export function MyStorySection() {
             </p>
           </div>
           <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-            <h3 className="mb-3 text-xl font-semibold text-[#D925C7]">
+            <h3 className="mb-3 text-fluid-xl font-semibold text-[#D925C7]">
               {t('story.solution.title', 'The Solution')}
             </h3>
             <p className="text-gray-300">

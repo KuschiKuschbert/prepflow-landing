@@ -165,18 +165,18 @@ export function IngredientSubstitutionGuide() {
     : filteredSubstitutions;
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 sm:space-y-2 sm:px-4 sm:py-4">
-      <div className="hidden flex-shrink-0 sm:block">
-        <h2 className="mb-1 text-base font-semibold text-white sm:mb-2 sm:text-lg">
+    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
+      <div className="hidden flex-shrink-0 tablet:block">
+        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
           Ingredient Substitution Guide
         </h2>
         <p className="text-xs text-gray-400">Find alternatives for common ingredients</p>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-shrink-0 flex-col space-y-1.5 sm:space-y-2">
+      <div className="flex flex-shrink-0 flex-col space-y-1.5 tablet:space-y-2">
         <div>
-          <label className="mb-0.5 block text-xs font-medium text-gray-300 sm:mb-1 sm:text-sm">
+          <label className="mb-0.5 block text-xs font-medium text-gray-300 tablet:mb-1 tablet:text-sm">
             Search Ingredient
           </label>
           <input
@@ -184,19 +184,19 @@ export function IngredientSubstitutionGuide() {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Type ingredient name..."
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2"
           />
         </div>
 
         <div className="flex w-full flex-wrap gap-2">
-          <div className="min-w-[150px] flex-1 sm:min-w-[200px]">
-            <label className="mb-0.5 block text-xs font-medium text-gray-300 sm:mb-1 sm:text-sm">
+          <div className="min-w-[150px] flex-1 tablet:min-w-[200px]">
+            <label className="mb-0.5 block text-xs font-medium text-gray-300 tablet:mb-1 tablet:text-sm">
               Category
             </label>
             <select
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none sm:rounded-xl sm:px-3 sm:py-2"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2"
             >
               <option value="">Select a category...</option>
               {categories.map(cat => (
@@ -207,28 +207,28 @@ export function IngredientSubstitutionGuide() {
             </select>
           </div>
           <div className="flex items-end">
-            <label className="flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-xs sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2 sm:text-sm">
+            <label className="flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-xs tablet:gap-2 tablet:rounded-xl tablet:px-3 tablet:py-2 tablet:text-sm">
               <input
                 type="checkbox"
                 checked={showAllergenFriendly}
                 onChange={e => setShowAllergenFriendly(e.target.checked)}
                 className="rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-[#29E7CD]"
               />
-              <span className="text-xs text-white sm:text-sm">Allergen-friendly</span>
+              <span className="text-xs text-white tablet:text-sm">Allergen-friendly</span>
             </label>
           </div>
         </div>
       </div>
 
       {/* Substitutions List - Only show when filter is active */}
-      <div className="flex-1 space-y-1.5 overflow-y-auto sm:space-y-2">
+      <div className="flex-1 space-y-1.5 overflow-y-auto tablet:space-y-2">
         {!hasActiveFilter ? (
-          <div className="flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center sm:rounded-xl sm:p-8">
+          <div className="flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center tablet:rounded-xl tablet:p-8">
             <div className="space-y-2">
-              <div className="text-sm text-gray-400 sm:text-base">
+              <div className="text-sm text-gray-400 tablet:text-base">
                 Search for an ingredient or select a category to see substitutions
               </div>
-              <div className="text-xs text-gray-500 sm:text-sm">
+              <div className="text-xs text-gray-500 tablet:text-sm">
                 Try: "Eggs", "Butter", "Milk", or select a category above
               </div>
             </div>
@@ -237,21 +237,21 @@ export function IngredientSubstitutionGuide() {
           allergenFriendlySubs.map(sub => (
             <div
               key={sub.ingredient}
-              className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-2 sm:rounded-xl sm:p-4"
+              className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-2 tablet:rounded-xl tablet:p-4"
             >
-              <h3 className="mb-1.5 text-sm font-semibold text-white sm:mb-2 sm:text-base">
+              <h3 className="mb-1.5 text-sm font-semibold text-white tablet:mb-2 tablet:text-base">
                 {sub.ingredient}
               </h3>
-              <div className="space-y-1.5 sm:space-y-2">
+              <div className="space-y-1.5 tablet:space-y-2">
                 {sub.substitutes.map((substitute, idx) => (
                   <div
                     key={idx}
-                    className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1.5 sm:rounded-xl sm:p-3"
+                    className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1.5 tablet:rounded-xl tablet:p-3"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <span className="text-xs font-medium text-white sm:text-sm">
+                        <div className="flex items-center gap-1.5 tablet:gap-2">
+                          <span className="text-xs font-medium text-white tablet:text-sm">
                             {substitute.name}
                           </span>
                           {substitute.allergenFriendly && (
@@ -260,7 +260,7 @@ export function IngredientSubstitutionGuide() {
                             </span>
                           )}
                         </div>
-                        <div className="mt-0.5 text-xs text-[#29E7CD] sm:mt-1 sm:text-sm">
+                        <div className="mt-0.5 text-xs text-[#29E7CD] tablet:mt-1 tablet:text-sm">
                           {substitute.ratio}
                         </div>
                         {substitute.notes && (
@@ -274,7 +274,7 @@ export function IngredientSubstitutionGuide() {
             </div>
           ))
         ) : (
-          <div className="flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center text-xs text-gray-400 sm:rounded-xl sm:p-8 sm:text-sm">
+          <div className="flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center text-xs text-gray-400 tablet:rounded-xl tablet:p-8 tablet:text-sm">
             No substitutions found. Try a different search term or category.
           </div>
         )}

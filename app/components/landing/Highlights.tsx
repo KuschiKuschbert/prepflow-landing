@@ -53,17 +53,17 @@ const highlights: Highlight[] = [
 
 export default function Highlights() {
   return (
-    <section className="relative bg-transparent py-16 md:py-20">
+    <section className="relative bg-transparent py-16 tablet:py-20">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+          <h2 className="text-fluid-3xl font-bold tracking-tight text-white tablet:text-fluid-4xl desktop:text-fluid-4xl">
             Get the highlights.
           </h2>
         </div>
 
         {/* Highlights Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-3 xl:grid-cols-5">
           {highlights.map((highlight, index) => {
             const { ref, animationStyle } = useScrollAnimation<HTMLDivElement>({
               threshold: 0.2,
@@ -89,10 +89,10 @@ export default function Highlights() {
                 </div>
 
                 {/* Title */}
-                <h3 className="mb-2 text-xl font-semibold text-white">{highlight.name}</h3>
+                <h3 className="mb-2 text-fluid-xl font-semibold text-white">{highlight.name}</h3>
 
                 {/* Description */}
-                <p className="text-sm text-gray-400">{highlight.description}</p>
+                <p className="text-fluid-sm text-gray-400">{highlight.description}</p>
 
                 {/* Hover Effect - Screenshot Preview */}
                 {highlight.screenshot && (

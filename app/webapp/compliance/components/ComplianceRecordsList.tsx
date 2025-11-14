@@ -77,7 +77,7 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
               </div>
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="mb-4 grid grid-cols-1 gap-4 desktop:grid-cols-2">
               {record.issue_date && (
                 <div>
                   <span className="text-sm text-gray-400">

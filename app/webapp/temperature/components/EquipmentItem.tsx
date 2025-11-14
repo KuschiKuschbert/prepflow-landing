@@ -67,7 +67,7 @@ export function EquipmentItem({
       <div className="absolute inset-0 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
       <div className="relative">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="mb-6 flex flex-col gap-4 tablet:flex-row tablet:items-start tablet:justify-between">
           <div className="flex items-start gap-4 flex-1 min-w-0">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 shadow-lg">
               <span className="text-3xl">{getTypeIcon(item.equipment_type)}</span>
@@ -83,8 +83,8 @@ export function EquipmentItem({
               )}
             </div>
           </div>
-          <div className="flex shrink-0 flex-col items-end gap-2 sm:items-start">
-            <div className="text-right sm:text-left">
+          <div className="flex shrink-0 flex-col items-end gap-2 tablet:items-start">
+            <div className="text-right tablet:text-left">
               <div className="mb-1 text-xs font-medium text-gray-400 uppercase tracking-wide">
                 {t('temperature.range', 'Temperature Range')}
               </div>
@@ -266,7 +266,7 @@ export function EquipmentItem({
               onClick={handleButtonClick}
               className="space-y-4"
             >
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-300">
                   {t('temperature.equipmentName', 'Equipment Name')}
@@ -309,7 +309,7 @@ export function EquipmentItem({
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 desktop:grid-cols-3">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-300">
                   {t('temperature.location', 'Location')}

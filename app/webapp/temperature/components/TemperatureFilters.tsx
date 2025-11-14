@@ -23,8 +23,8 @@ export function TemperatureFilters({
     temperatureTypes.find(tt => tt.value === type)?.icon || '🌡️';
 
   return (
-    <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-      <div className="flex flex-col gap-4 sm:flex-row">
+    <div className="flex flex-col items-start justify-between gap-4 tablet:flex-row tablet:items-center">
+      <div className="flex flex-col gap-4 tablet:flex-row">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('temperature.filterDate', 'Filter by Date')}

@@ -57,7 +57,7 @@ function BarChart({
 
           return (
             <div key={item.name} className="flex flex-1 flex-col items-center">
-              {showValues && <span className="mb-1 text-xs text-gray-400">{item.value}</span>}
+              {showValues && <span className="mb-1 text-fluid-xs text-gray-400">{item.value}</span>}
               <div
                 className="w-full rounded-t-lg transition-all duration-300 hover:opacity-80"
                 style={{
@@ -67,7 +67,7 @@ function BarChart({
                 }}
                 title={`${item.name}: ${item.value}`}
               />
-              <span className="mt-2 text-center text-xs leading-tight text-gray-300">
+              <span className="mt-2 text-center text-fluid-xs leading-tight text-gray-300">
                 {item.name}
               </span>
             </div>
@@ -138,8 +138,8 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
           {/* Center text */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-2xl font-bold text-white">{total}</div>
-              <div className="text-xs text-gray-400">Total</div>
+              <div className="text-fluid-2xl font-bold text-white">{total}</div>
+              <div className="text-fluid-xs text-gray-400">Total</div>
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
             const percentage = ((item.value / total) * 100).toFixed(1);
 
             return (
-              <div key={item.name} className="flex items-center justify-between text-sm">
+              <div key={item.name} className="flex items-center justify-between text-fluid-sm">
                 <div className="flex items-center space-x-2">
                   <div className="h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
                   <span className="text-gray-300">{item.name}</span>

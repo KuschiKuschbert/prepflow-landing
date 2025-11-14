@@ -59,26 +59,26 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
 
   return (
     <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-transparent">
-      <div className="mx-auto w-full max-w-7xl px-6 py-16 text-center md:py-20">
+      <div className="mx-auto w-full max-w-7xl px-6 py-16 text-center tablet:py-20">
         {/* Headline - Apple Style */}
         <div ref={textRef} style={textAnimationStyle} className="mb-8">
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl xl:text-8xl">
+          <h1 className="text-fluid-4xl font-bold tracking-tight text-white tablet:text-fluid-4xl desktop:text-fluid-4xl large-desktop:text-fluid-4xl xl:text-fluid-4xl">
             PrepFlow
           </h1>
-          <p className="mt-6 text-2xl font-medium text-gray-300 md:text-3xl lg:text-4xl">
+          <p className="mt-6 text-fluid-2xl font-medium text-gray-300 tablet:text-fluid-3xl desktop:text-fluid-3xl">
             Kitchen Management Platform.
           </p>
-          <p className="mt-2 text-2xl font-medium text-gray-300 md:text-3xl lg:text-4xl">
+          <p className="mt-2 text-fluid-2xl font-medium text-gray-300 tablet:text-fluid-3xl desktop:text-fluid-3xl">
             Now supercharged by AI.
           </p>
         </div>
 
         {/* CTAs - Minimal Apple Style */}
-        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 tablet:flex-row">
           {isAuthenticated ? (
             <button
               onClick={handleGoToDashboard}
-              className="rounded-full border border-white/20 bg-white px-8 py-3 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+              className="rounded-full border border-white/20 bg-white px-8 py-3 text-fluid-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
               aria-label="Go to Dashboard"
             >
               Go to Dashboard
@@ -87,14 +87,14 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
             <>
               <button
                 onClick={handleRegister}
-                className="rounded-full border border-white/20 bg-white px-8 py-3 text-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="rounded-full border border-white/20 bg-white px-8 py-3 text-fluid-lg font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Register for PrepFlow"
               >
                 Register
               </button>
               <button
                 onClick={handleSignIn}
-                className="rounded-full border border-white/20 bg-transparent px-8 py-3 text-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="rounded-full border border-white/20 bg-transparent px-8 py-3 text-fluid-lg font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Sign in to PrepFlow"
               >
                 Sign In

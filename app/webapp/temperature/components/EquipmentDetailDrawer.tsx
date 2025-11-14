@@ -146,7 +146,7 @@ export function EquipmentDetailDrawer({
       <div
         ref={drawerRef}
         className={`fixed right-0 top-0 z-[75] h-full w-full transform bg-[#0a0a0a] shadow-2xl transition-transform duration-300 ease-out ${
-          !isMobile ? 'lg:w-[600px]' : ''
+          !isMobile ? 'large-desktop:w-[600px]' : ''
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -158,7 +158,7 @@ export function EquipmentDetailDrawer({
           {/* Header - Swipe to close only works from here */}
           <div
             className={`flex flex-shrink-0 flex-col border-b border-[#2a2a2a] bg-[#0a0a0a] ${
-              isMobile ? 'touch-none' : 'lg:touch-auto'
+              isMobile ? 'touch-none' : 'large-desktop:touch-auto'
             }`}
             onTouchStart={handleHeaderTouchStart}
             onTouchMove={handleHeaderTouchMove}
@@ -202,7 +202,7 @@ export function EquipmentDetailDrawer({
                   <button
                     key={filter}
                     onClick={() => setTimeFilter(filter)}
-                    className={`group relative min-h-[44px] rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+                    className={`group relative min-h-[44px] rounded-2xl px-5 py-2.5 text-fluid-sm font-semibold transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
                       isActive
                         ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black shadow-xl scale-[1.02]'
                         : 'bg-transparent text-gray-400 hover:bg-[#2a2a2a] hover:text-white'
@@ -226,72 +226,75 @@ export function EquipmentDetailDrawer({
               })}
             </div>
 
-            {/* Graph Section - Responsive Height */}
-            <div className="mb-4 flex-shrink-0 sm:mb-6">
-              {isLoading ? (
-                <LoadingSkeleton variant="chart" height={`${chartHeight}px`} />
-              ) : logs.length === 0 ? (
-                <div className="flex h-[200px] items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 text-center shadow-lg sm:h-[250px]">
-                  <div>
-                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 mx-auto sm:h-20 sm:w-20">
-                      <svg
-                        className="h-8 w-8 text-gray-400 sm:h-10 sm:w-10"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                        />
-                      </svg>
+            {/* Chart and Statistics Container - Responsive Sidebar Layout */}
+            <div className="flex flex-1 flex-col desktop:flex-row desktop:gap-6">
+              {/* Graph Section - Responsive Height */}
+              <div className="mb-4 flex-shrink-0 flex-1 desktop:mb-0 desktop:min-w-0">
+                {isLoading ? (
+                  <LoadingSkeleton variant="chart" height={`${chartHeight}px`} />
+                ) : logs.length === 0 ? (
+                  <div className="flex h-[200px] items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 text-center shadow-lg tablet:h-[250px]">
+                    <div>
+                      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 mx-auto tablet:h-20 tablet:w-20">
+                        <svg
+                          className="h-8 w-8 text-gray-400 tablet:h-10 tablet:w-10"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                          />
+                        </svg>
+                      </div>
+                      <h4 className="mb-2 text-fluid-base font-medium text-white tablet:text-fluid-lg">No Temperature Data</h4>
+                      <p className="text-fluid-xs text-gray-400 tablet:text-fluid-sm">
+                        No temperature logs found for this equipment. Add some temperature readings to see the chart.
+                      </p>
                     </div>
-                    <h4 className="mb-2 text-base font-medium text-white sm:text-lg">No Temperature Data</h4>
-                    <p className="text-xs text-gray-400 sm:text-sm">
-                      No temperature logs found for this equipment. Add some temperature readings to see the chart.
+                  </div>
+                ) : (
+                  <div style={{ height: `${chartHeight}px` }}>
+                    <SimpleTemperatureChart
+                      logs={logs}
+                      equipment={equipment}
+                      timeFilter={timeFilter}
+                      height={chartHeight}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Statistics Dashboard - Sidebar */}
+              <div className="w-full flex-shrink-0 desktop:w-[400px] large-desktop:w-[450px] xl:w-[500px]">
+                {isLoading ? (
+                  <div className="space-y-4">
+                    <LoadingSkeleton variant="card" height="120px" />
+                    <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-1">
+                      <LoadingSkeleton variant="card" height="180px" />
+                      <LoadingSkeleton variant="card" height="180px" />
+                      <LoadingSkeleton variant="card" height="180px" />
+                      <LoadingSkeleton variant="card" height="180px" />
+                    </div>
+                  </div>
+                ) : logs.length === 0 ? (
+                  <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
+                    <p className="text-gray-400">
+                      {t('temperature.noLogsForEquipment', 'No temperature logs found for this equipment')}
                     </p>
                   </div>
-                </div>
-              ) : (
-                <div style={{ height: `${chartHeight}px` }}>
-                  <SimpleTemperatureChart
-                    logs={logs}
-                    equipment={equipment}
-                    timeFilter={timeFilter}
-                    height={chartHeight}
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Statistics Dashboard */}
-            <div className="flex-shrink-0">
-              {isLoading ? (
-                <div className="space-y-4">
-                  <LoadingSkeleton variant="card" height="120px" />
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <LoadingSkeleton variant="card" height="180px" />
-                    <LoadingSkeleton variant="card" height="180px" />
-                    <LoadingSkeleton variant="card" height="180px" />
-                    <LoadingSkeleton variant="card" height="180px" />
-                  </div>
-                </div>
-              ) : logs.length === 0 ? (
-                <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
-                  <p className="text-gray-400">
-                    {t('temperature.noLogsForEquipment', 'No temperature logs found for this equipment')}
-                  </p>
-                </div>
-              ) : (
-                <EquipmentStatistics logs={logs} equipment={equipment} />
-              )}
+                ) : (
+                  <EquipmentStatistics logs={logs} equipment={equipment} />
+                )}
+              </div>
             </div>
           </div>
 
           {/* Footer with Done Button */}
-          <div className="flex flex-shrink-0 border-t border-[#2a2a2a] bg-[#0a0a0a] p-4 lg:p-6">
+          <div className="flex flex-shrink-0 border-t border-[#2a2a2a] bg-[#0a0a0a] p-4 large-desktop:p-6">
             <button
               onClick={onClose}
               className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-base font-semibold text-black shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl active:scale-[0.98]"

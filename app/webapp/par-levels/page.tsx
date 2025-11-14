@@ -6,7 +6,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { getHelpText } from '@/lib/terminology-help';
 import { ParLevelFormModal } from './components/ParLevelFormModal';
-import { AdaptiveContainer } from '../components/AdaptiveContainer';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { Package2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
@@ -201,19 +201,19 @@ export default function ParLevelsPage() {
 
   if (loading) {
     return (
-      <AdaptiveContainer>
+      <ResponsivePageContainer>
         <div className="min-h-screen bg-transparent py-8 text-white">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
           </div>
         </div>
-      </AdaptiveContainer>
+      </ResponsivePageContainer>
     );
   }
 
   return (
-    <AdaptiveContainer>
+    <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -290,7 +290,7 @@ export default function ParLevelsPage() {
                       </div>
                     </div>
 
-                    <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div className="mb-4 grid grid-cols-1 gap-4 desktop:grid-cols-3">
                       <div>
                         <p className="mb-1 text-xs text-gray-400">
                           {t('parLevels.parLevel', 'Par Level')}
@@ -379,6 +379,6 @@ export default function ParLevelsPage() {
           onFormDataChange={(field, value) => setFormData({ ...formData, [field]: value })}
         />
       </div>
-    </AdaptiveContainer>
+    </ResponsivePageContainer>
   );
 }

@@ -17,7 +17,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data: dishes, error: dishesError } = await supabaseAdmin
+    // Get date range from query parameters
+    const { searchParams } = new URL(request.url);
+    const startDateParam = searchParams.get('startDate');
+    const endDateParam = searchParams.get('endDate');
+
+    // Build sales_data query with optional date filtering
+    let salesDataQuery = supabaseAdmin
       .from('menu_dishes')
       .select(
         `
@@ -29,8 +35,17 @@ export async function GET(request: NextRequest) {
           date
         )
       `,
-      )
-      .order('created_at', { ascending: false });
+      );
+
+    // Apply date filter to sales_data if dates are provided
+    if (startDateParam || endDateParam) {
+      // We'll filter in JavaScript since Supabase nested filtering is limited
+      // For now, fetch all and filter client-side
+    }
+
+    const { data: dishes, error: dishesError } = await salesDataQuery.order('created_at', {
+      ascending: false,
+    });
 
     if (dishesError) {
       console.error('Error fetching dishes:', dishesError);
@@ -44,13 +59,38 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Filter sales_data by date range if provided
+    let filteredDishes = dishes;
+    if (startDateParam || endDateParam) {
+      const startDate = startDateParam ? new Date(startDateParam) : null;
+      const endDate = endDateParam ? new Date(endDateParam) : null;
+      if (startDate) startDate.setHours(0, 0, 0, 0);
+      if (endDate) endDate.setHours(23, 59, 59, 999);
+
+      filteredDishes = dishes?.map((dish: any) => {
+        if (!dish.sales_data || dish.sales_data.length === 0) return dish;
+
+        const filteredSalesData = dish.sales_data.filter((sale: any) => {
+          const saleDate = new Date(sale.date);
+          if (startDate && saleDate < startDate) return false;
+          if (endDate && saleDate > endDate) return false;
+          return true;
+        });
+
+        return {
+          ...dish,
+          sales_data: filteredSalesData,
+        };
+      });
+    }
+
     // Filter dishes with sales data for analysis
     const dishesWithSales =
-      dishes?.filter(dish => dish.sales_data && dish.sales_data.length > 0) || [];
+      filteredDishes?.filter(dish => dish.sales_data && dish.sales_data.length > 0) || [];
 
     // Remove duplicates by keeping only the most recent entry for each dish name
     const uniqueDishes =
-      dishes?.reduce((acc: any[], dish: any) => {
+      filteredDishes?.reduce((acc: any[], dish: any) => {
         const existingDish = acc.find((d: any) => d.name === dish.name);
         if (!existingDish || new Date(dish.created_at) > new Date(existingDish.created_at)) {
           // Remove existing entry if it exists
@@ -61,36 +101,97 @@ export async function GET(request: NextRequest) {
       }, [] as any[]) || [];
 
     // PrepFlow COGS Methodology - Dynamic thresholds based on menu averages
-    // Calculate average profit margin across all unique dishes
+    //
+    // Profit Average: Includes ALL dishes (even without sales) because:
+    // - Profit margin exists regardless of sales volume (cost vs selling price)
+    // - Items that don't sell still need profit analysis to identify opportunities
+    // - "Hidden Gems" (high profit, no sales) are opportunities to market better
+    // - "Burnt Toast" (low profit, no sales) should be removed
     const averageProfitMargin =
       uniqueDishes.length > 0
-        ? uniqueDishes.reduce((sum, dish) => sum + dish.profit_margin, 0) / uniqueDishes.length
-        : 70.0; // Default fallback average
+        ? uniqueDishes.reduce((sum, dish) => {
+            // Handle null/undefined profit_margin - exclude from average calculation
+            const profitMargin = dish.profit_margin ?? 0;
+            return sum + profitMargin;
+          }, 0) / uniqueDishes.length
+        : 70.0; // Default fallback average for empty menus
 
-    // Calculate average popularity across all dishes with sales data
+    // Popularity Average: Includes ONLY dishes with sales data because:
+    // - Can't calculate popularity percentage without sales data
+    // - Items without sales automatically get LOW popularity category
     const averagePopularity =
       dishesWithSales.length > 0
         ? dishesWithSales.reduce((sum, dish) => {
-            const latestSales = dish.sales_data?.[0];
-            return sum + (latestSales?.popularity_percentage || 0);
+            const sortedSalesData = dish.sales_data
+              ? [...dish.sales_data].sort((a, b) => {
+                  const dateA = new Date(a.date).getTime();
+                  const dateB = new Date(b.date).getTime();
+                  return dateB - dateA; // Descending order (newest first)
+                })
+              : [];
+
+            if (startDateParam || endDateParam) {
+              // Average popularity over date range
+              const avgPopularity =
+                sortedSalesData.reduce((s, sale) => s + (sale.popularity_percentage || 0), 0) /
+                Math.max(1, sortedSalesData.length);
+              return sum + avgPopularity;
+            } else {
+              // Use most recent entry (backward compatibility)
+              const latestSales = sortedSalesData[0];
+              return sum + (latestSales?.popularity_percentage || 0);
+            }
           }, 0) / dishesWithSales.length
-        : 8.3; // Default fallback average
+        : 8.3; // Default fallback average for menus with no sales data
 
     // Dynamic thresholds based on PrepFlow methodology
-    const profitThreshold = averageProfitMargin; // HIGH if above menu average
-    const popularityThreshold = averagePopularity * 0.8; // HIGH if ≥ 80% of average popularity
+    // Profit: HIGH if above menu average (items "making you smile at the bank")
+    const profitThreshold = averageProfitMargin;
+    // Popularity: HIGH if ≥ 80% of average popularity (items "selling like hot chips")
+    const popularityThreshold = averagePopularity * 0.8;
 
     const performanceData =
       uniqueDishes
         .map(dish => {
-          const latestSales = dish.sales_data?.[0]; // Get most recent sales data
-          const numberSold = latestSales?.number_sold || 0;
-          const popularityPercentage = latestSales?.popularity_percentage || 0;
+          // Aggregate sales_data over the date range
+          // If date range is provided, sum up all sales in that range
+          // Otherwise, use most recent entry (backward compatibility)
+          const sortedSalesData = dish.sales_data
+            ? [...dish.sales_data].sort((a, b) => {
+                const dateA = new Date(a.date).getTime();
+                const dateB = new Date(b.date).getTime();
+                return dateB - dateA; // Descending order (newest first)
+              })
+            : [];
+
+          let numberSold = 0;
+          let popularityPercentage = 0;
+          const hasSalesData = sortedSalesData.length > 0;
+
+          if (hasSalesData) {
+            if (startDateParam || endDateParam) {
+              // Aggregate over date range: sum number_sold, average popularity_percentage
+              const totalSold = sortedSalesData.reduce((sum, sale) => sum + (sale.number_sold || 0), 0);
+              const avgPopularity =
+                sortedSalesData.reduce((sum, sale) => sum + (sale.popularity_percentage || 0), 0) /
+                sortedSalesData.length;
+              numberSold = totalSold;
+              popularityPercentage = avgPopularity;
+            } else {
+              // Use most recent entry (backward compatibility)
+              const latestSales = sortedSalesData[0];
+              numberSold = latestSales?.number_sold || 0;
+              popularityPercentage = latestSales?.popularity_percentage || 0;
+            }
+          }
+
+          // Handle null/undefined profit_margin - default to 0 for calculation purposes
+          const profitMargin = dish.profit_margin ?? 0;
 
           // Calculate food cost and contribution margin (PrepFlow's key metric)
           // In PrepFlow Excel: profit_margin is actually gross profit percentage
           // Food cost = selling price * (100 - profit_margin) / 100
-          const foodCost = (dish.selling_price * (100 - dish.profit_margin)) / 100;
+          const foodCost = (dish.selling_price * (100 - profitMargin)) / 100;
           const contributionMargin = dish.selling_price - foodCost;
 
           // Calculate gross profit excluding GST (PrepFlow standard)
@@ -98,11 +199,29 @@ export async function GET(request: NextRequest) {
           const gstRate = 0.1;
           const grossProfitExclGST = contributionMargin / (1 + gstRate);
 
-          // Calculate Profit Category: HIGH if above menu average, LOW if below (PrepFlow standard)
-          const profitCategory = dish.profit_margin >= profitThreshold ? 'High' : 'Low';
+          // Calculate Profit Category: HIGH if above menu average, LOW if below
+          // Edge case: Negative profit margins are always LOW (never "making you smile")
+          let profitCategory: string;
+          if (profitMargin < 0) {
+            profitCategory = 'Low'; // Negative profit is always LOW
+          } else if (dish.profit_margin === null || dish.profit_margin === undefined) {
+            profitCategory = 'Low'; // Null/undefined profit_margin defaults to LOW
+          } else {
+            // HIGH if ≥ average (items at average still "making you smile at the bank")
+            profitCategory = profitMargin >= profitThreshold ? 'High' : 'Low';
+          }
 
-          // Calculate Popularity Category: HIGH if ≥ 80% of average popularity, LOW if below (PrepFlow standard)
-          const popularityCategory = popularityPercentage >= popularityThreshold ? 'High' : 'Low';
+          // Calculate Popularity Category: HIGH if ≥ 80% of average popularity, LOW if below
+          // Edge case: Items without sales data automatically get LOW popularity
+          let popularityCategory: string;
+          if (!hasSalesData) {
+            popularityCategory = 'Low'; // No sales = no popularity
+          } else if (popularityPercentage === null || popularityPercentage === undefined) {
+            popularityCategory = 'Low'; // Null/undefined defaults to LOW
+          } else {
+            // HIGH if ≥ 80% threshold (items at threshold still "selling like hot chips")
+            popularityCategory = popularityPercentage >= popularityThreshold ? 'High' : 'Low';
+          }
 
           // Calculate Menu Item Class (combination of Profit Cat + Popularity Cat)
           let menuItemClass: string;
@@ -126,11 +245,13 @@ export async function GET(request: NextRequest) {
             food_cost: foodCost,
             contribution_margin: contributionMargin,
             gross_profit: grossProfitExclGST, // Gross profit excluding GST
-            gross_profit_percentage: dish.profit_margin,
+            gross_profit_percentage: profitMargin,
           };
         })
-        // Filter out items with no sales (number_sold = 0 or null)
-        .filter(dish => dish.number_sold > 0) || [];
+        // Include ALL dishes in performance analysis (even those without sales)
+        // Items without sales will be categorized as "Hidden Gem" (high profit, low popularity)
+        // or "Burnt Toast" (low profit, low popularity) - both are valuable insights
+        || [];
 
     return NextResponse.json({
       success: true,
@@ -145,6 +266,9 @@ export async function GET(request: NextRequest) {
         totalDishes: dishes?.length || 0,
         uniqueDishes: uniqueDishes.length,
         dishesWithSales: dishesWithSales.length,
+        // Note: Profit average includes ALL dishes (profit exists regardless of sales)
+        // Popularity average includes ONLY dishes with sales (can't calculate without sales)
+        // Final output includes ALL dishes (items without sales are valuable insights)
       },
     });
   } catch (error) {

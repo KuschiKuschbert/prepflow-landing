@@ -73,7 +73,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="pointer-events-none absolute top-6 right-6 z-50 rounded-full border border-[#2a2a2a] bg-[#1f1f1f]/70 px-3 py-1 text-sm text-white backdrop-blur-sm"
+            className="pointer-events-none absolute top-6 right-6 z-50 rounded-full border border-[#2a2a2a] bg-[#1f1f1f]/70 px-3 py-1 text-fluid-sm text-white backdrop-blur-sm"
             title="Dockets caught"
           >
             🧾 {caught}
@@ -84,7 +84,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
         {dockets.map(docket => (
           <motion.div
             key={docket.id}
-            className="absolute cursor-pointer text-4xl transition-transform hover:scale-125 md:text-6xl"
+            className="absolute cursor-pointer text-fluid-4xl transition-transform hover:scale-125 desktop:text-fluid-4xl"
             style={{
               left: `${docket.x}px`,
               top: `${docket.y}px`,

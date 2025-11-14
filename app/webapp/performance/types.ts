@@ -44,6 +44,15 @@ export interface PerformanceFilters {
   sortOrder: 'asc' | 'desc';
   currentPage: number;
   itemsPerPage: number;
+  menuItemClass?: string[]; // Filter by menu item class
+}
+
+export type DateRangePreset = '7d' | '30d' | '90d' | 'all' | 'custom';
+
+export interface DateRange {
+  startDate: Date | null;
+  endDate: Date | null;
+  preset: DateRangePreset;
 }
 
 export interface ChartData {
@@ -72,4 +81,17 @@ export interface PerformanceState {
   sortOrder: 'asc' | 'desc';
   loading: boolean;
   error: string | null;
+}
+
+export interface PerformanceInsight {
+  id: string;
+  type: 'hidden_gem' | 'bargain_bucket' | 'burnt_toast' | 'chefs_kiss';
+  title: string;
+  message: string;
+  items: PerformanceItem[];
+  priority: 'high' | 'medium' | 'low';
+  potentialImpact?: {
+    description: string;
+    value: number;
+  };
 }

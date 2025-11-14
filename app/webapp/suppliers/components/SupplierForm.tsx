@@ -39,7 +39,7 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
         </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
-      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('suppliers.name', 'Supplier Name')}
@@ -89,7 +89,7 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
             placeholder={String(t('suppliers.phonePlaceholder', '+61 2 1234 5678'))}
           />
         </div>
-        <div className="md:col-span-2">
+        <div className="desktop:col-span-2">
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('suppliers.address', 'Address')}
           </label>
@@ -154,7 +154,7 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
             placeholder={String(t('suppliers.minimumOrderPlaceholder', 'e.g., 100.00'))}
           />
         </div>
-        <div className="md:col-span-2">
+        <div className="desktop:col-span-2">
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('suppliers.notes', 'Notes')}
           </label>
@@ -168,7 +168,7 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
             rows={3}
           />
         </div>
-        <div className="flex space-x-4 md:col-span-2">
+        <div className="flex space-x-4 desktop:col-span-2">
           <button
             type="submit"
             className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
