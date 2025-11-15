@@ -1,10 +1,10 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState, useRef, useEffect } from 'react';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { Thermometer, Package, BookOpen, Calculator, Sparkles, Truck, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { BookOpen, Package, Plus, Sparkles, Thermometer, Truck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 interface NewItemOption {
   href: string;
@@ -37,7 +37,7 @@ export function FloatingActionButton() {
       category: 'Temperature',
     },
     {
-      href: '/webapp/ingredients?action=new',
+      href: '/webapp/recipes#ingredients',
       label: 'Ingredient',
       icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Ingredients',
@@ -47,12 +47,6 @@ export function FloatingActionButton() {
       label: 'Recipe',
       icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Recipes',
-    },
-    {
-      href: '/webapp/cogs?action=new',
-      label: 'COGS',
-      icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'COGS',
     },
     {
       href: '/webapp/cleaning?action=new',
@@ -147,7 +141,7 @@ export function FloatingActionButton() {
 
   return (
     <div
-      className="fixed right-4 z-50 desktop:hidden"
+      className="fixed right-4 z-50 lg:hidden"
       style={{
         bottom: 'calc(64px + 1rem + env(safe-area-inset-bottom, 0px))',
       }}

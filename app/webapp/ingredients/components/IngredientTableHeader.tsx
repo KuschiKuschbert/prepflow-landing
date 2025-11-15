@@ -52,7 +52,7 @@ export function IngredientTableHeader({
 }: IngredientTableHeaderProps) {
   return (
     <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
-      <div className="flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-xl font-semibold text-white">
             Ingredients{' '}

@@ -1,7 +1,10 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
+import { Icon } from '@/components/ui/Icon';
+import { X, Edit, Share2, Printer, Loader2 } from 'lucide-react';
 
 interface RecipePreviewModalProps {
   showPreview: boolean;
@@ -43,18 +46,68 @@ export default function RecipePreviewModal({
   capitalizeRecipeName,
   formatQuantity,
 }: RecipePreviewModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+
+  // Keyboard shortcuts and focus management
+  useEffect(() => {
+    if (!showPreview) return;
+
+    // Store the previously focused element
+    previousActiveElement.current = document.activeElement as HTMLElement;
+
+    // Focus the modal
+    modalRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      // Restore focus to previous element
+      previousActiveElement.current?.focus();
+    };
+  }, [showPreview, onClose]);
+
   if (!showPreview || !selectedRecipe) return null;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={e => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="recipe-preview-title"
+    >
+      <div
+        ref={modalRef}
+        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl animate-in zoom-in-95 duration-200 focus:outline-none"
+        tabIndex={-1}
+      >
         {/* Header */}
         <div className="border-b border-[#2a2a2a] p-6">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 className="mb-2 text-2xl font-bold text-white">
-                {capitalizeRecipeName(selectedRecipe.name)}
-              </h2>
+              <div className="mb-2 flex items-center justify-between">
+                <h2 id="recipe-preview-title" className="text-2xl font-bold text-white">
+                  {capitalizeRecipeName(selectedRecipe.name)}
+                </h2>
+                <button
+                  onClick={onClose}
+                  className="ml-4 flex-shrink-0 rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                  aria-label="Close recipe preview"
+                >
+                  <Icon icon={X} size="md" aria-hidden={true} />
+                </button>
+              </div>
 
               {/* Yield Adjustment Section */}
               <div className="mb-4 flex items-center gap-4">
@@ -112,14 +165,7 @@ export default function RecipePreviewModal({
                 onClick={onEditFromPreview}
                 className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  />
-                </svg>
+                <Icon icon={Edit} size="sm" className="text-white" aria-hidden={true} />
                 Edit Recipe
               </button>
               <button
@@ -129,19 +175,12 @@ export default function RecipePreviewModal({
               >
                 {shareLoading ? (
                   <>
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <Icon icon={Loader2} size="sm" className="animate-spin text-white" aria-hidden={true} />
                     <span>Sharing...</span>
                   </>
                 ) : (
                   <>
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                      />
-                    </svg>
+                    <Icon icon={Share2} size="sm" className="text-white" aria-hidden={true} />
                     <span>Share Recipe</span>
                   </>
                 )}
@@ -150,29 +189,8 @@ export default function RecipePreviewModal({
                 onClick={onPrint}
                 className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80"
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                  />
-                </svg>
+                <Icon icon={Printer} size="sm" className="text-white" aria-hidden={true} />
                 Print
-              </button>
-              <button
-                onClick={onClose}
-                className="flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-                Close
               </button>
             </div>
           </div>

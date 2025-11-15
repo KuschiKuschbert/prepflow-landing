@@ -58,7 +58,7 @@ export async function syncToDatabase(
         .update(formattedData)
         .eq('id', entityId)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) {
         const errorMessage = extractSupabaseErrorMessage(error, 'Database update failed');
@@ -68,6 +68,13 @@ export async function syncToDatabase(
         console.error(`Supabase update error for ${entityType}/${entityId}:`, error);
         throw new Error(`${errorMessage}${errorCode}`);
       }
+
+      // Handle case where entity was deleted between check and update
+      if (!updatedData) {
+        console.warn(`Entity ${entityType}/${entityId} was deleted, skipping update`);
+        return { success: true, entityId };
+      }
+
       savedEntityId = updatedData?.id || entityId;
     } else {
       // Create new entity

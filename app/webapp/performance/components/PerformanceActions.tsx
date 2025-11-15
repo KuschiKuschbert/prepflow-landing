@@ -3,21 +3,17 @@
 interface PerformanceActionsProps {
   showImportModal: boolean;
   showCharts: boolean;
-  realtimeEnabled: boolean;
   onImportClick: () => void;
   onExportCSV: () => void;
   onToggleCharts: () => void;
-  onToggleRealtime: () => void;
 }
 
 export default function PerformanceActions({
   showImportModal,
   showCharts,
-  realtimeEnabled,
   onImportClick,
   onExportCSV,
   onToggleCharts,
-  onToggleRealtime,
 }: PerformanceActionsProps) {
   return (
     <div className="mb-4 flex flex-wrap gap-3 tablet:gap-4 desktop:mb-6">
@@ -64,24 +60,6 @@ export default function PerformanceActions({
         </svg>
         <span className="hidden tablet:inline">{showCharts ? 'Hide Charts' : 'Show Charts'}</span>
         <span className="tablet:hidden">{showCharts ? 'Hide' : 'Charts'}</span>
-      </button>
-      <button
-        onClick={onToggleRealtime}
-        className={`flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-colors tablet:w-auto tablet:px-6 tablet:text-base ${
-          realtimeEnabled
-            ? 'bg-green-600 text-white hover:bg-green-700'
-            : 'bg-gray-600 text-white hover:bg-gray-700'
-        }`}
-      >
-        <div
-          className={`h-3 w-3 rounded-full ${
-            realtimeEnabled ? 'animate-pulse bg-green-400' : 'bg-gray-400'
-          }`}
-        ></div>
-        <span className="hidden tablet:inline">
-          {realtimeEnabled ? 'Disable Real-time' : 'Enable Real-time'}
-        </span>
-        <span className="tablet:hidden">{realtimeEnabled ? 'Disable' : 'Real-time'}</span>
       </button>
     </div>
   );

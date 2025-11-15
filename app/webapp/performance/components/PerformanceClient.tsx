@@ -36,10 +36,8 @@ export default function PerformanceClient() {
   const {
     state,
     updateState,
-    setupRealtimeSubscription,
     handleImport,
     handleExportCSV,
-    realtimeSubscription,
     fetchPerformanceData,
     previousPeriodData,
   } = usePerformanceData(dateRange);
@@ -49,20 +47,6 @@ export default function PerformanceClient() {
   );
 
   const hasData = state.performanceItems.length > 0;
-
-  // Handle realtime toggle
-  const handleToggleRealtime = () => {
-    const newRealtimeEnabled = !state.realtimeEnabled;
-    updateState({ realtimeEnabled: newRealtimeEnabled });
-
-    if (newRealtimeEnabled) {
-      setupRealtimeSubscription();
-    } else {
-      if (realtimeSubscription.current) {
-        realtimeSubscription.current.unsubscribe();
-      }
-    }
-  };
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -92,9 +76,8 @@ export default function PerformanceClient() {
     <>
       <PerformanceHeader
         performanceScore={state.performanceScore}
-        realtimeEnabled={state.realtimeEnabled}
-        lastUpdate={state.lastUpdate}
         performanceAlerts={state.performanceAlerts}
+        performanceItems={state.performanceItems}
       />
 
       {hasData ? (
@@ -115,7 +98,10 @@ export default function PerformanceClient() {
           <PerformanceSummaryCards performanceItems={state.performanceItems} />
 
           {/* Insights & Recommendations */}
-          <PerformanceInsights performanceItems={state.performanceItems} />
+          <PerformanceInsights
+            performanceItems={state.performanceItems}
+            performanceScore={state.performanceScore}
+          />
 
           {/* Methodology Metadata - Collapsible */}
           <PerformanceMetadata metadata={state.metadata} />
@@ -132,11 +118,9 @@ export default function PerformanceClient() {
           <PerformanceActions
             showImportModal={state.showImportModal}
             showCharts={state.showCharts}
-            realtimeEnabled={state.realtimeEnabled}
             onImportClick={handleImportClick}
             onExportCSV={handleExportCSV}
             onToggleCharts={handleToggleCharts}
-            onToggleRealtime={handleToggleRealtime}
           />
 
           {/* Charts - Removed for better screen space optimization */}

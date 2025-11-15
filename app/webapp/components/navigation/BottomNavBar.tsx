@@ -1,7 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useNavigationItems } from './nav-items';
 
 interface BottomNavBarProps {
@@ -12,18 +12,21 @@ export function BottomNavBar({ onMoreClick }: BottomNavBarProps) {
   const pathname = usePathname();
   const allItems = useNavigationItems();
 
-  // Primary items for bottom nav: Dashboard, Ingredients, Recipes, COGS
+  // Primary items for bottom nav: Dashboard, Ingredients, Recipes, Performance
   const primaryItems = allItems.filter(
     item =>
       item.href === '/webapp' ||
-      item.href === '/webapp/ingredients' ||
+      item.href === '/webapp/recipes#ingredients' ||
       item.href === '/webapp/recipes' ||
-      item.href === '/webapp/cogs',
+      item.href === '/webapp/performance',
   );
 
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
-    return pathname.startsWith(href);
+    if (href === '/webapp/recipes#ingredients') {
+      return pathname === '/webapp/recipes' && typeof window !== 'undefined' && window.location.hash === '#ingredients';
+    }
+    return pathname.startsWith(href.split('#')[0]);
   };
 
   return (

@@ -237,7 +237,7 @@ export default function IngredientTableWithFilters({
         }}
       />
 
-      <div className="block space-y-2 large-desktop:hidden">
+      <div className="block space-y-2 lg:hidden">
         {ingredients.map(ingredient => (
           <IngredientCard
             key={ingredient.id}

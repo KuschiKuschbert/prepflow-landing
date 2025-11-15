@@ -121,7 +121,7 @@ export function InputDialog({
 
       {/* Dialog */}
       <div
-        className="relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-2xl"
+        className="relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 lg:p-6 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"

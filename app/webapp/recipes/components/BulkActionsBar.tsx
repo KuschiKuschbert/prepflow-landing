@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Trash2 } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Trash2, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 interface BulkActionsBarProps {
@@ -15,6 +15,20 @@ export default function BulkActionsBar({
   onBulkDelete,
   onClearSelection,
 }: BulkActionsBarProps) {
+  // Keyboard shortcut: Esc to clear selection
+  useEffect(() => {
+    if (selectedCount === 0) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClearSelection();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedCount, onClearSelection]);
+
   if (selectedCount === 0) return null;
 
   return (
@@ -41,8 +55,10 @@ export default function BulkActionsBar({
           </button>
           <button
             onClick={onClearSelection}
-            className="rounded-lg bg-[#2a2a2a] px-4 py-2 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
+            className="flex items-center gap-2 rounded-lg bg-[#2a2a2a] px-4 py-2 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
+            title="Press Esc to clear selection"
           >
+            <Icon icon={X} size="sm" className="text-gray-300" aria-hidden={true} />
             Clear Selection
           </button>
         </div>

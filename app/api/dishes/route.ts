@@ -10,18 +10,22 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
+    const category = searchParams.get('category');
     const start = (page - 1) * pageSize;
     const end = start + pageSize - 1;
+
+    let query = supabaseAdmin.from('dishes').select('*', { count: 'exact' });
+
+    // Filter by category if provided
+    if (category && category !== 'All') {
+      query = query.eq('category', category);
+    }
 
     const {
       data: dishes,
       error,
       count,
-    } = await supabaseAdmin
-      .from('dishes')
-      .select('*', { count: 'exact' })
-      .order('dish_name')
-      .range(start, end);
+    } = await query.order('dish_name').range(start, end);
 
     if (error) {
       console.error('Error fetching dishes:', error);
@@ -44,7 +48,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { dish_name, description, selling_price, recipes, ingredients } = body;
+    const { dish_name, description, selling_price, recipes, ingredients, category } = body;
 
     if (!dish_name || !selling_price) {
       return NextResponse.json(
@@ -72,6 +76,7 @@ export async function POST(request: NextRequest) {
         dish_name: dish_name.trim(),
         description: description?.trim() || null,
         selling_price: parseFloat(selling_price),
+        category: category || 'Uncategorized',
       })
       .select()
       .single();

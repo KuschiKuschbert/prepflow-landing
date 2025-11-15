@@ -146,7 +146,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
       <div
         ref={popupRef}
-        className="animate-in slide-in-from-bottom-4 relative w-full max-w-md rounded-3xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-8 shadow-2xl duration-300"
+        className="animate-in slide-in-from-bottom-4 relative w-full max-w-md rounded-3xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-6 lg:p-8 shadow-2xl duration-300"
       >
         {/* Close button */}
         <button

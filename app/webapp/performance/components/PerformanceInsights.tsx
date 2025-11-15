@@ -8,10 +8,17 @@ import Link from 'next/link';
 
 interface PerformanceInsightsProps {
   performanceItems: PerformanceItem[];
+  performanceScore?: number;
 }
 
-export default function PerformanceInsights({ performanceItems }: PerformanceInsightsProps) {
-  const { insights, hasInsights } = usePerformanceInsights(performanceItems);
+export default function PerformanceInsights({
+  performanceItems,
+  performanceScore,
+}: PerformanceInsightsProps) {
+  const { insights, hasInsights, isLoadingAI } = usePerformanceInsights(
+    performanceItems,
+    performanceScore,
+  );
 
   if (!hasInsights) {
     return null;

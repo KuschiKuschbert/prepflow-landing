@@ -52,11 +52,21 @@
 
 ### Components
 
-- `app/components/landing/Hero.tsx`
-- `app/components/landing/Tour.tsx`, `TourModal.tsx`
-- `app/components/landing/Capabilities.tsx`
-- `app/components/landing/HowItWorks.tsx`
-- `app/components/landing/Security.tsx`
+- `app/components/landing/Hero.tsx` - Hero section
+- `app/components/landing/TourModal.tsx` - Tour modal component
+- `app/components/landing/HowItWorks.tsx` - Process explanation
+- `app/components/landing/sections/` - Landing page sections:
+  - `BenefitsSection.tsx` - Outcomes section
+  - `FeaturesSection.tsx` - Features showcase
+  - `FAQSection.tsx` - Frequently asked questions
+  - `LeadMagnetSection.tsx` - Email capture form
+  - `TrustSection.tsx` - Security and trust features
+  - `HowItWorksSection.tsx` - Process explanation
+  - `MyStorySection.tsx` - Founder story
+  - `ProblemOutcomeSection.tsx` - Problem/solution presentation
+  - `PracticeSection.tsx` - Practice examples
+  - `ContributingMarginSection.tsx` - Margin contribution explanation
+  - `GlobalFeaturesSection.tsx` - Global features showcase
 
 ### QA Checklist
 
@@ -145,12 +155,25 @@ app/
 ├── page.tsx            # Main landing page
 ├── components/landing/  # Landing page components
 │   ├── Hero.tsx        # Hero section
-│   ├── Tour.tsx        # Tour modal
-│   ├── Capabilities.tsx # Features showcase
+│   ├── TourModal.tsx   # Tour modal component
 │   ├── HowItWorks.tsx  # Process explanation
-│   ├── Benefits.tsx    # Outcomes section
-│   ├── Security.tsx    # Security features
+│   ├── LandingHeader.tsx # Landing page header
+│   ├── LandingFooter.tsx # Landing page footer
+│   ├── LandingSections.tsx # Section orchestrator
+│   ├── FinalCTA.tsx   # Final call-to-action
+│   ├── ExitIntentPopup.tsx # Exit intent lead capture
 │   └── sections/       # Landing page sections
+│       ├── BenefitsSection.tsx
+│       ├── FeaturesSection.tsx
+│       ├── FAQSection.tsx
+│       ├── LeadMagnetSection.tsx
+│       ├── TrustSection.tsx
+│       ├── HowItWorksSection.tsx
+│       ├── MyStorySection.tsx
+│       ├── ProblemOutcomeSection.tsx
+│       ├── PracticeSection.tsx
+│       ├── ContributingMarginSection.tsx
+│       └── GlobalFeaturesSection.tsx
 ├── webapp/             # Protected webapp area
 │   ├── page.tsx        # Main dashboard
 │   ├── layout.tsx      # WebApp layout with navigation
@@ -163,6 +186,9 @@ app/
 │   ├── compliance/     # Compliance records
 │   ├── suppliers/      # Supplier management
 │   ├── dish-sections/  # Menu sections
+│   ├── dish-builder/   # Dish builder interface
+│   ├── menu-builder/   # Menu builder interface
+│   ├── gadgets/        # Kitchen utility gadgets
 │   ├── par-levels/     # Par level management
 │   ├── order-lists/    # Order lists
 │   ├── prep-lists/     # Prep lists
@@ -197,7 +223,17 @@ components/
 │   ├── LoadingSkeleton.tsx # Loading skeleton components
 │   ├── ErrorBoundary.tsx # Error boundary component
 │   ├── ScrollToTop.tsx # Scroll to top button
-│   └── ScrollProgress.tsx # Scroll progress indicator
+│   ├── ScrollProgress.tsx # Scroll progress indicator
+│   ├── Icon.tsx        # Standardized icon wrapper
+│   ├── TablePagination.tsx # Table pagination component
+│   ├── ExitIntentPopup.tsx # Exit intent lead capture
+│   └── animated/       # Animated UI components
+│       ├── AnimatedCard.tsx
+│       ├── AnimatedButton.tsx
+│       ├── AnimatedSkeleton.tsx
+│       ├── AnimatedProgressBar.tsx
+│       ├── AnimatedToast.tsx
+│       └── AnimationShowcase.tsx
 ├── variants/           # A/B testing variant components
 │   ├── HeroVariants.tsx # Hero section variants (orchestrator)
 │   ├── HeroContent.tsx # Hero content rendering (title, subtitle)
@@ -208,10 +244,23 @@ components/
 ├── GoogleAnalytics.tsx # GA4 integration
 ├── GoogleTagManager.tsx # GTM integration
 ├── ScrollTracker.tsx   # Scroll depth tracking
+├── ExitIntentPopup.tsx # Exit intent lead capture popup
 ├── Arcade/             # Arcade/easter eggs
+│   ├── ArcadeMuteButton.tsx
+│   ├── GameScoreboard.tsx
+│   ├── NavbarStats.tsx
+│   └── WebAppBackground.tsx
 ├── EasterEggs/         # Easter egg games
+│   ├── TomatoToss.tsx
+│   ├── Confetti.tsx
+│   └── useTomatoTossGame.ts
 ├── ErrorGame/          # Error page games
+│   ├── KitchenOnFire.tsx
+│   └── useKitchenFireGame.ts
 └── Loading/            # Loading components
+    ├── CatchTheDocket.tsx
+    ├── CatchTheDocketOverlay.tsx
+    └── useCatchTheDocket.ts
 
 lib/
 ├── supabase.ts         # Supabase client (database only)
@@ -288,8 +337,8 @@ mobile/                 # React Native app (future)
 
 ### **Naming Conventions**
 
-- **Files:** kebab-case (e.g., `exit-intent-tracker.tsx`)
-- **Components:** PascalCase (e.g., `ExitIntentTracker`)
+- **Files:** kebab-case (e.g., `exit-intent-popup.tsx`)
+- **Components:** PascalCase (e.g., `ExitIntentPopup`)
 - **Functions:** camelCase with descriptive verbs (e.g., `trackUserEngagement`)
 - **Constants:** UPPER_SNAKE_CASE (e.g., `GTM_EVENTS`)
 - **CSS Classes:** Tailwind utility classes with custom CSS variables
@@ -1193,18 +1242,65 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 - **Tablet Behavior:** Tablets (768px-1023px) use mobile layout for better touch experience
 - **Mobile Layout:** Below `lg:` (1024px) → Mobile layout (phones + tablets)
 - **Desktop Layout:** `lg:` and above (1024px+) → Desktop layout
-- **Table Responsive Pattern:**
-  - Mobile/Tablet: `block lg:hidden` for card layouts
-  - Desktop: `hidden lg:block` for table layouts
 - **Touch Targets:** Minimum 44px for interactive elements
 - **Navigation:** Mobile-friendly hamburger menu with backdrop blur
 - **Forms:** Touch-optimized input fields with proper spacing
 
-**Responsive Patterns:**
-- Tables: `hidden lg:block` for desktop, `block lg:hidden` for mobile cards
-- Grids: `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3`
-- Text sizes: `text-sm lg:text-base xl:text-lg`
-- Padding: `p-4 lg:p-6 xl:p-8`
+#### **Tailwind Breakpoint System**
+
+| Breakpoint | Min Width | Usage |
+|------------|-----------|-------|
+| `sm:` | 640px | Small tablets, large phones |
+| `md:` | 768px | Tablets, small laptops |
+| `lg:` | 1024px | **Primary breakpoint** - Desktop starts here |
+| `xl:` | 1280px | Large desktops |
+| `2xl:` | 1536px | Extra-large desktops, ultra-wide screens |
+
+**Breakpoint Strategy:**
+- **Base (default):** Mobile-first styles (0-639px)
+- **sm:** Small tablets and large phones (640px+)
+- **md:** Tablets and small laptops (768px+)
+- **lg:** **Primary desktop breakpoint** (1024px+) - Most desktop layouts start here
+- **xl:** Large desktops (1280px+) - Enhanced spacing and larger grids
+- **2xl:** Extra-large displays (1536px+) - Maximum content width and spacing
+
+#### **Responsive Patterns**
+
+**Table Responsive Pattern:**
+- Mobile/Tablet: `block lg:hidden` for card layouts
+- Desktop: `hidden lg:block` for table layouts
+
+**Grid Patterns:**
+- Single column mobile: `grid-cols-1`
+- Two columns tablet: `md:grid-cols-2`
+- Three columns desktop: `lg:grid-cols-3`
+- Four columns large desktop: `xl:grid-cols-4`
+- Five columns extra-large: `2xl:grid-cols-5`
+- Example: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`
+
+**Text Size Patterns:**
+- Mobile: `text-sm` or `text-base`
+- Tablet: `md:text-base` or `md:text-lg`
+- Desktop: `lg:text-lg` or `lg:text-xl`
+- Large desktop: `xl:text-xl` or `xl:text-2xl`
+- Extra-large: `2xl:text-2xl` or `2xl:text-3xl`
+- Example: `text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl`
+
+**Spacing Patterns:**
+- Mobile: `p-4` or `p-6`
+- Tablet: `md:p-6` or `md:p-8`
+- Desktop: `lg:p-8` or `lg:p-10`
+- Large desktop: `xl:p-10` or `xl:p-12`
+- Extra-large: `2xl:p-12` or `2xl:p-16`
+- Example: `p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12`
+
+**Container Width Patterns:**
+- Mobile: `w-full` (no max-width)
+- Tablet: `md:max-w-2xl` or `md:max-w-3xl`
+- Desktop: `lg:max-w-4xl` or `lg:max-w-5xl`
+- Large desktop: `xl:max-w-6xl` or `xl:max-w-7xl`
+- Extra-large: `2xl:max-w-7xl` or `2xl:max-w-screen-2xl`
+- Example: `w-full md:max-w-2xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl`
 
 ### **Performance**
 
@@ -1252,21 +1348,21 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
    - **Table Components Updated:** PerformanceTable, IngredientTable, RecipeTable, DishTable, COGSTable, EquipmentTable, EquipmentListTable
 
 2. **Comprehensive Loading Skeleton System:** Unified LoadingSkeleton component with multiple variants (stats, table, form, chart, card, list, button) following Material Design 3 principles
-2. **Skeleton Positioning Fix:** Resolved skeleton positioning issues by removing unnecessary dynamic imports from dashboard components
-3. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
-4. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Material Design 3 styling across the entire webapp
-5. **Modern Navigation System:** Collapsible sidebar with organized categories and smart search
-6. **Lead Generation:** ExitIntentPopup with lead magnet offer
-7. **Accessibility:** Focus management and keyboard navigation
-8. **Smooth Scrolling:** Enhanced navigation with progress indicators
-9. **Visual Feedback:** Hover effects and smooth transitions
-10. **Recharts Integration:** Migrated from Chart.js to Recharts for 60% smaller bundle and better performance
-11. **Chart Interactions:** Smooth SVG-based animations with Material Design 3 styling
-12. **Responsive Charts:** Auto-detection between desktop and mobile chart versions
-13. **Chart Performance:** Optimized SVG rendering with efficient data filtering for large datasets
-14. **Mobile Webapp Fixes:** Comprehensive mobile fixes ensuring full feature parity - header height compensation, touch event support, z-index layering, iOS safe area support, mobile-responsive components, overflow prevention, and component refactoring (January 2025)
-15. **Dead Code Removal:** Removed unused components (MobileNavigation.tsx, ExitIntentTracker.tsx, PerformanceTracker.tsx, FloatingCTA.tsx) to reduce bundle size and improve maintainability (January 2025)
-16. **Performance Infrastructure:** Comprehensive performance optimization system with batch fetching, parallel requests, caching, prefetching, and instant display patterns (January 2025)
+3. **Skeleton Positioning Fix:** Resolved skeleton positioning issues by removing unnecessary dynamic imports from dashboard components
+4. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
+5. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Material Design 3 styling across the entire webapp
+6. **Modern Navigation System:** Collapsible sidebar with organized categories and smart search
+7. **Lead Generation:** ExitIntentPopup with lead magnet offer
+8. **Accessibility:** Focus management and keyboard navigation
+9. **Smooth Scrolling:** Enhanced navigation with progress indicators
+10. **Visual Feedback:** Hover effects and smooth transitions
+11. **Recharts Integration:** Migrated from Chart.js to Recharts for 60% smaller bundle and better performance
+12. **Chart Interactions:** Smooth SVG-based animations with Material Design 3 styling
+13. **Responsive Charts:** Auto-detection between desktop and mobile chart versions
+14. **Chart Performance:** Optimized SVG rendering with efficient data filtering for large datasets
+15. **Mobile Webapp Fixes:** Comprehensive mobile fixes ensuring full feature parity - header height compensation, touch event support, z-index layering, iOS safe area support, mobile-responsive components, overflow prevention, and component refactoring (January 2025)
+16. **Dead Code Removal:** Removed unused components (MobileNavigation.tsx, ExitIntentTracker.tsx, PerformanceTracker.tsx, FloatingCTA.tsx) to reduce bundle size and improve maintainability (January 2025)
+17. **Performance Infrastructure:** Comprehensive performance optimization system with batch fetching, parallel requests, caching, prefetching, and instant display patterns (January 2025)
 
 ## 🏗️ **Implementation Guide & Current Status**
 
@@ -1294,13 +1390,16 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 8. **Compliance Records** (`/webapp/compliance`) - Record keeping, type management, audit trails
 9. **Suppliers** (`/webapp/suppliers`) - Supplier management, price lists, contact information
 10. **Dish Sections** (`/webapp/dish-sections`) - Menu organization, section assignment
-11. **Par Levels** (`/webapp/par-levels`) - Inventory par level management
-12. **Order Lists** (`/webapp/order-lists`) - Purchase order management
-13. **Prep Lists** (`/webapp/prep-lists`) - Kitchen prep list generation
-14. **AI Specials** (`/webapp/ai-specials`) - AI-powered specials suggestions
-15. **Recipe Sharing** (`/webapp/recipe-sharing`) - Share recipes with other users
-16. **Settings** (`/webapp/settings`) - User settings, billing management
-17. **Setup** (`/webapp/setup`) - Database setup, data reset, test data population
+11. **Dish Builder** (`/webapp/dish-builder`) - Interactive dish building interface
+12. **Menu Builder** (`/webapp/menu-builder`) - Menu creation and management interface
+13. **Gadgets** (`/webapp/gadgets`) - Kitchen utility gadgets (timers, converters, calculators)
+14. **Par Levels** (`/webapp/par-levels`) - Inventory par level management
+15. **Order Lists** (`/webapp/order-lists`) - Purchase order management
+16. **Prep Lists** (`/webapp/prep-lists`) - Kitchen prep list generation
+17. **AI Specials** (`/webapp/ai-specials`) - AI-powered specials suggestions
+18. **Recipe Sharing** (`/webapp/recipe-sharing`) - Share recipes with other users
+19. **Settings** (`/webapp/settings`) - User settings, billing management
+20. **Setup** (`/webapp/setup`) - Database setup, data reset, test data population
 
 **Advanced Features:**
 
@@ -1327,7 +1426,7 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 #### **🔧 Technical Improvements**
 
 1. **Database Structure**: Fixed table schema and column naming issues
-2. **API Endpoints**: All endpoints tested and working correctly (44 endpoints)
+2. **API Endpoints**: All endpoints tested and working correctly (59 endpoints)
 3. **Component Architecture**: Split large components (Recipes: 1,670 → 673 lines, COGS: 1,634 → 459 lines)
 4. **Error Boundaries**: Implemented React error boundaries for better error handling
 5. **Loading States**: Comprehensive skeleton system with Material Design 3 compliance
@@ -1432,12 +1531,20 @@ prepflow-landing/
 │   ├── providers.tsx               # React Query and context providers
 │   ├── components/landing/         # Landing page components
 │   │   ├── Hero.tsx               # Hero section
-│   │   ├── Tour.tsx               # Tour modal
-│   │   ├── Capabilities.tsx       # Features showcase
+│   │   ├── TourModal.tsx          # Tour modal component
 │   │   ├── HowItWorks.tsx         # Process explanation
-│   │   ├── Benefits.tsx           # Outcomes section
-│   │   ├── Security.tsx           # Security features
-│   │   └── sections/               # Landing page sections
+│   │   ├── LandingHeader.tsx     # Landing page header
+│   │   ├── LandingFooter.tsx     # Landing page footer
+│   │   ├── LandingSections.tsx   # Section orchestrator
+│   │   ├── FinalCTA.tsx          # Final call-to-action
+│   │   ├── ExitIntentPopup.tsx   # Exit intent lead capture
+│   │   └── sections/              # Landing page sections
+│   │       ├── BenefitsSection.tsx
+│   │       ├── FeaturesSection.tsx
+│   │       ├── FAQSection.tsx
+│   │       ├── LeadMagnetSection.tsx
+│   │       ├── TrustSection.tsx
+│   │       └── ... (other sections)
 │   ├── webapp/                     # WebApp routes
 │   │   ├── page.tsx               # Dashboard
 │   │   ├── layout.tsx             # WebApp layout with navigation
@@ -1450,6 +1557,9 @@ prepflow-landing/
 │   │   ├── compliance/            # Compliance records
 │   │   ├── suppliers/             # Supplier management
 │   │   ├── dish-sections/         # Menu sections
+│   │   ├── dish-builder/          # Dish builder interface
+│   │   ├── menu-builder/          # Menu builder interface
+│   │   ├── gadgets/               # Kitchen utility gadgets
 │   │   ├── par-levels/            # Par level management
 │   │   ├── order-lists/           # Order lists
 │   │   ├── prep-lists/            # Prep lists
@@ -1462,7 +1572,7 @@ prepflow-landing/
 │   │       ├── DashboardStatsClient.tsx
 │   │       ├── DraftRecovery.tsx
 │   │       └── navigation/         # Navigation components
-│   └── api/                       # API routes (43 endpoints)
+│   └── api/                       # API routes (59 endpoints)
 │       ├── auth/                  # Authentication
 │       ├── billing/               # Stripe billing
 │       ├── ingredients/           # Ingredients CRUD
@@ -1534,7 +1644,7 @@ FROM_NAME=PrepFlow Team
 4. **menu_dishes** - Menu items with selling prices
 5. **users** - User management with subscriptions
 
-### **API Endpoints Reference (44 Endpoints)**
+### **API Endpoints Reference (59 Endpoints)**
 
 **Authentication & User:**
 
@@ -1614,6 +1724,33 @@ FROM_NAME=PrepFlow Team
 - `GET /api/order-lists/[id]` - Get order list details
 - `POST /api/assign-dish-section` - Assign dish to section
 - `POST /api/ai-specials` - Generate AI specials
+
+**Menu & Dishes:**
+
+- `GET /api/dishes` - List dishes (paginated)
+- `POST /api/dishes` - Create dish
+- `GET /api/dishes/[id]` - Get dish details
+- `PUT /api/dishes/[id]` - Update dish
+- `GET /api/dishes/[id]/cost` - Get dish cost calculation
+- `GET /api/menus` - List menus
+- `POST /api/menus` - Create menu
+- `GET /api/menus/[id]` - Get menu details
+- `PUT /api/menus/[id]` - Update menu
+- `GET /api/menus/[id]/items` - Get menu items
+- `POST /api/menus/[id]/items` - Add item to menu
+- `PUT /api/menus/[id]/items/[itemId]` - Update menu item
+- `DELETE /api/menus/[id]/items/[itemId]` - Remove item from menu
+- `POST /api/menus/[id]/reorder` - Reorder menu items
+- `GET /api/menus/[id]/statistics` - Get menu statistics
+
+**Equipment:**
+
+- `GET /api/equipment/[id]/qr-code` - Generate QR code for equipment
+
+**Utilities:**
+
+- `GET /api/detect-country` - Detect user country
+- `POST /api/setup-menu-builder` - Setup menu builder tables
 
 **Database Management (Dev Only):**
 

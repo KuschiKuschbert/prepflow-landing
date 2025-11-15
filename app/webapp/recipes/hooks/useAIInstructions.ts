@@ -2,10 +2,12 @@
 
 import { useCallback, useState } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { useCountry } from '@/contexts/CountryContext';
 
 export function useAIInstructions() {
   const [aiInstructions, setAiInstructions] = useState<string>('');
   const [generatingInstructions, setGeneratingInstructions] = useState(false);
+  const { selectedCountry } = useCountry();
 
   const generateAIInstructions = useCallback(
     async (recipe: Recipe, ingredients: RecipeIngredientWithDetails[]) => {
@@ -14,6 +16,33 @@ export function useAIInstructions() {
       setGeneratingInstructions(true);
 
       try {
+        // Try AI first
+        try {
+          const response = await fetch('/api/ai/recipe-instructions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              recipe,
+              ingredients,
+              countryCode: selectedCountry,
+            }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.instructions && data.source === 'ai') {
+              setAiInstructions(data.instructions);
+              setGeneratingInstructions(false);
+              return;
+            }
+          }
+        } catch (aiError) {
+          console.warn('AI recipe instructions failed, using fallback:', aiError);
+        }
+
+        // Fallback to rule-based logic
         // Analyze ingredients to determine cooking method
         const ingredientNames = ingredients.map(ri => ri.ingredients.ingredient_name.toLowerCase());
         console.log('🤖 DEBUG: Ingredient names:', ingredientNames);

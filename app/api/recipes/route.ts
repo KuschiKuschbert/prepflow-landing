@@ -10,18 +10,22 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
+    const category = searchParams.get('category');
     const start = (page - 1) * pageSize;
     const end = start + pageSize - 1;
+
+    let query = supabaseAdmin.from('recipes').select('*', { count: 'exact' });
+
+    // Filter by category if provided
+    if (category && category !== 'All') {
+      query = query.eq('category', category);
+    }
 
     const {
       data: recipes,
       error,
       count,
-    } = await supabaseAdmin
-      .from('recipes')
-      .select('*', { count: 'exact' })
-      .order('name')
-      .range(start, end);
+    } = await query.order('name').range(start, end);
 
     if (error) {
       console.error('Error fetching recipes:', error);
@@ -44,7 +48,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, yield: dishPortions, yield_unit } = body;
+    const { name, yield: dishPortions, yield_unit, category, description, instructions } = body;
 
     if (!name) {
       return NextResponse.json(
@@ -73,6 +77,9 @@ export async function POST(request: NextRequest) {
         .update({
           yield: dishPortions || 1,
           yield_unit: yield_unit || 'servings',
+          category: category || 'Uncategorized',
+          description: description || null,
+          instructions: instructions || null,
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingRecipe.id)
@@ -97,6 +104,9 @@ export async function POST(request: NextRequest) {
           name: name.trim(),
           yield: dishPortions || 1,
           yield_unit: yield_unit || 'servings',
+          category: category || 'Uncategorized',
+          description: description || null,
+          instructions: instructions || null,
         })
         .select()
         .single();

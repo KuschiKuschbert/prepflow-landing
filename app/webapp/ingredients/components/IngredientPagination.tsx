@@ -1,3 +1,7 @@
+'use client';
+
+import { useMemo } from 'react';
+
 interface IngredientPaginationProps {
   page: number;
   totalPages: number;
@@ -13,11 +17,15 @@ export default function IngredientPagination({
   onPageChange,
   className = '',
 }: IngredientPaginationProps) {
+  // Memoize the text to ensure consistent rendering
+  const paginationText = useMemo(
+    () => `Page ${page} of ${totalPages} (${total} items)`,
+    [page, totalPages, total],
+  );
+
   return (
     <div className={`flex items-center justify-between ${className}`}>
-      <span className="text-sm text-gray-400">
-        Page {page} of {totalPages} ({total} items)
-      </span>
+      <span className="text-sm text-gray-400">{paginationText}</span>
       <div className="space-x-2">
         <button
           onClick={() => onPageChange(Math.max(1, page - 1))}

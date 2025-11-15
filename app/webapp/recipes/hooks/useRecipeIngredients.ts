@@ -73,18 +73,29 @@ export function useRecipeIngredients(setError: (error: string) => void) {
     async (recipeIds: string[]): Promise<Record<string, RecipeIngredientWithDetails[]>> => {
       if (recipeIds.length === 0) return {};
       try {
+        console.log('[RecipeIngredients] Batch fetching for', recipeIds.length, 'recipe IDs');
+        const startTime = Date.now();
         const response = await fetch('/api/recipes/ingredients/batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ recipeIds }),
           cache: 'no-store',
         });
-        if (!response.ok) return {};
-        return ((await response.json())?.items || {}) as Record<
-          string,
-          RecipeIngredientWithDetails[]
-        >;
+        const fetchDuration = Date.now() - startTime;
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('[RecipeIngredients] Batch fetch failed:', response.status, errorText);
+          return {};
+        }
+
+        const data = await response.json();
+        const items = data?.items || {};
+        const duration = Date.now() - startTime;
+        console.log('[RecipeIngredients] Batch fetch completed in', duration, 'ms, got', Object.keys(items).length, 'recipe groups');
+        return items as Record<string, RecipeIngredientWithDetails[]>;
       } catch (err) {
+        console.error('[RecipeIngredients] Batch fetch error:', err);
         return {};
       }
     },

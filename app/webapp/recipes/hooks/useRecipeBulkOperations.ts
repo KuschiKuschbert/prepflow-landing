@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { Recipe } from '../types';
 import { useNotification } from '@/contexts/NotificationContext';
 
@@ -9,6 +8,8 @@ export function useRecipeBulkOperations(
   recipes: Recipe[],
   fetchRecipes: () => Promise<void>,
   capitalizeRecipeName: (name: string) => string,
+  optimisticallyUpdateRecipes: (updater: (recipes: Recipe[]) => Recipe[]) => void,
+  rollbackRecipes: () => void,
 ) {
   const { showSuccess, showError: showErrorNotification } = useNotification();
   const [selectedRecipes, setSelectedRecipes] = useState<Set<string>>(new Set());
@@ -42,39 +43,47 @@ export function useRecipeBulkOperations(
   const confirmBulkDelete = useCallback(async () => {
     if (selectedRecipes.size === 0) return;
 
+    const selectedRecipeIds = Array.from(selectedRecipes);
+    const count = selectedRecipes.size;
+
     try {
-      const selectedRecipeIds = Array.from(selectedRecipes);
+      // Optimistically remove recipes from list
+      optimisticallyUpdateRecipes(prev => prev.filter(r => !selectedRecipeIds.includes(r.id)));
 
-      const { error: ingredientsError } = await supabase
-        .from('recipe_ingredients')
-        .delete()
-        .in('recipe_id', selectedRecipeIds);
+      // Call API endpoint for bulk deletion
+      const response = await fetch('/api/recipes/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipeIds: selectedRecipeIds }),
+      });
 
-      if (ingredientsError) {
-        showErrorNotification(ingredientsError.message);
+      const result = await response.json();
+
+      if (!response.ok) {
+        rollbackRecipes();
+        const errorMessage = result.message || result.error || 'Failed to delete recipes';
+        showErrorNotification(errorMessage);
         return;
       }
 
-      const { error: recipesError } = await supabase
-        .from('recipes')
-        .delete()
-        .in('id', selectedRecipeIds);
-
-      if (recipesError) {
-        showErrorNotification(recipesError.message);
-        return;
-      }
-
+      // Refresh to sync with server
       await fetchRecipes();
-      showSuccess(
-        `${selectedRecipes.size} recipe${selectedRecipes.size > 1 ? 's' : ''} deleted successfully!`,
-      );
+      showSuccess(`${count} recipe${count > 1 ? 's' : ''} deleted successfully!`);
       setSelectedRecipes(new Set());
       setShowBulkDeleteConfirm(false);
     } catch (err) {
-      showErrorNotification('Failed to delete recipes');
+      rollbackRecipes();
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete recipes';
+      showErrorNotification(errorMessage);
     }
-  }, [selectedRecipes, fetchRecipes, showSuccess, showErrorNotification]);
+  }, [
+    selectedRecipes,
+    fetchRecipes,
+    showSuccess,
+    showErrorNotification,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
+  ]);
 
   const cancelBulkDelete = useCallback(() => {
     setShowBulkDeleteConfirm(false);

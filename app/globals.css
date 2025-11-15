@@ -98,6 +98,19 @@
   }
 }
 
+/* Side panel responsive height */
+.side-panel-height {
+  top: calc(var(--header-height-mobile) + var(--safe-area-inset-top));
+  height: calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top));
+}
+
+@media (min-width: 1024px) {
+  .side-panel-height {
+    top: calc(var(--header-height-desktop) + var(--safe-area-inset-top));
+    height: calc(100vh - var(--header-height-desktop) - var(--safe-area-inset-top));
+  }
+}
+
 /* Prevent flash of unstyled content (FOUC) */
 /* Ensure navigation components are properly positioned from the start */
 aside[role="navigation"][aria-label="Main navigation"],

@@ -15,6 +15,7 @@ import {
   IngredientStockCell,
   IngredientSupplierCell,
 } from './IngredientTableCell';
+import { formatRecipeDate } from '@/app/webapp/recipes/utils/formatDate';
 import { useLongPress } from '../hooks/useLongPress';
 
 interface Ingredient {
@@ -32,6 +33,7 @@ interface Ingredient {
   current_stock?: number;
   standard_unit?: string;
   original_unit?: string;
+  created_at?: string;
 }
 
 interface IngredientTableRowProps {
@@ -81,19 +83,25 @@ export function IngredientTableRow({
     delay: 500,
   });
 
-  // Click handler - in selection mode, toggle selection
+  // Click handler - in selection mode, toggle selection; otherwise open edit drawer
   const handleRowClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't trigger if clicking on buttons or interactive elements
+    if (target.closest('button') || target.closest('a')) {
+      return;
+    }
+
     if (isSelectionMode) {
-      const target = e.target as HTMLElement;
-      // Don't toggle if clicking on buttons or interactive elements
-      if (target.closest('button') || target.closest('a')) {
-        return;
-      }
       e.preventDefault();
       e.stopPropagation();
       // Get current selection state directly from the Set to avoid stale closure
       const currentlySelected = selectedIngredients.has(ingredient.id);
       onSelectIngredient(ingredient.id, !currentlySelected);
+    } else {
+      // Open edit drawer when clicking row in regular mode
+      e.preventDefault();
+      e.stopPropagation();
+      onEdit(ingredient);
     }
   };
 
@@ -116,15 +124,16 @@ export function IngredientTableRow({
 
   return (
     <tr
-      className={`transition-colors duration-200 ${
-        isSelectionMode ? 'cursor-pointer' : 'hover:bg-[#2a2a2a]/20'
-      } ${isSelected && isSelectionMode ? 'bg-[#29E7CD]/10' : ''}`}
+      className={`border-l-2 border-[#D925C7]/30 bg-[#D925C7]/2 transition-colors duration-200 ${
+        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#D925C7]/5'
+      } ${isSelected && isSelectionMode ? 'bg-[#D925C7]/10' : ''}`}
       onClick={handleRowClick}
+      title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
       onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
       onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
       onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
-      <td className="hidden px-6 py-4 whitespace-nowrap large-desktop:table-cell">
+      <td className="hidden px-6 py-4 whitespace-nowrap lg:table-cell">
         <button
           onClick={e => {
             e.stopPropagation();
@@ -166,11 +175,14 @@ export function IngredientTableRow({
         </button>
       </td>
       <IngredientNameCell ingredient={ingredient} />
-      <IngredientBrandCell ingredient={ingredient} />
-      <IngredientPackSizeCell ingredient={ingredient} />
+      <IngredientBrandCell ingredient={ingredient} className="hidden lg:table-cell" />
+      <IngredientPackSizeCell ingredient={ingredient} className="hidden lg:table-cell" />
       <IngredientCostCell ingredient={ingredient} displayUnit={displayUnit} />
-      <IngredientSupplierCell ingredient={ingredient} />
-      <IngredientStockCell ingredient={ingredient} />
+      <IngredientSupplierCell ingredient={ingredient} className="hidden lg:table-cell" />
+      <IngredientStockCell ingredient={ingredient} className="hidden lg:table-cell" />
+      <td className="hidden px-6 py-4 text-sm text-gray-300 lg:table-cell">
+        {ingredient.created_at ? formatRecipeDate(ingredient.created_at) : '—'}
+      </td>
       <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
         <div className="flex items-center gap-2">
           <button

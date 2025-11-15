@@ -1,23 +1,20 @@
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
 import {
-  BarChart3,
-  BookOpen,
-  Bot,
-  Calculator,
-  ClipboardCheck,
-  FileText,
-  LayoutDashboard,
-  ListChecks,
-  Package,
-  Package2,
-  Settings,
-  Settings2,
-  Sparkles,
-  Thermometer,
-  Truck,
-  UtensilsCrossed,
-  Wrench,
+    BarChart3,
+    Bot,
+    ClipboardCheck,
+    FileText,
+    LayoutDashboard,
+    ListChecks,
+    Package2,
+    Settings,
+    Settings2,
+    Sparkles,
+    Thermometer,
+    Truck,
+    UtensilsCrossed,
+    Wrench
 } from 'lucide-react';
 
 export interface NavigationItemConfig {
@@ -39,24 +36,10 @@ export function useNavigationItems(): NavigationItemConfig[] {
       category: 'core',
     },
     {
-      href: '/webapp/ingredients',
-      label: t('nav.ingredients', 'Ingredients') as string,
-      icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-      category: 'core',
-    },
-    {
       href: '/webapp/recipes',
-      label: t('nav.recipes', 'Recipes') as string,
-      icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#3B82F6]',
-      category: 'core',
-    },
-    {
-      href: '/webapp/cogs',
-      label: t('nav.cogs', 'COGS') as string,
-      icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#D925C7]',
+      label: t('nav.dishesAndRecipes', 'Dishes & Recipes') as string,
+      icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
+      color: 'text-[#29E7CD]',
       category: 'core',
     },
     {

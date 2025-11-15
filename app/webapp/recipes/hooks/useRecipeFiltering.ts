@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Recipe, RecipePriceData } from '../types';
+import { filterRecipes } from '../utils/recipeFiltering';
+import { sortRecipes } from '../utils/recipeSorting';
 
 export type RecipeSortField = 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created';
 
 interface RecipeFilters {
   searchTerm: string;
+  categoryFilter: string;
   sortField: RecipeSortField;
   sortDirection: 'asc' | 'desc';
   currentPage: number;
@@ -19,6 +22,7 @@ export function useRecipeFiltering(
 ) {
   const [filters, setFilters] = useState<RecipeFilters>({
     searchTerm: '',
+    categoryFilter: '',
     sortField: 'name',
     sortDirection: 'asc',
     currentPage: 1,
@@ -26,49 +30,16 @@ export function useRecipeFiltering(
   });
 
   const filteredAndSortedRecipes = useMemo(() => {
-    let filtered = recipes.filter(recipe =>
-      recipe.name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
-    );
-
-    filtered.sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
-
-      switch (filters.sortField) {
-        case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case 'recommended_price':
-          aValue = recipePrices[a.id]?.recommendedPrice || 0;
-          bValue = recipePrices[b.id]?.recommendedPrice || 0;
-          break;
-        case 'profit_margin':
-          aValue = recipePrices[a.id]?.gross_profit_margin || 0;
-          bValue = recipePrices[b.id]?.gross_profit_margin || 0;
-          break;
-        case 'contributing_margin':
-          aValue = recipePrices[a.id]?.contributingMargin || 0;
-          bValue = recipePrices[b.id]?.contributingMargin || 0;
-          break;
-        case 'created':
-          aValue = new Date(a.created_at).getTime();
-          bValue = new Date(b.created_at).getTime();
-          break;
-        default:
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-      }
-
-      if (filters.sortDirection === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
-
-    return filtered;
-  }, [recipes, recipePrices, filters.searchTerm, filters.sortField, filters.sortDirection]);
+    const filtered = filterRecipes(recipes, filters.searchTerm, filters.categoryFilter);
+    return sortRecipes(filtered, recipePrices, filters.sortField, filters.sortDirection);
+  }, [
+    recipes,
+    recipePrices,
+    filters.searchTerm,
+    filters.categoryFilter,
+    filters.sortField,
+    filters.sortDirection,
+  ]);
 
   const paginatedRecipes = useMemo(() => {
     const startIndex = (filters.currentPage - 1) * filters.itemsPerPage;
@@ -82,9 +53,10 @@ export function useRecipeFiltering(
     setFilters(prev => ({
       ...prev,
       ...updates,
-      // Reset to page 1 when changing search or sort
+      // Reset to page 1 when changing search, category, or sort
       currentPage:
         updates.searchTerm !== undefined ||
+        updates.categoryFilter !== undefined ||
         updates.sortField !== undefined ||
         updates.sortDirection !== undefined
           ? 1

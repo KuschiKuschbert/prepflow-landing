@@ -6,6 +6,7 @@ export interface Recipe {
   instructions?: string;
   yield: number;
   yield_unit: string;
+  category?: string;
   created_at: string;
   updated_at: string;
 }
@@ -69,8 +70,27 @@ export interface Dish {
   dish_name: string;
   description?: string;
   selling_price: number;
+  category?: string;
   created_at: string;
   updated_at: string;
+}
+
+// Unified Item Types (for Recipes & Dishes view)
+export type UnifiedItemType = 'recipe' | 'dish';
+
+export interface UnifiedItem {
+  id: string;
+  type: UnifiedItemType;
+  name: string;
+  description?: string;
+  category: string;
+  created_at: string;
+  updated_at: string;
+  // Recipe-specific fields
+  yield?: number;
+  yield_unit?: string;
+  // Dish-specific fields
+  selling_price?: number;
 }
 
 export interface DishRecipe {

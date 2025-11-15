@@ -96,6 +96,17 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
+    // Handle hash URLs (e.g., /webapp/recipes#ingredients)
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      if (pathname === path) {
+        if (typeof window !== 'undefined') {
+          return window.location.hash === `#${hash}`;
+        }
+        return false;
+      }
+      return pathname.startsWith(path);
+    }
     return pathname.startsWith(href);
   };
 
@@ -121,17 +132,17 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       />
 
       {/* Desktop: Persistent Sidebar - CSS handles visibility */}
-      <div className="hidden desktop:block">
+      <div className="hidden lg:block">
         <PersistentSidebar />
       </div>
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
-      <div className="block desktop:hidden">
+      <div className="block lg:hidden">
         <BottomNavBar onMoreClick={() => setIsMoreDrawerOpen(true)} />
       </div>
 
       {/* Mobile: More Drawer - CSS handles visibility */}
-      <div className="block desktop:hidden">
+      <div className="block lg:hidden">
         <MoreDrawer
           isOpen={isMoreDrawerOpen}
           onClose={() => setIsMoreDrawerOpen(false)}

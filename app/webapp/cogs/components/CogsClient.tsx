@@ -1,3 +1,14 @@
+/**
+ * @deprecated This component has been replaced by Dish Builder.
+ *
+ * The Dish Builder (app/webapp/dish-builder/components/DishBuilderClient.tsx) now provides
+ * all COGS calculation functionality with a modern tap-to-add interface.
+ *
+ * The Calculator tab in Recipes page now renders DishBuilderClient instead of this component.
+ *
+ * This file is kept for reference only. Do not use in new code.
+ */
+
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -12,6 +23,8 @@ import { useCOGSAutosave } from '../hooks/useCOGSAutosave';
 import { useCOGSCalculations } from '../hooks/useCOGSCalculations';
 import { useCOGSEffects } from '../hooks/useCOGSEffects';
 import { useCOGSLoadingGate } from '../hooks/useCOGSLoadingGate';
+import { useCOGSSorting } from '../hooks/useCOGSSorting';
+import { useCOGSRecipeLoading } from '../hooks/useCOGSRecipeLoading';
 import { useDishHandlers } from '../hooks/useDishHandlers';
 import { useIngredientAddition } from '../hooks/useIngredientAddition';
 import { useIngredientEditing } from '../hooks/useIngredientEditing';
@@ -50,8 +63,6 @@ export default function CogsClient() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [sortField, setSortField] = useState<'ingredient_name' | 'quantity' | 'cost'>('ingredient_name');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const {
     hasManualPortionsRef,
@@ -82,39 +93,7 @@ export default function CogsClient() {
 
   const recipeExistsLocally = Boolean(selectedRecipeData);
 
-  // Sort calculations
-  const sortedCalculations = useMemo(() => {
-    const sorted = [...calculations];
-    sorted.sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
-
-      switch (sortField) {
-        case 'ingredient_name':
-          aValue = a.ingredientName.toLowerCase();
-          bValue = b.ingredientName.toLowerCase();
-          break;
-        case 'quantity':
-          aValue = a.quantity;
-          bValue = b.quantity;
-          break;
-        case 'cost':
-          aValue = a.yieldAdjustedCost;
-          bValue = b.yieldAdjustedCost;
-          break;
-        default:
-          aValue = a.ingredientName.toLowerCase();
-          bValue = b.ingredientName.toLowerCase();
-      }
-
-      if (sortDirection === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
-    return sorted;
-  }, [calculations, sortField, sortDirection]);
+  const { sortedCalculations, sortField, sortDirection, onSortChange } = useCOGSSorting(calculations);
 
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
@@ -153,41 +132,16 @@ export default function CogsClient() {
     loadCalculations,
     setSelectedRecipe,
   });
-  useEffect(() => {
-    // Only run when selectedRecipe ID changes, not when selectedRecipeData object reference changes
-    if (!selectedRecipe) return;
-
-    // Derive selectedRecipeData inside effect to avoid dependency on object reference
-    const recipeData = recipes.find(r => r.id === selectedRecipe);
-    if (!recipeData) return;
-
-    if (hasManualIngredientsRef?.current) {
-      console.log('[CogsClient] Skipping loadExistingRecipeIngredients - manual changes exist');
-      return;
-    }
-    const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
-    if (timeSinceLastChange < 10000) {
-      console.log('[CogsClient] Skipping loadExistingRecipeIngredients - recent change detected');
-      return;
-    }
-    // Only reset portions if they haven't been manually changed
-    if (!hasManualPortionsRef.current) {
-      const timeSincePortionChange = Date.now() - (lastPortionChangeTimeRef.current || 0);
-      if (timeSincePortionChange > 10000) {
-        handleDishPortionsFromRecipe(recipeData.yield || 1);
-      }
-    }
-    loadExistingRecipeIngredients(selectedRecipe);
-  }, [
+  useCOGSRecipeLoading({
     selectedRecipe,
     recipes,
-    loadExistingRecipeIngredients,
     hasManualIngredientsRef,
     lastManualChangeTimeRef,
     hasManualPortionsRef,
     lastPortionChangeTimeRef,
+    loadExistingRecipeIngredients,
     handleDishPortionsFromRecipe,
-  ]);
+  });
   const { handleToggleAddIngredient } = useDishHandlers({
     showAddIngredient,
     dishName: selectedRecipeData?.name || '',
@@ -325,10 +279,7 @@ export default function CogsClient() {
                 dishPortions={dishPortions}
                 sortField={sortField}
                 sortDirection={sortDirection}
-                onSortChange={(field, direction) => {
-                  setSortField(field);
-                  setSortDirection(direction);
-                }}
+                onSortChange={onSortChange}
               />
 
               <PricingTool

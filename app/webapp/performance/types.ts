@@ -66,8 +66,6 @@ export interface PerformanceState {
   metadata: PerformanceMetadata | null;
   performanceAlerts: PerformanceAlert[];
   performanceScore: number;
-  realtimeEnabled: boolean;
-  lastUpdate: Date | null;
   showCharts: boolean;
   showImportModal: boolean;
   csvData: string;

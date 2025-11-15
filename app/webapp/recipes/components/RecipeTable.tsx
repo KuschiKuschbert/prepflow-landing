@@ -2,15 +2,18 @@
 
 import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
-import { Edit, Trash2, Check } from 'lucide-react';
+import { Edit, Trash2, Check, Eye } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeDate } from '../utils/formatDate';
 import { useRecipeTableSort } from '../hooks/useRecipeTableSort';
+import { RecipeTableRow } from './RecipeTableRow';
 
 interface RecipeTableProps {
   recipes: Recipe[];
   recipePrices: Record<string, RecipePriceData>;
   selectedRecipes: Set<string>;
+  highlightingRowId?: string | null;
   onSelectAll: () => void;
   onSelectRecipe: (recipeId: string) => void;
   onPreviewRecipe: (recipe: Recipe) => void;
@@ -20,12 +23,17 @@ interface RecipeTableProps {
   sortField?: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created';
   sortDirection?: 'asc' | 'desc';
   onSortChange?: (field: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created', direction: 'asc' | 'desc') => void;
+  isSelectionMode?: boolean;
+  onStartLongPress?: () => void;
+  onCancelLongPress?: () => void;
+  onEnterSelectionMode?: () => void;
 }
 
 const RecipeTable = React.memo(function RecipeTable({
   recipes,
   recipePrices,
   selectedRecipes,
+  highlightingRowId = null,
   onSelectAll,
   onSelectRecipe,
   onPreviewRecipe,
@@ -35,6 +43,10 @@ const RecipeTable = React.memo(function RecipeTable({
   sortField = 'name',
   sortDirection = 'asc',
   onSortChange,
+  isSelectionMode = false,
+  onStartLongPress,
+  onCancelLongPress,
+  onEnterSelectionMode,
 }: RecipeTableProps) {
   const { handleColumnSort, getSortIcon } = useRecipeTableSort({
     sortField,
@@ -43,7 +55,7 @@ const RecipeTable = React.memo(function RecipeTable({
   });
 
   return (
-    <div className="hidden overflow-x-auto tablet:block">
+    <div className="hidden overflow-x-auto lg:block">
       <table className="min-w-full divide-y divide-[#2a2a2a]">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
@@ -88,7 +100,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Recommended Price'
               )}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('profit_margin')}
@@ -102,7 +114,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Profit Margin'
               )}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('contributing_margin')}
@@ -116,7 +128,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Contributing Margin'
               )}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('created')}
@@ -131,120 +143,27 @@ const RecipeTable = React.memo(function RecipeTable({
               )}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
-              Actions
+              <span>Actions</span>
             </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
           {recipes.map(recipe => (
-            <tr key={recipe.id} className="transition-colors hover:bg-[#2a2a2a]/20">
-              <td
-                className="px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
-                onClick={e => e.stopPropagation()}
-              >
-                <button
-                  onClick={() => onSelectRecipe(recipe.id)}
-                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-                  aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
-                >
-                  {selectedRecipes.has(recipe.id) ? (
-                    <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-                  ) : (
-                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
-                  )}
-                </button>
-              </td>
-              <td
-                className="cursor-pointer px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
-                onClick={() => onPreviewRecipe(recipe)}
-              >
-                {capitalizeRecipeName(recipe.name)}
-              </td>
-              <td
-                className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
-                onClick={() => onPreviewRecipe(recipe)}
-              >
-                {recipePrices[recipe.id] ? (
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-white">
-                      ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
-                      {recipe.yield > 1 && (
-                        <span className="ml-1 text-xs font-normal text-gray-400">
-                          /portion ($
-                          {(recipePrices[recipe.id].recommendedPrice * recipe.yield).toFixed(
-                            2,
-                          )}{' '}
-                          total)
-                        </span>
-                      )}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {recipePrices[recipe.id].foodCostPercent.toFixed(1)}% food cost
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-gray-500">Calculating...</span>
-                )}
-              </td>
-              <td
-                className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
-                onClick={() => onPreviewRecipe(recipe)}
-              >
-                {recipePrices[recipe.id] ? (
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-white">
-                      {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      ${recipePrices[recipe.id].gross_profit.toFixed(2)}/portion
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-gray-500">-</span>
-                )}
-              </td>
-              <td
-                className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
-                onClick={() => onPreviewRecipe(recipe)}
-              >
-                {recipePrices[recipe.id] ? (
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-[#D925C7]">
-                      ${recipePrices[recipe.id].contributingMargin.toFixed(2)}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {recipePrices[recipe.id].contributingMarginPercent.toFixed(1)}%/portion
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-gray-500">-</span>
-                )}
-              </td>
-              <td
-                className="cursor-pointer px-6 py-4 text-sm whitespace-nowrap text-gray-300"
-                onClick={() => onPreviewRecipe(recipe)}
-              >
-                {formatRecipeDate(recipe.created_at)}
-              </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
-                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
-                  <button
-                    onClick={() => onEditRecipe(recipe)}
-                    className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
-                  >
-                    <Icon icon={Edit} size="xs" className="text-white" aria-hidden={true} />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => onDeleteRecipe(recipe)}
-                    className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
-                  >
-                    <Icon icon={Trash2} size="xs" className="text-white" aria-hidden={true} />
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
+            <RecipeTableRow
+              key={recipe.id}
+              recipe={recipe}
+              recipePrice={recipePrices[recipe.id]}
+              selectedRecipes={selectedRecipes}
+              isSelectionMode={isSelectionMode}
+              isHighlighting={highlightingRowId === recipe.id}
+              onSelectRecipe={onSelectRecipe}
+              onPreviewRecipe={onPreviewRecipe}
+              onEditRecipe={onEditRecipe}
+              onDeleteRecipe={onDeleteRecipe}
+              capitalizeRecipeName={capitalizeRecipeName}
+              onCancelLongPress={onCancelLongPress}
+              onEnterSelectionMode={onEnterSelectionMode}
+            />
           ))}
         </tbody>
       </table>

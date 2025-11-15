@@ -1,11 +1,11 @@
 'use client';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { PageHeader } from '../components/static/PageHeader';
-import { RecipeBookDescription } from './components/RecipeBookDescription';
-import { RecipeBookContent } from './components/RecipeBookContent';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { BookOpen } from 'lucide-react';
+import { UtensilsCrossed } from 'lucide-react';
+import { PageHeader } from '../components/static/PageHeader';
+import { RecipeBookContent } from './components/RecipeBookContent';
+import { RecipeBookDescription } from './components/RecipeBookDescription';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,9 +16,9 @@ export default function RecipesPage() {
         <div className="min-h-screen bg-transparent py-4 tablet:py-6">
           {/* Static Header - Renders Instantly */}
           <PageHeader
-            title="Recipe Book"
-            subtitle="Manage your saved recipes and create new dishes"
-            icon={BookOpen}
+            title="Recipe & Cost Management"
+            subtitle="Manage recipes, build dishes, and calculate costs"
+            icon={UtensilsCrossed}
             showLogo={true}
           />
 

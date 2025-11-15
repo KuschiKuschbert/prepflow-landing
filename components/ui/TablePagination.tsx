@@ -66,7 +66,7 @@ export function TablePagination({
             aria-label="Previous page"
           >
             <Icon icon={ChevronLeft} size="sm" aria-hidden={true} />
-            <span className="hidden tablet:inline">Previous</span>
+            <span className="hidden lg:inline">Previous</span>
           </button>
           <span className="px-4 py-2 text-fluid-sm text-gray-300">
             Page {page} of {totalPages}
@@ -77,7 +77,7 @@ export function TablePagination({
             className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-fluid-sm text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Next page"
           >
-            <span className="hidden tablet:inline">Next</span>
+            <span className="hidden lg:inline">Next</span>
             <Icon icon={ChevronRight} size="sm" aria-hidden={true} />
           </button>
         </div>

@@ -27,14 +27,15 @@ export function PageHeader({
       <div className="mb-2 flex flex-col gap-2 tablet:mb-3 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 desktop:mb-4 desktop:gap-6">
         <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
           {showLogo && (
-            <Image
-              src="/images/prepflow-logo.svg"
-              alt="PrepFlow Logo"
-              width={40}
-              height={40}
-              className="rounded-lg"
-              priority
-            />
+            <div className="relative h-10 w-10 flex-shrink-0">
+              <Image
+                src="/images/prepflow-logo.svg"
+                alt="PrepFlow Logo"
+                fill
+                className="rounded-lg object-contain"
+                priority
+              />
+            </div>
           )}
           <h1 className="flex items-center gap-2 font-bold text-white text-fluid-xl tablet:text-fluid-2xl">
             {icon && <Icon icon={icon} size="lg" className="text-[#29E7CD]" aria-hidden={true} />}

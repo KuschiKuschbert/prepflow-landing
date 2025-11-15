@@ -84,6 +84,7 @@ export function IngredientCard({
     isSelectionMode,
     selectedIngredients,
     onSelectIngredient,
+    onEdit: () => onEdit(ingredient),
     onStartLongPress,
     onCancelLongPress,
     onEnterSelectionMode,
@@ -117,12 +118,13 @@ export function IngredientCard({
   return (
     <>
       <div
-        className={`rounded-xl border p-3 transition-all duration-200 ${
+        className={`rounded-xl border-l-2 border-[#D925C7]/30 bg-[#D925C7]/2 p-3 transition-all duration-200 ${
           isSelectionMode
-            ? 'cursor-pointer border-[#2a2a2a]'
-            : 'border-[#2a2a2a] bg-[#1f1f1f]/50 hover:border-[#2a2a2a]/60 hover:bg-[#1f1f1f]/70'
-        } ${isSelected && isSelectionMode ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10' : ''}`}
+            ? 'cursor-pointer'
+            : 'cursor-pointer hover:bg-[#D925C7]/5'
+        } ${isSelected && isSelectionMode ? 'border-[#D925C7]/50 bg-[#D925C7]/10' : ''}`}
         onClick={handleCardClick}
+        title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}

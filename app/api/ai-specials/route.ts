@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { generateAIVisionResponse } from '@/lib/ai/ai-service';
+import { buildAISpecialsPrompt, parseAISpecialsResponse } from '@/lib/ai/prompts/ai-specials';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, imageData, prompt } = body;
+    const { userId, imageData, prompt, countryCode } = body;
 
     if (!userId || !imageData) {
       return NextResponse.json(
@@ -16,9 +18,44 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For now, we'll simulate AI processing
-    // In a real implementation, you would integrate with OpenAI Vision API or similar
-    const aiResponse = await processImageWithAI(imageData, prompt);
+    // Try AI Vision API first
+    let aiResponse: {
+      ingredients: string[];
+      suggestions: string[];
+      confidence: number;
+      notes?: string;
+      processing_time?: number;
+    };
+
+    try {
+      const aiPrompt = buildAISpecialsPrompt(prompt);
+      const visionResponse = await generateAIVisionResponse(
+        imageData, // imageData should be a data URL or public URL
+        aiPrompt,
+        countryCode || 'AU',
+        {
+          temperature: 0.7,
+          maxTokens: 1500,
+          useCache: true,
+          cacheTTL: 60 * 60 * 1000, // 1 hour cache
+        },
+      );
+
+      if (visionResponse.content && !visionResponse.error) {
+        const parsed = parseAISpecialsResponse(visionResponse.content);
+        aiResponse = {
+          ...parsed,
+          processing_time: 0, // Will be calculated if needed
+        };
+      } else {
+        // Fallback to mock
+        aiResponse = await processImageWithAI(imageData, prompt);
+      }
+    } catch (aiError) {
+      console.warn('AI Vision API failed, using fallback:', aiError);
+      // Fallback to mock
+      aiResponse = await processImageWithAI(imageData, prompt);
+    }
 
     // Save the AI analysis to database
     if (!supabaseAdmin) {

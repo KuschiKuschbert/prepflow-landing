@@ -47,20 +47,20 @@ export function IngredientNameCell({ ingredient }: { ingredient: Ingredient }) {
   );
 }
 
-export function IngredientBrandCell({ ingredient }: { ingredient: Ingredient }) {
+export function IngredientBrandCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
   return (
-    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">{ingredient.brand || '-'}</td>
+    <td className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${className || ''}`}>{ingredient.brand || '-'}</td>
   );
 }
 
-export function IngredientPackSizeCell({ ingredient }: { ingredient: Ingredient }) {
+export function IngredientPackSizeCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
   const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
   const originalUnit = ingredient.original_unit || packSizeUnit;
   const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
 
   return (
-    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+    <td className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${className || ''}`}>
       <div className="flex items-center gap-1">
         <span>
           {ingredient.pack_size != null ? `${ingredient.pack_size} ${packSizeUnit}` : '-'}
@@ -102,22 +102,22 @@ export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableC
   );
 }
 
-export function IngredientSupplierCell({ ingredient }: { ingredient: Ingredient }) {
+export function IngredientSupplierCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
   return (
-    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+    <td className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${className || ''}`}>
       {ingredient.supplier || '-'}
     </td>
   );
 }
 
-export function IngredientStockCell({ ingredient }: { ingredient: Ingredient }) {
+export function IngredientStockCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
   const isLowStock =
     ingredient.min_stock_level &&
     ingredient.current_stock &&
     ingredient.current_stock <= ingredient.min_stock_level;
 
   return (
-    <td className="px-6 py-4 whitespace-nowrap">
+    <td className={`px-6 py-4 whitespace-nowrap ${className || ''}`}>
       <div className="flex items-center gap-2">
         <span className={`text-sm ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}>
           {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'}{' '}
@@ -132,4 +132,3 @@ export function IngredientStockCell({ ingredient }: { ingredient: Ingredient }) 
     </td>
   );
 }
-

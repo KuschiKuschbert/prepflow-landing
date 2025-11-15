@@ -13,10 +13,10 @@ export function RecipeBookDescription() {
           </p>
         </div>
         <div>
-          <h3 className="mb-2 font-medium text-[#29E7CD]">📊 From COGS Calculations</h3>
+          <h3 className="mb-2 font-medium text-[#29E7CD]">📦 Ingredients</h3>
           <p>
-            Create cost calculations in the COGS screen, then save them as recipes. These recipes
-            include all ingredient costs and portion calculations.
+            Add ingredients with costs, suppliers, and storage locations. Build your ingredient library
+            for recipes and dishes.
           </p>
         </div>
       </div>

@@ -4,6 +4,7 @@ import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
 import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeDate } from '../utils/formatDate';
 
 interface RecipeCardProps {
@@ -28,13 +29,25 @@ const RecipeCard = React.memo(function RecipeCard({
   capitalizeRecipeName,
 }: RecipeCardProps) {
   return (
-    <div className="p-4 transition-colors hover:bg-[#2a2a2a]/20">
+    <div
+      className="border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 p-4 transition-colors hover:bg-[#3B82F6]/5 cursor-pointer"
+      onClick={(e) => {
+        // Don't trigger if clicking on buttons or checkbox
+        if ((e.target as HTMLElement).closest('button')) return;
+        onPreviewRecipe(recipe);
+      }}
+      title="Click to preview recipe details"
+    >
       <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
           <button
-            onClick={() => onSelectRecipe(recipe.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectRecipe(recipe.id);
+            }}
             className="mr-3 flex items-center justify-center transition-colors hover:text-[#29E7CD]"
             aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
+            title={selectedRecipes.has(recipe.id) ? 'Deselect recipe' : 'Select recipe'}
           >
             {selectedRecipes.has(recipe.id) ? (
               <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
@@ -42,18 +55,15 @@ const RecipeCard = React.memo(function RecipeCard({
               <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
             )}
           </button>
-          <h3
-            className="cursor-pointer text-sm font-medium text-white"
-            onClick={() => onPreviewRecipe(recipe)}
-          >
+          <h3 className="text-sm font-medium text-white">
             {capitalizeRecipeName(recipe.name)}
           </h3>
         </div>
-        <span className="text-xs text-gray-500">{formatRecipeDate(recipe.created_at)}</span>
+        <span className="text-xs text-gray-500" title={`Created on ${formatRecipeDate(recipe.created_at)}`}>{formatRecipeDate(recipe.created_at)}</span>
       </div>
 
       <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
-        <div>
+        <div title="Recommended selling price based on ingredient costs and target profit margin">
           <span className="font-medium">Recommended Price:</span>
           {recipePrices[recipe.id] ? (
             <span className="ml-1 font-semibold text-white">
@@ -68,12 +78,12 @@ const RecipeCard = React.memo(function RecipeCard({
               )}
             </span>
           ) : (
-            <span className="ml-1 text-gray-500">Calculating...</span>
+            <LoadingSkeleton variant="text" width="w-24" height="h-4" className="ml-1" />
           )}
         </div>
         {recipePrices[recipe.id] && (
           <>
-            <div>
+            <div title={`Profit margin: ${recipePrices[recipe.id].gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - Percentage of profit relative to selling price`}>
               <span className="font-medium">Profit Margin:</span>
               <span className="ml-1 text-white">
                 {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
@@ -82,7 +92,7 @@ const RecipeCard = React.memo(function RecipeCard({
                 (${recipePrices[recipe.id].gross_profit.toFixed(2)} profit/portion)
               </span>
             </div>
-            <div>
+            <div title="Contributing margin: Profit after variable costs - helps cover fixed costs">
               <span className="font-medium">Contributing Margin:</span>
               <span className="ml-1 font-semibold text-[#D925C7]">
                 ${recipePrices[recipe.id].contributingMargin.toFixed(2)}
@@ -93,23 +103,46 @@ const RecipeCard = React.memo(function RecipeCard({
             </div>
           </>
         )}
+        {!recipePrices[recipe.id] && (
+          <div className="text-xs text-gray-600 italic" title="Click Preview to see cost breakdown">
+            Price calculation pending...
+          </div>
+        )}
       </div>
 
       {/* Action Buttons */}
       <div className="ml-7 flex gap-2">
         <button
-          onClick={() => onEditRecipe(recipe)}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
+          onClick={(e) => {
+            e.stopPropagation();
+            onPreviewRecipe(recipe);
+          }}
+          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+          title="View full recipe details, ingredients, and instructions"
         >
-          <Icon icon={Edit} size="xs" className="text-white" aria-hidden={true} />
-          Edit in COGS
+          Preview
         </button>
         <button
-          onClick={() => onDeleteRecipe(recipe)}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-2 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEditRecipe(recipe);
+          }}
+          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+          aria-label={`Edit recipe ${capitalizeRecipeName(recipe.name)}`}
+          title="Edit recipe in builder"
         >
-          <Icon icon={Trash2} size="xs" className="text-white" aria-hidden={true} />
-          Delete
+          <Icon icon={Edit} size="xs" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDeleteRecipe(recipe);
+          }}
+          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-red-400"
+          aria-label={`Delete recipe ${capitalizeRecipeName(recipe.name)}`}
+          title="Delete this recipe"
+        >
+          <Icon icon={Trash2} size="xs" />
         </button>
       </div>
     </div>

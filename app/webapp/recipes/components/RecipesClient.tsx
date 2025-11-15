@@ -1,9 +1,7 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
-import { ChefHat } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -14,51 +12,62 @@ import { useRecipeActions } from '../hooks/useRecipeActions';
 import { useRecipeAutosaveListener } from '../hooks/useRecipeAutosaveListener';
 import { useRecipeManagement } from '../hooks/useRecipeManagement';
 import { useRecipeFiltering } from '../hooks/useRecipeFiltering';
+import { useRecipeRefreshEffects } from '../hooks/useRecipeRefreshEffects';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { TablePagination } from '@/components/ui/TablePagination';
+import { RecipesEmptyState } from './RecipesEmptyState';
+import { RecipesErrorDisplay } from './RecipesErrorDisplay';
 
 // Local components
 import BulkActionsBar from './BulkActionsBar';
 import { BulkDeleteConfirmationModal } from './BulkDeleteConfirmationModal';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import RecipeCard from './RecipeCard';
-import RecipePreviewModal from './RecipePreviewModal';
+import { UnifiedRecipeModal } from './UnifiedRecipeModal';
 import RecipeTable from './RecipeTable';
 import { RecipesActionButtons } from './RecipesActionButtons';
+import { RecipeFilterBar } from './RecipeFilterBar';
 import { SuccessMessage } from './SuccessMessage';
+import { RecipeEditDrawer } from './RecipeEditDrawer';
 
 // Utils
-import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
 
 export default function RecipesClient() {
   const router = useRouter();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
-  const [showPreview, setShowPreview] = useState(false);
+  const [showUnifiedModal, setShowUnifiedModal] = useState(false);
   const [previewYield, setPreviewYield] = useState<number>(1);
   const [changedRecipeIds, setChangedRecipeIds] = useState<Set<string>>(new Set());
+  const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+  const [showRecipeEditDrawer, setShowRecipeEditDrawer] = useState(false);
   const handleIngredientsChangeRef = useRef<((recipeId: string) => void) | null>(null);
+
+  const trackRecipeChange = useCallback((recipeId: string) => {
+    setChangedRecipeIds(prev => new Set(prev).add(recipeId));
+    if (handleIngredientsChangeRef.current) {
+      handleIngredientsChangeRef.current(recipeId);
+    }
+  }, []);
 
   const {
     recipes,
     loading,
     error,
+    recipeError,
     recipePrices,
     capitalizeRecipeName,
     fetchRecipes,
     fetchRecipeIngredients,
+    fetchBatchRecipeIngredients,
     handleEditRecipe,
+    updateVisibleRecipePrices,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
     setError,
-  } = useRecipeManagement((recipeId: string) => {
-    // This callback will be called by the subscription when ingredients change
-    // Track that this recipe has changed
-    setChangedRecipeIds(prev => new Set(prev).add(recipeId));
-    // If preview modal is open for this recipe, refresh immediately
-    if (handleIngredientsChangeRef.current) {
-      handleIngredientsChangeRef.current(recipeId);
-    }
-  });
+  } = useRecipeManagement(trackRecipeChange);
+
   const clearChangedFlag = useCallback((recipeId: string) => {
     setChangedRecipeIds(prev => {
       const next = new Set(prev);
@@ -66,9 +75,10 @@ export default function RecipesClient() {
       return next;
     });
   }, []);
+
   useEffect(() => {
     handleIngredientsChangeRef.current = (recipeId: string) => {
-      if (showPreview && selectedRecipe && selectedRecipe.id === recipeId) {
+      if (showUnifiedModal && selectedRecipe && selectedRecipe.id === recipeId) {
         fetchRecipeIngredients(recipeId)
           .then(ingredients => {
             setRecipeIngredients(ingredients);
@@ -77,7 +87,7 @@ export default function RecipesClient() {
           .catch(err => console.error('Failed to refresh preview ingredients:', err));
       }
     };
-    if (showPreview && selectedRecipe && changedRecipeIds.has(selectedRecipe.id)) {
+    if (showUnifiedModal && selectedRecipe && changedRecipeIds.has(selectedRecipe.id)) {
       fetchRecipeIngredients(selectedRecipe.id)
         .then(ingredients => {
           setRecipeIngredients(ingredients);
@@ -85,13 +95,21 @@ export default function RecipesClient() {
         })
         .catch(err => console.error('Failed to refresh on open:', err));
     }
-  }, [showPreview, selectedRecipe, changedRecipeIds, fetchRecipeIngredients, clearChangedFlag]);
+  }, [showUnifiedModal, selectedRecipe, changedRecipeIds, fetchRecipeIngredients, clearChangedFlag]);
+
   // Listen for autosave completion events to refresh recipes when yield/portions are updated
   useRecipeAutosaveListener({
     onRecipeSaved: () => {
       fetchRecipes().catch(err => console.error('Failed to refresh recipes after autosave:', err));
     },
   });
+
+  useRecipeRefreshEffects({
+    loading,
+    changedRecipeIds,
+    fetchRecipes,
+  });
+
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
   const {
     successMessage,
@@ -109,6 +127,7 @@ export default function RecipesClient() {
     shareLoading,
     handleAddRecipe: handleAddRecipeAction,
     handleEditFromPreview,
+    handleDuplicateRecipe,
     handleDeleteRecipe,
     confirmDeleteRecipe,
     cancelDeleteRecipe,
@@ -124,14 +143,66 @@ export default function RecipesClient() {
     fetchRecipeIngredients,
     setError,
     capitalizeRecipeName,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
   });
 
   const {
     filters,
     updateFilters,
     paginatedRecipes,
+    filteredAndSortedRecipes,
     totalPages,
   } = useRecipeFiltering(recipes, recipePrices);
+
+  // Track which recipes are currently being calculated to prevent duplicate requests
+  const calculatingPricesRef = useRef<Set<string>>(new Set());
+
+  // Create stable reference to paginated recipe IDs to prevent infinite loops
+  const paginatedRecipeIds = useMemo(
+    () => paginatedRecipes.map(r => r.id).sort().join(','),
+    [paginatedRecipes]
+  );
+
+  // Calculate prices for visible recipes only (lazy loading)
+  useEffect(() => {
+    if (paginatedRecipes.length === 0) return;
+
+    // Get recipe IDs that don't have prices yet and aren't currently being calculated
+    const recipesNeedingPrices = paginatedRecipes.filter(
+      recipe => !recipePrices[recipe.id] && !calculatingPricesRef.current.has(recipe.id)
+    );
+
+    if (recipesNeedingPrices.length > 0) {
+      // Mark recipes as being calculated
+      recipesNeedingPrices.forEach(recipe => {
+        calculatingPricesRef.current.add(recipe.id);
+      });
+
+      console.log('[RecipesClient] Calculating prices for', recipesNeedingPrices.length, 'recipes');
+      updateVisibleRecipePrices(
+        recipesNeedingPrices,
+        fetchRecipeIngredients,
+        fetchBatchRecipeIngredients,
+      )
+        .then(() => {
+          console.log('[RecipesClient] Price calculation completed');
+          // Remove from calculating set after completion
+          recipesNeedingPrices.forEach(recipe => {
+            calculatingPricesRef.current.delete(recipe.id);
+          });
+        })
+        .catch(err => {
+          console.error('[RecipesClient] Failed to calculate visible recipe prices:', err);
+          // Remove from calculating set on error
+          recipesNeedingPrices.forEach(recipe => {
+            calculatingPricesRef.current.delete(recipe.id);
+          });
+        });
+    }
+    // Only depend on paginatedRecipeIds - don't retrigger when recipePrices changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paginatedRecipeIds]);
 
   const formatQuantity = useCallback(
     (q: number, u: string) => formatQuantityUtil(q, u, previewYield, selectedRecipe?.yield || 1),
@@ -140,78 +211,105 @@ export default function RecipesClient() {
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
-        console.log('[RecipesClient] Opening preview:', recipe.id);
+        console.log('[RecipesClient] Opening unified modal:', recipe.id);
         const ingredients = await fetchRecipeIngredients(recipe.id);
         console.log('[RecipesClient] Fetched:', ingredients.length);
         setSelectedRecipe(recipe);
         setRecipeIngredients(ingredients);
-        setPreviewYield(recipe.yield);
-        setShowPreview(true);
+        setPreviewYield(recipe.yield || 1);
+        setShowUnifiedModal(true);
         clearChangedFlag(recipe.id);
         await generateAIInstructions(recipe, ingredients);
       } catch (err) {
         console.error('❌ Error in handlePreviewRecipe:', err);
-        setError('Failed to load recipe preview');
+        setError('Failed to load recipe');
       }
     },
     [fetchRecipeIngredients, setError, generateAIInstructions, clearChangedFlag],
   );
-  const handleEditFromPreviewWrapper = () => {
-    if (!selectedRecipe || !recipeIngredients.length) return;
-    handleEditFromPreview(selectedRecipe, recipeIngredients);
-    setShowPreview(false);
-  };
-  const handleShareRecipeWrapper = () => {
+
+  const handleEditRecipeWrapper = useCallback(
+    (recipe: Recipe) => {
+      setEditingRecipe(recipe);
+      setShowRecipeEditDrawer(true);
+      setShowUnifiedModal(false);
+    },
+    [],
+  );
+
+  const handleEditRecipeFromCard = useCallback(
+    (recipe: Recipe) => {
+      setEditingRecipe(recipe);
+      setShowRecipeEditDrawer(true);
+    },
+    [],
+  );
+
+  const handleDuplicateRecipeWrapper = useCallback(async () => {
+    if (!selectedRecipe) return;
+    const duplicated = await handleDuplicateRecipe(selectedRecipe);
+    if (duplicated) {
+      setShowUnifiedModal(false);
+      // Optionally open the new recipe
+      setTimeout(() => {
+        handlePreviewRecipe(duplicated);
+      }, 500);
+    }
+  }, [selectedRecipe, handleDuplicateRecipe, handlePreviewRecipe]);
+
+  const handleShareRecipeWrapper = useCallback(() => {
     if (!selectedRecipe || !recipeIngredients.length) return;
     handleShareRecipe(selectedRecipe, recipeIngredients, aiInstructions);
-  };
+  }, [selectedRecipe, recipeIngredients, aiInstructions, handleShareRecipe]);
+
   const handlePrint = () => window.print();
-  useEffect(() => {
-    if (loading) startLoadingGate('recipes');
-    else stopLoadingGate('recipes');
-    return () => stopLoadingGate('recipes');
-  }, [loading]);
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && changedRecipeIds.size > 0) {
-        console.log('[RecipesClient] Page visible, refreshing:', changedRecipeIds);
-        fetchRecipes().catch(err => console.error('Failed to refresh:', err));
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [changedRecipeIds, fetchRecipes]);
-  useEffect(() => {
-    const lastChangeTime = sessionStorage.getItem('recipe_ingredients_last_change');
-    if (lastChangeTime) {
-      const timeSinceChange = Date.now() - parseInt(lastChangeTime, 10);
-      if (timeSinceChange < 5 * 60 * 1000 && !loading) {
-        console.log('[RecipesClient] Recent changes detected, refreshing');
-        fetchRecipes().catch(err => console.error('Failed to refresh:', err));
-        sessionStorage.removeItem('recipe_ingredients_last_change');
-      }
-    }
-  }, [loading, fetchRecipes]);
-  if (loading) return <PageSkeleton />;
+
+  const handleRefreshIngredients = useCallback(async () => {
+    if (!selectedRecipe) return;
+    const ingredients = await fetchRecipeIngredients(selectedRecipe.id);
+    setRecipeIngredients(ingredients);
+  }, [selectedRecipe, fetchRecipeIngredients]);
+
+  // Show recipes immediately if we have cached data, even if loading
+  const showRecipes = recipes.length > 0 || !loading;
+
+  if (loading && recipes.length === 0) return <PageSkeleton />;
+
   return (
     <>
-      <RecipesActionButtons onRefresh={fetchRecipes} />
+      <RecipesActionButtons onRefresh={fetchRecipes} loading={loading} />
       <BulkActionsBar
         selectedCount={selectedRecipes.size}
         onBulkDelete={handleBulkDelete}
         onClearSelection={() => setSelectedRecipes(new Set())}
       />
 
-      {error && (
-        <div className="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-          {error}
-        </div>
-      )}
+      <RecipesErrorDisplay
+        error={error}
+        recipeError={recipeError}
+        onRetry={recipeError?.retryAction}
+        onDismiss={() => setError(null)}
+      />
       <SuccessMessage message={successMessage} />
-      <div className="overflow-hidden rounded-lg bg-[#1f1f1f] shadow">
-        <div className="sticky top-0 z-10 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 tablet:px-6">
+      <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow">
+        <RecipeFilterBar
+          recipes={recipes}
+          searchTerm={filters.searchTerm}
+          categoryFilter={filters.categoryFilter}
+          sortField={filters.sortField}
+          sortDirection={filters.sortDirection}
+          itemsPerPage={filters.itemsPerPage}
+          onSearchChange={term => updateFilters({ searchTerm: term })}
+          onCategoryFilterChange={category => updateFilters({ categoryFilter: category })}
+          onSortChange={(field, direction) => updateFilters({ sortField: field, sortDirection: direction })}
+          onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+        />
+        <div className="border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4 tablet:px-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">Recipes ({recipes.length})</h2>
+            <h2 className="text-lg font-semibold text-white" suppressHydrationWarning>
+              Recipes ({filteredAndSortedRecipes.length}
+              {filteredAndSortedRecipes.length !== recipes.length && ` of ${recipes.length}`})
+            </h2>
             {selectedRecipes.size > 0 && (
               <div className="flex items-center">
                 <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
@@ -225,7 +323,7 @@ export default function RecipesClient() {
         <TablePagination
           page={filters.currentPage}
           totalPages={totalPages}
-          total={recipes.length}
+          total={filteredAndSortedRecipes.length}
           itemsPerPage={filters.itemsPerPage}
           onPageChange={page => updateFilters({ currentPage: page })}
           onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
@@ -242,7 +340,7 @@ export default function RecipesClient() {
                 selectedRecipes={selectedRecipes}
                 onSelectRecipe={handleSelectRecipe}
                 onPreviewRecipe={handlePreviewRecipe}
-                onEditRecipe={handleEditRecipe}
+                onEditRecipe={handleEditRecipeFromCard}
                 onDeleteRecipe={handleDeleteRecipe}
                 capitalizeRecipeName={capitalizeRecipeName}
               />
@@ -256,7 +354,7 @@ export default function RecipesClient() {
           onSelectAll={handleSelectAll}
           onSelectRecipe={handleSelectRecipe}
           onPreviewRecipe={handlePreviewRecipe}
-          onEditRecipe={handleEditRecipe}
+          onEditRecipe={handleEditRecipeFromCard}
           onDeleteRecipe={handleDeleteRecipe}
           capitalizeRecipeName={capitalizeRecipeName}
           sortField={filters.sortField}
@@ -267,7 +365,7 @@ export default function RecipesClient() {
         <TablePagination
           page={filters.currentPage}
           totalPages={totalPages}
-          total={recipes.length}
+          total={filteredAndSortedRecipes.length}
           itemsPerPage={filters.itemsPerPage}
           onPageChange={page => updateFilters({ currentPage: page })}
           onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
@@ -275,37 +373,32 @@ export default function RecipesClient() {
         />
       </div>
 
-      {recipes.length === 0 && (
-        <div className="py-12 text-center">
-          <div className="mb-4 flex justify-center">
-            <Icon icon={ChefHat} size="xl" className="text-gray-400" aria-hidden={true} />
-          </div>
-          <h3 className="mb-2 text-lg font-medium text-white">No recipes yet</h3>
-          <p className="mb-4 text-gray-500">
-            Start by adding your first recipe to begin managing your kitchen costs.
-          </p>
-          <a
-            href="/webapp/cogs"
-            className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-white transition-colors hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
-          >
-            Add Your First Recipe
-          </a>
-        </div>
-      )}
+      {recipes.length === 0 && <RecipesEmptyState />}
 
-      <RecipePreviewModal
-        showPreview={showPreview}
-        selectedRecipe={selectedRecipe}
+      <UnifiedRecipeModal
+        isOpen={showUnifiedModal}
+        recipe={selectedRecipe}
         recipeIngredients={recipeIngredients}
         aiInstructions={aiInstructions}
         generatingInstructions={generatingInstructions}
         previewYield={previewYield}
         shareLoading={shareLoading}
-        onClose={() => setShowPreview(false)}
-        onEditFromPreview={handleEditFromPreviewWrapper}
+        onClose={() => {
+          setShowUnifiedModal(false);
+          setSelectedRecipe(null);
+        }}
+        onEditRecipe={handleEditRecipeWrapper}
         onShareRecipe={handleShareRecipeWrapper}
         onPrint={handlePrint}
+        onDuplicateRecipe={handleDuplicateRecipeWrapper}
+        onDeleteRecipe={() => {
+          if (selectedRecipe) {
+            handleDeleteRecipe(selectedRecipe);
+            setShowUnifiedModal(false);
+          }
+        }}
         onUpdatePreviewYield={setPreviewYield}
+        onRefreshIngredients={handleRefreshIngredients}
         capitalizeRecipeName={capitalizeRecipeName}
         formatQuantity={formatQuantity}
       />
@@ -325,6 +418,18 @@ export default function RecipesClient() {
         capitalizeRecipeName={capitalizeRecipeName}
         onConfirm={confirmBulkDelete}
         onCancel={cancelBulkDelete}
+      />
+
+      <RecipeEditDrawer
+        isOpen={showRecipeEditDrawer}
+        recipe={editingRecipe}
+        onClose={() => {
+          setShowRecipeEditDrawer(false);
+          setEditingRecipe(null);
+        }}
+        onRefresh={async () => {
+          await fetchRecipes();
+        }}
       />
     </>
   );

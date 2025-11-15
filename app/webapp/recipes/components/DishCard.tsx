@@ -33,13 +33,25 @@ const DishCard = React.memo(function DishCard({
   };
 
   return (
-    <div className="p-4 transition-colors hover:bg-[#2a2a2a]/20">
+    <div
+      className="border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 p-4 transition-colors hover:bg-[#29E7CD]/5 cursor-pointer"
+      onClick={(e) => {
+        // Don't trigger if clicking on buttons or checkbox
+        if ((e.target as HTMLElement).closest('button')) return;
+        onPreviewDish(dish);
+      }}
+      title="Click to preview dish details"
+    >
       <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
           <button
-            onClick={() => onSelectDish(dish.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectDish(dish.id);
+            }}
             className="mr-3 flex items-center justify-center transition-colors hover:text-[#29E7CD]"
             aria-label={`${selectedDishes.has(dish.id) ? 'Deselect' : 'Select'} dish ${capitalizeDishName(dish.dish_name)}`}
+            title={selectedDishes.has(dish.id) ? 'Deselect dish' : 'Select dish'}
           >
             {selectedDishes.has(dish.id) ? (
               <svg
@@ -59,30 +71,27 @@ const DishCard = React.memo(function DishCard({
               <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
             )}
           </button>
-          <h3
-            className="cursor-pointer text-sm font-medium text-white"
-            onClick={() => onPreviewDish(dish)}
-          >
+          <h3 className="text-sm font-medium text-white">
             {capitalizeDishName(dish.dish_name)}
           </h3>
         </div>
-        <span className="text-xs text-gray-500">{formatRecipeDate(dish.created_at)}</span>
+        <span className="text-xs text-gray-500" title={`Created on ${formatRecipeDate(dish.created_at)}`}>{formatRecipeDate(dish.created_at)}</span>
       </div>
 
       <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
-        <div>
+        <div title="The price customers pay for this dish">
           <span className="font-medium">Selling Price:</span>
           <span className="ml-1 font-semibold text-white">${dish.selling_price.toFixed(2)}</span>
         </div>
         {dishCost && (
           <>
-            <div>
+            <div title="Total cost of all ingredients in this dish">
               <span className="font-medium">Cost:</span>
               <span className="ml-1 font-semibold text-white">
                 ${dishCost.total_cost.toFixed(2)}
               </span>
             </div>
-            <div>
+            <div title={`Profit margin: ${dishCost.gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - ${dishCost.gross_profit_margin >= 30 ? 'Target achieved' : 'Consider optimizing'}`}>
               <span className="font-medium">Profit Margin:</span>
               <span
                 className={`ml-1 font-semibold ${
@@ -94,26 +103,43 @@ const DishCard = React.memo(function DishCard({
             </div>
           </>
         )}
+        {!dishCost && (
+          <div className="text-xs text-gray-600 italic" title="Click Preview to see cost breakdown">
+            Cost calculation pending...
+          </div>
+        )}
       </div>
 
       <div className="ml-7 flex gap-2">
         <button
-          onClick={() => onPreviewDish(dish)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onPreviewDish(dish);
+          }}
           className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+          title="View full dish details and cost breakdown"
         >
           Preview
         </button>
         <button
-          onClick={() => onEditDish(dish)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onEditDish(dish);
+          }}
           className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
           aria-label={`Edit dish ${capitalizeDishName(dish.dish_name)}`}
+          title="Edit dish in builder"
         >
           <Icon icon={Edit} size="xs" />
         </button>
         <button
-          onClick={() => onDeleteDish(dish)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDeleteDish(dish);
+          }}
           className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-red-400"
           aria-label={`Delete dish ${capitalizeDishName(dish.dish_name)}`}
+          title="Delete this dish"
         >
           <Icon icon={Trash2} size="xs" />
         </button>

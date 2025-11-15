@@ -1,3 +1,7 @@
+import Link from 'next/link';
+import { FileText } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+
 interface DishesActionButtonsProps {
   onAddDish: () => void;
 }
@@ -11,6 +15,13 @@ export function DishesActionButtons({ onAddDish }: DishesActionButtonsProps) {
       >
         Add Dish
       </button>
+      <Link
+        href="/webapp/menu-builder"
+        className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-6 py-3 font-medium text-white transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a] hover:shadow-lg"
+      >
+        <Icon icon={FileText} size="sm" />
+        <span>Menu Builder</span>
+      </Link>
     </div>
   );
 }

@@ -1,13 +1,14 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { Recipe } from '../types';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useCallback, useState } from 'react';
+import { Recipe } from '../types';
 
 export function useRecipeDeleteOperations(
   fetchRecipes: () => Promise<void>,
   capitalizeRecipeName: (name: string) => string,
+  optimisticallyUpdateRecipes: (updater: (recipes: Recipe[]) => Recipe[]) => void,
+  rollbackRecipes: () => void,
 ) {
   const { showSuccess, showError: showErrorNotification } = useNotification();
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
@@ -21,42 +22,50 @@ export function useRecipeDeleteOperations(
   const confirmDeleteRecipe = useCallback(async () => {
     if (!recipeToDelete) return;
 
+    const recipeIdToDelete = recipeToDelete.id;
+    const recipeName = capitalizeRecipeName(recipeToDelete.name);
+
     try {
-      const { error: ingredientsError } = await supabase
-        .from('recipe_ingredients')
-        .delete()
-        .eq('recipe_id', recipeToDelete.id);
+      // Optimistically remove recipe from list
+      optimisticallyUpdateRecipes(prev => prev.filter(r => r.id !== recipeIdToDelete));
 
-      if (ingredientsError) {
-        showErrorNotification(ingredientsError.message);
+      // Call API endpoint for deletion
+      console.log('[RecipeDelete] Attempting to delete recipe:', recipeIdToDelete);
+      const response = await fetch(`/api/recipes/${recipeIdToDelete}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const result = await response.json();
+      console.log('[RecipeDelete] API response:', { status: response.status, result });
+
+      if (!response.ok) {
+        rollbackRecipes();
+        const errorMessage = result.message || result.error || 'Failed to delete recipe';
+        console.error('[RecipeDelete] Deletion failed:', errorMessage, result);
+        showErrorNotification(errorMessage);
         return;
       }
 
-      const { error: recipeError } = await supabase
-        .from('recipes')
-        .delete()
-        .eq('id', recipeToDelete.id);
-
-      if (recipeError) {
-        showErrorNotification(recipeError.message);
-        return;
-      }
-
-      // Force a fresh fetch by clearing cache and refetching
+      // Refresh to sync with server
       await fetchRecipes();
-
-      // Small delay to ensure state updates propagate
-      setTimeout(() => {
-        fetchRecipes();
-      }, 100);
-
-      showSuccess(`Recipe "${capitalizeRecipeName(recipeToDelete.name)}" deleted successfully!`);
+      showSuccess(`Recipe "${recipeName}" deleted successfully!`);
       setShowDeleteConfirm(false);
       setRecipeToDelete(null);
     } catch (err) {
-      showErrorNotification('Failed to delete recipe');
+      rollbackRecipes();
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete recipe';
+      showErrorNotification(errorMessage);
     }
-  }, [recipeToDelete, fetchRecipes, capitalizeRecipeName, showSuccess, showErrorNotification]);
+  }, [
+    recipeToDelete,
+    fetchRecipes,
+    capitalizeRecipeName,
+    showSuccess,
+    showErrorNotification,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
+  ]);
 
   const cancelDeleteRecipe = useCallback(() => {
     setShowDeleteConfirm(false);

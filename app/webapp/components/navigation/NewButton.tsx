@@ -1,9 +1,9 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { BookOpen, Package, Plus, Sparkles, Thermometer, Truck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Thermometer, Package, BookOpen, Calculator, Sparkles, Truck, Plus } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 
 interface NewItemOption {
   href: string;
@@ -16,7 +16,7 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(' ');
 };
 
-export function NewButton() {
+function NewButton() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -31,7 +31,7 @@ export function NewButton() {
       category: 'Temperature',
     },
     {
-      href: '/webapp/ingredients?action=new',
+      href: '/webapp/recipes#ingredients',
       label: 'Ingredient',
       icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Ingredients',
@@ -41,12 +41,6 @@ export function NewButton() {
       label: 'Recipe',
       icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden={true} />,
       category: 'Recipes',
-    },
-    {
-      href: '/webapp/cogs?action=new',
-      label: 'COGS',
-      icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'COGS',
     },
     {
       href: '/webapp/cleaning?action=new',
@@ -165,11 +159,11 @@ export function NewButton() {
           role="menu"
           aria-orientation="vertical"
         >
-          <div className="p-2 desktop:p-2">
+          <div className="p-2 lg:p-2">
             <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
               Create New
             </div>
-            <div className="space-y-2 desktop:space-y-1">
+            <div className="space-y-2 lg:space-y-1">
               {creatableItems.map((item, index) => (
                 <button
                   key={item.href}
@@ -182,8 +176,8 @@ export function NewButton() {
                     'rounded-xl',
                     'px-4',
                     'py-3',
-                    'desktop:px-3',
-                    'desktop:py-2.5',
+                    'lg:px-3',
+                    'lg:py-2.5',
                     'text-left',
                     'text-sm',
                     'text-gray-300',
@@ -193,9 +187,9 @@ export function NewButton() {
                     'bg-[#1f1f1f]',
                     'shadow-md',
                     // Desktop: Remove card styling
-                    'desktop:border-0',
-                    'desktop:bg-transparent',
-                    'desktop:shadow-none',
+                    'lg:border-0',
+                    'lg:bg-transparent',
+                    'lg:shadow-none',
                     'transition-all',
                     'duration-200',
                     'hover:bg-[#2a2a2a]',
@@ -221,3 +215,5 @@ export function NewButton() {
     </div>
   );
 }
+
+export { NewButton };

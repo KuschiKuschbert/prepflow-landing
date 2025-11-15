@@ -5,9 +5,9 @@ import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { useEffect, useState } from 'react';
 
 // Direct imports to eliminate skeleton flashes
-import { useNotification } from '@/contexts/NotificationContext';
 import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useIngredientActions } from '../hooks/useIngredientActions';
 import { useIngredientBulkUpdate } from '../hooks/useIngredientBulkUpdate';
@@ -20,10 +20,27 @@ import { useIngredientsQuery } from '../hooks/useIngredientsQuery';
 import { useRegionalUnits } from '../hooks/useRegionalUnits';
 import { useSelectionMode } from '../hooks/useSelectionMode';
 import CSVImportModal from './CSVImportModal';
-import IngredientEditModal from './IngredientEditModal';
-import IngredientPagination from './IngredientPagination';
+import IngredientEditDrawer from './IngredientEditDrawer';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
+
+// Import IngredientPagination as client-only to prevent hydration mismatches
+const IngredientPagination = dynamic(() => import('./IngredientPagination'), {
+  ssr: false,
+  loading: () => (
+    <div className="mb-4 flex items-center justify-between">
+      <span className="text-sm text-gray-400">Loading...</span>
+      <div className="space-x-2">
+        <button disabled className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white opacity-50">
+          Prev
+        </button>
+        <button disabled className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white opacity-50">
+          Next
+        </button>
+      </div>
+    </div>
+  ),
+});
 
 interface Ingredient {
   id: string;
@@ -54,7 +71,11 @@ interface Supplier {
   created_at?: string;
 }
 
-export default function IngredientsClient() {
+interface IngredientsClientProps {
+  hideHeader?: boolean;
+}
+
+export default function IngredientsClient({ hideHeader = false }: IngredientsClientProps = {}) {
   const { t } = useTranslation();
   const {
     isSelectionMode,
@@ -182,14 +203,16 @@ export default function IngredientsClient() {
   };
   return (
     <>
-      <PageHeader
-        title={translateText('ingredients.title', 'Ingredients Management')}
-        subtitle={translateText(
-          'ingredients.subtitle',
-          'Manage your kitchen ingredients and inventory',
-        )}
-        icon={Package}
-      />
+      {!hideHeader && (
+        <PageHeader
+          title={translateText('ingredients.title', 'Ingredients Management')}
+          subtitle={translateText(
+            'ingredients.subtitle',
+            'Manage your kitchen ingredients and inventory',
+          )}
+          icon={Package}
+        />
+      )}
       {error && (
         <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
           {error}
@@ -254,7 +277,7 @@ export default function IngredientsClient() {
         onPageChange={setPage}
         className="mt-4"
       />
-      <IngredientEditModal
+      <IngredientEditDrawer
         isOpen={!!editingIngredient}
         ingredient={editingIngredient}
         suppliers={suppliers}

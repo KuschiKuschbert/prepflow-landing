@@ -1,17 +1,47 @@
 'use client';
 
-import { useState } from 'react';
-import { RecipeBookTabs } from './RecipeBookTabs';
-import RecipesClient from './RecipesClient';
+import { useEffect, useState } from 'react';
 import DishesClient from './DishesClient';
+import { IngredientsTab } from './IngredientsTab';
+import { RecipeManagementTabs, type RecipeManagementTab } from './RecipeManagementTabs';
 
 export function RecipeBookContent() {
-  const [activeTab, setActiveTab] = useState<'recipes' | 'dishes'>('recipes');
+  // Initialize with consistent default to prevent hydration mismatch
+  // Will be updated from URL hash in useEffect on client
+  const [activeTab, setActiveTab] = useState<RecipeManagementTab>('ingredients');
+
+  // Initialize from URL hash on client mount and sync with hash changes
+  useEffect(() => {
+    const updateTabFromHash = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash === 'dishes' || hash === 'ingredients') {
+        setActiveTab(hash as RecipeManagementTab);
+      } else if (hash === 'recipes' || hash === 'calculator') {
+        // Redirect old recipes/calculator hash to dishes tab
+        setActiveTab('dishes');
+        window.history.replaceState(null, '', `${window.location.pathname}#dishes`);
+      } else if (!hash) {
+        setActiveTab('ingredients');
+      }
+    };
+
+    // Set initial tab from hash on mount
+    updateTabFromHash();
+
+    // Sync with URL hash changes (e.g., browser back/forward)
+    const handleHashChange = () => {
+      updateTabFromHash();
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   return (
     <div>
-      <RecipeBookTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      {activeTab === 'recipes' ? <RecipesClient /> : <DishesClient />}
+      <RecipeManagementTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      {activeTab === 'ingredients' && <IngredientsTab />}
+      {activeTab === 'dishes' && <DishesClient />}
     </div>
   );
 }

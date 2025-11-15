@@ -57,7 +57,12 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
           id,
           ingredient_name,
           cost_per_unit,
-          unit
+          cost_per_unit_incl_trim,
+          trim_peel_waste_percentage,
+          yield_percentage,
+          unit,
+          supplier_name,
+          category
         )
       `,
       )

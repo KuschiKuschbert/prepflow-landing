@@ -11,6 +11,71 @@ interface IngredientsListProps {
   onRemoveCalculation: (ingredientId: string) => void;
 }
 
+// Format quantity to show reasonable decimal places
+const formatQuantity = (quantity: number): string => {
+  // If it's a whole number, show no decimals
+  if (Number.isInteger(quantity)) {
+    return quantity.toString();
+  }
+
+  // For small numbers (< 1), show up to 3 decimal places
+  if (quantity < 1) {
+    const formatted = quantity.toFixed(3);
+    // Remove trailing zeros and decimal point if not needed
+    return formatted.replace(/\.?0+$/, '');
+  }
+
+  // For larger numbers, show up to 2 decimal places
+  const formatted = quantity.toFixed(2);
+  // Remove trailing zeros and decimal point if not needed
+  return formatted.replace(/\.?0+$/, '');
+};
+
+// Format unit to be more readable
+const formatUnit = (unit: string): string => {
+  if (!unit) return '';
+
+  const unitLower = unit.toLowerCase().trim();
+
+  // Map common unit abbreviations to readable forms
+  const unitMap: { [key: string]: string } = {
+    'gm': 'g',
+    'g': 'g',
+    'gram': 'g',
+    'grams': 'g',
+    'kg': 'kg',
+    'kilogram': 'kg',
+    'kilograms': 'kg',
+    'pc': 'pc',
+    'piece': 'pc',
+    'pieces': 'pc',
+    'ml': 'ml',
+    'milliliter': 'ml',
+    'milliliters': 'ml',
+    'l': 'L',
+    'liter': 'L',
+    'liters': 'L',
+    'litre': 'L',
+    'litres': 'L',
+    'tsp': 'tsp',
+    'teaspoon': 'tsp',
+    'teaspoons': 'tsp',
+    'tbsp': 'tbsp',
+    'tablespoon': 'tbsp',
+    'tablespoons': 'tbsp',
+    'cup': 'cup',
+    'cups': 'cup',
+    'oz': 'oz',
+    'ounce': 'oz',
+    'ounces': 'oz',
+    'lb': 'lb',
+    'pound': 'lb',
+    'pounds': 'lb',
+  };
+
+  return unitMap[unitLower] || unit;
+};
+
 export const IngredientsList: React.FC<IngredientsListProps> = ({
   calculations,
   onUpdateCalculation,
@@ -48,7 +113,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       min="0"
                       autoFocus
                     />
-                    <span className="text-xs text-gray-400">{calc.unit}</span>
+                    <span className="text-xs text-gray-400">{formatUnit(calc.unit)}</span>
                   </div>
                   <button
                     onClick={() => {
@@ -77,7 +142,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
               ) : (
                 <>
                   <span className="font-medium text-gray-400">
-                    {calc.quantity} {calc.unit}
+                    {formatQuantity(calc.quantity)} {formatUnit(calc.unit)}
                   </span>
                   <button
                     onClick={() => {

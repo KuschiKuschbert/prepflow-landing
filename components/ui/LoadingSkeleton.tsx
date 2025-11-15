@@ -51,7 +51,7 @@ export function LoadingSkeleton({
 // Specialized skeleton components for common patterns
 export function PageSkeleton() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-4 tablet:p-6">
+    <div className="min-h-screen bg-[#0a0a0a] p-4 lg:p-6">
       <div className="mx-auto max-w-7xl">
         {/* Header skeleton */}
         <div className="mb-8 animate-pulse">
@@ -127,7 +127,7 @@ export function ChartSkeleton() {
 
 export function CardGridSkeleton({ count = 6 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-6">
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
@@ -144,7 +144,7 @@ export function CardGridSkeleton({ count = 6 }: { count?: number }) {
 
 export function StatsGridSkeleton() {
   return (
-    <div className="mb-8 grid grid-cols-1 gap-6 tablet:grid-cols-2 desktop:grid-cols-4">
+    <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
@@ -182,7 +182,7 @@ export function FormSkeleton() {
 export function HeroSkeleton() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-      <div className="mx-auto max-w-7xl px-4 tablet:px-6 desktop:px-8">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="animate-pulse">
           <div className="mx-auto mb-8 h-16 w-2/3 rounded-3xl bg-[#2a2a2a]"></div>
           <div className="mx-auto mb-12 h-6 w-1/2 rounded-xl bg-[#2a2a2a]"></div>

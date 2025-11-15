@@ -1,9 +1,9 @@
 'use client';
 
+import { useNotification } from '@/contexts/NotificationContext';
+import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { useNotification } from '@/contexts/NotificationContext';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { useRecipeBulkOperations } from './useRecipeBulkOperations';
 import { useRecipeDeleteOperations } from './useRecipeDeleteOperations';
@@ -17,6 +17,8 @@ interface UseRecipeActionsProps {
   fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
   setError: (error: string) => void;
   capitalizeRecipeName: (name: string) => string;
+  optimisticallyUpdateRecipes: (updater: (recipes: Recipe[]) => Recipe[]) => void;
+  rollbackRecipes: () => void;
 }
 
 export function useRecipeActions({
@@ -25,14 +27,27 @@ export function useRecipeActions({
   fetchRecipeIngredients,
   setError,
   capitalizeRecipeName,
+  optimisticallyUpdateRecipes,
+  rollbackRecipes,
 }: UseRecipeActionsProps) {
   const router = useRouter();
   const { showError: showErrorNotification } = useNotification();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Use extracted hooks
-  const bulkOps = useRecipeBulkOperations(recipes, fetchRecipes, capitalizeRecipeName);
-  const deleteOps = useRecipeDeleteOperations(fetchRecipes, capitalizeRecipeName);
+  const bulkOps = useRecipeBulkOperations(
+    recipes,
+    fetchRecipes,
+    capitalizeRecipeName,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
+  );
+  const deleteOps = useRecipeDeleteOperations(
+    fetchRecipes,
+    capitalizeRecipeName,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
+  );
   const shareOps = useRecipeShareOperations();
 
   const handleAddRecipe = useCallback(
@@ -72,6 +87,67 @@ export function useRecipeActions({
     [router, showErrorNotification],
   );
 
+  const handleDuplicateRecipe = useCallback(
+    async (recipe: Recipe) => {
+      try {
+        // Fetch recipe ingredients
+        const ingredients = await fetchRecipeIngredients(recipe.id);
+
+        // Create duplicate recipe with "Copy of" prefix
+        const duplicateName = `Copy of ${recipe.name}`;
+        const { data: newRecipe, error: recipeError } = await supabase
+          .from('recipes')
+          .insert([
+            {
+              name: duplicateName,
+              yield: recipe.yield,
+              yield_unit: recipe.yield_unit,
+              description: recipe.description,
+              instructions: recipe.instructions,
+              category: recipe.category,
+            },
+          ])
+          .select()
+          .single();
+
+        if (recipeError) {
+          showErrorNotification(`Failed to duplicate recipe: ${recipeError.message}`);
+          return;
+        }
+
+        // Duplicate recipe ingredients
+        if (ingredients.length > 0 && newRecipe) {
+          const ingredientInserts = ingredients.map(ing => ({
+            recipe_id: newRecipe.id,
+            ingredient_id: ing.ingredient_id,
+            quantity: ing.quantity,
+            unit: ing.unit,
+          }));
+
+          const { error: ingredientsError } = await supabase
+            .from('recipe_ingredients')
+            .insert(ingredientInserts);
+
+          if (ingredientsError) {
+            showErrorNotification(`Failed to duplicate ingredients: ${ingredientsError.message}`);
+            // Still refresh recipes even if ingredients failed
+            await fetchRecipes();
+            return;
+          }
+        }
+
+        await fetchRecipes();
+        setSuccessMessage(`Recipe "${duplicateName}" duplicated successfully`);
+        return newRecipe;
+      } catch (err) {
+        console.error('❌ Error duplicating recipe:', err);
+        showErrorNotification('Failed to duplicate recipe');
+        return null;
+      }
+    },
+    [fetchRecipes, fetchRecipeIngredients, showErrorNotification],
+  );
+
   return {
     successMessage,
     setSuccessMessage,
@@ -80,5 +156,6 @@ export function useRecipeActions({
     ...shareOps,
     handleAddRecipe,
     handleEditFromPreview,
+    handleDuplicateRecipe,
   };
 }

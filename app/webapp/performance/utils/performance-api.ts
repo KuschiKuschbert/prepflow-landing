@@ -3,6 +3,7 @@
  */
 
 import { DateRange } from '../types';
+import { calculatePerformanceScore } from './calculatePerformanceScore';
 
 export async function fetchPerformanceData(dateRange?: DateRange) {
   console.log('🔄 Fetching performance data from /api/performance...', { dateRange });
@@ -36,12 +37,12 @@ export async function fetchPerformanceData(dateRange?: DateRange) {
   });
 
   // API returns { success: true, data: [...], metadata: {...} }
+  const performanceItems = data.data || [];
   const result = {
-    performanceItems: data.data || [],
+    performanceItems,
     metadata: data.metadata || null,
     performanceAlerts: [],
-    performanceScore: 0,
-    lastUpdate: new Date(),
+    performanceScore: calculatePerformanceScore(performanceItems),
   };
 
   console.log('📊 Returning performance data:', {
