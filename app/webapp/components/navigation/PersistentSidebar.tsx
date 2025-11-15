@@ -30,7 +30,7 @@ export function PersistentSidebar() {
 
   return (
     <aside
-      className="fixed top-[var(--header-height-desktop)] bottom-0 left-0 z-40 w-72 md:w-80 lg:w-96 border-r border-[#2a2a2a] bg-[#1f1f1f] transition-all duration-300"
+      className="fixed top-[var(--header-height-desktop)] bottom-0 left-0 z-40 w-72 border-r border-[#2a2a2a] bg-[#1f1f1f] transition-all duration-300 md:w-80 lg:w-96"
       role="navigation"
       aria-label="Main navigation"
     >
