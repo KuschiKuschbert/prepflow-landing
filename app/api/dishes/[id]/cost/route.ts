@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -7,11 +9,17 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const dishId = id;
 
     if (!dishId) {
-      return NextResponse.json({ error: 'Missing dish id' }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Dish ID is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Fetch dish
@@ -21,8 +29,22 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       .eq('id', dishId)
       .single();
 
-    if (dishError || !dish) {
-      return NextResponse.json({ error: 'Dish not found' }, { status: 404 });
+    if (dishError) {
+      logger.error('[Dishes API] Database error fetching dish for cost calculation:', {
+        error: dishError.message,
+        code: (dishError as any).code,
+        context: { endpoint: '/api/dishes/[id]/cost', operation: 'GET', dishId },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(dishError, 404);
+      return NextResponse.json(apiError, { status: apiError.status || 404 });
+    }
+
+    if (!dish) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Dish not found', 'NOT_FOUND', 404, { dishId }),
+        { status: 404 },
+      );
     }
 
     let totalCost = 0;
@@ -121,12 +143,22 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       },
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/dishes/[id]/cost', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

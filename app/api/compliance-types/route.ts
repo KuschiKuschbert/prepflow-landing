@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,27 +17,37 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabaseAdmin.from('compliance_types').select('*').order('name');
 
     if (error) {
-      console.error('Error fetching compliance types:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch compliance types',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Compliance Types API] Database error fetching types:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/compliance-types', operation: 'GET', table: 'compliance_types' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
       success: true,
       data: data || [],
     });
-  } catch (error) {
-    console.error('Compliance types fetch error:', error);
+  } catch (err) {
+    logger.error('[Compliance Types API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/compliance-types', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to fetch compliance types',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -48,19 +60,14 @@ export async function POST(request: NextRequest) {
 
     if (!name) {
       return NextResponse.json(
-        {
-          error: 'Name is required',
-          message: 'Please provide a name for the compliance type',
-        },
+        ApiErrorHandler.createError('Compliance type name is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -76,14 +83,18 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error creating compliance type:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to create compliance type',
-          message: error.message,
+      logger.error('[Compliance Types API] Database error creating type:', {
+        error: error.message,
+        code: (error as any).code,
+        context: {
+          endpoint: '/api/compliance-types',
+          operation: 'POST',
+          table: 'compliance_types',
         },
-        { status: 500 },
-      );
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -91,13 +102,23 @@ export async function POST(request: NextRequest) {
       message: 'Compliance type created successfully',
       data,
     });
-  } catch (error) {
-    console.error('Compliance type creation error:', error);
+  } catch (err) {
+    logger.error('[Compliance Types API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/compliance-types', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to create compliance type',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

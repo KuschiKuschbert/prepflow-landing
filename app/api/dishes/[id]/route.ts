@@ -1,5 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+
+async function updateDishRecipes(
+  dishId: string,
+  recipes: Array<{ recipe_id: string; quantity?: number }>,
+) {
+  await supabaseAdmin.from('dish_recipes').delete().eq('dish_id', dishId);
+  if (recipes.length > 0) {
+    const dishRecipes = recipes.map(r => ({
+      dish_id: dishId,
+      recipe_id: r.recipe_id,
+      quantity: r.quantity || 1,
+    }));
+    const { error } = await supabaseAdmin.from('dish_recipes').insert(dishRecipes);
+    if (error) throw error;
+  }
+}
+
+async function updateDishIngredients(
+  dishId: string,
+  ingredients: Array<{ ingredient_id: string; quantity: number; unit: string }>,
+) {
+  await supabaseAdmin.from('dish_ingredients').delete().eq('dish_id', dishId);
+  if (ingredients.length > 0) {
+    const dishIngredients = ingredients.map(i => ({
+      dish_id: dishId,
+      ingredient_id: i.ingredient_id,
+      quantity: typeof i.quantity === 'string' ? parseFloat(i.quantity) : i.quantity,
+      unit: i.unit,
+    }));
+    const { error } = await supabaseAdmin.from('dish_ingredients').insert(dishIngredients);
+    if (error) throw error;
+  }
+}
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -21,8 +56,22 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       .eq('id', dishId)
       .single();
 
-    if (dishError || !dish) {
-      return NextResponse.json({ error: 'Dish not found' }, { status: 404 });
+    if (dishError) {
+      logger.error('[Dishes API] Database error fetching dish:', {
+        error: dishError.message,
+        code: (dishError as any).code,
+        context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(dishError, 404);
+      return NextResponse.json(apiError, { status: apiError.status || 404 });
+    }
+
+    if (!dish) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Dish not found', 'NOT_FOUND', 404, { dishId }),
+        { status: 404 },
+      );
     }
 
     // Fetch dish recipes
@@ -77,8 +126,24 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       },
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/dishes/[id]', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
 
@@ -90,20 +155,21 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const { dish_name, description, selling_price, recipes, ingredients } = body;
 
     if (!dishId) {
-      return NextResponse.json({ error: 'Missing dish id' }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Dish ID is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
-    // Update dish basic info
-    const updateData: {
-      dish_name?: string;
-      description?: string | null;
-      selling_price?: number;
-    } = {};
-
+    const updateData: { dish_name?: string; description?: string | null; selling_price?: number } =
+      {};
     if (dish_name !== undefined) updateData.dish_name = dish_name.trim();
     if (description !== undefined) updateData.description = description?.trim() || null;
     if (selling_price !== undefined) updateData.selling_price = parseFloat(selling_price);
@@ -116,58 +182,41 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       .single();
 
     if (updateError) {
-      console.error('Error updating dish:', updateError);
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
+      logger.error('[Dishes API] Database error updating dish:', {
+        error: updateError.message,
+        code: (updateError as any).code,
+        context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
-    // Update recipes if provided
     if (recipes !== undefined) {
-      // Delete existing recipes
-      await supabaseAdmin.from('dish_recipes').delete().eq('dish_id', dishId);
-
-      // Insert new recipes
-      if (recipes.length > 0) {
-        const dishRecipes = recipes.map((r: { recipe_id: string; quantity?: number }) => ({
-          dish_id: dishId,
-          recipe_id: r.recipe_id,
-          quantity: r.quantity || 1,
-        }));
-
-        const { error: recipesError } = await supabaseAdmin
-          .from('dish_recipes')
-          .insert(dishRecipes);
-
-        if (recipesError) {
-          console.error('Error updating dish recipes:', recipesError);
-          return NextResponse.json({ error: recipesError.message }, { status: 500 });
-        }
+      try {
+        await updateDishRecipes(dishId, recipes);
+      } catch (recipesError: any) {
+        logger.error('[Dishes API] Database error updating dish recipes:', {
+          error: recipesError.message,
+          code: recipesError.code,
+          context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+        });
+        const apiError = ApiErrorHandler.fromSupabaseError(recipesError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
     }
 
-    // Update ingredients if provided
     if (ingredients !== undefined) {
-      // Delete existing ingredients
-      await supabaseAdmin.from('dish_ingredients').delete().eq('dish_id', dishId);
-
-      // Insert new ingredients
-      if (ingredients.length > 0) {
-        const dishIngredients = ingredients.map(
-          (i: { ingredient_id: string; quantity: number; unit: string }) => ({
-            dish_id: dishId,
-            ingredient_id: i.ingredient_id,
-            quantity: typeof i.quantity === 'string' ? parseFloat(i.quantity) : i.quantity,
-            unit: i.unit,
-          }),
-        );
-
-        const { error: ingredientsError } = await supabaseAdmin
-          .from('dish_ingredients')
-          .insert(dishIngredients);
-
-        if (ingredientsError) {
-          console.error('Error updating dish ingredients:', ingredientsError);
-          return NextResponse.json({ error: ingredientsError.message }, { status: 500 });
-        }
+      try {
+        await updateDishIngredients(dishId, ingredients);
+      } catch (ingredientsError: any) {
+        logger.error('[Dishes API] Database error updating dish ingredients:', {
+          error: ingredientsError.message,
+          code: ingredientsError.code,
+          context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+        });
+        const apiError = ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
     }
 
@@ -176,12 +225,22 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       dish: updatedDish,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/dishes/[id]', method: 'PUT' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -193,19 +252,31 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
     const dishId = id;
 
     if (!dishId) {
-      return NextResponse.json({ error: 'Missing dish id' }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Dish ID is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Delete dish (cascade will handle related records)
     const { error } = await supabaseAdmin.from('dishes').delete().eq('id', dishId);
 
     if (error) {
-      console.error('Error deleting dish:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      logger.error('[Dishes API] Database error deleting dish:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/dishes/[id]', operation: 'DELETE', dishId },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -213,7 +284,23 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       message: 'Dish deleted successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/dishes/[id]', method: 'DELETE' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
