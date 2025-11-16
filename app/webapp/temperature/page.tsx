@@ -10,6 +10,7 @@ import TemperatureLogsTab from './components/TemperatureLogsTab';
 import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
 import { PageHeader } from './components/PageHeader';
 import { TabNavigation } from './components/TabNavigation';
+import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoadingState';
 import { useTemperaturePageData } from './hooks/useTemperaturePageData';
 import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
 
@@ -60,11 +61,13 @@ function TemperatureLogsPageContent() {
 
   useTemperatureWarnings({ allLogs, equipment });
 
-  if (equipment.length === 0) {
+  // Show loading state while fetching equipment
+  if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-4 pb-24 tablet:py-6 tablet:pb-6">
-          {/* Empty state - no skeleton, just dark background */}
+        <div className="tablet:py-6 tablet:pb-6 min-h-screen bg-transparent py-4 pb-24">
+          <PageHeader />
+          <TemperatureLogsLoadingState />
         </div>
       </ResponsivePageContainer>
     );
@@ -72,7 +75,7 @@ function TemperatureLogsPageContent() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-4 pb-24 tablet:py-6 tablet:pb-6">
+      <div className="tablet:py-6 tablet:pb-6 min-h-screen bg-transparent py-4 pb-24">
         <PageHeader />
 
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />

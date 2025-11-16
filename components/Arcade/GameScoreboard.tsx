@@ -31,15 +31,15 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.3 }}
-      className="fixed top-20 right-4 left-4 z-50 max-w-[200px] rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 shadow-xl backdrop-blur-md lg:top-4 lg:right-20 lg:left-auto lg:max-w-none lg:p-4"
+      className="desktop:top-4 desktop:right-20 desktop:left-auto desktop:max-w-none desktop:p-4 fixed top-20 right-4 left-4 z-50 max-w-[200px] rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 shadow-xl backdrop-blur-md"
     >
-      <div className="flex flex-col gap-2 text-fluid-xs lg:text-fluid-sm">
+      <div className="text-fluid-xs desktop:text-fluid-sm flex flex-col gap-2">
         {/* Session Score */}
-        <div className="flex items-center gap-1.5 lg:gap-2">
-          <span className="text-fluid-lg lg:text-fluid-xl">{icon}</span>
+        <div className="desktop:gap-2 flex items-center gap-1.5">
+          <span className="text-fluid-lg desktop:text-fluid-xl">{icon}</span>
           <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 lg:text-fluid-xs">Session</span>
-            <span className="text-fluid-base font-semibold text-[#29E7CD] lg:text-fluid-lg">
+            <span className="desktop:text-fluid-xs text-[10px] text-gray-400">Session</span>
+            <span className="text-fluid-base desktop:text-fluid-lg font-semibold text-[#29E7CD]">
               {sessionScore}
             </span>
           </div>
@@ -47,17 +47,19 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
 
         {/* Global Score */}
         {globalScore !== undefined && (
-          <div className="flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5 lg:gap-2 lg:pt-2">
-            <span className="text-[10px] text-gray-400 lg:text-fluid-xs">Total:</span>
-            <span className="text-fluid-xs font-semibold text-white lg:text-fluid-sm">{globalScore}</span>
+          <div className="desktop:gap-2 desktop:pt-2 flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5">
+            <span className="desktop:text-fluid-xs text-[10px] text-gray-400">Total:</span>
+            <span className="text-fluid-xs desktop:text-fluid-sm font-semibold text-white">
+              {globalScore}
+            </span>
           </div>
         )}
 
         {/* Flames Remaining (variant) */}
         {variant === 'flames' && flamesRemaining !== undefined && (
-          <div className="flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5 lg:gap-2 lg:pt-2">
-            <span className="text-[10px] text-gray-400 lg:text-fluid-xs">Flames:</span>
-            <span className="text-fluid-xs font-semibold text-[#E74C3C] lg:text-fluid-sm">
+          <div className="desktop:gap-2 desktop:pt-2 flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5">
+            <span className="desktop:text-fluid-xs text-[10px] text-gray-400">Flames:</span>
+            <span className="text-fluid-xs desktop:text-fluid-sm font-semibold text-[#E74C3C]">
               {flamesRemaining}
             </span>
           </div>
@@ -65,16 +67,18 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
 
         {/* Time */}
         {time !== undefined && (
-          <div className="flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5 lg:gap-2 lg:pt-2">
-            <span className="text-[10px] text-gray-400 lg:text-fluid-xs">Time:</span>
-            <span className="text-fluid-xs font-semibold text-[#D925C7] lg:text-fluid-sm">{time}s</span>
+          <div className="desktop:gap-2 desktop:pt-2 flex items-center gap-1.5 border-t border-[#2a2a2a] pt-1.5">
+            <span className="desktop:text-fluid-xs text-[10px] text-gray-400">Time:</span>
+            <span className="text-fluid-xs desktop:text-fluid-sm font-semibold text-[#D925C7]">
+              {time}s
+            </span>
           </div>
         )}
 
         {/* Tip Text */}
         {tipText && (
-          <div className="mt-1.5 border-t border-[#2a2a2a] pt-1.5 lg:mt-2 lg:pt-2">
-            <p className="text-[10px] text-gray-500 italic lg:text-fluid-xs">{tipText}</p>
+          <div className="desktop:mt-2 desktop:pt-2 mt-1.5 border-t border-[#2a2a2a] pt-1.5">
+            <p className="desktop:text-fluid-xs text-[10px] text-gray-500 italic">{tipText}</p>
           </div>
         )}
       </div>

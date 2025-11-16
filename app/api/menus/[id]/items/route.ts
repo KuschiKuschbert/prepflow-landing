@@ -6,17 +6,40 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { id } = await context.params;
     const menuId = id;
     const body = await request.json();
-    const { dish_id, category, position } = body;
+    const { dish_id, recipe_id, category, position } = body;
 
-    if (!menuId || !dish_id) {
+    // Must have either dish_id or recipe_id, but not both
+    if (!menuId || (!dish_id && !recipe_id)) {
       return NextResponse.json(
-        { error: 'Missing required fields', message: 'Menu id and dish id are required' },
+        {
+          success: false,
+          error: 'Missing required fields',
+          message: 'Menu id and either dish id or recipe id are required',
+        },
+        { status: 400 },
+      );
+    }
+
+    if (dish_id && recipe_id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Invalid request',
+          message: 'Cannot specify both dish_id and recipe_id',
+        },
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     // If position not provided, get the next position in the category
@@ -33,30 +56,52 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       itemPosition = existingItems && existingItems.length > 0 ? existingItems[0].position + 1 : 0;
     }
 
+    const insertData: {
+      menu_id: string;
+      dish_id?: string;
+      recipe_id?: string;
+      category: string;
+      position: number;
+    } = {
+      menu_id: menuId,
+      category: category || 'Uncategorized',
+      position: itemPosition,
+    };
+
+    if (dish_id) {
+      insertData.dish_id = dish_id;
+    } else if (recipe_id) {
+      insertData.recipe_id = recipe_id;
+    }
+
     const { data: newItem, error: createError } = await supabaseAdmin
       .from('menu_items')
-      .insert({
-        menu_id: menuId,
-        dish_id,
-        category: category || 'Uncategorized',
-        position: itemPosition,
-      })
+      .insert(insertData)
       .select()
       .single();
 
     if (createError) {
-      console.error('Error adding dish to menu:', createError);
-      return NextResponse.json({ error: createError.message }, { status: 500 });
+      console.error('Error adding item to menu:', createError);
+      return NextResponse.json(
+        {
+          success: false,
+          error: createError.message,
+          message: dish_id ? 'Failed to add dish to menu' : 'Failed to add recipe to menu',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       item: newItem,
+      message: dish_id ? 'Dish added to menu successfully' : 'Recipe added to menu successfully',
     });
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json(
       {
+        success: false,
         error: 'Internal server error',
         message: err instanceof Error ? err.message : 'Unknown error',
       },

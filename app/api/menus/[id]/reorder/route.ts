@@ -10,13 +10,24 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     if (!menuId || !items || !Array.isArray(items)) {
       return NextResponse.json(
-        { error: 'Missing required fields', message: 'Menu id and items array are required' },
+        {
+          success: false,
+          error: 'Missing required fields',
+          message: 'Menu id and items array are required',
+        },
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     // Update all items in a transaction-like manner
@@ -37,7 +48,12 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (errors.length > 0) {
       console.error('Error reordering menu items:', errors);
       return NextResponse.json(
-        { error: 'Failed to reorder some items', details: errors },
+        {
+          success: false,
+          error: 'Failed to reorder some items',
+          message: 'Some menu items could not be reordered',
+          details: errors,
+        },
         { status: 500 },
       );
     }
@@ -50,6 +66,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     console.error('Unexpected error:', err);
     return NextResponse.json(
       {
+        success: false,
         error: 'Internal server error',
         message: err instanceof Error ? err.message : 'Unknown error',
       },

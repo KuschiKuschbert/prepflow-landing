@@ -13,11 +13,25 @@ export async function PUT(
     const { category, position } = body;
 
     if (!menuId || !menuItemId) {
-      return NextResponse.json({ error: 'Missing menu id or item id' }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing menu id or item id',
+          message: 'Both menu id and item id are required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     const updateData: {
@@ -38,17 +52,26 @@ export async function PUT(
 
     if (updateError) {
       console.error('Error updating menu item:', updateError);
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: updateError.message,
+          message: 'Failed to update menu item',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       item: updatedItem,
+      message: 'Menu item updated successfully',
     });
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json(
       {
+        success: false,
         error: 'Internal server error',
         message: err instanceof Error ? err.message : 'Unknown error',
       },
@@ -67,11 +90,25 @@ export async function DELETE(
     const menuItemId = itemId;
 
     if (!menuId || !menuItemId) {
-      return NextResponse.json({ error: 'Missing menu id or item id' }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing menu id or item id',
+          message: 'Both menu id and item id are required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     const { error } = await supabaseAdmin
@@ -82,7 +119,14 @@ export async function DELETE(
 
     if (error) {
       console.error('Error deleting menu item:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.message,
+          message: 'Failed to delete menu item',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
@@ -91,6 +135,13 @@ export async function DELETE(
     });
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Internal server error',
+        message: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

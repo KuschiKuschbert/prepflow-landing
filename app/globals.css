@@ -69,7 +69,9 @@
   contain-intrinsic-size: auto 500px;
   /* Prevent layout shift during hydration */
   will-change: margin-left, padding-bottom;
-  transition: margin-left 0.3s ease-in-out, padding-bottom 0s;
+  transition:
+    margin-left 0.3s ease-in-out,
+    padding-bottom 0s;
 }
 
 /* Use custom tablet breakpoint (481px) for medium screens */
@@ -107,7 +109,7 @@
   height: calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top));
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .side-panel-height {
     top: calc(var(--header-height-desktop) + var(--safe-area-inset-top));
     height: calc(100vh - var(--header-height-desktop) - var(--safe-area-inset-top));
@@ -116,8 +118,8 @@
 
 /* Prevent flash of unstyled content (FOUC) */
 /* Ensure navigation components are properly positioned from the start */
-aside[role="navigation"][aria-label="Main navigation"],
-nav[aria-label="Bottom navigation"] {
+aside[role='navigation'][aria-label='Main navigation'],
+nav[aria-label='Bottom navigation'] {
   /* Prevent layout shift during initial render */
   contain: layout style paint;
   /* Ensure proper stacking context */
@@ -315,7 +317,6 @@ nav[aria-label="Bottom navigation"] {
     transform: translate(-20px, 20px) scale(0.95);
   }
 }
-
 
 @keyframes spin-slow {
   from {
@@ -957,7 +958,7 @@ body {
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .adaptive-grid {
     gap: 2rem;
   }
@@ -970,14 +971,14 @@ body {
   padding-right: 1rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 481px) {
   .adaptive-container {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .adaptive-container {
     padding-left: 2rem;
     padding-right: 2rem;

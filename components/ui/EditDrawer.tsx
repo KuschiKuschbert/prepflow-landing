@@ -167,7 +167,7 @@ export function EditDrawer({
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed right-0 top-0 z-[75] h-full ${widthClass} transform bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-[75] h-full ${widthClass} transform bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="dialog"
@@ -184,12 +184,12 @@ export function EditDrawer({
         <div className="flex h-full flex-col">
           {/* Header */}
           <div
-            className="sticky top-0 z-10 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-4 py-3 backdrop-blur-sm lg:px-6 lg:py-4"
+            className="desktop:px-6 desktop:py-4 sticky top-0 z-10 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-4 py-3 backdrop-blur-sm"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <h2 id="edit-drawer-title" className="text-lg font-bold text-white lg:text-xl">
+            <h2 id="edit-drawer-title" className="desktop:text-xl text-lg font-bold text-white">
               {title}
             </h2>
             <button
@@ -205,7 +205,7 @@ export function EditDrawer({
           {/* Scrollable content */}
           <div
             ref={contentRef}
-            className="flex-1 overflow-y-auto px-4 py-4 lg:px-6 lg:py-6"
+            className="desktop:px-6 desktop:py-6 flex-1 overflow-y-auto px-4 py-4"
             style={{
               WebkitOverflowScrolling: 'touch',
               overscrollBehavior: 'contain',
@@ -216,7 +216,7 @@ export function EditDrawer({
 
           {/* Footer */}
           {footer && (
-            <div className="sticky bottom-0 border-t border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3 lg:px-6 lg:py-4">
+            <div className="desktop:px-6 desktop:py-4 sticky bottom-0 border-t border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3">
               {footer}
             </div>
           )}

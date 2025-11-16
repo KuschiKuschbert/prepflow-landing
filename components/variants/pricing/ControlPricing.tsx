@@ -8,13 +8,13 @@ interface PricingProps {
 export function ControlPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm lg:p-16">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+      <div className="desktop:p-16 rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm">
+        <div className="desktop:grid-cols-2 grid items-center gap-12">
           <div>
-            <h3 className="text-fluid-3xl font-bold tracking-tight lg:text-fluid-4xl">
+            <h3 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">
               Get Your Menu Clarity Tool
             </h3>
-            <p className="mt-4 text-fluid-lg text-gray-300">
+            <p className="text-fluid-lg mt-4 text-gray-300">
               Simple, powerful, and designed to give you the insights you need to make better
               decisions.
             </p>
@@ -22,7 +22,9 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
             {/* Refund Policy */}
             <div className="mt-6 rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-4">
               <div className="text-center">
-                <h4 className="mb-2 text-fluid-sm font-semibold text-[#29E7CD]">Our Refund Policy</h4>
+                <h4 className="text-fluid-sm mb-2 font-semibold text-[#29E7CD]">
+                  Our Refund Policy
+                </h4>
                 <p className="text-fluid-sm leading-relaxed text-gray-300">
                   PrepFlow is a digital product with instant access. That said, we want you to feel
                   confident. If PrepFlow isn&apos;t what you expected, you can request a full refund
@@ -64,7 +66,7 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
             </div>
           </div>
           <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center shadow-lg">
-            <p className="mt-2 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-fluid-4xl font-extrabold tracking-tight text-transparent">
+            <p className="text-fluid-4xl mt-2 bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text font-extrabold tracking-tight text-transparent">
               AUD $29
             </p>
             <p className="text-fluid-sm text-gray-500">one-time purchase · Lifetime access</p>
@@ -72,19 +74,21 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-fluid-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25"
+              className="text-fluid-base mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25"
             >
               Start Now — Get Menu Clarity Today
             </a>
-            <p className="mt-4 text-fluid-sm text-gray-500">Secure checkout via Gumroad</p>
-            <p className="mt-2 text-fluid-xs text-gray-400">Not satisfied in 7 days? Full refund.</p>
-            <p className="mt-2 text-fluid-xs text-[#29E7CD]">
+            <p className="text-fluid-sm mt-4 text-gray-500">Secure checkout via Gumroad</p>
+            <p className="text-fluid-xs mt-2 text-gray-400">
+              Not satisfied in 7 days? Full refund.
+            </p>
+            <p className="text-fluid-xs mt-2 text-[#29E7CD]">
               🌍 Global pricing available in USD, EUR, GBP, AUD
             </p>
 
             {/* Trust Indicators */}
             <div className="mt-4 border-t border-gray-600 pt-4">
-              <div className="flex items-center justify-center gap-4 text-fluid-xs text-gray-400">
+              <div className="text-fluid-xs flex items-center justify-center gap-4 text-gray-400">
                 <div className="flex items-center gap-1">
                   <span className="text-green-500">🔒</span>
                   <span>SSL Secure</span>

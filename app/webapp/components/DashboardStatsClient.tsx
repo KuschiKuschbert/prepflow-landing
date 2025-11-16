@@ -89,10 +89,16 @@ export default function DashboardStatsClient() {
         if (!statsResponse.ok || !statsJson?.success) {
           setStatsError(statsJson?.error || 'Failed to load dashboard statistics');
         } else {
-          const newStats = {
+          const newStats: DashboardStatsData = {
             totalIngredients: statsJson.totalIngredients || 0,
             totalRecipes: statsJson.totalRecipes || 0,
             averageDishPrice: statsJson.averageDishPrice || 0,
+            totalMenuDishes: statsJson.totalMenuDishes,
+            recipesReady: statsJson.recipesReady,
+            recipesWithoutCost: statsJson.recipesWithoutCost,
+            ingredientsLowStock: statsJson.ingredientsLowStock,
+            temperatureChecksToday: statsJson.temperatureChecksToday,
+            cleaningTasksPending: statsJson.cleaningTasksPending,
           };
           setStats(newStats);
           cacheData('dashboard_stats', newStats);
@@ -185,7 +191,12 @@ export default function DashboardStatsClient() {
     }
 
     // Prefetch dashboard APIs
-    prefetchApis(['/api/dashboard/stats']);
+    prefetchApis([
+      '/api/dashboard/stats',
+      '/api/dashboard/performance-summary',
+      '/api/dashboard/menu-summary',
+      '/api/dashboard/recipe-readiness',
+    ]);
     fetchDashboardData({ hasPrefetchedData: hasCache });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -232,6 +243,25 @@ export default function DashboardStatsClient() {
 
   // Use temperature warnings hook
   useTemperatureWarnings({ allLogs, equipment });
+
+  // Calculate out of range temperature alerts
+  const today = new Date().toISOString().split('T')[0];
+  const todayLogs = allLogs.filter(log => log.log_date === today);
+  const outOfRangeAlerts = todayLogs.filter(log => {
+    const eq = equipment.find(e => e.location === log.location);
+    if (!eq || eq.min_temp_celsius === null || eq.max_temp_celsius === null) return false;
+    return (
+      log.temperature_celsius < eq.min_temp_celsius || log.temperature_celsius > eq.max_temp_celsius
+    );
+  }).length;
+
+  // Get last check time
+  const lastCheckTime =
+    allLogs.length > 0
+      ? allLogs[0].log_date && allLogs[0].log_time
+        ? `${allLogs[0].log_date}T${allLogs[0].log_time}`
+        : allLogs[0].created_at
+      : undefined;
 
   if (loading) {
     return <PageSkeleton />;

@@ -100,11 +100,13 @@ export function InputDialog({
   const variantStyles = {
     info: {
       icon: 'text-[#29E7CD]',
-      confirm: 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80',
+      confirm:
+        'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80',
     },
     warning: {
       icon: 'text-yellow-400',
-      confirm: 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-500/80 hover:to-orange-500/80',
+      confirm:
+        'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-500/80 hover:to-orange-500/80',
     },
   };
 
@@ -121,7 +123,7 @@ export function InputDialog({
 
       {/* Dialog */}
       <div
-        className="relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 lg:p-6 shadow-2xl"
+        className="desktop:p-6 relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
@@ -139,12 +141,12 @@ export function InputDialog({
         </div>
 
         {/* Title */}
-        <h2 id="dialog-title" className="mb-2 text-center text-fluid-xl font-bold text-white">
+        <h2 id="dialog-title" className="text-fluid-xl mb-2 text-center font-bold text-white">
           {title}
         </h2>
 
         {/* Message */}
-        <p id="dialog-description" className="mb-4 text-center text-fluid-sm text-gray-300">
+        <p id="dialog-description" className="text-fluid-sm mb-4 text-center text-gray-300">
           {message}
         </p>
 
@@ -154,7 +156,7 @@ export function InputDialog({
             ref={inputRef}
             type={type}
             value={value}
-            onChange={(e) => {
+            onChange={e => {
               setValue(e.target.value);
               setError(null); // Clear error on input change
             }}
@@ -163,12 +165,12 @@ export function InputDialog({
             max={max}
             className={`w-full rounded-2xl border ${
               error ? 'border-red-500' : 'border-[#2a2a2a]'
-            } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:outline-none focus:ring-2 focus:ring-[#29E7CD]/20`}
+            } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none`}
             aria-invalid={error ? 'true' : 'false'}
             aria-describedby={error ? 'error-message' : undefined}
           />
           {error && (
-            <p id="error-message" className="mt-2 text-fluid-sm text-red-400" role="alert">
+            <p id="error-message" className="text-fluid-sm mt-2 text-red-400" role="alert">
               {error}
             </p>
           )}

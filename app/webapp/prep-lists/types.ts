@@ -43,3 +43,56 @@ export interface PrepListFormData {
     notes: string;
   }>;
 }
+
+// Menu-based prep list generation types
+export interface IngredientSource {
+  type: 'dish' | 'recipe';
+  id: string;
+  name: string;
+  quantity?: number;
+}
+
+export interface AggregatedIngredient {
+  ingredientId: string;
+  name: string;
+  totalQuantity: number;
+  unit: string;
+  sources: IngredientSource[];
+}
+
+export interface RecipeGroupedItem {
+  recipeId: string;
+  recipeName: string;
+  dishId?: string;
+  dishName?: string;
+  ingredients: Array<{
+    ingredientId: string;
+    name: string;
+    quantity: number;
+    unit: string;
+  }>;
+}
+
+export interface SectionData {
+  sectionId: string | null;
+  sectionName: string;
+  aggregatedIngredients: AggregatedIngredient[];
+  recipeGrouped: RecipeGroupedItem[];
+}
+
+export interface GeneratedPrepListData {
+  success: boolean;
+  menuName: string;
+  menuId: string;
+  sections: SectionData[];
+  unassignedItems?: RecipeGroupedItem[];
+}
+
+export interface Menu {
+  id: string;
+  menu_name: string;
+  description?: string;
+  items_count?: number;
+  created_at: string;
+  updated_at: string;
+}

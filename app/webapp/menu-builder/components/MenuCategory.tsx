@@ -3,7 +3,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Utensils, ChefHat } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { MenuItem } from '../types';
 
@@ -28,6 +28,9 @@ function SortableMenuItem({ item, onRemove }: { item: MenuItem; onRemove: () => 
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const isRecipe = !!item.recipe_id;
+  const isDish = !!item.dish_id;
+
   return (
     <div
       ref={setNodeRef}
@@ -36,10 +39,32 @@ function SortableMenuItem({ item, onRemove }: { item: MenuItem; onRemove: () => 
       {...listeners}
       className="group flex cursor-grab items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50 active:cursor-grabbing"
     >
-      <div className="flex-1">
-        <div className="font-medium text-white">{item.dishes?.dish_name || 'Unknown Dish'}</div>
-        <div className="text-sm text-gray-400">
-          ${item.dishes?.selling_price.toFixed(2) || '0.00'}
+      <div className="flex flex-1 items-center gap-2">
+        {isDish ? (
+          <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" />
+        ) : isRecipe ? (
+          <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
+        ) : null}
+        <div className="flex-1">
+          {isDish ? (
+            <>
+              <div className="font-medium text-white">
+                {item.dishes?.dish_name || 'Unknown Dish'}
+              </div>
+              <div className="text-sm text-gray-400">
+                ${item.dishes?.selling_price.toFixed(2) || '0.00'}
+              </div>
+            </>
+          ) : isRecipe ? (
+            <>
+              <div className="font-medium text-white">{item.recipes?.name || 'Unknown Recipe'}</div>
+              {item.recipes?.yield && (
+                <div className="text-sm text-gray-400">{item.recipes.yield} servings</div>
+              )}
+            </>
+          ) : (
+            <div className="font-medium text-white">Unknown Item</div>
+          )}
         </div>
       </div>
       <button
@@ -76,7 +101,7 @@ export default function MenuCategory({ category, items, onRemoveItem }: MenuCate
         <div className="space-y-2">
           {items.length === 0 ? (
             <div className="py-8 text-center text-sm text-gray-400">
-              Drag dishes here to add them to this category
+              Drag dishes or recipes here to add them to this category
             </div>
           ) : (
             items.map(item => (

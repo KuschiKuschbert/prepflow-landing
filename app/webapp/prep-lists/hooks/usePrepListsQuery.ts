@@ -57,5 +57,6 @@ export function usePrepListsQuery(page: number, pageSize: number, userId: string
       return json.data;
     },
     placeholderData: previousData => previousData,
+    staleTime: 30000, // Consider data fresh for 30 seconds
   });
 }

@@ -2,6 +2,12 @@ export interface DashboardStatsData {
   totalIngredients: number;
   totalRecipes: number;
   averageDishPrice: number;
+  totalMenuDishes?: number;
+  recipesReady?: number;
+  recipesWithoutCost?: number;
+  ingredientsLowStock?: number;
+  temperatureChecksToday?: number;
+  cleaningTasksPending?: number;
 }
 
 export interface TemperatureLog {

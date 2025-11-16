@@ -51,14 +51,14 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.error || 'Failed to save menu');
+        setError(result.error || result.message || 'Failed to save menu. Please try again.');
         setLoading(false);
         return;
       }
 
       onSave();
     } catch (err) {
-      setError('Failed to save menu');
+      setError('Failed to save menu. Please check your connection and try again.');
       setLoading(false);
     }
   };

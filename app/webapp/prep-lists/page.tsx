@@ -5,20 +5,37 @@ import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 import { PrepListForm } from './components/PrepListForm';
 import { PrepListCard } from './components/PrepListCard';
+import { GenerateFromMenuModal } from './components/GenerateFromMenuModal';
+import { PrepListPreview } from './components/PrepListPreview';
 import { usePrepListsQuery } from './hooks/usePrepListsQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import type { KitchenSection, Ingredient, PrepList, PrepListFormData } from './types';
-import { ListChecks } from 'lucide-react';
+import type {
+  KitchenSection,
+  Ingredient,
+  PrepList,
+  PrepListFormData,
+  GeneratedPrepListData,
+} from './types';
+import { ListChecks, ChefHat } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { getCachedData, cacheData } from '@/lib/cache/data-cache';
 
 export default function PrepListsPage() {
   const { t } = useTranslation();
-  const [prepLists, setPrepLists] = useState<PrepList[]>([]);
-  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>([]);
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  // Initialize with cached data for instant display
+  const [prepLists, setPrepLists] = useState<PrepList[]>(() => getCachedData('prep_lists') || []);
+  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>(
+    () => getCachedData('kitchen_sections') || [],
+  );
+  const [ingredients, setIngredients] = useState<Ingredient[]>(
+    () => getCachedData('prep_lists_ingredients') || [],
+  );
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showGenerateModal, setShowGenerateModal] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [generatedData, setGeneratedData] = useState<GeneratedPrepListData | null>(null);
   const [editingPrepList, setEditingPrepList] = useState<PrepList | null>(null);
   const [formData, setFormData] = useState<PrepListFormData>({
     kitchenSectionId: '',
@@ -29,65 +46,77 @@ export default function PrepListsPage() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const userId = 'user-123';
-  const { data: prepListsData, isLoading: listsLoading } = usePrepListsQuery(
-    page,
-    pageSize,
-    userId,
-  );
+  const {
+    data: prepListsData,
+    isLoading: listsLoading,
+    refetch: refetchPrepLists,
+  } = usePrepListsQuery(page, pageSize, userId);
 
+  // Fetch kitchen sections on mount (needed for display)
   useEffect(() => {
+    const fetchKitchenSections = async () => {
+      // Check cache first
+      const cached = getCachedData('kitchen_sections');
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        setKitchenSections(cached);
+        return; // Use cached data, skip API call
+      }
+
+      try {
+        const response = await fetch(`/api/kitchen-sections?userId=${userId}`);
+        const result = await response.json();
+
+        if (result.success) {
+          setKitchenSections(result.data);
+          cacheData('kitchen_sections', result.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch kitchen sections:', err);
+      }
+    };
+
     fetchKitchenSections();
-    fetchIngredients();
   }, []);
 
+  // Lazy load ingredients when form, generate modal, or preview is opened
   useEffect(() => {
-    if (prepListsData?.items) setPrepLists(prepListsData.items as any);
+    if (!showForm && !showGenerateModal && !showPreview) return; // Don't fetch until needed
+
+    const fetchIngredients = async () => {
+      // Check cache first
+      const cached = getCachedData('prep_lists_ingredients');
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        setIngredients(cached);
+        return; // Use cached data, skip API call
+      }
+
+      try {
+        // Only fetch first 50 ingredients for form dropdown
+        const response = await fetch(`/api/ingredients?page=1&pageSize=50`);
+        const result = await response.json();
+
+        if (result.success) {
+          const items = result.data?.items || result.data || [];
+          const ingredientsArray = Array.isArray(items) ? items : [];
+          setIngredients(ingredientsArray);
+          cacheData('prep_lists_ingredients', ingredientsArray);
+        }
+      } catch (err) {
+        console.error('Failed to fetch ingredients:', err);
+      }
+    };
+
+    fetchIngredients();
+  }, [showForm, showGenerateModal, showPreview]);
+
+  useEffect(() => {
+    if (prepListsData?.items) {
+      setPrepLists(prepListsData.items as any);
+      cacheData('prep_lists', prepListsData.items);
+    }
   }, [prepListsData]);
 
-  const fetchPrepLists = async () => {
-    // Disable loading state to prevent skeleton flashes during API errors
-    // setLoading(true);
-    try {
-      const response = await fetch(`/api/prep-lists?userId=${userId}`);
-      const result = await response.json();
-
-      if (result.success) {
-        setPrepLists(result.data);
-      } else {
-        setError(result.message || 'Failed to fetch prep lists');
-      }
-    } catch (err) {
-      setError('Failed to fetch prep lists');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchKitchenSections = async () => {
-    try {
-      const response = await fetch(`/api/kitchen-sections?userId=${userId}`);
-      const result = await response.json();
-
-      if (result.success) {
-        setKitchenSections(result.data);
-      }
-    } catch (err) {
-      console.error('Failed to fetch kitchen sections:', err);
-    }
-  };
-
-  const fetchIngredients = async () => {
-    try {
-      const response = await fetch(`/api/ingredients?userId=${userId}`);
-      const result = await response.json();
-
-      if (result.success) {
-        setIngredients(result.data);
-      }
-    } catch (err) {
-      console.error('Failed to fetch ingredients:', err);
-    }
-  };
+  // Removed fetchPrepLists - using refetchPrepLists from React Query instead
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,7 +151,7 @@ export default function PrepListsPage() {
       const result = await response.json();
 
       if (result.success) {
-        await fetchPrepLists();
+        await refetchPrepLists();
         resetForm();
         setError(null);
       } else {
@@ -160,7 +189,7 @@ export default function PrepListsPage() {
       const result = await response.json();
 
       if (result.success) {
-        await fetchPrepLists();
+        await refetchPrepLists();
       } else {
         setError(result.message || 'Failed to delete prep list');
       }
@@ -180,7 +209,7 @@ export default function PrepListsPage() {
       const result = await response.json();
 
       if (result.success) {
-        await fetchPrepLists();
+        await refetchPrepLists();
       } else {
         setError(result.message || 'Failed to update status');
       }
@@ -220,6 +249,39 @@ export default function PrepListsPage() {
     setEditingPrepList(null);
   };
 
+  const handleGenerateFromMenu = (data: GeneratedPrepListData) => {
+    setGeneratedData(data);
+    setShowPreview(true);
+    setShowGenerateModal(false);
+  };
+
+  const handleSaveBatchPrepLists = async (
+    prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>,
+  ) => {
+    try {
+      setError(null);
+      const response = await fetch('/api/prep-lists/batch-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prepLists, userId }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        await refetchPrepLists();
+        setShowPreview(false);
+        setGeneratedData(null);
+        setError(null);
+      } else {
+        setError(result.message || 'Failed to save prep lists');
+      }
+    } catch (err) {
+      setError('Failed to save prep lists');
+      console.error('Error saving batch prep lists:', err);
+    }
+  };
+
   if (loading || listsLoading) {
     return <PageSkeleton />;
   }
@@ -241,12 +303,21 @@ export default function PrepListsPage() {
               {t('prepLists.subtitle', 'Create and manage kitchen prep lists by section')}
             </p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-          >
-            + {t('prepLists.createPrepList', 'Create Prep List')}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowGenerateModal(true)}
+              className="flex items-center gap-2 rounded-2xl bg-[#29E7CD]/10 px-6 py-3 font-semibold text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20"
+            >
+              <Icon icon={ChefHat} size="md" aria-hidden={true} />
+              {t('prepLists.generateFromMenu', 'Generate from Menu')}
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+            >
+              + {t('prepLists.createPrepList', 'Create Prep List')}
+            </button>
+          </div>
         </div>
 
         {/* Error Message */}
@@ -330,6 +401,28 @@ export default function PrepListsPage() {
               isEditing={!!editingPrepList}
             />
           </div>
+        )}
+
+        {/* Generate from Menu Modal */}
+        {showGenerateModal && (
+          <GenerateFromMenuModal
+            onClose={() => setShowGenerateModal(false)}
+            onGenerate={handleGenerateFromMenu}
+          />
+        )}
+
+        {/* Prep List Preview */}
+        {showPreview && generatedData && (
+          <PrepListPreview
+            data={generatedData}
+            kitchenSections={kitchenSections}
+            ingredients={ingredients}
+            onClose={() => {
+              setShowPreview(false);
+              setGeneratedData(null);
+            }}
+            onSave={handleSaveBatchPrepLists}
+          />
         )}
       </div>
     </ResponsivePageContainer>

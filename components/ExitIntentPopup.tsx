@@ -146,7 +146,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
       <div
         ref={popupRef}
-        className="animate-in slide-in-from-bottom-4 relative w-full max-w-md rounded-3xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-6 lg:p-8 shadow-2xl duration-300"
+        className="animate-in slide-in-from-bottom-4 desktop:p-8 relative w-full max-w-md rounded-3xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-6 shadow-2xl duration-300"
       >
         {/* Close button */}
         <button
@@ -166,8 +166,8 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
 
         {isSuccess ? (
           <div className="text-center">
-            <div className="mb-4 text-fluid-4xl">🎉</div>
-            <h3 className="mb-2 text-fluid-2xl font-bold text-[#29E7CD]">Don&apos;t go yet!</h3>
+            <div className="text-fluid-4xl mb-4">🎉</div>
+            <h3 className="text-fluid-2xl mb-2 font-bold text-[#29E7CD]">Don&apos;t go yet!</h3>
             <p className="mb-4 text-gray-300">
               We&apos;ve sent the sample dashboard to your email.
             </p>
@@ -177,8 +177,8 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
           <>
             {/* Header */}
             <div className="mb-6 text-center">
-              <div className="mb-3 text-fluid-4xl">🚨</div>
-              <h3 className="mb-2 text-fluid-2xl font-bold text-white">Wait! Before you go...</h3>
+              <div className="text-fluid-4xl mb-3">🚨</div>
+              <h3 className="text-fluid-2xl mb-2 font-bold text-white">Wait! Before you go...</h3>
               <p className="text-gray-300">
                 Get your free sample dashboard and see exactly how PrepFlow can transform your menu
                 profitability.
@@ -190,7 +190,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
               <div>
                 <label
                   htmlFor="popup-name"
-                  className="mb-2 block text-fluid-sm font-medium text-gray-300"
+                  className="text-fluid-sm mb-2 block font-medium text-gray-300"
                 >
                   Your name *
                 </label>
@@ -208,7 +208,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
                   aria-describedby={errors.name ? 'popup-name-error' : undefined}
                 />
                 {errors.name && (
-                  <p id="popup-name-error" className="mt-1 text-fluid-sm text-red-400">
+                  <p id="popup-name-error" className="text-fluid-sm mt-1 text-red-400">
                     {errors.name}
                   </p>
                 )}
@@ -217,7 +217,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
               <div>
                 <label
                   htmlFor="popup-email"
-                  className="mb-2 block text-fluid-sm font-medium text-gray-300"
+                  className="text-fluid-sm mb-2 block font-medium text-gray-300"
                 >
                   Your email *
                 </label>
@@ -235,7 +235,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
                   aria-describedby={errors.email ? 'popup-email-error' : undefined}
                 />
                 {errors.email && (
-                  <p id="popup-email-error" className="mt-1 text-fluid-sm text-red-400">
+                  <p id="popup-email-error" className="text-fluid-sm mt-1 text-red-400">
                     {errors.email}
                   </p>
                 )}
@@ -244,7 +244,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 text-fluid-base font-semibold text-white shadow-lg transition-all duration-300 ${
+                className={`text-fluid-base w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 ${
                   isSubmitting
                     ? 'cursor-not-allowed opacity-50'
                     : 'hover:shadow-xl hover:shadow-[#29E7CD]/25'
@@ -282,10 +282,12 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
 
             {/* Footer */}
             <div className="mt-6 text-center">
-              <p className="text-fluid-xs text-gray-500">No spam. No lock-in. Your data stays private.</p>
+              <p className="text-fluid-xs text-gray-500">
+                No spam. No lock-in. Your data stays private.
+              </p>
               <button
                 onClick={onClose}
-                className="mt-3 text-fluid-sm text-gray-400 underline transition-colors hover:text-white"
+                className="text-fluid-sm mt-3 text-gray-400 underline transition-colors hover:text-white"
               >
                 No thanks, I&apos;ll continue browsing
               </button>

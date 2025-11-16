@@ -16,7 +16,11 @@ export const PREFETCH_MAP: Record<string, string[]> = {
   '/webapp/par-levels': [],
   '/webapp/order-lists': [],
   '/webapp/dish-sections': [],
-  '/webapp/prep-lists': [],
+  '/webapp/prep-lists': [
+    '/api/prep-lists?userId=user-123&page=1&pageSize=10',
+    '/api/kitchen-sections',
+    '/api/ingredients?page=1&pageSize=50',
+  ],
   '/webapp/ai-specials': [],
   '/webapp/setup': [],
 };

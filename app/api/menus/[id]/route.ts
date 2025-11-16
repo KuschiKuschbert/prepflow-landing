@@ -7,11 +7,25 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const menuId = id;
 
     if (!menuId) {
-      return NextResponse.json({ error: 'Missing menu id' }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing menu id',
+          message: 'Menu id is required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     // Fetch menu
@@ -22,16 +36,24 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       .single();
 
     if (menuError || !menu) {
-      return NextResponse.json({ error: 'Menu not found' }, { status: 404 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Menu not found',
+          message: 'The requested menu could not be found',
+        },
+        { status: 404 },
+      );
     }
 
-    // Fetch menu items with dishes
+    // Fetch menu items with dishes and recipes
     const { data: menuItems, error: itemsError } = await supabaseAdmin
       .from('menu_items')
       .select(
         `
         id,
         dish_id,
+        recipe_id,
         category,
         position,
         dishes (
@@ -39,6 +61,12 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
           dish_name,
           description,
           selling_price
+        ),
+        recipes (
+          id,
+          name,
+          description,
+          yield
         )
       `,
       )
@@ -48,7 +76,14 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
     if (itemsError) {
       console.error('Error fetching menu items:', itemsError);
-      return NextResponse.json({ error: itemsError.message }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: itemsError.message,
+          message: 'Failed to fetch menu items',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
@@ -60,7 +95,14 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     });
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Internal server error',
+        message: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -72,11 +114,25 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const { menu_name, description } = body;
 
     if (!menuId) {
-      return NextResponse.json({ error: 'Missing menu id' }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing menu id',
+          message: 'Menu id is required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     const updateData: {
@@ -96,17 +152,26 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     if (updateError) {
       console.error('Error updating menu:', updateError);
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: updateError.message,
+          message: 'Failed to update menu',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       menu: updatedMenu,
+      message: 'Menu updated successfully',
     });
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json(
       {
+        success: false,
         error: 'Internal server error',
         message: err instanceof Error ? err.message : 'Unknown error',
       },
@@ -121,11 +186,25 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
     const menuId = id;
 
     if (!menuId) {
-      return NextResponse.json({ error: 'Missing menu id' }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing menu id',
+          message: 'Menu id is required',
+        },
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database connection not available',
+          message: 'Database connection could not be established',
+        },
+        { status: 500 },
+      );
     }
 
     // Delete menu (cascade will handle menu_items)
@@ -133,7 +212,14 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
 
     if (error) {
       console.error('Error deleting menu:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.message,
+          message: 'Failed to delete menu',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
@@ -142,6 +228,13 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
     });
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Internal server error',
+        message: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }

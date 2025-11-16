@@ -18,11 +18,14 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Error fetching menus:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.message,
+          message: 'Failed to fetch menus',
+        },
+        { status: 500 },
+      );
     }
 
     // Fetch menu items count for each menu
@@ -47,7 +50,14 @@ export async function GET(request: NextRequest) {
     });
   } catch (err) {
     console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Internal server error',
+        message: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -78,17 +88,26 @@ export async function POST(request: NextRequest) {
 
     if (createError) {
       console.error('Error creating menu:', createError);
-      return NextResponse.json({ error: createError.message }, { status: 500 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: createError.message,
+          message: 'Failed to create menu',
+        },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({
       success: true,
       menu: newMenu,
+      message: 'Menu created successfully',
     });
   } catch (err) {
     console.error('Unexpected error:', err);
     return NextResponse.json(
       {
+        success: false,
         error: 'Internal server error',
         message: err instanceof Error ? err.message : 'Unknown error',
       },

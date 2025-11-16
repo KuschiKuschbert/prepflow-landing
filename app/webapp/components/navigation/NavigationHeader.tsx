@@ -3,13 +3,15 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import AutosaveGlobalIndicator from '../AutosaveGlobalIndicator';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { BrandMark } from '@/components/BrandMark';
 import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { useSession } from 'next-auth/react';
 import { Search } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 interface NavigationHeaderProps {
   className?: string;
@@ -57,6 +59,29 @@ export function NavigationHeader({
   const userEmail = session?.user?.email;
   const userName = session?.user?.name || userEmail?.split('@')[0];
 
+  // Auto-hide header on mobile/tablet when scrolling down (not desktop)
+  // Uses custom breakpoint: desktop = 1025px+ (from tailwind.config.ts)
+  const { direction, isAtTop } = useScrollDirection();
+  const isDesktop = useMediaQuery('(min-width: 1025px)'); // Match custom desktop breakpoint
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    // Always show on desktop (1025px+)
+    if (isDesktop) {
+      setIsVisible(true);
+      return;
+    }
+
+    // Auto-hide on mobile/tablet (< 1025px): show at top, hide on scroll down, show on scroll up
+    if (isAtTop) {
+      setIsVisible(true);
+    } else if (direction === 'down') {
+      setIsVisible(false);
+    } else if (direction === 'up') {
+      setIsVisible(true);
+    }
+  }, [direction, isAtTop, isDesktop]);
+
   return (
     <header
       role="banner"
@@ -72,11 +97,17 @@ export function NavigationHeader({
         'pt-[var(--safe-area-inset-top)]',
         'h-[var(--header-height-mobile)]',
         'desktop:h-[var(--header-height-desktop)]',
+        // Auto-hide transition only on mobile/tablet (< 1025px)
+        !isDesktop && 'transition-transform duration-300 ease-in-out',
         className,
       )}
+      style={{
+        // Only apply transform on mobile/tablet (< 1025px)
+        transform: !isDesktop && !isVisible ? 'translateY(-100%)' : 'translateY(0)',
+      }}
     >
-      <div className="flex items-center justify-between px-3 py-2 desktop:px-4">
-        <div className="flex items-center space-x-2 desktop:space-x-3">
+      <div className="desktop:px-4 flex items-center justify-between px-3 py-2">
+        <div className="desktop:space-x-3 flex items-center space-x-2">
           <div className="flex items-center space-x-2">
             <Link
               href="/webapp"
@@ -103,7 +134,7 @@ export function NavigationHeader({
                 onMouseLeave={handleLogoMouseLeave}
               />
             </Link>
-            <Link href="/webapp" className="hidden desktop:inline">
+            <Link href="/webapp" className="desktop:inline hidden">
               <span className="text-lg font-semibold text-white">PrepFlow</span>
             </Link>
             <AutosaveGlobalIndicator />
@@ -131,7 +162,7 @@ export function NavigationHeader({
             </>
           )}
         </div>
-        <div className="flex items-center space-x-2 desktop:space-x-3">
+        <div className="desktop:space-x-3 flex items-center space-x-2">
           <button
             onClick={onSearchClick}
             className={cn(
@@ -149,7 +180,7 @@ export function NavigationHeader({
             <Icon icon={Search} size="md" className="text-gray-400" aria-hidden={true} />
           </button>
           <NavbarStats />
-          <div className="hidden items-center space-x-2 desktop:flex">
+          <div className="desktop:flex hidden items-center space-x-2">
             {userName && (
               <span
                 className="text-xs text-gray-400"

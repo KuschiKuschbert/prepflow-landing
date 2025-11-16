@@ -53,12 +53,14 @@ export function HeroContent({ t, handleEngagement, variant, children }: HeroCont
 
   return (
     <div>
-      <h1 className="text-fluid-4xl font-extrabold tracking-tight md:text-fluid-4xl lg:text-fluid-4xl">
+      <h1 className="text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-extrabold tracking-tight">
         <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
           {getTitle()}
         </span>
       </h1>
-      <p className="mt-6 text-fluid-lg leading-8 text-gray-300 lg:text-fluid-xl">{getSubtitle()}</p>
+      <p className="text-fluid-lg desktop:text-fluid-xl mt-6 leading-8 text-gray-300">
+        {getSubtitle()}
+      </p>
       {children}
     </div>
   );

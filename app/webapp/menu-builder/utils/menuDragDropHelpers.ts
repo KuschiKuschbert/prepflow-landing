@@ -18,12 +18,52 @@ export async function addDishToMenu(
       }),
     });
 
+    const result = await response.json();
+
     if (response.ok) {
       await onMenuDataReload();
       onStatisticsUpdate();
+    } else {
+      console.error('Failed to add dish to menu:', result.error || result.message);
+      // Show user-friendly error
+      alert(`Failed to add dish: ${result.error || result.message || 'Unknown error'}`);
     }
   } catch (err) {
     console.error('Failed to add dish to menu:', err);
+    alert('Failed to add dish. Please check your connection and try again.');
+  }
+}
+
+export async function addRecipeToMenu(
+  menuId: string,
+  recipeId: string,
+  category: string,
+  onMenuDataReload: () => Promise<void>,
+  onStatisticsUpdate: () => void,
+) {
+  try {
+    const response = await fetch(`/api/menus/${menuId}/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipe_id: recipeId,
+        category,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      await onMenuDataReload();
+      onStatisticsUpdate();
+    } else {
+      console.error('Failed to add recipe to menu:', result.error || result.message);
+      // Show user-friendly error
+      alert(`Failed to add recipe: ${result.error || result.message || 'Unknown error'}`);
+    }
+  } catch (err) {
+    console.error('Failed to add recipe to menu:', err);
+    alert('Failed to add recipe. Please check your connection and try again.');
   }
 }
 
@@ -35,6 +75,7 @@ export async function reorderMenuItems(
   overId: string,
   setMenuItems: (items: MenuItem[]) => void,
   onStatisticsUpdate: () => void,
+  onMenuDataReload: () => Promise<void>,
 ) {
   const categoryItems = menuItems
     .filter(item => item.category === activeItem.category)
@@ -64,12 +105,20 @@ export async function reorderMenuItems(
       }),
     });
 
+    const result = await response.json();
+
     if (response.ok) {
       const otherItems = menuItems.filter(item => item.category !== activeItem.category);
       setMenuItems([...otherItems, ...updatedItems]);
       onStatisticsUpdate();
+    } else {
+      console.error('Failed to reorder items:', result.error || result.message);
+      // Revert the UI change on error
+      await onMenuDataReload();
     }
   } catch (err) {
     console.error('Failed to reorder items:', err);
+    // Revert the UI change on error
+    await onMenuDataReload();
   }
 }

@@ -112,7 +112,9 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6 text-center"
           >
-            <h1 className="mb-2 text-fluid-4xl font-extrabold lg:text-fluid-4xl">🍅 Tomato Toss!</h1>
+            <h1 className="text-fluid-4xl desktop:text-fluid-4xl mb-2 font-extrabold">
+              🍅 Tomato Toss!
+            </h1>
             <p className="text-fluid-lg text-gray-300">Let it all out, Chef — aim for the wall.</p>
           </motion.div>
 
@@ -124,7 +126,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             transition={{ delay: 0.3 }}
             onClick={handleWallClick}
             onTouchEnd={handleWallTouch}
-            className="relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/40 shadow-2xl backdrop-blur-sm lg:h-[500px]"
+            className="desktop:h-[500px] relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/40 shadow-2xl backdrop-blur-sm"
           >
             {/* Splatters */}
             {splatters.map(splatter => (
@@ -175,7 +177,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
               return (
                 <motion.div
                   key={tomato.id}
-                  className="absolute text-fluid-4xl"
+                  className="text-fluid-4xl absolute"
                   style={{
                     left: `${pos.x}px`,
                     top: `${pos.y}px`,
@@ -194,7 +196,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
                 animate={{ opacity: 1 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <p className="rounded-xl bg-[#2a2a2a]/80 px-6 py-3 text-fluid-lg font-semibold text-white backdrop-blur-sm">
+                <p className="text-fluid-lg rounded-xl bg-[#2a2a2a]/80 px-6 py-3 font-semibold text-white backdrop-blur-sm">
                   Click or tap anywhere to throw!
                 </p>
               </motion.div>
@@ -224,7 +226,9 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
               className="mt-6 space-y-4"
             >
               <div className="rounded-xl border border-[#D925C7] bg-[#D925C7]/10 px-6 py-4">
-                <p className="text-fluid-lg font-semibold text-[#D925C7]">Chef! Get back to work! 🔪</p>
+                <p className="text-fluid-lg font-semibold text-[#D925C7]">
+                  Chef! Get back to work! 🔪
+                </p>
               </div>
             </motion.div>
           )}

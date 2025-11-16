@@ -22,17 +22,17 @@ export function DashboardSection({
   className = '',
 }: DashboardSectionProps) {
   return (
-    <section className={`mb-6 lg:mb-8 xl:mb-10 large-desktop:mb-12 ${className}`}>
+    <section className={`desktop:mb-8 large-desktop:mb-10 mb-6 xl:mb-12 ${className}`}>
       {(title || subtitle || actions) && (
-        <div className="mb-4 lg:mb-6 xl:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="desktop:mb-6 large-desktop:mb-8 desktop:flex-row desktop:items-center desktop:justify-between mb-4 flex flex-col gap-4">
           <div>
             {title && (
-              <h2 className="text-fluid-xl lg:text-fluid-2xl xl:text-fluid-3xl font-bold text-white mb-2">
+              <h2 className="text-fluid-xl desktop:text-fluid-2xl large-desktop:text-fluid-3xl mb-2 font-bold text-white">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-fluid-sm lg:text-fluid-base text-gray-400">{subtitle}</p>
+              <p className="text-fluid-sm desktop:text-fluid-base text-gray-400">{subtitle}</p>
             )}
           </div>
           {actions && <div className="flex items-center gap-2">{actions}</div>}

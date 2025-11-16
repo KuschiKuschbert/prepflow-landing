@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { MenuItem } from '../types';
-import { addDishToMenu, reorderMenuItems } from '../utils/menuDragDropHelpers';
+import { addDishToMenu, addRecipeToMenu, reorderMenuItems } from '../utils/menuDragDropHelpers';
 
 interface UseMenuDragDropProps {
   menuId: string;
@@ -38,6 +38,14 @@ export function useMenuDragDrop({
       return;
     }
 
+    // Handle adding recipe from palette
+    if (active.data.current?.type === 'recipe' && over.data.current?.type === 'category') {
+      const recipeId = active.id as string;
+      const category = over.data.current.category as string;
+      await addRecipeToMenu(menuId, recipeId, category, onMenuDataReload, onStatisticsUpdate);
+      return;
+    }
+
     // Handle reordering within category
     if (active.data.current?.type === 'menu-item' && over.data.current?.type === 'menu-item') {
       const activeItem = menuItems.find(item => item.id === active.id);
@@ -53,6 +61,7 @@ export function useMenuDragDrop({
         over.id as string,
         setMenuItems,
         onStatisticsUpdate,
+        onMenuDataReload,
       );
     }
   };

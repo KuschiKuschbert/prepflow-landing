@@ -1,4 +1,4 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -46,20 +46,21 @@ export async function GET() {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
-    const supabaseAdmin = createSupabaseAdmin();
     if (!supabaseAdmin) {
       return NextResponse.json(
         {
+          success: false,
           error: 'Database connection not available',
           message: 'Supabase admin client could not be initialized',
+          tablesExist: false,
         },
         { status: 500 },
       );
     }
 
-    // Check if dishes table exists
+    // Check if dishes table exists (primary table for menu builder)
     const { data, error } = await supabaseAdmin.from('dishes').select('id').limit(1);
 
     if (error && error.code === '42P01') {
@@ -81,14 +82,39 @@ export async function POST(request: NextRequest) {
     if (error) {
       return NextResponse.json(
         {
+          success: false,
           error: 'Database error',
           message: error.message,
+          tablesExist: false,
         },
         { status: 500 },
       );
     }
 
-    // Tables exist
+    // Check other required tables
+    const requiredTables = ['menus', 'menu_items', 'dish_recipes', 'dish_ingredients'];
+    const missingTables: string[] = [];
+
+    for (const table of requiredTables) {
+      const { error: tableError } = await supabaseAdmin.from(table).select('id').limit(1);
+      if (tableError && tableError.code === '42P01') {
+        missingTables.push(table);
+      }
+    }
+
+    if (missingTables.length > 0) {
+      return NextResponse.json({
+        success: false,
+        message: 'Some menu builder tables are missing',
+        tablesExist: false,
+        missingTables,
+        instructions: [
+          'Some required tables are missing. Please run the migration SQL in your Supabase SQL Editor.',
+        ],
+      });
+    }
+
+    // All tables exist
     return NextResponse.json({
       success: true,
       message: 'Menu builder tables already exist',
@@ -98,8 +124,10 @@ export async function POST(request: NextRequest) {
     console.error('Unexpected error:', err);
     return NextResponse.json(
       {
+        success: false,
         error: 'Internal server error',
         message: err instanceof Error ? err.message : 'Unknown error',
+        tablesExist: false,
       },
       { status: 500 },
     );

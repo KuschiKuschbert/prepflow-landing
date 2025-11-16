@@ -156,7 +156,7 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   return (
     <div
       ref={warningRef}
-      className={`fixed right-0 left-0 z-[45] w-full border-b backdrop-blur-sm ${styles.container} top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] lg:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] transition-all duration-200`}
+      className={`fixed right-0 left-0 z-[45] w-full border-b backdrop-blur-sm ${styles.container} desktop:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] transition-all duration-200`}
       style={{ pointerEvents: 'auto' }}
     >
       <div className="mx-auto max-w-7xl px-4 py-3">
@@ -175,7 +175,7 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
                   warning.action?.onClick();
                   removeWarning(warning.id);
                 }}
-                className={`rounded-lg px-3 py-1.5 text-fluid-xs font-medium transition-colors duration-200 focus:ring-2 focus:ring-white/20 focus:outline-none ${styles.button}`}
+                className={`text-fluid-xs rounded-lg px-3 py-1.5 font-medium transition-colors duration-200 focus:ring-2 focus:ring-white/20 focus:outline-none ${styles.button}`}
               >
                 {warning.action.label}
               </button>

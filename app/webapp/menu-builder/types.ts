@@ -10,7 +10,8 @@ export interface Menu {
 export interface MenuItem {
   id: string;
   menu_id: string;
-  dish_id: string;
+  dish_id?: string;
+  recipe_id?: string;
   category: string;
   position: number;
   dishes?: {
@@ -19,12 +20,21 @@ export interface MenuItem {
     description?: string;
     selling_price: number;
   };
+  recipes?: {
+    id: string;
+    name: string;
+    description?: string;
+    yield?: number;
+  };
 }
 
 export interface MenuStatistics {
+  total_items: number;
   total_dishes: number;
+  total_recipes: number;
   total_cogs: number;
   total_revenue: number;
+  gross_profit: number;
   average_profit_margin: number;
   food_cost_percent: number;
 }
@@ -34,4 +44,14 @@ export interface Dish {
   dish_name: string;
   description?: string;
   selling_price: number;
+}
+
+export interface Recipe {
+  id: string;
+  name: string;
+  description?: string;
+  yield?: number;
+  yield_unit?: string;
+  category?: string;
+  instructions?: string;
 }

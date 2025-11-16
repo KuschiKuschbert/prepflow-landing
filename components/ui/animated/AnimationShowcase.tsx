@@ -23,14 +23,14 @@ export function AnimationShowcase() {
     <div className="space-y-8 p-6">
       {/* Header */}
       <AnimatedDiv animation="fadeInDown" className="text-center">
-        <h1 className="mb-4 text-fluid-4xl font-bold text-white">🎨 Modern Animation System</h1>
+        <h1 className="text-fluid-4xl mb-4 font-bold text-white">🎨 Modern Animation System</h1>
         <p className="text-fluid-lg text-gray-400">
           Subtle, performant animations that enhance user experience
         </p>
       </AnimatedDiv>
 
       {/* Staggered Cards */}
-      <StaggeredContainer className="grid grid-cols-1 gap-6 lg:grid-cols-2 large-desktop:grid-cols-3">
+      <StaggeredContainer className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-6">
         <AnimatedCard
           title="Performance Optimized"
           description="All animations use CSS transforms and opacity for 60fps performance"

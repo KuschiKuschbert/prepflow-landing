@@ -10,7 +10,9 @@ import { addStat, addSessionStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { throwConfetti } from '@/hooks/useConfetti';
 
 export const useKitchenFireGame = () => {
-  const [flames, setFlames] = useState(() => Math.floor(Math.random() * 8) + 8);
+  // Initialize with fixed value to prevent hydration mismatch
+  // Random value will be set on client after mount
+  const [flames, setFlames] = useState(12);
   const [extinguished, setExtinguished] = useState(false);
   const [playTime, setPlayTime] = useState(0);
   const [alertShown, setAlertShown] = useState(false);
@@ -20,6 +22,11 @@ export const useKitchenFireGame = () => {
 
   const playTimeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const sounds = useKitchenFireSounds();
+
+  // Set random flames value after mount to prevent hydration mismatch
+  useEffect(() => {
+    setFlames(Math.floor(Math.random() * 8) + 8);
+  }, []);
 
   // Check for reduced motion preference
   useEffect(() => {

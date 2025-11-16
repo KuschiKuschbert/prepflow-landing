@@ -400,17 +400,18 @@ mobile/                 # React Native app (future)
 - **Table Rows:** `transition-colors hover:bg-[#2a2a2a]/20`
 - **Table Cells:** `px-6 py-4 text-sm text-white` (or `text-gray-300` for secondary content)
 - **Pagination:** Use `TablePagination` component from `components/ui/TablePagination.tsx` - place at both top and bottom of tables
-- **Responsive:** Tables use `lg:` (1024px) breakpoint - mobile/tablet (<1024px) shows card layout, desktop (≥1024px) shows table
+- **Responsive:** Tables use `desktop:` (1025px) breakpoint - mobile/tablet (<1025px) shows card layout, desktop (≥1025px) shows table
 - **Progress Bars:** Gradient bars for visual data representation
 - **Chips:** `rounded-full` with `bg-[#29E7CD]/10` and `border border-[#29E7CD]/20`
 
 **Standard Table Structure:**
+
 ```tsx
 <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
   <table className="min-w-full divide-y divide-[#2a2a2a]">
     <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
       <tr>
-        <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
           Header
         </th>
       </tr>
@@ -425,6 +426,7 @@ mobile/                 # React Native app (future)
 ```
 
 **Pagination Pattern:**
+
 ```tsx
 <TablePagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} className="mb-4" />
 <TableComponent data={paginatedData} />
@@ -1243,70 +1245,81 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 
 ### **Responsive Design**
 
-- **Breakpoints:** Mobile-first approach with Tailwind breakpoints
-- **Primary Breakpoint:** `lg:` (1024px) - Desktop layout starts at 1024px
-- **Tablet Behavior:** Tablets (768px-1023px) use mobile layout for better touch experience
-- **Mobile Layout:** Below `lg:` (1024px) → Mobile layout (phones + tablets)
-- **Desktop Layout:** `lg:` and above (1024px+) → Desktop layout
+- **Breakpoints:** Mobile-first approach with **CUSTOM** Tailwind breakpoints (standard sm/md/lg are DISABLED)
+- **Primary Breakpoint:** `desktop:` (1025px) - Desktop layout starts at 1025px
+- **Tablet Behavior:** Tablets (481px-1024px) use mobile layout for better touch experience
+- **Mobile Layout:** Below `desktop:` (1025px) → Mobile layout (phones + tablets)
+- **Desktop Layout:** `desktop:` and above (1025px+) → Desktop layout
 - **Touch Targets:** Minimum 44px for interactive elements
 - **Navigation:** Mobile-friendly hamburger menu with backdrop blur
 - **Forms:** Touch-optimized input fields with proper spacing
 
-#### **Tailwind Breakpoint System**
+#### **Custom Breakpoint System (MANDATORY)**
 
-| Breakpoint | Min Width | Usage |
-|------------|-----------|-------|
-| `sm:` | 640px | Small tablets, large phones |
-| `md:` | 768px | Tablets, small laptops |
-| `lg:` | 1024px | **Primary breakpoint** - Desktop starts here |
-| `xl:` | 1280px | Large desktops |
-| `2xl:` | 1536px | Extra-large desktops, ultra-wide screens |
+**🚨 CRITICAL:** Standard Tailwind breakpoints (`sm:`, `md:`, `lg:`) are **DISABLED** and will not work. Always use the custom breakpoints below.
+
+| Breakpoint         | Min Width | Usage                                                        |
+| ------------------ | --------- | ------------------------------------------------------------ |
+| **Base (default)** | 0-480px   | Mobile-first styles (no prefix)                              |
+| `tablet:`          | 481px     | Small tablets and up (481px-1024px)                          |
+| `desktop:`         | 1025px    | **Primary breakpoint** - Desktop starts here (1025px-1439px) |
+| `large-desktop:`   | 1440px    | Large desktop screens (1440px-1919px)                        |
+| `xl:`              | 1920px    | Extra-large desktop (1920px-2559px)                          |
+| `2xl:`             | 2560px    | Ultra-wide screens (≥2560px)                                 |
 
 **Breakpoint Strategy:**
-- **Base (default):** Mobile-first styles (0-639px)
-- **sm:** Small tablets and large phones (640px+)
-- **md:** Tablets and small laptops (768px+)
-- **lg:** **Primary desktop breakpoint** (1024px+) - Most desktop layouts start here
-- **xl:** Large desktops (1280px+) - Enhanced spacing and larger grids
-- **2xl:** Extra-large displays (1536px+) - Maximum content width and spacing
+
+- **Base (default):** Mobile-first styles (0-480px) - no prefix needed
+- **tablet:** Small tablets and large phones (481px+) - replaces `sm:` and `md:`
+- **desktop:** **Primary desktop breakpoint** (1025px+) - replaces `lg:` - Most desktop layouts start here
+- **large-desktop:** Large desktop screens (1440px+) - replaces some `xl:` usage
+- **xl:** Extra-large desktop (1920px+) - for very large displays
+- **2xl:** Ultra-wide displays (2560px+) - maximum content width and spacing
+
+**⚠️ IMPORTANT:** Standard Tailwind breakpoints (`sm:`, `md:`, `lg:`) are **DISABLED** in `tailwind.config.ts`. Using them will have no effect. Always use the custom breakpoints above.
 
 #### **Responsive Patterns**
 
 **Table Responsive Pattern:**
-- Mobile/Tablet: `block lg:hidden` for card layouts
-- Desktop: `hidden lg:block` for table layouts
+
+- Mobile/Tablet: `block desktop:hidden` for card layouts
+- Desktop: `hidden desktop:block` for table layouts
 
 **Grid Patterns:**
+
 - Single column mobile: `grid-cols-1`
-- Two columns tablet: `md:grid-cols-2`
-- Three columns desktop: `lg:grid-cols-3`
-- Four columns large desktop: `xl:grid-cols-4`
-- Five columns extra-large: `2xl:grid-cols-5`
-- Example: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`
+- Two columns tablet: `tablet:grid-cols-2`
+- Three columns desktop: `desktop:grid-cols-3`
+- Four columns large desktop: `large-desktop:grid-cols-4`
+- Five columns extra-large: `xl:grid-cols-5`
+- Example: `grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6`
 
 **Text Size Patterns:**
+
 - Mobile: `text-sm` or `text-base`
-- Tablet: `md:text-base` or `md:text-lg`
-- Desktop: `lg:text-lg` or `lg:text-xl`
-- Large desktop: `xl:text-xl` or `xl:text-2xl`
-- Extra-large: `2xl:text-2xl` or `2xl:text-3xl`
-- Example: `text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl`
+- Tablet: `tablet:text-base` or `tablet:text-lg`
+- Desktop: `desktop:text-lg` or `desktop:text-xl`
+- Large desktop: `large-desktop:text-xl` or `large-desktop:text-2xl`
+- Extra-large: `xl:text-2xl` or `xl:text-3xl`
+- Example: `text-sm tablet:text-base desktop:text-lg large-desktop:text-xl xl:text-2xl 2xl:text-3xl`
 
 **Spacing Patterns:**
+
 - Mobile: `p-4` or `p-6`
-- Tablet: `md:p-6` or `md:p-8`
-- Desktop: `lg:p-8` or `lg:p-10`
-- Large desktop: `xl:p-10` or `xl:p-12`
-- Extra-large: `2xl:p-12` or `2xl:p-16`
-- Example: `p-4 md:p-6 lg:p-8 xl:p-10 2xl:p-12`
+- Tablet: `tablet:p-6` or `tablet:p-8`
+- Desktop: `desktop:p-8` or `desktop:p-10`
+- Large desktop: `large-desktop:p-10` or `large-desktop:p-12`
+- Extra-large: `xl:p-12` or `xl:p-16`
+- Example: `p-4 tablet:p-6 desktop:p-8 large-desktop:p-10 xl:p-12 2xl:p-16`
 
 **Container Width Patterns:**
+
 - Mobile: `w-full` (no max-width)
-- Tablet: `md:max-w-2xl` or `md:max-w-3xl`
-- Desktop: `lg:max-w-4xl` or `lg:max-w-5xl`
-- Large desktop: `xl:max-w-6xl` or `xl:max-w-7xl`
-- Extra-large: `2xl:max-w-7xl` or `2xl:max-w-screen-2xl`
-- Example: `w-full md:max-w-2xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl`
+- Tablet: `tablet:max-w-2xl` or `tablet:max-w-3xl`
+- Desktop: `desktop:max-w-4xl` or `desktop:max-w-5xl`
+- Large desktop: `large-desktop:max-w-6xl` or `large-desktop:max-w-7xl`
+- Extra-large: `xl:max-w-7xl` or `xl:max-w-screen-2xl`
+- Example: `w-full tablet:max-w-2xl desktop:max-w-4xl large-desktop:max-w-6xl xl:max-w-7xl 2xl:max-w-screen-2xl`
 
 ### **Performance**
 
@@ -1349,7 +1362,7 @@ Comprehensive mobile fixes ensuring the webapp works flawlessly on all mobile de
 1. **UI Consistency Standardization (January 2025):**
    - **Table Formatting:** All tables use consistent styling (rounded-3xl, standard headers, consistent cell padding)
    - **Dual Pagination:** All paginated tables have pagination at both top and bottom using `TablePagination` component
-   - **Responsive Breakpoints:** Standardized to `lg:` (1024px) breakpoint - tablets use mobile layout for better UX
+   - **Responsive Breakpoints:** Standardized to `desktop:` (1025px) breakpoint - tablets use mobile layout for better UX
    - **Icon Standardization:** All icons use Icon wrapper component for consistent sizing and accessibility
    - **Table Components Updated:** PerformanceTable, IngredientTable, RecipeTable, DishTable, COGSTable, EquipmentTable, EquipmentListTable
 

@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import {
+  fetchPrepListsData,
+  fetchRelatedData,
+  fetchIngredientsBatch,
+  combinePrepListData,
+} from './helpers/fetchPrepLists';
+import { createPrepList } from './helpers/createPrepList';
+import { updatePrepList } from './helpers/updatePrepList';
+import { deletePrepList } from './helpers/deletePrepList';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          error: 'User ID is required',
-          message: 'Please provide a valid user ID',
-        },
-        { status: 400 },
-      );
-    }
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('pageSize') || '10');
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -25,48 +26,57 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabaseAdmin
-      .from('prep_lists')
-      .select(
-        `
-        *,
-        kitchen_sections (
-          id,
-          name,
-          color
-        ),
-        prep_list_items (
-          id,
-          ingredient_id,
-          quantity,
-          unit,
-          notes,
-          ingredients (
-            id,
-            name,
-            unit,
-            category
-          )
-        )
-      `,
-      )
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+    // Step 1: Fetch prep lists
+    const { prepLists, count, empty } = await fetchPrepListsData({ userId, page, pageSize });
 
-    if (error) {
-      console.error('Error fetching prep lists:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch prep lists',
-          message: 'Could not retrieve prep list data',
+    // If empty or fallback case, return early
+    if (empty) {
+      const totalPages = Math.max(1, Math.ceil(count / pageSize));
+      return NextResponse.json({
+        success: true,
+        data: {
+          items: prepLists.map((list: any) => ({
+            ...list,
+            kitchen_section_id: list.kitchen_section_id || list.section_id,
+            kitchen_sections: null,
+            prep_list_items: [],
+          })),
+          total: count,
+          page,
+          pageSize,
+          totalPages,
         },
-        { status: 500 },
-      );
+      });
     }
+
+    // Step 2: Fetch related data
+    const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
+
+    // Step 3: Fetch ingredients in batch
+    const ingredientIds = Array.from(
+      new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)),
+    );
+    const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
+
+    // Step 4: Combine all data
+    const mappedData = combinePrepListData(
+      prepLists,
+      sectionsMap,
+      itemsByPrepListId,
+      ingredientsMap,
+    );
+
+    const totalPages = Math.max(1, Math.ceil(count / pageSize));
 
     return NextResponse.json({
       success: true,
-      data: data || [],
+      data: {
+        items: mappedData,
+        total: count,
+        page,
+        pageSize,
+        totalPages,
+      },
     });
   } catch (error) {
     console.error('Prep lists API error:', error);
@@ -74,6 +84,7 @@ export async function GET(request: NextRequest) {
       {
         error: 'Internal server error',
         message: 'An unexpected error occurred',
+        details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },
     );
@@ -95,58 +106,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Create the prep list
-    const { data: prepList, error: prepError } = await supabaseAdmin
-      .from('prep_lists')
-      .insert({
-        user_id: userId,
-        kitchen_section_id: kitchenSectionId,
-        name: name,
-        notes: notes,
-        status: 'draft',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
-
-    if (prepError) {
-      console.error('Error creating prep list:', prepError);
-      return NextResponse.json(
-        {
-          error: 'Failed to create prep list',
-          message: 'Could not save prep list data',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Add items if provided
-    if (items && items.length > 0) {
-      const prepItems = items.map((item: any) => ({
-        prep_list_id: prepList.id,
-        ingredient_id: item.ingredientId,
-        quantity: item.quantity,
-        unit: item.unit,
-        notes: item.notes,
-      }));
-
-      const { error: itemsError } = await supabaseAdmin.from('prep_list_items').insert(prepItems);
-
-      if (itemsError) {
-        console.error('Error creating prep list items:', itemsError);
-        // Don't fail the entire request, just log the error
-      }
-    }
+    const prepList = await createPrepList({ userId, kitchenSectionId, name, notes, items });
 
     return NextResponse.json({
       success: true,
@@ -158,7 +118,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Internal server error',
-        message: 'An unexpected error occurred',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred',
       },
       { status: 500 },
     );
@@ -180,60 +140,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const updateData: any = {
-      updated_at: new Date().toISOString(),
-    };
-
-    if (kitchenSectionId !== undefined) updateData.kitchen_section_id = kitchenSectionId;
-    if (name !== undefined) updateData.name = name;
-    if (notes !== undefined) updateData.notes = notes;
-    if (status !== undefined) updateData.status = status;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    const { data, error } = await supabaseAdmin
-      .from('prep_lists')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating prep list:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to update prep list',
-          message: 'Could not update prep list data',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Update items if provided
-    if (items !== undefined) {
-      // Delete existing items
-      await supabaseAdmin.from('prep_list_items').delete().eq('prep_list_id', id);
-
-      // Add new items
-      if (items.length > 0) {
-        const prepItems = items.map((item: any) => ({
-          prep_list_id: id,
-          ingredient_id: item.ingredientId,
-          quantity: item.quantity,
-          unit: item.unit,
-          notes: item.notes,
-        }));
-
-        await supabaseAdmin.from('prep_list_items').insert(prepItems);
-      }
-    }
+    const data = await updatePrepList({ id, kitchenSectionId, name, notes, status, items });
 
     return NextResponse.json({
       success: true,
@@ -245,7 +152,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Internal server error',
-        message: 'An unexpected error occurred',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred',
       },
       { status: 500 },
     );
@@ -267,31 +174,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Delete prep list items first (foreign key constraint)
-    await supabaseAdmin.from('prep_list_items').delete().eq('prep_list_id', id);
-
-    // Delete the prep list
-    const { error } = await supabaseAdmin.from('prep_lists').delete().eq('id', id);
-
-    if (error) {
-      console.error('Error deleting prep list:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to delete prep list',
-          message: 'Could not remove prep list',
-        },
-        { status: 500 },
-      );
-    }
+    await deletePrepList(id);
 
     return NextResponse.json({
       success: true,
@@ -302,7 +185,7 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Internal server error',
-        message: 'An unexpected error occurred',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred',
       },
       { status: 500 },
     );

@@ -8,11 +8,13 @@ interface PricingProps {
 export function VariantCPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm lg:p-16">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+      <div className="desktop:p-16 rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm">
+        <div className="desktop:grid-cols-2 grid items-center gap-12">
           <div>
-            <h3 className="text-fluid-3xl font-bold tracking-tight lg:text-fluid-4xl">Everything You Need</h3>
-            <p className="mt-4 text-fluid-lg text-gray-300">
+            <h3 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">
+              Everything You Need
+            </h3>
+            <p className="text-fluid-lg mt-4 text-gray-300">
               One comprehensive tool for complete menu profitability analysis.
             </p>
 
@@ -59,30 +61,32 @@ export function VariantCPricing({ t, handleEngagement }: PricingProps) {
                 </div>
                 <div>
                   <h4 className="font-semibold text-white">AI Insights</h4>
-                  <p className="text-fluid-sm text-gray-400">Smart suggestions for margin improvement</p>
+                  <p className="text-fluid-sm text-gray-400">
+                    Smart suggestions for margin improvement
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-8 text-center">
-            <p className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-fluid-4xl font-extrabold tracking-tight text-transparent">
+            <p className="text-fluid-4xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text font-extrabold tracking-tight text-transparent">
               AUD $29
             </p>
-            <p className="mb-6 text-fluid-sm text-gray-500">One-time purchase · Lifetime access</p>
+            <p className="text-fluid-sm mb-6 text-gray-500">One-time purchase · Lifetime access</p>
 
             <a
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 text-fluid-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25"
+              className="text-fluid-base inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25"
             >
               Get Complete Access
             </a>
 
             <div className="mt-6 text-center">
               <p className="text-fluid-sm text-gray-500">7-day refund policy</p>
-              <p className="mt-2 text-fluid-xs text-gray-400">Secure checkout via Gumroad</p>
+              <p className="text-fluid-xs mt-2 text-gray-400">Secure checkout via Gumroad</p>
             </div>
           </div>
         </div>
