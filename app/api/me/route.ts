@@ -1,11 +1,36 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
+        { status: 401 },
+      );
+    }
+    return NextResponse.json({ user: session.user });
+  } catch (error) {
+    logger.error('[API /me] Failed to get user session:', {
+      error: error instanceof Error ? error.message : String(error),
+      context: { endpoint: '/api/me', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? error instanceof Error
+            ? error.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
-  return NextResponse.json({ user: session.user });
 }

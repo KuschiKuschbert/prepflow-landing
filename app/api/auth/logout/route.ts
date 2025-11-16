@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
+import { logger } from '@/lib/logger';
 
 /**
  * Custom logout endpoint that handles Auth0 session clearing
@@ -49,9 +50,12 @@ export async function GET(request: NextRequest) {
 
       // Log logout attempt for debugging (only in development)
       if (isDevelopment) {
-        console.log('[Auth0 Logout] Redirecting to:', logoutUrl);
-        console.log('[Auth0 Logout] ReturnTo URL:', returnTo);
-        console.log(
+        logger.info('[Auth0 Logout] Redirecting to logout URL', {
+          endpoint: '/api/auth/logout',
+          logoutUrl,
+          returnTo,
+        });
+        logger.dev(
           '[Auth0 Logout] Make sure this URL is whitelisted in Auth0 dashboard under "Allowed Logout URLs"',
         );
       }
@@ -64,7 +68,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(logoutUrl);
     } catch (error) {
       // If Auth0 logout URL construction fails, log error and redirect to landing
-      console.error('[Auth0 Logout] Error constructing logout URL:', error);
+      logger.error('[Auth0 Logout] Error constructing logout URL:', {
+        error: error instanceof Error ? error.message : String(error),
+        context: { endpoint: '/api/auth/logout', returnTo },
+      });
 
       // Fallback: redirect to landing page anyway
       // The NextAuth session should already be cleared on the client side
@@ -72,8 +79,10 @@ export async function GET(request: NextRequest) {
     }
   } else {
     // Log missing configuration for debugging
-    console.warn('[Auth0 Logout] Missing AUTH0_ISSUER_BASE_URL or AUTH0_CLIENT_ID');
-    console.warn('[Auth0 Logout] Only NextAuth session will be cleared (client-side)');
+    logger.warn('[Auth0 Logout] Missing Auth0 configuration', {
+      context: { endpoint: '/api/auth/logout' },
+    });
+    logger.dev('[Auth0 Logout] Only NextAuth session will be cleared (client-side)');
 
     // Fallback: redirect to landing page
     // This ensures logout still works even if Auth0 config is missing
