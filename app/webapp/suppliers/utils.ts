@@ -1,4 +1,9 @@
-export function getSupplierIcon(supplierName: string): string {
+export function getSupplierIcon(supplierName: string | null | undefined): string {
+  // Handle undefined, null, or empty string
+  if (!supplierName || typeof supplierName !== 'string') {
+    return '🚚'; // Default icon for missing supplier names
+  }
+
   const name = supplierName.toLowerCase();
   if (name.includes('meat') || name.includes('butcher')) return '🥩';
   if (name.includes('fish') || name.includes('seafood')) return '🐟';

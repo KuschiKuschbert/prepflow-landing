@@ -30,15 +30,15 @@ export default function PerformanceTable({
     <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
       <PerformanceClassificationLegend />
 
-      <div className="block lg:hidden">
-        <div className="space-y-3 p-3 md:space-y-4 md:p-4">
+      <div className="block desktop:hidden">
+        <div className="space-y-3 p-3 tablet:space-y-4 tablet:p-4">
           {performanceItems.map((item) => (
             <PerformanceTableMobileCard key={item.id} item={item} />
           ))}
         </div>
       </div>
 
-      <div className="hidden overflow-x-auto lg:block">
+      <div className="hidden overflow-x-auto desktop:block">
         <table className="min-w-full divide-y divide-[#2a2a2a]">
           <PerformanceTableHeader
             handleColumnSort={handleColumnSort}

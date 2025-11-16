@@ -170,12 +170,12 @@ export function UnifiedRecipeModal({
         tabIndex={-1}
       >
         {/* Header */}
-        <div className="border-b border-[#2a2a2a] p-4 lg:p-6 flex-shrink-0">
+        <div className="border-b border-[#2a2a2a] p-4 tablet:p-5 desktop:p-6 flex-shrink-0">
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <h2
                 id="recipe-modal-title"
-                className="text-xl lg:text-2xl font-bold text-white"
+                className="text-xl tablet:text-xl desktop:text-2xl font-bold text-white"
               >
                 {capitalizeRecipeName(recipe.name)}
               </h2>
@@ -212,8 +212,8 @@ export function UnifiedRecipeModal({
                 title="Edit recipe (Press E)"
               >
                 <Icon icon={Edit} size="sm" className="text-white" aria-hidden={true} />
-                <span className="hidden sm:inline">Edit</span>
-                <span className="hidden text-xs opacity-70 sm:inline">(E)</span>
+                <span className="hidden tablet:inline">Edit</span>
+                <span className="hidden text-xs opacity-70 tablet:inline">(E)</span>
               </button>
               <button
                 onClick={onDuplicateRecipe}
@@ -221,7 +221,7 @@ export function UnifiedRecipeModal({
                 title="Duplicate recipe"
               >
                 <Icon icon={Copy} size="sm" aria-hidden={true} />
-                <span className="hidden sm:inline">Duplicate</span>
+                <span className="hidden tablet:inline">Duplicate</span>
               </button>
               <button
                 onClick={onShareRecipe}
@@ -232,12 +232,12 @@ export function UnifiedRecipeModal({
                 {shareLoading ? (
                   <>
                     <Icon icon={Loader2} size="sm" className="animate-spin text-white" aria-hidden={true} />
-                    <span className="hidden sm:inline">Sharing...</span>
+                    <span className="hidden tablet:inline">Sharing...</span>
                   </>
                 ) : (
                   <>
                     <Icon icon={Share2} size="sm" className="text-white" aria-hidden={true} />
-                    <span className="hidden sm:inline">Share</span>
+                    <span className="hidden tablet:inline">Share</span>
                   </>
                 )}
               </button>
@@ -247,7 +247,7 @@ export function UnifiedRecipeModal({
                 title="Print recipe"
               >
                 <Icon icon={Printer} size="sm" aria-hidden={true} />
-                <span className="hidden sm:inline">Print</span>
+                <span className="hidden tablet:inline">Print</span>
               </button>
               <button
                 onClick={onClose}
@@ -279,7 +279,7 @@ export function UnifiedRecipeModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <div className="flex-1 overflow-y-auto p-4 tablet:p-5 desktop:p-6">
           {activeTab === 'preview' && (
             <div className="space-y-6">
               {/* Ingredients Summary */}

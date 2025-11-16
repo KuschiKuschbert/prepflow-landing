@@ -159,11 +159,11 @@ function NewButton() {
           role="menu"
           aria-orientation="vertical"
         >
-          <div className="p-2 lg:p-2">
+          <div className="p-2 desktop:p-2">
             <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
               Create New
             </div>
-            <div className="space-y-2 lg:space-y-1">
+            <div className="space-y-2 desktop:space-y-1">
               {creatableItems.map((item, index) => (
                 <button
                   key={item.href}
@@ -176,8 +176,8 @@ function NewButton() {
                     'rounded-xl',
                     'px-4',
                     'py-3',
-                    'lg:px-3',
-                    'lg:py-2.5',
+                    'desktop:px-3',
+                    'desktop:py-2.5',
                     'text-left',
                     'text-sm',
                     'text-gray-300',
@@ -187,9 +187,9 @@ function NewButton() {
                     'bg-[#1f1f1f]',
                     'shadow-md',
                     // Desktop: Remove card styling
-                    'lg:border-0',
-                    'lg:bg-transparent',
-                    'lg:shadow-none',
+                    'desktop:border-0',
+                    'desktop:bg-transparent',
+                    'desktop:shadow-none',
                     'transition-all',
                     'duration-200',
                     'hover:bg-[#2a2a2a]',

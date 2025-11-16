@@ -135,7 +135,7 @@ export default function IngredientTable({
         <table className="w-full">
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
-              <th className="hidden lg:table-cell px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="hidden desktop:table-cell px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
                 <button
                   onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
                   className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"

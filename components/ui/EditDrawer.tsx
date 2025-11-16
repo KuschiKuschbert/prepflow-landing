@@ -40,7 +40,7 @@ export function EditDrawer({
 }: EditDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMediaQuery('(max-width: 1023px)'); // lg: breakpoint is 1024px
+  const isMobile = useMediaQuery('(max-width: 1024px)'); // desktop: breakpoint is 1025px
   const [swipeStartX, setSwipeStartX] = useState<number | null>(null);
   const [swipeStartY, setSwipeStartY] = useState<number | null>(null);
   const [isSwiping, setIsSwiping] = useState(false);

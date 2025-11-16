@@ -109,8 +109,8 @@ export default function ModernIngredientFilters({
 
   return (
     <div className="mb-6 space-y-4">
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-3 backdrop-blur-sm md:p-4">
-        <div className="relative w-full min-w-[200px] flex-1 md:w-auto">
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-3 backdrop-blur-sm tablet:p-4">
+        <div className="relative w-full min-w-[200px] flex-1 tablet:w-auto">
           <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -178,14 +178,14 @@ export default function ModernIngredientFilters({
           activeBg="bg-[#D925C7]/20"
         />
 
-        <div className="relative w-full md:w-auto">
+        <div className="relative w-full tablet:w-auto">
           <button
             onClick={() => {
               setShowSortMenu(!showSortMenu);
               setShowSupplierMenu(false);
               setShowStorageMenu(false);
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD] md:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD] tablet:w-auto"
           >
             <Icon icon={currentSortOption.icon} size="sm" className="text-current" aria-hidden={true} />
             <span className="truncate">{currentSortOption.label}</span>
@@ -224,11 +224,11 @@ export default function ModernIngredientFilters({
           )}
         </div>
 
-        <div className="relative w-full md:w-auto">
+        <div className="relative w-full tablet:w-auto">
           <select
             value={displayUnit}
             onChange={e => onDisplayUnitChange(e.target.value)}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none md:w-auto"
+            className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:w-auto"
             title="Display unit"
           >
             <optgroup label="Weight">
@@ -247,7 +247,7 @@ export default function ModernIngredientFilters({
         {activeFilterCount > 0 && (
           <button
             onClick={handleClearAll}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-600/30 bg-gray-600/10 px-4 py-2.5 text-sm font-medium text-gray-400 transition-all duration-200 hover:border-gray-500/50 hover:bg-gray-500/20 hover:text-white md:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-600/30 bg-gray-600/10 px-4 py-2.5 text-sm font-medium text-gray-400 transition-all duration-200 hover:border-gray-500/50 hover:bg-gray-500/20 hover:text-white tablet:w-auto"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

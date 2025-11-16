@@ -106,10 +106,10 @@ export function DishTableRow({
       <td className="px-6 py-4 text-sm text-gray-300">
         ${dish.selling_price.toFixed(2)}
       </td>
-      <td className="hidden px-6 py-4 text-sm text-gray-300 lg:table-cell">
+      <td className="hidden px-6 py-4 text-sm text-gray-300 desktop:table-cell">
         {cost ? `$${cost.total_cost.toFixed(2)}` : '—'}
       </td>
-      <td className="hidden px-6 py-4 text-sm lg:table-cell">
+      <td className="hidden px-6 py-4 text-sm desktop:table-cell">
         {cost ? (
           <span
             className={`font-semibold ${
@@ -122,7 +122,7 @@ export function DishTableRow({
           <span className="text-gray-500">—</span>
         )}
       </td>
-      <td className="hidden px-6 py-4 text-sm text-gray-400 lg:table-cell">
+      <td className="hidden px-6 py-4 text-sm text-gray-400 desktop:table-cell">
         {formatRecipeDate(dish.created_at)}
       </td>
       <td className="px-6 py-4 text-sm font-medium">

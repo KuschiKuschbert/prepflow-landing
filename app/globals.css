@@ -15,7 +15,7 @@
 
   /* Navigation dimensions */
   --bottom-navbar-height: 64px;
-  --sidebar-width: 288px; /* 72 * 4px = 288px for md screens */
+  --sidebar-width: 256px; /* 64 * 4px = 256px for base screens (w-64) */
 
   /* Safe area insets for iOS devices with notches */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
@@ -39,7 +39,8 @@
   );
 }
 
-@media (min-width: 768px) {
+/* Use custom desktop breakpoint (1025px) instead of standard 768px */
+@media (min-width: 1025px) {
   .gadgets-card-container {
     /* Desktop: account for header + safe area + padding (no bottom nav, sidebar handled by margin) */
     height: calc(
@@ -56,7 +57,7 @@
   padding-top: calc(
     var(--header-height-mobile) + var(--safe-area-inset-top) + var(--warning-height) + 1.25rem
   );
-  padding-bottom: 5rem; /* Space for bottom nav */
+  padding-bottom: 8rem; /* Space for bottom nav (56px) + FAB (56px) + spacing (16px) = ~128px */
   padding-left: 1rem;
   padding-right: 1rem;
   margin-left: 0;
@@ -71,30 +72,32 @@
   transition: margin-left 0.3s ease-in-out, padding-bottom 0s;
 }
 
-@media (min-width: 768px) {
+/* Use custom tablet breakpoint (481px) for medium screens */
+@media (min-width: 481px) {
   :root {
-    --sidebar-width: 320px; /* 80 * 4px = 320px for md screens (w-80) */
+    --sidebar-width: 288px; /* 72 * 4px = 288px for tablet screens (w-72) */
   }
 
   .webapp-main-content {
-    /* Desktop: left margin for sidebar, no bottom padding */
+    /* Tablet: left margin for sidebar, no bottom padding */
     padding-top: calc(
       var(--header-height-desktop) + var(--safe-area-inset-top) + var(--warning-height) + 1.5rem
     );
     padding-bottom: 0;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    margin-left: 20rem; /* 320px sidebar = 20rem (w-80) for md screens */
+    margin-left: 18rem; /* 288px sidebar = 18rem (w-72) for tablet screens */
   }
 }
 
-@media (min-width: 1024px) {
+/* Use custom desktop breakpoint (1025px) for large screens */
+@media (min-width: 1025px) {
   :root {
-    --sidebar-width: 384px; /* 96 * 4px = 384px for lg screens (w-96) */
+    --sidebar-width: 320px; /* 80 * 4px = 320px for desktop screens (w-80) */
   }
 
   .webapp-main-content {
-    margin-left: 24rem; /* 384px sidebar = 24rem (w-96) for lg screens */
+    margin-left: 20rem; /* 320px sidebar = 20rem (w-80) for desktop screens */
   }
 }
 
@@ -668,7 +671,20 @@ nav[aria-label="Bottom navigation"] {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Custom breakpoints for responsive design (Final - Required) */
+  /* HARDCODED BREAKPOINT SYSTEM - DO NOT MODIFY
+   *
+   * These CSS variables are synchronized with tailwind.config.ts
+   * Standard Tailwind breakpoints (sm, md, lg) are DISABLED.
+   * Only use the custom breakpoints defined below.
+   *
+   * Available breakpoints:
+   * - Base (Mobile): 0-480px (no prefix)
+   * - tablet: 481px+
+   * - desktop: 1025px+
+   * - large-desktop: 1440px+
+   * - xl: 1920px+
+   * - 2xl: 2560px+
+   */
   --breakpoint-tablet: 481px;
   --breakpoint-desktop: 1025px;
   --breakpoint-large-desktop: 1440px;
@@ -676,25 +692,31 @@ nav[aria-label="Bottom navigation"] {
   --breakpoint-2xl: 2560px;
 }
 
-/* Custom breakpoint media queries */
+/* HARDCODED BREAKPOINT MEDIA QUERIES
+ *
+ * These media queries match the Tailwind breakpoint system.
+ * Use these for custom CSS that needs to match Tailwind breakpoints.
+ *
+ * DO NOT use standard Tailwind breakpoints (sm, md, lg) - they are disabled.
+ */
 @media (min-width: 481px) {
-  /* Tablet and up */
+  /* Tablet and up - matches tablet: prefix */
 }
 
 @media (min-width: 1025px) {
-  /* Desktop and up */
+  /* Desktop and up - matches desktop: prefix */
 }
 
 @media (min-width: 1440px) {
-  /* Large desktop and up */
+  /* Large desktop and up - matches large-desktop: prefix */
 }
 
 @media (min-width: 1920px) {
-  /* Extra-Large Desktop (XL) and up */
+  /* Extra-Large Desktop (XL) and up - matches xl: prefix */
 }
 
 @media (min-width: 2560px) {
-  /* Ultra-Wide / 2XL and up */
+  /* Ultra-Wide / 2XL and up - matches 2xl: prefix */
 }
 
 /* Fluid Typography Utility Classes - Scales from 360px to 4K displays */

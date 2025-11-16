@@ -27,10 +27,10 @@ export function FilterDropdown({
   activeBg,
 }: FilterDropdownProps) {
   return (
-    <div className="relative w-full md:w-auto">
+    <div className="relative w-full tablet:w-auto">
       <button
         onClick={onToggle}
-        className={`flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 md:w-auto ${
+        className={`flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 tablet:w-auto ${
           value
             ? `${activeColor} ${activeBg}`
             : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'

@@ -21,7 +21,7 @@ export function SuppliersGrid({ suppliers }: SuppliersGridProps) {
         >
           <div className="mb-4 flex items-center justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <span className="text-2xl">{getSupplierIcon(supplier.name)}</span>
+              <span className="text-2xl">{getSupplierIcon(supplier.name || '')}</span>
             </div>
             <span
               className={`rounded-full px-3 py-1 text-xs font-medium ${

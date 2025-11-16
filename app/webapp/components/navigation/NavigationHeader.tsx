@@ -71,12 +71,12 @@ export function NavigationHeader({
         'bg-[#1f1f1f]',
         'pt-[var(--safe-area-inset-top)]',
         'h-[var(--header-height-mobile)]',
-        'lg:h-[var(--header-height-desktop)]',
+        'desktop:h-[var(--header-height-desktop)]',
         className,
       )}
     >
-      <div className="flex items-center justify-between px-3 py-2 lg:px-4">
-        <div className="flex items-center space-x-2 lg:space-x-3">
+      <div className="flex items-center justify-between px-3 py-2 desktop:px-4">
+        <div className="flex items-center space-x-2 desktop:space-x-3">
           <div className="flex items-center space-x-2">
             <Link
               href="/webapp"
@@ -103,7 +103,7 @@ export function NavigationHeader({
                 onMouseLeave={handleLogoMouseLeave}
               />
             </Link>
-            <Link href="/webapp" className="hidden lg:inline">
+            <Link href="/webapp" className="hidden desktop:inline">
               <span className="text-lg font-semibold text-white">PrepFlow</span>
             </Link>
             <AutosaveGlobalIndicator />
@@ -116,7 +116,7 @@ export function NavigationHeader({
             'space-x-2',
             'text-sm',
             'text-gray-400',
-            'lg:flex',
+            'desktop:flex',
           )}
         >
           <Link href="/webapp" className={cn('transition-colors', 'hover:text-[#29E7CD]')}>
@@ -131,7 +131,7 @@ export function NavigationHeader({
             </>
           )}
         </div>
-        <div className="flex items-center space-x-2 lg:space-x-3">
+        <div className="flex items-center space-x-2 desktop:space-x-3">
           <button
             onClick={onSearchClick}
             className={cn(
@@ -149,7 +149,7 @@ export function NavigationHeader({
             <Icon icon={Search} size="md" className="text-gray-400" aria-hidden={true} />
           </button>
           <NavbarStats />
-          <div className="hidden items-center space-x-2 lg:flex">
+          <div className="hidden items-center space-x-2 desktop:flex">
             {userName && (
               <span
                 className="text-xs text-gray-400"

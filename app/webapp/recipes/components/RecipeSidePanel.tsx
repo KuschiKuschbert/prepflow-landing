@@ -5,10 +5,13 @@ import { createPortal } from 'react-dom';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { Icon } from '@/components/ui/Icon';
-import { X, Edit, Trash2, ChefHat, Calculator } from 'lucide-react';
+import { ChefHat } from 'lucide-react';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
 import { COGSCalculation } from '../../cogs/types';
 import { COGSCalculation as RecipeCOGSCalculation } from '../types';
+import { RecipeSidePanelHeader } from './RecipeSidePanelHeader';
+import { RecipeSidePanelCostSummary } from './RecipeSidePanelCostSummary';
+import { RecipeSidePanelActions } from './RecipeSidePanelActions';
 
 interface RecipeSidePanelProps {
   isOpen: boolean;
@@ -186,7 +189,7 @@ export function RecipeSidePanel({
     <>
       {/* Backdrop - only on mobile */}
       <div
-        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm lg:hidden transition-opacity duration-300"
+        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm desktop:hidden transition-opacity duration-300"
         style={{
           top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
         }}
@@ -197,7 +200,7 @@ export function RecipeSidePanel({
       {/* Side Panel */}
       <div
         ref={panelRef}
-        className={`fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out lg:max-w-lg ${
+        className={`fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out desktop:max-w-lg ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={panelStyle}
@@ -207,61 +210,18 @@ export function RecipeSidePanel({
         aria-labelledby="recipe-panel-title"
       >
         <div className="flex h-full flex-col overflow-hidden">
-          {/* Header */}
-          <div className="border-b border-[#2a2a2a] p-6 flex-shrink-0">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1 pr-4">
-                <h2
-                  id="recipe-panel-title"
-                  className="text-xl font-bold text-white mb-2"
-                >
-                  {capitalizeRecipeName(recipe.name)}
-                </h2>
+          <RecipeSidePanelHeader
+            recipe={recipe}
+            capitalizeRecipeName={capitalizeRecipeName}
+            onClose={onClose}
+          />
 
-                {/* Yield */}
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-gray-400">Yield:</span>
-                  <span className="font-medium text-white">
-                    {recipe.yield} {recipe.yield_unit}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={onClose}
-                className="flex-shrink-0 rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-                aria-label="Close recipe panel"
-              >
-                <Icon icon={X} size="md" aria-hidden={true} />
-              </button>
-            </div>
-          </div>
-
-          {/* Content */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 space-y-6" style={{ WebkitOverflowScrolling: 'touch' }}>
-            {/* Cost Summary */}
-            {calculations.length > 0 && (
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] p-4">
-                <div className="mb-3 flex items-center gap-2">
-                  <Icon icon={Calculator} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-                  <h3 className="text-sm font-semibold text-white">Cost Summary</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-xs text-gray-400">Total Cost</div>
-                    <div className="text-lg font-semibold text-white">
-                      ${totalCOGS.toFixed(2)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-400">Cost per Portion</div>
-                    <div className="text-lg font-semibold text-[#29E7CD]">
-                      ${costPerPortion.toFixed(2)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            <RecipeSidePanelCostSummary
+              calculations={calculations}
+              totalCOGS={totalCOGS}
+              costPerPortion={costPerPortion}
+            />
 
             {/* Ingredients Summary */}
             <div>
@@ -292,25 +252,11 @@ export function RecipeSidePanel({
             )}
           </div>
 
-          {/* Actions Footer */}
-          <div className="border-t border-[#2a2a2a] p-6 flex-shrink-0 space-y-3">
-            <button
-              onClick={() => onEditRecipe(recipe)}
-              className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-3 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
-              title="Edit recipe (Press E)"
-            >
-              <Icon icon={Edit} size="sm" className="text-white" aria-hidden={true} />
-              <span>Edit Recipe</span>
-            </button>
-            <button
-              onClick={() => onDeleteRecipe(recipe)}
-              className="w-full flex items-center justify-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20"
-              title="Delete recipe"
-            >
-              <Icon icon={Trash2} size="sm" aria-hidden={true} />
-              <span>Delete Recipe</span>
-            </button>
-          </div>
+          <RecipeSidePanelActions
+            recipe={recipe}
+            onEditRecipe={onEditRecipe}
+            onDeleteRecipe={onDeleteRecipe}
+          />
         </div>
       </div>
     </>

@@ -5,7 +5,7 @@ export function FeaturesSection() {
 
   return (
     <section id="features" className="py-20">
-      <div className="grid gap-8 desktop:grid-cols-3">
+      <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
           <h3 className="mb-3 text-fluid-xl font-semibold text-[#29E7CD]">
             {t('features.cogs.title', 'Accurate COGS Calculation')}

@@ -17,7 +17,6 @@ import '../globals.css';
 import { DraftRecovery } from './components/DraftRecovery';
 import ModernNavigation from './components/ModernNavigation';
 import { PersonalityScheduler } from './components/PersonalityScheduler';
-import { FloatingActionButton } from './components/navigation/FloatingActionButton';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -171,9 +170,6 @@ function WebAppLayoutContent({
         remainingMs={remainingMs}
         onStayActive={resetTimeout}
       />
-
-      {/* Floating Action Button (Mobile Only) */}
-      <FloatingActionButton />
     </div>
   );
 }

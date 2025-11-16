@@ -112,7 +112,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6 text-center"
           >
-            <h1 className="mb-2 text-fluid-4xl font-extrabold desktop:text-fluid-4xl">🍅 Tomato Toss!</h1>
+            <h1 className="mb-2 text-fluid-4xl font-extrabold lg:text-fluid-4xl">🍅 Tomato Toss!</h1>
             <p className="text-fluid-lg text-gray-300">Let it all out, Chef — aim for the wall.</p>
           </motion.div>
 
@@ -124,7 +124,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             transition={{ delay: 0.3 }}
             onClick={handleWallClick}
             onTouchEnd={handleWallTouch}
-            className="relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/40 shadow-2xl backdrop-blur-sm desktop:h-[500px]"
+            className="relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/40 shadow-2xl backdrop-blur-sm lg:h-[500px]"
           >
             {/* Splatters */}
             {splatters.map(splatter => (

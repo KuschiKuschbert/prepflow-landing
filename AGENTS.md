@@ -500,11 +500,17 @@ import { Zap, Store, MapPin } from 'lucide-react';
 
 #### **Z-Index Hierarchy**
 
-- **Modals (Search, More Drawer):** `z-[65]` - Highest priority overlays
+- **Modals:** `z-[80]` - Highest priority overlays (delete confirmations, forms, etc.)
+- **Search Modal:** `z-[75]` - Search interface overlay
+- **FAB (Floating Action Button):** `z-[70]` - Mobile quick actions button
+- **More Drawer:** `z-[65]` - Mobile drawer overlay
+- **More Drawer Backdrop:** `z-[60]` - Backdrop behind drawer
+- **Bottom Nav:** `z-[60]` - Mobile bottom navigation bar
 - **Bulk Actions Dropdown:** `z-[60]` - Action menus above content
 - **Sidebar:** `z-[60]` - Navigation drawer
 - **Bulk Actions Backdrop:** `z-[55]` - Blocks interactions behind dropdowns
 - **Sort/Filter Dropdowns:** `z-50` - Filter and sort menus
+- **Header:** `z-50` - Fixed navigation header
 - **Filter Bar:** `z-30` - Sticky filter bar above table content
 - **Persistent Sidebar:** `z-40` - Desktop sidebar navigation
 

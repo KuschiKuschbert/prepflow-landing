@@ -8,9 +8,9 @@ interface PricingProps {
 export function VariantAPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm desktop:p-16">
+      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm lg:p-16">
         <div className="mb-12 text-center">
-          <h3 className="mb-4 text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
+          <h3 className="mb-4 text-fluid-3xl font-bold tracking-tight lg:text-fluid-4xl">
             Simple Pricing, Maximum Value
           </h3>
           <p className="text-fluid-lg text-gray-300">

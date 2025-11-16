@@ -8,10 +8,10 @@ interface PricingProps {
 export function ControlPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm desktop:p-16">
-        <div className="grid items-center gap-12 desktop:grid-cols-2">
+      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm lg:p-16">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <h3 className="text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
+            <h3 className="text-fluid-3xl font-bold tracking-tight lg:text-fluid-4xl">
               Get Your Menu Clarity Tool
             </h3>
             <p className="mt-4 text-fluid-lg text-gray-300">

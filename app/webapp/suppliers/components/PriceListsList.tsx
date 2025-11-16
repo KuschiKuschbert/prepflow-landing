@@ -38,11 +38,11 @@ export function PriceListsList({ priceLists }: PriceListsListProps) {
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                <span className="text-2xl">{getSupplierIcon(priceList.suppliers.name)}</span>
+                <span className="text-2xl">{getSupplierIcon(priceList.suppliers?.name)}</span>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-white">{priceList.document_name}</h3>
-                <p className="text-gray-400">{priceList.suppliers.name}</p>
+                <p className="text-gray-400">{priceList.suppliers?.name || 'Unknown Supplier'}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">

@@ -75,7 +75,7 @@ export function EquipmentDetailDrawer({
       <div
         ref={drawerRef}
         className={`fixed right-0 top-0 z-[75] h-full w-full transform bg-[#0a0a0a] shadow-2xl transition-transform duration-300 ease-out ${
-          !isMobile ? 'large-desktop:w-[600px]' : ''
+          !isMobile ? 'desktop:w-[500px] large-desktop:w-[600px]' : ''
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}

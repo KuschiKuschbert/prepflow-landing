@@ -47,7 +47,7 @@ export function IngredientFormFields({
   return (
     <>
       {/* Basic Information */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-300">Ingredient Name *</label>
           <input
@@ -76,7 +76,7 @@ export function IngredientFormFields({
       </div>
 
       {/* Pack Information */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 desktop:grid-cols-3">
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-300">Pack Size *</label>
           <input
@@ -136,7 +136,7 @@ export function IngredientFormFields({
       </div>
 
       {/* Additional Information */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
         {/* Supplier */}
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-300">Supplier</label>

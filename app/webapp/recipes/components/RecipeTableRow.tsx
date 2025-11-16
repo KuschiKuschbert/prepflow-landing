@@ -132,7 +132,7 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 lg:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 desktop:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
@@ -149,7 +149,7 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 lg:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 desktop:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
@@ -166,7 +166,7 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 lg:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 desktop:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {formatRecipeDate(recipe.created_at)}

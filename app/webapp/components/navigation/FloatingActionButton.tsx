@@ -141,7 +141,7 @@ export function FloatingActionButton() {
 
   return (
     <div
-      className="fixed right-4 z-50 lg:hidden"
+      className="fixed right-4 z-50 desktop:hidden"
       style={{
         bottom: 'calc(64px + 1rem + env(safe-area-inset-bottom, 0px))',
       }}

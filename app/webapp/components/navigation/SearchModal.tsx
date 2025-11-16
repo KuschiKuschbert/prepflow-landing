@@ -20,20 +20,20 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
       role="dialog"
       aria-modal="true"
       aria-labelledby="search-modal-title"
-      className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-[75] bg-black/50 backdrop-blur-sm"
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape') onClose();
       }}
     >
       <div
-        className="flex items-start justify-center pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] lg:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top)+1rem)]"
+        className="flex items-start justify-center pt-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] desktop:pt-[calc(var(--header-height-desktop)+var(--safe-area-inset-top)+1rem)]"
         onClick={e => e.stopPropagation()}
         onTouchStart={e => e.stopPropagation()}
       >
         <div className="mx-4 w-full max-w-2xl">
           <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-            <div className="border-b border-[#2a2a2a] p-3 lg:p-4">
+            <div className="border-b border-[#2a2a2a] p-3 desktop:p-4">
               <div className="relative">
                 <h2 id="search-modal-title" className="sr-only">
                   Search navigation

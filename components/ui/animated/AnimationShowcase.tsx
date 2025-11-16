@@ -30,7 +30,7 @@ export function AnimationShowcase() {
       </AnimatedDiv>
 
       {/* Staggered Cards */}
-      <StaggeredContainer className="grid grid-cols-1 gap-6 desktop:grid-cols-2 large-desktop:grid-cols-3">
+      <StaggeredContainer className="grid grid-cols-1 gap-6 lg:grid-cols-2 large-desktop:grid-cols-3">
         <AnimatedCard
           title="Performance Optimized"
           description="All animations use CSS transforms and opacity for 60fps performance"

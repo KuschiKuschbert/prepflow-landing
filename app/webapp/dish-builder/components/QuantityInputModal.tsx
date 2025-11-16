@@ -74,7 +74,7 @@ export function QuantityInputModal({
 
       {/* Dialog */}
       <div
-        className="relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 lg:p-6 shadow-2xl"
+        className="relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 desktop:p-6 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
@@ -92,7 +92,7 @@ export function QuantityInputModal({
         </div>
 
         {/* Title */}
-        <h2 id="dialog-title" className="mb-2 text-center text-lg lg:text-xl font-bold text-white">
+        <h2 id="dialog-title" className="mb-2 text-center text-lg desktop:text-xl font-bold text-white">
           Add Ingredient
         </h2>
 

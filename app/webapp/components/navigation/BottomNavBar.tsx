@@ -1,41 +1,79 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useSwipeGesture } from '@/hooks/useSwipeGesture';
+import { Calculator } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useNavigationItems } from './nav-items';
 
 interface BottomNavBarProps {
   onMoreClick: () => void;
+  onSearchClick?: () => void;
 }
 
-export function BottomNavBar({ onMoreClick }: BottomNavBarProps) {
+export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) {
   const pathname = usePathname();
   const allItems = useNavigationItems();
+  const { direction, isAtTop } = useScrollDirection();
+  const [isVisible, setIsVisible] = useState(true);
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipeGesture({
+    onSwipeUp: onSearchClick,
+    threshold: 50,
+  });
 
-  // Primary items for bottom nav: Dashboard, Ingredients, Recipes, Performance
+  // Auto-hide on scroll down, show on scroll up or at top
+  useEffect(() => {
+    if (isAtTop) {
+      setIsVisible(true);
+    } else if (direction === 'down') {
+      setIsVisible(false);
+    } else if (direction === 'up') {
+      setIsVisible(true);
+    }
+  }, [direction, isAtTop]);
+
+  // Primary items for bottom nav: Dashboard, Recipes, COGS, Performance
   const primaryItems = allItems.filter(
     item =>
       item.href === '/webapp' ||
-      item.href === '/webapp/recipes#ingredients' ||
       item.href === '/webapp/recipes' ||
       item.href === '/webapp/performance',
   );
 
+  // Add COGS manually since it's accessed via hash link
+  const cogsItem = {
+    href: '/webapp/recipes#calculator',
+    label: 'COGS',
+    icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
+    color: 'text-[#29E7CD]',
+  };
+
+  const allPrimaryItems = [...primaryItems, cogsItem];
+
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
-    if (href === '/webapp/recipes#ingredients') {
-      return pathname === '/webapp/recipes' && typeof window !== 'undefined' && window.location.hash === '#ingredients';
+    if (href === '/webapp/recipes#calculator') {
+      return pathname === '/webapp/recipes' && typeof window !== 'undefined' && window.location.hash === '#calculator';
     }
     return pathname.startsWith(href.split('#')[0]);
   };
 
   return (
     <nav
-      className="fixed right-0 bottom-0 left-0 z-[60] border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/70 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl"
+      className="fixed right-0 bottom-0 left-0 z-[60] border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/70 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300 ease-in-out"
+      style={{
+        transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
+      }}
       aria-label="Bottom navigation"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={e => onTouchEnd(e)}
     >
       <div className="grid h-14 grid-cols-5">
-        {primaryItems.map(item => {
+        {allPrimaryItems.map(item => {
           const active = isActive(item.href);
           return (
             <Link

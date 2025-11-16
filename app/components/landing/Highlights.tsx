@@ -63,7 +63,7 @@ export default function Highlights() {
         </div>
 
         {/* Highlights Grid */}
-        <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-3 xl:grid-cols-5">
+        <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-5">
           {highlights.map((highlight, index) => {
             const { ref, animationStyle } = useScrollAnimation<HTMLDivElement>({
               threshold: 0.2,

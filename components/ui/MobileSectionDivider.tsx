@@ -18,11 +18,11 @@ export function MobileSectionDivider({
 }: MobileSectionDividerProps) {
   const visibilityClass = showOnDesktop
     ? 'block'
-    : 'block tablet:hidden';
+    : 'block md:hidden';
 
   return (
     <div
-      className={`${visibilityClass} h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent my-4 tablet:my-6 ${className}`}
+      className={`${visibilityClass} h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent my-4 md:my-6 ${className}`}
       aria-hidden="true"
     />
   );

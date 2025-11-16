@@ -164,8 +164,8 @@ export default function IngredientEditModal({
         aria-labelledby="ingredient-edit-modal-title"
       >
         {/* Header with close button - Responsive */}
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm lg:px-4 lg:py-2.5">
-          <h2 id="ingredient-edit-modal-title" className="text-lg font-bold text-white lg:text-xl">
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm desktop:px-4 desktop:py-2.5">
+          <h2 id="ingredient-edit-modal-title" className="text-lg font-bold text-white desktop:text-xl">
             Edit Ingredient
           </h2>
           <button
@@ -189,7 +189,7 @@ export default function IngredientEditModal({
           ref={scrollableContentRef}
           className="max-h-[calc(90vh-10vh-4rem)] overflow-y-auto"
         >
-          <div className="p-3 lg:p-4">
+          <div className="p-3 desktop:p-4">
             <IngredientForm
               ingredient={ingredient}
               suppliers={suppliers}

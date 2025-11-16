@@ -13,8 +13,9 @@ import { BottomNavBar } from './navigation/BottomNavBar';
 import { MoreDrawer } from './navigation/MoreDrawer';
 import { useNavigationItems } from './navigation/nav-items';
 import { NavigationHeader } from './navigation/NavigationHeader';
-import { PersistentSidebar } from './navigation/PersistentSidebar';
+import PersistentSidebar from './navigation/PersistentSidebar';
 import { SearchModal } from './navigation/SearchModal';
+import { MobileFAB } from './navigation/MobileFAB';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -132,20 +133,29 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       />
 
       {/* Desktop: Persistent Sidebar - CSS handles visibility */}
-      <div className="hidden lg:block">
+      <div className="hidden desktop:block">
         <PersistentSidebar />
       </div>
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
-      <div className="block lg:hidden">
-        <BottomNavBar onMoreClick={() => setIsMoreDrawerOpen(true)} />
+      <div className="block desktop:hidden">
+        <BottomNavBar
+          onMoreClick={() => setIsMoreDrawerOpen(true)}
+          onSearchClick={() => setIsSearchOpen(true)}
+        />
+      </div>
+
+      {/* Mobile: Floating Action Button - CSS handles visibility */}
+      <div className="block desktop:hidden">
+        <MobileFAB onSearchClick={() => setIsSearchOpen(true)} />
       </div>
 
       {/* Mobile: More Drawer - CSS handles visibility */}
-      <div className="block lg:hidden">
+      <div className="block desktop:hidden">
         <MoreDrawer
           isOpen={isMoreDrawerOpen}
           onClose={() => setIsMoreDrawerOpen(false)}
+          onOpen={() => setIsMoreDrawerOpen(true)}
           onSearchClick={() => {
             setIsMoreDrawerOpen(false);
             setIsSearchOpen(true);

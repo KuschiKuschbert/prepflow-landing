@@ -8,15 +8,15 @@ interface PricingProps {
 export function VariantBPricing({ t, handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm desktop:p-16">
+      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm lg:p-16">
         <div className="mb-12 text-center">
-          <h3 className="mb-4 text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
+          <h3 className="mb-4 text-fluid-3xl font-bold tracking-tight lg:text-fluid-4xl">
             Why Choose PrepFlow?
           </h3>
           <p className="text-fluid-lg text-gray-300">Compare the cost and value of different solutions</p>
         </div>
 
-        <div className="grid gap-8 desktop:grid-cols-3">
+        <div className="grid gap-8 lg:grid-cols-3">
           {/* Other Solutions */}
           <div className="rounded-2xl border border-gray-600 bg-[#2a2a2a]/80 p-6 text-center">
             <h4 className="mb-4 text-fluid-xl font-semibold text-gray-300">Other Restaurant Software</h4>

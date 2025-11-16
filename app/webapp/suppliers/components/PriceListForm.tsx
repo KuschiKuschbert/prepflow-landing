@@ -63,7 +63,7 @@ export function PriceListForm({
             </option>
             {suppliers.map(supplier => (
               <option key={supplier.id} value={supplier.id}>
-                {getSupplierIcon(supplier.name)} {supplier.name}
+                {getSupplierIcon(supplier.name || '')} {supplier.name || ''}
               </option>
             ))}
           </select>

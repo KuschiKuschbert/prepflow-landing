@@ -93,7 +93,7 @@ export default function PerformanceHeader({
   };
 
   const metrics = (
-    <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-4">
+    <div className="flex flex-col items-start gap-2 tablet:flex-row tablet:items-center tablet:gap-4">
       <div className="relative text-right" ref={scoreRef}>
         <div className="text-sm text-gray-400">Performance Score</div>
         <div
@@ -119,7 +119,7 @@ export default function PerformanceHeader({
         {showTooltip && tips.length > 0 && (
           <div
             ref={tooltipRef}
-            className="absolute right-0 top-full z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl md:right-0"
+            className="absolute right-0 top-full z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl tablet:right-0"
             role="tooltip"
           >
             <div className="mb-3 flex items-center gap-2">
@@ -163,7 +163,7 @@ export default function PerformanceHeader({
   );
 
   return (
-    <div className="mb-4 md:mb-6 lg:mb-8">
+    <div className="mb-4 tablet:mb-6 desktop:mb-8">
       <PageHeader
         title="Performance Analysis"
         subtitle="Analyze your menu performance and profitability"

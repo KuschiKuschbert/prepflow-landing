@@ -240,8 +240,8 @@ export default function DishPreviewModal({
                 title="Edit dish (Press E)"
               >
                 <Icon icon={Edit} size="sm" className="text-white" aria-hidden={true} />
-                <span className="hidden sm:inline">Edit</span>
-                <span className="hidden text-xs opacity-70 sm:inline">(E)</span>
+                <span className="hidden tablet:inline">Edit</span>
+                <span className="hidden text-xs opacity-70 tablet:inline">(E)</span>
               </button>
               <button
                 onClick={onClose}

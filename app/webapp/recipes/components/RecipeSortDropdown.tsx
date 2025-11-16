@@ -39,10 +39,10 @@ export function RecipeSortDropdown({
   };
 
   return (
-    <div className="relative w-full md:w-auto">
+    <div className="relative w-full tablet:w-auto">
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] md:w-auto"
+        className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] tablet:w-auto"
       >
         <Icon icon={ArrowUpDown} size="sm" className="text-current" aria-hidden={true} />
         <span className="truncate">{currentSortLabel}</span>

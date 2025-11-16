@@ -117,7 +117,7 @@ export default function Performance() {
         </div>
 
         {/* Performance Comparison */}
-        <div className="mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8 tablet:p-12">
+          <div className="mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8 tablet:p-12">
           <div className="text-center">
             <h3 className="text-fluid-2xl font-bold text-white tablet:text-fluid-3xl">
               Stop fighting with Excel at 2 AM

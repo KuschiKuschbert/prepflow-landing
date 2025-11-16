@@ -8,6 +8,7 @@ import {
   formatSupplierName,
   formatStorageLocation,
 } from '@/lib/text-utils';
+import { CSVImportPreview } from './CSVImportPreview';
 
 interface Ingredient {
   id: string;
@@ -203,9 +204,9 @@ export default function CSVImportModal({
     <div className="bg-opacity-50 fixed inset-0 z-[70] flex items-center justify-center bg-black p-4 backdrop-blur-sm">
       <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
         {/* Header */}
-        <div className="border-b border-[#2a2a2a] p-4 lg:p-6">
+        <div className="border-b border-[#2a2a2a] p-4 desktop:p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl lg:text-2xl font-bold text-white">📁 Import Ingredients from CSV</h2>
+            <h2 className="text-xl desktop:text-2xl font-bold text-white">📁 Import Ingredients from CSV</h2>
             <button
               onClick={handleClose}
               className="rounded-full bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white"
@@ -223,7 +224,7 @@ export default function CSVImportModal({
         </div>
 
         {/* Content */}
-        <div className="space-y-4 lg:space-y-6 p-4 lg:p-6">
+        <div className="space-y-4 desktop:space-y-6 p-4 desktop:p-6">
           {/* File Upload */}
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">Upload CSV File</label>
@@ -247,66 +248,14 @@ export default function CSVImportModal({
 
           {/* Preview */}
           {parsedIngredients.length > 0 && (
-            <div>
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-medium text-white">
-                  Preview ({parsedIngredients.length} ingredients found)
-                </h3>
-                <div className="space-x-2">
-                  <button
-                    onClick={() => handleSelectAll(true)}
-                    className="text-sm text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
-                  >
-                    Select All
-                  </button>
-                  <button
-                    onClick={() => handleSelectAll(false)}
-                    className="text-sm text-gray-400 transition-colors hover:text-white"
-                  >
-                    Clear All
-                  </button>
-                </div>
-              </div>
-
-              <div className="max-h-60 overflow-y-auto rounded-lg border border-[#2a2a2a]">
-                {parsedIngredients.map((ingredient, index) => {
-                  const displayCost = getDisplayCost(ingredient);
-                  const isSelected = selectedIngredients.has(index.toString());
-
-                  return (
-                    <div
-                      key={index}
-                      className={`border-b border-[#2a2a2a] p-3 transition-colors last:border-b-0 ${
-                        isSelected ? 'bg-[#29E7CD]/10' : 'hover:bg-[#2a2a2a]/20'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <button
-                          onClick={() => handleSelectIngredient(index.toString(), !isSelected)}
-                          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-                          aria-label={`${isSelected ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name || 'Unknown'}`}
-                        >
-                          {isSelected ? (
-                            <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
-                          )}
-                        </button>
-                        <div className="flex-1">
-                          <div className="font-medium text-white">{ingredient.ingredient_name}</div>
-                          <div className="text-sm text-gray-400">
-                            {ingredient.brand && `Brand: ${ingredient.brand} • `}
-                            Cost: ${displayCost.formattedCost}/{displayCost.unit}
-                            {displayCost.packInfo && ` • ${displayCost.packInfo}`}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            <>
+              <CSVImportPreview
+                parsedIngredients={parsedIngredients}
+                selectedIngredients={selectedIngredients}
+                onSelectIngredient={handleSelectIngredient}
+                onSelectAll={handleSelectAll}
+                getDisplayCost={getDisplayCost}
+              />
 
               <div className="mt-4 flex justify-end space-x-3">
                 <button
@@ -323,7 +272,7 @@ export default function CSVImportModal({
                   {loading ? 'Importing...' : `Import Selected (${selectedIngredients.size})`}
                 </button>
               </div>
-            </div>
+            </>
           )}
 
           {/* Instructions */}

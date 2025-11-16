@@ -17,7 +17,7 @@ export const metadata = {
 export default function TermsOfService() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl px-4 py-16 tablet:px-6 desktop:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
           <Link

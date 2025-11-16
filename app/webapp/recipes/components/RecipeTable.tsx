@@ -55,7 +55,7 @@ const RecipeTable = React.memo(function RecipeTable({
   });
 
   return (
-    <div className="hidden overflow-x-auto lg:block">
+    <div className="hidden overflow-x-auto desktop:block">
       <table className="min-w-full divide-y divide-[#2a2a2a]">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
@@ -100,7 +100,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Recommended Price'
               )}
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('profit_margin')}
@@ -114,7 +114,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Profit Margin'
               )}
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('contributing_margin')}
@@ -128,7 +128,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Contributing Margin'
               )}
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase lg:table-cell">
+            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('created')}

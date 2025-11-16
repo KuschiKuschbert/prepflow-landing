@@ -35,7 +35,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'left-0',
         'z-[60]',
         'w-72',
-        'lg:w-80',
+        'desktop:w-80',
         'transform',
         'border-r',
         'border-[#2a2a2a]',
@@ -45,7 +45,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'ease-in-out',
         'will-change-transform',
         'pt-[var(--header-height-mobile)]',
-        'lg:pt-[var(--header-height-desktop)]',
+        'desktop:pt-[var(--header-height-desktop)]',
         isOpen ? 'translate-x-0' : '-translate-x-full',
       )}
     >
@@ -58,7 +58,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
             'border-b',
             'border-[#2a2a2a]',
             'p-3',
-            'lg:p-4',
+            'desktop:p-4',
           )}
         >
           <h2 id="sidebar-title" className="text-lg font-semibold text-white">
@@ -92,19 +92,19 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
           </button>
         </div>
 
-        <div className={cn('hidden', 'lg:block', 'border-b', 'border-[#2a2a2a]', 'p-4')}>
+        <div className={cn('hidden', 'desktop:block', 'border-b', 'border-[#2a2a2a]', 'p-4')}>
           <div className="text-xs text-gray-500">
             Press <kbd className="rounded bg-[#2a2a2a] px-1">⌘B</kbd> to toggle
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 lg:p-4">
+        <div className="flex-1 overflow-y-auto p-3 desktop:p-4">
           {Object.entries(grouped).map(([category, items]) => (
-            <div key={category} className="mb-4 lg:mb-6">
+            <div key={category} className="mb-4 desktop:mb-6">
               <h3
                 className={cn(
                   'mb-2',
-                  'lg:mb-3',
+                  'desktop:mb-3',
                   'text-xs',
                   'font-semibold',
                   'tracking-wider',
@@ -166,7 +166,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         </div>
 
         {/* Mobile-only: Language and Logout */}
-        <div className="space-y-3 border-t border-[#2a2a2a] p-4 lg:hidden">
+        <div className="space-y-3 border-t border-[#2a2a2a] p-4 desktop:hidden">
           <div>
             <div className="mb-2 text-xs tracking-wider text-gray-400 uppercase">Settings</div>
             <div className="space-y-2">

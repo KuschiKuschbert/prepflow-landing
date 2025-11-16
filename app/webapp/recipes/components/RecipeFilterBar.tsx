@@ -65,7 +65,7 @@ export function RecipeFilterBar({
   return (
     <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
       {/* Search and Filters */}
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
+      <div className="flex flex-col gap-2 tablet:flex-row tablet:items-center tablet:gap-2">
         <RecipeSearchBar
           searchTerm={localSearchTerm}
           onSearchChange={setLocalSearchTerm}
