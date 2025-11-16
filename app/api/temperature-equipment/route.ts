@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -16,11 +18,18 @@ export async function GET() {
       .order('name', { ascending: true });
 
     if (error) {
-      console.error('Error fetching temperature equipment:', error);
-      return NextResponse.json(
-        { success: false, error: 'Failed to fetch temperature equipment' },
-        { status: 500 },
-      );
+      logger.error('[Temperature Equipment API] Database error fetching equipment:', {
+        error: error.message,
+        code: (error as any).code,
+        context: {
+          endpoint: '/api/temperature-equipment',
+          operation: 'GET',
+          table: 'temperature_equipment',
+        },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Apply Queensland food safety standards automatically
@@ -52,9 +61,25 @@ export async function GET() {
     });
 
     return NextResponse.json({ success: true, data: queenslandCompliantData || [] });
-  } catch (error) {
-    console.error('Server error:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  } catch (err) {
+    logger.error('[Temperature Equipment API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/temperature-equipment', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
 
@@ -62,7 +87,7 @@ export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        { success: false, error: 'Database connection not available' },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -87,17 +112,40 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error creating temperature equipment:', error);
-      return NextResponse.json(
-        { success: false, error: 'Failed to create temperature equipment' },
-        { status: 500 },
-      );
+      logger.error('[Temperature Equipment API] Database error creating equipment:', {
+        error: error.message,
+        code: (error as any).code,
+        context: {
+          endpoint: '/api/temperature-equipment',
+          operation: 'POST',
+          table: 'temperature_equipment',
+        },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (error) {
-    console.error('Server error:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  } catch (err) {
+    logger.error('[Temperature Equipment API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/temperature-equipment', method: 'POST' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
 
@@ -105,7 +153,7 @@ export async function DELETE(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        { success: false, error: 'Database connection not available' },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -115,7 +163,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        { success: false, error: 'Equipment ID is required' },
+        ApiErrorHandler.createError('Equipment ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -123,16 +171,35 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabaseAdmin.from('temperature_equipment').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting temperature equipment:', error);
-      return NextResponse.json(
-        { success: false, error: 'Failed to delete temperature equipment' },
-        { status: 500 },
-      );
+      logger.error('[Temperature Equipment API] Database error deleting equipment:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/temperature-equipment', operation: 'DELETE', equipmentId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Server error:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  } catch (err) {
+    logger.error('[Temperature Equipment API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/temperature-equipment', method: 'DELETE' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }

@@ -1,5 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -50,11 +52,14 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await query;
 
     if (error) {
-      console.error('Error fetching temperature logs:', error);
-      return NextResponse.json(
-        { success: false, error: 'Failed to fetch temperature logs' },
-        { status: 500 },
-      );
+      logger.error('[Temperature Logs API] Database error fetching logs:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/temperature-logs', operation: 'GET', table: 'temperature_logs' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     const total = count || 0;
@@ -70,9 +75,25 @@ export async function GET(request: NextRequest) {
         totalPages,
       },
     });
-  } catch (error) {
-    console.error('Server error:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  } catch (err) {
+    logger.error('[Temperature Logs API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/temperature-logs', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
 
@@ -80,7 +101,7 @@ export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        { success: false, error: 'Database connection not available' },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -90,7 +111,11 @@ export async function POST(request: NextRequest) {
     // Validate required fields - either equipment_id or temperature_type must be provided
     if (!body.temperature_celsius || (!body.equipment_id && !body.temperature_type)) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: temperature_celsius and (equipment_id or temperature_type)' },
+        ApiErrorHandler.createError(
+          'Missing required fields: temperature_celsius and (equipment_id or temperature_type)',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -98,7 +123,7 @@ export async function POST(request: NextRequest) {
     // Validate temperature range (reasonable values)
     if (body.temperature_celsius < -50 || body.temperature_celsius > 200) {
       return NextResponse.json(
-        { success: false, error: 'Temperature out of reasonable range' },
+        ApiErrorHandler.createError('Temperature out of reasonable range', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -140,16 +165,39 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error creating temperature log:', error);
-      return NextResponse.json(
-        { success: false, error: 'Failed to create temperature log' },
-        { status: 500 },
-      );
+      logger.error('[Temperature Logs API] Database error creating log:', {
+        error: error.message,
+        code: (error as any).code,
+        context: {
+          endpoint: '/api/temperature-logs',
+          operation: 'POST',
+          table: 'temperature_logs',
+        },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (error) {
-    console.error('Server error:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+  } catch (err) {
+    logger.error('[Temperature Logs API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/temperature-logs', method: 'POST' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
