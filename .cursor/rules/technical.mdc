@@ -35,8 +35,22 @@ alwaysApply: true
 - Purge Policy: Client migration purges drafts older than 7 days and re-keys `"new"`/`tmp_*` entries to stable IDs on startup.
 - Server Parity: Demo saves clear drafts; production keeps drafts on 4xx/5xx and surfaces an error.
 - UI Contracts:
-  - Forms using autosave must pass a stable `entityId` (prefer server ID; otherwise `deriveAutosaveId`).
-  - After successful save, drafts must be cleared (handled centrally in `useAutosave`).
+- Forms using autosave must pass a stable `entityId` (prefer server ID; otherwise `deriveAutosaveId`).
+- After successful save, drafts must be cleared (handled centrally in `useAutosave`).
+
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all technical standards.
+
+**Available Checks:**
+- Autosave patterns: Manual review (autosave ID usage)
+- Next.js patterns: Manual review (route handler patterns)
+
+**Available Fixes:**
+- Autosave patterns: Manual fixes required
+- Next.js patterns: Manual fixes required
+
+**Standards Reference:** See `cleanup.mdc` (Autosave Standards) for complete enforcement details.
 
 ### Implemented
 

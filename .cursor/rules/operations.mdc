@@ -378,3 +378,16 @@ export async function GET() {
 - **Examples:** Database restore, deployment rollback, incident response
 - **Updates:** Keep runbooks updated with process changes
 - **Access:** Runbooks accessible to all team members
+
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all operations standards.
+
+**Available Checks:**
+- Performance: `npm run cleanup:check` (validates bundle size, API response times)
+- Performance monitoring: Manual review (Core Web Vitals)
+
+**Available Fixes:**
+- Performance: Manual optimization required
+
+**Standards Reference:** See `cleanup.mdc` (Performance Standards) for complete enforcement details.

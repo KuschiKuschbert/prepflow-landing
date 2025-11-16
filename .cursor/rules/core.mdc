@@ -119,6 +119,20 @@ alwaysApply: true
 - This prevents TypeScript build errors on Vercel: `Type 'RefObject<HTMLDivElement | null>' is not assignable to type 'RefObject<HTMLDivElement>'`.
 - Always check ref types in hook return interfaces and component prop types.
 
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all core standards.
+
+**Available Checks:**
+- TypeScript ref types: `npm run cleanup:check` (validates RefObject patterns)
+- Naming conventions: `npm run cleanup:check` (validates file/component/function naming)
+- Supabase patterns: Manual review (query patterns)
+
+**Available Fixes:**
+- Naming conventions: Manual fixes required
+
+**Standards Reference:** See `cleanup.mdc` (Code Quality Standards, Naming Conventions) for complete enforcement details.
+
 ## 🎯 **Project Overview**
 
 PrepFlow is a unified restaurant profitability optimization platform that helps cafés, restaurants, and food trucks analyze their menu costs, calculate COGS, and optimize gross profit margins. The platform combines a marketing landing page with a comprehensive webapp featuring subscription-based access.

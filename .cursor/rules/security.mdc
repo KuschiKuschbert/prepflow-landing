@@ -257,3 +257,16 @@ For every new API endpoint:
 - [ ] No secrets in logs or error messages
 - [ ] SQL injection prevention verified
 - [ ] XSS prevention verified
+
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all security standards.
+
+**Available Checks:**
+- Security patterns: `npm run cleanup:check` (validates input validation, rate limiting patterns)
+- API security: Manual review (security headers, CSRF protection)
+
+**Available Fixes:**
+- Security patterns: Manual fixes required
+
+**Standards Reference:** See `cleanup.mdc` (Security Standards) for complete enforcement details.

@@ -389,6 +389,20 @@ if (error) {
 - [ ] Client components marked with `"use client"`
 - [ ] Documentation updated
 
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all implementation standards.
+
+**Available Checks:**
+- API standards: Manual review (response formats, status codes)
+- Database patterns: Manual review (Supabase query patterns)
+
+**Available Fixes:**
+- API standards: Manual fixes required
+- Database patterns: Manual fixes required
+
+**Standards Reference:** See `cleanup.mdc` (API Standards, Database Standards) for complete enforcement details.
+
 ## 🧭 **Modern Navigation System**
 
 ### **Architecture Overview**

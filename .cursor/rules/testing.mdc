@@ -346,3 +346,17 @@ For complete documentation of all testing scripts and future test commands, see 
 - [ ] Test coverage tracked
 - [ ] Bugs documented and tracked
 - [ ] Test results shared with team
+
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all testing standards.
+
+**Available Checks:**
+- Test coverage: Manual review (coverage reports)
+- Accessibility: Manual review (WCAG compliance)
+
+**Available Fixes:**
+- Test coverage: Manual fixes required
+- Accessibility: Manual fixes required
+
+**Standards Reference:** See `cleanup.mdc` (Testing Standards) for complete enforcement details.

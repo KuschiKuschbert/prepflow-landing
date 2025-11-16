@@ -377,6 +377,28 @@ npm run codemod:console:write
 
 **Status:** ✅ Breakpoint and Console migrations fully implemented and tested
 
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all development standards.
+
+**Available Checks:**
+- File sizes: `npm run cleanup:check` (validates file size limits)
+- Console.log migration: `npm run cleanup:check` (detects console usage)
+- Breakpoints: `npm run cleanup:check` (validates custom breakpoints)
+- Unused imports: `npm run cleanup:check` (detects unused imports)
+- Prettier formatting: `npm run cleanup:check` (validates formatting)
+- ESLint violations: `npm run cleanup:check` (validates lint rules)
+- JSDoc documentation: `npm run cleanup:check` (detects missing JSDoc)
+- Naming conventions: `npm run cleanup:check` (validates naming)
+
+**Available Fixes:**
+- Breakpoints: `npm run cleanup:fix` (auto-migrates via codemod)
+- Console.log: `npm run cleanup:fix` (auto-migrates via codemod)
+- Unused imports: `npm run cleanup:fix` (auto-removes via ESLint)
+- Prettier formatting: `npm run cleanup:fix` (auto-formats via Prettier)
+
+**Standards Reference:** See `cleanup.mdc` (File Size Limits, Code Quality Standards, JSDoc Requirements, Code Formatting Standards) for complete enforcement details.
+
 ## 🛠️ **Available Development Scripts**
 
 **Note:** See `docs/SCRIPTS.md` for complete script reference and usage examples.

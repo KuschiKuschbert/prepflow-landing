@@ -785,3 +785,16 @@ Run `npm run detect-breakpoints` to analyze breakpoint usage across the codebase
 - **Currency Display:** Clear pricing in multiple currencies
 - **Regional Compliance:** GDPR, privacy laws, data protection
 
+## 🤖 **Automated Enforcement**
+
+**Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all design standards.
+
+**Available Checks:**
+- Breakpoints: `npm run cleanup:check` (validates custom breakpoints, detects rogue breakpoints)
+- Icons: `npm run cleanup:check` (validates Icon wrapper usage, detects emoji usage)
+- Material Design 3: Manual review (design patterns)
+
+**Available Fixes:**
+- Breakpoints: `npm run cleanup:fix` (auto-migrates rogue breakpoints via codemod)
+
+**Standards Reference:** See `cleanup.mdc` (Breakpoint Standards, Icon Standards, Material Design 3 Standards) for complete enforcement details.

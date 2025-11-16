@@ -1,0 +1,416 @@
+---
+alwaysApply: true
+---
+
+## 🧹 **Cleanup Standards & Automated Enforcement**
+
+**Purpose:** Centralized documentation of ALL cleanup standards with automated enforcement capabilities.
+
+**See Also:**
+- `development.mdc` - Development workflow and refactoring standards
+- `design.mdc` - Design system and UI standards
+- `core.mdc` - Core TypeScript and naming standards
+- `security.mdc` - Security patterns and validation
+- `testing.mdc` - Testing and quality assurance standards
+- `operations.mdc` - Performance and operations standards
+- `implementation.mdc` - API and database patterns
+- `technical.mdc` - Technical patterns and autosave
+
+**Automated Enforcement:**
+- Check: `npm run cleanup:check` - Validates all standards
+- Fix: `npm run cleanup:fix` - Auto-fixes available issues
+- Report: `npm run cleanup:report` - Generates detailed reports
+
+---
+
+## 📏 **File Size Limits**
+
+**Source:** `development.mdc` (File Refactoring Standards)
+
+**MANDATORY Limits:**
+- **Pages:** 500 lines maximum
+- **Components:** 300 lines maximum
+- **API Routes:** 200 lines maximum
+- **Utilities:** 150 lines maximum
+- **Hooks:** 100 lines maximum
+- **Data Files:** 2000 lines maximum (seed data, translations)
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (file-sizes check)
+- Fix: Manual refactoring required (see `development.mdc` for guidelines)
+
+**Related:**
+- See `development.mdc` (File Refactoring Standards) for refactoring guidelines
+- See `development.mdc` (Git Best Practices) for refactoring workflow
+
+---
+
+## 💻 **Code Quality Standards**
+
+### **TypeScript Standards**
+
+**Source:** `development.mdc` (Code Quality Requirements), `core.mdc` (TypeScript Ref Types)
+
+**Standards:**
+- Strict typing, no `any` types without justification
+- Ref Types: `RefObject<HTMLElement | null>` (MANDATORY)
+- No `.catch()` chaining on Supabase query builders (MANDATORY)
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (typescript-ref-types check)
+- Fix: Manual fixes required
+
+**Related:**
+- See `core.mdc` (TypeScript Ref Types) for detailed patterns
+- See `core.mdc` (Supabase TypeScript Gotcha) for query patterns
+
+### **Console.log Migration**
+
+**Source:** `development.mdc` (Codemod Rules)
+
+**Standard:**
+- Use `logger.dev()` instead of `console.log()` (360 instances found)
+- Use `logger.error()` instead of `console.error()`
+- Use `logger.warn()` instead of `console.warn()`
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (console-logs check)
+- Fix: `scripts/cleanup.js --fix` (uses existing codemod)
+
+**Related:**
+- See `development.mdc` (Console Migration Codemod) for migration details
+- See `lib/logger.ts` for logger utility
+
+### **Naming Conventions**
+
+**Source:** `development.mdc` (Naming Conventions)
+
+**Standards:**
+- Files: kebab-case (e.g., `exit-intent-popup.tsx`)
+- Components: PascalCase (e.g., `ExitIntentPopup`)
+- Functions: camelCase with descriptive verbs
+- Constants: UPPER_SNAKE_CASE (e.g., `GTM_EVENTS`)
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (naming check)
+- Fix: Manual fixes required
+
+**Related:**
+- See `development.mdc` (Naming Conventions) for complete guidelines
+
+---
+
+## 🎨 **Design System Standards**
+
+### **Breakpoint Standards**
+
+**Source:** `design.mdc` (Custom Breakpoint System)
+
+**MANDATORY Standards:**
+- Custom breakpoints ONLY: `tablet:`, `desktop:`, `large-desktop:`, `xl:`, `2xl:`
+- Rogue breakpoints to fix: `sm:`, `md:`, `lg:` (found in 5+ files, DISABLED)
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (breakpoints check) or `npm run detect-breakpoints`
+- Fix: `scripts/cleanup.js --fix` (uses existing breakpoint codemod)
+
+**Related:**
+- See `design.mdc` (Custom Breakpoint System) for complete breakpoint map
+- See `scripts/detect-breakpoints.js` for detection script
+- See `scripts/codemods/breakpoint-migration.js` for migration codemod
+
+### **Icon Standards**
+
+**Source:** `design.mdc` (Icon Standards)
+
+**MANDATORY Standards:**
+- Use Lucide React icons exclusively (no emoji icons)
+- Use `Icon` wrapper component from `components/ui/Icon.tsx`
+- Sizes: `xs` (12px), `sm` (16px), `md` (20px), `lg` (24px), `xl` (32px)
+- Accessibility: Auto `aria-hidden` or `aria-label`
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (icons check)
+- Fix: Manual fixes required
+
+**Related:**
+- See `design.mdc` (Icon Standards) for complete guidelines
+- See `components/ui/Icon.tsx` for Icon component implementation
+
+### **Material Design 3 Standards**
+
+**Source:** `design.mdc` (Material Design 3 Design System)
+
+**Standards:**
+- Border radius: `rounded-3xl` (containers), `rounded-2xl` (cards)
+- Colors: Use CSS variables (`--primary`, `--secondary`, etc.)
+- Typography: Geist Sans (primary), Geist Mono (monospace)
+- Touch targets: 44px minimum
+- Z-index hierarchy: Documented in design.mdc
+
+**Enforcement:**
+- Check: Manual review (design patterns)
+- Fix: Manual fixes required
+
+**Related:**
+- See `design.mdc` (Material Design 3 Design System) for complete guidelines
+
+---
+
+## 📝 **Documentation Standards**
+
+### **JSDoc Requirements**
+
+**Source:** `development.mdc` (JSDoc Documentation Standards)
+
+**MANDATORY Standards:**
+- All public functions, components, hooks must have JSDoc
+- Required fields: Description, @param, @returns
+- Optional fields: @throws, @example, @see
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (jsdoc check)
+- Fix: Manual fixes required
+
+**Related:**
+- See `development.mdc` (JSDoc Documentation Standards) for templates
+- See `development.mdc` (JSDoc Template) for examples
+
+---
+
+## 🎨 **Code Formatting Standards**
+
+### **Prettier Configuration**
+
+**Source:** `development.mdc` (Prettier Configuration)
+
+**Standards:**
+- Semicolons: Required
+- Single quotes: Required
+- Print width: 100 characters
+- Trailing commas: All
+- Tailwind plugin: Auto-sort classes
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (prettier check) or `npm run format:check`
+- Fix: `scripts/cleanup.js --fix` (uses Prettier) or `npm run format`
+
+**Related:**
+- See `development.mdc` (Prettier Configuration) for complete settings
+- See `.prettierrc` for configuration file
+
+### **ESLint Standards**
+
+**Source:** `development.mdc` (ESLint Configuration)
+
+**Standards:**
+- React hooks rules: Enforced
+- Unescaped entities: Enforced (use `&apos;`, `&quot;`)
+- React compiler rules: Disabled
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (eslint check) or `npm run lint`
+- Fix: `scripts/cleanup.js --fix` (uses ESLint --fix)
+
+**Related:**
+- See `development.mdc` (ESLint Configuration) for complete rules
+- See `eslint.config.mjs` for configuration file
+
+---
+
+## 🔄 **Git Workflow Standards**
+
+**Source:** `development.mdc` (Git Best Practices)
+
+**MANDATORY Standards:**
+- Never work directly on main branch
+- Create feature branch: `improvement/feature-name`
+- Test before merge
+- Use Conventional Commits format
+
+**Enforcement:**
+- Check: Manual review (git workflow)
+- Fix: Manual fixes required
+
+**Related:**
+- See `development.mdc` (Git Best Practices) for complete workflow
+- See `development.mdc` (Automatic CHANGELOG Generation) for commit format
+
+---
+
+## 🔌 **API Standards**
+
+**Source:** `implementation.mdc` (API Response Standards)
+
+**Standards:**
+- RESTful design
+- Response format: `{ success, message, data }`
+- Error format: `{ error, message, details? }`
+- Proper HTTP status codes
+
+**Enforcement:**
+- Check: Manual review (API patterns)
+- Fix: Manual fixes required
+
+**Related:**
+- See `implementation.mdc` (API Response Standards) for complete guidelines
+
+---
+
+## 🗄️ **Database Standards**
+
+**Source:** `implementation.mdc` (Database Schema Standards), `core.mdc` (Supabase TypeScript Gotcha)
+
+**MANDATORY Standards:**
+- Supabase parameterized queries ONLY
+- No `.catch()` chaining on query builders
+- Handle `error` explicitly
+- Standard table structure with `created_at`, `updated_at`
+
+**Enforcement:**
+- Check: Manual review (database patterns)
+- Fix: Manual fixes required
+
+**Related:**
+- See `core.mdc` (Supabase TypeScript Gotcha) for query patterns
+- See `implementation.mdc` (Database Schema Standards) for table structure
+
+---
+
+## 🔒 **Security Standards**
+
+**Source:** `security.mdc` (Security Standards)
+
+**MANDATORY Standards:**
+- Input validation: Zod schemas
+- Rate limiting: 100 req/15min (default), 10 req/min (auth)
+- SQL injection: Parameterized queries only
+- XSS: Sanitize user content
+- Security headers: Configured in next.config.ts
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (security check)
+- Fix: Manual fixes required
+
+**Related:**
+- See `security.mdc` (Security Standards) for complete guidelines
+- See `security.mdc` (API Security) for API security patterns
+
+---
+
+## ⚡ **Performance Standards**
+
+**Source:** `operations.mdc` (Performance Standards)
+
+**Standards:**
+- LCP: < 2.5 seconds
+- FID: < 100 milliseconds
+- CLS: < 0.1
+- API response: < 500ms (p95)
+- Bundle size: < 200KB (gzipped)
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (performance check)
+- Fix: Manual optimization required
+
+**Related:**
+- See `operations.mdc` (Performance Standards) for complete targets
+- See `operations.mdc` (Performance Monitoring) for monitoring guidelines
+
+---
+
+## 🧪 **Testing Standards**
+
+**Source:** `testing.mdc` (Testing Standards)
+
+**Standards:**
+- Coverage: 60% minimum, 80% target
+- Critical paths: 100% coverage
+- Accessibility: WCAG 2.1 AA compliance
+- Color contrast: 4.5:1 minimum
+
+**Enforcement:**
+- Check: Manual review (test coverage)
+- Fix: Manual fixes required
+
+**Related:**
+- See `testing.mdc` (Testing Standards) for complete guidelines
+- See `testing.mdc` (Test Coverage Targets) for coverage requirements
+
+---
+
+## 💾 **Autosave Standards**
+
+**Source:** `technical.mdc` (Autosave & Drafts)
+
+**Standards:**
+- Use `deriveAutosaveId()` for stable IDs
+- Avoid `"new"` as entityId
+- Clear drafts after successful save
+
+**Enforcement:**
+- Check: Manual review (autosave patterns)
+- Fix: Manual fixes required
+
+**Related:**
+- See `technical.mdc` (Autosave & Drafts) for complete guidelines
+- See `lib/autosave-id.ts` for ID derivation utility
+
+---
+
+## 🔍 **Dead Code Detection**
+
+**Source:** `development.mdc` (Dead Code Removal)
+
+**Standards:**
+- Remove unused components
+- Remove unused functions
+- Remove unused imports
+- Remove commented-out code
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (dead-code check, unused-imports check)
+- Fix: Manual removal required
+
+**Related:**
+- See `development.mdc` (Dead Code Removal) for removal guidelines
+
+---
+
+## 📊 **Cleanup Script Usage**
+
+### **Commands**
+
+```bash
+# Check all standards
+npm run cleanup:check
+
+# Auto-fix available issues
+npm run cleanup:fix
+
+# Generate detailed report
+npm run cleanup:report
+
+# Check and fix staged files only
+npm run cleanup:staged
+
+# Run all checks, fixes, and reports
+npm run cleanup:all
+```
+
+### **Integration**
+
+**Pre-commit Hook:**
+- Automatically runs `cleanup:staged` on commit
+- Blocks commit on critical violations
+- Auto-fixes safe issues
+
+**CI Pipeline:**
+- Runs `cleanup:check` on all PRs
+- Generates report artifact
+- Fails build on critical violations
+
+**See Also:**
+- `scripts/cleanup.js` - Main cleanup script
+- `scripts/cleanup/checks/` - Individual check modules
+- `scripts/cleanup/fixes/` - Individual fix modules
