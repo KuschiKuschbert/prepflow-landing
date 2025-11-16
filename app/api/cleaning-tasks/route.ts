@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+
+const CLEANING_AREAS_SELECT = `
+  *,
+  cleaning_areas (
+    id,
+    name,
+    description,
+    frequency_days
+  )
+`;
 
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -19,17 +29,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseAdmin
       .from('cleaning_tasks')
-      .select(
-        `
-        *,
-        cleaning_areas (
-          id,
-          name,
-          description,
-          frequency_days
-        )
-      `,
-      )
+      .select(CLEANING_AREAS_SELECT)
       .order('assigned_date', { ascending: false });
 
     if (areaId) {
@@ -45,27 +45,37 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching cleaning tasks:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch cleaning tasks',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Tasks API] Database error fetching tasks:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
       success: true,
       data: data || [],
     });
-  } catch (error) {
-    console.error('Cleaning tasks fetch error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Tasks API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-tasks', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to fetch cleaning tasks',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -78,19 +88,18 @@ export async function POST(request: NextRequest) {
 
     if (!area_id || !assigned_date) {
       return NextResponse.json(
-        {
-          error: 'Required fields missing',
-          message: 'Please provide area_id and assigned_date',
-        },
+        ApiErrorHandler.createError(
+          'area_id and assigned_date are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -103,28 +112,18 @@ export async function POST(request: NextRequest) {
         notes: notes || null,
         status: 'pending',
       })
-      .select(
-        `
-        *,
-        cleaning_areas (
-          id,
-          name,
-          description,
-          frequency_days
-        )
-      `,
-      )
+      .select(CLEANING_AREAS_SELECT)
       .single();
 
     if (error) {
-      console.error('Error creating cleaning task:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to create cleaning task',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Tasks API] Database error creating task:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-tasks', operation: 'POST', table: 'cleaning_tasks' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -132,13 +131,23 @@ export async function POST(request: NextRequest) {
       message: 'Cleaning task created successfully',
       data,
     });
-  } catch (error) {
-    console.error('Cleaning task creation error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Tasks API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-tasks', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to create cleaning task',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -151,10 +160,7 @@ export async function PUT(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'ID is required',
-          message: 'Please provide an ID for the cleaning task to update',
-        },
+        ApiErrorHandler.createError('Cleaning task ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -164,17 +170,12 @@ export async function PUT(request: NextRequest) {
     if (completed_date !== undefined) updateData.completed_date = completed_date;
     if (notes !== undefined) updateData.notes = notes;
     if (photo_url !== undefined) updateData.photo_url = photo_url;
-
-    // If marking as completed, set completed_date to now
-    if (status === 'completed' && !completed_date) {
+    if (status === 'completed' && !completed_date)
       updateData.completed_date = new Date().toISOString();
-    }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -183,28 +184,18 @@ export async function PUT(request: NextRequest) {
       .from('cleaning_tasks')
       .update(updateData)
       .eq('id', id)
-      .select(
-        `
-        *,
-        cleaning_areas (
-          id,
-          name,
-          description,
-          frequency_days
-        )
-      `,
-      )
+      .select(CLEANING_AREAS_SELECT)
       .single();
 
     if (error) {
-      console.error('Error updating cleaning task:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to update cleaning task',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Tasks API] Database error updating task:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-tasks', operation: 'PUT', taskId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -212,13 +203,23 @@ export async function PUT(request: NextRequest) {
       message: 'Cleaning task updated successfully',
       data,
     });
-  } catch (error) {
-    console.error('Cleaning task update error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Tasks API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-tasks', method: 'PUT' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to update cleaning task',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -231,19 +232,14 @@ export async function DELETE(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'ID is required',
-          message: 'Please provide an ID for the cleaning task to delete',
-        },
+        ApiErrorHandler.createError('Cleaning task ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -251,27 +247,37 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabaseAdmin.from('cleaning_tasks').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting cleaning task:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to delete cleaning task',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Tasks API] Database error deleting task:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-tasks', operation: 'DELETE', taskId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
       success: true,
       message: 'Cleaning task deleted successfully',
     });
-  } catch (error) {
-    console.error('Cleaning task deletion error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Tasks API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-tasks', method: 'DELETE' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to delete cleaning task',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

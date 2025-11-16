@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,27 +20,37 @@ export async function GET(request: NextRequest) {
       .order('area_name');
 
     if (error) {
-      console.error('Error fetching cleaning areas:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch cleaning areas',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Areas API] Database error fetching areas:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-areas', operation: 'GET', table: 'cleaning_areas' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
       success: true,
       data: data || [],
     });
-  } catch (error) {
-    console.error('Cleaning areas fetch error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Areas API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-areas', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to fetch cleaning areas',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -51,19 +63,14 @@ export async function POST(request: NextRequest) {
 
     if (!area_name) {
       return NextResponse.json(
-        {
-          error: 'Area name is required',
-          message: 'Please provide a name for the cleaning area',
-        },
+        ApiErrorHandler.createError('Area name is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -79,14 +86,14 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error creating cleaning area:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to create cleaning area',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Areas API] Database error creating area:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-areas', operation: 'POST', table: 'cleaning_areas' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -94,13 +101,23 @@ export async function POST(request: NextRequest) {
       message: 'Cleaning area created successfully',
       data,
     });
-  } catch (error) {
-    console.error('Cleaning area creation error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Areas API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-areas', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to create cleaning area',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -113,10 +130,7 @@ export async function PUT(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'ID is required',
-          message: 'Please provide an ID for the cleaning area to update',
-        },
+        ApiErrorHandler.createError('Cleaning area ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -129,9 +143,7 @@ export async function PUT(request: NextRequest) {
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -144,14 +156,14 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error updating cleaning area:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to update cleaning area',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Areas API] Database error updating area:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-areas', operation: 'PUT', areaId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -159,13 +171,23 @@ export async function PUT(request: NextRequest) {
       message: 'Cleaning area updated successfully',
       data,
     });
-  } catch (error) {
-    console.error('Cleaning area update error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Areas API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-areas', method: 'PUT' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to update cleaning area',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -178,19 +200,14 @@ export async function DELETE(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'ID is required',
-          message: 'Please provide an ID for the cleaning area to delete',
-        },
+        ApiErrorHandler.createError('Cleaning area ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -198,27 +215,37 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabaseAdmin.from('cleaning_areas').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting cleaning area:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to delete cleaning area',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Cleaning Areas API] Database error deleting area:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/cleaning-areas', operation: 'DELETE', areaId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
       success: true,
       message: 'Cleaning area deleted successfully',
     });
-  } catch (error) {
-    console.error('Cleaning area deletion error:', error);
+  } catch (err) {
+    logger.error('[Cleaning Areas API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-areas', method: 'DELETE' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to delete cleaning area',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
