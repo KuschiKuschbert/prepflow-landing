@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -21,15 +26,17 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', category);
     }
 
-    const {
-      data: dishes,
-      error,
-      count,
-    } = await query.order('dish_name').range(start, end);
+    const { data: dishes, error, count } = await query.order('dish_name').range(start, end);
 
     if (error) {
-      console.error('Error fetching dishes:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      logger.error('[Dishes API] Database error fetching dishes:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/dishes', operation: 'GET', table: 'dishes' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -40,8 +47,24 @@ export async function GET(request: NextRequest) {
       pageSize,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/dishes', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
 
@@ -52,19 +75,30 @@ export async function POST(request: NextRequest) {
 
     if (!dish_name || !selling_price) {
       return NextResponse.json(
-        { error: 'Missing required fields', message: 'Dish name and selling price are required' },
+        ApiErrorHandler.createError(
+          'Dish name and selling price are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Validate that at least one recipe or ingredient is provided
     if ((!recipes || recipes.length === 0) && (!ingredients || ingredients.length === 0)) {
       return NextResponse.json(
-        { error: 'Invalid dish', message: 'Dish must contain at least one recipe or ingredient' },
+        ApiErrorHandler.createError(
+          'Dish must contain at least one recipe or ingredient',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -82,8 +116,14 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (createError) {
-      console.error('Error creating dish:', createError);
-      return NextResponse.json({ error: createError.message }, { status: 500 });
+      logger.error('[Dishes API] Database error creating dish:', {
+        error: createError.message,
+        code: (createError as any).code,
+        context: { endpoint: '/api/dishes', operation: 'POST', dishName: dish_name },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Add recipes if provided
@@ -97,10 +137,17 @@ export async function POST(request: NextRequest) {
       const { error: recipesError } = await supabaseAdmin.from('dish_recipes').insert(dishRecipes);
 
       if (recipesError) {
-        console.error('Error adding recipes to dish:', recipesError);
+        logger.error('[Dishes API] Database error adding recipes to dish:', {
+          error: recipesError.message,
+          code: (recipesError as any).code,
+          context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
+        });
+
         // Rollback dish creation
         await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
-        return NextResponse.json({ error: recipesError.message }, { status: 500 });
+
+        const apiError = ApiErrorHandler.fromSupabaseError(recipesError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
     }
 
@@ -120,10 +167,17 @@ export async function POST(request: NextRequest) {
         .insert(dishIngredients);
 
       if (ingredientsError) {
-        console.error('Error adding ingredients to dish:', ingredientsError);
+        logger.error('[Dishes API] Database error adding ingredients to dish:', {
+          error: ingredientsError.message,
+          code: (ingredientsError as any).code,
+          context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
+        });
+
         // Rollback dish creation
-        await supabaseAdmin!.from('dishes').delete().eq('id', newDish.id);
-        return NextResponse.json({ error: ingredientsError.message }, { status: 500 });
+        await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+
+        const apiError = ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
     }
 
@@ -132,12 +186,22 @@ export async function POST(request: NextRequest) {
       dish: newDish,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/dishes', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
