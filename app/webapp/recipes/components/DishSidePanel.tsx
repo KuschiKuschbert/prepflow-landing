@@ -17,19 +17,10 @@ export interface DishSidePanelProps {
   onDelete: (dish: Dish) => void;
 }
 
-export function DishSidePanel({
-  isOpen,
-  dish,
-  onClose,
-  onEdit,
-  onDelete,
-}: DishSidePanelProps) {
+export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishSidePanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [dishDetails, setDishDetails] = useState<DishWithDetails | null>(null);
-  const [costData, setCostData] = useState<DishCostData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({
     position: 'fixed',
     top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
@@ -57,144 +48,21 @@ export function DishSidePanel({
     window.addEventListener('resize', updatePanelStyle);
     return () => window.removeEventListener('resize', updatePanelStyle);
   }, []);
-  const [recipeIngredientsMap, setRecipeIngredientsMap] = useState<
-    Record<string, RecipeIngredientWithDetails[]>
-  >({});
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
   const [editQuantity, setEditQuantity] = useState<number>(0);
 
-  // Fetch dish details and recipe ingredients
-  useEffect(() => {
-    if (!isOpen || !dish) {
-      setDishDetails(null);
-      setCostData(null);
-      setLoading(true);
-      setRecipeIngredientsMap({});
-      return;
-    }
+  // Fetch dish details and recipe ingredients using hook
+  const { dishDetails, costData, loading, recipeIngredientsMap } = useDishSidePanelData(
+    isOpen,
+    dish,
+  );
 
-    Promise.all([
-      fetch(`/api/dishes/${dish.id}`).then(r => r.json()),
-      fetch(`/api/dishes/${dish.id}/cost`).then(r => r.json()),
-    ]).then(async ([dishData, costResponse]) => {
-      if (dishData.success) {
-        setDishDetails(dishData.dish);
-        // Fetch recipe ingredients for each recipe in the dish
-        const recipes = dishData.dish.recipes || [];
-        const ingredientsMap: Record<string, RecipeIngredientWithDetails[]> = {};
-        for (const dishRecipe of recipes) {
-          if (dishRecipe.recipe_id) {
-            try {
-              const response = await fetch(`/api/recipes/${dishRecipe.recipe_id}/ingredients`);
-              const data = await response.json();
-              if (data.success && data.ingredients) {
-                ingredientsMap[dishRecipe.recipe_id] = data.ingredients;
-              }
-            } catch (err) {
-              console.error(`Failed to fetch ingredients for recipe ${dishRecipe.recipe_id}:`, err);
-            }
-          }
-        }
-        setRecipeIngredientsMap(ingredientsMap);
-      }
-      if (costResponse.success) setCostData(costResponse.cost);
-      setLoading(false);
-    });
-  }, [isOpen, dish?.id]);
-
-  // Convert dish recipes and ingredients to COGS calculations
-  const calculations: COGSCalculation[] = useMemo(() => {
-    if (!dishDetails) return [];
-
-    const allCalculations: COGSCalculation[] = [];
-
-    // Process recipes
-    const recipes = dishDetails.recipes || [];
-    for (const dishRecipe of recipes) {
-      const recipeId = dishRecipe.recipe_id;
-      const recipeQuantity = typeof dishRecipe.quantity === 'number' ? dishRecipe.quantity : parseFloat(String(dishRecipe.quantity)) || 1;
-      const recipeIngredients = recipeIngredientsMap[recipeId] || [];
-
-      // Convert recipe ingredients to COGS calculations
-      const recipeCOGS = convertToCOGSCalculations(recipeIngredients, recipeId);
-
-      // Scale by recipe quantity and add to all calculations
-      recipeCOGS.forEach(calc => {
-        const scaledCalc: COGSCalculation = {
-          recipeId: recipeId,
-          ingredientId: calc.ingredientId || calc.ingredient_id || '',
-          ingredientName: calc.ingredientName || calc.ingredient_name || '',
-          quantity: calc.quantity * recipeQuantity,
-          unit: calc.unit,
-          costPerUnit: calc.cost_per_unit || 0,
-          totalCost: (calc.total_cost || 0) * recipeQuantity,
-          wasteAdjustedCost: calc.yieldAdjustedCost * recipeQuantity,
-          yieldAdjustedCost: calc.yieldAdjustedCost * recipeQuantity,
-          id: calc.id,
-          ingredient_id: calc.ingredient_id,
-          ingredient_name: calc.ingredient_name,
-          cost_per_unit: calc.cost_per_unit,
-          total_cost: (calc.total_cost || 0) * recipeQuantity,
-          supplier_name: calc.supplier_name,
-          category: calc.category,
-        };
-        allCalculations.push(scaledCalc);
-      });
-    }
-
-    // Process standalone ingredients
-    const ingredients = dishDetails.ingredients || [];
-    for (const dishIngredient of ingredients) {
-      const ingredient = dishIngredient.ingredients;
-      if (!ingredient) continue;
-
-      const quantity = typeof dishIngredient.quantity === 'number' ? dishIngredient.quantity : parseFloat(String(dishIngredient.quantity)) || 0;
-      const costPerUnit =
-        (ingredient as any).cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
-      const totalCost = quantity * costPerUnit;
-
-      // Apply waste and yield adjustments
-      const wastePercent = (ingredient as any).trim_peel_waste_percentage || 0;
-      const yieldPercent = (ingredient as any).yield_percentage || 100;
-
-      let wasteAdjustedCost = totalCost;
-      if (!(ingredient as any).cost_per_unit_incl_trim && wastePercent > 0) {
-        wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
-      }
-
-      const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
-
-      allCalculations.push({
-        recipeId: dish?.id || '',
-        ingredientId: ingredient.id,
-        ingredientName: ingredient.ingredient_name || 'Unknown',
-        quantity: quantity,
-        unit: dishIngredient.unit || 'g',
-        costPerUnit: costPerUnit,
-        totalCost: totalCost,
-        wasteAdjustedCost: wasteAdjustedCost,
-        yieldAdjustedCost: yieldAdjustedCost,
-        id: dishIngredient.id,
-        ingredient_id: ingredient.id,
-        ingredient_name: ingredient.ingredient_name || 'Unknown',
-        cost_per_unit: costPerUnit,
-        total_cost: totalCost,
-        supplier_name: (ingredient as any).supplier_name,
-        category: (ingredient as any).category,
-      });
-    }
-
-    return allCalculations;
-  }, [dishDetails, recipeIngredientsMap, dish?.id]);
-
-  // Calculate totals
-  const totalCOGS = useMemo(() => {
-    return calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
-  }, [calculations]);
-
-  const costPerPortion = useMemo(() => {
-    return totalCOGS; // Dishes typically have 1 portion
-  }, [totalCOGS]);
+  // Convert dish recipes and ingredients to COGS calculations using hook
+  const { calculations, totalCOGS, costPerPortion } = useDishCOGSCalculations(
+    dishDetails,
+    recipeIngredientsMap,
+    dish,
+  );
 
   const handleEditIngredient = (ingredientId: string, currentQuantity: number) => {
     setEditingIngredient(ingredientId);
@@ -301,7 +169,7 @@ export function DishSidePanel({
     <>
       {/* Backdrop - only on mobile */}
       <div
-        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm desktop:hidden transition-opacity duration-300"
+        className="desktop:hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
         style={{
           top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
         }}
@@ -312,7 +180,7 @@ export function DishSidePanel({
       {/* Side Panel */}
       <div
         ref={panelRef}
-        className={`fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out desktop:max-w-lg ${
+        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={panelStyle}
@@ -328,7 +196,10 @@ export function DishSidePanel({
             onClose={onClose}
           />
 
-          <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 space-y-6" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div
+            className="flex-1 space-y-6 overflow-x-hidden overflow-y-auto p-6"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             <DishSidePanelContent
               loading={loading}
               dishDetails={dishDetails}

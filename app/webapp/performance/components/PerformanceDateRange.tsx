@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { DateRange, DateRangePreset } from '../types';
@@ -22,12 +21,6 @@ export default function PerformanceDateRange({
   dateRange,
   onDateRangeChange,
 }: PerformanceDateRangeProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const handlePresetChange = (preset: DateRangePreset) => {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
@@ -91,21 +84,9 @@ export default function PerformanceDateRange({
     });
   };
 
-  // Prevent hydration mismatch by only rendering after mount
-  if (!mounted) {
-    return (
-      <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-        <div className="mb-4 flex items-center gap-2">
-          <div className="h-5 w-5 rounded bg-[#2a2a2a] animate-pulse" />
-          <div className="h-6 w-32 rounded bg-[#2a2a2a] animate-pulse" />
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6">
-      <div className="mb-2 flex items-center gap-2 tablet:mb-3">
+    <div className="tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6 mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3">
+      <div className="tablet:mb-3 mb-2 flex items-center gap-2">
         <Icon icon={Calendar} size="sm" className="text-[#29E7CD]" />
         <h3 className="text-base font-semibold text-white">Time Period</h3>
       </div>
@@ -116,7 +97,7 @@ export default function PerformanceDateRange({
           <button
             key={preset.value}
             onClick={() => handlePresetChange(preset.value)}
-            className={`rounded-full px-2 py-1 text-xs font-medium transition-all tablet:px-3 tablet:py-1.5 ${
+            className={`tablet:px-3 tablet:py-1.5 rounded-full px-2 py-1 text-xs font-medium transition-all ${
               dateRange.preset === preset.value
                 ? 'border-2 border-[#29E7CD] bg-[#29E7CD]/20 text-[#29E7CD] shadow-lg shadow-[#29E7CD]/20'
                 : 'border border-[#2a2a2a] bg-[#2a2a2a] text-gray-400 hover:border-[#29E7CD]/50 hover:text-[#29E7CD]'
@@ -129,7 +110,7 @@ export default function PerformanceDateRange({
 
       {/* Custom Date Range Inputs */}
       {dateRange.preset === 'custom' && (
-        <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2">
+        <div className="tablet:grid-cols-2 grid grid-cols-1 gap-4">
           <div className="flex flex-col">
             <label className="mb-2 text-sm font-medium text-gray-300">Start Date</label>
             <input
