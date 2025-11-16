@@ -1,6 +1,8 @@
 import { normalizeIngredientData } from '@/lib/ingredients/normalizeIngredientDataMain';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,14 +22,14 @@ export async function GET(request: NextRequest) {
       .range(start, end);
 
     if (error) {
-      console.error('Error fetching ingredients:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch ingredients',
-          details: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Ingredients API] Database error fetching ingredients:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/ingredients', operation: 'GET', table: 'ingredients' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -41,12 +43,22 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/ingredients', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -61,29 +73,30 @@ export async function POST(request: NextRequest) {
     const { normalized, error: normalizeError } = normalizeIngredientData(body);
     if (normalizeError) {
       return NextResponse.json(
-        {
-          error: 'Failed to normalize ingredient data',
-          details: normalizeError,
-        },
+        ApiErrorHandler.createError(
+          'Failed to normalize ingredient data',
+          'VALIDATION_ERROR',
+          400,
+          {
+            details: normalizeError,
+          },
+        ),
         { status: 400 },
       );
     }
 
     // Insert using admin client (bypasses RLS)
-    const { data, error } = await supabaseAdmin
-      .from('ingredients')
-      .insert([normalized])
-      .select();
+    const { data, error } = await supabaseAdmin.from('ingredients').insert([normalized]).select();
 
     if (error) {
-      console.error('Error inserting ingredient:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to add ingredient',
-          details: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Ingredients API] Database error inserting ingredient:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/ingredients', operation: 'POST', table: 'ingredients' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -91,12 +104,22 @@ export async function POST(request: NextRequest) {
       data: data?.[0] || null,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/ingredients', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -110,9 +133,7 @@ export async function PUT(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'Ingredient ID is required',
-        },
+        ApiErrorHandler.createError('Ingredient ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -153,22 +174,21 @@ export async function PUT(request: NextRequest) {
       .maybeSingle();
 
     if (error) {
-      console.error('Error updating ingredient:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to update ingredient',
-          details: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Ingredients API] Database error updating ingredient:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/ingredients', operation: 'PUT', ingredientId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     if (!data) {
       return NextResponse.json(
-        {
-          error: 'Ingredient not found',
-          details: 'The ingredient may have been deleted',
-        },
+        ApiErrorHandler.createError('Ingredient not found', 'NOT_FOUND', 404, {
+          ingredientId: id,
+        }),
         { status: 404 },
       );
     }
@@ -178,12 +198,22 @@ export async function PUT(request: NextRequest) {
       data: data,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/ingredients', method: 'PUT' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -197,9 +227,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'Ingredient ID is required',
-        },
+        ApiErrorHandler.createError('Ingredient ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -208,14 +236,14 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabaseAdmin.from('ingredients').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting ingredient:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to delete ingredient',
-          details: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Ingredients API] Database error deleting ingredient:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/ingredients', operation: 'DELETE', ingredientId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -223,12 +251,22 @@ export async function DELETE(request: NextRequest) {
       message: 'Ingredient deleted successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/ingredients', method: 'DELETE' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

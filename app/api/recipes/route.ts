@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -21,15 +26,17 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', category);
     }
 
-    const {
-      data: recipes,
-      error,
-      count,
-    } = await query.order('name').range(start, end);
+    const { data: recipes, error, count } = await query.order('name').range(start, end);
 
     if (error) {
-      console.error('Error fetching recipes:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      logger.error('[Recipes API] Database error fetching recipes:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/recipes', operation: 'GET', table: 'recipes' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -40,8 +47,24 @@ export async function GET(request: NextRequest) {
       pageSize,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }
 
@@ -52,13 +75,16 @@ export async function POST(request: NextRequest) {
 
     if (!name) {
       return NextResponse.json(
-        { error: 'Missing required field', message: 'Recipe name is required' },
+        ApiErrorHandler.createError('Recipe name is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Check if recipe already exists
@@ -87,8 +113,14 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (updateError) {
-        console.error('Error updating recipe:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        logger.error('[Recipes API] Database error updating recipe:', {
+          error: updateError.message,
+          code: (updateError as any).code,
+          context: { endpoint: '/api/recipes', operation: 'PUT', recipeId: existingRecipe.id },
+        });
+
+        const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
 
       return NextResponse.json({
@@ -112,8 +144,14 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (createError) {
-        console.error('Error creating recipe:', createError);
-        return NextResponse.json({ error: createError.message }, { status: 500 });
+        logger.error('[Recipes API] Database error creating recipe:', {
+          error: createError.message,
+          code: (createError as any).code,
+          context: { endpoint: '/api/recipes', operation: 'POST', recipeName: name },
+        });
+
+        const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
 
       return NextResponse.json({
@@ -123,12 +161,22 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
