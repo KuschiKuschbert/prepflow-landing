@@ -3,25 +3,27 @@ import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
 import {
-    calculateAveragePopularity,
-    calculateAverageProfitMargin,
-    calculateThresholds,
+  calculateAveragePopularity,
+  calculateAverageProfitMargin,
+  calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
 import { evaluateGate } from '@/lib/feature-gate';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
     const gate = evaluateGate('analytics', request);
     if (!gate.allowed) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(ApiErrorHandler.createError('Access denied', 'FORBIDDEN', 403), {
+        status: 403,
+      });
     }
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -49,15 +51,14 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (dishesError) {
-      console.error('Error fetching dishes:', dishesError);
-      return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not retrieve menu dishes from database',
-          details: dishesError,
-        },
-        { status: 500 },
-      );
+      logger.error('[Performance API] Database error fetching dishes:', {
+        error: dishesError.message,
+        code: (dishesError as any).code,
+        context: { endpoint: '/api/performance', operation: 'GET', table: 'menu_dishes' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(dishesError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Filter sales_data by date range if provided
@@ -131,14 +132,23 @@ export async function GET(request: NextRequest) {
         // Final output includes ALL dishes (items without sales are valuable insights)
       },
     });
-  } catch (error) {
-    console.error('Error in performance API:', error);
+  } catch (err) {
+    logger.error('[Performance API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/performance', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-        details: error,
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -150,19 +160,18 @@ export async function POST(request: NextRequest) {
 
     if (!dish_id || !number_sold || !popularity_percentage) {
       return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'dish_id, number_sold, and popularity_percentage are required',
-        },
+        ApiErrorHandler.createError(
+          'dish_id, number_sold, and popularity_percentage are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -184,15 +193,14 @@ export async function POST(request: NextRequest) {
       .select();
 
     if (error) {
-      console.error('Error inserting sales data:', error);
-      return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not update sales data',
-          details: error,
-        },
-        { status: 500 },
-      );
+      logger.error('[Performance API] Database error inserting sales data:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/performance', operation: 'POST', table: 'sales_data' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -200,14 +208,23 @@ export async function POST(request: NextRequest) {
       data: data,
       message: 'Sales data updated successfully',
     });
-  } catch (error) {
-    console.error('Error in performance POST API:', error);
+  } catch (err) {
+    logger.error('[Performance API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/performance', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-        details: error,
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
