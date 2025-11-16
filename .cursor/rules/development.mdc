@@ -1,0 +1,1145 @@
+---
+alwaysApply: true
+---
+## 📋 **Development Standards**
+
+### **Code Quality Requirements**
+
+- **TypeScript:** Strict typing, no `any` types without justification
+  - **Ref Types:** Always use `RefObject<HTMLElement | null>` in interfaces (see TypeScript Ref Types section in `core.mdc`)
+  - **useRef Pattern:** `useRef<HTMLElement>(null)` returns `RefObject<HTMLElement | null>`, always type accordingly
+- **React Patterns:** Functional components with hooks, proper error boundaries
+- **Performance:** Lazy loading, image optimization, Core Web Vitals optimization
+- **Accessibility:** ARIA labels, semantic HTML, keyboard navigation support
+- **SEO:** Proper meta tags, structured data, semantic markup
+- **Universal Design:** Components that work on web and mobile
+
+### **Naming Conventions**
+
+- **Files:** kebab-case (e.g., `exit-intent-popup.tsx`)
+- **Components:** PascalCase (e.g., `ExitIntentPopup`)
+- **Functions:** camelCase with descriptive verbs (e.g., `trackUserEngagement`)
+- **Constants:** UPPER_SNAKE_CASE (e.g., `GTM_EVENTS`)
+- **CSS Classes:** Tailwind utility classes with custom CSS variables
+
+### **Testing Requirements**
+
+- **Unit Tests:** All utility functions and components
+- **Integration Tests:** Analytics integration and user flows
+- **E2E Tests:** Critical user journeys (lead capture, purchase)
+- **Performance Tests:** Core Web Vitals and loading times
+
+**Note:** For comprehensive testing standards, patterns, and best practices, see `testing.mdc`.
+
+## 🔧 **Code Formatting & Quality Tools**
+
+### **Prettier Configuration**
+
+**Status:** ✅ Installed and configured
+
+**Configuration File:** `.prettierrc`
+
+**Settings:**
+- **Semi:** `true` (semicolons required)
+- **Trailing Comma:** `all` (trailing commas in objects/arrays)
+- **Single Quote:** `true` (single quotes for strings)
+- **Print Width:** `100` (line length)
+- **Tab Width:** `2` (indentation)
+- **Use Tabs:** `false` (spaces, not tabs)
+- **Bracket Spacing:** `true` (spaces in object literals)
+- **Arrow Parens:** `avoid` (omit parens when possible)
+- **End of Line:** `lf` (Unix line endings)
+- **Plugins:** `prettier-plugin-tailwindcss` (Tailwind class sorting)
+
+**Scripts:**
+- `npm run format` - Format entire project
+- `npm run format:check` - Check formatting without modifying files
+- `npm run format:staged` - Format staged files (via lint-staged)
+
+**Integration:**
+- Prettier runs automatically on commit via `lint-staged`
+- CI pipeline checks formatting via `format:check`
+- All files must be formatted before merging PRs
+
+**Usage:**
+```bash
+# Format entire project
+npm run format
+
+# Check formatting (CI)
+npm run format:check
+
+# Format only staged files
+npm run format:staged
+```
+
+### **ESLint Configuration**
+
+**Configuration File:** `eslint.config.mjs`
+
+**Extends:**
+- `next/core-web-vitals` - Next.js recommended rules
+
+**Custom Rules:**
+- React compiler rules disabled (set-state-in-effect, purity, refs, preserve-manual-memoization)
+- React hooks rules enforced
+- Unescaped entities enforced (use `&apos;`, `&quot;`, etc.)
+
+**Scripts:**
+- `npm run lint` - Lint entire project
+- CI pipeline runs lint on all PRs
+
+## 🚀 **CI/CD & Automation**
+
+**Note:** For detailed deployment process, monitoring, and operations standards, see `operations.mdc`.
+
+### **GitHub Actions CI Workflow**
+
+**File:** `.github/workflows/ci.yml`
+
+**Triggers:**
+- Pull requests to `main`
+- Pushes to `main`
+
+**Jobs:**
+1. **Lint** - Runs `npm run lint`
+2. **Type Check** - Runs `npm run type-check`
+3. **Format Check** - Runs `npm run format:check`
+4. **Build** - Runs `npm run build`
+
+**Requirements:**
+- All jobs must pass for PR merge
+- Node.js 22 LTS
+- Automatic npm cache
+
+**Status:** ✅ Configured and active
+
+### **PR Auto-Labeling**
+
+**File:** `.github/workflows/pr-labels.yml`
+
+**Configuration:** `.github/labeler.yml`
+
+**Labels Applied Automatically:**
+- `refactor` - Code refactoring changes
+- `bugfix` - Bug fixes
+- `ui` - UI/component changes
+- `breakpoints` - Responsive/breakpoint changes
+- `documentation` - Documentation updates
+- `ci` - CI/CD changes
+- `codemod` - Codemod transformations
+- `config` - Configuration changes
+- `api` - API route changes
+- `hooks` - React hooks changes
+- `types` - TypeScript type changes
+
+**How It Works:**
+- Analyzes changed files in PR
+- Matches patterns in `.github/labeler.yml`
+- Applies appropriate labels automatically
+- Runs on PR open, sync, and reopen
+
+**Status:** ✅ Configured and active
+
+### **Automatic CHANGELOG Generation**
+
+**Script:** `scripts/generate-changelog.js`
+
+**Command:** `npm run changelog`
+
+**How It Works:**
+- Analyzes git commits since last tag (or all commits)
+- Parses Conventional Commits format: `type(scope): subject`
+- Groups commits by type (feat, fix, docs, etc.)
+- Generates formatted CHANGELOG.md entry
+
+**Commit Types:**
+- 🚀 `feat:` - New features
+- 🐛 `fix:` - Bug fixes
+- 📚 `docs:` - Documentation
+- 💎 `style:` - Code style changes
+- ♻️ `refactor:` - Code refactoring
+- ⚡ `perf:` - Performance improvements
+- 🧪 `test:` - Test additions/changes
+- 🔧 `chore:` - Maintenance tasks
+- ⚙️ `ci:` - CI/CD changes
+- 📦 `build:` - Build system changes
+- ⏪ `revert:` - Reverted commits
+
+**Output Format:**
+```markdown
+## [0.1.1] - 2025-01-XX
+
+### 🚀 Features
+- New feature description (abc1234)
+
+### 🐛 Fixes
+- Bug fix description (def5678)
+```
+
+**Usage:**
+```bash
+# Generate changelog from recent commits
+npm run changelog
+```
+
+**Status:** ✅ Script created and ready
+
+## 📝 **JSDoc Documentation Standards**
+
+### **JSDoc Requirements**
+
+**MANDATORY:** All public functions, components, and utilities must have JSDoc documentation.
+
+### **JSDoc Template**
+
+```typescript
+/**
+ * Brief description of what the function/component does.
+ *
+ * @param {Type} paramName - Description of parameter
+ * @param {Type} [optionalParam] - Optional parameter description
+ * @returns {ReturnType} Description of return value
+ * @throws {ErrorType} When this error is thrown
+ *
+ * @example
+ * ```typescript
+ * const result = myFunction('example');
+ * console.log(result); // Output description
+ * ```
+ */
+```
+
+### **Component JSDoc Template**
+
+```typescript
+/**
+ * Component description.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.title - Title text
+ * @param {Function} props.onClick - Click handler
+ * @returns {JSX.Element} Rendered component
+ *
+ * @example
+ * ```tsx
+ * <MyComponent title="Hello" onClick={() => {}} />
+ * ```
+ */
+export function MyComponent({ title, onClick }: Props) {
+  // ...
+}
+```
+
+### **Hook JSDoc Template**
+
+```typescript
+/**
+ * Hook description.
+ *
+ * @param {Type} param - Parameter description
+ * @returns {Object} Hook return value
+ * @returns {Type} returns.property - Property description
+ *
+ * @example
+ * ```typescript
+ * const { data, loading } = useMyHook('param');
+ * ```
+ */
+export function useMyHook(param: string) {
+  // ...
+}
+```
+
+### **JSDoc Standards**
+
+- **Always document:** Public functions, React components, custom hooks, utility functions
+- **Optional:** Private/internal functions (but recommended)
+- **Required fields:** Description, @param for all parameters, @returns for return values
+- **Optional fields:** @throws, @example, @see, @since, @deprecated
+- **Format:** Use TypeScript types in JSDoc (`{string}`, `{Object}`, `{Promise<string>}`)
+
+**Status:** ⚠️ In Progress - Standardization ongoing
+
+## 🔄 **Codemod Rules & Transformations**
+
+### **Codemod System**
+
+**Purpose:** Automated code transformations for deprecated components, patterns, and migrations.
+
+**Implementation:** ✅ Fully implemented using jscodeshift with TypeScript/TSX parser support.
+
+### **Available Codemods**
+
+#### **1. Breakpoint Migration Codemod**
+
+**File:** `scripts/codemods/breakpoint-migration.js`
+
+**Transformations:**
+- `sm:` → `tablet:` (481px+)
+- `md:` → `tablet:` (481px+)
+- `lg:` → `desktop:` (1025px+)
+
+**Handles:**
+- String literals in JSX attributes (`className="sm:text-lg"`)
+- Template literals in JSX (`className={`sm:text-lg ${var}`}`)
+- Object properties (`className: "sm:text-lg"`)
+- String concatenations
+
+**Usage:**
+```bash
+# Dry-run (preview changes)
+npm run codemod:breakpoints
+
+# Apply changes
+npm run codemod:breakpoints:write
+```
+
+#### **2. Console Migration Codemod**
+
+**File:** `scripts/codemods/console-migration.js`
+
+**Transformations:**
+- `console.log(...)` → `logger.dev(...)`
+- `console.error(...)` → `logger.error(...)`
+- `console.warn(...)` → `logger.warn(...)`
+- `console.info(...)` → `logger.info(...)`
+- `console.debug(...)` → `logger.debug(...)`
+
+**Features:**
+- Automatically adds `import { logger } from '@/lib/logger';` if not present
+- Preserves all arguments and call structure
+- Detects existing logger imports to avoid duplicates
+
+**Usage:**
+```bash
+# Dry-run (preview changes)
+npm run codemod:console
+
+# Apply changes
+npm run codemod:console:write
+```
+
+#### **3. Run All Codemods**
+
+```bash
+# Run both migrations in dry-run mode
+npm run codemod:all
+```
+
+### **Codemod Execution Workflow**
+
+**Step 1: Preview Changes**
+```bash
+npm run codemod:breakpoints
+npm run codemod:console
+```
+
+**Step 2: Review Output**
+- Check the diff/preview output
+- Verify transformations look correct
+- Note any files that will be modified
+
+**Step 3: Apply Changes**
+```bash
+npm run codemod:breakpoints:write
+npm run codemod:console:write
+```
+
+**Step 4: Verify & Test**
+- Run `npm run lint` to check for issues
+- Run `npm run type-check` to verify TypeScript
+- Test affected functionality
+- Format code: `npm run format`
+
+**Step 5: Commit**
+- Commit with `refactor:` prefix
+- Example: `refactor: migrate breakpoints and console calls via codemod`
+
+### **Technical Details**
+
+**Dependencies:**
+- `jscodeshift` - AST transformation tool
+- `@types/jscodeshift` - TypeScript types
+
+**Parser:** Uses `tsx` parser for TypeScript/TSX file support
+
+**File Locations:**
+- `scripts/codemods/breakpoint-migration.js`
+- `scripts/codemods/console-migration.js`
+
+### **Future Codemods (To Be Created)**
+
+1. **Component Updates:** Update deprecated component names
+2. **Error Handling:** Standardize error handling patterns
+3. **Import Path Updates:** Migrate relative imports to alias imports
+
+**Status:** ✅ Breakpoint and Console migrations fully implemented and tested
+
+## 🛠️ **Available Development Scripts**
+
+**Note:** See `docs/SCRIPTS.md` for complete script reference and usage examples.
+
+### **Code Quality Scripts**
+
+#### **File Size Enforcement**
+
+**Script:** `scripts/check-file-sizes.js`
+**Command:** `npm run lint:filesize`
+
+Enforces file size limits to maintain code quality:
+- **Page Components:** Maximum 500 lines
+- **Complex Components:** Maximum 300 lines
+- **API Routes:** Maximum 200 lines
+- **Utility Functions:** Maximum 150 lines
+- **Hooks:** Maximum 100 lines
+
+**Integration:** Runs automatically in CI pipeline and pre-commit hooks.
+
+#### **Breakpoint Detection**
+
+**Script:** `scripts/detect-breakpoints.js`
+**Command:** `npm run detect-breakpoints`
+
+Analyzes breakpoint usage across the codebase:
+- Identifies active breakpoints (used in project)
+- Identifies unused breakpoints (defined but not used)
+- Identifies rogue breakpoints (used but not defined)
+
+**Referenced in:** `design.mdc` (Custom Breakpoint System)
+
+#### **CHANGELOG Generation**
+
+**Script:** `scripts/generate-changelog.js`
+**Command:** `npm run changelog`
+
+Automatically generates `CHANGELOG.md` from git commits using Conventional Commits format.
+
+**Commit Types Supported:**
+- 🚀 `feat:` - New features
+- 🐛 `fix:` - Bug fixes
+- 📚 `docs:` - Documentation
+- 💎 `style:` - Code style changes
+- ♻️ `refactor:` - Code refactoring
+- ⚡ `perf:` - Performance improvements
+- 🧪 `test:` - Test additions/changes
+- 🔧 `chore:` - Maintenance tasks
+- ⚙️ `ci:` - CI/CD changes
+- 📦 `build:` - Build system changes
+- ⏪ `revert:` - Reverted commits
+
+### **Asset Management Scripts**
+
+#### **Screenshot Management**
+
+**Scripts:**
+- `scripts/add-screenshots.sh` - Add new screenshots
+- `scripts/copy-screenshots.sh` - Copy screenshots from source
+- `scripts/replace-screenshots.sh` - Replace existing screenshots
+
+**Usage:**
+```bash
+bash scripts/add-screenshots.sh
+bash scripts/copy-screenshots.sh
+bash scripts/replace-screenshots.sh
+```
+
+**Purpose:** Helper scripts for managing screenshot assets in `public/images/`.
+
+#### **Image Optimization**
+
+**Script:** `scripts/optimize-images.js`
+**Command:** `node scripts/optimize-images.js`
+
+Optimizes images in `public/images/` and `public/icons/` directories:
+- Converts to WebP format
+- Compresses PNG/JPEG images
+- Generates responsive sizes
+
+**Referenced in:** `operations.mdc` (Performance Optimization)
+
+### **Complete Script Reference**
+
+For complete documentation of all scripts, see `docs/SCRIPTS.md`.
+
+## 🎨 **Material Design 3 Design System**
+
+### **Color Palette**
+
+```css
+--primary: #29e7cd /* Electric Cyan - Primary Actions */ --secondary: #3b82f6
+  /* Blue - Secondary Actions */ --accent: #d925c7 /* Vibrant Magenta - Accent Elements */
+  --background: #0a0a0a /* Dark background */ --foreground: #ffffff /* White text */
+  --muted: #1f1f1f /* Dark gray - Cards & Containers */ --border: #2a2a2a
+  /* Border gray - Subtle borders */ --surface: #2a2a2a /* Surface color - Elevated elements */
+  --surface-variant: #2a2a2a/30 /* Surface variant - Subtle backgrounds */;
+```
+
+### **Material Design 3 Typography**
+
+- **Primary Font:** Geist Sans (Google Fonts)
+- **Monospace:** Geist Mono (for technical content)
+- **Hierarchy:**
+  - Display Large: 4xl-6xl (Page titles)
+  - Headline Large: 2xl-3xl (Section headers)
+  - Title Large: xl-2xl (Card titles)
+  - Body Large: base-lg (Main content)
+  - Label Large: sm (Labels & metadata)
+  - Label Small: xs (Captions & fine print)
+
+### **Material Design 3 Component Guidelines**
+
+#### **Containers & Cards**
+
+- **Border Radius:** `rounded-3xl` for main containers, `rounded-2xl` for cards
+- **Elevation:** `shadow-lg` with `border border-[#2a2a2a]` for depth
+- **Background:** `bg-[#1f1f1f]` for main containers, `bg-[#2a2a2a]/30` for cards
+- **Gradients:** Subtle gradients for headers and accents
+
+#### **Buttons & Actions**
+
+- **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] to-[#D925C7]` with `rounded-2xl`
+- **Secondary Buttons:** `bg-[#29E7CD]/10` with `hover:bg-[#29E7CD]/20`
+- **Icon Buttons:** `rounded-full` with `p-2` and hover scaling
+- **Hover Effects:** `hover:shadow-xl` and `transition-all duration-200`
+
+#### **Data Tables**
+
+- **Table Container:** `overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]`
+- **Table Headers:** `sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20`
+- **Header Cells:** `px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase`
+- **Table Body:** `divide-y divide-[#2a2a2a] bg-[#1f1f1f]`
+- **Table Rows:** `transition-colors hover:bg-[#2a2a2a]/20`
+- **Table Cells:** `px-6 py-4 text-sm text-white` (or `text-gray-300` for secondary content)
+- **Pagination:** Use `TablePagination` component from `components/ui/TablePagination.tsx` - place at both top and bottom of tables
+- **Responsive:** Tables use `desktop:` (1025px) breakpoint - mobile/tablet (<1025px) shows card layout, desktop (≥1025px) shows table
+- **Progress Bars:** Gradient bars for visual data representation
+- **Chips:** `rounded-full` with `bg-[#29E7CD]/10` and `border border-[#29E7CD]/20`
+
+**Standard Table Structure:**
+
+```tsx
+<div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+  <table className="min-w-full divide-y divide-[#2a2a2a]">
+    <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+      <tr>
+        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+          Header
+        </th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+      <tr className="transition-colors hover:bg-[#2a2a2a]/20">
+        <td className="px-6 py-4 text-sm text-white">Content</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+**Pagination Pattern:**
+
+```tsx
+<TablePagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} className="mb-4" />
+<TableComponent data={paginatedData} />
+<TablePagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} className="mt-4" />
+```
+
+#### **Forms & Inputs**
+
+- **Input Fields:** `border border-[#2a2a2a]` with `focus:ring-2 focus:ring-[#29E7CD]`
+- **Focus States:** Cyan ring with smooth transitions
+- **Validation:** Color-coded feedback with Material 3 styling
+
+#### **Selection Controls & Checkboxes**
+
+- **Modern Button-Style Toggle:** All selection checkboxes use a button-style toggle design, not native HTML checkboxes
+- **Unselected State:** Empty box with `border border-[#2a2a2a]` and `bg-[#0a0a0a]`
+- **Selected State:** Checkmark icon (`M5 13l4 4L19 7`) in cyan (`text-[#29E7CD]`)
+- **Hover Effects:** Border highlights on hover (`hover:border-[#29E7CD]/50`)
+- **Transitions:** Smooth 200ms transitions for all state changes
+- **Accessibility:** Use `<button>` elements with proper `aria-label` attributes, not `<input type="checkbox">`
+- **Implementation Pattern:**
+
+```typescript
+<button
+  onClick={() => handleToggle(id)}
+  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+  aria-label={`${isSelected ? 'Deselect' : 'Select'} item ${name}`}
+>
+  {isSelected ? (
+    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+  ) : (
+    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+  )}
+</button>
+```
+
+- **Where Used:** Table row selection, bulk selection, card selection, import preview selection
+- **Components Updated:** `IngredientTableWithFilters`, `IngredientTableRow`, `RecipeTable`, `RecipeCard`, `CSVImportModal`
+
+#### **Icon Standards**
+
+- **Icon Library:** Use Lucide React icons exclusively (no emoji icons)
+- **Icon Component:** Use the standardized `Icon` component from `components/ui/Icon.tsx`
+- **Icon Sizes:** `xs` (12px), `sm` (16px), `md` (20px - default), `lg` (24px), `xl` (32px)
+- **Icon Colors:** Inherit from parent text color or use theme colors (`text-[#29E7CD]`, `text-gray-400`)
+- **Implementation Pattern:**
+
+```typescript
+import { Icon } from '@/components/ui/Icon';
+import { Zap, Store, MapPin } from 'lucide-react';
+
+// Basic usage with size
+<Icon icon={Zap} size="sm" className="text-[#29E7CD]" />
+
+// With accessibility (decorative - auto-hides from screen readers)
+<Icon icon={Store} size="md" aria-hidden="true" />
+
+// With accessibility (interactive - includes label)
+<Icon icon={MapPin} size="lg" aria-label="Filter by storage location" />
+```
+
+- **Automatic Accessibility:** The Icon component automatically sets `aria-hidden` when no `aria-label` is provided, and sets `role="img"` when `aria-label` is present
+- **Common Icons:**
+  - **Actions:** `Zap` (bulk actions), `Trash2` (delete), `Store` (supplier), `MapPin` (storage/location), `Target` (filter)
+  - **Navigation:** `ChevronDown` (dropdowns), `Type` (sort by name), `Tag` (sort by brand), `DollarSign` (sort by cost), `Package` (sort by stock)
+- **Migration Notes:**
+  - **Bulk Actions Icons:** All bulk action buttons use Lucide icons (replaced emoji icons: ⚡→`Zap`, 🗑️→`Trash2`, 🏪→`Store`, 📍→`MapPin`, 🎯→`Target`)
+  - **Filter Dropdown Icons:** Supplier filters use `Store`, Storage filters use `MapPin` (replaced emoji icons)
+- **Component Location:** `components/ui/Icon.tsx` - Standardized wrapper for consistent sizing and accessibility
+- **Migration Status:** All components use Icon wrapper - direct lucide-react imports are only for icon component references, not direct usage
+
+#### **Z-Index Hierarchy**
+
+- **Modals:** `z-[80]` - Highest priority overlays (delete confirmations, forms, etc.)
+- **Search Modal:** `z-[75]` - Search interface overlay
+- **FAB (Floating Action Button):** `z-[70]` - Mobile quick actions button
+- **More Drawer:** `z-[65]` - Mobile drawer overlay
+- **More Drawer Backdrop:** `z-[60]` - Backdrop behind drawer
+- **Bottom Nav:** `z-[60]` - Mobile bottom navigation bar
+- **Bulk Actions Dropdown:** `z-[60]` - Action menus above content
+- **Sidebar:** `z-[60]` - Navigation drawer
+- **Bulk Actions Backdrop:** `z-[55]` - Blocks interactions behind dropdowns
+- **Sort/Filter Dropdowns:** `z-50` - Filter and sort menus
+- **Header:** `z-50` - Fixed navigation header
+- **Filter Bar:** `z-30` - Sticky filter bar above table content
+- **Persistent Sidebar:** `z-40` - Desktop sidebar navigation
+
+**Implementation Note:** Always ensure dropdowns and modals have proper z-index values to prevent clipping behind other elements. Use backdrop divs with appropriate z-index to block interactions when dropdowns are open.
+
+### **Material Design 3 Animation System**
+
+```css
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+```
+
+### **Material Design 3 Layout Patterns**
+
+#### **Mobile-First Cards**
+
+- **Card Structure:** Header with title/brand, content grid, action buttons
+- **Staggered Animations:** `animationDelay: ${index * 50}ms`
+- **Touch Targets:** Minimum 44px with proper spacing
+- **Hover States:** `group-hover:text-[#29E7CD]` for interactive elements
+
+#### **Desktop Data Tables**
+
+- **Avatar Icons:** `w-10 h-10 rounded-full` with gradient backgrounds
+- **Progress Indicators:** Visual bars for percentages and metrics
+- **Action Buttons:** Circular buttons with icon scaling on hover
+- **Row Interactions:** Smooth hover effects with color transitions
+
+#### **Empty States**
+
+- **Large Icons:** `w-20 h-20` with gradient backgrounds
+- **Contextual Messaging:** Different messages for different states
+- **Call-to-Actions:** Prominent buttons with Material 3 styling
+
+### **Material Design 3 UX Guidelines**
+
+- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Material Design 3 principles
+- **Mobile Navigation:** Material 3 navigation rail with proper spacing
+- **Accessibility:** Focus rings, ARIA labels, keyboard navigation
+- **Smooth Transitions:** 200-300ms transitions for all interactions
+- **Touch Targets:** Minimum 44px for mobile, proper spacing
+- **Visual Hierarchy:** Clear distinction between primary and secondary actions
+
+### **Loading Skeleton System Architecture**
+
+- **Base Component:** `LoadingSkeleton` with variant prop for different content types
+- **Specialized Components:** `TableSkeleton`, `FormSkeleton`, `ChartSkeleton` for specific use cases
+- **Page-Level:** `PageSkeleton` for full-page loading states
+- **Landing Page:** `HeroSkeleton`, `PricingSkeleton` for marketing page
+- **Dynamic Imports:** Proper skeleton components replace inline animate-pulse divs
+- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Material Design 3 spacing
+- **Styling:** Consistent colors (`bg-[#2a2a2a]`), border radius (`rounded-xl`, `rounded-2xl`, `rounded-3xl`), and animations (`animate-pulse`)
+
+## 📊 **Analytics & Tracking**
+
+### **Required Tracking Events**
+
+- **Page Views:** All page loads with metadata
+- **User Engagement:** Scroll depth, time on page, section views
+- **Conversion Events:** CTA clicks, form submissions, purchases
+- **Performance Metrics:** Core Web Vitals, loading times
+- **A/B Testing:** Variant assignments, performance comparisons
+
+### **Data Layer Structure**
+
+```typescript
+interface TrackingEvent {
+  event: string;
+  event_category: string;
+  event_label?: string;
+  event_value?: number;
+  page_title: string;
+  page_location: string;
+  page_path: string;
+  timestamp: number;
+  user_id?: string;
+  session_id: string;
+}
+```
+
+### **GTM Configuration**
+
+- **Container ID:** GTM-WQMV22RD
+- **GA4 Measurement ID:** G-W1D5LQXGJT
+- **Data Layer:** Automatic page tracking, custom event support
+- **Triggers:** Page views, custom events, user interactions
+
+## 🚀 **Performance Requirements**
+
+### **Core Web Vitals Targets**
+
+- **LCP (Largest Contentful Paint):** < 2.5 seconds
+- **FID (First Input Delay):** < 100 milliseconds
+- **CLS (Cumulative Layout Shift):** < 0.1
+
+### **Loading Performance**
+
+- **First Contentful Paint:** < 1.8 seconds
+- **Time to Interactive:** < 3.8 seconds
+- **Total Bundle Size:** < 200KB (gzipped)
+
+### **Optimization Strategies**
+
+- **Image Optimization:** next/image with proper sizing
+- **Code Splitting:** Dynamic imports for non-critical components
+- **Lazy Loading:** Images, components, and third-party scripts
+- **Caching:** Static generation, CDN optimization
+
+### **Speed Performance Improvements**
+
+#### **Batch Fetching Infrastructure**
+
+The application uses batch fetching and parallelization to eliminate N+1 query problems and sequential loading bottlenecks:
+
+- **Batch Utilities**: `lib/api/batch-utils.ts` provides reusable batch fetching helpers
+  - `chunkArray()`: Splits large arrays into manageable chunks
+  - `fetchInParallel()`: Executes multiple requests in parallel with error handling
+  - `fetchInBatches()`: Handles batched requests with automatic chunking
+  - `groupBy()`: Groups results by key function
+  - `MAX_BATCH_SIZE`: 100 items per batch (PostgreSQL IN clause limit)
+
+- **Parallel Fetch Hook**: `hooks/useParallelFetch.ts` provides reusable parallel data fetching
+  - Individual loading states per request
+  - Error handling per request
+  - Automatic retry and fallback mechanisms
+
+#### **Caching & Prefetching Infrastructure**
+
+The application uses sessionStorage-based caching and intelligent prefetching to dramatically improve perceived performance:
+
+- **Generic Data Cache**: `lib/cache/data-cache.ts` provides reusable caching utilities
+  - `cacheData(key, data, expiryMs)`: Cache any data type with configurable expiry (default 5 minutes)
+  - `getCachedData(key)`: Retrieve cached data if valid (not expired)
+  - `clearCache(key)`: Clear cache for specific key
+  - `clearAllCaches()`: Clear all application caches
+  - `prefetchApi(endpoint)`: Prefetch API endpoint using link prefetch
+  - `prefetchApis(endpoints)`: Prefetch multiple endpoints in parallel
+
+- **Prefetch Configuration**: `lib/cache/prefetch-config.ts` maps routes to API endpoints
+  - Centralized configuration for all navigation routes
+  - `prefetchRoute(route)`: Automatically prefetches all endpoints for a route
+  - Prefetch triggers on navigation link hover for instant page loads
+
+- **Page-Specific Caching**:
+  - **Dashboard**: Caches stats, temperature logs, and equipment data
+  - **Recipes**: Caches recipe list for instant display
+  - **Ingredients**: Caches first page of ingredients
+  - **Performance**: Caches performance analysis data
+  - **Temperature Logs**: Caches first page with default filters
+
+- **Instant Display Pattern**: All pages follow this pattern:
+  1. Initialize state with cached data (if available) for instant display
+  2. Fetch fresh data in background
+  3. Update UI with fresh data when available
+  4. Cache new data for next visit
+
+- **Navigation Prefetching**:
+  - Sidebar links prefetch on hover
+  - Search modal links prefetch on hover
+  - Routes automatically prefetch their configured API endpoints
+
+#### **Performance Optimization Patterns**
+
+1. **Batch API Endpoints**: Create batch endpoints for fetching multiple related items
+   - Example: `/api/recipes/ingredients/batch` accepts multiple recipe IDs
+   - Single Supabase query with `.in()` clause instead of N sequential queries
+   - Groups results by key for easy consumption
+
+2. **Parallel Fetching**: Use `Promise.all()` for independent requests
+   - Dashboard fetches stats and temperature data in parallel
+   - Recipe price calculations use parallel individual fetches as fallback
+   - Reduces total fetch time from sequential (sum) to parallel (max)
+
+3. **Non-Blocking Loading**: Show content immediately, calculate in background
+   - Recipes page shows recipe list immediately
+   - Price calculations happen asynchronously in background
+   - Progressive loading: prices appear as they're calculated
+
+4. **Fallback Mechanisms**: Always have fallback strategies
+   - Batch fetch fails → fallback to parallel individual fetches
+   - Parallel fetches fail → graceful error handling per item
+   - Ensures functionality even if optimizations fail
+
+5. **Caching Strategy**: Use sessionStorage for instant display
+   - Cache first page of paginated data for instant display
+   - Cache dashboard stats and frequently accessed data
+   - Show cached data immediately, refresh in background
+   - 5-minute default expiry (configurable per cache key)
+
+6. **Prefetching Strategy**: Prefetch on user intent
+   - Prefetch API endpoints on navigation link hover
+   - Prefetch on mount for likely-to-be-accessed pages
+   - Use link prefetch for browser-level optimization
+   - Avoid prefetching when data changes frequently
+
+#### **Performance Improvements Achieved**
+
+- **Recipes Page**: 80-90% reduction in load time (10s → 1-2s with 14 recipes)
+  - Before: 14 sequential API calls (~10 seconds)
+  - After: 1 batch API call or 14 parallel calls (~1-2 seconds)
+  - Non-blocking: Recipes list displays immediately
+  - Caching: Instant display from cache, then background refresh
+
+- **Dashboard**: 50% reduction in load time (2 sequential → 1 parallel)
+  - Before: Stats fetch → Temperature fetch (sequential)
+  - After: Stats + Temperature fetch (parallel)
+  - Caching: Instant display from cache, then background refresh
+
+- **Perceived Performance**: Near-instant page loads with caching
+  - Pages show cached data immediately (< 50ms)
+  - Fresh data loads in background (~1-2 seconds)
+  - Users see content instantly while data refreshes
+  - Navigation prefetching makes subsequent page loads instant
+
+#### **Best Practices for Future Development**
+
+1. Always batch related fetches using batch endpoints
+2. Use parallel fetching with `Promise.all()` for independent requests
+3. Show UI immediately, calculate expensive operations in background
+4. Implement fallbacks for all optimizations
+5. Cache first page data using sessionStorage for instant display
+6. Prefetch API endpoints on navigation link hover
+7. Initialize state with cached data using `getCachedData()` in useState
+8. Cache after fetch: always call `cacheData()` after successful data fetch
+9. Monitor performance using browser DevTools
+10. Consider pagination for large datasets
+
+**Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, test performance, document patterns.
+
+**Example Caching Pattern:**
+
+```typescript
+// Initialize with cached data
+const [data, setData] = useState(() => getCachedData('my_data') || []);
+
+useEffect(() => {
+  // Fetch fresh data
+  fetch('/api/my-data')
+    .then(res => res.json())
+    .then(newData => {
+      setData(newData);
+      cacheData('my_data', newData); // Cache for next visit
+    });
+}, []);
+```
+
+**Example Prefetching Pattern:**
+
+```typescript
+// In prefetch-config.ts
+export const PREFETCH_MAP: Record<string, string[]> = {
+  '/webapp/my-page': ['/api/my-data'],
+};
+
+// In navigation component
+<Link href="/webapp/my-page" onMouseEnter={() => prefetchRoute('/webapp/my-page')}>
+  My Page
+</Link>
+```
+
+## 🔍 **SEO Requirements**
+
+### **Meta Tags**
+
+- **Title:** Under 60 characters, includes primary keyword
+- **Description:** Under 160 characters, compelling and keyword-rich
+- **Keywords:** Relevant long-tail keywords for restaurant profitability
+- **Open Graph:** Social media optimization with proper images
+
+### **Structured Data**
+
+- **Software Application:** Main product schema
+- **FAQ:** Question and answer markup
+- **Organization:** Company information
+- **Breadcrumb:** Navigation structure
+
+### **Content Strategy**
+
+- **Primary Keywords:** restaurant COGS, menu profitability, gross profit optimization
+- **Long-tail Keywords:** Australian café profitability, food truck cost analysis
+- **Content Types:** Blog posts, case studies, video content, resource guides
+
+## 💰 **Conversion Optimization**
+
+### **Lead Generation**
+
+- **Primary CTA:** "Get PrepFlow Now" (purchase)
+- **Secondary CTA:** "Watch the 2-min demo" (engagement)
+- **Lead Magnet:** "Get the sample sheet (free)" (email capture)
+- **Exit Intent:** Popup with lead magnet offer
+
+### **Trust Elements**
+
+- **Social Proof:** Customer testimonials with specific results
+- **Risk Reversal:** 7-day refund policy, no lock-in
+- **Security:** SSL certificates, secure checkout badges
+- **Transparency:** Clear pricing, no hidden fees
+
+### **Urgency & Scarcity**
+
+- **Limited Time:** Launch discount countdown
+- **Social Proof:** Real-time signup notifications
+- **FOMO Triggers:** "Don't miss the margin makeover"
+- **Exclusivity:** "Limited founder pricing"
+
+## 🧪 **A/B Testing Strategy**
+
+### **Test Variables**
+
+- **Headlines:** Different value propositions
+- **CTAs:** Button text, colors, positioning
+- **Social Proof:** Testimonial placement, content
+- **Pricing:** Price points, discount amounts
+- **Layout:** Section ordering, content structure
+
+### **Testing Framework**
+
+- **Traffic Split:** 25% each for 4 variants
+- **Statistical Significance:** 95% confidence level
+- **Metrics:** Conversion rate, engagement, revenue
+- **Duration:** Minimum 2 weeks for reliable results
+
+## 🔧 **Development Workflow**
+
+**Note:** For implementation patterns and code standards, see the **"Development Workflow & Standards"** section in `implementation.mdc`.
+
+### **🚨 CRITICAL: Mandatory Development Practices (NON-NEGOTIABLE)**
+
+#### **1. Git Best Practices (MANDATORY)**
+
+**ALL development work MUST follow this workflow to prevent code destruction:**
+
+1. Create feature branch: `git checkout -b improvement/feature-name`
+2. Implement & test incrementally
+3. Commit changes: `git add -A && git commit -m "feat: descriptive message"`
+4. Test branch functionality
+5. Merge to main: `git checkout main && git merge improvement/feature-name`
+6. Test main branch
+7. Push changes: `git push origin main`
+
+**NEVER work directly on main branch for improvements!**
+
+#### **2. File Refactoring Standards (MANDATORY)**
+
+**ALL files MUST be refactored when they exceed size limits:**
+
+**File Size Limits:**
+
+- **Page Components:** Maximum 500 lines
+- **Complex Components:** Maximum 300 lines
+- **API Routes:** Maximum 200 lines
+- **Utility Functions:** Maximum 150 lines
+- **Hooks:** Maximum 100 lines
+
+**Mandatory Refactoring Triggers:**
+
+- ✅ **Page exceeds 500 lines** → Split into smaller components
+- ✅ **Component exceeds 300 lines** → Extract sub-components and hooks
+- ✅ **API route exceeds 200 lines** → Split into multiple endpoints
+- ✅ **Function exceeds 150 lines** → Break into smaller functions
+- ✅ **Hook exceeds 100 lines** → Split into multiple specialized hooks
+
+**Refactoring Requirements:**
+
+1. **Component Splitting:** Break large components into logical sub-components
+2. **Hook Extraction:** Extract reusable logic into custom hooks
+3. **Type Definitions:** Create separate `.types.ts` files for complex interfaces
+4. **Utility Functions:** Move helper functions to separate utility files
+5. **Error Boundaries:** Wrap complex components with error boundaries
+6. **Loading States:** Implement proper loading and error handling
+7. **Documentation:** Update component documentation and prop interfaces
+
+**Refactoring Workflow:**
+
+1. Create refactoring branch: `git checkout -b refactor/component-name`
+2. Analyze structure and identify separation points
+3. Create new files (components, hooks, types, utilities)
+4. Update imports and test thoroughly
+5. Update documentation and merge to main
+
+**Example Refactoring Pattern:**
+
+```typescript
+// Before: Large component (800+ lines)
+// app/webapp/recipes/page.tsx
+
+// After: Refactored structure
+// app/webapp/recipes/
+//   ├── page.tsx (160 lines - main page)
+//   ├── types.ts (50 lines - TypeScript interfaces)
+//   ├── components/
+//   │   ├── RecipeCard.tsx (80 lines)
+//   │   ├── RecipeTable.tsx (120 lines)
+//   │   ├── RecipeForm.tsx (150 lines)
+//   │   └── RecipePreviewModal.tsx (100 lines)
+//   └── hooks/
+//       ├── useRecipeManagement.ts (80 lines)
+//       └── useAIInstructions.ts (60 lines)
+```
+
+**Code Quality Enforcement:**
+
+- **Pre-commit hooks:** Automatically check file sizes via `scripts/check-file-sizes.js`
+- **CI/CD pipeline:** Fail builds if files exceed limits
+- **Code reviews:** Mandatory review of refactored code
+- **Performance monitoring:** Track bundle size impact
+
+**Recent Refactoring Examples:**
+
+#### **Ingredient Normalization Utilities Refactoring**
+
+**Before:** Single large utility file (203 lines) - exceeded 150-line utility limit
+
+**After:** Split into 3 focused utilities (all under 150 lines):
+- `lib/ingredients/normalizeIngredientData.ts` (101 lines) - Core parsing and unit normalization
+- `lib/ingredients/buildInsertData.ts` (73 lines) - Data builder for database inserts
+- `lib/ingredients/normalizeIngredientDataMain.ts` (76 lines) - Main orchestrator function
+
+#### **COGS Hooks Refactoring**
+
+**Before:** Large hooks exceeding 100-line limit (104-127 lines)
+
+**After:** Trimmed and optimized hooks (all under 100 lines) with extracted specialized hooks:
+- `useCOGSDataFetching.ts` - Data fetching (extracted)
+- `useIngredientConversion.ts` - Unit conversions (extracted)
+
+**Refactoring Techniques Used:**
+
+1. **Extract Helper Functions:** Moved complex logic to separate utility functions
+2. **Split Large Hooks:** Broke down hooks into smaller, focused hooks
+3. **Extract Constants:** Moved constants to module-level for reuse
+4. **Consolidate Code:** Removed unnecessary blank lines and comments
+5. **Inline Simple Functions:** Inlined small helper functions to save lines
+6. **Extract Types:** Moved complex interfaces to separate type files when needed
+
+**Benefits of Mandatory Refactoring:**
+
+- ✅ **Maintainability:** Smaller files are easier to understand and modify
+- ✅ **Debugging:** Easier to isolate and fix issues in smaller components
+- ✅ **Testing:** Smaller components are easier to unit test
+- ✅ **Performance:** Better tree-shaking and code splitting
+- ✅ **Collaboration:** Multiple developers can work on different components
+- ✅ **Reusability:** Extracted hooks and utilities can be reused across the app
+- ✅ **Bundle Size:** Smaller, more focused bundles improve loading performance
+- ✅ **Code Safety:** Git branching prevents code destruction during refactoring
+
+### **Git Strategy**
+
+- **Main Branch:** Production-ready code (protected)
+- **Improvement Branches:** All new features and improvements (`improvement/feature-name`)
+- **Hotfix Branches:** Critical bug fixes (`hotfix/bug-description`)
+- **Commit Messages:** Conventional commits with descriptive messages
+
+### **Deployment Process**
+
+- **Development:** Local development with hot reload
+- **Staging:** Vercel preview deployments
+- **Production:** Automatic deployment from main branch
+- **Monitoring:** Performance metrics, error tracking, analytics
+
+### **🚨 CRITICAL: Vercel Compression Configuration**
+
+**IMPORTANT:** To prevent `ERR_CONTENT_DECODING_FAILED` errors on production:
+
+- **Set `compress: false`** in `next.config.ts` - Let Vercel handle compression automatically
+- **Remove explicit Content-Encoding headers** - Vercel's automatic compression conflicts with manual settings
+- **Never set `Content-Encoding: gzip, br`** manually - Causes browser decoding conflicts
+
+**Configuration:**
+
+```typescript
+// next.config.ts
+const nextConfig: NextConfig = {
+  // Let Vercel handle compression automatically
+  compress: false,
+  // Remove explicit compression headers from headers() function
+};
+```
+
+**Why:** Vercel automatically handles compression with optimal settings. Manual compression configuration causes conflicts and prevents proper content decoding in browsers.
+
+### **Quality Assurance**
+
+- **Code Review:** All changes require review
+- **Testing:** Automated tests must pass
+- **Performance:** Core Web Vitals monitoring
+- **Accessibility:** WCAG 2.1 AA compliance

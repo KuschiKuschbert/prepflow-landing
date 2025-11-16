@@ -55,7 +55,7 @@ export default function RecipeReadiness() {
             Recipe Readiness
           </h2>
           <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-gray-400">
-            What's ready to prepare
+            What&apos;s ready to prepare
           </p>
         </div>
         <Link

@@ -22,7 +22,18 @@ function getTimestampKey(key: string): string {
 }
 
 /**
- * Cache data in sessionStorage
+ * Cache data in sessionStorage with optional expiry.
+ *
+ * @param {string} key - Cache key identifier
+ * @param {T} data - Data to cache (any type)
+ * @param {number} [expiryMs] - Expiry time in milliseconds (default: 5 minutes)
+ * @returns {void}
+ *
+ * @example
+ * ```typescript
+ * cacheData('recipes', recipesList, 10 * 60 * 1000); // 10 minutes
+ * cacheData('dashboard_stats', stats); // 5 minutes (default)
+ * ```
  */
 export function cacheData<T>(key: string, data: T, expiryMs: number = CACHE_EXPIRY_MS): void {
   if (typeof window === 'undefined') return;
@@ -43,7 +54,18 @@ export function cacheData<T>(key: string, data: T, expiryMs: number = CACHE_EXPI
 }
 
 /**
- * Get cached data if valid
+ * Get cached data if valid and not expired.
+ *
+ * @param {string} key - Cache key identifier
+ * @returns {T | null} Cached data or null if expired/not found
+ *
+ * @example
+ * ```typescript
+ * const cached = getCachedData<Recipe[]>('recipes');
+ * if (cached) {
+ *   setRecipes(cached); // Use cached data
+ * }
+ * ```
  */
 export function getCachedData<T>(key: string): T | null {
   if (typeof window === 'undefined') return null;
@@ -109,7 +131,15 @@ export function clearAllCaches(): void {
 }
 
 /**
- * Prefetch API endpoint - starts loading in background
+ * Prefetch API endpoint using link prefetch for faster subsequent loads.
+ *
+ * @param {string} endpoint - API endpoint URL to prefetch
+ * @returns {void}
+ *
+ * @example
+ * ```typescript
+ * prefetchApi('/api/recipes'); // Prefetch on hover
+ * ```
  */
 export function prefetchApi(endpoint: string): void {
   if (typeof window === 'undefined') return;

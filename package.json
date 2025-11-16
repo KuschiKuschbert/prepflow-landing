@@ -28,7 +28,14 @@
     "bundle:webpack": "ANALYZE=true npm run build",
     "audit:deps": "node scripts/audit-dependencies.js",
     "bundle:size": "npm run build && npm run analyze",
-    "lint:filesize": "node scripts/check-file-sizes.js"
+    "lint:filesize": "node scripts/check-file-sizes.js",
+    "changelog": "node scripts/generate-changelog.js",
+    "detect-breakpoints": "node scripts/detect-breakpoints.js",
+    "codemod:breakpoints": "npx jscodeshift -t scripts/codemods/breakpoint-migration.js app components",
+    "codemod:breakpoints:write": "npx jscodeshift -t scripts/codemods/breakpoint-migration.js --write app components",
+    "codemod:console": "npx jscodeshift -t scripts/codemods/console-migration.js app components",
+    "codemod:console:write": "npx jscodeshift -t scripts/codemods/console-migration.js --write app components",
+    "codemod:all": "npm run codemod:breakpoints && npm run codemod:console"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -73,9 +80,11 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/jest": "^30.0.0",
     "@types/node": "24.9.2",
+    "@types/jscodeshift": "^0.11.10",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "eslint": "^9.38.0",
+    "jscodeshift": "^0.15.1",
     "eslint-config-next": "^16.0.1",
     "husky": "^9.1.7",
     "jest": "^30.2.0",

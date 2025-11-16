@@ -1,0 +1,49 @@
+# Auto-label PRs based on file changes
+
+refactor:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.ts', '**/*.tsx']
+      - all-files-match: ['refactor/**', '**/refactor/**']
+
+bugfix:
+  - changed-files:
+      - any-glob-to-any-file: ['**/fix/**', '**/bug/**', '**/*fix*.ts', '**/*fix*.tsx']
+
+ui:
+  - changed-files:
+      - any-glob-to-any-file: ['**/components/**', '**/*.tsx']
+      - all-files-match: ['**/ui/**', '**/components/**']
+
+breakpoints:
+  - changed-files:
+      - any-glob-to-any-file: ['tailwind.config.ts', '**/*.tsx', '**/*.ts']
+      - all-files-match: ['tablet:', 'desktop:', 'large-desktop:', 'xl:', '2xl:']
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.md', 'AGENTS.md', 'README.md', '**/docs/**']
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**', '**/workflows/**', '**/*.yml', '**/*.yaml']
+
+codemod:
+  - changed-files:
+      - any-glob-to-any-file: ['**/codemods/**', '**/*codemod*', 'scripts/**']
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          ['*.config.*', '.prettierrc', 'eslint.config.*', 'package.json', 'tsconfig.json']
+
+api:
+  - changed-files:
+      - any-glob-to-any-file: ['app/api/**', '**/api/**']
+
+hooks:
+  - changed-files:
+      - any-glob-to-any-file: ['**/hooks/**', 'hooks/**']
+
+types:
+  - changed-files:
+      - any-glob-to-any-file: ['**/types/**', 'types/**', '**/*.types.ts']

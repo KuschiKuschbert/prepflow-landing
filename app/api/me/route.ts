@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {

@@ -60,15 +60,6 @@ export function useCardTouchHandlers({
     cancelLongPressTimer,
   });
 
-  if (isSelectionMode) {
-    return {
-      handleTouchStart: selectionHandlers.handleTouchStart,
-      handleTouchMove: selectionHandlers.handleTouchMove,
-      handleTouchEnd: selectionHandlers.handleTouchEnd,
-      handleCardClick: selectionHandlers.handleCardClick,
-    };
-  }
-
   const handleCardClick = useCallback(
     (e: React.MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -83,6 +74,15 @@ export function useCardTouchHandlers({
     },
     [onEdit],
   );
+
+  if (isSelectionMode) {
+    return {
+      handleTouchStart: selectionHandlers.handleTouchStart,
+      handleTouchMove: selectionHandlers.handleTouchMove,
+      handleTouchEnd: selectionHandlers.handleTouchEnd,
+      handleCardClick: selectionHandlers.handleCardClick,
+    };
+  }
 
   return {
     handleTouchStart: regularHandlers.handleTouchStart,

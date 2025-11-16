@@ -1,14 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { createPrepList } from './helpers/createPrepList';
+import { deletePrepList } from './helpers/deletePrepList';
 import {
+  combinePrepListData,
+  fetchIngredientsBatch,
   fetchPrepListsData,
   fetchRelatedData,
-  fetchIngredientsBatch,
-  combinePrepListData,
 } from './helpers/fetchPrepLists';
-import { createPrepList } from './helpers/createPrepList';
+import { handlePrepListError } from './helpers/handlePrepListError';
 import { updatePrepList } from './helpers/updatePrepList';
-import { deletePrepList } from './helpers/deletePrepList';
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,9 +21,7 @@ export async function GET(request: NextRequest) {
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -78,16 +78,8 @@ export async function GET(request: NextRequest) {
         totalPages,
       },
     });
-  } catch (error) {
-    console.error('Prep lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 },
-    );
+  } catch (err) {
+    return handlePrepListError(err, 'GET');
   }
 }
 
@@ -98,10 +90,11 @@ export async function POST(request: NextRequest) {
 
     if (!userId || !kitchenSectionId || !name) {
       return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'User ID, kitchen section ID, and name are required',
-        },
+        ApiErrorHandler.createError(
+          'userId, kitchenSectionId, and name are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -113,15 +106,11 @@ export async function POST(request: NextRequest) {
       message: 'Prep list created successfully',
       data: prepList,
     });
-  } catch (error) {
-    console.error('Prep lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+  } catch (err: any) {
+    if (err.status) {
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handlePrepListError(err, 'POST');
   }
 }
 
@@ -132,10 +121,7 @@ export async function PUT(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'Prep list ID is required',
-        },
+        ApiErrorHandler.createError('Prep list ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -147,15 +133,11 @@ export async function PUT(request: NextRequest) {
       message: 'Prep list updated successfully',
       data,
     });
-  } catch (error) {
-    console.error('Prep lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+  } catch (err: any) {
+    if (err.status) {
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handlePrepListError(err, 'PUT');
   }
 }
 
@@ -166,10 +148,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'Missing ID',
-          message: 'Prep list ID is required',
-        },
+        ApiErrorHandler.createError('Prep list ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -180,14 +159,10 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Prep list deleted successfully',
     });
-  } catch (error) {
-    console.error('Prep lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+  } catch (err: any) {
+    if (err.status) {
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handlePrepListError(err, 'DELETE');
   }
 }

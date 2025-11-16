@@ -1,5 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { createOrderListWithItems } from './helpers/createOrderListWithItems';
+import { handleOrderListError } from './helpers/handleOrderListError';
+import { normalizeOrderListData } from './helpers/normalizeOrderListData';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,19 +17,14 @@ export async function GET(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        {
-          error: 'User ID is required',
-          message: 'Please provide a valid user ID',
-        },
+        ApiErrorHandler.createError('User ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -63,32 +63,18 @@ export async function GET(request: NextRequest) {
       .range(start, end);
 
     if (error) {
-      console.error('Error fetching order lists:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch order lists',
-          message: 'Could not retrieve order list data',
-        },
-        { status: 500 },
-      );
+      logger.error('[Order Lists API] Database error fetching lists:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/order-lists', operation: 'GET', table: 'order_lists' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Normalize nested ingredient_name
-    const items = (data || []).map((ol: any) => ({
-      ...ol,
-      suppliers: ol.suppliers
-        ? { ...ol.suppliers, supplier_name: ol.suppliers.supplier_name || ol.suppliers.name }
-        : null,
-      order_list_items: (ol.order_list_items || []).map((it: any) => ({
-        ...it,
-        ingredients: it.ingredients
-          ? {
-              ...it.ingredients,
-              ingredient_name: it.ingredients.ingredient_name || it.ingredients.name,
-            }
-          : null,
-      })),
-    }));
+    const items = normalizeOrderListData(data || []);
 
     return NextResponse.json({
       success: true,
@@ -97,15 +83,8 @@ export async function GET(request: NextRequest) {
       pageSize,
       total: count || 0,
     });
-  } catch (error) {
-    console.error('Order lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+  } catch (err) {
+    return handleOrderListError(err, 'GET');
   }
 }
 
@@ -116,81 +95,42 @@ export async function POST(request: NextRequest) {
 
     if (!userId || !supplierId || !name) {
       return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'User ID, supplier ID, and name are required',
-        },
+        ApiErrorHandler.createError(
+          'userId, supplierId, and name are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
 
-    // Create the order list
-    const { data: orderList, error: orderError } = await supabaseAdmin
-      .from('order_lists')
-      .insert({
+    const orderList = await createOrderListWithItems(
+      {
         user_id: userId,
         supplier_id: supplierId,
-        name: name,
-        notes: notes,
-        status: 'draft',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
-
-    if (orderError) {
-      console.error('Error creating order list:', orderError);
-      return NextResponse.json(
-        {
-          error: 'Failed to create order list',
-          message: 'Could not save order list data',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Add items if provided
-    if (items && items.length > 0) {
-      const orderItems = items.map((item: any) => ({
-        order_list_id: orderList.id,
-        ingredient_id: item.ingredientId,
-        quantity: item.quantity,
-        unit: item.unit,
-        notes: item.notes,
-      }));
-
-      const { error: itemsError } = await supabaseAdmin.from('order_list_items').insert(orderItems);
-
-      if (itemsError) {
-        console.error('Error creating order list items:', itemsError);
-        // Don't fail the entire request, just log the error
-      }
-    }
+        name,
+        notes,
+      },
+      items,
+    );
 
     return NextResponse.json({
       success: true,
       message: 'Order list created successfully',
       data: orderList,
     });
-  } catch (error) {
-    console.error('Order lists API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+  } catch (err: any) {
+    if (err.status) {
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handleOrderListError(err, 'POST');
   }
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Recipe, RecipePriceData } from '../../types';
 
 interface UseDishesClientRecipePricingProps {
@@ -21,36 +21,64 @@ export function useDishesClientRecipePricing({
   fetchBatchRecipeIngredients,
 }: UseDishesClientRecipePricingProps) {
   const calculatingPricesRef = useRef<Set<string>>(new Set());
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Create stable reference to recipe IDs for dependency tracking
+  const paginatedRecipeIds = useMemo(
+    () =>
+      paginatedRecipesList
+        .map(r => r.id)
+        .sort()
+        .join(','),
+    [paginatedRecipesList],
+  );
 
   useEffect(() => {
     if (paginatedRecipesList.length === 0) return;
 
-    const recipesNeedingPrices = paginatedRecipesList.filter(
-      recipe => !recipePrices[recipe.id] && !calculatingPricesRef.current.has(recipe.id),
-    );
-
-    if (recipesNeedingPrices.length > 0) {
-      recipesNeedingPrices.forEach(recipe => {
-        calculatingPricesRef.current.add(recipe.id);
-      });
-
-      updateVisibleRecipePrices(
-        recipesNeedingPrices,
-        fetchRecipeIngredients,
-        fetchBatchRecipeIngredients,
-      )
-        .then(() => {
-          recipesNeedingPrices.forEach(recipe => {
-            calculatingPricesRef.current.delete(recipe.id);
-          });
-        })
-        .catch(err => {
-          console.error('Failed to calculate visible recipe prices:', err);
-          recipesNeedingPrices.forEach(recipe => {
-            calculatingPricesRef.current.delete(recipe.id);
-          });
-        });
+    // Clear any existing debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
+
+    // Debounce price calculation by 300ms to prevent rapid-fire calls
+    debounceTimerRef.current = setTimeout(() => {
+      const recipesNeedingPrices = paginatedRecipesList.filter(
+        recipe => !recipePrices[recipe.id] && !calculatingPricesRef.current.has(recipe.id),
+      );
+
+      if (recipesNeedingPrices.length > 0) {
+        recipesNeedingPrices.forEach(recipe => {
+          calculatingPricesRef.current.add(recipe.id);
+        });
+
+        updateVisibleRecipePrices(
+          recipesNeedingPrices,
+          fetchRecipeIngredients,
+          fetchBatchRecipeIngredients,
+        )
+          .then(() => {
+            recipesNeedingPrices.forEach(recipe => {
+              calculatingPricesRef.current.delete(recipe.id);
+            });
+          })
+          .catch(err => {
+            console.error('Failed to calculate visible recipe prices:', err);
+            recipesNeedingPrices.forEach(recipe => {
+              calculatingPricesRef.current.delete(recipe.id);
+            });
+          });
+      }
+    }, 300);
+
+    // Cleanup debounce timer on unmount or dependency change
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
+    };
+    // Only depend on paginatedRecipeIds - don't retrigger when recipePrices changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paginatedRecipesList.map(r => r.id).join(',')]);
+  }, [paginatedRecipeIds]);
 }

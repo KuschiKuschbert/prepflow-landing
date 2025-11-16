@@ -1,7 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { generateAIVisionResponse } from '@/lib/ai/ai-service';
 import { buildAISpecialsPrompt, parseAISpecialsResponse } from '@/lib/ai/prompts/ai-specials';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { handleAISpecialsError } from './helpers/handleAISpecialsError';
+import { processImageWithAI } from './helpers/processImageWithAI';
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,7 +55,10 @@ export async function POST(request: NextRequest) {
         aiResponse = await processImageWithAI(imageData, prompt);
       }
     } catch (aiError) {
-      console.warn('AI Vision API failed, using fallback:', aiError);
+      logger.warn('[AI Specials API] AI Vision API failed, using fallback:', {
+        error: aiError instanceof Error ? aiError.message : String(aiError),
+        context: { endpoint: '/api/ai-specials', operation: 'POST' },
+      });
       // Fallback to mock
       aiResponse = await processImageWithAI(imageData, prompt);
     }
@@ -82,7 +88,11 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (aiError) {
-      console.error('Error saving AI analysis:', aiError);
+      logger.error('[AI Specials API] Database error saving:', {
+        error: aiError.message,
+        code: (aiError as any).code,
+        context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
+      });
       return NextResponse.json(
         {
           error: 'Failed to save AI analysis',
@@ -102,46 +112,8 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('AI specials API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+    return handleAISpecialsError(error, 'POST');
   }
-}
-
-async function processImageWithAI(imageData: string, prompt?: string) {
-  // Simulate AI processing delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  // Mock AI response - in real implementation, this would call OpenAI Vision API
-  const mockIngredients = [
-    'Fresh tomatoes',
-    'Basil leaves',
-    'Mozzarella cheese',
-    'Olive oil',
-    'Garlic',
-    'Red onions',
-    'Bell peppers',
-    'Fresh herbs',
-  ];
-
-  const mockSuggestions = [
-    'Caprese Salad - Perfect for showcasing fresh tomatoes and mozzarella',
-    'Mediterranean Bruschetta - Great use of tomatoes, basil, and garlic',
-    'Grilled Vegetable Platter - Highlight the bell peppers and onions',
-    'Herb-Infused Oil - Feature the fresh herbs and olive oil',
-  ];
-
-  return {
-    ingredients: mockIngredients,
-    suggestions: mockSuggestions,
-    confidence: 0.85,
-    processing_time: 2.1,
-  };
 }
 
 export async function GET(request: NextRequest) {
@@ -175,7 +147,11 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching AI specials:', error);
+      logger.error('[AI Specials API] Database error fetching:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/ai-specials', operation: 'GET', userId },
+      });
       return NextResponse.json(
         {
           error: 'Failed to fetch AI specials',
@@ -190,13 +166,6 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (error) {
-    console.error('AI specials API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+    return handleAISpecialsError(error, 'GET');
   }
 }

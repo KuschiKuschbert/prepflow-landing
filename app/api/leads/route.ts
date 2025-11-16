@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextResponse } from 'next/server';
 
 interface LeadRequestBody {
   name?: string;

@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const {
@@ -17,15 +22,14 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching menus:', error);
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-          message: 'Failed to fetch menus',
-        },
-        { status: 500 },
-      );
+      logger.error('[Menus API] Database error fetching menus:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/menus', operation: 'GET', table: 'menus' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Fetch menu items count for each menu
@@ -49,13 +53,22 @@ export async function GET(request: NextRequest) {
       count: count || 0,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Menus API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/menus', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -68,13 +81,16 @@ export async function POST(request: NextRequest) {
 
     if (!menu_name) {
       return NextResponse.json(
-        { error: 'Missing required field', message: 'Menu name is required' },
+        ApiErrorHandler.createError('Menu name is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const { data: newMenu, error: createError } = await supabaseAdmin
@@ -87,15 +103,14 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (createError) {
-      console.error('Error creating menu:', createError);
-      return NextResponse.json(
-        {
-          success: false,
-          error: createError.message,
-          message: 'Failed to create menu',
-        },
-        { status: 500 },
-      );
+      logger.error('[Menus API] Database error creating menu:', {
+        error: createError.message,
+        code: (createError as any).code,
+        context: { endpoint: '/api/menus', operation: 'POST', table: 'menus' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -104,13 +119,22 @@ export async function POST(request: NextRequest) {
       message: 'Menu created successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Menus API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/menus', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

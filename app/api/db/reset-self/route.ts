@@ -1,8 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
+import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { cleanExistingData } from '@/lib/populate-helpers';
+import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { deleteByUser } from './helpers/deleteByUser';
+import { getUserTableIds } from './helpers/getUserTableIds';
+import { handleGlobalWipe } from './helpers/handleGlobalWipe';
+import { performDeleteIn } from './helpers/performDeleteIn';
 
 type DeleteSummary = {
   dryRun: boolean;
@@ -26,9 +30,8 @@ export async function POST(request: NextRequest) {
 
   const userId = (body?.userId as string) || '';
   const wipeAll = body?.all === true;
-  const reseed = false; // reseed disabled by consolidation plan
 
-  console.log('Reset request:', { userId, wipeAll, dryRun, hasSession: !!session?.user });
+  logger.info('Reset request:', { userId, wipeAll, dryRun, hasSession: !!session?.user });
 
   if (!wipeAll && !userId) {
     return NextResponse.json(
@@ -37,55 +40,22 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // No password required; user must be authenticated via session
-
-  const isMissingTableError = (msg: string | undefined) => {
-    if (!msg) return false;
-    const m = msg.toLowerCase();
-    return (
-      m.includes('could not find the table') ||
-      (m.includes('does not exist') && (m.includes('relation') || m.includes('table'))) ||
-      m.includes('schema cache')
-    );
-  };
-
   // If wiping everything, delegate to centralized cleaner (FK-safe order across domain tables)
   if (!dryRun && wipeAll) {
     try {
-      console.log('🧹 Starting global wipe via cleanExistingData...');
-      const cleaned = await cleanExistingData(supabase);
-      console.log(`✅ Global wipe completed: ${cleaned} tables cleaned`);
-      const payload: DeleteSummary = {
-        dryRun: false,
-        reseeded: false,
-        deletedCountsByTable: { all_tables: cleaned },
-      };
+      const payload = await handleGlobalWipe(supabase);
       return NextResponse.json({ success: true, ...payload });
     } catch (e: any) {
-      console.error('❌ Global reset failed:', e);
+      logger.error('❌ Global reset failed:', {
+        error: e?.message || 'Unknown error',
+        stack: e?.stack,
+      });
       return NextResponse.json(
         { error: 'Global reset failed', message: e?.message || 'Unknown error' },
         { status: 500 },
       );
     }
   }
-
-  // Collect IDs for child tables dependent on parent scoped by user_id (skip if column missing)
-  const getIds = async (table: string, idColumn: string) => {
-    const { data, error } = await supabase
-      .from(table)
-      .select(`${idColumn}`, { head: false })
-      .eq('user_id', userId);
-    if (
-      error &&
-      (isMissingTableError(error.message) ||
-        /column .*user_id.* does not exist/i.test(error.message))
-    ) {
-      return [] as string[];
-    }
-    if (error) return [] as string[];
-    return (data || []).map((r: any) => r[idColumn]) as string[];
-  };
 
   // Determine counts for dry-run
   const deletedCountsByTable: Record<string, number> = {};
@@ -114,74 +84,25 @@ export async function POST(request: NextRequest) {
   ];
 
   // Compute parent IDs
-  const orderListIds = await getIds('order_lists', 'id');
-  const prepListIds = await getIds('prep_lists', 'id');
-
-  // Count child deletions (dry-run) or execute
-  const performDeleteIn = async (table: string, idColumn: string, ids: string[]) => {
-    if (ids.length === 0) {
-      return 0;
-    }
-    if (dryRun) {
-      // Count matching rows
-      const { count } = await supabase
-        .from(table)
-        .select('*', { count: 'exact', head: true })
-        .in(idColumn, ids);
-      return count || 0;
-    }
-    const { error } = await supabase.from(table).delete().in(idColumn, ids);
-    if (error) throw new Error(error.message);
-    return ids.length; // best-effort summary (items count not returned precisely)
-  };
+  const orderListIds = await getUserTableIds(supabase, 'order_lists', 'id', userId);
+  const prepListIds = await getUserTableIds(supabase, 'prep_lists', 'id', userId);
 
   try {
     // Child tables first
     const childPlans: Array<Promise<number>> = [];
-    childPlans.push(performDeleteIn('order_list_items', 'order_list_id', orderListIds));
-    childPlans.push(performDeleteIn('prep_list_items', 'prep_list_id', prepListIds));
+    childPlans.push(
+      performDeleteIn(supabase, 'order_list_items', 'order_list_id', orderListIds, dryRun),
+    );
+    childPlans.push(
+      performDeleteIn(supabase, 'prep_list_items', 'prep_list_id', prepListIds, dryRun),
+    );
     const childResults = await Promise.all(childPlans);
     deletedCountsByTable['order_list_items'] = childResults[0] || 0;
     deletedCountsByTable['prep_list_items'] = childResults[1] || 0;
 
-    // Parent tables and other user-owned tables
-    const deleteByUser = async (table: string) => {
-      if (dryRun) {
-        const { count, error } = await supabase
-          .from(table)
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', userId);
-        if (
-          error &&
-          (isMissingTableError(error.message) ||
-            /column .*user_id.* does not exist/i.test(error.message))
-        ) {
-          // Column missing: skip table
-          deletedCountsByTable[table] = 0;
-          return;
-        }
-        if (error) throw new Error(error.message);
-        deletedCountsByTable[table] = count || 0;
-        return;
-      }
-      const { error } = await supabase.from(table).delete().eq('user_id', userId);
-      if (
-        error &&
-        (isMissingTableError(error.message) ||
-          /column .*user_id.* does not exist/i.test(error.message))
-      ) {
-        // Column missing: skip table safely
-        deletedCountsByTable[table] = 0;
-        return;
-      }
-      if (error) throw new Error(error.message);
-      // Count unknown after delete; set to 0 to indicate success without count
-      deletedCountsByTable[table] = deletedCountsByTable[table] || 0;
-    };
-
-    // Parents
+    // Parent tables
     for (const t of parentTables) {
-      await deleteByUser(t);
+      await deleteByUser(supabase, t, userId, dryRun, deletedCountsByTable);
     }
 
     const payload: DeleteSummary = {
@@ -192,6 +113,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, ...payload });
   } catch (err) {
+    logger.error('[Reset Self API] Reset failed:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/db/reset-self', userId },
+    });
     return NextResponse.json(
       { error: 'Reset failed', message: err instanceof Error ? err.message : 'Unknown error' },
       { status: 500 },

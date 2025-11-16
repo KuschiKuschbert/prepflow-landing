@@ -1,0 +1,380 @@
+---
+alwaysApply: true
+---
+
+## 🚀 **Operations & DevOps Standards**
+
+**Note:** For security practices (secrets management, security headers), see `security.mdc`. For CI/CD workflow details, see `development.mdc`. For testing in deployment pipeline, see `testing.mdc`.
+
+### **Environment Management**
+
+**Environment Variables:**
+
+- **Development:** `.env.local` (gitignored)
+- **Staging:** Vercel preview deployments (environment variables)
+- **Production:** Vercel production environment variables
+
+**Environment Validation:**
+
+- **MANDATORY:** Validate all required environment variables at startup
+- **Fail fast:** Application should not start with missing/invalid env vars
+- **Documentation:** All env vars documented in `env.example`
+- **Secrets:** Never commit secrets to git
+
+**Environment-Specific Behavior:**
+
+- **Development:** Detailed error messages, dev tools enabled
+- **Production:** Generic error messages, dev tools disabled
+- **Feature flags:** Use environment variables for feature toggles
+
+### **Deployment Process**
+
+**Deployment Pipeline:**
+
+1. **Pre-deployment:**
+   - Run `npm run lint` (must pass)
+   - Run `npm run type-check` (must pass)
+   - Run `npm run format:check` (must pass)
+   - Run `npm run build` (must succeed)
+   - Run `npm audit` (fix high/critical vulnerabilities)
+   - Run `node scripts/check-legal-and-node.js` (verify Node version and legal compliance)
+   - Run `bash scripts/verify-vercel-setup.sh` (verify Vercel deployment configuration)
+
+**Pre-deployment Scripts:**
+- **Legal & Node Check:** `scripts/check-legal-and-node.js` - Verifies Node.js version (>=22.0.0) and legal compliance
+- **Vercel Setup Verification:** `scripts/verify-vercel-setup.sh` - Verifies git repository, GitHub Actions workflows, environment variables, and Next.js configuration
+
+**See:** `docs/SCRIPTS.md` for complete script reference.
+
+2. **Deployment:**
+   - Push to `main` branch triggers Vercel deployment
+   - Vercel runs build and deployment automatically
+   - Health check endpoint verified after deployment
+
+3. **Post-deployment:**
+   - Verify critical endpoints respond correctly
+   - Check error logs for issues
+   - Monitor performance metrics
+   - Verify analytics tracking
+
+**Deployment Rollback:**
+
+- **Vercel:** Use Vercel dashboard to rollback to previous deployment
+- **Process:** Identify issue → Rollback → Investigate → Fix → Redeploy
+- **Documentation:** Document rollback reason and resolution
+
+**Deployment Checklist:**
+
+- [ ] All tests pass
+- [ ] Build succeeds
+- [ ] Environment variables configured
+- [ ] Database migrations applied (if any)
+- [ ] Health check passes
+- [ ] Critical endpoints verified
+- [ ] Error monitoring active
+- [ ] Performance monitoring active
+
+### **Database Management**
+
+**Database Migrations:**
+
+- **MANDATORY:** All schema changes via migrations
+- **Version control:** Migrations stored in `migrations/` directory
+- **Naming:** `YYYYMMDD_HHMMSS_description.sql`
+- **Testing:** Test migrations on staging before production
+- **Rollback:** Always provide rollback migration
+
+**Migration Process:**
+
+1. **Create migration:** Write SQL migration file
+2. **Test locally:** Apply migration to local database
+3. **Test staging:** Apply migration to staging database
+4. **Deploy:** Include migration in deployment
+5. **Verify:** Confirm migration applied successfully
+
+**Database Backups:**
+
+- **Frequency:** Daily automated backups (Supabase handles)
+- **Retention:** 30 days of backups
+- **Testing:** Test restore process quarterly
+- **Documentation:** Document restore procedure
+
+**Connection Pooling:**
+
+- **MANDATORY:** Use Supabase connection pooling
+- **Configuration:** Supabase handles pooling automatically
+- **Monitoring:** Monitor connection count and pool usage
+- **Limits:** Respect Supabase connection limits
+
+**Database Performance:**
+
+- **Indexes:** Create indexes for frequently queried columns
+- **Query optimization:** Use EXPLAIN ANALYZE for slow queries
+- **Monitoring:** Monitor query performance and slow queries
+- **Optimization:** Optimize N+1 queries using batch endpoints
+
+**Database Setup Scripts:**
+
+- **Database Setup:** `scripts/setup-database.js` - Sets up database tables and schema in Supabase
+- **Ingredient Population:** `scripts/populate-ingredients.js` - Populates ingredients table with sample/test data
+
+**Usage:**
+```bash
+node scripts/setup-database.js
+node scripts/populate-ingredients.js
+```
+
+**Note:** Requires Supabase credentials in environment variables. See `docs/SCRIPTS.md` for details.
+
+### **Monitoring & Observability**
+
+**Application Monitoring:**
+
+- **Vercel Analytics:** Automatic performance monitoring
+- **Error Tracking:** Vercel error tracking (or Sentry)
+- **Uptime Monitoring:** External uptime monitoring service
+- **Performance Metrics:** Core Web Vitals tracking
+
+**Logging Standards:**
+
+- **Structured Logging:** Use `logger` utility for consistent format
+- **Log Levels:** error, warn, info, debug (dev only)
+- **Context:** Include user_id, request_id, endpoint in logs
+- **Sensitive Data:** Never log passwords, tokens, or PII
+
+**Metrics to Monitor:**
+
+- **Performance:** Response times, Core Web Vitals
+- **Errors:** Error rate, error types, stack traces
+- **Usage:** Request volume, endpoint usage, user activity
+- **Resources:** Database connections, API rate limits
+
+**Alerting:**
+
+- **Critical:** Immediate alerts for downtime or data breaches
+- **High:** Alerts for high error rates or performance degradation
+- **Medium:** Alerts for unusual patterns or warnings
+- **Low:** Daily/weekly summaries for trends
+
+### **Performance Standards**
+
+**Performance Targets:**
+
+- **LCP (Largest Contentful Paint):** < 2.5 seconds
+- **FID (First Input Delay):** < 100 milliseconds
+- **CLS (Cumulative Layout Shift):** < 0.1
+- **TTFB (Time to First Byte):** < 600 milliseconds
+- **API Response Time:** < 500 milliseconds (p95)
+
+**Performance Monitoring:**
+
+- **Real User Monitoring:** Vercel Analytics, Google Analytics
+- **Synthetic Monitoring:** Lighthouse CI, performance tests
+- **Database Performance:** Supabase query performance monitoring
+- **CDN Performance:** Vercel Edge Network performance
+
+**Performance Optimization:**
+
+- **Code Splitting:** Route-based and component-based splitting
+- **Image Optimization:** next/image with proper sizing
+- **Caching:** Browser caching, CDN caching, API response caching
+- **Bundle Size:** Monitor and optimize bundle sizes
+
+**Performance Scripts:**
+
+- **Bundle Analysis:** `scripts/analyze-bundle.js` - Analyzes Next.js bundle composition (`npm run analyze`)
+- **Performance Budget:** `scripts/check-performance-budget.js` - Checks metrics against defined budgets
+- **Performance Regression:** `scripts/check-performance-regression.js` - Detects performance regressions
+- **Performance Report:** `scripts/generate-performance-report.js` - Generates comprehensive performance reports
+- **Send Performance Report:** `scripts/send-performance-report.js` - Sends reports to configured recipients
+- **Performance Optimization:** `scripts/optimize-performance.js` - Automated optimization suggestions
+- **Image Optimization:** `scripts/optimize-images.js` - Optimizes images in public directories (converts to WebP, compresses)
+
+**Usage:**
+```bash
+npm run analyze  # Bundle analysis
+node scripts/check-performance-budget.js
+node scripts/optimize-images.js
+```
+
+**See:** `docs/SCRIPTS.md` for complete performance script reference.
+
+### **Backup & Recovery**
+
+**Backup Strategy:**
+
+- **Database:** Daily automated backups (Supabase)
+- **Code:** Git repository (GitHub)
+- **Environment Variables:** Vercel environment variables (backed up)
+- **User Data:** Database backups include all user data
+
+**Recovery Procedures:**
+
+- **Database Restore:** Document restore process from Supabase backups
+- **Code Rollback:** Git revert or Vercel deployment rollback
+- **Data Recovery:** Document data recovery procedures
+- **Testing:** Test recovery procedures quarterly
+
+**Disaster Recovery:**
+
+- **RTO (Recovery Time Objective):** < 4 hours
+- **RPO (Recovery Point Objective):** < 24 hours
+- **Documentation:** Document disaster recovery plan
+- **Testing:** Annual disaster recovery drill
+
+### **Feature Flags**
+
+**Feature Flag System:**
+
+- **Implementation:** Environment variables for feature toggles
+- **Naming:** `FEATURE_FLAG_NAME=true/false`
+- **Default:** Features disabled by default
+- **Documentation:** Document all feature flags in codebase
+
+**Feature Flag Usage:**
+
+```typescript
+// Check feature flag
+const isFeatureEnabled = process.env.FEATURE_NEW_DASHBOARD === 'true';
+
+if (isFeatureEnabled) {
+  // New feature code
+} else {
+  // Old feature code
+}
+```
+
+**Feature Flag Management:**
+
+- **Development:** Enable in `.env.local`
+- **Staging:** Enable in Vercel preview environment
+- **Production:** Enable in Vercel production environment
+- **Rollout:** Gradual rollout using percentage-based flags
+
+### **API Versioning**
+
+**Versioning Strategy:**
+
+- **Current:** No versioning (v1 implicit)
+- **Future:** `/api/v1/`, `/api/v2/` when breaking changes needed
+- **Deprecation:** 6-month deprecation period for old versions
+- **Documentation:** Document API versions and deprecation schedule
+
+**Breaking Changes:**
+
+- **Major version:** Breaking changes require new API version
+- **Minor version:** Non-breaking changes in same version
+- **Communication:** Notify users of breaking changes 30 days in advance
+- **Migration:** Provide migration guides for breaking changes
+
+### **Dependency Management**
+
+**Dependency Updates:**
+
+- **Security:** Fix high/critical vulnerabilities immediately
+- **Minor:** Update monthly for bug fixes and patches
+- **Major:** Update quarterly with thorough testing
+- **Automation:** Use Dependabot for automated PRs
+
+**Dependency Approval:**
+
+- **Review:** Check changelog and breaking changes
+- **Test:** Verify dependency doesn't break functionality
+- **Security:** Check for known vulnerabilities
+- **Approve:** Merge after review and testing
+
+**Dependency Audit:**
+
+- **Weekly:** Run `npm audit` and review results
+- **Monthly:** Review all dependencies for updates
+- **Quarterly:** Major dependency review and updates
+- **Documentation:** Document dependency update decisions
+
+**Dependency Audit Script:**
+
+- **Dependency Audit:** `scripts/audit-dependencies.js` - Audits dependencies for unused packages, heavy dependencies, security vulnerabilities, and update recommendations
+
+**Command:** `npm run audit:deps`
+
+**Output:** Reports unused dependencies, heavy packages, and optimization suggestions.
+
+**See:** `docs/SCRIPTS.md` for complete script reference.
+
+### **Incident Management**
+
+**Incident Response Process:**
+
+1. **Detection:** Identify incident (monitoring, alerts, user reports)
+2. **Triage:** Assess severity and impact
+3. **Containment:** Stop incident from spreading
+4. **Resolution:** Fix root cause
+5. **Recovery:** Restore normal operations
+6. **Post-mortem:** Document incident and improvements
+
+**Incident Severity:**
+
+- **Critical:** Service down, data breach, security incident
+- **High:** Major feature broken, performance degradation
+- **Medium:** Minor feature broken, non-critical errors
+- **Low:** Cosmetic issues, minor bugs
+
+**Incident Communication:**
+
+- **Status Page:** Update status page during incidents
+- **Team:** Notify team via Slack/email
+- **Users:** Communicate via status page or in-app notification
+- **Post-mortem:** Share post-mortem with team
+
+### **Health Checks**
+
+**Health Check Endpoint:**
+
+- **Route:** `/api/health` (public, no auth required)
+- **Response:** `{ status: 'ok', timestamp: '...' }`
+- **Checks:** Database connectivity, critical services
+- **Monitoring:** External monitoring service pings health endpoint
+
+**Health Check Implementation:**
+
+```typescript
+// app/api/health/route.ts
+export async function GET() {
+  // Check database connectivity
+  const dbHealthy = await checkDatabase();
+
+  if (!dbHealthy) {
+    return NextResponse.json(
+      { status: 'unhealthy', error: 'Database connection failed' },
+      { status: 503 }
+    );
+  }
+
+  return NextResponse.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+  });
+}
+```
+
+### **Documentation Standards**
+
+**API Documentation:**
+
+- **MANDATORY:** Document all API endpoints
+- **Format:** OpenAPI/Swagger specification (future)
+- **Examples:** Include request/response examples
+- **Authentication:** Document auth requirements
+
+**Code Documentation:**
+
+- **JSDoc:** All public functions, components, hooks
+- **README:** Update README with new features
+- **CHANGELOG:** Document all changes in CHANGELOG.md
+- **Architecture:** Document architectural decisions
+
+**Runbooks:**
+
+- **MANDATORY:** Document common operational tasks
+- **Examples:** Database restore, deployment rollback, incident response
+- **Updates:** Keep runbooks updated with process changes
+- **Access:** Runbooks accessible to all team members

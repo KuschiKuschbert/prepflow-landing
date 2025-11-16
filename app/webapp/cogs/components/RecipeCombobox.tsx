@@ -154,13 +154,13 @@ export function RecipeCombobox({
                 <div className="px-4 py-8 text-center text-gray-400">
                   {searchQuery ? (
                     <>
-                      <p className="mb-2">No recipes found matching "{searchQuery}"</p>
+                      <p className="mb-2">No recipes found matching &quot;{searchQuery}&quot;</p>
                       <button
                         type="button"
                         onClick={handleCreateNew}
                         className="text-[#29E7CD] hover:underline"
                       >
-                        Create "{searchQuery}" as new recipe
+                        Create &quot;{searchQuery}&quot; as new recipe
                       </button>
                     </>
                   ) : (

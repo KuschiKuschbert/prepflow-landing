@@ -1,7 +1,7 @@
 # Error Handling Standards
 
-**Date:** January 2025  
-**Purpose:** Define standardized error handling patterns for PrepFlow codebase  
+**Date:** January 2025
+**Purpose:** Define standardized error handling patterns for PrepFlow codebase
 **Status:** Active Standards
 
 ## Table of Contents
@@ -604,6 +604,6 @@ export default function RecipesPage() {
 
 ---
 
-**Document Status:** Active Standards  
-**Last Updated:** January 2025  
+**Document Status:** Active Standards
+**Last Updated:** January 2025
 **Next Review:** After Phase 1 migration

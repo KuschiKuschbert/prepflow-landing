@@ -1,5 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { createShareRecord } from './helpers/createShareRecord';
+import { fetchRecipeWithIngredients } from './helpers/fetchRecipeWithIngredients';
+import { generateRecipePDF } from './helpers/generateRecipePDF';
+import { handleRecipeShareError } from './helpers/handleRecipeShareError';
+import { normalizeRecipeForShare } from './helpers/normalizeRecipeForShare';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,98 +15,29 @@ export async function POST(request: NextRequest) {
 
     if (!recipeId || !shareType) {
       return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'Recipe ID and share type are required',
-        },
+        ApiErrorHandler.createError(
+          'Recipe ID and share type are required',
+          'VALIDATION_ERROR',
+          400,
+          { message: 'Missing required fields' },
+        ),
         { status: 400 },
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Get recipe details with ingredients
-    const { data: recipe, error: recipeError } = await supabaseAdmin
-      .from('recipes')
-      .select(
-        `
-        *,
-        recipe_ingredients (
-          id,
-          ingredient_id,
-          quantity,
-          unit,
-          notes,
-          ingredients (
-            id,
-            ingredient_name,
-            name,
-            unit,
-            category
-          )
-        )
-      `,
-      )
-      .eq('id', recipeId)
-      .single();
-
-    if (recipeError || !recipe) {
-      console.error('Error fetching recipe:', recipeError);
-      return NextResponse.json(
-        {
-          error: 'Recipe not found',
-          message: 'Could not find the specified recipe',
-        },
-        { status: 404 },
-      );
-    }
+    // Fetch recipe with ingredients
+    const recipe = await fetchRecipeWithIngredients(recipeId);
 
     // Create share record
-    const { data: shareRecord, error: shareError } = await supabaseAdmin
-      .from('recipe_shares')
-      .insert({
-        recipe_id: recipeId,
-        share_type: shareType,
-        recipient_email: recipientEmail,
-        notes: notes,
-        status: 'pending',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
+    const shareRecord = await createShareRecord({
+      recipe_id: recipeId,
+      share_type: shareType,
+      recipient_email: recipientEmail,
+      notes,
+    });
 
-    if (shareError) {
-      console.error('Error creating share record:', shareError);
-      return NextResponse.json(
-        {
-          error: 'Failed to create share record',
-          message: 'Could not save share information',
-        },
-        { status: 500 },
-      );
-    }
-
-    // Generate PDF content (simplified for now)
-    // Normalize ingredient_name for PDF/content
-    const normalized = {
-      ...recipe,
-      recipe_ingredients: (recipe as any).recipe_ingredients.map((ri: any) => ({
-        ...ri,
-        ingredients: {
-          ...ri.ingredients,
-          ingredient_name: ri.ingredients?.ingredient_name || ri.ingredients?.name,
-        },
-      })),
-    } as any;
-
+    // Normalize and generate PDF
+    const normalized = normalizeRecipeForShare(recipe);
     const pdfContent = generateRecipePDF(normalized);
 
     return NextResponse.json({
@@ -111,47 +49,12 @@ export async function POST(request: NextRequest) {
         recipe: recipe,
       },
     });
-  } catch (error) {
-    console.error('Recipe share API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+  } catch (error: any) {
+    if (error.status) {
+      return NextResponse.json(error, { status: error.status });
+    }
+    return handleRecipeShareError(error, 'POST');
   }
-}
-
-function generateRecipePDF(recipe: any) {
-  // This is a simplified PDF generation
-  // In a real implementation, you would use a library like puppeteer or jsPDF
-
-  const ingredients = recipe.recipe_ingredients
-    .map(
-      (ri: any) =>
-        `• ${ri.quantity} ${ri.unit} ${ri.ingredients.name}${ri.notes ? ` (${ri.notes})` : ''}`,
-    )
-    .join('\n');
-
-  const pdfContent = `
-RECIPE: ${recipe.name}
-${recipe.description ? `\nDescription: ${recipe.description}` : ''}
-
-INGREDIENTS:
-${ingredients}
-
-INSTRUCTIONS:
-${recipe.instructions || 'No instructions provided'}
-
-${recipe.notes ? `\nNOTES:\n${recipe.notes}` : ''}
-
----
-Generated by PrepFlow
-${new Date().toLocaleDateString()}
-  `.trim();
-
-  return pdfContent;
 }
 
 export async function GET(request: NextRequest) {
@@ -194,14 +97,13 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching recipe shares:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch recipe shares',
-          message: 'Could not retrieve share data',
-        },
-        { status: 500 },
-      );
+      logger.error('[Recipe Share API] Database error fetching shares:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/recipe-share', operation: 'GET', userId },
+      });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -209,13 +111,6 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (error) {
-    console.error('Recipe shares API error:', error);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
-      { status: 500 },
-    );
+    return handleRecipeShareError(error, 'GET');
   }
 }

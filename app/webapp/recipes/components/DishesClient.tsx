@@ -48,11 +48,7 @@ export default function DishesClient() {
     setRecipes,
     setError,
     fetchItems,
-  } = useDishesClientData(
-    updateVisibleRecipePrices,
-    fetchRecipeIngredients,
-    fetchBatchRecipeIngredients,
-  );
+  } = useDishesClientData();
 
   // Preview state
   const previewState = useDishesClientPreview({

@@ -1,15 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Dish, DishCostData, Recipe } from '../../types';
 
-export function useDishesClientData(
-  updateVisibleRecipePrices: (
-    recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<any>,
-    fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<any>,
-  ) => Promise<void>,
-  fetchRecipeIngredients: (recipeId: string) => Promise<any>,
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<any>,
-) {
+export function useDishesClientData() {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
@@ -67,19 +59,13 @@ export function useDishesClientData(
       });
       setDishCosts(costMap);
 
-      // Calculate prices for visible recipes
-      if (recipesList.length > 0) {
-        updateVisibleRecipePrices(
-          recipesList.slice(0, 20),
-          fetchRecipeIngredients,
-          fetchBatchRecipeIngredients,
-        ).catch(err => console.error('Failed to calculate recipe prices:', err));
-      }
+      // Note: Recipe price calculation is handled by useDishesClientRecipePricing
+      // based on visible/paginated recipes, not here
     } catch (err) {
       setError('Failed to fetch items');
       setLoading(false);
     }
-  }, [updateVisibleRecipePrices, fetchRecipeIngredients, fetchBatchRecipeIngredients]);
+  }, []);
 
   useEffect(() => {
     fetchItems();

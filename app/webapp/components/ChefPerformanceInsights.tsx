@@ -128,7 +128,7 @@ export default function ChefPerformanceInsights() {
               </h3>
             </div>
             <p className="text-fluid-xs tablet:text-fluid-sm mb-3 text-gray-400">
-              Keep making these - they're popular!
+              Keep making these - they&apos;re popular!
             </p>
             <div className="space-y-2">
               {data.topSellers.map((item, index) => (
@@ -237,7 +237,7 @@ export default function ChefPerformanceInsights() {
           </h3>
           <div className="tablet:grid-cols-4 grid grid-cols-2 gap-2">
             <div className="tablet:p-3 rounded-lg bg-[#1f1f1f] p-2 text-center">
-              <p className="text-fluid-xs tablet:text-fluid-sm text-gray-400">Chef's Kiss</p>
+              <p className="text-fluid-xs tablet:text-fluid-sm text-gray-400">Chef&apos;s Kiss</p>
               <p className="text-fluid-lg tablet:text-fluid-xl font-bold text-green-400">
                 {data.categoryCounts.chefsKiss}
               </p>

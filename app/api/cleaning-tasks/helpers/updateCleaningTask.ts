@@ -1,0 +1,56 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+
+const CLEANING_AREAS_SELECT = `
+  *,
+  cleaning_areas (
+    id,
+    name,
+    description,
+    frequency_days
+  )
+`;
+
+/**
+ * Update a cleaning task.
+ *
+ * @param {string} id - Cleaning task ID
+ * @param {Object} updateData - Update data
+ * @returns {Promise<Object>} Updated cleaning task
+ * @throws {Error} If update fails
+ */
+export async function updateCleaningTask(
+  id: string,
+  updateData: {
+    status?: string;
+    completed_date?: string | null;
+    notes?: string | null;
+    photo_url?: string | null;
+  },
+) {
+  if (!supabaseAdmin) throw new Error('Database connection not available');
+
+  const finalUpdateData: any = { ...updateData };
+  if (updateData.status === 'completed' && !updateData.completed_date) {
+    finalUpdateData.completed_date = new Date().toISOString();
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('cleaning_tasks')
+    .update(finalUpdateData)
+    .eq('id', id)
+    .select(CLEANING_AREAS_SELECT)
+    .single();
+
+  if (error) {
+    logger.error('[Cleaning Tasks API] Database error updating task:', {
+      error: error.message,
+      code: (error as any).code,
+      context: { endpoint: '/api/cleaning-tasks', operation: 'PUT', taskId: id },
+    });
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
+  }
+
+  return data;
+}

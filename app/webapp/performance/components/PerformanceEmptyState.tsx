@@ -1,9 +1,10 @@
 'use client';
-
 import { useState } from 'react';
 import { BarChart3, Sparkles, TrendingUp, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
+
+import { logger } from '@/lib/logger';
 
 interface PerformanceEmptyStateProps {
   onDataGenerated?: () => void;
@@ -20,26 +21,27 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
     setSuccessMessage(null);
 
     try {
-      console.log('🔄 Starting sales data generation...');
+      logger.dev('🔄 Starting sales data generation...');
       const response = await fetch('/api/generate-sales-data', { method: 'POST' });
-      console.log('📡 Response status:', response.status);
+      logger.dev('📡 Response status:', response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API Error:', errorText);
+        logger.error('❌ API Error:', errorText);
         let errorData;
         try {
           errorData = JSON.parse(errorText);
         } catch {
           errorData = { error: errorText || `HTTP ${response.status}` };
         }
-        const errorMsg = errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`;
+        const errorMsg =
+          errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`;
         setError(errorMsg);
         throw new Error(errorMsg);
       }
 
       const data = await response.json();
-      console.log('✅ Response data:', data);
+      logger.dev('✅ Response data:', data);
 
       if (data.success) {
         const successMsg = `Successfully generated sales data for ${data.summary.recipesProcessed} recipes over ${data.summary.daysGenerated} days. ${data.summary.salesRecordsCreated} sales records created.`;
@@ -67,7 +69,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
         setError(errorMsg);
       }
     } catch (error) {
-      console.error('❌ Error generating sales data:', error);
+      logger.error('❌ Error generating sales data:', error);
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       setError(errorMsg);
     } finally {
@@ -76,7 +78,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
   };
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 tablet:p-12 text-center">
+    <div className="tablet:p-12 overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
       <div className="mb-6 flex justify-center">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
           <Icon icon={BarChart3} size="xl" className="text-[#29E7CD]" />
@@ -84,13 +86,14 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       </div>
 
       <h3 className="mb-3 text-2xl font-semibold text-white">No Performance Data Yet</h3>
-      <p className="mb-8 max-w-2xl mx-auto text-gray-400">
-        Performance analysis helps you understand which menu items are profitable, which are popular, and which need
-        attention. Generate sales data from your recipes to see insights and recommendations.
+      <p className="mx-auto mb-8 max-w-2xl text-gray-400">
+        Performance analysis helps you understand which menu items are profitable, which are
+        popular, and which need attention. Generate sales data from your recipes to see insights and
+        recommendations.
       </p>
 
       {/* What You'll Get Section */}
-      <div className="mb-8 grid grid-cols-1 gap-4 tablet:grid-cols-3 max-w-3xl mx-auto">
+      <div className="tablet:grid-cols-3 mx-auto mb-8 grid max-w-3xl grid-cols-1 gap-4">
         <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
           <Icon icon={Sparkles} size="md" className="mx-auto mb-2 text-[#29E7CD]" />
           <h4 className="mb-1 text-sm font-semibold text-white">Smart Insights</h4>
@@ -109,15 +112,15 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       </div>
 
       {successMessage && (
-        <div className="mb-6 rounded-lg border border-green-500/30 bg-green-900/20 p-4 text-left max-w-md mx-auto">
+        <div className="mx-auto mb-6 max-w-md rounded-lg border border-green-500/30 bg-green-900/20 p-4 text-left">
           <p className="text-sm text-green-400">{successMessage}</p>
           <p className="mt-2 text-xs text-green-300">Refreshing data...</p>
         </div>
       )}
 
       {error && (
-        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-900/20 p-4 text-left max-w-md mx-auto">
-          <p className="text-sm font-semibold text-red-400 mb-1">Error generating sales data:</p>
+        <div className="mx-auto mb-6 max-w-md rounded-lg border border-red-500/30 bg-red-900/20 p-4 text-left">
+          <p className="mb-1 text-sm font-semibold text-red-400">Error generating sales data:</p>
           <p className="text-sm text-red-300">{error}</p>
           {error.includes('No recipes found') && (
             <p className="mt-2 text-xs text-red-200">
@@ -131,18 +134,25 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
         </div>
       )}
 
-      <div className="flex flex-col tablet:flex-row gap-4 justify-center items-center">
+      <div className="tablet:flex-row flex flex-col items-center justify-center gap-4">
         <button
           onClick={handleGenerateSalesData}
           disabled={isGenerating}
           className={`rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 font-semibold text-white transition-all hover:shadow-xl hover:shadow-[#29E7CD]/20 ${
-            isGenerating ? 'opacity-50 cursor-not-allowed' : ''
+            isGenerating ? 'cursor-not-allowed opacity-50' : ''
           }`}
         >
           {isGenerating ? (
             <span className="flex items-center gap-2">
               <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -168,7 +178,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       <p className="mt-6 text-sm text-gray-500">
         Or use the browser console:{' '}
         <code className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">
-          fetch('/api/generate-sales-data', {'{'} method: 'POST' {'}'})
+          fetch(&apos;/api/generate-sales-data&apos;, {'{'} method: &apos;POST&apos; {'}'})
         </code>
       </p>
     </div>

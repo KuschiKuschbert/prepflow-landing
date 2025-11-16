@@ -1,0 +1,181 @@
+---
+alwaysApply: true
+---
+## Auth, Allowlist, and Billing Setup
+
+### Auth (NextAuth + Auth0)
+
+- Env:
+  - `AUTH0_ISSUER_BASE_URL`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`
+  - `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+- Routes: `/api/auth/[...nextauth]`, `/api/me`
+- Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes).
+
+### Allowlist Configuration
+
+- **Option 1: Development Mode** (Default)
+  - In development (`NODE_ENV=development`), allowlist is automatically bypassed
+  - All authenticated users are allowed
+  - No configuration needed
+
+- **Option 2: Disable Allowlist**
+  - Set `DISABLE_ALLOWLIST=true` in environment variables
+  - All authenticated users can access (useful for testing/friend access)
+  - Works in both development and production
+
+- **Option 3: Email Allowlist**
+  - `ALLOWED_EMAILS` (comma-separated). Only allowlisted emails can access protected routes.
+  - Format: `email1@example.com,email2@example.com,email3@example.com`
+  - Unauthorized pages redirect to `/not-authorized`; APIs return 401/403.
+  - Most secure option for production
+
+### Shared Workspace
+
+- **Current Configuration**: Shared workspace - all authenticated users access the same data
+- **No User Isolation**: All users see and modify the same ingredients, recipes, menu dishes, etc.
+- **User Display**: Current user's name/email is displayed in navigation header (desktop only)
+- **Use Case**: Testing and friend access - not suitable for production with multiple customers
+- **Documentation**: See `docs/FRIEND_ACCESS.md` for detailed configuration and usage instructions
+
+### Billing (Stripe scaffolding)
+
+- Env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- Endpoints: `/api/billing/create-checkout-session`, `/api/billing/create-portal-session`, `/api/webhook/stripe`
+- Entitlements: `lib/tier-config.ts`, `lib/entitlements.ts`, `lib/feature-gate.ts`
+
+**Note:** For security practices around secrets management and API security, see `security.mdc`.
+
+## Landing v2 (Sign‑in + Tour)
+
+### IA
+
+- Hero: concise value prop; CTAs: Sign in, Register, Tour
+- Tour: 3–5 steps (Ingredients → Recipes → COGS → Performance → Temperature)
+- Capabilities: 4 cards linking to tour anchors
+- How it works: Add → Analyze → Act
+- Security: Auth0, Supabase, privacy
+
+### Components
+
+- `app/components/landing/Hero.tsx` - Hero section
+- `app/components/landing/TourModal.tsx` - Tour modal component
+- `app/components/landing/HowItWorks.tsx` - Process explanation
+- `app/components/landing/sections/` - Landing page sections:
+  - `BenefitsSection.tsx` - Outcomes section
+  - `FeaturesSection.tsx` - Features showcase
+  - `FAQSection.tsx` - Frequently asked questions
+  - `LeadMagnetSection.tsx` - Email capture form
+  - `TrustSection.tsx` - Security and trust features
+  - `HowItWorksSection.tsx` - Process explanation
+  - `MyStorySection.tsx` - Founder story
+  - `ProblemOutcomeSection.tsx` - Problem/solution presentation
+  - `PracticeSection.tsx` - Practice examples
+  - `ContributingMarginSection.tsx` - Margin contribution explanation
+  - `GlobalFeaturesSection.tsx` - Global features showcase
+
+### QA Checklist
+
+- Auth: NextAuth + Auth0 working; allowlist enforced on `/webapp/**` routes
+- Tour modal: focus trap, Escape closes, arrows navigate
+- Performance: Lighthouse ≥ 90; CLS < 0.1; LCP < 2.5s
+- Analytics: tour_open/close, step navigation, CTA clicks
+
+## Development Utilities
+
+- Reset and Seed (dev-only):
+  - `POST /api/db/reset` — wipes domain tables in FK-safe order.
+  - `POST /api/populate-clean-test-data` — single source of truth to generate all clean test data for the app (ingredients, recipes, suppliers, equipment, cleaning, compliance). Replaces existing data.
+  - `POST /api/db/reset-self` — authenticated self-reset that deletes only the current user's data (`user_id` scoped). Supports `?dry=1`. No reseed.
+  - Both require header `X-Admin-Key: $SEED_ADMIN_KEY` and are blocked in production.
+  - Optional `?dry=1` for a dry-run plan.
+
+### Supabase TypeScript Gotcha (Vercel Build)
+
+- Do not chain `.catch()` on Supabase query builders; they are not Promises until awaited.
+- Always use:
+  - `const { data, error } = await supabase.from('table').insert(row);`
+- Handle `error` explicitly; avoid `.catch()` which breaks type checks on Vercel.
+
+### TypeScript Ref Types (React useRef)
+
+- **MANDATORY**: Always use `RefObject<HTMLElement | null>` when declaring ref types in interfaces or function return types.
+- When using `useRef<HTMLElement>(null)`, TypeScript infers the type as `RefObject<HTMLElement | null>`, not `RefObject<HTMLElement>`.
+- **Correct pattern:**
+
+  ```typescript
+  interface MyHookReturn {
+    elementRef: React.RefObject<HTMLDivElement | null>; // ✅ Correct
+  }
+
+  const elementRef = useRef<HTMLDivElement>(null); // Returns RefObject<HTMLDivElement | null>
+  ```
+
+- **Incorrect pattern:**
+  ```typescript
+  interface MyHookReturn {
+    elementRef: React.RefObject<HTMLDivElement>; // ❌ Causes build errors
+  }
+  ```
+- This prevents TypeScript build errors on Vercel: `Type 'RefObject<HTMLDivElement | null>' is not assignable to type 'RefObject<HTMLDivElement>'`.
+- Always check ref types in hook return interfaces and component prop types.
+
+## 🎯 **Project Overview**
+
+PrepFlow is a unified restaurant profitability optimization platform that helps cafés, restaurants, and food trucks analyze their menu costs, calculate COGS, and optimize gross profit margins. The platform combines a marketing landing page with a comprehensive webapp featuring subscription-based access.
+
+**Target Market:** Independent restaurants, cafés, food trucks in Australia and globally
+**Primary Goal:** Convert visitors into customers through lead generation and subscription sales
+**Business Model:** Subscription-based SaaS ($29/month AUD) with 7-day free trial
+**Platform:** Unified Next.js webapp with future React Native mobile apps
+
+**Remember:** PrepFlow is a high-converting landing page that needs to balance technical excellence with conversion optimization. Every change should be measured and optimized for maximum impact on both user experience and business results.
+
+## 🏗️ **Technical Architecture**
+
+### **Framework & Stack**
+
+- **Frontend:** Next.js 16.0.0 with React 19 (App Router)
+- **Styling:** Tailwind CSS 4 with custom CSS variables
+- **Analytics:** Google Analytics 4, Google Tag Manager, Vercel Analytics
+- **Deployment:** Vercel platform
+- **Payment:** Stripe integration
+- **Database:** Supabase PostgreSQL
+- **Authentication:** NextAuth + Auth0 (user authentication), Supabase (database only)
+- **Email:** Resend integration
+- **Mobile:** React Native + Expo (future)
+
+### **Key Components**
+
+- **Analytics Stack:** ScrollTracker, GoogleAnalytics, GoogleTagManager
+- **GTM Integration:** GoogleTagManager with data layer management
+- **SEO Components:** Structured data, meta tags, OpenGraph
+- **UI Components:** Custom Button, Card, and form components
+- **UX Components:** LoadingSkeleton, ModernNavigation, ScrollToTop, ScrollProgress
+
+### **File Structure**
+
+**Note:** For detailed project structure with all directories and files, see the **"Current Project Structure"** section in `implementation.mdc`.
+
+## 🏗️ **Unified Architecture**
+
+### **Platform Strategy**
+
+- **Web-First Development:** Build for web with mobile-ready components
+- **Universal Components:** Create components that work on web and mobile
+- **Shared Business Logic:** Core functionality shared across platforms
+- **Progressive Enhancement:** Start with web, add mobile capabilities
+
+### **Authentication Flow**
+
+- **NextAuth + Auth0:** User authentication via NextAuth with Auth0 provider
+- **Supabase:** Database only (PostgreSQL) - not used for user authentication
+- **Session Management:** Secure token storage and refresh via NextAuth
+- **Allowlist Enforcement:** Middleware enforces email allowlist on `/webapp/**` and `/api/**` routes
+- **Role-Based Access:** User and admin permissions managed via Auth0
+
+### **Subscription Management**
+
+- **Stripe Integration:** Payment processing and subscription management
+- **Paywall System:** Protect premium features behind subscription
+- **Trial Period:** 7-day free trial for new users
+- **Billing Management:** User dashboard for subscription management

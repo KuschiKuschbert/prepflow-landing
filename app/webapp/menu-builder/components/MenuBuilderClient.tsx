@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Menu, MenuStatistics } from '../types';
 import MenuList from './MenuList';
@@ -19,11 +19,31 @@ export default function MenuBuilderClient() {
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [editingMenu, setEditingMenu] = useState<Menu | null>(null);
 
-  useEffect(() => {
-    checkDatabaseTables();
+  const fetchMenus = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/menus', { cache: 'no-store' });
+      const result = await response.json();
+      if (!response.ok) {
+        // Check if it's a table missing error
+        if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
+          setDbError('Menu builder tables are not set up. Please run the database migration.');
+        } else {
+          setError(result.error || result.message || 'Failed to fetch menus');
+        }
+        setLoading(false);
+      } else {
+        setMenus(result.menus || []);
+        setLoading(false);
+      }
+    } catch (err) {
+      setError('Failed to fetch menus. Please check your connection and try again.');
+      setLoading(false);
+    }
   }, []);
 
-  const checkDatabaseTables = async () => {
+  const checkDatabaseTables = useCallback(async () => {
     setCheckingDb(true);
     setDbError(null);
     try {
@@ -49,31 +69,11 @@ export default function MenuBuilderClient() {
       setDbError('Failed to check database tables. Please try again.');
       setCheckingDb(false);
     }
-  };
+  }, [fetchMenus]);
 
-  const fetchMenus = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/menus', { cache: 'no-store' });
-      const result = await response.json();
-      if (!response.ok) {
-        // Check if it's a table missing error
-        if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
-          setDbError('Menu builder tables are not set up. Please run the database migration.');
-        } else {
-          setError(result.error || result.message || 'Failed to fetch menus');
-        }
-        setLoading(false);
-      } else {
-        setMenus(result.menus || []);
-        setLoading(false);
-      }
-    } catch (err) {
-      setError('Failed to fetch menus. Please check your connection and try again.');
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    checkDatabaseTables();
+  }, [checkDatabaseTables]);
 
   const handleCreateMenu = () => {
     setEditingMenu(null);
@@ -127,7 +127,7 @@ export default function MenuBuilderClient() {
                 <ol className="ml-4 list-decimal space-y-1 text-sm text-yellow-300">
                   <li>Open your Supabase project dashboard</li>
                   <li>Go to SQL Editor (left sidebar)</li>
-                  <li>Click "New query"</li>
+                  <li>Click &quot;New query&quot;</li>
                   <li>
                     Copy the SQL from{' '}
                     <code className="rounded bg-yellow-900/30 px-1.5 py-0.5 text-xs">

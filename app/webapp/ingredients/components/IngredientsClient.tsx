@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 // Direct imports to eliminate skeleton flashes
 import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useIngredientActions } from '../hooks/useIngredientActions';
 import { useIngredientBulkUpdate } from '../hooks/useIngredientBulkUpdate';
@@ -23,24 +22,7 @@ import CSVImportModal from './CSVImportModal';
 import IngredientEditDrawer from './IngredientEditDrawer';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-
-// Import IngredientPagination as client-only to prevent hydration mismatches
-const IngredientPagination = dynamic(() => import('./IngredientPagination'), {
-  ssr: false,
-  loading: () => (
-    <div className="mb-4 flex items-center justify-between">
-      <span className="text-sm text-gray-400">Loading...</span>
-      <div className="space-x-2">
-        <button disabled className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white opacity-50">
-          Prev
-        </button>
-        <button disabled className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white opacity-50">
-          Next
-        </button>
-      </div>
-    </div>
-  ),
-});
+import IngredientPagination from './IngredientPagination';
 
 interface Ingredient {
   id: string;

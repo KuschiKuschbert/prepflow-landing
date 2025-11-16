@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
-import { groupBy } from '@/lib/api/batch-utils';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { groupBy } from '@/lib/api/batch-utils';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {

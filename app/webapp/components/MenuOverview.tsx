@@ -88,7 +88,7 @@ export default function MenuOverview() {
             Menu Overview
           </h2>
           <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-gray-400">
-            What's available to serve
+            What&apos;s available to serve
           </p>
         </div>
         <Link

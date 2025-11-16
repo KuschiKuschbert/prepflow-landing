@@ -1,0 +1,348 @@
+---
+alwaysApply: true
+---
+
+## 🧪 **Testing Standards & Quality Assurance**
+
+**Note:** For security testing details and checklists, see `security.mdc`. For CI/CD testing integration, see `operations.mdc`. For basic testing requirements, see `development.mdc`.
+
+### **Testing Strategy**
+
+**Testing Pyramid:**
+
+- **Unit Tests:** 70% - Test individual functions and components
+- **Integration Tests:** 20% - Test API endpoints and database interactions
+- **E2E Tests:** 10% - Test critical user journeys
+
+**Test Coverage Targets:**
+
+- **Minimum:** 60% code coverage
+- **Target:** 80% code coverage
+- **Critical Paths:** 100% coverage (authentication, payments, data operations)
+
+### **Unit Testing**
+
+**What to Test:**
+
+- **Utility Functions:** All pure functions and helpers
+- **React Components:** Component rendering and user interactions
+- **Hooks:** Custom hooks behavior and state management
+- **API Helpers:** Request/response handling utilities
+
+**Testing Library:**
+
+- **Framework:** Jest with React Testing Library
+- **Setup:** `jest.config.js` and `jest.setup.ts`
+- **Mocking:** Mock external dependencies (Supabase, Stripe, etc.)
+
+**Unit Test Pattern:**
+
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MyComponent } from './MyComponent';
+
+describe('MyComponent', () => {
+  it('renders correctly', () => {
+    render(<MyComponent />);
+    expect(screen.getByText('Hello')).toBeInTheDocument();
+  });
+
+  it('handles user interaction', () => {
+    render(<MyComponent />);
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+    expect(screen.getByText('Clicked')).toBeInTheDocument();
+  });
+});
+```
+
+**Unit Test Checklist:**
+
+- [ ] Test happy path (expected behavior)
+- [ ] Test error cases (error handling)
+- [ ] Test edge cases (boundary conditions)
+- [ ] Test with different inputs (variations)
+- [ ] Mock external dependencies
+- [ ] Clean up after tests (no side effects)
+
+### **Integration Testing**
+
+**What to Test:**
+
+- **API Endpoints:** Request/response handling, error cases
+- **Database Operations:** CRUD operations, queries, transactions
+- **Authentication:** Login, logout, session management
+- **External Services:** Stripe, Supabase, Resend integration
+
+**Integration Test Pattern:**
+
+```typescript
+import { createMocks } from 'node-mocks-http';
+import { GET } from '@/app/api/recipes/route';
+
+describe('/api/recipes', () => {
+  it('returns recipes list', async () => {
+    const { req, res } = createMocks({
+      method: 'GET',
+    });
+
+    await GET(req);
+
+    expect(res._getStatusCode()).toBe(200);
+    const data = JSON.parse(res._getData());
+    expect(data).toHaveProperty('recipes');
+  });
+});
+```
+
+**Integration Test Checklist:**
+
+- [ ] Test successful requests
+- [ ] Test error responses (400, 401, 403, 404, 500)
+- [ ] Test authentication requirements
+- [ ] Test authorization checks
+- [ ] Test input validation
+- [ ] Test database operations
+- [ ] Clean up test data
+
+### **E2E Testing**
+
+**What to Test:**
+
+- **Critical User Journeys:** Sign up, login, create recipe, checkout
+- **User Flows:** Complete workflows end-to-end
+- **Cross-browser:** Test on Chrome, Firefox, Safari
+- **Mobile:** Test on mobile devices/emulators
+
+**E2E Testing Tools:**
+
+- **Framework:** Playwright or Cypress (future)
+- **Setup:** E2E test configuration
+- **CI/CD:** Run E2E tests in CI pipeline
+
+**E2E Test Pattern:**
+
+```typescript
+// Example with Playwright
+import { test, expect } from '@playwright/test';
+
+test('user can create recipe', async ({ page }) => {
+  await page.goto('/webapp/recipes');
+  await page.click('text=New Recipe');
+  await page.fill('[name="name"]', 'Test Recipe');
+  await page.click('text=Save');
+  await expect(page.locator('text=Test Recipe')).toBeVisible();
+});
+```
+
+**E2E Test Checklist:**
+
+- [ ] Test critical user journeys
+- [ ] Test authentication flows
+- [ ] Test payment flows (Stripe)
+- [ ] Test data creation/editing
+- [ ] Test error handling
+- [ ] Test responsive design
+- [ ] Test accessibility
+
+### **Performance Testing**
+
+**Performance Test Targets:**
+
+- **Lighthouse Score:** ≥ 90 (Performance)
+- **Core Web Vitals:** LCP < 2.5s, FID < 100ms, CLS < 0.1
+- **API Response Time:** < 500ms (p95)
+- **Bundle Size:** < 200KB (gzipped)
+
+**Performance Testing Tools:**
+
+- **Lighthouse CI:** Automated performance testing
+- **Web Vitals:** Real user monitoring
+- **Load Testing:** k6 or Artillery (for API endpoints)
+
+**Performance Test Checklist:**
+
+- [ ] Run Lighthouse CI on every PR
+- [ ] Monitor Core Web Vitals in production
+- [ ] Test API endpoints under load
+- [ ] Monitor bundle sizes
+- [ ] Test on slow networks (3G throttling)
+- [ ] Test on low-end devices
+
+### **Accessibility Testing**
+
+**Accessibility Standards:**
+
+- **WCAG 2.1:** Level AA compliance
+- **Keyboard Navigation:** All features accessible via keyboard
+- **Screen Readers:** Test with NVDA/JAWS/VoiceOver
+- **Color Contrast:** Minimum 4.5:1 ratio
+
+**Accessibility Testing Tools:**
+
+- **Automated:** axe-core, Lighthouse accessibility audit
+- **Manual:** Keyboard navigation, screen reader testing
+- **CI/CD:** Run accessibility tests in CI pipeline
+
+**Accessibility Test Checklist:**
+
+- [ ] All images have alt text
+- [ ] All forms have labels
+- [ ] All interactive elements keyboard accessible
+- [ ] Color contrast meets WCAG standards
+- [ ] ARIA labels used correctly
+- [ ] Focus indicators visible
+- [ ] Screen reader tested
+
+### **Security Testing**
+
+**Security Test Areas:**
+
+- **Authentication:** Test login/logout, session management
+- **Authorization:** Test access control, permission checks
+- **Input Validation:** Test SQL injection, XSS prevention
+- **Rate Limiting:** Test rate limit enforcement
+- **Secrets:** Verify no secrets in logs or code
+
+**Security Testing Tools:**
+
+- **Dependency Scanning:** `npm audit`, Snyk
+- **Code Scanning:** ESLint security rules
+- **Penetration Testing:** Annual external audit
+
+**Security Test Checklist:**
+
+- [ ] Test authentication bypass attempts
+- [ ] Test authorization bypass attempts
+- [ ] Test SQL injection prevention
+- [ ] Test XSS prevention
+- [ ] Test CSRF protection
+- [ ] Test rate limiting
+- [ ] Verify no secrets in code/logs
+
+### **Test Data Management**
+
+**Test Data Strategy:**
+
+- **Unit Tests:** Mock data, no database required
+- **Integration Tests:** Use test database, clean up after tests
+- **E2E Tests:** Use test data, reset between test runs
+
+**Test Database:**
+
+- **Separate Database:** Use separate Supabase project for testing
+- **Fixtures:** Use seed scripts for consistent test data
+- **Cleanup:** Clean up test data after each test run
+
+**Test Data Best Practices:**
+
+- **Isolation:** Each test should be independent
+- **Cleanup:** Clean up test data after tests
+- **Fixtures:** Use consistent test data fixtures
+- **Randomization:** Use random data to catch edge cases
+
+### **Test Execution**
+
+**Note:** See `docs/SCRIPTS.md` for complete script reference and usage examples.
+
+**Local Testing:**
+
+- **Unit Tests:** `npm test` (Jest) - Runs all unit tests
+- **Watch Mode:** `npm run test:watch` - Runs tests in watch mode for development
+- **Coverage Report:** `npm run test:coverage` - Runs tests with coverage report (target: ≥ 60%, goal: 80%)
+- **Integration Tests:** `npm run test:integration` (future) - Will run integration tests for API endpoints and database operations
+- **E2E Tests:** `npm run test:e2e` (future) - Will run end-to-end tests using Playwright or Cypress
+- **All Tests:** `npm run test:all` (future) - Will run all test suites (unit, integration, E2E)
+
+**Test Scripts:**
+
+- **Jest Configuration:** `jest.config.js` and `jest.setup.ts` - Test framework configuration
+- **Test Coverage:** Coverage reports generated in `coverage/` directory
+- **Test Patterns:** See Unit Test Pattern and Integration Test Pattern sections above
+
+**CI/CD Testing:**
+
+- **On PR:** Run unit and integration tests
+- **On Merge:** Run all tests including E2E (when implemented)
+- **On Deploy:** Run smoke tests after deployment
+
+**Test Execution Checklist:**
+
+- [ ] All tests pass before PR merge
+- [ ] Tests run in CI pipeline
+- [ ] Test failures block deployment
+- [ ] Test coverage reported (≥ 60%)
+- [ ] Flaky tests identified and fixed
+
+**Complete Script Reference:**
+
+For complete documentation of all testing scripts and future test commands, see `docs/SCRIPTS.md`.
+
+### **Test Maintenance**
+
+**Test Maintenance Practices:**
+
+- **Update Tests:** Update tests when code changes
+- **Remove Obsolete Tests:** Delete tests for removed features
+- **Fix Flaky Tests:** Identify and fix flaky tests
+- **Refactor Tests:** Keep tests DRY and maintainable
+
+**Test Quality:**
+
+- **Readable:** Tests should be easy to understand
+- **Maintainable:** Tests should be easy to update
+- **Fast:** Tests should run quickly
+- **Reliable:** Tests should be deterministic (no flakiness)
+
+### **Code Quality Metrics**
+
+**Quality Metrics:**
+
+- **Test Coverage:** ≥ 60% (target 80%)
+- **Code Complexity:** Cyclomatic complexity < 10
+- **Code Duplication:** < 5%
+- **Technical Debt:** Track and reduce technical debt
+
+**Quality Tools:**
+
+- **Coverage:** Jest coverage reports
+- **Complexity:** ESLint complexity rules
+- **Duplication:** CodeQL or similar
+- **Technical Debt:** Track in issues/backlog
+
+### **Testing Best Practices**
+
+**DO:**
+
+- ✅ Write tests before fixing bugs (TDD)
+- ✅ Test behavior, not implementation
+- ✅ Use descriptive test names
+- ✅ Keep tests simple and focused
+- ✅ Mock external dependencies
+- ✅ Clean up after tests
+
+**DON'T:**
+
+- ❌ Test implementation details
+- ❌ Write tests that depend on other tests
+- ❌ Use real external services in tests
+- ❌ Skip tests for "simple" code
+- ❌ Write flaky tests
+- ❌ Ignore test failures
+
+### **Test Documentation**
+
+**Test Documentation Requirements:**
+
+- **Test Plan:** Document test strategy and approach
+- **Test Cases:** Document test cases for critical features
+- **Test Results:** Document test results and coverage
+- **Bug Reports:** Document bugs found during testing
+
+**Test Documentation Checklist:**
+
+- [ ] Test strategy documented
+- [ ] Critical test cases documented
+- [ ] Test coverage tracked
+- [ ] Bugs documented and tracked
+- [ ] Test results shared with team

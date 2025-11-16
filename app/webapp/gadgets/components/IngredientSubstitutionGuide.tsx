@@ -165,18 +165,18 @@ export function IngredientSubstitutionGuide() {
     : filteredSubstitutions;
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
-      <div className="hidden flex-shrink-0 tablet:block">
-        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
+    <div className="tablet:space-y-2 tablet:px-4 tablet:py-4 flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3">
+      <div className="tablet:block hidden flex-shrink-0">
+        <h2 className="tablet:mb-2 tablet:text-lg mb-1 text-base font-semibold text-white">
           Ingredient Substitution Guide
         </h2>
         <p className="text-xs text-gray-400">Find alternatives for common ingredients</p>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-shrink-0 flex-col space-y-1.5 tablet:space-y-2">
+      <div className="tablet:space-y-2 flex flex-shrink-0 flex-col space-y-1.5">
         <div>
-          <label className="mb-0.5 block text-xs font-medium text-gray-300 tablet:mb-1 tablet:text-sm">
+          <label className="tablet:mb-1 tablet:text-sm mb-0.5 block text-xs font-medium text-gray-300">
             Search Ingredient
           </label>
           <input
@@ -184,19 +184,19 @@ export function IngredientSubstitutionGuide() {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Type ingredient name..."
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2"
+            className="tablet:rounded-xl tablet:px-3 tablet:py-2 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
           />
         </div>
 
         <div className="flex w-full flex-wrap gap-2">
-          <div className="min-w-[150px] flex-1 tablet:min-w-[200px]">
-            <label className="mb-0.5 block text-xs font-medium text-gray-300 tablet:mb-1 tablet:text-sm">
+          <div className="tablet:min-w-[200px] min-w-[150px] flex-1">
+            <label className="tablet:mb-1 tablet:text-sm mb-0.5 block text-xs font-medium text-gray-300">
               Category
             </label>
             <select
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2"
+              className="tablet:rounded-xl tablet:px-3 tablet:py-2 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
             >
               <option value="">Select a category...</option>
               {categories.map(cat => (
@@ -207,29 +207,30 @@ export function IngredientSubstitutionGuide() {
             </select>
           </div>
           <div className="flex items-end">
-            <label className="flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-xs tablet:gap-2 tablet:rounded-xl tablet:px-3 tablet:py-2 tablet:text-sm">
+            <label className="tablet:gap-2 tablet:rounded-xl tablet:px-3 tablet:py-2 tablet:text-sm flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-xs">
               <input
                 type="checkbox"
                 checked={showAllergenFriendly}
                 onChange={e => setShowAllergenFriendly(e.target.checked)}
                 className="rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-[#29E7CD]"
               />
-              <span className="text-xs text-white tablet:text-sm">Allergen-friendly</span>
+              <span className="tablet:text-sm text-xs text-white">Allergen-friendly</span>
             </label>
           </div>
         </div>
       </div>
 
       {/* Substitutions List - Only show when filter is active */}
-      <div className="flex-1 space-y-1.5 overflow-y-auto tablet:space-y-2">
+      <div className="tablet:space-y-2 flex-1 space-y-1.5 overflow-y-auto">
         {!hasActiveFilter ? (
-          <div className="flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center tablet:rounded-xl tablet:p-8">
+          <div className="tablet:rounded-xl tablet:p-8 flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center">
             <div className="space-y-2">
-              <div className="text-sm text-gray-400 tablet:text-base">
+              <div className="tablet:text-base text-sm text-gray-400">
                 Search for an ingredient or select a category to see substitutions
               </div>
-              <div className="text-xs text-gray-500 tablet:text-sm">
-                Try: "Eggs", "Butter", "Milk", or select a category above
+              <div className="tablet:text-sm text-xs text-gray-500">
+                Try: &quot;Eggs&quot;, &quot;Butter&quot;, &quot;Milk&quot;, or select a category
+                above
               </div>
             </div>
           </div>
@@ -237,21 +238,21 @@ export function IngredientSubstitutionGuide() {
           allergenFriendlySubs.map(sub => (
             <div
               key={sub.ingredient}
-              className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-2 tablet:rounded-xl tablet:p-4"
+              className="tablet:rounded-xl tablet:p-4 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-2"
             >
-              <h3 className="mb-1.5 text-sm font-semibold text-white tablet:mb-2 tablet:text-base">
+              <h3 className="tablet:mb-2 tablet:text-base mb-1.5 text-sm font-semibold text-white">
                 {sub.ingredient}
               </h3>
-              <div className="space-y-1.5 tablet:space-y-2">
+              <div className="tablet:space-y-2 space-y-1.5">
                 {sub.substitutes.map((substitute, idx) => (
                   <div
                     key={idx}
-                    className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1.5 tablet:rounded-xl tablet:p-3"
+                    className="tablet:rounded-xl tablet:p-3 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-1.5"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-1.5 tablet:gap-2">
-                          <span className="text-xs font-medium text-white tablet:text-sm">
+                        <div className="tablet:gap-2 flex items-center gap-1.5">
+                          <span className="tablet:text-sm text-xs font-medium text-white">
                             {substitute.name}
                           </span>
                           {substitute.allergenFriendly && (
@@ -260,7 +261,7 @@ export function IngredientSubstitutionGuide() {
                             </span>
                           )}
                         </div>
-                        <div className="mt-0.5 text-xs text-[#29E7CD] tablet:mt-1 tablet:text-sm">
+                        <div className="tablet:mt-1 tablet:text-sm mt-0.5 text-xs text-[#29E7CD]">
                           {substitute.ratio}
                         </div>
                         {substitute.notes && (
@@ -274,7 +275,7 @@ export function IngredientSubstitutionGuide() {
             </div>
           ))
         ) : (
-          <div className="flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center text-xs text-gray-400 tablet:rounded-xl tablet:p-8 tablet:text-sm">
+          <div className="tablet:rounded-xl tablet:p-8 tablet:text-sm flex h-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 text-center text-xs text-gray-400">
             No substitutions found. Try a different search term or category.
           </div>
         )}

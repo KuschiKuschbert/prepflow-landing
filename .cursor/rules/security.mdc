@@ -1,0 +1,259 @@
+---
+alwaysApply: true
+---
+
+## 🔒 **Security Standards & Best Practices**
+
+**Note:** For authentication setup and allowlist configuration, see `core.mdc`. For deployment security and monitoring, see `operations.mdc`. For security testing standards, see `testing.mdc`.
+
+### **Environment Variable Validation**
+
+**MANDATORY:** All environment variables must be validated at application startup.
+
+**Implementation Pattern:**
+
+```typescript
+// lib/env-validation.ts
+import { z } from 'zod'; // Add zod as dependency
+
+const envSchema = z.object({
+  // Supabase
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+
+  // Auth
+  NEXTAUTH_SECRET: z.string().min(32),
+  NEXTAUTH_URL: z.string().url(),
+  AUTH0_ISSUER_BASE_URL: z.string().url().optional(),
+  AUTH0_CLIENT_ID: z.string().optional(),
+  AUTH0_CLIENT_SECRET: z.string().optional(),
+
+  // Stripe
+  STRIPE_SECRET_KEY: z.string().startsWith('sk_').optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().startsWith('whsec_').optional(),
+
+  // Node Environment
+  NODE_ENV: z.enum(['development', 'production', 'test']),
+});
+
+export const env = envSchema.parse(process.env);
+```
+
+**Usage:**
+
+- Validate on app startup in `app/layout.tsx` or `middleware.ts`
+- Fail fast with clear error messages if validation fails
+- Never use `process.env` directly - always use validated `env` object
+
+### **Secrets Management**
+
+**MANDATORY:** Follow these security practices for secrets:
+
+- **Never commit secrets** to git (use `.env.local`, `.gitignore`)
+- **Rotate secrets regularly** (every 90 days for production)
+- **Use different secrets** for development, staging, and production
+- **Store production secrets** in Vercel environment variables (never in code)
+- **Use strong secrets** (minimum 32 characters, random generation)
+- **Never log secrets** (use `logger` utility which redacts sensitive data)
+
+**Secret Generation:**
+
+```bash
+# Generate secure random secrets
+openssl rand -hex 32  # For NEXTAUTH_SECRET
+openssl rand -base64 32  # For AUTH0_SECRET
+```
+
+**Secret Rotation Process:**
+
+1. Generate new secret
+2. Update in Vercel environment variables
+3. Deploy new version
+4. Verify functionality
+5. Mark old secret for deletion (after 7 days grace period)
+
+### **API Security**
+
+**Rate Limiting:**
+
+- **MANDATORY:** Implement rate limiting on all public API endpoints
+- **Default Limits:** 100 requests per 15 minutes per IP
+- **Stricter Limits:** 10 requests per minute for authentication endpoints
+- **Implementation:** Use middleware or API route wrapper
+
+**Input Validation:**
+
+- **MANDATORY:** Validate all input data using Zod schemas
+- **Sanitize user input** before database operations
+- **Reject malformed requests** with 400 status codes
+- **Never trust client-side validation** - always validate server-side
+
+**SQL Injection Prevention:**
+
+- **MANDATORY:** Use Supabase parameterized queries only
+- **Never concatenate** user input into SQL strings
+- **Use Supabase client methods** (`.insert()`, `.update()`, `.select()`)
+- **Validate data types** before database operations
+
+**XSS Prevention:**
+
+- **MANDATORY:** Sanitize all user-generated content
+- **Use React's built-in escaping** (automatic for JSX)
+- **Never use `dangerouslySetInnerHTML`** without sanitization
+- **Content Security Policy** configured in `next.config.ts`
+
+**CSRF Protection:**
+
+- **MANDATORY:** Use NextAuth CSRF tokens for authenticated requests
+- **Verify origin headers** for API requests
+- **Use SameSite cookies** for session management
+
+### **Authentication & Authorization**
+
+**Session Management:**
+
+- **Secure cookies** with `httpOnly`, `secure`, `sameSite: 'strict'`
+- **Session timeout:** 4 hours (configurable)
+- **Token refresh:** Automatic via NextAuth
+- **Logout:** Clear all session data server-side
+
+**Authorization Checks:**
+
+- **MANDATORY:** Verify permissions on every API route
+- **Check user_id** matches resource ownership (when user isolation implemented)
+- **Validate subscription status** for premium features
+- **Fail closed:** Deny access by default, allow explicitly
+
+**Password Security (if implementing custom auth):**
+
+- **Minimum length:** 12 characters
+- **Complexity requirements:** Mix of uppercase, lowercase, numbers, symbols
+- **Hashing:** Use bcrypt with 12+ rounds
+- **Never store plaintext passwords**
+
+### **Data Privacy & GDPR Compliance**
+
+**Data Collection:**
+
+- **MANDATORY:** Only collect data necessary for functionality
+- **User consent** required for analytics and tracking
+- **Privacy policy** must be accessible and clear
+- **Data retention** policies documented and enforced
+
+**User Data Rights:**
+
+- **Right to access:** `/api/account/export` endpoint implemented
+- **Right to deletion:** `/api/account/delete` endpoint implemented
+- **Right to rectification:** Users can update their data
+- **Data portability:** Export in JSON format
+
+**Data Storage:**
+
+- **Encryption at rest:** Supabase handles database encryption
+- **Encryption in transit:** HTTPS/TLS for all connections
+- **Backup encryption:** Ensure backups are encrypted
+- **PII handling:** Minimize personally identifiable information storage
+
+### **Security Headers**
+
+**MANDATORY:** All responses must include security headers (configured in `next.config.ts`):
+
+- **X-Frame-Options:** DENY (prevent clickjacking)
+- **X-Content-Type-Options:** nosniff (prevent MIME sniffing)
+- **Strict-Transport-Security:** max-age=31536000 (force HTTPS)
+- **Content-Security-Policy:** Restrict resource loading
+- **Referrer-Policy:** origin-when-cross-origin
+- **Permissions-Policy:** Restrict browser features
+
+### **Security Monitoring**
+
+**Logging:**
+
+- **MANDATORY:** Log all security events (failed logins, unauthorized access attempts)
+- **Never log sensitive data** (passwords, tokens, PII)
+- **Use structured logging** with context (user_id, IP, endpoint)
+- **Monitor logs** for suspicious patterns
+
+**Alerting:**
+
+- **Failed authentication attempts:** Alert after 5 failures from same IP
+- **Unauthorized access attempts:** Alert immediately
+- **Unusual API usage:** Alert on rate limit violations
+- **Database errors:** Alert on connection failures or query errors
+
+**Security Audits:**
+
+- **Dependency scanning:** Run `npm audit` weekly
+- **Code scanning:** Use GitHub Security or similar
+- **Penetration testing:** Annual external security audit
+- **Vulnerability disclosure:** Process for reporting security issues
+
+### **Incident Response**
+
+**Security Incident Process:**
+
+1. **Detect:** Identify security incident (breach, vulnerability, attack)
+2. **Contain:** Isolate affected systems immediately
+3. **Assess:** Determine scope and impact
+4. **Remediate:** Fix vulnerability or stop attack
+5. **Document:** Record incident details and response
+6. **Notify:** Inform affected users if data breach occurred
+7. **Review:** Post-incident review and process improvement
+
+**Incident Contacts:**
+
+- **Security Lead:** [Define contact]
+- **DevOps Lead:** [Define contact]
+- **Legal/Compliance:** [Define contact]
+
+### **Dependency Security**
+
+**MANDATORY:** Regular dependency updates and security scanning:
+
+- **Weekly:** Run `npm audit` and fix high/critical vulnerabilities
+- **Monthly:** Review and update dependencies
+- **Quarterly:** Major dependency updates and testing
+- **Automated:** Use Dependabot or similar for automated PRs
+
+**Dependency Approval Process:**
+
+1. **Review:** Check vulnerability database (npm audit, Snyk)
+2. **Test:** Verify dependency doesn't break functionality
+3. **Approve:** Merge dependency update PR
+4. **Monitor:** Watch for issues after deployment
+
+### **API Security Checklist**
+
+For every new API endpoint:
+
+- [ ] Input validation with Zod schema
+- [ ] Authentication check (if protected route)
+- [ ] Authorization check (if user-specific data)
+- [ ] Rate limiting applied
+- [ ] Error handling (no sensitive data in errors)
+- [ ] Logging (security events logged)
+- [ ] SQL injection prevention (parameterized queries)
+- [ ] XSS prevention (sanitized output)
+- [ ] CSRF protection (NextAuth tokens)
+
+### **Security Testing**
+
+**MANDATORY:** Security testing before production deployment:
+
+- **Dependency scanning:** `npm audit`
+- **Code scanning:** ESLint security rules
+- **Manual testing:** Authentication, authorization, input validation
+- **Penetration testing:** Annual external audit
+
+**Security Test Checklist:**
+
+- [ ] All endpoints require authentication (where applicable)
+- [ ] Authorization checks prevent unauthorized access
+- [ ] Input validation prevents malformed data
+- [ ] Rate limiting prevents abuse
+- [ ] Error messages don't leak sensitive information
+- [ ] Security headers are present
+- [ ] No secrets in logs or error messages
+- [ ] SQL injection prevention verified
+- [ ] XSS prevention verified

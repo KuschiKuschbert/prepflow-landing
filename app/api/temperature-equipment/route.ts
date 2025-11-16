@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { applyQueenslandStandards } from './helpers/applyQueenslandStandards';
+import { handleTemperatureEquipmentError } from './helpers/handleTemperatureEquipmentError';
 
 export async function GET() {
   try {
@@ -33,53 +35,11 @@ export async function GET() {
     }
 
     // Apply Queensland food safety standards automatically
-    const queenslandCompliantData = data?.map(equipment => {
-      const name = equipment.name.toLowerCase();
+    const queenslandCompliantData = applyQueenslandStandards(data || []);
 
-      // Apply Queensland thresholds based on equipment type
-      if (name.includes('freezer') || name.includes('frozen')) {
-        return {
-          ...equipment,
-          min_temp_celsius: -24, // Optimal minimum freezer temperature
-          max_temp_celsius: -18, // Queensland freezer standard - must be at or below -18°C
-        };
-      } else if (name.includes('hot') || name.includes('warming') || name.includes('steam')) {
-        return {
-          ...equipment,
-          min_temp_celsius: 60, // Queensland hot holding standard
-          max_temp_celsius: null, // No upper limit for hot holding
-        };
-      } else {
-        // Default to cold storage (fridges, walk-ins, etc.)
-        // Set 0°C to 5°C range for optimal food safety
-        return {
-          ...equipment,
-          min_temp_celsius: 0, // Minimum temperature for cold storage
-          max_temp_celsius: 5, // Queensland cold storage standard - must be at or below 5°C
-        };
-      }
-    });
-
-    return NextResponse.json({ success: true, data: queenslandCompliantData || [] });
+    return NextResponse.json({ success: true, data: queenslandCompliantData });
   } catch (err) {
-    logger.error('[Temperature Equipment API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/temperature-equipment', method: 'GET' },
-    });
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleTemperatureEquipmentError(err, 'GET');
   }
 }
 
@@ -127,25 +87,11 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (err) {
-    logger.error('[Temperature Equipment API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/temperature-equipment', method: 'POST' },
-    });
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+  } catch (err: any) {
+    if (err.status) {
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handleTemperatureEquipmentError(err, 'POST');
   }
 }
 
@@ -183,23 +129,6 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    logger.error('[Temperature Equipment API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/temperature-equipment', method: 'DELETE' },
-    });
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleTemperatureEquipmentError(err, 'DELETE');
   }
 }

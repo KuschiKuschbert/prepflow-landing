@@ -53,7 +53,7 @@ export function ConfirmDialog({
 
       {/* Dialog */}
       <div
-        className="relative z-50 mx-4 w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 lg:p-6 shadow-2xl"
+        className="desktop:p-6 relative z-50 mx-4 w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
@@ -109,7 +109,7 @@ export function ConfirmDialog({
         </div>
 
         {/* Title */}
-        <h2 id="dialog-title" className="mb-3 text-center text-fluid-xl font-bold text-white">
+        <h2 id="dialog-title" className="text-fluid-xl mb-3 text-center font-bold text-white">
           {title}
         </h2>
 
