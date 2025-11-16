@@ -95,5 +95,8 @@
     "*.{json,css,md}": [
       "prettier --write"
     ]
+  },
+  "overrides": {
+    "js-yaml": ">=4.1.1"
   }
 }
