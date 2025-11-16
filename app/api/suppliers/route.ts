@@ -1,13 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+
+function buildSupplierData(body: any) {
+  return {
+    supplier_name: body.supplier_name,
+    contact_person: body.contact_person || null,
+    email: body.email || null,
+    phone: body.phone || null,
+    address: body.address || null,
+    website: body.website || null,
+    payment_terms: body.payment_terms || null,
+    delivery_schedule: body.delivery_schedule || null,
+    minimum_order_amount: body.minimum_order_amount ? parseFloat(body.minimum_order_amount) : null,
+    notes: body.notes || null,
+    is_active: body.is_active !== undefined ? body.is_active : true,
+  };
+}
 
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -32,14 +48,14 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await query.range(start, end);
 
     if (error) {
-      console.error('Error fetching suppliers:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch suppliers',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Suppliers API] Database error fetching suppliers:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/suppliers', operation: 'GET', table: 'suppliers' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -49,13 +65,23 @@ export async function GET(request: NextRequest) {
       pageSize,
       total: count || 0,
     });
-  } catch (error) {
-    console.error('Suppliers fetch error:', error);
+  } catch (err) {
+    logger.error('[Suppliers API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/suppliers', method: 'GET' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to fetch suppliers',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -65,64 +91,34 @@ export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
 
     const body = await request.json();
-    const {
-      supplier_name,
-      contact_person,
-      email,
-      phone,
-      address,
-      website,
-      payment_terms,
-      delivery_schedule,
-      minimum_order_amount,
-      notes,
-    } = body;
-
-    if (!supplier_name) {
+    if (!body.supplier_name) {
       return NextResponse.json(
-        {
-          error: 'Supplier name is required',
-          message: 'Please provide a supplier name',
-        },
+        ApiErrorHandler.createError('Supplier name is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     const { data, error } = await supabaseAdmin
       .from('suppliers')
-      .insert({
-        supplier_name,
-        contact_person: contact_person || null,
-        email: email || null,
-        phone: phone || null,
-        address: address || null,
-        website: website || null,
-        payment_terms: payment_terms || null,
-        delivery_schedule: delivery_schedule || null,
-        minimum_order_amount: minimum_order_amount ? parseFloat(minimum_order_amount) : null,
-        notes: notes || null,
-        is_active: true,
-      })
+      .insert(buildSupplierData(body))
       .select()
       .single();
 
     if (error) {
-      console.error('Error creating supplier:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to create supplier',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Suppliers API] Database error creating supplier:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/suppliers', operation: 'POST', table: 'suppliers' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -130,13 +126,23 @@ export async function POST(request: NextRequest) {
       message: 'Supplier created successfully',
       data,
     });
-  } catch (error) {
-    console.error('Supplier creation error:', error);
+  } catch (err) {
+    logger.error('[Suppliers API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/suppliers', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to create supplier',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -146,55 +152,24 @@ export async function PUT(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
 
     const body = await request.json();
-    const {
-      id,
-      name,
-      contact_person,
-      email,
-      phone,
-      address,
-      website,
-      payment_terms,
-      delivery_schedule,
-      minimum_order_amount,
-      notes,
-      is_active,
-    } = body;
-
+    const { id, ...updates } = body;
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'ID is required',
-          message: 'Please provide an ID for the supplier to update',
-        },
+        ApiErrorHandler.createError('Supplier ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    const updateData: any = {};
-    if (name !== undefined) updateData.name = name;
-    if (contact_person !== undefined) updateData.contact_person = contact_person;
-    if (email !== undefined) updateData.email = email;
-    if (phone !== undefined) updateData.phone = phone;
-    if (address !== undefined) updateData.address = address;
-    if (website !== undefined) updateData.website = website;
-    if (payment_terms !== undefined) updateData.payment_terms = payment_terms;
-    if (delivery_schedule !== undefined) updateData.delivery_schedule = delivery_schedule;
-    if (minimum_order_amount !== undefined)
-      updateData.minimum_order_amount = minimum_order_amount
-        ? parseFloat(minimum_order_amount)
-        : null;
-    if (notes !== undefined) updateData.notes = notes;
-    if (is_active !== undefined) updateData.is_active = is_active;
-
+    const updateData = buildSupplierData({
+      ...updates,
+      supplier_name: updates.name || updates.supplier_name,
+    });
     const { data, error } = await supabaseAdmin
       .from('suppliers')
       .update(updateData)
@@ -203,14 +178,14 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error updating supplier:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to update supplier',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Suppliers API] Database error updating supplier:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/suppliers', operation: 'PUT', supplierId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -218,13 +193,23 @@ export async function PUT(request: NextRequest) {
       message: 'Supplier updated successfully',
       data,
     });
-  } catch (error) {
-    console.error('Supplier update error:', error);
+  } catch (err) {
+    logger.error('[Suppliers API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/suppliers', method: 'PUT' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to update supplier',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -234,9 +219,7 @@ export async function DELETE(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -246,10 +229,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        {
-          error: 'ID is required',
-          message: 'Please provide an ID for the supplier to delete',
-        },
+        ApiErrorHandler.createError('Supplier ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -257,27 +237,37 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabaseAdmin.from('suppliers').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting supplier:', error);
-      return NextResponse.json(
-        {
-          error: 'Failed to delete supplier',
-          message: error.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Suppliers API] Database error deleting supplier:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/suppliers', operation: 'DELETE', supplierId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
       success: true,
       message: 'Supplier deleted successfully',
     });
-  } catch (error) {
-    console.error('Supplier deletion error:', error);
+  } catch (err) {
+    logger.error('[Suppliers API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/suppliers', method: 'DELETE' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Failed to delete supplier',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

@@ -1,16 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const recipeId = id;
     if (!recipeId) {
-      return NextResponse.json({ error: 'Missing recipe id' }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Recipe ID is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const normalizedId = String(recipeId).trim();
@@ -36,17 +44,24 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       .eq('recipe_id', normalizedId);
 
     if (error) {
-      return NextResponse.json(
-        { error: 'Failed to fetch ingredients', details: error.message },
-        { status: 500 },
-      );
+      logger.error('[Recipes API] Database error fetching recipe ingredients:', {
+        error: error.message,
+        code: (error as any).code,
+        context: {
+          endpoint: '/api/recipes/[id]/ingredients',
+          operation: 'GET',
+          recipeId: normalizedId,
+        },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     if (!data || data.length === 0) {
-      console.warn(
-        '[recipes/:id/ingredients] No recipe_ingredients found for recipe_id=',
-        normalizedId,
-      );
+      logger.debug('[Recipes API] No recipe_ingredients found', {
+        context: { endpoint: '/api/recipes/[id]/ingredients', recipeId: normalizedId },
+      });
       return NextResponse.json({ items: [] });
     }
 
@@ -55,10 +70,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     let rows: any[] = data;
     const missingNested = rows.some(r => !r.ingredients);
     if (missingNested) {
-      console.warn(
-        '[recipes/:id/ingredients] Missing nested ingredients join; applying backfill for recipe_id=',
-        recipeId,
-      );
+      logger.debug('[Recipes API] Missing nested ingredients join; applying backfill', {
+        context: { endpoint: '/api/recipes/[id]/ingredients', recipeId },
+      });
       const uniqueIds = Array.from(
         new Set(rows.map(r => r.ingredient_id).filter((v: any) => Boolean(v))),
       );
@@ -99,9 +113,23 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     });
 
     return NextResponse.json({ items });
-  } catch (e: any) {
+  } catch (err) {
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes/[id]/ingredients', method: 'GET' },
+    });
+
     return NextResponse.json(
-      { error: 'Unexpected error', details: e?.message || String(e) },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -115,13 +143,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     if (!ingredients || !Array.isArray(ingredients)) {
       return NextResponse.json(
-        { error: 'Missing required field', message: 'Ingredients array is required' },
+        ApiErrorHandler.createError('Ingredients array is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // If updating, delete existing ingredients first
@@ -132,11 +163,14 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         .eq('recipe_id', id);
 
       if (deleteError) {
-        console.error('Error deleting existing ingredients:', deleteError);
-        return NextResponse.json(
-          { error: `Failed to update recipe ingredients: ${deleteError.message}` },
-          { status: 500 },
-        );
+        logger.error('[Recipes API] Database error deleting existing ingredients:', {
+          error: deleteError.message,
+          code: (deleteError as any).code,
+          context: { endpoint: '/api/recipes/[id]/ingredients', operation: 'POST', recipeId: id },
+        });
+
+        const apiError = ApiErrorHandler.fromSupabaseError(deleteError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
     }
 
@@ -154,11 +188,14 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       .select();
 
     if (ingredientsError) {
-      console.error('Error saving recipe ingredients:', ingredientsError);
-      return NextResponse.json(
-        { error: `Failed to save recipe ingredients: ${ingredientsError.message}` },
-        { status: 500 },
-      );
+      logger.error('[Recipes API] Database error saving recipe ingredients:', {
+        error: ingredientsError.message,
+        code: (ingredientsError as any).code,
+        context: { endpoint: '/api/recipes/[id]/ingredients', operation: 'POST', recipeId: id },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -167,12 +204,22 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       data: data || [],
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes/[id]/ingredients', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

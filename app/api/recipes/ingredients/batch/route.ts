@@ -1,18 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { groupBy } from '@/lib/api/batch-utils';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const body = await request.json();
     const { recipeIds } = body;
 
     if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
-      return NextResponse.json({ error: 'recipeIds must be a non-empty array' }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('recipeIds must be a non-empty array', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     // Normalize recipe IDs
@@ -45,11 +53,18 @@ export async function POST(request: NextRequest) {
       .in('recipe_id', normalizedIds);
 
     if (error) {
-      console.error('[batch ingredients] Error fetching recipe ingredients:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch ingredients', details: error.message },
-        { status: 500 },
-      );
+      logger.error('[Recipes API] Database error fetching batch recipe ingredients:', {
+        error: error.message,
+        code: (error as any).code,
+        context: {
+          endpoint: '/api/recipes/ingredients/batch',
+          operation: 'POST',
+          recipeCount: normalizedIds.length,
+        },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // If no data, return empty grouped results
@@ -118,10 +133,23 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ items: grouped });
-  } catch (e: any) {
-    console.error('[batch ingredients] Unexpected error:', e);
+  } catch (err) {
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes/ingredients/batch', method: 'POST' },
+    });
+
     return NextResponse.json(
-      { error: 'Unexpected error', details: e?.message || String(e) },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

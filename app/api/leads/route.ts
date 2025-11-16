@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 interface LeadRequestBody {
   name?: string;
@@ -16,10 +18,7 @@ export async function POST(req: Request) {
 
     if (!name || !email) {
       return NextResponse.json(
-        {
-          error: 'ValidationError',
-          message: 'Name and email are required',
-        },
+        ApiErrorHandler.createError('Name and email are required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
@@ -27,10 +26,11 @@ export async function POST(req: Request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        {
-          error: 'ValidationError',
-          message: 'Please provide a valid email address',
-        },
+        ApiErrorHandler.createError(
+          'Please provide a valid email address',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -42,12 +42,15 @@ export async function POST(req: Request) {
       await supabase.from('leads').select('id').limit(1);
     } catch (_) {
       return NextResponse.json(
-        {
-          error: 'MissingTable',
-          message: 'Table leads does not exist. Please create tables first.',
-          instructions:
-            'Visit /api/create-tables for SQL script and ensure a leads table with (id uuid default gen_random_uuid(), name text, email text unique, source text, created_at timestamptz default now()).',
-        },
+        ApiErrorHandler.createError(
+          'Table leads does not exist. Please create tables first.',
+          'TABLE_NOT_FOUND',
+          400,
+          {
+            instructions:
+              'Visit /api/create-tables for SQL script and ensure a leads table with (id uuid default gen_random_uuid(), name text, email text unique, source text, created_at timestamptz default now()).',
+          },
+        ),
         { status: 400 },
       );
     }
@@ -58,14 +61,14 @@ export async function POST(req: Request) {
       .upsert({ name, email, source }, { onConflict: 'email' });
 
     if (upsertError) {
-      return NextResponse.json(
-        {
-          error: 'DatabaseError',
-          message: 'Failed to save lead',
-          details: upsertError.message,
-        },
-        { status: 500 },
-      );
+      logger.error('[Leads API] Database error saving lead:', {
+        error: upsertError.message,
+        code: (upsertError as any).code,
+        context: { endpoint: '/api/leads', operation: 'POST', email },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(upsertError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     // Optional: send email via Resend if configured (no SDK required)
@@ -101,19 +104,33 @@ export async function POST(req: Request) {
             html,
           }),
         });
-      } catch (_) {
+      } catch (emailError) {
         // Ignore email failures to not block lead capture
+        logger.warn('[Leads API] Failed to send email notification:', {
+          error: emailError instanceof Error ? emailError.message : String(emailError),
+          context: { endpoint: '/api/leads', operation: 'POST', email },
+        });
       }
     }
 
     return NextResponse.json({ success: true, message: 'Lead captured successfully' });
-  } catch (err: any) {
+  } catch (err) {
+    logger.error('[Leads API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/leads', method: 'POST' },
+    });
+
     return NextResponse.json(
-      {
-        error: 'ServerError',
-        message: 'Unexpected error while capturing lead',
-        details: err?.message,
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Unexpected error while capturing lead',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
