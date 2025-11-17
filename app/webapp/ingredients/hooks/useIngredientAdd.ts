@@ -56,7 +56,7 @@ export function useIngredientAdd<
 
         // Create temporary ingredient for optimistic update
         const tempId = `temp-${Date.now()}`;
-        const tempIngredient = { ...normalized, id: tempId } as T;
+        const tempIngredient = { ...normalized, id: tempId } as unknown as T;
 
         // Optimistically add to UI immediately
         setIngredients(prev => {
