@@ -57,7 +57,7 @@ export async function fetchMenuWithItems(menuId: string) {
       ),
       recipes (
         id,
-        recipe_name,
+        name,
         description,
         yield,
         selling_price
@@ -100,7 +100,7 @@ export async function fetchMenuWithItems(menuId: string) {
         ),
         recipes (
           id,
-          recipe_name,
+          name,
           description,
           yield,
           selling_price
