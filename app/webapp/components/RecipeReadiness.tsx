@@ -191,7 +191,7 @@ export default function RecipeReadiness() {
                     {index + 1}
                   </span>
                   <span className="text-fluid-xs tablet:text-fluid-sm font-medium text-white">
-                    {recipe.recipe_name}
+                    {recipe.name}
                   </span>
                 </div>
                 <span className="text-fluid-xs tablet:text-fluid-sm text-gray-400">
