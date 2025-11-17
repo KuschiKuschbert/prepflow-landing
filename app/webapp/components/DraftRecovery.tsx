@@ -6,7 +6,7 @@ import { syncAllDrafts } from '@/lib/autosave-sync';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useSession } from 'next-auth/react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function DraftRecovery() {
   const session = useSession();
   // Safely destructure session data, handling undefined during SSR
@@ -73,7 +73,7 @@ export function DraftRecovery() {
     setShowDialog(false);
 
     if (result.failed > 0) {
-      logger.warn(`Failed to sync ${result.failed} drafts:`, result.errors);
+      logger.warn(`Failed to sync ${result.failed} drafts:`, { errors: result.errors });
       // Could show a toast notification here
     }
   };

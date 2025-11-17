@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Recipe } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * Hook to calculate prices for visible recipes with debouncing.
  *
@@ -53,11 +53,7 @@ export function usePriceCalculationEffect({
           calculatingPricesRef.current.add(recipe.id);
         });
 
-        logger.dev(
-          '[RecipesClient] Calculating prices for',
-          recipesNeedingPrices.length,
-          'recipes',
-        );
+        logger.dev(`[RecipesClient] Calculating prices for ${recipesNeedingPrices.length} recipes`);
         updateVisibleRecipePrices(
           recipesNeedingPrices,
           fetchRecipeIngredients,

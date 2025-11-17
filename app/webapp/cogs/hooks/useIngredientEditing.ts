@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { flushSync } from 'react-dom';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseIngredientEditingProps {
   updateCalculation: (ingredientId: string, newQuantity: number) => void;
   removeCalculation: (ingredientId: string) => void;

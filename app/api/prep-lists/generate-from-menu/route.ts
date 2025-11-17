@@ -5,7 +5,7 @@ import { processDish } from './helpers/processDish';
 import { processRecipe } from './helpers/processRecipe';
 import { aggregateIngredientsFromRecipes } from './helpers/aggregateFromRecipes';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface SectionData {
   sectionId: string | null;
   sectionName: string;

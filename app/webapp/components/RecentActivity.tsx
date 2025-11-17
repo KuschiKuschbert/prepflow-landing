@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Clock, RefreshCw, Package, BookOpen, UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface RecentActivity {
   id: string;
   type: 'ingredient' | 'recipe' | 'menu_dish';

@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface CreatePrepListParams {
   userId: string;
   kitchenSectionId: string;

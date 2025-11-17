@@ -108,3 +108,4 @@ All screenshots should be:
 3. Add screenshots to `public/images/` directory
 4. Update component references if file names differ
 5. Test the landing page to ensure all images load correctly
+

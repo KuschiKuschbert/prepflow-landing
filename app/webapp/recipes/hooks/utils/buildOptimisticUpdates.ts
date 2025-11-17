@@ -1,6 +1,6 @@
 import { Recipe } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * Build optimistic update functions for recipe mutations.
  *

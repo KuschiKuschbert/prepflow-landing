@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Recipe } from '../types';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   calculateRecipeCost,
   calculateRecommendedPrice,

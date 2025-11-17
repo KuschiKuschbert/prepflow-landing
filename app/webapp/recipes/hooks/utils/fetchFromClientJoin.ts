@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { RecipeIngredientWithDetails } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * Fetch recipe ingredients using client-side join as fallback.
  *

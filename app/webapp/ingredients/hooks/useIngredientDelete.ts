@@ -3,7 +3,7 @@
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseIngredientDeleteProps<T extends { id: string }> {
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setError: (error: string) => void;

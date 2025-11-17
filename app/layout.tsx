@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import './globals.css';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';

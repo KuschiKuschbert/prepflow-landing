@@ -5,7 +5,7 @@ import { formatSupplierName } from '@/lib/text-utils';
 import { ChevronDown, Plus, Store } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface Supplier {
   id: number;
   supplier_name?: string;

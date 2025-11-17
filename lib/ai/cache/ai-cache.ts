@@ -49,7 +49,7 @@ export function getCachedAIResponse(key: string): string | null {
     }
     return entry.response;
   } catch (error) {
-    logger.warn('Failed to read AI cache:', error);
+    logger.warn('Failed to read AI cache:', { error: error instanceof Error ? error.message : String(error) });
     return null;
   }
 }
@@ -62,14 +62,14 @@ export function cacheAIResponse(key: string, response: string, ttl: number = DEF
     const entry: AICacheEntry = { key, response, timestamp: Date.now(), ttl };
     sessionStorage.setItem(key, JSON.stringify(entry));
   } catch (error) {
-    logger.warn('Failed to cache AI response:', error);
+    logger.warn('Failed to cache AI response:', { error: error instanceof Error ? error.message : String(error) });
     if (error instanceof DOMException && error.name === 'QuotaExceededError') {
       clearExpiredCacheEntries();
       try {
         const retryEntry: AICacheEntry = { key, response, timestamp: Date.now(), ttl };
         sessionStorage.setItem(key, JSON.stringify(retryEntry));
       } catch (retryError) {
-        logger.warn('Failed to cache after cleanup:', retryError);
+        logger.warn('Failed to cache after cleanup:', { error: retryError instanceof Error ? retryError.message : String(retryError) });
       }
     }
   }
@@ -98,7 +98,7 @@ function clearExpiredCacheEntries(): void {
     }
     keysToRemove.forEach(key => sessionStorage.removeItem(key));
   } catch (error) {
-    logger.warn('Failed to clear expired cache:', error);
+    logger.warn('Failed to clear expired cache:', { error: error instanceof Error ? error.message : String(error) });
   }
 }
 /**
@@ -114,6 +114,8 @@ export function clearAICache(): void {
     }
     keysToRemove.forEach(key => sessionStorage.removeItem(key));
   } catch (error) {
-    logger.warn('Failed to clear AI cache:', error);
+    logger.warn('Failed to clear AI cache:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }

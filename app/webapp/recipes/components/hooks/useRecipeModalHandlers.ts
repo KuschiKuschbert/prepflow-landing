@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * Hook to manage recipe modal handlers.
  *

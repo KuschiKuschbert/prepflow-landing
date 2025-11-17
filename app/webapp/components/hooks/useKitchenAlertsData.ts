@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { calculateTemperatureAlerts } from './useKitchenAlertsHelpers';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useKitchenAlertsData() {
   const [stats, setStats] = useState<{
     ingredientsLowStock?: number;

@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseIngredientAddProps<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },
 > {

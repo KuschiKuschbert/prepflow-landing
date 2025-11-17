@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Dish, DishCostData, Recipe } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useDishesClientData() {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);

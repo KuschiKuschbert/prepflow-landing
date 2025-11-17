@@ -3,7 +3,7 @@ import { assignVariant as assignVariantHelper } from './ab-testing-analytics/var
 import { sendABTestEvent } from './ab-testing-analytics/eventTracking';
 import { calculateTestResults } from './ab-testing-analytics/testResults';
 import { getSessionId } from './ab-testing-analytics/sessionManager';
-import { getVariantInfo, getVariantAssignmentInfo } from './ab-testing-analytics/variantInfo';
+import { getVariantInfo as getVariantInfoHelper, getVariantAssignmentInfo as getVariantAssignmentInfoHelper } from './ab-testing-analytics/variantInfo';
 import type { ABTestVariant, ABTestEvent, ABTestResult } from './ab-testing-analytics/types';
 
 class ABTestingAnalytics {
@@ -104,7 +104,7 @@ class ABTestingAnalytics {
 
   public getVariantInfo(testId: string, variantId: string): ABTestVariant | undefined {
     const variants = this.tests.get(testId);
-    return getVariantInfo(variants, variantId);
+    return getVariantInfoHelper(variants, variantId);
   }
 
   public getVariantAssignmentInfo(userId: string): {
@@ -113,7 +113,7 @@ class ABTestingAnalytics {
     daysRemaining: number;
     isPersistent: boolean;
   } | null {
-    return getVariantAssignmentInfo(userId);
+    return getVariantAssignmentInfoHelper(userId);
   }
 }
 
@@ -124,7 +124,11 @@ export const trackConversion = abTestingAnalytics.trackConversion.bind(abTesting
 export const trackEngagement = abTestingAnalytics.trackEngagement.bind(abTestingAnalytics);
 export const getTestResults = abTestingAnalytics.getTestResults.bind(abTestingAnalytics);
 export const getActiveTests = abTestingAnalytics.getActiveTests.bind(abTestingAnalytics);
+// Export class method bindings (not the helper functions from variantInfo.ts)
 export const getVariantInfo = abTestingAnalytics.getVariantInfo.bind(abTestingAnalytics);
 export const getVariantAssignmentInfo =
   abTestingAnalytics.getVariantAssignmentInfo.bind(abTestingAnalytics);
 export type { ABTestVariant, ABTestEvent, ABTestResult } from './ab-testing-analytics/types';
+
+// Explicitly do NOT re-export the helper functions to avoid conflicts
+// The helper functions (getVariantInfoHelper, getVariantAssignmentInfoHelper) are internal only

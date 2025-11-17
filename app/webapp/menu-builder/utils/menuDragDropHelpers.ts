@@ -1,7 +1,7 @@
 import { arrayMove } from '@dnd-kit/sortable';
 import { MenuItem } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function addDishToMenu(
   menuId: string,
   dishId: string,

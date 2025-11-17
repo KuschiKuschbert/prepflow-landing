@@ -109,7 +109,9 @@ export function parsePerformanceTipsResponse(aiResponse: string): PerformanceTip
       );
     }
   } catch (error) {
-    logger.warn('Failed to parse AI performance tips:', error);
+    logger.warn('Failed to parse AI performance tips:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 
   // Fallback: return empty array

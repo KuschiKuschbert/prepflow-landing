@@ -4,7 +4,7 @@ import { PerformanceState } from '../types';
 import { exportPerformanceDataToCSV, parseCSVSalesData } from '../utils/csv-utils';
 import { importPerformanceData } from '../utils/performance-api';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UsePerformanceImportExportProps {
   state: PerformanceState;
   setState: React.Dispatch<React.SetStateAction<PerformanceState>>;
@@ -50,3 +50,4 @@ export function usePerformanceImportExport({
     handleExportCSV,
   };
 }
+

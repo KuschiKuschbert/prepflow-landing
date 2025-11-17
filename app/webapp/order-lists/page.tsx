@@ -9,7 +9,7 @@ import { useOrderListsQuery } from './hooks/useOrderListsQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface Supplier {
   id: string;
   name: string;

@@ -28,3 +28,4 @@ export function EquipmentEmptyState({ onAddEquipment }: EquipmentEmptyStateProps
     </div>
   );
 }
+

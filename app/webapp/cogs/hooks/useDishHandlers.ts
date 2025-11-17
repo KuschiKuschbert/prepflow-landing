@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { Recipe } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseDishHandlersProps {
   showAddIngredient: boolean;
   dishName: string;

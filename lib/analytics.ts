@@ -1,6 +1,6 @@
 import { SessionManager } from './analytics/sessionManager';
 import { trackPageView } from './analytics/trackers/pageViewTracker';
-import { trackPerformance } from './analytics/trackers/performanceTracker';
+import { trackPerformance as trackPerformanceHelper } from './analytics/trackers/performanceTracker';
 import { trackUserInteractions } from './analytics/trackers/userInteractionTracker';
 import { trackConversions } from './analytics/trackers/conversionTracker';
 import {
@@ -30,7 +30,7 @@ class PrepFlowAnalytics {
       this.events,
       this.sendToAnalytics.bind(this),
     );
-    trackPerformance(
+    trackPerformanceHelper(
       this.sessionManager.getSessionId(),
       this.performance,
       this.sendPerformanceMetrics.bind(this),
@@ -143,6 +143,7 @@ class PrepFlowAnalytics {
 export const analytics = new PrepFlowAnalytics();
 export const trackEvent = analytics.trackEvent.bind(analytics);
 export const trackConversion = analytics.trackConversion.bind(analytics);
+// Export class method binding (not the helper function from performanceTracker.ts)
 export const trackPerformance = analytics.trackPerformanceMetrics.bind(analytics);
 export const getSessionId = analytics.getSessionId.bind(analytics);
 export const setUserId = analytics.setUserId.bind(analytics);

@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { invalidateRecipeCache } from '@/lib/cache/recipe-cache';
-import { logger } from '../../../lib/logger';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { logger } from '@/lib/logger';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 import type { MutableRefObject } from 'react';
 
 interface SubscriptionRefs {

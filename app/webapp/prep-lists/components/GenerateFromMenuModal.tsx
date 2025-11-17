@@ -6,7 +6,7 @@ import { Icon } from '@/components/ui/Icon';
 import { X, ChefHat, Loader2 } from 'lucide-react';
 import type { Menu, GeneratedPrepListData } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface GenerateFromMenuModalProps {
   onClose: () => void;
   onGenerate: (data: GeneratedPrepListData) => void;

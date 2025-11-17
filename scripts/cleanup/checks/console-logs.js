@@ -105,3 +105,4 @@ module.exports = {
   name: 'console-logs',
   check: checkConsoleLogs,
 };
+

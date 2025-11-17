@@ -1,7 +1,7 @@
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { useEffect, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface RecipeReadinessData {
   completeRecipes: number;
   incompleteRecipes: number;

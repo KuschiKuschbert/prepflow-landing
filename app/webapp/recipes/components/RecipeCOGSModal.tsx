@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   Recipe,
   RecipeIngredientWithDetails,

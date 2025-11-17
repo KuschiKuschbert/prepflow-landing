@@ -2,7 +2,7 @@ import { sampleIngredients } from '@/lib/sample-ingredients-updated';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
     // cleaned: Added environment protection to prevent demo data in production

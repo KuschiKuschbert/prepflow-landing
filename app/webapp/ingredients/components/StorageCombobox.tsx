@@ -5,7 +5,7 @@ import { formatStorageLocation } from '@/lib/text-utils';
 import { ChevronDown, Package } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface TemperatureEquipment {
   id: string;
   name: string;

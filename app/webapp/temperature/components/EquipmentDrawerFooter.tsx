@@ -17,3 +17,4 @@ export function EquipmentDrawerFooter({ onClose }: EquipmentDrawerFooterProps) {
     </div>
   );
 }
+

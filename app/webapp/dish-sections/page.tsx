@@ -10,7 +10,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface KitchenSection {
   id: string;
   name: string;

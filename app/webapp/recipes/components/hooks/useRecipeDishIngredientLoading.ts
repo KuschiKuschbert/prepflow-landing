@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { RecipeDishItem } from './useRecipeDishEditorData';
 import { Recipe } from '../../types';
-import { COGSCalculation } from '../../../cogs/types';
+import { COGSCalculation, Ingredient } from '../../../cogs/types';
 import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
-import { logger } from '../../../lib/logger';
+import { logger } from '@/lib/logger';
 
 interface UseRecipeDishIngredientLoadingProps {
   selectedItem: RecipeDishItem | null;
-  ingredients: Array<{ id: string; unit?: string }>;
+  ingredients: Ingredient[];
   recipes: Recipe[];
   allRecipes: Recipe[];
   convertIngredientQuantity: (
@@ -71,7 +71,7 @@ export function useRecipeDishIngredientLoading({
                   ingredientData,
                   convertedQuantity,
                   convertedUnit,
-                  conversionNote,
+                  conversionNote || '',
                   selectedItem.id,
                 );
               })
@@ -101,7 +101,7 @@ export function useRecipeDishIngredientLoading({
                     ingredientData,
                     convertedQuantity,
                     convertedUnit,
-                    conversionNote,
+                    conversionNote || '',
                     selectedItem.id,
                   ),
                 );
@@ -132,7 +132,7 @@ export function useRecipeDishIngredientLoading({
                         ingredientData,
                         convertedQuantity,
                         convertedUnit,
-                        conversionNote,
+                        conversionNote || '',
                         selectedItem.id,
                       ),
                     );

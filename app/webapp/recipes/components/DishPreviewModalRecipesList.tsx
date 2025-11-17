@@ -23,3 +23,4 @@ export function DishPreviewModalRecipesList({ dishDetails }: DishPreviewModalRec
     </div>
   );
 }
+

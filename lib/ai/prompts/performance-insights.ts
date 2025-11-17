@@ -138,7 +138,9 @@ export function parsePerformanceInsightsResponse(
         });
     }
   } catch (error) {
-    logger.warn('Failed to parse AI performance insights:', error);
+    logger.warn('Failed to parse AI performance insights:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 
   return [];

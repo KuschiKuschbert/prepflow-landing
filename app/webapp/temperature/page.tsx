@@ -14,7 +14,7 @@ import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoading
 import { useTemperaturePageData } from './hooks/useTemperaturePageData';
 import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 function TemperatureLogsPageContent() {
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('logs');
 

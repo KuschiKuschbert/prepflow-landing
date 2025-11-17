@@ -164,3 +164,4 @@ export function aggregateIngredientsBySection(
 
   return Array.from(sectionMap.values());
 }
+

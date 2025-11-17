@@ -49,3 +49,4 @@ export function useTemperatureChartData(logs: TemperatureLog[], equipment: Tempe
 
   return chartData;
 }
+

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Recipe } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseRecipeMetadataSubscriptionProps {
   recipes: Recipe[];
   onRecipeUpdated: (recipeId: string) => void;

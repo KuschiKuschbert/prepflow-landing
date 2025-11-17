@@ -1,7 +1,7 @@
 'use client';
 
 import { supabase } from '@/lib/supabase';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   formatBrandName,
   formatIngredientName,

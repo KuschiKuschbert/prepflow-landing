@@ -69,3 +69,4 @@ module.exports = {
   name: 'unused-imports',
   check: checkUnusedImports,
 };
+

@@ -5,7 +5,7 @@
 import { DateRange } from '../types';
 import { calculatePerformanceScore } from './calculatePerformanceScore';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function fetchPerformanceData(dateRange?: DateRange) {
   logger.dev('🔄 Fetching performance data from /api/performance...', { dateRange });
 

@@ -59,7 +59,8 @@ export function handleIngredientAdded(
       ingredient,
       convertedQuantity,
       convertedUnit,
-      conversionNote,
+      conversionNote || '',
+      null, // selectedRecipe - not applicable for dish builder
     );
     flushSync(() => {
       setCalculations(prev => [...prev, newCalc]);

@@ -10,7 +10,7 @@ import { SuppliersGrid } from './components/SuppliersGrid';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { PriceListFormData, Supplier, SupplierFormData, SupplierPriceList } from './types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export default function SuppliersPage() {
   const { t } = useTranslation();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);

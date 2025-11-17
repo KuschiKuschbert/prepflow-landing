@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseSampleDataGenerationProps {
   onRefreshLogs?: () => void;
 }
@@ -50,3 +50,4 @@ export function useSampleDataGeneration({ onRefreshLogs }: UseSampleDataGenerati
     handleGenerateSampleData,
   };
 }
+

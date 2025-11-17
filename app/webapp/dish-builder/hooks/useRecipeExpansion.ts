@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { ExpandedRecipeIngredient } from '../types';
 import { Ingredient } from '../../cogs/types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseRecipeExpansionProps {
   ingredients: Ingredient[];
   onIngredientsExpanded: (ingredients: ExpandedRecipeIngredient[]) => void;
@@ -60,3 +60,4 @@ export function useRecipeExpansion({
 
   return { expandRecipe };
 }
+

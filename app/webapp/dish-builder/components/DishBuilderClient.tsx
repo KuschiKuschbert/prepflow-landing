@@ -11,7 +11,7 @@ import { SuccessMessage } from '../../cogs/components/SuccessMessage';
 import { QuantityInputModal } from './QuantityInputModal';
 import { Ingredient, Recipe } from '../../cogs/types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface DishBuilderClientProps {
   onSaveSuccess?: () => void;
   editingRecipe?: Recipe | null;
@@ -183,7 +183,9 @@ export default function DishBuilderClient({
 
   const handleSaveEdit = () => {
     if (editingIngredient && editQuantity > 0) {
-      editCalculation(editingIngredient, editQuantity);
+      const calculation = calculations.find(calc => calc.ingredientId === editingIngredient);
+      const unit = calculation?.unit || 'kg';
+      editCalculation(editingIngredient, editQuantity, unit);
       setEditingIngredient(null);
       setEditQuantity(0);
     }

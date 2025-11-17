@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { RecipeIngredient } from '../types';
 import { useRecipeIngredientLoading } from './useRecipeIngredientLoading';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseRecipeIngredientsProps {
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>;
   setCalculations: React.Dispatch<React.SetStateAction<any[]>>;

@@ -4,7 +4,7 @@ import { Menu } from '../types';
 import { Edit, Trash2, FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface MenuListProps {
   menus: Menu[];
   onSelectMenu: (menu: Menu) => void;

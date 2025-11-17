@@ -16,3 +16,4 @@ UPDATE recipes SET category = 'Uncategorized' WHERE category IS NULL;
 UPDATE dishes SET category = 'Uncategorized' WHERE category IS NULL;
 
 
+

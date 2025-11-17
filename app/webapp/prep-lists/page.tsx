@@ -9,7 +9,7 @@ import { GenerateFromMenuModal } from './components/GenerateFromMenuModal';
 import { PrepListPreview } from './components/PrepListPreview';
 import { usePrepListsQuery } from './hooks/usePrepListsQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import type {
   KitchenSection,
   Ingredient,

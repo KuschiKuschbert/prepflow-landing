@@ -1,7 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * Generate 5 sample temperature log entries for each active equipment
  * Spreads entries randomly across the last 2 weeks (14 days) for better analytics visualization

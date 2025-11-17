@@ -11,7 +11,7 @@ import { Dish, Recipe } from '../types';
 import DishFormPricing from './DishFormPricing';
 import DishIngredientSelector from './DishIngredientSelector';
 import DishRecipeSelector from './DishRecipeSelector';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface DishEditDrawerProps {
   isOpen: boolean;
   dish: Dish | null;

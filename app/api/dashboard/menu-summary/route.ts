@@ -1,7 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function GET(_req: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -105,3 +105,4 @@ export async function GET(_req: NextRequest) {
     );
   }
 }
+

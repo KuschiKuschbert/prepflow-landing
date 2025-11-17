@@ -28,7 +28,9 @@ export function cacheData<T>(key: string, data: T, expiryMs: number = CACHE_EXPI
     sessionStorage.setItem(`prepflow_cache_${key}_expiry`, String(expiryMs));
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
-      logger.warn(`Failed to cache data for key "${key}":`, error);
+      logger.warn(`Failed to cache data for key "${key}":`, {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 }
@@ -56,7 +58,9 @@ export function getCachedData<T>(key: string): T | null {
     return cacheData.data || null;
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
-      logger.warn(`Failed to read cached data for key "${key}":`, error);
+      logger.warn(`Failed to read cached data for key "${key}":`, {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
     return null;
   }

@@ -1,4 +1,4 @@
-import { logger } from '../../../lib/logger';
+import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
 
 export async function handleGenerateSampleData(

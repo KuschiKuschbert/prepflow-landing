@@ -10,7 +10,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { Package2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface Ingredient {
   id: string;
   name: string;

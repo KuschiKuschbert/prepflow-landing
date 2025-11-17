@@ -60,7 +60,9 @@ export function parseAISpecialsResponse(aiResponse: string): {
       };
     }
   } catch (error) {
-    logger.warn('Failed to parse AI specials response:', error);
+    logger.warn('Failed to parse AI specials response:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 
   // Fallback: Try to extract lists from text

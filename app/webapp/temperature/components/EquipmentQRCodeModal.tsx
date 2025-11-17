@@ -8,7 +8,7 @@ import { EquipmentQRCodeModalHeader } from './EquipmentQRCodeModalHeader';
 import { EquipmentQRCodeDisplay } from './EquipmentQRCodeDisplay';
 import { EquipmentQRCodeModalActions } from './EquipmentQRCodeModalActions';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface EquipmentQRCodeModalProps {
   equipment: {
     id: string;

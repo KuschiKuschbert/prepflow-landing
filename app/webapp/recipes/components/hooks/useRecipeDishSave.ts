@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { RecipeDishItem } from './useRecipeDishEditorData';
 import { Recipe, Dish } from '../../types';
 import { COGSCalculation } from '../../../cogs/types';
-import { logger } from '../../../lib/logger';
+import { logger } from '@/lib/logger';
 
 interface UseRecipeDishSaveProps {
   selectedItem: RecipeDishItem | null;

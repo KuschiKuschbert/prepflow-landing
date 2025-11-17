@@ -46,28 +46,6 @@ export function useAutosave({
   const isInitialLoadRef = useRef(true);
   const dataString = JSON.stringify(data);
 
-  useEffect(() => {
-    if (entityId && enabled) {
-      const existingDraft = getDraft(entityType, entityId, userId);
-      if (existingDraft && onSave) {
-        // Optionally restore draft on mount
-        // onSave(existingDraft.data);
-      }
-    }
-    isInitialLoadRef.current = false;
-  }, [entityType, entityId, userId, enabled, onSave]);
-  useEffect(() => {
-    if (!enabled || !entityId || isInitialLoadRef.current) return;
-    const hasChanged = dataString !== previousDataRef.current;
-    if (!hasChanged) return;
-    setHasUnsavedChanges(true);
-    previousDataRef.current = dataString;
-    saveDraft(entityType, entityId, data, userId);
-    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = setTimeout(async () => await performSave(), debounceMs);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataString, entityType, entityId, userId, debounceMs, enabled, performSave]);
-
   const performSave = useCallback(async () => {
     if (!entityId || !enabled) return;
     setStatus('saving');
@@ -91,6 +69,28 @@ export function useAutosave({
       setError(result.error || 'Failed to save');
     }
   }, [entityType, entityId, data, userId, enabled, onConflict, onSave, onError]);
+
+  useEffect(() => {
+    if (entityId && enabled) {
+      const existingDraft = getDraft(entityType, entityId, userId);
+      if (existingDraft && onSave) {
+        // Optionally restore draft on mount
+        // onSave(existingDraft.data);
+      }
+    }
+    isInitialLoadRef.current = false;
+  }, [entityType, entityId, userId, enabled, onSave]);
+  useEffect(() => {
+    if (!enabled || !entityId || isInitialLoadRef.current) return;
+    const hasChanged = dataString !== previousDataRef.current;
+    if (!hasChanged) return;
+    setHasUnsavedChanges(true);
+    previousDataRef.current = dataString;
+    saveDraft(entityType, entityId, data, userId);
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(async () => await performSave(), debounceMs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataString, entityType, entityId, userId, debounceMs, enabled, performSave]);
 
   const saveNow = useCallback(async () => {
     if (debounceTimerRef.current) {

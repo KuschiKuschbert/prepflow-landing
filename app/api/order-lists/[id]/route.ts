@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     if (!supabaseAdmin) {

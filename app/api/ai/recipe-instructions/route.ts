@@ -9,7 +9,7 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructions';
 import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (aiError) {
-      logger.warn('AI recipe instructions failed, using fallback:', aiError);
+      logger.warn('AI recipe instructions failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
     }
 
     // Fallback: Return empty string - component should handle fallback to rule-based

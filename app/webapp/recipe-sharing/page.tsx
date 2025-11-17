@@ -5,7 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface Recipe {
   id: string;
   name: string;

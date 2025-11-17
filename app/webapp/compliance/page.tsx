@@ -8,7 +8,7 @@ import { ComplianceRecordsList } from './components/ComplianceRecordsList';
 import { ComplianceTypeForm } from './components/ComplianceTypeForm';
 import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   ComplianceRecord,
   ComplianceRecordFormData,

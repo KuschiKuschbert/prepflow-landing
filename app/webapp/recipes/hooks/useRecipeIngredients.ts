@@ -3,7 +3,7 @@
 import { useCallback, useRef } from 'react';
 import { RecipeIngredientWithDetails } from '../types';
 import { batchFetchWithRetry } from './utils/batchFetchWithRetry';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   globalBatchRequestCache,
   globalRequestQueue,

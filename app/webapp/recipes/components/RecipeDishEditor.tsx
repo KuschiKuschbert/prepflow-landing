@@ -19,7 +19,8 @@ import { useRecipeDishSave } from './hooks/useRecipeDishSave';
 import { RecipeDishEditorHeader } from './RecipeDishEditor/Header';
 import { RecipeDishSelector } from './RecipeDishEditor/RecipeDishSelector';
 import { CostSummary } from './RecipeDishEditor/CostSummary';
-import { logger } from '../../lib/logger';
+import { COGSCalculation } from '../../cogs/types';
+import { logger } from '@/lib/logger';
 
 interface RecipeDishEditorProps {
   item?: Recipe | Dish | null;
@@ -42,12 +43,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     setError,
     fetchData,
   } = useCOGSDataFetching();
-
-  // Calculation logic
-  const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
-    ingredients,
-    setCalculations,
-  });
 
   const { convertIngredientQuantity } = useIngredientConversion();
 
@@ -75,6 +70,12 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     convertIngredientQuantity,
     showError,
   });
+  // Calculation logic
+  const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
+    ingredients,
+    setCalculations,
+  });
+
   const { saving, handleSave } = useRecipeDishSave({
     selectedItem,
     calculations,
@@ -90,7 +91,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     (ingredientId: string, quantity: number) => {
       updateCalculation(ingredientId, quantity, ingredients, setCalculations);
     },
-    [ingredients, updateCalculation],
+    [ingredients, updateCalculation, setCalculations],
   );
 
   // Ingredient addition

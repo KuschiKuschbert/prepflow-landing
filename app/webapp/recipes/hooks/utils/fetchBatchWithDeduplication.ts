@@ -1,5 +1,5 @@
 import { RecipeIngredientWithDetails } from '../../types';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   isProcessingQueueRef,
   normalizeRecipeIds,

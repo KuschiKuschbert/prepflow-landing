@@ -1,7 +1,7 @@
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { useCallback, useEffect, useState } from 'react';
 import { TemperatureLog } from '../types';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseEquipmentLogsOptions {
   equipmentName: string | null;
   equipmentLocation?: string | null;

@@ -46,3 +46,4 @@ If you've already added the files, just tell me and I'll verify they're in the r
 Once the files are added, the landing page will automatically use them. No code changes needed - everything is already set up!
 
 **Where are your screenshot files located?** I can help you move them to the right place.
+

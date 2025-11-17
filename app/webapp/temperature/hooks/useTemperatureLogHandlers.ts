@@ -81,3 +81,4 @@ export function useTemperatureLogHandlers({
     handleDeleteLog,
   };
 }
+

@@ -5,7 +5,7 @@ import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { DragItem, ExpandedRecipeIngredient } from '../types';
 import { Ingredient, Recipe } from '../../cogs/types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseDishDragDropProps {
   recipes: Recipe[];
   ingredients: Ingredient[];
@@ -73,3 +73,4 @@ export function useDishDragDrop({
     handleDragEnd,
   };
 }
+

@@ -1,4 +1,4 @@
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import { RecipeIngredientWithDetails } from '../../types';
 /**
  * Batch fetch recipe ingredients with retry logic.
@@ -24,12 +24,7 @@ export async function batchFetchWithRetry(
   const getRetryDelay = (attempt: number) => Math.min(500 * Math.pow(2, attempt), 2000);
 
   try {
-    logger.dev(
-      '[RecipeIngredients] Batch fetching for',
-      recipeIds.length,
-      'recipe IDs:',
-      recipeIds,
-    );
+    logger.dev(`[RecipeIngredients] Batch fetching for ${recipeIds.length} recipe IDs: ${JSON.stringify(recipeIds)}`);
     const startTime = Date.now();
     const url = '/api/recipes/ingredients/batch';
 
@@ -73,13 +68,7 @@ export async function batchFetchWithRetry(
     const data = await response.json();
     const items = data?.items || {};
     const duration = Date.now() - startTime;
-    logger.dev(
-      '[RecipeIngredients] Batch fetch completed in',
-      duration,
-      'ms, got',
-      Object.keys(items).length,
-      'recipe groups',
-    );
+    logger.dev(`[RecipeIngredients] Batch fetch completed in ${duration}ms, got ${Object.keys(items).length} recipe groups`);
     return items as Record<string, RecipeIngredientWithDetails[]>;
   } catch (err) {
     logger.error('[RecipeIngredients] Batch fetch exception:', err);

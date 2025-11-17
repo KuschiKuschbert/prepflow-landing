@@ -38,7 +38,7 @@ export const useKitchenFireSounds = () => {
       audioReadyRef.current = true;
       return true;
     } catch (error) {
-      logger.warn('Audio context creation failed:', error);
+      logger.warn('Audio context creation failed:', { error: error instanceof Error ? error.message : String(error) });
       return false;
     }
   }, []);
@@ -96,7 +96,7 @@ export const useKitchenFireSounds = () => {
         fireLoopRef.current = fireLoop;
       }
     } catch (error) {
-      logger.warn('Failed to start fire loop:', error);
+      logger.warn('Failed to start fire loop:', { error: error instanceof Error ? error.message : String(error) });
     }
   }, [createBrownNoise]);
 
@@ -116,7 +116,7 @@ export const useKitchenFireSounds = () => {
           fireLoopRef.current = null;
         }, 500);
       } catch (error) {
-        logger.warn('Failed to stop fire loop:', error);
+        logger.warn('Failed to stop fire loop:', { error: error instanceof Error ? error.message : String(error) });
       }
     }
   }, []);
@@ -154,7 +154,7 @@ export const useKitchenFireSounds = () => {
       gainNode.connect(audioContextRef.current.destination);
       source.start();
     } catch (error) {
-      logger.warn('Failed to play extinguisher sound:', error);
+      logger.warn('Failed to play extinguisher sound:', { error: error instanceof Error ? error.message : String(error) });
     }
   }, []);
 
@@ -189,7 +189,7 @@ export const useKitchenFireSounds = () => {
         oscillator.stop(startTime + duration);
       });
     } catch (error) {
-      logger.warn('Failed to play success sound:', error);
+      logger.warn('Failed to play success sound:', { error: error instanceof Error ? error.message : String(error) });
     }
   }, []);
 
@@ -219,7 +219,7 @@ export const useKitchenFireSounds = () => {
       oscillator.start();
       oscillator.stop(currentTime + 2);
     } catch (error) {
-      logger.warn('Failed to play alert sound:', error);
+      logger.warn('Failed to play alert sound:', { error: error instanceof Error ? error.message : String(error) });
     }
   }, []);
 

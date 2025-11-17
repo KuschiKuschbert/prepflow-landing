@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 type ViewMode = 'list' | 'editor' | 'builder';
 
 export function useDishesClientViewMode() {
@@ -39,3 +39,4 @@ export function useDishesClientViewMode() {
 
   return { viewMode, setViewMode };
 }
+

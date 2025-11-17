@@ -6,7 +6,7 @@
 import { useCallback, useState } from 'react';
 import { Ingredient, Recipe } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useCOGSDataFetching() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);

@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Recipe } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * Hook to manage price calculation for visible recipes.
  *
@@ -50,11 +50,7 @@ export function usePriceCalculation({
           calculatingPricesRef.current.add(recipe.id);
         });
 
-        logger.dev(
-          '[RecipesClient] Calculating prices for',
-          recipesNeedingPrices.length,
-          'recipes',
-        );
+        logger.dev(`[RecipesClient] Calculating prices for ${recipesNeedingPrices.length} recipes`);
         updateVisibleRecipePrices(
           recipesNeedingPrices,
           fetchRecipeIngredients,

@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   buildPerformanceInsightsPrompt,
   parsePerformanceInsightsResponse,
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (aiError) {
-      logger.warn('AI performance insights failed, using fallback:', aiError);
+      logger.warn('AI performance insights failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
     }
 
     // Fallback: Return empty array - component should handle fallback to rule-based

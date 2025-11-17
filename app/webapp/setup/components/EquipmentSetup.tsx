@@ -8,7 +8,7 @@ import { EquipmentTypeModal } from './EquipmentTypeModal';
 import { EquipmentForm } from './EquipmentForm';
 import { EquipmentList } from './EquipmentList';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface EquipmentSetupProps {
   setupProgress: {
     ingredients: boolean;

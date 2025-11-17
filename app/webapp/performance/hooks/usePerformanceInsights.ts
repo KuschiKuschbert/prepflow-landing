@@ -3,7 +3,7 @@
 import { useCountry } from '@/contexts/CountryContext';
 import { useEffect, useMemo, useState } from 'react';
 import { PerformanceItem } from '../types';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   generateBargainBucketInsight,
   generateBurntToastInsight,
@@ -59,7 +59,7 @@ export function usePerformanceInsights(
           }
         }
       } catch (error) {
-        logger.warn('AI insights failed, using fallback:', error);
+        logger.warn('AI insights failed, using fallback:', { error: error instanceof Error ? error.message : String(error) });
       }
       setIsLoadingAI(false);
       setAiInsights([]);

@@ -37,7 +37,9 @@ export function cacheRecipes(recipes: any[]): void {
   try {
     sessionStorage.setItem(RECIPE_CACHE_VERSION_KEY, JSON.stringify(metadata));
   } catch (err) {
-    logger.warn('Failed to update recipe cache metadata:', err);
+    logger.warn('Failed to update recipe cache metadata:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 }
 
@@ -57,7 +59,9 @@ export function getCachedRecipes(): any[] | null {
       }
     }
   } catch (err) {
-    logger.warn('Failed to check recipe cache version:', err);
+    logger.warn('Failed to check recipe cache version:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 
   return getCachedData<any[]>(RECIPES_CACHE_KEY);
@@ -78,7 +82,9 @@ export function invalidateRecipeCache(recipeIds: string[]): void {
       sessionStorage.setItem(RECIPE_CACHE_VERSION_KEY, JSON.stringify(metadata));
     }
   } catch (err) {
-    logger.warn('Failed to invalidate recipe cache:', err);
+    logger.warn('Failed to invalidate recipe cache:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 
   // Also invalidate price cache for these recipes
@@ -92,7 +98,9 @@ export function invalidateRecipeCache(recipeIds: string[]): void {
       sessionStorage.setItem(RECIPE_PRICES_CACHE_KEY, JSON.stringify(prices));
     }
   } catch (err) {
-    logger.warn('Failed to invalidate recipe price cache:', err);
+    logger.warn('Failed to invalidate recipe price cache:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 }
 
@@ -105,7 +113,9 @@ export function clearRecipeCache(): void {
   try {
     sessionStorage.removeItem(RECIPE_CACHE_VERSION_KEY);
   } catch (err) {
-    logger.warn('Failed to clear recipe cache metadata:', err);
+    logger.warn('Failed to clear recipe cache metadata:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 }
 

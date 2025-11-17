@@ -68,13 +68,17 @@ export async function cleanExistingData(
           cleaned++;
           logger.dev(`✅ Cleaned table ${table} (integer IDs)`);
         } else {
-          logger.warn(`❌ Error cleaning table ${table} (both methods failed):`, error2);
+          logger.warn(`❌ Error cleaning table ${table} (both methods failed):`, {
+            error: error2?.message || String(error2),
+          });
         }
       } else if (!error) {
         cleaned++;
         logger.dev(`✅ Cleaned table ${table} (UUID IDs)`);
       } else {
-        logger.warn(`❌ Error cleaning table ${table}:`, error);
+        logger.warn(`❌ Error cleaning table ${table}:`, {
+          error: error?.message || String(error),
+        });
         // Try one more fallback: delete without filter if table is empty-safe
         if (error.message?.includes('must have at least one')) {
           logger.warn(`Table ${table} requires a filter, but all filters failed. Skipping.`);
@@ -82,7 +86,9 @@ export async function cleanExistingData(
       }
     } catch (err) {
       // Table might not exist, continue
-      logger.warn(`⚠️ Table ${table} might not exist or error occurred, continuing...`, err);
+      logger.warn(`⚠️ Table ${table} might not exist or error occurred, continuing...`, {
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }
   logger.dev(`🧹 Cleanup complete: ${cleaned} of ${tablesToClean.length} tables cleaned`);

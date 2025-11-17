@@ -2,7 +2,7 @@ import { filterSalesDataByDateRange, parseDateRange } from '@/lib/api/performanc
 import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/dishDeduplication';
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   calculateAveragePopularity,
   calculateAverageProfitMargin,

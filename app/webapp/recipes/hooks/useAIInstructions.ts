@@ -2,7 +2,7 @@
 import { useCallback, useState } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { useCountry } from '@/contexts/CountryContext';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import { analyzeIngredients } from './utils/analyzeIngredients';
 import { determineRecipeType } from './utils/determineRecipeType';
 import { generateInstructions } from './utils/generateInstructionTemplates';
@@ -41,7 +41,7 @@ export function useAIInstructions() {
             }
           }
         } catch (aiError) {
-          logger.warn('AI recipe instructions failed, using fallback:', aiError);
+          logger.warn('AI recipe instructions failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
         }
 
         // Fallback to rule-based logic

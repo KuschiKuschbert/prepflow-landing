@@ -6,7 +6,7 @@ import { UtensilsCrossed, BookOpen, AlertTriangle, Thermometer, Sparkles } from 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface KitchenOperationsStats {
   totalMenuDishes: number;
   recipesReady: number;

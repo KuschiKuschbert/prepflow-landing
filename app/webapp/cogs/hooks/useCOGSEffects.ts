@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { COGSCalculation } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseCOGSEffectsProps {
   setSuccessMessage: (msg: string | null) => void;
   setDishPortions: (portions: number) => void;

@@ -1,4 +1,4 @@
-import { logger } from '../../../../lib/logger';
+import { logger } from '@/lib/logger';
 import type { DishBuilderState } from '../../types';
 import type { COGSCalculation } from '../../../cogs/types';
 

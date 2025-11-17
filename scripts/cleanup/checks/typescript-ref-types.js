@@ -101,3 +101,4 @@ module.exports = {
   name: 'typescript-ref-types',
   check: checkTypeScriptRefTypes,
 };
+

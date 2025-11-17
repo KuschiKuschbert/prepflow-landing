@@ -391,3 +391,4 @@ setError('Error message');
 **Document Status:** Complete
 **Last Updated:** January 2025
 **Next Review:** After Phase 1 migration
+

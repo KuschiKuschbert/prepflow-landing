@@ -2,7 +2,7 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { generateSalesDataForMonth } from '@/lib/populate-helpers/generate-sales-data';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
     logger.dev('🚀 POST /api/generate-sales-data - Starting...');

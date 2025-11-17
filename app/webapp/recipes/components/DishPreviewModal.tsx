@@ -13,7 +13,7 @@ import { DishPreviewModalRecipesList } from './DishPreviewModalRecipesList';
 import { DishPreviewModalIngredientsList } from './DishPreviewModalIngredientsList';
 import { DishPreviewModalActions } from './DishPreviewModalActions';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface DishPreviewModalProps {
   dish: Dish;
   onClose: () => void;

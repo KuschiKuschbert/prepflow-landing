@@ -191,9 +191,9 @@ export async function populateBasicData(
     }
 
     if (skippedIngredients.length > 0) {
-      logger.warn(`Skipped ${skippedIngredients.length} ingredient(s) that could not be matched:`, [
-        ...new Set(skippedIngredients),
-      ]);
+      logger.warn(`Skipped ${skippedIngredients.length} ingredient(s) that could not be matched:`, {
+        skippedIngredients: [...new Set(skippedIngredients)],
+      });
     }
 
     if (recipeIngredientsToInsert.length > 0) {

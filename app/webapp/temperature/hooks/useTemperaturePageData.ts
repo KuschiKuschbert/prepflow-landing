@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { useTemperatureLogsQuery } from './useTemperatureLogsQuery';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analytics') {
   const queryClient = useQueryClient();
   const [logs, setLogs] = useState<TemperatureLog[]>([]);

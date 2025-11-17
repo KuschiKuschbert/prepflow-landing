@@ -24,3 +24,4 @@ export function formatCompactNumber(value: number): string {
 export function formatPercentage(value: number): string {
   return `${value.toFixed(2)}%`;
 }
+

@@ -43,7 +43,7 @@ export function handleTouchEndLogic({
     return;
   }
   const isAtTop = contentRef.current.scrollTop <= 5;
-  if (isAtTop && isDragging && maxUpwardMovementRef.current > 15) {
+  if (isAtTop && isDragging && (maxUpwardMovementRef.current ?? 0) > 15) {
     onClose();
     setIsDragging(false);
     setCanDrag(false);

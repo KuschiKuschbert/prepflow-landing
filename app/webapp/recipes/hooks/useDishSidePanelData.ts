@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Dish, DishWithDetails, DishCostData, RecipeIngredientWithDetails } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useDishSidePanelData(isOpen: boolean, dish: Dish | null) {
   const [dishDetails, setDishDetails] = useState<DishWithDetails | null>(null);
   const [costData, setCostData] = useState<DishCostData | null>(null);

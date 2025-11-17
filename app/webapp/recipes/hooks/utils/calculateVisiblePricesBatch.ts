@@ -1,4 +1,4 @@
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
 /**
  * Calculate prices using batch fetch.
@@ -30,7 +30,7 @@ export async function calculateVisiblePricesBatch({
 }): Promise<Record<string, RecipePriceData> | null> {
   const prices: Record<string, RecipePriceData> = {};
   const recipeIds = visibleRecipes.map(r => r.id);
-  logger.dev('[RecipePricing] Batch fetching ingredients for', recipeIds.length, 'recipes');
+  logger.dev(`[RecipePricing] Batch fetching ingredients for ${recipeIds.length} recipes`);
 
   visibleRecipes.forEach(recipe => {
     if (!inFlightRequestsRef.current.has(recipe.id)) {
@@ -45,7 +45,7 @@ export async function calculateVisiblePricesBatch({
       fetchBatchRecipeIngredients,
     );
     const batchDuration = Date.now() - batchStartTime;
-    logger.dev('[RecipePricing] Batch fetch completed in', batchDuration, 'ms');
+    logger.dev(`[RecipePricing] Batch fetch completed in ${batchDuration}ms`);
 
     if (Object.keys(batchIngredients).length > 0) {
       logger.dev('[RecipePricing] Calculating prices from batch data');
@@ -60,17 +60,11 @@ export async function calculateVisiblePricesBatch({
             calculatedCount++;
           }
         } catch (err) {
-          logger.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, err);
+          logger.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, { error: err instanceof Error ? err.message : String(err) });
         }
       }
       const calcDuration = Date.now() - calcStartTime;
-      logger.dev(
-        '[RecipePricing] Price calculation completed in',
-        calcDuration,
-        'ms, calculated',
-        calculatedCount,
-        'prices',
-      );
+      logger.dev(`[RecipePricing] Price calculation completed in ${calcDuration}ms, calculated ${calculatedCount} prices`);
       visibleRecipes.forEach(recipe => {
         inFlightRequestsRef.current.delete(recipe.id);
       });
@@ -85,10 +79,7 @@ export async function calculateVisiblePricesBatch({
       return null;
     }
   } catch (err) {
-    logger.error(
-      '[RecipePricing] Batch fetch failed, falling back to parallel individual calls:',
-      err,
-    );
+    logger.error('[RecipePricing] Batch fetch failed, falling back to parallel individual calls:', { error: err instanceof Error ? err.message : String(err) });
     visibleRecipes.forEach(recipe => {
       inFlightRequestsRef.current.delete(recipe.id);
     });

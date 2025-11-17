@@ -95,3 +95,4 @@ export function PerformanceTableRow({ item }: PerformanceTableRowProps) {
     </tr>
   );
 }
+

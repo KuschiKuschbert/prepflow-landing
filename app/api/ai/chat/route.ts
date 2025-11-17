@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

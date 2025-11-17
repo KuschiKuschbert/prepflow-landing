@@ -4,7 +4,7 @@ import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { Package } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface RecipeIngredientsListProps {
   recipeIngredients: RecipeIngredientWithDetails[];
   selectedRecipe: Recipe;
@@ -51,7 +51,7 @@ export function RecipeIngredientsList({
         ) : (
           recipeIngredients.map((ri, index) => {
             if (!ri.ingredients) {
-              logger.warn('⚠️ Recipe ingredient missing nested data:', ri);
+              logger.warn('⚠️ Recipe ingredient missing nested data:', { ingredient: JSON.stringify(ri) });
               return (
                 <div key={ri.id || index} className="px-4 py-3 text-center text-sm text-yellow-400">
                   ⚠️ Ingredient data incomplete (ID: {ri.ingredient_id || 'unknown'})
@@ -63,7 +63,7 @@ export function RecipeIngredientsList({
             const quantity = ri.quantity || 0;
 
             if (!ingredient.ingredient_name) {
-              logger.warn('⚠️ Recipe ingredient missing ingredient_name:', ingredient);
+              logger.warn('⚠️ Recipe ingredient missing ingredient_name:', { ingredient: JSON.stringify(ingredient) });
               return (
                 <div key={ri.id || index} className="px-4 py-3 text-center text-sm text-yellow-400">
                   ⚠️ Ingredient name missing (ID: {ingredient.id || 'unknown'})

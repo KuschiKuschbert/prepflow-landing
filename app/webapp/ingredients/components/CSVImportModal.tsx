@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   formatIngredientName,
   formatBrandName,

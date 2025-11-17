@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { migrateIngredientsToStandardUnits } from '@/lib/ingredients/migrate-to-standard-units';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const result = await migrateIngredientsToStandardUnits();

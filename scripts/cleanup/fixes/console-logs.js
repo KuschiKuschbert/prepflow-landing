@@ -35,3 +35,4 @@ module.exports = {
   name: 'console-logs',
   fix: fixConsoleLogs,
 };
+

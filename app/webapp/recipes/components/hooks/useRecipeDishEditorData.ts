@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Recipe, Dish } from '../../types';
-import { logger } from '../../../lib/logger';
+import { logger } from '@/lib/logger';
 
 export interface RecipeDishItem {
   id: string;

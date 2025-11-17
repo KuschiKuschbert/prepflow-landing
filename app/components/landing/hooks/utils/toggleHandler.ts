@@ -18,7 +18,7 @@ export function createToggleHandler(
   setExpandedIndex: (index: number | null) => void,
   setContainerWidths: React.Dispatch<React.SetStateAction<number[]>>,
   setScaleXValues: React.Dispatch<React.SetStateAction<number[]>>,
-  setIsTransitioning: (index: number | null) => void,
+  setIsTransitioning: React.Dispatch<React.SetStateAction<number | null>>,
 ) {
   return (index: number) => {
     const willExpand = expandedIndex !== index;
@@ -47,7 +47,7 @@ export function createToggleHandler(
           setTimeout(() => {
             setExpandedIndex(index);
             setTimeout(() => {
-              setIsTransitioning(prev => (prev === index ? null : prev));
+              setIsTransitioning((prev: number | null) => (prev === index ? null : prev));
             }, ANIMATION_DURATION + 50);
           }, 0);
         });
@@ -58,7 +58,7 @@ export function createToggleHandler(
       setIsTransitioning(index);
       setExpandedIndex(null);
       setTimeout(() => {
-        setIsTransitioning(prev => (prev === index ? null : prev));
+        setIsTransitioning((prev: number | null) => (prev === index ? null : prev));
       }, ANIMATION_DURATION + 50);
     }
   };

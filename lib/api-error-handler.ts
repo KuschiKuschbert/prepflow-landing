@@ -1,7 +1,7 @@
 import {
   parseSupabaseError,
-  ApiError,
   SUPABASE_ERROR_CODES,
+  type ApiError,
 } from './api-error-handler/supabaseErrorParser';
 import {
   isNetworkError,
@@ -18,7 +18,8 @@ interface PostgrestError {
   code?: string;
 }
 
-export { SUPABASE_ERROR_CODES, ApiError };
+export { SUPABASE_ERROR_CODES };
+export type { ApiError };
 
 export class ApiErrorHandler {
   static createError(message: string, code?: string, status?: number, details?: any): ApiError {
@@ -68,5 +69,3 @@ export class ApiErrorHandler {
     return isRowNotFoundError(error);
   }
 }
-
-export type { ApiError as default };

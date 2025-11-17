@@ -4,7 +4,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback, useState } from 'react';
 import { Recipe } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useRecipeDeleteOperations(
   fetchRecipes: () => Promise<void>,
   capitalizeRecipeName: (name: string) => string,

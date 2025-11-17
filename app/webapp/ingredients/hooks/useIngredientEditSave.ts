@@ -3,7 +3,7 @@
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseIngredientEditSaveProps<T extends { id: string }> {
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setEditingIngredient: (ingredient: T | null) => void;

@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   buildPerformanceTipsPrompt,
   parsePerformanceTipsResponse,
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (aiError) {
-      logger.warn('AI performance tips failed, using fallback:', aiError);
+      logger.warn('AI performance tips failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
     }
 
     // Fallback to rule-based logic

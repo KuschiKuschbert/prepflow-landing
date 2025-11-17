@@ -99,6 +99,8 @@ export function storeCostTracking(tracking: AICostTracking): void {
     const trimmed = costs.slice(-1000);
     localStorage.setItem('ai_cost_tracking', JSON.stringify(trimmed));
   } catch (error) {
-    logger.warn('Failed to store cost tracking:', error);
+    logger.warn('Failed to store cost tracking:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }

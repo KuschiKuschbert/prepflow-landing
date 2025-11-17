@@ -5,7 +5,7 @@ import { COGSCalculation } from '../types';
 import { useRecipeValidation } from './useRecipeValidation';
 import { useRecipeCRUD } from './useRecipeCRUD';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export const useRecipeSaving = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

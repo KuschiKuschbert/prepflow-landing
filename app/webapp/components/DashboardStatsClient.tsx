@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import type {
   DashboardStatsData,
   TemperatureEquipment,

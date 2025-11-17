@@ -7,7 +7,7 @@ import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { addCalculationHelper, removeCalculationHelper } from './utils/calculationManagement';
 import { mapCalculationsToRecipeIngredients } from './utils/mapCalculationsToRecipeIngredients';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 
 export const useCOGSCalculations = () => {
   const { ingredients, recipes, loading, error, setError, fetchData, setIngredients, setRecipes } =

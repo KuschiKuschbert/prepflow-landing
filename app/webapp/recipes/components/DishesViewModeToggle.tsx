@@ -60,3 +60,4 @@ export function DishesViewModeToggle({
     </div>
   );
 }
+

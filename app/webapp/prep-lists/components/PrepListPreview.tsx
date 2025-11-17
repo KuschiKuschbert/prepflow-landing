@@ -9,7 +9,7 @@ import { usePrepListPreview } from './hooks/usePrepListPreview';
 import { PrepListAggregatedView } from './PrepListAggregatedView';
 import { PrepListRecipeGroupedView } from './PrepListRecipeGroupedView';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface PrepListPreviewProps {
   data: GeneratedPrepListData;
   kitchenSections: KitchenSection[];

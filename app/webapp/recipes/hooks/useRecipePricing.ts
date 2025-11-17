@@ -6,7 +6,7 @@ import { calculateRecipePrice } from './utils/pricingHelpers';
 import { buildPricingCallbacks } from './utils/buildPricingCallbacks';
 import { buildPricingReturn } from './utils/buildPricingReturn';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useRecipePricing() {
   const [recipePrices, setRecipePrices] = useState<Record<string, RecipePriceData>>({});
   const inFlightRequestsRef = useRef<Map<string, AbortController>>(new Map());

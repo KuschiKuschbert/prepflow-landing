@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { TemperatureEquipment } from '../types';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseTemperatureEquipmentHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;

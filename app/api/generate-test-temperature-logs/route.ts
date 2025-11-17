@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { generateLegacyTemperatureLogs } from '@/lib/generate-legacy-temperature-logs';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 /**
  * @deprecated This endpoint is deprecated. Temperature logs are now automatically
  * generated as part of the populate-clean-test-data endpoint with regional standards.

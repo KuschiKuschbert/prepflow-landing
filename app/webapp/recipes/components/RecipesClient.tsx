@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 // UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 

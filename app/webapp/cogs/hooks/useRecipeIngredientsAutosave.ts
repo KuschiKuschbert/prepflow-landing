@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { COGSCalculation } from '../types';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   saveRecipeIngredients,
   serializeCalculations,

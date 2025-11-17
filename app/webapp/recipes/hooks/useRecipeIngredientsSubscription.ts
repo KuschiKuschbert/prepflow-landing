@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useRecipeIngredientsSubscription(
   recipes: Recipe[],
   refreshRecipePrices: (

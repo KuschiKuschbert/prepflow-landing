@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { DateRange, PerformanceItem } from '../types';
 import { fetchPerformanceData as fetchPerformanceApi } from '../utils/performance-api';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function usePreviousPeriodData() {
   const [previousPeriodData, setPreviousPeriodData] = useState<PerformanceItem[] | null>(null);
 
@@ -34,7 +34,7 @@ export function usePreviousPeriodData() {
       const previousState = await fetchPerformanceApi(previousRange);
       setPreviousPeriodData(previousState.performanceItems);
     } catch (error) {
-      logger.warn('Could not fetch previous period data for trends:', error);
+      logger.warn('Could not fetch previous period data for trends:', { error: error instanceof Error ? error.message : String(error) });
       setPreviousPeriodData(null);
     }
   };

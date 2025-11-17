@@ -31,3 +31,4 @@ export function DishPreviewModalActions({ onEdit, onDelete }: DishPreviewModalAc
     </div>
   );
 }
+

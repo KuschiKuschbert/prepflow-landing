@@ -47,7 +47,7 @@ export function handleUpwardGestureAtTop({
   progress: number;
 } {
   const upwardMovementValue = absDeltaY;
-  maxUpwardMovementRef.current = Math.max(maxUpwardMovementRef.current, upwardMovementValue);
+  maxUpwardMovementRef.current = Math.max(maxUpwardMovementRef.current ?? 0, upwardMovementValue);
   const progress = Math.min(1, upwardMovementValue / 15);
   const shouldClose = deltaY < -15;
 

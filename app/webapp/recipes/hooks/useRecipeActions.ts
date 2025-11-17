@@ -9,7 +9,7 @@ import { useRecipeDeleteOperations } from './useRecipeDeleteOperations';
 import { useRecipeShareOperations } from './useRecipeShareOperations';
 import { convertToCOGSCalculations } from './utils/recipeCalculationHelpers';
 import { storeRecipeForEditing } from './utils/recipeEditHelpers';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseRecipeActionsProps {
   recipes: Recipe[];
   fetchRecipes: () => Promise<void>;

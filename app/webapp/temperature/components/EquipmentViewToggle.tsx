@@ -38,3 +38,4 @@ export function EquipmentViewToggle({ viewMode, onViewModeChange }: EquipmentVie
     </div>
   );
 }
+

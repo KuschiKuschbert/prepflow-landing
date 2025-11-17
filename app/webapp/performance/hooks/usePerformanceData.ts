@@ -8,7 +8,7 @@ import { usePerformanceImportExport } from './usePerformanceImportExport';
 import { usePerformanceState } from './usePerformanceState';
 import { usePreviousPeriodData } from './usePreviousPeriodData';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function usePerformanceData(dateRange?: DateRange) {
   const cacheKey = dateRange
     ? `performance_data_${dateRange.preset}_${dateRange.startDate?.toISOString()}_${dateRange.endDate?.toISOString()}`

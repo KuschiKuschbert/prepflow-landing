@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { Recipe } from '../types';
 import { RecipeIngredientWithDetails } from '../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export function useRecipePriceSubscription(
   recipes: Recipe[],
   refreshRecipePrices: (

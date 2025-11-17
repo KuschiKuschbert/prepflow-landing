@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useSmartLoading } from '@/hooks/useSmartLoading';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface Ingredient {
   id: string;
   ingredient_name: string;

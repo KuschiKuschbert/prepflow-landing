@@ -1,6 +1,6 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 import {
   cleanExistingData,
   populateBasicData,

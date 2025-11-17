@@ -2,7 +2,7 @@ import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 
 function calculateOutOfRange(todayLogs: any[], equipment: any[]): number {
   return todayLogs.filter((log: any) => {

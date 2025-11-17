@@ -14,3 +14,4 @@ export const backgroundTheme: BackgroundTheme = {
   cornerCyanOpacity: 0.18,
   cornerMagentaOpacity: 0.16,
 };
+

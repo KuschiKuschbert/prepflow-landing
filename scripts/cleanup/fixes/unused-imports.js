@@ -34,3 +34,4 @@ module.exports = {
   name: 'unused-imports',
   fix: fixUnusedImports,
 };
+

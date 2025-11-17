@@ -9,7 +9,7 @@ import { DishSidePanelActions } from './DishSidePanelActions';
 import { useDishSidePanelData } from '../hooks/useDishSidePanelData';
 import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 export interface DishSidePanelProps {
   isOpen: boolean;
   dish: Dish | null;

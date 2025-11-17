@@ -9,7 +9,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { Sparkles, ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface CleaningArea {
   id: number;
   name: string;

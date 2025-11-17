@@ -11,7 +11,7 @@ import DishPalette from './DishPalette';
 import MenuCategory from './MenuCategory';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface MenuEditorProps {
   menu: Menu;
   onBack: () => void;

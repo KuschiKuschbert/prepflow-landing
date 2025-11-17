@@ -8,7 +8,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { Recipe } from '../types';
 import { useCallback, useEffect, useState } from 'react';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface RecipeEditDrawerProps {
   isOpen: boolean;
   recipe: Recipe | null;

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Recipe, RecipePriceData } from '../../types';
 
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 interface UseDishesClientRecipePricingProps {
   paginatedRecipesList: Recipe[];
   recipePrices: Record<string, RecipePriceData>;
