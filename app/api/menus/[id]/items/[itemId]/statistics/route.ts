@@ -76,12 +76,15 @@ export async function GET(
 
     // Calculate COGS (per serving for recipes)
     let cogs = 0;
-    if (menuItem.dish_id && menuItem.dishes) {
-      cogs = await calculateDishCost(menuItem.dishes.id);
+    const dish = Array.isArray(menuItem.dishes) ? menuItem.dishes[0] : menuItem.dishes;
+    const recipe = Array.isArray(menuItem.recipes) ? menuItem.recipes[0] : menuItem.recipes;
+    
+    if (menuItem.dish_id && dish) {
+      cogs = await calculateDishCost(dish.id);
     } else if (menuItem.recipe_id) {
       const fullRecipeCost = await calculateRecipeCost(menuItem.recipe_id, 1);
       // Divide by recipe yield to get per-serving COGS (matching per-serving price calculation)
-      const recipeYield = menuItem.recipes?.yield || 1;
+      const recipeYield = recipe?.yield || 1;
       cogs = recipeYield > 0 ? fullRecipeCost / recipeYield : fullRecipeCost;
     }
 
@@ -89,11 +92,11 @@ export async function GET(
     let sellingPrice = 0;
     if (menuItem.actual_selling_price != null) {
       sellingPrice = menuItem.actual_selling_price;
-    } else if (menuItem.dish_id && menuItem.dishes?.selling_price) {
-      sellingPrice = parseFloat(menuItem.dishes.selling_price);
-    } else if (menuItem.recipe_id && menuItem.recipes?.selling_price) {
+    } else if (menuItem.dish_id && dish?.selling_price) {
+      sellingPrice = parseFloat(String(dish.selling_price));
+    } else if (menuItem.recipe_id && recipe?.selling_price) {
       // For recipes, selling_price is already per serving
-      sellingPrice = parseFloat(menuItem.recipes.selling_price);
+      sellingPrice = parseFloat(String(recipe.selling_price));
     } else if (menuItem.recommended_selling_price != null) {
       sellingPrice = menuItem.recommended_selling_price;
     }
@@ -107,17 +110,17 @@ export async function GET(
     let recommendedPrice = menuItem.recommended_selling_price;
     if (recommendedPrice == null) {
       // Calculate dynamically if not cached
-      if (menuItem.dish_id && menuItem.dishes) {
+      if (menuItem.dish_id && dish) {
         const { calculateDishSellingPrice } = await import(
           '../../../statistics/helpers/calculateDishSellingPrice'
         );
-        recommendedPrice = await calculateDishSellingPrice(menuItem.dishes.id);
+        recommendedPrice = await calculateDishSellingPrice(dish.id);
       } else if (menuItem.recipe_id) {
         const { calculateRecipeSellingPrice } = await import(
           '../../../statistics/helpers/calculateRecipeSellingPrice'
         );
         const fullRecipePrice = await calculateRecipeSellingPrice(menuItem.recipe_id);
-        const recipeYield = menuItem.recipes?.yield || 1;
+        const recipeYield = recipe?.yield || 1;
         recommendedPrice = recipeYield > 0 ? fullRecipePrice / recipeYield : fullRecipePrice;
       }
     }
