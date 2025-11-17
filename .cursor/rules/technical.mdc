@@ -38,6 +38,22 @@ alwaysApply: true
 - Forms using autosave must pass a stable `entityId` (prefer server ID; otherwise `deriveAutosaveId`).
 - After successful save, drafts must be cleared (handled centrally in `useAutosave`).
 
+## Optimistic Updates (Global)
+
+- **MANDATORY:** All CRUD operations must use optimistic updates to eliminate loading delays.
+- **Pattern:** Store original state → Update UI immediately → Make API call → Revert on error
+- **Utilities:** Use `lib/optimistic-updates.ts` for generic CRUD operations or `hooks/useOptimisticMutation.ts` for custom mutations.
+- **State Management:** Optimistic updates work with React state (`useState`) - store original state before updates, revert on error.
+- **User Feedback:** Use `useNotification` hook for success/error notifications, never show loading states for mutations.
+- **Error Handling:** Always implement rollback logic - restore original state if API call fails.
+- **Background Refresh:** Optionally refresh statistics or related data in background (non-blocking) after successful mutations.
+- **No Post-Success Fetches:** Never call `fetchData()` after successful mutations - rely on optimistic updates.
+
+**See Also:**
+- `development.mdc` (Optimistic Updates Pattern) - Detailed pattern and examples
+- `operations.mdc` (Optimistic Updates Standard) - Performance targets
+- `implementation.mdc` (Optimistic Updates Implementation Pattern) - Code examples
+
 ## 🤖 **Automated Enforcement**
 
 **Cleanup System:** See `cleanup.mdc` for comprehensive automated enforcement of all technical standards.

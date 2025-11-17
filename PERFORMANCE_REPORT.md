@@ -1,18 +1,18 @@
 # PrepFlow Performance Report
 
-Generated: 2025-09-12T15:06:32.355Z
+Generated: 2025-11-17T18:34:46.103Z
 
 ## 📊 Bundle Analysis
 
-- **Total Chunk Size**: 2259KB
+- **Total Chunk Size**: 3403KB
 - **Chunks**: 1
 - **Bundle Analysis**: ❌ Not available
 
 ## 🖼️ Image Analysis
 
-- **Total Images**: 23
-- **Total Size**: 12320KB
-- **Optimized Images**: 12/23 (52%)
+- **Total Images**: 26
+- **Total Size**: 10815KB
+- **Optimized Images**: 8/26 (31%)
 
 ## 🔤 Font Analysis
 
@@ -22,10 +22,10 @@ Generated: 2025-09-12T15:06:32.355Z
 
 ## ⚡ Critical Resources
 
-- **Preload Hints**: ✅
-- **Prefetch Hints**: ✅
-- **Critical CSS**: ✅
-- **Service Worker**: ✅
+- **Preload Hints**: ❌
+- **Prefetch Hints**: ❌
+- **Critical CSS**: ❌
+- **Service Worker**: ❌
 
 ## 💡 Recommendations
 
@@ -33,9 +33,33 @@ Generated: 2025-09-12T15:06:32.355Z
 
 **Priority**: HIGH
 
-**Issue**: Total chunk size is 2259KB
+**Issue**: Total chunk size is 3403KB
 
 **Action**: Consider code splitting and lazy loading
+
+### 2. Images not optimized 🟡
+
+**Priority**: MEDIUM
+
+**Issue**: Only 8/26 images are optimized
+
+**Action**: Convert images to WebP/AVIF format
+
+### 3. Missing resource preloading 🔴
+
+**Priority**: HIGH
+
+**Issue**: No preload hints found for critical resources
+
+**Action**: Add preload hints for critical fonts and images
+
+### 4. No service worker 🟢
+
+**Priority**: LOW
+
+**Issue**: Service worker not implemented
+
+**Action**: Implement service worker for caching and offline support
 
 ## 🚀 Next Steps
 

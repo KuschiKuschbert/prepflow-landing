@@ -99,4 +99,3 @@ export function sortInsightsByPriority(insights: PerformanceInsight[]): Performa
     return b.items.length - a.items.length;
   });
 }
-

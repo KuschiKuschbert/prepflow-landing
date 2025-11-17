@@ -20,7 +20,7 @@ export function RecipeSidePanelHeader({
       <div className="mb-4 flex items-start justify-between">
         <div className="flex-1 pr-4">
           <h2 id="recipe-panel-title" className="mb-2 text-xl font-bold text-white">
-            {capitalizeRecipeName(recipe.name)}
+            {capitalizeRecipeName(recipe.recipe_name)}
           </h2>
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-400">Yield:</span>

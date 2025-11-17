@@ -139,6 +139,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     handleSelectIngredient,
     handleSelectAll,
   } = useIngredientActions({
+    ingredients,
     setIngredients,
     setError,
     setShowAddForm,
@@ -153,7 +154,8 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     filteredIngredients,
   });
   const { handleBulkUpdate } = useIngredientBulkUpdate({
-    refetchIngredients,
+    ingredients,
+    setIngredients,
     setSelectedIngredients,
     exitSelectionMode,
   });
@@ -172,6 +174,10 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedIngredients = filteredIngredients?.slice(startIndex, endIndex) || [];
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
   useEffect(() => {
     if (page > totalPages && totalPages > 0) setPage(1);
   }, [page, totalPages]);
@@ -213,52 +219,58 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           loading={loading}
         />
       )}
-      <IngredientPagination
-        page={page}
-        totalPages={totalPages}
-        total={filteredTotal}
-        onPageChange={setPage}
-        className="mb-4"
-      />
-      <IngredientTableWithFilters
-        ingredients={paginatedIngredients}
-        onBulkDelete={handleBulkDelete}
-        onBulkUpdate={handleBulkUpdate}
-        displayUnit={displayUnit}
-        searchTerm={searchTerm}
-        supplierFilter={supplierFilter}
-        storageFilter={storageFilter}
-        sortBy={sortBy}
-        selectedIngredients={selectedIngredients}
-        onEdit={setEditingIngredient}
-        onDelete={handleDeleteIngredient}
-        onSelectIngredient={handleSelectIngredient}
-        onSelectAll={handleSelectAll}
-        onSearchChange={setSearchTerm}
-        onSupplierFilterChange={setSupplierFilter}
-        onStorageFilterChange={setStorageFilter}
-        onSortChange={setSortBy}
-        onDisplayUnitChange={setDisplayUnit}
-        itemsPerPage={itemsPerPage}
-        onItemsPerPageChange={setItemsPerPage}
-        totalFiltered={filteredTotal}
-        onAddIngredient={() => setShowAddForm(true)}
-        onImportCSV={() => setShowCSVImport(true)}
-        onExportCSV={exportToCSV}
-        loading={loading}
-        isSelectionMode={isSelectionMode}
-        onStartLongPress={startLongPress}
-        onCancelLongPress={cancelLongPress}
-        onEnterSelectionMode={enterSelectionMode}
-        onExitSelectionMode={exitSelectionMode}
-      />
-      <IngredientPagination
-        page={page}
-        totalPages={totalPages}
-        total={filteredTotal}
-        onPageChange={setPage}
-        className="mt-4"
-      />
+      {isHydrated && (
+        <IngredientPagination
+          page={page}
+          totalPages={totalPages}
+          total={filteredTotal}
+          onPageChange={setPage}
+          className="mb-4"
+        />
+      )}
+      {(isHydrated || ingredients.length > 0) && (
+        <IngredientTableWithFilters
+          ingredients={paginatedIngredients}
+          onBulkDelete={handleBulkDelete}
+          onBulkUpdate={handleBulkUpdate}
+          displayUnit={displayUnit}
+          searchTerm={searchTerm}
+          supplierFilter={supplierFilter}
+          storageFilter={storageFilter}
+          sortBy={sortBy}
+          selectedIngredients={selectedIngredients}
+          onEdit={setEditingIngredient}
+          onDelete={handleDeleteIngredient}
+          onSelectIngredient={handleSelectIngredient}
+          onSelectAll={handleSelectAll}
+          onSearchChange={setSearchTerm}
+          onSupplierFilterChange={setSupplierFilter}
+          onStorageFilterChange={setStorageFilter}
+          onSortChange={setSortBy}
+          onDisplayUnitChange={setDisplayUnit}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={setItemsPerPage}
+          totalFiltered={filteredTotal}
+          onAddIngredient={() => setShowAddForm(true)}
+          onImportCSV={() => setShowCSVImport(true)}
+          onExportCSV={exportToCSV}
+          loading={false}
+          isSelectionMode={isSelectionMode}
+          onStartLongPress={startLongPress}
+          onCancelLongPress={cancelLongPress}
+          onEnterSelectionMode={enterSelectionMode}
+          onExitSelectionMode={exitSelectionMode}
+        />
+      )}
+      {isHydrated && (
+        <IngredientPagination
+          page={page}
+          totalPages={totalPages}
+          total={filteredTotal}
+          onPageChange={setPage}
+          className="mt-4"
+        />
+      )}
       <IngredientEditDrawer
         isOpen={!!editingIngredient}
         ingredient={editingIngredient}

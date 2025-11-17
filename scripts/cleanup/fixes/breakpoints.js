@@ -36,4 +36,3 @@ module.exports = {
   name: 'breakpoints',
   fix: fixBreakpoints,
 };
-

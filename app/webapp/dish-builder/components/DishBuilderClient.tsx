@@ -65,7 +65,7 @@ export default function DishBuilderClient({
     if (editingRecipe && ingredients.length > 0) {
       // Set recipe state
       setDishState({
-        dishName: editingRecipe.name || '',
+        dishName: editingRecipe.recipe_name || '',
         description: editingRecipe.description || '',
         sellingPrice: 0, // Will be calculated
         itemType: 'recipe',

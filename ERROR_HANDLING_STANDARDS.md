@@ -607,4 +607,3 @@ export default function RecipesPage() {
 **Document Status:** Active Standards
 **Last Updated:** January 2025
 **Next Review:** After Phase 1 migration
-

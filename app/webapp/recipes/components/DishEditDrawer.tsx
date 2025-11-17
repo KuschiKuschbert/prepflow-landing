@@ -118,7 +118,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
             const recipes = (data.dish.recipes || []).map((r: any) => ({
               recipe_id: r.recipe_id,
               quantity: r.quantity || 1,
-              recipe_name: r.recipes?.name,
+              recipe_name: r.recipes?.recipe_name,
             }));
             const ingredients = (data.dish.ingredients || []).map((i: any) => ({
               ingredient_id: i.ingredient_id,

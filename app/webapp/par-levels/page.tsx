@@ -1,206 +1,404 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
-import { getHelpText } from '@/lib/terminology-help';
-import { ParLevelFormModal } from './components/ParLevelFormModal';
+import { ParLevelInlineForm } from './components/ParLevelInlineForm';
+import { ParLevelEditDrawer } from './components/ParLevelEditDrawer';
+import { ParLevelCard } from './components/ParLevelCard';
+import { ParLevelTable } from './components/ParLevelTable';
+import { ParLevelSelectionModeBanner } from './components/ParLevelSelectionModeBanner';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { TablePagination } from '@/components/ui/TablePagination';
 import { Package2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-
+import { useNotification } from '@/contexts/NotificationContext';
+import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { createOptimisticDelete, createOptimisticUpdate } from '@/lib/optimistic-updates';
 import { logger } from '@/lib/logger';
-interface Ingredient {
-  id: string;
-  name: string;
-  unit: string;
-  category: string;
-}
-
-interface ParLevel {
-  id: string;
-  ingredient_id: string;
-  par_level: number;
-  reorder_point: number;
-  unit: string;
-  notes?: string;
-  created_at: string;
-  updated_at: string;
-  ingredients: Ingredient;
-}
+import { useSelectionMode } from './hooks/useSelectionMode';
+import type { ParLevel, Ingredient } from './types';
 
 export default function ParLevelsPage() {
   const { t } = useTranslation();
-  const [parLevels, setParLevels] = useState<ParLevel[]>([]);
+  const { showSuccess, showError } = useNotification();
+  const {
+    isSelectionMode,
+    startLongPress,
+    cancelLongPress,
+    enterSelectionMode,
+    exitSelectionMode,
+  } = useSelectionMode();
+  const [parLevels, setParLevels] = useState<ParLevel[]>(() => getCachedData('par_levels') || []);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingParLevel, setEditingParLevel] = useState<ParLevel | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [selectedParLevels, setSelectedParLevels] = useState<Set<string>>(new Set());
+  const [page, setPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
   const [formData, setFormData] = useState({
     ingredientId: '',
     parLevel: '',
-    reorderPoint: '',
+    reorderPointPercentage: '50', // Default to 50%
     unit: '',
-    notes: '',
   });
-
-  // Mock user ID for now
-  const userId = 'user-123';
 
   useEffect(() => {
     fetchParLevels();
     fetchIngredients();
   }, []);
 
-  const fetchParLevels = async () => {
-    // Disable loading state to prevent skeleton flashes during API errors
-    // setLoading(true);
+  const fetchParLevels = useCallback(async () => {
+    setLoading(true);
+    console.log('[Par Levels] Fetching par levels...');
     try {
-      const response = await fetch(`/api/par-levels?userId=${userId}`);
-      const result = await response.json();
+      const response = await fetch('/api/par-levels');
+      console.log('[Par Levels] Response status:', response.status, response.statusText);
 
-      if (result.success) {
-        setParLevels(result.data);
+      // Parse JSON even if status is not 200
+      let result;
+      try {
+        const responseText = await response.text();
+        console.log('[Par Levels] Response text:', responseText);
+        result = JSON.parse(responseText);
+        console.log('[Par Levels] Parsed result:', result);
+      } catch (parseError) {
+        logger.error('Failed to parse response:', parseError);
+        console.error('[Par Levels] Parse error:', parseError);
+        showError(`Server error (${response.status}). Please check the server logs.`);
+        return;
+      }
+
+      if (response.ok && result.success) {
+        setParLevels(result.data || []);
+        cacheData('par_levels', result.data || []);
       } else {
-        setError(result.message || 'Failed to fetch par levels');
+        // Show detailed error message with instructions if available
+        const errorMessage =
+          result.message || result.error || `Failed to fetch par levels (${response.status})`;
+        const instructions = result.details?.instructions || [];
+
+        // Log full error details for debugging
+        const errorDetails = {
+          status: response.status,
+          error: errorMessage,
+          details: result.details,
+          code: result.code,
+          fullResponse: result,
+        };
+
+        logger.error('Failed to fetch par levels:', errorDetails);
+
+        // Always log to console for debugging (client-side)
+        console.error('[Par Levels] API Error:', errorDetails);
+
+        // Show error notification
+        if (instructions.length > 0) {
+          const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
+          showError(fullMessage);
+          console.error('[Par Levels] Error Instructions:', instructions);
+        } else {
+          showError(errorMessage);
+        }
       }
     } catch (err) {
-      setError('Failed to fetch par levels');
+      logger.error('Failed to fetch par levels:', err);
+      showError('Failed to fetch par levels. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [showError]);
 
-  const fetchIngredients = async () => {
+  const fetchIngredients = useCallback(async () => {
     try {
-      const response = await fetch(`/api/ingredients?userId=${userId}`);
+      const response = await fetch('/api/ingredients');
       const result = await response.json();
 
       if (result.success) {
-        setIngredients(result.data);
+        const items = result.data?.items || result.data || [];
+        setIngredients(items);
       }
     } catch (err) {
       logger.error('Failed to fetch ingredients:', err);
     }
-  };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!formData.ingredientId || !formData.parLevel || !formData.unit) {
+      showError('Please fill in all required fields');
+      return;
+    }
+
+    // Ensure reorderPointPercentage has a default value
+    const reorderPointPercentageValue = formData.reorderPointPercentage || '50';
+    const parLevelValue = parseFloat(formData.parLevel);
+    const reorderPointPercentage = parseFloat(reorderPointPercentageValue);
+
+    if (isNaN(parLevelValue) || isNaN(reorderPointPercentage)) {
+      showError('Par level and reorder point percentage must be valid numbers');
+      return;
+    }
+
+    if (parLevelValue <= 0) {
+      showError('Par level must be greater than 0');
+      return;
+    }
+
+    if (reorderPointPercentage < 0 || reorderPointPercentage > 100) {
+      showError('Reorder point percentage must be between 0 and 100');
+      return;
+    }
+
+    // Calculate actual reorder point from percentage
+    const reorderPointValue = parLevelValue * (reorderPointPercentage / 100);
+
+    if (reorderPointValue >= parLevelValue) {
+      showError('Reorder point must be less than par level');
+      return;
+    }
+
+    // Create new par level
+    const tempId = `temp-${Date.now()}`;
+    const selectedIngredient = ingredients.find(ing => ing.id === formData.ingredientId);
+    const tempParLevel: ParLevel = {
+      id: tempId,
+      ingredient_id: formData.ingredientId,
+      par_level: parLevelValue,
+      reorder_point: reorderPointValue,
+      unit: formData.unit,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      ingredients: {
+        id: selectedIngredient?.id || formData.ingredientId,
+        ingredient_name: selectedIngredient?.ingredient_name || '',
+        unit: selectedIngredient?.unit,
+        category: selectedIngredient?.category,
+      },
+    };
+
+    // Store original state for rollback
+    const originalParLevels = [...parLevels];
+
+    // Optimistically add to UI immediately
+    setParLevels(prevItems => [...prevItems, tempParLevel]);
+
     try {
-      const url = editingParLevel ? '/api/par-levels' : '/api/par-levels';
-      const method = editingParLevel ? 'PUT' : 'POST';
-
-      const body = editingParLevel
-        ? {
-            id: editingParLevel.id,
-            parLevel: parseFloat(formData.parLevel),
-            reorderPoint: parseFloat(formData.reorderPoint),
-            unit: formData.unit,
-            notes: formData.notes,
-          }
-        : {
-            userId,
-            ingredientId: formData.ingredientId,
-            parLevel: parseFloat(formData.parLevel),
-            reorderPoint: parseFloat(formData.reorderPoint),
-            unit: formData.unit,
-            notes: formData.notes,
-          };
-
-      const response = await fetch(url, {
-        method,
+      const response = await fetch('/api/par-levels', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          ingredientId: formData.ingredientId,
+          parLevel: parLevelValue,
+          reorderPoint: reorderPointValue,
+          unit: formData.unit,
+        }),
       });
 
-      const result = await response.json();
+      // Parse JSON even if status is not 200
+      let result;
+      try {
+        const responseText = await response.text();
+        console.log('[Par Levels] POST Response status:', response.status, response.statusText);
+        console.log('[Par Levels] POST Response text:', responseText);
+        result = JSON.parse(responseText);
+        console.log('[Par Levels] POST Parsed result:', result);
+      } catch (parseError) {
+        logger.error('Failed to parse response:', parseError);
+        console.error('[Par Levels] POST Parse error:', parseError);
+        // Revert optimistic update on error
+        setParLevels(originalParLevels);
+        showError(`Server error (${response.status}). Please check the server logs.`);
+        return;
+      }
 
-      if (result.success) {
-        await fetchParLevels();
+      if (response.ok && result.success && result.data) {
+        // Replace temp item with real item from server
+        // Ensure ingredients data is present (fallback to temp data if missing)
+        const serverData = result.data;
+        if (!serverData.ingredients && tempParLevel.ingredients) {
+          serverData.ingredients = tempParLevel.ingredients;
+        }
+
+        setParLevels(prevItems => {
+          const updated = prevItems.map(item => (item.id === tempId ? serverData : item));
+          cacheData('par_levels', updated);
+          return updated;
+        });
+        showSuccess('Par level created successfully');
         resetForm();
-        setError(null);
       } else {
-        setError(result.message || 'Failed to save par level');
+        // Revert optimistic update on error
+        setParLevels(originalParLevels);
+
+        // Show detailed error message with instructions if available
+        const errorMessage =
+          result.message || result.error || `Failed to create par level (${response.status})`;
+        const instructions = result.details?.instructions || [];
+
+        // Log full error details for debugging
+        const errorDetails = {
+          status: response.status,
+          error: errorMessage,
+          details: result.details,
+          code: result.code,
+          fullResponse: result,
+          requestBody: {
+            ingredientId: formData.ingredientId,
+            parLevel: parLevelValue,
+            reorderPoint: reorderPointValue,
+            unit: formData.unit,
+          },
+        };
+
+        logger.error('Failed to create par level:', errorDetails);
+
+        // Always log to console for debugging (client-side)
+        console.error('[Par Levels] POST API Error:', errorDetails);
+
+        // Show error notification
+        if (instructions.length > 0) {
+          const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
+          showError(fullMessage);
+          console.error('[Par Levels] POST Error Instructions:', instructions);
+        } else {
+          showError(errorMessage);
+        }
       }
     } catch (err) {
-      setError('Failed to save par level');
+      // Revert optimistic update on error
+      setParLevels(originalParLevels);
+      logger.error('Failed to create par level:', err);
+      console.error('[Par Levels] POST Exception:', err);
+      showError('Failed to create par level. Please check your connection and try again.');
     }
+  };
+
+  const handleUpdate = async (updates: Partial<ParLevel>) => {
+    if (!updates.id) return;
+
+    await createOptimisticUpdate(
+      parLevels,
+      updates.id,
+      updates,
+      () =>
+        fetch('/api/par-levels', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: updates.id,
+            parLevel: updates.par_level,
+            reorderPoint: updates.reorder_point,
+            unit: updates.unit,
+          }),
+        }),
+      setParLevels,
+      () => {
+        showSuccess('Par level updated successfully');
+        fetchParLevels();
+      },
+      error => showError(error),
+    );
   };
 
   const handleEdit = (parLevel: ParLevel) => {
     setEditingParLevel(parLevel);
-    setFormData({
-      ingredientId: parLevel.ingredient_id,
-      parLevel: parLevel.par_level.toString(),
-      reorderPoint: parLevel.reorder_point.toString(),
-      unit: parLevel.unit,
-      notes: parLevel.notes || '',
-    });
-    setShowForm(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this par level?')) return;
+  const handleDelete = useCallback(
+    async (id: string): Promise<void> => {
+      const parLevelToDelete = parLevels.find(pl => pl.id === id);
+      if (!parLevelToDelete) return;
 
-    try {
-      const response = await fetch(`/api/par-levels?id=${id}`, {
-        method: 'DELETE',
-      });
+      await createOptimisticDelete(
+        parLevels,
+        id,
+        () => fetch(`/api/par-levels?id=${id}`, { method: 'DELETE' }),
+        setParLevels,
+        () => {
+          showSuccess('Par level deleted successfully');
+          fetchParLevels();
+        },
+        error => showError(error),
+      );
+    },
+    [parLevels, showSuccess, showError, fetchParLevels],
+  );
 
-      const result = await response.json();
-
-      if (result.success) {
-        await fetchParLevels();
-      } else {
-        setError(result.message || 'Failed to delete par level');
-      }
-    } catch (err) {
-      setError('Failed to delete par level');
-    }
+  const handleDeleteClick = (id: string) => {
+    setDeleteConfirmId(id);
+    setShowDeleteConfirm(true);
   };
+
+  const confirmDelete = useCallback(async () => {
+    if (!deleteConfirmId) return;
+
+    await handleDelete(deleteConfirmId);
+
+    setShowDeleteConfirm(false);
+    setDeleteConfirmId(null);
+  }, [deleteConfirmId, handleDelete]);
 
   const resetForm = () => {
     setFormData({
       ingredientId: '',
       parLevel: '',
-      reorderPoint: '',
+      reorderPointPercentage: '50', // Default to 50%
       unit: '',
-      notes: '',
     });
     setShowForm(false);
     setEditingParLevel(null);
   };
 
-  const getStatusColor = (parLevel: ParLevel) => {
-    // This would be calculated based on current stock levels
-    // For now, we'll use a mock calculation
-    const currentStock = Math.random() * parLevel.par_level * 2; // Mock current stock
+  // Pagination logic
+  const totalPages = Math.ceil(parLevels.length / itemsPerPage);
+  const paginatedParLevels = parLevels.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
-    if (currentStock <= parLevel.reorder_point) {
-      return 'text-red-400 bg-red-400/10';
-    } else if (currentStock <= parLevel.par_level) {
-      return 'text-yellow-400 bg-yellow-400/10';
-    } else {
-      return 'text-green-400 bg-green-400/10';
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [itemsPerPage]);
+
+  // Selection handlers
+  const handleSelectParLevel = useCallback((id: string, selected: boolean) => {
+    setSelectedParLevels(prev => {
+      const newSet = new Set(prev);
+      if (selected) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const handleSelectAll = useCallback(
+    (selected: boolean) => {
+      if (selected) {
+        const allIds = new Set(parLevels.map(pl => pl.id));
+        setSelectedParLevels(allIds);
+      } else {
+        setSelectedParLevels(new Set());
+        exitSelectionMode();
+      }
+    },
+    [parLevels, exitSelectionMode],
+  );
+
+  // Clear selection when exiting selection mode
+  useEffect(() => {
+    if (!isSelectionMode) {
+      setSelectedParLevels(new Set());
     }
-  };
+  }, [isSelectionMode]);
 
-  const getStatusText = (parLevel: ParLevel) => {
-    const currentStock = Math.random() * parLevel.par_level * 2; // Mock current stock
-
-    if (currentStock <= parLevel.reorder_point) {
-      return 'Reorder Now';
-    } else if (currentStock <= parLevel.par_level) {
-      return 'Low Stock';
-    } else {
-      return 'In Stock';
-    }
-  };
-
-  if (loading) {
+  if (loading && parLevels.length === 0) {
     return (
       <ResponsivePageContainer>
         <div className="min-h-screen bg-transparent py-8 text-white">
@@ -241,148 +439,128 @@ export default function ParLevelsPage() {
           </button>
         </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
-            <p className="text-red-400">{error}</p>
-          </div>
+        {/* Inline Add Form */}
+        {showForm && !editingParLevel && (
+          <ParLevelInlineForm
+            formData={formData}
+            ingredients={ingredients}
+            onClose={resetForm}
+            onSubmit={handleSubmit}
+            onFormDataChange={(field, value) => setFormData({ ...formData, [field]: value })}
+          />
         )}
 
+        {/* Selection Mode Banner */}
+        <ParLevelSelectionModeBanner
+          isSelectionMode={isSelectionMode}
+          onExitSelectionMode={exitSelectionMode}
+        />
+
         {/* Par Levels List */}
-        <div className="space-y-4">
-          {parLevels.length === 0 ? (
-            <div className="py-12 text-center">
-              <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon icon={Package2} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold text-white">
-                {t('parLevels.noParLevels', 'No Par Levels Set')}
-              </h3>
-              <p className="mb-6 text-gray-400">
-                {t(
-                  'parLevels.noParLevelsDesc',
-                  'Set par levels to automate your inventory management',
-                )}
-              </p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-              >
-                {t('parLevels.addFirstParLevel', 'Add Your First Par Level')}
-              </button>
+        {parLevels.length === 0 ? (
+          <div className="py-12 text-center">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
+              <Icon icon={Package2} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
             </div>
-          ) : (
-            parLevels.map(parLevel => (
-              <div
-                key={parLevel.id}
-                className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="mb-3 flex items-center space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                        <Icon
-                          icon={Package2}
-                          size="md"
-                          className="text-[#29E7CD]"
-                          aria-hidden={true}
-                        />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">
-                          {parLevel.ingredients.name}
-                        </h3>
-                        <p className="text-sm text-gray-400">{parLevel.ingredients.category}</p>
-                      </div>
-                    </div>
+            <h3 className="mb-2 text-xl font-semibold text-white">
+              {t('parLevels.noParLevels', 'No Par Levels Set')}
+            </h3>
+            <p className="mb-6 text-gray-400">
+              {t(
+                'parLevels.noParLevelsDesc',
+                'Set par levels to automate your inventory management',
+              )}
+            </p>
+            <button
+              onClick={() => setShowForm(true)}
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+            >
+              {t('parLevels.addFirstParLevel', 'Add Your First Par Level')}
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Pagination - Top */}
+            <TablePagination
+              page={page}
+              totalPages={totalPages}
+              total={parLevels.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setPage}
+              onItemsPerPageChange={setItemsPerPage}
+              className="mb-4"
+            />
 
-                    <div className="desktop:grid-cols-3 mb-4 grid grid-cols-1 gap-4">
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('parLevels.parLevel', 'Par Level')}
-                        </p>
-                        <p className="font-semibold text-white">
-                          {parLevel.par_level} {parLevel.unit}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('parLevels.reorderPoint', 'Reorder Point')}
-                        </p>
-                        <p className="font-semibold text-white">
-                          {parLevel.reorder_point} {parLevel.unit}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('parLevels.status', 'Status')}
-                        </p>
-                        <span
-                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(parLevel)}`}
-                        >
-                          {getStatusText(parLevel)}
-                        </span>
-                      </div>
-                    </div>
+            {/* Mobile/Tablet Cards */}
+            <div className="desktop:hidden block space-y-4">
+              {paginatedParLevels.map(parLevel => (
+                <ParLevelCard
+                  key={parLevel.id}
+                  parLevel={parLevel}
+                  selectedParLevels={selectedParLevels}
+                  onSelectParLevel={handleSelectParLevel}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  deletingId={deleteConfirmId}
+                  isSelectionMode={isSelectionMode}
+                  onStartLongPress={startLongPress}
+                  onCancelLongPress={cancelLongPress}
+                  onEnterSelectionMode={enterSelectionMode}
+                />
+              ))}
+            </div>
 
-                    {parLevel.notes && <p className="text-sm text-gray-300">{parLevel.notes}</p>}
-                  </div>
+            {/* Desktop Table */}
+            <ParLevelTable
+              parLevels={paginatedParLevels}
+              selectedParLevels={selectedParLevels}
+              totalFiltered={parLevels.length}
+              onSelectParLevel={handleSelectParLevel}
+              onSelectAll={handleSelectAll}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              deletingId={deleteConfirmId}
+              isSelectionMode={isSelectionMode}
+              onStartLongPress={startLongPress}
+              onCancelLongPress={cancelLongPress}
+              onEnterSelectionMode={enterSelectionMode}
+            />
 
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handleEdit(parLevel)}
-                      className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
-                      title={String(t('parLevels.edit', 'Edit'))}
-                    >
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => handleDelete(parLevel.id)}
-                      className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
-                      title={String(t('parLevels.delete', 'Delete'))}
-                    >
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+            {/* Pagination - Bottom */}
+            <TablePagination
+              page={page}
+              totalPages={totalPages}
+              total={parLevels.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setPage}
+              onItemsPerPageChange={setItemsPerPage}
+              className="mt-4"
+            />
+          </>
+        )}
 
-        {/* Add/Edit Form Modal */}
-        <ParLevelFormModal
-          show={showForm}
-          editingParLevel={editingParLevel}
-          formData={formData}
+        {/* Edit Drawer */}
+        <ParLevelEditDrawer
+          isOpen={!!editingParLevel}
+          parLevel={editingParLevel}
           ingredients={ingredients}
-          onClose={resetForm}
-          onSubmit={handleSubmit}
-          onFormDataChange={(field, value) => setFormData({ ...formData, [field]: value })}
+          onClose={() => setEditingParLevel(null)}
+          onSave={handleUpdate}
+        />
+
+        {/* Delete Confirmation Dialog */}
+        <ConfirmDialog
+          isOpen={showDeleteConfirm}
+          title="Delete Par Level"
+          message="Are you sure you want to delete this par level? This action cannot be undone."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={confirmDelete}
+          onCancel={() => {
+            setShowDeleteConfirm(false);
+            setDeleteConfirmId(null);
+          }}
+          variant="danger"
         />
       </div>
     </ResponsivePageContainer>

@@ -3,6 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Trash2 } from 'lucide-react';
 import type { SectionData } from '../types';
+import { IngredientPrepNotes } from './IngredientPrepNotes';
 
 interface PrepListAggregatedViewProps {
   section: SectionData;
@@ -41,6 +42,7 @@ export function PrepListAggregatedView({
                     {ingredient.sources.map(s => s.name).join(', ')}
                   </p>
                 )}
+                <IngredientPrepNotes ingredient={ingredient} />
               </>
             ) : (
               <select

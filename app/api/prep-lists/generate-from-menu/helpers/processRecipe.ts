@@ -1,13 +1,12 @@
-import { supabaseAdmin } from '@/lib/supabase';
-
 interface SectionData {
   sectionId: string | null;
   sectionName: string;
   aggregatedIngredients: any[];
   recipeGrouped: any[];
+  prepInstructions: any[];
 }
 
-export async function processRecipe(
+export function processRecipe(
   recipeId: string,
   recipeName: string,
   dishId: string | null,
@@ -16,39 +15,22 @@ export async function processRecipe(
   unassignedItems: any[],
   sectionsMap: Map<string, { id: string; name: string }>,
   recipeMultiplier: number = 1,
+  recipeInstructions?: string | null,
+  recipeIngredients?: any[],
+  dishSection?: { sectionId: string | null; sectionName: string } | null,
 ) {
-  if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
-  }
-
-  // Get recipe ingredients
-  const { data: recipeIngredients } = await supabaseAdmin
-    .from('recipe_ingredients')
-    .select('ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
-    .eq('recipe_id', recipeId);
-
+  // Use pre-fetched ingredients or return if none provided
   if (!recipeIngredients || recipeIngredients.length === 0) {
     return;
   }
 
-  // Determine section
+  // Determine section - use dish section if provided, otherwise Uncategorized
   let sectionId: string | null = null;
   let sectionName = 'Uncategorized';
 
-  if (dishId) {
-    const { data: dishSections } = await supabaseAdmin
-      .from('dish_sections')
-      .select('section_id, kitchen_sections(id, name)')
-      .eq('dish_id', dishId)
-      .limit(1);
-
-    if (dishSections && dishSections.length > 0) {
-      sectionId = dishSections[0].section_id;
-      const section = (dishSections[0] as any).kitchen_sections;
-      if (section) {
-        sectionName = section.name;
-      }
-    }
+  if (dishSection) {
+    sectionId = dishSection.sectionId;
+    sectionName = dishSection.sectionName;
   }
 
   const sectionKey = sectionId || null;
@@ -59,8 +41,9 @@ export async function processRecipe(
     recipeName,
     dishId: dishId || undefined,
     dishName: dishName || undefined,
+    instructions: recipeInstructions || undefined,
     ingredients: recipeIngredients.map((ri: any) => {
-      const ingredient = ri.ingredients;
+      const ingredient = ri.ingredients || {};
       return {
         ingredientId: ingredient.id,
         name: ingredient.ingredient_name || ingredient.name,
@@ -77,11 +60,26 @@ export async function processRecipe(
       sectionName,
       aggregatedIngredients: [],
       recipeGrouped: [],
+      prepInstructions: [],
     });
   }
 
   const section = sectionsData.get(sectionKey)!;
   section.recipeGrouped.push(recipeGroupedItem);
+
+  // If recipe has instructions, add to prep instructions
+  if (recipeInstructions && recipeInstructions.trim().length > 0) {
+    const prepInstructionItem = {
+      recipeId,
+      recipeName,
+      instructions: recipeInstructions,
+      dishId: dishId || undefined,
+      dishName: dishName || undefined,
+      sectionId,
+      sectionName,
+    };
+    section.prepInstructions.push(prepInstructionItem);
+  }
 
   // Add to aggregated ingredients
   for (const ri of recipeIngredients) {
@@ -122,4 +120,3 @@ export async function processRecipe(
     }
   }
 }
-

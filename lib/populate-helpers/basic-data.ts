@@ -98,13 +98,13 @@ export async function populateBasicData(
   }
 
   // Recipes - check for existing ones first
-  const { data: existingRecipes } = await supabaseAdmin.from('recipes').select('name');
+  const { data: existingRecipes } = await supabaseAdmin.from('recipes').select('recipe_name');
   const existingRecipeNames = new Set(
-    (existingRecipes || []).map(r => r.name?.toLowerCase().trim()).filter(Boolean),
+    (existingRecipes || []).map(r => r.recipe_name?.toLowerCase().trim()).filter(Boolean),
   );
 
   const recipesToInsert = cleanSampleRecipes.filter(
-    r => !existingRecipeNames.has(r.name?.toLowerCase().trim()),
+    r => !existingRecipeNames.has(r.recipe_name?.toLowerCase().trim()),
   );
 
   let recipesData: any[] | undefined;
@@ -140,8 +140,8 @@ export async function populateBasicData(
     // Create case-insensitive maps for matching
     const recipeMap = new Map<string, string>();
     recipesData.forEach(r => {
-      recipeMap.set(r.name.toLowerCase().trim(), r.id);
-      recipeMap.set(r.name, r.id); // Also include exact match
+      recipeMap.set(r.recipe_name.toLowerCase().trim(), r.id);
+      recipeMap.set(r.recipe_name, r.id); // Also include exact match
     });
 
     const ingredientMap = new Map<string, string>();

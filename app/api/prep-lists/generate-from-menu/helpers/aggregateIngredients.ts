@@ -70,7 +70,7 @@ export function aggregateIngredientsBySection(
         // Add to recipe grouped
         section.recipeGrouped.push({
           recipeId: dishRecipe.recipe_id,
-          recipeName: recipe.name,
+          recipeName: recipe.recipe_name,
           dishId: item.dish_id,
           dishName: item.dishes.dish_name,
           ingredients: recipeIngs.map(ri => ({
@@ -121,7 +121,7 @@ export function aggregateIngredientsBySection(
 
       section.recipeGrouped.push({
         recipeId: item.recipe_id,
-        recipeName: item.recipes.name,
+        recipeName: item.recipes.recipe_name,
         ingredients: recipeIngs.map(ri => ({
           ingredientId: ri.ingredient_id,
           name: ri.ingredients?.ingredient_name || 'Unknown',
@@ -141,7 +141,7 @@ export function aggregateIngredientsBySection(
           existing.sources.push({
             type: 'recipe',
             id: item.recipe_id,
-            name: item.recipes.name,
+            name: item.recipes.recipe_name,
           });
         } else {
           section.aggregatedIngredients.push({
@@ -153,7 +153,7 @@ export function aggregateIngredientsBySection(
               {
                 type: 'recipe',
                 id: item.recipe_id,
-                name: item.recipes.name,
+                name: item.recipes.recipe_name,
               },
             ],
           });
@@ -164,4 +164,3 @@ export function aggregateIngredientsBySection(
 
   return Array.from(sectionMap.values());
 }
-

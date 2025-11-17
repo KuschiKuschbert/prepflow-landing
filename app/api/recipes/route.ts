@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       query = query.eq('category', category);
     }
 
-    const { data: recipes, error, count } = await query.order('name').range(start, end);
+    const { data: recipes, error, count } = await query.order('recipe_name').range(start, end);
 
     if (error) {
       logger.error('[Recipes API] Database error fetching recipes:', {
@@ -90,8 +90,8 @@ export async function POST(request: NextRequest) {
     // Check if recipe already exists
     const { data: existingRecipes, error: checkError } = await supabaseAdmin
       .from('recipes')
-      .select('id, name')
-      .ilike('name', name.trim());
+      .select('id, recipe_name')
+      .ilike('recipe_name', name.trim());
 
     const existingRecipe =
       existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
       const { data: newRecipe, error: createError } = await supabaseAdmin
         .from('recipes')
         .insert({
-          name: name.trim(),
+          recipe_name: name.trim(),
           yield: dishPortions || 1,
           yield_unit: yield_unit || 'servings',
           category: category || 'Uncategorized',

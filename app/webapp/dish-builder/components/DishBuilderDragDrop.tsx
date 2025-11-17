@@ -21,7 +21,7 @@ function TappableRecipe({ recipe, onTap }: { recipe: Recipe; onTap: (recipe: Rec
       <div className="flex items-center gap-2">
         <Icon icon={ChefHat} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
         <div className="flex-1">
-          <div className="font-medium text-white">{recipe.name}</div>
+          <div className="font-medium text-white">{recipe.recipe_name}</div>
         </div>
         <Icon icon={Plus} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
       </div>
@@ -69,7 +69,7 @@ export default function DishBuilderDragDrop({
   const filteredRecipes = useMemo(() => {
     if (!recipeSearch.trim()) return recipes;
     const searchLower = recipeSearch.toLowerCase();
-    return recipes.filter(recipe => recipe.name.toLowerCase().includes(searchLower));
+    return recipes.filter(recipe => recipe.recipe_name.toLowerCase().includes(searchLower));
   }, [recipes, recipeSearch]);
 
   const filteredIngredients = useMemo(() => {

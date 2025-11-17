@@ -14,7 +14,19 @@ export function useIngredientDelete<T extends { id: string }>({
   setError,
 }: UseIngredientDeleteProps<T>) {
   const handleDeleteIngredient = useCallback(
-    async (id: string) => {
+    async (id: string, currentIngredients: T[]) => {
+      // Store original state for rollback
+      const originalIngredients = [...currentIngredients];
+      const itemToDelete = currentIngredients.find(item => item.id === id);
+
+      if (!itemToDelete) {
+        setError('Ingredient not found');
+        return;
+      }
+
+      // Optimistically remove from UI immediately
+      setIngredients(prev => prev.filter(ing => ing.id !== id));
+
       try {
         const { error } = await supabase.from('ingredients').delete().eq('id', id);
 
@@ -27,17 +39,21 @@ export function useIngredientDelete<T extends { id: string }>({
 
             const result = await response.json();
             if (!response.ok || !result.success) {
+              // Revert optimistic update on error
+              setIngredients(originalIngredients);
               const errorMsg = result.details || result.error || 'Failed to delete ingredient';
               setError(`Failed to delete ingredient: ${errorMsg}`);
               throw new Error(errorMsg);
             }
           } else {
+            // Revert optimistic update on error
+            setIngredients(originalIngredients);
             throw error;
           }
         }
-
-        setIngredients(prev => prev.filter(ing => ing.id !== id));
       } catch (error) {
+        // Revert optimistic update on error (if not already reverted)
+        setIngredients(originalIngredients);
         setError('Failed to delete ingredient');
       }
     },

@@ -94,6 +94,14 @@ export function formatEntityData(
     formattedData = recipeUpdateData;
   }
 
+  if (entityType === 'compliance_types') {
+    // Map 'name' to 'type_name' if the database uses 'type_name' column
+    if (formattedData.name && !formattedData.type_name) {
+      formattedData.type_name = formattedData.name;
+      delete formattedData.name;
+    }
+  }
+
   return formattedData;
 }
 

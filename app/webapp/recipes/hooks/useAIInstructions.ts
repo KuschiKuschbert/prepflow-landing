@@ -13,7 +13,7 @@ export function useAIInstructions() {
 
   const generateAIInstructions = useCallback(
     async (recipe: Recipe, ingredients: RecipeIngredientWithDetails[]) => {
-      logger.dev('🤖 DEBUG: Generating AI instructions for:', recipe.name);
+      logger.dev('🤖 DEBUG: Generating AI instructions for:', recipe.recipe_name);
       logger.dev('🤖 DEBUG: Ingredients:', ingredients);
       setGeneratingInstructions(true);
 
@@ -41,7 +41,9 @@ export function useAIInstructions() {
             }
           }
         } catch (aiError) {
-          logger.warn('AI recipe instructions failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
+          logger.warn('AI recipe instructions failed, using fallback:', {
+            error: aiError instanceof Error ? aiError.message : String(aiError),
+          });
         }
 
         // Fallback to rule-based logic

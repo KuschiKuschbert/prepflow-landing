@@ -15,7 +15,7 @@ export function filterRecipes(
   // Filter by search term
   if (searchTerm) {
     filtered = filtered.filter(recipe =>
-      recipe.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      recipe.recipe_name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }
 

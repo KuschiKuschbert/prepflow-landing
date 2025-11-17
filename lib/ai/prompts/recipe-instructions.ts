@@ -25,7 +25,7 @@ export function buildRecipeInstructionsPrompt(
   const prompt = `You are a professional chef creating detailed cooking instructions for a restaurant kitchen.
 
 **Recipe Information:**
-- Name: ${recipe.name}
+- Name: ${recipe.recipe_name}
 - Description: ${recipe.description || 'No description provided'}
 - Yield: ${recipe.yield} ${recipe.yield_unit}
 - Category: ${recipe.category || 'Not specified'}
@@ -68,7 +68,7 @@ Generate professional, detailed cooking instructions for this recipe. The instru
    - Use bullet points for tips
    - Bold important information
 
-Return ONLY the formatted instructions, no additional commentary. Start with "## ${recipe.name} Preparation"`;
+Return ONLY the formatted instructions, no additional commentary. Start with "## ${recipe.recipe_name} Preparation"`;
 
   return prompt;
 }

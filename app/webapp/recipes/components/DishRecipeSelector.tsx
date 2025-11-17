@@ -26,7 +26,7 @@ export default function DishRecipeSelector({
     if (recipes.length > 0) {
       onRecipesChange([
         ...selectedRecipes,
-        { recipe_id: recipes[0].id, quantity: 1, recipe_name: recipes[0].name },
+        { recipe_id: recipes[0].id, quantity: 1, recipe_name: recipes[0].recipe_name },
       ]);
     }
   };
@@ -42,7 +42,7 @@ export default function DishRecipeSelector({
           ? {
               recipe_id: recipe.id,
               quantity: r.quantity,
-              recipe_name: recipe.name,
+              recipe_name: recipe.recipe_name,
             }
           : r,
       ),

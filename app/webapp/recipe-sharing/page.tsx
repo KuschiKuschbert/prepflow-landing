@@ -111,7 +111,7 @@ export default function RecipeSharingPage() {
     const element = document.createElement('a');
     const file = new Blob([content], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    element.download = `${recipe.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_recipe.txt`;
+    element.download = `${recipe.recipe_name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_recipe.txt`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
@@ -229,7 +229,9 @@ export default function RecipeSharingPage() {
                         <span className="text-lg">{getShareTypeIcon(share.share_type)}</span>
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-white">{share.recipes.name}</h3>
+                        <h3 className="text-lg font-semibold text-white">
+                          {share.recipes.recipe_name}
+                        </h3>
                         <p className="text-sm text-gray-400">
                           {share.share_type.toUpperCase()} •{' '}
                           {share.recipient_email || 'No recipient'}
@@ -305,7 +307,7 @@ export default function RecipeSharingPage() {
                     </option>
                     {recipes.map(recipe => (
                       <option key={recipe.id} value={recipe.id}>
-                        {recipe.name}
+                        {recipe.recipe_name}
                       </option>
                     ))}
                   </select>

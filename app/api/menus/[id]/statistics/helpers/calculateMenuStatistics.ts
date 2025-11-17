@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { calculateDishCost } from './calculateDishCost';
 import { calculateRecipeCost } from './calculateRecipeCost';
 import { calculateRecipeSellingPrice } from './calculateRecipeSellingPrice';
+import { calculateDishSellingPrice } from './calculateDishSellingPrice';
 
 /**
  * Calculate menu statistics from menu items.
@@ -23,7 +24,12 @@ export async function calculateMenuStatistics(menuItems: any[]) {
     // Handle dishes
     if (dish) {
       dishCount++;
-      const sellingPrice = parseFloat(dish.selling_price) || 0;
+      // Price priority: menu_items.actual_selling_price > dish.selling_price > calculated recommended
+      const sellingPrice =
+        item.actual_selling_price ??
+        (dish.selling_price ? parseFloat(dish.selling_price) : null) ??
+        (await calculateDishSellingPrice(dish.id));
+
       totalRevenue += sellingPrice;
 
       const dishCost = await calculateDishCost(dish.id);
@@ -36,19 +42,29 @@ export async function calculateMenuStatistics(menuItems: any[]) {
       }
     }
 
-    // Handle recipes - treat them as dishes by calculating a selling price
+    // Handle recipes - use per-serving price
     if (recipe) {
       recipeCount++;
-      const recipeCost = await calculateRecipeCost(recipe.id, 1);
-      totalCOGS += recipeCost;
+      const fullRecipeCost = await calculateRecipeCost(recipe.id, 1);
+      const recipeYield = recipe.yield || 1;
+      const recipeCostPerServing = recipeYield > 0 ? fullRecipeCost / recipeYield : fullRecipeCost;
+      totalCOGS += recipeCostPerServing;
 
-      if (recipeCost > 0) {
-        const finalPriceExclGST = await calculateRecipeSellingPrice(recipe.id);
-        totalRevenue += finalPriceExclGST;
+      // Price priority: menu_items.actual_selling_price > recipe.selling_price (per serving) > calculated recommended (per serving)
+      const fullRecipeRecommendedPrice = await calculateRecipeSellingPrice(recipe.id);
+      const recipeRecommendedPricePerServing =
+        recipeYield > 0 ? fullRecipeRecommendedPrice / recipeYield : fullRecipeRecommendedPrice;
 
-        // Calculate profit margin
-        const grossProfit = finalPriceExclGST - recipeCost;
-        const margin = finalPriceExclGST > 0 ? (grossProfit / finalPriceExclGST) * 100 : 0;
+      const sellingPrice =
+        item.actual_selling_price ??
+        (recipe.selling_price ? parseFloat(recipe.selling_price) : null) ??
+        recipeRecommendedPricePerServing;
+
+      totalRevenue += sellingPrice;
+
+      if (sellingPrice > 0) {
+        const grossProfit = sellingPrice - recipeCostPerServing;
+        const margin = (grossProfit / sellingPrice) * 100;
         profitMargins.push(margin);
       }
     }

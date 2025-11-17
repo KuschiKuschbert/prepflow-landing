@@ -48,4 +48,3 @@ export function useEquipmentLogInfo(allLogs: TemperatureLog[] = []) {
     getLastLogInfo,
   };
 }
-

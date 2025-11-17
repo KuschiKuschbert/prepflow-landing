@@ -98,7 +98,7 @@ export default function RecipePreviewModal({
             <div className="flex-1">
               <div className="mb-2 flex items-center justify-between">
                 <h2 id="recipe-preview-title" className="text-2xl font-bold text-white">
-                  {capitalizeRecipeName(selectedRecipe.name)}
+                  {capitalizeRecipeName(selectedRecipe.recipe_name)}
                 </h2>
                 <button
                   onClick={onClose}

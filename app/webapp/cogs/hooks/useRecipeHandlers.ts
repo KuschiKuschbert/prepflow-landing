@@ -58,7 +58,7 @@ export function useRecipeHandlers({
         if (result.recipe) {
           setSelectedRecipe(result.recipe.id);
           setDishPortions(result.recipe.yield || 1);
-          setSuccessMessage(`Recipe "${result.recipe.name}" created successfully!`);
+          setSuccessMessage(`Recipe "${result.recipe.recipe_name}" created successfully!`);
           setTimeout(() => setSuccessMessage(null), 3000);
         }
         return result.recipe;

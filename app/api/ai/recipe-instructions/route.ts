@@ -50,7 +50,9 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (aiError) {
-      logger.warn('AI recipe instructions failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
+      logger.warn('AI recipe instructions failed, using fallback:', {
+        error: aiError instanceof Error ? aiError.message : String(aiError),
+      });
     }
 
     // Fallback: Return empty string - component should handle fallback to rule-based

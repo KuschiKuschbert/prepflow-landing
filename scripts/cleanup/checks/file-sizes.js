@@ -97,4 +97,3 @@ module.exports = {
   name: 'file-sizes',
   check: checkFileSizes,
 };
-

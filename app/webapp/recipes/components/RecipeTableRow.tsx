@@ -83,7 +83,7 @@ export function RecipeTableRow({
         <button
           onClick={() => onSelectRecipe(recipe.id)}
           className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-          aria-label={`${isSelected ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
+          aria-label={`${isSelected ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
         >
           {isSelected ? (
             <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
@@ -102,7 +102,7 @@ export function RecipeTableRow({
         }`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
-        {capitalizeRecipeName(recipe.name)}
+        {capitalizeRecipeName(recipe.recipe_name)}
       </td>
       <td
         className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
@@ -175,7 +175,7 @@ export function RecipeTableRow({
           <button
             onClick={() => onPreviewRecipe(recipe)}
             className="text-gray-400 transition-colors hover:text-[#29E7CD]"
-            aria-label={`Preview recipe ${capitalizeRecipeName(recipe.name)}`}
+            aria-label={`Preview recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title="Preview full details"
           >
             <Icon icon={Eye} size="sm" aria-hidden={true} />
@@ -183,7 +183,7 @@ export function RecipeTableRow({
           <button
             onClick={() => onEditRecipe(recipe)}
             className="text-gray-400 transition-colors hover:text-[#29E7CD]"
-            aria-label={`Edit recipe ${capitalizeRecipeName(recipe.name)}`}
+            aria-label={`Edit recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title="Edit recipe"
           >
             <Icon icon={Edit} size="sm" aria-hidden={true} />
@@ -191,7 +191,7 @@ export function RecipeTableRow({
           <button
             onClick={() => onDeleteRecipe(recipe)}
             className="text-gray-400 transition-colors hover:text-red-400"
-            aria-label={`Delete recipe ${capitalizeRecipeName(recipe.name)}`}
+            aria-label={`Delete recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title="Delete recipe"
           >
             <Icon icon={Trash2} size="sm" aria-hidden={true} />

@@ -67,4 +67,3 @@ The migration will:
 - Recipes can be converted to dishes later if needed
 - Both dishes and recipes can be reordered within categories
 - Both can be removed from menus using the trash icon
-

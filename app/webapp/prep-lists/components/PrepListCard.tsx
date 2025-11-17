@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { PrepList } from '../types';
 import { getStatusColor } from '../utils';
-import { ListChecks, Edit, Trash2 } from 'lucide-react';
+import { ListChecks, Edit, Trash2, Printer } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { PrepListExport } from './PrepListExport';
 
 interface PrepListCardProps {
   prepList: PrepList;
@@ -15,6 +17,7 @@ interface PrepListCardProps {
 
 export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: PrepListCardProps) {
   const { t } = useTranslation();
+  const [showExport, setShowExport] = useState(false);
 
   return (
     <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl">
@@ -94,6 +97,14 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
 
           <div className="flex space-x-2">
             <button
+              onClick={() => setShowExport(true)}
+              className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
+              title={String(t('prepLists.export', 'Export'))}
+              aria-label={String(t('prepLists.export', 'Export'))}
+            >
+              <Icon icon={Printer} size="md" aria-hidden={true} />
+            </button>
+            <button
               onClick={() => onEdit(prepList)}
               className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
               title={String(t('prepLists.edit', 'Edit'))}
@@ -112,6 +123,8 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
           </div>
         </div>
       </div>
+
+      {showExport && <PrepListExport prepList={prepList} onClose={() => setShowExport(false)} />}
     </div>
   );
 }

@@ -165,6 +165,35 @@ node scripts/populate-ingredients.js
 - **CLS (Cumulative Layout Shift):** < 0.1
 - **TTFB (Time to First Byte):** < 600 milliseconds
 - **API Response Time:** < 500 milliseconds (p95)
+- **Perceived Mutation Response:** < 50 milliseconds (optimistic updates)
+
+#### **Optimistic Updates Standard**
+
+**MANDATORY:** All CRUD operations (Create, Read, Update, Delete) must use optimistic updates to eliminate loading delays.
+
+**Performance Targets:**
+
+- **Perceived Response Time:** < 50 milliseconds for all mutations
+- **No Loading States:** Mutations should never show loading spinners or skeleton screens
+- **Error Rollback:** All optimistic updates must have rollback logic for error cases
+- **Background Refresh:** Statistics and related data may refresh in background (non-blocking)
+
+**Implementation Requirements:**
+
+1. **Store Original State**: Always store a copy of current state before optimistic updates
+2. **Update UI Immediately**: Apply changes to UI before API call completes
+3. **Revert on Error**: Restore original state if API call fails
+4. **User Feedback**: Use notification system for success/error messages
+5. **No Post-Success Fetches**: Never call `fetchData()` after successful mutations - rely on optimistic updates
+
+**Reusable Infrastructure:**
+
+- **`lib/optimistic-updates.ts`**: Generic optimistic update utilities
+- **`hooks/useOptimisticMutation.ts`**: Reusable hook for optimistic mutations
+
+**See Also:**
+- `development.mdc` (Optimistic Updates Pattern) - Detailed pattern and examples
+- `implementation.mdc` (Optimistic Updates Implementation Pattern) - Code examples
 
 **Performance Monitoring:**
 

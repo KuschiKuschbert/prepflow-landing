@@ -59,7 +59,7 @@ export function UnifiedRecipeModalHeader({
             id="recipe-modal-title"
             className="tablet:text-xl desktop:text-2xl text-xl font-bold text-white"
           >
-            {capitalizeRecipeName(recipe.name)}
+            {capitalizeRecipeName(recipe.recipe_name)}
           </h2>
 
           {/* Yield and Portions */}

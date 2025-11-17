@@ -89,4 +89,3 @@ export function PerformanceTableMobileCard({ item }: PerformanceTableMobileCardP
     </div>
   );
 }
-

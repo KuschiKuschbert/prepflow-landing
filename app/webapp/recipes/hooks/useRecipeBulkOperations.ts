@@ -62,7 +62,7 @@ export function useRecipeBulkOperations(
         showErrorNotification(errorMessage);
         return;
       }
-      await fetchRecipes();
+      // Success - optimistic update already applied, no need to refetch
       showSuccess(`${count} recipe${count > 1 ? 's' : ''} deleted successfully!`);
       setSelectedRecipes(new Set());
       setShowBulkDeleteConfirm(false);
@@ -73,7 +73,6 @@ export function useRecipeBulkOperations(
     }
   }, [
     selectedRecipes,
-    fetchRecipes,
     showSuccess,
     showErrorNotification,
     optimisticallyUpdateRecipes,

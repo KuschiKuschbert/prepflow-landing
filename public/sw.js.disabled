@@ -29,7 +29,7 @@ const CACHE_STRATEGIES = {
     '/webapp/suppliers/',
     '/webapp/par-levels/',
     '/webapp/order-lists/',
-    '/webapp/dish-sections/',
+    '/webapp/sections/',
     '/webapp/prep-lists/',
     '/webapp/recipe-sharing/',
     '/webapp/ai-specials/',

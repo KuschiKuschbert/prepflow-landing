@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { SectionData } from '../types';
 
 interface PrepListRecipeGroupedViewProps {
@@ -21,15 +24,64 @@ export function PrepListRecipeGroupedView({ section }: PrepListRecipeGroupedView
                 key={ingIndex}
                 className="flex items-center justify-between rounded-lg bg-[#1f1f1f] px-3 py-2"
               >
-                <span className="text-sm text-gray-300">{ing.name}</span>
-                <span className="text-sm font-medium text-white">
+                <div className="flex-1">
+                  <span className="text-sm text-gray-300">{ing.name}</span>
+                  {ing.prepNotes && ing.prepNotes.length > 0 && (
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {ing.prepNotes.map((note, noteIndex) => (
+                        <span
+                          key={noteIndex}
+                          className="inline-flex items-center rounded-full bg-[#29E7CD]/10 px-1.5 py-0.5 text-xs font-medium text-[#29E7CD]"
+                        >
+                          {note}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <span className="ml-4 text-sm font-medium text-white">
                   {ing.quantity} {ing.unit}
                 </span>
               </div>
             ))}
           </div>
+          {recipe.instructions && (
+            <RecipeInstructions instructions={recipe.instructions} recipeName={recipe.recipeName} />
+          )}
         </div>
       ))}
+    </div>
+  );
+}
+
+function RecipeInstructions({
+  instructions,
+  recipeName,
+}: {
+  instructions: string;
+  recipeName: string;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="mt-4 rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="flex w-full items-center justify-between p-3 text-left transition-colors hover:bg-[#29E7CD]/10"
+      >
+        <span className="text-sm font-semibold text-[#29E7CD]">Prep Instructions</span>
+        <Icon
+          icon={isExpanded ? ChevronUp : ChevronDown}
+          size="sm"
+          className="text-[#29E7CD]"
+          aria-hidden={true}
+        />
+      </button>
+      {isExpanded && (
+        <div className="border-t border-[#29E7CD]/20 p-3">
+          <div className="text-sm whitespace-pre-wrap text-gray-300">{instructions}</div>
+        </div>
+      )}
     </div>
   );
 }

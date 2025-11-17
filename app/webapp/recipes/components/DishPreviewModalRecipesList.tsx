@@ -15,7 +15,9 @@ export function DishPreviewModalRecipesList({ dishDetails }: DishPreviewModalRec
       <div className="space-y-2">
         {dishDetails.recipes.map((dr, index) => (
           <div key={index} className="rounded-lg bg-[#2a2a2a]/30 p-3 text-sm text-gray-300">
-            <span className="font-medium text-white">{dr.recipes?.name || 'Unknown Recipe'}</span>
+            <span className="font-medium text-white">
+              {dr.recipes?.recipe_name || 'Unknown Recipe'}
+            </span>
             <span className="ml-2 text-gray-400">× {dr.quantity}</span>
           </div>
         ))}
@@ -23,4 +25,3 @@ export function DishPreviewModalRecipesList({ dishDetails }: DishPreviewModalRec
     </div>
   );
 }
-

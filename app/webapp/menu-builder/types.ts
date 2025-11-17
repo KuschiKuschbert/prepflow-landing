@@ -14,6 +14,8 @@ export interface MenuItem {
   recipe_id?: string;
   category: string;
   position: number;
+  actual_selling_price?: number;
+  recommended_selling_price?: number;
   dishes?: {
     id: string;
     dish_name: string;
@@ -22,9 +24,10 @@ export interface MenuItem {
   };
   recipes?: {
     id: string;
-    name: string;
+    recipe_name: string;
     description?: string;
     yield?: number;
+    selling_price?: number;
   };
 }
 
@@ -48,10 +51,11 @@ export interface Dish {
 
 export interface Recipe {
   id: string;
-  name: string;
+  recipe_name: string;
   description?: string;
   yield?: number;
   yield_unit?: string;
   category?: string;
   instructions?: string;
+  selling_price?: number;
 }

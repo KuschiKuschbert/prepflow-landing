@@ -82,12 +82,12 @@ export function useRecipeActions({
     async (recipe: Recipe) => {
       try {
         const ingredients = await fetchRecipeIngredients(recipe.id);
-        const duplicateName = `Copy of ${recipe.name}`;
+        const duplicateName = `Copy of ${recipe.recipe_name}`;
         const { data: newRecipe, error: recipeError } = await supabase
           .from('recipes')
           .insert([
             {
-              name: duplicateName,
+              recipe_name: duplicateName,
               yield: recipe.yield,
               yield_unit: recipe.yield_unit,
               description: recipe.description,

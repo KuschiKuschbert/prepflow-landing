@@ -22,7 +22,9 @@ export async function calculateVisiblePricesFallback({
   ) => RecipePriceData | null;
 }): Promise<Record<string, RecipePriceData>> {
   const prices: Record<string, RecipePriceData> = {};
-  logger.dev(`[RecipePricing] Falling back to parallel individual fetches for ${visibleRecipes.length} recipes`);
+  logger.dev(
+    `[RecipePricing] Falling back to parallel individual fetches for ${visibleRecipes.length} recipes`,
+  );
   const fallbackStartTime = Date.now();
 
   try {
@@ -46,7 +48,9 @@ export async function calculateVisiblePricesFallback({
           if (err instanceof Error && err.name === 'AbortError') {
             return { recipeId: recipe.id, priceData: null };
           }
-          logger.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, { error: err instanceof Error ? err.message : String(err) });
+          logger.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, {
+            error: err instanceof Error ? err.message : String(err),
+          });
           return { recipeId: recipe.id, priceData: null };
         }
       }),
@@ -58,7 +62,9 @@ export async function calculateVisiblePricesFallback({
     });
     logger.dev(`[RecipePricing] Calculated prices for ${Object.keys(prices).length} recipes`);
   } catch (err) {
-    logger.error('[RecipePricing] Failed to calculate recipe prices:', { error: err instanceof Error ? err.message : String(err) });
+    logger.error('[RecipePricing] Failed to calculate recipe prices:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 
   return prices;

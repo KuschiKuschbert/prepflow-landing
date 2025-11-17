@@ -34,4 +34,3 @@ module.exports = {
   name: 'prettier',
   fix: fixPrettier,
 };
-

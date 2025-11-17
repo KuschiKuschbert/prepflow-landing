@@ -1,8 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { useSwipeGesture } from '@/hooks/useSwipeGesture';
+import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { Calculator } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,7 +18,9 @@ interface BottomNavBarProps {
 
 export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) {
   const pathname = usePathname();
-  const allItems = useNavigationItems();
+  const { workflow } = useWorkflowPreference();
+  const { trackNavigation } = useNavigationTracking();
+  const allItems = useNavigationItems(workflow);
   const { direction, isAtTop } = useScrollDirection();
   const [isVisible, setIsVisible] = useState(true);
   const { onTouchStart, onTouchMove, onTouchEnd } = useSwipeGesture({
@@ -83,6 +87,7 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => trackNavigation(item.href)}
               className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 transition-colors duration-200 ${
                 active ? 'border-t-2 border-[#29E7CD] bg-[#29E7CD]/10' : 'hover:bg-[#2a2a2a]/30'
               }`}

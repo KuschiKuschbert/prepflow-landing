@@ -2,7 +2,9 @@
 
 import { useDrawerAutoClose } from '@/hooks/useDrawerAutoClose';
 import { useDrawerSwipe } from '@/hooks/useDrawerSwipe';
+import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useSwipeGesture } from '@/hooks/useSwipeGesture';
+import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
@@ -23,7 +25,9 @@ interface MoreDrawerProps {
 
 export function MoreDrawer({ isOpen, onClose, onOpen, onSearchClick }: MoreDrawerProps) {
   const pathname = usePathname();
-  const allItems = useNavigationItems();
+  const { workflow } = useWorkflowPreference();
+  const { trackNavigation } = useNavigationTracking();
+  const allItems = useNavigationItems(workflow);
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
   const userName = session?.user?.name || userEmail?.split('@')[0];
@@ -201,11 +205,13 @@ export function MoreDrawer({ isOpen, onClose, onOpen, onSearchClick }: MoreDrawe
             groupedItems={groupedItems}
             isActive={isActive}
             onItemClick={handleItemClick}
+            onTrack={trackNavigation}
             isDragging={isDragging}
             canDrag={canDrag}
             onContentTouchStart={handleContentTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            workflow={workflow}
           />
 
           <DrawerFooter userName={userName} userEmail={userEmail} />

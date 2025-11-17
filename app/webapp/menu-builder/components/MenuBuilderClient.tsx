@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { Menu, MenuStatistics } from '../types';
 import MenuList from './MenuList';
 import MenuEditor from './MenuEditor';
@@ -9,39 +10,66 @@ import MenuForm from './MenuForm';
 import { Icon } from '@/components/ui/Icon';
 import { AlertCircle, Database, RefreshCw } from 'lucide-react';
 
-export default function MenuBuilderClient() {
-  const [menus, setMenus] = useState<Menu[]>([]);
-  const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
-  const [loading, setLoading] = useState(true);
+interface MenuBuilderClientProps {
+  selectedMenu: Menu | null;
+  setSelectedMenu: (menu: Menu | null) => void;
+  onBack: () => void;
+}
+
+export default function MenuBuilderClient({
+  selectedMenu,
+  setSelectedMenu,
+  onBack,
+}: MenuBuilderClientProps) {
+  // Initialize with cached data for instant display
+  const cachedMenus = getCachedData<Menu[]>('menu_builder_menus');
+  const [menus, setMenus] = useState<Menu[]>(cachedMenus || []);
+  const [loading, setLoading] = useState(!cachedMenus);
   const [checkingDb, setCheckingDb] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dbError, setDbError] = useState<string | null>(null);
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [editingMenu, setEditingMenu] = useState<Menu | null>(null);
 
-  const fetchMenus = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/menus', { cache: 'no-store' });
-      const result = await response.json();
-      if (!response.ok) {
-        // Check if it's a table missing error
-        if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
-          setDbError('Menu builder tables are not set up. Please run the database migration.');
+  const fetchMenus = useCallback(
+    async (updateSelected?: boolean) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('/api/menus', { cache: 'no-store' });
+        const result = await response.json();
+        if (!response.ok) {
+          // Check if it's a table missing error
+          if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
+            setDbError('Menu builder tables are not set up. Please run the database migration.');
+          } else {
+            setError(result.error || result.message || 'Failed to fetch menus');
+          }
+          setLoading(false);
         } else {
-          setError(result.error || result.message || 'Failed to fetch menus');
+          const updatedMenus = result.menus || [];
+          setMenus(updatedMenus);
+
+          // Cache menus for instant display next time
+          cacheData('menu_builder_menus', updatedMenus);
+
+          // Update selectedMenu if it exists to reflect any changes (only when explicitly requested)
+          if (updateSelected && selectedMenu) {
+            const updatedMenu = updatedMenus.find((m: Menu) => m.id === selectedMenu.id);
+            if (updatedMenu) {
+              setSelectedMenu(updatedMenu);
+            }
+          }
+
+          setLoading(false);
         }
-        setLoading(false);
-      } else {
-        setMenus(result.menus || []);
+      } catch (err) {
+        setError('Failed to fetch menus. Please check your connection and try again.');
         setLoading(false);
       }
-    } catch (err) {
-      setError('Failed to fetch menus. Please check your connection and try again.');
-      setLoading(false);
-    }
-  }, []);
+    },
+    [selectedMenu, setSelectedMenu],
+  );
 
   const checkDatabaseTables = useCallback(async () => {
     setCheckingDb(true);
@@ -64,7 +92,7 @@ export default function MenuBuilderClient() {
 
       // Tables exist, fetch menus
       setCheckingDb(false);
-      await fetchMenus();
+      await fetchMenus(false);
     } catch (err) {
       setDbError('Failed to check database tables. Please try again.');
       setCheckingDb(false);
@@ -89,15 +117,30 @@ export default function MenuBuilderClient() {
     setSelectedMenu(menu);
   };
 
-  const handleMenuSaved = () => {
+  const handleMenuSaved = (savedMenu: Menu) => {
     setShowMenuForm(false);
     setEditingMenu(null);
-    fetchMenus();
+
+    // Optimistically update menus list
+    if (editingMenu) {
+      // Update existing menu
+      setMenus(prevMenus => prevMenus.map(m => (m.id === savedMenu.id ? savedMenu : m)));
+      // Update selected menu if it's the one being edited
+      if (selectedMenu?.id === savedMenu.id) {
+        setSelectedMenu(savedMenu);
+      }
+    } else {
+      // Add new menu
+      setMenus(prevMenus => [...prevMenus, savedMenu]);
+    }
   };
 
-  const handleBackToList = () => {
-    setSelectedMenu(null);
-    fetchMenus();
+  const handleMenuUpdated = () => {
+    // MenuEditor handles its own optimistic updates
+    // We just need to update the selected menu if it exists
+    // This is called from MenuEditor when menu data changes
+    // We can refresh the selected menu optimistically if needed
+    // For now, MenuEditor manages its own state, so we don't need to do anything
   };
 
   if (checkingDb || loading) {
@@ -105,7 +148,7 @@ export default function MenuBuilderClient() {
   }
 
   if (selectedMenu) {
-    return <MenuEditor menu={selectedMenu} onBack={handleBackToList} onMenuUpdated={fetchMenus} />;
+    return <MenuEditor menu={selectedMenu} onBack={onBack} onMenuUpdated={handleMenuUpdated} />;
   }
 
   return (
@@ -186,7 +229,17 @@ export default function MenuBuilderClient() {
             menus={menus}
             onSelectMenu={handleSelectMenu}
             onEditMenu={handleEditMenu}
-            onDeleteMenu={fetchMenus}
+            onDeleteMenu={(deletedMenuId: string) => {
+              // Optimistically remove menu (already done in MenuList)
+              // If the deleted menu was selected, go back to list
+              if (selectedMenu?.id === deletedMenuId) {
+                setSelectedMenu(null);
+              }
+            }}
+            onMenuUpdated={() => {
+              // Menu updates are handled optimistically in MenuEditor
+            }}
+            setMenus={setMenus}
           />
         </>
       )}

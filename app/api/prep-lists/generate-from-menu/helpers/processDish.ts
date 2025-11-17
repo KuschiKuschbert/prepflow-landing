@@ -1,4 +1,3 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { processRecipe } from './processRecipe';
 
 interface SectionData {
@@ -6,69 +5,50 @@ interface SectionData {
   sectionName: string;
   aggregatedIngredients: any[];
   recipeGrouped: any[];
+  prepInstructions: any[];
 }
 
-export async function processDish(
+export function processDish(
   dishId: string,
   dishName: string,
   sectionsData: Map<string | null, SectionData>,
   unassignedItems: any[],
   sectionsMap: Map<string, { id: string; name: string }>,
+  dishSection: { sectionId: string | null; sectionName: string },
+  dishRecipes: Array<{ recipe_id: string; quantity: number; recipe: any }>,
+  dishIngredients: any[],
+  recipeIngredientsMap: Map<string, any[]>,
+  recipeInstructionsMap: Map<string, string | null>,
 ) {
-  if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
-  }
+  const sectionId = dishSection.sectionId;
+  const sectionName = dishSection.sectionName;
 
-  // Get kitchen section for dish
-  const { data: dishSections } = await supabaseAdmin
-    .from('dish_sections')
-    .select('section_id, kitchen_sections(id, name)')
-    .eq('dish_id', dishId)
-    .limit(1);
-
-  let sectionId: string | null = null;
-  let sectionName = 'Uncategorized';
-
-  if (dishSections && dishSections.length > 0) {
-    sectionId = dishSections[0].section_id;
-    const section = (dishSections[0] as any).kitchen_sections;
-    if (section) {
-      sectionName = section.name;
-    }
-  }
-
-  // Get dish recipes
-  const { data: dishRecipes } = await supabaseAdmin
-    .from('dish_recipes')
-    .select('recipe_id, quantity, recipes(id, name)')
-    .eq('dish_id', dishId);
-
-  // Get dish ingredients (standalone ingredients not in recipes)
-  const { data: dishIngredients } = await supabaseAdmin
-    .from('dish_ingredients')
-    .select('ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
-    .eq('dish_id', dishId);
-
-  // Process dish recipes
+  // Process dish recipes using pre-fetched data
   if (dishRecipes && dishRecipes.length > 0) {
     for (const dr of dishRecipes) {
-      const recipe = (dr as any).recipes;
-      if (recipe) {
-        await processRecipe(
+      const recipe = dr.recipe;
+      if (recipe && recipe.id) {
+        const recipeIngredients = recipeIngredientsMap.get(recipe.id) || [];
+        const instructions = recipeInstructionsMap.get(recipe.id) || null;
+
+        processRecipe(
           recipe.id,
-          recipe.name,
+          recipe.recipe_name,
           dishId,
           dishName,
           sectionsData,
           unassignedItems,
           sectionsMap,
           dr.quantity || 1,
+          instructions,
+          recipeIngredients,
+          dishSection, // Pass dish section to recipe
         );
       }
     }
   }
 
-  // Process standalone dish ingredients
+  // Process standalone dish ingredients using pre-fetched data
   if (dishIngredients && dishIngredients.length > 0) {
     const sectionKey = sectionId || null;
     if (!sectionsData.has(sectionKey)) {
@@ -77,6 +57,7 @@ export async function processDish(
         sectionName,
         aggregatedIngredients: [],
         recipeGrouped: [],
+        prepInstructions: [],
       });
     }
 
@@ -118,4 +99,3 @@ export async function processDish(
     }
   }
 }
-

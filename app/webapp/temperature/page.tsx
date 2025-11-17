@@ -22,6 +22,7 @@ function TemperatureLogsPageContent() {
     logs,
     allLogs,
     equipment,
+    setEquipment,
     loading,
     analyticsLoading,
     logsLoading,
@@ -58,6 +59,7 @@ function TemperatureLogsPageContent() {
     fetchEquipment,
     queryClient,
     equipment,
+    setEquipment,
   });
 
   useTemperatureWarnings({ allLogs, equipment });

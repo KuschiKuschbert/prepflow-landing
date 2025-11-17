@@ -49,7 +49,9 @@ export function updateVisiblePricesWithDebounce({
           fetchBatchRecipeIngredients,
         );
         const duration = Date.now() - startTime;
-        logger.dev(`[RecipePricing] updateVisibleRecipePrices completed in ${duration}ms, updating ${Object.keys(newPrices).length} prices`);
+        logger.dev(
+          `[RecipePricing] updateVisibleRecipePrices completed in ${duration}ms, updating ${Object.keys(newPrices).length} prices`,
+        );
         setRecipePrices(prev => {
           const updated = { ...prev, ...newPrices };
           logger.dev('[RecipePricing] Total prices in state:', Object.keys(updated).length);

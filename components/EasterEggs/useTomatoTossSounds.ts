@@ -38,7 +38,9 @@ export const useTomatoTossSounds = () => {
       audioReadyRef.current = true;
       return true;
     } catch (error) {
-      logger.warn('Audio context creation failed:', { error: error instanceof Error ? error.message : String(error) });
+      logger.warn('Audio context creation failed:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       return false;
     }
   }, []);
@@ -83,7 +85,9 @@ export const useTomatoTossSounds = () => {
       gainNode.connect(audioContextRef.current.destination);
       source.start();
     } catch (error) {
-      logger.warn('Failed to play throw sound:', { error: error instanceof Error ? error.message : String(error) });
+      logger.warn('Failed to play throw sound:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }, []);
 
@@ -131,7 +135,9 @@ export const useTomatoTossSounds = () => {
       gainNode.connect(audioContextRef.current.destination);
       source.start();
     } catch (error) {
-      logger.warn('Failed to play splat sound:', { error: error instanceof Error ? error.message : String(error) });
+      logger.warn('Failed to play splat sound:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }, []);
 
@@ -162,7 +168,9 @@ export const useTomatoTossSounds = () => {
       oscillator.start();
       oscillator.stop(currentTime + 1.5);
     } catch (error) {
-      logger.warn('Failed to play alert sound:', { error: error instanceof Error ? error.message : String(error) });
+      logger.warn('Failed to play alert sound:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }, []);
 
@@ -198,7 +206,9 @@ export const useTomatoTossSounds = () => {
         oscillator.stop(startTime + duration);
       });
     } catch (error) {
-      logger.warn('Failed to play confetti sound:', { error: error instanceof Error ? error.message : String(error) });
+      logger.warn('Failed to play confetti sound:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }, []);
 

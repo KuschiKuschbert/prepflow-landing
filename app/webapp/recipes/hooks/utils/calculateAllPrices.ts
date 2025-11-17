@@ -50,13 +50,17 @@ export async function calculateAllPrices({
             const priceData = calculateRecommendedPrice(recipe, ingredients);
             if (priceData) prices[recipe.id] = priceData;
           } catch (err) {
-            logger.dev(`Failed to calculate price for recipe ${recipe.id}:`, { error: err instanceof Error ? err.message : String(err) });
+            logger.dev(`Failed to calculate price for recipe ${recipe.id}:`, {
+              error: err instanceof Error ? err.message : String(err),
+            });
           }
         }
         return prices;
       }
     } catch (err) {
-      logger.dev('Batch fetch failed, falling back to parallel individual calls:', { error: err instanceof Error ? err.message : String(err) });
+      logger.dev('Batch fetch failed, falling back to parallel individual calls:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 
@@ -68,7 +72,9 @@ export async function calculateAllPrices({
           const priceData = calculateRecommendedPrice(recipe, ingredients);
           return { recipeId: recipe.id, priceData };
         } catch (err) {
-          logger.dev(`Failed to calculate price for recipe ${recipe.id}:`, { error: err instanceof Error ? err.message : String(err) });
+          logger.dev(`Failed to calculate price for recipe ${recipe.id}:`, {
+            error: err instanceof Error ? err.message : String(err),
+          });
           return { recipeId: recipe.id, priceData: null };
         }
       }),

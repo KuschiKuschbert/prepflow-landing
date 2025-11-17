@@ -70,7 +70,7 @@ export default function RecentActivity() {
           activities.push({
             id: recipe.id,
             type: 'recipe',
-            name: recipe.name,
+            name: recipe.recipe_name,
             action: recipe.created_at === recipe.updated_at ? 'created' : 'updated',
             created_at: recipe.updated_at,
           });

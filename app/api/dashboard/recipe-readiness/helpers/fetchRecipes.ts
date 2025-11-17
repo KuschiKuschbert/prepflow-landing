@@ -29,7 +29,7 @@ export async function fetchRecipes(): Promise<any[]> {
   // Fetch all recipes
   const { data: recipes, error: recipesError } = await supabaseAdmin
     .from('recipes')
-    .select('id, name');
+    .select('id, recipe_name');
 
   if (recipesError) {
     if (isTableNotFound(recipesError)) {

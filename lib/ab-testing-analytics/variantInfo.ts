@@ -31,7 +31,9 @@ export function getVariantAssignmentInfo(userId: string): {
       isPersistent: daysRemaining > 0,
     };
   } catch (error) {
-    logger.warn('Error reading variant assignment info:', { error: error instanceof Error ? error.message : String(error) });
+    logger.warn('Error reading variant assignment info:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return null;
   }
 }

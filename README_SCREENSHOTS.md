@@ -52,4 +52,3 @@ You should see 5 files total (including the existing dashboard and settings scre
 The landing page will automatically use the new screenshots - no code changes needed!
 
 **Do you have the screenshot files ready to add, or do you need help capturing them?**
-

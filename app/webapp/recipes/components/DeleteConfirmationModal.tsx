@@ -24,8 +24,8 @@ export function DeleteConfirmationModal({
 }: DeleteConfirmationModalProps) {
   const displayName = recipe
     ? capitalizeRecipeName
-      ? capitalizeRecipeName(recipe.name)
-      : recipe.name
+      ? capitalizeRecipeName(recipe.recipe_name)
+      : recipe.recipe_name
     : itemName || 'this item';
 
   const itemTypeLabel = recipe ? 'recipe' : itemType;

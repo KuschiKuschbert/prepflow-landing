@@ -44,4 +44,3 @@ export function EquipmentDrawerStatisticsSection({
 
   return <EquipmentStatistics logs={logs} equipment={equipment} />;
 }
-

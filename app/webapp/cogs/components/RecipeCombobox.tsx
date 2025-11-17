@@ -28,12 +28,12 @@ export function RecipeCombobox({
 
   // Filter recipes based on search query
   const filteredRecipes = recipes.filter(recipe =>
-    recipe.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    recipe.recipe_name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Get selected recipe name
   const selectedRecipeData = recipes.find(r => r.id === selectedRecipe);
-  const displayValue = selectedRecipeData?.name || '';
+  const displayValue = selectedRecipeData?.recipe_name || '';
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -180,7 +180,7 @@ export function RecipeCombobox({
                     } ${index === filteredRecipes.length - 1 ? 'rounded-b-xl' : ''}`}
                   >
                     <div className="flex-1">
-                      <div className="font-medium text-white">{recipe.name}</div>
+                      <div className="font-medium text-white">{recipe.recipe_name}</div>
                       <div className="text-xs text-gray-400">
                         {recipe.yield} {recipe.yield_unit || 'servings'}
                       </div>

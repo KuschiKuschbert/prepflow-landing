@@ -84,7 +84,9 @@ export function DishesSidePanels({
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && itemToDelete && (
         <DeleteConfirmationModal
-          itemName={itemToDelete.itemType === 'dish' ? itemToDelete.dish_name : itemToDelete.name}
+          itemName={
+            itemToDelete.itemType === 'dish' ? itemToDelete.dish_name : itemToDelete.recipe_name
+          }
           itemType={itemToDelete.itemType}
           onConfirm={onDeleteConfirm}
           onCancel={onDeleteCancel}
@@ -101,4 +103,3 @@ export function DishesSidePanels({
     </>
   );
 }
-

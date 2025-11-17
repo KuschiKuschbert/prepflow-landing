@@ -8,6 +8,7 @@ interface UseTemperaturePageHandlersProps {
   fetchEquipment: () => Promise<void>;
   queryClient: any;
   equipment: TemperatureEquipment[];
+  setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>;
 }
 
 export function useTemperaturePageHandlers({
@@ -16,6 +17,7 @@ export function useTemperaturePageHandlers({
   fetchEquipment,
   queryClient,
   equipment,
+  setEquipment,
 }: UseTemperaturePageHandlersProps) {
   const logHandlers = useTemperatureLogHandlers({ activeTab, fetchAllLogs });
   const equipmentHandlers = useTemperatureEquipmentHandlers({
@@ -24,6 +26,7 @@ export function useTemperaturePageHandlers({
     fetchEquipment,
     queryClient,
     equipment,
+    setEquipment,
   });
 
   return {

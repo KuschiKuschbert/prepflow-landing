@@ -155,7 +155,7 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h2 className="mb-2 text-2xl font-bold text-white">
-                {capitalizeRecipeName(recipe.name)} - COGS Breakdown
+                {capitalizeRecipeName(recipe.recipe_name)} - COGS Breakdown
               </h2>
               {recipe.description && <p className="text-gray-400">{recipe.description}</p>}
               <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">

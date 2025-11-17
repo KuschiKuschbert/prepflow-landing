@@ -75,10 +75,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       insertData.recipe_id = recipe_id;
     }
 
-    const { data: newItem, error: createError } = await supabaseAdmin
+    // Insert the menu item
+    const { data: insertedItem, error: createError } = await supabaseAdmin
       .from('menu_items')
       .insert(insertData)
-      .select()
+      .select('id')
       .single();
 
     if (createError) {
@@ -91,6 +92,44 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         },
         { status: 500 },
       );
+    }
+
+    // Fetch the complete item with joined dish/recipe data
+    const { data: newItem, error: fetchError } = await supabaseAdmin
+      .from('menu_items')
+      .select(
+        `
+        id,
+        dish_id,
+        recipe_id,
+        category,
+        position,
+        dishes (
+          id,
+          dish_name,
+          description,
+          selling_price
+        ),
+        recipes (
+          id,
+          recipe_name,
+          description,
+          yield,
+          selling_price
+        )
+      `,
+      )
+      .eq('id', insertedItem.id)
+      .single();
+
+    if (fetchError) {
+      logger.error('Error fetching new menu item:', fetchError);
+      // Return the basic item if fetch fails (shouldn't happen, but graceful fallback)
+      return NextResponse.json({
+        success: true,
+        item: insertedItem,
+        message: dish_id ? 'Dish added to menu successfully' : 'Recipe added to menu successfully',
+      });
     }
 
     return NextResponse.json({

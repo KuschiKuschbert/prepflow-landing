@@ -16,6 +16,7 @@ import { NavigationHeader } from './navigation/NavigationHeader';
 import PersistentSidebar from './navigation/PersistentSidebar';
 import { SearchModal } from './navigation/SearchModal';
 import { MobileFAB } from './navigation/MobileFAB';
+import { useWorkflowPreference } from '@/lib/workflow/preferences';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -63,8 +64,11 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   // CatchTheDocket trigger hook
   const { showDocketOverlay, setShowDocketOverlay } = useCatchTheDocketTrigger();
 
+  // Get workflow preference
+  const { workflow } = useWorkflowPreference();
+
   // Navigation items organized by category
-  const navigationItems: NavigationItem[] = useNavigationItems() as NavigationItem[];
+  const navigationItems: NavigationItem[] = useNavigationItems(workflow) as NavigationItem[];
 
   // Filter items based on search query
   const filteredItems = navigationItems.filter(item =>

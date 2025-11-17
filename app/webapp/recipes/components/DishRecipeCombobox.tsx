@@ -29,11 +29,11 @@ export default function DishRecipeCombobox({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filteredRecipes = recipes.filter(recipe =>
-    recipe.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    recipe.recipe_name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const selectedRecipeData = recipes.find(r => r.id === selectedRecipe.recipe_id);
-  const displayValue = selectedRecipeData?.name || '';
+  const displayValue = selectedRecipeData?.recipe_name || '';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -133,7 +133,7 @@ export default function DishRecipeCombobox({
                   } ${index === filteredRecipes.length - 1 ? 'rounded-b-xl' : ''}`}
                 >
                   <div className="flex-1">
-                    <div className="font-medium text-white">{recipe.name}</div>
+                    <div className="font-medium text-white">{recipe.recipe_name}</div>
                     {recipe.yield && (
                       <div className="text-xs text-gray-400">
                         {recipe.yield} {recipe.yield_unit || 'servings'}

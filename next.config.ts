@@ -26,8 +26,8 @@ const nextConfig: NextConfig = {
   // Experimental features for performance
   experimental: {
     optimizePackageImports: ['@supabase/supabase-js', '@vercel/analytics'],
-    // Enable modern bundling
-    esmExternals: true,
+    // Enable modern bundling (disabled for Turbopack compatibility)
+    // esmExternals: true, // Disabled - causes module import errors with Turbopack
     // Optimize CSS loading to prevent unused preloads
     optimizeCss: true,
   },

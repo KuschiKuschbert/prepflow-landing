@@ -59,4 +59,3 @@ export function useTableSort<T extends string>({
     getSortIcon,
   };
 }
-

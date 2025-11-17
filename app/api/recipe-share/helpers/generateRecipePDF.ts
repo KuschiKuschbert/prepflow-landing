@@ -14,7 +14,7 @@ export function generateRecipePDF(recipe: any): string {
     .join('\n');
 
   const pdfContent = `
-RECIPE: ${recipe.name}
+RECIPE: ${recipe.recipe_name}
 ${recipe.description ? `\nDescription: ${recipe.description}` : ''}
 
 INGREDIENTS:

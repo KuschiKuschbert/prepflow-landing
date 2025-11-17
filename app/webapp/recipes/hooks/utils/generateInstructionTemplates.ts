@@ -110,7 +110,7 @@ export function generateGeneralInstructions(
         ri.ingredients.ingredient_name.toLowerCase().includes('cheese') ||
         ri.ingredients.ingredient_name.toLowerCase().includes('milk'),
     )?.ingredients.ingredient_name || 'dairy products';
-  return `**${recipe.name} Preparation:**
+  return `**${recipe.recipe_name} Preparation:**
 
 **Mise en Place:**
 1. Gather all ingredients and equipment

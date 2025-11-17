@@ -892,6 +892,71 @@ The application uses sessionStorage-based caching and intelligent prefetching to
   - Users see content instantly while data refreshes
   - Navigation prefetching makes subsequent page loads instant
 
+#### **Optimistic Updates Pattern**
+
+Optimistic updates provide instant UI feedback by updating the UI immediately when a user performs an action, before the server responds. This dramatically improves perceived performance.
+
+**Standard Optimistic Update Pattern:**
+
+```typescript
+// 1. Store original state for rollback
+const originalState = [...currentState];
+
+// 2. Optimistically update UI immediately
+setState(optimisticUpdate);
+
+// 3. Make API call in background
+try {
+  const response = await fetch('/api/endpoint', { method: 'DELETE' });
+  const result = await response.json();
+
+  if (response.ok) {
+    // Success - show notification, refresh stats in background if needed
+    showSuccess('Item deleted');
+    refreshStatistics().catch(err => logger.error(err));
+  } else {
+    // Error - revert optimistic update
+    setState(originalState);
+    showError(result.error || 'Operation failed');
+  }
+} catch (err) {
+  // Error - revert optimistic update
+  setState(originalState);
+  showError('Operation failed');
+}
+```
+
+**Key Principles:**
+
+1. **Store Original State**: Always store a copy of the current state before making optimistic updates
+2. **Update UI Immediately**: Apply the optimistic change to the UI before the API call completes
+3. **Revert on Error**: If the API call fails, restore the original state
+4. **Background Refresh**: Optionally refresh statistics or related data in the background (non-blocking)
+5. **User Feedback**: Show success/error notifications using the notification system
+
+**Reusable Utilities:**
+
+- **`lib/optimistic-updates.ts`**: Generic optimistic update functions for common CRUD operations
+  - `createOptimisticDelete<T>` - Generic delete with revert capability
+  - `createOptimisticUpdate<T>` - Generic update with revert capability
+  - `createOptimisticCreate<T>` - Generic create with revert capability
+  - `createOptimisticReorder<T>` - Generic reorder with revert capability
+
+- **`hooks/useOptimisticMutation.ts`**: Reusable hook for optimistic mutations with automatic rollback
+
+**Best Practices:**
+
+1. Always implement rollback logic for error cases
+2. Use temporary IDs for create operations (replace with server ID on success)
+3. Refresh statistics in background (non-blocking) after successful mutations
+4. Never show loading states for mutations - UI updates should be instant
+5. Use the notification system (`useNotification`) for user feedback
+6. Replace native `confirm()` with `ConfirmDialog` for consistent styling
+
+**See Also:**
+- `operations.mdc` (Performance Standards) - Performance targets for mutation operations
+- `implementation.mdc` (Optimistic Updates Implementation Pattern) - Detailed implementation examples
+
 #### **Best Practices for Future Development**
 
 1. Always batch related fetches using batch endpoints
@@ -902,10 +967,12 @@ The application uses sessionStorage-based caching and intelligent prefetching to
 6. Prefetch API endpoints on navigation link hover
 7. Initialize state with cached data using `getCachedData()` in useState
 8. Cache after fetch: always call `cacheData()` after successful data fetch
-9. Monitor performance using browser DevTools
-10. Consider pagination for large datasets
+9. **Use optimistic updates for all CRUD operations** - Eliminate loading delays
+10. **Never call `fetchData()` after successful mutations** - Rely on optimistic updates
+11. Monitor performance using browser DevTools
+12. Consider pagination for large datasets
 
-**Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, test performance, document patterns.
+**Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, implement optimistic updates, test performance, document patterns.
 
 **Example Caching Pattern:**
 

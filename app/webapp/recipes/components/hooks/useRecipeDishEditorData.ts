@@ -65,7 +65,7 @@ export function useRecipeDishEditorData(
   }, []);
 
   const allItems: RecipeDishItem[] = [
-    ...allRecipes.map(r => ({ id: r.id, name: r.name, type: 'recipe' as const })),
+    ...allRecipes.map(r => ({ id: r.id, name: r.recipe_name, type: 'recipe' as const })),
     ...allDishes.map(d => ({ id: d.id, name: d.dish_name, type: 'dish' as const })),
   ].sort((a, b) => a.name.localeCompare(b.name));
 

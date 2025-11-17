@@ -3,11 +3,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
-import { X, Save, List, Grid, Loader2 } from 'lucide-react';
+import { X, Save, List, Grid, Loader2, Printer } from 'lucide-react';
 import type { GeneratedPrepListData, KitchenSection } from '../types';
 import { usePrepListPreview } from './hooks/usePrepListPreview';
 import { PrepListAggregatedView } from './PrepListAggregatedView';
 import { PrepListRecipeGroupedView } from './PrepListRecipeGroupedView';
+import { PrepInstructionsView } from './PrepInstructionsView';
+import { PrepTechniquesView } from './PrepTechniquesView';
+import { PrepListExport } from './PrepListExport';
 
 import { logger } from '@/lib/logger';
 interface PrepListPreviewProps {
@@ -29,6 +32,7 @@ export function PrepListPreview({
 }: PrepListPreviewProps) {
   const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('aggregated');
+  const [showExport, setShowExport] = useState(false);
 
   // Safe ingredients array
   const safeIngredients = Array.isArray(ingredients) ? ingredients : [];
@@ -37,6 +41,7 @@ export function PrepListPreview({
     sections,
     saving,
     error,
+    loadingPrepDetails,
     setSaving,
     setError,
     handleQuantityChange,
@@ -108,6 +113,13 @@ export function PrepListPreview({
               </button>
             </div>
             <button
+              onClick={() => setShowExport(true)}
+              className="flex items-center gap-2 rounded-xl bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+            >
+              <Icon icon={Printer} size="sm" aria-hidden={true} />
+              {t('prepLists.export', 'Export')}
+            </button>
+            <button
               onClick={onClose}
               className="p-2 text-gray-400 transition-colors hover:text-white"
               aria-label="Close"
@@ -132,9 +144,30 @@ export function PrepListPreview({
           ) : (
             <div className="space-y-6">
               {sections.map((section, sectionIndex) => {
+                const hasPrepInstructions =
+                  section.prepInstructions && section.prepInstructions.length > 0;
+                const hasPrepTechniques =
+                  section.prepTechniques &&
+                  (section.prepTechniques.cutShapes.length > 0 ||
+                    section.prepTechniques.sauces.length > 0 ||
+                    section.prepTechniques.marinations.length > 0 ||
+                    section.prepTechniques.preCookingSteps.length > 0 ||
+                    section.prepTechniques.specialTechniques.length > 0);
+                const hasContent =
+                  section.aggregatedIngredients.length > 0 ||
+                  section.recipeGrouped.length > 0 ||
+                  hasPrepInstructions ||
+                  hasPrepTechniques;
+
                 if (
-                  (viewMode === 'aggregated' && section.aggregatedIngredients.length === 0) ||
-                  (viewMode === 'recipe-grouped' && section.recipeGrouped.length === 0)
+                  (viewMode === 'aggregated' &&
+                    section.aggregatedIngredients.length === 0 &&
+                    !hasPrepInstructions &&
+                    !hasPrepTechniques) ||
+                  (viewMode === 'recipe-grouped' &&
+                    section.recipeGrouped.length === 0 &&
+                    !hasPrepInstructions &&
+                    !hasPrepTechniques)
                 ) {
                   return null;
                 }
@@ -205,6 +238,24 @@ export function PrepListPreview({
                     {viewMode === 'recipe-grouped' && (
                       <PrepListRecipeGroupedView section={section} />
                     )}
+
+                    {/* Prep Instructions - shown in both views */}
+                    {section.prepInstructions && section.prepInstructions.length > 0 && (
+                      <PrepInstructionsView prepInstructions={section.prepInstructions} />
+                    )}
+
+                    {/* Prep Techniques - shown in both views */}
+                    {loadingPrepDetails && !section.prepTechniques && (
+                      <div className="mt-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
+                        <div className="flex items-center gap-2 text-gray-400">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="text-sm">Analyzing prep techniques...</span>
+                        </div>
+                      </div>
+                    )}
+                    {section.prepTechniques && (
+                      <PrepTechniquesView prepTechniques={section.prepTechniques} />
+                    )}
                   </div>
                 );
               })}
@@ -239,6 +290,17 @@ export function PrepListPreview({
           </button>
         </div>
       </div>
+
+      {showExport && (
+        <PrepListExport
+          generatedData={{
+            sections: sections,
+            menuName: data.menuName,
+          }}
+          kitchenSections={kitchenSections}
+          onClose={() => setShowExport(false)}
+        />
+      )}
     </div>
   );
 }

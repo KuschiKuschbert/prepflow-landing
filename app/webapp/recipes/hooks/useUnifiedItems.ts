@@ -39,7 +39,7 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
       const recipeItems: UnifiedItem[] = (recipesResult.recipes || []).map((recipe: Recipe) => ({
         id: recipe.id,
         type: 'recipe' as const,
-        name: recipe.name,
+        name: recipe.recipe_name,
         description: recipe.description,
         category: recipe.category || 'Uncategorized',
         created_at: recipe.created_at,
@@ -91,4 +91,3 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
     fetchItems,
   };
 }
-

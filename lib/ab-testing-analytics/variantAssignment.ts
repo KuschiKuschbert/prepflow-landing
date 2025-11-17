@@ -29,7 +29,9 @@ export function getPersistentVariant(userId: string): string | null {
     localStorage.removeItem(`prepflow_variant_${userId}`);
     return null;
   } catch (error) {
-    logger.warn('Error reading persistent variant:', { error: error instanceof Error ? error.message : String(error) });
+    logger.warn('Error reading persistent variant:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return null;
   }
 }
@@ -70,7 +72,9 @@ function storePersistentVariant(userId: string, variantId: string): void {
       storageKey: `prepflow_variant_${userId}`,
     });
   } catch (error) {
-    logger.warn('Error storing persistent variant:', { error: error instanceof Error ? error.message : String(error) });
+    logger.warn('Error storing persistent variant:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 

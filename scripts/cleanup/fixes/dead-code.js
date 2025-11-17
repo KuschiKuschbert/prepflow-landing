@@ -211,4 +211,3 @@ module.exports = {
   name: 'dead-code',
   fix: fixDeadCode,
 };
-

@@ -1,28 +1,49 @@
 {
-  "timestamp": "2025-09-12T15:06:32.355Z",
+  "timestamp": "2025-11-17T18:34:46.103Z",
   "bundleAnalysis": {
     "chunkSizes": [
       {
         "name": "chunks",
-        "size": 2312952
+        "size": 3484368
       }
     ],
-    "totalChunkSize": 2312952
+    "totalChunkSize": 3484368
   },
   "recommendations": [
     {
       "type": "bundle-size",
       "priority": "high",
       "title": "Bundle size is large",
-      "description": "Total chunk size is 2259KB",
+      "description": "Total chunk size is 3403KB",
       "action": "Consider code splitting and lazy loading"
+    },
+    {
+      "type": "image-optimization",
+      "priority": "medium",
+      "title": "Images not optimized",
+      "description": "Only 8/26 images are optimized",
+      "action": "Convert images to WebP/AVIF format"
+    },
+    {
+      "type": "resource-hints",
+      "priority": "high",
+      "title": "Missing resource preloading",
+      "description": "No preload hints found for critical resources",
+      "action": "Add preload hints for critical fonts and images"
+    },
+    {
+      "type": "service-worker",
+      "priority": "low",
+      "title": "No service worker",
+      "description": "Service worker not implemented",
+      "action": "Implement service worker for caching and offline support"
     }
   ],
   "optimizations": [],
   "imageAnalysis": {
-    "totalImages": 23,
-    "totalSize": 12615665,
-    "optimizedImages": 12,
+    "totalImages": 26,
+    "totalSize": 11074838,
+    "optimizedImages": 8,
     "images": [
       {
         "path": "public/favicon.svg",
@@ -55,6 +76,36 @@
         "optimized": true
       },
       {
+        "path": "public/images/bg-tools/knife.svg",
+        "size": 328,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/images/bg-tools/spatula.svg",
+        "size": 264,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/images/bg-tools/whisk.svg",
+        "size": 333,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
+        "path": "public/images/cleaning-roster-screenshot.png",
+        "size": 523977,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
+        "path": "public/images/cogs-calculator-screenshot.png",
+        "size": 548976,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
         "path": "public/images/dashboard-screenshot.avif",
         "size": 116742,
         "extension": ".avif",
@@ -73,6 +124,12 @@
         "optimized": true
       },
       {
+        "path": "public/images/ingredients-management-screenshot.png",
+        "size": 1432201,
+        "extension": ".png",
+        "optimized": false
+      },
+      {
         "path": "public/images/prepflow-logo.avif",
         "size": 41577,
         "extension": ".avif",
@@ -85,28 +142,22 @@
         "optimized": false
       },
       {
+        "path": "public/images/prepflow-logo.svg",
+        "size": 2723,
+        "extension": ".svg",
+        "optimized": false
+      },
+      {
         "path": "public/images/prepflow-logo.webp",
         "size": 43080,
         "extension": ".webp",
         "optimized": true
       },
       {
-        "path": "public/images/recipe-screenshot.avif",
-        "size": 191397,
-        "extension": ".avif",
-        "optimized": true
-      },
-      {
-        "path": "public/images/recipe-screenshot.png",
-        "size": 2154693,
+        "path": "public/images/recipe-book-screenshot.png",
+        "size": 728615,
         "extension": ".png",
         "optimized": false
-      },
-      {
-        "path": "public/images/recipe-screenshot.webp",
-        "size": 264744,
-        "extension": ".webp",
-        "optimized": true
       },
       {
         "path": "public/images/settings-screenshot.avif",
@@ -127,22 +178,10 @@
         "optimized": true
       },
       {
-        "path": "public/images/stocklist-screenshot.avif",
-        "size": 188369,
-        "extension": ".avif",
-        "optimized": true
-      },
-      {
-        "path": "public/images/stocklist-screenshot.png",
-        "size": 2297763,
+        "path": "public/images/temperature-monitoring-screenshot.png",
+        "size": 638842,
         "extension": ".png",
         "optimized": false
-      },
-      {
-        "path": "public/images/stocklist-screenshot.webp",
-        "size": 320120,
-        "extension": ".webp",
-        "optimized": true
       },
       {
         "path": "public/next.svg",
@@ -171,9 +210,9 @@
     "fonts": []
   },
   "criticalResources": {
-    "hasPreload": true,
-    "hasPrefetch": true,
-    "hasCriticalCSS": true,
-    "hasServiceWorker": true
+    "hasPreload": false,
+    "hasPrefetch": false,
+    "hasCriticalCSS": false,
+    "hasServiceWorker": false
   }
 }

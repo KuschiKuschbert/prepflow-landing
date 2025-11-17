@@ -2,12 +2,18 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { MenuItem } from '../types';
 
 import { logger } from '@/lib/logger';
+
+interface NotificationFunctions {
+  showError: (message: string) => void;
+}
+
 export async function addDishToMenu(
   menuId: string,
   dishId: string,
   category: string,
   onMenuDataReload: () => Promise<void>,
   onStatisticsUpdate: () => void,
+  notifications?: NotificationFunctions,
 ) {
   try {
     const response = await fetch(`/api/menus/${menuId}/items`, {
@@ -27,11 +33,13 @@ export async function addDishToMenu(
     } else {
       logger.error('Failed to add dish to menu:', result.error || result.message);
       // Show user-friendly error
-      alert(`Failed to add dish: ${result.error || result.message || 'Unknown error'}`);
+      notifications?.showError(
+        `Failed to add dish: ${result.error || result.message || 'Unknown error'}`,
+      );
     }
   } catch (err) {
     logger.error('Failed to add dish to menu:', err);
-    alert('Failed to add dish. Please check your connection and try again.');
+    notifications?.showError('Failed to add dish. Please check your connection and try again.');
   }
 }
 
@@ -41,6 +49,7 @@ export async function addRecipeToMenu(
   category: string,
   onMenuDataReload: () => Promise<void>,
   onStatisticsUpdate: () => void,
+  notifications?: NotificationFunctions,
 ) {
   try {
     const response = await fetch(`/api/menus/${menuId}/items`, {
@@ -60,11 +69,13 @@ export async function addRecipeToMenu(
     } else {
       logger.error('Failed to add recipe to menu:', result.error || result.message);
       // Show user-friendly error
-      alert(`Failed to add recipe: ${result.error || result.message || 'Unknown error'}`);
+      notifications?.showError(
+        `Failed to add recipe: ${result.error || result.message || 'Unknown error'}`,
+      );
     }
   } catch (err) {
     logger.error('Failed to add recipe to menu:', err);
-    alert('Failed to add recipe. Please check your connection and try again.');
+    notifications?.showError('Failed to add recipe. Please check your connection and try again.');
   }
 }
 

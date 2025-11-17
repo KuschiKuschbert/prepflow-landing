@@ -34,7 +34,9 @@ export function usePreviousPeriodData() {
       const previousState = await fetchPerformanceApi(previousRange);
       setPreviousPeriodData(previousState.performanceItems);
     } catch (error) {
-      logger.warn('Could not fetch previous period data for trends:', { error: error instanceof Error ? error.message : String(error) });
+      logger.warn('Could not fetch previous period data for trends:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       setPreviousPeriodData(null);
     }
   };

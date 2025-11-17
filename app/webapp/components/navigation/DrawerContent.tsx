@@ -3,17 +3,20 @@
 import React from 'react';
 import { CategorySection } from './CategorySection';
 import type { NavigationItemConfig } from './nav-items';
+import type { WorkflowType } from '@/lib/workflow/preferences';
 
 interface DrawerContentProps {
   contentRef: React.RefObject<HTMLDivElement | null>;
   groupedItems: Record<string, NavigationItemConfig[]>;
   isActive: (href: string) => boolean;
   onItemClick: (href: string) => void;
+  onTrack?: (href: string) => void;
   isDragging: boolean;
   canDrag: boolean;
   onContentTouchStart: (e: React.TouchEvent) => void;
   onTouchMove: (e: React.TouchEvent) => void;
   onTouchEnd: () => void;
+  workflow?: WorkflowType;
 }
 
 function isAtTop(contentRef: React.RefObject<HTMLDivElement | null>): boolean {
@@ -25,11 +28,13 @@ export function DrawerContent({
   groupedItems,
   isActive,
   onItemClick,
+  onTrack,
   isDragging,
   canDrag,
   onContentTouchStart,
   onTouchMove,
   onTouchEnd,
+  workflow = 'daily-operations',
 }: DrawerContentProps) {
   const handleTouchStart = (e: React.TouchEvent) => {
     const target = e.target as HTMLElement;
@@ -88,7 +93,9 @@ export function DrawerContent({
           items={items}
           isActive={isActive}
           onItemClick={onItemClick}
+          onTrack={onTrack}
           compact={true}
+          workflow={workflow}
         />
       ))}
     </div>

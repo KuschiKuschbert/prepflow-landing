@@ -11,6 +11,7 @@ interface NavItemProps {
   color: string;
   isActive: boolean;
   onClick?: () => void;
+  onTrack?: (href: string) => void;
   className?: string;
   iconSize?: 'sm' | 'md' | 'lg';
   showLabel?: boolean;
@@ -24,11 +25,20 @@ export function NavItem({
   color,
   isActive,
   onClick,
+  onTrack,
   className = '',
   iconSize = 'md',
   showLabel = true,
   compact = false,
 }: NavItemProps) {
+  const handleClick = () => {
+    if (onTrack) {
+      onTrack(href);
+    }
+    if (onClick) {
+      onClick();
+    }
+  };
   const iconSizeClasses: Record<string, string> = {
     xs: 'h-3 w-3',
     sm: 'h-4 w-4',
@@ -41,7 +51,7 @@ export function NavItem({
     return (
       <Link
         href={href}
-        onClick={onClick}
+        onClick={handleClick}
         onMouseEnter={() => prefetchRoute(href)}
         className={`group flex min-h-[36px] items-center space-x-2 rounded-lg px-2 py-1.5 transition-all duration-200 ${
           isActive

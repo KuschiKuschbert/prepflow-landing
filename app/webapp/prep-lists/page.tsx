@@ -1,6 +1,8 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useNotification } from '@/contexts/NotificationContext';
 import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 import { PrepListForm } from './components/PrepListForm';
@@ -23,8 +25,20 @@ import { getCachedData, cacheData } from '@/lib/cache/data-cache';
 
 export default function PrepListsPage() {
   const { t } = useTranslation();
+  const { showSuccess, showError } = useNotification();
   // Initialize with cached data for instant display
   const [prepLists, setPrepLists] = useState<PrepList[]>(() => getCachedData('prep_lists') || []);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
   const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>(
     () => getCachedData('kitchen_sections') || [],
   );
@@ -152,11 +166,31 @@ export default function PrepListsPage() {
       const result = await response.json();
 
       if (result.success) {
-        await refetchPrepLists();
+        // Optimistically update UI
+        if (editingPrepList) {
+          // Update existing prep list
+          setPrepLists(prevLists =>
+            prevLists.map(list =>
+              list.id === editingPrepList.id ? { ...list, ...result.prepList } : list,
+            ),
+          );
+        } else {
+          // Add new prep list
+          if (result.prepList) {
+            setPrepLists(prevLists => [...prevLists, result.prepList]);
+          }
+        }
         resetForm();
         setError(null);
+        showSuccess(
+          editingPrepList ? 'Prep list updated successfully' : 'Prep list created successfully',
+        );
+        // Optionally refresh in background for accuracy (non-blocking)
+        refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
       } else {
-        setError(result.message || 'Failed to save prep list');
+        const errorMsg = result.message || 'Failed to save prep list';
+        setError(errorMsg);
+        showError(errorMsg);
       }
     } catch (err) {
       setError('Failed to save prep list');
@@ -179,8 +213,31 @@ export default function PrepListsPage() {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this prep list?')) return;
+  const handleDelete = (id: string) => {
+    const prepList = prepLists.find(list => list.id === id);
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Delete Prep List',
+      message: `Are you sure you want to delete "${prepList?.name || 'this prep list'}"? This action cannot be undone.`,
+      onConfirm: async () => {
+        setConfirmDialog(prev => ({ ...prev, isOpen: false }));
+        await performDelete(id);
+      },
+    });
+  };
+
+  const performDelete = async (id: string) => {
+    // Store original state for rollback
+    const originalPrepLists = [...prepLists];
+    const prepListToDelete = prepLists.find(list => list.id === id);
+
+    if (!prepListToDelete) {
+      showError('Prep list not found');
+      return;
+    }
+
+    // Optimistically remove from UI immediately
+    setPrepLists(prevLists => prevLists.filter(list => list.id !== id));
 
     try {
       const response = await fetch(`/api/prep-lists?id=${id}`, {
@@ -190,16 +247,40 @@ export default function PrepListsPage() {
       const result = await response.json();
 
       if (result.success) {
-        await refetchPrepLists();
+        showSuccess('Prep list deleted successfully');
+        // Optionally refresh in background for accuracy (non-blocking)
+        refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
       } else {
-        setError(result.message || 'Failed to delete prep list');
+        // Revert optimistic update on error
+        setPrepLists(originalPrepLists);
+        const errorMsg = result.message || 'Failed to delete prep list';
+        setError(errorMsg);
+        showError(errorMsg);
       }
     } catch (err) {
+      // Revert optimistic update on error
+      setPrepLists(originalPrepLists);
+      logger.error('Failed to delete prep list:', err);
       setError('Failed to delete prep list');
+      showError('Failed to delete prep list. Please check your connection and try again.');
     }
   };
 
   const handleStatusChange = async (id: string, status: string) => {
+    // Store original state for rollback
+    const originalPrepLists = [...prepLists];
+    const prepListToUpdate = prepLists.find(list => list.id === id);
+
+    if (!prepListToUpdate) {
+      showError('Prep list not found');
+      return;
+    }
+
+    // Optimistically update UI immediately
+    setPrepLists(prevLists =>
+      prevLists.map(list => (list.id === id ? { ...list, status: status as any } : list)),
+    );
+
     try {
       const response = await fetch('/api/prep-lists', {
         method: 'PUT',
@@ -210,12 +291,22 @@ export default function PrepListsPage() {
       const result = await response.json();
 
       if (result.success) {
-        await refetchPrepLists();
+        showSuccess('Status updated successfully');
+        // Optionally refresh in background for accuracy (non-blocking)
+        refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
       } else {
-        setError(result.message || 'Failed to update status');
+        // Revert optimistic update on error
+        setPrepLists(originalPrepLists);
+        const errorMsg = result.message || 'Failed to update status';
+        setError(errorMsg);
+        showError(errorMsg);
       }
     } catch (err) {
+      // Revert optimistic update on error
+      setPrepLists(originalPrepLists);
+      logger.error('Failed to update status:', err);
       setError('Failed to update status');
+      showError('Failed to update status. Please check your connection and try again.');
     }
   };
 
@@ -425,6 +516,18 @@ export default function PrepListsPage() {
             onSave={handleSaveBatchPrepLists}
           />
         )}
+
+        {/* Confirm Dialog */}
+        <ConfirmDialog
+          isOpen={confirmDialog.isOpen}
+          title={confirmDialog.title}
+          message={confirmDialog.message}
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={confirmDialog.onConfirm}
+          onCancel={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
+          variant="danger"
+        />
       </div>
     </ResponsivePageContainer>
   );

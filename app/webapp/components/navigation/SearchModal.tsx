@@ -3,6 +3,7 @@
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
 import React from 'react';
+import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -13,6 +14,8 @@ interface SearchModalProps {
 }
 
 export function SearchModal({ isOpen, query, onChange, onClose, filtered }: SearchModalProps) {
+  const { trackNavigation } = useNavigationTracking();
+
   if (!isOpen) return null;
   return (
     <div
@@ -70,7 +73,10 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                       aria-label={`Go to ${item.label}`}
                       key={item.href}
                       href={item.href}
-                      onClick={onClose}
+                      onClick={() => {
+                        trackNavigation(item.href);
+                        onClose();
+                      }}
                       onMouseEnter={() => prefetchRoute(item.href)}
                       className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[#2a2a2a]/50"
                     >

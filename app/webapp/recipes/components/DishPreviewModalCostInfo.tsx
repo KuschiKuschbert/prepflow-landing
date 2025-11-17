@@ -41,4 +41,3 @@ export function DishPreviewModalCostInfo({ costData }: DishPreviewModalCostInfoP
     </div>
   );
 }
-

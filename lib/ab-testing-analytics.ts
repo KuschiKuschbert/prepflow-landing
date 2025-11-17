@@ -3,7 +3,10 @@ import { assignVariant as assignVariantHelper } from './ab-testing-analytics/var
 import { sendABTestEvent } from './ab-testing-analytics/eventTracking';
 import { calculateTestResults } from './ab-testing-analytics/testResults';
 import { getSessionId } from './ab-testing-analytics/sessionManager';
-import { getVariantInfo as getVariantInfoHelper, getVariantAssignmentInfo as getVariantAssignmentInfoHelper } from './ab-testing-analytics/variantInfo';
+import {
+  getVariantInfo as getVariantInfoHelper,
+  getVariantAssignmentInfo as getVariantAssignmentInfoHelper,
+} from './ab-testing-analytics/variantInfo';
 import type { ABTestVariant, ABTestEvent, ABTestResult } from './ab-testing-analytics/types';
 
 class ABTestingAnalytics {

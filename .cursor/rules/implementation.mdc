@@ -57,6 +57,139 @@ CREATE TABLE table_name (
 }
 ```
 
+#### **Optimistic Updates Implementation Pattern**
+
+**MANDATORY:** All CRUD operations must use optimistic updates to eliminate loading delays and improve perceived performance.
+
+**Standard Pattern:**
+
+```typescript
+// Delete operation example
+const performDelete = async (id: string) => {
+  // 1. Store original state for rollback
+  const originalItems = [...currentItems];
+  const itemToDelete = currentItems.find(item => item.id === id);
+
+  if (!itemToDelete) {
+    showError('Item not found');
+    return;
+  }
+
+  // 2. Optimistically remove from UI immediately
+  setItems(prevItems => prevItems.filter(item => item.id !== id));
+
+  // 3. Make API call in background
+  try {
+    const response = await fetch(`/api/items/${id}`, { method: 'DELETE' });
+    const result = await response.json();
+
+    if (response.ok) {
+      // Success - show notification, refresh stats in background if needed
+      showSuccess('Item deleted successfully');
+      refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
+    } else {
+      // Error - revert optimistic update
+      setItems(originalItems);
+      showError(result.error || result.message || 'Operation failed');
+    }
+  } catch (err) {
+    // Error - revert optimistic update
+    setItems(originalItems);
+    logger.error('Failed to delete item:', err);
+    showError('Failed to delete item. Please check your connection and try again.');
+  }
+};
+```
+
+**Update Operation Example:**
+
+```typescript
+const performUpdate = async (id: string, updates: Partial<Item>) => {
+  // Store original state
+  const originalItems = [...currentItems];
+
+  // Optimistically update UI
+  setItems(prevItems =>
+    prevItems.map(item => (item.id === id ? { ...item, ...updates } : item)),
+  );
+
+  try {
+    const response = await fetch(`/api/items/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+      showSuccess('Item updated successfully');
+    } else {
+      setItems(originalItems);
+      showError(result.error || 'Update failed');
+    }
+  } catch (err) {
+    setItems(originalItems);
+    showError('Update failed');
+  }
+};
+```
+
+**Create Operation Example:**
+
+```typescript
+const performCreate = async (newItem: Partial<Item>) => {
+  // Store original state
+  const originalItems = [...currentItems];
+
+  // Create temporary item for optimistic update
+  const tempId = `temp-${Date.now()}`;
+  const tempItem = { ...newItem, id: tempId } as Item;
+
+  // Optimistically add to UI
+  setItems(prevItems => [...prevItems, tempItem]);
+
+  try {
+    const response = await fetch('/api/items', {
+      method: 'POST',
+      body: JSON.stringify(newItem),
+    });
+    const result = await response.json();
+
+    if (response.ok && result.item) {
+      // Replace temp item with real item from server
+      setItems(prevItems =>
+        prevItems.map(item => (item.id === tempId ? result.item : item)),
+      );
+      showSuccess('Item created successfully');
+    } else {
+      setItems(originalItems);
+      showError(result.error || 'Create failed');
+    }
+  } catch (err) {
+    setItems(originalItems);
+    showError('Create failed');
+  }
+};
+```
+
+**Key Requirements:**
+
+1. **Always store original state** before making optimistic updates
+2. **Update UI immediately** - no loading states for mutations
+3. **Revert on error** - restore original state if API call fails
+4. **Use notification system** - `useNotification` for user feedback
+5. **Replace native dialogs** - Use `ConfirmDialog` instead of `confirm()`
+6. **Background refresh** - Optionally refresh statistics in background (non-blocking)
+7. **Never refetch after success** - Rely on optimistic updates, don't call `fetchData()`
+
+**Reusable Utilities:**
+
+- **`lib/optimistic-updates.ts`**: Generic functions for common CRUD operations
+- **`hooks/useOptimisticMutation.ts`**: Reusable hook with automatic rollback
+
+**See Also:**
+- `development.mdc` (Optimistic Updates Pattern) - Detailed pattern and best practices
+- `operations.mdc` (Optimistic Updates Standard) - Performance targets and requirements
+
 ### **Current Project Structure**
 
 **Note:** This is the detailed project structure. For a high-level overview, see the **"File Structure"** section in `core.mdc`.

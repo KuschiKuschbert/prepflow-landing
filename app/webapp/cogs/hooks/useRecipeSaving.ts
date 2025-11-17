@@ -55,7 +55,9 @@ export const useRecipeSaving = () => {
 
         setError(null);
         const actionText = isNew ? 'saved' : 'updated';
-        setSuccessMessage(`Recipe "${recipe.name}" ${actionText} successfully to Recipe Book!`);
+        setSuccessMessage(
+          `Recipe "${recipe.recipe_name}" ${actionText} successfully to Recipe Book!`,
+        );
         setTimeout(() => setSuccessMessage(null), 5000);
       } catch (err: any) {
         logger.error('Recipe save error:', err);

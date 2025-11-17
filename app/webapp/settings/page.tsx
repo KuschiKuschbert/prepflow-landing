@@ -3,15 +3,23 @@
 import { getArcadeStats } from '@/lib/arcadeStats';
 import React, { useEffect, useState } from 'react';
 import { PersonalitySettingsPanel } from './components/PersonalitySettingsPanel';
+import { AdaptiveNavSettingsPanel } from './components/AdaptiveNavSettingsPanel';
 import { useCountry } from '@/contexts/CountryContext';
 import { getAvailableCountries } from '@/lib/country-config';
 import { useNotification } from '@/contexts/NotificationContext';
+import {
+  useWorkflowPreference,
+  getWorkflowDisplayName,
+  getWorkflowDescription,
+  type WorkflowType,
+} from '@/lib/workflow/preferences';
 
 export default function SettingsPage() {
   const [busy, setBusy] = useState(false);
-  const [arcadeStats, setArcadeStats] = useState(() => getArcadeStats());
+  const [arcadeStats, setArcadeStats] = useState({ tomatoes: 0, dockets: 0, fires: 0 });
   const { selectedCountry, countryConfig, setCountry } = useCountry();
   const availableCountries = getAvailableCountries();
+  const { workflow, setWorkflow } = useWorkflowPreference();
 
   const { showSuccess, showError } = useNotification();
 
@@ -30,8 +38,12 @@ export default function SettingsPage() {
     }
   };
 
-  // Update arcade stats when they change
+  // Load arcade stats after hydration and update when they change
   useEffect(() => {
+    // Load stats from localStorage only on client after hydration
+    setArcadeStats(getArcadeStats());
+
+    // Keep existing event listener for updates
     const handleStatsUpdate = () => {
       setArcadeStats(getArcadeStats());
     };
@@ -40,9 +52,49 @@ export default function SettingsPage() {
     return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
   }, []);
 
+  const workflowOptions: WorkflowType[] = [
+    'daily-operations',
+    'setup-planning-operations',
+    'menu-first',
+  ];
+
   return (
     <div className="mx-auto max-w-3xl p-6 text-white">
       <h1 className="mb-4 text-3xl font-bold">Settings</h1>
+
+      {/* Navigation Workflow Selection */}
+      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+        <h2 className="text-xl font-semibold">Navigation Workflow</h2>
+        <p className="text-sm text-gray-300">
+          Choose how you want your navigation organized. This affects how menu items are grouped in
+          the sidebar and mobile navigation.
+        </p>
+        <div className="space-y-3">
+          {workflowOptions.map(option => (
+            <label
+              key={option}
+              className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
+                workflow === option
+                  ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10'
+                  : 'border-[#2a2a2a] bg-[#2a2a2a]/20 hover:border-[#2a2a2a]/50'
+              }`}
+            >
+              <input
+                type="radio"
+                name="workflow"
+                value={option}
+                checked={workflow === option}
+                onChange={() => setWorkflow(option)}
+                className="mt-1 h-4 w-4 cursor-pointer border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+              />
+              <div className="flex-1">
+                <div className="font-medium text-white">{getWorkflowDisplayName(option)}</div>
+                <div className="mt-1 text-xs text-gray-400">{getWorkflowDescription(option)}</div>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
 
       {/* Country/Region Selection */}
       <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
@@ -129,8 +181,20 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* PrepFlow Personality Settings */}
-      <PersonalitySettingsPanel />
+      {/* Experimental Features */}
+      <div className="mt-8 space-y-6">
+        <h2 className="text-xl font-semibold">Experimental Features</h2>
+        <p className="text-sm text-gray-400">
+          Try out new features that are still in development. These may change or be removed in
+          future updates.
+        </p>
+
+        {/* Adaptive Navigation Optimization */}
+        <AdaptiveNavSettingsPanel />
+
+        {/* PrepFlow Personality Settings */}
+        <PersonalitySettingsPanel />
+      </div>
     </div>
   );
 }

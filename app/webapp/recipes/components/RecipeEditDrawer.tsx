@@ -26,7 +26,7 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
   // Initialize edited values when recipe changes
   useEffect(() => {
     if (recipe) {
-      setEditedName(recipe.name || '');
+      setEditedName(recipe.recipe_name || '');
       setEditedYield(recipe.yield || 1);
       setEditedInstructions(recipe.instructions || '');
     }
@@ -95,7 +95,7 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     <EditDrawer
       isOpen={isOpen}
       onClose={onClose}
-      title={`Edit ${capitalizeRecipeName(recipe.name)}`}
+      title={`Edit ${capitalizeRecipeName(recipe.recipe_name)}`}
       maxWidth="xl"
       onSave={handleSave}
       saving={saving || status === 'saving'}
@@ -134,7 +134,7 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
             placeholder="e.g., Chicken Stir-fry"
             onBlur={async e => {
               const name = e.target.value.trim().toLowerCase();
-              if (!name || name === recipe.name.toLowerCase()) return;
+              if (!name || name === recipe.recipe_name.toLowerCase()) return;
               try {
                 const res = await fetch(`/api/recipes/exists?name=${encodeURIComponent(name)}`, {
                   cache: 'no-store',

@@ -33,7 +33,9 @@ export function precalculatePrices(
 
   if (recipesNeedingPrices.length > 0) {
     recipesNeedingPrices.forEach((recipe: Recipe) => pricesCalculatedRef.current.add(recipe.id));
-      logger.dev(`[RecipeManagement] Pre-calculating prices for ${recipesNeedingPrices.length} recipes`);
+    logger.dev(
+      `[RecipeManagement] Pre-calculating prices for ${recipesNeedingPrices.length} recipes`,
+    );
     updateVisibleRecipePrices(
       recipesNeedingPrices,
       fetchRecipeIngredients,

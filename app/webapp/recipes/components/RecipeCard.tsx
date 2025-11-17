@@ -46,7 +46,7 @@ const RecipeCard = React.memo(function RecipeCard({
               onSelectRecipe(recipe.id);
             }}
             className="mr-3 flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-            aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.name)}`}
+            aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title={selectedRecipes.has(recipe.id) ? 'Deselect recipe' : 'Select recipe'}
           >
             {selectedRecipes.has(recipe.id) ? (
@@ -55,7 +55,9 @@ const RecipeCard = React.memo(function RecipeCard({
               <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
             )}
           </button>
-          <h3 className="text-sm font-medium text-white">{capitalizeRecipeName(recipe.name)}</h3>
+          <h3 className="text-sm font-medium text-white">
+            {capitalizeRecipeName(recipe.recipe_name)}
+          </h3>
         </div>
         <span
           className="text-xs text-gray-500"
@@ -133,7 +135,7 @@ const RecipeCard = React.memo(function RecipeCard({
             onEditRecipe(recipe);
           }}
           className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
-          aria-label={`Edit recipe ${capitalizeRecipeName(recipe.name)}`}
+          aria-label={`Edit recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
           title="Edit recipe in builder"
         >
           <Icon icon={Edit} size="xs" />
@@ -144,7 +146,7 @@ const RecipeCard = React.memo(function RecipeCard({
             onDeleteRecipe(recipe);
           }}
           className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-red-400"
-          aria-label={`Delete recipe ${capitalizeRecipeName(recipe.name)}`}
+          aria-label={`Delete recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
           title="Delete this recipe"
         >
           <Icon icon={Trash2} size="xs" />

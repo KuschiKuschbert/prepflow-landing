@@ -23,6 +23,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         `
         dish_id,
         recipe_id,
+        actual_selling_price,
+        recommended_selling_price,
         dishes (
           id,
           dish_name,
@@ -30,8 +32,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         ),
         recipes (
           id,
-          name,
-          yield
+          recipe_name,
+          yield,
+          selling_price
         )
       `,
       )

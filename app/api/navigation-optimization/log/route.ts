@@ -1,0 +1,86 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { authOptions } from '@/lib/auth-options';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const navigationLogSchema = z.object({
+  href: z.string().min(1),
+  timestamp: z.number().optional(),
+  dayOfWeek: z.number().min(0).max(6),
+  hourOfDay: z.number().min(0).max(23),
+  timeSpent: z.number().optional(),
+  returnFrequency: z.number().optional(),
+});
+
+export async function POST(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
+        { status: 401 },
+      );
+    }
+
+    const userId = session.user.email;
+    const body = await req.json().catch(() => ({}));
+    const validationResult = navigationLogSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const logData = validationResult.data;
+    const timestamp = logData.timestamp ? new Date(logData.timestamp) : new Date();
+
+    if (!supabaseAdmin) {
+      logger.error('[Navigation Optimization API] Supabase not available');
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),
+        { status: 503 },
+      );
+    }
+
+    const { error } = await supabaseAdmin.from('navigation_usage_logs').insert({
+      user_id: userId,
+      href: logData.href,
+      timestamp: timestamp.toISOString(),
+      day_of_week: logData.dayOfWeek,
+      hour_of_day: logData.hourOfDay,
+      time_spent: logData.timeSpent || null,
+      return_frequency: logData.returnFrequency || null,
+    });
+
+    if (error) {
+      logger.error('[Navigation Optimization API] Failed to insert log:', {
+        error: error.message,
+        userId,
+        href: logData.href,
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to log navigation usage', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ success: true, message: 'Navigation usage logged' });
+  } catch (error) {
+    logger.error('[Navigation Optimization API] Unexpected error:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
+  }
+}

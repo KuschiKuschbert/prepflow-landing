@@ -64,7 +64,7 @@ export function BulkDeleteConfirmationModal({
                 const recipe = recipes.find(r => r.id === recipeId);
                 return recipe ? (
                   <div key={recipeId} className="text-xs text-gray-400">
-                    • {capitalizeRecipeName(recipe.name)}
+                    • {capitalizeRecipeName(recipe.recipe_name)}
                   </div>
                 ) : null;
               })}

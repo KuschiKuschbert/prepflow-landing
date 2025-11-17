@@ -57,7 +57,9 @@ export async function fetchWithRetry(
     const data = await res.json();
     return (data?.items || []) as RecipeIngredientWithDetails[];
   } catch (err) {
-    logger.error(`[RecipeIngredients] Exception fetching from API for recipe ${recipeId}:`, { error: err instanceof Error ? err.message : String(err) });
+    logger.error(`[RecipeIngredients] Exception fetching from API for recipe ${recipeId}:`, {
+      error: err instanceof Error ? err.message : String(err),
+    });
     if (err instanceof Error) {
       logger.error('[RecipeIngredients] Error details:', { error: err.message, stack: err.stack });
 

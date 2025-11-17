@@ -251,4 +251,3 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
 );
 
 DishIngredientTable.displayName = 'DishIngredientTable';
-

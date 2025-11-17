@@ -59,7 +59,9 @@ export function usePerformanceInsights(
           }
         }
       } catch (error) {
-        logger.warn('AI insights failed, using fallback:', { error: error instanceof Error ? error.message : String(error) });
+        logger.warn('AI insights failed, using fallback:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
       setIsLoadingAI(false);
       setAiInsights([]);

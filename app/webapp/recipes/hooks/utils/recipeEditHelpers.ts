@@ -13,7 +13,7 @@ export function storeRecipeForEditing(
       recipe,
       recipeId: recipe.id,
       calculations,
-      dishName: recipe.name,
+      dishName: recipe.recipe_name,
       dishPortions: recipe.yield,
       dishNameLocked: true,
     }),

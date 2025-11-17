@@ -55,4 +55,3 @@ module.exports = {
   name: 'prettier',
   check: checkPrettier,
 };
-

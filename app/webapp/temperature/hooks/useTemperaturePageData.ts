@@ -91,6 +91,7 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
     logs,
     allLogs,
     equipment,
+    setEquipment,
     loading,
     analyticsLoading,
     logsLoading,

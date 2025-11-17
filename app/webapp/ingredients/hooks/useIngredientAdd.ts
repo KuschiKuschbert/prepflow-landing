@@ -44,12 +44,30 @@ export function useIngredientAdd<
 
   const handleAddIngredient = useCallback(
     async (ingredientData: Partial<T>) => {
+      // Store original state for rollback
+      let originalIngredients: T[] = [];
+
       try {
         const { normalized, error: normalizeError } = normalizeIngredientData(ingredientData);
         if (normalizeError) {
           setError(normalizeError);
           throw new Error(normalizeError);
         }
+
+        // Create temporary ingredient for optimistic update
+        const tempId = `temp-${Date.now()}`;
+        const tempIngredient = { ...normalized, id: tempId } as T;
+
+        // Optimistically add to UI immediately
+        setIngredients(prev => {
+          originalIngredients = [...prev];
+          return [...prev, tempIngredient];
+        });
+
+        // Close form optimistically
+        if (setShowAddForm) setShowAddForm(false);
+        if (setWizardStep) setWizardStep(1);
+        if (setNewIngredient) setNewIngredient(DEFAULT_INGREDIENT as unknown as Partial<T>);
 
         const { data, error } = await supabase.from('ingredients').insert([normalized]).select();
 
@@ -64,27 +82,42 @@ export function useIngredientAdd<
 
             const result = await response.json();
             if (!response.ok || !result.success) {
+              // Revert optimistic update on error
+              setIngredients(originalIngredients);
+              // Reopen form on error
+              if (setShowAddForm) setShowAddForm(true);
               const errorMsg = result.details || result.error || 'Failed to add ingredient';
               setError(`Failed to add ingredient: ${errorMsg}`);
               throw new Error(errorMsg);
             }
 
+            // Replace temp ingredient with real ingredient from server
             if (result.data) {
-              setIngredients(prev => [...prev, result.data]);
+              setIngredients(prev => prev.map(ing => (ing.id === tempId ? result.data : ing)));
             }
           } else {
+            // Revert optimistic update on error
+            setIngredients(originalIngredients);
+            // Reopen form on error
+            if (setShowAddForm) setShowAddForm(true);
             logger.error('Supabase error inserting ingredient:', error);
             throw error;
           }
         } else {
-          setIngredients(prev => [...prev, ...(data || [])]);
+          // Replace temp ingredient with real ingredient from server
+          if (data && data.length > 0) {
+            setIngredients(prev => prev.map(ing => (ing.id === tempId ? data[0] : ing)));
+          }
         }
 
         await queryClient.invalidateQueries({ queryKey: ['ingredients'] });
-        if (setShowAddForm) setShowAddForm(false);
-        if (setWizardStep) setWizardStep(1);
-        if (setNewIngredient) setNewIngredient(DEFAULT_INGREDIENT as unknown as Partial<T>);
       } catch (error: any) {
+        // Revert optimistic update on error (if not already reverted)
+        if (originalIngredients.length > 0) {
+          setIngredients(originalIngredients);
+        }
+        // Reopen form on error
+        if (setShowAddForm) setShowAddForm(true);
         const msg =
           error?.message ||
           (error?.code

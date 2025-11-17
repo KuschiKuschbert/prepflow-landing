@@ -1,7 +1,7 @@
 // Recipe Types
 export interface Recipe {
   id: string;
-  name: string;
+  recipe_name: string;
   description?: string;
   instructions?: string;
   yield: number;
@@ -9,6 +9,7 @@ export interface Recipe {
   category?: string;
   created_at: string;
   updated_at: string;
+  selling_price?: number;
 }
 
 export interface RecipeIngredient {
@@ -100,10 +101,11 @@ export interface DishRecipe {
   quantity: number;
   recipes?: {
     id: string;
-    name: string;
+    recipe_name: string;
     description?: string;
     yield: number;
     yield_unit: string;
+    selling_price?: number;
   };
 }
 

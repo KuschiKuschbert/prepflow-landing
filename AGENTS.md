@@ -185,10 +185,9 @@ app/
 │   ├── cleaning/       # Cleaning management
 │   ├── compliance/     # Compliance records
 │   ├── suppliers/      # Supplier management
-│   ├── dish-sections/  # Menu sections
+│   ├── sections/  # Menu sections
 │   ├── dish-builder/   # Dish builder interface
 │   ├── menu-builder/   # Menu builder interface
-│   ├── gadgets/        # Kitchen utility gadgets
 │   ├── par-levels/     # Par level management
 │   ├── order-lists/    # Order lists
 │   ├── prep-lists/     # Prep lists
@@ -1081,39 +1080,56 @@ The application uses sessionStorage-based caching and intelligent prefetching to
 
 #### **Performance Optimization Patterns**
 
-1. **Batch API Endpoints**: Create batch endpoints for fetching multiple related items
+1. **Optimistic Updates**: Update UI immediately when user performs actions
+   - Store original state before mutations
+   - Update UI immediately before API call completes
+   - Revert on error, show success notification on success
+   - Eliminates loading delays - perceived response time < 50ms
+   - Never show loading states for mutations
+   - Never call `fetchData()` after successful mutations
+   - Use `lib/optimistic-updates.ts` utilities or `hooks/useOptimisticMutation.ts` hook
+   - See `development.mdc` (Optimistic Updates Pattern) for detailed examples
+
+2. **Batch API Endpoints**: Create batch endpoints for fetching multiple related items
    - Example: `/api/recipes/ingredients/batch` accepts multiple recipe IDs
    - Single Supabase query with `.in()` clause instead of N sequential queries
    - Groups results by key for easy consumption
 
-2. **Parallel Fetching**: Use `Promise.all()` for independent requests
+3. **Parallel Fetching**: Use `Promise.all()` for independent requests
    - Dashboard fetches stats and temperature data in parallel
    - Recipe price calculations use parallel individual fetches as fallback
    - Reduces total fetch time from sequential (sum) to parallel (max)
 
-3. **Non-Blocking Loading**: Show content immediately, calculate in background
+4. **Non-Blocking Loading**: Show content immediately, calculate in background
    - Recipes page shows recipe list immediately
    - Price calculations happen asynchronously in background
    - Progressive loading: prices appear as they're calculated
 
-4. **Fallback Mechanisms**: Always have fallback strategies
+5. **Fallback Mechanisms**: Always have fallback strategies
    - Batch fetch fails → fallback to parallel individual fetches
    - Parallel fetches fail → graceful error handling per item
    - Ensures functionality even if optimizations fail
 
-5. **Caching Strategy**: Use sessionStorage for instant display
+6. **Caching Strategy**: Use sessionStorage for instant display
    - Cache first page of paginated data for instant display
    - Cache dashboard stats and frequently accessed data
    - Show cached data immediately, refresh in background
    - 5-minute default expiry (configurable per cache key)
 
-6. **Prefetching Strategy**: Prefetch on user intent
+7. **Prefetching Strategy**: Prefetch on user intent
    - Prefetch API endpoints on navigation link hover
    - Prefetch on mount for likely-to-be-accessed pages
    - Use link prefetch for browser-level optimization
    - Avoid prefetching when data changes frequently
 
 #### **Performance Improvements Achieved**
+
+- **CRUD Operations**: Near-instant perceived response time (< 50ms) with optimistic updates
+  - Before: Loading states during mutations, full data reloads after operations
+  - After: UI updates immediately, API calls happen in background
+  - Implemented across: Menu Builder, Ingredients, Recipes, Dishes, Temperature Equipment, Order Lists, Prep Lists
+  - Eliminates loading delays: Users see changes instantly, errors revert gracefully
+  - See `development.mdc` (Optimistic Updates Pattern) and `operations.mdc` (Optimistic Updates Standard) for details
 
 - **Recipes Page**: 80-90% reduction in load time (10s → 1-2s with 14 recipes)
   - Before: 14 sequential API calls (~10 seconds)
@@ -1134,18 +1150,20 @@ The application uses sessionStorage-based caching and intelligent prefetching to
 
 #### **Best Practices for Future Development**
 
-1. Always batch related fetches using batch endpoints
-2. Use parallel fetching with `Promise.all()` for independent requests
-3. Show UI immediately, calculate expensive operations in background
-4. Implement fallbacks for all optimizations
-5. Cache first page data using sessionStorage for instant display
-6. Prefetch API endpoints on navigation link hover
-7. Initialize state with cached data using `getCachedData()` in useState
-8. Cache after fetch: always call `cacheData()` after successful data fetch
-9. Monitor performance using browser DevTools
-10. Consider pagination for large datasets
+1. **Use optimistic updates for all CRUD operations** - Eliminate loading delays
+2. **Never call `fetchData()` after successful mutations** - Rely on optimistic updates
+3. Always batch related fetches using batch endpoints
+4. Use parallel fetching with `Promise.all()` for independent requests
+5. Show UI immediately, calculate expensive operations in background
+6. Implement fallbacks for all optimizations
+7. Cache first page data using sessionStorage for instant display
+8. Prefetch API endpoints on navigation link hover
+9. Initialize state with cached data using `getCachedData()` in useState
+10. Cache after fetch: always call `cacheData()` after successful data fetch
+11. Monitor performance using browser DevTools
+12. Consider pagination for large datasets
 
-**Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, test performance, document patterns.
+**Implementation Guidelines:** Identify N+1 patterns, create batch endpoints, use parallel hooks, implement caching, add prefetching routes, implement optimistic updates, test performance, document patterns.
 
 **Example Caching Pattern:**
 
@@ -1811,17 +1829,16 @@ Run `npm run detect-breakpoints` to analyze breakpoint usage across the codebase
 7. **Cleaning Management** (`/webapp/cleaning`) - Task tracking, area management, schedules
 8. **Compliance Records** (`/webapp/compliance`) - Record keeping, type management, audit trails
 9. **Suppliers** (`/webapp/suppliers`) - Supplier management, price lists, contact information
-10. **Dish Sections** (`/webapp/dish-sections`) - Menu organization, section assignment
+10. **Sections** (`/webapp/sections`) - Menu organization, section assignment
 11. **Dish Builder** (`/webapp/dish-builder`) - Interactive dish building interface
 12. **Menu Builder** (`/webapp/menu-builder`) - Menu creation and management interface
-13. **Gadgets** (`/webapp/gadgets`) - Kitchen utility gadgets (timers, converters, calculators)
-14. **Par Levels** (`/webapp/par-levels`) - Inventory par level management
-15. **Order Lists** (`/webapp/order-lists`) - Purchase order management
-16. **Prep Lists** (`/webapp/prep-lists`) - Kitchen prep list generation
-17. **AI Specials** (`/webapp/ai-specials`) - AI-powered specials suggestions
-18. **Recipe Sharing** (`/webapp/recipe-sharing`) - Share recipes with other users
-19. **Settings** (`/webapp/settings`) - User settings, billing management
-20. **Setup** (`/webapp/setup`) - Database setup, data reset, test data population
+13. **Par Levels** (`/webapp/par-levels`) - Inventory par level management
+14. **Order Lists** (`/webapp/order-lists`) - Purchase order management
+15. **Prep Lists** (`/webapp/prep-lists`) - Kitchen prep list generation
+16. **AI Specials** (`/webapp/ai-specials`) - AI-powered specials suggestions
+17. **Recipe Sharing** (`/webapp/recipe-sharing`) - Share recipes with other users
+18. **Settings** (`/webapp/settings`) - User settings, billing management
+19. **Setup** (`/webapp/setup`) - Database setup, data reset, test data population
 
 **Advanced Features:**
 
@@ -1877,15 +1894,20 @@ The following unused components have been removed to reduce bundle size and impr
 
 **Current Performance Infrastructure:**
 
+- **Optimistic Updates:** `lib/optimistic-updates.ts` utilities and `hooks/useOptimisticMutation.ts` hook for instant UI updates
 - **Batch Fetching:** `lib/api/batch-utils.ts` provides utilities for batching API calls
 - **Parallel Fetching:** `hooks/useParallelFetch.ts` for independent parallel requests
 - **Caching System:** `lib/cache/data-cache.ts` with 5-minute default expiry
 - **Prefetching:** `lib/cache/prefetch-config.ts` maps routes to API endpoints
 - **Navigation Prefetching:** Prefetch on hover in NavItem, Sidebar, and SearchModal
 - **Instant Display:** Pages initialize with cached data for <50ms perceived load time
+- **See:** `development.mdc` (Optimistic Updates Pattern), `operations.mdc` (Optimistic Updates Standard), `implementation.mdc` (Optimistic Updates Implementation Pattern)
 
 **Performance Improvements Achieved:**
 
+- **CRUD Operations:** Near-instant perceived response time (< 50ms) with optimistic updates
+  - Eliminates loading delays: UI updates immediately, API calls happen in background
+  - Implemented across: Menu Builder, Ingredients, Recipes, Dishes, Temperature Equipment, Order Lists, Prep Lists
 - **Recipes Page:** 80-90% reduction in load time (10s → 1-2s with 14 recipes)
 - **Dashboard:** 50% reduction in load time (2 sequential → 1 parallel)
 - **Perceived Performance:** Near-instant page loads with caching (<50ms)
@@ -1978,10 +2000,9 @@ prepflow-landing/
 │   │   ├── cleaning/              # Cleaning management
 │   │   ├── compliance/            # Compliance records
 │   │   ├── suppliers/             # Supplier management
-│   │   ├── dish-sections/         # Menu sections
+│   │   ├── sections/         # Menu sections
 │   │   ├── dish-builder/          # Dish builder interface
 │   │   ├── menu-builder/          # Menu builder interface
-│   │   ├── gadgets/               # Kitchen utility gadgets
 │   │   ├── par-levels/            # Par level management
 │   │   ├── order-lists/           # Order lists
 │   │   ├── prep-lists/            # Prep lists

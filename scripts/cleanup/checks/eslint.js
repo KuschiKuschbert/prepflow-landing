@@ -65,4 +65,3 @@ module.exports = {
   name: 'eslint',
   check: checkESLint,
 };
-

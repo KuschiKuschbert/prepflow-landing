@@ -31,7 +31,9 @@ export function useIngredientMigration(loading: boolean, isLoading: boolean, ing
           }
         }
       } catch (err) {
-        logger.warn('Migration check failed:', { error: err instanceof Error ? err.message : String(err) });
+        logger.warn('Migration check failed:', {
+          error: err instanceof Error ? err.message : String(err),
+        });
       } finally {
         setMigrationChecked(true);
       }

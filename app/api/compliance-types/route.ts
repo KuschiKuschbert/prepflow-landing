@@ -14,7 +14,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabaseAdmin.from('compliance_types').select('*').order('name');
+    // Database uses 'type_name' column based on schema migrations
+    const { data, error } = await supabaseAdmin
+      .from('compliance_types')
+      .select('*')
+      .order('type_name', { ascending: true, nullsFirst: false });
 
     if (error) {
       logger.error('[Compliance Types API] Database error fetching types:', {
@@ -27,9 +31,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
+    // Map 'type_name' to 'name' for frontend compatibility
+    const normalizedData = (data || []).map((item: any) => ({
+      ...item,
+      name: item.type_name || item.name,
+    }));
+
     return NextResponse.json({
       success: true,
-      data: data || [],
+      data: normalizedData,
     });
   } catch (err) {
     logger.error('[Compliance Types API] Unexpected error:', {
@@ -72,13 +82,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Database uses 'type_name' column based on schema migrations
+    const insertData = {
+      type_name: name,
+      description: description || null,
+      renewal_frequency_days: renewal_frequency_days || null,
+    };
+
     const { data, error } = await supabaseAdmin
       .from('compliance_types')
-      .insert({
-        name,
-        description: description || null,
-        renewal_frequency_days: renewal_frequency_days || null,
-      })
+      .insert(insertData)
       .select()
       .single();
 
@@ -97,10 +110,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
+    // Map 'type_name' to 'name' for frontend compatibility
+    const normalizedData = {
+      ...data,
+      name: (data as any).type_name || (data as any).name,
+    };
+
     return NextResponse.json({
       success: true,
       message: 'Compliance type created successfully',
-      data,
+      data: normalizedData,
     });
   } catch (err) {
     logger.error('[Compliance Types API] Unexpected error:', {

@@ -27,6 +27,7 @@ interface Ingredient {
 }
 
 interface UseIngredientActionsProps {
+  ingredients?: Ingredient[];
   setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
   setError: (error: string) => void;
   setShowAddForm?: (show: boolean) => void;

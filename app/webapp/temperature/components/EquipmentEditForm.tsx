@@ -137,4 +137,3 @@ export function EquipmentEditForm({
     </div>
   );
 }
-

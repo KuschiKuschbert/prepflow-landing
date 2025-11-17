@@ -8,7 +8,7 @@ import { Menu } from '../types';
 interface MenuFormProps {
   menu?: Menu | null;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (savedMenu: Menu) => void;
 }
 
 export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
@@ -56,7 +56,12 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
         return;
       }
 
-      onSave();
+      if (result.success && result.menu) {
+        onSave(result.menu);
+      } else {
+        setError('Failed to save menu. Please try again.');
+        setLoading(false);
+      }
     } catch (err) {
       setError('Failed to save menu. Please check your connection and try again.');
       setLoading(false);

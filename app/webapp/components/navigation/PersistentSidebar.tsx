@@ -6,11 +6,15 @@ import { LogoutButton } from '../LogoutButton';
 import { CategorySection } from './CategorySection';
 import { useNavigationItems } from './nav-items';
 import { NewButton } from './NewButton';
+import { useWorkflowPreference } from '@/lib/workflow/preferences';
+import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 
 export default function PersistentSidebar() {
   const pathname = usePathname();
+  const { workflow } = useWorkflowPreference();
+  const { trackNavigation } = useNavigationTracking();
 
-  const allItems = useNavigationItems();
+  const allItems = useNavigationItems(workflow);
 
   // Group items by category
   const groupedItems = allItems.reduce(
@@ -43,7 +47,14 @@ export default function PersistentSidebar() {
         {/* Collapsible content */}
         <div className="tablet:p-4 desktop:p-5 flex-1 overflow-y-auto p-3">
           {Object.entries(groupedItems).map(([category, items]) => (
-            <CategorySection key={category} category={category} items={items} isActive={isActive} />
+            <CategorySection
+              key={category}
+              category={category}
+              items={items}
+              isActive={isActive}
+              onTrack={trackNavigation}
+              workflow={workflow}
+            />
           ))}
         </div>
 

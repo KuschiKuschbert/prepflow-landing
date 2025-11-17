@@ -34,7 +34,8 @@ export async function fetchMenuData(menuId: string) {
         id,
         name,
         description,
-        yield
+        yield,
+        instructions
       )
     `,
     )

@@ -3,6 +3,7 @@
 import { Calendar } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { DateRange, DateRangePreset } from '../types';
+import { useEffect, useState } from 'react';
 
 interface PerformanceDateRangeProps {
   dateRange: DateRange;
@@ -21,6 +22,11 @@ export default function PerformanceDateRange({
   dateRange,
   onDateRangeChange,
 }: PerformanceDateRangeProps) {
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   const handlePresetChange = (preset: DateRangePreset) => {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
@@ -62,6 +68,29 @@ export default function PerformanceDateRange({
   const formatDate = (date: Date | null) => {
     if (!date) return '';
     return date.toISOString().split('T')[0];
+  };
+
+  const formatDateForDisplay = (date: Date) => {
+    if (!isHydrated) return '';
+    // Use consistent formatting that works on both server and client
+    const day = date.getDate();
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
   };
 
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,23 +165,14 @@ export default function PerformanceDateRange({
       )}
 
       {/* Display Current Range */}
-      {dateRange.preset !== 'custom' && dateRange.startDate && dateRange.endDate && (
+      {isHydrated && dateRange.preset !== 'custom' && dateRange.startDate && dateRange.endDate && (
         <div className="mt-3 text-xs text-gray-400">
           {dateRange.preset === 'all' ? (
             <span>Showing all available data</span>
           ) : (
             <span>
-              {dateRange.startDate.toLocaleDateString('en-AU', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              })}{' '}
-              to{' '}
-              {dateRange.endDate.toLocaleDateString('en-AU', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              })}
+              {formatDateForDisplay(dateRange.startDate)} to{' '}
+              {formatDateForDisplay(dateRange.endDate)}
             </span>
           )}
         </div>

@@ -47,12 +47,12 @@ export async function POST(req: NextRequest) {
 
     const { data: recipes, error: recErr } = await supabaseAdmin
       .from('recipes')
-      .select('id, name, updated_at');
+      .select('id, recipe_name, updated_at');
     if (recErr) throw recErr;
 
     const recipeGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
     (recipes || []).forEach(row => {
-      const key = String(row.name || '')
+      const key = String(row.recipe_name || '')
         .toLowerCase()
         .trim();
       if (!recipeGroups[key]) recipeGroups[key] = { key, ids: [], sample: row };

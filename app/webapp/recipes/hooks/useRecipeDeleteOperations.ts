@@ -48,8 +48,7 @@ export function useRecipeDeleteOperations(
         return;
       }
 
-      // Refresh to sync with server
-      await fetchRecipes();
+      // Success - optimistic update already applied, no need to refetch
       showSuccess(`Recipe "${recipeName}" deleted successfully!`);
       setShowDeleteConfirm(false);
       setRecipeToDelete(null);
@@ -60,7 +59,6 @@ export function useRecipeDeleteOperations(
     }
   }, [
     recipeToDelete,
-    fetchRecipes,
     capitalizeRecipeName,
     showSuccess,
     showErrorNotification,

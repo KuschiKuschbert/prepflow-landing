@@ -57,7 +57,9 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (aiError) {
-      logger.warn('AI performance tips failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
+      logger.warn('AI performance tips failed, using fallback:', {
+        error: aiError instanceof Error ? aiError.message : String(aiError),
+      });
     }
 
     // Fallback to rule-based logic

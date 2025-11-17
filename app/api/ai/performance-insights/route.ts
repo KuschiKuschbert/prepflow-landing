@@ -56,7 +56,9 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (aiError) {
-      logger.warn('AI performance insights failed, using fallback:', { error: aiError instanceof Error ? aiError.message : String(aiError) });
+      logger.warn('AI performance insights failed, using fallback:', {
+        error: aiError instanceof Error ? aiError.message : String(aiError),
+      });
     }
 
     // Fallback: Return empty array - component should handle fallback to rule-based
