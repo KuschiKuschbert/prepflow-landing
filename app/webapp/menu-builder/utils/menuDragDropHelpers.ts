@@ -1,6 +1,7 @@
 import { arrayMove } from '@dnd-kit/sortable';
 import { MenuItem } from '../types';
 
+import { logger } from '../../lib/logger';
 export async function addDishToMenu(
   menuId: string,
   dishId: string,
@@ -24,12 +25,12 @@ export async function addDishToMenu(
       await onMenuDataReload();
       onStatisticsUpdate();
     } else {
-      console.error('Failed to add dish to menu:', result.error || result.message);
+      logger.error('Failed to add dish to menu:', result.error || result.message);
       // Show user-friendly error
       alert(`Failed to add dish: ${result.error || result.message || 'Unknown error'}`);
     }
   } catch (err) {
-    console.error('Failed to add dish to menu:', err);
+    logger.error('Failed to add dish to menu:', err);
     alert('Failed to add dish. Please check your connection and try again.');
   }
 }
@@ -57,12 +58,12 @@ export async function addRecipeToMenu(
       await onMenuDataReload();
       onStatisticsUpdate();
     } else {
-      console.error('Failed to add recipe to menu:', result.error || result.message);
+      logger.error('Failed to add recipe to menu:', result.error || result.message);
       // Show user-friendly error
       alert(`Failed to add recipe: ${result.error || result.message || 'Unknown error'}`);
     }
   } catch (err) {
-    console.error('Failed to add recipe to menu:', err);
+    logger.error('Failed to add recipe to menu:', err);
     alert('Failed to add recipe. Please check your connection and try again.');
   }
 }
@@ -112,12 +113,12 @@ export async function reorderMenuItems(
       setMenuItems([...otherItems, ...updatedItems]);
       onStatisticsUpdate();
     } else {
-      console.error('Failed to reorder items:', result.error || result.message);
+      logger.error('Failed to reorder items:', result.error || result.message);
       // Revert the UI change on error
       await onMenuDataReload();
     }
   } catch (err) {
-    console.error('Failed to reorder items:', err);
+    logger.error('Failed to reorder items:', err);
     // Revert the UI change on error
     await onMenuDataReload();
   }

@@ -36,7 +36,8 @@ export function useViewportHeight(options: UseViewportHeightOptions = {}): Viewp
       const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
       // Detect iPad specifically
-      const isIPad = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      const isIPad =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
       // Treat as mobile if:

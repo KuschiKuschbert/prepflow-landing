@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function PUT(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
@@ -47,7 +48,10 @@ export async function PUT(request: NextRequest) {
     }
 
     // If updating wastage, also update yield percentage
-    if ('trim_peel_waste_percentage' in updates && typeof updates.trim_peel_waste_percentage === 'number') {
+    if (
+      'trim_peel_waste_percentage' in updates &&
+      typeof updates.trim_peel_waste_percentage === 'number'
+    ) {
       updateData.yield_percentage = 100 - updates.trim_peel_waste_percentage;
     }
 
@@ -66,7 +70,7 @@ export async function PUT(request: NextRequest) {
       .select();
 
     if (error) {
-      console.error('[bulk-update] Error updating ingredients:', error);
+      logger.error('[bulk-update] Error updating ingredients:', error);
       return NextResponse.json(
         {
           error: 'Failed to update ingredients',
@@ -85,7 +89,7 @@ export async function PUT(request: NextRequest) {
       },
     });
   } catch (e: any) {
-    console.error('[bulk-update] Unexpected error:', e);
+    logger.error('[bulk-update] Unexpected error:', e);
     return NextResponse.json(
       {
         error: 'Internal server error',

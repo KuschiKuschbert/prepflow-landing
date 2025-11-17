@@ -2534,6 +2534,56 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - Avoid passing `"new"` as `entityId` to `useAutosave`.
 - Ensure minimal field validation so autosave is only enabled when meaningful.
 
+## 🧹 **Unified Cleanup System**
+
+**Status:** ✅ Fully Implemented
+
+**Purpose:** Comprehensive automated enforcement of ALL code quality and standards.
+
+**Documentation:** See `.cursor/rules/cleanup.mdc` for complete cleanup standards and enforcement details.
+
+**Quick Start:**
+
+- Check all standards: `npm run cleanup:check`
+- Auto-fix available issues: `npm run cleanup:fix`
+- Generate detailed report: `npm run cleanup:report`
+- Check staged files only: `npm run cleanup:staged`
+
+**Standards Enforced:**
+
+- File size limits (pages: 500, components: 300, API: 200, utils: 150, hooks: 100)
+- Breakpoint standards (custom breakpoints only, detects rogue breakpoints)
+- Console.log migration (360 instances → logger.dev())
+- Unused imports (via ESLint)
+- TypeScript ref types (RefObject patterns)
+- JSDoc documentation (public functions/components/hooks)
+- Icon standards (Lucide icons with Icon wrapper)
+- Naming conventions (files, components, functions, constants)
+- Prettier formatting (semicolons, quotes, width)
+- ESLint violations (hooks rules, unescaped entities)
+- Dead code detection (unused exports)
+- Security patterns (input validation, rate limiting)
+- Performance standards (bundle size, API response times)
+
+**Integration:**
+
+- Pre-commit hook: Automatically runs on staged files
+- CI pipeline: Runs on all PRs, generates report artifacts
+- Exit codes: 0 (pass), 1 (critical violations), 2 (warnings only)
+
+**Cross-References:**
+
+- All standards reference source MDC files (development.mdc, design.mdc, etc.)
+- All MDC files reference cleanup.mdc for automated enforcement
+- Violation reports include standard references for easy navigation
+
+**See Also:**
+
+- `.cursor/rules/cleanup.mdc` - Complete cleanup standards documentation
+- `scripts/cleanup.js` - Main cleanup script
+- `scripts/cleanup/checks/` - Individual check modules
+- `scripts/cleanup/fixes/` - Individual fix modules
+
 ## 📋 **Enterprise Cleanup & Standards Summary**
 
 ### **✅ Completed (January 2025)**
@@ -2569,23 +2619,26 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 1. **JSDoc Standardization:**
    - ⚠️ In Progress - Apply JSDoc templates across codebase
    - Target: All public functions, components, hooks documented
+   - Enforcement: `npm run cleanup:check` (jsdoc check)
 
 2. **Codemod Scripts:**
-   - 📋 Rules defined - Scripts to be created
-   - Target: Automated breakpoint migration, component replacements
+   - ✅ Breakpoint migration codemod created
+   - ✅ Console.log migration codemod created
+   - 📋 Future: Component updates, error handling standardization
 
 3. **Rogue Breakpoint Removal:**
    - ⚠️ Pending user confirmation
-   - 3 standard Tailwind breakpoints (`sm:`, `md:`, `lg:`) found in 5+ files
-   - Action: Replace with custom breakpoints or remove
+   - Standard Tailwind breakpoints (`sm:`, `md:`, `lg:`) found in files
+   - Action: Run `npm run cleanup:fix` to auto-migrate via codemod
 
 ### **📊 Current Status**
 
 - **TypeScript Errors:** ✅ 0 errors
-- **ESLint Errors:** ⚠️ 9 errors remaining (minor issues)
+- **ESLint Errors:** ⚠️ 26 violations found (use `npm run cleanup:check` to see details)
 - **Prettier:** ✅ Configured and formatted
-- **CI/CD:** ✅ Fully configured
-- **Breakpoints:** ✅ Documented and detected
-- **Documentation:** ✅ Comprehensive standards in AGENTS.md
+- **CI/CD:** ✅ Fully configured (includes cleanup-check job)
+- **Breakpoints:** ✅ Documented and detected (use `npm run cleanup:check`)
+- **Documentation:** ✅ Comprehensive standards in AGENTS.md and cleanup.mdc
+- **Cleanup System:** ✅ Fully implemented with automated enforcement
 
 <!-- redeploy: noop update at 2025-11-03 23:55Z -->

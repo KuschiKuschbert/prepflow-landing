@@ -110,7 +110,7 @@ export function HelpTooltip({
           className={`absolute z-50 w-64 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl ${positionClasses[position]}`}
           role="tooltip"
         >
-          {title && <h4 className="mb-2 text-fluid-sm font-semibold text-white">{title}</h4>}
+          {title && <h4 className="text-fluid-sm mb-2 font-semibold text-white">{title}</h4>}
           <p className="text-fluid-sm leading-relaxed text-gray-300">{content}</p>
           <div className={`absolute h-0 w-0 border-4 ${arrowClasses[position]}`} />
         </div>

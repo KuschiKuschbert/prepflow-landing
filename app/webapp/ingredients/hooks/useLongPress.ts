@@ -65,4 +65,3 @@ export function useLongPress({ onLongPress, onCancel, delay = 500 }: UseLongPres
     onTouchEnd: handleTouchEnd,
   };
 }
-

@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -18,10 +19,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json(
-        { error: 'Messages array is required' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Messages array is required' }, { status: 400 });
     }
 
     const finalCountryCode = countryCode || 'AU';
@@ -29,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('AI chat error:', error);
+    logger.error('AI chat error:', error);
     return NextResponse.json(
       {
         error: 'Failed to generate AI response',

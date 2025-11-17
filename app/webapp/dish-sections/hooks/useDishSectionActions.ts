@@ -1,32 +1,6 @@
 'use client';
-
 import { useCallback } from 'react';
-
-interface KitchenSection {
-  id: string;
-  name: string;
-  description?: string;
-  color: string;
-  created_at: string;
-  updated_at: string;
-  menu_dishes: MenuDish[];
-}
-
-interface MenuDish {
-  id: string;
-  name: string;
-  description?: string;
-  selling_price: number;
-  category: string;
-  kitchen_section_id?: string;
-}
-
-interface FormData {
-  name: string;
-  description: string;
-  color: string;
-}
-
+import { KitchenSection, MenuDish, FormData } from './types';
 interface UseDishSectionActionsProps {
   userId: string;
   kitchenSections: KitchenSection[];
@@ -63,15 +37,12 @@ export function useDishSectionActions({
     setShowForm(false);
     setEditingSection(null);
   }, [setFormData, setShowForm, setEditingSection]);
-
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-
       try {
         const url = '/api/kitchen-sections';
         const method = editingSection ? 'PUT' : 'POST';
-
         const body = editingSection
           ? {
               id: editingSection.id,
@@ -85,15 +56,12 @@ export function useDishSectionActions({
               description: formData.description,
               color: formData.color,
             };
-
         const response = await fetch(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
         });
-
         const result = await response.json();
-
         if (result.success) {
           await fetchKitchenSections();
           resetForm();
@@ -107,7 +75,6 @@ export function useDishSectionActions({
     },
     [editingSection, formData, userId, fetchKitchenSections, resetForm, setError],
   );
-
   const handleEdit = useCallback(
     (section: KitchenSection) => {
       setEditingSection(section);
@@ -120,7 +87,6 @@ export function useDishSectionActions({
     },
     [setEditingSection, setFormData, setShowForm],
   );
-
   const handleDelete = useCallback(
     async (id: string) => {
       if (
@@ -129,11 +95,9 @@ export function useDishSectionActions({
         )
       )
         return;
-
       try {
         const response = await fetch(`/api/kitchen-sections?id=${id}`, { method: 'DELETE' });
         const result = await response.json();
-
         if (result.success) {
           await fetchKitchenSections();
           await fetchMenuDishes();
@@ -146,7 +110,6 @@ export function useDishSectionActions({
     },
     [fetchKitchenSections, fetchMenuDishes, setError],
   );
-
   const handleAssignDish = useCallback(
     async (dishId: string, sectionId: string | null) => {
       try {
@@ -155,9 +118,7 @@ export function useDishSectionActions({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ dishId, sectionId }),
         });
-
         const result = await response.json();
-
         if (result.success) {
           await fetchMenuDishes();
           await fetchKitchenSections();
@@ -170,11 +131,10 @@ export function useDishSectionActions({
     },
     [fetchMenuDishes, fetchKitchenSections, setError],
   );
-
-  const getUnassignedDishes = useCallback(() => {
-    return menuDishes.filter(dish => !dish.kitchen_section_id);
-  }, [menuDishes]);
-
+  const getUnassignedDishes = useCallback(
+    () => menuDishes.filter(dish => !dish.kitchen_section_id),
+    [menuDishes],
+  );
   return {
     handleSubmit,
     handleEdit,

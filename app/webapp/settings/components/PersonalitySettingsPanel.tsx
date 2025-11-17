@@ -46,7 +46,7 @@ export function PersonalitySettingsPanel() {
       {/* Spirit Presets */}
       <div>
         <h3 className="mb-3 text-sm font-medium text-gray-300">Personality Spirit</h3>
-        <div className="grid grid-cols-2 gap-2 desktop:grid-cols-5">
+        <div className="desktop:grid-cols-5 grid grid-cols-2 gap-2">
           {SPIRITS.map(spirit => (
             <button
               key={spirit}
@@ -66,7 +66,7 @@ export function PersonalitySettingsPanel() {
       {/* Feature Toggles */}
       <div className="space-y-3">
         <h3 className="text-sm font-medium text-gray-300">Features</h3>
-        <div className="grid gap-3 desktop:grid-cols-2">
+        <div className="desktop:grid-cols-2 grid gap-3">
           {[
             {
               key: 'moodShiftMessages',

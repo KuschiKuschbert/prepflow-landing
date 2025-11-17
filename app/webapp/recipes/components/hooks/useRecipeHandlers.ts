@@ -99,12 +99,7 @@ export function useRecipeHandlers({
   }, [selectedRecipe, handleDuplicateRecipe, handlePreviewRecipe, setShowUnifiedModal]);
 
   const handleRefreshIngredients = useMemo(
-    () =>
-      buildRefreshIngredients({
-        selectedRecipe,
-        fetchRecipeIngredients,
-        setRecipeIngredients,
-      }),
+    () => buildRefreshIngredients({ selectedRecipe, fetchRecipeIngredients, setRecipeIngredients }),
     [selectedRecipe, fetchRecipeIngredients, setRecipeIngredients],
   );
 

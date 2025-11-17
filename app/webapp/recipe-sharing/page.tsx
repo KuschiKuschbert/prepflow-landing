@@ -5,6 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 
+import { logger } from '../../lib/logger';
 interface Recipe {
   id: string;
   name: string;
@@ -56,7 +57,7 @@ export default function RecipeSharingPage() {
         setRecipes(result.data);
       }
     } catch (err) {
-      console.error('Failed to fetch recipes:', err);
+      logger.error('Failed to fetch recipes:', err);
     }
   };
 

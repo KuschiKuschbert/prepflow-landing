@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Dish, DishCostData, Recipe } from '../../types';
 
+import { logger } from '../../lib/logger';
 export function useDishesClientData() {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -48,7 +49,7 @@ export function useDishesClientData() {
             return { dishId: dish.id, cost: costResult.cost };
           }
         } catch (err) {
-          console.error(`Failed to fetch cost for dish ${dish.id}:`, err);
+          logger.error(`Failed to fetch cost for dish ${dish.id}:`, err);
         }
         return null;
       });

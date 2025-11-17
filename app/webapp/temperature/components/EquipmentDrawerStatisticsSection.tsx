@@ -22,7 +22,7 @@ export function EquipmentDrawerStatisticsSection({
     return (
       <div className="space-y-4">
         <LoadingSkeleton variant="card" height="120px" />
-        <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-1">
+        <div className="tablet:grid-cols-2 desktop:grid-cols-1 grid grid-cols-1 gap-4">
           <LoadingSkeleton variant="card" height="180px" />
           <LoadingSkeleton variant="card" height="180px" />
           <LoadingSkeleton variant="card" height="180px" />

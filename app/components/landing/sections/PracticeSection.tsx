@@ -7,18 +7,18 @@ export function PracticeSection() {
     <section id="how-it-works-practice" className="py-20">
       <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-10 shadow-2xl backdrop-blur-sm">
         <div className="text-center">
-          <h2 className="mb-6 text-fluid-3xl font-bold tracking-tight desktop:text-fluid-4xl">
+          <h2 className="text-fluid-3xl desktop:text-fluid-4xl mb-6 font-bold tracking-tight">
             {t('practice.title', 'How PrepFlow Works in Practice')}
           </h2>
-          <p className="mx-auto max-w-3xl text-fluid-lg text-gray-300">
+          <p className="text-fluid-lg mx-auto max-w-3xl text-gray-300">
             {t(
               'practice.description',
               'See how real restaurants use PrepFlow to increase their profit margins and streamline their operations.',
             )}
           </p>
-          <div className="mt-8 grid gap-6 desktop:grid-cols-2">
+          <div className="desktop:grid-cols-2 mt-8 grid gap-6">
             <div className="rounded-2xl bg-[#2a2a2a]/50 p-6">
-              <h3 className="mb-3 text-fluid-xl font-semibold text-[#29E7CD]">
+              <h3 className="text-fluid-xl mb-3 font-semibold text-[#29E7CD]">
                 {t('practice.before.title', 'Before PrepFlow')}
               </h3>
               <ul className="space-y-2 text-gray-300">
@@ -29,7 +29,7 @@ export function PracticeSection() {
               </ul>
             </div>
             <div className="rounded-2xl bg-[#2a2a2a]/50 p-6">
-              <h3 className="mb-3 text-fluid-xl font-semibold text-[#D925C7]">
+              <h3 className="text-fluid-xl mb-3 font-semibold text-[#D925C7]">
                 {t('practice.after.title', 'After PrepFlow')}
               </h3>
               <ul className="space-y-2 text-gray-300">

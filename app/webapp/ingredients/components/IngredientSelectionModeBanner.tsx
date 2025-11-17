@@ -12,7 +12,7 @@ export function IngredientSelectionModeBanner({
   if (!isSelectionMode) return null;
 
   return (
-    <div className="border-b border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 px-6 py-3 large-desktop:hidden">
+    <div className="large-desktop:hidden border-b border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 px-6 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]" />

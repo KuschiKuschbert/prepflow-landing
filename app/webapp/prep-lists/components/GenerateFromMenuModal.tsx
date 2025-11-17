@@ -6,6 +6,7 @@ import { Icon } from '@/components/ui/Icon';
 import { X, ChefHat, Loader2 } from 'lucide-react';
 import type { Menu, GeneratedPrepListData } from '../types';
 
+import { logger } from '../../lib/logger';
 interface GenerateFromMenuModalProps {
   onClose: () => void;
   onGenerate: (data: GeneratedPrepListData) => void;
@@ -36,7 +37,7 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
       }
     } catch (err) {
       setError('Failed to fetch menus');
-      console.error('Error fetching menus:', err);
+      logger.error('Error fetching menus:', err);
     } finally {
       setFetchingMenus(false);
     }
@@ -68,7 +69,7 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
       }
     } catch (err) {
       setError('Failed to generate prep list');
-      console.error('Error generating prep list:', err);
+      logger.error('Error generating prep list:', err);
     } finally {
       setLoading(false);
     }

@@ -78,24 +78,26 @@ export function RecipeSidePanel({
   const calculations: COGSCalculation[] = useMemo(() => {
     if (!recipe || recipeIngredients.length === 0) return [];
     const recipeCOGS = convertToCOGSCalculations(recipeIngredients, recipe.id);
-    return recipeCOGS.map((calc: RecipeCOGSCalculation): COGSCalculation => ({
-      recipeId: recipe.id,
-      ingredientId: calc.ingredientId || calc.ingredient_id || '',
-      ingredientName: calc.ingredientName || calc.ingredient_name || '',
-      quantity: calc.quantity,
-      unit: calc.unit,
-      costPerUnit: calc.cost_per_unit || 0,
-      totalCost: calc.total_cost || 0,
-      wasteAdjustedCost: calc.yieldAdjustedCost,
-      yieldAdjustedCost: calc.yieldAdjustedCost,
-      id: calc.id,
-      ingredient_id: calc.ingredient_id,
-      ingredient_name: calc.ingredient_name,
-      cost_per_unit: calc.cost_per_unit,
-      total_cost: calc.total_cost,
-      supplier_name: calc.supplier_name,
-      category: calc.category,
-    }));
+    return recipeCOGS.map(
+      (calc: RecipeCOGSCalculation): COGSCalculation => ({
+        recipeId: recipe.id,
+        ingredientId: calc.ingredientId || calc.ingredient_id || '',
+        ingredientName: calc.ingredientName || calc.ingredient_name || '',
+        quantity: calc.quantity,
+        unit: calc.unit,
+        costPerUnit: calc.cost_per_unit || 0,
+        totalCost: calc.total_cost || 0,
+        wasteAdjustedCost: calc.yieldAdjustedCost,
+        yieldAdjustedCost: calc.yieldAdjustedCost,
+        id: calc.id,
+        ingredient_id: calc.ingredient_id,
+        ingredient_name: calc.ingredient_name,
+        cost_per_unit: calc.cost_per_unit,
+        total_cost: calc.total_cost,
+        supplier_name: calc.supplier_name,
+        category: calc.category,
+      }),
+    );
   }, [recipe, recipeIngredients]);
 
   const totalCOGS = useMemo(() => {
@@ -189,7 +191,7 @@ export function RecipeSidePanel({
     <>
       {/* Backdrop - only on mobile */}
       <div
-        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm desktop:hidden transition-opacity duration-300"
+        className="desktop:hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
         style={{
           top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
         }}
@@ -200,7 +202,7 @@ export function RecipeSidePanel({
       {/* Side Panel */}
       <div
         ref={panelRef}
-        className={`fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out desktop:max-w-lg ${
+        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={panelStyle}
@@ -216,7 +218,10 @@ export function RecipeSidePanel({
             onClose={onClose}
           />
 
-          <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 space-y-6" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div
+            className="flex-1 space-y-6 overflow-x-hidden overflow-y-auto p-6"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             <RecipeSidePanelCostSummary
               calculations={calculations}
               totalCOGS={totalCOGS}
@@ -244,7 +249,7 @@ export function RecipeSidePanel({
               <div>
                 <h3 className="mb-3 text-sm font-semibold text-white">Instructions</h3>
                 <div className="rounded-lg bg-[#0a0a0a] p-4">
-                  <p className="text-sm text-gray-300 line-clamp-4 whitespace-pre-wrap">
+                  <p className="line-clamp-4 text-sm whitespace-pre-wrap text-gray-300">
                     {recipe.instructions}
                   </p>
                 </div>

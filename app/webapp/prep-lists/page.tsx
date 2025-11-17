@@ -9,6 +9,7 @@ import { GenerateFromMenuModal } from './components/GenerateFromMenuModal';
 import { PrepListPreview } from './components/PrepListPreview';
 import { usePrepListsQuery } from './hooks/usePrepListsQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { logger } from '../../lib/logger';
 import type {
   KitchenSection,
   Ingredient,
@@ -71,7 +72,7 @@ export default function PrepListsPage() {
           cacheData('kitchen_sections', result.data);
         }
       } catch (err) {
-        console.error('Failed to fetch kitchen sections:', err);
+        logger.error('Failed to fetch kitchen sections:', err);
       }
     };
 
@@ -102,7 +103,7 @@ export default function PrepListsPage() {
           cacheData('prep_lists_ingredients', ingredientsArray);
         }
       } catch (err) {
-        console.error('Failed to fetch ingredients:', err);
+        logger.error('Failed to fetch ingredients:', err);
       }
     };
 
@@ -278,7 +279,7 @@ export default function PrepListsPage() {
       }
     } catch (err) {
       setError('Failed to save prep lists');
-      console.error('Error saving batch prep lists:', err);
+      logger.error('Error saving batch prep lists:', err);
     }
   };
 

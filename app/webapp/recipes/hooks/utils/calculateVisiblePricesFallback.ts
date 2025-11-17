@@ -1,5 +1,6 @@
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Calculate prices using parallel individual fetches as fallback.
  *
@@ -21,7 +22,7 @@ export async function calculateVisiblePricesFallback({
   ) => RecipePriceData | null;
 }): Promise<Record<string, RecipePriceData>> {
   const prices: Record<string, RecipePriceData> = {};
-  console.log(
+  logger.dev(
     '[RecipePricing] Falling back to parallel individual fetches for',
     visibleRecipes.length,
     'recipes',
@@ -49,19 +50,19 @@ export async function calculateVisiblePricesFallback({
           if (err instanceof Error && err.name === 'AbortError') {
             return { recipeId: recipe.id, priceData: null };
           }
-          console.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, err);
+          logger.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, err);
           return { recipeId: recipe.id, priceData: null };
         }
       }),
     );
     const fallbackDuration = Date.now() - fallbackStartTime;
-    console.log('[RecipePricing] Parallel fetch completed in', fallbackDuration, 'ms');
+    logger.dev('[RecipePricing] Parallel fetch completed in', fallbackDuration, 'ms');
     results.forEach(({ recipeId, priceData }) => {
       if (priceData) prices[recipeId] = priceData;
     });
-    console.log('[RecipePricing] Calculated prices for', Object.keys(prices).length, 'recipes');
+    logger.dev('[RecipePricing] Calculated prices for', Object.keys(prices).length, 'recipes');
   } catch (err) {
-    console.error('[RecipePricing] Failed to calculate recipe prices:', err);
+    logger.error('[RecipePricing] Failed to calculate recipe prices:', err);
   }
 
   return prices;

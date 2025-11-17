@@ -4,6 +4,7 @@ import { Menu } from '../types';
 import { Edit, Trash2, FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
+import { logger } from '../../lib/logger';
 interface MenuListProps {
   menus: Menu[];
   onSelectMenu: (menu: Menu) => void;
@@ -28,7 +29,7 @@ export default function MenuList({ menus, onSelectMenu, onEditMenu, onDeleteMenu
         alert(`Failed to delete menu: ${result.error || result.message || 'Unknown error'}`);
       }
     } catch (err) {
-      console.error('Failed to delete menu:', err);
+      logger.error('Failed to delete menu:', err);
       alert('Failed to delete menu. Please try again.');
     }
   };

@@ -55,12 +55,12 @@ export function TemperatureLogCard({
 
       <div className="relative">
         <div className="mb-4 flex items-start justify-between gap-4">
-          <div className="flex items-start gap-4 flex-1 min-w-0">
+          <div className="flex min-w-0 flex-1 items-start gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 shadow-lg">
               <span className="text-2xl">{getTypeIcon(log.temperature_type)}</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="mb-1 text-lg font-semibold text-white truncate">
+            <div className="min-w-0 flex-1">
+              <h4 className="mb-1 truncate text-lg font-semibold text-white">
                 {log.location || getTypeLabel(log.temperature_type)}
               </h4>
               <div className="flex flex-wrap items-center gap-2 text-sm text-gray-400">
@@ -73,17 +73,11 @@ export function TemperatureLogCard({
             </div>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-2">
-            <span className="text-3xl font-bold text-[#29E7CD]">
-              {log.temperature_celsius}°C
-            </span>
+            <span className="text-3xl font-bold text-[#29E7CD]">{log.temperature_celsius}°C</span>
             <span
               className={`rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(status)}`}
             >
-              {status === 'high'
-                ? '⚠️ High'
-                : status === 'low'
-                  ? '⚠️ Low'
-                  : '✅ Normal'}
+              {status === 'high' ? '⚠️ High' : status === 'low' ? '⚠️ Low' : '✅ Normal'}
             </span>
           </div>
         </div>
@@ -105,9 +99,7 @@ export function TemperatureLogCard({
                 </span>
               </div>
             )}
-            {log.notes && (
-              <p className="text-sm text-gray-300 leading-relaxed">{log.notes}</p>
-            )}
+            {log.notes && <p className="text-sm leading-relaxed text-gray-300">{log.notes}</p>}
           </div>
         )}
 
@@ -116,10 +108,10 @@ export function TemperatureLogCard({
           <div
             className={`mb-4 rounded-2xl border p-4 ${
               foodSafety.status === 'safe'
-                ? 'bg-green-400/10 border-green-400/20'
+                ? 'border-green-400/20 bg-green-400/10'
                 : foodSafety.status === 'warning'
-                  ? 'bg-yellow-400/10 border-yellow-400/20'
-                  : 'bg-red-400/10 border-red-400/20'
+                  ? 'border-yellow-400/20 bg-yellow-400/10'
+                  : 'border-red-400/20 bg-red-400/10'
             }`}
           >
             <div className="flex items-start gap-3">

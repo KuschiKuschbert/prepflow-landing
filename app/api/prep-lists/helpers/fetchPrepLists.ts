@@ -5,7 +5,6 @@ interface FetchPrepListsParams {
   page: number;
   pageSize: number;
 }
-
 interface PrepListData {
   id: string;
   kitchen_section_id?: string;
@@ -24,7 +23,6 @@ interface KitchenSection {
   color?: string;
   color_code?: string;
 }
-
 interface PrepListItem {
   id: string;
   prep_list_id: string;
@@ -42,7 +40,6 @@ interface Ingredient {
   unit: string;
   category?: string;
 }
-
 export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepListsParams) {
   if (!supabaseAdmin) {
     throw new Error('Database connection not available');
@@ -50,7 +47,6 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
 
   const start = (page - 1) * pageSize;
   const end = start + pageSize - 1;
-
   // Step 1: Fetch prep lists (simple query, no nested relationships)
   let prepListsQuery = supabaseAdmin
     .from('prep_lists')
@@ -58,11 +54,7 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
     .order('created_at', { ascending: false })
     .range(start, end);
 
-  // Try to filter by user_id if column exists
-  if (userId) {
-    prepListsQuery = prepListsQuery.eq('user_id', userId);
-  }
-
+  if (userId) prepListsQuery = prepListsQuery.eq('user_id', userId);
   const { data: prepLists, error: prepListsError, count } = await prepListsQuery;
 
   // If user_id filter fails, try without it
@@ -81,10 +73,9 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
     return {
       prepLists: (fallbackResult.data || []) as PrepListData[],
       count: fallbackResult.count || 0,
-      empty: true, // Indicates we should return early with empty relationships
+      empty: true,
     };
   }
-
   if (prepListsError) {
     throw new Error(`Failed to fetch prep lists: ${prepListsError.message}`);
   }
@@ -113,7 +104,6 @@ export async function fetchRelatedData(prepLists: PrepListData[]) {
   const sectionIds = prepLists
     .map((list: any) => list.kitchen_section_id || list.section_id)
     .filter(Boolean);
-
   // Step 2: Fetch all related data in parallel
   const [kitchenSectionsResult, prepListItemsResult] = await Promise.all([
     // Fetch kitchen sections
@@ -134,7 +124,6 @@ export async function fetchRelatedData(prepLists: PrepListData[]) {
 
   const kitchenSections = (kitchenSectionsResult.data || []) as KitchenSection[];
   const prepListItems = (prepListItemsResult.data || []) as PrepListItem[];
-
   // Build kitchen sections map
   const sectionsMap = new Map();
   kitchenSections.forEach((section: any) => {
@@ -153,7 +142,6 @@ export async function fetchRelatedData(prepLists: PrepListData[]) {
     }
     itemsByPrepListId.get(item.prep_list_id).push(item);
   });
-
   return { sectionsMap, itemsByPrepListId, prepListItems };
 }
 
@@ -163,7 +151,6 @@ export async function fetchIngredientsBatch(ingredientIds: string[]) {
   }
 
   const ingredientsMap = new Map();
-
   // Fetch in batches of 100
   for (let i = 0; i < ingredientIds.length; i += 100) {
     const batch = ingredientIds.slice(i, i + 100);
@@ -186,7 +173,6 @@ export async function fetchIngredientsBatch(ingredientIds: string[]) {
 
   return ingredientsMap;
 }
-
 export function combinePrepListData(
   prepLists: PrepListData[],
   sectionsMap: Map<string, any>,

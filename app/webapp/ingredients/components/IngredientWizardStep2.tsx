@@ -22,7 +22,7 @@ export default function IngredientWizardStep2({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 large-desktop:grid-cols-4">
+    <div className="tablet:grid-cols-2 large-desktop:grid-cols-4 grid grid-cols-1 gap-3">
       {/* Supplier */}
       <div>
         <label className="mb-1.5 block text-sm font-medium text-gray-300">Supplier</label>
@@ -51,9 +51,7 @@ export default function IngredientWizardStep2({
 
       {/* Storage Location */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-300">
-          Storage Location
-        </label>
+        <label className="mb-1.5 block text-sm font-medium text-gray-300">Storage Location</label>
         <StorageCombobox
           value={formData.storage_location || ''}
           onChange={value => onInputChange('storage_location', value)}

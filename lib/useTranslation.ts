@@ -1,6 +1,6 @@
 'use client';
-
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 // Available languages - Only English and German
 export const availableLanguages = {
@@ -28,10 +28,8 @@ async function loadTranslations(language: string) {
       return deDE;
     }
   } catch (error) {
-    console.error(`Failed to load translations for ${language}:`, error);
+    logger.error(`Failed to load translations for ${language}:`, error);
   }
-
-  // Fallback to English if loading fails
   if (!translations['en-AU']) {
     const { translations: enAU } = await import('./translations/en-AU');
     translations['en-AU'] = enAU;
@@ -44,21 +42,9 @@ function getBrowserLanguage(): string {
   if (typeof window === 'undefined') return 'en-AU';
 
   const browserLang = navigator.language || 'en-AU';
-
-  // Check for exact match
-  if (availableLanguages[browserLang as keyof typeof availableLanguages]) {
-    return browserLang;
-  }
-
-  // Check for language code only (e.g., 'en' from 'en-US')
+  if (availableLanguages[browserLang as keyof typeof availableLanguages]) return browserLang;
   const langCode = browserLang.split('-')[0];
-
-  // Only support English and German
-  if (langCode === 'de') {
-    return 'de-DE';
-  }
-
-  // Default to English for all other languages
+  if (langCode === 'de') return 'de-DE';
   return 'en-AU';
 }
 
@@ -95,13 +81,7 @@ export function useTranslation() {
   const t = (key: string, fallback?: string | any[]): string | any[] => {
     const currentTranslations = translations[currentLanguage] || translations['en-AU'];
     const translation = getNestedValue(currentTranslations, key);
-
-    // If translation is found, return it
-    if (translation !== undefined) {
-      return translation;
-    }
-
-    // If no translation found, return fallback or key
+    if (translation !== undefined) return translation;
     return fallback || key;
   };
 
@@ -110,24 +90,15 @@ export function useTranslation() {
     if (availableLanguages[language as keyof typeof availableLanguages]) {
       setCurrentLanguage(language);
       localStorage.setItem('prepflow_language', language);
-
-      // Load the translation if not already loaded
       await loadTranslations(language);
-
-      // Reload the page to apply the new language
-      if (typeof window !== 'undefined') {
-        window.location.reload();
-      }
+      if (typeof window !== 'undefined') window.location.reload();
     }
   };
 
   // Get current language info
-  const getCurrentLanguageInfo = () => {
-    return (
-      availableLanguages[currentLanguage as keyof typeof availableLanguages] ||
-      availableLanguages['en-AU']
-    );
-  };
+  const getCurrentLanguageInfo = () =>
+    availableLanguages[currentLanguage as keyof typeof availableLanguages] ||
+    availableLanguages['en-AU'];
 
   // Get all available languages
   const getAvailableLanguages = () => {

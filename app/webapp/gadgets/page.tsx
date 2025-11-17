@@ -133,40 +133,40 @@ function GadgetsContent() {
 
   return (
     <div className="w-full bg-[#0a0a0a] text-white">
-      <div className="mx-auto w-full px-2 py-2 tablet:px-4 tablet:py-4 desktop:px-6 desktop:py-6">
+      <div className="tablet:px-4 tablet:py-4 desktop:px-6 desktop:py-6 mx-auto w-full px-2 py-2">
         {/* Compact Header for Mobile */}
-        <div className="mb-2 flex-shrink-0 tablet:mb-4">
-          <h1 className="text-fluid-base font-bold text-white tablet:text-fluid-xl desktop:text-fluid-2xl">
-            <span className="mr-1 tablet:mr-2">🔧</span>
+        <div className="tablet:mb-4 mb-2 flex-shrink-0">
+          <h1 className="text-fluid-base tablet:text-fluid-xl desktop:text-fluid-2xl font-bold text-white">
+            <span className="tablet:mr-2 mr-1">🔧</span>
             Kitchen Gadgets
           </h1>
-          <p className="hidden text-fluid-xs text-gray-400 tablet:block tablet:text-fluid-sm">
+          <p className="text-fluid-xs tablet:block tablet:text-fluid-sm hidden text-gray-400">
             Useful digital tools for your kitchen
           </p>
         </div>
 
         {/* Compact Tab Navigation */}
-        <div className="mb-2 w-full flex-shrink-0 overflow-x-auto tablet:mb-4">
-          <div className="flex w-full space-x-1 border-b border-[#2a2a2a] tablet:space-x-2">
+        <div className="tablet:mb-4 mb-2 w-full flex-shrink-0 overflow-x-auto">
+          <div className="tablet:space-x-2 flex w-full space-x-1 border-b border-[#2a2a2a]">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-shrink-0 items-center gap-1 border-b-2 px-2 py-2 text-fluid-xs font-medium transition-colors tablet:gap-2 tablet:px-3 desktop:py-2.5 tablet:text-fluid-sm ${
+                className={`text-fluid-xs tablet:gap-2 tablet:px-3 desktop:py-2.5 tablet:text-fluid-sm flex flex-shrink-0 items-center gap-1 border-b-2 px-2 py-2 font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'border-[#29E7CD] text-[#29E7CD]'
                     : 'border-transparent text-gray-400 hover:border-gray-500 hover:text-gray-300'
                 }`}
               >
                 <span className="text-fluid-sm tablet:text-fluid-base">{tab.icon}</span>
-                <span className="hidden tablet:inline">{tab.label}</span>
+                <span className="tablet:inline hidden">{tab.label}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* Swipe Indicators */}
-        <div className="mb-2 flex flex-shrink-0 items-center justify-center gap-1.5 tablet:mb-4 tablet:gap-2">
+        <div className="tablet:mb-4 tablet:gap-2 mb-2 flex flex-shrink-0 items-center justify-center gap-1.5">
           {tabs.map((tab, index) => {
             const currentIndex = tabs.findIndex(t => t.id === activeTab);
             return (
@@ -175,8 +175,8 @@ function GadgetsContent() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`h-1 rounded-full transition-all duration-200 ${
                   index === currentIndex
-                    ? 'w-5 bg-[#29E7CD] tablet:w-6'
-                    : 'w-1 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50 tablet:w-1.5'
+                    ? 'tablet:w-6 w-5 bg-[#29E7CD]'
+                    : 'tablet:w-1.5 w-1 bg-[#2a2a2a] hover:bg-[#2a2a2a]/50'
                 }`}
                 aria-label={`Go to ${tab.label}`}
               />
@@ -186,9 +186,9 @@ function GadgetsContent() {
 
         {/* Swipe Hint (shown on first load) */}
         {showSwipeHint && (
-          <div className="mb-2 flex flex-shrink-0 items-center justify-center gap-1.5 text-fluid-xs text-gray-400 tablet:mb-4 tablet:gap-2 tablet:text-fluid-sm">
+          <div className="text-fluid-xs tablet:mb-4 tablet:gap-2 tablet:text-fluid-sm mb-2 flex flex-shrink-0 items-center justify-center gap-1.5 text-gray-400">
             <svg
-              className="h-3 w-3 animate-pulse tablet:h-4 tablet:w-4"
+              className="tablet:h-4 tablet:w-4 h-3 w-3 animate-pulse"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -202,7 +202,7 @@ function GadgetsContent() {
             </svg>
             <span>Swipe to navigate</span>
             <svg
-              className="h-3 w-3 animate-pulse tablet:h-4 tablet:w-4"
+              className="tablet:h-4 tablet:w-4 h-3 w-3 animate-pulse"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -233,7 +233,7 @@ function GadgetsContent() {
                 {swipeOffset < -20 && (
                   <div className="pointer-events-none absolute top-1/2 right-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
                     <svg
-                      className="h-6 w-6 text-[#29E7CD] tablet:h-8 tablet:w-8"
+                      className="tablet:h-8 tablet:w-8 h-6 w-6 text-[#29E7CD]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -250,7 +250,7 @@ function GadgetsContent() {
                 {swipeOffset > 20 && (
                   <div className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 rounded-full bg-[#29E7CD]/20 p-3 backdrop-blur-sm">
                     <svg
-                      className="h-6 w-6 text-[#29E7CD] tablet:h-8 tablet:w-8"
+                      className="tablet:h-8 tablet:w-8 h-6 w-6 text-[#29E7CD]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -295,16 +295,16 @@ export default function GadgetsPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-[#0a0a0a] text-white">
-            <div className="mx-auto max-w-7xl px-4 py-6 tablet:px-6 tablet:py-8">
-              <PageHeader
-                title="Kitchen Gadgets"
-                subtitle="Useful digital tools for your kitchen"
-                icon={Wrench}
-              />
-              <div className="rounded-2xl bg-[#1f1f1f] p-6 tablet:p-8">
-                <div className="animate-pulse text-center text-gray-400">Loading gadgets...</div>
-              </div>
+          <div className="tablet:px-6 tablet:py-8 mx-auto max-w-7xl px-4 py-6">
+            <PageHeader
+              title="Kitchen Gadgets"
+              subtitle="Useful digital tools for your kitchen"
+              icon={Wrench}
+            />
+            <div className="tablet:p-8 rounded-2xl bg-[#1f1f1f] p-6">
+              <div className="animate-pulse text-center text-gray-400">Loading gadgets...</div>
             </div>
+          </div>
         </div>
       }
     >

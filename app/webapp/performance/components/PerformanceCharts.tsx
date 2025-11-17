@@ -48,7 +48,10 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
           performanceItems
             .filter(item => item.menu_item_class === "Chef's Kiss")
             .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(1, performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length),
+          Math.max(
+            1,
+            performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length,
+          ),
         color: '#22c55e',
       },
       {
@@ -57,7 +60,10 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
           performanceItems
             .filter(item => item.menu_item_class === 'Hidden Gem')
             .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length),
+          Math.max(
+            1,
+            performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
+          ),
         color: '#3b82f6',
       },
       {
@@ -78,7 +84,10 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
           performanceItems
             .filter(item => item.menu_item_class === 'Burnt Toast')
             .reduce((acc, item) => acc + item.gross_profit_percentage, 0) /
-          Math.max(1, performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length),
+          Math.max(
+            1,
+            performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
+          ),
         color: '#ef4444',
       },
     ],
@@ -152,17 +161,23 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
           <p className="text-sm text-gray-300">
             <span className="font-semibold text-white">Insight:</span> Your top 3 items (
             {topProfitItems.map(item => item.name).join(', ')}) generate{' '}
-            <span className="font-semibold text-[#29E7CD]">{top3ProfitPercentage.toFixed(1)}%</span> of total profit
-            ({formatCurrency(topProfitItems.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0))})
+            <span className="font-semibold text-[#29E7CD]">{top3ProfitPercentage.toFixed(1)}%</span>{' '}
+            of total profit (
+            {formatCurrency(
+              topProfitItems.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0),
+            )}
+            )
           </p>
         </div>
       )}
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 gap-6 large-desktop:grid-cols-2">
+      <div className="large-desktop:grid-cols-2 grid grid-cols-1 gap-6">
         {/* Bar Chart - Profit by Category */}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="mb-4 text-lg font-semibold text-white desktop:text-xl">Average Profit Margin by Category</h3>
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-white">
+            Average Profit Margin by Category
+          </h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ReBarChart data={chartData} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
@@ -180,7 +195,10 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
                     border: '1px solid #2a2a2a',
                     color: '#fff',
                   }}
-                  formatter={(value: number | string) => [`${(value as number).toFixed(1)}%`, 'Avg Profit Margin']}
+                  formatter={(value: number | string) => [
+                    `${(value as number).toFixed(1)}%`,
+                    'Avg Profit Margin',
+                  ]}
                 />
                 <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                   {chartData.map((entry, index) => (
@@ -194,7 +212,9 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
 
         {/* Pie Chart - Category Distribution */}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="mb-4 text-lg font-semibold text-white desktop:text-xl">Category Distribution</h3>
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-white">
+            Category Distribution
+          </h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <RePieChart>
@@ -220,11 +240,14 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
       {/* Time Series Chart - Show if date range is selected */}
       {dateRange?.startDate && dateRange?.endDate && (
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="mb-4 text-lg font-semibold text-white desktop:text-xl">Performance Over Time</h3>
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-white">
+            Performance Over Time
+          </h3>
           <p className="mb-4 text-sm text-gray-400">
-            Note: Time-series visualization requires daily sales data. Currently showing aggregated data for the selected period.
+            Note: Time-series visualization requires daily sales data. Currently showing aggregated
+            data for the selected period.
           </p>
-          <div className="h-64 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 flex items-center justify-center">
+          <div className="flex h-64 w-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
             <p className="text-sm text-gray-500">
               Time-series chart coming soon. Select a date range to see trends over time.
             </p>

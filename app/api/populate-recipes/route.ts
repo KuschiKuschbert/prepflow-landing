@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '../../lib/logger';
 import {
   additionalIngredientsForRecipes,
   sampleRecipesForPopulate,
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
     }
 
-    console.log('Starting recipe population...');
+    logger.dev('Starting recipe population...');
 
     // Insert additional ingredients
     for (const ingredient of additionalIngredientsForRecipes) {
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
         .upsert(ingredient, { onConflict: 'product_code' });
 
       if (error) {
-        console.log(`Error inserting ingredient ${ingredient.ingredient_name}:`, error.message);
+        logger.dev(`Error inserting ingredient ${ingredient.ingredient_name}:`, error.message);
       }
     }
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
       const { error } = await supabaseAdmin.from('recipes').upsert(recipe, { onConflict: 'id' });
 
       if (error) {
-        console.log(`Error inserting recipe ${recipe.name}:`, error.message);
+        logger.dev(`Error inserting recipe ${recipe.name}:`, error.message);
       }
     }
 
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
         .eq('recipe_id', recipeId);
 
       if (deleteError) {
-        console.log(
+        logger.dev(
           `Error deleting existing recipe ingredients for ${recipeId}:`,
           deleteError.message,
         );
@@ -85,17 +86,17 @@ export async function POST(request: NextRequest) {
         });
 
         if (error) {
-          console.log(`Error inserting recipe ingredient ${ri.ingredient_name}:`, error.message);
+          logger.dev(`Error inserting recipe ingredient ${ri.ingredient_name}:`, error.message);
         } else {
           insertedCount++;
         }
       } else {
-        console.log(`Ingredient not found: ${ri.ingredient_name}`);
+        logger.dev(`Ingredient not found: ${ri.ingredient_name}`);
         notFoundCount++;
       }
     }
 
-    console.log(`Inserted ${insertedCount} recipe ingredients, ${notFoundCount} not found`);
+    logger.dev(`Inserted ${insertedCount} recipe ingredients, ${notFoundCount} not found`);
 
     return NextResponse.json({
       success: true,
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error populating recipes:', error);
+    logger.error('Error populating recipes:', error);
     return NextResponse.json(
       {
         error: 'Failed to populate recipes',

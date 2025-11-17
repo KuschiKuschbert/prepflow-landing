@@ -58,7 +58,7 @@ export function CreateEquipmentForm({
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
       <form onSubmit={onSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
+        <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Name</label>
             <input
@@ -102,7 +102,7 @@ export function CreateEquipmentForm({
             )}
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 desktop:grid-cols-3">
+        <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">
               Location (Optional)

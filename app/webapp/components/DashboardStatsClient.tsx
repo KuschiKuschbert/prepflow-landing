@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
+import { logger } from '../../lib/logger';
 import type {
   DashboardStatsData,
   TemperatureEquipment,
@@ -57,7 +58,7 @@ export default function DashboardStatsClient() {
       try {
         statsResponse = await fetch('/api/dashboard/stats', { cache: 'no-store' });
       } catch (err) {
-        console.error('Network error fetching stats:', err);
+        logger.error('Network error fetching stats:', err);
         setStatsError(
           'Network error: Unable to fetch dashboard stats. Please check your connection.',
         );
@@ -104,7 +105,7 @@ export default function DashboardStatsClient() {
           cacheData('dashboard_stats', newStats);
         }
       } catch (err) {
-        console.error('Error parsing stats response:', err);
+        logger.error('Error parsing stats response:', err);
         setStatsError('Failed to parse dashboard statistics. Please try again.');
       }
 
@@ -114,7 +115,7 @@ export default function DashboardStatsClient() {
           logsResult.error.message ||
           'Failed to load temperature logs. The dashboard will still work without this data.';
         setTemperatureLogsError(errorMessage);
-        console.error('Error fetching temperature logs:', logsResult.error);
+        logger.error('Error fetching temperature logs:', logsResult.error);
         // Keep existing logs from cache if available, don't clear them
       } else if (logsResult.data) {
         const logs = logsResult.data || [];
@@ -128,7 +129,7 @@ export default function DashboardStatsClient() {
           equipmentResult.error.message ||
           'Failed to load temperature equipment. The dashboard will still work without this data.';
         setTemperatureEquipmentError(errorMessage);
-        console.error('Error fetching temperature equipment:', equipmentResult.error);
+        logger.error('Error fetching temperature equipment:', equipmentResult.error);
         // Keep existing equipment from cache if available, don't clear them
       } else if (equipmentResult.data) {
         const equip = equipmentResult.data || [];
@@ -136,7 +137,7 @@ export default function DashboardStatsClient() {
         cacheData('dashboard_temperature_equipment', equip);
       }
     } catch (error) {
-      console.error('Unexpected error fetching dashboard data:', error);
+      logger.error('Unexpected error fetching dashboard data:', error);
       const errorMessage =
         error instanceof Error
           ? error.message

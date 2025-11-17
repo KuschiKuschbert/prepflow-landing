@@ -35,7 +35,13 @@
     "codemod:breakpoints:write": "npx jscodeshift -t scripts/codemods/breakpoint-migration.js --write app components",
     "codemod:console": "npx jscodeshift -t scripts/codemods/console-migration.js app components",
     "codemod:console:write": "npx jscodeshift -t scripts/codemods/console-migration.js --write app components",
-    "codemod:all": "npm run codemod:breakpoints && npm run codemod:console"
+    "codemod:all": "npm run codemod:breakpoints && npm run codemod:console",
+    "cleanup": "node scripts/cleanup.js",
+    "cleanup:check": "node scripts/cleanup.js --check",
+    "cleanup:fix": "node scripts/cleanup.js --fix",
+    "cleanup:report": "node scripts/cleanup.js --report",
+    "cleanup:all": "node scripts/cleanup.js --check --fix --report",
+    "cleanup:staged": "node scripts/cleanup.js --staged"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -70,7 +76,8 @@
     "react-qr-code": "^2.0.18",
     "recharts": "^2.8.0",
     "stripe": "^19.2.0",
-    "web-vitals": "^5.1.0"
+    "web-vitals": "^5.1.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "16.0.1",
@@ -79,22 +86,23 @@
     "@testing-library/react": "^16.1.0",
     "@types/canvas-confetti": "^1.9.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "24.9.2",
     "@types/jscodeshift": "^0.11.10",
+    "@types/node": "24.9.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "eslint": "^9.38.0",
-    "jscodeshift": "^0.15.1",
     "eslint-config-next": "^16.0.1",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
+    "jscodeshift": "^0.15.1",
     "lighthouse": "^12.0.0",
     "lint-staged": "^16.2.6",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "0.7.1",
     "sharp": "^0.34.3",
     "tailwindcss": "^4.1.13",
+    "ts-prune": "^0.10.3",
     "typescript": "^5.9.2"
   },
   "lint-staged": {

@@ -86,7 +86,7 @@ export function AddTemperatureLogForm({
           </p>
         </div>
       </div>
-      <form onSubmit={onAddLog} className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
+      <form onSubmit={onAddLog} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('temperature.date', 'Date')}
@@ -228,7 +228,7 @@ export function AddTemperatureLogForm({
             rows={3}
           />
         </div>
-        <div className="flex space-x-4 desktop:col-span-2">
+        <div className="desktop:col-span-2 flex space-x-4">
           <button
             type="submit"
             className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"

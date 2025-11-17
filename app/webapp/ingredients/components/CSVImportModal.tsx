@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
+import { logger } from '../../lib/logger';
 import {
   formatIngredientName,
   formatBrandName,
@@ -163,7 +164,7 @@ export default function CSVImportModal({
       setSelectedIngredients(new Set());
       setError(null);
     } catch (err) {
-      console.error('Failed to import ingredients:', err);
+      logger.error('Failed to import ingredients:', err);
     }
   };
 
@@ -204,9 +205,11 @@ export default function CSVImportModal({
     <div className="bg-opacity-50 fixed inset-0 z-[70] flex items-center justify-center bg-black p-4 backdrop-blur-sm">
       <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
         {/* Header */}
-        <div className="border-b border-[#2a2a2a] p-4 desktop:p-6">
+        <div className="desktop:p-6 border-b border-[#2a2a2a] p-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl desktop:text-2xl font-bold text-white">📁 Import Ingredients from CSV</h2>
+            <h2 className="desktop:text-2xl text-xl font-bold text-white">
+              📁 Import Ingredients from CSV
+            </h2>
             <button
               onClick={handleClose}
               className="rounded-full bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white"
@@ -224,7 +227,7 @@ export default function CSVImportModal({
         </div>
 
         {/* Content */}
-        <div className="space-y-4 desktop:space-y-6 p-4 desktop:p-6">
+        <div className="desktop:space-y-6 desktop:p-6 space-y-4 p-4">
           {/* File Upload */}
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">Upload CSV File</label>

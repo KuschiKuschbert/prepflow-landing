@@ -47,7 +47,7 @@ export function PriceListForm({
         </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
-      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
+      <form onSubmit={onSubmit} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('suppliers.selectSupplier', 'Select Supplier')}
@@ -134,7 +134,7 @@ export function PriceListForm({
             rows={3}
           />
         </div>
-        <div className="flex items-center space-x-4 desktop:col-span-2">
+        <div className="desktop:col-span-2 flex items-center space-x-4">
           <label className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -147,7 +147,7 @@ export function PriceListForm({
             </span>
           </label>
         </div>
-        <div className="flex space-x-4 desktop:col-span-2">
+        <div className="desktop:col-span-2 flex space-x-4">
           <button
             type="submit"
             className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"

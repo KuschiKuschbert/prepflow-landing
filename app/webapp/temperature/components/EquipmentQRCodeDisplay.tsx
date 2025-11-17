@@ -27,28 +27,31 @@ export function EquipmentQRCodeDisplay({
   printRef,
 }: EquipmentQRCodeDisplayProps) {
   return (
-    <div ref={printRef} className="flex flex-col items-center mb-2 relative z-10 flex-1 min-h-0 justify-center">
+    <div
+      ref={printRef}
+      className="relative z-10 mb-2 flex min-h-0 flex-1 flex-col items-center justify-center"
+    >
       {baseUrl ? (
         <>
           {/* Modern QR Code Container */}
           <div className="relative mb-2">
             {/* Outer glow effect */}
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 blur-lg opacity-50 -z-10" />
+            <div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 opacity-50 blur-lg" />
 
             {/* Frame wrapper with gradient border */}
-            <div className="relative p-0.5 rounded-xl bg-gradient-to-br from-[#29E7CD] via-[#29E7CD]/70 to-[#D925C7] shadow-lg">
+            <div className="relative rounded-xl bg-gradient-to-br from-[#29E7CD] via-[#29E7CD]/70 to-[#D925C7] p-0.5 shadow-lg">
               {/* Inner frame border */}
-              <div className="relative p-0.5 rounded-xl bg-gradient-to-br from-[#D925C7]/50 to-[#29E7CD]/50">
+              <div className="relative rounded-xl bg-gradient-to-br from-[#D925C7]/50 to-[#29E7CD]/50 p-0.5">
                 {/* QR Code container */}
-                <div className="qr-code-svg relative p-3 bg-white rounded-xl shadow-2xl">
+                <div className="qr-code-svg relative rounded-xl bg-white p-3 shadow-2xl">
                   {/* Decorative corner accents */}
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#29E7CD] rounded-tl-xl opacity-50" />
-                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#D925C7] rounded-tr-xl opacity-50" />
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#29E7CD] rounded-bl-xl opacity-50" />
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#D925C7] rounded-br-xl opacity-50" />
+                  <div className="absolute top-0 left-0 h-8 w-8 rounded-tl-xl border-t-2 border-l-2 border-[#29E7CD] opacity-50" />
+                  <div className="absolute top-0 right-0 h-8 w-8 rounded-tr-xl border-t-2 border-r-2 border-[#D925C7] opacity-50" />
+                  <div className="absolute bottom-0 left-0 h-8 w-8 rounded-bl-xl border-b-2 border-l-2 border-[#29E7CD] opacity-50" />
+                  <div className="absolute right-0 bottom-0 h-8 w-8 rounded-br-xl border-r-2 border-b-2 border-[#D925C7] opacity-50" />
 
                   {/* QR Code */}
-                  <div className="flex items-center justify-center relative z-10">
+                  <div className="relative z-10 flex items-center justify-center">
                     <QRCode
                       value={equipmentUrl}
                       size={180}
@@ -59,18 +62,18 @@ export function EquipmentQRCodeDisplay({
                   </div>
 
                   {/* Inner shadow for depth */}
-                  <div className="absolute inset-0 rounded-xl shadow-inner pointer-events-none" />
+                  <div className="pointer-events-none absolute inset-0 rounded-xl shadow-inner" />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Important Info */}
-          <div className="mt-2 text-center max-w-xs">
-            <p className="text-xs text-gray-400 leading-relaxed">
+          <div className="mt-2 max-w-xs text-center">
+            <p className="text-xs leading-relaxed text-gray-400">
               Scan with your phone camera to log temperature readings
             </p>
-            <p className="text-xs text-gray-500 mt-1 italic">
+            <p className="mt-1 text-xs text-gray-500 italic">
               No app needed — just point and shoot, chef!
             </p>
           </div>
@@ -80,7 +83,7 @@ export function EquipmentQRCodeDisplay({
           <div className="animate-pulse rounded-xl bg-[#2a2a2a] p-6 shadow-xl">
             <div className="h-40 w-40 rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20"></div>
           </div>
-          <p className="text-xs text-gray-400 text-center font-medium">Generating QR code...</p>
+          <p className="text-center text-xs font-medium text-gray-400">Generating QR code...</p>
         </div>
       )}
     </div>

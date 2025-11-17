@@ -49,7 +49,7 @@ export default function NotAuthorizedPage() {
         This kitchen is for staff only. Need to sign in or create a new account? Grab your apron and
         let&apos;s get you set up.
       </p>
-      <div className="flex flex-col gap-3 tablet:flex-row tablet:justify-center">
+      <div className="tablet:flex-row tablet:justify-center flex flex-col gap-3">
         <button
           onClick={handleCreateAccount}
           className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-5 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"

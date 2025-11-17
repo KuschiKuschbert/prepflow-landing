@@ -18,9 +18,7 @@ export function getTemperatureStatus(
   equipment: TemperatureEquipment[],
 ): 'low' | 'high' | 'normal' {
   // Match equipment by name OR location field
-  const equipmentItem = equipment.find(
-    e => e.name === location || e.location === location,
-  );
+  const equipmentItem = equipment.find(e => e.name === location || e.location === location);
   if (!equipmentItem || !equipmentItem.is_active) return 'normal';
   // Check for null/undefined explicitly (0 is a valid temperature)
   if (
@@ -44,12 +42,10 @@ export function getFoodSafetyStatus(
   logDate: string,
   type: string,
 ): null | { status: 'safe' | 'warning' | 'danger'; message: string; color: string; icon: string } {
-  if (type !== 'food_cooking' && type !== 'food_hot_holding' && type !== 'food_cold_holding') {
+  if (type !== 'food_cooking' && type !== 'food_hot_holding' && type !== 'food_cold_holding')
     return null;
-  }
-  if (temp < 5 || temp > 60) {
+  if (temp < 5 || temp > 60)
     return { status: 'safe', message: 'Outside danger zone', color: 'text-green-400', icon: '✅' };
-  }
   const logDateTime = new Date(`${logDate}T${logTime}`);
   const now = new Date();
   const hoursInDangerZone = (now.getTime() - logDateTime.getTime()) / (1000 * 60 * 60);
@@ -203,27 +199,20 @@ export function calculateTemperatureStatistics(
     };
   }
 
-  // Sort logs by date and time (most recent first)
   const sortedLogs = [...logs].sort((a, b) => {
     const dateA = new Date(`${a.log_date}T${a.log_time}`);
     const dateB = new Date(`${b.log_date}T${b.log_time}`);
     return dateB.getTime() - dateA.getTime();
   });
-
-  // Current Status
   const latestLog = sortedLogs[0];
   const latestTemp = latestLog.temperature_celsius;
   const isInRange =
     (equipment.min_temp_celsius === null || latestTemp >= equipment.min_temp_celsius) &&
     (equipment.max_temp_celsius === null || latestTemp <= equipment.max_temp_celsius);
-
-  // Temperature Range
   const temperatures = logs.map(log => log.temperature_celsius);
   const min = Math.min(...temperatures);
   const max = Math.max(...temperatures);
   const average = temperatures.reduce((sum, temp) => sum + temp, 0) / temperatures.length;
-
-  // Compliance Rate
   const compliantCount = logs.filter(log => {
     const temp = log.temperature_celsius;
     return (
@@ -232,8 +221,6 @@ export function calculateTemperatureStatistics(
     );
   }).length;
   const complianceRate = logs.length > 0 ? (compliantCount / logs.length) * 100 : 0;
-
-  // Trend Analysis (compare last 7 days vs previous 7 days)
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
@@ -258,15 +245,11 @@ export function calculateTemperatureStatistics(
       : average;
 
   const percentageChange =
-    previousAverage !== 0 ? ((recentAverage - previousAverage) / Math.abs(previousAverage)) * 100 : 0;
+    previousAverage !== 0
+      ? ((recentAverage - previousAverage) / Math.abs(previousAverage)) * 100
+      : 0;
   const trendDirection =
-    Math.abs(percentageChange) < 1
-      ? 'stable'
-      : percentageChange > 0
-        ? 'declining'
-        : 'improving';
-
-  // Danger Zone Analysis (for food-related equipment)
+    Math.abs(percentageChange) < 1 ? 'stable' : percentageChange > 0 ? 'declining' : 'improving';
   const isFoodEquipment =
     equipment.equipment_type === 'food_cooking' ||
     equipment.equipment_type === 'food_hot_holding' ||
@@ -275,19 +258,14 @@ export function calculateTemperatureStatistics(
   let dangerZoneHours = 0;
   let violationCount = 0;
   let dangerZoneStatus: 'safe' | 'warning' | 'danger' = 'safe';
-
   if (isFoodEquipment) {
-    // Check each log for danger zone violations (5-60°C)
     logs.forEach(log => {
       const temp = log.temperature_celsius;
       if (temp >= 5 && temp <= 60) {
         violationCount++;
-        // Estimate time in danger zone (assuming 1 reading per hour average)
         dangerZoneHours += 1;
       }
     });
-
-    // Determine status based on total hours
     if (dangerZoneHours >= 4) {
       dangerZoneStatus = 'danger';
     } else if (dangerZoneHours >= 2) {

@@ -1,7 +1,8 @@
 'use client';
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import KitchenOnFire from '@/components/ErrorGame/KitchenOnFire';
+
+import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -24,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    logger.error('ErrorBoundary caught an error:', error, errorInfo);
 
     // Call custom error handler if provided
     if (this.props.onError) {
@@ -87,7 +88,7 @@ export class ErrorBoundary extends Component<Props, State> {
 // Hook for functional components to handle errors
 export const useErrorHandler = () => {
   const handleError = React.useCallback((error: Error, errorInfo?: any) => {
-    console.error('Error caught by useErrorHandler:', error, errorInfo);
+    logger.error('Error caught by useErrorHandler:', error, errorInfo);
 
     // Log to analytics if available
     if (typeof window !== 'undefined' && (window as any).gtag) {

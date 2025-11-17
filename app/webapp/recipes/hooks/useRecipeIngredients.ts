@@ -3,6 +3,7 @@
 import { useCallback, useRef } from 'react';
 import { RecipeIngredientWithDetails } from '../types';
 import { batchFetchWithRetry } from './utils/batchFetchWithRetry';
+import { logger } from '../../lib/logger';
 import {
   globalBatchRequestCache,
   globalRequestQueue,
@@ -18,7 +19,6 @@ export function useRecipeIngredients(setError: (error: string) => void) {
     | ((recipeId: string, retryCount?: number) => Promise<RecipeIngredientWithDetails[] | null>)
     | null
   >(null);
-
   const fetchFromApi = useCallback(
     async (recipeId: string, retryCount = 0): Promise<RecipeIngredientWithDetails[] | null> => {
       return fetchWithRetry(recipeId, retryCount, fetchFromApiRef);
@@ -42,7 +42,7 @@ export function useRecipeIngredients(setError: (error: string) => void) {
         if (Array.isArray(fromApi) && fromApi.length > 0) return fromApi;
         return await fetchFromClientJoinCallback(recipeId);
       } catch (err) {
-        console.error('❌ Exception fetching recipe ingredients:', err);
+        logger.error('Exception fetching recipe ingredients:', err);
         setError('Failed to fetch recipe ingredients');
         return [];
       }
@@ -57,7 +57,6 @@ export function useRecipeIngredients(setError: (error: string) => void) {
       ) => Promise<Record<string, RecipeIngredientWithDetails[]>>)
     | null
   >(null);
-
   const performBatchFetch = useCallback(
     async (
       recipeIds: string[],
@@ -74,19 +73,15 @@ export function useRecipeIngredients(setError: (error: string) => void) {
     async (recipeIds: string[]): Promise<Record<string, RecipeIngredientWithDetails[]>> => {
       if (recipeIds.length === 0) return {};
       const cacheKey = normalizeRecipeIds(recipeIds);
-
       const cachedPromise = globalBatchRequestCache.get(cacheKey);
-      if (cachedPromise) {
-        return cachedPromise;
-      }
-
+      if (cachedPromise) return cachedPromise;
       if (isProcessingQueue || globalRequestQueue.length > 0) {
         return new Promise<Record<string, RecipeIngredientWithDetails[]>>((resolve, reject) => {
           globalRequestQueue.push({ recipeIds, resolve, reject });
           if (!isProcessingQueue) {
-            processBatchRequestQueue(performBatchFetch).catch(err => {
-              console.error('[RecipeIngredients] Queue processing error:', err);
-            });
+            processBatchRequestQueue(performBatchFetch).catch(err =>
+              logger.error('[RecipeIngredients] Queue processing error:', err),
+            );
           }
         });
       }
@@ -94,16 +89,16 @@ export function useRecipeIngredients(setError: (error: string) => void) {
       const batchPromise = performBatchFetch(recipeIds)
         .then(result => {
           globalBatchRequestCache.delete(cacheKey);
-          processBatchRequestQueue(performBatchFetch).catch(err => {
-            console.error('[RecipeIngredients] Queue processing error:', err);
-          });
+          processBatchRequestQueue(performBatchFetch).catch(err =>
+            logger.error('[RecipeIngredients] Queue processing error:', err),
+          );
           return result;
         })
         .catch(err => {
           globalBatchRequestCache.delete(cacheKey);
-          processBatchRequestQueue(performBatchFetch).catch(processErr => {
-            console.error('[RecipeIngredients] Queue processing error:', processErr);
-          });
+          processBatchRequestQueue(performBatchFetch).catch(processErr =>
+            logger.error('[RecipeIngredients] Queue processing error:', processErr),
+          );
           throw err;
         });
 

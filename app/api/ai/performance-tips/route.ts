@@ -6,7 +6,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
-import { buildPerformanceTipsPrompt, parsePerformanceTipsResponse } from '@/lib/ai/prompts/performance-tips';
+import { logger } from '../../lib/logger';
+import {
+  buildPerformanceTipsPrompt,
+  parsePerformanceTipsResponse,
+} from '@/lib/ai/prompts/performance-tips';
 import { generatePerformanceTips } from '@/app/webapp/performance/utils/generatePerformanceTips';
 import type { PerformanceItem } from '@/app/webapp/performance/types';
 
@@ -20,10 +24,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (typeof performanceScore !== 'number' || !Array.isArray(performanceItems)) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     // Try AI first
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (aiError) {
-      console.warn('AI performance tips failed, using fallback:', aiError);
+      logger.warn('AI performance tips failed, using fallback:', aiError);
     }
 
     // Fallback to rule-based logic
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
       source: 'fallback',
     });
   } catch (error) {
-    console.error('Performance tips error:', error);
+    logger.error('Performance tips error:', error);
     return NextResponse.json(
       {
         error: 'Failed to generate performance tips',

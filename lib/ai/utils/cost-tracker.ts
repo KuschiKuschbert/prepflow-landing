@@ -6,11 +6,13 @@
 
 import { AICostTracking } from '../types';
 
+import { logger } from '@/lib/logger';
+
 // Cost per 1M tokens (as of 2024)
 const MODEL_COSTS: Record<string, { input: number; output: number }> = {
-  'gpt-4o-mini': { input: 0.15, output: 0.60 },
-  'gpt-4o': { input: 2.50, output: 10.0 },
-  'gpt-4o-vision': { input: 2.50, output: 10.0 },
+  'gpt-4o-mini': { input: 0.15, output: 0.6 },
+  'gpt-4o': { input: 2.5, output: 10.0 },
+  'gpt-4o-vision': { input: 2.5, output: 10.0 },
   'gpt-4-turbo': { input: 10.0, output: 30.0 },
   'gpt-3.5-turbo': { input: 0.5, output: 1.5 },
 };
@@ -51,7 +53,7 @@ export function trackCost(
 
   // Log cost (in production, send to analytics/monitoring service)
   if (process.env.NODE_ENV === 'development') {
-    console.log(`💰 AI Cost: $${cost.toFixed(4)} (${tracking.tokens} tokens, ${model})`);
+    logger.dev(`💰 AI Cost: $${cost.toFixed(4)} (${tracking.tokens} tokens, ${model})`);
   }
 
   return tracking;
@@ -97,6 +99,6 @@ export function storeCostTracking(tracking: AICostTracking): void {
     const trimmed = costs.slice(-1000);
     localStorage.setItem('ai_cost_tracking', JSON.stringify(trimmed));
   } catch (error) {
-    console.warn('Failed to store cost tracking:', error);
+    logger.warn('Failed to store cost tracking:', error);
   }
 }

@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { COGSCalculation } from '../types';
 
+import { logger } from '../../lib/logger';
 interface UseCOGSEffectsProps {
   setSuccessMessage: (msg: string | null) => void;
   setDishPortions: (portions: number) => void;
@@ -37,7 +38,7 @@ export function useCOGSEffects({
       setSuccessMessage(`Recipe "${recipeName}" loaded for editing!`);
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
-      console.error('Failed to parse editing data:', err);
+      logger.error('Failed to parse editing data:', err);
     }
   }, [setSuccessMessage, setDishPortions, loadCalculations, setSelectedRecipe]);
 

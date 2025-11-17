@@ -10,6 +10,7 @@ import { SuppliersGrid } from './components/SuppliersGrid';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { PriceListFormData, Supplier, SupplierFormData, SupplierPriceList } from './types';
 
+import { logger } from '../../lib/logger';
 export default function SuppliersPage() {
   const { t } = useTranslation();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -49,7 +50,7 @@ export default function SuppliersPage() {
         setSuppliers(data.data);
       }
     } catch (error) {
-      console.error('Error fetching suppliers:', error);
+      logger.error('Error fetching suppliers:', error);
     } finally {
       setLoading(false);
     }
@@ -68,7 +69,7 @@ export default function SuppliersPage() {
         setPriceLists(data.data);
       }
     } catch (error) {
-      console.error('Error fetching price lists:', error);
+      logger.error('Error fetching price lists:', error);
     }
   }, [selectedSupplier]);
 
@@ -103,7 +104,7 @@ export default function SuppliersPage() {
         setShowAddSupplier(false);
       }
     } catch (error) {
-      console.error('Error adding supplier:', error);
+      logger.error('Error adding supplier:', error);
     }
   };
 
@@ -133,7 +134,7 @@ export default function SuppliersPage() {
         setShowAddPriceList(false);
       }
     } catch (error) {
-      console.error('Error adding price list:', error);
+      logger.error('Error adding price list:', error);
     }
   };
 
@@ -143,7 +144,7 @@ export default function SuppliersPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+      <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-4xl font-bold text-white">
@@ -218,7 +219,7 @@ export default function SuppliersPage() {
         {activeTab === 'priceLists' && (
           <div className="space-y-6">
             {/* Filter and Add Button */}
-            <div className="flex flex-col items-start justify-between gap-4 tablet:flex-row tablet:items-center">
+            <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-300">
                   {t('suppliers.filterSupplier', 'Filter by Supplier')}

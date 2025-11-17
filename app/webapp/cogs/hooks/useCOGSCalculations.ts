@@ -7,6 +7,7 @@ import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { addCalculationHelper, removeCalculationHelper } from './utils/calculationManagement';
 import { mapCalculationsToRecipeIngredients } from './utils/mapCalculationsToRecipeIngredients';
+import { logger } from '../../lib/logger';
 
 export const useCOGSCalculations = () => {
   const { ingredients, recipes, loading, error, setError, fetchData, setIngredients, setRecipes } =
@@ -70,7 +71,7 @@ export const useCOGSCalculations = () => {
     if (selectedRecipe && selectedRecipe !== selectedRecipeRef.current) {
       const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
       if (hasManualIngredientsRef.current && timeSinceLastChange < 10000) {
-        console.log(
+        logger.dev(
           '[useCOGSCalculations] Skipping fetchRecipeIngredients - manual changes detected',
         );
         selectedRecipeRef.current = selectedRecipe;
@@ -80,7 +81,7 @@ export const useCOGSCalculations = () => {
       hasManualIngredientsRef.current = false;
       fetchRecipeIngredients(selectedRecipe);
     }
-  }, [selectedRecipe, fetchRecipeIngredients, lastManualChangeTimeRef]);
+  }, [selectedRecipe, fetchRecipeIngredients]);
   useEffect(() => {
     if (isLoadingFromApiRef.current) {
       isLoadingFromApiRef.current = false;

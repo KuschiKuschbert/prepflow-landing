@@ -1,5 +1,4 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import {
   ArrowDown,
@@ -17,7 +16,6 @@ import { EquipmentListTableFilters } from './EquipmentListTableFilters';
 import { EquipmentListTableMobileCards } from './EquipmentListTableMobileCards';
 import { EquipmentListTableDesktop } from './EquipmentListTableDesktop';
 import { TablePagination } from '@/components/ui/TablePagination';
-
 interface EquipmentListTableProps {
   equipment: TemperatureEquipment[];
   editingId: string | null;
@@ -42,7 +40,6 @@ interface EquipmentListTableProps {
   } | null;
   formatDate?: (date: Date) => string;
 }
-
 type SortField = 'name' | 'type' | 'location' | 'lastLogDate' | 'status';
 type SortDirection = 'asc' | 'desc';
 
@@ -73,8 +70,10 @@ export function EquipmentListTable({
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
   const getTypeIcon = (type: string) => temperatureTypes.find(t => t.value === type)?.icon || '🌡️';
-  const getTypeLabel = (type: string) =>
-    temperatureTypes.find(t => t.value === type)?.label || type;
+  const getTypeLabel = React.useCallback(
+    (type: string) => temperatureTypes.find(t => t.value === type)?.label || type,
+    [temperatureTypes],
+  );
 
   // Filter and sort equipment
   const filteredAndSortedEquipment = useMemo(() => {
@@ -90,29 +89,18 @@ export function EquipmentListTable({
           getTypeLabel(item.equipment_type).toLowerCase().includes(query),
       );
     }
-
     // Apply type filter
-    if (filterType !== 'all') {
+    if (filterType !== 'all')
       filtered = filtered.filter(item => item.equipment_type === filterType);
-    }
 
     // Apply status filter
     if (filterStatus !== 'all') {
-      if (filterStatus === 'active') {
-        filtered = filtered.filter(item => item.is_active);
-      } else if (filterStatus === 'inactive') {
-        filtered = filtered.filter(item => !item.is_active);
-      } else if (filterStatus === 'inRange') {
-        filtered = filtered.filter(item => {
-          const info = getLastLogInfo?.(item);
-          return info?.isInRange === true;
-        });
-      } else if (filterStatus === 'outOfRange') {
-        filtered = filtered.filter(item => {
-          const info = getLastLogInfo?.(item);
-          return info?.isInRange === false;
-        });
-      }
+      if (filterStatus === 'active') filtered = filtered.filter(item => item.is_active);
+      else if (filterStatus === 'inactive') filtered = filtered.filter(item => !item.is_active);
+      else if (filterStatus === 'inRange')
+        filtered = filtered.filter(item => getLastLogInfo?.(item)?.isInRange === true);
+      else if (filterStatus === 'outOfRange')
+        filtered = filtered.filter(item => getLastLogInfo?.(item)?.isInRange === false);
     }
 
     // Apply sorting
@@ -128,7 +116,7 @@ export function EquipmentListTable({
         case 'location':
           comparison = (a.location || '').localeCompare(b.location || '');
           break;
-        case 'lastLogDate':
+        case 'lastLogDate': {
           const dateA = getLastLogDate?.(a);
           const dateB = getLastLogDate?.(b);
           if (!dateA && !dateB) comparison = 0;
@@ -136,15 +124,16 @@ export function EquipmentListTable({
           else if (!dateB) comparison = -1;
           else comparison = new Date(dateA).getTime() - new Date(dateB).getTime();
           break;
-        case 'status':
+        }
+        case 'status': {
           const statusA = getLastLogInfo?.(a)?.isInRange;
           const statusB = getLastLogInfo?.(b)?.isInRange;
           if (statusA === statusB) comparison = 0;
           else if (statusA === null) comparison = 1;
           else if (statusB === null) comparison = -1;
-          else if (statusA === true) comparison = -1;
-          else comparison = 1;
+          else comparison = statusA === true ? -1 : 1;
           break;
+        }
       }
       return sortDirection === 'asc' ? comparison : -comparison;
     });
@@ -159,21 +148,19 @@ export function EquipmentListTable({
     sortDirection,
     getLastLogDate,
     getLastLogInfo,
+    getTypeLabel,
   ]);
 
   const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
+    if (sortField === field) setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    else {
       setSortField(field);
       setSortDirection('asc');
     }
   };
 
   const getSortIcon = (field: SortField) => {
-    if (sortField !== field) {
-      return <Icon icon={ArrowUpDown} size="sm" className="text-gray-500" />;
-    }
+    if (sortField !== field) return <Icon icon={ArrowUpDown} size="sm" className="text-gray-500" />;
     return sortDirection === 'asc' ? (
       <Icon icon={ArrowUp} size="sm" className="text-[#29E7CD]" />
     ) : (
@@ -188,23 +175,17 @@ export function EquipmentListTable({
 
   // Reset to page 1 when filters change
   React.useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      onPageChange(1);
-    }
+    if (currentPage > totalPages && totalPages > 0) onPageChange(1);
   }, [totalPages, currentPage, onPageChange]);
 
   const handleRowClick = (e: React.MouseEvent, item: TemperatureEquipment) => {
-    // Don't open drawer if clicking on buttons or form
     if (
       (e.target as HTMLElement).closest('button') ||
       (e.target as HTMLElement).closest('form') ||
       editingId === item.id
-    ) {
+    )
       return;
-    }
-    if (onEquipmentClick) {
-      onEquipmentClick(item);
-    }
+    if (onEquipmentClick) onEquipmentClick(item);
   };
 
   return (

@@ -1,10 +1,11 @@
 // PrepFlow Personality System - Mise en Place Easter Egg Hook
 
 'use client';
-
 import { useEffect, useRef } from 'react';
 import { usePersonality } from '@/lib/personality/store';
 import confetti from 'canvas-confetti';
+
+import { logger } from '@/lib/logger';
 
 const MISE_EN_PLACE_TRIGGER = 'mise en place';
 
@@ -66,7 +67,7 @@ export function useMiseEnPlaceEasterEgg() {
     if (!settings.enabled || !settings.footerEasterEggs) {
       // Debug: Log why it's not active
       if (process.env.NODE_ENV === 'development') {
-        console.log('[Mise en Place] Disabled:', {
+        logger.dev('[Mise en Place] Disabled:', {
           enabled: settings.enabled,
           footerEasterEggs: settings.footerEasterEggs,
         });
@@ -85,7 +86,7 @@ export function useMiseEnPlaceEasterEgg() {
         const now = Date.now();
         if (now - lastTriggerRef.current < COOLDOWN_MS) {
           if (process.env.NODE_ENV === 'development') {
-            console.log('[Mise en Place] Cooldown active');
+            logger.dev('[Mise en Place] Cooldown active');
           }
           return; // Cooldown
         }
@@ -93,7 +94,7 @@ export function useMiseEnPlaceEasterEgg() {
         lastTriggerRef.current = now;
 
         if (process.env.NODE_ENV === 'development') {
-          console.log('[Mise en Place] Triggered!', value);
+          logger.dev('[Mise en Place] Triggered!', value);
         }
 
         // Trigger vegetable confetti
@@ -112,7 +113,7 @@ export function useMiseEnPlaceEasterEgg() {
     document.addEventListener('input', handleInput, true);
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Mise en Place] Hook active, listening for input events');
+      logger.dev('[Mise en Place] Hook active, listening for input events');
     }
 
     return () => {

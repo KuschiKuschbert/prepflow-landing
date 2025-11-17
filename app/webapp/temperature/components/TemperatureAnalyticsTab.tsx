@@ -100,6 +100,7 @@ export default function TemperatureAnalyticsTab({
       // If already initialized but data changed, update loaded state
       setIsLoaded(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     equipment.length, // Only length, not full array
     allLogs.length, // Only length, not full array
@@ -107,7 +108,8 @@ export default function TemperatureAnalyticsTab({
     hasManuallyChangedFilter,
     timeFilter,
     externalLoading,
-    // Removed: equipment, findOutOfRangeEquipment, findBestTimeFilter, dateOffset
+    // Intentionally excluded: equipment, findOutOfRangeEquipment, findBestTimeFilter, dateOffset
+    // Using lengths prevents infinite loops while still detecting data changes
   ]);
 
   const handleEquipmentCardClick = (equipment: TemperatureEquipment) => {
@@ -122,7 +124,6 @@ export default function TemperatureAnalyticsTab({
     setDrawerEquipment(null);
   };
 
-
   // Show loading skeleton if data isn't ready or external loading is active
   if (!isLoaded || externalLoading) {
     return (
@@ -135,10 +136,9 @@ export default function TemperatureAnalyticsTab({
         </div>
 
         {/* Equipment Cards Skeleton */}
-        <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-6">
+        <div className="tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 grid grid-cols-1 gap-3 xl:grid-cols-6">
           <LoadingSkeleton variant="card" count={6} height="80px" />
         </div>
-
       </div>
     );
   }
@@ -160,14 +160,14 @@ export default function TemperatureAnalyticsTab({
       <div
         className={`grid gap-3 ${
           equipment.length <= 2
-            ? 'grid-cols-1 tablet:grid-cols-2'
+            ? 'tablet:grid-cols-2 grid-cols-1'
             : equipment.length <= 4
-              ? 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4'
+              ? 'tablet:grid-cols-2 desktop:grid-cols-4 grid-cols-1'
               : equipment.length <= 6
-                ? 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-6'
+                ? 'tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-6 grid-cols-1'
                 : equipment.length <= 12
-                  ? 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-6'
-                  : 'grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
+                  ? 'tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 grid-cols-1 xl:grid-cols-6'
+                  : 'tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 grid-cols-1 xl:grid-cols-5 2xl:grid-cols-6'
         }`}
       >
         {isLoaded ? (

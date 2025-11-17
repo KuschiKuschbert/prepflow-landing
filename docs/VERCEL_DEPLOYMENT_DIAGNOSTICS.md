@@ -65,6 +65,7 @@ If Vercel deployments aren't being triggered, follow this diagnostic checklist.
 4. Add to GitHub Secrets as `VERCEL_ORG_ID`
 
 **Alternative method:**
+
 - If using personal account, use your username
 - If using team, use team slug
 
@@ -76,6 +77,7 @@ If Vercel deployments aren't being triggered, follow this diagnostic checklist.
 4. Add to GitHub Secrets as `VERCEL_PROJECT_ID`
 
 **Alternative method:**
+
 - Check project URL: `https://vercel.com/[org]/[project]`
 - Project ID is in the API responses
 
@@ -153,10 +155,12 @@ If GitHub Actions deployment isn't working, enable Vercel's native auto-deploy:
 ### Hybrid Approach
 
 You can use both:
+
 - **GitHub Actions**: For CI/CD pipeline (linting, testing, building)
 - **Vercel Auto-Deploy**: For actual deployments
 
 This gives you:
+
 - ✅ Full CI/CD pipeline with quality checks
 - ✅ Reliable deployments via Vercel
 - ✅ Best of both worlds
@@ -166,6 +170,7 @@ This gives you:
 ### Test with Small Change
 
 1. **Make a test commit**
+
    ```bash
    echo "# Test deployment" >> .deploy-test
    git add .deploy-test
@@ -256,6 +261,3 @@ Once deployments are working:
 
 **Last Updated**: January 2025
 **Status**: Diagnostic guide for deployment trigger issues
-
-
-

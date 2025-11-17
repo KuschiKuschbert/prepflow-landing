@@ -1,5 +1,6 @@
 import { Recipe } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Build optimistic update functions for recipe mutations.
  *
@@ -19,7 +20,7 @@ export function buildOptimisticUpdates(
 
   const rollbackRecipes = () => {
     fetchRecipes().catch(err => {
-      console.error('Failed to rollback recipes:', err);
+      logger.error('Failed to rollback recipes:', err);
       setError('Failed to refresh recipes after error');
     });
   };

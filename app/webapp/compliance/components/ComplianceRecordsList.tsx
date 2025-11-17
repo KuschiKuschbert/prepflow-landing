@@ -5,7 +5,13 @@ import { useTranslation } from '@/lib/useTranslation';
 import { ClipboardCheck } from 'lucide-react';
 import OptimizedImage from '@/components/OptimizedImage';
 import { ComplianceRecord } from '../types';
-import { getTypeIcon, getStatusColor, getStatusIcon, getStatusIconEmoji, getDaysUntilExpiry } from '../utils';
+import {
+  getTypeIcon,
+  getStatusColor,
+  getStatusIcon,
+  getStatusIconEmoji,
+  getDaysUntilExpiry,
+} from '../utils';
 import { Icon } from '@/components/ui/Icon';
 
 interface ComplianceRecordsListProps {
@@ -43,7 +49,12 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                  <Icon icon={getTypeIcon(record.compliance_types.name)} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+                  <Icon
+                    icon={getTypeIcon(record.compliance_types.name)}
+                    size="md"
+                    className="text-[#29E7CD]"
+                    aria-hidden={true}
+                  />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white">{record.document_name}</h3>
@@ -77,7 +88,7 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
               </div>
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-4 desktop:grid-cols-2">
+            <div className="desktop:grid-cols-2 mb-4 grid grid-cols-1 gap-4">
               {record.issue_date && (
                 <div>
                   <span className="text-sm text-gray-400">

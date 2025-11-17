@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 interface CreatePrepListParams {
   userId: string;
   kitchenSectionId: string;
@@ -52,7 +53,7 @@ export async function createPrepList(params: CreatePrepListParams) {
     const { error: itemsError } = await supabaseAdmin.from('prep_list_items').insert(prepItems);
 
     if (itemsError) {
-      console.error('Error creating prep list items:', itemsError);
+      logger.error('Error creating prep list items:', itemsError);
       // Don't fail the entire request, just log the error
     }
   }

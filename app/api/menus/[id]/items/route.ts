@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       .single();
 
     if (createError) {
-      console.error('Error adding item to menu:', createError);
+      logger.error('Error adding item to menu:', createError);
       return NextResponse.json(
         {
           success: false,
@@ -98,7 +99,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: dish_id ? 'Dish added to menu successfully' : 'Recipe added to menu successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,

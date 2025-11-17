@@ -43,16 +43,14 @@ export function EquipmentTemperatureRange({
   }
 
   return (
-    <div className="flex shrink-0 flex-col items-end gap-2 tablet:items-start">
-      <div className="text-right tablet:text-left">
-        <div className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+    <div className="tablet:items-start flex shrink-0 flex-col items-end gap-2">
+      <div className="tablet:text-left text-right">
+        <div className="mb-1 text-xs font-medium tracking-wide text-gray-400 uppercase">
           {t('temperature.range', 'Temperature Range')}
         </div>
         <div className="flex flex-col gap-1">
           <div className="text-xl font-bold text-[#29E7CD]">{displayText}</div>
-          {isRecommended && (
-            <span className="text-xs text-gray-500 italic">(Recommended)</span>
-          )}
+          {isRecommended && <span className="text-xs text-gray-500 italic">(Recommended)</span>}
         </div>
       </div>
       <div className="flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-1.5">

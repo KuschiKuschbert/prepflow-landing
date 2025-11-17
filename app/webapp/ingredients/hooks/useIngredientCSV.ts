@@ -112,9 +112,9 @@ export function useIngredientCSV({
           .select();
         if (error) throw error;
         setIngredients(prev => [...prev, ...(data || [])]);
-        if (setShowCSVImport) setShowCSVImport(false);
-        if (setCsvData) setCsvData('');
-        if (setParsedIngredients) setParsedIngredients([]);
+        setShowCSVImport?.(false);
+        setCsvData?.('');
+        setParsedIngredients?.([]);
         return true;
       } catch (error) {
         setError('Failed to import ingredients');
@@ -123,6 +123,5 @@ export function useIngredientCSV({
     },
     [setIngredients, setError, setShowCSVImport, setCsvData, setParsedIngredients],
   );
-
   return { exportToCSV, handleCSVImport };
 }

@@ -6,7 +6,6 @@ import { updateVisiblePricesWithDebounce } from './updateVisiblePricesWithDeboun
 
 /**
  * Build pricing calculation callbacks.
- *
  * @param {Object} params - Callback parameters
  * @returns {Object} Pricing callbacks
  */

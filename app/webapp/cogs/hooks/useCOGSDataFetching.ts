@@ -6,6 +6,7 @@
 import { useCallback, useState } from 'react';
 import { Ingredient, Recipe } from '../types';
 
+import { logger } from '../../lib/logger';
 export function useCOGSDataFetching() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -28,19 +29,19 @@ export function useCOGSDataFetching() {
       const recipesResult = await recipesResponse.json();
 
       if (!ingredientsResponse.ok || ingredientsResult.error) {
-        console.error('Error fetching ingredients:', ingredientsResult.error);
+        logger.error('Error fetching ingredients:', ingredientsResult.error);
         setError(`Failed to load ingredients: ${ingredientsResult.error || 'Unknown error'}`);
         setIngredients([]);
       } else {
         const ingredientsData = ingredientsResult.data?.items || [];
-        console.log('🔍 DEBUG useCOGSDataFetching: Ingredients fetched', {
+        logger.dev('🔍 DEBUG useCOGSDataFetching: Ingredients fetched', {
           ingredientsCount: ingredientsData.length,
         });
         setIngredients(ingredientsData);
       }
 
       if (!recipesResponse.ok || recipesResult.error) {
-        console.error('Error fetching recipes:', recipesResult.error);
+        logger.error('Error fetching recipes:', recipesResult.error);
         setError(
           prev =>
             `${prev ? prev + ' ' : ''}Failed to load recipes: ${recipesResult.error || 'Unknown error'}`,
@@ -48,13 +49,13 @@ export function useCOGSDataFetching() {
         setRecipes([]);
       } else {
         const recipesData = recipesResult.recipes || [];
-        console.log('🔍 DEBUG useCOGSDataFetching: Recipes fetched', {
+        logger.dev('🔍 DEBUG useCOGSDataFetching: Recipes fetched', {
           recipesCount: recipesData.length,
         });
         setRecipes(recipesData);
       }
     } catch (err) {
-      console.error('Failed to fetch data:', err);
+      logger.error('Failed to fetch data:', err);
       setError('Failed to fetch data');
     } finally {
       setLoading(false);

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { TemperatureEquipment } from '../types';
-
+import { handleGenerateSampleData } from './utils/generateSampleDataHandler';
 interface UseTemperatureEquipmentTabHandlersProps {
   equipment: TemperatureEquipment[];
   itemsPerPage: number;
@@ -42,27 +42,22 @@ export function useTemperatureEquipmentTabHandlers({
     maxTemp: null as number | null,
   });
   const [showCreateForm, setShowCreateForm] = useState(false);
-
   const handleEquipmentClick = (equipment: TemperatureEquipment) => {
     setSelectedEquipment(equipment);
     setIsDrawerOpen(true);
   };
-
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
     setSelectedEquipment(null);
   };
-
   const handleShowQRCode = (equipment: TemperatureEquipment) => {
     setQrCodeEquipment(equipment);
     setIsQRCodeModalOpen(true);
   };
-
   const handleCloseQRCodeModal = () => {
     setIsQRCodeModalOpen(false);
     setQrCodeEquipment(null);
   };
-
   const handleCreateEquipment = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -81,7 +76,6 @@ export function useTemperatureEquipmentTabHandlers({
       // Handle error gracefully
     }
   };
-
   const handleUpdateEquipment = async (
     equipmentId: string,
     updates: Partial<TemperatureEquipment>,
@@ -93,7 +87,6 @@ export function useTemperatureEquipmentTabHandlers({
       // Handle error gracefully
     }
   };
-
   const handleDeleteEquipment = async (equipmentId: string) => {
     if (
       confirm(
@@ -103,15 +96,12 @@ export function useTemperatureEquipmentTabHandlers({
       try {
         await onDeleteEquipment(equipmentId);
         const newTotalPages = Math.ceil((equipment.length - 1) / itemsPerPage);
-        if (currentPage > newTotalPages && newTotalPages > 0) {
-          setCurrentPage(newTotalPages);
-        }
+        if (currentPage > newTotalPages && newTotalPages > 0) setCurrentPage(newTotalPages);
       } catch (error) {
         // Handle error gracefully
       }
     }
   };
-
   const toggleEquipmentStatus = async (equipmentId: string, currentStatus: boolean) => {
     try {
       await onUpdateEquipment(equipmentId, { is_active: !currentStatus });
@@ -119,48 +109,10 @@ export function useTemperatureEquipmentTabHandlers({
       // Handle error gracefully
     }
   };
-
-  const handleGenerateSampleData = async () => {
-    if (equipment.length === 0) {
-      showError('Please add equipment first before generating sample logs');
-      return;
-    }
-
-    setIsGenerating(true);
-    try {
-      const response = await fetch('/api/temperature-logs/generate-sample', {
-        method: 'POST',
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        showSuccess(
-          `Successfully generated ${data.data.totalLogs} temperature log entries (5 per equipment, spread across last 2 weeks)`,
-        );
-        if (onRefreshLogs) {
-          await new Promise(resolve => setTimeout(resolve, 500));
-          await onRefreshLogs();
-        } else {
-          setTimeout(() => {
-            window.location.hash = 'equipment';
-            window.location.reload();
-          }, 1500);
-        }
-      } else {
-        showError(data.error || 'Failed to generate sample data');
-      }
-    } catch (error) {
-      console.error('Error generating sample data:', error);
-      showError('Failed to generate sample data. Please try again.');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
+  const generateSampleData = () =>
+    handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, equipment.length);
-
   return {
     editingEquipment,
     setEditingEquipment,
@@ -187,6 +139,6 @@ export function useTemperatureEquipmentTabHandlers({
     handleUpdateEquipment,
     handleDeleteEquipment,
     toggleEquipmentStatus,
-    handleGenerateSampleData,
+    handleGenerateSampleData: generateSampleData,
   };
 }

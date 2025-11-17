@@ -13,10 +13,7 @@ interface UseAIOptions {
 }
 
 interface UseAIReturn {
-  generate: (
-    messages: AIChatMessage[],
-    options?: AIRequestOptions,
-  ) => Promise<AIResponse<string>>;
+  generate: (messages: AIChatMessage[], options?: AIRequestOptions) => Promise<AIResponse<string>>;
   isLoading: boolean;
   error: string | null;
   clearError: () => void;

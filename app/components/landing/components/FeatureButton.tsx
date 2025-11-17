@@ -53,21 +53,21 @@ export function FeatureButton({
         buttonRef(el);
       }}
       onClick={onToggle}
-      onMouseEnter={(e) => {
+      onMouseEnter={e => {
         if (!isExpanded && !isCurrentlyTransitioning) {
           e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
           e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
         }
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         if (!isExpanded && !isCurrentlyTransitioning) {
           e.currentTarget.style.transform = 'translateZ(0) scale(1)';
           e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
         }
       }}
-      className="relative flex text-left w-fit border focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
+      className="relative flex w-fit border text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible
@@ -79,16 +79,13 @@ export function FeatureButton({
         boxSizing: 'border-box',
         flexShrink: 0,
         flexGrow: 0,
-        width: isExpanded && containerWidth
-          ? `${containerWidth}px`
-          : initialWidth
-            ? `${initialWidth}px`
-            : 'max-content',
-        maxHeight: isExpanded
-          ? '1000px'
-          : buttonHeight
-            ? `${buttonHeight}px`
-            : '200px',
+        width:
+          isExpanded && containerWidth
+            ? `${containerWidth}px`
+            : initialWidth
+              ? `${initialWidth}px`
+              : 'max-content',
+        maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
         minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
         minWidth: 0,
         borderRadius: (() => {
@@ -103,7 +100,9 @@ export function FeatureButton({
         })(),
         contain: 'layout style paint',
         backfaceVisibility: 'hidden',
-        willChange: isCurrentlyTransitioning ? 'width, max-height, border-radius, padding, border-color, background-color, transform, opacity' : 'auto',
+        willChange: isCurrentlyTransitioning
+          ? 'width, max-height, border-radius, padding, border-color, background-color, transform, opacity'
+          : 'auto',
         transition: isCurrentlyTransitioning
           ? `opacity 400ms ${ANIMATION_EASING}, transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, width ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, max-height ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}, padding ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, background-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`
           : isVisible
@@ -123,7 +122,7 @@ export function FeatureButton({
       <span
         id={`feature-content-${index}`}
         ref={contentRef}
-        className="text-left text-fluid-sm tablet:text-fluid-base"
+        className="text-fluid-sm tablet:text-fluid-base text-left"
         style={{
           whiteSpace: isExpanded ? 'normal' : 'nowrap',
           overflowWrap: 'break-word',
@@ -138,7 +137,11 @@ export function FeatureButton({
         }}
       >
         <span
-          className={isExpanded ? 'font-semibold text-white text-fluid-base tablet:text-fluid-lg' : 'text-white/90 font-medium text-fluid-sm tablet:text-fluid-base'}
+          className={
+            isExpanded
+              ? 'text-fluid-base tablet:text-fluid-lg font-semibold text-white'
+              : 'text-fluid-sm tablet:text-fluid-base font-medium text-white/90'
+          }
           style={{
             display: 'inline-block',
             opacity: 1,
@@ -152,7 +155,7 @@ export function FeatureButton({
           {isExpanded && '.'}
         </span>
         <span
-          className="text-gray-300 text-fluid-sm tablet:text-fluid-base"
+          className="text-fluid-sm tablet:text-fluid-base text-gray-300"
           style={{
             display: 'inline-block',
             marginLeft: isExpanded ? '0.25rem' : '0',
@@ -176,7 +179,7 @@ export function FeatureButton({
       </span>
 
       <div
-        className="flex-shrink-0 ml-1.5"
+        className="ml-1.5 flex-shrink-0"
         style={{
           transform: isExpanded ? 'rotate(45deg)' : 'rotate(0deg)',
           transition: `transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`,

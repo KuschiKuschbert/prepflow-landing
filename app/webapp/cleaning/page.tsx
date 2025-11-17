@@ -9,6 +9,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { Sparkles, ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
+import { logger } from '../../lib/logger';
 interface CleaningArea {
   id: number;
   name: string;
@@ -54,7 +55,7 @@ export default function CleaningRosterPage() {
         setAreas(data.data);
       }
     } catch (error) {
-      console.error('Error fetching areas:', error);
+      logger.error('Error fetching areas:', error);
     }
   };
 
@@ -93,7 +94,7 @@ export default function CleaningRosterPage() {
         setShowAddArea(false);
       }
     } catch (error) {
-      console.error('Error adding area:', error);
+      logger.error('Error adding area:', error);
     }
   };
 
@@ -115,7 +116,7 @@ export default function CleaningRosterPage() {
         setShowAddTask(false);
       }
     } catch (error) {
-      console.error('Error adding task:', error);
+      logger.error('Error adding task:', error);
     }
   };
 
@@ -140,14 +141,14 @@ export default function CleaningRosterPage() {
         );
       }
     } catch (error) {
-      console.error('Error completing task:', error);
+      logger.error('Error completing task:', error);
     }
   };
 
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+        <div className="tablet:py-6 min-h-screen bg-transparent py-4">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="adaptive-grid mt-8">
             <LoadingSkeleton variant="card" count={4} height="120px" />
@@ -159,7 +160,7 @@ export default function CleaningRosterPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+      <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
@@ -294,7 +295,12 @@ export default function CleaningRosterPage() {
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                      <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+                      <Icon
+                        icon={Sparkles}
+                        size="md"
+                        className="text-[#29E7CD]"
+                        aria-hidden={true}
+                      />
                     </div>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-medium ${

@@ -52,7 +52,7 @@ export function EquipmentListTableDesktop({
   getSortIcon,
 }: EquipmentListTableDesktopProps) {
   return (
-    <div className="hidden overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg large-desktop:block">
+    <div className="large-desktop:block hidden overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

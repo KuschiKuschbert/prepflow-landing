@@ -1,4 +1,1 @@
 declare module 'recharts';
-
-
-

@@ -8,12 +8,9 @@ import { useCallback, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Howl } from 'howler';
 import { isArcadeMuted } from '@/lib/arcadeMute';
+import { logger } from '@/lib/logger';
 
 let popSound: Howl | null = null;
-
-/**
- * Initialize pop sound (lazy load)
- */
 const initPopSound = (): Howl | null => {
   if (typeof window === 'undefined') return null;
 
@@ -25,7 +22,7 @@ const initPopSound = (): Howl | null => {
         preload: false,
       });
     } catch (error) {
-      console.warn('Failed to load pop sound, using fallback');
+      logger.warn('Failed to load pop sound, using fallback');
       // Fallback: create simple beep using Web Audio API
       popSound = null;
     }
@@ -33,10 +30,6 @@ const initPopSound = (): Howl | null => {
 
   return popSound;
 };
-
-/**
- * Play pop sound (with mute check)
- */
 const playPopSound = (): void => {
   if (isArcadeMuted()) return;
 
@@ -68,10 +61,6 @@ const playPopSound = (): void => {
     }
   }
 };
-
-/**
- * Throw confetti with optional intensity
- */
 export const throwConfetti = (intensity: number = 1): void => {
   confetti({
     particleCount: Math.floor(100 * intensity),
@@ -82,19 +71,8 @@ export const throwConfetti = (intensity: number = 1): void => {
 
   playPopSound();
 };
-
-/**
- * Check if value is a milestone threshold
- */
 const MILESTONE_THRESHOLDS = [10, 25, 50, 100];
-
-export const isMilestone = (value: number): boolean => {
-  return MILESTONE_THRESHOLDS.includes(value);
-};
-
-/**
- * React hook for confetti functionality
- */
+export const isMilestone = (value: number): boolean => MILESTONE_THRESHOLDS.includes(value);
 export const useConfetti = () => {
   const triggerConfetti = useCallback((intensity: number = 1) => {
     throwConfetti(intensity);

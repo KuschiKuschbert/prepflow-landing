@@ -9,6 +9,7 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructions';
 import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -19,10 +20,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (!recipe || !Array.isArray(ingredients)) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     // Try AI first
@@ -52,7 +50,7 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (aiError) {
-      console.warn('AI recipe instructions failed, using fallback:', aiError);
+      logger.warn('AI recipe instructions failed, using fallback:', aiError);
     }
 
     // Fallback: Return empty string - component should handle fallback to rule-based
@@ -61,7 +59,7 @@ export async function POST(request: NextRequest) {
       source: 'fallback',
     });
   } catch (error) {
-    console.error('Recipe instructions error:', error);
+    logger.error('Recipe instructions error:', error);
     return NextResponse.json(
       {
         error: 'Failed to generate recipe instructions',

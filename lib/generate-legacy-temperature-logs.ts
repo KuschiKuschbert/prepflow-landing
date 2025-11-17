@@ -1,7 +1,3 @@
-/**
- * Legacy temperature log generation (for deprecated endpoint)
- */
-
 import {
   generateRealisticTemperature,
   generateFoodTemperature,
@@ -52,14 +48,11 @@ export function generateLegacyTemperatureLogs(
     const currentDate = new Date(date);
     const dateStr = currentDate.toISOString().split('T')[0];
 
-    // Generate equipment logs (morning and evening)
     for (const item of equipment) {
-      // Morning entry (7:00-9:00 AM)
       const morningHour = 7 + Math.floor(Math.random() * 3);
       const morningMinute = Math.floor(Math.random() * 60);
       const morningTime = `${morningHour.toString().padStart(2, '0')}:${morningMinute.toString().padStart(2, '0')}`;
       const morningTemp = generateRealisticTemperature(item, 'morning');
-
       temperatureLogs.push({
         log_date: dateStr,
         log_time: morningTime,
@@ -70,13 +63,10 @@ export function generateLegacyTemperatureLogs(
         logged_by: STAFF_MEMBERS[Math.floor(Math.random() * STAFF_MEMBERS.length)],
         created_at: new Date(`${dateStr}T${morningTime}:00`).toISOString(),
       });
-
-      // Evening entry (5:00-7:00 PM)
       const eveningHour = 17 + Math.floor(Math.random() * 3);
       const eveningMinute = Math.floor(Math.random() * 60);
       const eveningTime = `${eveningHour.toString().padStart(2, '0')}:${eveningMinute.toString().padStart(2, '0')}`;
       const eveningTemp = generateRealisticTemperature(item, 'evening');
-
       temperatureLogs.push({
         log_date: dateStr,
         log_time: eveningTime,
@@ -89,16 +79,13 @@ export function generateLegacyTemperatureLogs(
       });
     }
 
-    // Generate hot holding food items (2 entries per day)
     for (let i = 0; i < 2; i++) {
       const foodItem =
         FOOD_ITEMS.hotHolding[Math.floor(Math.random() * FOOD_ITEMS.hotHolding.length)];
-      const baseHour = i === 0 ? 11 : 14;
-      const hour = baseHour + Math.floor(Math.random() * 2);
+      const hour = (i === 0 ? 11 : 14) + Math.floor(Math.random() * 2);
       const minute = Math.floor(Math.random() * 60);
       const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       const temp = generateFoodTemperature('hot_holding');
-
       temperatureLogs.push({
         log_date: dateStr,
         log_time: time,
@@ -110,17 +97,13 @@ export function generateLegacyTemperatureLogs(
         created_at: new Date(`${dateStr}T${time}:00`).toISOString(),
       });
     }
-
-    // Generate cold holding food items (2 entries per day)
     for (let i = 0; i < 2; i++) {
       const foodItem =
         FOOD_ITEMS.coldHolding[Math.floor(Math.random() * FOOD_ITEMS.coldHolding.length)];
-      const baseHour = i === 0 ? 10 : 15;
-      const hour = baseHour + Math.floor(Math.random() * 2);
+      const hour = (i === 0 ? 10 : 15) + Math.floor(Math.random() * 2);
       const minute = Math.floor(Math.random() * 60);
       const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       const temp = generateFoodTemperature('cold_holding');
-
       temperatureLogs.push({
         log_date: dateStr,
         log_time: time,
@@ -132,14 +115,11 @@ export function generateLegacyTemperatureLogs(
         created_at: new Date(`${dateStr}T${time}:00`).toISOString(),
       });
     }
-
-    // Generate cooking food items (1 entry per day)
     const cookingItem = FOOD_ITEMS.cooking[Math.floor(Math.random() * FOOD_ITEMS.cooking.length)];
     const cookingHour = 13 + Math.floor(Math.random() * 2);
     const cookingMinute = Math.floor(Math.random() * 60);
     const cookingTime = `${cookingHour.toString().padStart(2, '0')}:${cookingMinute.toString().padStart(2, '0')}`;
     const cookingTemp = generateFoodTemperature('cooking');
-
     temperatureLogs.push({
       log_date: dateStr,
       log_time: cookingTime,

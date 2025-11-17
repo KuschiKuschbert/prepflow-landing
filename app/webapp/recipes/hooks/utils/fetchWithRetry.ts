@@ -1,5 +1,6 @@
 import { RecipeIngredientWithDetails } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Fetch recipe ingredients from API with retry logic.
  *
@@ -22,7 +23,7 @@ export async function fetchWithRetry(
 
   try {
     const url = `/api/recipes/${recipeId}/ingredients?t=${Date.now()}`;
-    console.log('[RecipeIngredients] Fetching from API:', url);
+    logger.dev('[RecipeIngredients] Fetching from API:', url);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -38,13 +39,13 @@ export async function fetchWithRetry(
       const errorText = await res.text().catch(() => 'Unknown error');
       const errorType =
         res.status >= 500 ? 'server error' : res.status >= 400 ? 'client error' : 'unknown error';
-      console.error(
+      logger.error(
         `[RecipeIngredients] API fetch failed for recipe ${recipeId}: ${res.status} ${errorType} - ${errorText}`,
       );
 
       if (res.status >= 500 && retryCount < maxRetries && fetchFromApiRef.current) {
         const delay = getRetryDelay(retryCount);
-        console.log(
+        logger.dev(
           `[RecipeIngredients] Retrying API fetch for recipe ${recipeId} after ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`,
         );
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -56,19 +57,19 @@ export async function fetchWithRetry(
     const data = await res.json();
     return (data?.items || []) as RecipeIngredientWithDetails[];
   } catch (err) {
-    console.error(`[RecipeIngredients] Exception fetching from API for recipe ${recipeId}:`, err);
+    logger.error(`[RecipeIngredients] Exception fetching from API for recipe ${recipeId}:`, err);
     if (err instanceof Error) {
-      console.error('[RecipeIngredients] Error details:', err.message, err.stack);
+      logger.error('[RecipeIngredients] Error details:', err.message, err.stack);
 
       const isAbortError = err.name === 'AbortError';
       const isNetworkError = err.name === 'TypeError' && err.message.includes('fetch');
 
       if (isAbortError) {
-        console.error(
+        logger.error(
           `[RecipeIngredients] Request timeout - server did not respond within ${timeoutMs}ms`,
         );
       } else if (isNetworkError) {
-        console.error(
+        logger.error(
           '[RecipeIngredients] Network error detected - check if dev server is running and API route exists',
         );
       }
@@ -76,7 +77,7 @@ export async function fetchWithRetry(
       if ((isNetworkError || isAbortError) && retryCount < maxRetries && fetchFromApiRef.current) {
         const delay = getRetryDelay(retryCount);
         const errorType = isAbortError ? 'timeout' : 'network error';
-        console.log(
+        logger.dev(
           `[RecipeIngredients] Retrying API fetch after ${errorType} for recipe ${recipeId} after ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`,
         );
         await new Promise(resolve => setTimeout(resolve, delay));

@@ -9,6 +9,7 @@ import { DishSidePanelActions } from './DishSidePanelActions';
 import { useDishSidePanelData } from '../hooks/useDishSidePanelData';
 import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
 
+import { logger } from '../../lib/logger';
 export interface DishSidePanelProps {
   isOpen: boolean;
   dish: Dish | null;
@@ -80,7 +81,7 @@ export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishS
   };
 
   const handleRemoveIngredient = async (ingredientId: string) => {
-    console.log('Remove ingredient:', ingredientId);
+    logger.dev('Remove ingredient:', ingredientId);
   };
 
   const capitalizeDishName = (name: string) => {

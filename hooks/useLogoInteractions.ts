@@ -1,9 +1,4 @@
-/**
- * Hook for managing logo interactions (Tomato Toss and Achievements)
- */
-
 import { useCallback, useEffect, useRef, useState } from 'react';
-
 export const useLogoInteractions = () => {
   const [logoClicks, setLogoClicks] = useState(0);
   const [showTomatoToss, setShowTomatoToss] = useState(false);
@@ -12,23 +7,15 @@ export const useLogoInteractions = () => {
   const logoHoldTimerRef = useRef<NodeJS.Timeout | null>(null);
   const logoHoldStartRef = useRef<number | null>(null);
   const preventNavigationRef = useRef<boolean>(false);
-
-  // Shared click/tap handler logic
   const handleLogoInteraction = useCallback(
     (shouldPreventDefault: boolean = false) => {
-      if (clickTimerRef.current) {
-        clearTimeout(clickTimerRef.current);
-      }
-
+      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
       const newClicks = logoClicks + 1;
       setLogoClicks(newClicks);
-
       if (newClicks >= 9) {
-        // On 9th click, prevent navigation and show game
         if (shouldPreventDefault) {
           preventNavigationRef.current = true;
           setShowTomatoToss(true);
-          // Reset flag after a short delay to allow Link click handler to check it
           setTimeout(() => {
             preventNavigationRef.current = false;
           }, 100);
@@ -38,20 +25,18 @@ export const useLogoInteractions = () => {
           clearTimeout(clickTimerRef.current);
           clickTimerRef.current = null;
         }
-        return true; // Indicates we should prevent default
+        return true;
       } else {
         preventNavigationRef.current = false;
         clickTimerRef.current = setTimeout(() => {
           setLogoClicks(0);
           clickTimerRef.current = null;
         }, 6000);
-        return false; // Allow normal navigation
+        return false;
       }
     },
     [logoClicks],
   );
-
-  // Logo click handler for Tomato Toss Easter Egg (desktop)
   const handleLogoClick = useCallback(
     (e: React.MouseEvent) => {
       const shouldPrevent = handleLogoInteraction(true);
@@ -59,18 +44,12 @@ export const useLogoInteractions = () => {
         e.preventDefault();
         e.stopPropagation();
       }
-      // Otherwise allow normal Link navigation
     },
     [handleLogoInteraction],
   );
-
-  // Logo touch start handler for Tomato Toss Easter Egg (mobile/Android)
-  // Android needs touchstart to prevent Link navigation early, but don't count clicks here
   const handleLogoTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      // Only prevent navigation if we're already at 9 clicks, don't increment counter
       if (logoClicks >= 8) {
-        // We're about to hit 9 on touchend, so prevent navigation now
         preventNavigationRef.current = true;
         e.preventDefault();
         e.stopPropagation();
@@ -78,9 +57,6 @@ export const useLogoInteractions = () => {
     },
     [logoClicks],
   );
-
-  // Logo touch end handler for Tomato Toss Easter Egg (mobile)
-  // This is where we actually count the tap (only once per tap)
   const handleLogoTouchEnd = useCallback(
     (e: React.TouchEvent) => {
       const shouldPrevent = handleLogoInteraction(true);
@@ -88,12 +64,9 @@ export const useLogoInteractions = () => {
         e.preventDefault();
         e.stopPropagation();
       }
-      // Otherwise allow normal Link navigation
     },
     [handleLogoInteraction],
   );
-
-  // Logo hold handler for Achievements Dropdown
   const handleLogoMouseDown = useCallback(() => {
     logoHoldStartRef.current = Date.now();
     logoHoldTimerRef.current = setTimeout(() => {
@@ -101,7 +74,6 @@ export const useLogoInteractions = () => {
       logoHoldTimerRef.current = null;
     }, 2000);
   }, []);
-
   const handleLogoMouseUp = useCallback(() => {
     if (logoHoldTimerRef.current) {
       clearTimeout(logoHoldTimerRef.current);
@@ -109,7 +81,6 @@ export const useLogoInteractions = () => {
     }
     logoHoldStartRef.current = null;
   }, []);
-
   const handleLogoMouseLeave = useCallback(() => {
     if (logoHoldTimerRef.current) {
       clearTimeout(logoHoldTimerRef.current);
@@ -117,8 +88,6 @@ export const useLogoInteractions = () => {
     }
     logoHoldStartRef.current = null;
   }, []);
-
-  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'A') {
@@ -126,23 +95,15 @@ export const useLogoInteractions = () => {
         setShowAchievements(true);
       }
     };
-
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      if (clickTimerRef.current) {
-        clearTimeout(clickTimerRef.current);
-      }
-      if (logoHoldTimerRef.current) {
-        clearTimeout(logoHoldTimerRef.current);
-      }
+      if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+      if (logoHoldTimerRef.current) clearTimeout(logoHoldTimerRef.current);
     };
   }, []);
-
   return {
     showTomatoToss,
     setShowTomatoToss,

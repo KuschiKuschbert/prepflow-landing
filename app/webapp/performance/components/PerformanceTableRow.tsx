@@ -82,9 +82,7 @@ export function PerformanceTableRow({ item }: PerformanceTableRowProps) {
           </span>
         </div>
       </td>
-      <td className="px-6 py-4 text-sm text-gray-300">
-        {formatNumber(item.number_sold)}
-      </td>
+      <td className="px-6 py-4 text-sm text-gray-300">{formatNumber(item.number_sold)}</td>
       <td className="px-6 py-4 text-sm font-semibold text-white">
         {formatCurrency(item.gross_profit * item.number_sold)}
       </td>

@@ -73,6 +73,3 @@ You should see all 5 files:
 - cleaning-roster-screenshot.png (new)
 
 Then restart your server and check the landing page!
-
-
-

@@ -16,7 +16,10 @@ export function useDishCOGSCalculations(
 
     for (const dishRecipe of recipes) {
       const recipeId = dishRecipe.recipe_id;
-      const recipeQuantity = typeof dishRecipe.quantity === 'number' ? dishRecipe.quantity : parseFloat(String(dishRecipe.quantity)) || 1;
+      const recipeQuantity =
+        typeof dishRecipe.quantity === 'number'
+          ? dishRecipe.quantity
+          : parseFloat(String(dishRecipe.quantity)) || 1;
       const recipeIngredients = recipeIngredientsMap[recipeId] || [];
       const recipeCOGS = convertToCOGSCalculations(recipeIngredients, recipeId);
 
@@ -48,8 +51,12 @@ export function useDishCOGSCalculations(
       const ingredient = dishIngredient.ingredients;
       if (!ingredient) continue;
 
-      const quantity = typeof dishIngredient.quantity === 'number' ? dishIngredient.quantity : parseFloat(String(dishIngredient.quantity)) || 0;
-      const costPerUnit = (ingredient as any).cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+      const quantity =
+        typeof dishIngredient.quantity === 'number'
+          ? dishIngredient.quantity
+          : parseFloat(String(dishIngredient.quantity)) || 0;
+      const costPerUnit =
+        (ingredient as any).cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
       const totalCost = quantity * costPerUnit;
       const wastePercent = (ingredient as any).trim_peel_waste_percentage || 0;
       const yieldPercent = (ingredient as any).yield_percentage || 100;
@@ -84,13 +91,11 @@ export function useDishCOGSCalculations(
     return allCalculations;
   }, [dishDetails, recipeIngredientsMap, dish?.id]);
 
-  const totalCOGS = useMemo(() => {
-    return calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
-  }, [calculations]);
-
-  const costPerPortion = useMemo(() => {
-    return totalCOGS;
-  }, [totalCOGS]);
+  const totalCOGS = useMemo(
+    () => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0),
+    [calculations],
+  );
+  const costPerPortion = useMemo(() => totalCOGS, [totalCOGS]);
 
   return { calculations, totalCOGS, costPerPortion };
 }

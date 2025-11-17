@@ -2,6 +2,7 @@ import { filterSalesDataByDateRange, parseDateRange } from '@/lib/api/performanc
 import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/dishDeduplication';
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
+import { logger } from '../../lib/logger';
 import {
   calculateAveragePopularity,
   calculateAverageProfitMargin,
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (dishesError) {
-      console.error('Error fetching dishes:', dishesError);
+      logger.error('Error fetching dishes:', dishesError);
       return NextResponse.json(
         {
           error: 'Database error',
@@ -163,7 +164,7 @@ export async function GET(request: NextRequest) {
     // Debug: Log if any dishes don't have a category assigned
     const dishesWithoutCategory = performanceData.filter(item => !item.menu_item_class);
     if (dishesWithoutCategory.length > 0) {
-      console.warn(`Warning: ${dishesWithoutCategory.length} dishes without category assignment`);
+      logger.warn(`Warning: ${dishesWithoutCategory.length} dishes without category assignment`);
     }
 
     return NextResponse.json({
@@ -178,7 +179,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error in performance summary API:', error);
+    logger.error('Error in performance summary API:', error);
     return NextResponse.json(
       {
         error: 'Internal server error',

@@ -98,9 +98,9 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 desktop:p-4">
+        <div className="desktop:p-4 flex-1 overflow-y-auto p-3">
           {Object.entries(grouped).map(([category, items]) => (
-            <div key={category} className="mb-4 desktop:mb-6">
+            <div key={category} className="desktop:mb-6 mb-4">
               <h3
                 className={cn(
                   'mb-2',
@@ -166,7 +166,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         </div>
 
         {/* Mobile-only: Language and Logout */}
-        <div className="space-y-3 border-t border-[#2a2a2a] p-4 desktop:hidden">
+        <div className="desktop:hidden space-y-3 border-t border-[#2a2a2a] p-4">
           <div>
             <div className="mb-2 text-xs tracking-wider text-gray-400 uppercase">Settings</div>
             <div className="space-y-2">

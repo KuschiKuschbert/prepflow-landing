@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
       error = result.error;
 
       if (error) {
-        console.error('Error fetching kitchen sections:', error);
+        logger.error('Error fetching kitchen sections:', error);
         return NextResponse.json(
           {
             error: 'Failed to fetch kitchen sections',
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
       data: mappedData,
     });
   } catch (error) {
-    console.error('Kitchen sections API error:', error);
+    logger.error('Kitchen sections API error:', error);
     return NextResponse.json(
       {
         error: 'Internal server error',

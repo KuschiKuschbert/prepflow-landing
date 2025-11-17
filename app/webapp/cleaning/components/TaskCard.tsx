@@ -38,7 +38,9 @@ function getStatusIcon(status: string) {
     case 'overdue':
       return <Icon icon={AlertTriangle} size="lg" className="text-red-400" aria-hidden={true} />;
     default:
-      return <Icon icon={ClipboardCheck} size="lg" className="text-yellow-400" aria-hidden={true} />;
+      return (
+        <Icon icon={ClipboardCheck} size="lg" className="text-yellow-400" aria-hidden={true} />
+      );
   }
 }
 
@@ -80,7 +82,8 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
       {task.completed_date && (
         <p className="mb-4 flex items-center gap-2 text-sm text-green-400">
           <Icon icon={CheckCircle} size="sm" aria-hidden={true} />
-          {t('cleaning.completedOn', 'Completed on')} {new Date(task.completed_date).toLocaleString()}
+          {t('cleaning.completedOn', 'Completed on')}{' '}
+          {new Date(task.completed_date).toLocaleString()}
         </p>
       )}
 

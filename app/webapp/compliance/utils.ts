@@ -11,7 +11,7 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
-  LucideIcon
+  LucideIcon,
 } from 'lucide-react';
 
 export function getTypeIcon(typeName: string): LucideIcon {

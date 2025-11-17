@@ -1,5 +1,6 @@
 import { Recipe, RecipeIngredientWithDetails } from '../../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Handle preview recipe action.
  *
@@ -30,9 +31,9 @@ export async function handlePreviewRecipe({
   setError: (error: string) => void;
 }): Promise<void> {
   try {
-    console.log('[RecipesClient] Opening unified modal:', recipe.id);
+    logger.dev('[RecipesClient] Opening unified modal:', recipe.id);
     const ingredients = await fetchRecipeIngredients(recipe.id);
-    console.log('[RecipesClient] Fetched:', ingredients.length);
+    logger.dev('[RecipesClient] Fetched:', ingredients.length);
     setSelectedRecipe(recipe);
     setRecipeIngredients(ingredients);
     setPreviewYield(recipe.yield || 1);
@@ -40,7 +41,7 @@ export async function handlePreviewRecipe({
     clearChangedFlag(recipe.id);
     await generateAIInstructions(recipe, ingredients);
   } catch (err) {
-    console.error('❌ Error in handlePreviewRecipe:', err);
+    logger.error('❌ Error in handlePreviewRecipe:', err);
     setError('Failed to load recipe');
   }
 }

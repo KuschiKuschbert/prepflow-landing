@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 // UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
@@ -91,7 +92,7 @@ export default function RecipesClient() {
   // Listen for autosave completion events to refresh recipes when yield/portions are updated
   useRecipeAutosaveListener({
     onRecipeSaved: () => {
-      fetchRecipes().catch(err => console.error('Failed to refresh recipes after autosave:', err));
+      fetchRecipes().catch(err => logger.error('Failed to refresh recipes after autosave:', err));
     },
   });
 

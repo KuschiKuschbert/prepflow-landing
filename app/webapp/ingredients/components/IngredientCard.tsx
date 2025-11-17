@@ -79,16 +79,17 @@ export function IngredientCard({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const isSelected = selectedIngredients.has(ingredient.id);
 
-  const { handleTouchStart, handleTouchMove, handleTouchEnd, handleCardClick } = useCardTouchHandlers({
-    ingredientId: ingredient.id,
-    isSelectionMode,
-    selectedIngredients,
-    onSelectIngredient,
-    onEdit: () => onEdit(ingredient),
-    onStartLongPress,
-    onCancelLongPress,
-    onEnterSelectionMode,
-  });
+  const { handleTouchStart, handleTouchMove, handleTouchEnd, handleCardClick } =
+    useCardTouchHandlers({
+      ingredientId: ingredient.id,
+      isSelectionMode,
+      selectedIngredients,
+      onSelectIngredient,
+      onEdit: () => onEdit(ingredient),
+      onStartLongPress,
+      onCancelLongPress,
+      onEnterSelectionMode,
+    });
 
   const handleDelete = () => {
     setShowDeleteConfirm(true);
@@ -119,9 +120,7 @@ export function IngredientCard({
     <>
       <div
         className={`rounded-xl border-l-2 border-[#D925C7]/30 bg-[#D925C7]/2 p-3 transition-all duration-200 ${
-          isSelectionMode
-            ? 'cursor-pointer'
-            : 'cursor-pointer hover:bg-[#D925C7]/5'
+          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#D925C7]/5'
         } ${isSelected && isSelectionMode ? 'border-[#D925C7]/50 bg-[#D925C7]/10' : ''}`}
         onClick={handleCardClick}
         title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
@@ -131,10 +130,12 @@ export function IngredientCard({
       >
         {/* Header: Name and Cost */}
         <div className="mb-2 flex items-start justify-between gap-2">
-          <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold text-white truncate">{ingredient.ingredient_name}</h3>
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-base font-semibold text-white">
+              {ingredient.ingredient_name}
+            </h3>
             {ingredient.product_code && (
-              <p className="text-xs text-gray-500 truncate">{ingredient.product_code}</p>
+              <p className="truncate text-xs text-gray-500">{ingredient.product_code}</p>
             )}
           </div>
           <div className="flex-shrink-0 text-right">
@@ -162,26 +163,27 @@ export function IngredientCard({
             <span className="flex items-center gap-1">
               <Icon icon={MapPin} size="xs" className="text-gray-500" aria-hidden={true} />
               {String(ingredient.pack_size)} {packSizeUnit}
-              {showUnitTooltip && (
-                <span className="text-gray-500">({standardUnit})</span>
-              )}
+              {showUnitTooltip && <span className="text-gray-500">({standardUnit})</span>}
             </span>
           )}
         </div>
 
         {/* Stock Status and Actions Row */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <span className={`text-xs font-medium truncate ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}>
-              Stock: {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'} {ingredient.unit || ''}
+          <div className="flex min-w-0 items-center gap-1.5">
+            <span
+              className={`truncate text-xs font-medium ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}
+            >
+              Stock: {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'}{' '}
+              {ingredient.unit || ''}
             </span>
             {isLowStock && (
-              <span className="inline-flex items-center rounded-full bg-red-900/20 px-1.5 py-0.5 text-xs font-medium text-red-400 flex-shrink-0">
+              <span className="inline-flex flex-shrink-0 items-center rounded-full bg-red-900/20 px-1.5 py-0.5 text-xs font-medium text-red-400">
                 Low
               </span>
             )}
           </div>
-          <div className="flex gap-1.5 flex-shrink-0">
+          <div className="flex flex-shrink-0 gap-1.5">
             <button
               onClick={handleEditClick}
               disabled={isSelectionMode}

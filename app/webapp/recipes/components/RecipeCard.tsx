@@ -30,8 +30,8 @@ const RecipeCard = React.memo(function RecipeCard({
 }: RecipeCardProps) {
   return (
     <div
-      className="border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 p-4 transition-colors hover:bg-[#3B82F6]/5 cursor-pointer"
-      onClick={(e) => {
+      className="cursor-pointer border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 p-4 transition-colors hover:bg-[#3B82F6]/5"
+      onClick={e => {
         // Don't trigger if clicking on buttons or checkbox
         if ((e.target as HTMLElement).closest('button')) return;
         onPreviewRecipe(recipe);
@@ -41,7 +41,7 @@ const RecipeCard = React.memo(function RecipeCard({
       <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               onSelectRecipe(recipe.id);
             }}
@@ -55,11 +55,14 @@ const RecipeCard = React.memo(function RecipeCard({
               <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
             )}
           </button>
-          <h3 className="text-sm font-medium text-white">
-            {capitalizeRecipeName(recipe.name)}
-          </h3>
+          <h3 className="text-sm font-medium text-white">{capitalizeRecipeName(recipe.name)}</h3>
         </div>
-        <span className="text-xs text-gray-500" title={`Created on ${formatRecipeDate(recipe.created_at)}`}>{formatRecipeDate(recipe.created_at)}</span>
+        <span
+          className="text-xs text-gray-500"
+          title={`Created on ${formatRecipeDate(recipe.created_at)}`}
+        >
+          {formatRecipeDate(recipe.created_at)}
+        </span>
       </div>
 
       <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
@@ -83,7 +86,9 @@ const RecipeCard = React.memo(function RecipeCard({
         </div>
         {recipePrices[recipe.id] && (
           <>
-            <div title={`Profit margin: ${recipePrices[recipe.id].gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - Percentage of profit relative to selling price`}>
+            <div
+              title={`Profit margin: ${recipePrices[recipe.id].gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - Percentage of profit relative to selling price`}
+            >
               <span className="font-medium">Profit Margin:</span>
               <span className="ml-1 text-white">
                 {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
@@ -113,7 +118,7 @@ const RecipeCard = React.memo(function RecipeCard({
       {/* Action Buttons */}
       <div className="ml-7 flex gap-2">
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onPreviewRecipe(recipe);
           }}
@@ -123,7 +128,7 @@ const RecipeCard = React.memo(function RecipeCard({
           Preview
         </button>
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onEditRecipe(recipe);
           }}
@@ -134,7 +139,7 @@ const RecipeCard = React.memo(function RecipeCard({
           <Icon icon={Edit} size="xs" />
         </button>
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onDeleteRecipe(recipe);
           }}

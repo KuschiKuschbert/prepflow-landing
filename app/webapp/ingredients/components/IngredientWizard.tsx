@@ -2,21 +2,21 @@
 
 import { Icon } from '@/components/ui/Icon';
 import {
-    formatBrandName,
-    formatIngredientName,
-    formatStorageLocation,
-    formatSupplierName,
-    formatTextInput,
+  formatBrandName,
+  formatIngredientName,
+  formatStorageLocation,
+  formatSupplierName,
+  formatTextInput,
 } from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import { AlertTriangle } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
-    calculateCostPerUnit,
-    calculateWastagePercentage,
-    checkValidation as checkValidationHelper,
-    formatCost,
-    getValidationErrors,
+  calculateCostPerUnit,
+  calculateWastagePercentage,
+  checkValidation as checkValidationHelper,
+  formatCost,
+  getValidationErrors,
 } from '../utils/wizard-helpers';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
@@ -235,14 +235,7 @@ export default function IngredientWizard({
   const canProceed = useMemo(() => {
     const step = wizardStep === 3 ? 3 : wizardStep;
     return checkValidationHelper(step, formData);
-  }, [
-    wizardStep,
-    formData.ingredient_name,
-    formData.pack_size,
-    formData.pack_size_unit,
-    formData.pack_price,
-    formData.unit,
-  ]);
+  }, [wizardStep, formData]);
   const stepProps = {
     formData,
     suppliers,
@@ -257,12 +250,16 @@ export default function IngredientWizard({
   };
   return (
     <div className="mb-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
-      <div className="mb-2"><h2 className="text-base font-semibold text-white">Add New Ingredient</h2></div>
+      <div className="mb-2">
+        <h2 className="text-base font-semibold text-white">Add New Ingredient</h2>
+      </div>
       <div className="mb-4">
         <div className="flex items-center gap-1.5">
           {[1, 2, 3].map(step => (
             <div key={step} className="flex flex-1 items-center">
-              <div className={`h-1 flex-1 rounded-full transition-all duration-200 ${step <= wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'}`} />
+              <div
+                className={`h-1 flex-1 rounded-full transition-all duration-200 ${step <= wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'}`}
+              />
             </div>
           ))}
         </div>

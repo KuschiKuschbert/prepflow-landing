@@ -1,8 +1,9 @@
 'use client';
-
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, Suspense } from 'react';
+
+import { logger } from '@/lib/logger';
 
 declare global {
   interface Window {
@@ -37,7 +38,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
         });
 
         hasInitialized.current = true;
-        console.log('✅ GTM Data Layer initialized');
+        logger.dev('✅ GTM Data Layer initialized');
       }
     }
   }, [pathname]);
@@ -55,7 +56,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
         timestamp: Date.now(),
       });
 
-      console.log('📊 GTM Page View tracked:', pathname);
+      logger.dev('📊 GTM Page View tracked:', pathname);
     }
   }, [pathname, searchParams]);
 
@@ -70,7 +71,6 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
           style={{ display: 'none', visibility: 'hidden' }}
         />
       </noscript>
-
       {/* Google Tag Manager */}
       <Script
         id="gtm-script"
@@ -85,18 +85,18 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
           `,
         }}
         onLoad={() => {
-          console.log('📥 Google Tag Manager loaded');
+          logger.dev('📥 Google Tag Manager loaded');
 
           // Initialize gtag function for backward compatibility
           if (typeof window !== 'undefined' && !window.gtag) {
             window.gtag = function () {
               window.dataLayer.push(arguments);
             };
-            console.log('🔧 gtag function initialized for GTM compatibility');
+            logger.dev('🔧 gtag function initialized for GTM compatibility');
           }
         }}
         onError={() => {
-          console.error('❌ Failed to load Google Tag Manager');
+          logger.error('❌ Failed to load Google Tag Manager');
         }}
       />
     </>
@@ -115,7 +115,7 @@ export default function GoogleTagManager({ gtmId, ga4MeasurementId }: GoogleTagM
 export function pushToDataLayer(data: any) {
   if (typeof window !== 'undefined' && window.dataLayer) {
     window.dataLayer.push(data);
-    console.log('📤 Data pushed to GTM:', data);
+    logger.dev('📤 Data pushed to GTM:', data);
   }
 }
 

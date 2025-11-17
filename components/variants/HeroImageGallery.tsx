@@ -80,7 +80,7 @@ export function HeroImageGallery({
             sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
           />
         </div>
-        <p className="mt-4 text-center text-fluid-sm text-gray-500">
+        <p className="text-fluid-sm mt-4 text-center text-gray-500">
           Dashboard · Settings · Recipe Costing · Stock Management
         </p>
       </div>

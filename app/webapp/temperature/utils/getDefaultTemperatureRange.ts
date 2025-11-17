@@ -70,14 +70,24 @@ export function getDefaultTemperatureRange(
     };
   }
 
-  if (name.includes('hot') || name.includes('warming') || name.includes('steam') || name.includes('bain marie')) {
+  if (
+    name.includes('hot') ||
+    name.includes('warming') ||
+    name.includes('steam') ||
+    name.includes('bain marie')
+  ) {
     return {
       minTemp: 60,
       maxTemp: 75,
     };
   }
 
-  if (name.includes('cold') || name.includes('fridge') || name.includes('refrigerator') || name.includes('cooler')) {
+  if (
+    name.includes('cold') ||
+    name.includes('fridge') ||
+    name.includes('refrigerator') ||
+    name.includes('cooler')
+  ) {
     return {
       minTemp: 0,
       maxTemp: 5,

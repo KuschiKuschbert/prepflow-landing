@@ -32,17 +32,16 @@ export function RecipeSortDropdown({
   const currentSortLabel = SORT_OPTIONS.find(opt => opt.value === sortField)?.label || 'Sort';
 
   const handleSort = (field: RecipeSortField) => {
-    const newDirection =
-      field === sortField && sortDirection === 'asc' ? 'desc' : 'asc';
+    const newDirection = field === sortField && sortDirection === 'asc' ? 'desc' : 'asc';
     onSortChange(field, newDirection);
     onClose();
   };
 
   return (
-    <div className="relative w-full tablet:w-auto">
+    <div className="tablet:w-auto relative w-full">
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] tablet:w-auto"
+        className="tablet:w-auto flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]"
       >
         <Icon icon={ArrowUpDown} size="sm" className="text-current" aria-hidden={true} />
         <span className="truncate">{currentSortLabel}</span>
@@ -64,16 +63,14 @@ export function RecipeSortDropdown({
                   onClick={() => handleSort(option.value)}
                   className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                     sortField === option.value
-                      ? 'bg-[#29E7CD]/20 text-[#29E7CD] border border-[#29E7CD]/50'
+                      ? 'border border-[#29E7CD]/50 bg-[#29E7CD]/20 text-[#29E7CD]'
                       : 'text-gray-300 hover:bg-[#2a2a2a]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span>{option.label}</span>
                     {sortField === option.value && (
-                      <span className="text-xs">
-                        {sortDirection === 'asc' ? '↑' : '↓'}
-                      </span>
+                      <span className="text-xs">{sortDirection === 'asc' ? '↑' : '↓'}</span>
                     )}
                   </div>
                 </button>

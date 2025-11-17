@@ -70,12 +70,12 @@ export function useIngredientAddition({
             calc => calc.ingredientId === newIngredient.ingredient_id,
           );
           if (currentCalc) {
-            flushSync(() => {
+            flushSync(() =>
               updateCalculation(
                 newIngredient.ingredient_id!,
                 currentCalc.quantity + convertedQuantity,
-              );
-            });
+              ),
+            );
             resetForm();
           }
           return;

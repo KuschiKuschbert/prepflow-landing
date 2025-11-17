@@ -29,6 +29,7 @@ export function TemperatureConverter() {
     } else if (fahrenheit === '') {
       setFahrenheit('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [celsius]);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export function TemperatureConverter() {
     } else if (celsius === '') {
       setCelsius('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fahrenheit]);
 
   const handlePreset = (tempC: number) => {
@@ -48,35 +50,37 @@ export function TemperatureConverter() {
   };
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col justify-center space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
-      <div className="hidden tablet:block">
-        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
+    <div className="tablet:space-y-2 tablet:px-4 tablet:py-4 flex min-h-[600px] w-full flex-col justify-center space-y-1.5 overflow-y-auto px-3 py-3">
+      <div className="tablet:block hidden">
+        <h2 className="tablet:mb-2 tablet:text-lg mb-1 text-base font-semibold text-white">
           Temperature Converter
         </h2>
         <p className="text-xs text-gray-400">Convert between Celsius and Fahrenheit</p>
       </div>
 
       {/* Converter Interface */}
-      <div className="grid w-full gap-2 tablet:grid-cols-2 tablet:gap-4">
-        <div className="space-y-1 tablet:space-y-2">
-          <label className="block text-xs font-medium text-gray-300 tablet:text-sm">Celsius (°C)</label>
+      <div className="tablet:grid-cols-2 tablet:gap-4 grid w-full gap-2">
+        <div className="tablet:space-y-2 space-y-1">
+          <label className="tablet:text-sm block text-xs font-medium text-gray-300">
+            Celsius (°C)
+          </label>
           <input
             type="number"
             value={celsius}
             onChange={e => setCelsius(e.target.value)}
             placeholder="Enter temperature"
             step="0.1"
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
+            className="tablet:rounded-xl tablet:px-3 tablet:py-2.5 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
           />
           {celsius && !isNaN(parseFloat(celsius)) && (
-            <div className="text-lg font-bold text-[#29E7CD] tablet:text-2xl">
+            <div className="tablet:text-2xl text-lg font-bold text-[#29E7CD]">
               {parseFloat(celsius).toFixed(1)}°C
             </div>
           )}
         </div>
 
-        <div className="space-y-1 tablet:space-y-2">
-          <label className="block text-xs font-medium text-gray-300 tablet:text-sm">
+        <div className="tablet:space-y-2 space-y-1">
+          <label className="tablet:text-sm block text-xs font-medium text-gray-300">
             Fahrenheit (°F)
           </label>
           <input
@@ -85,10 +89,10 @@ export function TemperatureConverter() {
             onChange={e => setFahrenheit(e.target.value)}
             placeholder="Enter temperature"
             step="0.1"
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
+            className="tablet:rounded-xl tablet:px-3 tablet:py-2.5 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
           />
           {fahrenheit && !isNaN(parseFloat(fahrenheit)) && (
-            <div className="text-lg font-bold text-[#D925C7] tablet:text-2xl">
+            <div className="tablet:text-2xl text-lg font-bold text-[#D925C7]">
               {parseFloat(fahrenheit).toFixed(1)}°F
             </div>
           )}
@@ -97,15 +101,15 @@ export function TemperatureConverter() {
 
       {/* Presets */}
       <div className="w-full">
-        <label className="mb-1 block text-xs font-medium text-gray-300 tablet:mb-2 tablet:text-sm">
+        <label className="tablet:mb-2 tablet:text-sm mb-1 block text-xs font-medium text-gray-300">
           Common Temperatures
         </label>
-        <div className="grid w-full grid-cols-2 gap-1 tablet:grid-cols-3 tablet:gap-2 desktop:grid-cols-4">
+        <div className="tablet:grid-cols-3 tablet:gap-2 desktop:grid-cols-4 grid w-full grid-cols-2 gap-1">
           {presets.map(preset => (
             <button
               key={preset.label}
               onClick={() => handlePreset(preset.celsius)}
-              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-left text-xs transition-colors hover:bg-[#2a2a2a] tablet:rounded-xl tablet:px-3 tablet:py-2 tablet:text-sm"
+              className="tablet:rounded-xl tablet:px-3 tablet:py-2 tablet:text-sm rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-1.5 text-left text-xs transition-colors hover:bg-[#2a2a2a]"
             >
               <div className="font-medium text-white">{preset.label}</div>
               <div className="text-xs text-gray-400">

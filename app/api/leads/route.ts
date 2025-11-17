@@ -2,38 +2,31 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
-interface LeadRequestBody {
-  name?: string;
-  email?: string;
-  source?: string;
-}
+const leadRequestSchema = z.object({
+  name: z.string().min(1, 'Name is required').trim(),
+  email: z.string().email('Please provide a valid email address').trim().toLowerCase(),
+  source: z.string().trim().default('unknown'),
+});
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json()) as LeadRequestBody;
-    const name = (body.name || '').trim();
-    const email = (body.email || '').trim().toLowerCase();
-    const source = (body.source || 'unknown').trim();
+    const body = await req.json().catch(() => ({}));
+    const validationResult = leadRequestSchema.safeParse(body);
 
-    if (!name || !email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Name and email are required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Please provide a valid email address',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { name, email, source } = validationResult.data;
 
     const supabase = createSupabaseAdmin();
 

@@ -20,6 +20,7 @@ Comprehensive UI consistency review completed across the entire PrepFlow webapp 
 - Uses Icon wrapper for consistent iconography
 
 **Features:**
+
 - Shows "Showing X-Y of Z" when total and itemsPerPage provided
 - Optional items-per-page dropdown
 - Previous/Next buttons with icons
@@ -49,12 +50,13 @@ Comprehensive UI consistency review completed across the entire PrepFlow webapp 
 7. **IngredientTableWithFilters.tsx** - Verified compliance
 
 **Standard Table Structure:**
+
 ```tsx
 <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
   <table className="min-w-full divide-y divide-[#2a2a2a]">
     <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
       <tr>
-        <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
           Header
         </th>
       </tr>
@@ -83,6 +85,7 @@ Comprehensive UI consistency review completed across the entire PrepFlow webapp 
    - Updated `IngredientPagination` to accept `className` prop
 
 **Pagination Pattern:**
+
 ```tsx
 <TablePagination page={page} totalPages={totalPages} total={total} onPageChange={setPage} className="mb-4" />
 <TableComponent data={paginatedData} />
@@ -110,6 +113,7 @@ Comprehensive UI consistency review completed across the entire PrepFlow webapp 
 11. `DishesClient.tsx` - `md:hidden` → `lg:hidden`
 
 **Responsive Breakpoint Rules:**
+
 - Below `lg:` (1024px) → Mobile layout (phones + tablets)
 - `lg:` and above (1024px+) → Desktop layout
 - Tables: `hidden lg:block` for desktop, `block lg:hidden` for mobile cards
@@ -119,9 +123,11 @@ Comprehensive UI consistency review completed across the entire PrepFlow webapp 
 **Verified:** All components use Icon wrapper correctly
 
 **Fixed:**
+
 - `ComplianceRecordsList.tsx` - Changed direct `ClipboardCheck` usage to Icon wrapper
 
 **Pattern Verified:**
+
 ```typescript
 import { Icon } from '@/components/ui/Icon';
 import { ClipboardCheck } from 'lucide-react';
@@ -156,9 +162,11 @@ import { ClipboardCheck } from 'lucide-react';
 **Total: 17 files**
 
 **New Files:**
+
 - `components/ui/TablePagination.tsx`
 
 **Modified Files:**
+
 - `AGENTS.md`
 - `app/webapp/performance/components/PerformanceTable.tsx`
 - `app/webapp/performance/components/PerformanceClient.tsx`
@@ -186,6 +194,7 @@ import { ClipboardCheck } from 'lucide-react';
 ## Standards Enforced
 
 ### Table Formatting
+
 - ✅ Container: `rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]`
 - ✅ Headers: `bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20`
 - ✅ Header cells: `px-6 py-3 text-xs font-medium tracking-wider text-gray-300 uppercase`
@@ -193,17 +202,20 @@ import { ClipboardCheck } from 'lucide-react';
 - ✅ Hover: `hover:bg-[#2a2a2a]/20`
 
 ### Responsive Breakpoints
+
 - ✅ Primary breakpoint: `lg:` (1024px)
 - ✅ Mobile/Tablet: Below 1024px → Mobile layout
 - ✅ Desktop: 1024px+ → Desktop layout
 - ✅ Tables: `hidden lg:block` / `block lg:hidden` pattern
 
 ### Pagination
+
 - ✅ Dual placement (top and bottom)
 - ✅ Consistent styling using `TablePagination` component
 - ✅ Proper spacing with `className` prop
 
 ### Icon Usage
+
 - ✅ All icons use `Icon` wrapper component
 - ✅ Consistent sizing (xs, sm, md, lg, xl)
 - ✅ Proper accessibility attributes
@@ -211,6 +223,7 @@ import { ClipboardCheck } from 'lucide-react';
 ## Testing Recommendations
 
 ### Visual Testing
+
 1. **Desktop (1920px, 1440px, 1024px)**
    - Verify tables display correctly
    - Check pagination at top and bottom
@@ -227,6 +240,7 @@ import { ClipboardCheck } from 'lucide-react';
    - Verify no horizontal overflow
 
 ### Functional Testing
+
 1. **Pagination Navigation**
    - Test pagination at top and bottom
    - Verify page changes work correctly

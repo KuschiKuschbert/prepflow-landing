@@ -1,11 +1,12 @@
 'use client';
-
 /**
  * Hook for managing Tomato Toss sound effects using Web Audio API
  * Follows the same pattern as useKitchenFireSounds.ts
  */
 
 import { useRef, useCallback } from 'react';
+
+import { logger } from '@/lib/logger';
 
 interface AudioNodeRef {
   node: AudioBufferSourceNode;
@@ -37,7 +38,7 @@ export const useTomatoTossSounds = () => {
       audioReadyRef.current = true;
       return true;
     } catch (error) {
-      console.warn('Audio context creation failed:', error);
+      logger.warn('Audio context creation failed:', error);
       return false;
     }
   }, []);
@@ -82,7 +83,7 @@ export const useTomatoTossSounds = () => {
       gainNode.connect(audioContextRef.current.destination);
       source.start();
     } catch (error) {
-      console.warn('Failed to play throw sound:', error);
+      logger.warn('Failed to play throw sound:', error);
     }
   }, []);
 
@@ -130,7 +131,7 @@ export const useTomatoTossSounds = () => {
       gainNode.connect(audioContextRef.current.destination);
       source.start();
     } catch (error) {
-      console.warn('Failed to play splat sound:', error);
+      logger.warn('Failed to play splat sound:', error);
     }
   }, []);
 
@@ -161,7 +162,7 @@ export const useTomatoTossSounds = () => {
       oscillator.start();
       oscillator.stop(currentTime + 1.5);
     } catch (error) {
-      console.warn('Failed to play alert sound:', error);
+      logger.warn('Failed to play alert sound:', error);
     }
   }, []);
 
@@ -197,7 +198,7 @@ export const useTomatoTossSounds = () => {
         oscillator.stop(startTime + duration);
       });
     } catch (error) {
-      console.warn('Failed to play confetti sound:', error);
+      logger.warn('Failed to play confetti sound:', error);
     }
   }, []);
 
@@ -219,6 +220,3 @@ export const useTomatoTossSounds = () => {
     audioReady: audioReadyRef.current,
   };
 };
-
-
-

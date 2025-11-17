@@ -53,7 +53,7 @@ export function EquipmentDrawerHeader({
         </div>
         <button
           onClick={onClose}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2a2a2a] text-gray-400 transition-all duration-200 hover:bg-[#3a3a3a] hover:text-white hover:scale-110 active:scale-95"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2a2a2a] text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-[#3a3a3a] hover:text-white active:scale-95"
           aria-label="Close drawer"
           title="Close"
         >

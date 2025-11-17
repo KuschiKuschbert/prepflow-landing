@@ -66,7 +66,7 @@ export function PerformanceTableMobileCard({ item }: PerformanceTableMobileCardP
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 pt-2 border-t border-[#3a3a3a]">
+      <div className="flex flex-wrap gap-2 border-t border-[#3a3a3a] pt-2">
         <span
           className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
             item.profit_category === 'High'

@@ -47,9 +47,18 @@ export default function PerformanceTrends({
     const previousTotalSold = previousItems.reduce((sum, item) => sum + item.number_sold, 0);
 
     // Calculate changes
-    const profitChange = previousTotalProfit > 0 ? ((currentTotalProfit - previousTotalProfit) / previousTotalProfit) * 100 : 0;
-    const revenueChange = previousTotalRevenue > 0 ? ((currentTotalRevenue - previousTotalRevenue) / previousTotalRevenue) * 100 : 0;
-    const soldChange = previousTotalSold > 0 ? ((currentTotalSold - previousTotalSold) / previousTotalSold) * 100 : 0;
+    const profitChange =
+      previousTotalProfit > 0
+        ? ((currentTotalProfit - previousTotalProfit) / previousTotalProfit) * 100
+        : 0;
+    const revenueChange =
+      previousTotalRevenue > 0
+        ? ((currentTotalRevenue - previousTotalRevenue) / previousTotalRevenue) * 100
+        : 0;
+    const soldChange =
+      previousTotalSold > 0
+        ? ((currentTotalSold - previousTotalSold) / previousTotalSold) * 100
+        : 0;
 
     return {
       profitChange,
@@ -101,7 +110,7 @@ export default function PerformanceTrends({
     if (!dateRange.startDate || !dateRange.endDate) return 'Previous Period';
 
     const daysDiff = Math.ceil(
-      (dateRange.endDate.getTime() - dateRange.startDate.getTime()) / (1000 * 60 * 60 * 24)
+      (dateRange.endDate.getTime() - dateRange.startDate.getTime()) / (1000 * 60 * 60 * 24),
     );
     const previousEndDate = new Date(dateRange.startDate);
     previousEndDate.setDate(previousEndDate.getDate() - 1);
@@ -112,20 +121,22 @@ export default function PerformanceTrends({
   };
 
   return (
-    <div className="mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6">
+    <div className="tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6 mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3">
       <h3 className="mb-2 text-base font-semibold text-white">Trend Analysis</h3>
       <p className="mb-3 text-xs text-gray-400">
         Comparing current period to {getPreviousPeriodLabel()}
       </p>
 
-      <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:grid-cols-3">
+      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-3">
         {/* Profit Trend */}
         <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
           <div className="mb-1.5 flex items-center justify-between">
             <span className="text-xs text-gray-400">Total Profit</span>
             {getTrendIcon(trends.profitChange)}
           </div>
-          <div className="mb-1 text-lg font-bold text-white">{formatCurrency(trends.currentTotalProfit)}</div>
+          <div className="mb-1 text-lg font-bold text-white">
+            {formatCurrency(trends.currentTotalProfit)}
+          </div>
           <div className={`text-xs font-semibold ${getTrendColor(trends.profitChange)}`}>
             {trends.profitChange > 0 ? '+' : ''}
             {trends.profitChange.toFixed(1)}% vs previous
@@ -141,7 +152,9 @@ export default function PerformanceTrends({
             <span className="text-xs text-gray-400">Total Revenue</span>
             {getTrendIcon(trends.revenueChange)}
           </div>
-          <div className="mb-1 text-lg font-bold text-white">{formatCurrency(trends.currentTotalRevenue)}</div>
+          <div className="mb-1 text-lg font-bold text-white">
+            {formatCurrency(trends.currentTotalRevenue)}
+          </div>
           <div className={`text-xs font-semibold ${getTrendColor(trends.revenueChange)}`}>
             {trends.revenueChange > 0 ? '+' : ''}
             {trends.revenueChange.toFixed(1)}% vs previous
@@ -157,7 +170,9 @@ export default function PerformanceTrends({
             <span className="text-xs text-gray-400">Units Sold</span>
             {getTrendIcon(trends.soldChange)}
           </div>
-          <div className="mb-1 text-lg font-bold text-white">{formatNumber(trends.currentTotalSold)}</div>
+          <div className="mb-1 text-lg font-bold text-white">
+            {formatNumber(trends.currentTotalSold)}
+          </div>
           <div className={`text-xs font-semibold ${getTrendColor(trends.soldChange)}`}>
             {trends.soldChange > 0 ? '+' : ''}
             {trends.soldChange.toFixed(1)}% vs previous

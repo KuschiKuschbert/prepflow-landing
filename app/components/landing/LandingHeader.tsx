@@ -22,7 +22,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 py-3 tablet:px-6 tablet:py-4">
+      <div className="tablet:px-6 tablet:py-4 mx-auto max-w-7xl px-4 py-3">
         <div className="flex items-center justify-between gap-2">
           {/* Logo */}
           <Link href="/" className="flex shrink-0 items-center">
@@ -31,12 +31,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
               alt="PrepFlow Logo"
               width={48}
               height={48}
-              className="h-10 w-10 tablet:h-12 tablet:w-12"
+              className="tablet:h-12 tablet:w-12 h-10 w-10"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden items-center space-x-8 tablet:flex">
+          <nav className="tablet:flex hidden items-center space-x-8">
             <a
               href="#features"
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
@@ -54,7 +54,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden items-center gap-4 tablet:flex">
+          <div className="tablet:flex hidden items-center gap-4">
             <LanguageSwitcher className="mr-4" />
             {!isLoading &&
               (isAuthenticated ? (
@@ -102,10 +102,10 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           </div>
 
           {/* Mobile Header - Simplified: Just logo and CTA */}
-          <div className="flex flex-1 items-center justify-end gap-2 tablet:hidden">
+          <div className="tablet:hidden flex flex-1 items-center justify-end gap-2">
             {!isLoading && (
               <button
-                className="flex min-h-[40px] items-center justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-fluid-xs font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+                className="text-fluid-xs flex min-h-[40px] items-center justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
                 onClick={() => {
                   if (isAuthenticated) {
                     trackEngagement('mobile_header_go_to_dashboard_click');

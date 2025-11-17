@@ -56,7 +56,6 @@ export function useIngredientFiltering({
       return matchesSearch && matchesSupplier && matchesStorage;
     });
 
-    // Sort ingredients
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'name_asc':
@@ -93,9 +92,7 @@ export function useIngredientFiltering({
           return 0;
       }
     });
-
     return filtered;
   }, [ingredients, searchTerm, supplierFilter, storageFilter, sortBy]);
-
   return { filteredIngredients };
 }

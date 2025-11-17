@@ -3,7 +3,16 @@
 import { Icon } from '@/components/ui/Icon';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
-import { ArrowDown, ArrowUp, CheckCircle2, Minus, Thermometer, TrendingDown, TrendingUp, XCircle } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  CheckCircle2,
+  Minus,
+  Thermometer,
+  TrendingDown,
+  TrendingUp,
+  XCircle,
+} from 'lucide-react';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { calculateTemperatureStatistics, formatDateString, formatTime } from './utils';
 
@@ -25,7 +34,7 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
   return (
     <div className="space-y-4">
       {/* Statistics Grid - Compact Layout */}
-      <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-1 large-desktop:grid-cols-1">
+      <div className="tablet:grid-cols-2 desktop:grid-cols-1 large-desktop:grid-cols-1 grid grid-cols-1 gap-4">
         {/* Current Status Card - Compact */}
         <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-5 shadow-lg">
           <div className="mb-3 flex items-center gap-2">
@@ -36,14 +45,14 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
           </div>
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-white">{stats.currentStatus.latestTemp}°C</span>
+              <span className="text-3xl font-bold text-white">
+                {stats.currentStatus.latestTemp}°C
+              </span>
             </div>
             {stats.currentStatus.status === 'in-range' ? (
               <div className="flex items-center gap-1.5 rounded-full bg-green-400/10 px-2 py-1 text-green-400">
                 <Icon icon={CheckCircle2} size="xs" />
-                <span className="text-xs font-medium">
-                  {t('temperature.inRange', 'In Range')}
-                </span>
+                <span className="text-xs font-medium">{t('temperature.inRange', 'In Range')}</span>
               </div>
             ) : (
               <div className="flex items-center gap-1.5 rounded-full bg-red-400/10 px-2 py-1 text-red-400">
@@ -56,7 +65,8 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
             <p className="text-xs text-gray-400">
               {stats.currentStatus.lastReadingDate &&
                 formatDateString(stats.currentStatus.lastReadingDate, formatDate)}
-              {stats.currentStatus.lastReadingTime && ` ${formatTime(stats.currentStatus.lastReadingTime)}`}
+              {stats.currentStatus.lastReadingTime &&
+                ` ${formatTime(stats.currentStatus.lastReadingTime)}`}
             </p>
           </div>
         </div>
@@ -65,28 +75,26 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
         <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-5 shadow-lg">
           <div className="mb-3 flex items-center gap-2">
             <Icon icon={Thermometer} size="sm" className="text-[#29E7CD]" />
-            <h3 className="text-sm font-semibold text-white">
-              {t('temperature.range', 'Range')}
-            </h3>
+            <h3 className="text-sm font-semibold text-white">{t('temperature.range', 'Range')}</h3>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">
-                {t('temperature.minimum', 'Min')}
+              <span className="text-xs text-gray-400">{t('temperature.minimum', 'Min')}</span>
+              <span className="text-base font-semibold text-blue-400">
+                {stats.temperatureRange.min}°C
               </span>
-              <span className="text-base font-semibold text-blue-400">{stats.temperatureRange.min}°C</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">
-                {t('temperature.average', 'Avg')}
+              <span className="text-xs text-gray-400">{t('temperature.average', 'Avg')}</span>
+              <span className="text-base font-semibold text-white">
+                {stats.temperatureRange.average}°C
               </span>
-              <span className="text-base font-semibold text-white">{stats.temperatureRange.average}°C</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">
-                {t('temperature.maximum', 'Max')}
+              <span className="text-xs text-gray-400">{t('temperature.maximum', 'Max')}</span>
+              <span className="text-base font-semibold text-red-400">
+                {stats.temperatureRange.max}°C
               </span>
-              <span className="text-base font-semibold text-red-400">{stats.temperatureRange.max}°C</span>
             </div>
           </div>
         </div>
@@ -110,7 +118,8 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
               />
             </div>
             <p className="text-xs text-gray-400">
-              {stats.compliance.compliantCount}/{stats.compliance.totalCount} {t('temperature.readings', 'readings')}
+              {stats.compliance.compliantCount}/{stats.compliance.totalCount}{' '}
+              {t('temperature.readings', 'readings')}
             </p>
           </div>
         </div>
@@ -125,9 +134,7 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
             ) : (
               <Icon icon={Minus} size="sm" className="text-gray-400" />
             )}
-            <h3 className="text-sm font-semibold text-white">
-              {t('temperature.trend', 'Trend')}
-            </h3>
+            <h3 className="text-sm font-semibold text-white">{t('temperature.trend', 'Trend')}</h3>
           </div>
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
@@ -158,9 +165,7 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
                   ? t('temperature.declining', 'Declining')
                   : ''}
             </p>
-            <p className="text-xs text-gray-500">
-              {t('temperature.last7Days', 'vs prev 7d')}
-            </p>
+            <p className="text-xs text-gray-500">{t('temperature.last7Days', 'vs prev 7d')}</p>
           </div>
         </div>
 
@@ -197,7 +202,9 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
                 <span className="text-xs text-gray-400">
                   {t('temperature.violations', 'Violations')}
                 </span>
-                <span className="text-base font-semibold text-white">{stats.dangerZone.violationCount}</span>
+                <span className="text-base font-semibold text-white">
+                  {stats.dangerZone.violationCount}
+                </span>
               </div>
               <div
                 className={`rounded-full px-2 py-1 text-center text-xs font-medium ${

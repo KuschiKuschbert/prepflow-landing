@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Error assigning dish to section:', error);
+      logger.error('Error assigning dish to section:', error);
       return NextResponse.json(
         {
           error: 'Failed to assign dish to section',
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (error) {
-    console.error('Assign dish section API error:', error);
+    logger.error('Assign dish section API error:', error);
     return NextResponse.json(
       {
         error: 'Internal server error',

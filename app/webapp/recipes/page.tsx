@@ -13,7 +13,7 @@ export default function RecipesPage() {
   return (
     <ErrorBoundary>
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+        <div className="tablet:py-6 min-h-screen bg-transparent py-4">
           {/* Static Header - Renders Instantly */}
           <PageHeader
             title="Recipe & Cost Management"

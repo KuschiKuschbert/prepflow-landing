@@ -133,7 +133,7 @@ export function IngredientTableRow({
       onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
       onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
-      <td className="hidden px-6 py-4 whitespace-nowrap desktop:table-cell">
+      <td className="desktop:table-cell hidden px-6 py-4 whitespace-nowrap">
         <button
           onClick={e => {
             e.stopPropagation();
@@ -175,12 +175,12 @@ export function IngredientTableRow({
         </button>
       </td>
       <IngredientNameCell ingredient={ingredient} />
-      <IngredientBrandCell ingredient={ingredient} className="hidden desktop:table-cell" />
-      <IngredientPackSizeCell ingredient={ingredient} className="hidden desktop:table-cell" />
+      <IngredientBrandCell ingredient={ingredient} className="desktop:table-cell hidden" />
+      <IngredientPackSizeCell ingredient={ingredient} className="desktop:table-cell hidden" />
       <IngredientCostCell ingredient={ingredient} displayUnit={displayUnit} />
-      <IngredientSupplierCell ingredient={ingredient} className="hidden desktop:table-cell" />
-      <IngredientStockCell ingredient={ingredient} className="hidden desktop:table-cell" />
-      <td className="hidden px-6 py-4 text-sm text-gray-300 desktop:table-cell">
+      <IngredientSupplierCell ingredient={ingredient} className="desktop:table-cell hidden" />
+      <IngredientStockCell ingredient={ingredient} className="desktop:table-cell hidden" />
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-300">
         {ingredient.created_at ? formatRecipeDate(ingredient.created_at) : '—'}
       </td>
       <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">

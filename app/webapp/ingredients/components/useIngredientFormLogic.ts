@@ -7,6 +7,7 @@ import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
 import { useCallback, useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface Ingredient {
   id?: string;
   ingredient_name: string;
@@ -193,7 +194,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         }
         await onSave(formData);
       } catch (error) {
-        console.error('Error saving ingredient:', error);
+        logger.error('Error saving ingredient:', error);
       }
     },
     [formData, validateForm, onSave],

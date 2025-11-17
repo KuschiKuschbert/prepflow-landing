@@ -1,5 +1,6 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '../../lib/logger';
 import {
   cleanExistingData,
   populateBasicData,
@@ -25,31 +26,31 @@ export async function POST(request: NextRequest) {
     };
 
     // Step 1: Clean up existing data
-    console.log('🧹 Cleaning existing test data...');
+    logger.dev('🧹 Cleaning existing test data...');
     results.cleaned = await cleanExistingData(supabaseAdmin);
 
     // Step 2-4: Populate basic data
-    console.log('📦 Populating basic data...');
+    logger.dev('📦 Populating basic data...');
     const { recipesData } = await populateBasicData(supabaseAdmin, results);
 
     // Step 5-6: Populate temperature data
-    console.log('🌡️ Populating temperature data...');
+    logger.dev('🌡️ Populating temperature data...');
     await populateTemperatureData(supabaseAdmin, results, countryCode);
 
     // Step 7-8: Populate cleaning data
-    console.log('🧽 Populating cleaning data...');
+    logger.dev('🧽 Populating cleaning data...');
     await populateCleaningData(supabaseAdmin, results);
 
     // Step 9: Populate compliance data
-    console.log('📋 Populating compliance data...');
+    logger.dev('📋 Populating compliance data...');
     await populateComplianceData(supabaseAdmin, results);
 
     // Step 10: Populate menu dishes
-    console.log('🍽️ Populating menu dishes...');
+    logger.dev('🍽️ Populating menu dishes...');
     await populateMenuDishes(supabaseAdmin, results, recipesData || []);
 
     // Step 11: Populate kitchen sections
-    console.log('🍽️ Populating kitchen sections...');
+    logger.dev('🍽️ Populating kitchen sections...');
     await populateKitchenSections(supabaseAdmin, results);
 
     const totalPopulated = results.populated.reduce((sum, item) => sum + item.count, 0);
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
       nextSteps: ['Visit /webapp to see all populated data'],
     });
   } catch (err) {
-    console.error('Error during test data population:', err);
+    logger.error('Error during test data population:', err);
     return NextResponse.json(
       {
         error: 'Internal server error during test data population',

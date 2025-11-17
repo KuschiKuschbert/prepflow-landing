@@ -41,8 +41,11 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
   const step = steps[index];
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose}>
-      <div className="mx-auto mt-12 desktop:mt-20 w-full max-w-2xl px-4" onClick={e => e.stopPropagation()}>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 desktop:p-6 shadow-xl">
+      <div
+        className="desktop:mt-20 mx-auto mt-12 w-full max-w-2xl px-4"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="desktop:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-fluid-xl font-semibold">{step.title}</h3>
             <button

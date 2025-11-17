@@ -21,7 +21,7 @@ export function EquipmentViewToggle({ viewMode, onViewModeChange }: EquipmentVie
         title="Table View"
       >
         <Icon icon={Table2} size="sm" aria-hidden={true} />
-        <span className="hidden tablet:inline">Table</span>
+        <span className="tablet:inline hidden">Table</span>
       </button>
       <button
         onClick={() => onViewModeChange('cards')}
@@ -33,7 +33,7 @@ export function EquipmentViewToggle({ viewMode, onViewModeChange }: EquipmentVie
         title="Card View"
       >
         <Icon icon={Grid3x3} size="sm" aria-hidden={true} />
-        <span className="hidden tablet:inline">Cards</span>
+        <span className="tablet:inline hidden">Cards</span>
       </button>
     </div>
   );

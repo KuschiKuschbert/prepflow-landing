@@ -218,6 +218,7 @@ Set these in Vercel dashboard (Settings → Environment Variables):
 If deployments aren't triggering:
 
 1. **Run verification script**:
+
    ```bash
    ./scripts/verify-vercel-setup.sh
    ```
@@ -231,6 +232,7 @@ If deployments aren't triggering:
 ### Custom Domain
 
 Configure custom domain in Vercel dashboard:
+
 - Go to Project Settings → Domains
 - Add custom domain: `app.prepflow.com`
 

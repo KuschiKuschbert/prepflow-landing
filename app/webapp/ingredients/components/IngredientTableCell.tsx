@@ -47,13 +47,27 @@ export function IngredientNameCell({ ingredient }: { ingredient: Ingredient }) {
   );
 }
 
-export function IngredientBrandCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
+export function IngredientBrandCell({
+  ingredient,
+  className,
+}: {
+  ingredient: Ingredient;
+  className?: string;
+}) {
   return (
-    <td className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${className || ''}`}>{ingredient.brand || '-'}</td>
+    <td className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${className || ''}`}>
+      {ingredient.brand || '-'}
+    </td>
   );
 }
 
-export function IngredientPackSizeCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
+export function IngredientPackSizeCell({
+  ingredient,
+  className,
+}: {
+  ingredient: Ingredient;
+  className?: string;
+}) {
   const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
   const originalUnit = ingredient.original_unit || packSizeUnit;
   const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
@@ -102,7 +116,13 @@ export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableC
   );
 }
 
-export function IngredientSupplierCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
+export function IngredientSupplierCell({
+  ingredient,
+  className,
+}: {
+  ingredient: Ingredient;
+  className?: string;
+}) {
   return (
     <td className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${className || ''}`}>
       {ingredient.supplier || '-'}
@@ -110,7 +130,13 @@ export function IngredientSupplierCell({ ingredient, className }: { ingredient: 
   );
 }
 
-export function IngredientStockCell({ ingredient, className }: { ingredient: Ingredient; className?: string }) {
+export function IngredientStockCell({
+  ingredient,
+  className,
+}: {
+  ingredient: Ingredient;
+  className?: string;
+}) {
   const isLowStock =
     ingredient.min_stock_level &&
     ingredient.current_stock &&

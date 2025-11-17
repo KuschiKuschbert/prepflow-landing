@@ -61,7 +61,7 @@ export function EquipmentStatusCard({
               <div
                 className={`h-2 w-2 rounded-full shadow-lg ${
                   isOutOfRange
-                    ? 'bg-red-500 animate-pulse'
+                    ? 'animate-pulse bg-red-500'
                     : needsSetup
                       ? 'bg-yellow-500'
                       : status.status === 'no-data'
@@ -102,7 +102,9 @@ export function EquipmentStatusCard({
             {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span>{logs.length} reading{logs.length !== 1 ? 's' : ''}</span>
+            <span>
+              {logs.length} reading{logs.length !== 1 ? 's' : ''}
+            </span>
             {!isCompact && (
               <>
                 <span className="text-gray-600">•</span>

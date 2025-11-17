@@ -70,11 +70,11 @@ export function IngredientTableDesktop({
   getSortIcon,
 }: IngredientTableDesktopProps) {
   return (
-    <div className="hidden overflow-x-auto desktop:block">
+    <div className="desktop:block hidden overflow-x-auto">
       <table className="w-full">
         <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               <button
                 onClick={() => {
                   const allSelected =
@@ -127,7 +127,7 @@ export function IngredientTableDesktop({
                 {getSortIcon('name')}
               </button>
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               <button
                 onClick={() => handleColumnSort('brand')}
                 className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
@@ -136,7 +136,7 @@ export function IngredientTableDesktop({
                 {getSortIcon('brand')}
               </button>
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               <button
                 onClick={() => handleColumnSort('pack_size')}
                 className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
@@ -154,7 +154,7 @@ export function IngredientTableDesktop({
                 {getSortIcon('cost')}
               </button>
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               <button
                 onClick={() => handleColumnSort('supplier')}
                 className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
@@ -163,7 +163,7 @@ export function IngredientTableDesktop({
                 {getSortIcon('supplier')}
               </button>
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               <button
                 onClick={() => handleColumnSort('stock')}
                 className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
@@ -172,7 +172,7 @@ export function IngredientTableDesktop({
                 {getSortIcon('stock')}
               </button>
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               Created
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">

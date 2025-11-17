@@ -18,7 +18,7 @@ export function usePerformanceFilters(performanceItems: PerformanceItem[]) {
   const filteredAndSortedItems = useMemo(() => {
     const filtered = filterPerformanceItems(performanceItems, filters);
     return sortPerformanceItems(filtered, filters.sortBy, filters.sortOrder);
-  }, [performanceItems, filters.searchTerm, filters.sortBy, filters.sortOrder, filters.menuItemClass]);
+  }, [performanceItems, filters]);
 
   const paginatedItems = useMemo(() => {
     const startIndex = (filters.currentPage - 1) * filters.itemsPerPage;

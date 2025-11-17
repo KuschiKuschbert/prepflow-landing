@@ -64,7 +64,14 @@ export function useSelectionModeHandlers({
       }
       resetTracking();
     },
-    [ingredientId, selectedIngredients, onSelectIngredient, getTouchDuration, resetTracking, hasMoved],
+    [
+      ingredientId,
+      selectedIngredients,
+      onSelectIngredient,
+      getTouchDuration,
+      resetTracking,
+      hasMoved,
+    ],
   );
 
   const handleCardClick = useCallback(

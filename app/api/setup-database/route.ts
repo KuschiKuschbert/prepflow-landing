@@ -2,6 +2,7 @@ import { sampleIngredients } from '@/lib/sample-ingredients-updated';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest) {
   try {
     // cleaned: Added environment protection to prevent demo data in production
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (testError) {
-      console.error('Table check error:', testError);
+      logger.error('Table check error:', testError);
       return NextResponse.json(
         {
           error: 'Database tables do not exist',
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabaseAdmin.from('ingredients').insert(ingredientsData);
 
     if (error) {
-      console.error('Error inserting ingredients:', error);
+      logger.error('Error inserting ingredients:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
       data: data,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

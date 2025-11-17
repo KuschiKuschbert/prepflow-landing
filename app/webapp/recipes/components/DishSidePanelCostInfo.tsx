@@ -24,9 +24,7 @@ export function DishSidePanelCostInfo({ costData }: DishSidePanelCostInfoProps) 
         </div>
         <div>
           <div className="text-xs text-gray-400">Total Cost</div>
-          <div className="text-lg font-semibold text-white">
-            ${costData.total_cost.toFixed(2)}
-          </div>
+          <div className="text-lg font-semibold text-white">${costData.total_cost.toFixed(2)}</div>
         </div>
         <div>
           <div className="text-xs text-gray-400">Gross Profit</div>

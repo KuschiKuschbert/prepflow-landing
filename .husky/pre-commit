@@ -4,10 +4,18 @@
 # Get staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')
 
-# Run file size guard on staged files (if any)
+# Run unified cleanup check on staged files (if any)
 if [ -n "$STAGED_FILES" ]; then
-  echo "Checking file size limits on staged files..."
-  node scripts/check-file-sizes.js $STAGED_FILES || exit 1
+  echo "Running cleanup checks on staged files..."
+  # Only fail on critical violations, warnings are allowed in pre-commit
+  npm run cleanup:staged
+  CLEANUP_EXIT=$?
+  # Exit code 1 = critical violations, exit code 2 = warnings only
+  if [ $CLEANUP_EXIT -eq 1 ]; then
+    echo "❌ Critical violations found - commit blocked"
+    exit 1
+  fi
+  # Exit code 2 (warnings) or 0 (pass) are allowed
 fi
 
 # Run lint-staged for formatting

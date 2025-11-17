@@ -1,9 +1,6 @@
-/**
- * Performance monitoring utilities for PrepFlow
- * Tracks Core Web Vitals, custom metrics, and performance budgets
- */
-
 import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
+
+import { logger } from '@/lib/logger';
 
 export interface PerformanceMetrics {
   lcp: number | null;
@@ -54,21 +51,15 @@ class PerformanceMonitor {
   private listeners: Array<(metrics: PerformanceMetrics) => void> = [];
 
   constructor() {
-    // Only initialize on client side
-    if (typeof window !== 'undefined') {
-      this.initializeTracking();
-    }
+    if (typeof window !== 'undefined') this.initializeTracking();
   }
 
   private initializeTracking() {
-    // Track Core Web Vitals
     onLCP(metric => this.updateMetric('lcp', metric));
     onFCP(metric => this.updateMetric('fcp', metric));
     onCLS(metric => this.updateMetric('cls', metric));
     onTTFB(metric => this.updateMetric('ttfb', metric));
     onINP(metric => this.updateMetric('inp', metric));
-
-    // Track custom metrics
     this.trackCustomMetrics();
   }
 
@@ -85,19 +76,16 @@ class PerformanceMonitor {
   private checkPerformanceBudget(key: keyof PerformanceMetrics, metric: Metric) {
     const budget = PERFORMANCE_BUDGETS[key];
     const goal = PERFORMANCE_GOALS[key];
-
     if (budget && metric.value > budget) {
-      console.warn(`🚨 Performance Budget Exceeded: ${key.toUpperCase()}`, {
+      logger.warn(`🚨 Performance Budget Exceeded: ${key.toUpperCase()}`, {
         value: metric.value,
         budget,
         goal,
         rating: metric.rating,
       });
-
-      // Send to analytics
       this.sendPerformanceAlert(key, metric, 'budget_exceeded');
     } else if (goal && metric.value <= goal) {
-      console.log(`✅ Performance Goal Met: ${key.toUpperCase()}`, {
+      logger.dev(`✅ Performance Goal Met: ${key.toUpperCase()}`, {
         value: metric.value,
         budget,
         goal,
@@ -122,25 +110,17 @@ class PerformanceMonitor {
   }
 
   private trackCustomMetrics() {
-    // Track page load time
     if (typeof window !== 'undefined') {
-      window.addEventListener('load', () => {
-        const loadTime = performance.now();
-        this.trackCustomMetric('page_load_time', loadTime);
-      });
-
-      // Track DOM content loaded
-      document.addEventListener('DOMContentLoaded', () => {
-        const domReadyTime = performance.now();
-        this.trackCustomMetric('dom_ready_time', domReadyTime);
-      });
-
-      // Track first paint
+      window.addEventListener('load', () =>
+        this.trackCustomMetric('page_load_time', performance.now()),
+      );
+      document.addEventListener('DOMContentLoaded', () =>
+        this.trackCustomMetric('dom_ready_time', performance.now()),
+      );
       if ('performance' in window && 'getEntriesByType' in performance) {
-        const paintEntries = performance.getEntriesByType('paint');
-        paintEntries.forEach(entry => {
-          this.trackCustomMetric(`paint_${entry.name}`, entry.startTime);
-        });
+        performance
+          .getEntriesByType('paint')
+          .forEach(entry => this.trackCustomMetric(`paint_${entry.name}`, entry.startTime));
       }
     }
   }
@@ -166,9 +146,7 @@ class PerformanceMonitor {
     this.listeners.push(listener);
     return () => {
       const index = this.listeners.indexOf(listener);
-      if (index > -1) {
-        this.listeners.splice(index, 1);
-      }
+      if (index > -1) this.listeners.splice(index, 1);
     };
   }
 
@@ -176,21 +154,16 @@ class PerformanceMonitor {
     const metrics = this.getMetrics();
     let score = 0;
     let count = 0;
-
     Object.entries(metrics).forEach(([key, value]) => {
       if (value !== null) {
         const budget = PERFORMANCE_BUDGETS[key as keyof PerformanceBudget];
         const goal = PERFORMANCE_GOALS[key as keyof PerformanceBudget];
-
         if (budget && goal) {
-          // Calculate score based on how close we are to the goal
-          const ratio = Math.min(value / goal, 1);
-          score += (1 - ratio) * 100;
+          score += (1 - Math.min(value / goal, 1)) * 100;
           count++;
         }
       }
     });
-
     return count > 0 ? Math.round(score / count) : 0;
   }
 
@@ -199,15 +172,11 @@ class PerformanceMonitor {
     if (score >= 90) return 'A';
     if (score >= 80) return 'B';
     if (score >= 70) return 'C';
-    if (score >= 60) return 'D';
-    return 'F';
+    return score >= 60 ? 'D' : 'F';
   }
 }
 
-// Singleton instance
 export const performanceMonitor = new PerformanceMonitor();
-
-// Utility functions
 export const getPerformanceMetrics = () => performanceMonitor.getMetrics();
 export const subscribeToPerformance = (listener: (metrics: PerformanceMetrics) => void) =>
   performanceMonitor.subscribe(listener);

@@ -2,6 +2,7 @@
 
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { supabase } from '@/lib/supabase';
+import { logger } from '../../lib/logger';
 import {
   Bar,
   BarChart,
@@ -84,7 +85,7 @@ export default function KitchenCharts() {
           setTemperatureChecks(checks);
         }
       } catch (err) {
-        console.error('Error fetching chart data:', err);
+        logger.error('Error fetching chart data:', err);
       } finally {
         setLoading(false);
       }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 interface PrepListToCreate {
   sectionId: string | null;
   name: string;
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (prepError) {
-          console.error('Error creating prep list:', prepError);
+          logger.error('Error creating prep list:', prepError);
           errors.push({
             prepListName: prepListData.name,
             error: prepError.message,
@@ -101,7 +102,7 @@ export async function POST(request: NextRequest) {
             .insert(prepItems);
 
           if (itemsError) {
-            console.error('Error creating prep list items:', itemsError);
+            logger.error('Error creating prep list items:', itemsError);
             // Delete the prep list if items failed
             await supabaseAdmin.from('prep_lists').delete().eq('id', prepList.id);
             errors.push({
@@ -114,7 +115,7 @@ export async function POST(request: NextRequest) {
 
         createdPrepLists.push(prepList.id);
       } catch (err) {
-        console.error('Error processing prep list:', err);
+        logger.error('Error processing prep list:', err);
         errors.push({
           prepListName: prepListData.name,
           error: err instanceof Error ? err.message : 'Unknown error',
@@ -144,7 +145,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,

@@ -138,30 +138,29 @@ export default function Page() {
 
         {/* Content overlay - ensures content is above background */}
         <div className="relative z-10">
+          {/* Header */}
+          <LandingHeader trackEngagement={trackEngagement} />
 
-        {/* Header */}
-        <LandingHeader trackEngagement={trackEngagement} />
+          {/* Hero - Full-viewport with product title and large dashboard screenshot */}
+          <AppHero trackEngagement={trackEngagement} />
 
-        {/* Hero - Full-viewport with product title and large dashboard screenshot */}
-        <AppHero trackEngagement={trackEngagement} />
+          {/* Get the Highlights - 5 key features with icons and descriptions */}
+          <Highlights />
 
-        {/* Get the Highlights - 5 key features with icons and descriptions */}
-        <Highlights />
+          {/* Take a Closer Look - 6 expandable feature sections with screenshots */}
+          <CloserLook />
 
-        {/* Take a Closer Look - 6 expandable feature sections with screenshots */}
-        <CloserLook />
+          {/* Performance - Visual comparisons and performance metrics */}
+          <Performance />
 
-        {/* Performance - Visual comparisons and performance metrics */}
-        <Performance />
+          {/* Technical Specs - Organized capabilities and features */}
+          <TechnicalSpecs />
 
-        {/* Technical Specs - Organized capabilities and features */}
-        <TechnicalSpecs />
+          {/* Final CTA - Register/Buy buttons */}
+          <FinalCTA trackEngagement={trackEngagement} />
 
-        {/* Final CTA - Register/Buy buttons */}
-        <FinalCTA trackEngagement={trackEngagement} />
-
-        {/* Footer */}
-        <LandingFooter />
+          {/* Footer */}
+          <LandingFooter />
         </div>
       </main>
     </>

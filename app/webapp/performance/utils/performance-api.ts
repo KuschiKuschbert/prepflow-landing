@@ -5,8 +5,9 @@
 import { DateRange } from '../types';
 import { calculatePerformanceScore } from './calculatePerformanceScore';
 
+import { logger } from '../../lib/logger';
 export async function fetchPerformanceData(dateRange?: DateRange) {
-  console.log('🔄 Fetching performance data from /api/performance...', { dateRange });
+  logger.dev('🔄 Fetching performance data from /api/performance...', { dateRange });
 
   // Build query string with date range parameters
   const params = new URLSearchParams();
@@ -21,16 +22,16 @@ export async function fetchPerformanceData(dateRange?: DateRange) {
   const url = queryString ? `/api/performance?${queryString}` : '/api/performance';
 
   const response = await fetch(url);
-  console.log('📡 Performance API response status:', response.status);
+  logger.dev('📡 Performance API response status:', response.status);
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    console.error('❌ Performance API error:', errorData);
+    logger.error('❌ Performance API error:', errorData);
     throw new Error(errorData.message || errorData.error || 'Failed to fetch performance data');
   }
 
   const data = await response.json();
-  console.log('✅ Performance API response:', {
+  logger.dev('✅ Performance API response:', {
     success: data.success,
     itemsCount: data.data?.length || 0,
     hasMetadata: !!data.metadata,
@@ -45,7 +46,7 @@ export async function fetchPerformanceData(dateRange?: DateRange) {
     performanceScore: calculatePerformanceScore(performanceItems),
   };
 
-  console.log('📊 Returning performance data:', {
+  logger.dev('📊 Returning performance data:', {
     itemsCount: result.performanceItems.length,
     hasMetadata: !!result.metadata,
   });

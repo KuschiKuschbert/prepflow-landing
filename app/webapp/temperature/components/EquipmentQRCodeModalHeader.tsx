@@ -63,10 +63,10 @@ export function EquipmentQRCodeModalHeader({
       )}
 
       {/* Permanent Link Note */}
-      <div className="ml-10 mt-1.5 rounded-lg border border-[#29E7CD]/20 bg-[#2a2a2a]/50 px-2 py-1">
+      <div className="mt-1.5 ml-10 rounded-lg border border-[#29E7CD]/20 bg-[#2a2a2a]/50 px-2 py-1">
         <p className="text-xs leading-relaxed text-gray-400">
-          <span className="font-semibold text-[#29E7CD]">Permanently linked</span> — This QR code
-          is like a well-seasoned pan: it&apos;ll stick around even if you rename the equipment. No
+          <span className="font-semibold text-[#29E7CD]">Permanently linked</span> — This QR code is
+          like a well-seasoned pan: it&apos;ll stick around even if you rename the equipment. No
           reprinting needed!
         </p>
       </div>

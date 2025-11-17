@@ -157,15 +157,18 @@ export default function IngredientEditModal({
       {/* Modal Card - Responsive */}
       <div
         ref={modalRef}
-        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 w-full max-w-4xl max-h-[calc(90vh-10vh)] overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300"
+        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300"
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="ingredient-edit-modal-title"
       >
         {/* Header with close button - Responsive */}
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm desktop:px-4 desktop:py-2.5">
-          <h2 id="ingredient-edit-modal-title" className="text-lg font-bold text-white desktop:text-xl">
+        <div className="desktop:px-4 desktop:py-2.5 sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm">
+          <h2
+            id="ingredient-edit-modal-title"
+            className="desktop:text-xl text-lg font-bold text-white"
+          >
             Edit Ingredient
           </h2>
           <button
@@ -185,11 +188,8 @@ export default function IngredientEditModal({
         </div>
 
         {/* Scrollable content - Responsive */}
-        <div
-          ref={scrollableContentRef}
-          className="max-h-[calc(90vh-10vh-4rem)] overflow-y-auto"
-        >
-          <div className="p-3 desktop:p-4">
+        <div ref={scrollableContentRef} className="max-h-[calc(90vh-10vh-4rem)] overflow-y-auto">
+          <div className="desktop:p-4 p-3">
             <IngredientForm
               ingredient={ingredient}
               suppliers={suppliers}

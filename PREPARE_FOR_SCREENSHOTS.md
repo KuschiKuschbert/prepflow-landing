@@ -37,6 +37,3 @@ Use Chrome DevTools to take full-page screenshots:
 ## ❓ Need Help?
 
 If you have the files saved somewhere else, just tell me the file paths and I'll copy them to the right place!
-
-
-

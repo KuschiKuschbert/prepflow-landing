@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
+import { logger } from '../../lib/logger';
 interface AnimatedBackgroundProps {
   className?: string;
 }
@@ -99,7 +100,7 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
               radius - 3,
               waveCenterX,
               waveCenterY,
-              radius + 3
+              radius + 3,
             );
             glowGradient.addColorStop(0, `rgba(41, 231, 205, ${alpha * 0.3})`);
             glowGradient.addColorStop(1, 'rgba(41, 231, 205, 0)');
@@ -114,7 +115,7 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
         animationFrameRef.current = requestAnimationFrame(animate);
       } catch (error) {
         // Silently fail if there's an error - background animation is not critical
-        console.error('AnimatedBackground error:', error);
+        logger.error('AnimatedBackground error:', error);
       }
     };
 

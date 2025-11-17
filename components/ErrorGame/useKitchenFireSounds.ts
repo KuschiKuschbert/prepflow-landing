@@ -1,10 +1,11 @@
 'use client';
-
 /**
  * Hook for managing Kitchen's on Fire sound effects using Web Audio API
  */
 
 import { useRef, useCallback } from 'react';
+
+import { logger } from '@/lib/logger';
 
 interface AudioNodeRef {
   node: AudioBufferSourceNode;
@@ -37,7 +38,7 @@ export const useKitchenFireSounds = () => {
       audioReadyRef.current = true;
       return true;
     } catch (error) {
-      console.warn('Audio context creation failed:', error);
+      logger.warn('Audio context creation failed:', error);
       return false;
     }
   }, []);
@@ -95,7 +96,7 @@ export const useKitchenFireSounds = () => {
         fireLoopRef.current = fireLoop;
       }
     } catch (error) {
-      console.warn('Failed to start fire loop:', error);
+      logger.warn('Failed to start fire loop:', error);
     }
   }, [createBrownNoise]);
 
@@ -115,7 +116,7 @@ export const useKitchenFireSounds = () => {
           fireLoopRef.current = null;
         }, 500);
       } catch (error) {
-        console.warn('Failed to stop fire loop:', error);
+        logger.warn('Failed to stop fire loop:', error);
       }
     }
   }, []);
@@ -153,7 +154,7 @@ export const useKitchenFireSounds = () => {
       gainNode.connect(audioContextRef.current.destination);
       source.start();
     } catch (error) {
-      console.warn('Failed to play extinguisher sound:', error);
+      logger.warn('Failed to play extinguisher sound:', error);
     }
   }, []);
 
@@ -188,7 +189,7 @@ export const useKitchenFireSounds = () => {
         oscillator.stop(startTime + duration);
       });
     } catch (error) {
-      console.warn('Failed to play success sound:', error);
+      logger.warn('Failed to play success sound:', error);
     }
   }, []);
 
@@ -218,7 +219,7 @@ export const useKitchenFireSounds = () => {
       oscillator.start();
       oscillator.stop(currentTime + 2);
     } catch (error) {
-      console.warn('Failed to play alert sound:', error);
+      logger.warn('Failed to play alert sound:', error);
     }
   }, []);
 
@@ -242,6 +243,3 @@ export const useKitchenFireSounds = () => {
     audioReady: audioReadyRef.current,
   };
 };
-
-
-

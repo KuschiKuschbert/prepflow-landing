@@ -42,9 +42,8 @@ export default function PerformanceClient() {
     previousPeriodData,
   } = usePerformanceData(dateRange);
 
-  const { filters, updateFilters, paginatedItems, totalPages, filteredAndSortedItems } = usePerformanceFilters(
-    state.performanceItems,
-  );
+  const { filters, updateFilters, paginatedItems, totalPages, filteredAndSortedItems } =
+    usePerformanceFilters(state.performanceItems);
 
   const hasData = state.performanceItems.length > 0;
 

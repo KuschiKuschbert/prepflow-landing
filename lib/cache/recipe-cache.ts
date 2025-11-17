@@ -3,6 +3,8 @@
  */
 import { cacheData, clearCache, getCachedData, prefetchApi } from './data-cache';
 
+import { logger } from '@/lib/logger';
+
 const RECIPES_CACHE_KEY = 'recipes';
 const RECIPE_PRICES_CACHE_KEY = 'recipe_prices';
 const RECIPE_CACHE_VERSION_KEY = 'recipe_cache_version';
@@ -35,7 +37,7 @@ export function cacheRecipes(recipes: any[]): void {
   try {
     sessionStorage.setItem(RECIPE_CACHE_VERSION_KEY, JSON.stringify(metadata));
   } catch (err) {
-    console.warn('Failed to update recipe cache metadata:', err);
+    logger.warn('Failed to update recipe cache metadata:', err);
   }
 }
 
@@ -55,7 +57,7 @@ export function getCachedRecipes(): any[] | null {
       }
     }
   } catch (err) {
-    console.warn('Failed to check recipe cache version:', err);
+    logger.warn('Failed to check recipe cache version:', err);
   }
 
   return getCachedData<any[]>(RECIPES_CACHE_KEY);
@@ -76,7 +78,7 @@ export function invalidateRecipeCache(recipeIds: string[]): void {
       sessionStorage.setItem(RECIPE_CACHE_VERSION_KEY, JSON.stringify(metadata));
     }
   } catch (err) {
-    console.warn('Failed to invalidate recipe cache:', err);
+    logger.warn('Failed to invalidate recipe cache:', err);
   }
 
   // Also invalidate price cache for these recipes
@@ -90,7 +92,7 @@ export function invalidateRecipeCache(recipeIds: string[]): void {
       sessionStorage.setItem(RECIPE_PRICES_CACHE_KEY, JSON.stringify(prices));
     }
   } catch (err) {
-    console.warn('Failed to invalidate recipe price cache:', err);
+    logger.warn('Failed to invalidate recipe price cache:', err);
   }
 }
 
@@ -103,7 +105,7 @@ export function clearRecipeCache(): void {
   try {
     sessionStorage.removeItem(RECIPE_CACHE_VERSION_KEY);
   } catch (err) {
-    console.warn('Failed to clear recipe cache metadata:', err);
+    logger.warn('Failed to clear recipe cache metadata:', err);
   }
 }
 

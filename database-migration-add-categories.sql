@@ -14,3 +14,5 @@ CREATE INDEX IF NOT EXISTS idx_dishes_category ON dishes(category);
 -- Update existing records to have default category
 UPDATE recipes SET category = 'Uncategorized' WHERE category IS NULL;
 UPDATE dishes SET category = 'Uncategorized' WHERE category IS NULL;
+
+

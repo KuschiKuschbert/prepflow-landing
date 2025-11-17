@@ -11,7 +11,7 @@ export function ItemsPerPageSelector({
 }: ItemsPerPageSelectorProps) {
   return (
     <div className="flex items-center gap-1.5">
-      <label htmlFor="items-per-page" className="text-xs text-gray-400 whitespace-nowrap">
+      <label htmlFor="items-per-page" className="text-xs whitespace-nowrap text-gray-400">
         Per page:
       </label>
       <select

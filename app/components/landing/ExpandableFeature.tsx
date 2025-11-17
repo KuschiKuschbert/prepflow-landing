@@ -50,15 +50,17 @@ export default function ExpandableFeature({
       <button
         onClick={onToggle}
         onKeyDown={handleKeyDown}
-        className="flex w-full items-center justify-between py-6 text-left focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]"
+        className="flex w-full items-center justify-between py-6 text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
         aria-expanded={isExpanded}
         aria-controls={`feature-content-${title.replace(/\s+/g, '-').toLowerCase()}`}
       >
         <div className="flex items-center gap-4">
           <span className="text-fluid-3xl">{icon}</span>
           <div>
-            <h3 className="text-fluid-xl font-semibold text-white desktop:text-fluid-2xl">{title}</h3>
-            <p className="mt-1 text-fluid-sm text-gray-400">{description}</p>
+            <h3 className="text-fluid-xl desktop:text-fluid-2xl font-semibold text-white">
+              {title}
+            </h3>
+            <p className="text-fluid-sm mt-1 text-gray-400">{description}</p>
           </div>
         </div>
 
@@ -110,10 +112,7 @@ export default function ExpandableFeature({
             <div className="space-y-3">
               {details.map((detail, index) => (
                 <div key={index} className="flex items-start gap-3">
-                  <div
-                    className="mt-1 h-2 w-2 rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
+                  <div className="mt-1 h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
                   <p className="text-gray-300">{detail}</p>
                 </div>
               ))}

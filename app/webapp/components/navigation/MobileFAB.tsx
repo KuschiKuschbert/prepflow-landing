@@ -90,7 +90,7 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-20 right-4 z-[70] desktop:hidden">
+    <div className="desktop:hidden fixed right-4 bottom-20 z-[70]">
       {/* Quick Actions Menu */}
       {isOpen && (
         <div
@@ -103,7 +103,12 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
             aria-label="Create Recipe"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
-              <Icon icon={UtensilsCrossed} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+              <Icon
+                icon={UtensilsCrossed}
+                size="sm"
+                className="text-[#29E7CD]"
+                aria-hidden={true}
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium text-white">Create Recipe</span>

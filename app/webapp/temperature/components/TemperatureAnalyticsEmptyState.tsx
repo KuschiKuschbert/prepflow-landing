@@ -17,8 +17,8 @@ export function TemperatureAnalyticsEmptyState({
       <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 shadow-xl">
         <Icon icon={BarChart3} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
       </div>
-      <h3 className="mb-3 text-fluid-2xl font-bold text-white">No Temperature Data</h3>
-      <p className="mb-6 max-w-md text-center text-fluid-base text-gray-400">
+      <h3 className="text-fluid-2xl mb-3 font-bold text-white">No Temperature Data</h3>
+      <p className="text-fluid-base mb-6 max-w-md text-center text-gray-400">
         Generate sample temperature logs to see analytics, charts, and insights for your equipment
       </p>
       <button

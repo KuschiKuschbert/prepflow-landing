@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+import { logger } from '../../lib/logger';
 export async function GET() {
   try {
     // Read the SQL migration file
@@ -35,7 +36,7 @@ export async function GET() {
       ],
     });
   } catch (err) {
-    console.error('Error reading migration file:', err);
+    logger.error('Error reading migration file:', err);
     return NextResponse.json(
       {
         error: 'Internal server error',
@@ -121,7 +122,7 @@ export async function POST(_request: NextRequest) {
       tablesExist: true,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,

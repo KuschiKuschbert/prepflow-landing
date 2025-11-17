@@ -6,7 +6,11 @@ interface COGSTableSummaryProps {
   dishPortions: number;
 }
 
-export function COGSTableSummary({ totalCOGS, costPerPortion, dishPortions }: COGSTableSummaryProps) {
+export function COGSTableSummary({
+  totalCOGS,
+  costPerPortion,
+  dishPortions,
+}: COGSTableSummaryProps) {
   return (
     <div className="border-t pt-4">
       <div className="mb-2 flex items-center justify-between">

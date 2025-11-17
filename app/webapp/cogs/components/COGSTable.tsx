@@ -23,7 +23,10 @@ interface COGSTableProps {
   dishPortions: number;
   sortField?: 'ingredient_name' | 'quantity' | 'cost';
   sortDirection?: 'asc' | 'desc';
-  onSortChange?: (field: 'ingredient_name' | 'quantity' | 'cost', direction: 'asc' | 'desc') => void;
+  onSortChange?: (
+    field: 'ingredient_name' | 'quantity' | 'cost',
+    direction: 'asc' | 'desc',
+  ) => void;
 }
 
 export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable({
@@ -55,7 +58,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
   return (
     <div className="space-y-4">
       {/* Mobile Card Layout */}
-      <div className="block large-desktop:hidden">
+      <div className="large-desktop:hidden block">
         <div className="space-y-3">
           {calculations.map((calc, index) => (
             <COGSTableMobileCard
@@ -75,7 +78,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
       </div>
 
       {/* Desktop Table Layout */}
-      <div className="hidden overflow-x-auto large-desktop:block">
+      <div className="large-desktop:block hidden overflow-x-auto">
         <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
           <table className="min-w-full divide-y divide-[#2a2a2a]">
             <COGSTableHeader

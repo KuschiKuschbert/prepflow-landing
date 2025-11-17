@@ -1,6 +1,4 @@
 // PrepFlow - Ingredient Conversion Utilities Hook
-// Extracted from useIngredientAddition.ts to meet file size limits
-
 'use client';
 
 import { useMemo } from 'react';
@@ -58,7 +56,6 @@ export function useIngredientConversion() {
     const normalizedIngredientUnit = normalizeUnit(ingredientUnit);
     const userCategory = getUnitCategory(normalizedUserUnit);
     const ingredientCategory = getUnitCategory(normalizedIngredientUnit);
-
     if (userCategory !== ingredientCategory) {
       const conversionResult = convertUnit(quantity, normalizedUserUnit, normalizedIngredientUnit);
       if (
@@ -77,18 +74,15 @@ export function useIngredientConversion() {
         conversionNote: ` (cannot convert ${userCategory} to ${ingredientCategory})`,
       };
     }
-
     const userStandard = convertToStandardUnit(quantity, normalizedUserUnit);
     const conversionResult = convertUnit(
       userStandard.value,
       userStandard.unit,
       normalizedIngredientUnit,
     );
-
     if (conversionResult.value === quantity && conversionResult.unit === normalizedIngredientUnit) {
       return { convertedQuantity: quantity, convertedUnit: userUnit, conversionNote: '' };
     }
-
     return {
       convertedQuantity: conversionResult.value,
       convertedUnit: ingredientUnit,

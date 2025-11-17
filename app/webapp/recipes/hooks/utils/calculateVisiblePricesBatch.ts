@@ -1,9 +1,7 @@
+import { logger } from '../../lib/logger';
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
-import { calculateRecipePrice } from '../utils/pricingHelpers';
-
 /**
  * Calculate prices using batch fetch.
- *
  * @param {Object} params - Batch calculation parameters
  * @returns {Promise<Record<string, RecipePriceData> | null>} Prices or null if batch fails
  */
@@ -32,7 +30,7 @@ export async function calculateVisiblePricesBatch({
 }): Promise<Record<string, RecipePriceData> | null> {
   const prices: Record<string, RecipePriceData> = {};
   const recipeIds = visibleRecipes.map(r => r.id);
-  console.log('[RecipePricing] Batch fetching ingredients for', recipeIds.length, 'recipes');
+  logger.dev('[RecipePricing] Batch fetching ingredients for', recipeIds.length, 'recipes');
 
   visibleRecipes.forEach(recipe => {
     if (!inFlightRequestsRef.current.has(recipe.id)) {
@@ -47,10 +45,10 @@ export async function calculateVisiblePricesBatch({
       fetchBatchRecipeIngredients,
     );
     const batchDuration = Date.now() - batchStartTime;
-    console.log('[RecipePricing] Batch fetch completed in', batchDuration, 'ms');
+    logger.dev('[RecipePricing] Batch fetch completed in', batchDuration, 'ms');
 
     if (Object.keys(batchIngredients).length > 0) {
-      console.log('[RecipePricing] Calculating prices from batch data');
+      logger.dev('[RecipePricing] Calculating prices from batch data');
       const calcStartTime = Date.now();
       let calculatedCount = 0;
       for (const recipe of visibleRecipes) {
@@ -62,11 +60,11 @@ export async function calculateVisiblePricesBatch({
             calculatedCount++;
           }
         } catch (err) {
-          console.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, err);
+          logger.error(`[RecipePricing] Failed to calculate price for recipe ${recipe.id}:`, err);
         }
       }
       const calcDuration = Date.now() - calcStartTime;
-      console.log(
+      logger.dev(
         '[RecipePricing] Price calculation completed in',
         calcDuration,
         'ms, calculated',
@@ -78,7 +76,7 @@ export async function calculateVisiblePricesBatch({
       });
       return prices;
     } else {
-      console.warn(
+      logger.warn(
         '[RecipePricing] Batch fetch returned empty results, falling back to individual calls',
       );
       visibleRecipes.forEach(recipe => {
@@ -87,7 +85,7 @@ export async function calculateVisiblePricesBatch({
       return null;
     }
   } catch (err) {
-    console.error(
+    logger.error(
       '[RecipePricing] Batch fetch failed, falling back to parallel individual calls:',
       err,
     );

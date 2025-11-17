@@ -1,7 +1,3 @@
-/**
- * Utility functions for drawer swipe gesture detection
- */
-
 interface GestureState {
   upwardMovement: number;
   dragProgress: number;
@@ -19,7 +15,7 @@ interface CalculateProgressParams {
 interface HandleUpwardGestureParams {
   deltaY: number;
   absDeltaY: number;
-  maxUpwardMovementRef: React.MutableRefObject<number>;
+  maxUpwardMovementRef: React.MutableRefObject<number | null>;
   onClose: () => void;
 }
 
@@ -33,9 +29,6 @@ interface HandleDownwardGestureParams {
   currentTime: number;
 }
 
-/**
- * Calculate drag progress based on movement and drawer height
- */
 export function calculateDragProgress({
   deltaY,
   drawerHeight,
@@ -43,10 +36,6 @@ export function calculateDragProgress({
 }: CalculateProgressParams): number {
   return Math.min(1, deltaY / (drawerHeight * threshold));
 }
-
-/**
- * Handle upward gesture detection and closing
- */
 export function handleUpwardGestureAtTop({
   deltaY,
   absDeltaY,
@@ -72,10 +61,6 @@ export function handleUpwardGestureAtTop({
     progress,
   };
 }
-
-/**
- * Handle downward gesture when at top
- */
 export function handleDownwardGestureAtTop({
   deltaY,
   drawerHeight,
@@ -102,10 +87,6 @@ export function handleDownwardGestureAtTop({
     shouldPreventDefault,
   };
 }
-
-/**
- * Calculate velocity from movement
- */
 export function calculateVelocity(
   currentY: number,
   lastY: number,

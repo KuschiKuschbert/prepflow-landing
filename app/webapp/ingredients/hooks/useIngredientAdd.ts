@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
+import { logger } from '../../lib/logger';
 interface UseIngredientAddProps<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },
 > {
@@ -54,7 +55,7 @@ export function useIngredientAdd<
 
         if (error) {
           if (error.code === '42501' || error.message?.includes('row-level security')) {
-            console.warn('RLS policy blocked direct insert, falling back to API route');
+            logger.warn('RLS policy blocked direct insert, falling back to API route');
             const response = await fetch('/api/ingredients', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -72,7 +73,7 @@ export function useIngredientAdd<
               setIngredients(prev => [...prev, result.data]);
             }
           } else {
-            console.error('Supabase error inserting ingredient:', error);
+            logger.error('Supabase error inserting ingredient:', error);
             throw error;
           }
         } else {

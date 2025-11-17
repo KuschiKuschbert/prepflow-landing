@@ -214,7 +214,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">📏 Unit</label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">Unit</label>
               <RecipeUnitSelect value={newIngredient.unit || 'kg'} onChange={onUnitChange} />
             </div>
           </div>

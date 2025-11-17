@@ -8,6 +8,7 @@ import { EquipmentTypeModal } from './EquipmentTypeModal';
 import { EquipmentForm } from './EquipmentForm';
 import { EquipmentList } from './EquipmentList';
 
+import { logger } from '../../lib/logger';
 interface EquipmentSetupProps {
   setupProgress: {
     ingredients: boolean;
@@ -68,7 +69,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         setEquipment(data.data);
       }
     } catch (error) {
-      console.error('Error fetching equipment:', error);
+      logger.error('Error fetching equipment:', error);
     }
   };
 

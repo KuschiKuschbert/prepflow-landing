@@ -1,9 +1,6 @@
 import { Recipe } from '../../types';
-import { RecipeError } from '../../types/errors';
-import { RecipePriceData } from '../../types';
-import { useRecipeIngredients } from '../useRecipeIngredients';
 import { useRecipePricing } from '../useRecipePricing';
-import { setupRecipeSubscriptions } from './setupRecipeSubscriptions';
+import { useSetupRecipeSubscriptions } from './setupRecipeSubscriptions';
 import { useRecipeInitialization } from './useRecipeInitialization';
 
 /**
@@ -12,7 +9,7 @@ import { useRecipeInitialization } from './useRecipeInitialization';
  * @param {Object} params - Hook setup parameters
  * @returns {Object} Hook return values
  */
-export function setupRecipeHooks({
+export function useSetupRecipeHooks({
   setError,
   setRecipes,
   setIsHydrated,
@@ -53,7 +50,7 @@ export function setupRecipeHooks({
     refreshRecipePrices: refreshPrices,
   } = useRecipePricing();
 
-  setupRecipeSubscriptions({
+  useSetupRecipeSubscriptions({
     recipes,
     refreshRecipePrices,
     fetchRecipeIngredients,

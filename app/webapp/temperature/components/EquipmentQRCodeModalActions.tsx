@@ -109,17 +109,17 @@ export function EquipmentQRCodeModalActions({
   };
 
   return (
-    <div className="flex gap-2 relative z-10 flex-shrink-0">
+    <div className="relative z-10 flex flex-shrink-0 gap-2">
       <button
         onClick={handlePrint}
-        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#29E7CD]/30 transition-all hover:scale-105"
+        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#29E7CD]/30"
       >
         <Icon icon={Printer} size="sm" />
         Print
       </button>
       <button
         onClick={onClose}
-        className="px-3 py-2 rounded-lg bg-[#2a2a2a] text-white text-xs font-medium hover:bg-[#3a3a3a] transition-all border border-[#2a2a2a] hover:border-[#29E7CD]/30"
+        className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-xs font-medium text-white transition-all hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]"
       >
         Close
       </button>

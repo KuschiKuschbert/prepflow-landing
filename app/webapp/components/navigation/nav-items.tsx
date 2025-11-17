@@ -1,20 +1,20 @@
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
 import {
-    BarChart3,
-    Bot,
-    ClipboardCheck,
-    FileText,
-    LayoutDashboard,
-    ListChecks,
-    Package2,
-    Settings,
-    Settings2,
-    Sparkles,
-    Thermometer,
-    Truck,
-    UtensilsCrossed,
-    Wrench
+  BarChart3,
+  Bot,
+  ClipboardCheck,
+  FileText,
+  LayoutDashboard,
+  ListChecks,
+  Package2,
+  Settings,
+  Settings2,
+  Sparkles,
+  Thermometer,
+  Truck,
+  UtensilsCrossed,
+  Wrench,
 } from 'lucide-react';
 
 export interface NavigationItemConfig {

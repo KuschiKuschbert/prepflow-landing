@@ -9,7 +9,7 @@ import { useOrderListsQuery } from './hooks/useOrderListsQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-
+import { logger } from '../../lib/logger';
 interface Supplier {
   id: string;
   name: string;
@@ -45,7 +45,6 @@ interface OrderList {
   suppliers: Supplier;
   order_list_items: OrderListItem[];
 }
-
 export default function OrderListsPage() {
   const { t } = useTranslation();
   const [orderLists, setOrderLists] = useState<OrderList[]>([]);
@@ -79,18 +78,14 @@ export default function OrderListsPage() {
   );
 
   useEffect(() => {
-    // Keep suppliers and ingredients fetch; lists come from query
     fetchSuppliers();
     fetchIngredients();
   }, []);
-
   useEffect(() => {
     if (orderListsData?.items) setOrderLists(orderListsData.items as any);
   }, [orderListsData]);
 
   const fetchOrderLists = async () => {
-    // Disable loading state to prevent skeleton flashes during API errors
-    // setLoading(true);
     try {
       const response = await fetch(`/api/order-lists?userId=${userId}`);
       const result = await response.json();
@@ -116,7 +111,7 @@ export default function OrderListsPage() {
         setSuppliers(result.data);
       }
     } catch (err) {
-      console.error('Failed to fetch suppliers:', err);
+      logger.error('Failed to fetch suppliers:', err);
     }
   };
 
@@ -129,7 +124,7 @@ export default function OrderListsPage() {
         setIngredients(result.data);
       }
     } catch (err) {
-      console.error('Failed to fetch ingredients:', err);
+      logger.error('Failed to fetch ingredients:', err);
     }
   };
 
@@ -233,8 +228,6 @@ export default function OrderListsPage() {
     }
   };
 
-  // item mutators moved into OrderListForm
-
   const resetForm = () => {
     setFormData({
       supplierId: '',
@@ -245,9 +238,6 @@ export default function OrderListsPage() {
     setShowForm(false);
     setEditingOrderList(null);
   };
-
-  // getStatusColor imported
-
   if (loading || listsLoading) {
     return (
       <ResponsivePageContainer>
@@ -298,7 +288,12 @@ export default function OrderListsPage() {
           {orderLists.length === 0 ? (
             <div className="py-12 text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon icon={ClipboardCheck} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+                <Icon
+                  icon={ClipboardCheck}
+                  size="xl"
+                  className="text-[#29E7CD]"
+                  aria-hidden={true}
+                />
               </div>
               <h3 className="mb-2 text-xl font-semibold text-white">
                 {t('orderLists.noOrderLists', 'No Order Lists')}
@@ -327,7 +322,12 @@ export default function OrderListsPage() {
                     <div className="flex-1">
                       <div className="mb-3 flex items-center space-x-4">
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                          <Icon icon={ClipboardCheck} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+                          <Icon
+                            icon={ClipboardCheck}
+                            size="md"
+                            className="text-[#29E7CD]"
+                            aria-hidden={true}
+                          />
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-white">{orderList.name}</h3>

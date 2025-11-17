@@ -4,6 +4,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import DishIngredientCombobox from './DishIngredientCombobox';
 
+import { logger } from '../../lib/logger';
 interface SelectedIngredient {
   ingredient_id: string;
   quantity: number;
@@ -35,7 +36,7 @@ export default function DishIngredientSelector({
         },
       ]);
     } else {
-      console.warn('No ingredients available to add');
+      logger.warn('No ingredients available to add');
     }
   };
 

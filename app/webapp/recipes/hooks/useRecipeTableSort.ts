@@ -5,7 +5,12 @@ import { Icon } from '@/components/ui/Icon';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import React from 'react';
 
-export type RecipeSortField = 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created';
+export type RecipeSortField =
+  | 'name'
+  | 'recommended_price'
+  | 'profit_margin'
+  | 'contributing_margin'
+  | 'created';
 
 interface UseRecipeTableSortOptions {
   sortField: RecipeSortField;

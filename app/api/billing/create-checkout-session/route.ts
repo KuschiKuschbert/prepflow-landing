@@ -5,6 +5,16 @@ import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const checkoutSessionSchema = z
+  .object({
+    priceId: z.string().optional(),
+    tier: z.enum(['starter', 'pro', 'enterprise']).optional(),
+  })
+  .refine(data => data.priceId || data.tier, {
+    message: 'Either priceId or tier must be provided',
+  });
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +35,21 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json().catch(() => ({}));
-    const priceId: string | null = body.priceId || resolvePriceIdFromTier(body.tier);
+    const validationResult = checkoutSessionSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { priceId: validatedPriceId, tier } = validationResult.data;
+    const priceId: string | null = validatedPriceId || resolvePriceIdFromTier(tier);
     if (!priceId) {
       return NextResponse.json(
         ApiErrorHandler.createError('Missing priceId or tier', 'VALIDATION_ERROR', 400),

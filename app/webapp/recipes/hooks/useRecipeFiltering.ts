@@ -5,7 +5,12 @@ import { Recipe, RecipePriceData } from '../types';
 import { filterRecipes } from '../utils/recipeFiltering';
 import { sortRecipes } from '../utils/recipeSorting';
 
-export type RecipeSortField = 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created';
+export type RecipeSortField =
+  | 'name'
+  | 'recommended_price'
+  | 'profit_margin'
+  | 'contributing_margin'
+  | 'created';
 
 interface RecipeFilters {
   searchTerm: string;

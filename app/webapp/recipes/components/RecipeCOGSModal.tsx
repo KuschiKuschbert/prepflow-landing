@@ -3,7 +3,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { Recipe, RecipeIngredientWithDetails, COGSCalculation as RecipeCOGSCalculation } from '../types';
+import { logger } from '../../lib/logger';
+import {
+  Recipe,
+  RecipeIngredientWithDetails,
+  COGSCalculation as RecipeCOGSCalculation,
+} from '../types';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
 import { COGSTable } from '../../cogs/components/COGSTable';
 import { COGSTableSummary } from '../../cogs/components/COGSTableSummary';
@@ -30,25 +35,27 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
     if (!recipe || recipeIngredients.length === 0) return [];
     const recipeCOGS = convertToCOGSCalculations(recipeIngredients, recipe.id);
     // Convert from recipes/types.ts COGSCalculation to cogs/types.ts COGSCalculation
-    return recipeCOGS.map((calc: RecipeCOGSCalculation): COGSCalculation => ({
-      recipeId: recipe.id,
-      ingredientId: calc.ingredientId || calc.ingredient_id || '',
-      ingredientName: calc.ingredientName || calc.ingredient_name || '',
-      quantity: calc.quantity,
-      unit: calc.unit,
-      costPerUnit: calc.cost_per_unit || 0,
-      totalCost: calc.total_cost || 0,
-      wasteAdjustedCost: calc.yieldAdjustedCost, // Approximate
-      yieldAdjustedCost: calc.yieldAdjustedCost,
-      // Legacy properties
-      id: calc.id,
-      ingredient_id: calc.ingredient_id,
-      ingredient_name: calc.ingredient_name,
-      cost_per_unit: calc.cost_per_unit,
-      total_cost: calc.total_cost,
-      supplier_name: calc.supplier_name,
-      category: calc.category,
-    }));
+    return recipeCOGS.map(
+      (calc: RecipeCOGSCalculation): COGSCalculation => ({
+        recipeId: recipe.id,
+        ingredientId: calc.ingredientId || calc.ingredient_id || '',
+        ingredientName: calc.ingredientName || calc.ingredient_name || '',
+        quantity: calc.quantity,
+        unit: calc.unit,
+        costPerUnit: calc.cost_per_unit || 0,
+        totalCost: calc.total_cost || 0,
+        wasteAdjustedCost: calc.yieldAdjustedCost, // Approximate
+        yieldAdjustedCost: calc.yieldAdjustedCost,
+        // Legacy properties
+        id: calc.id,
+        ingredient_id: calc.ingredient_id,
+        ingredient_name: calc.ingredient_name,
+        cost_per_unit: calc.cost_per_unit,
+        total_cost: calc.total_cost,
+        supplier_name: calc.supplier_name,
+        category: calc.category,
+      }),
+    );
   }, [recipe, recipeIngredients]);
 
   // Calculate totals
@@ -94,7 +101,7 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
         })
         .catch(err => {
           setError('Failed to load recipe ingredients');
-          console.error(err);
+          logger.error(err);
         })
         .finally(() => {
           setLoading(false);
@@ -192,8 +199,8 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
           ) : (
             <>
               {/* COGS Table */}
-              <div className="mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow tablet:p-6">
-                <h3 className="mb-4 text-lg font-semibold tablet:text-xl">Cost Breakdown</h3>
+              <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+                <h3 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Breakdown</h3>
                 <COGSTable
                   calculations={calculations}
                   editingIngredient={editingIngredient}
@@ -211,7 +218,7 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
 
               {/* Pricing Tool */}
               {costPerPortion > 0 && (
-                <div className="rounded-lg bg-[#1f1f1f] p-4 shadow tablet:p-6">
+                <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
                   <PricingTool
                     costPerPortion={costPerPortion}
                     targetGrossProfit={targetGrossProfit}

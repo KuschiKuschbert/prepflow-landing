@@ -7,7 +7,7 @@ import { useRecipeSubscriptions } from '../useRecipeSubscriptions';
  *
  * @param {Object} params - Subscription parameters
  */
-export function setupRecipeSubscriptions({
+export function useSetupRecipeSubscriptions({
   recipes,
   refreshRecipePrices,
   fetchRecipeIngredients,

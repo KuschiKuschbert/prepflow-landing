@@ -47,10 +47,7 @@ export function useRecipeBulkOperations(
     const count = selectedRecipes.size;
 
     try {
-      // Optimistically remove recipes from list
       optimisticallyUpdateRecipes(prev => prev.filter(r => !selectedRecipeIds.includes(r.id)));
-
-      // Call API endpoint for bulk deletion
       const response = await fetch('/api/recipes/bulk-delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,8 +62,6 @@ export function useRecipeBulkOperations(
         showErrorNotification(errorMessage);
         return;
       }
-
-      // Refresh to sync with server
       await fetchRecipes();
       showSuccess(`${count} recipe${count > 1 ? 's' : ''} deleted successfully!`);
       setSelectedRecipes(new Set());

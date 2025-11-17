@@ -30,7 +30,7 @@ interface NavigationHeaderProps {
   handleLogoMouseDown: () => void;
   handleLogoMouseUp: () => void;
   handleLogoMouseLeave: () => void;
-  shouldPreventNavigation: React.RefObject<boolean>;
+  shouldPreventNavigation: React.RefObject<boolean | null>;
 }
 
 const cn = (...classes: (string | undefined | null | false)[]): string => {

@@ -9,10 +9,10 @@ export default function LandingFooter() {
   return (
     <footer className="border-t border-gray-700 bg-[#0a0a0a]/95 py-12">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-4">
+        <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid gap-8">
           {/* Brand */}
           <div className="tablet:col-span-2">
-            <h3 className="mb-4 text-fluid-xl font-bold text-white">PrepFlow</h3>
+            <h3 className="text-fluid-xl mb-4 font-bold text-white">PrepFlow</h3>
             <p className="text-fluid-sm text-gray-400">
               Restaurant profitability optimization tool built by chefs for kitchens worldwide.
             </p>
@@ -20,7 +20,7 @@ export default function LandingFooter() {
 
           {/* Legal Links */}
           <div>
-            <h4 className="mb-4 text-fluid-sm font-semibold tracking-wider text-gray-300 uppercase">
+            <h4 className="text-fluid-sm mb-4 font-semibold tracking-wider text-gray-300 uppercase">
               Legal
             </h4>
             <nav className="flex flex-col space-y-2">
@@ -41,7 +41,7 @@ export default function LandingFooter() {
 
           {/* Contact */}
           <div>
-            <h4 className="mb-4 text-fluid-sm font-semibold tracking-wider text-gray-300 uppercase">
+            <h4 className="text-fluid-sm mb-4 font-semibold tracking-wider text-gray-300 uppercase">
               Contact
             </h4>
             <nav className="flex flex-col space-y-2">
@@ -57,7 +57,9 @@ export default function LandingFooter() {
 
         {/* Bottom */}
         <div className="mt-8 border-t border-gray-800 pt-8 text-center">
-          <p className="text-fluid-sm text-gray-500">© {currentYear} PrepFlow. All rights reserved.</p>
+          <p className="text-fluid-sm text-gray-500">
+            © {currentYear} PrepFlow. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

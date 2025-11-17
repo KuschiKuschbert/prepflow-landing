@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Hook to manage recipe modal handlers.
  *
@@ -34,14 +35,14 @@ export function useRecipeModalHandlers({
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       try {
-        console.log('[RecipesClient] Opening unified modal:', recipe.id);
+        logger.dev('[RecipesClient] Opening unified modal:', recipe.id);
         const ingredients = await fetchRecipeIngredients(recipe.id);
-        console.log('[RecipesClient] Fetched:', ingredients.length);
+        logger.dev('[RecipesClient] Fetched:', ingredients.length);
         clearChangedFlag(recipe.id);
         await generateAIInstructions(recipe, ingredients);
         return { recipe, ingredients };
       } catch (err) {
-        console.error('❌ Error in handlePreviewRecipe:', err);
+        logger.error('❌ Error in handlePreviewRecipe:', err);
         setError('Failed to load recipe');
         return null;
       }

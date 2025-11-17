@@ -1,0 +1,49 @@
+export const UNIT_ALIASES: { [key: string]: string } = {
+  gram: 'g',
+  grams: 'g',
+  gm: 'g',
+  kilogram: 'kg',
+  kilograms: 'kg',
+  ounce: 'oz',
+  ounces: 'oz',
+  pound: 'lb',
+  pounds: 'lb',
+  milliliter: 'ml',
+  milliliters: 'ml',
+  litre: 'l',
+  liter: 'l',
+  liters: 'l',
+  litres: 'l',
+  teaspoon: 'tsp',
+  teaspoons: 'tsp',
+  tablespoon: 'tbsp',
+  tablespoons: 'tbsp',
+  'fluid ounce': 'fl_oz',
+  'fluid ounces': 'fl_oz',
+  piece: 'pc',
+  pieces: 'pc',
+  box: 'box',
+  pack: 'pack',
+  bag: 'bag',
+  bottle: 'bottle',
+  can: 'can',
+  bunch: 'bunch',
+};
+
+export const conversions: { [key: string]: { [key: string]: number } } = {
+  kg: { g: 1000, lb: 2.20462, oz: 35.274 },
+  g: { kg: 0.001, lb: 0.00220462, oz: 0.035274 },
+  lb: { kg: 0.453592, g: 453.592, oz: 16 },
+  oz: { kg: 0.0283495, g: 28.3495, lb: 0.0625 },
+  l: { ml: 1000, cup: 4.22675, fl_oz: 33.814, tsp: 202.884, tbsp: 67.628 },
+  ml: { l: 0.001, cup: 0.00422675, fl_oz: 0.033814, tsp: 0.202884, tbsp: 0.067628 },
+  cup: { l: 0.236588, ml: 236.588, fl_oz: 8, tsp: 48, tbsp: 16 },
+  fl_oz: { l: 0.0295735, ml: 29.5735, cup: 0.125, tsp: 6, tbsp: 2 },
+  tsp: { ml: 4.92892, l: 0.00492892, cup: 0.0208333, fl_oz: 0.166667, tbsp: 0.333333 },
+  tbsp: { ml: 14.7868, l: 0.0147868, cup: 0.0625, fl_oz: 0.5, tsp: 3 },
+};
+
+export function normalizeUnit(unit: string): string {
+  const normalized = unit.toLowerCase().trim();
+  return UNIT_ALIASES[normalized] || normalized;
+}

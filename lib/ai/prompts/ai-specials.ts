@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * AI Specials Prompt
  *
@@ -59,7 +60,7 @@ export function parseAISpecialsResponse(aiResponse: string): {
       };
     }
   } catch (error) {
-    console.warn('Failed to parse AI specials response:', error);
+    logger.warn('Failed to parse AI specials response:', error);
   }
 
   // Fallback: Try to extract lists from text
@@ -68,10 +69,16 @@ export function parseAISpecialsResponse(aiResponse: string): {
 
   return {
     ingredients: ingredientsMatch
-      ? ingredientsMatch[1].split(',').map(s => s.trim()).filter(Boolean)
+      ? ingredientsMatch[1]
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean)
       : [],
     suggestions: suggestionsMatch
-      ? suggestionsMatch[1].split(',').map(s => s.trim()).filter(Boolean)
+      ? suggestionsMatch[1]
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean)
       : [],
     confidence: 0.7,
     notes: 'Parsed from text response',

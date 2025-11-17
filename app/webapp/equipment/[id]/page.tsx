@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface TemperatureEquipment {
   id: string;
   name: string;
@@ -64,7 +65,9 @@ export default function EquipmentPage() {
         const equipmentData = await equipmentRes.json();
         const logsData = await logsRes.json();
 
-        const foundEquipment = equipmentData.data?.find((eq: TemperatureEquipment) => eq.id === equipmentId);
+        const foundEquipment = equipmentData.data?.find(
+          (eq: TemperatureEquipment) => eq.id === equipmentId,
+        );
         if (!foundEquipment) {
           showError('Equipment not found');
           router.push('/webapp/temperature');
@@ -74,7 +77,7 @@ export default function EquipmentPage() {
         setEquipment(foundEquipment);
         setRecentLogs(logsData.data?.items || logsData.data || []);
       } catch (error) {
-        console.error('Error fetching equipment:', error);
+        logger.error('Error fetching equipment:', error);
         showError('Failed to load equipment details');
         router.push('/webapp/temperature');
       } finally {
@@ -110,11 +113,13 @@ export default function EquipmentPage() {
       setNotes('');
 
       // Refresh logs
-      const logsRes = await fetch(`/api/temperature-logs?equipment_id=${equipmentId}&limit=5&pageSize=5`);
+      const logsRes = await fetch(
+        `/api/temperature-logs?equipment_id=${equipmentId}&limit=5&pageSize=5`,
+      );
       const logsData = await logsRes.json();
       setRecentLogs(logsData.data?.items || logsData.data || []);
     } catch (error) {
-      console.error('Error logging temperature:', error);
+      logger.error('Error logging temperature:', error);
       showError('Failed to log temperature');
     } finally {
       setSubmitting(false);
@@ -210,7 +215,9 @@ export default function EquipmentPage() {
                   {equipment.min_temp_celsius}°C - {equipment.max_temp_celsius}°C
                 </p>
               ) : equipment.min_temp_celsius !== null ? (
-                <p className="text-lg font-semibold text-[#29E7CD]">≥{equipment.min_temp_celsius}°C</p>
+                <p className="text-lg font-semibold text-[#29E7CD]">
+                  ≥{equipment.min_temp_celsius}°C
+                </p>
               ) : (
                 <p className="text-sm text-gray-500">Not set</p>
               )}
@@ -249,7 +256,9 @@ export default function EquipmentPage() {
           <h2 className="mb-4 text-xl font-bold text-white">Log Temperature</h2>
           <form onSubmit={handleSubmitTemperature} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">Temperature (°C)</label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">
+                Temperature (°C)
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -261,7 +270,9 @@ export default function EquipmentPage() {
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">Notes (Optional)</label>
+              <label className="mb-2 block text-sm font-medium text-gray-300">
+                Notes (Optional)
+              </label>
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
@@ -288,10 +299,7 @@ export default function EquipmentPage() {
               {recentLogs.map(log => {
                 const logStatus = getTemperatureStatus(log.temperature_celsius);
                 return (
-                  <div
-                    key={log.id}
-                    className="rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] p-4"
-                  >
+                  <div key={log.id} className="rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-lg font-semibold text-white">
@@ -324,9 +332,7 @@ export default function EquipmentPage() {
                         </span>
                       </div>
                     </div>
-                    {log.notes && (
-                      <p className="mt-2 text-sm text-gray-400">{log.notes}</p>
-                    )}
+                    {log.notes && <p className="mt-2 text-sm text-gray-400">{log.notes}</p>}
                   </div>
                 );
               })}

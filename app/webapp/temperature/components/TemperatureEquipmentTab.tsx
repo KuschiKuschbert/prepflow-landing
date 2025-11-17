@@ -92,9 +92,9 @@ export default function TemperatureEquipmentTab({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:justify-between">
+      <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white tablet:text-3xl">
+          <h2 className="tablet:text-3xl text-2xl font-bold text-white">
             {t('temperature.equipment', 'Temperature Equipment')}
           </h2>
           <p className="mt-2 text-base text-gray-400">
@@ -117,7 +117,7 @@ export default function TemperatureEquipmentTab({
                 className="transition-transform duration-300 group-hover:rotate-12"
                 aria-hidden={true}
               />
-              <span className="hidden tablet:inline">
+              <span className="tablet:inline hidden">
                 {isGenerating ? 'Generating...' : 'Generate Sample Logs'}
               </span>
               <span className="tablet:hidden">{isGenerating ? '...' : '📊'}</span>
@@ -176,7 +176,7 @@ export default function TemperatureEquipmentTab({
             endIndex={endIndex}
             onPageChange={setCurrentPage}
           />
-          <div className="grid gap-4 tablet:grid-cols-1 large-desktop:grid-cols-2">
+          <div className="tablet:grid-cols-1 large-desktop:grid-cols-2 grid gap-4">
             {equipment.slice(startIndex, endIndex).map(item => (
               <EquipmentItem
                 key={item.id}

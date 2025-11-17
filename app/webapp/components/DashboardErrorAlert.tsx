@@ -39,8 +39,7 @@ export function DashboardErrorAlert({
   disabled,
   className = 'mb-4',
 }: DashboardErrorAlertProps) {
-  const { icon, borderClass, backgroundClass, textClass, buttonClass } =
-    VARIANT_STYLES[variant];
+  const { icon, borderClass, backgroundClass, textClass, buttonClass } = VARIANT_STYLES[variant];
 
   return (
     <div

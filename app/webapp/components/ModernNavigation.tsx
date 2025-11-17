@@ -133,12 +133,12 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       />
 
       {/* Desktop: Persistent Sidebar - CSS handles visibility */}
-      <div className="hidden desktop:block">
+      <div className="desktop:block hidden">
         <PersistentSidebar />
       </div>
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
-      <div className="block desktop:hidden">
+      <div className="desktop:hidden block">
         <BottomNavBar
           onMoreClick={() => setIsMoreDrawerOpen(true)}
           onSearchClick={() => setIsSearchOpen(true)}
@@ -146,12 +146,12 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       </div>
 
       {/* Mobile: Floating Action Button - CSS handles visibility */}
-      <div className="block desktop:hidden">
+      <div className="desktop:hidden block">
         <MobileFAB onSearchClick={() => setIsSearchOpen(true)} />
       </div>
 
       {/* Mobile: More Drawer - CSS handles visibility */}
-      <div className="block desktop:hidden">
+      <div className="desktop:hidden block">
         <MoreDrawer
           isOpen={isMoreDrawerOpen}
           onClose={() => setIsMoreDrawerOpen(false)}

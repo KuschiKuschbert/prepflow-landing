@@ -47,22 +47,29 @@ export function FeatureImageContainer({
   ANIMATION_EASING,
 }: FeatureImageContainerProps) {
   return (
-    <div className="desktop:sticky desktop:top-24 desktop:flex-1 desktop:min-w-[55%] desktop:max-w-[60%] xl:min-w-[58%] xl:max-w-[65%] desktop:z-10 w-full flex items-stretch">
+    <div className="desktop:sticky desktop:top-24 desktop:flex-1 desktop:min-w-[55%] desktop:max-w-[60%] desktop:z-10 flex w-full items-stretch xl:max-w-[65%] xl:min-w-[58%]">
       <div
         ref={imageContainerRef as any}
-        className="relative rounded-3xl bg-[#1f1f1f]/40 shadow-xl shadow-black/20 w-full flex-1 overflow-hidden"
+        className="relative w-full flex-1 overflow-hidden rounded-3xl bg-[#1f1f1f]/40 shadow-xl shadow-black/20"
         style={{
           height: containerHeight ? `${containerHeight}px` : undefined,
           minHeight: containerHeight
-            ? (typeof window !== 'undefined' && window.innerWidth >= 1024 ? `${Math.min(containerHeight, 500)}px` : '450px')
+            ? typeof window !== 'undefined' && window.innerWidth >= 1024
+              ? `${Math.min(containerHeight, 500)}px`
+              : '450px'
             : '450px',
-          maxHeight: containerHeight && typeof window !== 'undefined' && window.innerWidth >= 1024
-            ? `${Math.max(containerHeight, 800)}px`
-            : undefined,
+          maxHeight:
+            containerHeight && typeof window !== 'undefined' && window.innerWidth >= 1024
+              ? `${Math.max(containerHeight, 800)}px`
+              : undefined,
           opacity: prefersReducedMotion()
-            ? (expandedFeature ? 1 : 0.8)
+            ? expandedFeature
+              ? 1
+              : 0.8
             : imageMounted
-              ? (expandedFeature ? 1 : 0.8)
+              ? expandedFeature
+                ? 1
+                : 0.8
               : 0,
           transform: prefersReducedMotion()
             ? 'translateX(0)'
@@ -76,10 +83,10 @@ export function FeatureImageContainer({
           willChange: prefersReducedMotion() ? 'auto' : 'opacity, transform, height',
         }}
       >
-        <div className="relative w-full h-full bg-[#0a0a0a] overflow-hidden">
+        <div className="relative h-full w-full overflow-hidden bg-[#0a0a0a]">
           {previousImage && isImageTransitioning && (
             <div
-              className="absolute inset-0 z-20 pointer-events-none"
+              className="pointer-events-none absolute inset-0 z-20"
               style={{
                 background: `radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.4) 90%, rgba(0, 0, 0, 0.6) 100%)`,
                 opacity: previousImageOpacity,
@@ -90,7 +97,7 @@ export function FeatureImageContainer({
 
           {currentImage && (
             <div
-              className="absolute inset-0 z-20 pointer-events-none"
+              className="pointer-events-none absolute inset-0 z-20"
               style={{
                 background: `radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.4) 90%, rgba(0, 0, 0, 0.6) 100%)`,
                 opacity: imageMounted ? currentImageOpacity : 0,
@@ -100,7 +107,13 @@ export function FeatureImageContainer({
           )}
 
           {previousImage && isImageTransitioning && (
-            <div className="absolute inset-0 z-10" style={{ opacity: previousImageOpacity, transition: `opacity ${ANIMATION_DURATION + 200}ms ${ANIMATION_EASING}` }}>
+            <div
+              className="absolute inset-0 z-10"
+              style={{
+                opacity: previousImageOpacity,
+                transition: `opacity ${ANIMATION_DURATION + 200}ms ${ANIMATION_EASING}`,
+              }}
+            >
               <Image
                 src={previousImage.screenshot}
                 alt={previousImage.screenshotAlt}
@@ -108,8 +121,10 @@ export function FeatureImageContainer({
                 height={800}
                 className="h-full w-full object-cover object-center"
                 style={{
-                  maskImage: 'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
-                  WebkitMaskImage: 'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
+                  maskImage:
+                    'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
+                  WebkitMaskImage:
+                    'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
                   willChange: 'opacity',
                 }}
                 quality={90}
@@ -119,7 +134,11 @@ export function FeatureImageContainer({
 
           {currentImage && (
             <div
-              className={previousImage && isImageTransitioning ? 'absolute inset-0 z-10' : 'h-full w-full z-10'}
+              className={
+                previousImage && isImageTransitioning
+                  ? 'absolute inset-0 z-10'
+                  : 'z-10 h-full w-full'
+              }
               style={{
                 opacity: imageMounted ? currentImageOpacity : 0,
                 transition: `opacity ${ANIMATION_DURATION + 200}ms ${ANIMATION_EASING}`,
@@ -133,8 +152,10 @@ export function FeatureImageContainer({
                 height={800}
                 className="h-full w-full object-cover object-center"
                 style={{
-                  maskImage: 'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
-                  WebkitMaskImage: 'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
+                  maskImage:
+                    'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
+                  WebkitMaskImage:
+                    'radial-gradient(ellipse 95% 95% at center, black 85%, transparent 100%)',
                 }}
                 quality={90}
                 priority={true}

@@ -51,7 +51,7 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
       <div className="flex flex-wrap gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
         <button
           onClick={() => handleTabChange('ingredients')}
-          className={`flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none tablet:px-6 ${
+          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
             activeTab === 'ingredients'
               ? 'bg-[#29E7CD] text-black shadow-lg'
               : 'text-gray-400 hover:text-white'
@@ -64,7 +64,7 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
         </button>
         <button
           onClick={() => handleTabChange('dishes')}
-          className={`flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none tablet:px-6 ${
+          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
             activeTab === 'dishes'
               ? 'bg-[#29E7CD] text-black shadow-lg'
               : 'text-gray-400 hover:text-white'

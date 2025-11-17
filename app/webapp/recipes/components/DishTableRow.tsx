@@ -96,20 +96,18 @@ export function DishTableRow({
           !isSelectionMode ? 'cursor-pointer' : ''
         } ${
           isHighlighting
-            ? 'border-l-4 border-[#29E7CD] bg-[#29E7CD]/10 animate-[highlightPulse_0.5s_ease-in-out]'
+            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[#29E7CD] bg-[#29E7CD]/10'
             : ''
         }`}
         onClick={!isSelectionMode ? () => onPreviewDish(dish) : undefined}
       >
         {capitalizeDishName(dish.dish_name)}
       </td>
-      <td className="px-6 py-4 text-sm text-gray-300">
-        ${dish.selling_price.toFixed(2)}
-      </td>
-      <td className="hidden px-6 py-4 text-sm text-gray-300 desktop:table-cell">
+      <td className="px-6 py-4 text-sm text-gray-300">${dish.selling_price.toFixed(2)}</td>
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-300">
         {cost ? `$${cost.total_cost.toFixed(2)}` : '—'}
       </td>
-      <td className="hidden px-6 py-4 text-sm desktop:table-cell">
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm">
         {cost ? (
           <span
             className={`font-semibold ${
@@ -122,7 +120,7 @@ export function DishTableRow({
           <span className="text-gray-500">—</span>
         )}
       </td>
-      <td className="hidden px-6 py-4 text-sm text-gray-400 desktop:table-cell">
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-400">
         {formatRecipeDate(dish.created_at)}
       </td>
       <td className="px-6 py-4 text-sm font-medium">

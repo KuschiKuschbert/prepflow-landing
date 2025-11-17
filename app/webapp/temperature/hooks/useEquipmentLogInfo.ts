@@ -6,7 +6,9 @@ export function useEquipmentLogInfo(allLogs: TemperatureLog[] = []) {
     return lastLogInfo ? lastLogInfo.date : null;
   };
 
-  const getLastLogInfo = (equipment: TemperatureEquipment): {
+  const getLastLogInfo = (
+    equipment: TemperatureEquipment,
+  ): {
     date: string;
     temperature: number;
     isInRange: boolean | null;

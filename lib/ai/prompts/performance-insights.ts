@@ -1,10 +1,5 @@
-/**
- * Performance Insights AI Prompt
- *
- * Generates AI-powered insights and recommendations for menu performance
- */
-
 import type { PerformanceItem } from '@/app/webapp/performance/types';
+import { logger } from '@/lib/logger';
 
 export interface PerformanceInsight {
   id: string;
@@ -43,6 +38,10 @@ export function buildPerformanceInsightsPrompt(
   const totalProfit = performanceItems.reduce((sum, item) => sum + (item.gross_profit || 0), 0);
   const averageMargin = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
 
+  const formatItem = (item: PerformanceItem) => {
+    const revenue = (item.selling_price || 0) * (item.number_sold || 0);
+    return `- ${item.name}: $${(item.gross_profit || 0).toFixed(2)} profit, ${item.number_sold} sold, ${revenue > 0 ? (((item.gross_profit || 0) / revenue) * 100).toFixed(1) : '0.0'}% margin`;
+  };
   const prompt = `You are a restaurant profitability consultant analyzing menu performance data.
 
 **Current Performance Score:** ${performanceScore}/100
@@ -53,28 +52,16 @@ export function buildPerformanceInsightsPrompt(
 **Menu Item Categories:**
 
 **Hidden Gems (High Profit, Low Popularity) - ${hiddenGems.length} items:**
-${hiddenGems.slice(0, 10).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: $${(item.gross_profit || 0).toFixed(2)} profit, ${item.number_sold} sold, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${hiddenGems.slice(0, 10).map(formatItem).join('\n') || 'None'}
 
 **Bargain Buckets (Low Profit, High Popularity) - ${bargainBuckets.length} items:**
-${bargainBuckets.slice(0, 10).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: $${(item.gross_profit || 0).toFixed(2)} profit, ${item.number_sold} sold, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${bargainBuckets.slice(0, 10).map(formatItem).join('\n') || 'None'}
 
 **Burnt Toast (Low Profit, Low Popularity) - ${burntToast.length} items:**
-${burntToast.slice(0, 10).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: $${(item.gross_profit || 0).toFixed(2)} profit, ${item.number_sold} sold, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${burntToast.slice(0, 10).map(formatItem).join('\n') || 'None'}
 
 **Chef's Kiss (High Profit, High Popularity) - ${chefsKiss.length} items:**
-${chefsKiss.slice(0, 10).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: $${(item.gross_profit || 0).toFixed(2)} profit, ${item.number_sold} sold, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${chefsKiss.slice(0, 10).map(formatItem).join('\n') || 'None'}
 
 **Your Task:**
 Generate 2-4 strategic insights with actionable recommendations. Each insight should:
@@ -110,9 +97,6 @@ Focus on:
   return prompt;
 }
 
-/**
- * Parse AI response into PerformanceInsight array
- */
 export function parsePerformanceInsightsResponse(
   aiResponse: string,
   performanceItems: PerformanceItem[],
@@ -139,11 +123,9 @@ export function parsePerformanceInsightsResponse(
             ['high', 'medium', 'low'].includes(insight.priority),
         )
         .map((insight, index) => {
-          // Find matching items by name
           const items = insight.itemNames
             ? performanceItems.filter(item => insight.itemNames!.includes(item.name))
             : [];
-
           return {
             id: `ai_insight_${index}_${Date.now()}`,
             type: insight.type as PerformanceInsight['type'],
@@ -156,7 +138,7 @@ export function parsePerformanceInsightsResponse(
         });
     }
   } catch (error) {
-    console.warn('Failed to parse AI performance insights:', error);
+    logger.warn('Failed to parse AI performance insights:', error);
   }
 
   return [];

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useSmartLoading } from '@/hooks/useSmartLoading';
 
+import { logger } from '../../lib/logger';
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -37,7 +38,7 @@ export function useIngredientData() {
           .order('name', { ascending: true });
 
         if (fallbackQuery.error) {
-          console.error('Error fetching suppliers:', fallbackQuery.error);
+          logger.error('Error fetching suppliers:', fallbackQuery.error);
           setError(`Failed to load suppliers: ${fallbackQuery.error.message}`);
           throw fallbackQuery.error;
         }
@@ -47,7 +48,7 @@ export function useIngredientData() {
         setSuppliers(data || []);
       }
     } catch (error: any) {
-      console.error('Error fetching suppliers:', error);
+      logger.error('Error fetching suppliers:', error);
       setError(error?.message || 'Failed to load suppliers');
       setSuppliers([]); // Set empty array on error to prevent crashes
     } finally {
@@ -57,6 +58,7 @@ export function useIngredientData() {
 
   useEffect(() => {
     fetchSuppliers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

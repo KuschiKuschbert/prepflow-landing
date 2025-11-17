@@ -14,7 +14,7 @@ interface HeroBulletsProps {
 export function HeroBullets({ t, variant }: HeroBulletsProps) {
   if (variant === 'control') {
     return (
-      <ul className="mt-8 space-y-3 text-fluid-base text-gray-300">
+      <ul className="text-fluid-base mt-8 space-y-3 text-gray-300">
         <Bullet>
           <strong>Item Profit & Popularity</strong> — know what to promote, fix, or drop to raise
           gross profit
@@ -43,7 +43,7 @@ export function HeroBullets({ t, variant }: HeroBulletsProps) {
 
   if (variant === 'variantA') {
     return (
-      <ul className="mt-8 space-y-3 text-fluid-base text-gray-300">
+      <ul className="text-fluid-base mt-8 space-y-3 text-gray-300">
         <Bullet>
           <strong>{t('hero.variantA.bullet1.title', 'Stop the Bleeding')}</strong> —{' '}
           {t(
@@ -83,7 +83,7 @@ export function HeroBullets({ t, variant }: HeroBulletsProps) {
 
   if (variant === 'variantB') {
     return (
-      <ul className="mt-8 space-y-3 text-fluid-base text-gray-300">
+      <ul className="text-fluid-base mt-8 space-y-3 text-gray-300">
         <Bullet>
           <strong>{t('hero.variantB.bullet1.title', 'Profit Maximization')}</strong> —{' '}
           {t('hero.variantB.bullet1.description', 'identify your highest-margin opportunities')}
@@ -114,7 +114,7 @@ export function HeroBullets({ t, variant }: HeroBulletsProps) {
 
   // variantC
   return (
-    <ul className="mt-8 space-y-3 text-fluid-base text-gray-300">
+    <ul className="text-fluid-base mt-8 space-y-3 text-gray-300">
       <Bullet>
         <strong>{t('hero.variantC.bullet1.title', 'Cost Breakdown')}</strong> —{' '}
         {t('hero.variantC.bullet1.description', 'see exactly what each dish costs to make')}

@@ -68,23 +68,23 @@ export default function AppleStyleFeatures({
   };
 
   return (
-    <section className="relative bg-transparent py-16 tablet:py-20">
-      <div className="mx-auto w-full max-w-[95%] desktop:max-w-[92%] xl:max-w-[90%] 2xl:max-w-7xl px-4 tablet:px-6 desktop:px-8">
+    <section className="tablet:py-20 relative bg-transparent py-16">
+      <div className="desktop:max-w-[92%] tablet:px-6 desktop:px-8 mx-auto w-full max-w-[95%] px-4 xl:max-w-[90%] 2xl:max-w-7xl">
         <div className="mb-16 text-center">
-          <h2 className="text-fluid-3xl font-bold tracking-tight text-white tablet:text-fluid-4xl desktop:text-fluid-4xl">
+          <h2 className="text-fluid-3xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold tracking-tight text-white">
             {sectionTitle}
           </h2>
         </div>
 
         <div
-          className="flex flex-col gap-12 desktop:flex-row desktop:gap-8 xl:gap-12 desktop:items-stretch"
+          className="desktop:flex-row desktop:gap-8 desktop:items-stretch flex flex-col gap-12 xl:gap-12"
           style={{
             contain: 'layout',
           }}
         >
           <div
             ref={parentContainerRef as any}
-            className="flex flex-col flex-shrink-0 desktop:max-w-[45%] xl:max-w-[42%] w-full desktop:w-auto min-w-0 desktop:self-center"
+            className="desktop:max-w-[45%] desktop:w-auto desktop:self-center flex w-full min-w-0 flex-shrink-0 flex-col xl:max-w-[42%]"
             style={{
               contain: 'layout',
               gap: '0.375rem',
@@ -107,13 +107,13 @@ export default function AppleStyleFeatures({
                   initialWidth={initialWidths[index]}
                   buttonHeight={buttonHeights[index]}
                   onToggle={() => handleToggle(index)}
-                  containerRef={(el) => {
+                  containerRef={el => {
                     containerRefs.current[index] = el;
                   }}
-                  buttonRef={(el) => {
+                  buttonRef={el => {
                     buttonRefs.current[index] = el;
                   }}
-                  contentRef={(el) => {
+                  contentRef={el => {
                     contentRefs.current[index] = el;
                   }}
                   ANIMATION_DURATION={ANIMATION_DURATION}

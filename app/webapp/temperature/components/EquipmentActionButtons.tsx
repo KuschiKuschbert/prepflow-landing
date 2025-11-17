@@ -68,9 +68,7 @@ export function EquipmentActionButtons({
             : 'bg-green-500/20 text-green-400 hover:bg-green-500/30 hover:shadow-lg'
         }`}
       >
-        {item.is_active
-          ? t('common.deactivate', 'Deactivate')
-          : t('common.activate', 'Activate')}
+        {item.is_active ? t('common.deactivate', 'Deactivate') : t('common.activate', 'Activate')}
       </button>
       <button
         onClick={e => {

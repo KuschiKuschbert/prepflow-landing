@@ -11,6 +11,7 @@ import DishPalette from './DishPalette';
 import MenuCategory from './MenuCategory';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
 
+import { logger } from '../../lib/logger';
 interface MenuEditorProps {
   menu: Menu;
   onBack: () => void;
@@ -50,7 +51,7 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
       const statsData = await statsResponse.json();
 
       if (!menuResponse.ok) {
-        console.error('Failed to load menu:', menuData.error || menuData.message);
+        logger.error('Failed to load menu:', menuData.error || menuData.message);
         return;
       }
 
@@ -67,24 +68,24 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
       if (dishesData.success) {
         setDishes(dishesData.dishes || []);
       } else {
-        console.warn('Failed to load dishes:', dishesData.error || dishesData.message);
+        logger.warn('Failed to load dishes:', dishesData.error || dishesData.message);
         setDishes([]);
       }
 
       if (recipesData.success) {
         setRecipes(recipesData.recipes || []);
       } else {
-        console.warn('Failed to load recipes:', recipesData.error || recipesData.message);
+        logger.warn('Failed to load recipes:', recipesData.error || recipesData.message);
         setRecipes([]);
       }
 
       if (statsData.success) {
         setStatistics(statsData.statistics);
       } else {
-        console.warn('Failed to load statistics:', statsData.error || statsData.message);
+        logger.warn('Failed to load statistics:', statsData.error || statsData.message);
       }
     } catch (err) {
-      console.error('Failed to load menu data:', err);
+      logger.error('Failed to load menu data:', err);
     } finally {
       setLoading(false);
     }
@@ -100,6 +101,7 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
 
   useEffect(() => {
     loadMenuData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu.id]);
 
   const handleAddCategory = () => {
@@ -140,11 +142,11 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
 
           if (!response.ok) {
             const result = await response.json();
-            console.error('Failed to move item:', result.error || result.message);
+            logger.error('Failed to move item:', result.error || result.message);
             hasError = true;
           }
         } catch (err) {
-          console.error('Failed to move item:', err);
+          logger.error('Failed to move item:', err);
           hasError = true;
         }
       }
@@ -181,7 +183,7 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
         alert(`Failed to remove item: ${result.error || result.message || 'Unknown error'}`);
       }
     } catch (err) {
-      console.error('Failed to remove item:', err);
+      logger.error('Failed to remove item:', err);
       alert('Failed to remove item. Please check your connection and try again.');
     }
   };

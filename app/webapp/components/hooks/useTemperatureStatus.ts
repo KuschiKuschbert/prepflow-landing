@@ -2,6 +2,8 @@ import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
+
 function calculateOutOfRange(todayLogs: any[], equipment: any[]): number {
   return todayLogs.filter((log: any) => {
     const eq = equipment.find((e: any) => e.location === log.location);
@@ -63,15 +65,11 @@ export function useTemperatureStatus() {
 
         if (statsResponse.ok) {
           const statsJson = await statsResponse.json();
-          if (statsJson.success) {
-            setTemperatureChecksToday(statsJson.temperatureChecksToday || 0);
-          }
+          if (statsJson.success) setTemperatureChecksToday(statsJson.temperatureChecksToday || 0);
         }
-
         if (!logsResult.error && logsResult.data) {
           const logs = logsResult.data || [];
           const todayLogs = logs.filter((log: any) => log.log_date === today);
-
           if (logs.length > 0) {
             const lastLog = logs[0];
             setLastCheckTime(
@@ -80,7 +78,6 @@ export function useTemperatureStatus() {
                 : lastLog.created_at,
             );
           }
-
           if (!equipmentResult.error && equipmentResult.data) {
             const equip = equipmentResult.data || [];
             setActiveEquipment(equip.length);
@@ -90,7 +87,7 @@ export function useTemperatureStatus() {
           }
         }
       } catch (err) {
-        console.error('Error fetching temperature status:', err);
+        logger.error('Error fetching temperature status:', err);
       } finally {
         setLoading(false);
       }

@@ -66,7 +66,13 @@ export function useRecipeIngredientLoading({
           setError(err instanceof Error ? err.message : 'Failed to load recipe ingredients');
       }
     },
-    [setCalculations, setRecipeIngredients, setError, setIsLoadingFromApi, preserveManualIngredients],
+    [
+      setCalculations,
+      setRecipeIngredients,
+      setError,
+      setIsLoadingFromApi,
+      preserveManualIngredients,
+    ],
   );
   return { loadExistingRecipeIngredients };
 }

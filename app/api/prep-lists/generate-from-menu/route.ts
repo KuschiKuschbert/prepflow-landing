@@ -5,6 +5,7 @@ import { processDish } from './helpers/processDish';
 import { processRecipe } from './helpers/processRecipe';
 import { aggregateIngredientsFromRecipes } from './helpers/aggregateFromRecipes';
 
+import { logger } from '../../lib/logger';
 interface SectionData {
   sectionId: string | null;
   sectionName: string;
@@ -110,7 +111,7 @@ export async function POST(request: NextRequest) {
           }
         }
       } catch (itemError) {
-        console.error(`Error processing menu item ${menuItem.id}:`, itemError);
+        logger.error(`Error processing menu item ${menuItem.id}:`, itemError);
         // Continue processing other items even if one fails
       }
     }
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
       unassignedItems: unassignedItems.length > 0 ? unassignedItems : undefined,
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,

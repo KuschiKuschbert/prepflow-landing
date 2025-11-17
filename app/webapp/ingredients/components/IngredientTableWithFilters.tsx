@@ -137,6 +137,7 @@ export default function IngredientTableWithFilters({
     };
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBulkMenu]);
 
   const { handleColumnSort, getSortIcon } = useIngredientTableSort(sortBy, onSortChange);
@@ -237,7 +238,7 @@ export default function IngredientTableWithFilters({
         }}
       />
 
-      <div className="block space-y-2 desktop:hidden">
+      <div className="desktop:hidden block space-y-2">
         {ingredients.map(ingredient => (
           <IngredientCard
             key={ingredient.id}

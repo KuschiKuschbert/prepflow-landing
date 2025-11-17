@@ -4,6 +4,7 @@ import { PerformanceState } from '../types';
 import { exportPerformanceDataToCSV, parseCSVSalesData } from '../utils/csv-utils';
 import { importPerformanceData } from '../utils/performance-api';
 
+import { logger } from '../../lib/logger';
 interface UsePerformanceImportExportProps {
   state: PerformanceState;
   setState: React.Dispatch<React.SetStateAction<PerformanceState>>;
@@ -24,7 +25,7 @@ export function usePerformanceImportExport({
       setState(prev => ({ ...prev, csvData: '', showImportModal: false, importing: false }));
       await fetchPerformanceData();
     } catch (error) {
-      console.error('Error importing data:', error);
+      logger.error('Error importing data:', error);
       setState(prev => ({
         ...prev,
         importing: false,

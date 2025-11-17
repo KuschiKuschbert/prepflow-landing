@@ -56,7 +56,11 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
     if (href === '/webapp/recipes#calculator') {
-      return pathname === '/webapp/recipes' && typeof window !== 'undefined' && window.location.hash === '#calculator';
+      return (
+        pathname === '/webapp/recipes' &&
+        typeof window !== 'undefined' &&
+        window.location.hash === '#calculator'
+      );
     }
     return pathname.startsWith(href.split('#')[0]);
   };

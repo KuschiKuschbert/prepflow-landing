@@ -123,7 +123,7 @@ export default function AISpecialsPage() {
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+        <div className="tablet:py-6 min-h-screen bg-transparent py-4">
           {/* Header skeleton */}
           <div className="mb-8">
             <LoadingSkeleton variant="stats" height="64px" />

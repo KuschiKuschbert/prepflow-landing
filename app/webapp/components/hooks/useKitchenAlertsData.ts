@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { calculateTemperatureAlerts } from './useKitchenAlertsHelpers';
 
+import { logger } from '../../lib/logger';
 export function useKitchenAlertsData() {
   const [stats, setStats] = useState<{
     ingredientsLowStock?: number;
@@ -78,7 +79,7 @@ export function useKitchenAlertsData() {
           );
         }
       } catch (err) {
-        console.error('Error fetching kitchen alerts:', err);
+        logger.error('Error fetching kitchen alerts:', err);
       } finally {
         setLoading(false);
       }

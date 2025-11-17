@@ -23,7 +23,9 @@ export function generateHiddenGemInsight(hiddenGems: PerformanceItem[]): Perform
   };
 }
 
-export function generateBargainBucketInsight(bargainBuckets: PerformanceItem[]): PerformanceInsight | null {
+export function generateBargainBucketInsight(
+  bargainBuckets: PerformanceItem[],
+): PerformanceInsight | null {
   if (bargainBuckets.length === 0) return null;
 
   const totalCurrentProfit = bargainBuckets.reduce(
@@ -51,7 +53,9 @@ export function generateBargainBucketInsight(bargainBuckets: PerformanceItem[]):
   };
 }
 
-export function generateBurntToastInsight(burntToast: PerformanceItem[]): PerformanceInsight | null {
+export function generateBurntToastInsight(
+  burntToast: PerformanceItem[],
+): PerformanceInsight | null {
   if (burntToast.length === 0) return null;
 
   return {
@@ -67,7 +71,10 @@ export function generateBurntToastInsight(burntToast: PerformanceItem[]): Perfor
 export function generateChefsKissInsight(chefsKiss: PerformanceItem[]): PerformanceInsight | null {
   if (chefsKiss.length === 0) return null;
 
-  const totalProfit = chefsKiss.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0);
+  const totalProfit = chefsKiss.reduce(
+    (sum, item) => sum + item.gross_profit * item.number_sold,
+    0,
+  );
 
   return {
     id: 'chefs-kiss',

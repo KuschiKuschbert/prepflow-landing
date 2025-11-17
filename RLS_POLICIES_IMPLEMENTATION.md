@@ -3,6 +3,7 @@
 ## What Was Done
 
 ### 1. Created RLS Policies SQL Script
+
 - **File**: `supabase-rls-policies.sql`
 - **Content**: Comprehensive RLS policies for all 20+ database tables
 - **Policy Pattern**: Allows public access (anon key) since middleware already protects routes
@@ -17,6 +18,7 @@
   - System: system_settings
 
 ### 2. Updated Client Code to Use Direct Supabase Calls
+
 - **File**: `app/webapp/ingredients/hooks/useIngredientCRUD.ts`
   - `handleAddIngredient`: Now tries direct Supabase call first, falls back to API route if RLS error
   - `handleUpdateIngredient`: Now tries direct Supabase call first, falls back to API route if RLS error
@@ -28,6 +30,7 @@
   - Added supabase import
 
 ### 3. Kept API Routes as Fallback
+
 - **File**: `app/api/ingredients/route.ts`
   - POST, PUT, DELETE handlers remain in place as fallback
   - These will be used automatically if RLS policies block direct calls
@@ -35,6 +38,7 @@
 ## Next Steps (Manual)
 
 ### Step 1: Apply RLS Policies to Database
+
 1. Open Supabase Dashboard → SQL Editor
 2. Copy contents of `supabase-rls-policies.sql`
 3. Paste into SQL Editor
@@ -42,7 +46,9 @@
 5. Verify policies were created (script includes verification queries at the end)
 
 ### Step 2: Test CRUD Operations
+
 After applying policies, test:
+
 - ✅ Create ingredient via wizard
 - ✅ Edit ingredient (including "Fresh Chillies" that was failing)
 - ✅ Delete ingredient
@@ -52,6 +58,7 @@ After applying policies, test:
 - ✅ CSV import/export
 
 ### Step 3: Verify Direct Calls Work
+
 - Check browser console for any RLS fallback warnings
 - If you see "RLS policy blocked direct insert/update/delete, falling back to API route" warnings, the policies may not be applied correctly
 - If no warnings, direct calls are working!
@@ -71,6 +78,7 @@ Since Auth0 + NextAuth middleware already protects all `/webapp/*` and `/api/*` 
 ## Troubleshooting
 
 If you see RLS errors after applying policies:
+
 1. Check that policies were created: Run verification queries in SQL script
 2. Check policy syntax: Ensure `USING (true)` and `WITH CHECK (true)` are correct
 3. Check table names: Ensure all table names match exactly (case-sensitive)

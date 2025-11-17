@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Dish, DishWithDetails, DishCostData, RecipeIngredientWithDetails } from '../types';
 
+import { logger } from '../../lib/logger';
 export function useDishSidePanelData(isOpen: boolean, dish: Dish | null) {
   const [dishDetails, setDishDetails] = useState<DishWithDetails | null>(null);
   const [costData, setCostData] = useState<DishCostData | null>(null);
@@ -35,7 +36,7 @@ export function useDishSidePanelData(isOpen: boolean, dish: Dish | null) {
                 ingredientsMap[dishRecipe.recipe_id] = data.ingredients;
               }
             } catch (err) {
-              console.error(`Failed to fetch ingredients for recipe ${dishRecipe.recipe_id}:`, err);
+              logger.error(`Failed to fetch ingredients for recipe ${dishRecipe.recipe_id}:`, err);
             }
           }
         }
@@ -44,7 +45,7 @@ export function useDishSidePanelData(isOpen: boolean, dish: Dish | null) {
       if (costResponse.success) setCostData(costResponse.cost);
       setLoading(false);
     });
-  }, [isOpen, dish?.id]);
+  }, [isOpen, dish?.id, dish]);
 
   return { dishDetails, costData, loading, recipeIngredientsMap };
 }

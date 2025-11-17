@@ -1,10 +1,5 @@
-/**
- * Performance Tips AI Prompt
- *
- * Generates contextual, actionable tips to improve menu performance score
- */
-
 import type { PerformanceItem } from '@/app/webapp/performance/types';
+import { logger } from '@/lib/logger';
 
 export interface PerformanceTip {
   priority: 'high' | 'medium' | 'low';
@@ -36,6 +31,10 @@ export function buildPerformanceTipsPrompt(
   const totalProfit = performanceItems.reduce((sum, item) => sum + (item.gross_profit || 0), 0);
   const averageProfitMargin = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
 
+  const formatItem = (item: PerformanceItem) => {
+    const revenue = (item.selling_price || 0) * (item.number_sold || 0);
+    return `- ${item.name}: ${item.number_sold} sold, $${(item.gross_profit || 0).toFixed(2)} profit, ${revenue > 0 ? (((item.gross_profit || 0) / revenue) * 100).toFixed(1) : '0.0'}% margin`;
+  };
   const prompt = `You are a restaurant profitability consultant analyzing a menu's performance.
 
 **Current Performance Score:** ${performanceScore}/100
@@ -55,28 +54,16 @@ export function buildPerformanceTipsPrompt(
 - Burnt Toast (Low Profit + Low Popularity): ${burntToast.length} items (${((burntToast.length / totalItems) * 100).toFixed(1)}%)
 
 **Top Performers (Chef's Kiss):**
-${chefsKiss.slice(0, 5).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: ${item.number_sold} sold, $${(item.gross_profit || 0).toFixed(2)} profit, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${chefsKiss.slice(0, 5).map(formatItem).join('\n') || 'None'}
 
 **Hidden Opportunities (Hidden Gems):**
-${hiddenGems.slice(0, 5).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: ${item.number_sold} sold, $${(item.gross_profit || 0).toFixed(2)} profit, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${hiddenGems.slice(0, 5).map(formatItem).join('\n') || 'None'}
 
 **Pricing Issues (Bargain Buckets):**
-${bargainBuckets.slice(0, 5).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: ${item.number_sold} sold, $${(item.gross_profit || 0).toFixed(2)} profit, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${bargainBuckets.slice(0, 5).map(formatItem).join('\n') || 'None'}
 
 **Underperformers (Burnt Toast):**
-${burntToast.slice(0, 5).map(item => {
-  const revenue = (item.selling_price || 0) * (item.number_sold || 0);
-  return `- ${item.name}: ${item.number_sold} sold, $${(item.gross_profit || 0).toFixed(2)} profit, ${revenue > 0 ? ((item.gross_profit || 0) / revenue * 100).toFixed(1) : '0.0'}% margin`;
-}).join('\n') || 'None'}
+${burntToast.slice(0, 5).map(formatItem).join('\n') || 'None'}
 
 **Your Task:**
 Generate 3-7 actionable tips to improve the performance score. Each tip should have:
@@ -106,9 +93,6 @@ Be concise, professional, and kitchen-focused.`;
   return prompt;
 }
 
-/**
- * Parse AI response into PerformanceTip array
- */
 export function parsePerformanceTipsResponse(aiResponse: string): PerformanceTip[] {
   try {
     // Try to extract JSON from the response
@@ -125,7 +109,7 @@ export function parsePerformanceTipsResponse(aiResponse: string): PerformanceTip
       );
     }
   } catch (error) {
-    console.warn('Failed to parse AI performance tips:', error);
+    logger.warn('Failed to parse AI performance tips:', error);
   }
 
   // Fallback: return empty array

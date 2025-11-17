@@ -8,6 +8,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { Recipe } from '../types';
 import { useCallback, useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface RecipeEditDrawerProps {
   isOpen: boolean;
   recipe: Recipe | null;
@@ -15,12 +16,7 @@ interface RecipeEditDrawerProps {
   onRefresh?: () => Promise<void>;
 }
 
-export function RecipeEditDrawer({
-  isOpen,
-  recipe,
-  onClose,
-  onRefresh,
-}: RecipeEditDrawerProps) {
+export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeEditDrawerProps) {
   const { showWarning } = useNotification();
   const [editedName, setEditedName] = useState('');
   const [editedYield, setEditedYield] = useState(1);
@@ -79,7 +75,7 @@ export function RecipeEditDrawer({
         showWarning(error.message || 'Failed to save recipe');
       }
     } catch (err) {
-      console.error('Failed to save recipe:', err);
+      logger.error('Failed to save recipe:', err);
       showWarning('Failed to save recipe');
     } finally {
       setSaving(false);
@@ -128,9 +124,7 @@ export function RecipeEditDrawer({
     >
       <div className="space-y-6">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            Recipe Name *
-          </label>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Recipe Name *</label>
           <input
             type="text"
             required
@@ -155,9 +149,7 @@ export function RecipeEditDrawer({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            Yield Portions
-          </label>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Yield Portions</label>
           <input
             type="number"
             min="1"
@@ -168,9 +160,7 @@ export function RecipeEditDrawer({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            Instructions
-          </label>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Instructions</label>
           <textarea
             value={editedInstructions}
             onChange={e => setEditedInstructions(e.target.value)}

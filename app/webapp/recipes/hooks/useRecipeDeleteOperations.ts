@@ -4,6 +4,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback, useState } from 'react';
 import { Recipe } from '../types';
 
+import { logger } from '../../lib/logger';
 export function useRecipeDeleteOperations(
   fetchRecipes: () => Promise<void>,
   capitalizeRecipeName: (name: string) => string,
@@ -30,19 +31,19 @@ export function useRecipeDeleteOperations(
       optimisticallyUpdateRecipes(prev => prev.filter(r => r.id !== recipeIdToDelete));
 
       // Call API endpoint for deletion
-      console.log('[RecipeDelete] Attempting to delete recipe:', recipeIdToDelete);
+      logger.dev('[RecipeDelete] Attempting to delete recipe:', recipeIdToDelete);
       const response = await fetch(`/api/recipes/${recipeIdToDelete}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
 
       const result = await response.json();
-      console.log('[RecipeDelete] API response:', { status: response.status, result });
+      logger.dev('[RecipeDelete] API response:', { status: response.status, result });
 
       if (!response.ok) {
         rollbackRecipes();
         const errorMessage = result.message || result.error || 'Failed to delete recipe';
-        console.error('[RecipeDelete] Deletion failed:', errorMessage, result);
+        logger.error('[RecipeDelete] Deletion failed:', errorMessage, result);
         showErrorNotification(errorMessage);
         return;
       }

@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { RecipeIngredient } from '../types';
 import { useRecipeIngredientLoading } from './useRecipeIngredientLoading';
 
+import { logger } from '../../lib/logger';
 interface UseRecipeIngredientsProps {
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>;
   setCalculations: React.Dispatch<React.SetStateAction<any[]>>;
@@ -43,7 +44,7 @@ export function useRecipeIngredients({
         // and calculates COGS with all necessary data
         await loadExistingRecipeIngredients(recipeId);
       } catch (err) {
-        console.error('Failed to fetch recipe ingredients:', err);
+        logger.error('Failed to fetch recipe ingredients:', err);
         setError('Failed to fetch recipe ingredients');
       }
     },
@@ -72,7 +73,7 @@ export function useRecipeIngredients({
         return { exists: false, recipeId: null };
       }
     } catch (err) {
-      console.log('Error checking recipe:', err);
+      logger.dev('Error checking recipe:', err);
       return { exists: null, recipeId: null };
     }
   }, []);

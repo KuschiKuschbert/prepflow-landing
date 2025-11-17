@@ -3,6 +3,7 @@
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
 
+import { logger } from '../../lib/logger';
 interface UseIngredientDeleteProps<T extends { id: string }> {
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setError: (error: string) => void;
@@ -19,7 +20,7 @@ export function useIngredientDelete<T extends { id: string }>({
 
         if (error) {
           if (error.code === '42501' || error.message?.includes('row-level security')) {
-            console.warn('RLS policy blocked direct delete, falling back to API route');
+            logger.warn('RLS policy blocked direct delete, falling back to API route');
             const response = await fetch(`/api/ingredients?id=${encodeURIComponent(id)}`, {
               method: 'DELETE',
             });

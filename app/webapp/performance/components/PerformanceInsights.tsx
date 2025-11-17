@@ -2,7 +2,14 @@
 
 import { usePerformanceInsights } from '../hooks/usePerformanceInsights';
 import { PerformanceItem } from '../types';
-import { Lightbulb, TrendingUp, TrendingDown, AlertTriangle, Award, ArrowRight } from 'lucide-react';
+import {
+  Lightbulb,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  Award,
+  ArrowRight,
+} from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 
@@ -64,22 +71,32 @@ export default function PerformanceInsights({
   };
 
   return (
-    <div className="mb-3 space-y-2 tablet:mb-4 tablet:space-y-2.5 desktop:mb-6 desktop:space-y-3">
+    <div className="tablet:mb-4 tablet:space-y-2.5 desktop:mb-6 desktop:space-y-3 mb-3 space-y-2">
       <div className="flex items-center gap-2">
         <Icon icon={Lightbulb} size="md" className="text-[#29E7CD]" />
-        <h2 className="text-base font-semibold text-white" style={{ fontSize: 'clamp(0.875rem, 1.5vw + 0.5rem, 1rem)' }}>Performance Insights & Recommendations</h2>
+        <h2
+          className="text-base font-semibold text-white"
+          style={{ fontSize: 'clamp(0.875rem, 1.5vw + 0.5rem, 1rem)' }}
+        >
+          Performance Insights & Recommendations
+        </h2>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2">
+      <div className="tablet:grid-cols-2 grid grid-cols-1 gap-3">
         {insights.map(insight => (
           <div
             key={insight.id}
-            className={`rounded-xl border p-3 tablet:p-4 desktop:p-5 ${getInsightColor(insight.type)}`}
+            className={`tablet:p-4 desktop:p-5 rounded-xl border p-3 ${getInsightColor(insight.type)}`}
           >
             <div className="mb-3 flex items-start gap-2">
               {getInsightIcon(insight.type)}
               <div className="flex-1">
-                <h3 className="mb-1.5 text-sm font-semibold text-white" style={{ fontSize: 'clamp(0.75rem, 1vw + 0.5rem, 0.875rem)' }}>{insight.title}</h3>
+                <h3
+                  className="mb-1.5 text-sm font-semibold text-white"
+                  style={{ fontSize: 'clamp(0.75rem, 1vw + 0.5rem, 0.875rem)' }}
+                >
+                  {insight.title}
+                </h3>
                 <p className="text-xs text-gray-300">{insight.message}</p>
               </div>
             </div>
@@ -104,7 +121,11 @@ export default function PerformanceInsights({
                       className="group flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-2.5 py-1 text-xs text-gray-300 transition-colors hover:border-[#29E7CD]/50 hover:text-[#29E7CD]"
                     >
                       <span>{item.name}</span>
-                      <Icon icon={ArrowRight} size="xs" className="opacity-0 transition-opacity group-hover:opacity-100" />
+                      <Icon
+                        icon={ArrowRight}
+                        size="xs"
+                        className="opacity-0 transition-opacity group-hover:opacity-100"
+                      />
                     </Link>
                   ))}
                   {insight.items.length > 5 && (

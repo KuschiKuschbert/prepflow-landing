@@ -11,7 +11,7 @@ import { buildOptimisticUpdates } from './utils/buildOptimisticUpdates';
 import { buildRecipeManagementReturn } from './utils/buildRecipeManagementReturn';
 import { fetchRecipesWithErrorHandling } from './utils/fetchRecipesWithErrorHandling';
 import { handleEditRecipe as handleEditRecipeUtil } from './utils/handleEditRecipe';
-import { setupRecipeSubscriptions } from './utils/setupRecipeSubscriptions';
+import { useSetupRecipeSubscriptions } from './utils/setupRecipeSubscriptions';
 import { useRecipeInitialization } from './utils/useRecipeInitialization';
 
 export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => void) {
@@ -52,8 +52,7 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
     (recipe: Recipe) => handleEditRecipeUtil(recipe, fetchRecipeIngredients, setError, router),
     [fetchRecipeIngredients, router, setError],
   );
-  // Unified subscription for all recipe-related changes
-  setupRecipeSubscriptions({
+  useSetupRecipeSubscriptions({
     recipes,
     refreshRecipePrices,
     fetchRecipeIngredients,
@@ -61,8 +60,6 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
     onIngredientsChange,
     fetchRecipes,
   });
-
-  // Initialize recipes from cache and pre-calculate prices
   useRecipeInitialization({
     setRecipes,
     setIsHydrated,

@@ -40,3 +40,6 @@ temp/.next/
 .next/**
 .next/cache/
 .vercel
+
+# Cleanup reports
+cleanup-reports/

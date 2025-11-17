@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { generateLegacyTemperatureLogs } from '@/lib/generate-legacy-temperature-logs';
 
+import { logger } from '../../lib/logger';
 /**
  * @deprecated This endpoint is deprecated. Temperature logs are now automatically
  * generated as part of the populate-clean-test-data endpoint with regional standards.
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('🌡️ Starting temperature log generation...');
+    logger.dev('🌡️ Starting temperature log generation...');
 
     // First, check if equipment exists
     let { data: equipment, error: equipmentError } = await supabaseAdmin
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
       .eq('is_active', true);
 
     if (equipmentError) {
-      console.error('Error fetching equipment:', equipmentError);
+      logger.error('Error fetching equipment:', equipmentError);
       return NextResponse.json(
         {
           error: 'Failed to fetch equipment',
@@ -39,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     // If no equipment exists, create 5 sample equipment items
     if (!equipment || equipment.length === 0) {
-      console.log('No equipment found. Creating 5 sample equipment items...');
+      logger.dev('No equipment found. Creating 5 sample equipment items...');
       const sampleEquipment = [
         {
           name: 'Main Refrigerator',
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest) {
         .select();
 
       if (insertError) {
-        console.error('Error creating sample equipment:', insertError);
+        logger.error('Error creating sample equipment:', insertError);
         return NextResponse.json(
           {
             error: 'Failed to create sample equipment',
@@ -99,11 +100,11 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log(`✅ Created ${insertedEquipment.length} sample equipment items`);
+      logger.dev(`✅ Created ${insertedEquipment.length} sample equipment items`);
       equipment = insertedEquipment;
     }
 
-    console.log(`📊 Found ${equipment.length} active equipment items`);
+    logger.dev(`📊 Found ${equipment.length} active equipment items`);
 
     // Generate data for the last 3 months
     const endDate = new Date();
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
     startDate.setMonth(startDate.getMonth() - 3);
 
     const temperatureLogs = generateLegacyTemperatureLogs(equipment, startDate, endDate);
-    console.log(`📝 Generated ${temperatureLogs.length} temperature log entries`);
+    logger.dev(`📝 Generated ${temperatureLogs.length} temperature log entries`);
 
     // Insert logs in batches to avoid overwhelming the database
     const batchSize = 100;
@@ -123,7 +124,7 @@ export async function POST(request: NextRequest) {
       const { error: insertError } = await supabaseAdmin.from('temperature_logs').insert(batch);
 
       if (insertError) {
-        console.error('Error inserting batch:', insertError);
+        logger.error('Error inserting batch:', insertError);
         return NextResponse.json(
           {
             error: 'Failed to insert temperature logs',
@@ -135,12 +136,12 @@ export async function POST(request: NextRequest) {
       }
 
       insertedCount += batch.length;
-      console.log(
+      logger.dev(
         `✅ Inserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(temperatureLogs.length / batchSize)} (${insertedCount}/${temperatureLogs.length} logs)`,
       );
     }
 
-    console.log(`🎉 Successfully generated ${insertedCount} temperature log entries`);
+    logger.dev(`🎉 Successfully generated ${insertedCount} temperature log entries`);
 
     return NextResponse.json({
       success: true,
@@ -167,7 +168,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error generating temperature logs:', error);
+    logger.error('Error generating temperature logs:', error);
     return NextResponse.json(
       {
         error: 'Failed to generate temperature logs',

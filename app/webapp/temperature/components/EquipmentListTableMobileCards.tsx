@@ -45,7 +45,7 @@ export function EquipmentListTableMobileCards({
   formatDate,
 }: EquipmentListTableMobileCardsProps) {
   return (
-    <div className="block space-y-4 large-desktop:hidden">
+    <div className="large-desktop:hidden block space-y-4">
       {paginatedEquipment.map(item => (
         <div
           key={item.id}

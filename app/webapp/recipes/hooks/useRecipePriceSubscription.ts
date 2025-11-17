@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { Recipe } from '../types';
 import { RecipeIngredientWithDetails } from '../types';
 
+import { logger } from '../../lib/logger';
 export function useRecipePriceSubscription(
   recipes: Recipe[],
   refreshRecipePrices: (
@@ -35,7 +36,7 @@ export function useRecipePriceSubscription(
           filter: 'cost_per_unit=neq.null',
         },
         payload => {
-          console.log('Ingredient price changed:', payload);
+          logger.dev('Ingredient price changed:', payload);
           refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients);
         },
       )

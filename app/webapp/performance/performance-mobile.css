@@ -2,7 +2,7 @@
 
 /* Mobile-first responsive design */
 .performance-container {
-  @apply p-4 tablet:p-6;
+  @apply tablet:p-6 p-4;
 }
 
 /* Mobile Card Layout Optimizations */
@@ -95,7 +95,7 @@
   }
 
   .performance-action-button-desktop-text {
-    @apply hidden tablet:inline;
+    @apply tablet:inline hidden;
   }
 }
 

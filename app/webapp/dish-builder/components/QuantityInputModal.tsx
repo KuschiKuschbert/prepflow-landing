@@ -74,7 +74,7 @@ export function QuantityInputModal({
 
       {/* Dialog */}
       <div
-        className="relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 desktop:p-6 shadow-2xl"
+        className="desktop:p-6 relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
@@ -83,16 +83,14 @@ export function QuantityInputModal({
       >
         {/* Icon */}
         <div className="mb-4 flex justify-center">
-          <Icon
-            icon={Package}
-            size="lg"
-            className="text-[#29E7CD]"
-            aria-hidden={true}
-          />
+          <Icon icon={Package} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
         </div>
 
         {/* Title */}
-        <h2 id="dialog-title" className="mb-2 text-center text-lg desktop:text-xl font-bold text-white">
+        <h2
+          id="dialog-title"
+          className="desktop:text-xl mb-2 text-center text-lg font-bold text-white"
+        >
           Add Ingredient
         </h2>
 
@@ -103,9 +101,7 @@ export function QuantityInputModal({
 
         {/* Quantity Input */}
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            Quantity
-          </label>
+          <label className="mb-2 block text-sm font-medium text-gray-300">Quantity</label>
           <div className="flex items-center gap-3">
             <input
               ref={inputRef}
@@ -113,14 +109,14 @@ export function QuantityInputModal({
               step="0.01"
               min="0.01"
               value={quantity}
-              onChange={(e) => {
+              onChange={e => {
                 setQuantity(e.target.value);
                 setError(null); // Clear error on input change
               }}
               placeholder="0.00"
               className={`flex-1 rounded-2xl border ${
                 error ? 'border-red-500' : 'border-[#2a2a2a]'
-              } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:outline-none focus:ring-2 focus:ring-[#29E7CD]/20`}
+              } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none`}
               aria-invalid={error ? 'true' : 'false'}
               aria-describedby={error ? 'error-message' : undefined}
             />

@@ -6,6 +6,8 @@
 
 import OpenAI from 'openai';
 
+import { logger } from '@/lib/logger';
+
 let openaiClient: OpenAI | null = null;
 
 export function getOpenAIClient(): OpenAI | null {
@@ -16,7 +18,7 @@ export function getOpenAIClient(): OpenAI | null {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    console.warn('⚠️ OpenAI API key not found. AI features will be disabled.');
+    logger.warn('⚠️ OpenAI API key not found. AI features will be disabled.');
     return null;
   }
 
@@ -32,16 +34,14 @@ export function getOpenAIClient(): OpenAI | null {
     });
     return openaiClient;
   } catch (error) {
-    console.error('❌ Failed to initialize OpenAI client:', error);
+    logger.error('❌ Failed to initialize OpenAI client:', error);
     return null;
   }
 }
 
 export function isAIEnabled(): boolean {
   return (
-    process.env.AI_ENABLED !== 'false' &&
-    !!process.env.OPENAI_API_KEY &&
-    getOpenAIClient() !== null
+    process.env.AI_ENABLED !== 'false' && !!process.env.OPENAI_API_KEY && getOpenAIClient() !== null
   );
 }
 

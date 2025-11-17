@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { logger } from '../../lib/logger';
 /**
  * Generate 5 sample temperature log entries for each active equipment
  * Spreads entries randomly across the last 2 weeks (14 days) for better analytics visualization
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('🌡️ Generating 5 sample temperature logs per equipment...');
+    logger.dev('🌡️ Generating 5 sample temperature logs per equipment...');
 
     // Fetch all active equipment
     const { data: equipment, error: equipmentError } = await supabaseAdmin
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       .eq('is_active', true);
 
     if (equipmentError) {
-      console.error('Error fetching equipment:', equipmentError);
+      logger.error('Error fetching equipment:', equipmentError);
       return NextResponse.json(
         {
           error: 'Failed to fetch equipment',
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`📊 Found ${equipment.length} active equipment items`);
+    logger.dev(`📊 Found ${equipment.length} active equipment items`);
 
     // Generate 5 entries per equipment, randomly spread across the last 2 weeks (14 days)
     const logs: any[] = [];
@@ -114,13 +115,13 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    console.log(`📝 Generated ${logs.length} temperature log entries`);
+    logger.dev(`📝 Generated ${logs.length} temperature log entries`);
 
     // Insert logs in a single batch
     const { error: insertError } = await supabaseAdmin.from('temperature_logs').insert(logs);
 
     if (insertError) {
-      console.error('Error inserting logs:', insertError);
+      logger.error('Error inserting logs:', insertError);
       return NextResponse.json(
         {
           error: 'Failed to insert temperature logs',
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`🎉 Successfully generated ${logs.length} temperature log entries`);
+    logger.dev(`🎉 Successfully generated ${logs.length} temperature log entries`);
 
     return NextResponse.json({
       success: true,
@@ -142,7 +143,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error generating temperature logs:', error);
+    logger.error('Error generating temperature logs:', error);
     return NextResponse.json(
       {
         error: 'Failed to generate temperature logs',

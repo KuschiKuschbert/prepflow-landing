@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Recipe } from '../types';
 
+import { logger } from '../../lib/logger';
 interface UseRecipeMetadataSubscriptionProps {
   recipes: Recipe[];
   onRecipeUpdated: (recipeId: string) => void;
@@ -39,12 +40,12 @@ export function useRecipeMetadataSubscription({
         payload => {
           const recipeId =
             (payload.new as { id?: string })?.id || (payload.old as { id?: string })?.id;
-          console.log('[RecipeMetadataSubscription] Recipe updated:', {
+          logger.dev('[RecipeMetadataSubscription] Recipe updated:', {
             recipeId,
             changes: payload.new,
           });
           if (!recipeId) {
-            console.warn('[RecipeMetadataSubscription] No recipe ID in payload', payload);
+            logger.warn('[RecipeMetadataSubscription] No recipe ID in payload', payload);
             return;
           }
           // Check if yield or yield_unit changed
@@ -54,7 +55,7 @@ export function useRecipeMetadataSubscription({
           const newYieldUnit = (payload.new as { yield_unit?: string })?.yield_unit;
           const yieldChanged = oldYield !== newYield || oldYieldUnit !== newYieldUnit;
           if (yieldChanged) {
-            console.log('[RecipeMetadataSubscription] Yield changed, refreshing recipes');
+            logger.dev('[RecipeMetadataSubscription] Yield changed, refreshing recipes');
             // Add to pending set for debouncing
             pendingRecipeIdsRef.current.add(recipeId);
             // Debounce rapid-fire events
@@ -64,10 +65,10 @@ export function useRecipeMetadataSubscription({
             debounceTimerRef.current = setTimeout(() => {
               const recipeIdsToRefresh = Array.from(pendingRecipeIdsRef.current);
               pendingRecipeIdsRef.current.clear();
-              console.log('[RecipeMetadataSubscription] Debounced refresh:', recipeIdsToRefresh);
+              logger.dev('[RecipeMetadataSubscription] Debounced refresh:', recipeIdsToRefresh);
               // Refresh recipes list
               fetchRecipes().catch(err => {
-                console.error('[RecipeMetadataSubscription] Failed to refresh recipes:', err);
+                logger.error('[RecipeMetadataSubscription] Failed to refresh recipes:', err);
               });
               // Call onRecipeUpdated for each recipe that changed
               recipeIdsToRefresh.forEach(id => onRecipeUpdated(id));

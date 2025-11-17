@@ -4,6 +4,8 @@
 
 import { createSupabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '@/lib/logger';
+
 export interface PopulateResults {
   cleaned: number;
   populated: Array<{ table: string; count: number }>;
@@ -60,29 +62,29 @@ export async function cleanExistingData(
           error.message?.includes('invalid input syntax') ||
           error.message?.includes('uuid'))
       ) {
-        console.log(`Table ${table} appears to use integer IDs, trying integer filter...`);
+        logger.dev(`Table ${table} appears to use integer IDs, trying integer filter...`);
         const { error: error2 } = await supabaseAdmin.from(table).delete().gte('id', 0); // Fallback for integer IDs
         if (!error2) {
           cleaned++;
-          console.log(`✅ Cleaned table ${table} (integer IDs)`);
+          logger.dev(`✅ Cleaned table ${table} (integer IDs)`);
         } else {
-          console.warn(`❌ Error cleaning table ${table} (both methods failed):`, error2);
+          logger.warn(`❌ Error cleaning table ${table} (both methods failed):`, error2);
         }
       } else if (!error) {
         cleaned++;
-        console.log(`✅ Cleaned table ${table} (UUID IDs)`);
+        logger.dev(`✅ Cleaned table ${table} (UUID IDs)`);
       } else {
-        console.warn(`❌ Error cleaning table ${table}:`, error);
+        logger.warn(`❌ Error cleaning table ${table}:`, error);
         // Try one more fallback: delete without filter if table is empty-safe
         if (error.message?.includes('must have at least one')) {
-          console.warn(`Table ${table} requires a filter, but all filters failed. Skipping.`);
+          logger.warn(`Table ${table} requires a filter, but all filters failed. Skipping.`);
         }
       }
     } catch (err) {
       // Table might not exist, continue
-      console.warn(`⚠️ Table ${table} might not exist or error occurred, continuing...`, err);
+      logger.warn(`⚠️ Table ${table} might not exist or error occurred, continuing...`, err);
     }
   }
-  console.log(`🧹 Cleanup complete: ${cleaned} of ${tablesToClean.length} tables cleaned`);
+  logger.dev(`🧹 Cleanup complete: ${cleaned} of ${tablesToClean.length} tables cleaned`);
   return cleaned;
 }

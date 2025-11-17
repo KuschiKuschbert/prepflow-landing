@@ -8,7 +8,13 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
 
   // Always recalculate from pack data (source of truth) to ensure accuracy
   let costPerWorkingUnit = 0;
-  if (formData.pack_price && formData.pack_price > 0 && formData.pack_size && formData.pack_size_unit && formData.unit) {
+  if (
+    formData.pack_price &&
+    formData.pack_price > 0 &&
+    formData.pack_size &&
+    formData.pack_size_unit &&
+    formData.unit
+  ) {
     const packSize = parseFloat(String(formData.pack_size));
     if (packSize > 0) {
       costPerWorkingUnit = calculateCostPerUnit(
@@ -22,12 +28,10 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
 
   const yieldPercent = formData.yield_percentage || 100;
   // Calculate adjusted cost from recalculated cost_per_unit and yield
-  const adjustedCost = costPerWorkingUnit > 0
-    ? costPerWorkingUnit / (yieldPercent / 100)
-    : 0;
+  const adjustedCost = costPerWorkingUnit > 0 ? costPerWorkingUnit / (yieldPercent / 100) : 0;
 
   return (
-    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 large-desktop:grid-cols-4">
+    <div className="tablet:grid-cols-2 large-desktop:grid-cols-4 grid grid-cols-1 gap-3">
       {/* Ingredient Name */}
       <div>
         <div className="mb-1 text-xs text-gray-400">Name</div>

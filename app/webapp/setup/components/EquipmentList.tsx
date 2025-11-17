@@ -87,7 +87,7 @@ export function EquipmentList({
           )}
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2 large-desktop:grid-cols-3">
+      <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-4">
         {(showAll ? equipment : equipment.slice(0, 6)).map(eq => (
           <div key={eq.id} className="rounded-2xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
             <div className="mb-3 flex items-start justify-between">

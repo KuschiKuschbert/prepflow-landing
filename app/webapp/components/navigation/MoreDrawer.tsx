@@ -29,15 +29,18 @@ export function MoreDrawer({ isOpen, onClose, onOpen, onSearchClick }: MoreDrawe
   const userName = session?.user?.name || userEmail?.split('@')[0];
 
   // Swipe-up gesture to open drawer from peek
-  const { onTouchStart: peekTouchStart, onTouchMove: peekTouchMove, onTouchEnd: peekTouchEnd } =
-    useSwipeGesture({
-      onSwipeUp: () => {
-        if (onOpen) {
-          onOpen();
-        }
-      },
-      threshold: 30, // Lower threshold for peek area
-    });
+  const {
+    onTouchStart: peekTouchStart,
+    onTouchMove: peekTouchMove,
+    onTouchEnd: peekTouchEnd,
+  } = useSwipeGesture({
+    onSwipeUp: () => {
+      if (onOpen) {
+        onOpen();
+      }
+    },
+    threshold: 30, // Lower threshold for peek area
+  });
 
   // Swipe gesture hook
   const {
@@ -122,7 +125,7 @@ export function MoreDrawer({ isOpen, onClose, onOpen, onSearchClick }: MoreDrawe
         {/* Peek handle with visual indicator */}
         <div className="mx-auto h-1 w-12 rounded-full bg-gradient-to-r from-[#29E7CD]/50 via-[#2a2a2a] to-[#D925C7]/50" />
         <div className="absolute inset-x-0 top-2 flex justify-center">
-          <div className="h-6 w-32 rounded-t-2xl border-t border-x border-[#2a2a2a]/30 bg-[#1f1f1f]/50 backdrop-blur-sm" />
+          <div className="h-6 w-32 rounded-t-2xl border-x border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/50 backdrop-blur-sm" />
         </div>
       </div>
     );

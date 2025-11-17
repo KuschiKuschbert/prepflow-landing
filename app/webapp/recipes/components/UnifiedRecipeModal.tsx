@@ -132,7 +132,7 @@ export function UnifiedRecipeModal({
       window.removeEventListener('keydown', handleKeyDown);
       previousActiveElement.current?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, onEditRecipe, recipe]);
 
   if (!isOpen || !recipe) return null;
 

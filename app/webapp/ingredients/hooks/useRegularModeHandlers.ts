@@ -39,7 +39,14 @@ export function useRegularModeHandlers({
         }
       });
     },
-    [ingredientId, selectedIngredients, onSelectIngredient, onEnterSelectionMode, recordTouchStart, startLongPressTimer],
+    [
+      ingredientId,
+      selectedIngredients,
+      onSelectIngredient,
+      onEnterSelectionMode,
+      recordTouchStart,
+      startLongPressTimer,
+    ],
   );
 
   const handleTouchMove = useCallback(

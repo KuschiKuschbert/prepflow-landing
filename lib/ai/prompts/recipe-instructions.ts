@@ -18,7 +18,7 @@ export function buildRecipeInstructionsPrompt(
     .join('\n');
 
   const totalCost = ingredients.reduce(
-    (sum, ri) => sum + (ri.quantity * (ri.ingredients.cost_per_unit || 0)),
+    (sum, ri) => sum + ri.quantity * (ri.ingredients.cost_per_unit || 0),
     0,
   );
 

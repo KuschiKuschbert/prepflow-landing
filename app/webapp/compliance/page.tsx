@@ -8,6 +8,7 @@ import { ComplianceRecordsList } from './components/ComplianceRecordsList';
 import { ComplianceTypeForm } from './components/ComplianceTypeForm';
 import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { logger } from '../../lib/logger';
 import {
   ComplianceRecord,
   ComplianceRecordFormData,
@@ -53,7 +54,7 @@ export default function ComplianceTrackingPage() {
         setTypes(data.data);
       }
     } catch (error) {
-      console.error('Error fetching types:', error);
+      logger.error('Error fetching types:', error);
     }
   }, []);
 
@@ -71,7 +72,7 @@ export default function ComplianceTrackingPage() {
         setRecords(data.data);
       }
     } catch (error) {
-      console.error('Error fetching records:', error);
+      logger.error('Error fetching records:', error);
     } finally {
       setLoading(false);
     }
@@ -111,7 +112,7 @@ export default function ComplianceTrackingPage() {
         setShowAddRecord(false);
       }
     } catch (error) {
-      console.error('Error adding record:', error);
+      logger.error('Error adding record:', error);
     }
   };
 
@@ -135,14 +136,14 @@ export default function ComplianceTrackingPage() {
         setShowAddType(false);
       }
     } catch (error) {
-      console.error('Error adding type:', error);
+      logger.error('Error adding type:', error);
     }
   };
 
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-[#0a0a0a] py-4 tablet:py-6">
+        <div className="tablet:py-6 min-h-screen bg-[#0a0a0a] py-4">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="adaptive-grid mt-8">
             <LoadingSkeleton variant="card" count={4} height="120px" />
@@ -154,7 +155,7 @@ export default function ComplianceTrackingPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+      <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
@@ -199,8 +200,8 @@ export default function ComplianceTrackingPage() {
         {activeTab === 'records' && (
           <div className="space-y-6">
             {/* Filters and Add Button */}
-            <div className="flex flex-col items-start justify-between gap-4 tablet:flex-row tablet:items-center">
-              <div className="flex flex-col gap-4 tablet:flex-row">
+            <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
+              <div className="tablet:flex-row flex flex-col gap-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-gray-300">
                     {t('compliance.filterType', 'Filter by Type')}

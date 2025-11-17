@@ -20,7 +20,7 @@ function prefersReducedMotion(): boolean {
 }
 
 export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
-  options: UseScrollAnimationOptions = {}
+  options: UseScrollAnimationOptions = {},
 ) {
   const { threshold = 0.05, triggerOnce = true, delay = 0, duration = 600 } = options;
   const [ref, isIntersecting] = useIntersectionObserver<T>({

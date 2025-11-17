@@ -1,6 +1,7 @@
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface RecipeReadinessData {
   completeRecipes: number;
   incompleteRecipes: number;
@@ -49,7 +50,7 @@ export function useRecipeReadiness() {
           throw new Error(result.message || 'Invalid response format');
         }
       } catch (err) {
-        console.error('Error fetching recipe readiness:', err);
+        logger.error('Error fetching recipe readiness:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch recipe readiness');
       } finally {
         setLoading(false);

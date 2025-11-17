@@ -97,7 +97,7 @@ export function RecipeTableRow({
           !isSelectionMode ? 'cursor-pointer' : ''
         } ${
           isHighlighting
-            ? 'border-l-4 border-[#29E7CD] bg-[#29E7CD]/10 animate-[highlightPulse_0.5s_ease-in-out]'
+            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[#29E7CD] bg-[#29E7CD]/10'
             : ''
         }`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
@@ -115,8 +115,7 @@ export function RecipeTableRow({
               {recipe.yield > 1 && (
                 <span className="ml-1 text-xs font-normal text-gray-400">
                   /portion ($
-                  {(recipePrice.recommendedPrice * recipe.yield).toFixed(2)}{' '}
-                  total)
+                  {(recipePrice.recommendedPrice * recipe.yield).toFixed(2)} total)
                 </span>
               )}
             </span>
@@ -132,7 +131,7 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 desktop:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
@@ -149,7 +148,7 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 desktop:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
@@ -166,7 +165,7 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 desktop:table-cell ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {formatRecipeDate(recipe.created_at)}

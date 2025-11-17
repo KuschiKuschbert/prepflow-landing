@@ -42,7 +42,15 @@ const metrics: Metric[] = [
   },
 ];
 
-function AnimatedCounter({ value, suffix, color }: { value: number; suffix: string; color: string }) {
+function AnimatedCounter({
+  value,
+  suffix,
+  color,
+}: {
+  value: number;
+  suffix: string;
+  color: string;
+}) {
   const [count, setCount] = useState(0);
   const [ref, isIntersecting] = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.5,
@@ -75,7 +83,7 @@ function AnimatedCounter({ value, suffix, color }: { value: number; suffix: stri
   return (
     <div ref={ref} className="text-center">
       <div
-        className="text-fluid-4xl font-bold tablet:text-fluid-4xl desktop:text-fluid-4xl"
+        className="text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold"
         style={{ color }}
       >
         {count}
@@ -87,18 +95,18 @@ function AnimatedCounter({ value, suffix, color }: { value: number; suffix: stri
 
 export default function Performance() {
   return (
-    <section className="relative bg-transparent py-16 tablet:py-20">
+    <section className="tablet:py-20 relative bg-transparent py-16">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-fluid-4xl font-bold tracking-tight text-white tablet:text-fluid-4xl desktop:text-fluid-4xl">
+          <h2 className="text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold tracking-tight text-white">
             Performance
           </h2>
-          <p className="mt-4 text-fluid-xl text-gray-400">Happily ever faster.</p>
+          <p className="text-fluid-xl mt-4 text-gray-400">Happily ever faster.</p>
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-4">
+        <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid gap-8">
           {metrics.map((metric, index) => (
             <div
               key={metric.label}
@@ -108,30 +116,30 @@ export default function Performance() {
               <AnimatedCounter value={metric.value} suffix={metric.suffix} color={metric.color} />
 
               {/* Label */}
-              <h3 className="mt-4 text-fluid-xl font-semibold text-white">{metric.label}</h3>
+              <h3 className="text-fluid-xl mt-4 font-semibold text-white">{metric.label}</h3>
 
               {/* Description */}
-              <p className="mt-2 text-fluid-sm text-gray-400">{metric.description}</p>
+              <p className="text-fluid-sm mt-2 text-gray-400">{metric.description}</p>
             </div>
           ))}
         </div>
 
         {/* Performance Comparison */}
-          <div className="mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8 tablet:p-12">
+        <div className="tablet:p-12 mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8">
           <div className="text-center">
-            <h3 className="text-fluid-2xl font-bold text-white tablet:text-fluid-3xl">
+            <h3 className="text-fluid-2xl tablet:text-fluid-3xl font-bold text-white">
               Stop fighting with Excel at 2 AM
             </h3>
-            <p className="mt-4 text-fluid-lg text-gray-400">
+            <p className="text-fluid-lg mt-4 text-gray-400">
               PrepFlow calculates COGS, analyzes menu performance, and tracks compliance—all in one
               place. No more spreadsheets, no more guesswork, no more late-night formula errors.
             </p>
           </div>
 
           {/* Before/After Comparison */}
-          <div className="mt-12 grid gap-8 desktop:grid-cols-2">
+          <div className="desktop:grid-cols-2 mt-12 grid gap-8">
             <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6">
-              <h4 className="mb-4 text-fluid-xl font-semibold text-red-400">Before PrepFlow</h4>
+              <h4 className="text-fluid-xl mb-4 font-semibold text-red-400">Before PrepFlow</h4>
               <ul className="space-y-2 text-gray-300">
                 <li>• Manual Excel calculations</li>
                 <li>• Hours of data entry</li>
@@ -142,7 +150,7 @@ export default function Performance() {
             </div>
 
             <div className="rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/10 p-6">
-              <h4 className="mb-4 text-fluid-xl font-semibold text-[#29E7CD]">With PrepFlow</h4>
+              <h4 className="text-fluid-xl mb-4 font-semibold text-[#29E7CD]">With PrepFlow</h4>
               <ul className="space-y-2 text-gray-300">
                 <li>• Automatic COGS calculations</li>
                 <li>• Real-time inventory tracking</li>

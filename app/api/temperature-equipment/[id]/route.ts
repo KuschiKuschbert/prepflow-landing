@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -25,7 +26,7 @@ export async function DELETE(
     const { error } = await supabaseAdmin.from('temperature_equipment').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting temperature equipment:', error);
+      logger.error('Error deleting temperature equipment:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to delete temperature equipment' },
         { status: 500 },
@@ -34,7 +35,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Server error:', error);
+    logger.error('Server error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }

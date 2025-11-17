@@ -20,6 +20,9 @@ export function useDrawerAutoClose({
       return;
     }
 
+    // Capture ref value at effect start for cleanup
+    const timeoutIdRef = scrollTimeoutRef;
+
     // Detect upward scroll gesture when at top (wheel events for desktop)
     // Touch events are handled by useDrawerSwipe hook to avoid conflicts
     const handleWheel = (e: WheelEvent) => {
@@ -28,8 +31,8 @@ export function useDrawerAutoClose({
 
       // User is scrolling up while at top - close drawer immediately
       if (isAtTop && e.deltaY < 0) {
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
+        if (timeoutIdRef.current) {
+          clearTimeout(timeoutIdRef.current);
         }
         onClose();
       }
@@ -48,8 +51,9 @@ export function useDrawerAutoClose({
     return () => {
       content.removeEventListener('wheel', handleWheel);
       content.removeEventListener('scroll', handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
+      // Use captured ref value for cleanup
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
       }
     };
   }, [isOpen, contentRef, onClose]);

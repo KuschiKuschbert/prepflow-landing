@@ -58,7 +58,7 @@ export default function SimpleTemperatureChart({
   }
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg tablet:p-6">
+    <div className="tablet:p-6 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
       <div
         ref={chartContainerRef}
         className="relative w-full"

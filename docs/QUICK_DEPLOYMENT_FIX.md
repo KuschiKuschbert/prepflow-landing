@@ -13,6 +13,7 @@ Go to: https://github.com/KuschiKuschbert/prepflow-landing/actions
 - [ ] Are there any error messages in the logs?
 
 **If workflows aren't running:**
+
 - Check if `.github/workflows/ci-cd.yml` exists
 - Verify you're pushing to `main` branch (not `master` or other branches)
 
@@ -47,6 +48,7 @@ Go to: https://vercel.com/dashboard → Your Project → Settings → Git
 - [ ] Production branch: `main`
 
 **If not connected:**
+
 - Click "Connect Git Repository"
 - Select GitHub → Authorize → Select repo
 - Enable "Auto-deploy"
@@ -101,6 +103,3 @@ For comprehensive troubleshooting, see: `docs/VERCEL_DEPLOYMENT_DIAGNOSTICS.md`
 **Most Common Issue**: Missing GitHub Secrets (`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`)
 
 **Quickest Fix**: Enable Vercel Auto-Deploy in dashboard
-
-
-

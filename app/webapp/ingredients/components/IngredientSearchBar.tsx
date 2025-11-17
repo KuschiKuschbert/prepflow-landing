@@ -12,7 +12,7 @@ export function IngredientSearchBar({
   onClear,
 }: IngredientSearchBarProps) {
   return (
-    <div className="relative flex-1 min-w-0">
+    <div className="relative min-w-0 flex-1">
       <div className="absolute top-1/2 left-2.5 -translate-y-1/2 text-gray-400">
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path

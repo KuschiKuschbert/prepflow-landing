@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { flushSync } from 'react-dom';
 
+import { logger } from '../../lib/logger';
 interface UseIngredientEditingProps {
   updateCalculation: (ingredientId: string, newQuantity: number) => void;
   removeCalculation: (ingredientId: string) => void;
@@ -37,22 +38,22 @@ export function useIngredientEditing({
 
   const handleRemoveIngredient = useCallback(
     async (ingredientId: string) => {
-      console.log('[useIngredientEditing] Removing ingredient:', ingredientId);
+      logger.dev('[useIngredientEditing] Removing ingredient:', ingredientId);
       // Use flushSync to ensure state update is committed synchronously before async save
       flushSync(() => {
         removeCalculation(ingredientId);
       });
-      console.log('[useIngredientEditing] State updated, triggering save');
+      logger.dev('[useIngredientEditing] State updated, triggering save');
       // Trigger immediate save to persist removal before any potential reload
       if (saveNow) {
         try {
           await saveNow();
-          console.log('[useIngredientEditing] Save completed successfully');
+          logger.dev('[useIngredientEditing] Save completed successfully');
         } catch (err) {
-          console.error('[useIngredientEditing] Failed to save after removal:', err);
+          logger.error('[useIngredientEditing] Failed to save after removal:', err);
         }
       } else {
-        console.warn('[useIngredientEditing] saveNow not available');
+        logger.warn('[useIngredientEditing] saveNow not available');
       }
     },
     [removeCalculation, saveNow],

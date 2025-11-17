@@ -5,6 +5,7 @@ import { formatSupplierName } from '@/lib/text-utils';
 import { ChevronDown, Plus, Store } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface Supplier {
   id: number;
   supplier_name?: string;
@@ -42,7 +43,7 @@ export function SupplierCombobox({
           setSupplierList(data.data);
         }
       } catch (error) {
-        console.error('Failed to fetch suppliers:', error);
+        logger.error('Failed to fetch suppliers:', error);
       }
     };
     fetchSuppliers();
@@ -71,7 +72,15 @@ export function SupplierCombobox({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      const maxIndex = filteredSuppliers.length + (searchQuery.trim() && !filteredSuppliers.some(s => (s.supplier_name || s.name || '').toLowerCase() === searchQuery.toLowerCase()) ? 1 : 0) - 1;
+      const maxIndex =
+        filteredSuppliers.length +
+        (searchQuery.trim() &&
+        !filteredSuppliers.some(
+          s => (s.supplier_name || s.name || '').toLowerCase() === searchQuery.toLowerCase(),
+        )
+          ? 1
+          : 0) -
+        1;
       setHighlightedIndex(prev => (prev < maxIndex ? prev + 1 : prev));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -123,14 +132,18 @@ export function SupplierCombobox({
         setSearchQuery('');
         setHighlightedIndex(-1);
       } catch (error) {
-        console.error('Failed to add supplier:', error);
+        logger.error('Failed to add supplier:', error);
       }
     } else {
       handleSelect(supplierName);
     }
   };
 
-  const showAddNewOption = searchQuery.trim() && !filteredSuppliers.some(s => (s.supplier_name || s.name || '').toLowerCase() === searchQuery.toLowerCase());
+  const showAddNewOption =
+    searchQuery.trim() &&
+    !filteredSuppliers.some(
+      s => (s.supplier_name || s.name || '').toLowerCase() === searchQuery.toLowerCase(),
+    );
 
   return (
     <div ref={comboboxRef} className={`relative ${className}`}>
@@ -205,4 +218,3 @@ export function SupplierCombobox({
     </div>
   );
 }
-

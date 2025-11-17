@@ -4,9 +4,11 @@ import { HelpTooltip } from '@/components/ui/HelpTooltip';
 
 export function PerformanceClassificationLegend() {
   return (
-    <div className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 p-3 tablet:p-4 desktop:p-6">
-      <div className="mb-1.5 flex items-center gap-2 tablet:mb-2">
-        <h3 className="text-xs font-semibold text-white tablet:text-sm">Menu Item Classifications</h3>
+    <div className="tablet:p-4 desktop:p-6 border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 p-3">
+      <div className="tablet:mb-2 mb-1.5 flex items-center gap-2">
+        <h3 className="tablet:text-sm text-xs font-semibold text-white">
+          Menu Item Classifications
+        </h3>
         <HelpTooltip
           content="Dishes are categorized based on profit and popularity. Chef's Kiss: High profit AND high sales - your stars. Hidden Gem: High profit but low sales - market these better. Bargain Bucket: Popular but low profit - consider raising price. Burnt Toast: Low profit AND low sales - consider removing."
           title="Understanding Classifications"

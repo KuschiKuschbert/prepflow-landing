@@ -15,7 +15,8 @@ export function EquipmentEmptyState({ onAddEquipment }: EquipmentEmptyStateProps
       </div>
       <h3 className="mb-3 text-2xl font-bold text-white">No Equipment Added</h3>
       <p className="mb-6 max-w-md text-base text-gray-400">
-        Add temperature monitoring equipment to start tracking temperatures and ensure food safety compliance
+        Add temperature monitoring equipment to start tracking temperatures and ensure food safety
+        compliance
       </p>
       <button
         onClick={onAddEquipment}

@@ -1,5 +1,6 @@
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Update visible recipe prices with debouncing.
  *
@@ -48,7 +49,7 @@ export function updateVisiblePricesWithDebounce({
           fetchBatchRecipeIngredients,
         );
         const duration = Date.now() - startTime;
-        console.log(
+        logger.dev(
           '[RecipePricing] updateVisibleRecipePrices completed in',
           duration,
           'ms, updating',
@@ -57,7 +58,7 @@ export function updateVisiblePricesWithDebounce({
         );
         setRecipePrices(prev => {
           const updated = { ...prev, ...newPrices };
-          console.log('[RecipePricing] Total prices in state:', Object.keys(updated).length);
+          logger.dev('[RecipePricing] Total prices in state:', Object.keys(updated).length);
           return updated;
         });
         resolve();

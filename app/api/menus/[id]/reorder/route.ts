@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const errors = results.filter(r => r.error);
 
     if (errors.length > 0) {
-      console.error('Error reordering menu items:', errors);
+      logger.error('Error reordering menu items:', errors);
       return NextResponse.json(
         {
           success: false,
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: 'Menu items reordered successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,

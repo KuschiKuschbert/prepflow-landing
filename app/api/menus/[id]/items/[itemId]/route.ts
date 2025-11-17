@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string; itemId: string }> },
@@ -51,7 +52,7 @@ export async function PUT(
       .single();
 
     if (updateError) {
-      console.error('Error updating menu item:', updateError);
+      logger.error('Error updating menu item:', updateError);
       return NextResponse.json(
         {
           success: false,
@@ -68,7 +69,7 @@ export async function PUT(
       message: 'Menu item updated successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,
@@ -118,7 +119,7 @@ export async function DELETE(
       .eq('menu_id', menuId);
 
     if (error) {
-      console.error('Error deleting menu item:', error);
+      logger.error('Error deleting menu item:', error);
       return NextResponse.json(
         {
           success: false,
@@ -134,7 +135,7 @@ export async function DELETE(
       message: 'Menu item deleted successfully',
     });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    logger.error('Unexpected error:', err);
     return NextResponse.json(
       {
         success: false,

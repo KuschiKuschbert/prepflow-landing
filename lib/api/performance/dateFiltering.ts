@@ -7,7 +7,10 @@ export interface DateRange {
   endDate: Date | null;
 }
 
-export function parseDateRange(startDateParam: string | null, endDateParam: string | null): DateRange {
+export function parseDateRange(
+  startDateParam: string | null,
+  endDateParam: string | null,
+): DateRange {
   const startDate = startDateParam ? new Date(startDateParam) : null;
   const endDate = endDateParam ? new Date(endDateParam) : null;
 

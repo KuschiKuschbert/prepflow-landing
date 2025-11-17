@@ -1,7 +1,10 @@
 'use client';
 
 interface COGSTableHeaderProps {
-  onSortChange?: (field: 'ingredient_name' | 'quantity' | 'cost', direction: 'asc' | 'desc') => void;
+  onSortChange?: (
+    field: 'ingredient_name' | 'quantity' | 'cost',
+    direction: 'asc' | 'desc',
+  ) => void;
   handleColumnSort: (field: 'ingredient_name' | 'quantity' | 'cost') => void;
   getSortIcon: (field: 'ingredient_name' | 'quantity' | 'cost') => React.ReactNode;
 }

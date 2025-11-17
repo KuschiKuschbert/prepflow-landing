@@ -16,7 +16,7 @@ function TappableRecipe({ recipe, onTap }: { recipe: Recipe; onTap: (recipe: Rec
   return (
     <button
       onClick={() => onTap(recipe)}
-      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-left transition-all hover:border-[#29E7CD]/50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#29E7CD]/50"
+      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-left transition-all hover:border-[#29E7CD]/50 hover:shadow-lg focus:ring-2 focus:ring-[#29E7CD]/50 focus:outline-none"
     >
       <div className="flex items-center gap-2">
         <Icon icon={ChefHat} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
@@ -29,18 +29,25 @@ function TappableRecipe({ recipe, onTap }: { recipe: Recipe; onTap: (recipe: Rec
   );
 }
 
-function TappableIngredient({ ingredient, onTap }: { ingredient: Ingredient; onTap: (ingredient: Ingredient) => void }) {
+function TappableIngredient({
+  ingredient,
+  onTap,
+}: {
+  ingredient: Ingredient;
+  onTap: (ingredient: Ingredient) => void;
+}) {
   return (
     <button
       onClick={() => onTap(ingredient)}
-      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-left transition-all hover:border-[#29E7CD]/50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#29E7CD]/50"
+      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-left transition-all hover:border-[#29E7CD]/50 hover:shadow-lg focus:ring-2 focus:ring-[#29E7CD]/50 focus:outline-none"
     >
       <div className="flex items-center gap-2">
         <Icon icon={Package} size="sm" className="text-[#3B82F6]" aria-hidden={true} />
         <div className="flex-1">
           <div className="font-medium text-white">{ingredient.ingredient_name}</div>
           <div className="text-xs text-gray-400">
-            {ingredient.cost_per_unit ? `$${ingredient.cost_per_unit.toFixed(2)}` : 'No price'}/{ingredient.unit || 'unit'}
+            {ingredient.cost_per_unit ? `$${ingredient.cost_per_unit.toFixed(2)}` : 'No price'}/
+            {ingredient.unit || 'unit'}
           </div>
         </div>
         <Icon icon={Plus} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
@@ -105,23 +112,19 @@ export default function DishBuilderDragDrop({
           <Icon
             icon={Search}
             size="sm"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
             aria-hidden={true}
           />
           <input
             type="text"
-            placeholder={
-              activeTab === 'recipes'
-                ? 'Search recipes...'
-                : 'Search ingredients...'
-            }
+            placeholder={activeTab === 'recipes' ? 'Search recipes...' : 'Search ingredients...'}
             value={activeTab === 'recipes' ? recipeSearch : ingredientSearch}
             onChange={e =>
               activeTab === 'recipes'
                 ? setRecipeSearch(e.target.value)
                 : setIngredientSearch(e.target.value)
             }
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] pl-10 pr-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:outline-none focus:ring-1 focus:ring-[#29E7CD]"
+            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] py-2 pr-4 pl-10 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
           />
         </div>
       </div>
@@ -148,7 +151,11 @@ export default function DishBuilderDragDrop({
               </div>
             ) : (
               filteredIngredients.map(ingredient => (
-                <TappableIngredient key={ingredient.id} ingredient={ingredient} onTap={onIngredientTap} />
+                <TappableIngredient
+                  key={ingredient.id}
+                  ingredient={ingredient}
+                  onTap={onIngredientTap}
+                />
               ))
             )}
           </>

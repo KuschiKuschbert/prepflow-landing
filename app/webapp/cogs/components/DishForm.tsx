@@ -71,8 +71,8 @@ export const DishForm: React.FC<DishFormProps> = ({
   const hasIngredients = calculations.length > 0;
 
   return (
-    <div className="rounded-lg bg-[#1f1f1f] p-4 shadow tablet:p-6">
-      <h2 className="mb-6 text-lg font-semibold tablet:text-xl">Recipe & Ingredients</h2>
+    <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+      <h2 className="tablet:text-xl mb-6 text-lg font-semibold">Recipe & Ingredients</h2>
 
       {/* Recipe Combobox */}
       <div className="mb-6">

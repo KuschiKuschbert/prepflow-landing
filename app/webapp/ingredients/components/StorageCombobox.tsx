@@ -5,6 +5,7 @@ import { formatStorageLocation } from '@/lib/text-utils';
 import { ChevronDown, Package } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface TemperatureEquipment {
   id: string;
   name: string;
@@ -41,7 +42,7 @@ export function StorageCombobox({
           setEquipmentList(data.data);
         }
       } catch (error) {
-        console.error('Failed to fetch equipment:', error);
+        logger.error('Failed to fetch equipment:', error);
       }
     };
     fetchEquipment();
@@ -152,4 +153,3 @@ export function StorageCombobox({
     </div>
   );
 }
-

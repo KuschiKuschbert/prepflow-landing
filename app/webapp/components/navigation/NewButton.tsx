@@ -159,11 +159,11 @@ function NewButton() {
           role="menu"
           aria-orientation="vertical"
         >
-          <div className="p-2 desktop:p-2">
+          <div className="desktop:p-2 p-2">
             <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
               Create New
             </div>
-            <div className="space-y-2 desktop:space-y-1">
+            <div className="desktop:space-y-1 space-y-2">
               {creatableItems.map((item, index) => (
                 <button
                   key={item.href}

@@ -52,9 +52,7 @@ export function COGSTableRow({
           </span>
         )}
       </td>
-      <td className="px-6 py-4 text-sm text-gray-300">
-        ${calc.yieldAdjustedCost.toFixed(2)}
-      </td>
+      <td className="px-6 py-4 text-sm text-gray-300">${calc.yieldAdjustedCost.toFixed(2)}</td>
       <td className="px-6 py-4 text-sm">
         <div className="flex items-center space-x-2">
           {editingIngredient === calc.ingredientId ? (

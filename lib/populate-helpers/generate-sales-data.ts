@@ -4,6 +4,8 @@
 
 import { createSupabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '@/lib/logger';
+
 interface Recipe {
   id: string;
   name: string;
@@ -27,12 +29,15 @@ interface SalesDataEntry {
 /**
  * Get popularity tier and percentage for a recipe based on its name
  */
-function getRecipePopularity(recipeName: string): { tier: 'high' | 'medium' | 'low'; percentage: number } {
+function getRecipePopularity(recipeName: string): {
+  tier: 'high' | 'medium' | 'low';
+  percentage: number;
+} {
   const name = recipeName.toLowerCase();
 
   // High popularity dishes
   if (name.includes('fish') && name.includes('chip')) {
-    return { tier: 'high', percentage: 0.20 };
+    return { tier: 'high', percentage: 0.2 };
   }
   if (name.includes('beef') && name.includes('burger')) {
     return { tier: 'high', percentage: 0.18 };
@@ -43,10 +48,10 @@ function getRecipePopularity(recipeName: string): { tier: 'high' | 'medium' | 'l
     return { tier: 'medium', percentage: 0.12 };
   }
   if (name.includes('caesar') && name.includes('salad')) {
-    return { tier: 'medium', percentage: 0.10 };
+    return { tier: 'medium', percentage: 0.1 };
   }
   if (name.includes('pasta') && name.includes('carbonara')) {
-    return { tier: 'medium', percentage: 0.10 };
+    return { tier: 'medium', percentage: 0.1 };
   }
 
   // Lower popularity dishes
@@ -110,7 +115,7 @@ export async function ensureMenuDishExists(
 
   if (checkError && checkError.code !== 'PGRST116') {
     // PGRST116 is "not found" which is fine
-    console.error(`Error checking menu_dish for recipe ${recipe.name}:`, checkError);
+    logger.error(`Error checking menu_dish for recipe ${recipe.name}:`, checkError);
     return null;
   }
 
@@ -133,7 +138,7 @@ export async function ensureMenuDishExists(
     .single();
 
   if (createError) {
-    console.error(`Error creating menu_dish for recipe ${recipe.name}:`, createError);
+    logger.error(`Error creating menu_dish for recipe ${recipe.name}:`, createError);
     return null;
   }
 
@@ -195,7 +200,8 @@ export async function generateSalesDataForMonth(
   // Distribute remaining percentage evenly among recipes without specific popularity
   const remainingPercentage = Math.max(0, 1.0 - totalKnownPopularity);
   const recipesWithoutPopularity = recipePopularities.filter(rp => rp.popularity.percentage === 0);
-  const evenDistribution = recipesWithoutPopularity.length > 0 ? remainingPercentage / recipesWithoutPopularity.length : 0;
+  const evenDistribution =
+    recipesWithoutPopularity.length > 0 ? remainingPercentage / recipesWithoutPopularity.length : 0;
 
   // Update popularity percentages
   recipePopularities.forEach(rp => {

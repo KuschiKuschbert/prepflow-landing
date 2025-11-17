@@ -6,6 +6,7 @@ import { UtensilsCrossed, BookOpen, AlertTriangle, Thermometer, Sparkles } from 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 interface KitchenOperationsStats {
   totalMenuDishes: number;
   recipesReady: number;
@@ -56,7 +57,7 @@ export default function KitchenOperations() {
           cacheData('dashboard_stats', result);
         }
       } catch (err) {
-        console.error('Error fetching kitchen operations stats:', err);
+        logger.error('Error fetching kitchen operations stats:', err);
       } finally {
         setLoading(false);
       }

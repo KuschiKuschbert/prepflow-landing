@@ -13,7 +13,6 @@
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useEffect, useMemo, useState } from 'react';
-
 // Components
 import { COGSTable } from '../components/COGSTable';
 import { CreateRecipeModal } from '../components/CreateRecipeModal';
@@ -93,7 +92,8 @@ export default function CogsClient() {
 
   const recipeExistsLocally = Boolean(selectedRecipeData);
 
-  const { sortedCalculations, sortField, sortDirection, onSortChange } = useCOGSSorting(calculations);
+  const { sortedCalculations, sortField, sortDirection, onSortChange } =
+    useCOGSSorting(calculations);
 
   const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
   const costPerPortion = totalCOGS / (dishPortions || 1);
@@ -198,10 +198,7 @@ export default function CogsClient() {
       setSaveError,
     });
   useCOGSLoadingGate(loading);
-  if (loading) {
-    return <PageSkeleton />;
-  }
-
+  if (loading) return <PageSkeleton />;
   return (
     <>
       <COGSHeader />
@@ -229,7 +226,7 @@ export default function CogsClient() {
         onSuccess={() => setShowCreateModal(false)}
       />
 
-      <div className="grid grid-cols-1 gap-4 tablet:gap-8 large-desktop:grid-cols-2">
+      <div className="tablet:gap-8 large-desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div>
           <DishForm
             recipes={recipes}
@@ -261,8 +258,8 @@ export default function CogsClient() {
           />
         </div>
 
-        <div className="rounded-lg bg-[#1f1f1f] p-4 shadow tablet:p-6">
-          <h2 className="mb-4 text-lg font-semibold tablet:text-xl">Cost Analysis</h2>
+        <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+          <h2 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Analysis</h2>
           {selectedRecipe ? (
             <>
               <COGSTable

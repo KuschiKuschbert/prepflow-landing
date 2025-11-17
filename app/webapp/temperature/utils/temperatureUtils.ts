@@ -17,12 +17,7 @@ export function getTypeLabel(type: string): string {
   return typeInfo?.label || type;
 }
 
-export function getFoodSafetyStatus(
-  temp: number,
-  logTime: string,
-  logDate: string,
-  type: string,
-) {
+export function getFoodSafetyStatus(temp: number, logTime: string, logDate: string, type: string) {
   if (type !== 'food_cooking' && type !== 'food_hot_holding' && type !== 'food_cold_holding') {
     return null;
   }

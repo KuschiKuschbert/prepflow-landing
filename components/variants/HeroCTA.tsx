@@ -108,19 +108,19 @@ export function HeroCTA({ t, handleEngagement, variant }: HeroCTAProps) {
         href={primary.href}
         target={variant === 'control' ? '_blank' : undefined}
         rel={variant === 'control' ? 'noopener noreferrer' : undefined}
-        className={`rounded-2xl bg-gradient-to-r ${primary.gradient} px-8 py-4 text-fluid-base font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl ${primary.shadow}`}
+        className={`rounded-2xl bg-gradient-to-r ${primary.gradient} text-fluid-base px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl ${primary.shadow}`}
         onClick={() => handleEngagement?.('hero_cta_click')}
       >
         {primary.text}
       </a>
       <a
         href={secondary.href}
-        className={`rounded-2xl border border-gray-600 px-8 py-4 text-fluid-base font-semibold text-gray-300 transition-all duration-300 ${secondary.borderHover}`}
+        className={`text-fluid-base rounded-2xl border border-gray-600 px-8 py-4 font-semibold text-gray-300 transition-all duration-300 ${secondary.borderHover}`}
         onClick={() => handleEngagement?.('hero_demo_click')}
       >
         {secondary.text}
       </a>
-      <p className="w-full text-fluid-sm text-gray-500">{getDisclaimer()}</p>
+      <p className="text-fluid-sm w-full text-gray-500">{getDisclaimer()}</p>
     </div>
   );
 }

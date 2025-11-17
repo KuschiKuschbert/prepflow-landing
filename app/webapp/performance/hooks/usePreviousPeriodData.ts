@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { DateRange, PerformanceItem } from '../types';
 import { fetchPerformanceData as fetchPerformanceApi } from '../utils/performance-api';
 
+import { logger } from '../../lib/logger';
 export function usePreviousPeriodData() {
   const [previousPeriodData, setPreviousPeriodData] = useState<PerformanceItem[] | null>(null);
 
@@ -15,7 +16,7 @@ export function usePreviousPeriodData() {
 
     try {
       const daysDiff = Math.ceil(
-        (dateRange.endDate.getTime() - dateRange.startDate.getTime()) / (1000 * 60 * 60 * 24)
+        (dateRange.endDate.getTime() - dateRange.startDate.getTime()) / (1000 * 60 * 60 * 24),
       );
       const previousEndDate = new Date(dateRange.startDate);
       previousEndDate.setDate(previousEndDate.getDate() - 1);
@@ -33,7 +34,7 @@ export function usePreviousPeriodData() {
       const previousState = await fetchPerformanceApi(previousRange);
       setPreviousPeriodData(previousState.performanceItems);
     } catch (error) {
-      console.warn('Could not fetch previous period data for trends:', error);
+      logger.warn('Could not fetch previous period data for trends:', error);
       setPreviousPeriodData(null);
     }
   };

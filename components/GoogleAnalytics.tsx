@@ -1,8 +1,9 @@
 'use client';
-
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, Suspense, useRef } from 'react';
+
+import { logger } from '@/lib/logger';
 
 declare global {
   interface Window {
@@ -39,7 +40,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
       });
 
       hasInitialized.current = true;
-      console.log('✅ Google Analytics initialized with ID:', measurementId);
+      logger.dev('✅ Google Analytics initialized with ID:', measurementId);
     }
   }, [measurementId]);
 
@@ -53,7 +54,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
         page_path: pathname + (searchParams.toString() ? `?${searchParams.toString()}` : ''),
       });
 
-      console.log('📊 GA4 Page View tracked:', pathname);
+      logger.dev('📊 GA4 Page View tracked:', pathname);
     }
   }, [pathname, searchParams]);
 
@@ -79,14 +80,13 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
         onLoad={() => {
-          console.log('📥 Google Analytics script loaded');
+          logger.dev('📥 Google Analytics script loaded');
           initializeGtag();
         }}
         onError={() => {
-          console.error('❌ Failed to load Google Analytics script');
+          logger.error('❌ Failed to load Google Analytics script');
         }}
       />
-
       {/* Initialize gtag function */}
       <Script
         id="google-analytics-init"
@@ -101,11 +101,11 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
               page_location: window.location.href,
               send_page_view: false,
             });
-            console.log('🔧 Google Analytics gtag function initialized');
+            // Google Analytics gtag function initialized
           `,
         }}
         onLoad={() => {
-          console.log('✅ Google Analytics initialization script loaded');
+          logger.dev('✅ Google Analytics initialization script loaded');
           initializeGtag();
         }}
       />

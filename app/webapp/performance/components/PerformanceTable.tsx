@@ -30,22 +30,19 @@ export default function PerformanceTable({
     <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
       <PerformanceClassificationLegend />
 
-      <div className="block desktop:hidden">
-        <div className="space-y-3 p-3 tablet:space-y-4 tablet:p-4">
-          {performanceItems.map((item) => (
+      <div className="desktop:hidden block">
+        <div className="tablet:space-y-4 tablet:p-4 space-y-3 p-3">
+          {performanceItems.map(item => (
             <PerformanceTableMobileCard key={item.id} item={item} />
           ))}
         </div>
       </div>
 
-      <div className="hidden overflow-x-auto desktop:block">
+      <div className="desktop:block hidden overflow-x-auto">
         <table className="min-w-full divide-y divide-[#2a2a2a]">
-          <PerformanceTableHeader
-            handleColumnSort={handleColumnSort}
-            getSortIcon={getSortIcon}
-          />
+          <PerformanceTableHeader handleColumnSort={handleColumnSort} getSortIcon={getSortIcon} />
           <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
-            {performanceItems.map((item) => (
+            {performanceItems.map(item => (
               <PerformanceTableRow key={item.id} item={item} />
             ))}
           </tbody>

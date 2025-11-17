@@ -30,7 +30,7 @@ export function EquipmentListTableFilters({
   return (
     <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
       {/* Search and Filter Toggle */}
-      <div className="flex flex-col gap-3 tablet:flex-row">
+      <div className="tablet:flex-row flex flex-col gap-3">
         <div className="relative flex-1">
           <Icon
             icon={Search}
@@ -82,7 +82,7 @@ export function EquipmentListTableFilters({
 
       {/* Filter Options */}
       {showFilters && (
-        <div className="grid grid-cols-1 gap-3 border-t border-[#2a2a2a] pt-3 tablet:grid-cols-2">
+        <div className="tablet:grid-cols-2 grid grid-cols-1 gap-3 border-t border-[#2a2a2a] pt-3">
           <div>
             <label className="mb-2 block text-xs font-medium text-gray-400">Equipment Type</label>
             <select

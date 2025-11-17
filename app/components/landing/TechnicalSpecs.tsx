@@ -64,18 +64,18 @@ export default function TechnicalSpecs() {
   };
 
   return (
-    <section className="relative bg-transparent py-16 desktop:py-20">
+    <section className="desktop:py-20 relative bg-transparent py-16">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Header */}
         <div className="mb-16 text-center">
-          <h2 className="text-fluid-4xl font-bold tracking-tight text-white desktop:text-fluid-4xl large-desktop:text-fluid-4xl">
+          <h2 className="text-fluid-4xl desktop:text-fluid-4xl large-desktop:text-fluid-4xl font-bold tracking-tight text-white">
             Technical Specifications
           </h2>
-          <p className="mt-4 text-fluid-xl text-gray-400">Everything you need to know.</p>
+          <p className="text-fluid-xl mt-4 text-gray-400">Everything you need to know.</p>
         </div>
 
         {/* Specs Grid */}
-        <div className="grid gap-6 desktop:grid-cols-2 large-desktop:grid-cols-3">
+        <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid gap-6">
           {specCategories.map(category => {
             const isExpanded = expandedCategory === category.title;
 

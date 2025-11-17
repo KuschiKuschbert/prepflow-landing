@@ -9,6 +9,7 @@ import { usePrepListPreview } from './hooks/usePrepListPreview';
 import { PrepListAggregatedView } from './PrepListAggregatedView';
 import { PrepListRecipeGroupedView } from './PrepListRecipeGroupedView';
 
+import { logger } from '../../lib/logger';
 interface PrepListPreviewProps {
   data: GeneratedPrepListData;
   kitchenSections: KitchenSection[];
@@ -62,7 +63,7 @@ export function PrepListPreview({
       onSave(prepListsToSave);
     } catch (err) {
       setError('Failed to save prep lists');
-      console.error('Error saving prep lists:', err);
+      logger.error('Error saving prep lists:', err);
       setSaving(false);
     }
   };

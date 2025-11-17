@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Clock, RefreshCw, Package, BookOpen, UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
+import { logger } from '../../lib/logger';
 interface RecentActivity {
   id: string;
   type: 'ingredient' | 'recipe' | 'menu_dish';
@@ -95,7 +96,7 @@ export default function RecentActivity() {
       );
       return sorted;
     } catch (error) {
-      console.error('Error fetching recent activity:', error);
+      logger.error('Error fetching recent activity:', error);
       throw error;
     }
   }, []);
@@ -167,9 +168,11 @@ export default function RecentActivity() {
           </div>
         </div>
 
-        <h2 className="mb-2 text-center text-fluid-xl font-semibold text-white">No Recent Activity</h2>
+        <h2 className="text-fluid-xl mb-2 text-center font-semibold text-white">
+          No Recent Activity
+        </h2>
 
-        <p className="text-center text-fluid-sm text-gray-400">
+        <p className="text-fluid-sm text-center text-gray-400">
           Start by adding some ingredients or recipes to see recent activity here.
         </p>
       </div>
@@ -177,9 +180,11 @@ export default function RecentActivity() {
   }
 
   return (
-    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg tablet:rounded-3xl tablet:p-6">
-      <div className="mb-4 flex items-center justify-between tablet:mb-6">
-        <h2 className="text-fluid-lg font-semibold text-white tablet:text-fluid-xl">Recent Activity</h2>
+    <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+      <div className="tablet:mb-6 mb-4 flex items-center justify-between">
+        <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-white">
+          Recent Activity
+        </h2>
 
         <button
           onClick={refetch}
@@ -191,15 +196,15 @@ export default function RecentActivity() {
         </button>
       </div>
 
-      <div className="space-y-3 tablet:space-y-4">
+      <div className="tablet:space-y-4 space-y-3">
         {activities.slice(0, 5).map(activity => (
           <div
             key={activity.id}
-            className="flex items-center space-x-3 rounded-xl bg-[#2a2a2a]/30 p-3 transition-colors duration-200 hover:bg-[#2a2a2a]/50 tablet:space-x-4 tablet:rounded-2xl tablet:p-3"
+            className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl bg-[#2a2a2a]/30 p-3 transition-colors duration-200 hover:bg-[#2a2a2a]/50"
           >
             <div className="flex-shrink-0">
               <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full tablet:h-10 tablet:w-10 ${
+                className={`tablet:h-10 tablet:w-10 flex h-8 w-8 items-center justify-center rounded-full ${
                   activity.type === 'ingredient'
                     ? 'bg-blue-500/20'
                     : activity.type === 'recipe'
@@ -214,16 +219,21 @@ export default function RecentActivity() {
                   <Icon icon={BookOpen} size="sm" className="text-green-400" aria-hidden={true} />
                 )}
                 {activity.type === 'menu_dish' && (
-                  <Icon icon={UtensilsCrossed} size="sm" className="text-purple-400" aria-hidden={true} />
+                  <Icon
+                    icon={UtensilsCrossed}
+                    size="sm"
+                    className="text-purple-400"
+                    aria-hidden={true}
+                  />
                 )}
               </div>
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-fluid-sm font-medium text-white tablet:text-fluid-base">
+              <p className="text-fluid-sm tablet:text-fluid-base truncate font-medium text-white">
                 {activity.name}
               </p>
-              <p className="text-fluid-xs text-gray-400 tablet:text-fluid-sm">
+              <p className="text-fluid-xs tablet:text-fluid-sm text-gray-400">
                 {activity.action === 'created' ? 'Created' : 'Updated'} •{' '}
                 {new Date(activity.created_at).toLocaleDateString()}
               </p>

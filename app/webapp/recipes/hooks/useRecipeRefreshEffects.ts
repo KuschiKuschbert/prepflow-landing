@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 
+import { logger } from '../../lib/logger';
 interface UseRecipeRefreshEffectsProps {
   loading: boolean;
   changedRecipeIds: Set<string>;
@@ -25,8 +26,8 @@ export function useRecipeRefreshEffects({
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible' && changedRecipeIds.size > 0) {
-        console.log('[RecipesClient] Page visible, refreshing:', changedRecipeIds);
-        fetchRecipes().catch(err => console.error('Failed to refresh:', err));
+        logger.dev('[RecipesClient] Page visible, refreshing:', changedRecipeIds);
+        fetchRecipes().catch(err => logger.error('Failed to refresh:', err));
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -39,8 +40,8 @@ export function useRecipeRefreshEffects({
     if (lastChangeTime) {
       const timeSinceChange = Date.now() - parseInt(lastChangeTime, 10);
       if (timeSinceChange < 5 * 60 * 1000 && !loading) {
-        console.log('[RecipesClient] Recent changes detected, refreshing');
-        fetchRecipes().catch(err => console.error('Failed to refresh:', err));
+        logger.dev('[RecipesClient] Recent changes detected, refreshing');
+        fetchRecipes().catch(err => logger.error('Failed to refresh:', err));
         sessionStorage.removeItem('recipe_ingredients_last_change');
       }
     }

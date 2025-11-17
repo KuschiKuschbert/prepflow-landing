@@ -10,6 +10,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { Package2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
+import { logger } from '../../lib/logger';
 interface Ingredient {
   id: string;
   name: string;
@@ -81,7 +82,7 @@ export default function ParLevelsPage() {
         setIngredients(result.data);
       }
     } catch (err) {
-      console.error('Failed to fetch ingredients:', err);
+      logger.error('Failed to fetch ingredients:', err);
     }
   };
 
@@ -280,7 +281,12 @@ export default function ParLevelsPage() {
                   <div className="flex-1">
                     <div className="mb-3 flex items-center space-x-4">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                        <Icon icon={Package2} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+                        <Icon
+                          icon={Package2}
+                          size="md"
+                          className="text-[#29E7CD]"
+                          aria-hidden={true}
+                        />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-white">
@@ -290,7 +296,7 @@ export default function ParLevelsPage() {
                       </div>
                     </div>
 
-                    <div className="mb-4 grid grid-cols-1 gap-4 desktop:grid-cols-3">
+                    <div className="desktop:grid-cols-3 mb-4 grid grid-cols-1 gap-4">
                       <div>
                         <p className="mb-1 text-xs text-gray-400">
                           {t('parLevels.parLevel', 'Par Level')}

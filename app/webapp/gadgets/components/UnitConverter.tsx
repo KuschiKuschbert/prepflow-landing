@@ -52,17 +52,17 @@ export function UnitConverter() {
   };
 
   return (
-    <div className="flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3 tablet:space-y-2 tablet:px-4 tablet:py-4">
-      <div className="hidden tablet:block">
-        <h2 className="mb-1 text-base font-semibold text-white tablet:mb-2 tablet:text-lg">
+    <div className="tablet:space-y-2 tablet:px-4 tablet:py-4 flex min-h-[600px] w-full flex-col space-y-1.5 overflow-y-auto px-3 py-3">
+      <div className="tablet:block hidden">
+        <h2 className="tablet:mb-2 tablet:text-lg mb-1 text-base font-semibold text-white">
           Unit Converter
         </h2>
         <p className="text-xs text-gray-400">Convert between weight and volume units</p>
       </div>
 
       {/* Recipe Integration Link - Hidden on mobile */}
-      <div className="hidden w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2 tablet:block tablet:p-4">
-        <p className="text-xs text-gray-300 tablet:text-sm">
+      <div className="tablet:block tablet:p-4 hidden w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2">
+        <p className="tablet:text-sm text-xs text-gray-300">
           Need to convert recipe ingredients?{' '}
           <Link href="/webapp/recipes" className="text-[#29E7CD] hover:underline">
             Go to Recipes
@@ -71,23 +71,23 @@ export function UnitConverter() {
       </div>
 
       {/* Converter Interface */}
-      <div className="w-full space-y-2 tablet:space-y-4">
-        <div className="grid w-full gap-2 tablet:grid-cols-2 tablet:gap-4">
+      <div className="tablet:space-y-4 w-full space-y-2">
+        <div className="tablet:grid-cols-2 tablet:gap-4 grid w-full gap-2">
           {/* From */}
-          <div className="space-y-1 tablet:space-y-2">
-            <label className="block text-xs font-medium text-gray-300 tablet:text-sm">From</label>
+          <div className="tablet:space-y-2 space-y-1">
+            <label className="tablet:text-sm block text-xs font-medium text-gray-300">From</label>
             <input
               type="number"
               value={value}
               onChange={e => setValue(e.target.value)}
               placeholder="Value"
               step="any"
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
+              className="tablet:rounded-xl tablet:px-3 tablet:py-2.5 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
             />
             <select
               value={fromUnit}
               onChange={e => setFromUnit(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
+              className="tablet:rounded-xl tablet:px-3 tablet:py-2.5 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
             >
               {allUnits.map(unit => (
                 <option key={unit} value={unit}>
@@ -98,15 +98,15 @@ export function UnitConverter() {
           </div>
 
           {/* To */}
-          <div className="space-y-1 tablet:space-y-2">
-            <label className="block text-xs font-medium text-gray-300 tablet:text-sm">To</label>
-            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white tablet:rounded-xl tablet:px-3 tablet:py-2.5">
+          <div className="tablet:space-y-2 space-y-1">
+            <label className="tablet:text-sm block text-xs font-medium text-gray-300">To</label>
+            <div className="tablet:rounded-xl tablet:px-3 tablet:py-2.5 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white">
               {convertedValue !== null ? convertedValue.toFixed(4) : '—'}
             </div>
             <select
               value={toUnit}
               onChange={e => setToUnit(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none tablet:rounded-xl tablet:px-3 tablet:py-2.5"
+              className="tablet:rounded-xl tablet:px-3 tablet:py-2.5 w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-2 py-2 text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
             >
               {allUnits.map(unit => (
                 <option key={unit} value={unit}>
@@ -120,13 +120,13 @@ export function UnitConverter() {
         {/* Swap Button */}
         <button
           onClick={handleSwap}
-          className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2a2a2a] tablet:rounded-xl tablet:px-4 tablet:py-2 tablet:text-sm"
+          className="tablet:rounded-xl tablet:px-4 tablet:py-2 tablet:text-sm w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2a2a2a]"
         >
           ↕ Swap Units
         </button>
 
         {/* Unit Categories - Hidden on mobile */}
-        <div className="hidden grid-cols-2 gap-4 tablet:grid">
+        <div className="tablet:grid hidden grid-cols-2 gap-4">
           <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
             <h3 className="mb-2 text-sm font-semibold text-gray-300">Weight Units</h3>
             <div className="flex flex-wrap gap-2">

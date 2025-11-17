@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 
+import { logger } from '../../lib/logger';
 interface UseRecipeAutosaveListenerProps {
   onRecipeSaved: () => void;
 }
@@ -18,7 +19,7 @@ export function useRecipeAutosaveListener({ onRecipeSaved }: UseRecipeAutosaveLi
       // entityId can be either the recipe ID directly or a derived ID
       // We check for 'recipes' entityType and any non-null entityId
       if (status === 'saved' && entityType === 'recipes' && entityId && entityId !== 'new') {
-        console.log('[useRecipeAutosaveListener] Recipe metadata saved, refreshing recipes list', {
+        logger.dev('[useRecipeAutosaveListener] Recipe metadata saved, refreshing recipes list', {
           entityId,
           entityType,
         });

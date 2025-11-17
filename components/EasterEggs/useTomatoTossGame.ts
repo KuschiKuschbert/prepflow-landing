@@ -65,7 +65,8 @@ export const useTomatoTossGame = () => {
   useEffect(() => {
     const initialized = sounds.initAudio();
     setAudioReady(initialized);
-  }, [sounds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // sounds object is stable, initialize once on mount
 
   // Initialize timer on mount (click-independent via requestAnimationFrame)
   useEffect(() => {
@@ -101,7 +102,7 @@ export const useTomatoTossGame = () => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [sounds]);
 
   // Keep refs in sync with state (avoid restarting effect)
   useEffect(() => {
@@ -119,7 +120,7 @@ export const useTomatoTossGame = () => {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [sounds]);
+  }, [sounds]); // sounds object is stable, cleanup only on unmount
 
   // Easing function for aggressive, fast throws
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);

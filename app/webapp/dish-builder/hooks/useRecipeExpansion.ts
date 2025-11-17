@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { ExpandedRecipeIngredient } from '../types';
 import { Ingredient } from '../../cogs/types';
 
+import { logger } from '../../lib/logger';
 interface UseRecipeExpansionProps {
   ingredients: Ingredient[];
   onIngredientsExpanded: (ingredients: ExpandedRecipeIngredient[]) => void;
@@ -37,22 +38,20 @@ export function useRecipeExpansion({
 
         // Expand recipe ingredients to individual dish ingredients
         // Map recipe ingredients to expanded format
-        const expandedIngredients: ExpandedRecipeIngredient[] = recipeIngredients.map(
-          (ri: any) => {
-            // Find the ingredient data to get the name
-            const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
-            return {
-              ingredient_id: ri.ingredient_id,
-              ingredient_name: ingredientData?.ingredient_name || ri.ingredient_name || 'Unknown',
-              quantity: ri.quantity,
-              unit: ri.unit,
-            };
-          },
-        );
+        const expandedIngredients: ExpandedRecipeIngredient[] = recipeIngredients.map((ri: any) => {
+          // Find the ingredient data to get the name
+          const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
+          return {
+            ingredient_id: ri.ingredient_id,
+            ingredient_name: ingredientData?.ingredient_name || ri.ingredient_name || 'Unknown',
+            quantity: ri.quantity,
+            unit: ri.unit,
+          };
+        });
 
         onIngredientsExpanded(expandedIngredients);
       } catch (err) {
-        console.error('Failed to expand recipe:', err);
+        logger.error('Failed to expand recipe:', err);
         setError(err instanceof Error ? err.message : 'Failed to expand recipe');
       }
     },

@@ -46,8 +46,8 @@ export default function CostAnalysisSection({
   onPricingStrategyChange,
 }: CostAnalysisSectionProps) {
   return (
-    <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow tablet:p-6">
-      <h2 className="mb-4 text-lg font-semibold tablet:text-xl text-white">Cost Analysis</h2>
+    <div className="tablet:p-6 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow">
+      <h2 className="tablet:text-xl mb-4 text-lg font-semibold text-white">Cost Analysis</h2>
 
       {/* Ingredients Table */}
       <DishIngredientTable

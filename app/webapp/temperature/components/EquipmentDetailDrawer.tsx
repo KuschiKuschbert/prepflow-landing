@@ -28,14 +28,9 @@ const temperatureTypes = [
 ];
 
 const getTypeIcon = (type: string) => temperatureTypes.find(t => t.value === type)?.icon || '🌡️';
-const getTypeLabel = (type: string) =>
-  temperatureTypes.find(t => t.value === type)?.label || type;
+const getTypeLabel = (type: string) => temperatureTypes.find(t => t.value === type)?.label || type;
 
-export function EquipmentDetailDrawer({
-  equipment,
-  isOpen,
-  onClose,
-}: EquipmentDetailDrawerProps) {
+export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentDetailDrawerProps) {
   const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('all');
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -74,11 +69,9 @@ export function EquipmentDetailDrawer({
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed right-0 top-0 z-[75] h-full w-full transform bg-[#0a0a0a] shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-[75] h-full w-full transform bg-[#0a0a0a] shadow-2xl transition-transform duration-300 ease-out ${
           !isMobile ? 'desktop:w-[500px] large-desktop:w-[600px]' : ''
-        } ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        } ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="equipment-detail-title"
@@ -100,9 +93,9 @@ export function EquipmentDetailDrawer({
             <EquipmentDrawerTimeFilter timeFilter={timeFilter} onTimeFilterChange={setTimeFilter} />
 
             {/* Chart and Statistics Container - Responsive Sidebar Layout */}
-            <div className="flex flex-1 flex-col desktop:flex-row desktop:gap-6">
+            <div className="desktop:flex-row desktop:gap-6 flex flex-1 flex-col">
               {/* Graph Section - Responsive Height */}
-              <div className="mb-4 flex-shrink-0 flex-1 desktop:mb-0 desktop:min-w-0">
+              <div className="desktop:mb-0 desktop:min-w-0 mb-4 flex-1 flex-shrink-0">
                 <EquipmentDrawerChartSection
                   logs={logs}
                   equipment={equipment}
@@ -113,7 +106,7 @@ export function EquipmentDetailDrawer({
               </div>
 
               {/* Statistics Dashboard - Sidebar */}
-              <div className="w-full flex-shrink-0 desktop:w-[400px] large-desktop:w-[450px] xl:w-[500px]">
+              <div className="desktop:w-[400px] large-desktop:w-[450px] w-full flex-shrink-0 xl:w-[500px]">
                 <EquipmentDrawerStatisticsSection
                   logs={logs}
                   equipment={equipment}

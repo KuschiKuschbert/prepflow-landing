@@ -9,13 +9,9 @@ interface RecipeSearchBarProps {
   onClear: () => void;
 }
 
-export function RecipeSearchBar({
-  searchTerm,
-  onSearchChange,
-  onClear,
-}: RecipeSearchBarProps) {
+export function RecipeSearchBar({ searchTerm, onSearchChange, onClear }: RecipeSearchBarProps) {
   return (
-    <div className="relative flex-1 min-w-0">
+    <div className="relative min-w-0 flex-1">
       <div className="absolute top-1/2 left-2.5 -translate-y-1/2 text-gray-400">
         <Icon icon={Search} size="sm" aria-hidden={true} />
       </div>

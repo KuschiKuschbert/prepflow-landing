@@ -10,15 +10,11 @@ interface AnimatedProgressBarProps {
   className?: string;
 }
 
-export function AnimatedProgressBar({
-  progress,
-  label,
-  className = '',
-}: AnimatedProgressBarProps) {
+export function AnimatedProgressBar({ progress, label, className = '' }: AnimatedProgressBarProps) {
   return (
     <div className={`space-y-2 ${className}`}>
       {label && (
-        <div className="flex justify-between text-fluid-sm">
+        <div className="text-fluid-sm flex justify-between">
           <span className="text-gray-300">{label}</span>
           <span className="font-medium text-[#29E7CD]">{progress}%</span>
         </div>

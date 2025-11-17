@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { Recipe } from '../types';
 
+import { logger } from '../../lib/logger';
 interface UseDishHandlersProps {
   showAddIngredient: boolean;
   dishName: string;
@@ -40,7 +41,7 @@ export function useDishHandlers({
         try {
           await loadExistingRecipeIngredients(selectedRecipe);
         } catch (err) {
-          console.error('Failed to load existing recipe ingredients:', err);
+          logger.error('Failed to load existing recipe ingredients:', err);
         }
       }
     }

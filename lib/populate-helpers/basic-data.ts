@@ -7,6 +7,8 @@ import { cleanSampleSuppliers } from '@/lib/sample-suppliers-clean';
 import { cleanSampleIngredients } from '@/lib/sample-ingredients-clean';
 import { cleanSampleRecipes, recipeIngredientMappings } from '@/lib/sample-recipes-clean';
 
+import { logger } from '@/lib/logger';
+
 interface PopulateResults {
   cleaned: number;
   populated: Array<{ table: string; count: number }>;
@@ -43,13 +45,13 @@ export async function populateBasicData(
       suppliersData = data || [];
       results.populated.push({ table: 'suppliers', count: suppliersData.length });
       if (suppliersToInsert.length < cleanSampleSuppliers.length) {
-        console.log(
+        logger.dev(
           `Skipped ${cleanSampleSuppliers.length - suppliersToInsert.length} duplicate suppliers`,
         );
       }
     }
   } else {
-    console.log('All suppliers already exist, skipping insert');
+    logger.dev('All suppliers already exist, skipping insert');
     // Fetch existing suppliers for use in recipe linking
     const { data } = await supabaseAdmin.from('suppliers').select();
     suppliersData = data || [];
@@ -83,13 +85,13 @@ export async function populateBasicData(
       ingredientsData = allIngredients || [];
       results.populated.push({ table: 'ingredients', count: ingredientsToInsert.length });
       if (ingredientsToInsert.length < cleanSampleIngredients.length) {
-        console.log(
+        logger.dev(
           `Skipped ${cleanSampleIngredients.length - ingredientsToInsert.length} duplicate ingredients`,
         );
       }
     }
   } else {
-    console.log('All ingredients already exist, skipping insert');
+    logger.dev('All ingredients already exist, skipping insert');
     // Fetch existing ingredients for use in recipe linking
     const { data } = await supabaseAdmin.from('ingredients').select();
     ingredientsData = data || [];
@@ -121,13 +123,13 @@ export async function populateBasicData(
       recipesData = allRecipes || [];
       results.populated.push({ table: 'recipes', count: recipesToInsert.length });
       if (recipesToInsert.length < cleanSampleRecipes.length) {
-        console.log(
+        logger.dev(
           `Skipped ${cleanSampleRecipes.length - recipesToInsert.length} duplicate recipes`,
         );
       }
     }
   } else {
-    console.log('All recipes already exist, skipping insert');
+    logger.dev('All recipes already exist, skipping insert');
     // Fetch existing recipes for use in recipe ingredient linking
     const { data } = await supabaseAdmin.from('recipes').select();
     recipesData = data || [];
@@ -161,7 +163,7 @@ export async function populateBasicData(
       // Try exact match first, then case-insensitive
       const recipeId = recipeMap.get(recipeName) || recipeMap.get(recipeName.toLowerCase().trim());
       if (!recipeId) {
-        console.warn(`Recipe "${recipeName}" not found in recipes data`);
+        logger.warn(`Recipe "${recipeName}" not found in recipes data`);
         continue;
       }
 
@@ -173,7 +175,7 @@ export async function populateBasicData(
 
         if (!ingredientId) {
           skippedIngredients.push(mapping.ingredient_name);
-          console.warn(
+          logger.warn(
             `Ingredient "${mapping.ingredient_name}" not found when linking to recipe "${recipeName}"`,
           );
           continue;
@@ -189,10 +191,9 @@ export async function populateBasicData(
     }
 
     if (skippedIngredients.length > 0) {
-      console.warn(
-        `Skipped ${skippedIngredients.length} ingredient(s) that could not be matched:`,
-        [...new Set(skippedIngredients)],
-      );
+      logger.warn(`Skipped ${skippedIngredients.length} ingredient(s) that could not be matched:`, [
+        ...new Set(skippedIngredients),
+      ]);
     }
 
     if (recipeIngredientsToInsert.length > 0) {

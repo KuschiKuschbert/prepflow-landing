@@ -1,6 +1,7 @@
 import { Recipe } from '../../types';
 import { RecipeIngredientWithDetails } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Pre-calculate prices for first page of recipes.
  *
@@ -32,7 +33,7 @@ export function precalculatePrices(
 
   if (recipesNeedingPrices.length > 0) {
     recipesNeedingPrices.forEach((recipe: Recipe) => pricesCalculatedRef.current.add(recipe.id));
-    console.log(
+    logger.dev(
       '[RecipeManagement] Pre-calculating prices for',
       recipesNeedingPrices.length,
       'recipes',
@@ -43,10 +44,10 @@ export function precalculatePrices(
       fetchBatchRecipeIngredients,
     )
       .then(() => {
-        console.log('[RecipeManagement] Pre-calculated prices completed');
+        logger.dev('[RecipeManagement] Pre-calculated prices completed');
       })
       .catch(err => {
-        console.error('[RecipeManagement] Background price calculation failed:', err);
+        logger.error('[RecipeManagement] Background price calculation failed:', err);
         recipesNeedingPrices.forEach((recipe: Recipe) =>
           pricesCalculatedRef.current.delete(recipe.id),
         );

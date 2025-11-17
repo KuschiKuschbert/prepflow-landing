@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Recipe, RecipePriceData } from '../../types';
 
+import { logger } from '../../lib/logger';
 interface UseDishesClientRecipePricingProps {
   paginatedRecipesList: Recipe[];
   recipePrices: Record<string, RecipePriceData>;
@@ -63,7 +64,7 @@ export function useDishesClientRecipePricing({
             });
           })
           .catch(err => {
-            console.error('Failed to calculate visible recipe prices:', err);
+            logger.error('Failed to calculate visible recipe prices:', err);
             recipesNeedingPrices.forEach(recipe => {
               calculatingPricesRef.current.delete(recipe.id);
             });

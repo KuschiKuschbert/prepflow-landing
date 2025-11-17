@@ -11,12 +11,16 @@ import { SuccessMessage } from '../../cogs/components/SuccessMessage';
 import { QuantityInputModal } from './QuantityInputModal';
 import { Ingredient, Recipe } from '../../cogs/types';
 
+import { logger } from '../../lib/logger';
 interface DishBuilderClientProps {
   onSaveSuccess?: () => void;
   editingRecipe?: Recipe | null;
 }
 
-export default function DishBuilderClient({ onSaveSuccess, editingRecipe }: DishBuilderClientProps) {
+export default function DishBuilderClient({
+  onSaveSuccess,
+  editingRecipe,
+}: DishBuilderClientProps) {
   const {
     ingredients,
     recipes,
@@ -93,11 +97,18 @@ export default function DishBuilderClient({ onSaveSuccess, editingRecipe }: Dish
           }
         })
         .catch(err => {
-          console.error('Failed to load recipe ingredients:', err);
+          logger.error('Failed to load recipe ingredients:', err);
           setError('Failed to load recipe ingredients');
         });
     }
-  }, [editingRecipe, ingredients, setDishState, clearCalculations, handleIngredientAdded, setError]);
+  }, [
+    editingRecipe,
+    ingredients,
+    setDishState,
+    clearCalculations,
+    handleIngredientAdded,
+    setError,
+  ]);
 
   // Handle recipe tap - load whole recipe with all ingredients
   const handleRecipeTap = async (recipe: Recipe) => {
@@ -136,7 +147,7 @@ export default function DishBuilderClient({ onSaveSuccess, editingRecipe }: Dish
 
       setExpandingRecipe(null);
     } catch (err) {
-      console.error('Failed to expand recipe:', err);
+      logger.error('Failed to expand recipe:', err);
       setError(err instanceof Error ? err.message : 'Failed to expand recipe');
       setExpandingRecipe(null);
     }
@@ -203,7 +214,6 @@ export default function DishBuilderClient({ onSaveSuccess, editingRecipe }: Dish
     }
   };
 
-
   if (loading) {
     return <PageSkeleton />;
   }
@@ -231,7 +241,7 @@ export default function DishBuilderClient({ onSaveSuccess, editingRecipe }: Dish
 
         <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
 
-        <div className="grid grid-cols-1 gap-6 large-desktop:grid-cols-2">
+        <div className="large-desktop:grid-cols-2 grid grid-cols-1 gap-6">
           {/* Left Panel - Tap to Add */}
           <div>
             <DishBuilderDragDrop

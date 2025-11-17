@@ -21,3 +21,5 @@ SELECT
 FROM pg_constraint
 WHERE conrelid = 'sales_data'::regclass
 AND conname = 'sales_data_dish_id_date_unique';
+
+

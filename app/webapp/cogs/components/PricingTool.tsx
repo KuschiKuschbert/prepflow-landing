@@ -53,7 +53,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
     <div className="mt-6 border-t border-[#2a2a2a] pt-4">
       <div className="mb-4">
         {/* Header with Title and Target Gross Profit */}
-        <div className="mb-4 flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-between">
+        <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-4 flex flex-col gap-3">
           <h3 className="flex items-center text-lg font-semibold text-white">
             <Icon icon={DollarSign} size="md" className="mr-2 text-[#29E7CD]" aria-hidden={true} />
             Costing Tool

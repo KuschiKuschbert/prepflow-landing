@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { logger } from '../../lib/logger';
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     if (!supabaseAdmin) {
@@ -32,7 +33,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       .single();
 
     if (error) {
-      console.error('Error updating order list:', error);
+      logger.error('Error updating order list:', error);
       return NextResponse.json(
         { error: 'Failed to update order list', message: error.message },
         { status: 500 },
@@ -55,7 +56,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     return NextResponse.json({ success: true, message: 'Order list updated successfully', data });
   } catch (error) {
-    console.error('Order lists API error:', error);
+    logger.error('Order lists API error:', error);
     return NextResponse.json(
       { error: 'Internal server error', message: 'An unexpected error occurred' },
       { status: 500 },
@@ -81,7 +82,7 @@ export async function DELETE(_request: NextRequest, context: { params: Promise<{
     const { error } = await supabaseAdmin.from('order_lists').delete().eq('id', id);
 
     if (error) {
-      console.error('Error deleting order list:', error);
+      logger.error('Error deleting order list:', error);
       return NextResponse.json(
         { error: 'Failed to delete order list', message: error.message },
         { status: 500 },
@@ -90,7 +91,7 @@ export async function DELETE(_request: NextRequest, context: { params: Promise<{
 
     return NextResponse.json({ success: true, message: 'Order list deleted successfully' });
   } catch (error) {
-    console.error('Order lists API error:', error);
+    logger.error('Order lists API error:', error);
     return NextResponse.json(
       { error: 'Internal server error', message: 'An unexpected error occurred' },
       { status: 500 },

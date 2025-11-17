@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 export function useIngredientMigration(loading: boolean, isLoading: boolean, ingredientsData: any) {
   const [migrationChecked, setMigrationChecked] = useState(false);
 
@@ -30,7 +31,7 @@ export function useIngredientMigration(loading: boolean, isLoading: boolean, ing
           }
         }
       } catch (err) {
-        console.warn('Migration check failed:', err);
+        logger.warn('Migration check failed:', err);
       } finally {
         setMigrationChecked(true);
       }

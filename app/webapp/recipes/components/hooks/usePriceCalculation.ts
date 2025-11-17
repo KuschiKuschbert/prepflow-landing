@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Recipe } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Hook to manage price calculation for visible recipes.
  *
@@ -49,7 +50,7 @@ export function usePriceCalculation({
           calculatingPricesRef.current.add(recipe.id);
         });
 
-        console.log(
+        logger.dev(
           '[RecipesClient] Calculating prices for',
           recipesNeedingPrices.length,
           'recipes',
@@ -60,13 +61,13 @@ export function usePriceCalculation({
           fetchBatchRecipeIngredients,
         )
           .then(() => {
-            console.log('[RecipesClient] Price calculation completed');
+            logger.dev('[RecipesClient] Price calculation completed');
             recipesNeedingPrices.forEach(recipe => {
               calculatingPricesRef.current.delete(recipe.id);
             });
           })
           .catch(err => {
-            console.error('[RecipesClient] Failed to calculate visible recipe prices:', err);
+            logger.error('[RecipesClient] Failed to calculate visible recipe prices:', err);
             recipesNeedingPrices.forEach(recipe => {
               calculatingPricesRef.current.delete(recipe.id);
             });
@@ -80,5 +81,6 @@ export function usePriceCalculation({
         debounceTimerRef.current = null;
       }
     };
-  }, [paginatedRecipeIds])();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paginatedRecipeIds]);
 }

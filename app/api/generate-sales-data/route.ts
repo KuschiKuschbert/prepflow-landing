@@ -2,13 +2,14 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { generateSalesDataForMonth } from '@/lib/populate-helpers/generate-sales-data';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest) {
   try {
-    console.log('🚀 POST /api/generate-sales-data - Starting...');
+    logger.dev('🚀 POST /api/generate-sales-data - Starting...');
     const supabaseAdmin = createSupabaseAdmin();
 
     if (!supabaseAdmin) {
-      console.error('❌ Database connection not available');
+      logger.error('❌ Database connection not available');
       return NextResponse.json(
         {
           error: 'Database connection not available',
@@ -31,17 +32,19 @@ export async function POST(request: NextRequest) {
       : new Date(endDate.getTime() - (days - 1) * 24 * 60 * 60 * 1000);
     startDate.setHours(0, 0, 0, 0); // Start of day
 
-    console.log(`📅 Date range: ${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`);
+    logger.dev(
+      `📅 Date range: ${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`,
+    );
 
     // Fetch all recipes
-    console.log('📖 Fetching recipes...');
+    logger.dev('📖 Fetching recipes...');
     const { data: recipes, error: recipesError } = await supabaseAdmin
       .from('recipes')
       .select('id, name')
       .order('name');
 
     if (recipesError) {
-      console.error('❌ Error fetching recipes:', recipesError);
+      logger.error('❌ Error fetching recipes:', recipesError);
       return NextResponse.json(
         {
           error: 'Database error',
@@ -52,10 +55,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`✅ Found ${recipes?.length || 0} recipes`);
+    logger.dev(`✅ Found ${recipes?.length || 0} recipes`);
 
     if (!recipes || recipes.length === 0) {
-      console.warn('⚠️ No recipes found');
+      logger.warn('⚠️ No recipes found');
       return NextResponse.json(
         {
           error: 'No recipes found',
@@ -66,7 +69,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate sales data
-    console.log(`📊 Generating sales data for ${recipes.length} recipes over ${days} days...`);
+    logger.dev(`📊 Generating sales data for ${recipes.length} recipes over ${days} days...`);
     const { salesData, dishesCreated, dishesUsed } = await generateSalesDataForMonth(
       recipes,
       startDate,
@@ -74,10 +77,12 @@ export async function POST(request: NextRequest) {
       supabaseAdmin,
     );
 
-    console.log(`✅ Generated ${salesData.length} sales data entries, created ${dishesCreated} dishes, used ${dishesUsed} existing dishes`);
+    logger.dev(
+      `✅ Generated ${salesData.length} sales data entries, created ${dishesCreated} dishes, used ${dishesUsed} existing dishes`,
+    );
 
     if (salesData.length === 0) {
-      console.error('❌ No sales data generated');
+      logger.error('❌ No sales data generated');
       return NextResponse.json(
         {
           error: 'No sales data generated',
@@ -92,13 +97,15 @@ export async function POST(request: NextRequest) {
     let insertedCount = 0;
     const errors: Array<{ batch: number; error: string }> = [];
 
-    console.log(`💾 Inserting ${salesData.length} sales records in batches of ${BATCH_SIZE}...`);
+    logger.dev(`💾 Inserting ${salesData.length} sales records in batches of ${BATCH_SIZE}...`);
 
     for (let i = 0; i < salesData.length; i += BATCH_SIZE) {
       const batch = salesData.slice(i, i + BATCH_SIZE);
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
 
-      console.log(`📦 Inserting batch ${batchNumber}/${Math.ceil(salesData.length / BATCH_SIZE)} (${batch.length} records)...`);
+      logger.dev(
+        `📦 Inserting batch ${batchNumber}/${Math.ceil(salesData.length / BATCH_SIZE)} (${batch.length} records)...`,
+      );
 
       // Use insert with ignoreDuplicates instead of upsert if unique constraint doesn't exist
       // First try upsert, if it fails, try insert with ignoreDuplicates
@@ -112,7 +119,9 @@ export async function POST(request: NextRequest) {
 
       // If upsert fails due to missing constraint, try insert with ignoreDuplicates
       if (error && error.message.includes('no unique or exclusion constraint')) {
-        console.warn(`⚠️ Unique constraint missing, using insert with ignoreDuplicates for batch ${batchNumber}`);
+        logger.warn(
+          `⚠️ Unique constraint missing, using insert with ignoreDuplicates for batch ${batchNumber}`,
+        );
         // Insert one by one, skipping duplicates
         const inserted: any[] = [];
         for (const record of batch) {
@@ -124,7 +133,7 @@ export async function POST(request: NextRequest) {
           if (!singleError && singleData) {
             inserted.push(...singleData);
           } else if (singleError && !singleError.message.includes('duplicate')) {
-            console.error(`Error inserting record:`, singleError);
+            logger.error(`Error inserting record:`, singleError);
           }
         }
         data = inserted;
@@ -132,17 +141,18 @@ export async function POST(request: NextRequest) {
       }
 
       if (error) {
-        console.error(`❌ Error inserting batch ${batchNumber}:`, error);
+        logger.error(`❌ Error inserting batch ${batchNumber}:`, error);
         errors.push({ batch: batchNumber, error: error.message });
       } else {
         insertedCount += data?.length || 0;
-        console.log(`✅ Batch ${batchNumber} inserted: ${data?.length || 0} records`);
+        logger.dev(`✅ Batch ${batchNumber} inserted: ${data?.length || 0} records`);
       }
     }
 
-    console.log(`✅ Total inserted: ${insertedCount} records, ${errors.length} errors`);
+    logger.dev(`✅ Total inserted: ${insertedCount} records, ${errors.length} errors`);
 
-    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+    const totalDays =
+      Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 
     return NextResponse.json({
       success: true,
@@ -164,7 +174,7 @@ export async function POST(request: NextRequest) {
       nextSteps: ['Visit /webapp/performance to view the generated sales data'],
     });
   } catch (error) {
-    console.error('Error generating sales data:', error);
+    logger.error('Error generating sales data:', error);
     return NextResponse.json(
       {
         error: 'Internal server error',

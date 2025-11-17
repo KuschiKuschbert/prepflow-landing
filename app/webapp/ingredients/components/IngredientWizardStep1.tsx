@@ -83,7 +83,7 @@ export default function IngredientWizardStep1({
     }
   };
   return (
-    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 large-desktop:grid-cols-5">
+    <div className="tablet:grid-cols-2 large-desktop:grid-cols-5 grid grid-cols-1 gap-3">
       <div>
         <label className="mb-1.5 block text-sm font-medium text-gray-300">Ingredient Name *</label>
         <input

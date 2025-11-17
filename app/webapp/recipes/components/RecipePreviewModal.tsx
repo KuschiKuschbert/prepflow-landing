@@ -77,7 +77,7 @@ export default function RecipePreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+      className="animate-in fade-in fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm duration-200"
       onClick={e => {
         if (e.target === e.currentTarget) {
           onClose();
@@ -89,7 +89,7 @@ export default function RecipePreviewModal({
     >
       <div
         ref={modalRef}
-        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl animate-in zoom-in-95 duration-200 focus:outline-none"
+        className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl duration-200 focus:outline-none"
         tabIndex={-1}
       >
         {/* Header */}
@@ -175,7 +175,12 @@ export default function RecipePreviewModal({
               >
                 {shareLoading ? (
                   <>
-                    <Icon icon={Loader2} size="sm" className="animate-spin text-white" aria-hidden={true} />
+                    <Icon
+                      icon={Loader2}
+                      size="sm"
+                      className="animate-spin text-white"
+                      aria-hidden={true}
+                    />
                     <span>Sharing...</span>
                   </>
                 ) : (

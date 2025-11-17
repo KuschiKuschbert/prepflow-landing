@@ -5,6 +5,7 @@ import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { DragItem, ExpandedRecipeIngredient } from '../types';
 import { Ingredient, Recipe } from '../../cogs/types';
 
+import { logger } from '../../lib/logger';
 interface UseDishDragDropProps {
   recipes: Recipe[];
   ingredients: Ingredient[];
@@ -59,7 +60,7 @@ export function useDishDragDrop({
           onIngredientAdded(ingredient, defaultQuantity, defaultUnit);
         }
       } catch (err) {
-        console.error('Error handling drag end:', err);
+        logger.error('Error handling drag end:', err);
         setError(err instanceof Error ? err.message : 'Failed to add item');
       }
     },

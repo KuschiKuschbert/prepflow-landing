@@ -89,13 +89,13 @@ export function IngredientTableFilterBar({
     onSearchChange('');
     onSupplierFilterChange('');
     onStorageFilterChange('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onSearchChange, onSupplierFilterChange, onStorageFilterChange]);
-
 
   return (
     <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
       {/* Search and Filters - Optimized Layout */}
-      <div className="flex flex-col gap-2 tablet:flex-row tablet:items-center tablet:gap-2">
+      <div className="tablet:flex-row tablet:items-center tablet:gap-2 flex flex-col gap-2">
         <IngredientSearchBar
           searchTerm={localSearchTerm}
           onSearchChange={setLocalSearchTerm}
@@ -107,58 +107,64 @@ export function IngredientTableFilterBar({
 
         {/* Filter Buttons Row - Compact */}
         <div className="flex flex-wrap items-center gap-2">
-        <FilterDropdown
-          label="Supplier"
-          icon={Store}
-          value={supplierFilter}
-          options={uniqueSuppliers}
-          isOpen={showSupplierMenu}
-          onToggle={() => {
-            setShowSupplierMenu(!showSupplierMenu);
-            setShowStorageMenu(false);
-            setShowSortMenu(false);
-          }}
-          onChange={onSupplierFilterChange}
-          activeColor="border-[#3B82F6]/50 bg-[#3B82F6]/10 text-[#3B82F6]"
-          activeBg="bg-[#3B82F6]/20"
-        />
+          <FilterDropdown
+            label="Supplier"
+            icon={Store}
+            value={supplierFilter}
+            options={uniqueSuppliers}
+            isOpen={showSupplierMenu}
+            onToggle={() => {
+              setShowSupplierMenu(!showSupplierMenu);
+              setShowStorageMenu(false);
+              setShowSortMenu(false);
+            }}
+            onChange={onSupplierFilterChange}
+            activeColor="border-[#3B82F6]/50 bg-[#3B82F6]/10 text-[#3B82F6]"
+            activeBg="bg-[#3B82F6]/20"
+          />
 
-        <FilterDropdown
-          label="Storage"
-          icon={MapPin}
-          value={storageFilter}
-          options={uniqueStorageLocations}
-          isOpen={showStorageMenu}
-          onToggle={() => {
-            setShowStorageMenu(!showStorageMenu);
-            setShowSupplierMenu(false);
-            setShowSortMenu(false);
-          }}
-          onChange={onStorageFilterChange}
-          activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
-          activeBg="bg-[#D925C7]/20"
-        />
+          <FilterDropdown
+            label="Storage"
+            icon={MapPin}
+            value={storageFilter}
+            options={uniqueStorageLocations}
+            isOpen={showStorageMenu}
+            onToggle={() => {
+              setShowStorageMenu(!showStorageMenu);
+              setShowSupplierMenu(false);
+              setShowSortMenu(false);
+            }}
+            onChange={onStorageFilterChange}
+            activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
+            activeBg="bg-[#D925C7]/20"
+          />
 
-        <IngredientSortDropdown
-          sortBy={sortBy}
-          onSortChange={onSortChange}
-          isOpen={showSortMenu}
-          onToggle={() => {
-            setShowSortMenu(!showSortMenu);
-            setShowSupplierMenu(false);
-            setShowStorageMenu(false);
-          }}
-          onClose={() => setShowSortMenu(false)}
-        />
+          <IngredientSortDropdown
+            sortBy={sortBy}
+            onSortChange={onSortChange}
+            isOpen={showSortMenu}
+            onToggle={() => {
+              setShowSortMenu(!showSortMenu);
+              setShowSupplierMenu(false);
+              setShowStorageMenu(false);
+            }}
+            onClose={() => setShowSortMenu(false)}
+          />
 
-        <DisplayUnitSelector displayUnit={displayUnit} onDisplayUnitChange={onDisplayUnitChange} />
+          <DisplayUnitSelector
+            displayUnit={displayUnit}
+            onDisplayUnitChange={onDisplayUnitChange}
+          />
 
-        <ItemsPerPageSelector
-          itemsPerPage={itemsPerPage}
-          onItemsPerPageChange={onItemsPerPageChange}
-        />
+          <ItemsPerPageSelector
+            itemsPerPage={itemsPerPage}
+            onItemsPerPageChange={onItemsPerPageChange}
+          />
 
-        <ClearAllFiltersButton activeFilterCount={activeFilterCount} onClearAll={handleClearAll} />
+          <ClearAllFiltersButton
+            activeFilterCount={activeFilterCount}
+            onClearAll={handleClearAll}
+          />
         </div>
       </div>
 

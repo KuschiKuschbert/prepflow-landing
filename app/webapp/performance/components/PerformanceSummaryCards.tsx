@@ -2,7 +2,15 @@
 
 import { useMemo } from 'react';
 import { PerformanceItem } from '../types';
-import { TrendingUp, TrendingDown, Minus, Award, DollarSign, Package, BarChart3 } from 'lucide-react';
+import {
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  Award,
+  DollarSign,
+  Package,
+  BarChart3,
+} from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { SummaryCardGrid } from '@/components/ui/SummaryCardGrid';
 
@@ -10,7 +18,9 @@ interface PerformanceSummaryCardsProps {
   performanceItems: PerformanceItem[];
 }
 
-export default function PerformanceSummaryCards({ performanceItems }: PerformanceSummaryCardsProps) {
+export default function PerformanceSummaryCards({
+  performanceItems,
+}: PerformanceSummaryCardsProps) {
   const summary = useMemo(() => {
     if (performanceItems.length === 0) {
       return {
@@ -37,7 +47,10 @@ export default function PerformanceSummaryCards({ performanceItems }: Performanc
       (sum, item) => sum + (item.selling_price * item.number_sold) / 1.1,
       0,
     );
-    const totalCost = performanceItems.reduce((sum, item) => sum + item.food_cost * item.number_sold, 0);
+    const totalCost = performanceItems.reduce(
+      (sum, item) => sum + item.food_cost * item.number_sold,
+      0,
+    );
 
     // Calculate average profit margin
     const averageProfitMargin =
@@ -48,16 +61,20 @@ export default function PerformanceSummaryCards({ performanceItems }: Performanc
     const categoryCounts = {
       "Chef's Kiss": performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length,
       'Hidden Gem': performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
-      'Bargain Bucket': performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length,
+      'Bargain Bucket': performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket')
+        .length,
       'Burnt Toast': performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
     };
 
     // Find top performer (highest total profit)
-    const topPerformer = performanceItems.reduce((top, item) => {
-      const itemProfit = item.gross_profit * item.number_sold;
-      const topProfit = top ? top.gross_profit * top.number_sold : 0;
-      return itemProfit > topProfit ? item : top;
-    }, null as PerformanceItem | null);
+    const topPerformer = performanceItems.reduce(
+      (top, item) => {
+        const itemProfit = item.gross_profit * item.number_sold;
+        const topProfit = top ? top.gross_profit * top.number_sold : 0;
+        return itemProfit > topProfit ? item : top;
+      },
+      null as PerformanceItem | null,
+    );
 
     return {
       totalProfit,
@@ -96,9 +113,9 @@ export default function PerformanceSummaryCards({ performanceItems }: Performanc
   }
 
   return (
-    <SummaryCardGrid className="mb-3 tablet:mb-4 desktop:mb-6" gap="sm">
+    <SummaryCardGrid className="tablet:mb-4 desktop:mb-6 mb-3" gap="sm">
       {/* Total Profit Card */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5 tablet:p-3 desktop:p-4">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Icon icon={DollarSign} size="sm" className="text-[#29E7CD]" />
@@ -106,12 +123,14 @@ export default function PerformanceSummaryCards({ performanceItems }: Performanc
           </div>
           {getTrendIcon(summary.totalProfit, 0)}
         </div>
-        <div className="text-fluid-lg font-bold text-white">{formatCurrency(summary.totalProfit)}</div>
-        <div className="mt-0.5 text-fluid-xs text-gray-500">ex GST</div>
+        <div className="text-fluid-lg font-bold text-white">
+          {formatCurrency(summary.totalProfit)}
+        </div>
+        <div className="text-fluid-xs mt-0.5 text-gray-500">ex GST</div>
       </div>
 
       {/* Average Profit Margin Card */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5 tablet:p-3 desktop:p-4">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Icon icon={BarChart3} size="sm" className="text-[#3B82F6]" />
@@ -119,47 +138,58 @@ export default function PerformanceSummaryCards({ performanceItems }: Performanc
           </div>
           {getTrendIcon(summary.averageProfitMargin, 70)}
         </div>
-        <div className="text-fluid-lg font-bold text-white">{formatPercentage(summary.averageProfitMargin)}</div>
-        <div className="mt-0.5 text-fluid-xs text-gray-500">across all items</div>
+        <div className="text-fluid-lg font-bold text-white">
+          {formatPercentage(summary.averageProfitMargin)}
+        </div>
+        <div className="text-fluid-xs mt-0.5 text-gray-500">across all items</div>
       </div>
 
       {/* Category Breakdown Card */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5 tablet:p-3 desktop:p-4">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center gap-1.5">
           <Icon icon={Package} size="sm" className="text-[#D925C7]" />
           <span className="text-fluid-xs text-gray-400">Categories</span>
         </div>
         <div className="space-y-0.5">
-          <div className="flex items-center justify-between text-fluid-xs">
+          <div className="text-fluid-xs flex items-center justify-between">
             <span className="text-green-400">Chef&apos;s Kiss</span>
-            <span className="font-semibold text-white">{summary.categoryCounts["Chef's Kiss"]}</span>
+            <span className="font-semibold text-white">
+              {summary.categoryCounts["Chef's Kiss"]}
+            </span>
           </div>
-          <div className="flex items-center justify-between text-fluid-xs">
+          <div className="text-fluid-xs flex items-center justify-between">
             <span className="text-blue-400">Hidden Gem</span>
             <span className="font-semibold text-white">{summary.categoryCounts['Hidden Gem']}</span>
           </div>
-          <div className="flex items-center justify-between text-fluid-xs">
+          <div className="text-fluid-xs flex items-center justify-between">
             <span className="text-yellow-400">Bargain</span>
-            <span className="font-semibold text-white">{summary.categoryCounts['Bargain Bucket']}</span>
+            <span className="font-semibold text-white">
+              {summary.categoryCounts['Bargain Bucket']}
+            </span>
           </div>
-          <div className="flex items-center justify-between text-fluid-xs">
+          <div className="text-fluid-xs flex items-center justify-between">
             <span className="text-red-400">Burnt Toast</span>
-            <span className="font-semibold text-white">{summary.categoryCounts['Burnt Toast']}</span>
+            <span className="font-semibold text-white">
+              {summary.categoryCounts['Burnt Toast']}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Top Performer Card */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5 tablet:p-3 desktop:p-4">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center gap-1.5">
           <Icon icon={Award} size="sm" className="text-yellow-400" />
           <span className="text-fluid-xs text-gray-400">Top Performer</span>
         </div>
         {summary.topPerformer ? (
           <>
-            <div className="truncate text-fluid-sm font-semibold text-white">{summary.topPerformer.name}</div>
-            <div className="mt-0.5 text-fluid-xs text-gray-500">
-              {formatCurrency(summary.topPerformer.gross_profit * summary.topPerformer.number_sold)} profit
+            <div className="text-fluid-sm truncate font-semibold text-white">
+              {summary.topPerformer.name}
+            </div>
+            <div className="text-fluid-xs mt-0.5 text-gray-500">
+              {formatCurrency(summary.topPerformer.gross_profit * summary.topPerformer.number_sold)}{' '}
+              profit
             </div>
           </>
         ) : (
@@ -168,27 +198,31 @@ export default function PerformanceSummaryCards({ performanceItems }: Performanc
       </div>
 
       {/* Total Revenue Card */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5 tablet:p-3 desktop:p-4">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Icon icon={TrendingUp} size="sm" className="text-green-400" />
             <span className="text-fluid-xs text-gray-400">Total Revenue</span>
           </div>
         </div>
-        <div className="text-fluid-lg font-bold text-white">{formatCurrency(summary.totalRevenue)}</div>
-        <div className="mt-0.5 text-fluid-xs text-gray-500">ex GST</div>
+        <div className="text-fluid-lg font-bold text-white">
+          {formatCurrency(summary.totalRevenue)}
+        </div>
+        <div className="text-fluid-xs mt-0.5 text-gray-500">ex GST</div>
       </div>
 
       {/* Total Cost Card */}
-      <div className="rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5 tablet:p-3 desktop:p-4">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Icon icon={Package} size="sm" className="text-orange-400" />
             <span className="text-fluid-xs text-gray-400">Total Cost</span>
           </div>
         </div>
-        <div className="text-fluid-lg font-bold text-white">{formatCurrency(summary.totalCost)}</div>
-        <div className="mt-0.5 text-fluid-xs text-gray-500">food costs</div>
+        <div className="text-fluid-lg font-bold text-white">
+          {formatCurrency(summary.totalCost)}
+        </div>
+        <div className="text-fluid-xs mt-0.5 text-gray-500">food costs</div>
       </div>
     </SummaryCardGrid>
   );

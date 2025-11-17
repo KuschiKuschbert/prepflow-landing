@@ -1,8 +1,8 @@
 'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
 import { trackEvent, trackConversion, getSessionId } from '../lib/analytics';
 import { trackGTMEvent } from './GoogleTagManager';
+import { logger } from '@/lib/logger';
 
 interface ExitIntentPopupProps {
   isVisible: boolean;
@@ -16,8 +16,6 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
   const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
   const [isSuccess, setIsSuccess] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
-
-  // Close popup when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -126,7 +124,7 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
         setIsSuccess(false);
       }, 3000);
     } catch (error) {
-      console.error('Exit intent form submission failed:', error);
+      logger.error('Exit intent form submission failed:', error);
     } finally {
       setIsSubmitting(false);
     }

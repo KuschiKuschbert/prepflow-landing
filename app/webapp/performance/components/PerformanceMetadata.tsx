@@ -20,26 +20,26 @@ export default function PerformanceMetadata({ metadata }: PerformanceMetadataPro
   // Prevent hydration mismatch by only rendering after mount
   if (!mounted || !metadata) return null;
 
-      return (
-        <div className="mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] overflow-hidden tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6">
-          {/* Always visible summary */}
-          <div className="p-3 tablet:p-4 desktop:p-6">
-            <div className="mb-2 flex items-center justify-between tablet:mb-3">
-              <div className="flex items-center gap-2">
-                <Icon icon={Info} size="sm" className="text-[#29E7CD]" />
-                <h3 className="text-base font-semibold text-white">Methodology</h3>
-              </div>
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-2.5 py-1 text-xs text-gray-300 transition-colors hover:border-[#29E7CD]/50 hover:text-[#29E7CD]"
-              >
-                <span>{isExpanded ? 'Hide' : 'Show'} Details</span>
-                <Icon icon={isExpanded ? ChevronUp : ChevronDown} size="xs" />
-              </button>
-            </div>
+  return (
+    <div className="tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6 mb-3 overflow-hidden rounded-xl border border-[#2a2a2a] bg-[#1f1f1f]">
+      {/* Always visible summary */}
+      <div className="tablet:p-4 desktop:p-6 p-3">
+        <div className="tablet:mb-3 mb-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Icon icon={Info} size="sm" className="text-[#29E7CD]" />
+            <h3 className="text-base font-semibold text-white">Methodology</h3>
+          </div>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-2.5 py-1 text-xs text-gray-300 transition-colors hover:border-[#29E7CD]/50 hover:text-[#29E7CD]"
+          >
+            <span>{isExpanded ? 'Hide' : 'Show'} Details</span>
+            <Icon icon={isExpanded ? ChevronUp : ChevronDown} size="xs" />
+          </button>
+        </div>
 
-            {/* Key metrics - always visible */}
-            <div className="grid grid-cols-2 gap-3 tablet:grid-cols-4">
+        {/* Key metrics - always visible */}
+        <div className="tablet:grid-cols-4 grid grid-cols-2 gap-3">
           <div className="text-center">
             <div className="mb-1 text-xs text-gray-400">Methodology</div>
             <div className="text-base font-semibold text-[#29E7CD]">{metadata.methodology}</div>
@@ -65,21 +65,22 @@ export default function PerformanceMetadata({ metadata }: PerformanceMetadataPro
         </div>
       </div>
 
-          {/* Expandable details */}
-          {isExpanded && (
-            <div className="border-t border-[#2a2a2a] bg-[#2a2a2a]/30 p-3 tablet:p-4 desktop:p-6">
-              <div className="space-y-1.5 text-xs text-gray-300">
+      {/* Expandable details */}
+      {isExpanded && (
+        <div className="tablet:p-4 desktop:p-6 border-t border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+          <div className="space-y-1.5 text-xs text-gray-300">
             <p>
               <strong className="text-white">Profit Check:</strong> HIGH if above menu average (
               {metadata.averageProfitMargin?.toFixed(1)}%), LOW if below
             </p>
             <p>
-              <strong className="text-white">Popularity Check:</strong> HIGH if ≥ 80% of average popularity (
-              {metadata.popularityThreshold?.toFixed(1)}%), LOW if below
+              <strong className="text-white">Popularity Check:</strong> HIGH if ≥ 80% of average
+              popularity ({metadata.popularityThreshold?.toFixed(1)}%), LOW if below
             </p>
             <p className="mt-4 text-xs text-gray-400">
-              The PrepFlow COGS Dynamic methodology automatically adapts thresholds based on your menu&apos;s actual
-              performance, ensuring accurate categorization that reflects your business reality.
+              The PrepFlow COGS Dynamic methodology automatically adapts thresholds based on your
+              menu&apos;s actual performance, ensuring accurate categorization that reflects your
+              business reality.
             </p>
           </div>
         </div>

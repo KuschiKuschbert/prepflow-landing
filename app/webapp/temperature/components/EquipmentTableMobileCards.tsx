@@ -26,7 +26,7 @@ export function EquipmentTableMobileCards({
   getTypeLabel,
 }: EquipmentTableMobileCardsProps) {
   return (
-    <div className="block divide-y divide-[#2a2a2a] large-desktop:hidden">
+    <div className="large-desktop:hidden block divide-y divide-[#2a2a2a]">
       {equipment.slice(startIndex, endIndex).map(item => {
         const status = equipmentStatuses.get(item.id) || {
           status: 'no-data',

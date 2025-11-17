@@ -6,6 +6,7 @@ import { calculateRecipePrice } from './utils/pricingHelpers';
 import { buildPricingCallbacks } from './utils/buildPricingCallbacks';
 import { buildPricingReturn } from './utils/buildPricingReturn';
 
+import { logger } from '../../lib/logger';
 export function useRecipePricing() {
   const [recipePrices, setRecipePrices] = useState<Record<string, RecipePriceData>>({});
   const inFlightRequestsRef = useRef<Map<string, AbortController>>(new Map());
@@ -46,7 +47,7 @@ export function useRecipePricing() {
           fetchBatchRecipeIngredients,
         );
       } catch (err) {
-        console.log('Failed to refresh recipe prices:', err);
+        logger.dev('Failed to refresh recipe prices:', err);
       }
     },
     [calculateAllRecipePrices],

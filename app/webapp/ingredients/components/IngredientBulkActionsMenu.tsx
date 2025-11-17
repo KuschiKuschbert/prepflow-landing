@@ -30,7 +30,9 @@ export function IngredientBulkActionsMenu({
   if (selectedCount === 0) return null;
 
   return (
-    <div className={`relative z-[60] ${variant === 'desktop' ? 'hidden large-desktop:block' : 'large-desktop:hidden'}`}>
+    <div
+      className={`relative z-[60] ${variant === 'desktop' ? 'large-desktop:block hidden' : 'large-desktop:hidden'}`}
+    >
       <button
         onClick={onToggleBulkMenu}
         disabled={bulkActionLoading}

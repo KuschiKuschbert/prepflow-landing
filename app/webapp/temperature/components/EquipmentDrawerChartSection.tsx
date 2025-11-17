@@ -25,11 +25,11 @@ export function EquipmentDrawerChartSection({
 
   if (logs.length === 0) {
     return (
-      <div className="flex h-[200px] items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 text-center shadow-lg tablet:h-[250px]">
+      <div className="tablet:h-[250px] flex h-[200px] items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 text-center shadow-lg">
         <div>
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 mx-auto tablet:h-20 tablet:w-20">
+          <div className="tablet:h-20 tablet:w-20 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
             <svg
-              className="h-8 w-8 text-gray-400 tablet:h-10 tablet:w-10"
+              className="tablet:h-10 tablet:w-10 h-8 w-8 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -42,11 +42,12 @@ export function EquipmentDrawerChartSection({
               />
             </svg>
           </div>
-          <h4 className="mb-2 text-fluid-base font-medium text-white tablet:text-fluid-lg">
+          <h4 className="text-fluid-base tablet:text-fluid-lg mb-2 font-medium text-white">
             No Temperature Data
           </h4>
-          <p className="text-fluid-xs text-gray-400 tablet:text-fluid-sm">
-            No temperature logs found for this equipment. Add some temperature readings to see the chart.
+          <p className="text-fluid-xs tablet:text-fluid-sm text-gray-400">
+            No temperature logs found for this equipment. Add some temperature readings to see the
+            chart.
           </p>
         </div>
       </div>

@@ -16,10 +16,10 @@ export default function PerformanceActions({
   onToggleCharts,
 }: PerformanceActionsProps) {
   return (
-    <div className="mb-4 flex flex-wrap gap-3 tablet:gap-4 desktop:mb-6">
+    <div className="tablet:gap-4 desktop:mb-6 mb-4 flex flex-wrap gap-3">
       <button
         onClick={onImportClick}
-        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#29E7CD] px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-[#29E7CD]/80 tablet:w-auto tablet:px-6 tablet:text-base"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#29E7CD] px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-[#29E7CD]/80"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -28,12 +28,12 @@ export default function PerformanceActions({
             clipRule="evenodd"
           />
         </svg>
-        <span className="hidden tablet:inline">Import Sales Data</span>
+        <span className="tablet:inline hidden">Import Sales Data</span>
         <span className="tablet:hidden">Import</span>
       </button>
       <button
         onClick={onExportCSV}
-        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#3B82F6] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3B82F6]/80 tablet:w-auto tablet:px-6 tablet:text-base"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#3B82F6] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#3B82F6]/80"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -42,12 +42,12 @@ export default function PerformanceActions({
             clipRule="evenodd"
           />
         </svg>
-        <span className="hidden tablet:inline">Export CSV</span>
+        <span className="tablet:inline hidden">Export CSV</span>
         <span className="tablet:hidden">Export</span>
       </button>
       <button
         onClick={onToggleCharts}
-        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700 tablet:w-auto tablet:px-6 tablet:text-base"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -58,7 +58,7 @@ export default function PerformanceActions({
             }
           />
         </svg>
-        <span className="hidden tablet:inline">{showCharts ? 'Hide Charts' : 'Show Charts'}</span>
+        <span className="tablet:inline hidden">{showCharts ? 'Hide Charts' : 'Show Charts'}</span>
         <span className="tablet:hidden">{showCharts ? 'Hide' : 'Charts'}</span>
       </button>
     </div>

@@ -302,20 +302,34 @@ alwaysApply: true
 
 **Source:** `operations.mdc` (Performance Standards)
 
+**Status:** ✅ Fully Implemented
+
 **Standards:**
 - LCP: < 2.5 seconds
 - FID: < 100 milliseconds
 - CLS: < 0.1
 - API response: < 500ms (p95)
-- Bundle size: < 200KB (gzipped)
+- Bundle size budgets:
+  - Total bundle: 500KB (500000 bytes)
+  - JavaScript bundle: 200KB (200000 bytes)
+  - CSS bundle: 50KB (50000 bytes)
 
 **Enforcement:**
 - Check: `scripts/cleanup.js` (performance check)
-- Fix: Manual optimization required
+- Fix: Manual optimization required (violations provide actionable recommendations)
+
+**Implementation Details:**
+- Analyzes bundle sizes from `.next/static` directory (requires `npm run build` first)
+- Compares against budgets from `scripts/check-performance-budget.js`
+- Uses logic from `scripts/analyze-bundle.js` for bundle analysis
+- Only runs if `.next` directory exists (gracefully skips if not built)
+- Creates violations for exceeded budgets with specific recommendations
 
 **Related:**
 - See `operations.mdc` (Performance Standards) for complete targets
 - See `operations.mdc` (Performance Monitoring) for monitoring guidelines
+- See `scripts/analyze-bundle.js` for bundle analysis implementation
+- See `scripts/check-performance-budget.js` for budget definitions
 
 ---
 
@@ -362,18 +376,43 @@ alwaysApply: true
 
 **Source:** `development.mdc` (Dead Code Removal)
 
+**Status:** ✅ Fully Implemented
+
 **Standards:**
 - Remove unused components
 - Remove unused functions
-- Remove unused imports
+- Remove unused exports
+- Remove unused imports (handled separately via unused-imports check)
 - Remove commented-out code
 
 **Enforcement:**
 - Check: `scripts/cleanup.js` (dead-code check, unused-imports check)
-- Fix: Manual removal required
+- Fix: `npm run cleanup:fix` (auto-removes unused exports via ts-prune)
+
+**Implementation Details:**
+- Uses `ts-prune` to detect unused TypeScript/JavaScript exports
+- Requires TypeScript project (`tsconfig.json`)
+- Automatically excludes:
+  - Test files (`*.test.ts`, `*.spec.ts`)
+  - Type definition files (`*.d.ts`)
+  - Build directories (`node_modules`, `.next`, `out`, `build`, `dist`)
+- Parses ts-prune output format: `filePath:line:exportName`
+- Auto-fix removes unused exports (handles named exports, re-exports)
+- Gracefully handles missing prerequisites (skips if tsconfig.json not found)
+
+**Usage:**
+```bash
+# Check for unused exports
+npm run cleanup:check
+
+# Auto-remove unused exports
+npm run cleanup:fix
+```
 
 **Related:**
 - See `development.mdc` (Dead Code Removal) for removal guidelines
+- See `ts-prune` documentation for detection algorithm
+- Note: Unused imports are handled separately by the unused-imports check
 
 ---
 

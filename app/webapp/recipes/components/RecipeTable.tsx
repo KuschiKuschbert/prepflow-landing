@@ -22,7 +22,10 @@ interface RecipeTableProps {
   capitalizeRecipeName: (name: string) => string;
   sortField?: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created';
   sortDirection?: 'asc' | 'desc';
-  onSortChange?: (field: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created', direction: 'asc' | 'desc') => void;
+  onSortChange?: (
+    field: 'name' | 'recommended_price' | 'profit_margin' | 'contributing_margin' | 'created',
+    direction: 'asc' | 'desc',
+  ) => void;
   isSelectionMode?: boolean;
   onStartLongPress?: () => void;
   onCancelLongPress?: () => void;
@@ -55,7 +58,7 @@ const RecipeTable = React.memo(function RecipeTable({
   });
 
   return (
-    <div className="hidden overflow-x-auto desktop:block">
+    <div className="desktop:block hidden overflow-x-auto">
       <table className="min-w-full divide-y divide-[#2a2a2a]">
         <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
           <tr>
@@ -100,7 +103,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Recommended Price'
               )}
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('profit_margin')}
@@ -114,7 +117,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Profit Margin'
               )}
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('contributing_margin')}
@@ -128,7 +131,7 @@ const RecipeTable = React.memo(function RecipeTable({
                 'Contributing Margin'
               )}
             </th>
-            <th className="hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase desktop:table-cell">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
               {onSortChange ? (
                 <button
                   onClick={() => handleColumnSort('created')}

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Hook to handle ingredients change effect for modal refresh.
  *
@@ -31,7 +32,7 @@ export function useIngredientsChangeEffect({
             setRecipeIngredients(ingredients);
             clearChangedFlag(recipeId);
           })
-          .catch(err => console.error('Failed to refresh preview ingredients:', err));
+          .catch(err => logger.error('Failed to refresh preview ingredients:', err));
       }
     };
     if (showUnifiedModal && selectedRecipe && changedRecipeIds.has(selectedRecipe.id)) {
@@ -40,7 +41,7 @@ export function useIngredientsChangeEffect({
           setRecipeIngredients(ingredients);
           clearChangedFlag(selectedRecipe.id);
         })
-        .catch(err => console.error('Failed to refresh on open:', err));
+        .catch(err => logger.error('Failed to refresh on open:', err));
     }
   }, [
     showUnifiedModal,

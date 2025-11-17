@@ -16,7 +16,7 @@ export function EquipmentItemHeader({
   typeLabel,
 }: EquipmentItemHeaderProps) {
   return (
-    <div className="mb-6 flex flex-col gap-4 tablet:flex-row tablet:items-start tablet:justify-between">
+    <div className="tablet:flex-row tablet:items-start tablet:justify-between mb-6 flex flex-col gap-4">
       <div className="flex min-w-0 flex-1 items-start gap-4">
         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 shadow-lg">
           <span className="text-3xl">{typeIcon}</span>

@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useCountry } from '@/contexts/CountryContext';
 import {
@@ -19,16 +18,12 @@ export default function CountrySetup() {
 
   const availableCountries = getAvailableCountries();
   const taxBreakdown = getTaxBreakdown(testAmount, selectedCountry);
-
-  // Filter countries based on search term
   const filteredCountries = availableCountries.filter(
     country =>
       country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       country.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
       country.code.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -42,8 +37,6 @@ export default function CountrySetup() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!showDropdown) return;
 
@@ -71,37 +64,26 @@ export default function CountrySetup() {
         break;
     }
   };
-
-  const formatPrice = (amount: number, includeTax: boolean = true) => {
-    return formatCurrencyWithTax(amount, selectedCountry, includeTax);
-  };
-
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat(countryConfig.locale, {
+  const formatPrice = (amount: number, includeTax: boolean = true) =>
+    formatCurrencyWithTax(amount, selectedCountry, includeTax);
+  const formatDate = (date: Date) =>
+    new Intl.DateTimeFormat(countryConfig.locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     }).format(date);
-  };
-
-  const formatNumber = (num: number) => {
-    return new Intl.NumberFormat(countryConfig.locale).format(num);
-  };
+  const formatNumber = (num: number) => new Intl.NumberFormat(countryConfig.locale).format(num);
 
   return (
     <div className="mx-auto max-w-3xl rounded-2xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-6">
       <div className="mb-6 text-center">
-        <h2 className="mb-2 text-fluid-2xl font-bold text-[#29E7CD]">🌍 Country & Tax Setup</h2>
+        <h2 className="text-fluid-2xl mb-2 font-bold text-[#29E7CD]">🌍 Country & Tax Setup</h2>
         <p className="text-fluid-sm text-gray-400">
           Configure your country for automatic tax rates and currency formatting
         </p>
       </div>
-
-      {/* Country Selection */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-4">
-        <h3 className="mb-3 text-fluid-lg font-semibold text-white">📍 Select Your Country</h3>
-
-        {/* Modern Combobox Picker */}
+        <h3 className="text-fluid-lg mb-3 font-semibold text-white">📍 Select Your Country</h3>
         <div className="relative" ref={dropdownRef}>
           <div className="relative">
             <input
@@ -146,8 +128,6 @@ export default function CountrySetup() {
               </svg>
             </button>
           </div>
-
-          {/* Dropdown Results */}
           {showDropdown && (
             <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] shadow-lg">
               {filteredCountries.length > 0 ? (
@@ -187,7 +167,7 @@ export default function CountrySetup() {
           )}
         </div>
 
-        <div className="mt-3 text-fluid-sm text-gray-400">
+        <div className="text-fluid-sm mt-3 text-gray-400">
           Selected: <span className="font-medium text-[#29E7CD]">{countryConfig.name}</span> •
           Currency: <span className="text-white">{countryConfig.currency}</span> • Tax:{' '}
           <span className="text-white">
@@ -195,11 +175,9 @@ export default function CountrySetup() {
           </span>
         </div>
       </div>
-
-      {/* Current Configuration */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
-        <h3 className="mb-2 text-fluid-base font-semibold text-white">⚙️ Configuration Details</h3>
-        <div className="flex flex-wrap gap-3 text-fluid-xs">
+        <h3 className="text-fluid-base mb-2 font-semibold text-white">⚙️ Configuration Details</h3>
+        <div className="text-fluid-xs flex flex-wrap gap-3">
           <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
             <span className="font-medium text-[#29E7CD]">Date:</span>
             <span className="text-white">{countryConfig.dateFormat}</span>
@@ -217,14 +195,12 @@ export default function CountrySetup() {
           </div>
         </div>
       </div>
-
-      {/* Tax Calculator */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-fluid-base font-semibold text-white">🧮 Tax Calculator</h3>
           <button
             onClick={() => setShowTaxBreakdown(!showTaxBreakdown)}
-            className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1 text-fluid-xs text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
+            className="text-fluid-xs rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1 text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
           >
             {showTaxBreakdown ? 'Hide' : 'Show'} Breakdown
           </button>
@@ -236,15 +212,17 @@ export default function CountrySetup() {
             type="number"
             value={testAmount}
             onChange={e => setTestAmount(Number(e.target.value))}
-            className="w-20 rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] p-2 text-fluid-xs text-white"
+            className="text-fluid-xs w-20 rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] p-2 text-white"
             placeholder="100"
           />
-          <div className="font-mono text-fluid-xs text-white">Total: {formatPrice(testAmount, true)}</div>
+          <div className="text-fluid-xs font-mono text-white">
+            Total: {formatPrice(testAmount, true)}
+          </div>
         </div>
 
         {showTaxBreakdown && (
           <div className="rounded-lg bg-[#1f1f1f] p-2">
-            <div className="flex justify-between text-fluid-xs">
+            <div className="text-fluid-xs flex justify-between">
               <div className="text-center">
                 <div className="mb-1 text-gray-400">Subtotal</div>
                 <div className="font-mono text-white">
@@ -267,11 +245,9 @@ export default function CountrySetup() {
           </div>
         )}
       </div>
-
-      {/* Formatting Examples */}
       <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
-        <h3 className="mb-2 text-fluid-base font-semibold text-white">📊 Formatting Examples</h3>
-        <div className="flex flex-wrap gap-3 text-fluid-xs">
+        <h3 className="text-fluid-base mb-2 font-semibold text-white">📊 Formatting Examples</h3>
+        <div className="text-fluid-xs flex flex-wrap gap-3">
           <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
             <span className="font-medium text-[#29E7CD]">Currency:</span>
             <span className="text-white">{formatPrice(testAmount, false)}</span>
@@ -297,19 +273,17 @@ export default function CountrySetup() {
           </div>
         </div>
       </div>
-
-      {/* Impact Notice */}
       <div className="rounded-xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-3">
         <div className="flex items-start space-x-2">
           <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
             <span className="text-fluid-sm">⚡</span>
           </div>
           <div>
-            <h4 className="mb-1 text-fluid-base font-semibold text-white">Global Impact</h4>
-            <p className="mb-2 text-fluid-xs text-gray-300">
+            <h4 className="text-fluid-base mb-1 font-semibold text-white">Global Impact</h4>
+            <p className="text-fluid-xs mb-2 text-gray-300">
               This setting automatically applies across your entire PrepFlow system:
             </p>
-            <div className="flex flex-wrap gap-2 text-fluid-xs text-gray-300">
+            <div className="text-fluid-xs flex flex-wrap gap-2 text-gray-300">
               <span>
                 • Pricing uses {countryConfig.taxName} at {(countryConfig.taxRate * 100).toFixed(0)}
                 %

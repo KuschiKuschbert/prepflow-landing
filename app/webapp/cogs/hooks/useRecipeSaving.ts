@@ -5,6 +5,7 @@ import { COGSCalculation } from '../types';
 import { useRecipeValidation } from './useRecipeValidation';
 import { useRecipeCRUD } from './useRecipeCRUD';
 
+import { logger } from '../../lib/logger';
 export const useRecipeSaving = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +58,7 @@ export const useRecipeSaving = () => {
         setSuccessMessage(`Recipe "${recipe.name}" ${actionText} successfully to Recipe Book!`);
         setTimeout(() => setSuccessMessage(null), 5000);
       } catch (err: any) {
-        console.error('Recipe save error:', err);
+        logger.error('Recipe save error:', err);
         const errorMessage =
           err?.message || (err?.code ? `Database error (${err.code})` : 'Failed to save recipe');
         setError(`Failed to save recipe: ${errorMessage}`);

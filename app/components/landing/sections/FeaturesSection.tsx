@@ -5,9 +5,9 @@ export function FeaturesSection() {
 
   return (
     <section id="features" className="py-20">
-      <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
+      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid gap-8">
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h3 className="mb-3 text-fluid-xl font-semibold text-[#29E7CD]">
+          <h3 className="text-fluid-xl mb-3 font-semibold text-[#29E7CD]">
             {t('features.cogs.title', 'Accurate COGS Calculation')}
           </h3>
           <p className="text-gray-300">
@@ -18,7 +18,7 @@ export function FeaturesSection() {
           </p>
         </div>
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h3 className="mb-3 text-fluid-xl font-semibold text-[#3B82F6]">
+          <h3 className="text-fluid-xl mb-3 font-semibold text-[#3B82F6]">
             {t('features.pricing.title', 'Smart Pricing Tool')}
           </h3>
           <p className="text-gray-300">
@@ -29,7 +29,7 @@ export function FeaturesSection() {
           </p>
         </div>
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h3 className="mb-3 text-fluid-xl font-semibold text-[#D925C7]">
+          <h3 className="text-fluid-xl mb-3 font-semibold text-[#D925C7]">
             {t('features.insights.title', 'Profit Insights')}
           </h3>
           <p className="text-gray-300">

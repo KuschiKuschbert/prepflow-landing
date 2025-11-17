@@ -3,6 +3,7 @@
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
 
+import { logger } from '../../lib/logger';
 interface UseIngredientEditSaveProps<T extends { id: string }> {
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setEditingIngredient: (ingredient: T | null) => void;
@@ -38,7 +39,7 @@ export function useIngredientEditSave<T extends { id: string }>({
 
         if (error) {
           if (error.code === '42501' || error.message?.includes('row-level security')) {
-            console.warn('RLS policy blocked direct update, falling back to API route');
+            logger.warn('RLS policy blocked direct update, falling back to API route');
             const response = await fetch('/api/ingredients', {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },

@@ -1,9 +1,4 @@
-/**
- * CSS Loading Optimization Utilities
- *
- * These utilities help prevent unused CSS preload warnings
- * by managing CSS loading more efficiently.
- */
+import { logger } from '@/lib/logger';
 
 export interface CSSResource {
   href: string;
@@ -23,9 +18,6 @@ export class CSSOptimizer {
     return CSSOptimizer.instance;
   }
 
-  /**
-   * Register a CSS resource for tracking
-   */
   registerResource(href: string, isCritical: boolean = false): void {
     this.resources.set(href, {
       href,
@@ -34,9 +26,6 @@ export class CSSOptimizer {
     });
   }
 
-  /**
-   * Mark a CSS resource as used
-   */
   markAsUsed(href: string): void {
     const resource = this.resources.get(href);
     if (resource) {
@@ -44,9 +33,6 @@ export class CSSOptimizer {
     }
   }
 
-  /**
-   * Clean up unused CSS preloads
-   */
   cleanupUnusedPreloads(): void {
     const preloadLinks = document.querySelectorAll('link[rel="preload"][as="style"]');
 
@@ -57,25 +43,19 @@ export class CSSOptimizer {
       const resource = this.resources.get(href);
       const isStylesheetLoaded = document.querySelector(`link[href="${href}"][rel="stylesheet"]`);
 
-      // If it's not critical and not used, schedule for removal
       if (!resource?.isCritical && !resource?.isUsed && !isStylesheetLoaded) {
         const timer = setTimeout(() => {
-          // Double-check before removal
           const stillUnused = !document.querySelector(`link[href="${href}"][rel="stylesheet"]`);
           if (stillUnused) {
             link.remove();
-            console.log('🗑️ Removed unused CSS preload:', href);
+            logger.dev('🗑️ Removed unused CSS preload:', href);
           }
-        }, 2000); // 2 second delay
-
+        }, 2000);
         this.cleanupTimers.set(href, timer);
       }
     });
   }
 
-  /**
-   * Add critical CSS preloads
-   */
   addCriticalPreloads(): void {
     const criticalResources = [
       '/_next/static/css/app/layout.css',
@@ -97,16 +77,12 @@ export class CSSOptimizer {
         document.head.appendChild(preloadLink);
 
         this.registerResource(resource, true);
-        console.log('✅ Added critical CSS preload:', resource);
+        logger.dev('✅ Added critical CSS preload:', resource);
       }
     });
   }
 
-  /**
-   * Initialize the CSS optimizer
-   */
   initialize(): void {
-    // Run cleanup after DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
         this.addCriticalPreloads();
@@ -116,16 +92,9 @@ export class CSSOptimizer {
       this.addCriticalPreloads();
       this.cleanupUnusedPreloads();
     }
-
-    // Periodic cleanup
-    setInterval(() => {
-      this.cleanupUnusedPreloads();
-    }, 5000);
+    setInterval(() => this.cleanupUnusedPreloads(), 5000);
   }
 
-  /**
-   * Cleanup all timers
-   */
   destroy(): void {
     this.cleanupTimers.forEach(timer => {
       clearTimeout(timer);
@@ -135,9 +104,6 @@ export class CSSOptimizer {
   }
 }
 
-/**
- * Hook to use CSS optimization
- */
 export function useCSSOptimization() {
   const optimizer = CSSOptimizer.getInstance();
 

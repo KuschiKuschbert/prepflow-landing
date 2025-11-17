@@ -14,6 +14,7 @@ import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoading
 import { useTemperaturePageData } from './hooks/useTemperaturePageData';
 import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
 
+import { logger } from '../../lib/logger';
 function TemperatureLogsPageContent() {
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('logs');
 
@@ -140,7 +141,7 @@ function TemperatureLogsPageContent() {
             equipment={equipment}
             isLoading={analyticsLoading}
             onRefreshLogs={() => {
-              console.log('🔄 Refreshing analytics data after sample generation...');
+              logger.dev('🔄 Refreshing analytics data after sample generation...');
               fetchAllLogs(1000, true).catch(() => {});
             }}
           />

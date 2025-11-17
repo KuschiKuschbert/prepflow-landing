@@ -91,8 +91,10 @@ export default function IngredientTable({
               clipRule="evenodd"
             />
           </svg>
-          <h3 className="mb-2 text-fluid-xl font-semibold text-white">No Ingredients Found</h3>
-          <p className="text-fluid-sm text-gray-400">Start by adding your first ingredient to get started.</p>
+          <h3 className="text-fluid-xl mb-2 font-semibold text-white">No Ingredients Found</h3>
+          <p className="text-fluid-sm text-gray-400">
+            Start by adding your first ingredient to get started.
+          </p>
         </div>
       </div>
     );
@@ -102,27 +104,39 @@ export default function IngredientTable({
     <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
       <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-fluid-xl font-semibold text-white">Ingredients ({ingredients.length})</h2>
+          <h2 className="text-fluid-xl font-semibold text-white">
+            Ingredients ({ingredients.length})
+          </h2>
           <div className="flex items-center gap-2">
             {selectedIngredients.size > 0 ? (
               <button
                 onClick={() => onSelectAll(false)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-fluid-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:border-[#29E7CD]/50"
+                className="text-fluid-sm flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 font-medium text-[#29E7CD] transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20"
                 aria-label="Deselect all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 <span>{selectedIngredients.size} selected</span>
               </button>
             ) : (
               <button
                 onClick={() => onSelectAll(true)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-fluid-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+                className="text-fluid-sm flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
                 aria-label="Select all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 <span>Select All</span>
               </button>
@@ -135,40 +149,52 @@ export default function IngredientTable({
         <table className="w-full">
           <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
-              <th className="hidden desktop:table-cell px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="desktop:table-cell text-fluid-xs hidden px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 <button
                   onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
                   className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-                  aria-label={selectedIngredients.size === ingredients.length ? "Deselect all" : "Select all"}
+                  aria-label={
+                    selectedIngredients.size === ingredients.length ? 'Deselect all' : 'Select all'
+                  }
                 >
                   {selectedIngredients.size === ingredients.length && ingredients.length > 0 ? (
-                    <svg className="h-4 w-4 text-[#29E7CD]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="h-4 w-4 text-[#29E7CD]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   ) : (
                     <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
                   )}
                 </button>
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Brand
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Pack Size
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Cost/Unit
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Supplier
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Stock
               </th>
-              <th className="px-6 py-3 text-left text-fluid-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 Actions
               </th>
             </tr>

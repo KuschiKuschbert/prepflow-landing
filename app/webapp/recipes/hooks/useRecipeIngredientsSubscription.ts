@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 
+import { logger } from '../../lib/logger';
 export function useRecipeIngredientsSubscription(
   recipes: Recipe[],
   refreshRecipePrices: (
@@ -44,14 +45,14 @@ export function useRecipeIngredientsSubscription(
               ? (payload.old as { recipe_id?: string })?.recipe_id
               : (payload.new as { recipe_id?: string })?.recipe_id ||
                 (payload.old as { recipe_id?: string })?.recipe_id;
-          console.log(`[Subscription] ${eventType} for recipe: ${recipeId}`, {
+          logger.dev(`[Subscription] ${eventType} for recipe: ${recipeId}`, {
             eventType,
             recipeId,
             hasNew: !!payload.new,
             hasOld: !!payload.old,
           });
           if (!recipeId) {
-            console.warn('[Subscription] No recipe_id in payload', payload);
+            logger.warn('[Subscription] No recipe_id in payload', payload);
             return;
           }
           // Add to pending set for debouncing
@@ -63,12 +64,12 @@ export function useRecipeIngredientsSubscription(
           debounceTimerRef.current = setTimeout(() => {
             const recipeIdsToRefresh = Array.from(pendingRecipeIdsRef.current);
             pendingRecipeIdsRef.current.clear();
-            console.log('[Subscription] Debounced refresh:', recipeIdsToRefresh);
+            logger.dev('[Subscription] Debounced refresh:', recipeIdsToRefresh);
             // Store timestamp in sessionStorage so recipe book can detect changes
             sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
             refreshRecipePrices(recipes, fetchRecipeIngredients, fetchBatchRecipeIngredients).catch(
               err => {
-                console.error('Failed to refresh recipe prices after ingredient change:', err);
+                logger.error('Failed to refresh recipe prices after ingredient change:', err);
               },
             );
             // Call onIngredientsChange for each recipe that changed

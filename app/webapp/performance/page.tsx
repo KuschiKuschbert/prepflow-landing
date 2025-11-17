@@ -6,7 +6,7 @@ export default function PerformancePage() {
   return (
     <ErrorBoundary>
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-4 tablet:py-6">
+        <div className="tablet:py-6 min-h-screen bg-transparent py-4">
           <PerformanceClient />
         </div>
       </ResponsivePageContainer>

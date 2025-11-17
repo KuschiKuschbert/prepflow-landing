@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { COGSCalculation } from '../types';
+import { logger } from '../../lib/logger';
 import {
   saveRecipeIngredients,
   serializeCalculations,
@@ -36,15 +37,15 @@ export function useRecipeIngredientsAutosave({
   const performSave = useCallback(
     async (force = false) => {
       if (!recipeId || (!enabled && !force)) {
-        console.log('[Autosave] Save skipped:', { recipeId, enabled, force });
+        logger.dev('[Autosave] Save skipped:', { recipeId, enabled, force });
         return;
       }
-      console.log('[Autosave] Starting save:', { recipeId, count: calculations.length, force });
+      logger.dev('[Autosave] Starting save:', { recipeId, count: calculations.length, force });
       setStatus('saving');
       setError(null);
       const result = await saveRecipeIngredients(recipeId, calculations);
       if (result.success) {
-        console.log('[Autosave] Save successful:', { recipeId, count: calculations.length });
+        logger.dev('[Autosave] Save successful:', { recipeId, count: calculations.length });
         setStatus('saved');
         if (typeof window !== 'undefined') {
           sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
@@ -52,7 +53,7 @@ export function useRecipeIngredientsAutosave({
         if (onSave) onSave();
         setTimeout(() => setStatus(prev => (prev === 'saved' ? 'idle' : prev)), 2000);
       } else {
-        console.error('[Autosave] Save failed:', result.error);
+        logger.error('[Autosave] Save failed:', result.error);
         setStatus('error');
         setError(result.error || 'Failed to save');
         if (onError && result.error) onError(result.error);
@@ -81,7 +82,7 @@ export function useRecipeIngredientsAutosave({
   }, [calculationsString, recipeId, enabled, debounceMs, performSave]);
 
   const saveNow = useCallback(async () => {
-    console.log('[Autosave] saveNow called (force save)');
+    logger.dev('[Autosave] saveNow called (force save)');
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
@@ -89,11 +90,12 @@ export function useRecipeIngredientsAutosave({
     await performSave(true);
   }, [performSave]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    };
-  }, []);
+    },
+    [],
+  );
 
   return { status, error, saveNow };
 }

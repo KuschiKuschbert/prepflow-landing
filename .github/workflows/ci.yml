@@ -43,6 +43,26 @@ jobs:
       - run: npm ci
       - run: npm run format:check
 
+  cleanup-check:
+    name: Cleanup Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run cleanup:check
+      - name: Upload cleanup report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cleanup-report
+          path: cleanup-reports/
+          retention-days: 7
+          if-no-files-found: ignore
+
   build:
     name: Build
     runs-on: ubuntu-latest

@@ -11,7 +11,7 @@ import { Dish, Recipe } from '../types';
 import DishFormPricing from './DishFormPricing';
 import DishIngredientSelector from './DishIngredientSelector';
 import DishRecipeSelector from './DishRecipeSelector';
-
+import { logger } from '../../lib/logger';
 interface DishEditDrawerProps {
   isOpen: boolean;
   dish: Dish | null;
@@ -74,7 +74,6 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
     loading: costLoading,
   } = useDishCostCalculation(selectedRecipes, selectedIngredients, recipes, ingredients);
 
-  // Auto-update selling price when cost calculation changes (unless manually overridden or editing existing dish)
   useEffect(() => {
     if (
       !dish &&
@@ -90,8 +89,6 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
     if (!isOpen) return;
 
     setLoading(true);
-
-    // Fetch recipes and ingredients when drawer opens
     Promise.all([
       fetch('/api/recipes').then(r => r.json()),
       fetch('/api/ingredients?pageSize=1000').then(r => r.json()),
@@ -101,16 +98,13 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
         if (ingredientsData.success) setIngredients(ingredientsData.data?.items || []);
       })
       .catch(err => {
-        console.error('Failed to fetch recipes/ingredients:', err);
+        logger.error('Failed to fetch recipes/ingredients:', err);
         showError('Failed to load recipes and ingredients');
       });
-
-    // Load dish data if editing
     if (dish) {
       setDishName(dish.dish_name);
       setDescription(dish.description || '');
       setSellingPrice(dish.selling_price.toString());
-      // Fetch dish details with full error handling
       fetch(`/api/dishes/${dish.id}`)
         .then(r => {
           if (!r.ok) {
@@ -119,7 +113,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
           return r.json();
         })
         .then(data => {
-          console.log('Dish data loaded:', data); // Debug log
+          logger.dev('Dish data loaded:', data); // Debug log
           if (data.success && data.dish) {
             const recipes = (data.dish.recipes || []).map((r: any) => ({
               recipe_id: r.recipe_id,
@@ -132,24 +126,21 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
               unit: i.unit || 'kg',
               ingredient_name: i.ingredients?.ingredient_name,
             }));
-            console.log('Setting recipes:', recipes); // Debug log
-            console.log('Setting ingredients:', ingredients); // Debug log
             setSelectedRecipes(recipes);
             setSelectedIngredients(ingredients);
             setLoading(false);
           } else {
-            console.error('Invalid dish data structure:', data);
+            logger.error('Invalid dish data structure:', data);
             showError('Failed to load dish data: Invalid response structure');
             setLoading(false);
           }
         })
         .catch(err => {
-          console.error('Failed to fetch dish details:', err);
+          logger.error('Failed to fetch dish details:', err);
           showError('Failed to load dish details. Please try again.');
           setLoading(false);
         });
     } else {
-      // Reset form for create mode
       setDishName('');
       setDescription('');
       setSellingPrice('');
@@ -202,13 +193,11 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
       onSave();
       onClose();
     } catch (err) {
-      console.error('Failed to save dish:', err);
+      logger.error('Failed to save dish:', err);
       showError('Failed to save dish');
       setLoading(false);
     }
   };
-
-  // Reset form when drawer closes or dish changes
   useEffect(() => {
     if (!isOpen) {
       setDishName('');

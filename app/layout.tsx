@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { logger } from '../../lib/logger';
 import './globals.css';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -140,7 +141,7 @@ export default function RootLayout({
                 navigator.serviceWorker.getRegistrations().then(function(registrations) {
                   for(let registration of registrations) {
                     registration.unregister();
-                    console.log('🗑️ Development: Service Worker unregistered');
+                    logger.dev('🗑️ Development: Service Worker unregistered');
                   }
                 });
               }

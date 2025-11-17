@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
+import { logger } from '../../lib/logger';
 import {
   buildPerformanceInsightsPrompt,
   parsePerformanceInsightsResponse,
@@ -22,10 +23,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (!Array.isArray(performanceItems) || typeof performanceScore !== 'number') {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     // Try AI first
@@ -58,7 +56,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } catch (aiError) {
-      console.warn('AI performance insights failed, using fallback:', aiError);
+      logger.warn('AI performance insights failed, using fallback:', aiError);
     }
 
     // Fallback: Return empty array - component should handle fallback to rule-based
@@ -67,7 +65,7 @@ export async function POST(request: NextRequest) {
       source: 'fallback',
     });
   } catch (error) {
-    console.error('Performance insights error:', error);
+    logger.error('Performance insights error:', error);
     return NextResponse.json(
       {
         error: 'Failed to generate performance insights',

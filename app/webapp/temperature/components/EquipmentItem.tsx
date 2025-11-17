@@ -66,7 +66,7 @@ export function EquipmentItem({
       <div className="absolute inset-0 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
       <div className="relative">
-        <div className="mb-6 flex flex-col gap-4 tablet:flex-row tablet:items-start tablet:justify-between">
+        <div className="tablet:flex-row tablet:items-start tablet:justify-between mb-6 flex flex-col gap-4">
           <EquipmentItemHeader
             name={item.name}
             equipmentType={item.equipment_type}

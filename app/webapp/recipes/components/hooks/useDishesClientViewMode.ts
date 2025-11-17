@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { logger } from '../../lib/logger';
 type ViewMode = 'list' | 'editor' | 'builder';
 
 export function useDishesClientViewMode() {
@@ -11,7 +12,7 @@ export function useDishesClientViewMode() {
         const urlParams = new URLSearchParams(window.location.search);
         const builderParam = urlParams.get('builder');
         if (builderParam === 'true') {
-          console.log('[DishesClient] Builder parameter detected, switching to builder mode');
+          logger.dev('[DishesClient] Builder parameter detected, switching to builder mode');
           setViewMode('builder');
           const newUrl = window.location.pathname + window.location.hash;
           window.history.replaceState({}, '', newUrl);

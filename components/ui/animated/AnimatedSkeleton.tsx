@@ -9,10 +9,7 @@ interface AnimatedSkeletonProps {
   className?: string;
 }
 
-export function AnimatedSkeleton({
-  variant = 'card',
-  className = '',
-}: AnimatedSkeletonProps) {
+export function AnimatedSkeleton({ variant = 'card', className = '' }: AnimatedSkeletonProps) {
   const variants = {
     card: 'h-32 rounded-2xl',
     text: 'h-4 rounded',

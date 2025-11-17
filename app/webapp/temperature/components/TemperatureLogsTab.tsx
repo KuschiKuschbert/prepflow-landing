@@ -12,11 +12,11 @@ import { TemperatureLogsEmptyState } from './TemperatureLogsEmptyState';
 import { TemperatureLogsTimePeriodHeader } from './TemperatureLogsTimePeriodHeader';
 import { TemperatureLogCard } from './TemperatureLogCard';
 import {
-    formatDateString as formatDateStringUtil,
-    formatTime as formatTimeUtil,
-    getFoodSafetyStatus as getFoodSafetyStatusUtil,
-    getTemperatureStatus as getTemperatureStatusUtil,
-    groupLogsByTimePeriod,
+  formatDateString as formatDateStringUtil,
+  formatTime as formatTimeUtil,
+  getFoodSafetyStatus as getFoodSafetyStatusUtil,
+  getTemperatureStatus as getTemperatureStatusUtil,
+  groupLogsByTimePeriod,
 } from './utils';
 
 interface TemperatureLogsTabProps {
@@ -93,7 +93,12 @@ export default function TemperatureLogsTab({
     temperatureTypes.find(t => t.value === type)?.label || type;
 
   // Convert equipment IDs from string to number for TemperatureFilters component
-  const equipmentForFilters: Array<{ id?: number; name: string; equipment_type: string; is_active: boolean }> = equipment.map((eq) => {
+  const equipmentForFilters: Array<{
+    id?: number;
+    name: string;
+    equipment_type: string;
+    is_active: boolean;
+  }> = equipment.map(eq => {
     const parsedId = eq.id && !isNaN(parseInt(eq.id, 10)) ? parseInt(eq.id, 10) : undefined;
     return {
       id: parsedId,
@@ -151,7 +156,7 @@ export default function TemperatureLogsTab({
               />
 
               {/* Logs for this time period */}
-              <div className="grid gap-4 tablet:grid-cols-1 large-desktop:grid-cols-2">
+              <div className="tablet:grid-cols-1 large-desktop:grid-cols-2 grid gap-4">
                 {timeGroup.logs.map(log => (
                   <TemperatureLogCard
                     key={log.id}

@@ -1,4 +1,5 @@
 import { RecipeIngredientWithDetails } from '../../types';
+import { logger } from '../../lib/logger';
 import {
   isProcessingQueueRef,
   normalizeRecipeIds,
@@ -37,7 +38,7 @@ export async function fetchBatchWithDeduplication({
       requestQueueRef.push({ recipeIds, resolve, reject });
       if (!isProcessingQueueRef) {
         processRequestQueue(fetchBatchRecipeIngredients).catch(err => {
-          console.error('[RecipePricing] Queue processing error:', err);
+          logger.error('[RecipePricing] Queue processing error:', err);
         });
       }
     });
@@ -47,14 +48,14 @@ export async function fetchBatchWithDeduplication({
     .then(result => {
       batchRequestCacheRef.current.delete(cacheKey);
       processRequestQueue(fetchBatchRecipeIngredients).catch(err => {
-        console.error('[RecipePricing] Queue processing error:', err);
+        logger.error('[RecipePricing] Queue processing error:', err);
       });
       return result;
     })
     .catch(err => {
       batchRequestCacheRef.current.delete(cacheKey);
       processRequestQueue(fetchBatchRecipeIngredients).catch(processErr => {
-        console.error('[RecipePricing] Queue processing error:', processErr);
+        logger.error('[RecipePricing] Queue processing error:', processErr);
       });
       throw err;
     });

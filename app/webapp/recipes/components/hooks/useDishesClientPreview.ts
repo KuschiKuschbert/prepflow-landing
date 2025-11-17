@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Dish, Recipe, RecipeIngredientWithDetails } from '../../types';
 
+import { logger } from '../../lib/logger';
 interface UseDishesClientPreviewProps {
   fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
   generateAIInstructions: (
@@ -45,10 +46,10 @@ export function useDishesClientPreview({
         setPreviewYield(recipe.yield || 1);
         setShowRecipePanel(true);
         generateAIInstructions(recipe, ingredients).catch(err => {
-          console.error('Failed to generate AI instructions:', err);
+          logger.error('Failed to generate AI instructions:', err);
         });
       } catch (err) {
-        console.error('Failed to load recipe:', err);
+        logger.error('Failed to load recipe:', err);
         setError('Failed to load recipe details');
       }
     },

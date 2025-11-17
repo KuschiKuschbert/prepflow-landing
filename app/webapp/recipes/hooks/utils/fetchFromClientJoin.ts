@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { RecipeIngredientWithDetails } from '../../types';
 
+import { logger } from '../../lib/logger';
 /**
  * Fetch recipe ingredients using client-side join as fallback.
  *
@@ -20,7 +21,7 @@ export async function fetchFromClientJoin(
     .eq('recipe_id', recipeId);
 
   if (ingredientsError) {
-    console.error('❌ Error fetching recipe ingredients:', ingredientsError);
+    logger.error('❌ Error fetching recipe ingredients:', ingredientsError);
     setError(ingredientsError.message);
     return [];
   }

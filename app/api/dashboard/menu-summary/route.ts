@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { logger } from '../../lib/logger';
 export async function GET(_req: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -19,7 +20,7 @@ export async function GET(_req: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (menusError) {
-      console.error('Error fetching menus:', menusError);
+      logger.error('Error fetching menus:', menusError);
       return NextResponse.json(
         {
           error: 'Database error',
@@ -35,7 +36,7 @@ export async function GET(_req: NextRequest) {
       .select('id, menu_id, dish_id, category');
 
     if (menuItemsError) {
-      console.error('Error fetching menu items:', menuItemsError);
+      logger.error('Error fetching menu items:', menuItemsError);
       return NextResponse.json(
         {
           error: 'Database error',
@@ -51,7 +52,7 @@ export async function GET(_req: NextRequest) {
       .select('id, name, recipe_id, selling_price');
 
     if (dishesError) {
-      console.error('Error fetching dishes:', dishesError);
+      logger.error('Error fetching dishes:', dishesError);
       return NextResponse.json(
         {
           error: 'Database error',
@@ -94,7 +95,7 @@ export async function GET(_req: NextRequest) {
       totalMenus: menus?.length || 0,
     });
   } catch (error) {
-    console.error('Error in menu summary API:', error);
+    logger.error('Error in menu summary API:', error);
     return NextResponse.json(
       {
         error: 'Internal server error',

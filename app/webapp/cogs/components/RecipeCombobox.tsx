@@ -91,7 +91,7 @@ export function RecipeCombobox({
 
   return (
     <div ref={comboboxRef} className="relative">
-      <label className="mb-2 block text-sm font-medium text-gray-300">📚 Recipe</label>
+      <label className="mb-2 block text-sm font-medium text-gray-300">Recipe</label>
       <div className="relative">
         <div className="relative">
           <Icon

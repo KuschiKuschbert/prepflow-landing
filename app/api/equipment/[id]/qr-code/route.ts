@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+import { logger } from '../../lib/logger';
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Equipment ID is required' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Equipment ID is required' }, { status: 400 });
     }
 
     // Generate URL that will be encoded in QR code
@@ -45,10 +40,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error('Error generating QR code:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate QR code' },
-      { status: 500 },
-    );
+    logger.error('Error generating QR code:', error);
+    return NextResponse.json({ error: 'Failed to generate QR code' }, { status: 500 });
   }
 }

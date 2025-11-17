@@ -27,10 +27,10 @@ export function FilterDropdown({
   activeBg,
 }: FilterDropdownProps) {
   return (
-    <div className="relative w-full tablet:w-auto">
+    <div className="tablet:w-auto relative w-full">
       <button
         onClick={onToggle}
-        className={`flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 tablet:w-auto ${
+        className={`tablet:w-auto flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
           value
             ? `${activeColor} ${activeBg}`
             : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
@@ -38,7 +38,12 @@ export function FilterDropdown({
       >
         <Icon icon={icon} size="sm" className="text-current" aria-hidden={true} />
         <span className="truncate">{value || label}</span>
-        <Icon icon={ChevronDown} size="xs" className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden={true} />
+        <Icon
+          icon={ChevronDown}
+          size="xs"
+          className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          aria-hidden={true}
+        />
       </button>
       {isOpen && (
         <>

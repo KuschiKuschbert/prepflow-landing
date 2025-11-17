@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Recipe } from '../types';
+import { logger } from '../../lib/logger';
 import {
   calculateRecipeCost,
   calculateRecommendedPrice,
@@ -60,7 +61,7 @@ export function useDishCostCalculation(
           setRecipeIngredients(data.items);
         }
       } catch (err) {
-        console.error('Failed to fetch recipe ingredients:', err);
+        logger.error('Failed to fetch recipe ingredients:', err);
       } finally {
         setLoading(false);
       }

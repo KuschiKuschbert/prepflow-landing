@@ -13,16 +13,56 @@ interface IngredientSortDropdownProps {
 }
 
 const sortOptions: { value: SortOption; label: string; icon: React.ReactNode }[] = [
-  { value: 'name_asc', label: 'Name ↑', icon: <Icon icon={Type} size="xs" className="text-current" /> },
-  { value: 'name_desc', label: 'Name ↓', icon: <Icon icon={Type} size="xs" className="text-current" /> },
-  { value: 'brand_asc', label: 'Brand ↑', icon: <Icon icon={Tag} size="xs" className="text-current" /> },
-  { value: 'brand_desc', label: 'Brand ↓', icon: <Icon icon={Tag} size="xs" className="text-current" /> },
-  { value: 'cost_asc', label: 'Cost ↑', icon: <Icon icon={DollarSign} size="xs" className="text-current" /> },
-  { value: 'cost_desc', label: 'Cost ↓', icon: <Icon icon={DollarSign} size="xs" className="text-current" /> },
-  { value: 'supplier_asc', label: 'Supplier ↑', icon: <Icon icon={Store} size="xs" className="text-current" /> },
-  { value: 'supplier_desc', label: 'Supplier ↓', icon: <Icon icon={Store} size="xs" className="text-current" /> },
-  { value: 'stock_asc', label: 'Stock ↑', icon: <Icon icon={Package} size="xs" className="text-current" /> },
-  { value: 'stock_desc', label: 'Stock ↓', icon: <Icon icon={Package} size="xs" className="text-current" /> },
+  {
+    value: 'name_asc',
+    label: 'Name ↑',
+    icon: <Icon icon={Type} size="xs" className="text-current" />,
+  },
+  {
+    value: 'name_desc',
+    label: 'Name ↓',
+    icon: <Icon icon={Type} size="xs" className="text-current" />,
+  },
+  {
+    value: 'brand_asc',
+    label: 'Brand ↑',
+    icon: <Icon icon={Tag} size="xs" className="text-current" />,
+  },
+  {
+    value: 'brand_desc',
+    label: 'Brand ↓',
+    icon: <Icon icon={Tag} size="xs" className="text-current" />,
+  },
+  {
+    value: 'cost_asc',
+    label: 'Cost ↑',
+    icon: <Icon icon={DollarSign} size="xs" className="text-current" />,
+  },
+  {
+    value: 'cost_desc',
+    label: 'Cost ↓',
+    icon: <Icon icon={DollarSign} size="xs" className="text-current" />,
+  },
+  {
+    value: 'supplier_asc',
+    label: 'Supplier ↑',
+    icon: <Icon icon={Store} size="xs" className="text-current" />,
+  },
+  {
+    value: 'supplier_desc',
+    label: 'Supplier ↓',
+    icon: <Icon icon={Store} size="xs" className="text-current" />,
+  },
+  {
+    value: 'stock_asc',
+    label: 'Stock ↑',
+    icon: <Icon icon={Package} size="xs" className="text-current" />,
+  },
+  {
+    value: 'stock_desc',
+    label: 'Stock ↓',
+    icon: <Icon icon={Package} size="xs" className="text-current" />,
+  },
 ];
 
 export function IngredientSortDropdown({

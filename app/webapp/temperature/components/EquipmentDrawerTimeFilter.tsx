@@ -21,9 +21,9 @@ export function EquipmentDrawerTimeFilter({
           <button
             key={filter}
             onClick={() => onTimeFilterChange(filter)}
-            className={`group relative min-h-[44px] rounded-2xl px-5 py-2.5 text-fluid-sm font-semibold transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+            className={`group text-fluid-sm relative min-h-[44px] rounded-2xl px-5 py-2.5 font-semibold transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
               isActive
-                ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black shadow-xl scale-[1.02]'
+                ? 'scale-[1.02] bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black shadow-xl'
                 : 'bg-transparent text-gray-400 hover:bg-[#2a2a2a] hover:text-white'
             }`}
           >

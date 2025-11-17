@@ -8,6 +8,7 @@ import { usePerformanceImportExport } from './usePerformanceImportExport';
 import { usePerformanceState } from './usePerformanceState';
 import { usePreviousPeriodData } from './usePreviousPeriodData';
 
+import { logger } from '../../lib/logger';
 export function usePerformanceData(dateRange?: DateRange) {
   const cacheKey = dateRange
     ? `performance_data_${dateRange.preset}_${dateRange.startDate?.toISOString()}_${dateRange.endDate?.toISOString()}`
@@ -17,12 +18,12 @@ export function usePerformanceData(dateRange?: DateRange) {
   const { previousPeriodData, fetchPreviousPeriodData } = usePreviousPeriodData();
 
   const fetchPerformanceData = async () => {
-    console.log('🔄 usePerformanceData: Starting fetch...', { dateRange });
+    logger.dev('🔄 usePerformanceData: Starting fetch...', { dateRange });
     setState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
       const newState = await fetchPerformanceApi(dateRange);
-      console.log('✅ usePerformanceData: Received data:', {
+      logger.dev('✅ usePerformanceData: Received data:', {
         itemsCount: newState.performanceItems.length,
         hasMetadata: !!newState.metadata,
       });
@@ -33,7 +34,7 @@ export function usePerformanceData(dateRange?: DateRange) {
       // Fetch previous period data for trend comparison
       await fetchPreviousPeriodData(dateRange);
     } catch (error) {
-      console.error('❌ usePerformanceData: Error fetching performance data:', error);
+      logger.error('❌ usePerformanceData: Error fetching performance data:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setState(prev => ({
         ...prev,

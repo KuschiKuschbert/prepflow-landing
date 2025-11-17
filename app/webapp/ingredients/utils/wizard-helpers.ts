@@ -1,6 +1,4 @@
-import {
-  convertUnit
-} from '@/lib/unit-conversion';
+import { convertUnit } from '@/lib/unit-conversion';
 import { Ingredient } from '../components/types';
 
 // Calculate cost per unit from pack price and pack size

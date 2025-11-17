@@ -23,9 +23,9 @@ export function PageHeader({
   children,
 }: PageHeaderProps) {
   return (
-    <div className="mb-4 tablet:mb-6 desktop:mb-8">
-      <div className="mb-2 flex flex-col gap-2 tablet:mb-3 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 desktop:mb-4 desktop:gap-6">
-        <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
+    <div className="tablet:mb-6 desktop:mb-8 mb-4">
+      <div className="tablet:mb-3 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 desktop:mb-4 desktop:gap-6 mb-2 flex flex-col gap-2">
+        <div className="tablet:gap-3 desktop:gap-4 flex items-center gap-2">
           {showLogo && (
             <div className="relative h-10 w-10 flex-shrink-0">
               <Image
@@ -37,14 +37,16 @@ export function PageHeader({
               />
             </div>
           )}
-          <h1 className="flex items-center gap-2 font-bold text-white text-fluid-xl tablet:text-fluid-2xl">
+          <h1 className="text-fluid-xl tablet:text-fluid-2xl flex items-center gap-2 font-bold text-white">
             {icon && <Icon icon={icon} size="lg" className="text-[#29E7CD]" aria-hidden={true} />}
             {title}
           </h1>
         </div>
-        {actions && <div className="flex items-center justify-start tablet:justify-end">{actions}</div>}
+        {actions && (
+          <div className="tablet:justify-end flex items-center justify-start">{actions}</div>
+        )}
       </div>
-      {subtitle && <p className="text-gray-400 text-fluid-base">{subtitle}</p>}
+      {subtitle && <p className="text-fluid-base text-gray-400">{subtitle}</p>}
       {children}
     </div>
   );

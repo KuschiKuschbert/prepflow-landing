@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { detectCountryFromLocale } from '@/lib/country-config';
 
+import { logger } from '../../lib/logger';
 export async function GET(request: NextRequest) {
   try {
     // Vercel automatically provides geolocation headers
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
       source: countryCode ? 'ip' : 'browser',
     });
   } catch (error) {
-    console.error('Error detecting country:', error);
+    logger.error('Error detecting country:', error);
     // Return default fallback
     return NextResponse.json({
       success: true,

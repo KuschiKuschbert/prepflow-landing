@@ -34,8 +34,8 @@ const DishCard = React.memo(function DishCard({
 
   return (
     <div
-      className="border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 p-4 transition-colors hover:bg-[#29E7CD]/5 cursor-pointer"
-      onClick={(e) => {
+      className="cursor-pointer border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 p-4 transition-colors hover:bg-[#29E7CD]/5"
+      onClick={e => {
         // Don't trigger if clicking on buttons or checkbox
         if ((e.target as HTMLElement).closest('button')) return;
         onPreviewDish(dish);
@@ -45,7 +45,7 @@ const DishCard = React.memo(function DishCard({
       <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               onSelectDish(dish.id);
             }}
@@ -71,11 +71,14 @@ const DishCard = React.memo(function DishCard({
               <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
             )}
           </button>
-          <h3 className="text-sm font-medium text-white">
-            {capitalizeDishName(dish.dish_name)}
-          </h3>
+          <h3 className="text-sm font-medium text-white">{capitalizeDishName(dish.dish_name)}</h3>
         </div>
-        <span className="text-xs text-gray-500" title={`Created on ${formatRecipeDate(dish.created_at)}`}>{formatRecipeDate(dish.created_at)}</span>
+        <span
+          className="text-xs text-gray-500"
+          title={`Created on ${formatRecipeDate(dish.created_at)}`}
+        >
+          {formatRecipeDate(dish.created_at)}
+        </span>
       </div>
 
       <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
@@ -91,7 +94,9 @@ const DishCard = React.memo(function DishCard({
                 ${dishCost.total_cost.toFixed(2)}
               </span>
             </div>
-            <div title={`Profit margin: ${dishCost.gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - ${dishCost.gross_profit_margin >= 30 ? 'Target achieved' : 'Consider optimizing'}`}>
+            <div
+              title={`Profit margin: ${dishCost.gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - ${dishCost.gross_profit_margin >= 30 ? 'Target achieved' : 'Consider optimizing'}`}
+            >
               <span className="font-medium">Profit Margin:</span>
               <span
                 className={`ml-1 font-semibold ${
@@ -112,7 +117,7 @@ const DishCard = React.memo(function DishCard({
 
       <div className="ml-7 flex gap-2">
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onPreviewDish(dish);
           }}
@@ -122,7 +127,7 @@ const DishCard = React.memo(function DishCard({
           Preview
         </button>
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onEditDish(dish);
           }}
@@ -133,7 +138,7 @@ const DishCard = React.memo(function DishCard({
           <Icon icon={Edit} size="xs" />
         </button>
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onDeleteDish(dish);
           }}

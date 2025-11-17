@@ -1,12 +1,3 @@
-/**
- * Arcade Stats Management System
- *
- * Manages both persistent (global) and session-based stats for all mini-arcade games.
- * Global stats are stored in localStorage (persist across sessions).
- * Session stats are stored in sessionStorage (reset on browser close).
- * Both are tracked simultaneously and dispatched via custom events.
- */
-
 export interface ArcadeStats {
   tomatoes: number;
   dockets: number;
@@ -19,10 +10,6 @@ const STAT_KEYS = {
   FIRES: 'prepflow_fires_extinguished',
 } as const;
 
-// Global stats (localStorage) - persistent across sessions
-/**
- * Get all arcade stats from localStorage (global/persistent)
- */
 export const getArcadeStats = (): ArcadeStats => {
   if (typeof window === 'undefined') {
     return { tomatoes: 0, dockets: 0, fires: 0 };
@@ -35,17 +22,11 @@ export const getArcadeStats = (): ArcadeStats => {
   };
 };
 
-/**
- * Get a single stat value from localStorage (global/persistent)
- */
 export const getStat = (key: string): number => {
   if (typeof window === 'undefined') return 0;
   return Number(localStorage.getItem(key) || 0);
 };
 
-/**
- * Add to a stat value in localStorage and dispatch update event (global/persistent)
- */
 export const addStat = (key: string, value: number = 1): number => {
   if (typeof window === 'undefined') return 0;
 
@@ -59,9 +40,6 @@ export const addStat = (key: string, value: number = 1): number => {
   return newValue;
 };
 
-/**
- * Set a stat value directly in localStorage (for best run records) (global/persistent)
- */
 export const setStat = (key: string, value: number): void => {
   if (typeof window === 'undefined') return;
 
@@ -72,10 +50,6 @@ export const setStat = (key: string, value: number): void => {
   window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
 };
 
-// Session stats (sessionStorage) - reset on browser close
-/**
- * Get all arcade stats from sessionStorage (session-only)
- */
 export const getSessionStats = (): ArcadeStats => {
   if (typeof window === 'undefined') {
     return { tomatoes: 0, dockets: 0, fires: 0 };
@@ -88,17 +62,11 @@ export const getSessionStats = (): ArcadeStats => {
   };
 };
 
-/**
- * Get a single session stat value from sessionStorage (session-only)
- */
 export const getSessionStat = (key: string): number => {
   if (typeof window === 'undefined') return 0;
   return Number(sessionStorage.getItem(key) || 0);
 };
 
-/**
- * Add to a session stat value in sessionStorage and dispatch update event (session-only)
- */
 export const addSessionStat = (key: string, value: number = 1): number => {
   if (typeof window === 'undefined') return 0;
 
@@ -112,9 +80,6 @@ export const addSessionStat = (key: string, value: number = 1): number => {
   return newValue;
 };
 
-/**
- * Set a session stat value directly in sessionStorage (session-only)
- */
 export const setSessionStat = (key: string, value: number): void => {
   if (typeof window === 'undefined') return;
 
@@ -125,10 +90,6 @@ export const setSessionStat = (key: string, value: number): void => {
   window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
 };
 
-/**
- * Clear all session stats from sessionStorage (called on logout)
- * This resets the navbar display but keeps persistent stats in Settings
- */
 export const clearSessionStats = (): void => {
   if (typeof window === 'undefined') return;
 
@@ -140,10 +101,6 @@ export const clearSessionStats = (): void => {
   window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
 };
 
-/**
- * Clear all persistent stats from localStorage (for admin/debugging purposes)
- * Note: This is NOT called on logout - persistent stats should remain
- */
 export const clearArcadeStats = (): void => {
   if (typeof window === 'undefined') return;
 
@@ -155,7 +112,4 @@ export const clearArcadeStats = (): void => {
   window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
 };
 
-/**
- * Export stat keys for use in components
- */
 export { STAT_KEYS };

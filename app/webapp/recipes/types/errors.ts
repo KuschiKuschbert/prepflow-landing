@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * Error types for recipe operations
  */
@@ -75,7 +76,11 @@ export class UnknownError implements RecipeError {
  * Categorize an error into a RecipeError type
  */
 export function categorizeError(error: unknown, retryAction?: () => Promise<void>): RecipeError {
-  if (error instanceof NetworkError || error instanceof ValidationError || error instanceof ServerError) {
+  if (
+    error instanceof NetworkError ||
+    error instanceof ValidationError ||
+    error instanceof ServerError
+  ) {
     return error;
   }
 
@@ -96,7 +101,11 @@ export function categorizeError(error: unknown, retryAction?: () => Promise<void
     }
 
     // Server errors (5xx)
-    if (error.message.includes('500') || error.message.includes('502') || error.message.includes('503')) {
+    if (
+      error.message.includes('500') ||
+      error.message.includes('502') ||
+      error.message.includes('503')
+    ) {
       return new ServerError(
         'Server error occurred. Please try again in a moment.',
         error,
@@ -145,7 +154,7 @@ export async function retryWithBackoff<T>(
 
       if (attempt < maxRetries) {
         const delay = initialDelay * Math.pow(2, attempt);
-        console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`);
+        logger.dev(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }

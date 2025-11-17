@@ -47,9 +47,7 @@ export function RecipesErrorDisplay({
           <div className="flex-1">
             <p className="font-medium">{displayError.message}</p>
             {displayError.originalError && process.env.NODE_ENV === 'development' && (
-              <p className="mt-1 text-xs opacity-75">
-                {displayError.originalError.message}
-              </p>
+              <p className="mt-1 text-xs opacity-75">{displayError.originalError.message}</p>
             )}
           </div>
         </div>

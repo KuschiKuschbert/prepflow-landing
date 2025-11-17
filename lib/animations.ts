@@ -43,7 +43,7 @@ export function getAnimationDuration(baseDuration: number): number {
 export function getTransition(
   properties: string[] = ['all'],
   duration: number = ANIMATION_DURATION.normal,
-  easing: string = ANIMATION_EASING.easeInOut
+  easing: string = ANIMATION_EASING.easeInOut,
 ): string {
   const actualDuration = getAnimationDuration(duration);
   if (actualDuration === 0) return 'none';

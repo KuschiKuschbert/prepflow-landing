@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 
+import { logger } from '../../lib/logger';
 interface UseSampleDataGenerationProps {
   onRefreshLogs?: () => void;
 }
@@ -37,7 +38,7 @@ export function useSampleDataGeneration({ onRefreshLogs }: UseSampleDataGenerati
         showError(data.error || 'Failed to generate sample data');
       }
     } catch (error) {
-      console.error('Error generating sample data:', error);
+      logger.error('Error generating sample data:', error);
       showError('Failed to generate sample data. Please try again.');
     } finally {
       setIsGenerating(false);

@@ -41,7 +41,7 @@ export function EquipmentEditForm({
         onClick={handleButtonClick}
         className="space-y-4"
       >
-        <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
+        <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">
               {t('temperature.equipmentName', 'Equipment Name')}
@@ -64,8 +64,10 @@ export function EquipmentEditForm({
               onChange={e => {
                 const selectedType = e.target.value;
                 const defaultRange = getDefaultTemperatureRange(selectedType, item.name);
-                const minTempInput = e.currentTarget.form?.querySelector<HTMLInputElement>('input[name="minTemp"]');
-                const maxTempInput = e.currentTarget.form?.querySelector<HTMLInputElement>('input[name="maxTemp"]');
+                const minTempInput =
+                  e.currentTarget.form?.querySelector<HTMLInputElement>('input[name="minTemp"]');
+                const maxTempInput =
+                  e.currentTarget.form?.querySelector<HTMLInputElement>('input[name="maxTemp"]');
                 if (minTempInput) minTempInput.value = defaultRange.minTemp?.toString() || '';
                 if (maxTempInput) maxTempInput.value = defaultRange.maxTemp?.toString() || '';
               }}
@@ -83,7 +85,7 @@ export function EquipmentEditForm({
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 desktop:grid-cols-3">
+        <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">
               {t('temperature.location', 'Location')}

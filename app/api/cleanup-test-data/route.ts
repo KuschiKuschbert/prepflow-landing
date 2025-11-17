@@ -1,6 +1,7 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { logger } from '../../lib/logger';
 export async function POST(request: NextRequest) {
   // Prevent cleanup in production
   if (process.env.NODE_ENV === 'production') {
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
       errors: results.errors.length > 0 ? results.errors : undefined,
     });
   } catch (err) {
-    console.error('Error during test data cleanup:', err);
+    logger.error('Error during test data cleanup:', err);
     return NextResponse.json(
       {
         error: 'Internal server error during test data cleanup',
