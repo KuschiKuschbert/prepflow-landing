@@ -1,7 +1,7 @@
 // COGS Types
 export interface Recipe {
   id: string;
-  name: string;
+  recipe_name: string;
   description?: string;
   instructions?: string;
   yield: number;

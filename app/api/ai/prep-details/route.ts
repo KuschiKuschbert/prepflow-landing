@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         // Map to RecipePrepDetails format
         const prepDetails: RecipePrepDetails = {
           recipeId: recipe.id,
-          recipeName: recipe.name,
+          recipeName: recipe.recipe_name,
           prepDetails: [
             ...parsed.cutShapes.map(cs => ({
               type: 'cut_shape' as const,
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       prepDetails: {
         recipeId: recipe.id,
-        recipeName: recipe.name,
+        recipeName: recipe.recipe_name,
         prepDetails: [],
         sauces: [],
         marinations: [],

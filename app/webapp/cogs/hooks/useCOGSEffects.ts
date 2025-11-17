@@ -34,7 +34,7 @@ export function useCOGSEffects({
       if (actualRecipeId) setSelectedRecipe(actualRecipeId);
       if (calculations?.length > 0) loadCalculations(calculations);
       sessionStorage.removeItem('editingRecipe');
-      const recipeName = recipe?.name || 'Recipe';
+      const recipeName = recipe?.recipe_name || 'Recipe';
       setSuccessMessage(`Recipe "${recipeName}" loaded for editing!`);
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {

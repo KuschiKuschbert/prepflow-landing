@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     // Fetch recipes with instructions
     const { data: recipes } = await supabaseAdmin
       .from('recipes')
-      .select('id, name, description, yield, yield_unit, instructions')
+      .select('id, recipe_name, description, yield, yield_unit, instructions')
       .in('id', recipeIds)
       .not('instructions', 'is', null);
 
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       .map(recipe => ({
         recipe: {
           id: recipe.id,
-          name: recipe.recipe_name,
+          recipe_name: recipe.recipe_name,
           description: recipe.description || '',
           yield: recipe.yield,
           yield_unit: recipe.yield_unit,

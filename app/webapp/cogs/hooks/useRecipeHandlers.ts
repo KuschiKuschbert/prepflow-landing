@@ -80,7 +80,7 @@ export function useRecipeHandlers({
     if (!selectedRecipeData || calculations.length === 0) return;
     try {
       if (saveNow) await saveNow();
-      setSuccessMessage(`Recipe "${selectedRecipeData.name}" is complete! 🎉`);
+      setSuccessMessage(`Recipe "${selectedRecipeData.recipe_name}" is complete! 🎉`);
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       const errorMsg = 'Failed to save recipe. Please try again.';

@@ -65,7 +65,7 @@ export function useDishHandlers({
       if (recipeId) {
         const selectedRecipeData = recipes.find(r => r.id === recipeId);
         if (selectedRecipeData) {
-          setDishName(selectedRecipeData.name);
+          setDishName(selectedRecipeData.recipe_name);
           setDishPortions(selectedRecipeData.yield || 1);
         }
       } else {

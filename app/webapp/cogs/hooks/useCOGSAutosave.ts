@@ -32,7 +32,7 @@ export function useCOGSAutosave({
     : null;
 
   const recipeMetadataAutosaveId = selectedRecipe
-    ? deriveAutosaveId('recipes', selectedRecipe, [selectedRecipeData?.name || ''])
+    ? deriveAutosaveId('recipes', selectedRecipe, [selectedRecipeData?.recipe_name || ''])
     : null;
 
   const { status: recipeMetadataStatus } = useAutosave({

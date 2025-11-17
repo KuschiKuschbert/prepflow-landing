@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 interface CreateRecipeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateRecipe: (name: string) => Promise<{ id: string; name: string } | null>;
+  onCreateRecipe: (name: string) => Promise<{ id: string; recipe_name: string } | null>;
   onSuccess: (recipeId: string, recipeName: string) => void;
 }
 
@@ -54,7 +54,7 @@ export function CreateRecipeModal({
     try {
       const result = await onCreateRecipe(trimmedName);
       if (result) {
-        onSuccess(result.id, result.name);
+        onSuccess(result.id, result.recipe_name);
         onClose();
       } else {
         setError('Failed to create recipe. Please try again.');

@@ -144,7 +144,7 @@ export default function CogsClient() {
   });
   const { handleToggleAddIngredient } = useDishHandlers({
     showAddIngredient,
-    dishName: selectedRecipeData?.name || '',
+    dishName: selectedRecipeData?.recipe_name || '',
     recipes,
     recipeExists: null,
     selectedRecipe,
