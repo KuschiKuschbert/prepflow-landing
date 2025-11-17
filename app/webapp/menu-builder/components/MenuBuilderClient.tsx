@@ -151,6 +151,10 @@ export default function MenuBuilderClient({
     return <MenuEditor menu={selectedMenu} onBack={onBack} onMenuUpdated={handleMenuUpdated} />;
   }
 
+  // Capture selectedMenu.id for use in callbacks (TypeScript type narrowing fix)
+  // After early return, TypeScript narrows selectedMenu to null, so we use type assertion
+  const selectedMenuId = (selectedMenu as Menu | null)?.id;
+
   return (
     <div>
       {/* Database Setup Error */}
@@ -232,7 +236,7 @@ export default function MenuBuilderClient({
             onDeleteMenu={(deletedMenuId: string) => {
               // Optimistically remove menu (already done in MenuList)
               // If the deleted menu was selected, go back to list
-              if (selectedMenu?.id === deletedMenuId) {
+              if (selectedMenuId === deletedMenuId) {
                 setSelectedMenu(null);
               }
             }}
