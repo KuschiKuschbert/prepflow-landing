@@ -202,7 +202,7 @@ export default function MenuBuilderClient({
             <div className="flex-1">
               <p className="text-sm font-medium text-red-400">{error}</p>
               <button
-                onClick={fetchMenus}
+                onClick={() => fetchMenus()}
                 className="mt-3 flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-900/20 px-3 py-1.5 text-xs font-medium text-red-300 transition-colors hover:bg-red-900/30"
               >
                 <Icon icon={RefreshCw} size="xs" />
