@@ -232,9 +232,11 @@ export function EmployeeForm({
               <div className="relative">
                 <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-[#2a2a2a]">
                   {photoPreview.startsWith('data:') ? (
-                    <img
+                    <Image
                       src={photoPreview}
                       alt="Employee photo"
+                      width={80}
+                      height={80}
                       className="h-full w-full object-cover"
                     />
                   ) : (

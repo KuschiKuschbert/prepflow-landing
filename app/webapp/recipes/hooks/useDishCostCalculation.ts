@@ -68,6 +68,7 @@ export function useDishCostCalculation(
     };
 
     fetchRecipeIngredients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRecipes.map(sr => sr.recipe_id).join(',')]);
 
   // Calculate total cost

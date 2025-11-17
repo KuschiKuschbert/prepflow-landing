@@ -74,9 +74,10 @@ export function useRecipeSubscriptions({
       },
       recipes,
     );
+    const timerRef = debounceTimerRef.current;
     return () => {
-      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      if (timerRef) clearTimeout(timerRef);
       if (subscription) subscription.unsubscribe();
     };
-  }, [recipes.length]);
+  }, [recipes]);
 }

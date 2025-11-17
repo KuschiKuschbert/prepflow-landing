@@ -147,7 +147,7 @@ export default function IngredientTable({
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
             <tr>
               <th className="desktop:table-cell text-fluid-xs hidden px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
                 <button
@@ -199,7 +199,7 @@ export default function IngredientTable({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a]">
+          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
             {ingredients.map(ingredient => (
               <IngredientTableRow
                 key={ingredient.id}

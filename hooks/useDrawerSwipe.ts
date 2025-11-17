@@ -181,6 +181,7 @@ export function useDrawerSwipe({
     setIsDragging,
     setCanDrag,
     setVelocity,
+    setDragY,
     setUpwardMovement,
     setDragProgress,
   ]);

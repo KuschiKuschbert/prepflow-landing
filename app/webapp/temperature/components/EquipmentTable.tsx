@@ -78,7 +78,7 @@ export function EquipmentTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2a2a2a]">
+            <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
               {equipment.slice(startIndex, endIndex).map(item => {
                 const status = equipmentStatuses.get(item.id) || {
                   status: 'no-data',

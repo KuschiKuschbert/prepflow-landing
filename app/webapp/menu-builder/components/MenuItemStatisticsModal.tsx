@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
@@ -48,9 +48,9 @@ export function MenuItemStatisticsModal({
       setError(null);
       setIsEditingPrice(false);
     }
-  }, [isOpen, item]);
+  }, [isOpen, item, loadStatistics]);
 
-  const loadStatistics = async () => {
+  const loadStatistics = useCallback(async () => {
     if (!item) return;
 
     setLoading(true);
@@ -71,7 +71,7 @@ export function MenuItemStatisticsModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [menuId, item]);
 
   const handlePriceSave = async () => {
     if (!item) return;

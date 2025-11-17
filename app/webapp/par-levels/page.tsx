@@ -51,7 +51,7 @@ export default function ParLevelsPage() {
   useEffect(() => {
     fetchParLevels();
     fetchIngredients();
-  }, []);
+  }, [fetchParLevels, fetchIngredients]);
 
   const fetchParLevels = useCallback(async () => {
     setLoading(true);

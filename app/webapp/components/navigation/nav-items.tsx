@@ -113,104 +113,107 @@ export function useNavigationItems(
   const { settings } = useAdaptiveNavSettings();
   const [optimizedItems, setOptimizedItems] = useState<NavigationItemConfig[] | null>(null);
 
-  const baseItems: Omit<NavigationItemConfig, 'category'>[] = [
-    {
-      href: '/webapp',
-      label: t('nav.dashboard', 'Dashboard') as string,
-      icon: <Icon icon={LayoutDashboard} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/recipes',
-      label: t('nav.dishesAndRecipes', 'Dishes & Recipes') as string,
-      icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/performance',
-      label: t('nav.performance', 'Performance') as string,
-      icon: <Icon icon={BarChart3} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/cleaning',
-      label: t('nav.cleaning', 'Cleaning') as string,
-      icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/temperature',
-      label: t('nav.temperature', 'Temperature') as string,
-      icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#3B82F6]',
-    },
-    {
-      href: '/webapp/compliance',
-      label: t('nav.compliance', 'Compliance') as string,
-      icon: <Icon icon={ClipboardCheck} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#D925C7]',
-    },
-    {
-      href: '/webapp/employees',
-      label: t('nav.employees', 'Kitchen Staff') as string,
-      icon: <Icon icon={Users} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/suppliers',
-      label: t('nav.suppliers', 'Suppliers') as string,
-      icon: <Icon icon={Truck} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/par-levels',
-      label: t('nav.parLevels', 'Par Levels') as string,
-      icon: <Icon icon={Package2} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#3B82F6]',
-    },
-    {
-      href: '/webapp/order-lists',
-      label: t('nav.orderLists', 'Order Lists') as string,
-      icon: <Icon icon={ClipboardCheck} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#D925C7]',
-    },
-    {
-      href: '/webapp/sections',
-      label: t('nav.dishSections', 'Sections') as string,
-      icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/menu-builder',
-      label: t('nav.menuBuilder', 'Menu Builder') as string,
-      icon: <Icon icon={FileText} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#D925C7]',
-    },
-    {
-      href: '/webapp/prep-lists',
-      label: t('nav.prepLists', 'Prep Lists') as string,
-      icon: <Icon icon={ListChecks} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#3B82F6]',
-    },
-    {
-      href: '/webapp/ai-specials',
-      label: t('nav.aiSpecials', 'AI Specials') as string,
-      icon: <Icon icon={Bot} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/setup',
-      label: t('nav.setup', 'Setup') as string,
-      icon: <Icon icon={Settings} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#29E7CD]',
-    },
-    {
-      href: '/webapp/settings',
-      label: t('nav.settings', 'Settings') as string,
-      icon: <Icon icon={Settings2} size="sm" className="text-current" aria-hidden={true} />,
-      color: 'text-[#3B82F6]',
-    },
-  ];
+  const baseItems: Omit<NavigationItemConfig, 'category'>[] = useMemo(
+    () => [
+      {
+        href: '/webapp',
+        label: t('nav.dashboard', 'Dashboard') as string,
+        icon: <Icon icon={LayoutDashboard} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/recipes',
+        label: t('nav.dishesAndRecipes', 'Dishes & Recipes') as string,
+        icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/performance',
+        label: t('nav.performance', 'Performance') as string,
+        icon: <Icon icon={BarChart3} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/cleaning',
+        label: t('nav.cleaning', 'Cleaning') as string,
+        icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/temperature',
+        label: t('nav.temperature', 'Temperature') as string,
+        icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
+      },
+      {
+        href: '/webapp/compliance',
+        label: t('nav.compliance', 'Compliance') as string,
+        icon: <Icon icon={ClipboardCheck} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#D925C7]',
+      },
+      {
+        href: '/webapp/employees',
+        label: t('nav.employees', 'Kitchen Staff') as string,
+        icon: <Icon icon={Users} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/suppliers',
+        label: t('nav.suppliers', 'Suppliers') as string,
+        icon: <Icon icon={Truck} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/par-levels',
+        label: t('nav.parLevels', 'Par Levels') as string,
+        icon: <Icon icon={Package2} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
+      },
+      {
+        href: '/webapp/order-lists',
+        label: t('nav.orderLists', 'Order Lists') as string,
+        icon: <Icon icon={ClipboardCheck} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#D925C7]',
+      },
+      {
+        href: '/webapp/sections',
+        label: t('nav.dishSections', 'Sections') as string,
+        icon: <Icon icon={UtensilsCrossed} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/menu-builder',
+        label: t('nav.menuBuilder', 'Menu Builder') as string,
+        icon: <Icon icon={FileText} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#D925C7]',
+      },
+      {
+        href: '/webapp/prep-lists',
+        label: t('nav.prepLists', 'Prep Lists') as string,
+        icon: <Icon icon={ListChecks} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
+      },
+      {
+        href: '/webapp/ai-specials',
+        label: t('nav.aiSpecials', 'AI Specials') as string,
+        icon: <Icon icon={Bot} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/setup',
+        label: t('nav.setup', 'Setup') as string,
+        icon: <Icon icon={Settings} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/settings',
+        label: t('nav.settings', 'Settings') as string,
+        icon: <Icon icon={Settings2} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
+      },
+    ],
+    [t],
+  );
 
   // Assign categories based on workflow
   const itemsWithCategories = useMemo(
@@ -219,7 +222,7 @@ export function useNavigationItems(
         ...item,
         category: getCategoryForWorkflow(item.href, workflow),
       })),
-    [workflow, t],
+    [workflow, baseItems],
   );
 
   // Apply optimization if enabled (with debouncing)

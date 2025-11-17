@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import { MenuItem } from '../types';
 
@@ -78,9 +78,9 @@ export function MenuItemHoverStatistics({
       }
       // Don't clear statistics - keep cached data for next hover
     }
-  }, [isVisible, statistics, loading, menuId, item.id]);
+  }, [isVisible, statistics, loading, menuId, item.id, loadStatistics]);
 
-  const loadStatistics = async () => {
+  const loadStatistics = useCallback(async () => {
     const cacheKey = `${menuId}-${item.id}`;
     const cached = statisticsCache.get(cacheKey);
     const now = Date.now();
@@ -115,7 +115,7 @@ export function MenuItemHoverStatistics({
     } finally {
       setLoading(false);
     }
-  };
+  }, [menuId, item.id]);
 
   // Calculate tooltip position based on cursor
   useEffect(() => {

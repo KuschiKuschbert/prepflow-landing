@@ -100,9 +100,11 @@ export function EmployeeCard({
           {employee.photo_url ? (
             <div className="relative h-16 w-16 overflow-hidden rounded-2xl border-2 border-[#29E7CD]/20">
               {employee.photo_url.startsWith('data:') ? (
-                <img
+                <Image
                   src={employee.photo_url}
                   alt={employee.full_name}
+                  width={64}
+                  height={64}
                   className="h-full w-full object-cover"
                 />
               ) : (

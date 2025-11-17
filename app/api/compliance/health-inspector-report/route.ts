@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
         const allQualifications: any[] = [];
         employees?.forEach(emp => {
           if (emp.employee_qualifications) {
-            emp.employee_qualifications.forEach(qual => {
+            emp.employee_qualifications.forEach((qual: any) => {
               allQualifications.push({
                 employee_name: emp.full_name,
                 employee_role: emp.role,

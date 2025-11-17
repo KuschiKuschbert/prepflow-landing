@@ -4,7 +4,7 @@
 -- Ingredients table
 CREATE TABLE IF NOT EXISTS ingredients (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
+  ingredient_name VARCHAR(255) NOT NULL,
   brand VARCHAR(255),
   pack_size VARCHAR(100),
   unit VARCHAR(50) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS menu_dishes (
 );
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_ingredients_name ON ingredients(name);
+CREATE INDEX IF NOT EXISTS idx_ingredients_name ON ingredients(ingredient_name);
 CREATE INDEX IF NOT EXISTS idx_recipes_name ON recipes(name);
 CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_recipe_id ON recipe_ingredients(recipe_id);
 CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_ingredient_id ON recipe_ingredients(ingredient_id);
