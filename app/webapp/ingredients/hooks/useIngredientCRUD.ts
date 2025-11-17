@@ -24,10 +24,10 @@ export function useIngredientCRUD<
   const { handleDeleteIngredient: deleteFn } = useIngredientDelete(props);
 
   // Wrap delete function to pass current ingredients
-  const handleDeleteIngredient = (id: string) => {
+  const handleDeleteIngredient = (id: string): Promise<void> => {
     if (!props.ingredients) {
       props.setError('Ingredients list not available');
-      return;
+      return Promise.reject(new Error('Ingredients list not available'));
     }
     return deleteFn(id, props.ingredients);
   };
