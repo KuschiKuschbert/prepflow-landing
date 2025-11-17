@@ -92,6 +92,7 @@ export default function EmployeesPage() {
       if (data.success) {
         setEmployees([data.data, ...employees]);
         setNewEmployee({
+          employee_id: '',
           full_name: '',
           role: '',
           employment_start_date: new Date().toISOString().split('T')[0],
@@ -100,6 +101,7 @@ export default function EmployeesPage() {
           phone: '',
           email: '',
           emergency_contact: '',
+          photo_url: '',
           notes: '',
         });
         setShowAddForm(false);
