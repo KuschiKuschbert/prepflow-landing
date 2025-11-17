@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       const { error } = await supabaseAdmin.from('recipes').upsert(recipe, { onConflict: 'id' });
 
       if (error) {
-        logger.dev(`Error inserting recipe ${recipe.recipe_name}:`, error.message);
+        logger.dev(`Error inserting recipe ${recipe.name}:`, error.message);
       }
     }
 
