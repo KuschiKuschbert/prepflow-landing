@@ -119,7 +119,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
           }
         }
       } catch (err) {
-        logger.warn('[Menu Ingredients API] Error processing dishes (continuing):', err);
+        logger.warn('[Menu Ingredients API] Error processing dishes (continuing):', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { menuId },
+        });
       }
     }
 
@@ -142,7 +145,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
           });
         }
       } catch (err) {
-        logger.warn('[Menu Ingredients API] Error processing recipes (continuing):', err);
+        logger.warn('[Menu Ingredients API] Error processing recipes (continuing):', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { menuId },
+        });
       }
     }
 
@@ -205,7 +211,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       // Par levels are optional - continue without them
       logger.warn(
         '[Menu Ingredients API] Error fetching par levels (continuing without them):',
-        err,
+        {
+          error: err instanceof Error ? err.message : String(err),
+          context: { menuId },
+        },
       );
     }
 
