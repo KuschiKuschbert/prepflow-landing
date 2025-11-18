@@ -17,6 +17,16 @@ const CLEANING_AREAS_SELECT = `
   )
 `;
 
+/**
+ * GET /api/cleaning-tasks
+ * Get cleaning tasks with optional filters
+ *
+ * @param {NextRequest} request - Request object
+ * @param {string} [request.url.searchParams.area_id] - Filter by area ID
+ * @param {string} [request.url.searchParams.status] - Filter by status
+ * @param {string} [request.url.searchParams.date] - Filter by assigned date
+ * @returns {Promise<NextResponse>} List of cleaning tasks with area details
+ */
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -68,6 +78,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * POST /api/cleaning-tasks
+ * Create a new cleaning task
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string} request.body.area_id - Area ID (required)
+ * @param {string} request.body.assigned_date - Assigned date (required)
+ * @param {string} [request.body.notes] - Task notes
+ * @returns {Promise<NextResponse>} Created cleaning task
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -103,6 +124,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * PUT /api/cleaning-tasks
+ * Update an existing cleaning task
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string} request.body.id - Cleaning task ID (required)
+ * @param {string} [request.body.status] - Task status
+ * @param {string} [request.body.completed_date] - Completion date
+ * @param {string} [request.body.notes] - Task notes
+ * @param {string} [request.body.photo_url] - Photo URL
+ * @returns {Promise<NextResponse>} Updated cleaning task
+ */
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
@@ -136,6 +170,14 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+/**
+ * DELETE /api/cleaning-tasks
+ * Delete a cleaning task
+ *
+ * @param {NextRequest} request - Request object
+ * @param {string} request.url.searchParams.id - Cleaning task ID (required)
+ * @returns {Promise<NextResponse>} Deletion response
+ */
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

@@ -31,7 +31,10 @@ function findFiles() {
           walkDir(fullPath);
         }
       } else if (/\.(ts|tsx|js|jsx)$/.test(entry.name)) {
-        files.push(fullPath);
+        // Exclude logger.ts (intentional console usage)
+        if (!fullPath.includes('lib/logger.ts')) {
+          files.push(fullPath);
+        }
       }
     }
   }

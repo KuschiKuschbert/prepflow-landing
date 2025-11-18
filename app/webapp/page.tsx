@@ -1,19 +1,51 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import DashboardStatsClient from './components/DashboardStatsClient';
-import QuickActions from './components/QuickActions';
 import { PageHeader } from './components/static/PageHeader';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { DashboardSection } from '@/components/ui/DashboardSection';
 import { LayoutDashboard } from 'lucide-react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import KitchenOperations from './components/KitchenOperations';
-import KitchenAlerts from './components/KitchenAlerts';
-import ChefPerformanceInsights from './components/ChefPerformanceInsights';
-import TemperatureStatus from './components/TemperatureStatus';
-import MenuOverview from './components/MenuOverview';
-import KitchenCharts from './components/KitchenCharts';
+
+// Static imports - needed immediately
+import QuickActions from './components/QuickActions';
+
+// Dynamic imports - lazy load heavy dashboard components
+const DashboardStatsClient = dynamic(() => import('./components/DashboardStatsClient'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const KitchenOperations = dynamic(() => import('./components/KitchenOperations'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const MenuOverview = dynamic(() => import('./components/MenuOverview'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const KitchenAlerts = dynamic(() => import('./components/KitchenAlerts'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const TemperatureStatus = dynamic(() => import('./components/TemperatureStatus'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const ChefPerformanceInsights = dynamic(() => import('./components/ChefPerformanceInsights'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const KitchenCharts = dynamic(() => import('./components/KitchenCharts'), {
+  ssr: false,
+  loading: () => null, // Charts are non-critical, no loading state
+});
 
 export default function WebAppDashboard() {
   // ErrorBoundary is already in app/webapp/layout.tsx wrapping all children
@@ -67,7 +99,7 @@ export default function WebAppDashboard() {
           </div>
 
           {/* Row 4: Kitchen Charts */}
-          <Suspense fallback={<PageSkeleton />}>
+          <Suspense fallback={null}>
             <KitchenCharts />
           </Suspense>
         </div>

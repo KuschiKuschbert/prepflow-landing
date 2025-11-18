@@ -1,12 +1,19 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import MenuBuilderClient from './components/MenuBuilderClient';
 import { FileText } from 'lucide-react';
 import { Menu } from './types';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+
+// Lazy load MenuBuilderClient to reduce initial bundle size (uses dnd-kit)
+const MenuBuilderClient = dynamic(() => import('./components/MenuBuilderClient'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
 
 export default function MenuBuilderPage() {
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);

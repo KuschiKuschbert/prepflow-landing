@@ -1,42 +1,16 @@
-import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
+/**
+ * Performance monitoring utilities - re-exported from specialized modules.
+ */
 
-import { logger } from '@/lib/logger';
+import type { PerformanceMetrics } from './performance-monitor/metrics';
+import { initializeWebVitalsTracking, trackCustomMetrics, checkPerformanceBudget } from './performance-monitor/tracking';
+import { calculatePerformanceScore, getPerformanceGrade as calculateGrade } from './performance-monitor/scoring';
+import { PERFORMANCE_BUDGETS, PERFORMANCE_GOALS } from './performance-monitor/budgets';
+import type { PerformanceBudget } from './performance-monitor/budgets';
 
-export interface PerformanceMetrics {
-  lcp: number | null;
-  fid: number | null;
-  cls: number | null;
-  fcp: number | null;
-  ttfb: number | null;
-  inp: number | null;
-}
-
-export interface PerformanceBudget {
-  lcp: number; // 2.5s
-  fid: number; // 100ms
-  cls: number; // 0.1
-  fcp: number; // 1.8s
-  ttfb: number; // 600ms
-  inp: number; // 200ms
-}
-
-export const PERFORMANCE_BUDGETS: PerformanceBudget = {
-  lcp: 2500,
-  fid: 100,
-  cls: 0.1,
-  fcp: 1800,
-  ttfb: 600,
-  inp: 200,
-};
-
-export const PERFORMANCE_GOALS: PerformanceBudget = {
-  lcp: 1500,
-  fid: 50,
-  cls: 0.05,
-  fcp: 1200,
-  ttfb: 300,
-  inp: 100,
-};
+// Re-export types and constants
+export type { PerformanceMetrics, PerformanceBudget };
+export { PERFORMANCE_BUDGETS, PERFORMANCE_GOALS };
 
 class PerformanceMonitor {
   private metrics: PerformanceMetrics = {
@@ -55,87 +29,22 @@ class PerformanceMonitor {
   }
 
   private initializeTracking() {
-    onLCP(metric => this.updateMetric('lcp', metric));
-    onFCP(metric => this.updateMetric('fcp', metric));
-    onCLS(metric => this.updateMetric('cls', metric));
-    onTTFB(metric => this.updateMetric('ttfb', metric));
-    onINP(metric => this.updateMetric('inp', metric));
-    this.trackCustomMetrics();
+    initializeWebVitalsTracking(
+      (key, metric) => this.updateMetric(key, metric),
+      (key, metric) => checkPerformanceBudget(key, metric),
+    );
+    trackCustomMetrics(() => {
+      // Custom metrics don't map to standard keys, so we'll skip them for now
+    });
   }
 
-  private updateMetric(key: keyof PerformanceMetrics, metric: Metric) {
+  private updateMetric(key: keyof PerformanceMetrics, metric: { value: number }) {
     this.metrics[key] = metric.value;
     this.notifyListeners();
-    this.checkPerformanceBudget(key, metric);
   }
 
   private notifyListeners() {
     this.listeners.forEach(listener => listener(this.metrics));
-  }
-
-  private checkPerformanceBudget(key: keyof PerformanceMetrics, metric: Metric) {
-    const budget = PERFORMANCE_BUDGETS[key];
-    const goal = PERFORMANCE_GOALS[key];
-    if (budget && metric.value > budget) {
-      logger.warn(`🚨 Performance Budget Exceeded: ${key.toUpperCase()}`, {
-        value: metric.value,
-        budget,
-        goal,
-        rating: metric.rating,
-      });
-      this.sendPerformanceAlert(key, metric, 'budget_exceeded');
-    } else if (goal && metric.value <= goal) {
-      logger.dev(`✅ Performance Goal Met: ${key.toUpperCase()}`, {
-        value: metric.value,
-        budget,
-        goal,
-        rating: metric.rating,
-      });
-    }
-  }
-
-  private sendPerformanceAlert(key: string, metric: Metric, type: string) {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'performance_alert', {
-        event_category: 'Performance',
-        event_label: key,
-        value: Math.round(metric.value),
-        custom_parameter_metric_name: key,
-        custom_parameter_metric_value: Math.round(metric.value),
-        custom_parameter_metric_rating: metric.rating,
-        custom_parameter_alert_type: type,
-        custom_parameter_page: window.location.pathname,
-      });
-    }
-  }
-
-  private trackCustomMetrics() {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('load', () =>
-        this.trackCustomMetric('page_load_time', performance.now()),
-      );
-      document.addEventListener('DOMContentLoaded', () =>
-        this.trackCustomMetric('dom_ready_time', performance.now()),
-      );
-      if ('performance' in window && 'getEntriesByType' in performance) {
-        performance
-          .getEntriesByType('paint')
-          .forEach(entry => this.trackCustomMetric(`paint_${entry.name}`, entry.startTime));
-      }
-    }
-  }
-
-  private trackCustomMetric(name: string, value: number) {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'custom_metric', {
-        event_category: 'Performance',
-        event_label: name,
-        value: Math.round(value),
-        custom_parameter_metric_name: name,
-        custom_parameter_metric_value: Math.round(value),
-        custom_parameter_page: window.location.pathname,
-      });
-    }
   }
 
   public getMetrics(): PerformanceMetrics {
@@ -151,28 +60,11 @@ class PerformanceMonitor {
   }
 
   public getPerformanceScore(): number {
-    const metrics = this.getMetrics();
-    let score = 0;
-    let count = 0;
-    Object.entries(metrics).forEach(([key, value]) => {
-      if (value !== null) {
-        const budget = PERFORMANCE_BUDGETS[key as keyof PerformanceBudget];
-        const goal = PERFORMANCE_GOALS[key as keyof PerformanceBudget];
-        if (budget && goal) {
-          score += (1 - Math.min(value / goal, 1)) * 100;
-          count++;
-        }
-      }
-    });
-    return count > 0 ? Math.round(score / count) : 0;
+    return calculatePerformanceScore(this.getMetrics());
   }
 
   public getPerformanceGrade(): 'A' | 'B' | 'C' | 'D' | 'F' {
-    const score = this.getPerformanceScore();
-    if (score >= 90) return 'A';
-    if (score >= 80) return 'B';
-    if (score >= 70) return 'C';
-    return score >= 60 ? 'D' : 'F';
+    return calculateGrade(this.getPerformanceScore());
   }
 }
 

@@ -3,6 +3,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateSalesDataForMonth } from '@/lib/populate-helpers/generate-sales-data';
 
 import { logger } from '@/lib/logger';
+
+/**
+ * POST /api/generate-sales-data
+ * Generate synthetic sales data for menu items
+ *
+ * @param {NextRequest} request - Request object
+ * @param {string} [request.url.searchParams.days] - Number of days to generate (default: 30)
+ * @param {string} [request.url.searchParams.startDate] - Start date (ISO format)
+ * @returns {Promise<NextResponse>} Sales data generation response
+ */
 export async function POST(request: NextRequest) {
   try {
     logger.dev('🚀 POST /api/generate-sales-data - Starting...');

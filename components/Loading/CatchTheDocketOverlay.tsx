@@ -1,9 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import CatchTheDocket from '@/components/Loading/CatchTheDocket';
 import { subscribeLoadingGate } from '@/lib/loading-gate';
 import { prefersReducedMotion, isArcadeDisabled, isTouchDevice } from '@/lib/arcadeGuards';
-import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useMemo, useState } from 'react';
 
 const routePath = () => {
@@ -14,6 +14,43 @@ const routePath = () => {
 const isAuthRoute = (path: string) => {
   return path.startsWith('/api/auth') || path.startsWith('/login') || path.startsWith('/auth');
 };
+
+// Lazy load framer-motion to reduce initial bundle size
+const CatchTheDocketOverlayContent = dynamic(
+  () =>
+    import('framer-motion').then(mod => {
+      const { AnimatePresence, motion } = mod;
+
+      return {
+        default: function CatchTheDocketOverlayContent({
+          active,
+        }: {
+          active: boolean;
+        }) {
+          return (
+            <AnimatePresence>
+              {active && (
+                <motion.div
+                  key="catch-docket-overlay"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="fixed inset-0 z-[60]"
+                >
+                  <CatchTheDocket isLoading={true} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          );
+        },
+      };
+    }),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
 const CatchTheDocketOverlay: React.FC = () => {
   const [active, setActive] = useState(false);
@@ -78,22 +115,7 @@ const CatchTheDocketOverlay: React.FC = () => {
   // Safety checks - only disable for reduced motion, arcade disabled flag, or auth routes
   if (disabled || isArcadeDisabled() || prefersReducedMotion()) return null;
 
-  return (
-    <AnimatePresence>
-      {active && (
-        <motion.div
-          key="catch-docket-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[60]"
-        >
-          <CatchTheDocket isLoading={true} />
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+  return <CatchTheDocketOverlayContent active={active} />;
 };
 
 export default CatchTheDocketOverlay;

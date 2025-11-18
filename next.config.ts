@@ -25,7 +25,16 @@ const nextConfig: NextConfig = {
 
   // Experimental features for performance
   experimental: {
-    optimizePackageImports: ['@supabase/supabase-js', '@vercel/analytics'],
+    optimizePackageImports: [
+      '@supabase/supabase-js',
+      '@vercel/analytics',
+      'recharts',
+      'lucide-react',
+      'framer-motion',
+      '@dnd-kit/core',
+      '@dnd-kit/sortable',
+      '@tanstack/react-query',
+    ],
     // Enable modern bundling (disabled for Turbopack compatibility)
     // esmExternals: true, // Disabled - causes module import errors with Turbopack
     // Optimize CSS loading to prevent unused preloads
@@ -63,7 +72,7 @@ const nextConfig: NextConfig = {
       config.optimization.splitChunks = {
         chunks: 'all',
         minSize: 20000,
-        maxSize: 244000,
+        maxSize: 200000, // Reduced for better code splitting
         cacheGroups: {
           // Vendor chunks
           vendor: {
@@ -95,6 +104,30 @@ const nextConfig: NextConfig = {
             name: 'react',
             chunks: 'all',
             priority: 25,
+            reuseExistingChunk: true,
+          },
+          // Framer Motion chunk (heavy animation library - lazy loaded in most places)
+          framerMotion: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: 'framer-motion',
+            chunks: 'async', // Only load when needed (page transitions, arcade components)
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          // DnD Kit chunk (drag and drop library - only used in menu-builder)
+          dndKit: {
+            test: /[\\/]node_modules[\\/]@dnd-kit[\\/]/,
+            name: 'dnd-kit',
+            chunks: 'async', // Only load when needed (menu-builder route)
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          // Recharts chunk (charting library - already lazy loaded)
+          recharts: {
+            test: /[\\/]node_modules[\\/]recharts[\\/]/,
+            name: 'recharts',
+            chunks: 'async', // Only load when needed (lazy loaded)
+            priority: 20,
             reuseExistingChunk: true,
           },
           // Common chunk

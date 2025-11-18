@@ -1,0 +1,155 @@
+'use client';
+
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useRef } from 'react';
+import { MenuItem } from '../types';
+import { useMenuItemDropdowns } from './SortableMenuItem/hooks/useMenuItemDropdowns';
+import { useMenuItemHover } from './SortableMenuItem/hooks/useMenuItemHover';
+import { MenuItemContent } from './SortableMenuItem/components/MenuItemContent';
+import { MenuItemActions } from './SortableMenuItem/components/MenuItemActions';
+import { MenuItemTooltip } from './SortableMenuItem/components/MenuItemTooltip';
+
+interface SortableMenuItemProps {
+  item: MenuItem;
+  menuId: string;
+  onRemove: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  onMoveToCategory?: (targetCategory: string) => void;
+  onUpdateActualPrice?: (itemId: string, price: number | null) => void;
+  onShowStatistics?: (item: MenuItem) => void;
+  availableCategories?: string[];
+  currentCategory: string;
+  isFirst: boolean;
+  isLast: boolean;
+  onHoverItem?: (item: MenuItem | null) => void;
+  onClickItem?: (item: MenuItem) => void;
+  onMouseMove?: (position: { x: number; y: number }) => void;
+}
+
+export function SortableMenuItem({
+  item,
+  menuId,
+  onRemove,
+  onMoveUp,
+  onMoveDown,
+  onMoveToCategory,
+  onUpdateActualPrice,
+  onShowStatistics,
+  availableCategories = [],
+  currentCategory,
+  isFirst,
+  isLast,
+  onHoverItem,
+  onClickItem,
+  onMouseMove,
+}: SortableMenuItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: item.id,
+    data: {
+      type: 'menu-item',
+      item,
+    },
+  });
+
+  const itemRef = useRef<HTMLDivElement>(null);
+  const priceInputRef = useRef<HTMLInputElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  const {
+    showCategoryDropdown,
+    setShowCategoryDropdown,
+    showReorderDropdown,
+    setShowReorderDropdown,
+    categoryDropdownRef,
+    reorderDropdownRef,
+    handleMoveToCategory,
+  } = useMenuItemDropdowns({
+    onMoveToCategory,
+    currentCategory,
+    availableCategories,
+  });
+
+  const {
+    isHovered,
+    setIsHovered,
+    mousePosition,
+    setMousePosition,
+    handleMouseEnter,
+    handleMouseMove,
+    handleMouseLeave,
+  } = useMenuItemHover({
+    item,
+    onHoverItem,
+    onMouseMove,
+  });
+
+  // Don't apply transform when dragging - let DragOverlay handle the visual representation
+  const style = {
+    transform: isDragging ? 'none' : CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0 : 1,
+  };
+
+
+  const handleClick = (e: React.MouseEvent) => {
+    // Don't trigger if clicking on buttons or dropdowns
+    if (
+      (e.target as HTMLElement).closest('button') ||
+      (e.target as HTMLElement).closest('[role="menu"]') ||
+      (e.target as HTMLElement).closest('[role="menuitem"]')
+    ) {
+      return;
+    }
+    onClickItem?.(item);
+  };
+
+  return (
+    <div
+      ref={node => {
+        setNodeRef(node);
+        itemRef.current = node;
+      }}
+      data-sortable-id={item.id}
+      style={style}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={e => handleMouseLeave(e, tooltipRef)}
+      className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50"
+    >
+      <MenuItemContent item={item} />
+
+      <MenuItemActions
+        onRemove={onRemove}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+        onMoveToCategory={onMoveToCategory}
+        availableCategories={availableCategories}
+        currentCategory={currentCategory}
+        isFirst={isFirst}
+        isLast={isLast}
+        showReorderDropdown={showReorderDropdown}
+        setShowReorderDropdown={setShowReorderDropdown}
+        showCategoryDropdown={showCategoryDropdown}
+        setShowCategoryDropdown={setShowCategoryDropdown}
+        handleMoveToCategory={handleMoveToCategory}
+        reorderDropdownRef={reorderDropdownRef}
+        categoryDropdownRef={categoryDropdownRef}
+      />
+
+      <MenuItemTooltip
+        item={item}
+        menuId={menuId}
+        isHovered={isHovered}
+        mousePosition={mousePosition}
+        tooltipRef={tooltipRef}
+        setIsHovered={setIsHovered}
+        setMousePosition={setMousePosition}
+        onHoverItem={onHoverItem}
+        onMouseMove={handleMouseMove}
+      />
+    </div>
+  );
+}

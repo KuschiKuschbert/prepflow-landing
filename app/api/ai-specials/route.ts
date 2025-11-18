@@ -6,6 +6,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { handleAISpecialsError } from './helpers/handleAISpecialsError';
 import { processImageWithAI } from './helpers/processImageWithAI';
 
+/**
+ * POST /api/ai-specials
+ * Generate AI-powered specials suggestions from image analysis
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string} request.body.userId - User ID
+ * @param {string} request.body.imageData - Image data (data URL or public URL)
+ * @param {string} [request.body.prompt] - Optional prompt
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @returns {Promise<NextResponse>} AI specials response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -116,6 +128,15 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * GET /api/ai-specials
+ * Fetch AI specials history for a user
+ *
+ * @param {NextRequest} request - Request object
+ * @param {string} request.url - Request URL with search params
+ * @param {string} request.url.searchParams.userId - User ID query parameter
+ * @returns {Promise<NextResponse>} AI specials history response
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

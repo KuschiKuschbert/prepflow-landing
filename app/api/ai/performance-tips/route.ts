@@ -14,6 +14,17 @@ import {
 import { generatePerformanceTips } from '@/app/webapp/performance/utils/generatePerformanceTips';
 import type { PerformanceItem } from '@/app/webapp/performance/types';
 
+/**
+ * POST /api/ai/performance-tips
+ * Generate AI-powered performance tips with fallback to rule-based logic
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {number} request.body.performanceScore - Performance score
+ * @param {PerformanceItem[]} request.body.performanceItems - Performance items
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @returns {Promise<NextResponse>} Performance tips response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

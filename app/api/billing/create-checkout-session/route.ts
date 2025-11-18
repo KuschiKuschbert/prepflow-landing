@@ -16,6 +16,16 @@ const checkoutSessionSchema = z
     message: 'Either priceId or tier must be provided',
   });
 
+/**
+ * POST /api/billing/create-checkout-session
+ * Create Stripe checkout session for subscription
+ *
+ * @param {NextRequest} req - Request object
+ * @param {Object} req.body - Request body (validated against checkoutSessionSchema)
+ * @param {string} [req.body.priceId] - Stripe price ID
+ * @param {'starter' | 'pro' | 'enterprise'} [req.body.tier] - Subscription tier
+ * @returns {Promise<NextResponse>} Checkout session URL
+ */
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe();

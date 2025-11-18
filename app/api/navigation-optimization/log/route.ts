@@ -15,6 +15,20 @@ const navigationLogSchema = z.object({
   returnFrequency: z.number().optional(),
 });
 
+/**
+ * POST /api/navigation-optimization/log
+ * Log navigation usage for adaptive optimization
+ *
+ * @param {NextRequest} req - Request object
+ * @param {Object} req.body - Request body (validated against navigationLogSchema)
+ * @param {string} req.body.href - Navigation href
+ * @param {number} [req.body.timestamp] - Timestamp
+ * @param {number} req.body.dayOfWeek - Day of week (0-6)
+ * @param {number} req.body.hourOfDay - Hour of day (0-23)
+ * @param {number} [req.body.timeSpent] - Time spent in milliseconds
+ * @param {number} [req.body.returnFrequency] - Return frequency
+ * @returns {Promise<NextResponse>} Log response
+ */
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

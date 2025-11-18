@@ -17,6 +17,16 @@ import type { RecipePrepDetails, SectionData } from '@/app/webapp/prep-lists/typ
 
 import { logger } from '@/lib/logger';
 
+/**
+ * POST /api/prep-lists/analyze-prep-details
+ * Analyze prep details for recipes in the background (async, non-blocking)
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string[]} request.body.recipeIds - Recipe IDs to analyze
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @returns {Promise<NextResponse>} Prep details analysis response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

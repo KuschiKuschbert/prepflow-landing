@@ -1,20 +1,15 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useCOGSDataFetching } from '../../cogs/hooks/useCOGSDataFetching';
 import { useCOGSCalculationLogic } from '../../cogs/hooks/useCOGSCalculationLogic';
 import { usePricing } from '../../cogs/hooks/usePricing';
 import { useIngredientConversion } from '../../cogs/hooks/useIngredientConversion';
-import {
-  handleIngredientAdded,
-  removeCalculation,
-  editCalculation,
-  clearCalculations,
-} from './utils/ingredientManagement';
-import { saveDish as saveDishHelper } from './utils/dishSave';
 import { useAutoPopulatePrice } from './utils/autoPopulatePrice';
+import { createDishBuilderCallbacks } from './helpers/createCallbacks';
 import { DishBuilderState } from '../types';
-import { COGSCalculation, Ingredient } from '../../cogs/types';
+import { COGSCalculation } from '../../cogs/types';
+
 export function useDishBuilder() {
   const { ingredients, recipes, loading, error, setError, fetchData } = useCOGSDataFetching();
   const [dishState, setDishState] = useState<DishBuilderState>({
@@ -55,22 +50,21 @@ export function useDishBuilder() {
 
   useAutoPopulatePrice({ pricingCalculation, dishState, setDishState });
 
-  const handleIngredientAddedCallback = useCallback(
-    (ingredient: Ingredient, quantity: number, unit: string) => {
-      handleIngredientAdded(
-        {
-          calculations,
-          calculationsRef,
-          ingredients,
-          setCalculations,
-          updateCalculation,
-          convertIngredientQuantity,
-        },
-        ingredient,
-        quantity,
-        unit,
-      );
-    },
+  // Create callbacks - they are already memoized by the helper functions
+  // Note: The helper functions return stable function references
+  const callbacks = useMemo(
+    () =>
+      createDishBuilderCallbacks({
+        calculations,
+        calculationsRef,
+        ingredients,
+        setCalculations,
+        updateCalculation,
+        convertIngredientQuantity,
+        dishState,
+        setError,
+        setDishState,
+      }),
     [
       calculations,
       calculationsRef,
@@ -78,37 +72,10 @@ export function useDishBuilder() {
       setCalculations,
       updateCalculation,
       convertIngredientQuantity,
+      dishState,
+      setError,
+      setDishState,
     ],
-  );
-
-  const removeCalculationCallback = useCallback(
-    (ingredientId: string) => removeCalculation(setCalculations, ingredientId),
-    [setCalculations],
-  );
-  const editCalculationCallback = useCallback(
-    (ingredientId: string, newQuantity: number, newUnit: string) =>
-      editCalculation(
-        {
-          calculationsRef,
-          ingredients,
-          setCalculations,
-          updateCalculation,
-          convertIngredientQuantity,
-        },
-        ingredientId,
-        newQuantity,
-        newUnit,
-      ),
-    [calculationsRef, ingredients, setCalculations, updateCalculation, convertIngredientQuantity],
-  );
-  const clearCalculationsCallback = useCallback(
-    () => clearCalculations(setCalculations),
-    [setCalculations],
-  );
-  const saveDishCallback = useCallback(
-    async () =>
-      saveDishHelper({ dishState, calculations, setError, setDishState, setCalculations }),
-    [dishState, calculations, setError, setDishState, setCalculations],
   );
 
   const totalCOGS = useMemo(
@@ -134,10 +101,6 @@ export function useDishBuilder() {
     allStrategyPrices,
     setTargetGrossProfit,
     setPricingStrategy,
-    handleIngredientAdded: handleIngredientAddedCallback,
-    removeCalculation: removeCalculationCallback,
-    editCalculation: editCalculationCallback,
-    clearCalculations: clearCalculationsCallback,
-    saveDish: saveDishCallback,
+    ...callbacks,
   };
 }

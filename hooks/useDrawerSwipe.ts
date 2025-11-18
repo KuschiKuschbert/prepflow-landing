@@ -2,6 +2,11 @@ import { useCallback, useRef } from 'react';
 import { useDrawerState } from './utils/drawerStateManagement';
 import { handleTouchMoveLogic } from './utils/drawerTouchMoveHandler';
 import { handleTouchEndLogic } from './utils/drawerTouchEndHandler';
+import {
+  startDrag,
+  handleHandleTouchStart as handleHandleTouchStartHelper,
+  handleContentTouchStart as handleContentTouchStartHelper,
+} from './useDrawerSwipe/touchStartHandlers';
 
 interface UseDrawerSwipeOptions {
   isOpen: boolean;
@@ -61,44 +66,39 @@ export function useDrawerSwipe({
     maxUpwardMovementRef,
   } = useDrawerState(isOpen, contentRef);
 
-  const startDrag = (touchY: number) => {
-    const now = Date.now();
-    setStartY(touchY);
-    setLastY(touchY);
-    setLastTime(now);
-    setIsDragging(true);
-    setCanDrag(true);
-    setVelocity(0);
-    setDragY(0);
-  };
   const handleHandleTouchStart = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    if (drawerRef.current) startDrag(e.touches[0].clientY);
+    handleHandleTouchStartHelper(e, drawerRef, (touchY: number) => {
+      startDrag(
+        touchY,
+        setStartY,
+        setLastY,
+        setLastTime,
+        setIsDragging,
+        setCanDrag,
+        setVelocity,
+        setDragY,
+      );
+    });
   };
+
   const handleContentTouchStart = (e: React.TouchEvent) => {
-    if (!contentRef.current || !drawerRef.current) return;
-    const atTop = contentRef.current.scrollTop <= 5;
-    const touchY = e.touches[0].clientY;
-    const drawerRect = drawerRef.current.getBoundingClientRect();
-    const touchRelativeToDrawer = touchY - drawerRect.top;
-    const now = Date.now();
-    setStartY(touchY);
-    setLastY(touchY);
-    setLastTime(now);
-    maxUpwardMovementRef.current = 0;
-    setIsAtTop(atTop);
-    setUpwardMovement(0);
-    setDragProgress(0);
-    if (atTop) {
-      setIsDragging(true);
-      setCanDrag(true);
-      setDragY(0);
-      setVelocity(0);
-    } else {
-      const inDragArea = touchRelativeToDrawer < contentTopDragArea;
-      setIsDragging(inDragArea);
-      setCanDrag(inDragArea);
-    }
+    handleContentTouchStartHelper(
+      e,
+      contentRef,
+      drawerRef,
+      contentTopDragArea,
+      maxUpwardMovementRef,
+      setStartY,
+      setLastY,
+      setLastTime,
+      setIsAtTop,
+      setUpwardMovement,
+      setDragProgress,
+      setIsDragging,
+      setCanDrag,
+      setDragY,
+      setVelocity,
+    );
   };
 
   const handleTouchMove = useCallback(

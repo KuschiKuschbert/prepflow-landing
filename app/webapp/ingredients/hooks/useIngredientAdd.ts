@@ -1,11 +1,13 @@
 'use client';
 
 import { normalizeIngredientData } from '@/lib/ingredients/normalizeIngredientDataMain';
-import { supabase } from '@/lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
+import { handleIngredientInsert } from './helpers/handleIngredientInsert';
+import { handleIngredientInsertError, formatIngredientInsertError } from './helpers/errorHandling';
+import { performOptimisticUpdate, replaceWithServerIngredient } from './helpers/optimisticUpdate';
+import { formatIngredientErrorMessage } from './helpers/errorMessageFormatting';
 
-import { logger } from '@/lib/logger';
 interface UseIngredientAddProps<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },
 > {
@@ -54,60 +56,28 @@ export function useIngredientAdd<
           throw new Error(normalizeError);
         }
 
-        // Create temporary ingredient for optimistic update
-        const tempId = `temp-${Date.now()}`;
-        const tempIngredient = { ...normalized, id: tempId } as unknown as T;
-
-        // Optimistically add to UI immediately
-        setIngredients(prev => {
-          originalIngredients = [...prev];
-          return [...prev, tempIngredient];
+        // Perform optimistic update
+        const tempId = performOptimisticUpdate({
+          normalized,
+          originalIngredients,
+          setIngredients,
+          setShowAddForm,
+          setWizardStep,
+          setNewIngredient,
+          DEFAULT_INGREDIENT: DEFAULT_INGREDIENT as unknown as Partial<T>,
         });
 
-        // Close form optimistically
-        if (setShowAddForm) setShowAddForm(false);
-        if (setWizardStep) setWizardStep(1);
-        if (setNewIngredient) setNewIngredient(DEFAULT_INGREDIENT as unknown as Partial<T>);
-
-        const { data, error } = await supabase.from('ingredients').insert([normalized]).select();
+        // Insert ingredient (with API fallback)
+        const { data, error } = await handleIngredientInsert(normalized, ingredientData);
 
         if (error) {
-          if (error.code === '42501' || error.message?.includes('row-level security')) {
-            logger.warn('RLS policy blocked direct insert, falling back to API route');
-            const response = await fetch('/api/ingredients', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(ingredientData),
-            });
+          handleIngredientInsertError(error, originalIngredients, setIngredients, setError, setShowAddForm);
+          throw new Error(formatIngredientInsertError(error));
+        }
 
-            const result = await response.json();
-            if (!response.ok || !result.success) {
-              // Revert optimistic update on error
-              setIngredients(originalIngredients);
-              // Reopen form on error
-              if (setShowAddForm) setShowAddForm(true);
-              const errorMsg = result.details || result.error || 'Failed to add ingredient';
-              setError(`Failed to add ingredient: ${errorMsg}`);
-              throw new Error(errorMsg);
-            }
-
-            // Replace temp ingredient with real ingredient from server
-            if (result.data) {
-              setIngredients(prev => prev.map(ing => (ing.id === tempId ? result.data : ing)));
-            }
-          } else {
-            // Revert optimistic update on error
-            setIngredients(originalIngredients);
-            // Reopen form on error
-            if (setShowAddForm) setShowAddForm(true);
-            logger.error('Supabase error inserting ingredient:', error);
-            throw error;
-          }
-        } else {
-          // Replace temp ingredient with real ingredient from server
-          if (data && data.length > 0) {
-            setIngredients(prev => prev.map(ing => (ing.id === tempId ? data[0] : ing)));
-          }
+        // Replace temp ingredient with real ingredient from server
+        if (data) {
+          replaceWithServerIngredient([], tempId, data as T, setIngredients);
         }
 
         await queryClient.invalidateQueries({ queryKey: ['ingredients'] });
@@ -118,12 +88,7 @@ export function useIngredientAdd<
         }
         // Reopen form on error
         if (setShowAddForm) setShowAddForm(true);
-        const msg =
-          error?.message ||
-          (error?.code
-            ? `Database error (${error.code})${error?.details ? `: ${error.details}` : ''}${error?.hint ? ` Hint: ${error.hint}` : ''}`
-            : error?.details || 'Failed to add ingredient');
-        setError(`Failed to add ingredient: ${msg}`);
+        setError(`Failed to add ingredient: ${formatIngredientErrorMessage(error)}`);
         throw error;
       }
     },

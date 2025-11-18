@@ -1,6 +1,7 @@
-import { flushSync } from 'react-dom';
-import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
 import type { COGSCalculation, Ingredient } from '../../../cogs/types';
+import { addIngredientToCalculations } from './helpers/addIngredient';
+import { editIngredientCalculation } from './helpers/editIngredient';
+import { removeCalculation, clearCalculations } from './helpers/calculationHelpers';
 
 interface IngredientManagementProps {
   calculations: COGSCalculation[];
@@ -26,7 +27,6 @@ interface IngredientManagementProps {
 
 export function handleIngredientAdded(
   {
-    calculations,
     calculationsRef,
     ingredients,
     setCalculations,
@@ -44,35 +44,19 @@ export function handleIngredientAdded(
     unit,
     ingredient.unit || 'kg',
   );
-  if (existingCalc) {
-    flushSync(() => {
-      updateCalculation(
-        ingredient.id,
-        existingCalc.quantity + convertedQuantity,
-        ingredients,
-        setCalculations,
-      );
-    });
-  } else {
-    const newCalc = createCalculation(
-      ingredient.id,
-      ingredient,
-      convertedQuantity,
-      convertedUnit,
-      conversionNote || '',
-      null, // selectedRecipe - not applicable for dish builder
-    );
-    flushSync(() => {
-      setCalculations(prev => [...prev, newCalc]);
-    });
-  }
-}
-
-export function removeCalculation(
-  setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
-  ingredientId: string,
-): void {
-  setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
+  addIngredientToCalculations({
+    ingredient,
+    quantity,
+    unit,
+    convertedQuantity,
+    convertedUnit,
+    conversionNote,
+    existingCalc,
+    currentCalculations,
+    updateCalculation,
+    ingredients,
+    setCalculations,
+  });
 }
 
 export function editCalculation(
@@ -92,18 +76,18 @@ export function editCalculation(
   if (!existingCalc) return;
   const ingredient = ingredients.find(ing => ing.id === ingredientId);
   if (!ingredient) return;
-  const { convertedQuantity } = convertIngredientQuantity(
+  const { convertedQuantity } = convertIngredientQuantity(newQuantity, newUnit, ingredient.unit || 'kg');
+  editIngredientCalculation({
+    ingredientId,
     newQuantity,
     newUnit,
-    ingredient.unit || 'kg',
-  );
-  flushSync(() => {
-    updateCalculation(ingredientId, convertedQuantity, ingredients, setCalculations);
+    convertedQuantity,
+    currentCalculations,
+    ingredients,
+    setCalculations,
+    updateCalculation,
   });
 }
 
-export function clearCalculations(
-  setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
-): void {
-  setCalculations([]);
-}
+// Re-export helpers for backward compatibility
+export { removeCalculation, clearCalculations };

@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+
+/**
+ * POST /api/assign-dish-section
+ * Assign a dish to a kitchen section
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string} request.body.dishId - Dish ID (required)
+ * @param {string} [request.body.sectionId] - Kitchen section ID (optional, null to unassign)
+ * @returns {Promise<NextResponse>} Assignment response with updated dish data
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

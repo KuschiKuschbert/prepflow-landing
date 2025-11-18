@@ -9,6 +9,18 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
 import { logger } from '@/lib/logger';
+
+/**
+ * POST /api/ai/chat
+ * Generate AI chat response
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {AIChatMessage[]} request.body.messages - Chat messages
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @param {AIRequestOptions} [request.body.options] - AI request options
+ * @returns {Promise<NextResponse>} AI response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

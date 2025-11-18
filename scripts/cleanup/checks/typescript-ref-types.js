@@ -43,7 +43,8 @@ function checkRefTypes(content, filePath) {
   const lines = content.split(/\r?\n/);
 
   // Check for incorrect RefObject patterns in interfaces
-  const interfaceRefPattern = /interface\s+\w+.*?\{[\s\S]*?RefObject<(\w+)>\s*[;:]/g;
+  // Note: Only check RefObject, not MutableRefObject (which doesn't need | null)
+  const interfaceRefPattern = /interface\s+\w+.*?\{[\s\S]*?\bRefObject<(\w+)>\s*[;:]/g;
   let match;
   while ((match = interfaceRefPattern.exec(content)) !== null) {
     const type = match[1];

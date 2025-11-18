@@ -1,0 +1,118 @@
+/**
+ * Hook for fetching par levels and ingredients data.
+ */
+
+import { useState, useEffect, useCallback } from 'react';
+import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
+import type { ParLevel, Ingredient } from '../types';
+
+interface UseParLevelsDataReturn {
+  parLevels: ParLevel[];
+  ingredients: Ingredient[];
+  loading: boolean;
+  setParLevels: React.Dispatch<React.SetStateAction<ParLevel[]>>;
+  fetchParLevels: () => Promise<void>;
+  fetchIngredients: () => Promise<void>;
+}
+
+interface UseParLevelsDataProps {
+  showError: (message: string) => void;
+}
+
+/**
+ * Hook for fetching par levels and ingredients data.
+ *
+ * @param {UseParLevelsDataProps} props - Hook dependencies
+ * @returns {UseParLevelsDataReturn} Data fetching state and functions
+ */
+export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLevelsDataReturn {
+  const [parLevels, setParLevels] = useState<ParLevel[]>(() => getCachedData('par_levels') || []);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchParLevels = useCallback(async () => {
+    setLoading(true);
+    logger.dev('[Par Levels] Fetching par levels...');
+    try {
+      const response = await fetch('/api/par-levels');
+      logger.dev(`[Par Levels] Response status: ${response.status} ${response.statusText}`);
+
+      // Parse JSON even if status is not 200
+      let result;
+      try {
+        const responseText = await response.text();
+        logger.dev('[Par Levels] Response text:', responseText);
+        result = JSON.parse(responseText);
+        logger.dev('[Par Levels] Parsed result:', result);
+      } catch (parseError) {
+        logger.error('[Par Levels] Parse error:', parseError);
+        showError(`Server error (${response.status}). Please check the server logs.`);
+        return;
+      }
+
+      if (response.ok && result.success) {
+        setParLevels(result.data || []);
+        cacheData('par_levels', result.data || []);
+      } else {
+        // Show detailed error message with instructions if available
+        const errorMessage =
+          result.message || result.error || `Failed to fetch par levels (${response.status})`;
+        const instructions = result.details?.instructions || [];
+
+        // Log full error details for debugging
+        const errorDetails = {
+          status: response.status,
+          error: errorMessage,
+          details: result.details,
+          code: result.code,
+          fullResponse: result,
+        };
+
+        logger.error('[Par Levels] API Error:', errorDetails);
+
+        // Show error notification
+        if (instructions.length > 0) {
+          const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
+          showError(fullMessage);
+          logger.dev('[Par Levels] Error Instructions:', instructions);
+        } else {
+          showError(errorMessage);
+        }
+      }
+    } catch (err) {
+      logger.error('Failed to fetch par levels:', err);
+      showError('Failed to fetch par levels. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [showError]);
+
+  const fetchIngredients = useCallback(async () => {
+    try {
+      const response = await fetch('/api/ingredients');
+      const result = await response.json();
+
+      if (result.success) {
+        const items = result.data?.items || result.data || [];
+        setIngredients(items);
+      }
+    } catch (err) {
+      logger.error('Failed to fetch ingredients:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchParLevels();
+    fetchIngredients();
+  }, [fetchParLevels, fetchIngredients]);
+
+  return {
+    parLevels,
+    ingredients,
+    loading,
+    setParLevels,
+    fetchParLevels,
+    fetchIngredients,
+  };
+}

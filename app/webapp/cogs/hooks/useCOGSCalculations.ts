@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { COGSCalculation, RecipeIngredient } from '../types';
 import { useCOGSCalculationLogic } from './useCOGSCalculationLogic';
 import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useRecipeIngredients } from './useRecipeIngredients';
-import { addCalculationHelper, removeCalculationHelper } from './utils/calculationManagement';
-import { mapCalculationsToRecipeIngredients } from './utils/mapCalculationsToRecipeIngredients';
-import { logger } from '@/lib/logger';
+import { useRecipeChangeEffect, useCOGSCalculationEffect } from './helpers/calculationEffects';
+import { createCalculationOperations } from './helpers/calculationOperations';
 
 export const useCOGSCalculations = () => {
   const { ingredients, recipes, loading, error, setError, fetchData, setIngredients, setRecipes } =
@@ -33,63 +32,34 @@ export const useCOGSCalculations = () => {
     shouldPreserveManualIngredients: () => hasManualIngredientsRef.current,
   });
 
-  const removeCalculation = (ingredientId: string) => {
-    removeCalculationHelper(
-      ingredientId,
+  const { removeCalculation, addCalculation, clearCalculations, loadCalculations } =
+    createCalculationOperations({
       setCalculations,
       setRecipeIngredients,
       hasManualIngredientsRef,
       lastManualChangeTimeRef,
-    );
-  };
-  const addCalculation = (calculation: COGSCalculation) => {
-    addCalculationHelper(
-      calculation,
       selectedRecipe,
-      setCalculations,
-      setRecipeIngredients,
-      hasManualIngredientsRef,
-      lastManualChangeTimeRef,
-    );
-  };
-  const clearCalculations = () => {
-    setCalculations([]);
-    setRecipeIngredients([]);
-  };
-  const loadCalculations = (newCalculations: COGSCalculation[]) => {
-    hasManualIngredientsRef.current = false;
-    setCalculations(newCalculations);
-    setRecipeIngredients(mapCalculationsToRecipeIngredients(newCalculations));
-  };
+    });
+
   const updateCalculationWrapper = (ingredientId: string, newQuantity: number) => {
     hasManualIngredientsRef.current = true;
     lastManualChangeTimeRef.current = Date.now();
     updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
   };
-  const selectedRecipeRef = useRef<string>('');
-  useEffect(() => {
-    if (selectedRecipe && selectedRecipe !== selectedRecipeRef.current) {
-      const timeSinceLastChange = Date.now() - (lastManualChangeTimeRef?.current || 0);
-      if (hasManualIngredientsRef.current && timeSinceLastChange < 10000) {
-        logger.dev(
-          '[useCOGSCalculations] Skipping fetchRecipeIngredients - manual changes detected',
-        );
-        selectedRecipeRef.current = selectedRecipe;
-        return;
-      }
-      selectedRecipeRef.current = selectedRecipe;
-      hasManualIngredientsRef.current = false;
-      fetchRecipeIngredients(selectedRecipe);
-    }
-  }, [selectedRecipe, fetchRecipeIngredients]);
-  useEffect(() => {
-    if (isLoadingFromApiRef.current) {
-      isLoadingFromApiRef.current = false;
-      return;
-    }
-    if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0)
-      calculateCOGS(recipeIngredients);
-  }, [recipeIngredients, calculateCOGS, calculations.length, ingredients.length]);
+  useRecipeChangeEffect({
+    selectedRecipe,
+    fetchRecipeIngredients,
+    hasManualIngredientsRef,
+    lastManualChangeTimeRef,
+  });
+
+  useCOGSCalculationEffect({
+    recipeIngredients,
+    calculations,
+    ingredients,
+    calculateCOGS,
+    isLoadingFromApiRef,
+  });
   return {
     ingredients,
     recipes,

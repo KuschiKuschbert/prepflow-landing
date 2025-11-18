@@ -5,6 +5,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
+/**
+ * GET /api/navigation-optimization/patterns
+ * Get navigation usage patterns for adaptive optimization
+ *
+ * @returns {Promise<NextResponse>} Navigation patterns data
+ */
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);

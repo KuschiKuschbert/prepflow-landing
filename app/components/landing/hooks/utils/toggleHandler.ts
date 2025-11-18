@@ -15,7 +15,7 @@ export function createToggleHandler(
   containerRefs: React.MutableRefObject<(HTMLButtonElement | null)[]>,
   parentContainerRef: React.RefObject<HTMLDivElement | null>,
   initialWidths: number[],
-  setExpandedIndex: (index: number | null) => void,
+  setExpandedIndex: React.Dispatch<React.SetStateAction<number | null>>,
   setContainerWidths: React.Dispatch<React.SetStateAction<number[]>>,
   setScaleXValues: React.Dispatch<React.SetStateAction<number[]>>,
   setIsTransitioning: React.Dispatch<React.SetStateAction<number | null>>,

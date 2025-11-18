@@ -4,6 +4,15 @@ import { logger } from '@/lib/logger';
 import { calculateDishCost } from '../../../statistics/helpers/calculateDishCost';
 import { calculateRecipeCost } from '../../../statistics/helpers/calculateRecipeCost';
 
+/**
+ * GET /api/menus/[id]/items/[itemId]/statistics
+ * Get statistics for a menu item (cost, profit margin, etc.)
+ *
+ * @param {NextRequest} _req - Request object (unused)
+ * @param {Object} context - Route context
+ * @param {Promise<{id: string, itemId: string}>} context.params - Route parameters
+ * @returns {Promise<NextResponse>} Menu item statistics
+ */
 export async function GET(
   _req: NextRequest,
   context: { params: Promise<{ id: string; itemId: string }> },

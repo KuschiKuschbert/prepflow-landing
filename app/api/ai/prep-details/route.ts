@@ -12,6 +12,18 @@ import type { RecipePrepDetails } from '@/app/webapp/prep-lists/types';
 
 import { logger } from '@/lib/logger';
 
+/**
+ * POST /api/ai/prep-details
+ * Analyze recipes to extract detailed prep information (cut shapes, sauces, marination, etc.)
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {Recipe} request.body.recipe - Recipe object
+ * @param {RecipeIngredientWithDetails[]} request.body.ingredients - Recipe ingredients
+ * @param {string | null} [request.body.instructions] - Recipe instructions
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @returns {Promise<NextResponse>} Prep details response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

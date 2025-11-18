@@ -10,6 +10,18 @@ import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructi
 import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 
 import { logger } from '@/lib/logger';
+
+/**
+ * POST /api/ai/recipe-instructions
+ * Generate AI-powered recipe instructions with fallback to rule-based logic
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {Recipe} request.body.recipe - Recipe object
+ * @param {RecipeIngredientWithDetails[]} request.body.ingredients - Recipe ingredients
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @returns {Promise<NextResponse>} Recipe instructions response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

@@ -60,18 +60,13 @@
     "@vercel/speed-insights": "^1.2.0",
     "canvas-confetti": "^1.9.4",
     "date-fns": "^4.1.0",
-    "exceljs": "^4.4.0",
     "framer-motion": "^12.23.24",
     "gtag": "^1.0.1",
     "howler": "^2.2.4",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^3.0.2",
     "lucide-react": "^0.553.0",
     "next": "^16.0.0",
     "next-auth": "^4.24.13",
     "openai": "^6.9.0",
-    "primeicons": "^7.0.0",
-    "primereact": "^10.9.7",
     "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -116,6 +111,7 @@
     ]
   },
   "overrides": {
-    "js-yaml": ">=4.1.1"
+    "js-yaml": ">=4.1.1",
+    "glob": "^11.0.4"
   }
 }

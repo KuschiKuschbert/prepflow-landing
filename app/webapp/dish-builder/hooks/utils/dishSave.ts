@@ -1,6 +1,9 @@
 import { logger } from '@/lib/logger';
 import type { DishBuilderState } from '../../types';
 import type { COGSCalculation } from '../../../cogs/types';
+import { validateDishState } from '../helpers/validateDish';
+import { saveRecipe } from '../helpers/saveRecipe';
+import { saveDishItem } from '../helpers/saveDishItem';
 
 interface DishSaveProps {
   dishState: DishBuilderState;
@@ -10,6 +13,30 @@ interface DishSaveProps {
   setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>;
 }
 
+const DEFAULT_DISH_STATE: DishBuilderState = {
+  dishName: '',
+  description: '',
+  sellingPrice: 0,
+  itemType: 'dish',
+  yield: 1,
+  yield_unit: 'portion',
+  instructions: '',
+};
+
+/**
+ * Reset form to default state.
+ *
+ * @param {Function} setDishState - Dish state setter
+ * @param {Function} setCalculations - Calculations setter
+ */
+function resetForm(
+  setDishState: React.Dispatch<React.SetStateAction<DishBuilderState>>,
+  setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
+): void {
+  setDishState(DEFAULT_DISH_STATE);
+  setCalculations([]);
+}
+
 export async function saveDish({
   dishState,
   calculations,
@@ -17,99 +44,35 @@ export async function saveDish({
   setDishState,
   setCalculations,
 }: DishSaveProps): Promise<{ success: boolean; recipe?: any; dish?: any }> {
-  if (!dishState.dishName.trim()) {
-    setError('Dish name is required');
+  // Validate dish state
+  const validationError = validateDishState(dishState, calculations);
+  if (validationError) {
+    setError(validationError);
     return { success: false };
   }
-  if (calculations.length === 0) {
-    setError('At least one ingredient is required');
-    return { success: false };
-  }
-  if (dishState.itemType === 'dish' && dishState.sellingPrice <= 0) {
-    setError('Selling price must be greater than 0');
-    return { success: false };
-  }
-  if (dishState.itemType === 'recipe' && (!dishState.yield || dishState.yield <= 0)) {
-    setError('Yield must be greater than 0');
-    return { success: false };
-  }
-  const resetForm = () => {
-    setDishState({
-      dishName: '',
-      description: '',
-      sellingPrice: 0,
-      itemType: 'dish',
-      yield: 1,
-      yield_unit: 'portion',
-      instructions: '',
-    });
-    setCalculations([]);
-  };
+
   try {
     const itemIngredients = calculations.map(calc => ({
       ingredient_id: calc.ingredientId,
       quantity: calc.quantity,
       unit: calc.unit,
     }));
+
     if (dishState.itemType === 'recipe') {
-      const recipeResponse = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: dishState.dishName.trim(),
-          yield: dishState.yield || 1,
-          yield_unit: dishState.yield_unit || 'portion',
-          category: 'Uncategorized',
-          description: dishState.description?.trim() || null,
-          instructions: dishState.instructions?.trim() || null,
-        }),
-      });
-      const recipeResult = await recipeResponse.json();
-      if (!recipeResponse.ok) {
-        setError(recipeResult.error || recipeResult.message || 'Failed to save recipe');
+      const result = await saveRecipe({ dishState, itemIngredients });
+      if (!result.success) {
+        setError(result.error || 'Failed to save recipe');
         return { success: false };
       }
-      const recipeId = recipeResult.recipe?.id || recipeResult.recipe?.[0]?.id;
-      if (!recipeId) {
-        setError('Failed to get recipe ID after creation');
-        return { success: false };
-      }
-      const ingredientsResponse = await fetch(`/api/recipes/${recipeId}/ingredients`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ingredients: itemIngredients.map(ing => ({
-            ingredient_id: ing.ingredient_id,
-            quantity: ing.quantity,
-            unit: ing.unit,
-          })),
-          isUpdate: false,
-        }),
-      });
-      if (!ingredientsResponse.ok) {
-        const ingredientsResult = await ingredientsResponse.json();
-        setError(ingredientsResult.error || 'Failed to save recipe ingredients');
-        return { success: false };
-      }
-      resetForm();
-      return { success: true, recipe: recipeResult.recipe };
+      resetForm(setDishState, setCalculations);
+      return { success: true, recipe: result.recipe };
     } else {
-      const response = await fetch('/api/dishes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          dish_name: dishState.dishName.trim(),
-          description: dishState.description.trim() || null,
-          selling_price: dishState.sellingPrice,
-          ingredients: itemIngredients,
-        }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        setError(result.error || result.message || 'Failed to save dish');
+      const result = await saveDishItem({ dishState, itemIngredients });
+      if (!result.success) {
+        setError(result.error || 'Failed to save dish');
         return { success: false };
       }
-      resetForm();
+      resetForm(setDishState, setCalculations);
       return { success: true, dish: result.dish };
     }
   } catch (err) {

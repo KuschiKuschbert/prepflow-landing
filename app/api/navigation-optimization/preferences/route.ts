@@ -11,6 +11,12 @@ const preferencesSchema = z.object({
   selectedSections: z.array(z.string()),
 });
 
+/**
+ * GET /api/navigation-optimization/preferences
+ * Get user navigation optimization preferences
+ *
+ * @returns {Promise<NextResponse>} User preferences
+ */
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -74,6 +80,16 @@ export async function GET() {
   }
 }
 
+/**
+ * PUT /api/navigation-optimization/preferences
+ * Update user navigation optimization preferences
+ *
+ * @param {NextRequest} req - Request object
+ * @param {Object} req.body - Request body (validated against preferencesSchema)
+ * @param {boolean} req.body.enabled - Whether optimization is enabled
+ * @param {string[]} req.body.selectedSections - Selected navigation sections
+ * @returns {Promise<NextResponse>} Updated preferences
+ */
 export async function PUT(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

@@ -6,6 +6,13 @@ import { getStripe } from '@/lib/stripe';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * POST /api/billing/create-portal-session
+ * Create Stripe customer portal session for billing management
+ *
+ * @param {NextRequest} req - Request object
+ * @returns {Promise<NextResponse>} Portal session URL
+ */
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe();

@@ -1,14 +1,8 @@
 'use client';
 
 import { useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
-import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-  formatTextInput,
-} from '@/lib/text-utils';
+import { exportIngredientsToCSV } from './helpers/csvExport';
+import { importIngredientsFromCSV } from './helpers/csvImport';
 
 interface Ingredient {
   id: string;
@@ -35,38 +29,6 @@ interface UseIngredientCSVProps {
   filteredIngredients?: Ingredient[];
 }
 
-const CSV_HEADERS = [
-  'Ingredient Name',
-  'Brand',
-  'Pack Size',
-  'Pack Size Unit',
-  'Pack Price',
-  'Unit',
-  'Cost Per Unit',
-  'Supplier',
-  'Product Code',
-  'Storage Location',
-  'Min Stock Level',
-  'Current Stock',
-];
-
-function formatIngredientForCSV(ingredient: Ingredient): string {
-  return [
-    ingredient.ingredient_name,
-    ingredient.brand || '',
-    ingredient.pack_size || '',
-    ingredient.pack_size_unit || '',
-    ingredient.pack_price || 0,
-    ingredient.unit || '',
-    ingredient.cost_per_unit || 0,
-    ingredient.supplier || '',
-    ingredient.product_code || '',
-    ingredient.storage_location || '',
-    ingredient.min_stock_level || 0,
-    ingredient.current_stock || 0,
-  ].join(',');
-}
-
 export function useIngredientCSV({
   setIngredients,
   setError,
@@ -77,46 +39,19 @@ export function useIngredientCSV({
 }: UseIngredientCSVProps) {
   const exportToCSV = useCallback(() => {
     if (!filteredIngredients) return;
-    const csvContent = [
-      CSV_HEADERS.join(','),
-      ...filteredIngredients.map(formatIngredientForCSV),
-    ].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'ingredients.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
+    exportIngredientsToCSV(filteredIngredients);
   }, [filteredIngredients]);
 
   const handleCSVImport = useCallback(
     async (parsedIngredients: Partial<Ingredient>[]) => {
-      try {
-        const { data, error } = await supabase
-          .from('ingredients')
-          .insert(
-            parsedIngredients.map(ingredient => ({
-              ...ingredient,
-              ingredient_name: formatIngredientName(ingredient.ingredient_name || ''),
-              brand: ingredient.brand ? formatBrandName(ingredient.brand) : null,
-              supplier: ingredient.supplier ? formatSupplierName(ingredient.supplier) : null,
-              storage_location: ingredient.storage_location
-                ? formatStorageLocation(ingredient.storage_location)
-                : null,
-              product_code: ingredient.product_code
-                ? formatTextInput(ingredient.product_code)
-                : null,
-            })),
-          )
-          .select();
-        if (error) throw error;
-        setIngredients(prev => [...prev, ...(data || [])]);
+      const result = await importIngredientsFromCSV(parsedIngredients);
+      if (result.success && result.data) {
+        setIngredients(prev => [...prev, ...result.data!]);
         setShowCSVImport?.(false);
         setCsvData?.('');
         setParsedIngredients?.([]);
         return true;
-      } catch (error) {
+      } else {
         setError('Failed to import ingredients');
         return false;
       }

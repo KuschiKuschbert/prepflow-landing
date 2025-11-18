@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
@@ -15,11 +15,12 @@ import { TablePagination } from '@/components/ui/TablePagination';
 import { Package2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import { createOptimisticDelete, createOptimisticUpdate } from '@/lib/optimistic-updates';
-import { logger } from '@/lib/logger';
 import { useSelectionMode } from './hooks/useSelectionMode';
-import type { ParLevel, Ingredient } from './types';
+import { useParLevelsData } from './hooks/useParLevelsData';
+import { useParLevelsForm } from './hooks/useParLevelsForm';
+import { useParLevelsCRUD } from './hooks/useParLevelsCRUD';
+import { useParLevelsSelection } from './hooks/useParLevelsSelection';
+import { useParLevelsPagination } from './hooks/useParLevelsPagination';
 
 export default function ParLevelsPage() {
   const { t } = useTranslation();
@@ -31,372 +32,57 @@ export default function ParLevelsPage() {
     enterSelectionMode,
     exitSelectionMode,
   } = useSelectionMode();
-  const [parLevels, setParLevels] = useState<ParLevel[]>(() => getCachedData('par_levels') || []);
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [editingParLevel, setEditingParLevel] = useState<ParLevel | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
-  const [selectedParLevels, setSelectedParLevels] = useState<Set<string>>(new Set());
-  const [page, setPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
-  const [formData, setFormData] = useState({
-    ingredientId: '',
-    parLevel: '',
-    reorderPointPercentage: '50', // Default to 50%
-    unit: '',
+
+  // Data fetching
+  const { parLevels, ingredients, loading, setParLevels, fetchParLevels } = useParLevelsData({
+    showError,
   });
 
-  const fetchParLevels = useCallback(async () => {
-    setLoading(true);
-    console.log('[Par Levels] Fetching par levels...');
-    try {
-      const response = await fetch('/api/par-levels');
-      console.log('[Par Levels] Response status:', response.status, response.statusText);
+  // Form handling
+  const { formData, setFormData, handleSubmit, resetForm } = useParLevelsForm({
+    parLevels,
+    ingredients,
+    setParLevels,
+    showError,
+    showSuccess,
+  });
 
-      // Parse JSON even if status is not 200
-      let result;
-      try {
-        const responseText = await response.text();
-        console.log('[Par Levels] Response text:', responseText);
-        result = JSON.parse(responseText);
-        console.log('[Par Levels] Parsed result:', result);
-      } catch (parseError) {
-        logger.error('Failed to parse response:', parseError);
-        console.error('[Par Levels] Parse error:', parseError);
-        showError(`Server error (${response.status}). Please check the server logs.`);
-        return;
-      }
+  // CRUD operations
+  const {
+    editingParLevel,
+    showDeleteConfirm,
+    deleteConfirmId,
+    handleUpdate,
+    handleEdit,
+    handleDelete,
+    handleDeleteClick,
+    confirmDelete,
+    cancelDelete,
+    closeEditDrawer,
+  } = useParLevelsCRUD({
+    parLevels,
+    setParLevels,
+    fetchParLevels,
+    showError,
+    showSuccess,
+  });
 
-      if (response.ok && result.success) {
-        setParLevels(result.data || []);
-        cacheData('par_levels', result.data || []);
-      } else {
-        // Show detailed error message with instructions if available
-        const errorMessage =
-          result.message || result.error || `Failed to fetch par levels (${response.status})`;
-        const instructions = result.details?.instructions || [];
+  // Selection
+  const { selectedParLevels, handleSelectParLevel, handleSelectAll } = useParLevelsSelection({
+    parLevels,
+    isSelectionMode,
+    exitSelectionMode,
+  });
 
-        // Log full error details for debugging
-        const errorDetails = {
-          status: response.status,
-          error: errorMessage,
-          details: result.details,
-          code: result.code,
-          fullResponse: result,
-        };
+  // Pagination
+  const { page, setPage, itemsPerPage, setItemsPerPage, totalPages, paginatedParLevels } =
+    useParLevelsPagination({ parLevels });
 
-        logger.error('Failed to fetch par levels:', errorDetails);
-
-        // Always log to console for debugging (client-side)
-        console.error('[Par Levels] API Error:', errorDetails);
-
-        // Show error notification
-        if (instructions.length > 0) {
-          const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
-          showError(fullMessage);
-          console.error('[Par Levels] Error Instructions:', instructions);
-        } else {
-          showError(errorMessage);
-        }
-      }
-    } catch (err) {
-      logger.error('Failed to fetch par levels:', err);
-      showError('Failed to fetch par levels. Please check your connection and try again.');
-    } finally {
-      setLoading(false);
-    }
-  }, [showError]);
-
-  const fetchIngredients = useCallback(async () => {
-    try {
-      const response = await fetch('/api/ingredients');
-      const result = await response.json();
-
-      if (result.success) {
-        const items = result.data?.items || result.data || [];
-        setIngredients(items);
-      }
-    } catch (err) {
-      logger.error('Failed to fetch ingredients:', err);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchParLevels();
-    fetchIngredients();
-  }, [fetchParLevels, fetchIngredients]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formData.ingredientId || !formData.parLevel || !formData.unit) {
-      showError('Please fill in all required fields');
-      return;
-    }
-
-    // Ensure reorderPointPercentage has a default value
-    const reorderPointPercentageValue = formData.reorderPointPercentage || '50';
-    const parLevelValue = parseFloat(formData.parLevel);
-    const reorderPointPercentage = parseFloat(reorderPointPercentageValue);
-
-    if (isNaN(parLevelValue) || isNaN(reorderPointPercentage)) {
-      showError('Par level and reorder point percentage must be valid numbers');
-      return;
-    }
-
-    if (parLevelValue <= 0) {
-      showError('Par level must be greater than 0');
-      return;
-    }
-
-    if (reorderPointPercentage < 0 || reorderPointPercentage > 100) {
-      showError('Reorder point percentage must be between 0 and 100');
-      return;
-    }
-
-    // Calculate actual reorder point from percentage
-    const reorderPointValue = parLevelValue * (reorderPointPercentage / 100);
-
-    if (reorderPointValue >= parLevelValue) {
-      showError('Reorder point must be less than par level');
-      return;
-    }
-
-    // Create new par level
-    const tempId = `temp-${Date.now()}`;
-    const selectedIngredient = ingredients.find(ing => ing.id === formData.ingredientId);
-    const tempParLevel: ParLevel = {
-      id: tempId,
-      ingredient_id: formData.ingredientId,
-      par_level: parLevelValue,
-      reorder_point: reorderPointValue,
-      unit: formData.unit,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      ingredients: {
-        id: selectedIngredient?.id || formData.ingredientId,
-        ingredient_name: selectedIngredient?.ingredient_name || '',
-        unit: selectedIngredient?.unit,
-        category: selectedIngredient?.category,
-      },
-    };
-
-    // Store original state for rollback
-    const originalParLevels = [...parLevels];
-
-    // Optimistically add to UI immediately
-    setParLevels(prevItems => [...prevItems, tempParLevel]);
-
-    try {
-      const response = await fetch('/api/par-levels', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ingredientId: formData.ingredientId,
-          parLevel: parLevelValue,
-          reorderPoint: reorderPointValue,
-          unit: formData.unit,
-        }),
-      });
-
-      // Parse JSON even if status is not 200
-      let result;
-      try {
-        const responseText = await response.text();
-        console.log('[Par Levels] POST Response status:', response.status, response.statusText);
-        console.log('[Par Levels] POST Response text:', responseText);
-        result = JSON.parse(responseText);
-        console.log('[Par Levels] POST Parsed result:', result);
-      } catch (parseError) {
-        logger.error('Failed to parse response:', parseError);
-        console.error('[Par Levels] POST Parse error:', parseError);
-        // Revert optimistic update on error
-        setParLevels(originalParLevels);
-        showError(`Server error (${response.status}). Please check the server logs.`);
-        return;
-      }
-
-      if (response.ok && result.success && result.data) {
-        // Replace temp item with real item from server
-        // Ensure ingredients data is present (fallback to temp data if missing)
-        const serverData = result.data;
-        if (!serverData.ingredients && tempParLevel.ingredients) {
-          serverData.ingredients = tempParLevel.ingredients;
-        }
-
-        setParLevels(prevItems => {
-          const updated = prevItems.map(item => (item.id === tempId ? serverData : item));
-          cacheData('par_levels', updated);
-          return updated;
-        });
-        showSuccess('Par level created successfully');
-        resetForm();
-      } else {
-        // Revert optimistic update on error
-        setParLevels(originalParLevels);
-
-        // Show detailed error message with instructions if available
-        const errorMessage =
-          result.message || result.error || `Failed to create par level (${response.status})`;
-        const instructions = result.details?.instructions || [];
-
-        // Log full error details for debugging
-        const errorDetails = {
-          status: response.status,
-          error: errorMessage,
-          details: result.details,
-          code: result.code,
-          fullResponse: result,
-          requestBody: {
-            ingredientId: formData.ingredientId,
-            parLevel: parLevelValue,
-            reorderPoint: reorderPointValue,
-            unit: formData.unit,
-          },
-        };
-
-        logger.error('Failed to create par level:', errorDetails);
-
-        // Always log to console for debugging (client-side)
-        console.error('[Par Levels] POST API Error:', errorDetails);
-
-        // Show error notification
-        if (instructions.length > 0) {
-          const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
-          showError(fullMessage);
-          console.error('[Par Levels] POST Error Instructions:', instructions);
-        } else {
-          showError(errorMessage);
-        }
-      }
-    } catch (err) {
-      // Revert optimistic update on error
-      setParLevels(originalParLevels);
-      logger.error('Failed to create par level:', err);
-      console.error('[Par Levels] POST Exception:', err);
-      showError('Failed to create par level. Please check your connection and try again.');
-    }
-  };
-
-  const handleUpdate = async (updates: Partial<ParLevel>) => {
-    if (!updates.id) return;
-
-    await createOptimisticUpdate(
-      parLevels,
-      updates.id,
-      updates,
-      () =>
-        fetch('/api/par-levels', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: updates.id,
-            parLevel: updates.par_level,
-            reorderPoint: updates.reorder_point,
-            unit: updates.unit,
-          }),
-        }),
-      setParLevels,
-      () => {
-        showSuccess('Par level updated successfully');
-        fetchParLevels();
-      },
-      error => showError(error),
-    );
-  };
-
-  const handleEdit = (parLevel: ParLevel) => {
-    setEditingParLevel(parLevel);
-  };
-
-  const handleDelete = useCallback(
-    async (id: string): Promise<void> => {
-      const parLevelToDelete = parLevels.find(pl => pl.id === id);
-      if (!parLevelToDelete) return;
-
-      await createOptimisticDelete(
-        parLevels,
-        id,
-        () => fetch(`/api/par-levels?id=${id}`, { method: 'DELETE' }),
-        setParLevels,
-        () => {
-          showSuccess('Par level deleted successfully');
-          fetchParLevels();
-        },
-        error => showError(error),
-      );
-    },
-    [parLevels, showSuccess, showError, fetchParLevels],
-  );
-
-  const handleDeleteClick = (id: string) => {
-    setDeleteConfirmId(id);
-    setShowDeleteConfirm(true);
-  };
-
-  const confirmDelete = useCallback(async () => {
-    if (!deleteConfirmId) return;
-
-    await handleDelete(deleteConfirmId);
-
-    setShowDeleteConfirm(false);
-    setDeleteConfirmId(null);
-  }, [deleteConfirmId, handleDelete]);
-
-  const resetForm = () => {
-    setFormData({
-      ingredientId: '',
-      parLevel: '',
-      reorderPointPercentage: '50', // Default to 50%
-      unit: '',
-    });
+  const handleFormClose = () => {
+    resetForm();
     setShowForm(false);
-    setEditingParLevel(null);
   };
-
-  // Pagination logic
-  const totalPages = Math.ceil(parLevels.length / itemsPerPage);
-  const paginatedParLevels = parLevels.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(1);
-  }, [itemsPerPage]);
-
-  // Selection handlers
-  const handleSelectParLevel = useCallback((id: string, selected: boolean) => {
-    setSelectedParLevels(prev => {
-      const newSet = new Set(prev);
-      if (selected) {
-        newSet.add(id);
-      } else {
-        newSet.delete(id);
-      }
-      return newSet;
-    });
-  }, []);
-
-  const handleSelectAll = useCallback(
-    (selected: boolean) => {
-      if (selected) {
-        const allIds = new Set(parLevels.map(pl => pl.id));
-        setSelectedParLevels(allIds);
-      } else {
-        setSelectedParLevels(new Set());
-        exitSelectionMode();
-      }
-    },
-    [parLevels, exitSelectionMode],
-  );
-
-  // Clear selection when exiting selection mode
-  useEffect(() => {
-    if (!isSelectionMode) {
-      setSelectedParLevels(new Set());
-    }
-  }, [isSelectionMode]);
 
   if (loading && parLevels.length === 0) {
     return (
@@ -444,7 +130,7 @@ export default function ParLevelsPage() {
           <ParLevelInlineForm
             formData={formData}
             ingredients={ingredients}
-            onClose={resetForm}
+            onClose={handleFormClose}
             onSubmit={handleSubmit}
             onFormDataChange={(field, value) => setFormData({ ...formData, [field]: value })}
           />
@@ -544,7 +230,7 @@ export default function ParLevelsPage() {
           isOpen={!!editingParLevel}
           parLevel={editingParLevel}
           ingredients={ingredients}
-          onClose={() => setEditingParLevel(null)}
+          onClose={closeEditDrawer}
           onSave={handleUpdate}
         />
 
@@ -556,10 +242,7 @@ export default function ParLevelsPage() {
           confirmLabel="Delete"
           cancelLabel="Cancel"
           onConfirm={confirmDelete}
-          onCancel={() => {
-            setShowDeleteConfirm(false);
-            setDeleteConfirmId(null);
-          }}
+          onCancel={cancelDelete}
           variant="danger"
         />
       </div>

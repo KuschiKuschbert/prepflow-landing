@@ -13,6 +13,17 @@ import {
 } from '@/lib/ai/prompts/performance-insights';
 import type { PerformanceItem } from '@/app/webapp/performance/types';
 
+/**
+ * POST /api/ai/performance-insights
+ * Generate AI-powered performance insights with fallback to rule-based logic
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {PerformanceItem[]} request.body.performanceItems - Performance items
+ * @param {number} request.body.performanceScore - Performance score
+ * @param {string} [request.body.countryCode] - Country code (default: 'AU')
+ * @returns {Promise<NextResponse>} Performance insights response
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

@@ -7,6 +7,13 @@ import { deleteCleaningArea } from './helpers/deleteCleaningArea';
 import { handleCleaningAreaError } from './helpers/handleCleaningAreaError';
 import { updateCleaningArea } from './helpers/updateCleaningArea';
 
+/**
+ * GET /api/cleaning-areas
+ * Get all cleaning areas
+ *
+ * @param {NextRequest} request - Request object
+ * @returns {Promise<NextResponse>} List of cleaning areas
+ */
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -43,6 +50,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * POST /api/cleaning-areas
+ * Create a new cleaning area
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string} request.body.area_name - Area name (required)
+ * @param {string} [request.body.description] - Area description
+ * @param {string} [request.body.cleaning_frequency] - Cleaning frequency
+ * @returns {Promise<NextResponse>} Created cleaning area
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -74,6 +92,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * PUT /api/cleaning-areas
+ * Update an existing cleaning area
+ *
+ * @param {NextRequest} request - Request object
+ * @param {Object} request.body - Request body
+ * @param {string} request.body.id - Cleaning area ID (required)
+ * @param {string} [request.body.area_name] - Area name
+ * @param {string} [request.body.description] - Area description
+ * @param {string} [request.body.cleaning_frequency] - Cleaning frequency
+ * @param {boolean} [request.body.is_active] - Active status
+ * @returns {Promise<NextResponse>} Updated cleaning area
+ */
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
@@ -107,6 +138,14 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+/**
+ * DELETE /api/cleaning-areas
+ * Delete a cleaning area
+ *
+ * @param {NextRequest} request - Request object
+ * @param {string} request.url.searchParams.id - Cleaning area ID (required)
+ * @returns {Promise<NextResponse>} Deletion response
+ */
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
