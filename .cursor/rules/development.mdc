@@ -93,6 +93,27 @@ npm run format:staged
 
 **Note:** For detailed deployment process, monitoring, and operations standards, see `operations.mdc`.
 
+### **Pre-Deployment Checks**
+
+**MANDATORY:** Before pushing to `main`, run `npm run pre-deploy` to verify your code will deploy successfully on Vercel.
+
+**What it checks:**
+- Node version (>=22.0.0)
+- Dependencies installation (`npm ci`)
+- Lint check (`npm run lint`)
+- Type check (`npm run type-check`)
+- Format check (`npm run format:check`)
+- Cleanup check (`npm run cleanup:check`)
+- Build check (`npm run build`) - **Most important, this is what Vercel runs**
+
+**Usage:**
+```bash
+# Run all pre-deployment checks
+npm run pre-deploy
+```
+
+**See Also:** `operations.mdc` (Deployment Process) for complete pre-deployment checklist and `docs/SCRIPTS.md` (Pre-Deployment Check) for detailed documentation.
+
 ### **GitHub Actions CI Workflow**
 
 **File:** `.github/workflows/ci.yml`

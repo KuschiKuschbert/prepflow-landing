@@ -48,11 +48,6 @@ export default function ParLevelsPage() {
     unit: '',
   });
 
-  useEffect(() => {
-    fetchParLevels();
-    fetchIngredients();
-  }, [fetchParLevels, fetchIngredients]);
-
   const fetchParLevels = useCallback(async () => {
     setLoading(true);
     console.log('[Par Levels] Fetching par levels...');
@@ -127,6 +122,11 @@ export default function ParLevelsPage() {
       logger.error('Failed to fetch ingredients:', err);
     }
   }, []);
+
+  useEffect(() => {
+    fetchParLevels();
+    fetchIngredients();
+  }, [fetchParLevels, fetchIngredients]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

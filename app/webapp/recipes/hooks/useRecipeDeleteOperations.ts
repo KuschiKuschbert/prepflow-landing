@@ -24,7 +24,7 @@ export function useRecipeDeleteOperations(
     if (!recipeToDelete) return;
 
     const recipeIdToDelete = recipeToDelete.id;
-    const recipeName = capitalizeRecipeName(recipeToDelete.name);
+    const recipeName = capitalizeRecipeName(recipeToDelete.recipe_name);
 
     try {
       // Optimistically remove recipe from list

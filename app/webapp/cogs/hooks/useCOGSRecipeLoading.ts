@@ -1,5 +1,5 @@
-import { useEffect, RefObject } from 'react';
 import { logger } from '@/lib/logger';
+import { RefObject, useEffect } from 'react';
 import { Recipe } from '../types';
 
 interface UseCOGSRecipeLoadingProps {

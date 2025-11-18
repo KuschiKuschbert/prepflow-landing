@@ -78,7 +78,7 @@ export async function GET(
     let cogs = 0;
     const dish = Array.isArray(menuItem.dishes) ? menuItem.dishes[0] : menuItem.dishes;
     const recipe = Array.isArray(menuItem.recipes) ? menuItem.recipes[0] : menuItem.recipes;
-    
+
     if (menuItem.dish_id && dish) {
       cogs = await calculateDishCost(dish.id);
     } else if (menuItem.recipe_id) {

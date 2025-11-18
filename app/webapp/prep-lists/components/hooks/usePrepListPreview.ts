@@ -114,7 +114,7 @@ export function usePrepListPreview({
           });
         }
       } catch (err) {
-        logger.warn('Failed to load prep details:', err);
+        logger.warn('Failed to load prep details:', err instanceof Error ? { error: err.message } : undefined);
         // Don't show error to user - prep list still works without prep details
       } finally {
         setLoadingPrepDetails(false);

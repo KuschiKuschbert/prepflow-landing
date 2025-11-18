@@ -668,11 +668,12 @@ function generateComplianceRecords(records: ReportData['compliance_records']): s
 
 function generateTemperatureLogs(logs: ReportData['temperature_logs']): string {
   if (!logs || logs.logs.length === 0) {
+    const dateRange = logs?.date_range || { start: '', end: '' };
     return `
       <div class="section">
         <div class="section-title">Temperature Monitoring</div>
         <p>No temperature logs found for the selected period.</p>
-        <p><strong>Date Range:</strong> ${formatAustralianDate(logs.date_range.start)} - ${formatAustralianDate(logs.date_range.end)}</p>
+        <p><strong>Date Range:</strong> ${dateRange.start ? formatAustralianDate(dateRange.start) : 'N/A'} - ${dateRange.end ? formatAustralianDate(dateRange.end) : 'N/A'}</p>
       </div>
     `;
   }
@@ -718,11 +719,12 @@ function generateTemperatureLogs(logs: ReportData['temperature_logs']): string {
 
 function generateCleaningRecords(records: ReportData['cleaning_records']): string {
   if (!records || records.tasks.length === 0) {
+    const dateRange = records?.date_range || { start: '', end: '' };
     return `
       <div class="section">
         <div class="section-title">Cleaning Records</div>
         <p>No cleaning tasks found for the selected period.</p>
-        <p><strong>Date Range:</strong> ${formatAustralianDate(records.date_range.start)} - ${formatAustralianDate(records.date_range.end)}</p>
+        <p><strong>Date Range:</strong> ${dateRange.start ? formatAustralianDate(dateRange.start) : 'N/A'} - ${dateRange.end ? formatAustralianDate(dateRange.end) : 'N/A'}</p>
       </div>
     `;
   }

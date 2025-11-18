@@ -6,13 +6,13 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import {
-  closestCenter,
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type Modifier,
+    closestCenter,
+    DndContext,
+    DragOverlay,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    type Modifier,
 } from '@dnd-kit/core';
 import { ChefHat, Utensils } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -420,7 +420,7 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
             recipe_id: itemToAdd.id,
             recipes: {
               id: recipe!.id,
-              name: recipe!.name,
+              recipe_name: recipe!.recipe_name,
               description: recipe!.description,
               yield: recipe!.yield,
             },

@@ -440,6 +440,41 @@ bash scripts/replace-screenshots.sh
 
 ## Deployment & Verification
 
+### Pre-Deployment Check
+
+**Script:** `scripts/pre-deploy-check.sh`
+**Command:** `npm run pre-deploy`
+**Referenced in:** `operations.mdc` (Deployment Process)
+
+**MANDATORY:** Run before pushing to `main` to verify your code will deploy successfully on Vercel.
+
+Runs all checks that Vercel and CI run during deployment:
+- Node version check (>=22.0.0)
+- Dependencies installation (`npm ci`)
+- Lint check (`npm run lint`)
+- Type check (`npm run type-check`)
+- Format check (`npm run format:check`)
+- Cleanup check (`npm run cleanup:check`)
+- Build check (`npm run build`) - **Most important, this is what Vercel runs**
+
+**Usage:**
+
+```bash
+# Run all pre-deployment checks
+npm run pre-deploy
+```
+
+**Exit Codes:**
+- `0` - All checks passed, safe to deploy
+- `1` - One or more checks failed, fix issues before deploying
+
+**Integration:** Should be run manually before pushing to `main`. Consider adding to pre-push hook (future enhancement).
+
+**See Also:**
+- `operations.mdc` (Deployment Process) - Complete deployment checklist
+
+---
+
 ### Vercel Setup Verification
 
 **Script:** `scripts/verify-vercel-setup.sh`

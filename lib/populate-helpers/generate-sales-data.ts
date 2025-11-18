@@ -8,7 +8,8 @@ import { logger } from '@/lib/logger';
 
 interface Recipe {
   id: string;
-  name: string;
+  recipe_name: string;
+  name?: string; // For backward compatibility
 }
 
 interface MenuDish {
@@ -115,7 +116,7 @@ export async function ensureMenuDishExists(
 
   if (checkError && checkError.code !== 'PGRST116') {
     // PGRST116 is "not found" which is fine
-    logger.error(`Error checking menu_dish for recipe ${recipe.recipe_name}:`, checkError);
+    logger.error(`Error checking menu_dish for recipe ${recipe.recipe_name || recipe.name}:`, checkError);
     return null;
   }
 
@@ -124,12 +125,13 @@ export async function ensureMenuDishExists(
   }
 
   // Create menu_dish with default pricing
-  const { selling_price, profit_margin } = getDefaultPricing(recipe.recipe_name);
+  const recipeName = recipe.recipe_name || recipe.name || '';
+  const { selling_price, profit_margin } = getDefaultPricing(recipeName);
 
   const { data: newDish, error: createError } = await supabaseAdmin
     .from('menu_dishes')
     .insert({
-      name: recipe.recipe_name,
+      name: recipeName,
       recipe_id: recipe.id,
       selling_price: selling_price,
       profit_margin: profit_margin,
@@ -138,7 +140,7 @@ export async function ensureMenuDishExists(
     .single();
 
   if (createError) {
-    logger.error(`Error creating menu_dish for recipe ${recipe.recipe_name}:`, createError);
+    logger.error(`Error creating menu_dish for recipe ${recipe.recipe_name || recipe.name}:`, createError);
     return null;
   }
 
@@ -188,7 +190,7 @@ export async function generateSalesDataForMonth(
   // Calculate popularity percentages for all recipes
   const recipePopularities = recipes.map(recipe => ({
     recipe,
-    popularity: getRecipePopularity(recipe.recipe_name),
+    popularity: getRecipePopularity(recipe.recipe_name || recipe.name || ''),
   }));
 
   // Calculate total popularity percentage for known recipes

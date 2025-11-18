@@ -41,7 +41,7 @@ export async function populateMenuDishes(
 ) {
   if (!recipesData || recipesData.length === 0) return;
 
-  const recipeMap = new Map(recipesData.map(r => [r.name, r.id]));
+  const recipeMap = new Map(recipesData.map(r => [r.recipe_name || r.name, r.id]));
 
   const menuDishes = [
     {

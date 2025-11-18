@@ -37,19 +37,6 @@ export function MenuItemStatisticsModal({
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [priceValue, setPriceValue] = useState('');
 
-  useEffect(() => {
-    if (isOpen && item) {
-      loadStatistics();
-      setPriceValue(
-        item.actual_selling_price?.toFixed(2) || item.recommended_selling_price?.toFixed(2) || '',
-      );
-    } else {
-      setStatistics(null);
-      setError(null);
-      setIsEditingPrice(false);
-    }
-  }, [isOpen, item, loadStatistics]);
-
   const loadStatistics = useCallback(async () => {
     if (!item) return;
 
@@ -72,6 +59,19 @@ export function MenuItemStatisticsModal({
       setLoading(false);
     }
   }, [menuId, item]);
+
+  useEffect(() => {
+    if (isOpen && item) {
+      loadStatistics();
+      setPriceValue(
+        item.actual_selling_price?.toFixed(2) || item.recommended_selling_price?.toFixed(2) || '',
+      );
+    } else {
+      setStatistics(null);
+      setError(null);
+      setIsEditingPrice(false);
+    }
+  }, [isOpen, item, loadStatistics]);
 
   const handlePriceSave = async () => {
     if (!item) return;

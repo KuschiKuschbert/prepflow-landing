@@ -41,7 +41,8 @@
     "cleanup:fix": "node scripts/cleanup.js --fix",
     "cleanup:report": "node scripts/cleanup.js --report",
     "cleanup:all": "node scripts/cleanup.js --check --fix --report",
-    "cleanup:staged": "node scripts/cleanup.js --staged"
+    "cleanup:staged": "node scripts/cleanup.js --staged",
+    "pre-deploy": "bash scripts/pre-deploy-check.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

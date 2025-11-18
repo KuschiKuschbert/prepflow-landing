@@ -30,7 +30,7 @@ export function useRecipeDishEditorData(
     ) {
       const itemName =
         initialItemType === 'recipe'
-          ? (initialItem as Recipe).name
+          ? (initialItem as Recipe).recipe_name
           : (initialItem as Dish).dish_name;
       if (itemName) {
         const initialItemData: RecipeDishItem = {

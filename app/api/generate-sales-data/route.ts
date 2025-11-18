@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
     logger.dev('📖 Fetching recipes...');
     const { data: recipes, error: recipesError } = await supabaseAdmin
       .from('recipes')
-      .select('id, name')
-      .order('name');
+      .select('id, recipe_name')
+      .order('recipe_name');
 
     if (recipesError) {
       logger.error('❌ Error fetching recipes:', recipesError);

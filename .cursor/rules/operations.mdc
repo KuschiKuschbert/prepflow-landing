@@ -32,15 +32,18 @@ alwaysApply: true
 **Deployment Pipeline:**
 
 1. **Pre-deployment:**
-   - Run `npm run lint` (must pass)
-   - Run `npm run type-check` (must pass)
-   - Run `npm run format:check` (must pass)
-   - Run `npm run build` (must succeed)
-   - Run `npm audit` (fix high/critical vulnerabilities)
-   - Run `node scripts/check-legal-and-node.js` (verify Node version and legal compliance)
-   - Run `bash scripts/verify-vercel-setup.sh` (verify Vercel deployment configuration)
+   - **MANDATORY:** Run `npm run pre-deploy` (runs all checks below automatically)
+   - Or run checks individually:
+     - Run `npm run lint` (must pass)
+     - Run `npm run type-check` (must pass)
+     - Run `npm run format:check` (must pass)
+     - Run `npm run build` (must succeed)
+     - Run `npm audit` (fix high/critical vulnerabilities)
+     - Run `node scripts/check-legal-and-node.js` (verify Node version and legal compliance)
+     - Run `bash scripts/verify-vercel-setup.sh` (verify Vercel deployment configuration)
 
 **Pre-deployment Scripts:**
+- **Pre-Deploy Check:** `scripts/pre-deploy-check.sh` - **MANDATORY** - Runs all Vercel/CI checks locally before pushing (lint, type-check, format-check, cleanup-check, build). Use `npm run pre-deploy` to run all checks at once. **See:** `docs/SCRIPTS.md` (Pre-Deployment Check) for details.
 - **Legal & Node Check:** `scripts/check-legal-and-node.js` - Verifies Node.js version (>=22.0.0) and legal compliance
 - **Vercel Setup Verification:** `scripts/verify-vercel-setup.sh` - Verifies git repository, GitHub Actions workflows, environment variables, and Next.js configuration
 

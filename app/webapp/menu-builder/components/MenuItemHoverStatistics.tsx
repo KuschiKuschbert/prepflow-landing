@@ -49,37 +49,6 @@ export function MenuItemHoverStatistics({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    if (isVisible) {
-      // Check cache first
-      const cacheKey = `${menuId}-${item.id}`;
-      const cached = statisticsCache.get(cacheKey);
-      const now = Date.now();
-
-      if (cached && now < cached.expiry) {
-        // Use cached data immediately
-        setStatistics(cached.data);
-        setLoading(false);
-      } else if (!statistics && !loading) {
-        // Reduced delay for faster response
-        hoverTimeoutRef.current = setTimeout(() => {
-          loadStatistics();
-        }, 100);
-      }
-
-      return () => {
-        if (hoverTimeoutRef.current) {
-          clearTimeout(hoverTimeoutRef.current);
-        }
-      };
-    } else {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-      // Don't clear statistics - keep cached data for next hover
-    }
-  }, [isVisible, statistics, loading, menuId, item.id, loadStatistics]);
-
   const loadStatistics = useCallback(async () => {
     const cacheKey = `${menuId}-${item.id}`;
     const cached = statisticsCache.get(cacheKey);
@@ -116,6 +85,37 @@ export function MenuItemHoverStatistics({
       setLoading(false);
     }
   }, [menuId, item.id]);
+
+  useEffect(() => {
+    if (isVisible) {
+      // Check cache first
+      const cacheKey = `${menuId}-${item.id}`;
+      const cached = statisticsCache.get(cacheKey);
+      const now = Date.now();
+
+      if (cached && now < cached.expiry) {
+        // Use cached data immediately
+        setStatistics(cached.data);
+        setLoading(false);
+      } else if (!statistics && !loading) {
+        // Reduced delay for faster response
+        hoverTimeoutRef.current = setTimeout(() => {
+          loadStatistics();
+        }, 100);
+      }
+
+      return () => {
+        if (hoverTimeoutRef.current) {
+          clearTimeout(hoverTimeoutRef.current);
+        }
+      };
+    } else {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      // Don't clear statistics - keep cached data for next hover
+    }
+  }, [isVisible, statistics, loading, menuId, item.id, loadStatistics]);
 
   // Calculate tooltip position based on cursor
   useEffect(() => {

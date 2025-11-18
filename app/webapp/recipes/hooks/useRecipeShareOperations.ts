@@ -24,7 +24,7 @@ export function useRecipeShareOperations() {
       setShareLoading(true);
       try {
         const recipeData = {
-          name: selectedRecipe.name,
+          name: selectedRecipe.recipe_name,
           yield: selectedRecipe.yield,
           yield_unit: selectedRecipe.yield_unit,
           instructions: selectedRecipe.instructions,

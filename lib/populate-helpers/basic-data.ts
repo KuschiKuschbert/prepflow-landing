@@ -103,9 +103,12 @@ export async function populateBasicData(
     (existingRecipes || []).map(r => r.recipe_name?.toLowerCase().trim()).filter(Boolean),
   );
 
-  const recipesToInsert = cleanSampleRecipes.filter(
-    r => !existingRecipeNames.has(r.recipe_name?.toLowerCase().trim()),
-  );
+  const recipesToInsert = cleanSampleRecipes
+    .filter(r => !existingRecipeNames.has(r.name?.toLowerCase().trim()))
+    .map(r => ({
+      ...r,
+      recipe_name: r.name,
+    }));
 
   let recipesData: any[] | undefined;
   if (recipesToInsert.length > 0) {

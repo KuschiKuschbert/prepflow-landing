@@ -8,7 +8,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { logger } from '@/lib/logger';
 interface Recipe {
   id: string;
-  name: string;
+  recipe_name: string;
   description?: string;
   instructions?: string;
   notes?: string;

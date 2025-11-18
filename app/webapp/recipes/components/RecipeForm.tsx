@@ -25,9 +25,9 @@ export default function RecipeForm({
   const { showWarning } = useNotification();
   // Autosave integration
   const entityId = deriveAutosaveId('recipes', newRecipe.id as string | undefined, [
-    newRecipe.name || '',
+    newRecipe.recipe_name || '',
   ]);
-  const canAutosave = Boolean(newRecipe.name);
+  const canAutosave = Boolean(newRecipe.recipe_name);
 
   const {
     status,
@@ -54,8 +54,8 @@ export default function RecipeForm({
           <input
             type="text"
             required
-            value={newRecipe.name || ''}
-            onChange={e => onUpdateRecipe({ name: e.target.value })}
+            value={newRecipe.recipe_name || ''}
+            onChange={e => onUpdateRecipe({ recipe_name: e.target.value })}
             className="w-full rounded-md border border-[#2a2a2a] px-3 py-2 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             placeholder="e.g., Chicken Stir-fry"
             onBlur={async e => {
