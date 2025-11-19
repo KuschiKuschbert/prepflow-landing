@@ -39,7 +39,7 @@ export function DietaryBadge({
         className={`inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 ${sizeClasses[size]}`}
         title="Vegan - Contains no animal products"
       >
-        <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden="true" />
+        <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden={true} />
         <span>Vegan</span>
         {showConfidence && confidence === 'low' && (
           <Icon
@@ -59,7 +59,7 @@ export function DietaryBadge({
         className={`inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 ${sizeClasses[size]}`}
         title="Vegetarian - Contains no meat or fish"
       >
-        <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden="true" />
+        <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden={true} />
         <span>Vegetarian</span>
         {showConfidence && confidence === 'low' && (
           <Icon
