@@ -153,7 +153,7 @@ export async function batchAggregateRecipeAllergens(
     if (updates.length > 0) {
       await Promise.all(
         updates.map(update =>
-          supabaseAdmin
+          supabaseAdmin!
             .from('recipes')
             .update({ allergens: update.allergens })
             .eq('id', update.id)
