@@ -7,6 +7,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
+import type { MenuItem } from '@/app/webapp/menu-builder/types';
 
 export async function GET(
   request: NextRequest,
@@ -42,7 +43,7 @@ export async function GET(
     }
 
     // Build allergen matrix data
-    const matrixData = (menu.items || []).map(item => {
+    const matrixData = (menu.items || []).map((item: MenuItem) => {
       // Extract allergens - ensure it's always an array
       let allergens: string[] = [];
 
