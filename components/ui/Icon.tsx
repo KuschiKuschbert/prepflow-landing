@@ -20,6 +20,7 @@ export interface IconProps {
   'aria-label'?: string;
   'aria-hidden'?: boolean;
   style?: React.CSSProperties;
+  title?: string;
 }
 
 /**
