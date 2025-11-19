@@ -81,7 +81,7 @@ export default function IngredientWizard({
     }
   };
 
-  const handleInputChange = (field: keyof Ingredient, value: string | number) => {
+  const handleInputChange = (field: keyof Ingredient, value: string | number | string[] | Record<string, any>) => {
     setFormData(prev => {
       const updated = {
         ...prev,
