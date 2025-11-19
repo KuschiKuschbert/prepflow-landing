@@ -3,6 +3,7 @@
  * Displays vegetarian/vegan badges with confidence indicators
  */
 
+import React from 'react';
 import { Icon } from './Icon';
 import { Leaf, AlertCircle } from 'lucide-react';
 
@@ -29,13 +30,13 @@ export function DietaryBadge({
     lg: 'text-base px-3 py-1.5',
   };
 
-  const badges: JSX.Element[] = [];
+  const badges: React.ReactElement[] = [];
 
   if (isVegan === true) {
     badges.push(
       <span
         key="vegan"
-        className={`inline-flex items-center gap-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 ${sizeClasses[size]}`}
+        className={`inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 ${sizeClasses[size]}`}
         title="Vegan - Contains no animal products"
       >
         <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden="true" />
@@ -55,7 +56,7 @@ export function DietaryBadge({
     badges.push(
       <span
         key="vegetarian"
-        className={`inline-flex items-center gap-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 ${sizeClasses[size]}`}
+        className={`inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 ${sizeClasses[size]}`}
         title="Vegetarian - Contains no meat or fish"
       >
         <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden="true" />
@@ -79,4 +80,3 @@ export function DietaryBadge({
 
   return <div className={`flex flex-wrap gap-2 ${className}`}>{badges}</div>;
 }
-
