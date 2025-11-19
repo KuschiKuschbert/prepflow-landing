@@ -118,7 +118,7 @@ const DishCard = React.memo(function DishCard({
       </div>
 
       {/* Allergens and Dietary Info */}
-      {(dish.allergens?.length > 0 || dish.is_vegetarian || dish.is_vegan) && (
+      {((dish.allergens?.length ?? 0) > 0 || dish.is_vegetarian || dish.is_vegan) && (
         <div className="mb-3 ml-7 space-y-2">
           {dish.allergens && dish.allergens.length > 0 && (
             <div>
