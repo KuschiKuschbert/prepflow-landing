@@ -120,7 +120,7 @@ const RecipeCard = React.memo(function RecipeCard({
       </div>
 
       {/* Allergens and Dietary Info */}
-      {(recipe.allergens?.length > 0 || recipe.is_vegetarian || recipe.is_vegan) && (
+      {((recipe.allergens?.length ?? 0) > 0 || recipe.is_vegetarian || recipe.is_vegan) && (
         <div className="mb-3 ml-7 space-y-2">
           {recipe.allergens && recipe.allergens.length > 0 && (
             <div>
