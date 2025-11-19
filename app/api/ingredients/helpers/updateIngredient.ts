@@ -75,7 +75,10 @@ export async function updateIngredient(id: string, updates: any) {
           }
         } catch (err) {
           // Don't fail update if allergen detection fails
-          logger.warn('[Ingredients API] Failed to auto-detect allergens on update:', err);
+          logger.warn('[Ingredients API] Failed to auto-detect allergens on update:', {
+            error: err instanceof Error ? err.message : String(err),
+            stack: err instanceof Error ? err.stack : undefined,
+          });
         }
       }
     }

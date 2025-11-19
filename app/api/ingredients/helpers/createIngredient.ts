@@ -60,7 +60,10 @@ export async function createIngredient(ingredientData: any) {
       }
     } catch (err) {
       // Don't fail creation if allergen detection fails
-      logger.warn('[Ingredients API] Failed to auto-detect allergens on create:', err);
+      logger.warn('[Ingredients API] Failed to auto-detect allergens on create:', {
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
     }
   }
 

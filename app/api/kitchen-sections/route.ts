@@ -135,7 +135,10 @@ export async function GET(request: NextRequest) {
       }
     } catch (err) {
       dishSectionsError = err;
-      logger.warn('Error querying dish_sections:', err);
+      logger.warn('Error querying dish_sections:', {
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
     }
 
     // If dish_sections doesn't exist or is empty, try dishes with kitchen_section_id column
@@ -158,7 +161,10 @@ export async function GET(request: NextRequest) {
           }
         }
       } catch (err) {
-        logger.warn('Error fetching dishes with kitchen_section_id:', err);
+        logger.warn('Error fetching dishes with kitchen_section_id:', {
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
       }
     }
 

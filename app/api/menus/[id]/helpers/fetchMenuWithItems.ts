@@ -599,7 +599,10 @@ export async function fetchMenuWithItems(menuId: string) {
                   aggregated: allergens,
                 });
               } catch (err) {
-                logger.warn('[Menus API] Error aggregating dish allergens:', err);
+                logger.warn('[Menus API] Error aggregating dish allergens:', {
+                  error: err instanceof Error ? err.message : String(err),
+                  stack: err instanceof Error ? err.stack : undefined,
+                });
                 allergens = [];
               }
             }
@@ -643,7 +646,10 @@ export async function fetchMenuWithItems(menuId: string) {
                   aggregated: allergens,
                 });
               } catch (err) {
-                logger.warn('[Menus API] Error aggregating recipe allergens:', err);
+                logger.warn('[Menus API] Error aggregating recipe allergens:', {
+                  error: err instanceof Error ? err.message : String(err),
+                  stack: err instanceof Error ? err.stack : undefined,
+                });
                 allergens = [];
               }
             }

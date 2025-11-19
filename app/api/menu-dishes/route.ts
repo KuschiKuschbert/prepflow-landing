@@ -88,10 +88,18 @@ export async function GET(request: NextRequest) {
         if (!dishSectionsResult.error && dishSectionsResult.data) {
           dishSections = dishSectionsResult.data;
         } else {
-          logger.warn('dish_sections table might not exist or query failed:', dishSectionsResult.error);
+          logger.warn('dish_sections table might not exist or query failed:', {
+            error: dishSectionsResult.error?.message || String(dishSectionsResult.error),
+            code: dishSectionsResult.error?.code,
+            details: dishSectionsResult.error?.details,
+            hint: dishSectionsResult.error?.hint,
+          });
         }
       } catch (err) {
-        logger.warn('Error querying dish_sections:', err);
+        logger.warn('Error querying dish_sections:', {
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
         // Continue without dish_sections mapping
       }
     }
