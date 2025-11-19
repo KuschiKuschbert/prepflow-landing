@@ -548,7 +548,7 @@ export async function fetchMenuWithItems(menuId: string) {
           const { AUSTRALIAN_ALLERGENS, consolidateAllergens } = require('@/lib/allergens/australian-allergens');
           const validCodes = AUSTRALIAN_ALLERGENS.map((a: { code: string }) => a.code);
           const consolidated = consolidateAllergens(validAllergens);
-          const filtered = consolidated.filter(code => validCodes.includes(code));
+          const filtered = consolidated.filter((code: string) => validCodes.includes(code));
 
           // Log if we filtered out invalid codes
           if (validAllergens.length !== filtered.length && itemName) {
