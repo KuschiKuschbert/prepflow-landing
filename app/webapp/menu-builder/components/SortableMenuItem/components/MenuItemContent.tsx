@@ -93,10 +93,10 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
               )}
             </div>
             {/* Allergens and Dietary Info for Recipe */}
-            {(item.allergens?.length > 0 ||
+            {((item.allergens?.length ?? 0) > 0 ||
               item.is_vegetarian ||
               item.is_vegan ||
-              item.recipes?.allergens?.length > 0 ||
+              (item.recipes?.allergens?.length ?? 0) > 0 ||
               item.recipes?.is_vegetarian ||
               item.recipes?.is_vegan) && (
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
