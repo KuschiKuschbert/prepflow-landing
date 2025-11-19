@@ -76,7 +76,8 @@ export async function GET(
         recipes (
           id,
           name,
-          yield
+          yield,
+          selling_price
         )
       `,
       )
