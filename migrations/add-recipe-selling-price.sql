@@ -10,3 +10,4 @@ CREATE INDEX IF NOT EXISTS idx_recipes_selling_price ON recipes(selling_price);
 
 -- Add comment for documentation
 COMMENT ON COLUMN recipes.selling_price IS 'User-set actual selling price per serving. NULL means use calculated recommended price.';
+

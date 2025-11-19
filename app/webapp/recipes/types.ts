@@ -10,6 +10,11 @@ export interface Recipe {
   created_at: string;
   updated_at: string;
   selling_price?: number;
+  allergens?: string[];
+  is_vegetarian?: boolean;
+  is_vegan?: boolean;
+  dietary_confidence?: string;
+  dietary_method?: string;
 }
 
 export interface RecipeIngredient {
@@ -74,6 +79,11 @@ export interface Dish {
   category?: string;
   created_at: string;
   updated_at: string;
+  allergens?: string[];
+  is_vegetarian?: boolean;
+  is_vegan?: boolean;
+  dietary_confidence?: string;
+  dietary_method?: string;
 }
 
 // Unified Item Types (for Recipes & Dishes view)

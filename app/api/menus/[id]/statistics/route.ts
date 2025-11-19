@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateMenuStatistics } from './helpers/calculateMenuStatistics';
 import { handleMenuStatisticsError } from './helpers/handleMenuStatisticsError';
@@ -17,7 +18,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     }
 
     // Fetch menu items with dishes and recipes
-    const { data: menuItems } = await supabaseAdmin
+    // Note: recipes table uses 'name' column, not 'recipe_name'
+    const { data: menuItems, error: queryError } = await supabaseAdmin
       .from('menu_items')
       .select(
         `
@@ -32,15 +34,43 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         ),
         recipes (
           id,
-          recipe_name,
-          yield,
-          selling_price
+          name,
+          yield
         )
       `,
       )
       .eq('menu_id', menuId);
 
+    if (queryError) {
+      logger.error('[Menu Statistics API] Database query error:', {
+        error: queryError,
+        menuId,
+        message: queryError.message,
+        details: queryError.details,
+      });
+      return NextResponse.json(
+        {
+          error: 'Database query failed',
+          message: queryError.message || 'Failed to fetch menu items',
+        },
+        { status: 500 },
+      );
+    }
+
+    logger.dev('[Menu Statistics API] Menu items fetched:', {
+      menuId,
+      itemCount: menuItems?.length || 0,
+      items: menuItems?.map(item => ({
+        dish_id: item.dish_id,
+        recipe_id: item.recipe_id,
+        has_dish: !!item.dishes,
+        has_recipe: !!item.recipes,
+        actual_selling_price: item.actual_selling_price,
+      })),
+    });
+
     if (!menuItems || menuItems.length === 0) {
+      logger.dev('[Menu Statistics API] No menu items found, returning zeros');
       return NextResponse.json({
         success: true,
         statistics: {
@@ -56,7 +86,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       });
     }
 
+    logger.dev('[Menu Statistics API] Calculating statistics', { itemCount: menuItems.length });
     const statistics = await calculateMenuStatistics(menuItems);
+    logger.dev('[Menu Statistics API] Statistics calculated:', statistics);
 
     return NextResponse.json({
       success: true,

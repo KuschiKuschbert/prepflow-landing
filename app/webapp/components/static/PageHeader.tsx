@@ -1,9 +1,9 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { ArrowLeft, LucideIcon } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode } from 'react';
-import { ArrowLeft, LucideIcon } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 
 interface PageHeaderProps {
   title: string | ReactNode;
@@ -45,6 +45,7 @@ export function PageHeader({
                 src="/images/prepflow-logo.svg"
                 alt="PrepFlow Logo"
                 fill
+                sizes="40px"
                 className="rounded-lg object-contain"
                 priority
               />

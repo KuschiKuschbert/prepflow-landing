@@ -1,7 +1,7 @@
 'use client';
 
 import { Recipe, RecipeIngredientWithDetails } from '../types';
-import { RecipeSortField } from '../hooks/useRecipeFiltering';
+import { RecipeSortField, RecipeFilters } from '../hooks/useRecipeFiltering';
 import { TablePagination } from '@/components/ui/TablePagination';
 import RecipeCard from './RecipeCard';
 import RecipeTable from './RecipeTable';
@@ -13,16 +13,9 @@ interface RecipesContentProps {
   paginatedRecipes: Recipe[];
   recipePrices: Record<string, any>;
   selectedRecipes: Set<string>;
-  filters: {
-    searchTerm: string;
-    categoryFilter: string;
-    sortField: RecipeSortField;
-    sortDirection: 'asc' | 'desc';
-    itemsPerPage: number;
-    currentPage: number;
-  };
+  filters: RecipeFilters;
   totalPages: number;
-  updateFilters: (updates: Partial<RecipesContentProps['filters']>) => void;
+  updateFilters: (updates: Partial<RecipeFilters>) => void;
   handleSelectRecipe: (recipeId: string) => void;
   handleSelectAll: () => void;
   handlePreviewRecipe: (recipe: Recipe) => void;
@@ -53,11 +46,19 @@ export function RecipesContent({
         recipes={recipes}
         searchTerm={filters.searchTerm}
         categoryFilter={filters.categoryFilter}
+        excludeAllergens={filters.excludeAllergens}
+        includeAllergens={filters.includeAllergens}
+        vegetarian={filters.vegetarian}
+        vegan={filters.vegan}
         sortField={filters.sortField}
         sortDirection={filters.sortDirection}
         itemsPerPage={filters.itemsPerPage}
         onSearchChange={term => updateFilters({ searchTerm: term })}
         onCategoryFilterChange={category => updateFilters({ categoryFilter: category })}
+        onExcludeAllergensChange={allergens => updateFilters({ excludeAllergens: allergens })}
+        onIncludeAllergensChange={allergens => updateFilters({ includeAllergens: allergens })}
+        onVegetarianChange={vegetarian => updateFilters({ vegetarian })}
+        onVeganChange={vegan => updateFilters({ vegan })}
         onSortChange={(field, direction) =>
           updateFilters({ sortField: field, sortDirection: direction })
         }

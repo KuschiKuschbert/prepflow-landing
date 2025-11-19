@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { PageHeader } from '../components/static/PageHeader';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
@@ -18,9 +18,9 @@ const MenuBuilderClient = dynamic(() => import('./components/MenuBuilderClient')
 export default function MenuBuilderPage() {
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
 
-  const handleBackToList = () => {
+  const handleBackToList = useCallback(() => {
     setSelectedMenu(null);
-  };
+  }, []);
 
   return (
     <ErrorBoundary>

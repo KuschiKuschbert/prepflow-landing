@@ -12,9 +12,13 @@ export type RecipeSortField =
   | 'contributing_margin'
   | 'created';
 
-interface RecipeFilters {
+export interface RecipeFilters {
   searchTerm: string;
   categoryFilter: string;
+  excludeAllergens: string[];
+  includeAllergens: string[];
+  vegetarian: boolean;
+  vegan: boolean;
   sortField: RecipeSortField;
   sortDirection: 'asc' | 'desc';
   currentPage: number;
@@ -28,6 +32,10 @@ export function useRecipeFiltering(
   const [filters, setFilters] = useState<RecipeFilters>({
     searchTerm: '',
     categoryFilter: '',
+    excludeAllergens: [],
+    includeAllergens: [],
+    vegetarian: false,
+    vegan: false,
     sortField: 'name',
     sortDirection: 'asc',
     currentPage: 1,
@@ -35,13 +43,25 @@ export function useRecipeFiltering(
   });
 
   const filteredAndSortedRecipes = useMemo(() => {
-    const filtered = filterRecipes(recipes, filters.searchTerm, filters.categoryFilter);
+    const filtered = filterRecipes(
+      recipes,
+      filters.searchTerm,
+      filters.categoryFilter,
+      filters.excludeAllergens,
+      filters.includeAllergens,
+      filters.vegetarian,
+      filters.vegan,
+    );
     return sortRecipes(filtered, recipePrices, filters.sortField, filters.sortDirection);
   }, [
     recipes,
     recipePrices,
     filters.searchTerm,
     filters.categoryFilter,
+    filters.excludeAllergens,
+    filters.includeAllergens,
+    filters.vegetarian,
+    filters.vegan,
     filters.sortField,
     filters.sortDirection,
   ]);
@@ -58,10 +78,14 @@ export function useRecipeFiltering(
     setFilters(prev => ({
       ...prev,
       ...updates,
-      // Reset to page 1 when changing search, category, or sort
+      // Reset to page 1 when changing search, category, allergens, dietary, or sort
       currentPage:
         updates.searchTerm !== undefined ||
         updates.categoryFilter !== undefined ||
+        updates.excludeAllergens !== undefined ||
+        updates.includeAllergens !== undefined ||
+        updates.vegetarian !== undefined ||
+        updates.vegan !== undefined ||
         updates.sortField !== undefined ||
         updates.sortDirection !== undefined
           ? 1

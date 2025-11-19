@@ -60,12 +60,18 @@ export default function DishSectionsPage() {
       const result = await response.json();
 
       if (result.success) {
-        setKitchenSections(result.data);
+        setKitchenSections(result.data || []);
+        // Show helpful message if tables don't exist
+        if (result.message && result.instructions) {
+          logger.warn('Kitchen sections:', result.message);
+          logger.dev('Setup instructions:', result.instructions);
+        }
       } else {
         setError(result.message || 'Failed to fetch kitchen sections');
       }
     } catch (err) {
-      setError('Failed to fetch kitchen sections');
+      logger.error('Failed to fetch kitchen sections:', err);
+      setError('Failed to fetch kitchen sections. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -77,7 +83,14 @@ export default function DishSectionsPage() {
       const result = await response.json();
 
       if (result.success) {
-        setMenuDishes(result.data);
+        setMenuDishes(result.data || []);
+        // Show helpful message if tables don't exist
+        if (result.message && result.instructions) {
+          logger.warn('Menu dishes:', result.message);
+          logger.dev('Setup instructions:', result.instructions);
+        }
+      } else {
+        logger.error('Failed to fetch menu dishes:', result);
       }
     } catch (err) {
       logger.error('Failed to fetch menu dishes:', err);

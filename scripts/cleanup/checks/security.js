@@ -94,3 +94,4 @@ module.exports = {
   name: 'security',
   check: checkSecurity,
 };
+

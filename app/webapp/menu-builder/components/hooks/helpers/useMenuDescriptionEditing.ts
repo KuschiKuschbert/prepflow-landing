@@ -2,7 +2,7 @@
  * Hook for editing menu descriptions.
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { Menu } from '../../../types';
 import { saveMenuDescription } from './saveMenuDescription';
@@ -38,36 +38,50 @@ export function useMenuDescriptionEditing({
     }
   }, [editingMenuId]);
 
-  const handleStartEditDescription = (menu: Menu, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setEditingMenuId(menu.id);
-    setEditDescription(menu.description || '');
-  };
+  const handleStartEditDescription = useCallback(
+    (menu: Menu, e: React.MouseEvent) => {
+      e.stopPropagation();
+      // Prevent editing locked menus
+      if (menu.is_locked) {
+        showError('Cannot edit locked menu. Please unlock it first.');
+        return;
+      }
+      setEditingMenuId(menu.id);
+      setEditDescription(menu.description || '');
+    },
+    [showError], // Stable - only uses setState functions
+  );
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setEditingMenuId(null);
     setEditDescription('');
-  };
+  }, []); // Stable - only uses setState functions
 
-  const handleSaveDescription = async (menu: Menu) => {
-    await saveMenuDescription({
-      menu,
-      trimmedDescription: editDescription.trim(),
-      setMenus,
-      onMenuUpdated,
-      handleCancelEdit,
-      setIsSaving,
-      showError,
-      showSuccess,
-    });
-  };
+  const handleSaveDescription = useCallback(
+    async (menu: Menu) => {
+      await saveMenuDescription({
+        menu,
+        trimmedDescription: editDescription.trim(),
+        setMenus,
+        onMenuUpdated,
+        handleCancelEdit,
+        setIsSaving,
+        showError,
+        showSuccess,
+      });
+    },
+    [editDescription, setMenus, onMenuUpdated, handleCancelEdit, showError, showSuccess],
+  );
 
-  const handleDescriptionKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Escape') {
-      handleCancelEdit();
-    }
-    // Allow Enter for multi-line descriptions
-  };
+  const handleDescriptionKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Escape') {
+        handleCancelEdit();
+      }
+      // Allow Enter for multi-line descriptions
+    },
+    [handleCancelEdit],
+  );
 
   return {
     editingMenuId,

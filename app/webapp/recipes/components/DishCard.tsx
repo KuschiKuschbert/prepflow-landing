@@ -5,6 +5,8 @@ import { Dish, DishCostData } from '../types';
 import { Edit, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { formatRecipeDate } from '../utils/formatDate';
+import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
+import { DietaryBadge } from '@/components/ui/DietaryBadge';
 
 interface DishCardProps {
   dish: Dish;
@@ -114,6 +116,26 @@ const DishCard = React.memo(function DishCard({
           </div>
         )}
       </div>
+
+      {/* Allergens and Dietary Info */}
+      {(dish.allergens?.length > 0 || dish.is_vegetarian || dish.is_vegan) && (
+        <div className="mb-3 ml-7 space-y-2">
+          {dish.allergens && dish.allergens.length > 0 && (
+            <div>
+              <span className="text-xs font-medium text-gray-400">Allergens:</span>
+              <div className="mt-1">
+                <AllergenDisplay allergens={dish.allergens} size="sm" showEmpty={false} />
+              </div>
+            </div>
+          )}
+          <DietaryBadge
+            isVegetarian={dish.is_vegetarian}
+            isVegan={dish.is_vegan}
+            confidence={dish.dietary_confidence}
+            size="sm"
+          />
+        </div>
+      )}
 
       <div className="ml-7 flex gap-2">
         <button

@@ -80,3 +80,4 @@ export interface OptimizationResult {
   lastCalculated: number; // timestamp
   patternVersion: number; // Increments when patterns change
 }
+

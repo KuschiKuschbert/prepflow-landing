@@ -58,3 +58,4 @@ export function aggregateIngredientsFromRecipes(
 
   return Array.from(aggregated.values());
 }
+

@@ -38,7 +38,7 @@ export async function validateRecipeUpdate(
   // Check if recipe exists
   const { data: existingRecipe, error: checkError } = await supabaseAdmin
     .from('recipes')
-    .select('id, recipe_name')
+    .select('id, name')
     .eq('id', recipeId)
     .single();
 
@@ -50,11 +50,12 @@ export async function validateRecipeUpdate(
   }
 
   // Check if new name conflicts with another recipe (case-insensitive)
-  if (name.trim().toLowerCase() !== existingRecipe.recipe_name.toLowerCase()) {
+  const existingName = (existingRecipe as any).name || (existingRecipe as any).recipe_name;
+  if (name.trim().toLowerCase() !== existingName.toLowerCase()) {
     const { data: conflictingRecipes, error: conflictError } = await supabaseAdmin
       .from('recipes')
-      .select('id, recipe_name')
-      .ilike('recipe_name', name.trim())
+      .select('id, name')
+      .ilike('name', name.trim())
       .neq('id', recipeId);
 
     if (conflictError) {

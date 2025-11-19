@@ -29,3 +29,4 @@ export function handleEmployeeError(err: unknown, operation: string): NextRespon
     { status: 500 },
   );
 }
+

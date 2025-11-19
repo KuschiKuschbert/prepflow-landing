@@ -222,3 +222,4 @@ CREATE TABLE IF NOT EXISTS supplier_verification (
 CREATE INDEX IF NOT EXISTS idx_supplier_verification_date ON supplier_verification(verification_date DESC);
 CREATE INDEX IF NOT EXISTS idx_supplier_verification_supplier ON supplier_verification(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_supplier_verification_valid ON supplier_verification(is_valid);
+

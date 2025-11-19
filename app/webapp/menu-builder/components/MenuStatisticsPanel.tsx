@@ -5,11 +5,11 @@ import { Package, Percent, TrendingUp } from 'lucide-react';
 import { MenuStatistics } from '../types';
 
 interface MenuStatisticsPanelProps {
-  statistics: MenuStatistics;
+  statistics: MenuStatistics | null | undefined;
 }
 
 export default function MenuStatisticsPanel({ statistics }: MenuStatisticsPanelProps) {
-  // Ensure all statistics fields exist with defaults
+  // Ensure all statistics fields exist with defaults - handle null/undefined gracefully
   const stats = {
     total_items: statistics?.total_items ?? 0,
     total_dishes: statistics?.total_dishes ?? 0,

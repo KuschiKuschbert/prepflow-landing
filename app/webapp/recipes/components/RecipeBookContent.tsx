@@ -7,12 +7,17 @@ import { RecipeManagementTabs, type RecipeManagementTab } from './RecipeManageme
 
 export function RecipeBookContent() {
   // Initialize with consistent default to prevent hydration mismatch
-  // Will be updated from URL hash in useEffect on client
+  // Use 'ingredients' as default, will be updated from URL hash in useEffect on client
   const [activeTab, setActiveTab] = useState<RecipeManagementTab>('ingredients');
+  const [isMounted, setIsMounted] = useState(false);
 
   // Initialize from URL hash on client mount and sync with hash changes
   useEffect(() => {
+    setIsMounted(true);
+
     const updateTabFromHash = () => {
+      if (typeof window === 'undefined') return;
+
       const hash = window.location.hash.slice(1);
       if (hash === 'dishes' || hash === 'ingredients') {
         setActiveTab(hash as RecipeManagementTab);
@@ -40,8 +45,13 @@ export function RecipeBookContent() {
   return (
     <div>
       <RecipeManagementTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      {activeTab === 'ingredients' && <IngredientsTab />}
-      {activeTab === 'dishes' && <DishesClient />}
+      {/* Only render tab content after mount to prevent hydration mismatch */}
+      {isMounted && (
+        <>
+          {activeTab === 'ingredients' && <IngredientsTab />}
+          {activeTab === 'dishes' && <DishesClient />}
+        </>
+      )}
     </div>
   );
 }

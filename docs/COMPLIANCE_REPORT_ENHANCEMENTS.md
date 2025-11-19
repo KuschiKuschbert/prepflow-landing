@@ -198,3 +198,4 @@ Or execute the SQL directly in your Supabase SQL editor.
 - Indexes created for performance on frequently queried columns
 - All tables include `created_at` and `updated_at` timestamps
 - Error handling included in API endpoints
+

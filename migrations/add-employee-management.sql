@@ -105,3 +105,4 @@ VALUES
   ('First Aid', 'First Aid Certificate - Recommended for kitchen staff', false, 1095, true), -- 3 years
   ('Allergen Management', 'Allergen Management Training - Recommended for food handlers', false, 730, true) -- 2 years
 ON CONFLICT (name) DO NOTHING;
+

@@ -72,3 +72,4 @@ export function calculateThresholds(
     popularityThreshold: averagePopularity * 0.8, // HIGH if ≥ 80% of average
   };
 }
+

@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { getCachedData } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 import type { MenuItem, MenuStatistics, Dish, Recipe } from '../../types';
 import { loadMenuData as loadMenuDataHelper } from './useMenuData/dataLoading';
 
@@ -51,10 +52,35 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
   const [loading, setLoading] = useState(!cachedMenuData && !cachedDishes && !cachedRecipes);
 
   const refreshStatistics = useCallback(async () => {
-    const statsResponse = await fetch(`/api/menus/${menuId}/statistics`);
-    if (statsResponse.ok) {
-      const statsData = await statsResponse.json();
-      if (statsData.success) setStatistics(statsData.statistics);
+    try {
+      const statsResponse = await fetch(`/api/menus/${menuId}/statistics`);
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json();
+        if (statsData.success) {
+          logger.dev('[useMenuData] Statistics refreshed', {
+            menuId,
+            statistics: statsData.statistics,
+            totalItems: statsData.statistics?.total_items,
+          });
+          setStatistics(statsData.statistics);
+        } else {
+          logger.warn('[useMenuData] Statistics API returned error', {
+            menuId,
+            error: statsData.error || statsData.message,
+          });
+        }
+      } else {
+        logger.error('[useMenuData] Statistics API request failed', {
+          menuId,
+          status: statsResponse.status,
+          statusText: statsResponse.statusText,
+        });
+      }
+    } catch (err) {
+      logger.error('[useMenuData] Failed to refresh statistics', {
+        menuId,
+        error: err,
+      });
     }
   }, [menuId]);
 

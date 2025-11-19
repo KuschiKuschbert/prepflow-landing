@@ -17,3 +17,4 @@ export function deduplicateDishes(dishes: any[]): any[] {
 export function filterDishesWithSales(dishes: any[]): any[] {
   return dishes.filter(dish => dish.sales_data && dish.sales_data.length > 0);
 }
+

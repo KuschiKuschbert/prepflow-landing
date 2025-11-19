@@ -33,3 +33,4 @@ module.exports = {
   name: 'naming',
   check: checkNaming,
 };
+

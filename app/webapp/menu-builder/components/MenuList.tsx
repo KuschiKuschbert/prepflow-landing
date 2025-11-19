@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useRef } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Menu } from '../types';
 import { EmptyMenuList } from './EmptyMenuList';
@@ -33,6 +34,15 @@ export default function MenuList({
 }: MenuListProps) {
   const editing = useMenuEditing({ menus, setMenus, onMenuUpdated });
   const deletion = useMenuDeletion({ menus, setMenus, onDeleteMenu });
+
+  // Use ref to access deletion.setMenuToDelete without depending on deletion object
+  const deletionRef = useRef(deletion);
+  deletionRef.current = deletion;
+
+  // Memoize cancel handler using ref to avoid dependency on changing deletion object
+  const handleCancelDelete = useCallback(() => {
+    deletionRef.current.setMenuToDelete(null);
+  }, []); // Empty deps - use ref for setMenuToDelete
 
   if (menus.length === 0) {
     return <EmptyMenuList />;
@@ -72,17 +82,17 @@ export default function MenuList({
         );
       })}
       <ConfirmDialog
-        isOpen={!!deletion.menuToDelete}
+        isOpen={!!deletion.menuToDelete && !deletion.menuToDelete.is_locked}
         title="86 This Menu?"
         message={
-          deletion.menuToDelete
+          deletion.menuToDelete && !deletion.menuToDelete.is_locked
             ? `Ready to 86 "${deletion.menuToDelete.menu_name}"? This menu's going in the bin - no ceremony needed. This can't be undone, chef!`
             : ''
         }
         confirmLabel="86 It"
         cancelLabel="Cancel"
         onConfirm={deletion.confirmDelete}
-        onCancel={() => deletion.setMenuToDelete(null)}
+        onCancel={handleCancelDelete}
         variant="danger"
       />
     </div>

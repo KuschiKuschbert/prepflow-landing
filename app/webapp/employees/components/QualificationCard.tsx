@@ -91,3 +91,4 @@ export function QualificationCard({ qualification, onDelete }: QualificationCard
     </div>
   );
 }
+

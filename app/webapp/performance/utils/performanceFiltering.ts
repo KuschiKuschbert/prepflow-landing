@@ -17,3 +17,4 @@ export function filterPerformanceItems(
     return matchesSearch && matchesClass;
   });
 }
+

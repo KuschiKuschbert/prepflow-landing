@@ -63,3 +63,4 @@ export function EquipmentDrawerHeader({
     </div>
   );
 }
+

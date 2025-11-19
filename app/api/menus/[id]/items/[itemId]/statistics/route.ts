@@ -14,13 +14,27 @@ import { calculateRecipeCost } from '../../../statistics/helpers/calculateRecipe
  * @returns {Promise<NextResponse>} Menu item statistics
  */
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   context: { params: Promise<{ id: string; itemId: string }> },
 ) {
+  // Early logging to confirm route is being called
+  logger.dev('[Menu Item Statistics API] Route handler called', {
+    path: req.nextUrl.pathname,
+    method: req.method,
+    url: req.url,
+  });
+
   try {
-    const { id, itemId } = await context.params;
-    const menuId = id;
-    const menuItemId = itemId;
+    const params = await context.params;
+    const menuId = params?.id;
+    const menuItemId = params?.itemId;
+
+    logger.dev('[Menu Item Statistics API] GET request received', {
+      menuId,
+      menuItemId,
+      params,
+      pathname: req.nextUrl.pathname,
+    });
 
     if (!menuId || !menuItemId) {
       return NextResponse.json(
@@ -61,9 +75,8 @@ export async function GET(
         ),
         recipes (
           id,
-          recipe_name,
-          yield,
-          selling_price
+          name,
+          yield
         )
       `,
       )

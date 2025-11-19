@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const { data, error } = await supabaseAdmin
       .from('recipes')
       .select('id')
-      .ilike('recipe_name', name);
+      .ilike('name', name);
     if (error) throw error;
     return NextResponse.json({ exists: (data || []).length > 0 });
   } catch (e: any) {

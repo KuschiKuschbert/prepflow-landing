@@ -5,6 +5,9 @@ export interface Menu {
   created_at: string;
   updated_at: string;
   items_count?: number;
+  is_locked?: boolean;
+  locked_at?: string;
+  locked_by?: string;
 }
 
 export interface MenuItem {
@@ -21,6 +24,11 @@ export interface MenuItem {
     dish_name: string;
     description?: string;
     selling_price: number;
+    allergens?: string[];
+    is_vegetarian?: boolean;
+    is_vegan?: boolean;
+    dietary_confidence?: string;
+    dietary_method?: string;
   };
   recipes?: {
     id: string;
@@ -28,7 +36,17 @@ export interface MenuItem {
     description?: string;
     yield?: number;
     selling_price?: number;
+    allergens?: string[];
+    is_vegetarian?: boolean;
+    is_vegan?: boolean;
+    dietary_confidence?: string;
+    dietary_method?: string;
   };
+  allergens?: string[];
+  is_vegetarian?: boolean;
+  is_vegan?: boolean;
+  dietary_confidence?: string;
+  dietary_method?: string;
 }
 
 export interface MenuStatistics {

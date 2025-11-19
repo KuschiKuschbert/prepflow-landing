@@ -36,6 +36,12 @@ export interface IngredientData {
   min_stock_level?: string | number;
   current_stock?: string | number;
   pack_size_unit?: string;
+  allergens?: string[];
+  allergen_source?: {
+    manual?: boolean;
+    ai?: boolean;
+    ai_detected_at?: string;
+  };
 }
 
 export interface NormalizedIngredientData {
@@ -57,6 +63,12 @@ export interface NormalizedIngredientData {
   current_stock?: number;
   standard_unit?: string;
   original_unit?: string;
+  allergens?: string[];
+  allergen_source?: {
+    manual?: boolean;
+    ai?: boolean;
+    ai_detected_at?: string;
+  };
 }
 
 export function parseNumeric(value: string | number | undefined, defaultValue: number): number {

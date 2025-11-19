@@ -6,6 +6,8 @@ import { Edit, Trash2, Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeDate } from '../utils/formatDate';
+import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
+import { DietaryBadge } from '@/components/ui/DietaryBadge';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -116,6 +118,26 @@ const RecipeCard = React.memo(function RecipeCard({
           </div>
         )}
       </div>
+
+      {/* Allergens and Dietary Info */}
+      {(recipe.allergens?.length > 0 || recipe.is_vegetarian || recipe.is_vegan) && (
+        <div className="mb-3 ml-7 space-y-2">
+          {recipe.allergens && recipe.allergens.length > 0 && (
+            <div>
+              <span className="text-xs font-medium text-gray-400">Allergens:</span>
+              <div className="mt-1">
+                <AllergenDisplay allergens={recipe.allergens} size="sm" showEmpty={false} />
+              </div>
+            </div>
+          )}
+          <DietaryBadge
+            isVegetarian={recipe.is_vegetarian}
+            isVegan={recipe.is_vegan}
+            confidence={recipe.dietary_confidence}
+            size="sm"
+          />
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="ml-7 flex gap-2">

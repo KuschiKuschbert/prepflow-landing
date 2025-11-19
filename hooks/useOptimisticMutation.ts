@@ -99,3 +99,4 @@ export function useOptimisticMutation<T = unknown>(
 
   return { mutate, isMutating };
 }
+

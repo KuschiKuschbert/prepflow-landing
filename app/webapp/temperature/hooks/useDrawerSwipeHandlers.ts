@@ -64,3 +64,4 @@ export function useDrawerSwipeHandlers({ isOpen, onClose }: UseDrawerSwipeHandle
     handleHeaderTouchEnd,
   };
 }
+

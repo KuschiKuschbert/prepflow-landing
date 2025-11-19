@@ -3,7 +3,7 @@
  * Orchestrates specialized hooks for title and description editing.
  */
 
-import { useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { Menu } from '../../types';
 import { useMenuTitleEditing } from './helpers/useMenuTitleEditing';
 import { useMenuDescriptionEditing } from './helpers/useMenuDescriptionEditing';
@@ -21,8 +21,6 @@ interface UseMenuEditingProps {
  * @returns {Object} Editing state and handlers
  */
 export function useMenuEditing({ menus, setMenus, onMenuUpdated }: UseMenuEditingProps) {
-  const [editingField, setEditingField] = useState<'title' | 'description' | null>(null);
-
   // Delegate to specialized hooks
   const titleEditing = useMenuTitleEditing({
     menus,
@@ -36,48 +34,104 @@ export function useMenuEditing({ menus, setMenus, onMenuUpdated }: UseMenuEditin
     onMenuUpdated,
   });
 
-  // Update editingField based on which hook is active
-  const editingMenuId = titleEditing.editingMenuId || descriptionEditing.editingMenuId || null;
-  if (editingMenuId && titleEditing.editingMenuId) {
-    setEditingField('title');
-  } else if (editingMenuId && descriptionEditing.editingMenuId) {
-    setEditingField('description');
-  } else if (!editingMenuId) {
-    setEditingField(null);
-  }
+  // Use refs to access handlers without including them in dependencies
+  const titleEditingRef = useRef(titleEditing);
+  const descriptionEditingRef = useRef(descriptionEditing);
 
-  const handleStartEditTitle = (menu: Menu, e: React.MouseEvent) => {
-    titleEditing.handleStartEditTitle(menu, e);
-    setEditingField('title');
-  };
+  // Update refs synchronously during render (safe, doesn't cause re-renders)
+  titleEditingRef.current = titleEditing;
+  descriptionEditingRef.current = descriptionEditing;
 
-  const handleStartEditDescription = (menu: Menu, e: React.MouseEvent) => {
-    descriptionEditing.handleStartEditDescription(menu, e);
-    setEditingField('description');
-  };
+  // Extract primitive values and refs (these are stable or change predictably)
+  const {
+    editingMenuId: titleEditingMenuId,
+    editTitle,
+    isSaving: titleIsSaving,
+    titleInputRef,
+    setEditTitle,
+  } = titleEditing;
 
-  const handleCancelEdit = () => {
-    titleEditing.handleCancelEdit();
-    descriptionEditing.handleCancelEdit();
-    setEditingField(null);
-  };
+  const {
+    editingMenuId: descEditingMenuId,
+    editDescription,
+    isSaving: descIsSaving,
+    descriptionInputRef,
+    setEditDescription,
+  } = descriptionEditing;
 
-  return {
-    editingMenuId,
-    editingField,
-    editTitle: titleEditing.editTitle,
-    editDescription: descriptionEditing.editDescription,
-    isSaving: titleEditing.isSaving || descriptionEditing.isSaving,
-    titleInputRef: titleEditing.titleInputRef,
-    descriptionInputRef: descriptionEditing.descriptionInputRef,
-    handleStartEditTitle,
-    handleStartEditDescription,
-    handleCancelEdit,
-    handleSaveTitle: titleEditing.handleSaveTitle,
-    handleSaveDescription: descriptionEditing.handleSaveDescription,
-    handleTitleKeyDown: titleEditing.handleTitleKeyDown,
-    handleDescriptionKeyDown: descriptionEditing.handleDescriptionKeyDown,
-    setEditTitle: titleEditing.setEditTitle,
-    setEditDescription: descriptionEditing.setEditDescription,
-  };
+  // Compute editingField directly from hook states (simple derived value, no memoization needed)
+  const editingMenuId = titleEditingMenuId || descEditingMenuId || null;
+  const editingField: 'title' | 'description' | null =
+    titleEditingMenuId ? 'title' : descEditingMenuId ? 'description' : null;
+
+  // Memoize handlers using refs to avoid dependency on changing handler functions
+  const handleStartEditTitle = useCallback((menu: Menu, e: React.MouseEvent) => {
+    titleEditingRef.current.handleStartEditTitle(menu, e);
+  }, []); // Empty deps - use ref for handler
+
+  const handleStartEditDescription = useCallback((menu: Menu, e: React.MouseEvent) => {
+    descriptionEditingRef.current.handleStartEditDescription(menu, e);
+  }, []); // Empty deps - use ref for handler
+
+  const handleCancelEdit = useCallback(() => {
+    titleEditingRef.current.handleCancelEdit();
+    descriptionEditingRef.current.handleCancelEdit();
+  }, []); // Empty deps - use refs for handlers
+
+  const handleSaveTitle = useCallback((menu: Menu) => {
+    titleEditingRef.current.handleSaveTitle(menu);
+  }, []); // Empty deps - use ref for handler
+
+  const handleSaveDescription = useCallback((menu: Menu) => {
+    descriptionEditingRef.current.handleSaveDescription(menu);
+  }, []); // Empty deps - use ref for handler
+
+  const handleTitleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>, menu: Menu) => {
+    titleEditingRef.current.handleTitleKeyDown(e, menu);
+  }, []); // Empty deps - use ref for handler
+
+  const handleDescriptionKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    descriptionEditingRef.current.handleDescriptionKeyDown(e);
+  }, []); // Empty deps - use ref for handler
+
+  // Memoize return object - only depend on primitive values, not handler functions
+  return useMemo(
+    () => ({
+      editingMenuId,
+      editingField,
+      editTitle,
+      editDescription,
+      isSaving: titleIsSaving || descIsSaving,
+      titleInputRef,
+      descriptionInputRef,
+      handleStartEditTitle,
+      handleStartEditDescription,
+      handleCancelEdit,
+      handleSaveTitle,
+      handleSaveDescription,
+      handleTitleKeyDown,
+      handleDescriptionKeyDown,
+      setEditTitle,
+      setEditDescription,
+    }),
+    [
+      editingMenuId,
+      editingField,
+      editTitle,
+      editDescription,
+      titleIsSaving,
+      descIsSaving,
+      titleInputRef,
+      descriptionInputRef,
+      setEditTitle,
+      setEditDescription,
+      handleStartEditTitle,
+      handleStartEditDescription,
+      handleCancelEdit,
+      handleSaveTitle,
+      handleSaveDescription,
+      handleTitleKeyDown,
+      handleDescriptionKeyDown,
+    ],
+  );
 }

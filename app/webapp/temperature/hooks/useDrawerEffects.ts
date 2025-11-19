@@ -29,3 +29,4 @@ export function useDrawerEffects({ isOpen, onClose }: UseDrawerEffectsProps) {
     };
   }, [isOpen]);
 }
+

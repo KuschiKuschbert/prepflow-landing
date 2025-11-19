@@ -7,6 +7,7 @@ import { PageHeader } from '../components/static/PageHeader';
 import { RecipeBookContent } from './components/RecipeBookContent';
 import { RecipeBookDescription } from './components/RecipeBookDescription';
 
+// Force dynamic rendering to prevent SSR hydration issues
 export const dynamic = 'force-dynamic';
 
 export default function RecipesPage() {

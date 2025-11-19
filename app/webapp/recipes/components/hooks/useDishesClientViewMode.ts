@@ -39,3 +39,4 @@ export function useDishesClientViewMode() {
 
   return { viewMode, setViewMode };
 }
+

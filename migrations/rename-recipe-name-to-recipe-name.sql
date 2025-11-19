@@ -19,3 +19,4 @@ CREATE UNIQUE INDEX IF NOT EXISTS recipes_unique_recipe_name
 
 -- Add comment for documentation
 COMMENT ON COLUMN recipes.recipe_name IS 'Recipe name. Standardized to match dishes.dish_name pattern.';
+

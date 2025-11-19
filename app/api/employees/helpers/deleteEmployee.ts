@@ -35,3 +35,4 @@ export async function deleteEmployee(id: string) {
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 }
+

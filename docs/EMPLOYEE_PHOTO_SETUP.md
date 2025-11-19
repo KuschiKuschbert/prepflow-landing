@@ -106,3 +106,4 @@ Old photos are automatically deleted when:
 - Employee is deleted (if cascade delete is configured)
 
 Manual cleanup can be done via Supabase Dashboard > Storage > employee-photos bucket.
+

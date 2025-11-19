@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { Menu } from '../../types';
@@ -19,11 +19,18 @@ export function useMenuDeletion({ menus, setMenus, onDeleteMenu }: UseMenuDeleti
   const { showError, showSuccess } = useNotification();
   const [menuToDelete, setMenuToDelete] = useState<Menu | null>(null);
 
-  const handleDeleteClick = (menu: Menu) => {
+  // Memoize handleDeleteClick - only uses setState, so empty deps
+  const handleDeleteClick = useCallback((menu: Menu) => {
+    // Prevent deleting locked menus
+    if (menu.is_locked) {
+      showError('Cannot delete locked menu. Please unlock it first.');
+      return;
+    }
     setMenuToDelete(menu);
-  };
+  }, [showError]);
 
-  const confirmDelete = async () => {
+  // Memoize confirmDelete with proper dependencies
+  const confirmDelete = useCallback(async () => {
     if (!menuToDelete) return;
 
     // Store original state for rollback
@@ -62,12 +69,16 @@ export function useMenuDeletion({ menus, setMenus, onDeleteMenu }: UseMenuDeleti
       showError('Failed to delete menu. Something went wrong - please try again.');
       setMenuToDelete(null);
     }
-  };
+  }, [menuToDelete, menus, setMenus, onDeleteMenu, showError, showSuccess]);
 
-  return {
-    menuToDelete,
-    setMenuToDelete,
-    handleDeleteClick,
-    confirmDelete,
-  };
+  // Memoize return object to prevent MenuList re-renders
+  return useMemo(
+    () => ({
+      menuToDelete,
+      setMenuToDelete,
+      handleDeleteClick,
+      confirmDelete,
+    }),
+    [menuToDelete, handleDeleteClick, confirmDelete],
+  );
 }

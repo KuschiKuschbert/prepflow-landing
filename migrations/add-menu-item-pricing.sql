@@ -16,3 +16,4 @@ CREATE INDEX IF NOT EXISTS idx_menu_items_recommended_selling_price ON menu_item
 -- Add comment for documentation
 COMMENT ON COLUMN menu_items.actual_selling_price IS 'User-set selling price override for this menu item. If NULL, use recommended_selling_price or dish.selling_price';
 COMMENT ON COLUMN menu_items.recommended_selling_price IS 'Calculated recommended selling price based on COGS and target profit margin. Cached for performance.';
+

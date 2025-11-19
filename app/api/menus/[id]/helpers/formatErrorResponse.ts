@@ -7,12 +7,19 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Formatted error response
  */
 export function formatErrorResponse(err: any): NextResponse {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   return NextResponse.json(
     {
       success: false,
       error: err.error || 'Error',
       message: err.message || 'An error occurred',
+      ...(isDevelopment && {
+        details: err.details,
+        code: err.code,
+        timestamp: err.timestamp,
+      }),
     },
-    { status: err.status },
+    { status: err.status || 500 },
   );
 }

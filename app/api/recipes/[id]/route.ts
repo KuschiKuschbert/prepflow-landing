@@ -6,6 +6,80 @@ import { buildUpdateData } from './helpers/buildUpdateData';
 import { deleteRecipeAndCleanup } from './helpers/deleteRecipeAndCleanup';
 import { validateRecipeDelete } from './helpers/validateRecipeDelete';
 import { validateRecipeUpdate } from './helpers/validateRecipeUpdate';
+import { aggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
+import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
+import { invalidateRecipeAllergenCache, invalidateDishesWithRecipe } from '@/lib/allergens/cache-invalidation';
+
+export async function GET(
+  _req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await context.params;
+    const recipeId = id;
+
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
+    // Fetch recipe
+    const { data: recipe, error: fetchError } = await supabaseAdmin
+      .from('recipes')
+      .select('*')
+      .eq('id', recipeId)
+      .single();
+
+    if (fetchError || !recipe) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
+    }
+
+    // Aggregate allergens and dietary status (check cache first)
+    const [allergens, dietaryStatus] = await Promise.all([
+      aggregateRecipeAllergens(recipeId),
+      aggregateRecipeDietaryStatus(recipeId),
+    ]);
+
+    // Enrich recipe with allergens and dietary info
+    const enrichedRecipe = {
+      ...recipe,
+      allergens: allergens || [],
+      is_vegetarian: dietaryStatus?.isVegetarian ?? null,
+      is_vegan: dietaryStatus?.isVegan ?? null,
+      dietary_confidence: dietaryStatus?.confidence ?? null,
+      dietary_method: dietaryStatus?.method ?? null,
+    };
+
+    return NextResponse.json({
+      success: true,
+      recipe: enrichedRecipe,
+    });
+  } catch (err) {
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes/[id]', method: 'GET' },
+    });
+
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? err instanceof Error
+            ? err.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
+  }
+}
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -20,6 +94,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     // Build update data
     const updateData = buildUpdateData(body);
+
+    // Check if ingredients are being updated (which would affect allergens)
+    const ingredientsChanged = body.ingredients !== undefined;
 
     // Update recipe
     const { data: updatedRecipe, error: updateError } = await supabaseAdmin!
@@ -38,6 +115,16 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
       const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
+    }
+
+    // Invalidate allergen cache if ingredients changed
+    if (ingredientsChanged) {
+      Promise.all([
+        invalidateRecipeAllergenCache(recipeId),
+        invalidateDishesWithRecipe(recipeId),
+      ]).catch(err => {
+        logger.error('[Recipes API] Error invalidating allergen caches:', err);
+      });
     }
 
     return NextResponse.json({

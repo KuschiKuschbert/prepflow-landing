@@ -106,3 +106,4 @@ export function getWorkflowDescription(workflow: WorkflowType): string {
       return 'Organized by time of day: Morning Prep → Service → End of Day';
   }
 }
+

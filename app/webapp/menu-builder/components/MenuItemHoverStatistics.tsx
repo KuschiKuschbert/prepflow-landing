@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { MenuItem } from '../types';
 
 interface MenuItemHoverStatisticsProps {
@@ -10,6 +11,7 @@ interface MenuItemHoverStatisticsProps {
   isVisible: boolean;
   position: 'top' | 'bottom';
   mousePosition?: { x: number; y: number };
+  anchorElement?: HTMLElement | null; // Menu item element for positioning
 }
 
 interface ItemStatistics {
@@ -36,10 +38,12 @@ export function MenuItemHoverStatistics({
   isVisible,
   position = 'top',
   mousePosition,
+  anchorElement,
 }: MenuItemHoverStatisticsProps) {
   const [statistics, setStatistics] = useState<ItemStatistics | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentItemId, setCurrentItemId] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{
     top?: number;
     bottom?: number;
@@ -49,55 +53,140 @@ export function MenuItemHoverStatistics({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const loadStatistics = useCallback(async () => {
-    const cacheKey = `${menuId}-${item.id}`;
-    const cached = statisticsCache.get(cacheKey);
-    const now = Date.now();
+  const loadStatistics = useCallback(
+    async (retryCount = 0) => {
+      const cacheKey = `${menuId}-${item.id}`;
+      const cached = statisticsCache.get(cacheKey);
+      const now = Date.now();
 
-    // Use cache if valid
-    if (cached && now < cached.expiry) {
-      setStatistics(cached.data);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`/api/menus/${menuId}/items/${item.id}/statistics`);
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setStatistics(result.statistics);
-        // Cache the result
-        statisticsCache.set(cacheKey, {
-          data: result.statistics,
-          timestamp: now,
-          expiry: now + CACHE_EXPIRY_MS,
-        });
-      } else {
-        setError(result.error || result.message || 'Failed to load statistics');
+      // Use cache if valid
+      if (cached && now < cached.expiry) {
+        setStatistics(cached.data);
+        return;
       }
-    } catch (err) {
-      logger.error('Failed to load item statistics:', err);
-      setError('Failed to load statistics');
-    } finally {
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(`/api/menus/${menuId}/items/${item.id}/statistics`);
+
+        if (!response.ok) {
+          // Handle 404 errors with retry logic (may be transient Next.js routing issue)
+          if (response.status === 404) {
+            if (retryCount < 1) {
+              // Retry once after a short delay (exponential backoff)
+              logger.dev(
+                '[MenuItemHoverStatistics] Statistics endpoint not found (404), retrying...',
+                {
+                  menuId,
+                  itemId: item.id,
+                  retryCount,
+                },
+              );
+              setTimeout(() => {
+                loadStatistics(retryCount + 1);
+              }, 500);
+              return;
+            }
+            // After retry, suppress error to avoid console spam
+            logger.dev('[MenuItemHoverStatistics] Statistics endpoint not found after retry, skipping', {
+              menuId,
+              itemId: item.id,
+            });
+            setLoading(false);
+            return;
+          }
+          const errorData = await response.json().catch(() => ({}));
+          setError(errorData.error || errorData.message || 'Failed to load statistics');
+          setLoading(false);
+          return;
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+          logger.dev('[MenuItemHoverStatistics] Statistics loaded successfully', {
+            cacheKey,
+            statistics: result.statistics,
+            hasRecommendedPrice: result.statistics?.recommended_selling_price != null,
+            hasActualPrice: result.statistics?.actual_selling_price != null,
+            sellingPrice: result.statistics?.selling_price,
+          });
+          setStatistics(result.statistics);
+          // Cache the result
+          statisticsCache.set(cacheKey, {
+            data: result.statistics,
+            timestamp: now,
+            expiry: now + CACHE_EXPIRY_MS,
+          });
+        } else {
+          logger.error('[MenuItemHoverStatistics] Statistics API returned error', {
+            cacheKey,
+            error: result.error || result.message,
+          });
+          setError(result.error || result.message || 'Failed to load statistics');
+        }
+      } catch (err) {
+        logger.error('Failed to load item statistics:', err);
+        setError('Failed to load statistics');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [menuId, item.id],
+  );
+
+  // Clear statistics immediately when item changes (switching between items)
+  useEffect(() => {
+    if (currentItemId !== null && currentItemId !== item.id) {
+      // Item changed - clear old statistics immediately
+      setStatistics(null);
+      setError(null);
       setLoading(false);
+      // Clear any pending timeouts
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
+      }
     }
-  }, [menuId, item.id]);
+    setCurrentItemId(item.id);
+  }, [item.id]);
 
   useEffect(() => {
     if (isVisible) {
-      // Check cache first
+      logger.dev('[MenuItemHoverStatistics] Tooltip visible, loading statistics', {
+        menuId,
+        itemId: item.id,
+        itemName: item.dishes?.dish_name || item.recipes?.recipe_name || 'Unknown',
+      });
+
+      // Clear any previous timeout
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
+      }
+
+      // Check cache first for THIS specific item
       const cacheKey = `${menuId}-${item.id}`;
       const cached = statisticsCache.get(cacheKey);
       const now = Date.now();
 
       if (cached && now < cached.expiry) {
-        // Use cached data immediately
+        // Use cached data immediately for this item
+        logger.dev('[MenuItemHoverStatistics] Using cached statistics', {
+          cacheKey,
+          statistics: cached.data,
+        });
         setStatistics(cached.data);
         setLoading(false);
-      } else if (!statistics && !loading) {
+        setError(null);
+      } else {
+        // Ensure we're showing loading state for this item
+        // Don't clear statistics here - let the item change effect handle it
+        setLoading(true);
+        setError(null);
+        logger.dev('[MenuItemHoverStatistics] Fetching fresh statistics', { cacheKey });
         // Reduced delay for faster response
         hoverTimeoutRef.current = setTimeout(() => {
           loadStatistics();
@@ -107,51 +196,64 @@ export function MenuItemHoverStatistics({
       return () => {
         if (hoverTimeoutRef.current) {
           clearTimeout(hoverTimeoutRef.current);
+          hoverTimeoutRef.current = null;
         }
       };
     } else {
+      // Tooltip hidden - clear timeout but keep statistics cached
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = null;
       }
-      // Don't clear statistics - keep cached data for next hover
     }
-  }, [isVisible, statistics, loading, menuId, item.id, loadStatistics]);
+  }, [isVisible, menuId, item.id, loadStatistics]);
 
-  // Calculate tooltip position based on cursor
+  // Track mouse position globally and update tooltip position in real-time
   useEffect(() => {
-    if (!isVisible || !mousePosition) return;
+    if (!isVisible) {
+      setTooltipPosition({});
+      return;
+    }
 
-    const updatePosition = () => {
-      if (!mousePosition) return;
+    let currentPos = mousePosition;
+
+    const updatePosition = (pos?: { x: number; y: number }) => {
+      const position = pos || currentPos || mousePosition;
+      if (!position || typeof position.x !== 'number' || typeof position.y !== 'number') {
+        return;
+      }
 
       const tooltipWidth = 256; // w-64 = 256px
-      const tooltipHeight = tooltipRef.current?.offsetHeight || 200; // Estimate if not rendered
-      const offset = 12; // Distance from cursor
+      const tooltipHeight = tooltipRef.current?.offsetHeight || 200;
+      const padding = 8;
+      const offset = 12; // Small offset from cursor
 
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
-      // Default: position top-right of cursor
-      let left = mousePosition.x + offset;
-      let top = mousePosition.y - tooltipHeight - offset;
+      // Position tooltip to the right of cursor, vertically centered
+      let left = position.x + offset;
+      let top = position.y - tooltipHeight / 2;
 
-      // Boundary detection: adjust if near edges
-      if (left + tooltipWidth > viewportWidth - 8) {
-        // Near right edge - position left of cursor
-        left = mousePosition.x - tooltipWidth - offset;
-      }
-      if (left < 8) {
-        // Too far left - align to left edge with padding
-        left = 8;
+      // Boundary detection
+      if (left + tooltipWidth > viewportWidth - padding) {
+        // Position left of cursor instead
+        left = position.x - tooltipWidth - offset;
       }
 
-      if (top < 8) {
-        // Near top - position below cursor
-        top = mousePosition.y + offset;
+      if (left < padding) {
+        left = padding;
       }
-      if (top + tooltipHeight > viewportHeight - 8) {
-        // Near bottom - position above cursor (but ensure it doesn't go above viewport)
-        top = Math.max(8, mousePosition.y - tooltipHeight - offset);
+
+      if (top < padding) {
+        top = position.y + offset;
+      }
+
+      if (top + tooltipHeight > viewportHeight - padding) {
+        top = position.y - tooltipHeight - offset;
+        if (top < padding) {
+          top = padding;
+        }
       }
 
       setTooltipPosition({
@@ -160,33 +262,41 @@ export function MenuItemHoverStatistics({
       });
     };
 
-    updatePosition();
-    // Update on window resize
-    window.addEventListener('resize', updatePosition);
+    // Global mouse move handler for continuous tracking
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      currentPos = { x: e.clientX, y: e.clientY };
+      updatePosition(currentPos);
+    };
+
+    // Initial position update
+    if (mousePosition) {
+      updatePosition();
+    }
+
+    // Track mouse movement globally for smooth following
+    window.addEventListener('mousemove', handleGlobalMouseMove);
+    window.addEventListener('resize', () => updatePosition());
+    window.addEventListener('scroll', () => updatePosition(), true);
 
     return () => {
-      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('resize', () => updatePosition());
+      window.removeEventListener('scroll', () => updatePosition(), true);
     };
   }, [isVisible, mousePosition]);
 
   if (!isVisible) return null;
 
-  return (
+  const tooltipContent = (
     <div
       ref={tooltipRef}
-      className="pointer-events-auto fixed z-[60] w-64 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl transition-all duration-150 ease-out"
+      className="pointer-events-none fixed z-[60] w-64 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl"
       style={{
+        left: tooltipPosition.left !== undefined ? `${tooltipPosition.left}px` : undefined,
+        top: tooltipPosition.top !== undefined ? `${tooltipPosition.top}px` : undefined,
         animation: 'fadeInUp 0.2s ease-out forwards',
-        ...tooltipPosition,
       }}
       role="tooltip"
-      onMouseEnter={e => {
-        e.stopPropagation();
-        // Keep tooltip visible when hovering over it
-      }}
-      onMouseLeave={e => {
-        e.stopPropagation();
-      }}
     >
       {loading && (
         <div className="animate-pulse text-xs text-gray-400 transition-opacity duration-200">
@@ -196,72 +306,146 @@ export function MenuItemHoverStatistics({
       {error && <div className="text-xs text-red-400 transition-opacity duration-200">{error}</div>}
       {statistics && !loading && !error && (
         <div className="space-y-3 transition-opacity duration-200">
-          {/* Recommended Price Section */}
-          {statistics.recommended_selling_price != null && (
-            <div className="border-b border-[#2a2a2a] pb-2">
-              <div className="text-xs text-gray-400">Recommended Price</div>
-              <div className="text-sm font-semibold text-[#29E7CD]">
-                ${statistics.recommended_selling_price.toFixed(2)}
+          {/* Show the price being used for calculations in the header */}
+          {statistics.actual_selling_price != null ? (
+            /* Actual price exists - show actual price in header, recommended as reference */
+            <>
+              <div className="mb-2 border-b border-[#2a2a2a] pb-2">
+                <div className="text-xs text-gray-400">Selling Price</div>
+                <div className="text-sm font-semibold text-white">
+                  ${statistics.actual_selling_price.toFixed(2)}
+                </div>
+                {statistics.recommended_selling_price != null &&
+                  Math.abs(statistics.actual_selling_price - statistics.recommended_selling_price) >
+                    0.01 && (
+                    <div className="mt-1 text-xs text-gray-500">
+                      Recommended: ${statistics.recommended_selling_price.toFixed(2)}
+                    </div>
+                  )}
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <div className="text-gray-400">COGS</div>
+                  <div className="font-medium text-white">${statistics.cogs.toFixed(2)}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400">Revenue</div>
+                  <div className="font-medium text-white">${statistics.selling_price.toFixed(2)}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400">Gross Profit</div>
+                  <div
+                    className={`font-medium ${statistics.gross_profit >= 0 ? 'text-[#29E7CD]' : 'text-red-400'}`}
+                  >
+                    ${statistics.gross_profit.toFixed(2)}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-400">Profit Margin</div>
+                  <div
+                    className={`font-medium ${statistics.gross_profit_margin >= 0 ? 'text-[#29E7CD]' : 'text-red-400'}`}
+                  >
+                    {statistics.gross_profit_margin.toFixed(1)}%
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : statistics.recommended_selling_price != null ? (
+            /* No actual price - show recommended price (projected) in header */
+            <>
+              <div className="mb-2 rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-2">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <div className="text-xs font-medium text-[#29E7CD]">Recommended Price</div>
+                  <div className="text-xs text-gray-400">(Projected)</div>
+                </div>
+                <div className="text-sm font-semibold text-[#29E7CD]">
+                  ${statistics.recommended_selling_price.toFixed(2)}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <div className="text-gray-400">COGS</div>
+                  <div className="font-medium text-white">${statistics.cogs.toFixed(2)}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400">Revenue</div>
+                  <div className="font-medium text-white">
+                    ${statistics.recommended_selling_price.toFixed(2)}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-400">Gross Profit</div>
+                  <div
+                    className={`font-medium ${
+                      statistics.recommended_selling_price - statistics.cogs >= 0
+                        ? 'text-[#29E7CD]'
+                        : 'text-red-400'
+                    }`}
+                  >
+                    ${(statistics.recommended_selling_price - statistics.cogs).toFixed(2)}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-400">Profit Margin</div>
+                  <div
+                    className={`font-medium ${
+                      statistics.recommended_selling_price > 0 &&
+                      (statistics.recommended_selling_price - statistics.cogs) / statistics.recommended_selling_price >= 0
+                        ? 'text-[#29E7CD]'
+                        : 'text-red-400'
+                    }`}
+                  >
+                    {statistics.recommended_selling_price > 0
+                      ? (
+                          ((statistics.recommended_selling_price - statistics.cogs) /
+                            statistics.recommended_selling_price) *
+                          100
+                        ).toFixed(1)
+                      : '0.0'}
+                    %
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            /* No price available - show basic stats */
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <div className="text-gray-400">COGS</div>
+                <div className="font-medium text-white">${statistics.cogs.toFixed(2)}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">Revenue</div>
+                <div className="font-medium text-white">${statistics.selling_price.toFixed(2)}</div>
+              </div>
+              <div>
+                <div className="text-gray-400">Gross Profit</div>
+                <div
+                  className={`font-medium ${statistics.gross_profit >= 0 ? 'text-[#29E7CD]' : 'text-red-400'}`}
+                >
+                  ${statistics.gross_profit.toFixed(2)}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-400">Profit Margin</div>
+                <div
+                  className={`font-medium ${statistics.gross_profit_margin >= 0 ? 'text-[#29E7CD]' : 'text-red-400'}`}
+                >
+                  {statistics.gross_profit_margin.toFixed(1)}%
+                </div>
               </div>
             </div>
           )}
-
-          {/* Show calculation breakdown when no actual price */}
-          {statistics.actual_selling_price == null &&
-            statistics.recommended_selling_price != null && (
-              <div className="rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-2">
-                <div className="mb-1 text-xs font-medium text-[#29E7CD]">
-                  Projected Calculations
-                </div>
-                <div className="space-y-1 text-xs text-gray-300">
-                  <div className="flex justify-between">
-                    <span>COGS:</span>
-                    <span className="font-medium">${statistics.cogs.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Gross Profit (70%):</span>
-                    <span className="font-medium text-[#29E7CD]">
-                      ${(statistics.recommended_selling_price - statistics.cogs).toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between border-t border-[#2a2a2a] pt-1">
-                    <span>Recommended Price:</span>
-                    <span className="font-semibold text-[#29E7CD]">
-                      ${statistics.recommended_selling_price.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div>
-              <div className="text-gray-400">COGS</div>
-              <div className="font-medium text-white">${statistics.cogs.toFixed(2)}</div>
-            </div>
-            <div>
-              <div className="text-gray-400">Revenue</div>
-              <div className="font-medium text-white">${statistics.selling_price.toFixed(2)}</div>
-            </div>
-            <div>
-              <div className="text-gray-400">Gross Profit</div>
-              <div
-                className={`font-medium ${statistics.gross_profit >= 0 ? 'text-[#29E7CD]' : 'text-red-400'}`}
-              >
-                ${statistics.gross_profit.toFixed(2)}
-              </div>
-            </div>
-            <div>
-              <div className="text-gray-400">Profit Margin</div>
-              <div
-                className={`font-medium ${statistics.gross_profit_margin >= 0 ? 'text-[#29E7CD]' : 'text-red-400'}`}
-              >
-                {statistics.gross_profit_margin.toFixed(1)}%
-              </div>
-            </div>
-          </div>
         </div>
       )}
     </div>
   );
+
+  // Render tooltip in portal to avoid transform/positioning context issues
+  // This ensures fixed positioning works correctly regardless of parent transforms
+  if (typeof window !== 'undefined') {
+    return createPortal(tooltipContent, document.body);
+  }
+
+  return null;
 }

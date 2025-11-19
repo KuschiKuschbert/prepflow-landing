@@ -50,3 +50,4 @@ export function useEquipmentStatus({ getFilteredLogs }: UseEquipmentStatusProps)
     findOutOfRangeEquipment,
   };
 }
+

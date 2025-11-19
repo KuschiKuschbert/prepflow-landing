@@ -3,7 +3,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { Package, UtensilsCrossed } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 
 export type RecipeManagementTab = 'dishes' | 'ingredients';
 
@@ -15,28 +14,8 @@ interface RecipeManagementTabsProps {
 export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagementTabsProps) {
   const pathname = usePathname();
 
-  // Sync URL hash with active tab on mount
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (hash === 'dishes' || hash === 'ingredients') {
-      if (hash !== activeTab) {
-        onTabChange(hash as RecipeManagementTab);
-      }
-    } else if (hash === 'recipes' || hash === 'calculator') {
-      // Redirect old recipes/calculator hash to dishes tab
-      onTabChange('dishes');
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', `${pathname}#dishes`);
-      }
-    } else if (!hash) {
-      // Default to ingredients if no hash
-      onTabChange('ingredients');
-      if (typeof window !== 'undefined') {
-        window.history.replaceState(null, '', `${pathname}#ingredients`);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run on mount
+  // Note: URL hash syncing is handled by parent RecipeBookContent component
+  // to prevent duplicate logic and race conditions
 
   const handleTabChange = (tab: RecipeManagementTab) => {
     onTabChange(tab);

@@ -50,3 +50,4 @@ export function useSampleDataGeneration({ onRefreshLogs }: UseSampleDataGenerati
     handleGenerateSampleData,
   };
 }
+

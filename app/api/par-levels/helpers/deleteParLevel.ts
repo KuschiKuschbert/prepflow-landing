@@ -34,3 +34,4 @@ export async function deleteParLevel(id: string): Promise<void> {
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 }
+

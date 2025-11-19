@@ -41,11 +41,12 @@ export function useMenuItemHover({
     e: React.MouseEvent,
     tooltipRef?: React.RefObject<HTMLDivElement | null>,
   ) => {
-    // Check if mouse is moving to the tooltip
-    const relatedTarget = e.relatedTarget as HTMLElement;
-    if (relatedTarget && tooltipRef?.current?.contains(relatedTarget)) {
-      return; // Don't hide if moving to tooltip
-    }
+    // Note: We don't check if mouse is moving to tooltip here because:
+    // 1. relatedTarget can be null or invalid in some browsers/events, causing runtime errors
+    // 2. The tooltip has its own mouse event handlers (onMouseEnter/onMouseLeave) to keep it visible
+    // 3. This approach avoids the "Failed to execute 'contains' on 'Node'" TypeError
+
+    // Simply hide the tooltip - if mouse moves to tooltip, its onMouseEnter will show it again
     setIsHovered(false);
     setMousePosition(undefined);
     onHoverItem?.(null);

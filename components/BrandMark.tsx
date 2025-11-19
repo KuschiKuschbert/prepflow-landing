@@ -62,6 +62,7 @@ export function BrandMark({
           alt={alt}
           width={width}
           height={height}
+          sizes="24px"
           style={{
             width: '100%',
             height: '100%',

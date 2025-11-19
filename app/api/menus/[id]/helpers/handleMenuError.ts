@@ -9,9 +9,18 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Error response
  */
 export function handleMenuError(err: Error | any, method: string): NextResponse {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const errorMessage = err instanceof Error ? err.message : String(err);
+  const errorStack = err instanceof Error ? err.stack : undefined;
+
   logger.error('[Menus API] Unexpected error:', {
-    error: err instanceof Error ? err.message : String(err),
-    stack: err instanceof Error ? err.stack : undefined,
+    error: errorMessage,
+    stack: errorStack,
+    ...(isDevelopment && {
+      fullError: err,
+      details: err.details,
+      code: err.code,
+    }),
     context: { endpoint: '/api/menus/[id]', method },
   });
 
@@ -19,7 +28,12 @@ export function handleMenuError(err: Error | any, method: string): NextResponse 
     {
       success: false,
       error: 'Internal server error',
-      message: err instanceof Error ? err.message : 'Unknown error',
+      message: errorMessage,
+      ...(isDevelopment && {
+        details: err.details,
+        code: err.code,
+        stack: errorStack,
+      }),
     },
     { status: 500 },
   );

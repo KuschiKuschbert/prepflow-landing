@@ -33,3 +33,4 @@ CREATE TABLE IF NOT EXISTS navigation_optimization_preferences (
 );
 
 CREATE INDEX IF NOT EXISTS idx_nav_prefs_enabled ON navigation_optimization_preferences(enabled);
+

@@ -119,3 +119,4 @@ export function formatAUD(amount: number): string {
     currency: 'AUD',
   }).format(amount);
 }
+

@@ -8,6 +8,7 @@ import { ComplianceRecordsList } from './components/ComplianceRecordsList';
 import { ComplianceTypeForm } from './components/ComplianceTypeForm';
 import { ComplianceTypesGrid } from './components/ComplianceTypesGrid';
 import { HealthInspectorReport } from './components/HealthInspectorReport';
+import { AllergenOverview } from './components/AllergenOverview';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { logger } from '@/lib/logger';
 import {
@@ -25,7 +26,7 @@ export default function ComplianceTrackingPage() {
   const [types, setTypes] = useState<ComplianceType[]>([]);
   const [records, setRecords] = useState<ComplianceRecord[]>([]);
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
-  const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report'>('records');
+  const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>('records');
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [showAddType, setShowAddType] = useState(false);
   const [selectedType, setSelectedType] = useState('all');
@@ -204,6 +205,16 @@ export default function ComplianceTrackingPage() {
             >
               📊 Health Inspector Report
             </button>
+            <button
+              onClick={() => setActiveTab('allergens')}
+              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
+                activeTab === 'allergens'
+                  ? 'bg-[#29E7CD] text-black shadow-lg'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              🥜 Allergen Overview
+            </button>
           </div>
         </div>
 
@@ -304,6 +315,19 @@ export default function ComplianceTrackingPage() {
 
         {/* Health Inspector Report Tab */}
         {activeTab === 'report' && <HealthInspectorReport />}
+
+        {/* Allergens Tab */}
+        {activeTab === 'allergens' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="mb-2 text-2xl font-semibold text-white">Allergen Overview</h2>
+              <p className="text-gray-400">
+                View all dishes and recipes with their allergen information for compliance tracking
+              </p>
+            </div>
+            <AllergenOverview />
+          </div>
+        )}
       </div>
     </ResponsivePageContainer>
   );

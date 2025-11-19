@@ -45,16 +45,35 @@ export function MenuItemStatisticsModal({
 
     try {
       const response = await fetch(`/api/menus/${menuId}/items/${item.id}/statistics`);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        logger.error('[MenuItemStatisticsModal] Failed to load statistics:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData,
+          menuId,
+          itemId: item.id,
+        });
+        setError(
+          response.status === 404
+            ? 'Statistics endpoint not available. This may be a Next.js routing issue. Please restart the dev server and try again.'
+            : errorData.error || errorData.message || 'Failed to load statistics',
+        );
+        setLoading(false);
+        return;
+      }
+
       const result = await response.json();
 
-      if (response.ok && result.success) {
+      if (result.success) {
         setStatistics(result.statistics);
       } else {
         setError(result.error || result.message || 'Failed to load statistics');
       }
     } catch (err) {
       logger.error('Failed to load item statistics:', err);
-      setError('Failed to load statistics. Please try again.');
+      setError('Failed to load statistics. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }

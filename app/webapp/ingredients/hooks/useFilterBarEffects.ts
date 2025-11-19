@@ -50,3 +50,4 @@ export function useFilterBarEffects({
     setLocalSearchTerm,
   };
 }
+

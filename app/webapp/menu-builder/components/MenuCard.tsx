@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Check, Edit2, Trash2, X } from 'lucide-react';
+import { Check, Edit2, Lock, Trash2, X } from 'lucide-react';
 import { Menu } from '../types';
 
 interface MenuCardProps {
@@ -56,10 +56,16 @@ export function MenuCard({
   setEditTitle,
   setEditDescription,
 }: MenuCardProps) {
+  const isLocked = menu.is_locked || false;
+
   return (
     <div
       key={menu.id}
-      className="group relative cursor-pointer overflow-visible rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all hover:border-[#29E7CD]/50 hover:shadow-lg"
+      className={`group relative cursor-pointer overflow-visible rounded-2xl border p-6 transition-all hover:shadow-lg ${
+        isLocked
+          ? 'border-yellow-500/50 bg-yellow-500/10 hover:border-yellow-500/70'
+          : 'border-[#2a2a2a] bg-[#1f1f1f] hover:border-[#29E7CD]/50'
+      }`}
       onClick={() => {
         if (!isEditingThisMenu) {
           onSelectMenu(menu);
@@ -108,28 +114,42 @@ export function MenuCard({
           </div>
         ) : (
           <>
-            <h3
-              className="text-fluid-lg flex-1 font-semibold text-white"
-              onDoubleClick={e => onStartEditTitle(menu, e)}
-            >
-              {menu.menu_name}
-            </h3>
-            <div className="flex gap-2" onClick={e => e.stopPropagation()}>
-              <button
-                onClick={e => onStartEditTitle(menu, e)}
-                className="rounded-lg p-2 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
-                aria-label={`Edit menu name "${menu.menu_name}"`}
-                title="Double-click or click edit to rename"
+            <div className="flex flex-1 items-center gap-2">
+              <h3
+                className="text-fluid-lg flex-1 font-semibold text-white"
+                onDoubleClick={isLocked ? undefined : e => onStartEditTitle(menu, e)}
               >
-                <Icon icon={Edit2} size="sm" />
-              </button>
-              <button
-                onClick={() => onDeleteClick(menu)}
-                className="rounded-lg p-2 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-red-400"
-              >
-                <Icon icon={Trash2} size="sm" />
-              </button>
+                {menu.menu_name}
+              </h3>
+              {isLocked && (
+                <Icon
+                  icon={Lock}
+                  size="sm"
+                  className="text-yellow-400"
+                  aria-label="Menu is locked"
+                  title="This menu is locked and cannot be edited or deleted"
+                />
+              )}
             </div>
+            {!isLocked && (
+              <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                <button
+                  onClick={e => onStartEditTitle(menu, e)}
+                  className="rounded-lg p-2 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                  aria-label={`Edit menu name "${menu.menu_name}"`}
+                  title="Double-click or click edit to rename"
+                >
+                  <Icon icon={Edit2} size="sm" />
+                </button>
+                <button
+                  onClick={() => onDeleteClick(menu)}
+                  className="rounded-lg p-2 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-red-400"
+                  aria-label={`Delete menu "${menu.menu_name}"`}
+                >
+                  <Icon icon={Trash2} size="sm" />
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
@@ -175,22 +195,27 @@ export function MenuCard({
             </div>
           </div>
         ) : (
-          <div className="flex items-start gap-2" onDoubleClick={e => onStartEditDescription(menu, e)}>
+          <div
+            className="flex items-start gap-2"
+            onDoubleClick={isLocked ? undefined : e => onStartEditDescription(menu, e)}
+          >
             {menu.description ? (
               <p className="flex-1 text-sm text-gray-400">{menu.description}</p>
             ) : (
-              <p className="flex-1 text-sm text-gray-500 italic">
-                No description. Double-click to add one.
+              <p className={`flex-1 text-sm ${isLocked ? 'text-gray-500' : 'text-gray-500 italic'}`}>
+                {isLocked ? 'No description.' : 'No description. Double-click to add one.'}
               </p>
             )}
-            <button
-              onClick={e => onStartEditDescription(menu, e)}
-              className="rounded-lg p-1.5 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
-              aria-label="Edit menu description"
-              title="Double-click or click edit to add/edit description"
-            >
-              <Icon icon={Edit2} size="sm" />
-            </button>
+            {!isLocked && (
+              <button
+                onClick={e => onStartEditDescription(menu, e)}
+                className="rounded-lg p-1.5 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                aria-label="Edit menu description"
+                title="Double-click or click edit to add/edit description"
+              >
+                <Icon icon={Edit2} size="sm" />
+              </button>
+            )}
           </div>
         )}
       </div>

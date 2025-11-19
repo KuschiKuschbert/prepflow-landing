@@ -24,3 +24,4 @@ export function IngredientPrepNotes({ ingredient }: IngredientPrepNotesProps) {
     </div>
   );
 }
+

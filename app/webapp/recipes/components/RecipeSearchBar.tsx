@@ -34,3 +34,4 @@ export function RecipeSearchBar({ searchTerm, onSearchChange, onClear }: RecipeS
     </div>
   );
 }
+

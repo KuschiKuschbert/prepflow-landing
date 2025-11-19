@@ -9,6 +9,7 @@ interface IngredientWizardNavigationProps {
   onCancel: () => void;
   canProceed: boolean;
   loading?: boolean;
+  onSkipStep2?: () => void;
 }
 
 export default function IngredientWizardNavigation({
@@ -20,6 +21,7 @@ export default function IngredientWizardNavigation({
   onCancel,
   canProceed,
   loading = false,
+  onSkipStep2,
 }: IngredientWizardNavigationProps) {
   const isFirstStep = currentStep === 1;
   const isLastStep = currentStep === totalSteps;
@@ -49,6 +51,16 @@ export default function IngredientWizardNavigation({
       </div>
 
       <div className="flex items-center space-x-3">
+        {currentStep === 2 && onSkipStep2 && (
+          <button
+            type="button"
+            onClick={onSkipStep2}
+            disabled={loading}
+            className="rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-sm font-medium text-gray-400 transition-all duration-200 hover:border-[#29E7CD]/50 hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Skip Step
+          </button>
+        )}
         {!isLastStep && (
           <button
             type="button"

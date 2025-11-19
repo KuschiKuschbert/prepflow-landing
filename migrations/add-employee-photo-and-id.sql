@@ -15,3 +15,4 @@ CREATE INDEX IF NOT EXISTS idx_employees_employee_id ON employees(employee_id);
 -- Add comment to columns
 COMMENT ON COLUMN employees.employee_id IS 'Custom employee identifier (e.g., EMP001, STAFF-2024-001)';
 COMMENT ON COLUMN employees.photo_url IS 'URL to employee photo stored in Supabase Storage or external storage';
+

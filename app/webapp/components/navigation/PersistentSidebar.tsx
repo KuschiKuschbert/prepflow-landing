@@ -8,11 +8,18 @@ import { useNavigationItems } from './nav-items';
 import { NewButton } from './NewButton';
 import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
+import { useEffect, useState } from 'react';
 
 export default function PersistentSidebar() {
   const pathname = usePathname();
   const { workflow } = useWorkflowPreference();
   const { trackNavigation } = useNavigationTracking();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering navigation after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const allItems = useNavigationItems(workflow);
 
@@ -46,16 +53,17 @@ export default function PersistentSidebar() {
 
         {/* Collapsible content */}
         <div className="tablet:p-4 desktop:p-5 flex-1 overflow-y-auto p-3">
-          {Object.entries(groupedItems).map(([category, items]) => (
-            <CategorySection
-              key={category}
-              category={category}
-              items={items}
-              isActive={isActive}
-              onTrack={trackNavigation}
-              workflow={workflow}
-            />
-          ))}
+          {mounted &&
+            Object.entries(groupedItems).map(([category, items]) => (
+              <CategorySection
+                key={category}
+                category={category}
+                items={items}
+                isActive={isActive}
+                onTrack={trackNavigation}
+                workflow={workflow}
+              />
+            ))}
         </div>
 
         {/* Footer with settings */}

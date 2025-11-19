@@ -4,11 +4,11 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useRef } from 'react';
 import { MenuItem } from '../types';
+import { MenuItemActions } from './SortableMenuItem/components/MenuItemActions';
+import { MenuItemContent } from './SortableMenuItem/components/MenuItemContent';
+import { MenuItemTooltip } from './SortableMenuItem/components/MenuItemTooltip';
 import { useMenuItemDropdowns } from './SortableMenuItem/hooks/useMenuItemDropdowns';
 import { useMenuItemHover } from './SortableMenuItem/hooks/useMenuItemHover';
-import { MenuItemContent } from './SortableMenuItem/components/MenuItemContent';
-import { MenuItemActions } from './SortableMenuItem/components/MenuItemActions';
-import { MenuItemTooltip } from './SortableMenuItem/components/MenuItemTooltip';
 
 interface SortableMenuItemProps {
   item: MenuItem;
@@ -145,6 +145,7 @@ export function SortableMenuItem({
         isHovered={isHovered}
         mousePosition={mousePosition}
         tooltipRef={tooltipRef}
+        anchorElement={itemRef.current}
         setIsHovered={setIsHovered}
         setMousePosition={setMousePosition}
         onHoverItem={onHoverItem}

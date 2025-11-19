@@ -19,9 +19,28 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
     const dish = await fetchDishWithRelations(dishId);
 
+    // Aggregate allergens and dietary status
+    const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');
+    const { aggregateDishDietaryStatus } = await import('@/lib/dietary/dietary-aggregation');
+
+    const [allergens, dietaryStatus] = await Promise.all([
+      aggregateDishAllergens(dishId),
+      aggregateDishDietaryStatus(dishId),
+    ]);
+
+    // Enrich dish with allergens and dietary info
+    const enrichedDish = {
+      ...dish,
+      allergens: allergens || [],
+      is_vegetarian: dietaryStatus?.isVegetarian ?? null,
+      is_vegan: dietaryStatus?.isVegan ?? null,
+      dietary_confidence: dietaryStatus?.confidence ?? null,
+      dietary_method: dietaryStatus?.method ?? null,
+    };
+
     return NextResponse.json({
       success: true,
-      dish,
+      dish: enrichedDish,
     });
   } catch (err: any) {
     return handleDishError(err, 'GET');
@@ -90,6 +109,11 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     if (ingredients !== undefined) {
       try {
         await updateDishIngredients(dishId, ingredients);
+        // Invalidate allergen cache when ingredients change
+        const { invalidateDishAllergenCache } = await import('@/lib/allergens/cache-invalidation');
+        invalidateDishAllergenCache(dishId).catch(err => {
+          logger.error('[Dishes API] Error invalidating allergen cache:', err);
+        });
       } catch (ingredientsError: any) {
         logger.error('[Dishes API] Database error updating dish ingredients:', {
           error: ingredientsError.message,
@@ -99,6 +123,14 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
         const apiError = ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
         return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
+    }
+
+    // Invalidate allergen cache when recipes change
+    if (recipes !== undefined) {
+      const { invalidateDishAllergenCache } = await import('@/lib/allergens/cache-invalidation');
+      invalidateDishAllergenCache(dishId).catch(err => {
+        logger.error('[Dishes API] Error invalidating allergen cache:', err);
+      });
     }
 
     return NextResponse.json({

@@ -47,3 +47,4 @@ export function TemperatureChartEmptyState({
     </div>
   );
 }
+

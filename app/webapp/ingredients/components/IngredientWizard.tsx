@@ -10,7 +10,8 @@ import {
 } from '@/lib/text-utils';
 import { useTranslation } from '@/lib/useTranslation';
 import { AlertTriangle } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { logger } from '@/lib/logger';
 import {
   calculateCostPerUnit,
   calculateWastagePercentage,
@@ -22,6 +23,7 @@ import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
 import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
+import IngredientWizardStep4 from './IngredientWizardStep4';
 import { Ingredient, IngredientWizardProps } from './types';
 
 export default function IngredientWizard({
@@ -35,6 +37,7 @@ export default function IngredientWizard({
   const { t } = useTranslation();
 
   const [wizardStep, setWizardStep] = useState(1);
+  const totalSteps = 4;
   const [formData, setFormData] = useState<Partial<Ingredient>>({
     ingredient_name: '',
     brand: '',
@@ -52,9 +55,13 @@ export default function IngredientWizard({
     storage_location: '',
     min_stock_level: 0,
     current_stock: 0,
+    allergens: [],
+    allergen_source: { manual: false, ai: false },
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [detectingAllergens, setDetectingAllergens] = useState(false);
+  const lastDetectedRef = useRef<{ ingredientName: string; brand?: string } | null>(null);
   // Auto-calculate cost per unit when pack price or pack size changes
   const updateCostPerUnit = () => {
     if (formData.pack_price && formData.pack_size && formData.pack_size_unit && formData.unit) {
@@ -179,7 +186,7 @@ export default function IngredientWizard({
   };
   const nextStep = () => {
     if (validateStep(wizardStep)) {
-      setWizardStep(prev => Math.min(prev + 1, 3));
+      setWizardStep(prev => Math.min(prev + 1, totalSteps));
     }
   };
 
@@ -205,11 +212,16 @@ export default function IngredientWizard({
       storage_location: '',
       min_stock_level: 0,
       current_stock: 0,
+      allergens: [],
+      allergen_source: { manual: false, ai: false },
     });
     setErrors({});
+    lastDetectedRef.current = null;
+    setDetectingAllergens(false);
   };
   const handleSave = async () => {
-    if (!validateStep(3)) return;
+    // Validate step 1 (required fields) before saving
+    if (!validateStep(1)) return;
 
     try {
       // Capitalize text fields before saving
@@ -232,9 +244,105 @@ export default function IngredientWizard({
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+  const skipStep2 = () => {
+    setWizardStep(3); // Skip to allergens step (now step 3)
+  };
+
+  // Detect allergens when entering step 3 (allergen step)
+  useEffect(() => {
+    const detectAllergens = async () => {
+      // Only detect if we're on step 3, have ingredient name, and no manual allergens set
+      if (wizardStep !== 3) return;
+
+      const ingredientName = formData.ingredient_name?.trim();
+      if (!ingredientName || ingredientName.length < 2) return;
+
+      // Don't detect if user has already manually set allergens
+      const currentAllergens = (formData.allergens as string[]) || [];
+      const allergenSource = (formData.allergen_source as {
+        manual?: boolean;
+        ai?: boolean;
+      }) || { manual: false, ai: false };
+
+      if (allergenSource.manual && currentAllergens.length > 0) {
+        logger.dev('[Wizard] Skipping allergen detection - manual allergens already set');
+        return;
+      }
+
+      // Only detect if we haven't detected before for this ingredient name/brand combination
+      const brand = formData.brand?.trim() || '';
+      if (
+        lastDetectedRef.current &&
+        lastDetectedRef.current.ingredientName === ingredientName &&
+        lastDetectedRef.current.brand === brand &&
+        currentAllergens.length > 0
+      ) {
+        logger.dev('[Wizard] Skipping allergen detection - already detected for this ingredient');
+        return;
+      }
+
+      setDetectingAllergens(true);
+
+      try {
+        const response = await fetch('/api/ingredients/ai-detect-allergens', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ingredient_name: ingredientName,
+            brand: formData.brand?.trim() || undefined,
+            force_ai: false,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to detect allergens');
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data?.allergens) {
+          const detectedAllergens = result.data.allergens as string[];
+          logger.dev(
+            `[Wizard] Detected ${detectedAllergens.length} allergens for ${ingredientName}: ${detectedAllergens.join(', ')}`,
+          );
+
+          // Only update if we got allergens and they're different from current
+          if (detectedAllergens.length > 0) {
+            setFormData(prev => ({
+              ...prev,
+              allergens: detectedAllergens,
+              allergen_source: {
+                manual: false,
+                ai: result.data.method === 'ai' || result.data.method === 'hybrid',
+              },
+            }));
+            // Track that we've detected for this ingredient
+            lastDetectedRef.current = {
+              ingredientName,
+              brand: brand || undefined,
+            };
+          }
+        }
+      } catch (error) {
+        logger.error('[Wizard] Error detecting allergens:', error);
+        // Don't show error to user - detection is optional
+      } finally {
+        setDetectingAllergens(false);
+      }
+    };
+
+    detectAllergens();
+  }, [wizardStep, formData.ingredient_name, formData.brand]);
+
   const canProceed = useMemo(() => {
-    const step = wizardStep === 3 ? 3 : wizardStep;
-    return checkValidationHelper(step, formData);
+    // Step 1 and step 4 (review) require validation
+    // Step 2 (supplier/storage) and step 3 (allergens) are optional
+    if (wizardStep === 1 || wizardStep === 4) {
+      return checkValidationHelper(1, formData); // Use step 1 validation for both
+    }
+    return true; // Steps 2 and 3 are optional
   }, [wizardStep, formData]);
   const stepProps = {
     formData,
@@ -247,6 +355,7 @@ export default function IngredientWizard({
     onYieldPercentageChange: handleYieldPercentageChange,
     onAddSupplier,
     formatCost,
+    detectingAllergens: wizardStep === 3 ? detectingAllergens : false,
   };
   return (
     <div className="mb-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
@@ -255,7 +364,7 @@ export default function IngredientWizard({
       </div>
       <div className="mb-4">
         <div className="flex items-center gap-1.5">
-          {[1, 2, 3].map(step => (
+          {[1, 2, 3, 4].map(step => (
             <div key={step} className="flex flex-1 items-center">
               <div
                 className={`h-1 flex-1 rounded-full transition-all duration-200 ${step <= wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'}`}
@@ -274,16 +383,18 @@ export default function IngredientWizard({
       )}
       {wizardStep === 1 && <IngredientWizardStep1 {...stepProps} />}
       {wizardStep === 2 && <IngredientWizardStep2 {...stepProps} />}
-      {wizardStep === 3 && <IngredientWizardStep3 {...stepProps} />}
+      {wizardStep === 3 && <IngredientWizardStep4 {...stepProps} />}
+      {wizardStep === 4 && <IngredientWizardStep3 {...stepProps} />}
       <IngredientWizardNavigation
         currentStep={wizardStep}
-        totalSteps={3}
+        totalSteps={totalSteps}
         onNext={nextStep}
         onPrevious={prevStep}
         onSave={handleSave}
         onCancel={onCancel}
         canProceed={canProceed}
         loading={loading}
+        onSkipStep2={wizardStep === 2 ? skipStep2 : undefined}
       />
     </div>
   );

@@ -31,5 +31,23 @@ export async function formatIngredientUpdates(updates: any): Promise<any> {
     formattedUpdates.product_code = formatTextInput(updates.product_code);
   }
 
+  // Handle allergens (ensure it's a valid JSONB array)
+  if (updates.allergens !== undefined) {
+    if (Array.isArray(updates.allergens)) {
+      formattedUpdates.allergens = updates.allergens;
+    } else if (updates.allergens === null || updates.allergens === '') {
+      formattedUpdates.allergens = [];
+    }
+  }
+
+  // Handle allergen_source (ensure it's a valid JSONB object)
+  if (updates.allergen_source !== undefined) {
+    if (typeof updates.allergen_source === 'object' && updates.allergen_source !== null) {
+      formattedUpdates.allergen_source = updates.allergen_source;
+    } else if (updates.allergen_source === null || updates.allergen_source === '') {
+      formattedUpdates.allergen_source = { manual: false, ai: false };
+    }
+  }
+
   return formattedUpdates;
 }

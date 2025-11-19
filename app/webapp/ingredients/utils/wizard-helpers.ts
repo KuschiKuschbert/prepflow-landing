@@ -87,8 +87,10 @@ export function formatCost(cost: number): string {
 }
 
 // Pure validation function that doesn't set state (for use during render)
+// Step 1 and step 4 (review) require validation
+// Step 2 (supplier/storage) and step 3 (allergens) are optional
 export function checkValidation(step: number, formData: Partial<Ingredient>): boolean {
-  if (step === 1 || step === 3) {
+  if (step === 1 || step === 4) {
     if (!formData.ingredient_name?.trim()) return false;
     if (!formData.pack_size?.trim()) return false;
     if (!formData.pack_size_unit) return false;
@@ -99,13 +101,15 @@ export function checkValidation(step: number, formData: Partial<Ingredient>): bo
 }
 
 // Validation function that returns errors (for setting state)
+// Step 1 and step 4 (review) require validation
+// Step 2 (supplier/storage) and step 3 (allergens) are optional
 export function getValidationErrors(
   step: number,
   formData: Partial<Ingredient>,
 ): Record<string, string> {
   const newErrors: Record<string, string> = {};
 
-  if (step === 1 || step === 3) {
+  if (step === 1 || step === 4) {
     if (!formData.ingredient_name?.trim())
       newErrors.ingredient_name = 'Ingredient name is required';
     if (!formData.pack_size?.trim()) newErrors.pack_size = 'Pack size is required';

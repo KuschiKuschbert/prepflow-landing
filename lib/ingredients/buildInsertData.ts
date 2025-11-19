@@ -90,6 +90,12 @@ export function buildInsertData(
   if (currentStock > 0) {
     insertData.current_stock = currentStock;
   }
+  if (ingredientData.allergens && Array.isArray(ingredientData.allergens)) {
+    insertData.allergens = ingredientData.allergens;
+  }
+  if (ingredientData.allergen_source) {
+    insertData.allergen_source = ingredientData.allergen_source;
+  }
 
   return insertData;
 }
