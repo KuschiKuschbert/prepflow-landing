@@ -31,9 +31,7 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
       <div className="flex-1">
         {isDish ? (
           <>
-            <div className="font-medium text-white">
-              {item.dishes?.dish_name || 'Unknown Dish'}
-            </div>
+            <div className="font-medium text-white">{item.dishes?.dish_name || 'Unknown Dish'}</div>
             <div className="flex items-baseline gap-2">
               {item.recommended_selling_price != null && (
                 <div className="text-xs text-gray-500">
@@ -44,14 +42,17 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
                 {item.actual_selling_price != null ? (
                   <>${item.actual_selling_price.toFixed(2)}</>
                 ) : (
-                  item.dishes?.selling_price != null && (
-                    <>${item.dishes.selling_price.toFixed(2)}</>
-                  )
+                  item.dishes?.selling_price != null && <>${item.dishes.selling_price.toFixed(2)}</>
                 )}
               </div>
             </div>
             {/* Allergens and Dietary Info for Dish */}
-            {(item.allergens?.length > 0 || item.is_vegetarian || item.is_vegan || item.dishes?.allergens?.length > 0 || item.dishes?.is_vegetarian || item.dishes?.is_vegan) && (
+            {((item.allergens?.length ?? 0) > 0 ||
+              item.is_vegetarian ||
+              item.is_vegan ||
+              (item.dishes?.allergens?.length ?? 0) > 0 ||
+              item.dishes?.is_vegetarian ||
+              item.dishes?.is_vegan) && (
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                 <AllergenDisplay
                   allergens={item.allergens || item.dishes?.allergens || []}
@@ -92,7 +93,12 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
               )}
             </div>
             {/* Allergens and Dietary Info for Recipe */}
-            {(item.allergens?.length > 0 || item.is_vegetarian || item.is_vegan || item.recipes?.allergens?.length > 0 || item.recipes?.is_vegetarian || item.recipes?.is_vegan) && (
+            {(item.allergens?.length > 0 ||
+              item.is_vegetarian ||
+              item.is_vegan ||
+              item.recipes?.allergens?.length > 0 ||
+              item.recipes?.is_vegetarian ||
+              item.recipes?.is_vegan) && (
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                 <AllergenDisplay
                   allergens={item.allergens || item.recipes?.allergens || []}
