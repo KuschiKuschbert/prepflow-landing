@@ -16,8 +16,10 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
     const category = searchParams.get('category');
-    const excludeAllergens = searchParams.get('exclude_allergens')?.split(',').filter(Boolean) || [];
-    const includeAllergens = searchParams.get('include_allergens')?.split(',').filter(Boolean) || [];
+    const excludeAllergens =
+      searchParams.get('exclude_allergens')?.split(',').filter(Boolean) || [];
+    const includeAllergens =
+      searchParams.get('include_allergens')?.split(',').filter(Boolean) || [];
     const vegetarian = searchParams.get('vegetarian') === 'true';
     const vegan = searchParams.get('vegan') === 'true';
     const start = (page - 1) * pageSize;
@@ -41,11 +43,11 @@ export async function GET(request: NextRequest) {
     if (includeAllergens.length > 0) {
       // Include recipes that contain any of these allergens
       // Use OR logic: recipes containing at least one of the specified allergens
-      const allergenConditions = includeAllergens.map(allergen =>
-        supabaseAdmin.from('recipes').select('id').contains('allergens', [allergen])
-      );
       // Note: Supabase doesn't support OR directly, so we'll filter client-side for now
       // In production, consider using a more complex query or filtering after fetch
+      const allergenConditions = includeAllergens.map(allergen =>
+        supabaseAdmin!.from('recipes').select('id').contains('allergens', [allergen]),
+      );
     }
 
     // Filter by dietary suitability
@@ -83,7 +85,9 @@ export async function GET(request: NextRequest) {
       r => !r.allergens || (Array.isArray(r.allergens) && r.allergens.length === 0),
     );
     if (recipesNeedingAllergens.length > 0) {
-      const { batchAggregateRecipeAllergens } = await import('@/lib/allergens/allergen-aggregation');
+      const { batchAggregateRecipeAllergens } = await import(
+        '@/lib/allergens/allergen-aggregation'
+      );
       const recipeIds = recipesNeedingAllergens.map(r => r.id);
       const allergensByRecipe = await batchAggregateRecipeAllergens(recipeIds);
 
