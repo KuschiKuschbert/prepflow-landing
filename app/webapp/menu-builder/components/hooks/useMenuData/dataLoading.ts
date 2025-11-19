@@ -68,8 +68,7 @@ export async function loadMenuData({
       statsData: statsData,
     });
 
-    // Also log to console for visibility
-    console.log('[Menu Data Loading] Statistics API Response:', {
+    logger.dev('[Menu Data Loading] Statistics API Response:', {
       status: statsResponse.status,
       success: statsData.success,
       statistics: statsData.statistics,
@@ -132,7 +131,7 @@ export async function loadMenuData({
         totalRevenue: statsData.statistics?.total_revenue,
         averageProfitMargin: statsData.statistics?.average_profit_margin,
       });
-      console.log('[Menu Data Loading] ✅ Statistics loaded:', statsData.statistics);
+      logger.dev('[Menu Data Loading] ✅ Statistics loaded:', statsData.statistics);
       setStatistics(statsData.statistics);
       // Update cached menu data with statistics
       const currentCached = getCachedData<{
@@ -156,7 +155,7 @@ export async function loadMenuData({
         });
       }
       // Set statistics to default empty values instead of null to ensure panel always shows
-      console.warn('[Menu Data Loading] ⚠️ Statistics API failed, using defaults:', {
+      logger.warn('[Menu Data Loading] ⚠️ Statistics API failed, using defaults:', {
         status: statsResponse.status,
         error: statsData.error || statsData.message,
       });

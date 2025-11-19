@@ -11,16 +11,18 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 
+/**
+ * Lock a menu to prevent modifications.
+ *
+ * @param {NextRequest} request - The incoming request
+ * @param {Object} context - Route context containing params
+ * @param {Promise<{id: string}>} context.params - Route parameters containing menu ID
+ * @returns {Promise<NextResponse>} Response with locked menu data or error
+ */
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
-  // VERY EARLY logging - this should always appear in server console
-  console.log('[Menu Lock API] ===== POST route handler CALLED =====');
-  console.log('[Menu Lock API] Path:', request.nextUrl.pathname);
-  console.log('[Menu Lock API] Method:', request.method);
-  console.log('[Menu Lock API] URL:', request.url);
-
   // Early logging to confirm route is being called
   logger.dev('[Menu Lock API] POST route handler called', {
     path: request.nextUrl.pathname,
@@ -31,9 +33,6 @@ export async function POST(
   try {
     const params = await context.params;
     const menuId = params?.id;
-
-    console.log('[Menu Lock API] Extracted menuId:', menuId);
-    console.log('[Menu Lock API] menuId type:', typeof menuId);
 
     logger.dev('[Menu Lock API] POST request received', {
       menuId,
@@ -69,7 +68,6 @@ export async function POST(
 
     // Check if menu exists - first check if menu exists (without is_locked column)
     // The is_locked column may not exist if migration hasn't been run
-    console.log('[Menu Lock API] Checking menu existence for menuId:', menuId);
     logger.dev('[Menu Lock API] Checking menu existence:', { menuId });
 
     // First, check if menu exists (just by ID)
@@ -77,13 +75,6 @@ export async function POST(
       .from('menus')
       .select('id')
       .eq('id', menuId);
-
-    console.log('[Menu Lock API] Menu existence check:', {
-      menusFound: menus?.length || 0,
-      hasError: !!fetchError,
-      errorMessage: fetchError?.message,
-      errorCode: fetchError?.code,
-    });
 
     if (fetchError) {
       logger.error('[Menu Lock API] Error fetching menu:', {
@@ -140,7 +131,7 @@ export async function POST(
       // Continue anyway - we know menu exists
     }
 
-    console.log('[Menu Lock API] Menu lock status:', {
+    logger.dev('[Menu Lock API] Menu lock status:', {
       menuId: menu.id,
       isLocked: menu.is_locked,
       columnExists: lockStatusError?.code !== '42703',
@@ -229,6 +220,14 @@ export async function POST(
   }
 }
 
+/**
+ * Unlock a menu to allow modifications.
+ *
+ * @param {NextRequest} request - The incoming request
+ * @param {Object} context - Route context containing params
+ * @param {Promise<{id: string}>} context.params - Route parameters containing menu ID
+ * @returns {Promise<NextResponse>} Response with unlocked menu data or error
+ */
 export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
