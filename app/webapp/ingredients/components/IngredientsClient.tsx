@@ -46,7 +46,6 @@ interface Ingredient {
 interface IngredientsClientProps {
   hideHeader?: boolean;
 }
-
 export default function IngredientsClient({ hideHeader = false }: IngredientsClientProps = {}) {
   const { t } = useTranslation();
   const {
@@ -64,7 +63,6 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   const [storageFilter, setStorageFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name_asc');
-
   const { availableUnits } = useRegionalUnits();
   const { suppliers, loading, error, setError } = useIngredientData();
   const {
@@ -143,7 +141,6 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
       setSelectedIngredients,
       exitSelectionMode,
     });
-
   const [hasAutoCategorized, setHasAutoCategorized] = useState(false);
   useEffect(() => {
     if (
@@ -164,7 +161,6 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     handleCategorizeAllUncategorized,
     refetchIngredients,
   ]);
-
   const { handleSave: handleEditSave } = useIngredientEditSave({
     setIngredients,
     setEditingIngredient,
