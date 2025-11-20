@@ -1,10 +1,7 @@
 'use client';
-
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { useEffect, useState } from 'react';
-
-// Direct imports to eliminate skeleton flashes
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
@@ -115,9 +112,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     error: queryError,
     refetch: refetchIngredients,
   } = useIngredientsQuery(1, 10000);
-  useEffect(() => {
-    setPage(1);
-  }, [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
+  useEffect(() => setPage(1), [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;
@@ -165,7 +160,6 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
       exitSelectionMode,
     });
 
-  // Auto-categorize all uncategorized ingredients on first load
   const [hasAutoCategorized, setHasAutoCategorized] = useState(false);
   useEffect(() => {
     if (
@@ -203,9 +197,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   const endIndex = startIndex + itemsPerPage;
   const paginatedIngredients = filteredIngredients?.slice(startIndex, endIndex) || [];
   const [isHydrated, setIsHydrated] = useState(false);
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  useEffect(() => setIsHydrated(true), []);
   useEffect(() => {
     if (page > totalPages && totalPages > 0) setPage(1);
   }, [page, totalPages]);
@@ -308,8 +300,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         suppliers={suppliers}
         availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
-          if (!editingIngredient?.id) return;
-          await handleEditSave(editingIngredient.id, ingredientData);
+          if (editingIngredient?.id) await handleEditSave(editingIngredient.id, ingredientData);
         }}
         onClose={() => setEditingIngredient(null)}
         loading={loading}
