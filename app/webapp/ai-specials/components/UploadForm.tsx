@@ -28,9 +28,14 @@ export function UploadForm({
           <Icon icon={Bot} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-white">{t('aiSpecials.uploadImage', 'Upload Image')}</h2>
+          <h2 className="text-xl font-semibold text-white">
+            {t('aiSpecials.uploadImage', 'Upload Image')}
+          </h2>
           <p className="text-sm text-gray-400">
-            {t('aiSpecials.uploadDesc', 'Upload an image of your ingredients to generate AI-powered specials')}
+            {t(
+              'aiSpecials.uploadDesc',
+              'Upload an image of your ingredients to generate AI-powered specials',
+            )}
           </p>
         </div>
       </div>
@@ -59,7 +64,9 @@ export function UploadForm({
             value={prompt}
             onChange={e => onPromptChange(e.target.value)}
             className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            placeholder={String(t('aiSpecials.promptPlaceholder', 'Describe what you want the AI to focus on...'))}
+            placeholder={String(
+              t('aiSpecials.promptPlaceholder', 'Describe what you want the AI to focus on...'),
+            )}
             rows={3}
           />
         </div>
@@ -68,10 +75,11 @@ export function UploadForm({
           disabled={!selectedFile || processing}
           className="w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {processing ? t('aiSpecials.processing', 'Processing...') : t('aiSpecials.generateSpecials', 'Generate Specials')}
+          {processing
+            ? t('aiSpecials.processing', 'Processing...')
+            : t('aiSpecials.generateSpecials', 'Generate Specials')}
         </button>
       </div>
     </form>
   );
 }
-

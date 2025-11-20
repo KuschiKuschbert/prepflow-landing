@@ -44,7 +44,8 @@ export function useMenuItemAddition({
         return;
       }
       const categoryItems = menuItems.filter(item => item.category === category);
-      const maxPosition = categoryItems.length > 0 ? Math.max(...categoryItems.map(item => item.position)) : -1;
+      const maxPosition =
+        categoryItems.length > 0 ? Math.max(...categoryItems.map(item => item.position)) : -1;
       const optimisticItem: MenuItem = {
         id: `temp-${Date.now()}`,
         menu_id: menuId,
@@ -76,17 +77,28 @@ export function useMenuItemAddition({
         const response = await fetch(`/api/menus/${menuId}/items`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(selectedItem.type === 'dish' ? { dish_id: selectedItem.id, category } : { recipe_id: selectedItem.id, category }),
+          body: JSON.stringify(
+            selectedItem.type === 'dish'
+              ? { dish_id: selectedItem.id, category }
+              : { recipe_id: selectedItem.id, category },
+          ),
         });
 
         const result = await response.json();
 
         if (response.ok && result.success && result.item) {
-          setMenuItems(prevItems => prevItems.map(item => (item.id === optimisticItem.id ? result.item : item)));
+          setMenuItems(prevItems =>
+            prevItems.map(item => (item.id === optimisticItem.id ? result.item : item)),
+          );
           refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
         } else {
-          const errorMessage = result.error || result.message || `Failed to add item (${response.status})`;
-          logger.error('[Menu Editor] API Error:', { status: response.status, error: errorMessage, result });
+          const errorMessage =
+            result.error || result.message || `Failed to add item (${response.status})`;
+          logger.error('[Menu Editor] API Error:', {
+            status: response.status,
+            error: errorMessage,
+            result,
+          });
           setMenuItems(prevItems => prevItems.filter(item => item.id !== optimisticItem.id));
           showError(errorMessage);
         }

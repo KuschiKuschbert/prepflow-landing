@@ -34,53 +34,45 @@ export function useDishesSidePanelsHandlers({
   cancelDeleteItem,
   fetchItems,
 }: UseDishesSidePanelsHandlersProps) {
-  const onDishPanelClose = useCallback(() => {
+  const closeDishPanel = useCallback(() => {
     setShowDishPanel(false);
     setSelectedDishForPreview(null);
   }, [setShowDishPanel, setSelectedDishForPreview]);
-
+  const onDishPanelClose = closeDishPanel;
   const onDishEdit = useCallback(
     (dish: Dish) => {
-      setShowDishPanel(false);
-      setSelectedDishForPreview(null);
+      closeDishPanel();
       handleEditDish(dish);
     },
-    [setShowDishPanel, setSelectedDishForPreview, handleEditDish],
+    [closeDishPanel, handleEditDish],
   );
-
   const onDishDelete = useCallback(
     (dish: Dish) => {
-      setShowDishPanel(false);
-      setSelectedDishForPreview(null);
+      closeDishPanel();
       handleDeleteDish(dish);
     },
-    [setShowDishPanel, setSelectedDishForPreview, handleDeleteDish],
+    [closeDishPanel, handleDeleteDish],
   );
-
-  const onRecipePanelClose = useCallback(() => {
+  const closeRecipePanel = useCallback(() => {
     setShowRecipePanel(false);
     setSelectedRecipeForPreview(null);
     setRecipeIngredients([]);
   }, [setShowRecipePanel, setSelectedRecipeForPreview, setRecipeIngredients]);
-
+  const onRecipePanelClose = closeRecipePanel;
   const onRecipeEdit = useCallback(
     (recipe: Recipe) => {
-      setShowRecipePanel(false);
-      setSelectedRecipeForPreview(null);
+      closeRecipePanel();
       handleEditRecipe(recipe);
     },
-    [setShowRecipePanel, setSelectedRecipeForPreview, handleEditRecipe],
+    [closeRecipePanel, handleEditRecipe],
   );
-
   const onRecipeDelete = useCallback(
     (recipe: Recipe) => {
-      setShowRecipePanel(false);
-      setSelectedRecipeForPreview(null);
+      closeRecipePanel();
       handleDeleteRecipe(recipe);
     },
-    [setShowRecipePanel, setSelectedRecipeForPreview, handleDeleteRecipe],
+    [closeRecipePanel, handleDeleteRecipe],
   );
-
   const onDishEditDrawerClose = useCallback(() => {
     setShowDishEditDrawer(false);
     setEditingDish(null);
@@ -99,4 +91,3 @@ export function useDishesSidePanelsHandlers({
     onDishEditDrawerSave: fetchItems,
   };
 }
-

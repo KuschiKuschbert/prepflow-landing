@@ -27,4 +27,3 @@ export function MenuLockButton({ lockLoading, onLock }: MenuLockButtonProps) {
     </div>
   );
 }
-

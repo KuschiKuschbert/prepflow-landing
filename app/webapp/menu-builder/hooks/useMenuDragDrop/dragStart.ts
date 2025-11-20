@@ -59,17 +59,6 @@ export function calculateInitialOffset(
   const rect = draggedElement.getBoundingClientRect();
   const offsetX = clientX - rect.left;
   const offsetY = clientY - rect.top;
-  logger.dev('[Drag Debug] Initial offset calculation', {
-    clientX,
-    clientY,
-    rectLeft: rect.left,
-    rectTop: rect.top,
-    offsetX,
-    offsetY,
-    elementWidth: rect.width,
-    elementHeight: rect.height,
-  });
-
   return { x: offsetX, y: offsetY };
 }
 /**
@@ -96,7 +85,7 @@ export function handleDragStart(
   if (draggedElement) {
     const offset = calculateInitialOffset(coordinates.x, coordinates.y, draggedElement);
     setInitialOffset(offset);
-    setInitialCursorPosition({ x: coordinates.x, y: coordinates.y });
+    setInitialCursorPosition(coordinates);
   } else {
     setInitialOffset(null);
   }

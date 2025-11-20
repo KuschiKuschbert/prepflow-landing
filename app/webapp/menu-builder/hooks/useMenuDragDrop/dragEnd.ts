@@ -44,7 +44,9 @@ async function moveItemToCategory(
       await onStatisticsUpdate();
     } else {
       const result = await response.json();
-      notifications?.showError(`Failed to move item: ${result.error || result.message || 'Unknown error'}`);
+      notifications?.showError(
+        `Failed to move item: ${result.error || result.message || 'Unknown error'}`,
+      );
     }
   } catch (err) {
     notifications?.showError('Failed to move item. Please check your connection and try again.');
@@ -83,7 +85,6 @@ export async function handleDragEnd({
           onMenuDataReload,
         );
       } else {
-        // Different category - move item to new category at the position of the target item
         await moveItemToCategory(
           menuId,
           activeItem.id,
@@ -95,11 +96,10 @@ export async function handleDragEnd({
         );
       }
     } else if (over.data.current?.type === 'category') {
-      const targetCategory = over.data.current.category as string;
       await moveItemToCategory(
         menuId,
         activeItem.id,
-        targetCategory,
+        over.data.current.category as string,
         activeItem.position,
         onMenuDataReload,
         onStatisticsUpdate,

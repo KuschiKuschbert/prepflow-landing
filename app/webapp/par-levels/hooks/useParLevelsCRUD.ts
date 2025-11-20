@@ -37,7 +37,12 @@ export function useParLevelsCRUD({
           fetch('/api/par-levels', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: updates.id, parLevel: updates.par_level, reorderPoint: updates.reorder_point, unit: updates.unit }),
+            body: JSON.stringify({
+              id: updates.id,
+              parLevel: updates.par_level,
+              reorderPoint: updates.reorder_point,
+              unit: updates.unit,
+            }),
           }),
         setParLevels,
         () => {

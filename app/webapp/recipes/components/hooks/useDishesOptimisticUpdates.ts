@@ -18,12 +18,18 @@ export function useDishesOptimisticUpdates({
 }: UseDishesOptimisticUpdatesProps) {
   const [originalDishes, setOriginalDishes] = useState<Dish[]>([]);
   const [originalRecipes, setOriginalRecipes] = useState<Recipe[]>([]);
-  const optimisticallyUpdateDishes = useCallback((updater: (dishes: Dish[]) => Dish[]) => {
-    setDishes(updater(dishes));
-  }, [dishes, setDishes]);
-  const optimisticallyUpdateRecipes = useCallback((updater: (recipes: Recipe[]) => Recipe[]) => {
-    setRecipes(updater(recipes));
-  }, [recipes, setRecipes]);
+  const optimisticallyUpdateDishes = useCallback(
+    (updater: (dishes: Dish[]) => Dish[]) => {
+      setDishes(updater(dishes));
+    },
+    [dishes, setDishes],
+  );
+  const optimisticallyUpdateRecipes = useCallback(
+    (updater: (recipes: Recipe[]) => Recipe[]) => {
+      setRecipes(updater(recipes));
+    },
+    [recipes, setRecipes],
+  );
   const rollbackDishes = useCallback(() => {
     if (originalDishes.length > 0) setDishes(originalDishes);
   }, [originalDishes, setDishes]);
@@ -43,4 +49,3 @@ export function useDishesOptimisticUpdates({
     rollbackRecipes,
   };
 }
-

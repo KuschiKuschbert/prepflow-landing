@@ -18,7 +18,11 @@ interface MenuItemTooltipContentProps {
   error: string | null;
 }
 
-export function MenuItemTooltipContent({ statistics, loading, error }: MenuItemTooltipContentProps) {
+export function MenuItemTooltipContent({
+  statistics,
+  loading,
+  error,
+}: MenuItemTooltipContentProps) {
   if (loading) {
     return (
       <div className="animate-pulse text-xs text-gray-400 transition-opacity duration-200">
@@ -36,9 +40,12 @@ export function MenuItemTooltipContent({ statistics, loading, error }: MenuItemT
         <>
           <div className="mb-2 border-b border-[#2a2a2a] pb-2">
             <div className="text-xs text-gray-400">Selling Price</div>
-            <div className="text-sm font-semibold text-white">${statistics.actual_selling_price.toFixed(2)}</div>
+            <div className="text-sm font-semibold text-white">
+              ${statistics.actual_selling_price.toFixed(2)}
+            </div>
             {statistics.recommended_selling_price != null &&
-              Math.abs(statistics.actual_selling_price - statistics.recommended_selling_price) > 0.01 && (
+              Math.abs(statistics.actual_selling_price - statistics.recommended_selling_price) >
+                0.01 && (
                 <div className="mt-1 text-xs text-gray-500">
                   Recommended: ${statistics.recommended_selling_price.toFixed(2)}
                 </div>
@@ -65,4 +72,3 @@ export function MenuItemTooltipContent({ statistics, loading, error }: MenuItemT
     </div>
   );
 }
-

@@ -12,7 +12,9 @@ export function EmptyState({ onShareClick }: EmptyStateProps) {
       <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
         <span className="text-3xl">📤</span>
       </div>
-      <h3 className="mb-2 text-xl font-semibold text-white">{t('recipeSharing.noShares', 'No Recipe Shares')}</h3>
+      <h3 className="mb-2 text-xl font-semibold text-white">
+        {t('recipeSharing.noShares', 'No Recipe Shares')}
+      </h3>
       <p className="mb-6 text-gray-400">
         {t('recipeSharing.noSharesDesc', 'Share your recipes with others as PDFs or links')}
       </p>
@@ -25,4 +27,3 @@ export function EmptyState({ onShareClick }: EmptyStateProps) {
     </div>
   );
 }
-

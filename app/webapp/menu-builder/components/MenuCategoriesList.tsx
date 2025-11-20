@@ -30,7 +30,9 @@ export function MenuCategoriesList({
   return (
     <div className="space-y-6">
       {categories.map(category => {
-        const categoryItems = menuItems.filter(item => item.category === category).sort((a, b) => a.position - b.position);
+        const categoryItems = menuItems
+          .filter(item => item.category === category)
+          .sort((a, b) => a.position - b.position);
         return (
           <MenuCategory
             key={category}
@@ -52,4 +54,3 @@ export function MenuCategoriesList({
     </div>
   );
 }
-

@@ -49,7 +49,8 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
         setParLevels(result.data || []);
         cacheData('par_levels', result.data || []);
       } else {
-        const errorMessage = result.message || result.error || `Failed to fetch par levels (${response.status})`;
+        const errorMessage =
+          result.message || result.error || `Failed to fetch par levels (${response.status})`;
         const instructions = result.details?.instructions || [];
         logger.error('[Par Levels] API Error:', {
           status: response.status,
@@ -58,12 +59,10 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
           code: result.code,
           fullResponse: result,
         });
-        if (instructions.length > 0) {
-          showError(`${errorMessage}\n\n${instructions.join('\n')}`);
-          logger.dev('[Par Levels] Error Instructions:', instructions);
-        } else {
-          showError(errorMessage);
-        }
+        showError(
+          instructions.length > 0 ? `${errorMessage}\n\n${instructions.join('\n')}` : errorMessage,
+        );
+        if (instructions.length > 0) logger.dev('[Par Levels] Error Instructions:', instructions);
       }
     } catch (err) {
       logger.error('Failed to fetch par levels:', err);

@@ -50,17 +50,22 @@ export function useMenuItemReorder({
         const response = await fetch(`/api/menus/${menuId}/reorder`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: updatedItems.map(item => ({ id: item.id, category: item.category, position: item.position })) }),
+          body: JSON.stringify({
+            items: updatedItems.map(item => ({
+              id: item.id,
+              category: item.category,
+              position: item.position,
+            })),
+          }),
         });
-
         const result = await response.json();
-
-        if (response.ok) {
-          refreshStatistics().catch(handleRefreshError);
-        } else {
+        if (response.ok) refreshStatistics().catch(handleRefreshError);
+        else {
           setMenuItems(originalMenuItems);
           logger.error('Failed to reorder items:', result.error || result.message);
-          showError(`Failed to reorder items: ${result.error || result.message || 'Unknown error'}`);
+          showError(
+            `Failed to reorder items: ${result.error || result.message || 'Unknown error'}`,
+          );
           refreshStatistics().catch(handleRefreshError);
         }
       } catch (err) {
@@ -76,15 +81,12 @@ export function useMenuItemReorder({
     async (itemId: string) => {
       const item = menuItems.find(i => i.id === itemId);
       if (!item) return;
-
       const categoryItems = menuItems
         .filter(i => i.category === item.category)
         .sort((a, b) => a.position - b.position);
-
       const currentIndex = categoryItems.findIndex(i => i.id === itemId);
       if (currentIndex <= 0) return;
-      const targetItem = categoryItems[currentIndex - 1];
-      await performReorder(itemId, targetItem.id, item.category);
+      await performReorder(itemId, categoryItems[currentIndex - 1].id, item.category);
     },
     [menuItems, performReorder],
   );
@@ -92,15 +94,12 @@ export function useMenuItemReorder({
     async (itemId: string) => {
       const item = menuItems.find(i => i.id === itemId);
       if (!item) return;
-
       const categoryItems = menuItems
         .filter(i => i.category === item.category)
         .sort((a, b) => a.position - b.position);
-
       const currentIndex = categoryItems.findIndex(i => i.id === itemId);
       if (currentIndex === -1 || currentIndex >= categoryItems.length - 1) return;
-      const targetItem = categoryItems[currentIndex + 1];
-      await performReorder(itemId, targetItem.id, item.category);
+      await performReorder(itemId, categoryItems[currentIndex + 1].id, item.category);
     },
     [menuItems, performReorder],
   );

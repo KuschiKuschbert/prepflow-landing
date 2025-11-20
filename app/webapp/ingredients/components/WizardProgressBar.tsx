@@ -24,4 +24,3 @@ export function WizardProgressBar({ currentStep, totalSteps }: WizardProgressBar
     </div>
   );
 }
-

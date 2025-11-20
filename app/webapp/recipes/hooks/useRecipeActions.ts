@@ -54,7 +54,7 @@ export function useRecipeActions({
         }
         await fetchRecipes();
         return true;
-      } catch (err) {
+      } catch {
         showErrorNotification('Failed to add recipe');
         return false;
       }
@@ -85,7 +85,16 @@ export function useRecipeActions({
         const duplicateName = `Copy of ${recipe.recipe_name}`;
         const { data: newRecipe, error: recipeError } = await supabase
           .from('recipes')
-          .insert([{ recipe_name: duplicateName, yield: recipe.yield, yield_unit: recipe.yield_unit, description: recipe.description, instructions: recipe.instructions, category: recipe.category }])
+          .insert([
+            {
+              recipe_name: duplicateName,
+              yield: recipe.yield,
+              yield_unit: recipe.yield_unit,
+              description: recipe.description,
+              instructions: recipe.instructions,
+              category: recipe.category,
+            },
+          ])
           .select()
           .single();
         if (recipeError) {
@@ -93,8 +102,15 @@ export function useRecipeActions({
           return;
         }
         if (ingredients.length > 0 && newRecipe) {
-          const ingredientInserts = ingredients.map(ing => ({ recipe_id: newRecipe.id, ingredient_id: ing.ingredient_id, quantity: ing.quantity, unit: ing.unit }));
-          const { error: ingredientsError } = await supabase.from('recipe_ingredients').insert(ingredientInserts);
+          const ingredientInserts = ingredients.map(ing => ({
+            recipe_id: newRecipe.id,
+            ingredient_id: ing.ingredient_id,
+            quantity: ing.quantity,
+            unit: ing.unit,
+          }));
+          const { error: ingredientsError } = await supabase
+            .from('recipe_ingredients')
+            .insert(ingredientInserts);
           if (ingredientsError) {
             showErrorNotification(`Failed to duplicate ingredients: ${ingredientsError.message}`);
             await fetchRecipes();

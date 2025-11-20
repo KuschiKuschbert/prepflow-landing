@@ -17,16 +17,8 @@ interface UseMenuEditingProps {
  * Hook for managing menu editing state and operations.
  */
 export function useMenuEditing({ menus, setMenus, onMenuUpdated }: UseMenuEditingProps) {
-  const titleEditing = useMenuTitleEditing({
-    menus,
-    setMenus,
-    onMenuUpdated,
-  });
-  const descriptionEditing = useMenuDescriptionEditing({
-    menus,
-    setMenus,
-    onMenuUpdated,
-  });
+  const titleEditing = useMenuTitleEditing({ menus, setMenus, onMenuUpdated });
+  const descriptionEditing = useMenuDescriptionEditing({ menus, setMenus, onMenuUpdated });
   const titleEditingRef = useRef(titleEditing);
   const descriptionEditingRef = useRef(descriptionEditing);
   titleEditingRef.current = titleEditing;
@@ -46,7 +38,11 @@ export function useMenuEditing({ menus, setMenus, onMenuUpdated }: UseMenuEditin
     setEditDescription,
   } = descriptionEditing;
   const editingMenuId = titleEditingMenuId || descEditingMenuId || null;
-  const editingField: 'title' | 'description' | null = titleEditingMenuId ? 'title' : descEditingMenuId ? 'description' : null;
+  const editingField: 'title' | 'description' | null = titleEditingMenuId
+    ? 'title'
+    : descEditingMenuId
+      ? 'description'
+      : null;
   const handleStartEditTitle = useCallback((menu: Menu, e: React.MouseEvent) => {
     titleEditingRef.current.handleStartEditTitle(menu, e);
   }, []);

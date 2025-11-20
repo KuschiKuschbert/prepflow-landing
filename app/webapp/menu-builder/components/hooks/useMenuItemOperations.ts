@@ -23,7 +23,10 @@ interface UseMenuItemOperationsProps {
 }
 
 interface UseMenuItemOperationsReturn {
-  handleCategorySelect: (category: string, selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null) => Promise<void>;
+  handleCategorySelect: (
+    category: string,
+    selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null,
+  ) => Promise<void>;
   handleRemoveItem: (itemId: string, onConfirm: () => void) => void;
   performRemoveItem: (itemId: string, itemName: string) => Promise<void>;
   handleMoveUp: (itemId: string) => Promise<void>;

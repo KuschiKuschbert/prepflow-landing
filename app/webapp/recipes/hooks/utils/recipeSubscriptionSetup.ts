@@ -44,14 +44,20 @@ export function setupRecipeSubscriptions(refs: SubscriptionRefs, recipes: Recipe
       });
       sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
       if (recipeIdsToRefresh.length > 0) invalidateRecipeCache(recipeIdsToRefresh);
-      if (refreshTypes.includes('prices')) {
+      if (refreshTypes.includes('prices'))
         refs.refreshRecipePricesRef
-          .current(refs.recipesRef.current, refs.fetchRecipeIngredientsRef.current, refs.fetchBatchRecipeIngredientsRef.current)
-          .catch(err => logger.error('Failed to refresh recipe prices after subscription change:', err));
-      }
-      if (refreshTypes.includes('recipes')) {
-        refs.fetchRecipesRef.current().catch(err => logger.error('Failed to refresh recipes after subscription change:', err));
-      }
+          .current(
+            refs.recipesRef.current,
+            refs.fetchRecipeIngredientsRef.current,
+            refs.fetchBatchRecipeIngredientsRef.current,
+          )
+          .catch(err =>
+            logger.error('Failed to refresh recipe prices after subscription change:', err),
+          );
+      if (refreshTypes.includes('recipes'))
+        refs.fetchRecipesRef
+          .current()
+          .catch(err => logger.error('Failed to refresh recipes after subscription change:', err));
       recipeIdsToRefresh.forEach(id => {
         refs.onIngredientsChangeRef.current?.(id);
         refs.onRecipeUpdatedRef.current?.(id);
@@ -106,8 +112,7 @@ export function setupRecipeSubscriptions(refs: SubscriptionRefs, recipes: Recipe
       const newYield = (payload.new as { yield?: number })?.yield;
       const oldYieldUnit = (payload.old as { yield_unit?: string })?.yield_unit;
       const newYieldUnit = (payload.new as { yield_unit?: string })?.yield_unit;
-      const yieldChanged = oldYield !== newYield || oldYieldUnit !== newYieldUnit;
-      if (yieldChanged) {
+      if (oldYield !== newYield || oldYieldUnit !== newYieldUnit) {
         logger.dev('[RecipeSubscriptions] Yield changed, refreshing recipes');
         refs.pendingRecipeIdsRef.current.add(recipeId);
         refs.pendingRefreshTypeRef.current.add('recipes');

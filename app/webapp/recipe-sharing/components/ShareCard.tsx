@@ -67,13 +67,17 @@ export function ShareCard({ share }: ShareCardProps) {
           <div className="mb-4 flex items-center space-x-4">
             <div>
               <p className="mb-1 text-xs text-gray-400">{t('recipeSharing.status', 'Status')}</p>
-              <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(share.status)}`}>
+              <span
+                className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(share.status)}`}
+              >
                 {share.status.charAt(0).toUpperCase() + share.status.slice(1)}
               </span>
             </div>
             <div>
               <p className="mb-1 text-xs text-gray-400">{t('recipeSharing.shared', 'Shared')}</p>
-              <p className="font-semibold text-white">{new Date(share.created_at).toLocaleDateString()}</p>
+              <p className="font-semibold text-white">
+                {new Date(share.created_at).toLocaleDateString()}
+              </p>
             </div>
           </div>
           {share.notes && <p className="text-sm text-gray-300">{share.notes}</p>}
@@ -82,4 +86,3 @@ export function ShareCard({ share }: ShareCardProps) {
     </div>
   );
 }
-

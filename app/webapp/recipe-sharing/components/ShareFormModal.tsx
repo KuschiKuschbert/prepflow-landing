@@ -38,8 +38,13 @@ export function ShareFormModal({
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">{t('recipeSharing.shareRecipe', 'Share Recipe')}</h2>
-          <button onClick={onClose} className="p-2 text-gray-400 transition-colors hover:text-white">
+          <h2 className="text-xl font-semibold text-white">
+            {t('recipeSharing.shareRecipe', 'Share Recipe')}
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 transition-colors hover:text-white"
+          >
             <Icon icon={X} size="lg" aria-hidden={true} />
           </button>
         </div>
@@ -54,7 +59,9 @@ export function ShareFormModal({
               className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               required
             >
-              <option value="">{t('recipeSharing.chooseRecipe', 'Choose a recipe to share')}</option>
+              <option value="">
+                {t('recipeSharing.chooseRecipe', 'Choose a recipe to share')}
+              </option>
               {recipes.map(recipe => (
                 <option key={recipe.id} value={recipe.id}>
                   {recipe.recipe_name}
@@ -68,7 +75,12 @@ export function ShareFormModal({
             </label>
             <select
               value={formData.shareType}
-              onChange={e => onFormDataChange({ ...formData, shareType: e.target.value as 'pdf' | 'link' | 'email' })}
+              onChange={e =>
+                onFormDataChange({
+                  ...formData,
+                  shareType: e.target.value as 'pdf' | 'link' | 'email',
+                })
+              }
               className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               required
             >
@@ -93,13 +105,20 @@ export function ShareFormModal({
             </div>
           )}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">{t('recipeSharing.notes', 'Notes')}</label>
+            <label className="mb-2 block text-sm font-medium text-gray-300">
+              {t('recipeSharing.notes', 'Notes')}
+            </label>
             <textarea
               value={formData.notes}
               onChange={e => onFormDataChange({ ...formData, notes: e.target.value })}
               className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               rows={3}
-              placeholder={String(t('recipeSharing.notesPlaceholder', 'Optional message to include with the shared recipe'))}
+              placeholder={String(
+                t(
+                  'recipeSharing.notesPlaceholder',
+                  'Optional message to include with the shared recipe',
+                ),
+              )}
             />
           </div>
           <div className="flex space-x-3 pt-4">
@@ -122,4 +141,3 @@ export function ShareFormModal({
     </div>
   );
 }
-

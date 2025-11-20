@@ -42,8 +42,12 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
   const [menuItems, setMenuItems] = useState<MenuItem[]>(cachedMenuData?.menuItems || []);
   const [dishes, setDishes] = useState<Dish[]>(cachedDishes || []);
   const [recipes, setRecipes] = useState<Recipe[]>(cachedRecipes || []);
-  const [categories, setCategories] = useState<string[]>(cachedMenuData?.categories || ['Uncategorized']);
-  const [statistics, setStatistics] = useState<MenuStatistics | null>(cachedMenuData?.statistics || null);
+  const [categories, setCategories] = useState<string[]>(
+    cachedMenuData?.categories || ['Uncategorized'],
+  );
+  const [statistics, setStatistics] = useState<MenuStatistics | null>(
+    cachedMenuData?.statistics || null,
+  );
   const [loading, setLoading] = useState(!cachedMenuData && !cachedDishes && !cachedRecipes);
   const refreshStatistics = useCallback(async () => {
     try {
@@ -51,13 +55,24 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
         if (statsData.success) {
-          logger.dev('[useMenuData] Statistics refreshed', { menuId, statistics: statsData.statistics, totalItems: statsData.statistics?.total_items });
+          logger.dev('[useMenuData] Statistics refreshed', {
+            menuId,
+            statistics: statsData.statistics,
+            totalItems: statsData.statistics?.total_items,
+          });
           setStatistics(statsData.statistics);
         } else {
-          logger.warn('[useMenuData] Statistics API returned error', { menuId, error: statsData.error || statsData.message });
+          logger.warn('[useMenuData] Statistics API returned error', {
+            menuId,
+            error: statsData.error || statsData.message,
+          });
         }
       } else {
-        logger.error('[useMenuData] Statistics API request failed', { menuId, status: statsResponse.status, statusText: statsResponse.statusText });
+        logger.error('[useMenuData] Statistics API request failed', {
+          menuId,
+          status: statsResponse.status,
+          statusText: statsResponse.statusText,
+        });
       }
     } catch (err) {
       logger.error('[useMenuData] Failed to refresh statistics', { menuId, error: err });

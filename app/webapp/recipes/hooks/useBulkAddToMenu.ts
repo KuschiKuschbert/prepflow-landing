@@ -60,7 +60,6 @@ export function useBulkAddToMenu({
         showError('No items selected');
         return;
       }
-
       setAddLoading(true);
       setShowMenuDialog(false);
       try {
@@ -70,24 +69,21 @@ export function useBulkAddToMenu({
             ? { recipe_id: id, category: 'Uncategorized' }
             : { dish_id: id, category: 'Uncategorized' };
         });
-
         const response = await fetch(`/api/menus/${menuId}/items/bulk`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items }),
         });
-
         const result = await response.json();
-
         if (!response.ok) {
-          const errorMessage = result.message || result.error || 'Failed to add items to menu';
-          showError(errorMessage);
+          showError(result.message || result.error || 'Failed to add items to menu');
           return;
         }
         const count = selectedItems.size;
-        showSuccess(`${count} item${count > 1 ? 's' : ''} added to menu successfully! Opening menu editor...`);
+        showSuccess(
+          `${count} item${count > 1 ? 's' : ''} added to menu successfully! Opening menu editor...`,
+        );
         router.push(`/webapp/menu-builder?menuId=${menuId}`);
-
         onSuccess?.();
       } catch (err) {
         logger.error('Bulk add to menu failed:', err);

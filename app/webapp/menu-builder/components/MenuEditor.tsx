@@ -1,16 +1,15 @@
 'use client';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import {
-    closestCenter,
-    DndContext,
-    DragOverlay,
-    PointerSensor,
-    useSensor,
-    useSensors,
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
 } from '@dnd-kit/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useMenuDragDrop } from '../hooks/useMenuDragDrop';
@@ -18,11 +17,11 @@ import { Menu } from '../types';
 import CategoryManager from './CategoryManager';
 import CategorySelectorModal from './CategorySelectorModal';
 import DishPalette from './DishPalette';
+import { MenuCategoriesList } from './MenuCategoriesList';
 import { MenuItemStatisticsModal } from './MenuItemStatisticsModal';
+import { MenuLockButton } from './MenuLockButton';
 import { MenuLockedView } from './MenuLockedView';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
-import { MenuLockButton } from './MenuLockButton';
-import { MenuCategoriesList } from './MenuCategoriesList';
 import { DragOverlayContent } from './drag/DragOverlayContent';
 import { createCenterOnCursorModifier } from './drag/centerOnCursorModifier';
 import { useCategoryOperations } from './hooks/useCategoryOperations';
@@ -169,46 +168,56 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
   useEffect(() => {
     if (menuLockStatus.is_locked) loadMenuData();
   }, [menuLockStatus.is_locked, loadMenuData]);
-  const handleLockToggle = useCallback(async (lock: boolean) => {
-    setLockLoading(true);
-    try {
-      const response = await fetch(`/api/menus/${menu.id}/lock`, {
-        method: lock ? 'POST' : 'DELETE',
-      });
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        logger.error(`[MenuEditor] ${lock ? 'Lock' : 'Unlock'} menu failed:`, {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorData,
+  const handleLockToggle = useCallback(
+    async (lock: boolean) => {
+      setLockLoading(true);
+      try {
+        const response = await fetch(`/api/menus/${menu.id}/lock`, {
+          method: lock ? 'POST' : 'DELETE',
         });
-        const errorMsg =
-          response.status === 404
-            ? `Menu ${lock ? 'lock' : 'unlock'} endpoint not found. ${lock ? 'This may be a Next.js routing issue. Please restart the dev server and try again.' : 'Please refresh the page and try again.'}`
-            : errorData.error || errorData.message || `Failed to ${lock ? 'lock' : 'unlock'} menu`;
-        showError(errorMsg);
-        return;
-      }
-      const data = await response.json();
-      if (data.success) {
-        setMenuLockStatus(
-          lock
-            ? { is_locked: true, locked_at: data.menu.locked_at, locked_by: data.menu.locked_by }
-            : { is_locked: false, locked_at: undefined, locked_by: undefined },
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          logger.error(`[MenuEditor] ${lock ? 'Lock' : 'Unlock'} menu failed:`, {
+            status: response.status,
+            statusText: response.statusText,
+            error: errorData,
+          });
+          const errorMsg =
+            response.status === 404
+              ? `Menu ${lock ? 'lock' : 'unlock'} endpoint not found. ${lock ? 'This may be a Next.js routing issue. Please restart the dev server and try again.' : 'Please refresh the page and try again.'}`
+              : errorData.error ||
+                errorData.message ||
+                `Failed to ${lock ? 'lock' : 'unlock'} menu`;
+          showError(errorMsg);
+          return;
+        }
+        const data = await response.json();
+        if (data.success) {
+          setMenuLockStatus(
+            lock
+              ? { is_locked: true, locked_at: data.menu.locked_at, locked_by: data.menu.locked_by }
+              : { is_locked: false, locked_at: undefined, locked_by: undefined },
+          );
+          showSuccess(`Menu ${lock ? 'locked' : 'unlocked'} successfully`);
+          onMenuUpdated();
+        } else {
+          logger.error(
+            `[MenuEditor] ${lock ? 'Lock' : 'Unlock'} API returned success=false:`,
+            data,
+          );
+          showError(data.error || data.message || `Failed to ${lock ? 'lock' : 'unlock'} menu`);
+        }
+      } catch (err) {
+        logger.error(`[MenuEditor] Error ${lock ? 'locking' : 'unlocking'} menu:`, err);
+        showError(
+          `Failed to ${lock ? 'lock' : 'unlock'} menu. Please check your connection and try again.`,
         );
-        showSuccess(`Menu ${lock ? 'locked' : 'unlocked'} successfully`);
-        onMenuUpdated();
-      } else {
-        logger.error(`[MenuEditor] ${lock ? 'Lock' : 'Unlock'} API returned success=false:`, data);
-        showError(data.error || data.message || `Failed to ${lock ? 'lock' : 'unlock'} menu`);
+      } finally {
+        setLockLoading(false);
       }
-    } catch (err) {
-      logger.error(`[MenuEditor] Error ${lock ? 'locking' : 'unlocking'} menu:`, err);
-      showError(`Failed to ${lock ? 'lock' : 'unlock'} menu. Please check your connection and try again.`);
-    } finally {
-      setLockLoading(false);
-    }
-  }, [menu.id, showSuccess, showError, onMenuUpdated]);
+    },
+    [menu.id, showSuccess, showError, onMenuUpdated],
+  );
   const handleLockMenu = useCallback(() => handleLockToggle(true), [handleLockToggle]);
   const handleUnlockMenu = useCallback(() => handleLockToggle(false), [handleLockToggle]);
 
@@ -258,10 +267,11 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
         </div>
       </div>
       <DragOverlay dropAnimation={null} modifiers={[centerOnCursor]}>
-        {activeId && (() => {
-          const menuItem = menuItems.find(item => item.id === activeId);
-          return menuItem ? <DragOverlayContent menuItem={menuItem} /> : null;
-        })()}
+        {activeId &&
+          (() => {
+            const menuItem = menuItems.find(item => item.id === activeId);
+            return menuItem ? <DragOverlayContent menuItem={menuItem} /> : null;
+          })()}
       </DragOverlay>
       <CategorySelectorModal
         isOpen={showCategoryModal}

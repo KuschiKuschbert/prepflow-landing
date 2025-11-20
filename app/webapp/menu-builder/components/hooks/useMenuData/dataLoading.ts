@@ -37,32 +37,40 @@ export async function loadMenuData({
 }: LoadMenuDataProps): Promise<void> {
   setLoading(true);
   try {
-    logger.dev('[Menu Data Loading] Starting data load', { menuId });
     const [menuResponse, dishesResponse, recipesResponse, statsResponse] = await Promise.all([
       fetch(`/api/menus/${menuId}`),
       fetch('/api/dishes?pageSize=1000'),
       fetch('/api/recipes?pageSize=1000'),
       fetch(`/api/menus/${menuId}/statistics`),
     ]);
-    logger.dev('[Menu Data Loading] All API calls completed', { menuId, menuStatus: menuResponse.status, dishesStatus: dishesResponse.status, recipesStatus: recipesResponse.status, statsStatus: statsResponse.status });
     const menuData = await menuResponse.json();
     const dishesData = await dishesResponse.json();
     const recipesData = await recipesResponse.json();
     const statsData = await statsResponse.json();
-    logger.dev('[Menu Data Loading] API responses parsed', { menuId, menuItemsCount: menuData.menu?.items?.length || 0, statsSuccess: statsData.success, statsData });
 
     if (!menuResponse.ok) {
-      logger.error('Failed to load menu:', { error: menuData.error || menuData.message, status: menuResponse.status, menuId, fullResponse: menuData });
+      logger.error('Failed to load menu:', {
+        error: menuData.error || menuData.message,
+        status: menuResponse.status,
+        menuId,
+        fullResponse: menuData,
+      });
       onError?.(`Failed to load menu: ${menuData.error || menuData.message || 'Unknown error'}`);
       return;
     }
     if (menuData.success) {
       const items = menuData.menu.items || [];
       setMenuItems(items);
-      const uniqueCategories = Array.from(new Set(items.map((item: MenuItem) => item.category || 'Uncategorized'))) as string[];
+      const uniqueCategories = Array.from(
+        new Set(items.map((item: MenuItem) => item.category || 'Uncategorized')),
+      ) as string[];
       const finalCategories = uniqueCategories.length > 0 ? uniqueCategories : ['Uncategorized'];
       setCategories(finalCategories);
-      cacheData(menuCacheKey, { menuItems: items, categories: finalCategories, statistics: statsData.success ? statsData.statistics : null });
+      cacheData(menuCacheKey, {
+        menuItems: items,
+        categories: finalCategories,
+        statistics: statsData.success ? statsData.statistics : null,
+      });
     }
 
     if (dishesData.success) {
@@ -84,17 +92,32 @@ export async function loadMenuData({
     }
 
     if (statsResponse.ok && statsData.success) {
-      logger.dev('[Menu Data Loading] Statistics loaded successfully', { menuId, statistics: statsData.statistics, totalItems: statsData.statistics?.total_items, totalRevenue: statsData.statistics?.total_revenue, averageProfitMargin: statsData.statistics?.average_profit_margin });
       setStatistics(statsData.statistics);
-      const currentCached = getCachedData<{ menuItems: MenuItem[]; categories: string[]; statistics: MenuStatistics | null }>(menuCacheKey);
-      if (currentCached) cacheData(menuCacheKey, { ...currentCached, statistics: statsData.statistics });
+      const currentCached = getCachedData<{
+        menuItems: MenuItem[];
+        categories: string[];
+        statistics: MenuStatistics | null;
+      }>(menuCacheKey);
+      if (currentCached)
+        cacheData(menuCacheKey, { ...currentCached, statistics: statsData.statistics });
     } else {
-      if (statsResponse.status === 404) {
-        logger.dev('[Menu Data Loading] Statistics endpoint not found (404) - this may be a Next.js routing issue. Try restarting the dev server.');
-      } else {
-        logger.warn('[Menu Data Loading] Failed to load statistics', { status: statsResponse.status, error: statsData.error || statsData.message, menuId, statsData });
+      if (statsResponse.status !== 404) {
+        logger.warn('[Menu Data Loading] Failed to load statistics', {
+          status: statsResponse.status,
+          error: statsData.error || statsData.message,
+          menuId,
+        });
       }
-      setStatistics({ total_items: 0, total_dishes: 0, total_recipes: 0, total_cogs: 0, total_revenue: 0, gross_profit: 0, average_profit_margin: 0, food_cost_percent: 0 });
+      setStatistics({
+        total_items: 0,
+        total_dishes: 0,
+        total_recipes: 0,
+        total_cogs: 0,
+        total_revenue: 0,
+        gross_profit: 0,
+        average_profit_margin: 0,
+        food_cost_percent: 0,
+      });
     }
   } catch (err) {
     logger.error('Failed to load menu data:', err);

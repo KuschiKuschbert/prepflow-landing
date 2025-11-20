@@ -17,4 +17,3 @@ export function WizardErrorDisplay({ error }: WizardErrorDisplayProps) {
     </div>
   );
 }
-
