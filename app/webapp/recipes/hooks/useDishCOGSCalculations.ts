@@ -13,7 +13,6 @@ export function useDishCOGSCalculations(
 
     const allCalculations: COGSCalculation[] = [];
     const recipes = dishDetails.recipes || [];
-
     for (const dishRecipe of recipes) {
       const recipeId = dishRecipe.recipe_id;
       const recipeQuantity =
@@ -45,7 +44,6 @@ export function useDishCOGSCalculations(
         allCalculations.push(scaledCalc);
       });
     }
-
     const ingredients = dishDetails.ingredients || [];
     for (const dishIngredient of ingredients) {
       const ingredient = dishIngredient.ingredients;
@@ -67,16 +65,8 @@ export function useDishCOGSCalculations(
       }
 
       const isConsumable = (ingredient as any).category === 'Consumables';
-
-      // For consumables: simple calculation (no waste/yield)
-      let wasteAdjustedCostFinal = wasteAdjustedCost;
-      let yieldAdjustedCostFinal: number;
-      if (isConsumable) {
-        wasteAdjustedCostFinal = totalCost;
-        yieldAdjustedCostFinal = totalCost;
-      } else {
-        yieldAdjustedCostFinal = wasteAdjustedCost / (yieldPercent / 100);
-      }
+      const wasteAdjustedCostFinal = isConsumable ? totalCost : wasteAdjustedCost;
+      const yieldAdjustedCostFinal = isConsumable ? totalCost : wasteAdjustedCost / (yieldPercent / 100);
 
       allCalculations.push({
         recipeId: dish?.id || '',
@@ -101,12 +91,9 @@ export function useDishCOGSCalculations(
 
     return allCalculations;
   }, [dishDetails, recipeIngredientsMap, dish?.id]);
-
   const totalCOGS = useMemo(
     () => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0),
     [calculations],
   );
-  const costPerPortion = useMemo(() => totalCOGS, [totalCOGS]);
-
-  return { calculations, totalCOGS, costPerPortion };
+  return { calculations, totalCOGS, costPerPortion: totalCOGS };
 }
