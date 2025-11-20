@@ -73,9 +73,7 @@ export function useTemperatureEquipmentTabHandlers({
       setNewEquipment({ name: '', equipmentType: '', location: '', minTemp: null, maxTemp: null });
       setShowCreateForm(false);
       setCurrentPage(Math.ceil((equipment.length + 1) / itemsPerPage));
-    } catch (error) {
-      // Handle error gracefully
-    }
+    } catch (error) {}
   };
   const handleUpdateEquipment = async (
     equipmentId: string,
@@ -96,23 +94,17 @@ export function useTemperatureEquipmentTabHandlers({
       confirmLabel: 'Delete',
       cancelLabel: 'Cancel',
     });
-
     if (!confirmed) return;
-
     try {
       await onDeleteEquipment(equipmentId);
       const newTotalPages = Math.ceil((equipment.length - 1) / itemsPerPage);
       if (currentPage > newTotalPages && newTotalPages > 0) setCurrentPage(newTotalPages);
-    } catch (error) {
-      // Handle error gracefully
-    }
+    } catch (error) {}
   };
   const toggleEquipmentStatus = async (equipmentId: string, currentStatus: boolean) => {
     try {
       await onUpdateEquipment(equipmentId, { is_active: !currentStatus });
-    } catch (error) {
-      // Handle error gracefully
-    }
+    } catch (error) {}
   };
   const generateSampleData = () => handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs);
   const startIndex = (currentPage - 1) * itemsPerPage;
