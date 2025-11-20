@@ -35,7 +35,6 @@ export function useRecipeDishIngredientLoading({
     convertIngredientQuantityRef.current = convertIngredientQuantity;
     showErrorRef.current = showError;
   }, [convertIngredientQuantity, showError]);
-
   useEffect(() => {
     const loadIngredients = async () => {
       if (!selectedItem || !selectedItem.id || selectedItem.id === '' || ingredients.length === 0) {
@@ -44,6 +43,8 @@ export function useRecipeDishIngredientLoading({
         return;
       }
       setLoadingIngredients(true);
+      const createCalc = (ingId: string, ingData: Ingredient, qty: number, unit: string, note: string) =>
+        createCalculation(ingId, ingData, qty, unit, note, selectedItem.id);
       try {
         if (selectedItem.type === 'recipe') {
           const response = await fetch(`/api/recipes/${selectedItem.id}/ingredients`, {
@@ -60,20 +61,8 @@ export function useRecipeDishIngredientLoading({
               .map((ri: any) => {
                 const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
                 if (!ingredientData) return null;
-                const { convertedQuantity, convertedUnit, conversionNote } =
-                  convertIngredientQuantityRef.current(
-                    ri.quantity / recipeYield,
-                    ri.unit,
-                    ingredientData.unit || 'kg',
-                  );
-                return createCalculation(
-                  ri.ingredient_id,
-                  ingredientData,
-                  convertedQuantity,
-                  convertedUnit,
-                  conversionNote || '',
-                  selectedItem.id,
-                );
+                const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantityRef.current(ri.quantity / recipeYield, ri.unit, ingredientData.unit || 'kg');
+                return createCalc(ri.ingredient_id, ingredientData, convertedQuantity, convertedUnit, conversionNote || '');
               })
               .filter(Boolean) as COGSCalculation[];
             setCalculations(loadedCalculations);
@@ -89,22 +78,8 @@ export function useRecipeDishIngredientLoading({
             for (const di of dishIngredients) {
               const ingredientData = ingredients.find(ing => ing.id === di.ingredient_id);
               if (ingredientData) {
-                const { convertedQuantity, convertedUnit, conversionNote } =
-                  convertIngredientQuantityRef.current(
-                    di.quantity,
-                    di.unit,
-                    ingredientData.unit || 'kg',
-                  );
-                allCalculations.push(
-                  createCalculation(
-                    di.ingredient_id,
-                    ingredientData,
-                    convertedQuantity,
-                    convertedUnit,
-                    conversionNote || '',
-                    selectedItem.id,
-                  ),
-                );
+                const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantityRef.current(di.quantity, di.unit, ingredientData.unit || 'kg');
+                allCalculations.push(createCalc(di.ingredient_id, ingredientData, convertedQuantity, convertedUnit, conversionNote || ''));
               }
             }
             for (const dr of dishRecipes) {
@@ -120,22 +95,8 @@ export function useRecipeDishIngredientLoading({
                 for (const ri of recipeIngredients) {
                   const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
                   if (ingredientData) {
-                    const { convertedQuantity, convertedUnit, conversionNote } =
-                      convertIngredientQuantityRef.current(
-                        (ri.quantity / recipeYield) * quantity,
-                        ri.unit,
-                        ingredientData.unit || 'kg',
-                      );
-                    allCalculations.push(
-                      createCalculation(
-                        ri.ingredient_id,
-                        ingredientData,
-                        convertedQuantity,
-                        convertedUnit,
-                        conversionNote || '',
-                        selectedItem.id,
-                      ),
-                    );
+                    const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantityRef.current((ri.quantity / recipeYield) * quantity, ri.unit, ingredientData.unit || 'kg');
+                    allCalculations.push(createCalc(ri.ingredient_id, ingredientData, convertedQuantity, convertedUnit, conversionNote || ''));
                   }
                 }
               }
