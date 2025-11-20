@@ -1,11 +1,10 @@
 /**
  * Hook for managing prep list form state and submission.
  */
-
 import { useState, useCallback } from 'react';
 import type { PrepList, PrepListFormData } from '../types';
 import { submitPrepListForm as submitPrepListFormHelper } from './usePrepListsForm/formSubmission';
-
+const DEFAULT_FORM_DATA: PrepListFormData = { kitchenSectionId: '', name: '', notes: '', items: [] };
 interface UsePrepListsFormProps {
   prepLists: PrepList[];
   setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>;
@@ -17,9 +16,6 @@ interface UsePrepListsFormProps {
 
 /**
  * Hook for managing prep list form state and submission.
- *
- * @param {UsePrepListsFormProps} props - Hook dependencies
- * @returns {Object} Form state and handlers
  */
 export function usePrepListsForm({
   prepLists,
@@ -29,22 +25,11 @@ export function usePrepListsForm({
   showSuccess,
   userId,
 }: UsePrepListsFormProps) {
-  const [formData, setFormData] = useState<PrepListFormData>({
-    kitchenSectionId: '',
-    name: '',
-    notes: '',
-    items: [],
-  });
+  const [formData, setFormData] = useState<PrepListFormData>(DEFAULT_FORM_DATA);
   const [editingPrepList, setEditingPrepList] = useState<PrepList | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   const resetForm = useCallback(() => {
-    setFormData({
-      kitchenSectionId: '',
-      name: '',
-      notes: '',
-      items: [],
-    });
+    setFormData(DEFAULT_FORM_DATA);
     setEditingPrepList(null);
     setError(null);
   }, []);
@@ -78,14 +63,12 @@ export function usePrepListsForm({
       setError,
     ],
   );
-
   const addItem = useCallback(() => {
     setFormData({
       ...formData,
       items: [...formData.items, { ingredientId: '', quantity: '', unit: '', notes: '' }],
     });
   }, [formData]);
-
   const removeItem = useCallback(
     (index: number) => {
       setFormData({
@@ -95,31 +78,20 @@ export function usePrepListsForm({
     },
     [formData],
   );
-
-  const updateItem = useCallback(
-    (index: number, field: string, value: string) => {
-      const newItems = [...formData.items];
-      newItems[index] = { ...newItems[index], [field]: value };
-      setFormData({ ...formData, items: newItems });
-    },
-    [formData],
-  );
-
+  const updateItem = useCallback((index: number, field: string, value: string) => {
+    const newItems = [...formData.items];
+    newItems[index] = { ...newItems[index], [field]: value };
+    setFormData({ ...formData, items: newItems });
+  }, [formData]);
   const handleEdit = useCallback((prepList: PrepList) => {
     setEditingPrepList(prepList);
     setFormData({
       kitchenSectionId: prepList.kitchen_section_id,
       name: prepList.name,
       notes: prepList.notes || '',
-      items: prepList.prep_list_items.map(item => ({
-        ingredientId: item.ingredient_id,
-        quantity: item.quantity.toString(),
-        unit: item.unit,
-        notes: item.notes || '',
-      })),
+      items: prepList.prep_list_items.map(item => ({ ingredientId: item.ingredient_id, quantity: item.quantity.toString(), unit: item.unit, notes: item.notes || '' })),
     });
   }, []);
-
   return {
     formData,
     setFormData,
