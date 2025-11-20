@@ -1,5 +1,4 @@
 'use client';
-
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
@@ -116,13 +115,7 @@ export default function CleaningRosterPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setTasks(
-          tasks.map(task =>
-            task.id === taskId
-              ? { ...task, status: 'completed', completed_date: data.data.completed_date }
-              : task,
-          ),
-        );
+        setTasks(tasks.map(task => (task.id === taskId ? { ...task, status: 'completed', completed_date: data.data.completed_date } : task)));
       }
     } catch (error) {
       logger.error('Error completing task:', error);
