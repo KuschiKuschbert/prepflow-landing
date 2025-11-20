@@ -39,7 +39,7 @@ export default function AISpecialsPage() {
       } else {
         setError(result.message || 'Failed to fetch AI specials');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to fetch AI specials');
     } finally {
       setLoading(false);
@@ -83,7 +83,7 @@ export default function AISpecialsPage() {
         setProcessing(false);
       };
       reader.readAsDataURL(selectedFile);
-    } catch (err) {
+    } catch {
       setError('Failed to process image');
       setProcessing(false);
     }
