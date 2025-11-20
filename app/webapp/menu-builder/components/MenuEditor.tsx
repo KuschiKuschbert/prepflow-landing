@@ -1,17 +1,16 @@
 'use client';
-
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import {
-  closestCenter,
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  useSensor,
-  useSensors,
+    closestCenter,
+    DndContext,
+    DragOverlay,
+    PointerSensor,
+    useSensor,
+    useSensors,
 } from '@dnd-kit/core';
 import { Lock } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -30,7 +29,6 @@ import { useCategoryOperations } from './hooks/useCategoryOperations';
 import { useMenuData } from './hooks/useMenuData';
 import { useMenuEditorUI } from './hooks/useMenuEditorUI';
 import { useMenuItemOperations } from './hooks/useMenuItemOperations';
-
 interface MenuEditorProps {
   menu: Menu;
   onBack: () => void;
@@ -146,8 +144,6 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
       },
     }),
   );
-
-  // Create drag modifier
   const centerOnCursor = createCenterOnCursorModifier({
     initialOffset,
     initialCursorPosition,
@@ -186,17 +182,20 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
           statusText: response.statusText,
           error: errorData,
         });
-        const errorMsg = response.status === 404
-          ? `Menu ${lock ? 'lock' : 'unlock'} endpoint not found. ${lock ? 'This may be a Next.js routing issue. Please restart the dev server and try again.' : 'Please refresh the page and try again.'}`
-          : errorData.error || errorData.message || `Failed to ${lock ? 'lock' : 'unlock'} menu`;
+        const errorMsg =
+          response.status === 404
+            ? `Menu ${lock ? 'lock' : 'unlock'} endpoint not found. ${lock ? 'This may be a Next.js routing issue. Please restart the dev server and try again.' : 'Please refresh the page and try again.'}`
+            : errorData.error || errorData.message || `Failed to ${lock ? 'lock' : 'unlock'} menu`;
         showError(errorMsg);
         return;
       }
       const data = await response.json();
       if (data.success) {
-        setMenuLockStatus(lock
-          ? { is_locked: true, locked_at: data.menu.locked_at, locked_by: data.menu.locked_by }
-          : { is_locked: false, locked_at: undefined, locked_by: undefined });
+        setMenuLockStatus(
+          lock
+            ? { is_locked: true, locked_at: data.menu.locked_at, locked_by: data.menu.locked_by }
+            : { is_locked: false, locked_at: undefined, locked_by: undefined },
+        );
         showSuccess(`Menu ${lock ? 'locked' : 'unlocked'} successfully`);
         onMenuUpdated();
       } else {
@@ -283,7 +282,6 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
           </div>
         </div>
       </div>
-
       <DragOverlay dropAnimation={null} modifiers={[centerOnCursor]}>
         {activeId && (() => {
           const menuItem = menuItems.find(item => item.id === activeId);
