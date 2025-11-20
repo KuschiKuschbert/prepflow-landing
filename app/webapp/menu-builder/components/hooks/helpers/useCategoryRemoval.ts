@@ -1,7 +1,6 @@
 /**
  * Hook for removing categories.
  */
-
 import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import type { MenuItem } from '../../../types';
@@ -39,11 +38,8 @@ export function useCategoryRemoval({
 }: UseCategoryRemovalProps) {
   const performRemoveCategory = useCallback(
     async (category: string) => {
-      // Store original state for rollback
       const originalMenuItems = [...menuItems];
       const originalCategories = [...categories];
-
-      // Apply optimistic updates
       const itemsToMove = optimisticCategoryRemoval({
         category,
         menuItems,
@@ -52,8 +48,6 @@ export function useCategoryRemoval({
         setCategories,
         refreshStatistics,
       });
-
-      // Make API calls in background
       const success = await moveItemsToUncategorized({
         menuId,
         itemsToMove,
@@ -65,11 +59,7 @@ export function useCategoryRemoval({
         showError,
       });
 
-      if (!success) {
-        return;
-      }
-
-      // Success - refresh statistics in background to ensure accuracy
+      if (!success) return;
       showSuccess(`Category "${category}" removed successfully`);
       refreshStatistics().catch(err => {
         logger.error('Failed to refresh statistics:', err);

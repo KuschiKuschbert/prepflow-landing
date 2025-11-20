@@ -1,6 +1,5 @@
 'use client';
-
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useCOGSDataFetching } from '../../cogs/hooks/useCOGSDataFetching';
 import { useCOGSCalculationLogic } from '../../cogs/hooks/useCOGSCalculationLogic';
 import { usePricing } from '../../cogs/hooks/usePricing';
@@ -22,7 +21,7 @@ export function useDishBuilder() {
     instructions: '',
   });
   const [calculations, setCalculations] = useState<COGSCalculation[]>([]);
-  const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
+  const { updateCalculation } = useCOGSCalculationLogic({
     ingredients,
     setCalculations,
   });
@@ -47,11 +46,7 @@ export function useDishBuilder() {
   useEffect(() => {
     calculationsRef.current = calculations;
   }, [calculations]);
-
   useAutoPopulatePrice({ pricingCalculation, dishState, setDishState });
-
-  // Create callbacks - they are already memoized by the helper functions
-  // Note: The helper functions return stable function references
   const callbacks = useMemo(
     () =>
       createDishBuilderCallbacks({
@@ -77,7 +72,6 @@ export function useDishBuilder() {
       setDishState,
     ],
   );
-
   const totalCOGS = useMemo(
     () => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0),
     [calculations],

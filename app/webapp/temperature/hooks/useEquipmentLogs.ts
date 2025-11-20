@@ -19,22 +19,18 @@ export function useEquipmentLogs({
     (allLogs: TemperatureLog[]) => {
       if (timeFilter === 'all') return allLogs;
       const now = new Date();
-      if (timeFilter === '24h') {
+      const daysMap = { '24h': 1, '7d': 7, '30d': 30 };
+      const days = daysMap[timeFilter];
+      if (days === 1) {
         const cutoffDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
         return allLogs.filter(log => {
           const logDateTime = new Date(`${log.log_date}T${log.log_time}`);
           return logDateTime >= cutoffDate && logDateTime <= now;
         });
-      } else if (timeFilter === '7d') {
-        const cutoffDate = new Date(now);
-        cutoffDate.setDate(now.getDate() - 7);
-        return allLogs.filter(log => new Date(log.log_date) >= cutoffDate);
-      } else if (timeFilter === '30d') {
-        const cutoffDate = new Date(now);
-        cutoffDate.setDate(now.getDate() - 30);
-        return allLogs.filter(log => new Date(log.log_date) >= cutoffDate);
       }
-      return allLogs;
+      const cutoffDate = new Date(now);
+      cutoffDate.setDate(now.getDate() - days);
+      return allLogs.filter(log => new Date(log.log_date) >= cutoffDate);
     },
     [timeFilter],
   );
@@ -76,14 +72,10 @@ export function useEquipmentLogs({
           setLogs(filterLogsByTime(uniqueLogs));
           logger.dev(`✅ Found ${uniqueLogs.length} logs for equipment "${equipmentName}"`, {
             queriedLocations: uniqueLocations,
-            matchingLogs: uniqueLogs
-              .slice(0, 3)
-              .map(l => ({ location: l.location, date: l.log_date })),
+            matchingLogs: uniqueLogs.slice(0, 3).map(l => ({ location: l.location, date: l.log_date })),
           });
         } else {
-          logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, {
-            queriedLocations: uniqueLocations,
-          });
+          logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, { queriedLocations: uniqueLocations });
           setLogs([]);
         }
       } catch (err) {
