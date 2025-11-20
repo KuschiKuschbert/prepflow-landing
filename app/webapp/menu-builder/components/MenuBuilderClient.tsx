@@ -1,5 +1,4 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
@@ -21,7 +20,6 @@ export default function MenuBuilderClient({
   setSelectedMenu,
   onBack,
 }: MenuBuilderClientProps) {
-  // Initialize with cached data for instant display
   const cachedMenus = getCachedData<Menu[]>('menu_builder_menus');
   const [menus, setMenus] = useState<Menu[]>(cachedMenus || []);
   const [loading, setLoading] = useState(!cachedMenus);
@@ -30,19 +28,12 @@ export default function MenuBuilderClient({
   const [dbError, setDbError] = useState<string | null>(null);
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [editingMenu, setEditingMenu] = useState<Menu | null>(null);
-
-  // Use refs to access props without including them in dependencies
-  // Update refs synchronously during render (safe - doesn't cause re-renders)
   const selectedMenuRef = useRef<Menu | null>(selectedMenu);
   const setSelectedMenuRef = useRef(setSelectedMenu);
   const onBackRef = useRef(onBack);
-
-  // Update refs synchronously (this is safe and doesn't cause re-renders)
   selectedMenuRef.current = selectedMenu;
   setSelectedMenuRef.current = setSelectedMenu;
   onBackRef.current = onBack;
-
-  // Use ref to track if we've initialized to prevent infinite loops
   const hasInitializedRef = useRef(false);
 
   const fetchMenus = useCallback(
@@ -53,7 +44,6 @@ export default function MenuBuilderClient({
         const response = await fetch('/api/menus', { cache: 'no-store' });
         const result = await response.json();
         if (!response.ok) {
-          // Check if it's a table missing error
           if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
             setDbError('Menu builder tables are not set up. Please run the database migration.');
           } else {
@@ -63,11 +53,7 @@ export default function MenuBuilderClient({
         } else {
           const updatedMenus = result.menus || [];
           setMenus(updatedMenus);
-
-          // Cache menus for instant display next time
           cacheData('menu_builder_menus', updatedMenus);
-
-          // Update selectedMenu if it exists to reflect any changes (only when explicitly requested)
           if (updateSelected && selectedMenuRef.current) {
             const updatedMenu = updatedMenus.find(
               (m: Menu) => m.id === selectedMenuRef.current?.id,
@@ -84,10 +70,8 @@ export default function MenuBuilderClient({
         setLoading(false);
       }
     },
-    [], // Empty deps - use refs for setSelectedMenu and selectedMenu
+    [],
   );
-
-  // Initialize on mount only - inline function to avoid dependency issues
   useEffect(() => {
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
@@ -107,12 +91,10 @@ export default function MenuBuilderClient({
             result.message ||
               'Menu builder tables are not set up. Please run the database migration.',
           );
-          setCheckingDb(false);
-          return;
-        }
-
-        // Tables exist, fetch menus
         setCheckingDb(false);
+        return;
+      }
+      setCheckingDb(false);
         await fetchMenus(false);
       } catch (err) {
         setDbError('Failed to check database tables. Please try again.');
@@ -121,8 +103,7 @@ export default function MenuBuilderClient({
     };
 
     checkDatabaseTables();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run once on mount - fetchMenus uses refs internally
+  }, []);
 
   const handleCreateMenu = useCallback(() => {
     setEditingMenu(null);
@@ -135,7 +116,6 @@ export default function MenuBuilderClient({
   }, []);
 
   const handleSelectMenu = useCallback((menu: Menu) => {
-    // Only update if menu has actually changed to prevent unnecessary re-renders
     if (selectedMenuRef.current?.id !== menu.id) {
       setSelectedMenuRef.current(menu);
     }
@@ -144,17 +124,11 @@ export default function MenuBuilderClient({
   const handleMenuSaved = useCallback((savedMenu: Menu) => {
     setShowMenuForm(false);
     setEditingMenu(null);
-
-    // Optimistically update menus list
     setMenus(prevMenus => {
-      // Check if this is an update or new menu by looking for existing menu
       const existingIndex = prevMenus.findIndex(m => m.id === savedMenu.id);
       if (existingIndex >= 0) {
-        // Update existing menu
         const updated = prevMenus.map(m => (m.id === savedMenu.id ? savedMenu : m));
-        // Update selected menu if it's the one being edited and has actually changed
         if (selectedMenuRef.current?.id === savedMenu.id) {
-          // Only update if the menu data has actually changed
           const currentMenu = selectedMenuRef.current;
           if (
             currentMenu.menu_name !== savedMenu.menu_name ||
@@ -165,22 +139,13 @@ export default function MenuBuilderClient({
           }
         }
         return updated;
-      } else {
-        // Add new menu
-        return [...prevMenus, savedMenu];
       }
+      return [...prevMenus, savedMenu];
     });
   }, []);
 
-  const handleMenuUpdated = useCallback(() => {
-    // Refresh menu list to get updated lock status and other changes
-    // This is called from MenuEditor when menu data changes (e.g., locking/unlocking)
-    fetchMenus(false);
-  }, [fetchMenus]);
-
+  const handleMenuUpdated = useCallback(() => fetchMenus(false), [fetchMenus]);
   const handleDeleteMenu = useCallback((deletedMenuId: string) => {
-    // Optimistically remove menu (already done in MenuList)
-    // If the deleted menu was selected, go back to list
     if (selectedMenuRef.current?.id === deletedMenuId) {
       setSelectedMenuRef.current(null);
     }
@@ -224,11 +189,8 @@ export default function MenuBuilderClient({
     };
     checkDatabaseTables();
   }, [fetchMenus]);
-
-  // Stabilize onBack callback to prevent re-renders
   const handleBack = useCallback(() => {
     onBackRef.current();
-    // Refresh menu list when navigating back to ensure lock status is up to date
     fetchMenus(false);
   }, [fetchMenus]);
 
@@ -242,7 +204,6 @@ export default function MenuBuilderClient({
 
   return (
     <div>
-      {/* Database Setup Error */}
       {dbError && (
         <div className="mb-6 rounded-xl border border-yellow-500/30 bg-yellow-900/20 p-6">
           <div className="mb-4 flex items-start gap-3">
@@ -282,8 +243,6 @@ export default function MenuBuilderClient({
           </div>
         </div>
       )}
-
-      {/* General Error */}
       {error && !dbError && (
         <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-4">
           <div className="flex items-start gap-3">
@@ -301,8 +260,6 @@ export default function MenuBuilderClient({
           </div>
         </div>
       )}
-
-      {/* Main Content */}
       {!dbError && (
         <>
           <div className="mb-6 flex justify-end">
