@@ -61,32 +61,21 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
   }, []);
   useEffect(() => {
     const ld = logsData as any;
-    if (ld?.items) setLogs(ld.items);
-    else if (logsData && !ld?.items) setLogs([]);
+    setLogs(ld?.items || []);
   }, [logsData]);
   useEffect(() => {
     prefetchApis(['/api/temperature-equipment']);
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        await Promise.all([fetchEquipment()]);
-      } catch (error) {
-        logger.error('Error loading temperature data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadData();
+    setLoading(true);
+    fetchEquipment()
+      .catch(error => logger.error('Error loading temperature data:', error))
+      .finally(() => setLoading(false));
   }, [fetchEquipment]);
   useEffect(() => {
-    if (activeTab === 'analytics' || activeTab === 'equipment') {
+    if ((activeTab === 'analytics' || activeTab === 'equipment') && !analyticsLoading) {
       const isStale = Date.now() - lastAnalyticsFetch > 30000;
-      const shouldFetch = allLogs.length === 0 || isStale;
-      if (shouldFetch && !analyticsLoading) fetchAllLogs(1000, isStale).catch(() => {});
+      if (allLogs.length === 0 || isStale) fetchAllLogs(1000, isStale).catch(() => {});
     }
   }, [activeTab, allLogs.length, lastAnalyticsFetch, analyticsLoading, fetchAllLogs]);
-  const total = (logsData as any)?.total || 0;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
   return {
     logs,
     allLogs,
@@ -101,8 +90,8 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
     setSelectedType,
     page,
     setPage,
-    total,
-    totalPages,
+    total: (logsData as any)?.total || 0,
+    totalPages: Math.max(1, Math.ceil(((logsData as any)?.total || 0) / pageSize)),
     pageSize,
     fetchAllLogs,
     fetchEquipment,
