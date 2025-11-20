@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { Dish, Recipe } from '../../types';
 import { useDishesClientDelete } from './useDishesClientDelete';
-
 type ViewMode = 'list' | 'editor' | 'builder';
 
 interface UseDishesClientHandlersProps {
@@ -45,12 +44,16 @@ export function useDishesClientHandlers({
     setError,
   });
 
+  const resetEditor = useCallback(() => {
+    if (viewMode === 'editor' && editingItem) {
+      setViewMode('list');
+      setEditingItem(null);
+    }
+  }, [viewMode, editingItem, setViewMode, setEditingItem]);
+
   const handleEditDish = useCallback(
     (dish: Dish) => {
-      if (viewMode === 'editor' && editingItem) {
-        setViewMode('list');
-        setEditingItem(null);
-      }
+      resetEditor();
       setHighlightingRowId(dish.id);
       setHighlightingRowType('dish');
       setTimeout(() => {
@@ -60,24 +63,14 @@ export function useDishesClientHandlers({
         setHighlightingRowType(null);
       }, 500);
     },
-    [
-      viewMode,
-      editingItem,
-      setViewMode,
-      setEditingItem,
-      setHighlightingRowId,
-      setHighlightingRowType,
-    ],
+    [resetEditor, setHighlightingRowId, setHighlightingRowType, setEditingItem, setViewMode],
   );
 
   const handleEditRecipe = useCallback(
     (recipe: Recipe) => {
       setShowRecipePanel(false);
       setSelectedRecipeForPreview(null);
-      if (viewMode === 'editor' && editingItem) {
-        setViewMode('list');
-        setEditingItem(null);
-      }
+      resetEditor();
       setHighlightingRowId(recipe.id);
       setHighlightingRowType('recipe');
       setTimeout(() => {
@@ -88,14 +81,13 @@ export function useDishesClientHandlers({
       }, 500);
     },
     [
-      viewMode,
-      editingItem,
-      setViewMode,
-      setEditingItem,
+      resetEditor,
       setShowRecipePanel,
       setSelectedRecipeForPreview,
       setHighlightingRowId,
       setHighlightingRowType,
+      setEditingItem,
+      setViewMode,
     ],
   );
 

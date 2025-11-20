@@ -1,7 +1,6 @@
 /**
  * Prep details loading logic for prep list preview.
  */
-
 import { logger } from '@/lib/logger';
 import { aggregatePrepTechniques, addPrepNotesToIngredients } from '../../../utils/prepTechniques';
 import type { SectionData, RecipePrepDetails } from '../../../types';
@@ -22,19 +21,11 @@ export async function loadPrepDetails({
   setSections,
   setLoadingPrepDetails,
 }: PrepDetailsLoadingProps): Promise<void> {
-  // Collect all recipe IDs that have instructions
-  const recipeIds: string[] = [];
-  for (const section of sectionsWithPrepInstructions) {
-    for (const recipeItem of section.recipeGrouped) {
-      if (recipeItem.instructions && recipeItem.instructions.trim().length > 0) {
-        recipeIds.push(recipeItem.recipeId);
-      }
-    }
-  }
-
-  if (recipeIds.length === 0) {
-    return; // No recipes with instructions to analyze
-  }
+  const recipeIds = sectionsWithPrepInstructions
+    .flatMap(section => section.recipeGrouped)
+    .filter(item => item.instructions?.trim().length > 0)
+    .map(item => item.recipeId);
+  if (recipeIds.length === 0) return;
 
   try {
     setLoadingPrepDetails(true);
@@ -55,7 +46,6 @@ export async function loadPrepDetails({
 
     const result = await response.json();
     if (result.success && result.prepDetails) {
-      // Update sections with prep details
       setSections(prevSections => {
         return prevSections.map(section => {
           const updatedRecipeGrouped = section.recipeGrouped.map(recipeItem => {
@@ -71,24 +61,15 @@ export async function loadPrepDetails({
             return recipeItem;
           });
 
-          const updatedSection = {
-            ...section,
-            recipeGrouped: updatedRecipeGrouped,
-          };
-
-          // Aggregate prep techniques for the section
+          const updatedSection = { ...section, recipeGrouped: updatedRecipeGrouped };
           const prepTechniques = aggregatePrepTechniques(updatedSection);
-          if (
+          const hasPrepTechniques =
             prepTechniques.cutShapes.length > 0 ||
             prepTechniques.sauces.length > 0 ||
             prepTechniques.marinations.length > 0 ||
             prepTechniques.preCookingSteps.length > 0 ||
-            prepTechniques.specialTechniques.length > 0
-          ) {
-            updatedSection.prepTechniques = prepTechniques;
-          }
-
-          // Add prep notes to ingredients
+            prepTechniques.specialTechniques.length > 0;
+          if (hasPrepTechniques) updatedSection.prepTechniques = prepTechniques;
           addPrepNotesToIngredients(updatedSection);
 
           return updatedSection;
@@ -96,11 +77,7 @@ export async function loadPrepDetails({
       });
     }
   } catch (err) {
-    logger.warn(
-      'Failed to load prep details:',
-      err instanceof Error ? { error: err.message } : undefined,
-    );
-    // Don't show error to user - prep list still works without prep details
+    logger.warn('Failed to load prep details:', err instanceof Error ? { error: err.message } : undefined);
   } finally {
     setLoadingPrepDetails(false);
   }
