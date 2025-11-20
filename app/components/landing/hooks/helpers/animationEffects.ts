@@ -38,9 +38,6 @@ interface AnimationEffectsProps {
 
 /**
  * Setup animation effects and transitions.
- *
- * @param {AnimationEffectsProps} props - Animation effects props
- * @returns {Object} Animation effects and handlers
  */
 export function useAnimationEffects({
   displayFeature,
@@ -72,28 +69,12 @@ export function useAnimationEffects({
     setImageDimensions,
     setNewImageLoaded,
   } = useImageTransitions(displayFeature, imageMounted);
-
   const containerHeight = useContainerHeight(imageDimensions, imageContainerRef);
-
   useImageEntranceAnimation(imageMounted, imageContainerRef, expandedFeature, setImageMounted);
   useContainerOpacityAnimation(imageMounted, imageContainerRef, expandedFeature);
   useStaggeredButtonAnimation(features, setButtonsVisible);
-  useInitialWidthMeasurement(
-    features,
-    containerRefs,
-    initialWidths,
-    buttonHeights,
-    setInitialWidths,
-    setButtonHeights,
-  );
-  useExpandedWidthMeasurement(
-    expandedIndex,
-    features,
-    containerRefs,
-    parentContainerRef,
-    setContainerWidths,
-  );
-
+  useInitialWidthMeasurement(features, containerRefs, initialWidths, buttonHeights, setInitialWidths, setButtonHeights);
+  useExpandedWidthMeasurement(expandedIndex, features, containerRefs, parentContainerRef, setContainerWidths);
   const handleToggle = createToggleHandler(
     expandedIndex,
     features,
@@ -105,7 +86,6 @@ export function useAnimationEffects({
     setScaleXValues,
     setIsTransitioning,
   );
-
   return {
     currentImage,
     previousImage,

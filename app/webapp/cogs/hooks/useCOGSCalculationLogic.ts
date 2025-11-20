@@ -1,5 +1,4 @@
 'use client';
-
 import { useCallback } from 'react';
 import { convertIngredientCost } from '@/lib/unit-conversion';
 import { COGSCalculation, Ingredient, RecipeIngredient } from '../types';
@@ -29,32 +28,7 @@ export function useCOGSCalculationLogic({
             ri.quantity,
           );
           const totalCost = ri.quantity * costPerUnit;
-
-          // For consumables: simple calculation (no waste/yield)
-          if (isConsumable) {
-            return {
-              recipeId: ri.recipe_id || 'temp',
-              ingredientId: ri.ingredient_id,
-              ingredientName: ingredient.ingredient_name,
-              quantity: ri.quantity,
-              unit: ri.unit || ingredient.unit || 'kg',
-              costPerUnit,
-              totalCost,
-              wasteAdjustedCost: totalCost,
-              yieldAdjustedCost: totalCost,
-              isConsumable: true,
-            };
-          }
-
-          // For regular ingredients: apply waste/yield adjustments
-          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-          const yieldPercent = ingredient.yield_percentage || 100;
-          const wasteAdjustedCost =
-            !ingredient.cost_per_unit_incl_trim && wastePercent > 0
-              ? totalCost / (1 - wastePercent / 100)
-              : totalCost;
-          const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
-          return {
+          const baseCalc = {
             recipeId: ri.recipe_id || 'temp',
             ingredientId: ri.ingredient_id,
             ingredientName: ingredient.ingredient_name,
@@ -62,17 +36,21 @@ export function useCOGSCalculationLogic({
             unit: ri.unit || ingredient.unit || 'kg',
             costPerUnit,
             totalCost,
-            wasteAdjustedCost,
-            yieldAdjustedCost,
-            isConsumable: false,
           };
+          if (isConsumable) {
+            return { ...baseCalc, wasteAdjustedCost: totalCost, yieldAdjustedCost: totalCost, isConsumable: true };
+          }
+          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
+          const yieldPercent = ingredient.yield_percentage || 100;
+          const wasteAdjustedCost = !ingredient.cost_per_unit_incl_trim && wastePercent > 0 ? totalCost / (1 - wastePercent / 100) : totalCost;
+          const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
+          return { ...baseCalc, wasteAdjustedCost, yieldAdjustedCost, isConsumable: false };
         })
         .filter(Boolean) as COGSCalculation[];
       setCalculations(calculations);
     },
     [ingredients, setCalculations],
   );
-
   const updateCalculation = useCallback(
     (
       ingredientId: string,
@@ -87,8 +65,6 @@ export function useCOGSCalculationLogic({
           if (!ingredient) return calc;
           const isConsumable = ingredient.category === 'Consumables';
           const newTotalCost = newQuantity * calc.costPerUnit;
-
-          // For consumables: simple calculation
           if (isConsumable) {
             return {
               ...calc,
@@ -98,16 +74,15 @@ export function useCOGSCalculationLogic({
               yieldAdjustedCost: newTotalCost,
             };
           }
-
-          // For regular ingredients: apply waste/yield
           const wastePercent = ingredient.trim_peel_waste_percentage || 0;
           const yieldPercent = ingredient.yield_percentage || 100;
+          const wasteAdj = newTotalCost * (1 + wastePercent / 100);
           return {
             ...calc,
             quantity: newQuantity,
             totalCost: newTotalCost,
-            wasteAdjustedCost: newTotalCost * (1 + wastePercent / 100),
-            yieldAdjustedCost: (newTotalCost * (1 + wastePercent / 100)) / (yieldPercent / 100),
+            wasteAdjustedCost: wasteAdj,
+            yieldAdjustedCost: wasteAdj / (yieldPercent / 100),
           };
         }),
       );
