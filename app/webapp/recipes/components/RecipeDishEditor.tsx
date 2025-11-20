@@ -1,5 +1,4 @@
 'use client';
-
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { Recipe, Dish } from '../types';
 import { useCOGSDataFetching } from '../../cogs/hooks/useCOGSDataFetching';
@@ -35,8 +34,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
   const { showError, showSuccess } = useNotification();
   const { allRecipes, allDishes, selectedItem, setSelectedItem, loading, allItems } =
     useRecipeDishEditorData(item, itemType);
-
-  // Data fetching
   const {
     ingredients,
     recipes,
@@ -47,8 +44,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
   } = useCOGSDataFetching();
 
   const { convertIngredientQuantity } = useIngredientConversion();
-
-  // Ingredient search
   const {
     ingredientSearch,
     showSuggestions,
@@ -72,7 +67,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     convertIngredientQuantity,
     showError,
   });
-  // Calculation logic
   const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
     ingredients,
     setCalculations,
@@ -87,16 +81,12 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     showError,
     showSuccess,
   });
-
-  // Wrapper for updateCalculation to match useIngredientAddition signature
   const updateCalculationWrapper = useCallback(
     (ingredientId: string, quantity: number) => {
       updateCalculation(ingredientId, quantity, ingredients, setCalculations);
     },
     [ingredients, updateCalculation, setCalculations],
   );
-
-  // Ingredient addition
   const { handleAddIngredient } = useIngredientAddition({
     calculations,
     ingredients,
@@ -113,8 +103,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     e.preventDefault();
     await handleAddIngredient(newIngredient, e);
   };
-
-  // Handle clicking ingredient from left panel to add to recipe
   const handleIngredientClick = useCallback(
     async (ingredient: Ingredient) => {
       // Add ingredient with default quantity of 1 and ingredient's unit
@@ -142,20 +130,9 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
   }, [selectedItem]);
 
   const [showAddIngredient, setShowAddIngredient] = useState(false);
-
-  // Separate calculations into ingredients and consumables (for display purposes)
-  const ingredientCalculations = useMemo(() => {
-    return calculations.filter(calc => !calc.isConsumable);
-  }, [calculations]);
-
-  const consumableCalculations = useMemo(() => {
-    return calculations.filter(calc => calc.isConsumable);
-  }, [calculations]);
-
-  // Calculate totals
-  const totalCOGS = useMemo(() => {
-    return calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
-  }, [calculations]);
+  const ingredientCalculations = useMemo(() => calculations.filter(calc => !calc.isConsumable), [calculations]);
+  const consumableCalculations = useMemo(() => calculations.filter(calc => calc.isConsumable), [calculations]);
+  const totalCOGS = useMemo(() => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0), [calculations]);
 
   const costPerPortion = useMemo(() => {
     if (!selectedItem) return 0;
@@ -166,15 +143,12 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
       return totalCOGS; // Dishes are single-serving
     }
   }, [totalCOGS, selectedItem, allRecipes]);
-
   const capitalizeName = (name: string) => {
     return name
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   };
-
-  // Show loading only for initial data fetch, not for ingredient loading
   if (dataLoading || (loading && allItems.length === 0)) {
     return (
       <div className="space-y-6">
@@ -207,9 +181,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
             onSelectItem={setSelectedItem}
             capitalizeName={capitalizeName}
           />
-        )}
-
-        {/* Right Column - Ingredient Editor */}
+          )}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           {!selectedItem ? (
             <div className="flex h-full min-h-[400px] items-center justify-center text-gray-400">
@@ -219,7 +191,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
               </div>
             </div>
           ) : loadingIngredients && calculations.length === 0 ? (
-            // Only show skeleton if we have no calculations to display
             <div className="space-y-4">
               <LoadingSkeleton variant="text" width="w-48" height="h-6" />
               <LoadingSkeleton variant="card" />
@@ -228,7 +199,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
             <div
               className={`flex h-full flex-col transition-opacity duration-200 ${loadingIngredients ? 'opacity-60' : 'opacity-100'}`}
             >
-              {/* Header */}
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-white">
@@ -247,8 +217,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                 consumableCount={consumableCalculations.length}
                 itemType={selectedItem.type}
               />
-
-              {/* Ingredients/Consumables List */}
               <div className="mb-6 flex-1 overflow-y-auto">
                 {calculations.length > 0 ? (
                   <IngredientsList
@@ -268,8 +236,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                   </div>
                 )}
               </div>
-
-              {/* Add Ingredient/Consumable Section */}
               <div className="border-t border-[#2a2a2a] pt-4">
                 <IngredientManager
                   showAddIngredient={showAddIngredient}
@@ -289,16 +255,10 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                   onAddIngredient={handleAddIngredientWrapper}
                 />
               </div>
-
-              {/* Save Button */}
               <div className="mt-4 border-t border-[#2a2a2a] pt-4">
                 <button
                   onClick={() => {
-                    logger.dev('Save button clicked:', {
-                      selectedItem,
-                      calculationsCount: calculations.length,
-                      saving,
-                    });
+                    logger.dev('Save button clicked:', { selectedItem, calculationsCount: calculations.length, saving });
                     handleSave();
                   }}
                   disabled={saving || calculations.length === 0 || !selectedItem}
