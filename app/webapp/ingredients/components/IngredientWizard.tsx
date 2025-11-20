@@ -1,5 +1,4 @@
 'use client';
-import { Icon } from '@/components/ui/Icon';
 import {
   formatBrandName,
   formatIngredientName,
@@ -7,8 +6,9 @@ import {
   formatSupplierName,
   formatTextInput,
 } from '@/lib/text-utils';
-import { AlertTriangle } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { WizardProgressBar } from './WizardProgressBar';
+import { WizardErrorDisplay } from './WizardErrorDisplay';
 import { logger } from '@/lib/logger';
 import {
   calculateCostPerUnit,
@@ -267,25 +267,8 @@ export default function IngredientWizard({
       <div className="mb-2">
         <h2 className="text-base font-semibold text-white">Add New Ingredient</h2>
       </div>
-      <div className="mb-4">
-        <div className="flex items-center gap-1.5">
-          {[1, 2, 3, 4].map(step => (
-            <div key={step} className="flex flex-1 items-center">
-              <div
-                className={`h-1 flex-1 rounded-full transition-all duration-200 ${step <= wizardStep ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]' : 'bg-[#2a2a2a]'}`}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      {errors.submit && (
-        <div className="mb-3 rounded-lg border border-red-500 bg-red-900/20 px-3 py-2 text-sm text-red-400">
-          <div className="flex items-center space-x-2">
-            <Icon icon={AlertTriangle} size="md" className="text-red-400" aria-hidden={true} />
-            <span>{errors.submit}</span>
-          </div>
-        </div>
-      )}
+      <WizardProgressBar currentStep={wizardStep} totalSteps={totalSteps} />
+      <WizardErrorDisplay error={errors.submit || null} />
       {wizardStep === 1 && <IngredientWizardStep1 {...stepProps} />}
       {wizardStep === 2 && <IngredientWizardStep2 {...stepProps} />}
       {wizardStep === 3 && <IngredientWizardStep4 {...stepProps} />}
