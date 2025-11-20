@@ -19,7 +19,6 @@ import {
 import { getTypeIconEmoji } from './utils';
 import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-
 export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
   const [types, setTypes] = useState<ComplianceType[]>([]);
@@ -101,7 +100,17 @@ export default function ComplianceTrackingPage() {
       const data = await response.json();
       if (data.success) {
         setRecords([data.data, ...records]);
-        setNewRecord({ compliance_type_id: '', document_name: '', issue_date: '', expiry_date: '', document_url: '', photo_url: '', notes: '', reminder_enabled: true, reminder_days_before: 30 });
+        setNewRecord({
+          compliance_type_id: '',
+          document_name: '',
+          issue_date: '',
+          expiry_date: '',
+          document_url: '',
+          photo_url: '',
+          notes: '',
+          reminder_enabled: true,
+          reminder_days_before: 30,
+        });
         setShowAddRecord(false);
       }
     } catch (error) {
@@ -147,7 +156,7 @@ export default function ComplianceTrackingPage() {
   }
 
   return (
-      <ResponsivePageContainer>
+    <ResponsivePageContainer>
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
@@ -163,46 +172,27 @@ export default function ComplianceTrackingPage() {
         </div>
         <div className="mb-8">
           <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
-            <button
-              onClick={() => setActiveTab('records')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                activeTab === 'records'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              📄 {t('compliance.records', 'Compliance Records')}
-            </button>
-            <button
-              onClick={() => setActiveTab('types')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                activeTab === 'types'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              🏷️ {t('compliance.types', 'Compliance Types')}
-            </button>
-            <button
-              onClick={() => setActiveTab('report')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                activeTab === 'report'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              📊 Health Inspector Report
-            </button>
-            <button
-              onClick={() => setActiveTab('allergens')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                activeTab === 'allergens'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              🥜 Allergen Overview
-            </button>
+            {(['records', 'types', 'report', 'allergens'] as const).map(tab => {
+              const labels: Record<typeof tab, string> = {
+                records: `📄 ${t('compliance.records', 'Compliance Records')}`,
+                types: `🏷️ ${t('compliance.types', 'Compliance Types')}`,
+                report: '📊 Health Inspector Report',
+                allergens: '🥜 Allergen Overview',
+              };
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
+                    activeTab === tab
+                      ? 'bg-[#29E7CD] text-black shadow-lg'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {labels[tab]}
+                </button>
+              );
+            })}
           </div>
         </div>
         {activeTab === 'records' && (
