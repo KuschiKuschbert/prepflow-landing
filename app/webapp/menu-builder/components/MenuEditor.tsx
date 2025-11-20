@@ -12,17 +12,17 @@ import {
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
-import { Lock } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useMenuDragDrop } from '../hooks/useMenuDragDrop';
 import { Menu } from '../types';
 import CategoryManager from './CategoryManager';
 import CategorySelectorModal from './CategorySelectorModal';
 import DishPalette from './DishPalette';
-import MenuCategory from './MenuCategory';
 import { MenuItemStatisticsModal } from './MenuItemStatisticsModal';
 import { MenuLockedView } from './MenuLockedView';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
+import { MenuLockButton } from './MenuLockButton';
+import { MenuCategoriesList } from './MenuCategoriesList';
 import { DragOverlayContent } from './drag/DragOverlayContent';
 import { createCenterOnCursorModifier } from './drag/centerOnCursorModifier';
 import { useCategoryOperations } from './hooks/useCategoryOperations';
@@ -228,22 +228,7 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
       onDragEnd={handleDragEnd}
     >
       <div>
-        <div className="mb-4 flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleLockMenu();
-            }}
-            disabled={lockLoading}
-            className="flex items-center gap-2 rounded-lg border border-[#29E7CD]/50 bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-all hover:bg-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50"
-            title="Lock menu to finalize and show allergen matrix"
-          >
-            <Icon icon={Lock} size="sm" aria-hidden={true} />
-            <span>{lockLoading ? 'Locking...' : 'Lock Menu'}</span>
-          </button>
-        </div>
+        <MenuLockButton lockLoading={lockLoading} onLock={handleLockMenu} />
         <div className="large-desktop:grid-cols-4 grid grid-cols-1 gap-6">
           <div className="large-desktop:col-span-1">
             <DishPalette dishes={dishes} recipes={recipes} onItemTap={handleItemTap} />
@@ -257,28 +242,18 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
               onAddCategory={handleAddCategory}
               onRemoveCategory={handleRemoveCategory}
             />
-            <div className="space-y-6">
-              {categories.map(category => {
-                const categoryItems = menuItems.filter(item => item.category === category).sort((a, b) => a.position - b.position);
-                return (
-                  <MenuCategory
-                    key={category}
-                    category={category}
-                    items={categoryItems}
-                    menuId={menu.id}
-                    onRemoveItem={handleRemoveItem}
-                    onRenameCategory={handleRenameCategory}
-                    canRename={true}
-                    onMoveUp={handleMoveUp}
-                    onMoveDown={handleMoveDown}
-                    onMoveToCategory={handleMoveToCategory}
-                    onUpdateActualPrice={handleUpdateActualPrice}
-                    onShowStatistics={item => setSelectedItemForStats(item)}
-                    availableCategories={categories}
-                  />
-                );
-              })}
-            </div>
+            <MenuCategoriesList
+              categories={categories}
+              menuItems={menuItems}
+              menuId={menu.id}
+              onRemoveItem={handleRemoveItem}
+              onRenameCategory={handleRenameCategory}
+              onMoveUp={handleMoveUp}
+              onMoveDown={handleMoveDown}
+              onMoveToCategory={handleMoveToCategory}
+              onUpdateActualPrice={handleUpdateActualPrice}
+              onShowStatistics={item => setSelectedItemForStats(item)}
+            />
           </div>
         </div>
       </div>
