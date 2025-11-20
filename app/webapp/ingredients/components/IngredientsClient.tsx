@@ -113,7 +113,6 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   }, [ingredientsData]);
   const {
     handleAddIngredient,
-    handleUpdateIngredient,
     handleDeleteIngredient,
     handleBulkDelete,
     exportToCSV,
