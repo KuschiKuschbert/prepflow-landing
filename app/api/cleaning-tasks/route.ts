@@ -191,15 +191,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     await deleteCleaningTask(id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Cleaning task deleted successfully',
-    });
+    return NextResponse.json({ success: true, message: 'Cleaning task deleted successfully' });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    if (err.status) return NextResponse.json(err, { status: err.status });
     return handleCleaningTaskError(err, 'DELETE');
   }
 }

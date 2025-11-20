@@ -1,13 +1,9 @@
-import { Recipe } from '../../types';
-import { COGSCalculation, Ingredient } from '../../../cogs/types';
+import { COGSCalculation } from '../../../cogs/types';
 import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
-
-interface LoadRecipeIngredientsParams {
-  recipeId: string;
-  allRecipes: Recipe[];
-  ingredients: Ingredient[];
-  convertIngredientQuantity: (qty: number, fromUnit: string, toUnit: string) => { convertedQuantity: number; convertedUnit: string; conversionNote?: string };
-}
+import {
+  LoadRecipeIngredientsParams,
+  LoadDishIngredientsParams,
+} from './useRecipeDishIngredientLoading.helpers.types';
 
 export async function loadRecipeIngredients({
   recipeId,
@@ -30,16 +26,16 @@ export async function loadRecipeIngredients({
         ri.unit,
         ingredientData.unit || 'kg',
       );
-      return createCalculation(ri.ingredient_id, ingredientData, convertedQuantity, convertedUnit, conversionNote || '', recipeId);
+      return createCalculation(
+        ri.ingredient_id,
+        ingredientData,
+        convertedQuantity,
+        convertedUnit,
+        conversionNote || '',
+        recipeId,
+      );
     })
     .filter(Boolean) as COGSCalculation[];
-}
-
-interface LoadDishIngredientsParams {
-  dishId: string;
-  recipes: Recipe[];
-  ingredients: Ingredient[];
-  convertIngredientQuantity: (qty: number, fromUnit: string, toUnit: string) => { convertedQuantity: number; convertedUnit: string; conversionNote?: string };
 }
 
 export async function loadDishIngredients({
@@ -63,7 +59,16 @@ export async function loadDishIngredients({
       unit,
       ingredientData.unit || 'kg',
     );
-    allCalculations.push(createCalculation(ingId, ingredientData, convertedQuantity, convertedUnit, conversionNote || '', dishId));
+    allCalculations.push(
+      createCalculation(
+        ingId,
+        ingredientData,
+        convertedQuantity,
+        convertedUnit,
+        conversionNote || '',
+        dishId,
+      ),
+    );
   };
   dishIngredients.forEach(di => processIngredient(di.ingredient_id, di.quantity, di.unit));
   for (const dr of dishRecipes) {
@@ -73,10 +78,9 @@ export async function loadDishIngredients({
       cache: 'no-store',
     });
     const recipeData = await recipeResponse.json();
-    const recipeIngredients = recipeData.items || [];
     const recipeYield = recipe.yield || 1;
     const quantity = dr.quantity || 1;
-    recipeIngredients.forEach(ri =>
+    (recipeData.items || []).forEach(ri =>
       processIngredient(ri.ingredient_id, (ri.quantity / recipeYield) * quantity, ri.unit),
     );
   }

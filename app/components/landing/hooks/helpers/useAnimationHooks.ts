@@ -63,10 +63,32 @@ export function useAnimationHooks(params: UseAnimationHooksParams) {
   useImageEntranceAnimation(imageMounted, imageContainerRef, expandedFeature, setImageMounted);
   useContainerOpacityAnimation(imageMounted, imageContainerRef, expandedFeature);
   useStaggeredButtonAnimation(features, setButtonsVisible);
-  useInitialWidthMeasurement(features, containerRefs, initialWidths, buttonHeights, setInitialWidths, setButtonHeights);
-  useExpandedWidthMeasurement(expandedIndex, features, containerRefs, parentContainerRef, setContainerWidths);
-  const handleToggle = createToggleHandler(expandedIndex, features, containerRefs, parentContainerRef, initialWidths, setExpandedIndex, setContainerWidths, setScaleXValues, setIsTransitioning);
+  useInitialWidthMeasurement(
+    features,
+    containerRefs,
+    initialWidths,
+    buttonHeights,
+    setInitialWidths,
+    setButtonHeights,
+  );
+  useExpandedWidthMeasurement(
+    expandedIndex,
+    features,
+    containerRefs,
+    parentContainerRef,
+    setContainerWidths,
+  );
+  const handleToggle = createToggleHandler(
+    expandedIndex,
+    features,
+    containerRefs,
+    parentContainerRef,
+    initialWidths,
+    setExpandedIndex,
+    setContainerWidths,
+    setScaleXValues,
+    setIsTransitioning,
+  );
 
   return { ...imageData, containerHeight, handleToggle };
 }
-

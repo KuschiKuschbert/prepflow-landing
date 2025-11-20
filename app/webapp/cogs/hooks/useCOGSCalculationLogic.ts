@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { convertIngredientCost } from '@/lib/unit-conversion';
 import { COGSCalculation, Ingredient, RecipeIngredient } from '../types';
+import { updateCalculation as updateCalculationUtil } from './utils/updateCalculation';
 
 interface UseCOGSCalculationLogicProps {
   ingredients: Ingredient[];
@@ -66,37 +67,9 @@ export function useCOGSCalculationLogic({
       ingredients: Ingredient[],
       setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
     ) => {
-      setCalculations(prev =>
-        prev.map(calc => {
-          if (calc.ingredientId !== ingredientId) return calc;
-          const ingredient = ingredients.find(ing => ing.id === ingredientId);
-          if (!ingredient) return calc;
-          const isConsumable = ingredient.category === 'Consumables';
-          const newTotalCost = newQuantity * calc.costPerUnit;
-          if (isConsumable) {
-            return {
-              ...calc,
-              quantity: newQuantity,
-              totalCost: newTotalCost,
-              wasteAdjustedCost: newTotalCost,
-              yieldAdjustedCost: newTotalCost,
-            };
-          }
-          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-          const yieldPercent = ingredient.yield_percentage || 100;
-          const wasteAdj = newTotalCost * (1 + wastePercent / 100);
-          return {
-            ...calc,
-            quantity: newQuantity,
-            totalCost: newTotalCost,
-            wasteAdjustedCost: wasteAdj,
-            yieldAdjustedCost: wasteAdj / (yieldPercent / 100),
-          };
-        }),
-      );
+      updateCalculationUtil({ ingredientId, newQuantity, ingredients, setCalculations });
     },
     [],
   );
-
   return { calculateCOGS, updateCalculation };
 }

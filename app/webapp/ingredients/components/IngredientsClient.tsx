@@ -191,7 +191,9 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
       {!hideHeader && (
         <PageHeader
           title={String(t('ingredients.title', 'Ingredients Management'))}
-          subtitle={String(t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory'))}
+          subtitle={String(
+            t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory'),
+          )}
           icon={Package}
         />
       )}
