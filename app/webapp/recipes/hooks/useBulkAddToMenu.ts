@@ -1,5 +1,4 @@
 'use client';
-
 import { useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -23,8 +22,6 @@ export function useBulkAddToMenu({
   const [loadingMenus, setLoadingMenus] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
   const [showMenuDialog, setShowMenuDialog] = useState(false);
-
-  // Fetch available menus
   useEffect(() => {
     if (showMenuDialog) {
       fetchMenus();
@@ -50,7 +47,6 @@ export function useBulkAddToMenu({
       setLoadingMenus(false);
     }
   }, [showError]);
-
   const handleBulkAddToMenu = useCallback(() => {
     if (selectedItems.size === 0) {
       showError('No items selected');
@@ -58,7 +54,6 @@ export function useBulkAddToMenu({
     }
     setShowMenuDialog(true);
   }, [selectedItems.size, showError]);
-
   const handleSelectMenu = useCallback(
     async (menuId: string) => {
       if (selectedItems.size === 0) {
@@ -68,9 +63,7 @@ export function useBulkAddToMenu({
 
       setAddLoading(true);
       setShowMenuDialog(false);
-
       try {
-        // Prepare items array
         const items = Array.from(selectedItems).map(id => {
           const type = selectedItemTypes.get(id);
           return type === 'recipe'
@@ -91,14 +84,8 @@ export function useBulkAddToMenu({
           showError(errorMessage);
           return;
         }
-
-        // Success
         const count = selectedItems.size;
-        showSuccess(
-          `${count} item${count > 1 ? 's' : ''} added to menu successfully! Opening menu editor...`,
-        );
-
-        // Navigate to menu editor
+        showSuccess(`${count} item${count > 1 ? 's' : ''} added to menu successfully! Opening menu editor...`);
         router.push(`/webapp/menu-builder?menuId=${menuId}`);
 
         onSuccess?.();
@@ -111,13 +98,10 @@ export function useBulkAddToMenu({
     },
     [selectedItems, selectedItemTypes, router, showSuccess, showError, onSuccess],
   );
-
   const handleCreateNewMenu = useCallback(() => {
     setShowMenuDialog(false);
-    // Navigate to menu builder to create new menu
     router.push('/webapp/menu-builder');
   }, [router]);
-
   return {
     handleBulkAddToMenu,
     handleSelectMenu,
