@@ -205,9 +205,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         />
       )}
       {error && (
-        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
-          {error}
-        </div>
+        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">{error}</div>
       )}
       {showAddForm && (
         <IngredientWizard
@@ -223,13 +221,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         />
       )}
       {isHydrated && (
-        <IngredientPagination
-          page={page}
-          totalPages={totalPages}
-          total={filteredTotal}
-          onPageChange={setPage}
-          className="mb-4"
-        />
+        <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mb-4" />
       )}
       {(isHydrated || ingredients.length > 0) && (
         <IngredientTableWithFilters
@@ -269,13 +261,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         />
       )}
       {isHydrated && (
-        <IngredientPagination
-          page={page}
-          totalPages={totalPages}
-          total={filteredTotal}
-          onPageChange={setPage}
-          className="mt-4"
-        />
+        <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mt-4" />
       )}
       <IngredientEditDrawer
         isOpen={!!editingIngredient}
@@ -283,7 +269,9 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         suppliers={suppliers}
         availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
-          if (editingIngredient?.id) await handleEditSave(editingIngredient.id, ingredientData);
+          if (editingIngredient?.id) {
+            await handleEditSave(editingIngredient.id, ingredientData);
+          }
         }}
         onClose={() => setEditingIngredient(null)}
         loading={loading}
