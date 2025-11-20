@@ -6,7 +6,7 @@ import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../hooks/useRecipePricing';
 import { Dish, Recipe } from '../types';
-import { SelectionModeBanner } from './SelectionModeBanner';
+import { DishesBulkActionsSection } from './DishesBulkActionsSection';
 import { DishesListView } from './DishesListView';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
 import { DishesEditorView } from './DishesEditorView';
@@ -214,25 +214,20 @@ export default function DishesClient() {
           {error}
         </div>
       )}
-      <SelectionModeBanner
+      <DishesBulkActionsSection
         isSelectionMode={isSelectionMode}
         selectedCount={selectedItems.size}
+        selectedRecipeCount={selectedRecipeCount}
+        bulkActionLoading={bulkActionLoading}
+        bulkShareLoading={bulkShareLoading}
+        addToMenuLoading={addToMenuLoading}
+        showBulkMenu={showBulkMenu}
         onExitSelectionMode={handleExitSelectionMode}
+        onBulkDelete={handleBulkDelete}
+        onBulkShare={() => handleBulkShare('pdf')}
+        onBulkAddToMenu={handleBulkAddToMenu}
+        onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
       />
-      {isSelectionMode && selectedItems.size > 0 && (
-        <div className="mb-4 flex items-center justify-between">
-          <UnifiedBulkActionsMenu
-            selectedCount={selectedItems.size}
-            selectedRecipeCount={selectedRecipeCount}
-            bulkActionLoading={bulkActionLoading || bulkShareLoading || addToMenuLoading}
-            onBulkDelete={handleBulkDelete}
-            onBulkShare={() => handleBulkShare('pdf')}
-            onBulkAddToMenu={handleBulkAddToMenu}
-            showBulkMenu={showBulkMenu}
-            onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
-          />
-        </div>
-      )}
       <BulkAddToMenuDialog
         show={showMenuDialog}
         menus={menus}
@@ -259,7 +254,6 @@ export default function DishesClient() {
           setEditingItem(null);
         }}
       />
-
       <DishesEditorView
         viewMode={viewMode}
         editingItem={editingItem}
@@ -345,10 +339,10 @@ export default function DishesClient() {
             }}
             onDeleteConfirm={confirmDeleteItem}
             onDeleteCancel={cancelDeleteItem}
-            onDishEditDrawerClose={() => {
+            onDishEditDrawerClose={useCallback(() => {
               setShowDishEditDrawer(false);
               setEditingDish(null);
-            }}
+            }, [setShowDishEditDrawer, setEditingDish])}
             onDishEditDrawerSave={fetchItems}
           />
         </>
