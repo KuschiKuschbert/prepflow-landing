@@ -3,9 +3,12 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useEffect, useState } from 'react';
 import { TaskCard } from './components/TaskCard';
+import { AddAreaForm } from './components/AddAreaForm';
+import { AddTaskForm } from './components/AddTaskForm';
+import { AreaCard } from './components/AreaCard';
 import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { Sparkles, ClipboardCheck, MapPin, Plus } from 'lucide-react';
+import { ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 interface CleaningArea {
@@ -138,7 +141,7 @@ export default function CleaningRosterPage() {
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
-            <Icon icon={Sparkles} size="lg" aria-hidden={true} />
+            <Icon icon={ClipboardCheck} size="lg" aria-hidden={true} />
             {t('cleaning.title', 'Cleaning Roster')}
           </h1>
           <p className="text-gray-400">
@@ -190,107 +193,16 @@ export default function CleaningRosterPage() {
               </button>
             </div>
             {showAddArea && (
-              <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-                <h3 className="mb-4 text-xl font-semibold text-white">
-                  {t('cleaning.addNewArea', 'Add New Cleaning Area')}
-                </h3>
-                <form onSubmit={handleAddArea} className="space-y-4">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('cleaning.areaName', 'Area Name')}
-                    </label>
-                    <input
-                      type="text"
-                      value={newArea.name}
-                      onChange={e => setNewArea({ ...newArea, name: e.target.value })}
-                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      placeholder="e.g., Kitchen Floors, Prep Tables"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('cleaning.description', 'Description')}
-                    </label>
-                    <textarea
-                      value={newArea.description}
-                      onChange={e => setNewArea({ ...newArea, description: e.target.value })}
-                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      placeholder="Describe what needs to be cleaned"
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('cleaning.frequency', 'Cleaning Frequency (days)')}
-                    </label>
-                    <input
-                      type="number"
-                      value={newArea.frequency_days}
-                      onChange={e => setNewArea({ ...newArea, frequency_days: parseInt(e.target.value) || 7 })}
-                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      min="1"
-                      required
-                    />
-                  </div>
-                  <div className="flex space-x-4">
-                    <button
-                      type="submit"
-                      className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
-                    >
-                      {t('cleaning.save', 'Save Area')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowAddArea(false)}
-                      className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
-                    >
-                      {t('cleaning.cancel', 'Cancel')}
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <AddAreaForm
+                newArea={newArea}
+                onAreaChange={setNewArea}
+                onSubmit={handleAddArea}
+                onCancel={() => setShowAddArea(false)}
+              />
             )}
             <div className="adaptive-grid">
               {areas.map(area => (
-                <div
-                  key={area.id}
-                  className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-200 hover:shadow-xl"
-                >
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                      <Icon
-                        icon={Sparkles}
-                        size="md"
-                        className="text-[#29E7CD]"
-                        aria-hidden={true}
-                      />
-                    </div>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
-                        area.is_active
-                          ? 'border border-green-400/20 bg-green-400/10 text-green-400'
-                          : 'border border-gray-400/20 bg-gray-400/10 text-gray-400'
-                      }`}
-                    >
-                      {area.is_active
-                        ? t('cleaning.active', 'Active')
-                        : t('cleaning.inactive', 'Inactive')}
-                    </span>
-                  </div>
-                  <h3 className="mb-2 text-xl font-semibold text-white">{area.name}</h3>
-                  <p className="mb-4 text-gray-400">
-                    {area.description || t('cleaning.noDescription', 'No description provided')}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      {t('cleaning.everyDays', 'Every')} {area.frequency_days} {t('cleaning.days', 'days')}
-                    </span>
-                    <button className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
-                      {t('cleaning.edit', 'Edit')}
-                    </button>
-                  </div>
-                </div>
+                <AreaCard key={area.id} area={area} />
               ))}
             </div>
           </div>
@@ -310,70 +222,13 @@ export default function CleaningRosterPage() {
               </button>
             </div>
             {showAddTask && (
-              <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-                <h3 className="mb-4 text-xl font-semibold text-white">
-                  {t('cleaning.addNewTask', 'Add New Cleaning Task')}
-                </h3>
-                <form onSubmit={handleAddTask} className="space-y-4">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('cleaning.selectArea', 'Select Area')}
-                    </label>
-                    <select
-                      value={newTask.area_id}
-                      onChange={e => setNewTask({ ...newTask, area_id: e.target.value })}
-                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      required
-                    >
-                      <option value="">{t('cleaning.selectAreaPlaceholder', 'Choose a cleaning area')}</option>
-                      {areas.map(area => (
-                        <option key={area.id} value={area.id}>
-                          {area.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('cleaning.assignedDate', 'Assigned Date')}
-                    </label>
-                    <input
-                      type="date"
-                      value={newTask.assigned_date}
-                      onChange={e => setNewTask({ ...newTask, assigned_date: e.target.value })}
-                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('cleaning.notes', 'Notes')}
-                    </label>
-                    <textarea
-                      value={newTask.notes}
-                      onChange={e => setNewTask({ ...newTask, notes: e.target.value })}
-                      className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      placeholder="Additional notes or instructions"
-                      rows={3}
-                    />
-                  </div>
-                  <div className="flex space-x-4">
-                    <button
-                      type="submit"
-                      className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
-                    >
-                      {t('cleaning.save', 'Save Task')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowAddTask(false)}
-                      className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
-                    >
-                      {t('cleaning.cancel', 'Cancel')}
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <AddTaskForm
+                newTask={newTask}
+                areas={areas}
+                onTaskChange={setNewTask}
+                onSubmit={handleAddTask}
+                onCancel={() => setShowAddTask(false)}
+              />
             )}
             <div className="space-y-4">
               {tasks.map(task => (
