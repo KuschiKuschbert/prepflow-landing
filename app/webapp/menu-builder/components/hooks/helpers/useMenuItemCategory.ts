@@ -1,7 +1,6 @@
 /**
  * Hook for moving menu items between categories.
  */
-
 import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import type { MenuItem } from '../../../types';
@@ -17,9 +16,6 @@ interface UseMenuItemCategoryProps {
 
 /**
  * Hook for moving menu items between categories.
- *
- * @param {UseMenuItemCategoryProps} props - Hook dependencies
- * @returns {Object} Category move handlers
  */
 export function useMenuItemCategory({
   menuId,
@@ -29,12 +25,10 @@ export function useMenuItemCategory({
   loadMenuData,
   showError,
 }: UseMenuItemCategoryProps) {
+  const handleRefreshError = (err: any) => logger.error('Failed to refresh statistics:', err);
   const performMoveToCategory = useCallback(
     async (itemId: string, targetCategory: string, item: MenuItem) => {
-      // Store original state for rollback
       const originalMenuItems = [...menuItems];
-
-      // Optimistically update UI immediately
       setMenuItems(prevItems =>
         prevItems.map(i =>
           i.id === itemId
@@ -46,13 +40,7 @@ export function useMenuItemCategory({
             : i,
         ),
       );
-
-      // Refresh statistics optimistically in background
-      refreshStatistics().catch(err => {
-        logger.error('Failed to refresh statistics:', err);
-      });
-
-      // Make API call in background
+      refreshStatistics().catch(handleRefreshError);
       try {
         const response = await fetch(`/api/menus/${menuId}/items/${itemId}`, {
           method: 'PUT',
@@ -66,36 +54,23 @@ export function useMenuItemCategory({
         const result = await response.json();
 
         if (response.ok) {
-          // Success - reload menu data to ensure consistency
           await loadMenuData();
-          // Refresh statistics in background to ensure accuracy
-          refreshStatistics().catch(err => {
-            logger.error('Failed to refresh statistics:', err);
-          });
+          refreshStatistics().catch(handleRefreshError);
         } else {
-          // Revert optimistic update on error
           setMenuItems(originalMenuItems);
           logger.error('Failed to move item:', result.error || result.message);
           showError(`Failed to move item: ${result.error || result.message || 'Unknown error'}`);
-          // Refresh statistics to revert optimistic change
-          refreshStatistics().catch(err => {
-            logger.error('Failed to refresh statistics:', err);
-          });
+          refreshStatistics().catch(handleRefreshError);
         }
       } catch (err) {
-        // Revert optimistic update on error
         setMenuItems(originalMenuItems);
         logger.error('Failed to move item:', err);
         showError('Failed to move item. Please check your connection and try again.');
-        // Refresh statistics to revert optimistic change
-        refreshStatistics().catch(err => {
-          logger.error('Failed to refresh statistics:', err);
-        });
+        refreshStatistics().catch(handleRefreshError);
       }
     },
     [menuId, menuItems, setMenuItems, refreshStatistics, loadMenuData, showError],
   );
-
   const handleMoveToCategory = useCallback(
     async (itemId: string, targetCategory: string) => {
       const item = menuItems.find(i => i.id === itemId);
@@ -104,10 +79,7 @@ export function useMenuItemCategory({
         return;
       }
 
-      if (item.category === targetCategory) {
-        return; // Already in target category
-      }
-
+      if (item.category === targetCategory) return;
       await performMoveToCategory(itemId, targetCategory, item);
     },
     [menuItems, performMoveToCategory, showError],
