@@ -10,8 +10,6 @@ import type { UseRecipeHandlersParams } from './utils/types';
 
 /**
  * Hook to manage recipe handlers for preview, edit, duplicate, share, and print.
- *
- * @param {UseRecipeHandlersParams} params - Handler parameters
  */
 export function useRecipeHandlers({
   selectedRecipe,
@@ -31,11 +29,7 @@ export function useRecipeHandlers({
   handleDuplicateRecipe,
   handleShareRecipe,
 }: UseRecipeHandlersParams) {
-  const formatQuantity = useMemo(
-    () => buildFormatQuantity(previewYield, selectedRecipe),
-    [previewYield, selectedRecipe],
-  );
-
+  const formatQuantity = useMemo(() => buildFormatQuantity(previewYield, selectedRecipe), [previewYield, selectedRecipe]);
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
       await handlePreviewRecipeUtil({
@@ -61,13 +55,7 @@ export function useRecipeHandlers({
       setShowUnifiedModal,
     ],
   );
-
-  const {
-    handleEditRecipeWrapper,
-    handleEditRecipeFromCard,
-    handleShareRecipeWrapper,
-    handlePrint,
-  } = useMemo(
+  const { handleEditRecipeWrapper, handleEditRecipeFromCard, handleShareRecipeWrapper, handlePrint } = useMemo(
     () =>
       buildRecipeHandlers({
         selectedRecipe,
@@ -78,17 +66,8 @@ export function useRecipeHandlers({
         setShowUnifiedModal,
         handleShareRecipe,
       }),
-    [
-      selectedRecipe,
-      recipeIngredients,
-      aiInstructions,
-      setEditingRecipe,
-      setShowRecipeEditDrawer,
-      setShowUnifiedModal,
-      handleShareRecipe,
-    ],
+    [selectedRecipe, recipeIngredients, aiInstructions, setEditingRecipe, setShowRecipeEditDrawer, setShowUnifiedModal, handleShareRecipe],
   );
-
   const handleDuplicateRecipeWrapper = useCallback(async () => {
     await handleDuplicateRecipeWrapperUtil({
       selectedRecipe,
@@ -97,12 +76,10 @@ export function useRecipeHandlers({
       setShowUnifiedModal,
     });
   }, [selectedRecipe, handleDuplicateRecipe, handlePreviewRecipe, setShowUnifiedModal]);
-
   const handleRefreshIngredients = useMemo(
     () => buildRefreshIngredients({ selectedRecipe, fetchRecipeIngredients, setRecipeIngredients }),
     [selectedRecipe, fetchRecipeIngredients, setRecipeIngredients],
   );
-
   return buildRecipeHandlersReturn({
     formatQuantity,
     handlePreviewRecipe,

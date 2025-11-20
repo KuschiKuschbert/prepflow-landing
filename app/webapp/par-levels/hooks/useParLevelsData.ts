@@ -1,7 +1,6 @@
 /**
  * Hook for fetching par levels and ingredients data.
  */
-
 import { useState, useEffect, useCallback } from 'react';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
@@ -22,9 +21,6 @@ interface UseParLevelsDataProps {
 
 /**
  * Hook for fetching par levels and ingredients data.
- *
- * @param {UseParLevelsDataProps} props - Hook dependencies
- * @returns {UseParLevelsDataReturn} Data fetching state and functions
  */
 export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLevelsDataReturn {
   const [parLevels, setParLevels] = useState<ParLevel[]>(() => getCachedData('par_levels') || []);
@@ -38,7 +34,6 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
       const response = await fetch('/api/par-levels');
       logger.dev(`[Par Levels] Response status: ${response.status} ${response.statusText}`);
 
-      // Parse JSON even if status is not 200
       let result;
       try {
         const responseText = await response.text();
@@ -50,31 +45,21 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
         showError(`Server error (${response.status}). Please check the server logs.`);
         return;
       }
-
       if (response.ok && result.success) {
         setParLevels(result.data || []);
         cacheData('par_levels', result.data || []);
       } else {
-        // Show detailed error message with instructions if available
-        const errorMessage =
-          result.message || result.error || `Failed to fetch par levels (${response.status})`;
+        const errorMessage = result.message || result.error || `Failed to fetch par levels (${response.status})`;
         const instructions = result.details?.instructions || [];
-
-        // Log full error details for debugging
-        const errorDetails = {
+        logger.error('[Par Levels] API Error:', {
           status: response.status,
           error: errorMessage,
           details: result.details,
           code: result.code,
           fullResponse: result,
-        };
-
-        logger.error('[Par Levels] API Error:', errorDetails);
-
-        // Show error notification
+        });
         if (instructions.length > 0) {
-          const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
-          showError(fullMessage);
+          showError(`${errorMessage}\n\n${instructions.join('\n')}`);
           logger.dev('[Par Levels] Error Instructions:', instructions);
         } else {
           showError(errorMessage);
@@ -87,7 +72,6 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
       setLoading(false);
     }
   }, [showError]);
-
   const fetchIngredients = useCallback(async () => {
     try {
       const response = await fetch('/api/ingredients');
@@ -101,7 +85,6 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
       logger.error('Failed to fetch ingredients:', err);
     }
   }, []);
-
   useEffect(() => {
     fetchParLevels();
     fetchIngredients();
