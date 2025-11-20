@@ -1,7 +1,6 @@
 /**
  * Utilities for handling drag end events.
  */
-
 import { DragEndEvent } from '@dnd-kit/core';
 import type { MenuItem } from '../../types';
 import { reorderMenuItems } from '../../utils/menuDragDropHelpers';
@@ -23,15 +22,6 @@ interface HandleDragEndProps {
 
 /**
  * Move menu item to new category.
- *
- * @param {string} menuId - Menu ID
- * @param {string} itemId - Item ID
- * @param {string} targetCategory - Target category
- * @param {number} targetPosition - Target position
- * @param {Function} onMenuDataReload - Reload callback
- * @param {Function} onStatisticsUpdate - Statistics update callback
- * @param {NotificationFunctions | undefined} notifications - Notification functions
- * @returns {Promise<void>}
  */
 async function moveItemToCategory(
   menuId: string,
@@ -46,10 +36,7 @@ async function moveItemToCategory(
     const response = await fetch(`/api/menus/${menuId}/items/${itemId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        category: targetCategory,
-        position: targetPosition,
-      }),
+      body: JSON.stringify({ category: targetCategory, position: targetPosition }),
     });
 
     if (response.ok) {
@@ -57,9 +44,7 @@ async function moveItemToCategory(
       await onStatisticsUpdate();
     } else {
       const result = await response.json();
-      notifications?.showError(
-        `Failed to move item: ${result.error || result.message || 'Unknown error'}`,
-      );
+      notifications?.showError(`Failed to move item: ${result.error || result.message || 'Unknown error'}`);
     }
   } catch (err) {
     notifications?.showError('Failed to move item. Please check your connection and try again.');
@@ -68,8 +53,6 @@ async function moveItemToCategory(
 
 /**
  * Handle drag end event.
- *
- * @param {HandleDragEndProps} props - Drag end handler props
  */
 export async function handleDragEnd({
   event,
@@ -81,23 +64,13 @@ export async function handleDragEnd({
   notifications,
 }: HandleDragEndProps): Promise<void> {
   const { active, over } = event;
-
   if (!over) return;
-
-  // Only handle menu-item drag-and-drop for rearranging
-  // Tap-to-add handles adding items from palette
-
-  // Handle reordering within category or moving between categories
   if (active.data.current?.type === 'menu-item') {
     const activeItem = menuItems.find(item => item.id === active.id);
     if (!activeItem) return;
-
-    // If dropped on another menu item, reorder within that item's category
     if (over.data.current?.type === 'menu-item') {
       const overItem = menuItems.find(item => item.id === over.id);
       if (!overItem) return;
-
-      // If same category, reorder within category
       if (activeItem.category === overItem.category) {
         await reorderMenuItems(
           menuId,
@@ -121,12 +94,8 @@ export async function handleDragEnd({
           notifications,
         );
       }
-    }
-    // If dropped on a category, move item to that category
-    else if (over.data.current?.type === 'category') {
+    } else if (over.data.current?.type === 'category') {
       const targetCategory = over.data.current.category as string;
-
-      // Update item's category
       await moveItemToCategory(
         menuId,
         activeItem.id,
