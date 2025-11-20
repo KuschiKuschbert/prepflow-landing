@@ -84,13 +84,18 @@ function RecommendedPriceGrid({ statistics }: { statistics: ItemStatistics }) {
     </div>
   );
 }
+/**
+ * Menu item hover statistics tooltip component.
+ *
+ * @component
+ * @param {MenuItemHoverStatisticsProps} props - Component props
+ * @returns {JSX.Element | null} Tooltip element or null
+ */
 export function MenuItemHoverStatistics({
   item,
   menuId,
   isVisible,
-  position = 'top',
   mousePosition,
-  anchorElement,
 }: MenuItemHoverStatisticsProps) {
   const [statistics, setStatistics] = useState<ItemStatistics | null>(null);
   const [loading, setLoading] = useState(false);
@@ -174,12 +179,15 @@ export function MenuItemHoverStatistics({
     setCurrentItemId(item.id);
   }, [item.id, currentItemId]);
   useEffect(() => {
-    if (isVisible) {
-      logger.dev('[MenuItemHoverStatistics] Loading statistics', { menuId, itemId: item.id });
+    const clearHoverTimeout = () => {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
         hoverTimeoutRef.current = null;
       }
+    };
+    if (isVisible) {
+      logger.dev('[MenuItemHoverStatistics] Loading statistics', { menuId, itemId: item.id });
+      clearHoverTimeout();
       const cacheKey = `${menuId}-${item.id}`;
       const cached = statisticsCache.get(cacheKey);
       const now = Date.now();
@@ -192,17 +200,9 @@ export function MenuItemHoverStatistics({
         setError(null);
         hoverTimeoutRef.current = setTimeout(() => loadStatistics(), 100);
       }
-      return () => {
-        if (hoverTimeoutRef.current) {
-          clearTimeout(hoverTimeoutRef.current);
-          hoverTimeoutRef.current = null;
-        }
-      };
+      return clearHoverTimeout;
     } else {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-        hoverTimeoutRef.current = null;
-      }
+      clearHoverTimeout();
     }
   }, [
     isVisible,
