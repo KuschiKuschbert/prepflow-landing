@@ -1,7 +1,6 @@
 /**
  * Hook for renaming categories.
  */
-
 import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import type { MenuItem } from '../../../types';
@@ -31,19 +30,12 @@ export function useCategoryRename({
 }: UseCategoryRenameProps) {
   const handleRenameCategory = useCallback(
     async (oldName: string, newName: string) => {
-      // Prevent renaming to an existing category (except if it's the same)
       if (newName !== oldName && categories.includes(newName)) {
         throw new Error(`Category "${newName}" already exists`);
       }
-
-      // Store original state for rollback
       const originalMenuItems = [...menuItems];
       const originalCategories = [...categories];
-
-      // Get all items in the old category
       const itemsToUpdate = menuItems.filter(item => item.category === oldName);
-
-      // Optimistically update UI immediately
       if (itemsToUpdate.length > 0) {
         setMenuItems(prevItems =>
           prevItems.map(item =>
@@ -52,18 +44,8 @@ export function useCategoryRename({
         );
       }
       setCategories(categories.map(c => (c === oldName ? newName : c)));
-
-      // Update statistics optimistically in background
-      refreshStatistics().catch(err => {
-        logger.error('Failed to refresh statistics:', err);
-      });
-
-      if (itemsToUpdate.length === 0) {
-        // No items to update, just return (already updated optimistically)
-        return;
-      }
-
-      // Make API calls in background
+      refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
+      if (itemsToUpdate.length === 0) return;
       let hasError = false;
       const errors: string[] = [];
 
@@ -96,16 +78,11 @@ export function useCategoryRename({
       }
 
       if (hasError) {
-        // Revert optimistic update on error
         setMenuItems(originalMenuItems);
         setCategories(originalCategories);
         throw new Error(`Some items could not be updated:\n${errors.join('\n')}`);
       }
-
-      // Success - refresh statistics in background to ensure accuracy
-      refreshStatistics().catch(err => {
-        logger.error('Failed to refresh statistics:', err);
-      });
+      refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
     },
     [menuId, menuItems, categories, setMenuItems, setCategories, refreshStatistics],
   );
