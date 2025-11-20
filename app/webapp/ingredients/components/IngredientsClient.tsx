@@ -21,7 +21,6 @@ import IngredientEditDrawer from './IngredientEditDrawer';
 import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -44,14 +43,6 @@ interface Ingredient {
   created_at?: string;
   updated_at?: string;
 }
-
-interface Supplier {
-  id: string;
-  supplier_name?: string;
-  name?: string;
-  created_at?: string;
-}
-
 interface IngredientsClientProps {
   hideHeader?: boolean;
 }
@@ -83,16 +74,12 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     setEditingIngredient,
     showCSVImport,
     setShowCSVImport,
-    csvData,
     setCsvData,
     parsedIngredients,
     setParsedIngredients,
     importing,
     setImporting,
-    wizardStep,
     setWizardStep,
-    newIngredient,
-    setNewIngredient,
     resetWizard,
     resetCSVImport,
   } = useIngredientFormState();
@@ -109,21 +96,18 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   const {
     data: ingredientsData,
     isLoading,
-    error: queryError,
     refetch: refetchIngredients,
   } = useIngredientsQuery(1, 10000);
-  useEffect(() => setPage(1), [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
+  useEffect(
+    () => setPage(1),
+    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter],
+  );
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;
-    if (active) {
-      startLoadingGate('ingredients');
-    } else {
-      stopLoadingGate('ingredients');
-    }
-    return () => {
-      stopLoadingGate('ingredients');
-    };
+    if (active) startLoadingGate('ingredients');
+    else stopLoadingGate('ingredients');
+    return () => stopLoadingGate('ingredients');
   }, [loading, isLoading]);
   useEffect(() => {
     if (ingredientsData?.items) setIngredients(ingredientsData.items as Ingredient[]);
@@ -205,19 +189,22 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
   }, [selectedIngredients.size, isSelectionMode, exitSelectionMode]);
   if (loading || isLoading) return <PageSkeleton />;
-  const translateText = (key: string, fallback: string): string => {
-    const result = t(key, fallback);
-    return Array.isArray(result) ? result.join('') : result;
-  };
   return (
     <>
       {!hideHeader && (
         <PageHeader
-          title={translateText('ingredients.title', 'Ingredients Management')}
-          subtitle={translateText(
-            'ingredients.subtitle',
-            'Manage your kitchen ingredients and inventory',
-          )}
+          title={
+            Array.isArray(t('ingredients.title', 'Ingredients Management'))
+              ? t('ingredients.title', 'Ingredients Management').join('')
+              : t('ingredients.title', 'Ingredients Management')
+          }
+          subtitle={
+            Array.isArray(
+              t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory'),
+            )
+              ? t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory').join('')
+              : t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')
+          }
           icon={Package}
         />
       )}
