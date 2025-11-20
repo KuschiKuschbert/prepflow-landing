@@ -1,7 +1,6 @@
 /**
  * Hook for removing menu items.
  */
-
 import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import type { MenuItem } from '../../../types';
@@ -29,16 +28,26 @@ export function useMenuItemRemoval({
   showError,
   showSuccess,
 }: UseMenuItemRemovalProps) {
+  const revertItemRemoval = useCallback(
+    (itemToRemove: MenuItem, prevItems: MenuItem[]) => {
+      const otherItems = prevItems.filter(item => item.id !== itemToRemove.id);
+      const insertIndex = otherItems.findIndex(
+        item => item.category === itemToRemove.category && item.position > itemToRemove.position,
+      );
+      return insertIndex === -1
+        ? [...otherItems, itemToRemove]
+        : [...otherItems.slice(0, insertIndex), itemToRemove, ...otherItems.slice(insertIndex)];
+    },
+    [],
+  );
+
   const performRemoveItem = useCallback(
     async (itemId: string, itemName: string) => {
-      // Store the item being removed for potential revert
       const itemToRemove = menuItems.find(i => i.id === itemId);
       if (!itemToRemove) {
         showError('Item not found');
         return;
       }
-
-      // Optimistically remove from UI immediately (instant feedback)
       setMenuItems(prevItems => prevItems.filter(item => item.id !== itemId));
 
       try {
@@ -49,55 +58,20 @@ export function useMenuItemRemoval({
         const result = await response.json();
 
         if (response.ok) {
-          // Success - refresh statistics in background (non-blocking)
           showSuccess(`"${itemName}" removed from menu`);
-          refreshStatistics().catch(err => {
-            logger.error('Failed to refresh statistics:', err);
-          });
+          refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
         } else {
-          // Revert optimistic update on error
-          setMenuItems(prevItems => {
-            // Reinsert the item at its original position
-            const otherItems = prevItems.filter(item => item.id !== itemId);
-            const insertIndex = otherItems.findIndex(
-              item =>
-                item.category === itemToRemove.category && item.position > itemToRemove.position,
-            );
-            if (insertIndex === -1) {
-              return [...otherItems, itemToRemove];
-            }
-            return [
-              ...otherItems.slice(0, insertIndex),
-              itemToRemove,
-              ...otherItems.slice(insertIndex),
-            ];
-          });
+          setMenuItems(prevItems => revertItemRemoval(itemToRemove, prevItems));
           showError(`Failed to remove item: ${result.error || result.message || 'Unknown error'}`);
         }
       } catch (err) {
-        // Revert optimistic update on error
-        setMenuItems(prevItems => {
-          const otherItems = prevItems.filter(item => item.id !== itemId);
-          const insertIndex = otherItems.findIndex(
-            item =>
-              item.category === itemToRemove.category && item.position > itemToRemove.position,
-          );
-          if (insertIndex === -1) {
-            return [...otherItems, itemToRemove];
-          }
-          return [
-            ...otherItems.slice(0, insertIndex),
-            itemToRemove,
-            ...otherItems.slice(insertIndex),
-          ];
-        });
+        setMenuItems(prevItems => revertItemRemoval(itemToRemove, prevItems));
         logger.error('Failed to remove item:', err);
         showError('Failed to remove item. Please check your connection and try again.');
       }
     },
-    [menuId, menuItems, setMenuItems, refreshStatistics, showError, showSuccess],
+    [menuId, menuItems, setMenuItems, refreshStatistics, showError, showSuccess, revertItemRemoval],
   );
-
   const handleRemoveItem = useCallback(
     (itemId: string, onConfirm: () => void) => {
       const item = menuItems.find(i => i.id === itemId);

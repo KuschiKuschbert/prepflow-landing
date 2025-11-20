@@ -2,14 +2,12 @@
  * Hook for managing menu item operations (add, remove, move, reorder, update price)
  * Orchestrates specialized hooks for different operations.
  */
-
 import type { MenuItem, Dish, Recipe } from '../../types';
 import { useMenuItemAddition } from './helpers/useMenuItemAddition';
 import { useMenuItemRemoval } from './helpers/useMenuItemRemoval';
 import { useMenuItemReorder } from './helpers/useMenuItemReorder';
 import { useMenuItemCategory } from './helpers/useMenuItemCategory';
 import { useMenuItemPrice } from './helpers/useMenuItemPrice';
-
 interface UseMenuItemOperationsProps {
   menuId: string;
   menuItems: MenuItem[];
@@ -25,10 +23,7 @@ interface UseMenuItemOperationsProps {
 }
 
 interface UseMenuItemOperationsReturn {
-  handleCategorySelect: (
-    category: string,
-    selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null,
-  ) => Promise<void>;
+  handleCategorySelect: (category: string, selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null) => Promise<void>;
   handleRemoveItem: (itemId: string, onConfirm: () => void) => void;
   performRemoveItem: (itemId: string, itemName: string) => Promise<void>;
   handleMoveUp: (itemId: string) => Promise<void>;
@@ -52,7 +47,6 @@ export function useMenuItemOperations({
   showError,
   showSuccess,
 }: UseMenuItemOperationsProps): UseMenuItemOperationsReturn {
-  // Delegate to specialized hooks
   const { handleCategorySelect } = useMenuItemAddition({
     menuId,
     menuItems,
@@ -64,7 +58,6 @@ export function useMenuItemOperations({
     refreshStatistics,
     showError,
   });
-
   const { handleRemoveItem, performRemoveItem } = useMenuItemRemoval({
     menuId,
     menuItems,
@@ -73,7 +66,6 @@ export function useMenuItemOperations({
     showError,
     showSuccess,
   });
-
   const { handleMoveUp, handleMoveDown, performReorder } = useMenuItemReorder({
     menuId,
     menuItems,
@@ -81,7 +73,6 @@ export function useMenuItemOperations({
     refreshStatistics,
     showError,
   });
-
   const { handleMoveToCategory, performMoveToCategory } = useMenuItemCategory({
     menuId,
     menuItems,
@@ -90,7 +81,6 @@ export function useMenuItemOperations({
     loadMenuData,
     showError,
   });
-
   const { handleUpdateActualPrice } = useMenuItemPrice({
     menuId,
     menuItems,
@@ -99,7 +89,6 @@ export function useMenuItemOperations({
     refreshStatistics,
     showError,
   });
-
   return {
     handleCategorySelect,
     handleRemoveItem,
