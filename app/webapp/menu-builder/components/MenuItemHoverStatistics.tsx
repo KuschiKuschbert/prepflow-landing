@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MenuItem } from '../types';
+import { MenuItemTooltipContent } from './MenuItemTooltipContent';
 interface MenuItemHoverStatisticsProps {
   item: MenuItem;
   menuId: string;
@@ -26,7 +27,7 @@ const statisticsCache = new Map<
   { data: ItemStatistics; timestamp: number; expiry: number }
 >();
 const CACHE_EXPIRY_MS = 5 * 60 * 1000;
-function StatisticsGrid({ statistics }: { statistics: ItemStatistics }) {
+export function StatisticsGrid({ statistics }: { statistics: ItemStatistics }) {
   const profitColor = (value: number) => (value >= 0 ? 'text-[#29E7CD]' : 'text-red-400');
   return (
     <div className="grid grid-cols-2 gap-2 text-xs">
@@ -53,7 +54,7 @@ function StatisticsGrid({ statistics }: { statistics: ItemStatistics }) {
     </div>
   );
 }
-function RecommendedPriceGrid({ statistics }: { statistics: ItemStatistics }) {
+export function RecommendedPriceGrid({ statistics }: { statistics: ItemStatistics }) {
   const profit = statistics.recommended_selling_price! - statistics.cogs;
   const margin =
     statistics.recommended_selling_price! > 0
@@ -267,49 +268,7 @@ export function MenuItemHoverStatistics({
       }}
       role="tooltip"
     >
-      {loading && (
-        <div className="animate-pulse text-xs text-gray-400 transition-opacity duration-200">
-          Loading statistics...
-        </div>
-      )}
-      {error && <div className="text-xs text-red-400 transition-opacity duration-200">{error}</div>}
-      {statistics && !loading && !error && (
-        <div className="space-y-3 transition-opacity duration-200">
-          {statistics.actual_selling_price != null ? (
-            <>
-              <div className="mb-2 border-b border-[#2a2a2a] pb-2">
-                <div className="text-xs text-gray-400">Selling Price</div>
-                <div className="text-sm font-semibold text-white">
-                  ${statistics.actual_selling_price.toFixed(2)}
-                </div>
-                {statistics.recommended_selling_price != null &&
-                  Math.abs(statistics.actual_selling_price - statistics.recommended_selling_price) >
-                    0.01 && (
-                    <div className="mt-1 text-xs text-gray-500">
-                      Recommended: ${statistics.recommended_selling_price.toFixed(2)}
-                    </div>
-                  )}
-              </div>
-              <StatisticsGrid statistics={statistics} />
-            </>
-          ) : statistics.recommended_selling_price != null ? (
-            <>
-              <div className="mb-2 rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-2">
-                <div className="mb-1 flex items-center gap-1.5">
-                  <div className="text-xs font-medium text-[#29E7CD]">Recommended Price</div>
-                  <div className="text-xs text-gray-400">(Projected)</div>
-                </div>
-                <div className="text-sm font-semibold text-[#29E7CD]">
-                  ${statistics.recommended_selling_price.toFixed(2)}
-                </div>
-              </div>
-              <RecommendedPriceGrid statistics={statistics} />
-            </>
-          ) : (
-            <StatisticsGrid statistics={statistics} />
-          )}
-        </div>
-      )}
+      <MenuItemTooltipContent statistics={statistics} loading={loading} error={error} />
     </div>
   );
   if (typeof window !== 'undefined') {
