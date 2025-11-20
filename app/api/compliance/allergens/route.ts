@@ -92,9 +92,7 @@ export async function GET(request: NextRequest) {
     // Filter by allergen if requested
     let filteredItems = allItems;
     if (excludeAllergen) {
-      filteredItems = allItems.filter(
-        item => !item.allergens.includes(excludeAllergen),
-      );
+      filteredItems = allItems.filter(item => !item.allergens.includes(excludeAllergen));
     }
 
     return NextResponse.json({
@@ -117,4 +115,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

@@ -15,10 +15,7 @@ interface UseCategoryAdditionProps {
  * @param {UseCategoryAdditionProps} props - Hook dependencies
  * @returns {Function} handleAddCategory function
  */
-export function useCategoryAddition({
-  categories,
-  setCategories,
-}: UseCategoryAdditionProps) {
+export function useCategoryAddition({ categories, setCategories }: UseCategoryAdditionProps) {
   const handleAddCategory = useCallback(
     (newCategory: string, setNewCategory: (value: string) => void) => {
       if (newCategory.trim() && !categories.includes(newCategory.trim())) {

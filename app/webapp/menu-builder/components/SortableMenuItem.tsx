@@ -92,7 +92,6 @@ export function SortableMenuItem({
     opacity: isDragging ? 0 : 1,
   };
 
-
   const handleClick = (e: React.MouseEvent) => {
     // Don't trigger if clicking on buttons or dropdowns
     if (

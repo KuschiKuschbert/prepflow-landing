@@ -3,13 +3,14 @@
 import { useState, useMemo } from 'react';
 import { Ingredient, Recipe } from '../../cogs/types';
 import { Icon } from '@/components/ui/Icon';
-import { Search, ChefHat, Package, Plus } from 'lucide-react';
+import { Search, ChefHat, Package, Plus, ShoppingBag } from 'lucide-react';
 
 interface DishBuilderDragDropProps {
   recipes: Recipe[];
   ingredients: Ingredient[];
   onRecipeTap: (recipe: Recipe) => void;
   onIngredientTap: (ingredient: Ingredient) => void;
+  onConsumableTap?: (consumable: Ingredient) => void;
 }
 
 function TappableRecipe({ recipe, onTap }: { recipe: Recipe; onTap: (recipe: Recipe) => void }) {
@@ -32,9 +33,11 @@ function TappableRecipe({ recipe, onTap }: { recipe: Recipe; onTap: (recipe: Rec
 function TappableIngredient({
   ingredient,
   onTap,
+  isConsumable = false,
 }: {
   ingredient: Ingredient;
   onTap: (ingredient: Ingredient) => void;
+  isConsumable?: boolean;
 }) {
   return (
     <button
@@ -42,7 +45,12 @@ function TappableIngredient({
       className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-left transition-all hover:border-[#29E7CD]/50 hover:shadow-lg focus:ring-2 focus:ring-[#29E7CD]/50 focus:outline-none"
     >
       <div className="flex items-center gap-2">
-        <Icon icon={Package} size="sm" className="text-[#3B82F6]" aria-hidden={true} />
+        <Icon
+          icon={isConsumable ? ShoppingBag : Package}
+          size="sm"
+          className={isConsumable ? 'text-[#D925C7]' : 'text-[#3B82F6]'}
+          aria-hidden={true}
+        />
         <div className="flex-1">
           <div className="font-medium text-white">{ingredient.ingredient_name}</div>
           <div className="text-xs text-gray-400">
@@ -61,10 +69,21 @@ export default function DishBuilderDragDrop({
   ingredients,
   onRecipeTap,
   onIngredientTap,
+  onConsumableTap,
 }: DishBuilderDragDropProps) {
   const [recipeSearch, setRecipeSearch] = useState('');
   const [ingredientSearch, setIngredientSearch] = useState('');
-  const [activeTab, setActiveTab] = useState<'recipes' | 'ingredients'>('recipes');
+  const [consumableSearch, setConsumableSearch] = useState('');
+  const [activeTab, setActiveTab] = useState<'recipes' | 'ingredients' | 'consumables'>('recipes');
+
+  // Separate ingredients and consumables
+  const regularIngredients = useMemo(() => {
+    return ingredients.filter(ing => ing.category !== 'Consumables');
+  }, [ingredients]);
+
+  const consumables = useMemo(() => {
+    return ingredients.filter(ing => ing.category === 'Consumables');
+  }, [ingredients]);
 
   const filteredRecipes = useMemo(() => {
     if (!recipeSearch.trim()) return recipes;
@@ -73,10 +92,18 @@ export default function DishBuilderDragDrop({
   }, [recipes, recipeSearch]);
 
   const filteredIngredients = useMemo(() => {
-    if (!ingredientSearch.trim()) return ingredients;
+    if (!ingredientSearch.trim()) return regularIngredients;
     const searchLower = ingredientSearch.toLowerCase();
-    return ingredients.filter(ing => ing.ingredient_name.toLowerCase().includes(searchLower));
-  }, [ingredients, ingredientSearch]);
+    return regularIngredients.filter(ing =>
+      ing.ingredient_name.toLowerCase().includes(searchLower),
+    );
+  }, [regularIngredients, ingredientSearch]);
+
+  const filteredConsumables = useMemo(() => {
+    if (!consumableSearch.trim()) return consumables;
+    const searchLower = consumableSearch.toLowerCase();
+    return consumables.filter(cons => cons.ingredient_name.toLowerCase().includes(searchLower));
+  }, [consumables, consumableSearch]);
 
   return (
     <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
@@ -102,7 +129,17 @@ export default function DishBuilderDragDrop({
               : 'text-gray-400 hover:text-white'
           }`}
         >
-          Ingredients ({ingredients.length})
+          Ingredients ({regularIngredients.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('consumables')}
+          className={`px-4 py-2 text-sm font-medium transition-colors ${
+            activeTab === 'consumables'
+              ? 'border-b-2 border-[#29E7CD] text-[#29E7CD]'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          Consumables ({consumables.length})
         </button>
       </div>
 
@@ -117,13 +154,29 @@ export default function DishBuilderDragDrop({
           />
           <input
             type="text"
-            placeholder={activeTab === 'recipes' ? 'Search recipes...' : 'Search ingredients...'}
-            value={activeTab === 'recipes' ? recipeSearch : ingredientSearch}
-            onChange={e =>
+            placeholder={
               activeTab === 'recipes'
-                ? setRecipeSearch(e.target.value)
-                : setIngredientSearch(e.target.value)
+                ? 'Search recipes...'
+                : activeTab === 'ingredients'
+                  ? 'Search ingredients...'
+                  : 'Search consumables...'
             }
+            value={
+              activeTab === 'recipes'
+                ? recipeSearch
+                : activeTab === 'ingredients'
+                  ? ingredientSearch
+                  : consumableSearch
+            }
+            onChange={e => {
+              if (activeTab === 'recipes') {
+                setRecipeSearch(e.target.value);
+              } else if (activeTab === 'ingredients') {
+                setIngredientSearch(e.target.value);
+              } else {
+                setConsumableSearch(e.target.value);
+              }
+            }}
             className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] py-2 pr-4 pl-10 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
           />
         </div>
@@ -143,7 +196,7 @@ export default function DishBuilderDragDrop({
               ))
             )}
           </>
-        ) : (
+        ) : activeTab === 'ingredients' ? (
           <>
             {filteredIngredients.length === 0 ? (
               <div className="py-8 text-center text-sm text-gray-400">
@@ -155,6 +208,26 @@ export default function DishBuilderDragDrop({
                   key={ingredient.id}
                   ingredient={ingredient}
                   onTap={onIngredientTap}
+                  isConsumable={false}
+                />
+              ))
+            )}
+          </>
+        ) : (
+          <>
+            {filteredConsumables.length === 0 ? (
+              <div className="py-8 text-center text-sm text-gray-400">
+                {consumableSearch
+                  ? 'No consumables found'
+                  : 'No consumables available. Set ingredient category to "Consumables" to add them here.'}
+              </div>
+            ) : (
+              filteredConsumables.map(consumable => (
+                <TappableIngredient
+                  key={consumable.id}
+                  ingredient={consumable}
+                  onTap={onConsumableTap || onIngredientTap}
+                  isConsumable={true}
                 />
               ))
             )}

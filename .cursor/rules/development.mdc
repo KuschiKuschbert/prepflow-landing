@@ -283,6 +283,70 @@ export function useMyHook(param: string) {
 
 **Status:** ⚠️ In Progress - Standardization ongoing
 
+## 💬 **Dialog Usage Standards**
+
+### **MANDATORY: Never Use Native Browser Dialogs**
+
+**NEVER use native browser dialogs:**
+- ❌ `confirm()` - Use `useConfirm` hook instead
+- ❌ `prompt()` - Use `usePrompt` hook instead
+- ❌ `alert()` - Use `useAlert` hook instead
+
+**Why:** Native dialogs are inaccessible, unstyled, and break user experience. Our custom dialogs follow Material Design 3, are fully accessible, and use PrepFlow's voice.
+
+### **Dialog Hook Usage**
+
+**Decision Tree:**
+
+1. **Need user confirmation?** → Use `useConfirm`
+   - Delete actions → `variant: 'danger'`
+   - Disconnect/disable actions → `variant: 'warning'`
+   - Populate/test data → `variant: 'info'`
+
+2. **Need user input?** → Use `usePrompt`
+   - Text input (names, descriptions) → `type: 'text'`
+   - Number input (percentages, quantities) → `type: 'number'` with `min`/`max`
+
+3. **Just showing a message?** → Use `useAlert`
+   - Success messages → `variant: 'info'`
+   - Warning messages → `variant: 'warning'`
+   - Error messages → `variant: 'danger'`
+
+### **PrepFlow Voice Guidelines**
+
+**Tone:** Professional but friendly, kitchen-themed metaphors when appropriate, clear and direct.
+
+**Do:**
+- Use kitchen/chef metaphors naturally ("start fresh", "all the trimmings", "can't undo this one")
+- Be clear about consequences ("All temperature logs go with it", "All dishes will be unassigned")
+- Keep it concise but informative
+- Use contractions ("can't", "won't", "you'll") for natural speech
+- Add personality without being unprofessional
+
+**Don't:**
+- Overuse emojis (we're professional, not a text message)
+- Be overly casual ("yo", "dude", etc.)
+- Make jokes at the user's expense
+- Be vague about consequences
+- Use technical jargon unnecessarily
+
+**Examples:**
+- ✅ "Delete this ingredient? This action can't be undone. Last chance to back out."
+- ✅ "Disconnect Google Drive? You'll need to reconnect if you want to upload backups later."
+- ❌ "Are you sure you want to delete this item?" (too generic)
+- ❌ "⚠️ DELETE??? 😱" (too casual/unprofessional)
+
+### **Accessibility Requirements**
+
+**MANDATORY:** All dialogs must meet WCAG 2.1 AA standards.
+
+- **Focus Trap:** Tab/Shift+Tab loops within dialog (can't escape until you decide)
+- **Keyboard:** Escape closes dialog, Enter confirms (for InputDialog)
+- **Focus Return:** Returns focus to trigger element on close
+- **ARIA:** Proper labels and roles for screen readers
+
+**See Also:** `.cursor/rules/dialogs.mdc` for complete dialog standards and usage guidelines.
+
 ## 🔄 **Codemod Rules & Transformations**
 
 ### **Codemod System**

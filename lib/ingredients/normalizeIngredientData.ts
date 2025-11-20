@@ -36,6 +36,7 @@ export interface IngredientData {
   min_stock_level?: string | number;
   current_stock?: string | number;
   pack_size_unit?: string;
+  category?: string;
   allergens?: string[];
   allergen_source?: {
     manual?: boolean;
@@ -63,6 +64,7 @@ export interface NormalizedIngredientData {
   current_stock?: number;
   standard_unit?: string;
   original_unit?: string;
+  category?: string;
   allergens?: string[];
   allergen_source?: {
     manual?: boolean;

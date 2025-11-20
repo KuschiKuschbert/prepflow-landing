@@ -116,4 +116,11 @@ export const cleanSampleSuppliers = [
     phone: '0425 678 901',
     address: '357 Farm Rd, Brisbane QLD 4000',
   },
+  {
+    supplier_name: 'Restaurant Supplies Co',
+    contact_person: 'Patricia Supplies',
+    email: 'patricia@restaurantsupplies.com',
+    phone: '0426 789 012',
+    address: '468 Packaging Way, Brisbane QLD 4000',
+  },
 ];

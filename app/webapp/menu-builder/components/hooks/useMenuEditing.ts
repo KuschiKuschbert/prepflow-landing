@@ -61,8 +61,11 @@ export function useMenuEditing({ menus, setMenus, onMenuUpdated }: UseMenuEditin
 
   // Compute editingField directly from hook states (simple derived value, no memoization needed)
   const editingMenuId = titleEditingMenuId || descEditingMenuId || null;
-  const editingField: 'title' | 'description' | null =
-    titleEditingMenuId ? 'title' : descEditingMenuId ? 'description' : null;
+  const editingField: 'title' | 'description' | null = titleEditingMenuId
+    ? 'title'
+    : descEditingMenuId
+      ? 'description'
+      : null;
 
   // Memoize handlers using refs to avoid dependency on changing handler functions
   const handleStartEditTitle = useCallback((menu: Menu, e: React.MouseEvent) => {

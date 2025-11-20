@@ -1,0 +1,43 @@
+/**
+ * GET /api/backup/drive/download/[fileId]
+ * Download backup file from Google Drive.
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth-options';
+import { authenticateGoogleDrive, downloadBackupFromDrive } from '@/lib/backup/google-drive';
+import { logger } from '@/lib/logger';
+
+export async function GET(request: NextRequest, context: { params: Promise<{ fileId: string }> }) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userId = session.user.email;
+    const { fileId } = await context.params;
+
+    // Authenticate Google Drive
+    const client = await authenticateGoogleDrive(userId);
+
+    // Download backup
+    const backupData = await downloadBackupFromDrive(client, fileId);
+
+    // Convert to base64 for JSON response, or return as binary
+    const base64Data = Buffer.from(backupData).toString('base64');
+
+    return NextResponse.json({
+      success: true,
+      backupFile: base64Data,
+      size: backupData.length,
+    });
+  } catch (error: any) {
+    logger.error('[Google Drive Download] Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to download backup from Google Drive', message: error.message },
+      { status: 500 },
+    );
+  }
+}

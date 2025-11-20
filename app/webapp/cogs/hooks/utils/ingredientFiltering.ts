@@ -1,11 +1,13 @@
 import { Ingredient } from '../../types';
 
 export function filterIngredients(ingredients: Ingredient[], searchTerm: string): Ingredient[] {
+  // Filter out consumables - they should only appear in consumables section
+  const regularIngredients = ingredients.filter(ing => ing.category !== 'Consumables');
   if (!searchTerm.trim()) {
-    return ingredients.slice(0, 50);
+    return regularIngredients.slice(0, 50);
   }
   const term = searchTerm.toLowerCase().trim();
-  const filtered = ingredients
+  const filtered = regularIngredients
     .filter(
       ingredient =>
         ingredient.ingredient_name.toLowerCase().includes(term) ||

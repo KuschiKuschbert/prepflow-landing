@@ -69,7 +69,14 @@ export function useEmployeePhoto({
   };
 
   const handleRemovePhoto = async () => {
-    await handlePhotoRemoval(photoPath, employeePhotoUrl, setPhotoPreview, setPhotoPath, onPhotoUrlChange, fileInputRef);
+    await handlePhotoRemoval(
+      photoPath,
+      employeePhotoUrl,
+      setPhotoPreview,
+      setPhotoPath,
+      onPhotoUrlChange,
+      fileInputRef,
+    );
   };
 
   return {

@@ -17,9 +17,11 @@ export function mapRecipeIngredients(rows: any[]): any[] {
         id: ing.id,
         ingredient_name: ing.ingredient_name || 'Unknown',
         cost_per_unit: ing.cost_per_unit,
+        cost_per_unit_incl_trim: ing.cost_per_unit_incl_trim,
         unit: ing.unit || row.unit || null,
         trim_peel_waste_percentage: ing.trim_peel_waste_percentage,
         yield_percentage: ing.yield_percentage,
+        category: ing.category || null, // Handle missing category column gracefully
       },
     };
   });

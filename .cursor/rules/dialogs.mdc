@@ -1,0 +1,434 @@
+---
+alwaysApply: true
+---
+
+## Dialog Standards & Usage Guidelines
+
+### Overview
+
+PrepFlow uses standardized Material Design 3 dialog components with PrepFlow's friendly, kitchen-themed voice. All dialogs are accessible, keyboard-navigable, and follow consistent styling patterns.
+
+### Dialog Components
+
+#### ConfirmDialog
+
+**Location:** `components/ui/ConfirmDialog.tsx`
+
+**Purpose:** Confirmation dialogs for user actions (delete, disconnect, etc.)
+
+**Variants:**
+- `danger` - Destructive actions (delete, remove) - uses `AlertTriangle` icon
+- `warning` - Potentially destructive actions (disconnect, disable) - uses `AlertCircle` icon
+- `info` - Informational confirmations (populate data, save changes) - uses `Info` icon
+
+**Props:**
+- `isOpen: boolean` - Whether dialog is open
+- `title: string` - Dialog title
+- `message: string` - Dialog message (use PrepFlow voice)
+- `confirmLabel?: string` - Confirm button label (default: "Confirm")
+- `cancelLabel?: string` - Cancel button label (default: "Cancel")
+- `onConfirm: () => void` - Callback when confirmed
+- `onCancel: () => void` - Callback when cancelled
+- `variant?: 'danger' | 'warning' | 'info'` - Dialog variant (default: "warning")
+
+**Accessibility:**
+- Focus trap (Tab/Shift+Tab loops within dialog)
+- Escape key closes dialog
+- Focus returns to trigger element on close
+- ARIA labels and roles for screen readers
+
+#### InputDialog
+
+**Location:** `components/ui/InputDialog.tsx`
+
+**Purpose:** Input dialogs for user text/number input
+
+**Props:**
+- `isOpen: boolean` - Whether dialog is open
+- `title: string` - Dialog title
+- `message: string` - Dialog message (use PrepFlow voice)
+- `placeholder?: string` - Input placeholder text
+- `defaultValue?: string` - Default input value
+- `type?: 'text' | 'number'` - Input type (default: "text")
+- `min?: number` - Minimum value (for number type)
+- `max?: number` - Maximum value (for number type)
+- `confirmLabel?: string` - Confirm button label (default: "OK")
+- `cancelLabel?: string` - Cancel button label (default: "Cancel")
+- `onConfirm: (value: string) => void` - Callback when confirmed (receives input value)
+- `onCancel: () => void` - Callback when cancelled
+- `variant?: 'info' | 'warning'` - Dialog variant (default: "info")
+- `validation?: (value: string) => string | null` - Validation function (returns error message or null)
+
+**Accessibility:**
+- Focus trap (Tab/Shift+Tab loops within dialog)
+- Escape key closes dialog
+- Enter key confirms (submits form)
+- Focus returns to trigger element on close
+- ARIA labels and roles for screen readers
+- Input validation with error messages
+
+### Reusable Hooks
+
+#### useConfirm Hook
+
+**Location:** `hooks/useConfirm.ts`
+
+**Purpose:** Promise-based confirmation dialogs
+
+**API:**
+```typescript
+const { showConfirm, ConfirmDialog } = useConfirm();
+
+// Usage:
+const confirmed = await showConfirm({
+  title: 'Delete Ingredient',
+  message: 'Are you sure? This can\'t be undone.',
+  variant: 'danger',
+  confirmLabel: 'Delete',
+  cancelLabel: 'Cancel'
+});
+// Returns true if confirmed, false if cancelled
+```
+
+**Features:**
+- Promise-based API (returns `Promise<boolean>`)
+- Automatic dialog state management
+- Supports all ConfirmDialog variants (danger, warning, info)
+- Returns dialog component to render
+
+**Usage Pattern:**
+```typescript
+'use client';
+
+import { useConfirm } from '@/hooks/useConfirm';
+
+export function MyComponent() {
+  const { showConfirm, ConfirmDialog } = useConfirm();
+
+  const handleDelete = async () => {
+    const confirmed = await showConfirm({
+      title: 'Delete Item?',
+      message: 'Delete this item? This action can\'t be undone.',
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    });
+
+    if (confirmed) {
+      // User confirmed, proceed with deletion
+      await deleteItem();
+    }
+  };
+
+  return (
+    <>
+      <ConfirmDialog />
+      <button onClick={handleDelete}>Delete</button>
+    </>
+  );
+}
+```
+
+#### usePrompt Hook
+
+**Location:** `hooks/usePrompt.ts`
+
+**Purpose:** Promise-based input dialogs
+
+**API:**
+```typescript
+const { showPrompt, InputDialog } = usePrompt();
+
+// Usage:
+const recipeName = await showPrompt({
+  title: 'Save Recipe',
+  message: 'What should we call this recipe?',
+  placeholder: 'Recipe name',
+  type: 'text',
+  validation: (v) => v.length > 0 ? null : 'Recipe name is required'
+});
+// Returns string value or null if cancelled
+```
+
+**Features:**
+- Promise-based API (returns `Promise<string | null>`)
+- Automatic dialog state management
+- Built-in validation support
+- Returns dialog component to render
+
+**Usage Pattern:**
+```typescript
+'use client';
+
+import { usePrompt } from '@/hooks/usePrompt';
+
+export function MyComponent() {
+  const { showPrompt, InputDialog } = usePrompt();
+
+  const handleSave = async () => {
+    const name = await showPrompt({
+      title: 'Enter Name',
+      message: 'What should we call this?',
+      placeholder: 'Name',
+      type: 'text',
+      validation: (v) => v.trim().length > 0 ? null : 'Name is required',
+    });
+
+    if (name) {
+      // User entered a name, proceed with save
+      await saveItem(name);
+    }
+  };
+
+  return (
+    <>
+      <InputDialog />
+      <button onClick={handleSave}>Save</button>
+    </>
+  );
+}
+```
+
+#### useAlert Hook
+
+**Location:** `hooks/useAlert.ts`
+
+**Purpose:** Promise-based alert dialogs
+
+**API:**
+```typescript
+const { showAlert, AlertDialog } = useAlert();
+
+// Usage:
+await showAlert({
+  title: 'Success!',
+  message: 'All ingredients saved successfully.',
+  variant: 'info'
+});
+// Returns void (just shows the message)
+```
+
+**Features:**
+- Promise-based API (returns `Promise<void>`)
+- Single "OK" button (no decisions needed)
+- Uses ConfirmDialog with info variant (reuse what we've got)
+- Returns dialog component to render
+
+**Usage Pattern:**
+```typescript
+'use client';
+
+import { useAlert } from '@/hooks/useAlert';
+
+export function MyComponent() {
+  const { showAlert, AlertDialog } = useAlert();
+
+  const handleSuccess = async () => {
+    await showAlert({
+      title: 'Success!',
+      message: 'All ingredients saved successfully.',
+      variant: 'info',
+    });
+  };
+
+  return (
+    <>
+      <AlertDialog />
+      <button onClick={handleSuccess}>Save</button>
+    </>
+  );
+}
+```
+
+### PrepFlow Voice Guidelines for Dialog Messages
+
+**Tone:** Professional but friendly, kitchen-themed metaphors when appropriate, clear and direct.
+
+**Do:**
+- Use kitchen/chef metaphors naturally ("start fresh", "all the trimmings", "can't undo this one")
+- Be clear about consequences ("All temperature logs go with it", "All dishes will be unassigned")
+- Keep it concise but informative
+- Use contractions ("can't", "won't", "you'll") for natural speech
+- Add personality without being unprofessional
+- Reference the action clearly ("Delete this equipment?", "Disconnect Google Drive?")
+
+**Don't:**
+- Overuse emojis (we're professional, not a text message)
+- Be overly casual ("yo", "dude", etc.)
+- Make jokes at the user's expense
+- Be vague about consequences
+- Use technical jargon unnecessarily
+- Be overly dramatic ("⚠️ DANGER! ⚠️")
+
+**Examples:**
+- ✅ "Delete this ingredient? This action can't be undone. Last chance to back out."
+- ✅ "Disconnect Google Drive? You'll need to reconnect if you want to upload backups later."
+- ✅ "That's not a valid percentage. Give me something between 0 and 100, chef."
+- ❌ "Are you sure you want to delete this item?" (too generic)
+- ❌ "⚠️ DELETE??? 😱" (too casual/unprofessional)
+- ❌ "This operation will permanently remove the selected entity from the database." (too technical)
+
+### When to Use Which Hook
+
+**Decision Tree:**
+
+1. **Need user confirmation?** → Use `useConfirm`
+   - Delete actions → `variant: 'danger'`
+   - Disconnect/disable actions → `variant: 'warning'`
+   - Populate/test data → `variant: 'info'`
+
+2. **Need user input?** → Use `usePrompt`
+   - Text input (names, descriptions) → `type: 'text'`
+   - Number input (percentages, quantities) → `type: 'number'` with `min`/`max`
+
+3. **Just showing a message?** → Use `useAlert`
+   - Success messages → `variant: 'info'`
+   - Warning messages → `variant: 'warning'`
+   - Error messages → `variant: 'danger'`
+
+### Accessibility Requirements
+
+**MANDATORY:** All dialogs must meet WCAG 2.1 AA standards.
+
+**Focus Trap:**
+- Tab/Shift+Tab loops within dialog (can't escape until you decide)
+- First focusable element receives focus when dialog opens
+- Last focusable element wraps to first on Tab
+- First focusable element wraps to last on Shift+Tab
+
+**Keyboard Navigation:**
+- **Escape:** Closes dialog (all dialog types)
+- **Enter:** Confirms action (InputDialog only)
+- **Tab/Shift+Tab:** Moves focus within dialog (trapped)
+
+**Focus Return:**
+- Returns focus to trigger element when dialog closes
+- Prevents focus loss and maintains user context
+
+**ARIA Labels:**
+- `role="dialog"` - Identifies dialog element
+- `aria-modal="true"` - Indicates modal behavior
+- `aria-labelledby` - References title element
+- `aria-describedby` - References message element
+- `aria-invalid` - Indicates validation errors (InputDialog)
+
+**Screen Reader Support:**
+- Proper labels and descriptions for all interactive elements
+- Error messages announced via `role="alert"`
+- Status updates announced via `aria-live` regions
+
+### Z-Index Hierarchy
+
+**Dialog Layering:**
+- **Modals/Dialogs:** `z-[80]` - Highest priority overlays (nothing should cover these)
+- **Backdrop:** `z-[79]` - Behind dialog, above content (blocks interaction)
+
+**Implementation:**
+```typescript
+// Dialog container
+<div className="fixed inset-0 z-[80] flex items-center justify-center">
+  {/* Backdrop */}
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[79]" />
+
+  {/* Dialog */}
+  <div className="relative z-50 ...">
+    {/* Dialog content */}
+  </div>
+</div>
+```
+
+### Material Design 3 Styling
+
+**Dialog Container:**
+- Border radius: `rounded-3xl` (soft and friendly)
+- Background: `bg-[#1f1f1f]` with `border border-[#2a2a2a]` (matches dark theme)
+- Padding: `p-4 desktop:p-6` (responsive spacing)
+- Max width: `max-w-md` (comfortable reading width)
+
+**Backdrop:**
+- Background: `bg-black/60 backdrop-blur-sm` (subtle but effective)
+- Click to close: Backdrop click closes dialog (optional, configurable)
+
+**Buttons:**
+- Primary: Material 3 gradient (`from-[#29E7CD] to-[#D925C7]`) for confirm actions
+- Secondary: `bg-[#2a2a2a]/40` with `border border-[#2a2a2a]` for cancel actions
+- Focus ring: `focus:ring-2 focus:ring-[#29E7CD]` (visible focus indicators)
+
+**Icons:**
+- Use Lucide React icons via `Icon` component (no inline SVG)
+- Sizes: `xl` (48px) for dialog icons
+- Colors: Match variant (danger=red, warning=yellow, info=cyan)
+
+**Typography:**
+- Title: `text-fluid-xl` (Material 3 text hierarchy)
+- Message: `text-fluid-sm` (readable but not overwhelming)
+- Colors: `text-white` for titles, `text-gray-300` for messages
+
+### Migration from Native Dialogs
+
+**NEVER use native browser dialogs:**
+- ❌ `confirm()` - Use `useConfirm` hook instead
+- ❌ `prompt()` - Use `usePrompt` hook instead
+- ❌ `alert()` - Use `useAlert` hook instead
+
+**Migration Pattern:**
+```typescript
+// Before (native dialog):
+if (confirm('Are you sure?')) {
+  deleteItem();
+}
+
+// After (useConfirm hook):
+const { showConfirm, ConfirmDialog } = useConfirm();
+
+const handleDelete = async () => {
+  const confirmed = await showConfirm({
+    title: 'Delete Item?',
+    message: 'Are you sure? This can\'t be undone.',
+    variant: 'danger',
+  });
+
+  if (confirmed) {
+    deleteItem();
+  }
+};
+
+return (
+  <>
+    <ConfirmDialog />
+    <button onClick={handleDelete}>Delete</button>
+  </>
+);
+```
+
+### Testing Checklist
+
+**Accessibility Testing:**
+- [ ] Focus trap works (Tab loops within dialog, can't escape)
+- [ ] Escape key closes dialog
+- [ ] Focus returns to trigger element on close
+- [ ] Keyboard navigation works correctly (Tab, Shift+Tab, Enter, Escape)
+- [ ] Screen reader testing (VoiceOver/NVDA - everyone should be able to use this)
+- [ ] ARIA labels are present and correct
+
+**Visual Testing:**
+- [ ] Z-index layering correct (no clipping behind other elements)
+- [ ] Material Design 3 styling consistent (looks good, feels good)
+- [ ] Icons use Icon component with Lucide icons (no inline SVG)
+- [ ] All variants (danger, warning, info) work correctly (test each one)
+- [ ] Mobile touch interactions work (tap outside to close, etc.)
+
+**Functional Testing:**
+- [ ] All dialogs use standardized components (no more browser dialogs)
+- [ ] PrepFlow voice is consistent across all dialogs (sounds like PrepFlow, not a robot)
+- [ ] Validation works correctly (InputDialog with validation function)
+- [ ] Error messages display correctly (InputDialog validation errors)
+
+**Verification:**
+- [ ] No native browser dialogs remain (grep for `confirm|alert|prompt` should return nothing)
+
+### Related Documentation
+
+- **Design System:** See `design.mdc` for Material Design 3 guidelines
+- **Development Standards:** See `development.mdc` for dialog usage standards
+- **Accessibility:** See `testing.mdc` for accessibility testing requirements

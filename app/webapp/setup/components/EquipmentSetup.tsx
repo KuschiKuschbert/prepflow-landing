@@ -7,7 +7,7 @@ import { getDefaultTemps } from './equipment-utils';
 import { EquipmentTypeModal } from './EquipmentTypeModal';
 import { EquipmentForm } from './EquipmentForm';
 import { EquipmentList } from './EquipmentList';
-
+import { useConfirm } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
 interface EquipmentSetupProps {
   setupProgress: {
@@ -25,6 +25,7 @@ interface EquipmentSetupProps {
 }
 
 export default function EquipmentSetup({ setupProgress, onProgressUpdate }: EquipmentSetupProps) {
+  const { showConfirm, ConfirmDialog } = useConfirm();
   const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
   const [showAddEquipment, setShowAddEquipment] = useState(false);
   const [showEquipmentModal, setShowEquipmentModal] = useState(false);
@@ -114,7 +115,15 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
   };
 
   const handleDeleteEquipment = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this equipment?')) return;
+    const confirmed = await showConfirm({
+      title: 'Delete Equipment?',
+      message: "Delete this equipment? All its temperature logs go with it. Can't undo this one.",
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    });
+
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/temperature-equipment?id=${id}`, {
@@ -133,12 +142,15 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
   };
 
   const handleDeleteAllEquipment = async () => {
-    if (
-      !confirm(
-        `Are you sure you want to delete ALL ${equipment.length} pieces of equipment? This action cannot be undone.`,
-      )
-    )
-      return;
+    const confirmed = await showConfirm({
+      title: 'Delete All Equipment?',
+      message: `Delete ALL ${equipment.length} pieces of equipment? That's... everything. Sure about this?`,
+      variant: 'danger',
+      confirmLabel: 'Delete All',
+      cancelLabel: 'Cancel',
+    });
+
+    if (!confirmed) return;
 
     try {
       setEquipmentLoading(true);
@@ -169,45 +181,48 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
   };
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
-      {/* Add Equipment Button */}
-      <div className="mb-6 flex justify-center">
-        <button
-          onClick={() => setShowEquipmentModal(true)}
-          className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
-        >
-          ➕ Add Equipment
-        </button>
-      </div>
+    <>
+      <ConfirmDialog />
+      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
+        {/* Add Equipment Button */}
+        <div className="mb-6 flex justify-center">
+          <button
+            onClick={() => setShowEquipmentModal(true)}
+            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
+          >
+            ➕ Add Equipment
+          </button>
+        </div>
 
-      {/* Equipment Type Selection Modal */}
-      <EquipmentTypeModal
-        isOpen={showEquipmentModal}
-        onClose={() => setShowEquipmentModal(false)}
-        onSelect={handleEquipmentSelection}
-      />
-
-      {/* Add Equipment Form */}
-      {showAddEquipment && (
-        <EquipmentForm
-          equipment={newEquipment}
-          setEquipment={setNewEquipment}
-          onSubmit={handleAddEquipment}
-          onCancel={() => setShowAddEquipment(false)}
-          loading={equipmentLoading}
-          error={equipmentError}
-          result={equipmentResult}
+        {/* Equipment Type Selection Modal */}
+        <EquipmentTypeModal
+          isOpen={showEquipmentModal}
+          onClose={() => setShowEquipmentModal(false)}
+          onSelect={handleEquipmentSelection}
         />
-      )}
 
-      {/* Equipment List */}
-      <EquipmentList
-        equipment={equipment}
-        showAll={showAllEquipment}
-        onToggleShowAll={() => setShowAllEquipment(!showAllEquipment)}
-        onDelete={handleDeleteEquipment}
-        onDeleteAll={handleDeleteAllEquipment}
-      />
-    </div>
+        {/* Add Equipment Form */}
+        {showAddEquipment && (
+          <EquipmentForm
+            equipment={newEquipment}
+            setEquipment={setNewEquipment}
+            onSubmit={handleAddEquipment}
+            onCancel={() => setShowAddEquipment(false)}
+            loading={equipmentLoading}
+            error={equipmentError}
+            result={equipmentResult}
+          />
+        )}
+
+        {/* Equipment List */}
+        <EquipmentList
+          equipment={equipment}
+          showAll={showAllEquipment}
+          onToggleShowAll={() => setShowAllEquipment(!showAllEquipment)}
+          onDelete={handleDeleteEquipment}
+          onDeleteAll={handleDeleteAllEquipment}
+        />
+      </div>
+    </>
   );
 }

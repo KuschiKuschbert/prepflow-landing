@@ -65,6 +65,23 @@ function getCategoryLabel(category: string, workflow: WorkflowType = 'daily-oper
   return workflowLabels[workflow]?.[category] || legacyLabels[category] || category;
 }
 
+/**
+ * Category section component for navigation items.
+ * Groups navigation items by category with workflow-adaptive labels.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.category - Category name
+ * @param {Array} props.items - Navigation items in this category
+ * @param {Function} props.isActive - Function to check if href is active
+ * @param {Function} [props.onItemClick] - Optional click handler
+ * @param {Function} [props.onTrack] - Optional tracking callback
+ * @param {boolean} [props.showLabels=true] - Whether to show item labels
+ * @param {'sm' | 'md' | 'lg'} [props.iconSize='md'] - Icon size
+ * @param {boolean} [props.compact=false] - Whether to use compact mode
+ * @param {WorkflowType} [props.workflow='daily-operations'] - Current workflow type
+ * @returns {JSX.Element} Category section
+ */
 export function CategorySection({
   category,
   items,

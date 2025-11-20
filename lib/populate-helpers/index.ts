@@ -15,7 +15,12 @@ export interface PopulateResults {
 export { populateBasicData } from './basic-data';
 export { populateTemperatureData } from './temperature-data';
 export { populateCleaningData } from './cleaning-data';
-export { populateComplianceData, populateMenuDishes, populateKitchenSections } from './other-data';
+export {
+  populateComplianceData,
+  populateMenuDishes,
+  populateKitchenSections,
+  populateSalesData,
+} from './other-data';
 
 /**
  * Clean up existing test data

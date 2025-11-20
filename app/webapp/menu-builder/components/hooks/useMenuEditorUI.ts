@@ -7,7 +7,10 @@ interface UseMenuEditorUIProps {
   performRemoveCategory: (category: string) => Promise<void>;
   handleRemoveItemBase: (itemId: string, onConfirm: () => void) => void;
   performRemoveItem: (itemId: string, itemName: string) => Promise<void>;
-  handleCategorySelect: (category: string, selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null) => Promise<void>;
+  handleCategorySelect: (
+    category: string,
+    selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null,
+  ) => Promise<void>;
   menuItems: MenuItem[];
 }
 

@@ -22,11 +22,7 @@ const CatchTheDocketOverlayContent = dynamic(
       const { AnimatePresence, motion } = mod;
 
       return {
-        default: function CatchTheDocketOverlayContent({
-          active,
-        }: {
-          active: boolean;
-        }) {
+        default: function CatchTheDocketOverlayContent({ active }: { active: boolean }) {
           return (
             <AnimatePresence>
               {active && (

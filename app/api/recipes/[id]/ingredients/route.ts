@@ -26,7 +26,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     }
 
     const normalizedId = String(recipeId).trim();
-    const { data, error } = await supabaseAdmin
+
+    // First try with category, fallback without if column doesn't exist
+    let { data, error } = await supabaseAdmin
       .from('recipe_ingredients')
       .select(
         `
@@ -40,12 +42,53 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
           ingredient_name,
           unit,
           cost_per_unit,
+          cost_per_unit_incl_trim,
           trim_peel_waste_percentage,
-          yield_percentage
+          yield_percentage,
+          category
         )
       `,
       )
       .eq('recipe_id', normalizedId);
+
+    // If category column doesn't exist, retry without it
+    if (error && (error as any).code === '42703' && (error as any).message?.includes('category')) {
+      logger.warn('[Recipes API] Category column not found, retrying without category', {
+        context: { endpoint: '/api/recipes/[id]/ingredients', recipeId: normalizedId },
+      });
+
+      const retryResult = await supabaseAdmin
+        .from('recipe_ingredients')
+        .select(
+          `
+          id,
+          recipe_id,
+          ingredient_id,
+          quantity,
+          unit,
+          ingredients (
+            id,
+            ingredient_name,
+            unit,
+            cost_per_unit,
+            cost_per_unit_incl_trim,
+            trim_peel_waste_percentage,
+            yield_percentage
+          )
+        `,
+        )
+        .eq('recipe_id', normalizedId);
+
+      // Normalize the retry result to include category as null for type compatibility
+      data = retryResult.data?.map((item: any) => ({
+        ...item,
+        ingredients: item.ingredients?.map((ing: any) => ({
+          ...ing,
+          category: ing.category ?? null,
+        })),
+      })) as typeof data;
+      error = retryResult.error;
+    }
 
     if (error) {
       logger.error('[Recipes API] Database error fetching recipe ingredients:', {

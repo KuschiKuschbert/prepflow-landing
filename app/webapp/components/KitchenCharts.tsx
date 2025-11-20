@@ -84,5 +84,7 @@ export default function KitchenCharts() {
     return null; // Don't show skeleton, charts are non-critical
   }
 
-  return <KitchenChartsContent performanceData={performanceData} temperatureChecks={temperatureChecks} />;
+  return (
+    <KitchenChartsContent performanceData={performanceData} temperatureChecks={temperatureChecks} />
+  );
 }

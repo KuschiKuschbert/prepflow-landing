@@ -92,11 +92,7 @@ export function formatGeneratedPrepListForPrint(
     }
 
     // Prep Instructions
-    if (
-      includeInstructions &&
-      section.prepInstructions &&
-      section.prepInstructions.length > 0
-    ) {
+    if (includeInstructions && section.prepInstructions && section.prepInstructions.length > 0) {
       html += `
             <div class="prep-list-instructions">
               <h3>Prep Instructions</h3>

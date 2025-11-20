@@ -96,6 +96,9 @@ export function buildInsertData(
   if (ingredientData.allergen_source) {
     insertData.allergen_source = ingredientData.allergen_source;
   }
+  if (ingredientData.category) {
+    insertData.category = ingredientData.category;
+  }
 
   return insertData;
 }

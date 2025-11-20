@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react';
 import { COGSCalculation } from '../types';
+import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';
 interface UseCOGSEffectsProps {
-  setSuccessMessage: (msg: string | null) => void;
   setDishPortions: (portions: number) => void;
   setShowSuggestions: (show: boolean) => void;
   loadCalculations: (calculations: COGSCalculation[]) => void;
@@ -17,12 +17,13 @@ interface UseCOGSEffectsProps {
  * Handles editing data from recipe book and closing suggestions
  */
 export function useCOGSEffects({
-  setSuccessMessage,
   setDishPortions,
   setShowSuggestions,
   loadCalculations,
   setSelectedRecipe,
 }: UseCOGSEffectsProps) {
+  const { showSuccess } = useNotification();
+
   // Handle editing data from recipe book
   useEffect(() => {
     const editingData = sessionStorage.getItem('editingRecipe');
@@ -35,12 +36,11 @@ export function useCOGSEffects({
       if (calculations?.length > 0) loadCalculations(calculations);
       sessionStorage.removeItem('editingRecipe');
       const recipeName = recipe?.recipe_name || 'Recipe';
-      setSuccessMessage(`Recipe "${recipeName}" loaded for editing!`);
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showSuccess(`Recipe "${recipeName}" loaded for editing!`);
     } catch (err) {
       logger.error('Failed to parse editing data:', err);
     }
-  }, [setSuccessMessage, setDishPortions, loadCalculations, setSelectedRecipe]);
+  }, [showSuccess, setDishPortions, loadCalculations, setSelectedRecipe]);
 
   // Close suggestions when clicking outside
   useEffect(() => {

@@ -36,28 +36,36 @@ function validateWorkflow(value: unknown): WorkflowType {
  * ```
  */
 export function useWorkflowPreference() {
-  const [workflow, setWorkflowState] = useState<WorkflowType>(() => {
-    if (typeof window === 'undefined') return DEFAULT_WORKFLOW;
+  // Always start with default to prevent hydration mismatch
+  const [workflow, setWorkflowState] = useState<WorkflowType>(DEFAULT_WORKFLOW);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load from localStorage after hydration
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return validateWorkflow(stored);
+        const validated = validateWorkflow(stored);
+        setWorkflowState(validated);
       }
     } catch {
       // Invalid stored data, use defaults
     }
-    return DEFAULT_WORKFLOW;
-  });
 
-  // Persist to localStorage on change
+    setIsHydrated(true);
+  }, []);
+
+  // Persist to localStorage on change (only after hydration)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!isHydrated || typeof window === 'undefined') return;
     try {
       localStorage.setItem(STORAGE_KEY, workflow);
     } catch {
       // Storage quota exceeded or disabled, ignore
     }
-  }, [workflow]);
+  }, [workflow, isHydrated]);
 
   const setWorkflow = useCallback((newWorkflow: WorkflowType) => {
     setWorkflowState(validateWorkflow(newWorkflow));
@@ -106,4 +114,3 @@ export function getWorkflowDescription(workflow: WorkflowType): string {
       return 'Organized by time of day: Morning Prep → Service → End of Day';
   }
 }
-

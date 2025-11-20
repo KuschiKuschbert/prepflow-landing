@@ -56,8 +56,8 @@ function isProcessedIngredient(ingredientName: string, brand?: string): boolean 
   ];
 
   // Check if name contains processed indicators
-  const hasProcessedIndicator = processedIndicators.some(indicator =>
-    lowerName.includes(indicator) || lowerBrand.includes(indicator),
+  const hasProcessedIndicator = processedIndicators.some(
+    indicator => lowerName.includes(indicator) || lowerBrand.includes(indicator),
   );
 
   // Check if it's a brand name (often processed)
@@ -69,7 +69,9 @@ function isProcessedIngredient(ingredientName: string, brand?: string): boolean 
   // Check if name contains numbers or special characters (often processed products)
   const hasSpecialChars = /[0-9%()]/.test(ingredientName);
 
-  return hasProcessedIndicator || (hasBrand && !hasProcessedIndicator) || isShort || hasSpecialChars;
+  return (
+    hasProcessedIndicator || (hasBrand && !hasProcessedIndicator) || isShort || hasSpecialChars
+  );
 }
 
 /**
@@ -114,7 +116,10 @@ export async function detectAllergensHybrid(
 
   // Step 3: Use AI detection as fallback or supplement
   logger.dev(`[Hybrid Allergen Detection] Using AI detection for: ${trimmedName}`);
-  const aiResult: AIAllergenDetectionResult = await detectAllergensFromIngredient(trimmedName, trimmedBrand);
+  const aiResult: AIAllergenDetectionResult = await detectAllergensFromIngredient(
+    trimmedName,
+    trimmedBrand,
+  );
 
   // Step 4: Merge non-AI and AI results and consolidate
   const mergedAllergens = consolidateAllergens([

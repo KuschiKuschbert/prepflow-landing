@@ -10,6 +10,7 @@ interface Ingredient {
   pack_size?: string;
   pack_size_unit?: string;
   pack_price?: number;
+  category?: string;
   unit?: string;
   cost_per_unit: number;
   cost_per_unit_as_purchased?: number;

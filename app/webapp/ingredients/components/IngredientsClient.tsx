@@ -5,6 +5,7 @@ import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { useEffect, useState } from 'react';
 
 // Direct imports to eliminate skeleton flashes
+import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
 import { PageHeader } from '../../components/static/PageHeader';
@@ -20,9 +21,9 @@ import { useRegionalUnits } from '../hooks/useRegionalUnits';
 import { useSelectionMode } from '../hooks/useSelectionMode';
 import CSVImportModal from './CSVImportModal';
 import IngredientEditDrawer from './IngredientEditDrawer';
+import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-import IngredientPagination from './IngredientPagination';
 
 interface Ingredient {
   id: string;
@@ -40,6 +41,7 @@ interface Ingredient {
   supplier?: string;
   product_code?: string;
   storage_location?: string;
+  category?: string;
   min_stock_level?: number;
   current_stock?: number;
   created_at?: string;
@@ -72,6 +74,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   const [searchTerm, setSearchTerm] = useState('');
   const [supplierFilter, setSupplierFilter] = useState('');
   const [storageFilter, setStorageFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name_asc');
 
   const { availableUnits } = useRegionalUnits();
@@ -101,6 +104,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     searchTerm,
     supplierFilter,
     storageFilter,
+    categoryFilter,
     sortBy,
   });
   const [page, setPage] = useState(1);
@@ -113,7 +117,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   } = useIngredientsQuery(1, 10000);
   useEffect(() => {
     setPage(1);
-  }, [itemsPerPage, searchTerm, supplierFilter, storageFilter]);
+  }, [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;
@@ -153,12 +157,36 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     selectedIngredients,
     filteredIngredients,
   });
-  const { handleBulkUpdate } = useIngredientBulkUpdate({
+  const { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized } =
+    useIngredientBulkUpdate({
+      ingredients,
+      setIngredients,
+      setSelectedIngredients,
+      exitSelectionMode,
+    });
+
+  // Auto-categorize all uncategorized ingredients on first load
+  const [hasAutoCategorized, setHasAutoCategorized] = useState(false);
+  useEffect(() => {
+    if (
+      !hasAutoCategorized &&
+      !isLoading &&
+      ingredients.length > 0 &&
+      ingredients.some(ing => !ing.category || ing.category.trim() === '')
+    ) {
+      setHasAutoCategorized(true);
+      handleCategorizeAllUncategorized(true, refetchIngredients).catch(err => {
+        logger.error('Auto-categorization failed:', err);
+      });
+    }
+  }, [
     ingredients,
-    setIngredients,
-    setSelectedIngredients,
-    exitSelectionMode,
-  });
+    isLoading,
+    hasAutoCategorized,
+    handleCategorizeAllUncategorized,
+    refetchIngredients,
+  ]);
+
   const { handleSave: handleEditSave } = useIngredientEditSave({
     setIngredients,
     setEditingIngredient,
@@ -233,10 +261,12 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           ingredients={paginatedIngredients}
           onBulkDelete={handleBulkDelete}
           onBulkUpdate={handleBulkUpdate}
+          onBulkAutoCategorize={handleBulkAutoCategorize}
           displayUnit={displayUnit}
           searchTerm={searchTerm}
           supplierFilter={supplierFilter}
           storageFilter={storageFilter}
+          categoryFilter={categoryFilter}
           sortBy={sortBy}
           selectedIngredients={selectedIngredients}
           onEdit={setEditingIngredient}
@@ -246,6 +276,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           onSearchChange={setSearchTerm}
           onSupplierFilterChange={setSupplierFilter}
           onStorageFilterChange={setStorageFilter}
+          onCategoryFilterChange={setCategoryFilter}
           onSortChange={setSortBy}
           onDisplayUnitChange={setDisplayUnit}
           itemsPerPage={itemsPerPage}

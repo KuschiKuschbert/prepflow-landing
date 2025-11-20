@@ -56,7 +56,8 @@ export default function IngredientWizardStep4({
   }) || { manual: false, ai: false };
 
   const hasManualAllergens = allergenSource.manual && selectedAllergens.length > 0;
-  const hasAutoDetectedAllergens = !allergenSource.manual && allergenSource.ai && selectedAllergens.length > 0;
+  const hasAutoDetectedAllergens =
+    !allergenSource.manual && allergenSource.ai && selectedAllergens.length > 0;
 
   const handleAllergenToggle = (allergenCode: string) => {
     const current = selectedAllergens;
@@ -77,11 +78,13 @@ export default function IngredientWizardStep4({
         <h3 className="mb-2 text-sm font-semibold text-white">Allergen Information</h3>
         <div className="mb-2 rounded-lg border border-yellow-500/30 bg-yellow-500/5 px-3 py-2">
           <p className="text-xs font-medium text-yellow-400">
-            ⚠️ Experimental: Allergen detection is currently experimental and may not be 100% accurate.
+            ⚠️ Experimental: Allergen detection is currently experimental and may not be 100%
+            accurate.
           </p>
         </div>
         <p className="mb-4 text-xs text-gray-400">
-          Allergens are automatically detected when you enter this step using hybrid detection (keyword matching + AI). You can optionally edit them manually below.
+          Allergens are automatically detected when you enter this step using hybrid detection
+          (keyword matching + AI). You can optionally edit them manually below.
         </p>
       </div>
 
@@ -133,7 +136,9 @@ export default function IngredientWizardStep4({
             {hasManualAllergens ? (
               <>
                 <p className="text-xs text-gray-400">
-                  You have manually selected {selectedAllergens.length} allergen{selectedAllergens.length !== 1 ? 's' : ''}. These will override automatic detection.
+                  You have manually selected {selectedAllergens.length} allergen
+                  {selectedAllergens.length !== 1 ? 's' : ''}. These will override automatic
+                  detection.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {selectedAllergens.map(code => (
@@ -144,7 +149,8 @@ export default function IngredientWizardStep4({
             ) : (
               <>
                 <p className="text-xs text-gray-400">
-                  {selectedAllergens.length} allergen{selectedAllergens.length !== 1 ? 's' : ''} detected automatically. You can edit them below if needed.
+                  {selectedAllergens.length} allergen{selectedAllergens.length !== 1 ? 's' : ''}{' '}
+                  detected automatically. You can edit them below if needed.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {selectedAllergens.map(code => (
@@ -160,7 +166,7 @@ export default function IngredientWizardStep4({
       {/* Allergen Checkboxes - Only show when manual edit is enabled */}
       {showManualEdit && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-2 tablet:grid-cols-2 large-desktop:grid-cols-3">
+          <div className="tablet:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-2">
             {AUSTRALIAN_FSANZ_ALLERGENS.map(allergen => {
               const isSelected = selectedAllergens.includes(allergen.code);
 
@@ -202,9 +208,7 @@ export default function IngredientWizardStep4({
         </div>
       )}
 
-      {errors.allergens && (
-        <p className="mt-1 text-xs text-red-400">{errors.allergens}</p>
-      )}
+      {errors.allergens && <p className="mt-1 text-xs text-red-400">{errors.allergens}</p>}
     </div>
   );
 }

@@ -20,14 +20,17 @@ export function useMenuDeletion({ menus, setMenus, onDeleteMenu }: UseMenuDeleti
   const [menuToDelete, setMenuToDelete] = useState<Menu | null>(null);
 
   // Memoize handleDeleteClick - only uses setState, so empty deps
-  const handleDeleteClick = useCallback((menu: Menu) => {
-    // Prevent deleting locked menus
-    if (menu.is_locked) {
-      showError('Cannot delete locked menu. Please unlock it first.');
-      return;
-    }
-    setMenuToDelete(menu);
-  }, [showError]);
+  const handleDeleteClick = useCallback(
+    (menu: Menu) => {
+      // Prevent deleting locked menus
+      if (menu.is_locked) {
+        showError('Cannot delete locked menu. Please unlock it first.');
+        return;
+      }
+      setMenuToDelete(menu);
+    },
+    [showError],
+  );
 
   // Memoize confirmDelete with proper dependencies
   const confirmDelete = useCallback(async () => {

@@ -10,10 +10,7 @@ export async function GET(req: NextRequest) {
     if (!name) return NextResponse.json({ exists: false });
     if (!supabaseAdmin) return NextResponse.json({ error: 'DB unavailable' }, { status: 500 });
 
-    const { data, error } = await supabaseAdmin
-      .from('recipes')
-      .select('id')
-      .ilike('name', name);
+    const { data, error } = await supabaseAdmin.from('recipes').select('id').ilike('name', name);
     if (error) throw error;
     return NextResponse.json({ exists: (data || []).length > 0 });
   } catch (e: any) {

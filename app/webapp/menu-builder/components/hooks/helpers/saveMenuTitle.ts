@@ -30,7 +30,6 @@ export async function saveMenuTitle({
   showError,
   showSuccess,
 }: SaveMenuTitleProps): Promise<void> {
-
   if (!trimmedTitle) {
     showError('Menu name cannot be empty');
     handleCancelEdit();
@@ -70,9 +69,7 @@ export async function saveMenuTitle({
     } else {
       // Revert optimistic update on error
       if (setMenus) {
-        setMenus(prevMenus =>
-          prevMenus.map(m => (m.id === menu.id ? originalMenu : m)),
-        );
+        setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));
       }
       const errorMsg = result.error || result.message || 'Unknown error';
       showError(`Failed to update menu name: ${errorMsg}`);
@@ -80,9 +77,7 @@ export async function saveMenuTitle({
   } catch (err) {
     // Revert optimistic update on error
     if (setMenus) {
-      setMenus(prevMenus =>
-        prevMenus.map(m => (m.id === menu.id ? originalMenu : m)),
-      );
+      setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));
     }
     showError('Failed to update menu name. Please try again.');
   } finally {

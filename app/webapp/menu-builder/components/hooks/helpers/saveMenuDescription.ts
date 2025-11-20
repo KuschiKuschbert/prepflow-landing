@@ -30,7 +30,6 @@ export async function saveMenuDescription({
   showError,
   showSuccess,
 }: SaveMenuDescriptionProps): Promise<void> {
-
   if (trimmedDescription === (menu.description || '')) {
     handleCancelEdit();
     return;
@@ -66,9 +65,7 @@ export async function saveMenuDescription({
     } else {
       // Revert optimistic update on error
       if (setMenus) {
-        setMenus(prevMenus =>
-          prevMenus.map(m => (m.id === menu.id ? originalMenu : m)),
-        );
+        setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));
       }
       const errorMsg = result.error || result.message || 'Unknown error';
       showError(`Failed to update menu description: ${errorMsg}`);
@@ -76,9 +73,7 @@ export async function saveMenuDescription({
   } catch (err) {
     // Revert optimistic update on error
     if (setMenus) {
-      setMenus(prevMenus =>
-        prevMenus.map(m => (m.id === menu.id ? originalMenu : m)),
-      );
+      setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));
     }
     showError('Failed to update menu description. Please try again.');
   } finally {

@@ -1,6 +1,7 @@
 'use client';
 import { useCallback } from 'react';
 import { KitchenSection, MenuDish, FormData } from './types';
+import { useConfirm } from '@/hooks/useConfirm';
 interface UseDishSectionActionsProps {
   userId: string;
   kitchenSections: KitchenSection[];
@@ -32,6 +33,7 @@ export function useDishSectionActions({
   fetchKitchenSections,
   fetchMenuDishes,
 }: UseDishSectionActionsProps) {
+  const { showConfirm, ConfirmDialog } = useConfirm();
   const resetForm = useCallback(() => {
     setFormData({ name: '', description: '', color: '#29E7CD' });
     setShowForm(false);
@@ -89,12 +91,16 @@ export function useDishSectionActions({
   );
   const handleDelete = useCallback(
     async (id: string) => {
-      if (
-        !confirm(
-          'Are you sure you want to delete this kitchen section? All dishes will be unassigned.',
-        )
-      )
-        return;
+      const confirmed = await showConfirm({
+        title: 'Delete Kitchen Section?',
+        message:
+          'Delete this kitchen section? All dishes will be unassigned. Still want to delete it?',
+        variant: 'danger',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+      });
+
+      if (!confirmed) return;
       try {
         const response = await fetch(`/api/kitchen-sections?id=${id}`, { method: 'DELETE' });
         const result = await response.json();
@@ -108,7 +114,7 @@ export function useDishSectionActions({
         setError('Failed to delete kitchen section');
       }
     },
-    [fetchKitchenSections, fetchMenuDishes, setError],
+    [fetchKitchenSections, fetchMenuDishes, setError, showConfirm],
   );
   const handleAssignDish = useCallback(
     async (dishId: string, sectionId: string | null) => {
@@ -142,5 +148,6 @@ export function useDishSectionActions({
     handleAssignDish,
     resetForm,
     getUnassignedDishes,
+    ConfirmDialog,
   };
 }

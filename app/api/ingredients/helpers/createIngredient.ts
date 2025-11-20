@@ -42,10 +42,11 @@ export async function createIngredient(ingredientData: any) {
         ingredient_name: normalized.ingredient_name,
         brand: normalized.brand || undefined,
         allergens: (normalized.allergens as string[]) || [],
-        allergen_source: (normalized.allergen_source as {
-          manual?: boolean;
-          ai?: boolean;
-        }) || {},
+        allergen_source:
+          (normalized.allergen_source as {
+            manual?: boolean;
+            ai?: boolean;
+          }) || {},
       });
 
       normalized.allergens = enriched.allergens;
@@ -82,16 +83,23 @@ export async function createIngredient(ingredientData: any) {
   const createdIngredient = data?.[0] || null;
 
   // If allergens were provided, invalidate caches for affected recipes/dishes
-  if (createdIngredient && normalized.allergens && Array.isArray(normalized.allergens) && normalized.allergens.length > 0) {
+  if (
+    createdIngredient &&
+    normalized.allergens &&
+    Array.isArray(normalized.allergens) &&
+    normalized.allergens.length > 0
+  ) {
     // Don't await - run in background
-    import('@/lib/allergens/cache-invalidation').then(({ invalidateRecipesWithIngredient, invalidateDishesWithIngredient }) => {
-      Promise.all([
-        invalidateRecipesWithIngredient(createdIngredient.id),
-        invalidateDishesWithIngredient(createdIngredient.id),
-      ]).catch(err => {
-        logger.error('[Ingredients API] Error invalidating allergen caches:', err);
-      });
-    });
+    import('@/lib/allergens/cache-invalidation').then(
+      ({ invalidateRecipesWithIngredient, invalidateDishesWithIngredient }) => {
+        Promise.all([
+          invalidateRecipesWithIngredient(createdIngredient.id),
+          invalidateDishesWithIngredient(createdIngredient.id),
+        ]).catch(err => {
+          logger.error('[Ingredients API] Error invalidating allergen caches:', err);
+        });
+      },
+    );
   }
 
   return createdIngredient;

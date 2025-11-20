@@ -79,7 +79,8 @@ export function useMenuItemRemoval({
         setMenuItems(prevItems => {
           const otherItems = prevItems.filter(item => item.id !== itemId);
           const insertIndex = otherItems.findIndex(
-            item => item.category === itemToRemove.category && item.position > itemToRemove.position,
+            item =>
+              item.category === itemToRemove.category && item.position > itemToRemove.position,
           );
           if (insertIndex === -1) {
             return [...otherItems, itemToRemove];

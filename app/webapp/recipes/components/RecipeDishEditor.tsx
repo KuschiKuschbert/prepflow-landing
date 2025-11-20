@@ -18,8 +18,10 @@ import { useRecipeDishIngredientLoading } from './hooks/useRecipeDishIngredientL
 import { useRecipeDishSave } from './hooks/useRecipeDishSave';
 import { RecipeDishEditorHeader } from './RecipeDishEditor/Header';
 import { RecipeDishSelector } from './RecipeDishEditor/RecipeDishSelector';
+import { IngredientListPanel } from './RecipeDishEditor/IngredientListPanel';
 import { CostSummary } from './RecipeDishEditor/CostSummary';
 import { COGSCalculation } from '../../cogs/types';
+import { Ingredient } from '../../cogs/types';
 import { logger } from '@/lib/logger';
 
 interface RecipeDishEditorProps {
@@ -112,11 +114,43 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     await handleAddIngredient(newIngredient, e);
   };
 
+  // Handle clicking ingredient from left panel to add to recipe
+  const handleIngredientClick = useCallback(
+    async (ingredient: Ingredient) => {
+      // Add ingredient with default quantity of 1 and ingredient's unit
+      const defaultQuantity = 1;
+      const defaultUnit = ingredient.unit || 'kg';
+
+      await handleAddIngredient(
+        {
+          ingredient_id: ingredient.id,
+          quantity: defaultQuantity,
+          unit: defaultUnit,
+        },
+        undefined,
+      );
+    },
+    [handleAddIngredient],
+  );
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    logger.dev('RecipeDishEditor: selectedItem changed', { selectedItem });
+  }, [selectedItem]);
+
   const [showAddIngredient, setShowAddIngredient] = useState(false);
+
+  // Separate calculations into ingredients and consumables (for display purposes)
+  const ingredientCalculations = useMemo(() => {
+    return calculations.filter(calc => !calc.isConsumable);
+  }, [calculations]);
+
+  const consumableCalculations = useMemo(() => {
+    return calculations.filter(calc => calc.isConsumable);
+  }, [calculations]);
 
   // Calculate totals
   const totalCOGS = useMemo(() => {
@@ -153,14 +187,27 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
 
   return (
     <div className="space-y-6">
-      <RecipeDishEditorHeader onClose={onClose} />
+      <RecipeDishEditorHeader
+        onClose={onClose}
+        selectedItem={selectedItem}
+        capitalizeName={capitalizeName}
+      />
       <div className="large-desktop:grid-cols-2 grid grid-cols-1 gap-6">
-        <RecipeDishSelector
-          allItems={allItems}
-          selectedItem={selectedItem}
-          onSelectItem={setSelectedItem}
-          capitalizeName={capitalizeName}
-        />
+        {selectedItem ? (
+          <IngredientListPanel
+            ingredients={ingredients}
+            onIngredientClick={handleIngredientClick}
+            onBack={() => setSelectedItem(null)}
+            capitalizeName={capitalizeName}
+          />
+        ) : (
+          <RecipeDishSelector
+            allItems={allItems}
+            selectedItem={selectedItem}
+            onSelectItem={setSelectedItem}
+            capitalizeName={capitalizeName}
+          />
+        )}
 
         {/* Right Column - Ingredient Editor */}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
@@ -188,7 +235,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                     {capitalizeName(selectedItem.name)}
                   </h3>
                   <p className="text-sm text-gray-400">
-                    {selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} Ingredients
+                    {selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} Ingredients & Consumables
                   </p>
                 </div>
               </div>
@@ -196,11 +243,12 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
               <CostSummary
                 totalCOGS={totalCOGS}
                 costPerPortion={costPerPortion}
-                ingredientCount={calculations.length}
+                ingredientCount={ingredientCalculations.length}
+                consumableCount={consumableCalculations.length}
                 itemType={selectedItem.type}
               />
 
-              {/* Ingredients List */}
+              {/* Ingredients/Consumables List */}
               <div className="mb-6 flex-1 overflow-y-auto">
                 {calculations.length > 0 ? (
                   <IngredientsList
@@ -216,12 +264,12 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                   />
                 ) : (
                   <div className="flex h-32 items-center justify-center text-gray-400">
-                    <p>No ingredients added yet</p>
+                    <p>No ingredients or consumables added yet</p>
                   </div>
                 )}
               </div>
 
-              {/* Add Ingredient Section */}
+              {/* Add Ingredient/Consumable Section */}
               <div className="border-t border-[#2a2a2a] pt-4">
                 <IngredientManager
                   showAddIngredient={showAddIngredient}

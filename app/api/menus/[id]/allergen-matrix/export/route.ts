@@ -9,10 +9,7 @@ import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/aust
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import type { MenuItem } from '@/app/webapp/menu-builder/types';
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id: menuId } = await context.params;
     const { searchParams } = new URL(request.url);
@@ -27,7 +24,11 @@ export async function GET(
 
     if (!['html', 'csv', 'pdf'].includes(format)) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Invalid format. Must be html, csv, or pdf', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError(
+          'Invalid format. Must be html, csv, or pdf',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -36,10 +37,9 @@ export async function GET(
     const menu = await fetchMenuWithItems(menuId);
 
     if (!menu) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Build allergen matrix data
@@ -76,8 +76,11 @@ export async function GET(
         recipeAllergens: item.recipes?.allergens,
       });
 
-      const isVegetarian = item.is_vegetarian ?? (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
-      const isVegan = item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
+      const isVegetarian =
+        item.is_vegetarian ??
+        (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
+      const isVegan =
+        item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
 
       return {
         name: item.dish_id ? item.dishes?.dish_name : item.recipes?.recipe_name || 'Unknown',
@@ -120,7 +123,14 @@ export async function GET(
 }
 
 function generateCSV(menuName: string, matrixData: any[]): NextResponse {
-  const headers = ['Item Name', 'Type', 'Category', ...AUSTRALIAN_ALLERGENS.map(a => a.displayName), 'Vegetarian', 'Vegan'];
+  const headers = [
+    'Item Name',
+    'Type',
+    'Category',
+    ...AUSTRALIAN_ALLERGENS.map(a => a.displayName),
+    'Vegetarian',
+    'Vegan',
+  ];
   const rows = matrixData.map(item => {
     const allergenColumns = AUSTRALIAN_ALLERGENS.map(allergen =>
       item.allergens.includes(allergen.code) ? 'Yes' : 'No',
@@ -257,11 +267,14 @@ function generateHTML(menuName: string, matrixData: any[], forPDF: boolean): Nex
       </tr>
     </thead>
     <tbody>
-      ${matrixData.length === 0
-        ? '<tr><td colspan="' + (AUSTRALIAN_ALLERGENS.length + 4) + '" style="text-align: center; padding: 20px; color: #999;">No items in this menu</td></tr>'
-        : matrixData
-            .map(
-              item => `
+      ${
+        matrixData.length === 0
+          ? '<tr><td colspan="' +
+            (AUSTRALIAN_ALLERGENS.length + 4) +
+            '" style="text-align: center; padding: 20px; color: #999;">No items in this menu</td></tr>'
+          : matrixData
+              .map(
+                item => `
         <tr>
           <td class="item-name">${escapeHtml(item.name)}</td>
           <td class="type">${escapeHtml(item.type)}</td>
@@ -279,8 +292,9 @@ function generateHTML(menuName: string, matrixData: any[], forPDF: boolean): Nex
           </td>
         </tr>
       `,
-            )
-            .join('')}
+              )
+              .join('')
+      }
     </tbody>
   </table>
   ${forPDF ? '<script>window.onload = function() { window.print(); }</script>' : ''}

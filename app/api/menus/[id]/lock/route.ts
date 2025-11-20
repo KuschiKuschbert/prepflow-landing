@@ -19,10 +19,7 @@ import { authOptions } from '@/lib/auth-options';
  * @param {Promise<{id: string}>} context.params - Route parameters containing menu ID
  * @returns {Promise<NextResponse>} Response with locked menu data or error
  */
-export async function POST(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Early logging to confirm route is being called
   logger.dev('[Menu Lock API] POST route handler called', {
     path: request.nextUrl.pathname,
@@ -53,10 +50,9 @@ export async function POST(
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401),
-        { status: 401 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
+        status: 401,
+      });
     }
 
     if (!supabaseAdmin) {
@@ -84,10 +80,9 @@ export async function POST(
         hint: fetchError.hint,
         menuId,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     if (!menus || menus.length === 0) {
@@ -96,10 +91,9 @@ export async function POST(
         menuIdType: typeof menuId,
         menusFound: menus?.length || 0,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Menu exists! Now check lock status (handle missing column gracefully)
@@ -110,9 +104,7 @@ export async function POST(
       .single();
 
     // If is_locked column doesn't exist, treat menu as unlocked
-    const isLocked = lockStatusError?.code === '42703'
-      ? false
-      : (menuWithLock?.is_locked || false);
+    const isLocked = lockStatusError?.code === '42703' ? false : menuWithLock?.is_locked || false;
 
     const menu = {
       id: menus[0].id,
@@ -228,10 +220,7 @@ export async function POST(
  * @param {Promise<{id: string}>} context.params - Route parameters containing menu ID
  * @returns {Promise<NextResponse>} Response with unlocked menu data or error
  */
-export async function DELETE(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   // Early logging to confirm route is being called
   logger.dev('[Menu Lock API] DELETE route handler called', {
     path: request.nextUrl.pathname,
@@ -262,10 +251,9 @@ export async function DELETE(
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401),
-        { status: 401 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
+        status: 401,
+      });
     }
 
     if (!supabaseAdmin) {
@@ -289,10 +277,9 @@ export async function DELETE(
         hint: fetchError.hint,
         menuId,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     if (!menus || menus.length === 0) {
@@ -301,10 +288,9 @@ export async function DELETE(
         menuIdType: typeof menuId,
         menusFound: menus?.length || 0,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Menu exists! Now check lock status (handle missing column gracefully)
@@ -315,9 +301,7 @@ export async function DELETE(
       .single();
 
     // If is_locked column doesn't exist, treat menu as unlocked
-    const isLocked = lockStatusError?.code === '42703'
-      ? false
-      : (menuWithLock?.is_locked || false);
+    const isLocked = lockStatusError?.code === '42703' ? false : menuWithLock?.is_locked || false;
 
     const menu = {
       id: menus[0].id,

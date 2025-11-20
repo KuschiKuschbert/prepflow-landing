@@ -70,9 +70,7 @@ export async function fetchParLevels(supabaseAdmin: any) {
 
       // If we got data without join, fetch ingredients separately
       if (simpleData && simpleData.length > 0) {
-        const ingredientIds = simpleData
-          .map((pl: any) => pl.ingredient_id)
-          .filter((id: any) => id);
+        const ingredientIds = simpleData.map((pl: any) => pl.ingredient_id).filter((id: any) => id);
 
         if (ingredientIds.length > 0) {
           const { data: ingredientsData } = await supabaseAdmin
@@ -81,9 +79,7 @@ export async function fetchParLevels(supabaseAdmin: any) {
             .in('id', ingredientIds);
 
           // Merge ingredients into par levels
-          const ingredientsMap = new Map(
-            (ingredientsData || []).map((ing: any) => [ing.id, ing]),
-          );
+          const ingredientsMap = new Map((ingredientsData || []).map((ing: any) => [ing.id, ing]));
           data = simpleData.map((pl: any) => ({
             ...pl,
             ingredients: ingredientsMap.get(pl.ingredient_id) || null,

@@ -1,0 +1,136 @@
+/**
+ * Backup Settings Page
+ * Main page for backup and restore configuration.
+ */
+
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNotification } from '@/contexts/NotificationContext';
+import { GoogleDriveConnection } from './components/GoogleDriveConnection';
+import { ScheduledBackupConfig } from './components/ScheduledBackupConfig';
+import { ManualBackupControls } from './components/ManualBackupControls';
+import { BackupList } from './components/BackupList';
+import { RestoreDialog } from './components/RestoreDialog';
+import type { BackupFile, BackupSettings } from '@/lib/backup/types';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+
+export default function BackupSettingsPage() {
+  const [settings, setSettings] = useState<BackupSettings | null>(null);
+  const [backups, setBackups] = useState<BackupFile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
+  const [selectedBackup, setSelectedBackup] = useState<BackupFile | null>(null);
+  const { showSuccess, showError } = useNotification();
+
+  const loadSettings = useCallback(async () => {
+    try {
+      const res = await fetch('/api/backup/settings');
+      const data = await res.json();
+      if (res.ok && data.settings) {
+        setSettings(data.settings);
+      }
+    } catch (error) {
+      showError('Failed to load backup settings');
+    } finally {
+      setLoading(false);
+    }
+  }, [showError]);
+
+  const loadBackups = useCallback(async () => {
+    try {
+      const res = await fetch('/api/backup/list');
+      const data = await res.json();
+      if (res.ok && data.backups) {
+        setBackups(data.backups);
+      }
+    } catch (error) {
+      showError('Failed to load backups');
+    }
+  }, [showError]);
+
+  // Load settings and backups
+  useEffect(() => {
+    loadSettings();
+    loadBackups();
+  }, [loadSettings, loadBackups]);
+
+  const handleRestore = (backup: BackupFile) => {
+    setSelectedBackup(backup);
+    setRestoreDialogOpen(true);
+  };
+
+  const handleRestoreComplete = () => {
+    setRestoreDialogOpen(false);
+    setSelectedBackup(null);
+    loadBackups(); // Refresh backup list
+  };
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-4xl p-6 text-white">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-64 rounded bg-[#2a2a2a]"></div>
+          <div className="h-32 rounded bg-[#2a2a2a]"></div>
+          <div className="h-32 rounded bg-[#2a2a2a]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-4xl p-6 text-white">
+      {/* Header */}
+      <div className="mb-6 flex items-center gap-4">
+        <Link
+          href="/webapp/settings"
+          className="flex items-center gap-2 text-gray-400 transition-colors hover:text-[#29E7CD]"
+        >
+          <Icon icon={ArrowLeft} size="sm" />
+          <span>Back to Settings</span>
+        </Link>
+      </div>
+
+      <h1 className="mb-2 text-3xl font-bold">Backup & Restore</h1>
+      <p className="mb-8 text-gray-400">
+        Backup your data to Google Drive or download encrypted backup files. Restore from backups
+        with full, selective, or merge options.
+      </p>
+
+      {/* Google Drive Connection */}
+      <div className="mb-6">
+        <GoogleDriveConnection onConnectionChange={loadBackups} />
+      </div>
+
+      {/* Scheduled Backup Configuration */}
+      <div className="mb-6">
+        <ScheduledBackupConfig settings={settings} onSettingsChange={loadSettings} />
+      </div>
+
+      {/* Manual Backup Controls */}
+      <div className="mb-6">
+        <ManualBackupControls onBackupCreated={loadBackups} />
+      </div>
+
+      {/* Backup List */}
+      <div className="mb-6">
+        <BackupList backups={backups} onRestore={handleRestore} onRefresh={loadBackups} />
+      </div>
+
+      {/* Restore Dialog */}
+      {restoreDialogOpen && selectedBackup && (
+        <RestoreDialog
+          backup={selectedBackup}
+          open={restoreDialogOpen}
+          onClose={() => {
+            setRestoreDialogOpen(false);
+            setSelectedBackup(null);
+          }}
+          onRestoreComplete={handleRestoreComplete}
+        />
+      )}
+    </div>
+  );
+}

@@ -25,17 +25,14 @@ interface TemperatureChartContentProps {
 }
 
 // Lazy load Recharts to reduce initial bundle size
-const TemperatureChart = dynamic(
-  () => import('./TemperatureChartLazy'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#29E7CD] border-t-transparent" />
-      </div>
-    ),
-  },
-);
+const TemperatureChart = dynamic(() => import('./TemperatureChartLazy'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#29E7CD] border-t-transparent" />
+    </div>
+  ),
+});
 
 export function TemperatureChartContent(props: TemperatureChartContentProps) {
   return <TemperatureChart {...props} />;

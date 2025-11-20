@@ -1,5 +1,9 @@
 /**
  * Animated Notification Toast
+ *
+ * @deprecated This component is deprecated. Use NotificationContext (useNotification hook) instead.
+ * This component is kept only for AnimationShowcase demo purposes.
+ * For production use, use: const { showSuccess, showError } = useNotification();
  */
 
 'use client';
@@ -14,6 +18,9 @@ interface AnimatedToastProps {
   onClose: () => void;
 }
 
+/**
+ * @deprecated Use NotificationContext (useNotification hook) instead
+ */
 export function AnimatedToast({
   message,
   type = 'success',
@@ -66,4 +73,3 @@ export function AnimatedToast({
     </AnimatedDiv>
   );
 }
-

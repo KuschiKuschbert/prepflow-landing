@@ -3,33 +3,56 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
-import { useSwipeGesture } from '@/hooks/useSwipeGesture';
 import { useWorkflowPreference } from '@/lib/workflow/preferences';
-import { Calculator } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState, useRef } from 'react';
 import { useNavigationItems } from './nav-items';
 
 interface BottomNavBarProps {
   onMoreClick: () => void;
-  onSearchClick?: () => void;
+  moreButtonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
-export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) {
+/**
+ * Bottom navigation bar component for mobile devices.
+ * Displays primary navigation items (Dashboard, Recipes, Performance, More).
+ * Auto-hides on scroll down, shows on scroll up or at top.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Function} props.onMoreClick - Callback when "More" button is clicked
+ * @returns {JSX.Element} Bottom navigation bar
+ *
+ * @example
+ * ```tsx
+ * <BottomNavBar
+ *   onMoreClick={() => setIsPopoverOpen(true)}
+ * />
+ * ```
+ */
+export const BottomNavBar = memo(function BottomNavBar({
+  onMoreClick,
+  moreButtonRef,
+}: BottomNavBarProps) {
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = moreButtonRef || internalRef;
   const pathname = usePathname();
   const { workflow } = useWorkflowPreference();
   const { trackNavigation } = useNavigationTracking();
   const allItems = useNavigationItems(workflow);
   const { direction, isAtTop } = useScrollDirection();
   const [isVisible, setIsVisible] = useState(true);
-  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipeGesture({
-    onSwipeUp: onSearchClick,
-    threshold: 50,
-  });
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Auto-hide on scroll down, show on scroll up or at top
   useEffect(() => {
+    if (!mounted) return;
     if (isAtTop) {
       setIsVisible(true);
     } else if (direction === 'down') {
@@ -37,9 +60,9 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
     } else if (direction === 'up') {
       setIsVisible(true);
     }
-  }, [direction, isAtTop]);
+  }, [direction, isAtTop, mounted]);
 
-  // Primary items for bottom nav: Dashboard, Recipes, COGS, Performance
+  // Primary items for bottom nav: Dashboard, Recipes, Performance
   const primaryItems = allItems.filter(
     item =>
       item.href === '/webapp' ||
@@ -47,25 +70,8 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
       item.href === '/webapp/performance',
   );
 
-  // Add COGS manually since it's accessed via hash link
-  const cogsItem = {
-    href: '/webapp/recipes#calculator',
-    label: 'COGS',
-    icon: <Icon icon={Calculator} size="sm" className="text-current" aria-hidden={true} />,
-    color: 'text-[#29E7CD]',
-  };
-
-  const allPrimaryItems = [...primaryItems, cogsItem];
-
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
-    if (href === '/webapp/recipes#calculator') {
-      return (
-        pathname === '/webapp/recipes' &&
-        typeof window !== 'undefined' &&
-        window.location.hash === '#calculator'
-      );
-    }
     return pathname.startsWith(href.split('#')[0]);
   };
 
@@ -76,19 +82,17 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
         transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
       }}
       aria-label="Bottom navigation"
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={e => onTouchEnd(e)}
+      suppressHydrationWarning
     >
-      <div className="grid h-14 grid-cols-5">
-        {allPrimaryItems.map(item => {
+      <div className="flex h-14 w-full">
+        {primaryItems.map(item => {
           const active = isActive(item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => trackNavigation(item.href)}
-              className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 transition-colors duration-200 ${
+              className={`flex min-h-[44px] flex-1 flex-col items-center justify-center gap-0.5 transition-colors duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
                 active ? 'border-t-2 border-[#29E7CD] bg-[#29E7CD]/10' : 'hover:bg-[#2a2a2a]/30'
               }`}
               aria-current={active ? 'page' : undefined}
@@ -109,8 +113,9 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
 
         {/* More button */}
         <button
+          ref={buttonRef}
           onClick={onMoreClick}
-          className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 transition-colors duration-200 hover:bg-[#2a2a2a]/30"
+          className="flex min-h-[44px] flex-1 flex-col items-center justify-center gap-0.5 transition-colors duration-200 hover:bg-[#2a2a2a]/30 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
           aria-label="More navigation options"
         >
           <svg
@@ -131,4 +136,4 @@ export function BottomNavBar({ onMoreClick, onSearchClick }: BottomNavBarProps) 
       </div>
     </nav>
   );
-}
+});

@@ -39,7 +39,11 @@ export function createIngredientCallbacks({
   updateCalculation,
   convertIngredientQuantity,
 }: IngredientCallbacksProps) {
-  const handleIngredientAddedCallback = (ingredient: Ingredient, quantity: number, unit: string) => {
+  const handleIngredientAddedCallback = (
+    ingredient: Ingredient,
+    quantity: number,
+    unit: string,
+  ) => {
     handleIngredientAdded(
       {
         calculations,

@@ -36,7 +36,6 @@ import { COGSEmptyState } from '../components/COGSEmptyState';
 import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
 import { COGSHeader } from '../components/COGSHeader';
 import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
-import { SuccessMessage } from '../components/SuccessMessage';
 export default function CogsClient() {
   const {
     ingredients,
@@ -60,7 +59,6 @@ export default function CogsClient() {
   const [dishPortions, setDishPortions] = useState<number>(1);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const {
@@ -126,7 +124,6 @@ export default function CogsClient() {
     fetchData();
   }, [fetchData]);
   useCOGSEffects({
-    setSuccessMessage,
     setDishPortions,
     setShowSuggestions,
     loadCalculations,
@@ -193,7 +190,6 @@ export default function CogsClient() {
       setShowCreateModal,
       createOrUpdateRecipe,
       fetchData,
-      setSuccessMessage,
       saveNow: saveNowAutosave,
       setSaveError,
     });
@@ -216,8 +212,6 @@ export default function CogsClient() {
           }}
         />
       )}
-
-      <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
 
       <CreateRecipeModal
         isOpen={showCreateModal}

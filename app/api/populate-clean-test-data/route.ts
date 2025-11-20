@@ -9,6 +9,7 @@ import {
   populateComplianceData,
   populateMenuDishes,
   populateKitchenSections,
+  populateSalesData,
 } from '@/lib/populate-helpers';
 
 export async function POST(request: NextRequest) {
@@ -52,6 +53,10 @@ export async function POST(request: NextRequest) {
     // Step 11: Populate kitchen sections
     logger.dev('🍽️ Populating kitchen sections...');
     await populateKitchenSections(supabaseAdmin, results);
+
+    // Step 12: Populate sales data (for Performance page)
+    logger.dev('📊 Populating sales data...');
+    await populateSalesData(supabaseAdmin, results, recipesData || []);
 
     const totalPopulated = results.populated.reduce((sum, item) => sum + item.count, 0);
 

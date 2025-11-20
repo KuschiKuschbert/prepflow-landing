@@ -76,7 +76,11 @@ export function editCalculation(
   if (!existingCalc) return;
   const ingredient = ingredients.find(ing => ing.id === ingredientId);
   if (!ingredient) return;
-  const { convertedQuantity } = convertIngredientQuantity(newQuantity, newUnit, ingredient.unit || 'kg');
+  const { convertedQuantity } = convertIngredientQuantity(
+    newQuantity,
+    newUnit,
+    ingredient.unit || 'kg',
+  );
   editIngredientCalculation({
     ingredientId,
     newQuantity,

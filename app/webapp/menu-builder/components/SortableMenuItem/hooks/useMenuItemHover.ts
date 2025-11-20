@@ -13,11 +13,7 @@ interface UseMenuItemHoverProps {
  * @param {UseMenuItemHoverProps} props - Hook props
  * @returns {Object} Hover state and handlers
  */
-export function useMenuItemHover({
-  item,
-  onHoverItem,
-  onMouseMove,
-}: UseMenuItemHoverProps) {
+export function useMenuItemHover({ item, onHoverItem, onMouseMove }: UseMenuItemHoverProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number } | undefined>(
     undefined,

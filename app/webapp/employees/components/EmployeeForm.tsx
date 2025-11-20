@@ -71,17 +71,12 @@ export function EmployeeForm({
     }
   };
 
-  const {
-    photoPreview,
-    photoUploading,
-    photoError,
-    handlePhotoChange,
-    handleRemovePhoto,
-  } = useEmployeePhoto({
-    employeePhotoUrl: employee?.photo_url,
-    employeeId: employee?.id,
-    onPhotoUrlChange: (url: string) => handleChange('photo_url', url),
-  });
+  const { photoPreview, photoUploading, photoError, handlePhotoChange, handleRemovePhoto } =
+    useEmployeePhoto({
+      employeePhotoUrl: employee?.photo_url,
+      employeeId: employee?.id,
+      onPhotoUrlChange: (url: string) => handleChange('photo_url', url),
+    });
 
   const handleViewCertificates = () => {
     // Scroll to qualifications section in the employee card

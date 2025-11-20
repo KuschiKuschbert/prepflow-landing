@@ -3,10 +3,17 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
-export function generateSupplierVerification(verification: ReportData['supplier_verification']): string {
+export function generateSupplierVerification(
+  verification: ReportData['supplier_verification'],
+): string {
   if (!verification || verification.total_verifications === 0) {
     return `
       <div class="section">
@@ -91,4 +98,3 @@ export function generateSupplierVerification(verification: ReportData['supplier_
     </div>
   `;
 }
-

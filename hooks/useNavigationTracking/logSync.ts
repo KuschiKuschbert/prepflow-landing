@@ -14,10 +14,7 @@ import { savePendingLogs } from './logStorage';
  * @param {boolean} isUnload - Whether this is an unload sync
  * @returns {Promise<void>}
  */
-export async function syncPendingLogs(
-  pendingLogs: PendingLog[],
-  isUnload = false,
-): Promise<void> {
+export async function syncPendingLogs(pendingLogs: PendingLog[], isUnload = false): Promise<void> {
   const settings = getAdaptiveNavSettings();
   if (!settings.enabled) {
     return; // Don't sync if feature is disabled

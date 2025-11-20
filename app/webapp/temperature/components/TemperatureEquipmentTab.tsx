@@ -79,6 +79,7 @@ export default function TemperatureEquipmentTab({
     handleDeleteEquipment,
     toggleEquipmentStatus,
     handleGenerateSampleData,
+    ConfirmDialog,
   } = useTemperatureEquipmentTabHandlers({
     equipment,
     itemsPerPage,
@@ -215,6 +216,9 @@ export default function TemperatureEquipmentTab({
           temperatureTypes={temperatureTypes}
         />
       )}
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog />
     </div>
   );
 }

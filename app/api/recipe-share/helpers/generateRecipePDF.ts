@@ -9,7 +9,7 @@ export function generateRecipePDF(recipe: any): string {
   const ingredients = recipe.recipe_ingredients
     .map(
       (ri: any) =>
-        `• ${ri.quantity} ${ri.unit} ${ri.ingredients.name}${ri.notes ? ` (${ri.notes})` : ''}`,
+        `• ${ri.quantity} ${ri.unit} ${ri.ingredients?.ingredient_name || ri.ingredients?.name || 'Unknown'}${ri.notes ? ` (${ri.notes})` : ''}`,
     )
     .join('\n');
 

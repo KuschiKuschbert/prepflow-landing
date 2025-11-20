@@ -143,16 +143,14 @@ const NON_VEGAN_KEYWORDS = [
 /**
  * Check if an ingredient is non-vegetarian
  */
-export function isNonVegetarianIngredient(
-  ingredientName: string,
-  category?: string,
-): boolean {
+export function isNonVegetarianIngredient(ingredientName: string, category?: string): boolean {
   const lowerName = ingredientName.toLowerCase();
   const lowerCategory = category?.toLowerCase() || '';
 
   // Check against keywords
   return NON_VEGETARIAN_KEYWORDS.some(
-    keyword => lowerName.includes(keyword.toLowerCase()) || lowerCategory.includes(keyword.toLowerCase()),
+    keyword =>
+      lowerName.includes(keyword.toLowerCase()) || lowerCategory.includes(keyword.toLowerCase()),
   );
 }
 
@@ -253,7 +251,9 @@ export async function detectVegetarianVeganWithAI(
 
   const client = getOpenAIClient();
   if (!client) {
-    logger.warn('[Dietary Detection] OpenAI client not available, falling back to non-AI detection');
+    logger.warn(
+      '[Dietary Detection] OpenAI client not available, falling back to non-AI detection',
+    );
     return detectVegetarianVeganFromIngredients(ingredients);
   }
 
@@ -340,7 +340,10 @@ export async function detectDietarySuitability(
   }
 
   // If confidence is low/medium or user requested AI, try AI detection
-  if ((nonAIResult.confidence === 'low' || nonAIResult.confidence === 'medium' || useAI) && recipeName) {
+  if (
+    (nonAIResult.confidence === 'low' || nonAIResult.confidence === 'medium' || useAI) &&
+    recipeName
+  ) {
     try {
       const aiResult = await detectVegetarianVeganWithAI(recipeName, ingredients, description);
       // AI takes precedence if used

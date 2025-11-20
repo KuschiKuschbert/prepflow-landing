@@ -5,12 +5,14 @@ interface UseIngredientBulkActionsDialogProps {
   selectedIngredients: Set<string>;
   onBulkDelete?: (ids: string[]) => Promise<void>;
   onBulkUpdate?: (ids: string[], updates: Partial<any>) => Promise<void>;
+  onBulkAutoCategorize?: (ids: string[], useAI?: boolean) => Promise<void>;
 }
 
 export function useIngredientBulkActionsDialog({
   selectedIngredients,
   onBulkDelete,
   onBulkUpdate,
+  onBulkAutoCategorize,
 }: UseIngredientBulkActionsDialogProps) {
   const [showBulkMenu, setShowBulkMenu] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -58,6 +60,16 @@ export function useIngredientBulkActionsDialog({
     [deleteConfirmId],
   );
 
+  const handleBulkAutoCategorize = useCallback(async () => {
+    if (selectedCount === 0 || !onBulkAutoCategorize) return;
+    setShowBulkMenu(false);
+    try {
+      await onBulkAutoCategorize(Array.from(selectedIngredients), true);
+    } catch (error) {
+      // Error handling is done in the handler
+    }
+  }, [selectedCount, onBulkAutoCategorize, selectedIngredients]);
+
   return {
     bulkActionLoading,
     showBulkMenu,
@@ -74,6 +86,7 @@ export function useIngredientBulkActionsDialog({
     handleBulkUpdateSupplier,
     handleBulkUpdateStorage,
     handleBulkUpdateWastage,
+    handleBulkAutoCategorize,
     handleDelete,
     confirmDelete,
   };

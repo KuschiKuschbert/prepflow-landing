@@ -97,26 +97,24 @@ export async function fetchIngredientsWithParLevels(
   }
 
   // Combine ingredients with par levels
-  const ingredientsWithParLevels: IngredientWithParLevel[] = (ingredients || []).map(
-    (ing: any) => {
-      const parLevel = parLevelsMap.get(ing.id);
-      return {
-        id: ing.id,
-        ingredient_name: ing.ingredient_name,
-        brand: ing.brand || undefined,
-        pack_size: ing.pack_size || undefined,
-        pack_size_unit: ing.pack_size_unit || ing.unit || undefined,
-        pack_price: ing.pack_price || undefined,
-        cost_per_unit: ing.cost_per_unit || 0,
-        unit: ing.unit || undefined,
-        storage: ing.storage || ing.storage_location || 'Uncategorized',
-        category: ing.category || undefined,
-        par_level: parLevel?.par_level,
-        reorder_point: parLevel?.reorder_point,
-        par_unit: parLevel?.unit,
-      };
-    },
-  );
+  const ingredientsWithParLevels: IngredientWithParLevel[] = (ingredients || []).map((ing: any) => {
+    const parLevel = parLevelsMap.get(ing.id);
+    return {
+      id: ing.id,
+      ingredient_name: ing.ingredient_name,
+      brand: ing.brand || undefined,
+      pack_size: ing.pack_size || undefined,
+      pack_size_unit: ing.pack_size_unit || ing.unit || undefined,
+      pack_price: ing.pack_price || undefined,
+      cost_per_unit: ing.cost_per_unit || 0,
+      unit: ing.unit || undefined,
+      storage: ing.storage || ing.storage_location || 'Uncategorized',
+      category: ing.category || undefined,
+      par_level: parLevel?.par_level,
+      reorder_point: parLevel?.reorder_point,
+      par_unit: parLevel?.unit,
+    };
+  });
 
   return ingredientsWithParLevels;
 }

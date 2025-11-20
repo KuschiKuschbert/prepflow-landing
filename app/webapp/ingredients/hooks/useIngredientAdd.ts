@@ -71,7 +71,13 @@ export function useIngredientAdd<
         const { data, error } = await handleIngredientInsert(normalized, ingredientData);
 
         if (error) {
-          handleIngredientInsertError(error, originalIngredients, setIngredients, setError, setShowAddForm);
+          handleIngredientInsertError(
+            error,
+            originalIngredients,
+            setIngredients,
+            setError,
+            setShowAddForm,
+          );
           throw new Error(formatIngredientInsertError(error));
         }
 

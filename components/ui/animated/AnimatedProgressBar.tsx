@@ -28,4 +28,3 @@ export function AnimatedProgressBar({ progress, label, className = '' }: Animate
     </div>
   );
 }
-

@@ -3,7 +3,12 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
 export function generateCleaningRecords(records: ReportData['cleaning_records']): string {
@@ -64,4 +69,3 @@ export function generateCleaningRecords(records: ReportData['cleaning_records'])
     </div>
   `;
 }
-

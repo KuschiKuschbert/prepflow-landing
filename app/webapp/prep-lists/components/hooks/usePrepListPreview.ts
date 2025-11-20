@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
-import type {
-  GeneratedPrepListData,
-  SectionData,
-  KitchenSection,
-} from '../../types';
+import type { GeneratedPrepListData, SectionData, KitchenSection } from '../../types';
 import { usePrepListHandlers } from './usePrepListHandlers';
 import { loadPrepDetails } from './usePrepListPreview/prepDetailsLoading';
 

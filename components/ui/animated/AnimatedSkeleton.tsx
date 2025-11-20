@@ -19,4 +19,3 @@ export function AnimatedSkeleton({ variant = 'card', className = '' }: AnimatedS
 
   return <div className={`animate-shimmer bg-[#2a2a2a] ${variants[variant]} ${className} `} />;
 }
-

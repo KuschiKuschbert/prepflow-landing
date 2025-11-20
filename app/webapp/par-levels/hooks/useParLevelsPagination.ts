@@ -19,7 +19,10 @@ export function useParLevelsPagination({ parLevels }: UseParLevelsPaginationProp
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
 
-  const totalPages = useMemo(() => Math.ceil(parLevels.length / itemsPerPage), [parLevels.length, itemsPerPage]);
+  const totalPages = useMemo(
+    () => Math.ceil(parLevels.length / itemsPerPage),
+    [parLevels.length, itemsPerPage],
+  );
 
   const paginatedParLevels = useMemo(
     () => parLevels.slice((page - 1) * itemsPerPage, page * itemsPerPage),

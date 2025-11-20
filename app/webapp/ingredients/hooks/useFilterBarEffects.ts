@@ -6,9 +6,11 @@ interface UseFilterBarEffectsProps {
   onSearchChange: (term: string) => void;
   showSupplierMenu: boolean;
   showStorageMenu: boolean;
+  showCategoryMenu: boolean;
   showSortMenu: boolean;
   setShowSupplierMenu: (show: boolean) => void;
   setShowStorageMenu: (show: boolean) => void;
+  setShowCategoryMenu: (show: boolean) => void;
   setShowSortMenu: (show: boolean) => void;
 }
 
@@ -17,9 +19,11 @@ export function useFilterBarEffects({
   onSearchChange,
   showSupplierMenu,
   showStorageMenu,
+  showCategoryMenu,
   showSortMenu,
   setShowSupplierMenu,
   setShowStorageMenu,
+  setShowCategoryMenu,
   setShowSortMenu,
 }: UseFilterBarEffectsProps) {
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
@@ -38,16 +42,16 @@ export function useFilterBarEffects({
       if (e.key === 'Escape') {
         setShowSupplierMenu(false);
         setShowStorageMenu(false);
+        setShowCategoryMenu(false);
         setShowSortMenu(false);
       }
     };
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [setShowSupplierMenu, setShowStorageMenu, setShowSortMenu]);
+  }, [setShowSupplierMenu, setShowStorageMenu, setShowCategoryMenu, setShowSortMenu]);
 
   return {
     localSearchTerm,
     setLocalSearchTerm,
   };
 }
-

@@ -19,8 +19,8 @@ export function EmptyMenuList() {
       </div>
       <h3 className="mb-3 text-2xl font-semibold text-white">No menus yet</h3>
       <p className="mx-auto mb-6 max-w-md text-gray-400">
-        Create your first menu to organize your dishes into categories. You can drag and drop
-        dishes from your recipe collection into menu categories.
+        Create your first menu to organize your dishes into categories. You can drag and drop dishes
+        from your recipe collection into menu categories.
       </p>
       <div className="mx-auto max-w-md rounded-lg border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
         <p className="mb-2 text-sm text-gray-300">

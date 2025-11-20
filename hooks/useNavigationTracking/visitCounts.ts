@@ -45,10 +45,7 @@ export function saveVisitCounts(visitCounts: Map<string, number>): void {
  * @param {Map<string, number>} visitCounts - Visit counts map
  * @returns {number} Return frequency
  */
-export function calculateReturnFrequency(
-  href: string,
-  visitCounts: Map<string, number>,
-): number {
+export function calculateReturnFrequency(href: string, visitCounts: Map<string, number>): number {
   const count = visitCounts.get(href) || 0;
   // Simple calculation: assume visits are spread over a week
   // More sophisticated calculation could use actual timestamps

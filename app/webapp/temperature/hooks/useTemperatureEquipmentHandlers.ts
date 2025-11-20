@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { TemperatureEquipment } from '../types';
-import { updateEquipment, createEquipment, deleteEquipment } from './useTemperatureEquipmentHandlers/equipmentCRUD';
+import {
+  updateEquipment,
+  createEquipment,
+  deleteEquipment,
+} from './useTemperatureEquipmentHandlers/equipmentCRUD';
 import { handleQuickTempLog as handleQuickTempLogHelper } from './useTemperatureEquipmentHandlers/quickTempLog';
 import { handleRefreshLogs as handleRefreshLogsHelper } from './useTemperatureEquipmentHandlers/refreshLogs';
 interface UseTemperatureEquipmentHandlersProps {

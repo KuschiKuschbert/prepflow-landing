@@ -6,6 +6,9 @@ import React from 'react';
 import { formatCost } from '../utils/wizard-helpers';
 import { SupplierCombobox } from './SupplierCombobox';
 import { StorageCombobox } from './StorageCombobox';
+import { STANDARD_CATEGORIES } from '@/lib/ingredients/category-detection';
+import { Icon } from '@/components/ui/Icon';
+import { Sparkles } from 'lucide-react';
 
 interface Ingredient {
   id: string;
@@ -14,6 +17,7 @@ interface Ingredient {
   pack_size?: string;
   pack_size_unit?: string;
   pack_price?: number;
+  category?: string;
   unit?: string;
   cost_per_unit: number;
   supplier?: string;
@@ -29,6 +33,7 @@ interface IngredientFormFieldsProps {
   errors: Record<string, string>;
   availableUnits: string[];
   handleInputChange: (field: keyof Ingredient, value: string | number) => void;
+  autoDetectedCategory?: string | null;
 }
 
 export function IngredientFormFields({
@@ -36,6 +41,7 @@ export function IngredientFormFields({
   errors,
   availableUnits,
   handleInputChange,
+  autoDetectedCategory,
 }: IngredientFormFieldsProps) {
   // Calculate cost per pack unit (like wizard Step 1)
   const costPerPackUnit =
@@ -72,6 +78,31 @@ export function IngredientFormFields({
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             placeholder="e.g., Coles"
           />
+        </div>
+      </div>
+
+      {/* Category */}
+      <div className="grid grid-cols-1 gap-4">
+        <div>
+          <label className="mb-1 block text-sm font-medium text-gray-300">Category</label>
+          <select
+            value={formData.category || ''}
+            onChange={e => handleInputChange('category', e.target.value)}
+            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+          >
+            <option value="">Select category...</option>
+            {STANDARD_CATEGORIES.map(category => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+          {autoDetectedCategory && formData.category === autoDetectedCategory && (
+            <div className="mt-1.5 flex items-center gap-1.5 text-xs text-[#29E7CD]">
+              <Icon icon={Sparkles} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+              <span>Category auto-detected: {autoDetectedCategory}</span>
+            </div>
+          )}
         </div>
       </div>
 

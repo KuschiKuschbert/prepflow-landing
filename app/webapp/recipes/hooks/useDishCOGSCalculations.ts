@@ -66,7 +66,17 @@ export function useDishCOGSCalculations(
         wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
       }
 
-      const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
+      const isConsumable = (ingredient as any).category === 'Consumables';
+
+      // For consumables: simple calculation (no waste/yield)
+      let wasteAdjustedCostFinal = wasteAdjustedCost;
+      let yieldAdjustedCostFinal: number;
+      if (isConsumable) {
+        wasteAdjustedCostFinal = totalCost;
+        yieldAdjustedCostFinal = totalCost;
+      } else {
+        yieldAdjustedCostFinal = wasteAdjustedCost / (yieldPercent / 100);
+      }
 
       allCalculations.push({
         recipeId: dish?.id || '',
@@ -76,8 +86,9 @@ export function useDishCOGSCalculations(
         unit: dishIngredient.unit || 'g',
         costPerUnit: costPerUnit,
         totalCost: totalCost,
-        wasteAdjustedCost: wasteAdjustedCost,
-        yieldAdjustedCost: yieldAdjustedCost,
+        wasteAdjustedCost: wasteAdjustedCostFinal,
+        yieldAdjustedCost: yieldAdjustedCostFinal,
+        isConsumable: isConsumable,
         id: dishIngredient.id,
         ingredient_id: ingredient.id,
         ingredient_name: ingredient.ingredient_name || 'Unknown',

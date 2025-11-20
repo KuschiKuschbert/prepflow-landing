@@ -3,7 +3,12 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
 export function generateSanitizerLogs(logs: ReportData['sanitizer_logs']): string {
@@ -69,4 +74,3 @@ export function generateSanitizerLogs(logs: ReportData['sanitizer_logs']): strin
     </div>
   `;
 }
-

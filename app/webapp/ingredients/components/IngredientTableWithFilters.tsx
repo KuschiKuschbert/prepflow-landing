@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { IngredientCard } from './IngredientCard';
-import { IngredientTableFilterBar } from './IngredientTableFilterBar';
-import { type SortOption } from '../hooks/useIngredientFiltering';
-import { IngredientBulkActionsMenu } from './IngredientBulkActionsMenu';
-import { IngredientTableDialogs } from './IngredientTableDialogs';
-import { IngredientSelectionModeBanner } from './IngredientSelectionModeBanner';
-import { IngredientTableHeader } from './IngredientTableHeader';
-import { IngredientTableEmptyState } from './IngredientTableEmptyState';
-import { IngredientTableDesktop } from './IngredientTableDesktop';
+import { useEffect, useState } from 'react';
 import { useIngredientBulkActionsDialog } from '../hooks/useIngredientBulkActionsDialog';
+import { type SortOption } from '../hooks/useIngredientFiltering';
 import { useIngredientTableSort } from '../hooks/useIngredientTableSort';
+import { IngredientCard } from './IngredientCard';
+import { IngredientSelectionModeBanner } from './IngredientSelectionModeBanner';
+import { IngredientTableDesktop } from './IngredientTableDesktop';
+import { IngredientTableDialogs } from './IngredientTableDialogs';
+import { IngredientTableEmptyState } from './IngredientTableEmptyState';
+import { IngredientTableFilterBar } from './IngredientTableFilterBar';
+import { IngredientTableHeader } from './IngredientTableHeader';
 
 interface Ingredient {
   id: string;
@@ -30,6 +29,7 @@ interface Ingredient {
   supplier?: string;
   product_code?: string;
   storage_location?: string;
+  category?: string;
   min_stock_level?: number;
   current_stock?: number;
   created_at?: string;
@@ -42,6 +42,7 @@ interface IngredientTableWithFiltersProps {
   searchTerm: string;
   supplierFilter: string;
   storageFilter: string;
+  categoryFilter: string;
   sortBy: SortOption;
   selectedIngredients: Set<string>;
   onEdit: (ingredient: Ingredient) => void;
@@ -51,6 +52,7 @@ interface IngredientTableWithFiltersProps {
   onSearchChange: (term: string) => void;
   onSupplierFilterChange: (supplier: string) => void;
   onStorageFilterChange: (storage: string) => void;
+  onCategoryFilterChange: (category: string) => void;
   onSortChange: (sort: SortOption) => void;
   onDisplayUnitChange: (unit: string) => void;
   itemsPerPage: number;
@@ -61,6 +63,7 @@ interface IngredientTableWithFiltersProps {
   onExportCSV?: () => void;
   onBulkDelete?: (ids: string[]) => Promise<void>;
   onBulkUpdate?: (ids: string[], updates: Partial<Ingredient>) => Promise<void>;
+  onBulkAutoCategorize?: (ids: string[], useAI?: boolean) => Promise<void>;
   loading?: boolean;
   isSelectionMode?: boolean;
   onStartLongPress?: () => void;
@@ -75,6 +78,7 @@ export default function IngredientTableWithFilters({
   searchTerm,
   supplierFilter,
   storageFilter,
+  categoryFilter,
   sortBy,
   selectedIngredients,
   onEdit,
@@ -84,6 +88,7 @@ export default function IngredientTableWithFilters({
   onSearchChange,
   onSupplierFilterChange,
   onStorageFilterChange,
+  onCategoryFilterChange,
   onSortChange,
   onDisplayUnitChange,
   itemsPerPage,
@@ -94,6 +99,7 @@ export default function IngredientTableWithFilters({
   onExportCSV,
   onBulkDelete,
   onBulkUpdate,
+  onBulkAutoCategorize,
   loading = false,
   isSelectionMode = false,
   onStartLongPress,
@@ -118,12 +124,14 @@ export default function IngredientTableWithFilters({
     handleBulkUpdateSupplier,
     handleBulkUpdateStorage,
     handleBulkUpdateWastage,
+    handleBulkAutoCategorize: handleBulkAutoCategorizeFromHook,
     handleDelete: handleDeleteFromHook,
     confirmDelete: confirmDeleteFromHook,
   } = useIngredientBulkActionsDialog({
     selectedIngredients,
     onBulkDelete,
     onBulkUpdate,
+    onBulkAutoCategorize,
   });
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -171,12 +179,14 @@ export default function IngredientTableWithFilters({
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
         storageFilter={storageFilter}
+        categoryFilter={categoryFilter}
         sortBy={sortBy}
         displayUnit={displayUnit}
         itemsPerPage={itemsPerPage}
         onSearchChange={onSearchChange}
         onSupplierFilterChange={onSupplierFilterChange}
         onStorageFilterChange={onStorageFilterChange}
+        onCategoryFilterChange={onCategoryFilterChange}
         onSortChange={onSortChange}
         onDisplayUnitChange={onDisplayUnitChange}
         onItemsPerPageChange={onItemsPerPageChange}
@@ -194,12 +204,14 @@ export default function IngredientTableWithFilters({
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
         storageFilter={storageFilter}
+        categoryFilter={categoryFilter}
         sortBy={sortBy}
         displayUnit={displayUnit}
         itemsPerPage={itemsPerPage}
         onSearchChange={onSearchChange}
         onSupplierFilterChange={onSupplierFilterChange}
         onStorageFilterChange={onStorageFilterChange}
+        onCategoryFilterChange={onCategoryFilterChange}
         onSortChange={onSortChange}
         onDisplayUnitChange={onDisplayUnitChange}
         onItemsPerPageChange={onItemsPerPageChange}
@@ -224,6 +236,7 @@ export default function IngredientTableWithFilters({
         onBulkUpdateSupplier={handleBulkUpdateSupplier}
         onBulkUpdateStorage={handleBulkUpdateStorage}
         onBulkUpdateWastage={handleBulkUpdateWastage}
+        onBulkAutoCategorize={handleBulkAutoCategorizeFromHook}
         onSelectAll={onSelectAll}
         onEnterSelectionMode={onEnterSelectionMode}
       />

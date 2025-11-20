@@ -54,10 +54,11 @@ export default function IngredientForm({
   loading = false,
 }: IngredientFormProps) {
   const handlePersonalitySave = useOnSave();
-  const { formData, errors, handleInputChange, validateForm } = useIngredientFormLogic({
-    ingredient,
-    onSave,
-  });
+  const { formData, errors, handleInputChange, validateForm, autoDetectedCategory } =
+    useIngredientFormLogic({
+      ingredient,
+      onSave,
+    });
 
   const entityId = deriveAutosaveId('ingredients', ingredient?.id, [
     formData.ingredient_name || '',
@@ -107,6 +108,7 @@ export default function IngredientForm({
           errors={errors}
           availableUnits={availableUnits}
           handleInputChange={handleInputChange}
+          autoDetectedCategory={autoDetectedCategory}
         />
 
         <div className="flex gap-3 pt-4">

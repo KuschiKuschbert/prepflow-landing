@@ -27,7 +27,6 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
 
       if (!response.ok) {
         const errorText = await response.text();
-        logger.error('❌ API Error:', errorText);
         let errorData;
         try {
           errorData = JSON.parse(errorText);
@@ -36,6 +35,12 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
         }
         const errorMsg =
           errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`;
+        logger.error('❌ API Error:', {
+          message: errorMsg,
+          status: response.status,
+          statusText: response.statusText,
+          response: errorText,
+        });
         setError(errorMsg);
         throw new Error(errorMsg);
       }

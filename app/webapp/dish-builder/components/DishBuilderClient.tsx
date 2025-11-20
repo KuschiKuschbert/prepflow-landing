@@ -7,9 +7,9 @@ import DishBuilderDragDrop from './DishBuilderDragDrop';
 import DishForm from './DishForm';
 import DishDropZone from './DishDropZone';
 import CostAnalysisSection from './CostAnalysisSection';
-import { SuccessMessage } from '../../cogs/components/SuccessMessage';
 import { QuantityInputModal } from './QuantityInputModal';
 import { Ingredient, Recipe } from '../../cogs/types';
+import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';
 interface DishBuilderClientProps {
@@ -48,7 +48,7 @@ export default function DishBuilderClient({
 
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
   const [editQuantity, setEditQuantity] = useState<number>(0);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { showSuccess } = useNotification();
 
   // Quantity modal state
   const [showQuantityModal, setShowQuantityModal] = useState(false);
@@ -205,10 +205,9 @@ export default function DishBuilderClient({
     const result = await saveDish();
     if (result.success) {
       const itemType = dishState.itemType === 'dish' ? 'Dish' : 'Recipe';
-      setSuccessMessage(`${itemType} "${dishState.dishName}" saved successfully!`);
-      // Clear form after a delay and notify parent
+      showSuccess(`${itemType} "${dishState.dishName}" saved successfully!`);
+      // Notify parent after a delay
       setTimeout(() => {
-        setSuccessMessage(null);
         if (onSaveSuccess) {
           onSaveSuccess();
         }
@@ -241,8 +240,6 @@ export default function DishBuilderClient({
           </div>
         )}
 
-        <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
-
         <div className="large-desktop:grid-cols-2 grid grid-cols-1 gap-6">
           {/* Left Panel - Tap to Add */}
           <div>
@@ -251,6 +248,7 @@ export default function DishBuilderClient({
               ingredients={ingredients}
               onRecipeTap={handleRecipeTap}
               onIngredientTap={handleIngredientTap}
+              onConsumableTap={handleIngredientTap}
             />
           </div>
 

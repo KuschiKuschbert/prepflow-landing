@@ -31,12 +31,14 @@ interface IngredientTableEmptyStateProps {
   searchTerm: string;
   supplierFilter: string;
   storageFilter: string;
+  categoryFilter: string;
   sortBy: SortOption;
   displayUnit: string;
   itemsPerPage: number;
   onSearchChange: (term: string) => void;
   onSupplierFilterChange: (supplier: string) => void;
   onStorageFilterChange: (storage: string) => void;
+  onCategoryFilterChange: (category: string) => void;
   onSortChange: (sort: SortOption) => void;
   onDisplayUnitChange: (unit: string) => void;
   onItemsPerPageChange: (itemsPerPage: number) => void;
@@ -50,12 +52,14 @@ export function IngredientTableEmptyState({
   searchTerm,
   supplierFilter,
   storageFilter,
+  categoryFilter,
   sortBy,
   displayUnit,
   itemsPerPage,
   onSearchChange,
   onSupplierFilterChange,
   onStorageFilterChange,
+  onCategoryFilterChange,
   onSortChange,
   onDisplayUnitChange,
   onItemsPerPageChange,
@@ -70,12 +74,14 @@ export function IngredientTableEmptyState({
         searchTerm={searchTerm}
         supplierFilter={supplierFilter}
         storageFilter={storageFilter}
+        categoryFilter={categoryFilter}
         sortBy={sortBy}
         displayUnit={displayUnit}
         itemsPerPage={itemsPerPage}
         onSearchChange={onSearchChange}
         onSupplierFilterChange={onSupplierFilterChange}
         onStorageFilterChange={onStorageFilterChange}
+        onCategoryFilterChange={onCategoryFilterChange}
         onSortChange={onSortChange}
         onDisplayUnitChange={onDisplayUnitChange}
         onItemsPerPageChange={onItemsPerPageChange}

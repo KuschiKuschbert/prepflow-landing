@@ -47,7 +47,10 @@ export async function migrateIngredient(
     if (convertedCostPerUnitInclTrim !== undefined)
       updateData.cost_per_unit_incl_trim = convertedCostPerUnitInclTrim;
 
-    const { error } = await supabaseAdmin.from('ingredients').update(updateData).eq('id', ingredient.id);
+    const { error } = await supabaseAdmin
+      .from('ingredients')
+      .update(updateData)
+      .eq('id', ingredient.id);
     if (error) return { success: false, error: error.message };
     return { success: true };
   } catch (err) {

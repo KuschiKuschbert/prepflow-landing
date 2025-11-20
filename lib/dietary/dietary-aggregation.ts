@@ -47,11 +47,7 @@ export async function aggregateRecipeDietaryStatus(
     }
 
     // Return cached status if available and recent (within 7 days)
-    if (
-      recipe?.is_vegetarian !== null &&
-      recipe?.is_vegan !== null &&
-      recipe?.dietary_checked_at
-    ) {
+    if (recipe?.is_vegetarian !== null && recipe?.is_vegan !== null && recipe?.dietary_checked_at) {
       const checkedAt = new Date(recipe.dietary_checked_at);
       const daysSinceCheck = (Date.now() - checkedAt.getTime()) / (1000 * 60 * 60 * 24);
       if (daysSinceCheck < 7) {
@@ -167,11 +163,7 @@ export async function aggregateDishDietaryStatus(
     }
 
     // Return cached status if available and recent
-    if (
-      dish?.is_vegetarian !== null &&
-      dish?.is_vegan !== null &&
-      dish?.dietary_checked_at
-    ) {
+    if (dish?.is_vegetarian !== null && dish?.is_vegan !== null && dish?.dietary_checked_at) {
       const checkedAt = new Date(dish.dietary_checked_at);
       const daysSinceCheck = (Date.now() - checkedAt.getTime()) / (1000 * 60 * 60 * 24);
       if (daysSinceCheck < 7) {
@@ -330,4 +322,3 @@ async function cacheDietaryStatus(
     logger.error('[Dietary Aggregation] Failed to cache dietary status:', err);
   }
 }
-

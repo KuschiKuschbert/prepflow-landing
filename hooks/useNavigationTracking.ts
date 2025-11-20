@@ -5,8 +5,16 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { getAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { saveUsageLog } from '@/lib/navigation-optimization/localStorage';
-import { loadPendingLogs, savePendingLogs, type PendingLog } from './useNavigationTracking/logStorage';
-import { loadVisitCounts, saveVisitCounts, calculateReturnFrequency } from './useNavigationTracking/visitCounts';
+import {
+  loadPendingLogs,
+  savePendingLogs,
+  type PendingLog,
+} from './useNavigationTracking/logStorage';
+import {
+  loadVisitCounts,
+  saveVisitCounts,
+  calculateReturnFrequency,
+} from './useNavigationTracking/visitCounts';
 import { syncPendingLogs } from './useNavigationTracking/logSync';
 import { useLogSync } from './useNavigationTracking/useLogSync';
 import { useTimeTracking } from './useNavigationTracking/useTimeTracking';

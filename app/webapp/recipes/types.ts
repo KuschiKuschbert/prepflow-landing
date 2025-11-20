@@ -136,6 +136,7 @@ export interface DishIngredient {
 export interface DishWithDetails extends Dish {
   recipes?: DishRecipe[];
   ingredients?: DishIngredient[];
+  consumables?: DishIngredient[]; // Consumables are stored in dish_ingredients but filtered by category
 }
 
 export interface DishCostData {

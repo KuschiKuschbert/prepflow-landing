@@ -17,6 +17,7 @@ import { SetupProgress } from './types';
 import SetupProgressComponent from './components/SetupProgress';
 import EquipmentSetup from './components/EquipmentSetup';
 import PopulateAllCleanData from './components/PopulateAllCleanData';
+import PopulateAllAllergens from './components/PopulateAllAllergens';
 import ResetSelfDataCard from './components/ResetSelfDataCard';
 
 export default function SetupPageRefactored() {
@@ -126,12 +127,35 @@ export default function SetupPageRefactored() {
             <PopulateAllCleanData onDataPopulated={handleDataPopulated} />
           </div>
 
-          {/* Step 3: Equipment Setup (Optional - for adding more equipment manually) */}
+          {/* Step 3: Populate Allergens (Optional) */}
+          <div>
+            <div className="mb-8 text-center">
+              <div className="mb-4 flex items-center justify-center space-x-3">
+                <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+                <span className="text-sm font-semibold text-gray-500">3. Allergens (Optional)</span>
+              </div>
+              <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+                <Icon icon={Sparkles} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+                Auto-Detect Allergens
+              </h2>
+              <p className="text-lg text-gray-400">
+                Automatically detect and populate allergens for all ingredients using hybrid
+                detection (keyword matching + AI)
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                Tip: Only processes ingredients without manual allergens. Won&apos;t overwrite
+                existing manual entries.
+              </p>
+            </div>
+            <PopulateAllAllergens />
+          </div>
+
+          {/* Step 4: Equipment Setup (Optional - for adding more equipment manually) */}
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
                 <Icon icon={Thermometer} size="md" className="text-[#29E7CD]" aria-hidden={true} />
-                <span className="text-sm font-semibold text-gray-500">3. Equipment (Optional)</span>
+                <span className="text-sm font-semibold text-gray-500">4. Equipment (Optional)</span>
               </div>
               <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
                 <Icon icon={Thermometer} size="lg" className="text-[#29E7CD]" aria-hidden={true} />

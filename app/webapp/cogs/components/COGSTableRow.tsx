@@ -98,4 +98,3 @@ export function COGSTableRow({
     </tr>
   );
 }
-

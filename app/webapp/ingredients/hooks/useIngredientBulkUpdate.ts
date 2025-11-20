@@ -56,5 +56,122 @@ export function useIngredientBulkUpdate({
     ],
   );
 
-  return { handleBulkUpdate };
+  const handleBulkAutoCategorize = useCallback(
+    async (ids: string[], useAI: boolean = true) => {
+      // Store original state for rollback
+      const originalIngredients = [...ingredients];
+
+      try {
+        const response = await fetch('/api/ingredients/auto-categorize', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ingredientIds: ids, useAI }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result.error || result.message || 'Failed to auto-categorize ingredients',
+          );
+        }
+
+        // Fetch updated ingredients to get their new categories
+        const { data: updatedIngredients, error: fetchError } = await supabase
+          .from('ingredients')
+          .select('id, category')
+          .in('id', ids);
+
+        if (fetchError) {
+          throw fetchError;
+        }
+
+        // Optimistically update UI with new categories
+        if (updatedIngredients) {
+          const categoryMap = new Map(updatedIngredients.map(ing => [ing.id, ing.category]));
+          setIngredients(prevIngredients =>
+            prevIngredients.map(ing => {
+              const newCategory = categoryMap.get(ing.id);
+              return newCategory ? { ...ing, category: newCategory } : ing;
+            }),
+          );
+        }
+
+        setSelectedIngredients(new Set());
+        exitSelectionMode();
+        showSuccess(
+          result.message ||
+            `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
+        );
+      } catch (error) {
+        // Revert optimistic update on error
+        setIngredients(originalIngredients);
+        logger.error('Bulk auto-categorize failed:', error);
+        showError(error instanceof Error ? error.message : 'Failed to auto-categorize ingredients');
+        throw error;
+      }
+    },
+    [
+      ingredients,
+      setIngredients,
+      setSelectedIngredients,
+      exitSelectionMode,
+      showSuccess,
+      showError,
+    ],
+  );
+
+  const handleCategorizeAllUncategorized = useCallback(
+    async (useAI: boolean = true, onRefresh?: () => void) => {
+      try {
+        const response = await fetch('/api/ingredients/auto-categorize', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ categorizeAll: true, useAI }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || result.message || 'Failed to categorize all ingredients');
+        }
+
+        // Refresh ingredients list to show updated categories
+        if (onRefresh) {
+          onRefresh();
+        } else {
+          // Fallback: refetch all ingredients
+          const { data: updatedIngredients, error: fetchError } = await supabase
+            .from('ingredients')
+            .select('id, category');
+
+          if (!fetchError && updatedIngredients) {
+            const categoryMap = new Map(updatedIngredients.map(ing => [ing.id, ing.category]));
+            setIngredients(prevIngredients =>
+              prevIngredients.map(ing => {
+                const newCategory = categoryMap.get(ing.id);
+                return newCategory ? { ...ing, category: newCategory } : ing;
+              }),
+            );
+          }
+        }
+
+        showSuccess(
+          result.message ||
+            `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
+        );
+      } catch (error) {
+        logger.error('Categorize all failed:', error);
+        showError(error instanceof Error ? error.message : 'Failed to categorize all ingredients');
+        throw error;
+      }
+    },
+    [showSuccess, showError, setIngredients],
+  );
+
+  return { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized };
 }

@@ -3,8 +3,15 @@
  */
 
 import type { PerformanceMetrics } from './performance-monitor/metrics';
-import { initializeWebVitalsTracking, trackCustomMetrics, checkPerformanceBudget } from './performance-monitor/tracking';
-import { calculatePerformanceScore, getPerformanceGrade as calculateGrade } from './performance-monitor/scoring';
+import {
+  initializeWebVitalsTracking,
+  trackCustomMetrics,
+  checkPerformanceBudget,
+} from './performance-monitor/tracking';
+import {
+  calculatePerformanceScore,
+  getPerformanceGrade as calculateGrade,
+} from './performance-monitor/scoring';
 import { PERFORMANCE_BUDGETS, PERFORMANCE_GOALS } from './performance-monitor/budgets';
 import type { PerformanceBudget } from './performance-monitor/budgets';
 

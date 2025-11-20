@@ -20,7 +20,8 @@ import { RecipesEmptyState } from './RecipesEmptyState';
 import { RecipesErrorDisplay } from './RecipesErrorDisplay';
 
 // Local components
-import BulkActionsBar from './BulkActionsBar';
+import { UnifiedBulkActionsMenu } from './UnifiedBulkActionsMenu';
+import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
 import { BulkDeleteConfirmationModal } from './BulkDeleteConfirmationModal';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import RecipeCard from './RecipeCard';
@@ -28,13 +29,15 @@ import { UnifiedRecipeModal } from './UnifiedRecipeModal';
 import RecipeTable from './RecipeTable';
 import { RecipesActionButtons } from './RecipesActionButtons';
 import { RecipeFilterBar } from './RecipeFilterBar';
-import { SuccessMessage } from './SuccessMessage';
 import { RecipeEditDrawer } from './RecipeEditDrawer';
 import { RecipesContent } from './RecipesContent';
 import { RecipesModals } from './RecipesModals';
 import { useIngredientsChangeEffect } from './hooks/useIngredientsChangeEffect';
 import { usePriceCalculationEffect } from './hooks/usePriceCalculationEffect';
 import { useRecipeHandlers } from './hooks/useRecipeHandlers';
+import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
+import { useBulkShare } from '../hooks/useBulkShare';
+import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
 
 export default function RecipesClient() {
   const router = useRouter();
@@ -104,13 +107,9 @@ export default function RecipesClient() {
 
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
   const {
-    successMessage,
-    setSuccessMessage,
     recipeToDelete,
     showDeleteConfirm,
     setShowDeleteConfirm,
-    showBulkDeleteConfirm,
-    setShowBulkDeleteConfirm,
     selectedRecipes,
     setSelectedRecipes,
     showShareModal,
@@ -125,9 +124,6 @@ export default function RecipesClient() {
     cancelDeleteRecipe,
     handleSelectRecipe,
     handleSelectAll,
-    handleBulkDelete,
-    confirmBulkDelete,
-    cancelBulkDelete,
     handleShareRecipe,
   } = useRecipeActions({
     recipes,
@@ -138,6 +134,57 @@ export default function RecipesClient() {
     optimisticallyUpdateRecipes,
     rollbackRecipes,
   });
+
+  // Create item types map (all recipes in this page)
+  const selectedItemTypes = new Map<string, 'recipe' | 'dish'>();
+  selectedRecipes.forEach(id => {
+    selectedItemTypes.set(id, 'recipe');
+  });
+
+  // Unified bulk actions hook
+  const {
+    bulkActionLoading,
+    showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm,
+    setShowBulkDeleteConfirm: setShowUnifiedBulkDeleteConfirm,
+    handleBulkDelete: handleUnifiedBulkDelete,
+    confirmBulkDelete: confirmUnifiedBulkDelete,
+    cancelBulkDelete: cancelUnifiedBulkDelete,
+    selectedRecipeIds,
+  } = useUnifiedBulkActions({
+    recipes,
+    dishes: [],
+    selectedItems: selectedRecipes,
+    selectedItemTypes,
+    optimisticallyUpdateRecipes,
+    optimisticallyUpdateDishes: () => {},
+    rollbackRecipes,
+    rollbackDishes: () => {},
+    onClearSelection: () => setSelectedRecipes(new Set()),
+  });
+
+  // Bulk share hook
+  const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
+    selectedRecipeIds,
+    onSuccess: () => setSelectedRecipes(new Set()),
+  });
+
+  // Bulk add to menu hook
+  const {
+    handleBulkAddToMenu,
+    handleSelectMenu,
+    handleCreateNewMenu,
+    menus,
+    loadingMenus,
+    addLoading: addToMenuLoading,
+    showMenuDialog,
+    setShowMenuDialog,
+  } = useBulkAddToMenu({
+    selectedItems: selectedRecipes,
+    selectedItemTypes,
+    onSuccess: () => setSelectedRecipes(new Set()),
+  });
+
+  const [showBulkMenu, setShowBulkMenu] = useState(false);
 
   const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } =
     useRecipeFiltering(recipes, recipePrices);
@@ -186,10 +233,26 @@ export default function RecipesClient() {
   return (
     <>
       <RecipesActionButtons onRefresh={fetchRecipes} loading={loading} />
-      <BulkActionsBar
-        selectedCount={selectedRecipes.size}
-        onBulkDelete={handleBulkDelete}
-        onClearSelection={() => setSelectedRecipes(new Set())}
+      <div className="mb-4 flex items-center justify-between">
+        <UnifiedBulkActionsMenu
+          selectedCount={selectedRecipes.size}
+          selectedRecipeCount={selectedRecipes.size}
+          bulkActionLoading={bulkActionLoading || bulkShareLoading || addToMenuLoading}
+          onBulkDelete={handleUnifiedBulkDelete}
+          onBulkShare={() => handleBulkShare('pdf')}
+          onBulkAddToMenu={handleBulkAddToMenu}
+          showBulkMenu={showBulkMenu}
+          onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
+        />
+      </div>
+
+      <BulkAddToMenuDialog
+        show={showMenuDialog}
+        menus={menus}
+        loadingMenus={loadingMenus}
+        onClose={() => setShowMenuDialog(false)}
+        onSelectMenu={handleSelectMenu}
+        onCreateNew={handleCreateNewMenu}
       />
 
       <RecipesErrorDisplay
@@ -198,7 +261,6 @@ export default function RecipesClient() {
         onRetry={recipeError?.retryAction}
         onDismiss={() => setError(null)}
       />
-      <SuccessMessage message={successMessage} />
       <RecipesContent
         recipes={recipes}
         filteredAndSortedRecipes={filteredAndSortedRecipes}
@@ -228,7 +290,7 @@ export default function RecipesClient() {
         shareLoading={shareLoading}
         showDeleteConfirm={showDeleteConfirm}
         recipeToDelete={recipeToDelete}
-        showBulkDeleteConfirm={showBulkDeleteConfirm}
+        showBulkDeleteConfirm={showUnifiedBulkDeleteConfirm}
         selectedRecipes={selectedRecipes}
         recipes={recipes}
         showRecipeEditDrawer={showRecipeEditDrawer}
@@ -251,8 +313,8 @@ export default function RecipesClient() {
         onDeleteRecipe={handleDeleteRecipe}
         onConfirmDelete={confirmDeleteRecipe}
         onCancelDelete={cancelDeleteRecipe}
-        onConfirmBulkDelete={confirmBulkDelete}
-        onCancelBulkDelete={cancelBulkDelete}
+        onConfirmBulkDelete={confirmUnifiedBulkDelete}
+        onCancelBulkDelete={cancelUnifiedBulkDelete}
         onRefreshIngredients={handleRefreshIngredients}
         onRefreshRecipes={fetchRecipes}
       />

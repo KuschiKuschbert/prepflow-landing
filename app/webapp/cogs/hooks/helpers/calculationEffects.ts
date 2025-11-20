@@ -26,7 +26,10 @@ export function useRecipeChangeEffect({
   lastManualChangeTimeRef,
 }: Pick<
   CalculationEffectsProps,
-  'selectedRecipe' | 'fetchRecipeIngredients' | 'hasManualIngredientsRef' | 'lastManualChangeTimeRef'
+  | 'selectedRecipe'
+  | 'fetchRecipeIngredients'
+  | 'hasManualIngredientsRef'
+  | 'lastManualChangeTimeRef'
 >) {
   const selectedRecipeRef = useRef<string>('');
 
@@ -70,5 +73,11 @@ export function useCOGSCalculationEffect({
     if (recipeIngredients.length > 0 && calculations.length === 0 && ingredients.length > 0) {
       calculateCOGS(recipeIngredients);
     }
-  }, [recipeIngredients, calculateCOGS, calculations.length, ingredients.length, isLoadingFromApiRef]);
+  }, [
+    recipeIngredients,
+    calculateCOGS,
+    calculations.length,
+    ingredients.length,
+    isLoadingFromApiRef,
+  ]);
 }

@@ -449,6 +449,7 @@ bash scripts/replace-screenshots.sh
 **MANDATORY:** Run before pushing to `main` to verify your code will deploy successfully on Vercel.
 
 Runs all checks that Vercel and CI run during deployment:
+
 - Node version check (>=22.0.0)
 - Dependencies installation (`npm ci`)
 - Lint check (`npm run lint`)
@@ -465,12 +466,14 @@ npm run pre-deploy
 ```
 
 **Exit Codes:**
+
 - `0` - All checks passed, safe to deploy
 - `1` - One or more checks failed, fix issues before deploying
 
 **Integration:** Should be run manually before pushing to `main`. Consider adding to pre-push hook (future enhancement).
 
 **See Also:**
+
 - `operations.mdc` (Deployment Process) - Complete deployment checklist
 
 ---

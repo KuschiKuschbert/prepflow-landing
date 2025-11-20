@@ -4,10 +4,16 @@
 
 import { randomInt } from './temperature-log-generator/utils';
 import { generateEquipmentLog, generateFoodLog } from './temperature-log-generator/logGenerators';
-import type { TemperatureLogOptions, GeneratedTemperatureLog } from './temperature-log-generator/types';
+import type {
+  TemperatureLogOptions,
+  GeneratedTemperatureLog,
+} from './temperature-log-generator/types';
 
 // Re-export types
-export type { TemperatureLogOptions, GeneratedTemperatureLog } from './temperature-log-generator/types';
+export type {
+  TemperatureLogOptions,
+  GeneratedTemperatureLog,
+} from './temperature-log-generator/types';
 
 /**
  * Generate temperature logs for a date range.

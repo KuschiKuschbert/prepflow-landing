@@ -16,6 +16,14 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(' ');
 };
 
+/**
+ * New button component for creating new items.
+ * Displays dropdown menu with options to create recipes, ingredients, temperature logs, etc.
+ * Positioned at top of sidebar (desktop) like Google Drive.
+ *
+ * @component
+ * @returns {JSX.Element} New button component
+ */
 function NewButton() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);

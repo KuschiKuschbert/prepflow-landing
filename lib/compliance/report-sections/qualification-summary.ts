@@ -3,7 +3,12 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
 export function generateQualificationSummary(qualifications: ReportData['qualifications']): string {
@@ -53,4 +58,3 @@ export function generateQualificationSummary(qualifications: ReportData['qualifi
     </div>
   `;
 }
-

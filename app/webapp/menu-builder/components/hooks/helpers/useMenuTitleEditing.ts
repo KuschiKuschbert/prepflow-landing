@@ -19,11 +19,7 @@ interface UseMenuTitleEditingProps {
  * @param {UseMenuTitleEditingProps} props - Hook dependencies
  * @returns {Object} Title editing handlers and state
  */
-export function useMenuTitleEditing({
-  menus,
-  setMenus,
-  onMenuUpdated,
-}: UseMenuTitleEditingProps) {
+export function useMenuTitleEditing({ menus, setMenus, onMenuUpdated }: UseMenuTitleEditingProps) {
   const { showError, showSuccess } = useNotification();
   const [editingMenuId, setEditingMenuId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');

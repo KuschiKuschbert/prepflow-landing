@@ -8,12 +8,12 @@ import { validateRecipeDelete } from './helpers/validateRecipeDelete';
 import { validateRecipeUpdate } from './helpers/validateRecipeUpdate';
 import { aggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
 import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
-import { invalidateRecipeAllergenCache, invalidateDishesWithRecipe } from '@/lib/allergens/cache-invalidation';
+import {
+  invalidateRecipeAllergenCache,
+  invalidateDishesWithRecipe,
+} from '@/lib/allergens/cache-invalidation';
 
-export async function GET(
-  _req: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const recipeId = id;
@@ -33,10 +33,9 @@ export async function GET(
       .single();
 
     if (fetchError || !recipe) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Aggregate allergens and dietary status (check cache first)

@@ -18,7 +18,6 @@ interface UseDishesClientHandlersProps {
   setSelectedRecipeForPreview: (recipe: Recipe | null) => void;
   setHighlightingRowId: (id: string | null) => void;
   setHighlightingRowType: (type: 'recipe' | 'dish' | null) => void;
-  setSuccessMessage: (message: string | null) => void;
   setError: (error: string | null) => void;
 }
 
@@ -36,7 +35,6 @@ export function useDishesClientHandlers({
   setSelectedRecipeForPreview,
   setHighlightingRowId,
   setHighlightingRowType,
-  setSuccessMessage,
   setError,
 }: UseDishesClientHandlersProps) {
   const deleteHandlers = useDishesClientDelete({
@@ -45,7 +43,6 @@ export function useDishesClientHandlers({
     setDishes,
     setRecipes,
     setError,
-    setSuccessMessage,
   });
 
   const handleEditDish = useCallback(

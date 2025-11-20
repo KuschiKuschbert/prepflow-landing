@@ -8,6 +8,7 @@ interface Ingredient {
   pack_size_unit?: string;
   supplier?: string;
   storage_location?: string;
+  category?: string;
   cost_per_unit: number;
   current_stock?: number;
 }
@@ -31,6 +32,7 @@ interface UseIngredientFilteringProps {
   searchTerm: string;
   supplierFilter: string;
   storageFilter: string;
+  categoryFilter: string;
   sortBy: SortOption;
 }
 
@@ -39,6 +41,7 @@ export function useIngredientFiltering({
   searchTerm,
   supplierFilter,
   storageFilter,
+  categoryFilter,
   sortBy,
 }: UseIngredientFilteringProps) {
   const filteredIngredients = useMemo(() => {
@@ -52,8 +55,9 @@ export function useIngredientFiltering({
 
       const matchesSupplier = !supplierFilter || ingredient.supplier === supplierFilter;
       const matchesStorage = !storageFilter || ingredient.storage_location === storageFilter;
+      const matchesCategory = !categoryFilter || ingredient.category === categoryFilter;
 
-      return matchesSearch && matchesSupplier && matchesStorage;
+      return matchesSearch && matchesSupplier && matchesStorage && matchesCategory;
     });
 
     filtered.sort((a, b) => {
@@ -93,6 +97,6 @@ export function useIngredientFiltering({
       }
     });
     return filtered;
-  }, [ingredients, searchTerm, supplierFilter, storageFilter, sortBy]);
+  }, [ingredients, searchTerm, supplierFilter, storageFilter, categoryFilter, sortBy]);
   return { filteredIngredients };
 }

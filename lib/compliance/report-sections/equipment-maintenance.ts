@@ -3,10 +3,17 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
-export function generateEquipmentMaintenance(maintenance: ReportData['equipment_maintenance']): string {
+export function generateEquipmentMaintenance(
+  maintenance: ReportData['equipment_maintenance'],
+): string {
   if (!maintenance || maintenance.total_records === 0) {
     return `
       <div class="section">
@@ -75,4 +82,3 @@ export function generateEquipmentMaintenance(maintenance: ReportData['equipment_
     </div>
   `;
 }
-

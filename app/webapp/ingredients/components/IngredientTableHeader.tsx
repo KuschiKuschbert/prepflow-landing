@@ -24,6 +24,7 @@ interface IngredientTableHeaderProps {
   onBulkUpdateSupplier: () => void;
   onBulkUpdateStorage: () => void;
   onBulkUpdateWastage: () => void;
+  onBulkAutoCategorize?: () => void;
   onSelectAll: (selected: boolean) => void;
   onEnterSelectionMode?: () => void;
 }
@@ -47,6 +48,7 @@ export function IngredientTableHeader({
   onBulkUpdateSupplier,
   onBulkUpdateStorage,
   onBulkUpdateWastage,
+  onBulkAutoCategorize,
   onSelectAll,
   onEnterSelectionMode,
 }: IngredientTableHeaderProps) {
@@ -103,6 +105,7 @@ export function IngredientTableHeader({
                   onBulkUpdateSupplier={onBulkUpdateSupplier}
                   onBulkUpdateStorage={onBulkUpdateStorage}
                   onBulkUpdateWastage={onBulkUpdateWastage}
+                  onBulkAutoCategorize={onBulkAutoCategorize}
                   showBulkMenu={showBulkMenu}
                   onToggleBulkMenu={onToggleBulkMenu}
                   variant="desktop"
@@ -160,6 +163,7 @@ export function IngredientTableHeader({
                   onBulkUpdateSupplier={onBulkUpdateSupplier}
                   onBulkUpdateStorage={onBulkUpdateStorage}
                   onBulkUpdateWastage={onBulkUpdateWastage}
+                  onBulkAutoCategorize={onBulkAutoCategorize}
                   showBulkMenu={showBulkMenu}
                   onToggleBulkMenu={onToggleBulkMenu}
                   variant="mobile"

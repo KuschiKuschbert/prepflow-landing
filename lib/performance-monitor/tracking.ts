@@ -8,7 +8,9 @@ import { PERFORMANCE_BUDGETS, PERFORMANCE_GOALS } from './budgets';
  *
  * @param {Function} updateMetric - Function to update metric value
  */
-export function trackCustomMetrics(_updateMetric?: (key: keyof PerformanceMetrics, value: number) => void): void {
+export function trackCustomMetrics(
+  _updateMetric?: (key: keyof PerformanceMetrics, value: number) => void,
+): void {
   if (typeof window !== 'undefined') {
     window.addEventListener('load', () => trackCustomMetric('page_load_time', performance.now()));
     document.addEventListener('DOMContentLoaded', () =>

@@ -41,7 +41,8 @@ export function convertIngredientCosts(
       convertedCostPerUnit = ingredient.pack_price / packSizeNum / conversion.value;
     }
   } else if (normalizedUnit !== standardUnit) {
-    convertedCostPerUnit = ingredient.cost_per_unit / convertToStandardUnit(1, normalizedUnit).value;
+    convertedCostPerUnit =
+      ingredient.cost_per_unit / convertToStandardUnit(1, normalizedUnit).value;
   }
 
   let convertedCostPerUnitAsPurchased = ingredient.cost_per_unit_as_purchased;

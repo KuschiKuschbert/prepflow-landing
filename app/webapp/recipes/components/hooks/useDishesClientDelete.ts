@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Dish, Recipe } from '../../types';
+import { useNotification } from '@/contexts/NotificationContext';
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 
@@ -9,7 +10,6 @@ interface UseDishesClientDeleteProps {
   setDishes: (dishes: Dish[]) => void;
   setRecipes: (recipes: Recipe[]) => void;
   setError: (error: string | null) => void;
-  setSuccessMessage: (message: string | null) => void;
 }
 
 export function useDishesClientDelete({
@@ -18,8 +18,8 @@ export function useDishesClientDelete({
   setDishes,
   setRecipes,
   setError,
-  setSuccessMessage,
 }: UseDishesClientDeleteProps) {
+  const { showSuccess } = useNotification();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<UnifiedItem | null>(null);
 
@@ -65,10 +65,9 @@ export function useDishesClientDelete({
         return;
       }
 
-      setSuccessMessage(`${itemType === 'dish' ? 'Dish' : 'Recipe'} deleted successfully`);
+      showSuccess(`${itemType === 'dish' ? 'Dish' : 'Recipe'} deleted successfully`);
       setShowDeleteConfirm(false);
       setItemToDelete(null);
-      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       // Revert optimistic update on error
       if (itemType === 'dish') {
@@ -78,7 +77,7 @@ export function useDishesClientDelete({
       }
       setError(`Failed to delete ${itemType}`);
     }
-  }, [itemToDelete, dishes, recipes, setDishes, setRecipes, setError, setSuccessMessage]);
+  }, [itemToDelete, dishes, recipes, setDishes, setRecipes, setError, showSuccess]);
 
   const cancelDeleteItem = useCallback(() => {
     setShowDeleteConfirm(false);

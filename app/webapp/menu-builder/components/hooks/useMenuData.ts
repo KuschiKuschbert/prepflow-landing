@@ -98,7 +98,19 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
       setStatistics,
       setLoading,
     });
-  }, [menuId, menuCacheKey, dishesCacheKey, recipesCacheKey, onError, setMenuItems, setDishes, setRecipes, setCategories, setStatistics, setLoading]);
+  }, [
+    menuId,
+    menuCacheKey,
+    dishesCacheKey,
+    recipesCacheKey,
+    onError,
+    setMenuItems,
+    setDishes,
+    setRecipes,
+    setCategories,
+    setStatistics,
+    setLoading,
+  ]);
 
   useEffect(() => {
     loadMenuData();

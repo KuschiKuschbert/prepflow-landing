@@ -2,17 +2,19 @@
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeName } from '@/lib/text-utils';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../hooks/useRecipePricing';
 import { Dish, Recipe } from '../types';
 import { SelectionModeBanner } from './SelectionModeBanner';
-import { SuccessMessage } from './SuccessMessage';
 import { DishesListView } from './DishesListView';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
 import { DishesEditorView } from './DishesEditorView';
 import { DishesSidePanels } from './DishesSidePanels';
+import { UnifiedBulkActionsMenu } from './UnifiedBulkActionsMenu';
+import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
+import { UnifiedBulkDeleteConfirmationModal } from './UnifiedBulkDeleteConfirmationModal';
 import { useDishesClientData } from './hooks/useDishesClientData';
 import { useDishesClientViewMode } from './hooks/useDishesClientViewMode';
 import { useDishesClientPreview } from './hooks/useDishesClientPreview';
@@ -20,22 +22,17 @@ import { useDishesClientHandlers } from './hooks/useDishesClientHandlers';
 import { useDishesClientSelection } from './hooks/useDishesClientSelection';
 import { useDishesClientPagination } from './hooks/useDishesClientPagination';
 import { useDishesClientRecipePricing } from './hooks/useDishesClientRecipePricing';
+import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
+import { useBulkShare } from '../hooks/useBulkShare';
+import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
 import { DishSortField } from '../hooks/useDishFiltering';
 
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Recipe pricing hooks
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
-  const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError => {
-    // Error handling
-  });
-  const capitalizeRecipeName = formatRecipeName;
-
-  // AI Instructions hook
-  const { generateAIInstructions } = useAIInstructions();
 
   // Data fetching
   const {
@@ -49,6 +46,12 @@ export default function DishesClient() {
     setError,
     fetchItems,
   } = useDishesClientData();
+
+  const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
+  const capitalizeRecipeName = formatRecipeName;
+
+  // AI Instructions hook
+  const { generateAIInstructions } = useAIInstructions();
 
   // Preview state
   const previewState = useDishesClientPreview({
@@ -126,7 +129,6 @@ export default function DishesClient() {
     setSelectedRecipeForPreview,
     setHighlightingRowId,
     setHighlightingRowType,
-    setSuccessMessage,
     setError,
   });
 
@@ -160,13 +162,115 @@ export default function DishesClient() {
     fetchBatchRecipeIngredients,
   });
 
+  // Create item types map for bulk actions
+  const selectedItemTypes = useMemo(() => {
+    const types = new Map<string, 'recipe' | 'dish'>();
+    dishes.forEach(d => {
+      if (selectedItems.has(d.id)) {
+        types.set(d.id, 'dish');
+      }
+    });
+    recipes.forEach(r => {
+      if (selectedItems.has(r.id)) {
+        types.set(r.id, 'recipe');
+      }
+    });
+    return types;
+  }, [dishes, recipes, selectedItems]);
+
+  // Optimistic update functions
+  const optimisticallyUpdateDishes = useCallback(
+    (updater: (dishes: Dish[]) => Dish[]) => {
+      setDishes(updater(dishes));
+    },
+    [dishes, setDishes],
+  );
+
+  const optimisticallyUpdateRecipes = useCallback(
+    (updater: (recipes: Recipe[]) => Recipe[]) => {
+      setRecipes(updater(recipes));
+    },
+    [recipes, setRecipes],
+  );
+
+  // Store original state for rollback
+  const [originalDishes, setOriginalDishes] = useState<Dish[]>([]);
+  const [originalRecipes, setOriginalRecipes] = useState<Recipe[]>([]);
+
+  const rollbackDishes = useCallback(() => {
+    if (originalDishes.length > 0) {
+      setDishes(originalDishes);
+    }
+  }, [originalDishes, setDishes]);
+
+  const rollbackRecipes = useCallback(() => {
+    if (originalRecipes.length > 0) {
+      setRecipes(originalRecipes);
+    }
+  }, [originalRecipes, setRecipes]);
+
+  // Store original state before bulk operations
+  useEffect(() => {
+    if (selectedItems.size > 0) {
+      setOriginalDishes([...dishes]);
+      setOriginalRecipes([...recipes]);
+    }
+  }, [selectedItems.size, dishes, recipes]); // Only update when selection changes
+
+  // Unified bulk actions hook
+  const {
+    bulkActionLoading,
+    showBulkDeleteConfirm,
+    setShowBulkDeleteConfirm,
+    handleBulkDelete,
+    confirmBulkDelete,
+    cancelBulkDelete,
+    selectedRecipeIds,
+    selectedDishIds,
+  } = useUnifiedBulkActions({
+    recipes,
+    dishes,
+    selectedItems,
+    selectedItemTypes,
+    optimisticallyUpdateRecipes,
+    optimisticallyUpdateDishes,
+    rollbackRecipes,
+    rollbackDishes,
+    onClearSelection: handleExitSelectionMode,
+  });
+
+  // Bulk share hook
+  const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
+    selectedRecipeIds,
+    onSuccess: handleExitSelectionMode,
+  });
+
+  // Bulk add to menu hook
+  const {
+    handleBulkAddToMenu,
+    handleSelectMenu,
+    handleCreateNewMenu,
+    menus,
+    loadingMenus,
+    addLoading: addToMenuLoading,
+    showMenuDialog,
+    setShowMenuDialog,
+  } = useBulkAddToMenu({
+    selectedItems,
+    selectedItemTypes,
+    onSuccess: handleExitSelectionMode,
+  });
+
+  const [showBulkMenu, setShowBulkMenu] = useState(false);
+
+  const selectedRecipeCount = selectedRecipeIds.length;
+
   if (loading) {
     return <PageSkeleton />;
   }
 
   return (
     <div>
-      {successMessage && <SuccessMessage message={successMessage} />}
       {error && (
         <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400">
           {error}
@@ -178,6 +282,42 @@ export default function DishesClient() {
         isSelectionMode={isSelectionMode}
         selectedCount={selectedItems.size}
         onExitSelectionMode={handleExitSelectionMode}
+      />
+
+      {/* Bulk Actions Menu */}
+      {isSelectionMode && selectedItems.size > 0 && (
+        <div className="mb-4 flex items-center justify-between">
+          <UnifiedBulkActionsMenu
+            selectedCount={selectedItems.size}
+            selectedRecipeCount={selectedRecipeCount}
+            bulkActionLoading={bulkActionLoading || bulkShareLoading || addToMenuLoading}
+            onBulkDelete={handleBulkDelete}
+            onBulkShare={() => handleBulkShare('pdf')}
+            onBulkAddToMenu={handleBulkAddToMenu}
+            showBulkMenu={showBulkMenu}
+            onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
+          />
+        </div>
+      )}
+
+      <BulkAddToMenuDialog
+        show={showMenuDialog}
+        menus={menus}
+        loadingMenus={loadingMenus}
+        onClose={() => setShowMenuDialog(false)}
+        onSelectMenu={handleSelectMenu}
+        onCreateNew={handleCreateNewMenu}
+      />
+
+      <UnifiedBulkDeleteConfirmationModal
+        show={showBulkDeleteConfirm}
+        selectedItems={selectedItems}
+        selectedItemTypes={selectedItemTypes}
+        recipes={recipes}
+        dishes={dishes}
+        capitalizeRecipeName={capitalizeRecipeName}
+        onConfirm={confirmBulkDelete}
+        onCancel={cancelBulkDelete}
       />
 
       <DishesViewModeToggle

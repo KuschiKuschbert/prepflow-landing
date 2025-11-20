@@ -24,13 +24,10 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
   const { showError, showSuccess } = useNotification();
   const [exportLoading, setExportLoading] = useState<string | null>(null);
 
-
-
   // Get unique menu items (dishes and recipes) with their allergens
   const menuItemsWithAllergens = menuItems.map((item, index) => {
     // Extract allergens - ensure it's always an array
     let allergens: string[] = [];
-
 
     // Try item.allergens first (from enriched item)
     if (item.allergens && Array.isArray(item.allergens)) {
@@ -68,9 +65,14 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
       });
     }
 
-    const isVegetarian = item.is_vegetarian ?? (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
-    const isVegan = item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
-    const dietaryConfidence = item.dietary_confidence || (item.dish_id ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
+    const isVegetarian =
+      item.is_vegetarian ??
+      (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
+    const isVegan =
+      item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
+    const dietaryConfidence =
+      item.dietary_confidence ||
+      (item.dish_id ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
 
     // Final safety check - ensure allergens is always a proper array
     const finalAllergens = Array.isArray(allergens) ? allergens : [];
@@ -84,16 +86,22 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
       isVegan,
       dietaryConfidence,
       category: item.category,
-      price: item.actual_selling_price || (item.dish_id ? item.dishes?.selling_price : item.recommended_selling_price) || 0,
+      price:
+        item.actual_selling_price ||
+        (item.dish_id ? item.dishes?.selling_price : item.recommended_selling_price) ||
+        0,
     };
   });
 
   const handleExport = async (format: 'pdf' | 'html' | 'csv') => {
     setExportLoading(format);
     try {
-      const response = await fetch(`/api/menus/${menu.id}/allergen-matrix/export?format=${format}`, {
-        method: 'GET',
-      });
+      const response = await fetch(
+        `/api/menus/${menu.id}/allergen-matrix/export?format=${format}`,
+        {
+          method: 'GET',
+        },
+      );
 
       if (!response.ok) {
         const data = await response.json();
@@ -130,7 +138,8 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
             <div>
               <h2 className="text-xl font-semibold text-white">Menu Locked</h2>
               <p className="text-sm text-gray-400">
-                This menu has been finalized. View the allergen matrix below or export it for printing.
+                This menu has been finalized. View the allergen matrix below or export it for
+                printing.
                 {menu.locked_at && (
                   <span className="ml-2">
                     Locked on {new Date(menu.locked_at).toLocaleDateString()}
@@ -186,21 +195,21 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
           <table className="min-w-full divide-y divide-[#2a2a2a]">
             <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                   Item Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                   Type
                 </th>
                 {AUSTRALIAN_ALLERGENS.map(allergen => (
                   <th
                     key={allergen.code}
-                    className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-300"
+                    className="px-4 py-3 text-center text-xs font-medium tracking-wider text-gray-300 uppercase"
                   >
                     {allergen.displayName}
                   </th>
                 ))}
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                   Dietary
                 </th>
               </tr>
@@ -208,7 +217,10 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
             <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
               {menuItemsWithAllergens.length === 0 ? (
                 <tr>
-                  <td colSpan={AUSTRALIAN_ALLERGENS.length + 3} className="px-6 py-8 text-center text-gray-400">
+                  <td
+                    colSpan={AUSTRALIAN_ALLERGENS.length + 3}
+                    className="px-6 py-8 text-center text-gray-400"
+                  >
                     No items in this menu
                   </td>
                 </tr>
@@ -222,11 +234,13 @@ export function MenuLockedView({ menu, menuItems, onUnlock }: MenuLockedViewProp
                       const allergensArray = Array.isArray(item.allergens) ? item.allergens : [];
                       const containsAllergen = allergensArray.includes(allergen.code);
 
-
                       return (
                         <td key={allergen.code} className="px-4 py-4 text-center">
                           {containsAllergen ? (
-                            <span className="text-red-500" title={`Contains ${allergen.displayName}`}>
+                            <span
+                              className="text-red-500"
+                              title={`Contains ${allergen.displayName}`}
+                            >
                               ❌
                             </span>
                           ) : (

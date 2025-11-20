@@ -58,9 +58,10 @@ export function formatIngredientForCSV(ingredient: Ingredient): string {
  * @param {Ingredient[]} filteredIngredients - Ingredients to export
  */
 export function exportIngredientsToCSV(filteredIngredients: Ingredient[]): void {
-  const csvContent = [CSV_HEADERS.join(','), ...filteredIngredients.map(formatIngredientForCSV)].join(
-    '\n',
-  );
+  const csvContent = [
+    CSV_HEADERS.join(','),
+    ...filteredIngredients.map(formatIngredientForCSV),
+  ].join('\n');
   const blob = new Blob([csvContent], { type: 'text/csv' });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');

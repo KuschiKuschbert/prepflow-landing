@@ -50,8 +50,8 @@ const KitchenCharts = dynamic(() => import('./components/KitchenCharts'), {
 export default function WebAppDashboard() {
   // ErrorBoundary is already in app/webapp/layout.tsx wrapping all children
   return (
-    <ResponsivePageContainer>
-      <div className="tablet:py-6 min-h-screen overflow-x-hidden bg-transparent py-4">
+    <ResponsivePageContainer fullWidth={true}>
+      <div className="tablet:px-6 tablet:py-6 desktop:px-8 large-desktop:px-12 min-h-screen overflow-x-hidden bg-transparent px-4 py-4 xl:px-16 2xl:px-20">
         {/* Static Header - Renders Instantly */}
         <PageHeader
           title="Kitchen Management Dashboard"

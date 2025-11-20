@@ -32,7 +32,10 @@ export interface WizardStepProps {
   suppliers?: any[];
   availableUnits: string[];
   errors: Record<string, string>;
-  onInputChange: (field: keyof Ingredient, value: string | number | string[] | Record<string, any>) => void;
+  onInputChange: (
+    field: keyof Ingredient,
+    value: string | number | string[] | Record<string, any>,
+  ) => void;
   onInputBlur?: (field: keyof Ingredient, value: string | number) => void;
   formatCost: (value: number) => string;
   onWastagePercentageChange?: (wastage: number) => void;

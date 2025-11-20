@@ -3,7 +3,12 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
 export function generateTemperatureLogs(logs: ReportData['temperature_logs']): string {
@@ -56,4 +61,3 @@ export function generateTemperatureLogs(logs: ReportData['temperature_logs']): s
     </div>
   `;
 }
-

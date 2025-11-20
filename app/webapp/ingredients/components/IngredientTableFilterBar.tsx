@@ -10,11 +10,12 @@ import { ItemsPerPageSelector } from './ItemsPerPageSelector';
 import { ClearAllFiltersButton } from './ClearAllFiltersButton';
 import { useFilterBarEffects } from '../hooks/useFilterBarEffects';
 import { type SortOption } from '../hooks/useIngredientFiltering';
-import { Store, MapPin } from 'lucide-react';
+import { Store, MapPin, Tag } from 'lucide-react';
 
 interface Ingredient {
   supplier?: string;
   storage_location?: string;
+  category?: string;
 }
 
 interface IngredientTableFilterBarProps {
@@ -22,12 +23,14 @@ interface IngredientTableFilterBarProps {
   searchTerm: string;
   supplierFilter: string;
   storageFilter: string;
+  categoryFilter: string;
   sortBy: SortOption;
   displayUnit: string;
   itemsPerPage: number;
   onSearchChange: (term: string) => void;
   onSupplierFilterChange: (supplier: string) => void;
   onStorageFilterChange: (storage: string) => void;
+  onCategoryFilterChange: (category: string) => void;
   onSortChange: (sort: SortOption) => void;
   onDisplayUnitChange: (unit: string) => void;
   onItemsPerPageChange: (itemsPerPage: number) => void;
@@ -38,18 +41,21 @@ export function IngredientTableFilterBar({
   searchTerm,
   supplierFilter,
   storageFilter,
+  categoryFilter,
   sortBy,
   displayUnit,
   itemsPerPage,
   onSearchChange,
   onSupplierFilterChange,
   onStorageFilterChange,
+  onCategoryFilterChange,
   onSortChange,
   onDisplayUnitChange,
   onItemsPerPageChange,
 }: IngredientTableFilterBarProps) {
   const [showSupplierMenu, setShowSupplierMenu] = useState(false);
   const [showStorageMenu, setShowStorageMenu] = useState(false);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   const { localSearchTerm, setLocalSearchTerm } = useFilterBarEffects({
@@ -57,22 +63,27 @@ export function IngredientTableFilterBar({
     onSearchChange,
     showSupplierMenu,
     showStorageMenu,
+    showCategoryMenu,
     showSortMenu,
     setShowSupplierMenu,
     setShowStorageMenu,
+    setShowCategoryMenu,
     setShowSortMenu,
   });
 
-  const { uniqueSuppliers, uniqueStorageLocations } = useMemo(() => {
+  const { uniqueSuppliers, uniqueStorageLocations, uniqueCategories } = useMemo(() => {
     const supplierSet = new Set<string>();
     const storageSet = new Set<string>();
+    const categorySet = new Set<string>();
     ingredients.forEach(ingredient => {
       if (ingredient.supplier) supplierSet.add(ingredient.supplier);
       if (ingredient.storage_location) storageSet.add(ingredient.storage_location);
+      if (ingredient.category) categorySet.add(ingredient.category);
     });
     return {
       uniqueSuppliers: Array.from(supplierSet).sort(),
       uniqueStorageLocations: Array.from(storageSet).sort(),
+      uniqueCategories: Array.from(categorySet).sort(),
     };
   }, [ingredients]);
 
@@ -81,16 +92,18 @@ export function IngredientTableFilterBar({
     if (searchTerm) count++;
     if (supplierFilter) count++;
     if (storageFilter) count++;
+    if (categoryFilter) count++;
     return count;
-  }, [searchTerm, supplierFilter, storageFilter]);
+  }, [searchTerm, supplierFilter, storageFilter, categoryFilter]);
 
   const handleClearAll = useCallback(() => {
     setLocalSearchTerm('');
     onSearchChange('');
     onSupplierFilterChange('');
     onStorageFilterChange('');
+    onCategoryFilterChange('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onSearchChange, onSupplierFilterChange, onStorageFilterChange]);
+  }, [onSearchChange, onSupplierFilterChange, onStorageFilterChange, onCategoryFilterChange]);
 
   return (
     <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
@@ -116,6 +129,7 @@ export function IngredientTableFilterBar({
             onToggle={() => {
               setShowSupplierMenu(!showSupplierMenu);
               setShowStorageMenu(false);
+              setShowCategoryMenu(false);
               setShowSortMenu(false);
             }}
             onChange={onSupplierFilterChange}
@@ -132,11 +146,29 @@ export function IngredientTableFilterBar({
             onToggle={() => {
               setShowStorageMenu(!showStorageMenu);
               setShowSupplierMenu(false);
+              setShowCategoryMenu(false);
               setShowSortMenu(false);
             }}
             onChange={onStorageFilterChange}
             activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
             activeBg="bg-[#D925C7]/20"
+          />
+
+          <FilterDropdown
+            label="Category"
+            icon={Tag}
+            value={categoryFilter}
+            options={uniqueCategories}
+            isOpen={showCategoryMenu}
+            onToggle={() => {
+              setShowCategoryMenu(!showCategoryMenu);
+              setShowSupplierMenu(false);
+              setShowStorageMenu(false);
+              setShowSortMenu(false);
+            }}
+            onChange={onCategoryFilterChange}
+            activeColor="border-[#29E7CD]/50 bg-[#29E7CD]/10 text-[#29E7CD]"
+            activeBg="bg-[#29E7CD]/20"
           />
 
           <IngredientSortDropdown
@@ -147,6 +179,7 @@ export function IngredientTableFilterBar({
               setShowSortMenu(!showSortMenu);
               setShowSupplierMenu(false);
               setShowStorageMenu(false);
+              setShowCategoryMenu(false);
             }}
             onClose={() => setShowSortMenu(false)}
           />
@@ -160,27 +193,28 @@ export function IngredientTableFilterBar({
             itemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}
           />
-
-          <ClearAllFiltersButton
-            activeFilterCount={activeFilterCount}
-            onClearAll={handleClearAll}
-          />
         </div>
       </div>
 
       {/* Active Filter Chips */}
-      {(searchTerm || supplierFilter || storageFilter) && (
+      {(searchTerm || supplierFilter || storageFilter || categoryFilter) && (
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           <ActiveFilterChips
             searchTerm={searchTerm}
             supplierFilter={supplierFilter}
             storageFilter={storageFilter}
+            categoryFilter={categoryFilter}
             onClearSearch={() => {
               setLocalSearchTerm('');
               onSearchChange('');
             }}
             onClearSupplier={() => onSupplierFilterChange('')}
             onClearStorage={() => onStorageFilterChange('')}
+            onClearCategory={() => onCategoryFilterChange('')}
+          />
+          <ClearAllFiltersButton
+            activeFilterCount={activeFilterCount}
+            onClearAll={handleClearAll}
           />
         </div>
       )}

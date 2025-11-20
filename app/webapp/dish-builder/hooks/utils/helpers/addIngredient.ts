@@ -39,7 +39,12 @@ export function addIngredientToCalculations({
 }: AddIngredientProps): void {
   if (existingCalc) {
     flushSync(() => {
-      updateCalculation(ingredient.id, existingCalc.quantity + convertedQuantity, ingredients, setCalculations);
+      updateCalculation(
+        ingredient.id,
+        existingCalc.quantity + convertedQuantity,
+        ingredients,
+        setCalculations,
+      );
     });
   } else {
     const newCalc = createCalculation(

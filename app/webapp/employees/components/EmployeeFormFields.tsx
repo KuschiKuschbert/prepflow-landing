@@ -66,9 +66,7 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-300">
-          Employment End Date
-        </label>
+        <label className="mb-2 block text-sm font-medium text-gray-300">Employment End Date</label>
         <input
           type="date"
           value={formData.employment_end_date}

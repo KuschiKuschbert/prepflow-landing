@@ -83,7 +83,9 @@ export function useMenuItemReorder({
           // Revert optimistic update on error
           setMenuItems(originalMenuItems);
           logger.error('Failed to reorder items:', result.error || result.message);
-          showError(`Failed to reorder items: ${result.error || result.message || 'Unknown error'}`);
+          showError(
+            `Failed to reorder items: ${result.error || result.message || 'Unknown error'}`,
+          );
           // Refresh statistics to revert optimistic change
           refreshStatistics().catch(err => {
             logger.error('Failed to refresh statistics:', err);

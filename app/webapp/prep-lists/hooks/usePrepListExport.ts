@@ -15,12 +15,9 @@ interface ExportOptions {
  * Hook for exporting and printing prep lists
  */
 export function usePrepListExport() {
-  const printPrepListWrapper = useCallback(
-    (prepList: PrepList) => {
-      printPrepList(prepList);
-    },
-    [],
-  );
+  const printPrepListWrapper = useCallback((prepList: PrepList) => {
+    printPrepList(prepList);
+  }, []);
 
   const printGeneratedPrepListWrapper = useCallback(
     (sections: SectionData[], menuName: string, options?: ExportOptions) => {

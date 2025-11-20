@@ -51,7 +51,7 @@ export default function QuickActions() {
         </p>
       </div>
 
-      <div className="tablet:grid-cols-4 tablet:gap-4 desktop:grid-cols-4 grid grid-cols-2 gap-3">
+      <div className="tablet:gap-4 tablet:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] desktop:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] grid [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))] gap-3">
         {actions.map((action, index) => (
           <Link
             key={action.title}

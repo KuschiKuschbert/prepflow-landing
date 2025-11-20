@@ -3,7 +3,12 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
 export function generateHACCP(haccp: ReportData['haccp']): string {
@@ -81,4 +86,3 @@ export function generateHACCP(haccp: ReportData['haccp']): string {
     </div>
   `;
 }
-

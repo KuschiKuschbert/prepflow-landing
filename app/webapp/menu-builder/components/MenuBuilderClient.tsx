@@ -69,7 +69,9 @@ export default function MenuBuilderClient({
 
           // Update selectedMenu if it exists to reflect any changes (only when explicitly requested)
           if (updateSelected && selectedMenuRef.current) {
-            const updatedMenu = updatedMenus.find((m: Menu) => m.id === selectedMenuRef.current?.id);
+            const updatedMenu = updatedMenus.find(
+              (m: Menu) => m.id === selectedMenuRef.current?.id,
+            );
             if (updatedMenu) {
               setSelectedMenuRef.current(updatedMenu);
             }
@@ -235,13 +237,7 @@ export default function MenuBuilderClient({
   }
 
   if (selectedMenu) {
-    return (
-      <MenuEditor
-        menu={selectedMenu}
-        onBack={handleBack}
-        onMenuUpdated={handleMenuUpdated}
-      />
-    );
+    return <MenuEditor menu={selectedMenu} onBack={handleBack} onMenuUpdated={handleMenuUpdated} />;
   }
 
   return (

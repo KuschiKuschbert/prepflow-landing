@@ -2,10 +2,10 @@
  * Helper functions for populating basic data (suppliers, ingredients, recipes)
  */
 
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { cleanSampleSuppliers } from '@/lib/sample-suppliers-clean';
 import { cleanSampleIngredients } from '@/lib/sample-ingredients-clean';
 import { cleanSampleRecipes, recipeIngredientMappings } from '@/lib/sample-recipes-clean';
+import { cleanSampleSuppliers } from '@/lib/sample-suppliers-clean';
+import { createSupabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
 
@@ -57,7 +57,8 @@ export async function populateBasicData(
     suppliersData = data || [];
   }
 
-  // Ingredients - check for existing ones first
+  // Ingredients (including consumables) - check for existing ones first
+  // Note: cleanSampleIngredients includes consumables from cleanSampleConsumablesIngredients
   const { data: existingIngredients } = await supabaseAdmin
     .from('ingredients')
     .select('ingredient_name');
@@ -67,6 +68,12 @@ export async function populateBasicData(
 
   const ingredientsToInsert = cleanSampleIngredients.filter(
     i => !existingIngredientNames.has(i.ingredient_name?.toLowerCase().trim()),
+  );
+
+  // Count consumables for logging
+  const consumablesCount = ingredientsToInsert.reduce(
+    (count, i) => ((i as any).category === 'Consumables' ? count + 1 : count),
+    0,
   );
 
   let ingredientsData: any[] | undefined;
@@ -84,6 +91,16 @@ export async function populateBasicData(
       const { data: allIngredients } = await supabaseAdmin.from('ingredients').select();
       ingredientsData = allIngredients || [];
       results.populated.push({ table: 'ingredients', count: ingredientsToInsert.length });
+
+      // Log consumables count explicitly
+      if (consumablesCount > 0) {
+        logger.dev(
+          `✅ Inserted ${ingredientsToInsert.length} ingredients (including ${consumablesCount} consumables)`,
+        );
+      } else {
+        logger.dev(`✅ Inserted ${ingredientsToInsert.length} ingredients`);
+      }
+
       if (ingredientsToInsert.length < cleanSampleIngredients.length) {
         logger.dev(
           `Skipped ${cleanSampleIngredients.length - ingredientsToInsert.length} duplicate ingredients`,

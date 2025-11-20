@@ -20,7 +20,9 @@ function extractColumnName(error: any): string | null {
 
   // Try to extract column name from common error patterns
   // Pattern: "column X does not exist" or "column X.Y does not exist"
-  const columnMatch = fullErrorText.match(/column\s+["']?([\w.]+)["']?\s+(?:does\s+not\s+exist|not\s+found)/i);
+  const columnMatch = fullErrorText.match(
+    /column\s+["']?([\w.]+)["']?\s+(?:does\s+not\s+exist|not\s+found)/i,
+  );
   if (columnMatch && columnMatch[1]) {
     return columnMatch[1];
   }
@@ -223,7 +225,8 @@ export async function fetchMenuWithItems(menuId: string) {
         const noPricingErrorMessage = noPricingError.message || '';
         const noPricingErrorDetails = (noPricingError as any)?.details || '';
         const noPricingErrorHint = (noPricingError as any)?.hint || '';
-        const noPricingFullErrorText = `${noPricingErrorMessage} ${noPricingErrorDetails} ${noPricingErrorHint}`.toLowerCase();
+        const noPricingFullErrorText =
+          `${noPricingErrorMessage} ${noPricingErrorDetails} ${noPricingErrorHint}`.toLowerCase();
         const isColumnNotFoundInFallback =
           noPricingErrorCode === '42703' || noPricingErrorCode === 'COLUMN_NOT_FOUND';
         const isMissingDietaryInFallback =
@@ -289,14 +292,22 @@ export async function fetchMenuWithItems(menuId: string) {
             .order('position');
 
           if (minimalError) {
-            logDetailedError(minimalError, 'Database error fetching menu items (minimal query failed)', menuId);
+            logDetailedError(
+              minimalError,
+              'Database error fetching menu items (minimal query failed)',
+              menuId,
+            );
             throw ApiErrorHandler.fromSupabaseError(minimalError, 500);
           }
 
           menuItems = itemsMinimal;
         } else {
           // Error but not about dietary columns - throw it
-          logDetailedError(noPricingError, 'Database error fetching menu items (no pricing fallback failed)', menuId);
+          logDetailedError(
+            noPricingError,
+            'Database error fetching menu items (no pricing fallback failed)',
+            menuId,
+          );
           throw ApiErrorHandler.fromSupabaseError(noPricingError, 500);
         }
       }
@@ -345,7 +356,8 @@ export async function fetchMenuWithItems(menuId: string) {
         const noDietaryErrorMessage = noDietaryError.message || '';
         const noDietaryErrorDetails = (noDietaryError as any)?.details || '';
         const noDietaryErrorHint = (noDietaryError as any)?.hint || '';
-        const noDietaryFullErrorText = `${noDietaryErrorMessage} ${noDietaryErrorDetails} ${noDietaryErrorHint}`.toLowerCase();
+        const noDietaryFullErrorText =
+          `${noDietaryErrorMessage} ${noDietaryErrorDetails} ${noDietaryErrorHint}`.toLowerCase();
         const isColumnNotFoundInDietaryFallback =
           noDietaryErrorCode === '42703' || noDietaryErrorCode === 'COLUMN_NOT_FOUND';
         const isMissingDescriptionInDietaryFallback =
@@ -363,11 +375,10 @@ export async function fetchMenuWithItems(menuId: string) {
             context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
           });
 
-          const { data: itemsWithoutDescription, error: noDescriptionError } =
-            await supabaseAdmin
-              .from('menu_items')
-              .select(
-                `
+          const { data: itemsWithoutDescription, error: noDescriptionError } = await supabaseAdmin
+            .from('menu_items')
+            .select(
+              `
                 id,
                 dish_id,
                 recipe_id,
@@ -386,19 +397,27 @@ export async function fetchMenuWithItems(menuId: string) {
                   yield
                 )
               `,
-              )
-              .eq('menu_id', menuId)
-              .order('category')
-              .order('position');
+            )
+            .eq('menu_id', menuId)
+            .order('category')
+            .order('position');
 
           if (noDescriptionError) {
-            logDetailedError(noDescriptionError, 'Database error fetching menu items (no description fallback failed)', menuId);
+            logDetailedError(
+              noDescriptionError,
+              'Database error fetching menu items (no description fallback failed)',
+              menuId,
+            );
             throw ApiErrorHandler.fromSupabaseError(noDescriptionError, 500);
           }
 
           menuItems = itemsWithoutDescription;
         } else {
-          logDetailedError(noDietaryError, 'Database error fetching menu items (no dietary fallback failed)', menuId);
+          logDetailedError(
+            noDietaryError,
+            'Database error fetching menu items (no dietary fallback failed)',
+            menuId,
+          );
           throw ApiErrorHandler.fromSupabaseError(noDietaryError, 500);
         }
       } else {
@@ -443,7 +462,11 @@ export async function fetchMenuWithItems(menuId: string) {
 
         if (minimalError) {
           // Final fallback: try without any relationships (just menu_items columns)
-          logDetailedError(minimalError, 'Database error fetching menu items (minimal query failed), trying without relationships', menuId);
+          logDetailedError(
+            minimalError,
+            'Database error fetching menu items (minimal query failed), trying without relationships',
+            menuId,
+          );
 
           const { data: itemsNoRelations, error: noRelationsError } = await supabaseAdmin
             .from('menu_items')
@@ -462,11 +485,14 @@ export async function fetchMenuWithItems(menuId: string) {
               noRelationsError.message?.includes('position');
 
             if (isCategoryOrPositionMissing) {
-              logger.warn('[Menus API] Category/position columns missing, trying with only essential columns:', {
-                error: noRelationsError.message,
-                columnName: columnName || 'unknown',
-                context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
-              });
+              logger.warn(
+                '[Menus API] Category/position columns missing, trying with only essential columns:',
+                {
+                  error: noRelationsError.message,
+                  columnName: columnName || 'unknown',
+                  context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
+                },
+              );
 
               const { data: itemsEssential, error: essentialError } = await supabaseAdmin
                 .from('menu_items')
@@ -474,13 +500,21 @@ export async function fetchMenuWithItems(menuId: string) {
                 .eq('menu_id', menuId);
 
               if (essentialError) {
-                logDetailedError(essentialError, 'Database error fetching menu items (ultimate fallback with essential columns failed)', menuId);
+                logDetailedError(
+                  essentialError,
+                  'Database error fetching menu items (ultimate fallback with essential columns failed)',
+                  menuId,
+                );
                 throw ApiErrorHandler.fromSupabaseError(essentialError, 500);
               }
 
               menuItems = itemsEssential || [];
             } else {
-              logDetailedError(noRelationsError, 'Database error fetching menu items (final fallback without relationships failed)', menuId);
+              logDetailedError(
+                noRelationsError,
+                'Database error fetching menu items (final fallback without relationships failed)',
+                menuId,
+              );
               throw ApiErrorHandler.fromSupabaseError(noRelationsError, 500);
             }
           } else {
@@ -491,7 +525,11 @@ export async function fetchMenuWithItems(menuId: string) {
         }
       } else {
         // Unknown error that's not a column-not-found, throw it
-        logDetailedError(allColumnsError, 'Database error fetching menu items (unknown error)', menuId);
+        logDetailedError(
+          allColumnsError,
+          'Database error fetching menu items (unknown error)',
+          menuId,
+        );
         throw ApiErrorHandler.fromSupabaseError(allColumnsError, 500);
       }
     }
@@ -542,10 +580,15 @@ export async function fetchMenuWithItems(menuId: string) {
         if (!allergenData) return [];
         if (Array.isArray(allergenData)) {
           // Filter out invalid values and ensure strings
-          const validAllergens = allergenData.filter((a): a is string => typeof a === 'string' && a.length > 0);
+          const validAllergens = allergenData.filter(
+            (a): a is string => typeof a === 'string' && a.length > 0,
+          );
 
           // Consolidate and validate against known allergen codes
-          const { AUSTRALIAN_ALLERGENS, consolidateAllergens } = require('@/lib/allergens/australian-allergens');
+          const {
+            AUSTRALIAN_ALLERGENS,
+            consolidateAllergens,
+          } = require('@/lib/allergens/australian-allergens');
           const validCodes = AUSTRALIAN_ALLERGENS.map((a: { code: string }) => a.code);
           const consolidated = consolidateAllergens(validAllergens);
           const filtered = consolidated.filter((code: string) => validCodes.includes(code));
@@ -592,7 +635,9 @@ export async function fetchMenuWithItems(menuId: string) {
             } else {
               // Column exists but is empty/null, try to aggregate
               try {
-                const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');
+                const { aggregateDishAllergens } = await import(
+                  '@/lib/allergens/allergen-aggregation'
+                );
                 allergens = await aggregateDishAllergens(item.dishes.id);
                 logger.dev('[Menus API] Aggregated dish allergens:', {
                   dishName,
@@ -639,7 +684,9 @@ export async function fetchMenuWithItems(menuId: string) {
             } else {
               // Column exists but is empty/null, try to aggregate
               try {
-                const { aggregateRecipeAllergens } = await import('@/lib/allergens/allergen-aggregation');
+                const { aggregateRecipeAllergens } = await import(
+                  '@/lib/allergens/allergen-aggregation'
+                );
                 allergens = await aggregateRecipeAllergens(item.recipes.id);
                 logger.dev('[Menus API] Aggregated recipe allergens:', {
                   recipeName,

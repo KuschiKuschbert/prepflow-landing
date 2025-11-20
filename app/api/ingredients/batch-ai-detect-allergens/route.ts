@@ -5,7 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { detectAllergensFromIngredient, enrichIngredientWithAllergens } from '@/lib/allergens/ai-allergen-detection';
+import {
+  detectAllergensFromIngredient,
+  enrichIngredientWithAllergens,
+} from '@/lib/allergens/ai-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -39,10 +42,9 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401),
-        { status: 401 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
+        status: 401,
+      });
     }
 
     const userId = session.user.email;
@@ -146,10 +148,11 @@ export async function POST(request: NextRequest) {
           ingredient_name: ingredient.ingredient_name,
           brand: ingredient.brand || undefined,
           allergens: (ingredient.allergens as string[]) || [],
-          allergen_source: (ingredient.allergen_source as {
-            manual?: boolean;
-            ai?: boolean;
-          }) || {},
+          allergen_source:
+            (ingredient.allergen_source as {
+              manual?: boolean;
+              ai?: boolean;
+            }) || {},
         });
 
         // Update ingredient in database
@@ -210,4 +213,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

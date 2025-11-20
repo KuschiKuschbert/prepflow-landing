@@ -6,7 +6,11 @@
 import { logger } from '@/lib/logger';
 import { getOpenAIClient, isAIEnabled } from '@/lib/ai/openai-client';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getAllAllergenCodes, AUSTRALIAN_ALLERGENS, consolidateAllergens } from './australian-allergens';
+import {
+  getAllAllergenCodes,
+  AUSTRALIAN_ALLERGENS,
+  consolidateAllergens,
+} from './australian-allergens';
 
 export interface AIAllergenDetectionResult {
   allergens: string[];

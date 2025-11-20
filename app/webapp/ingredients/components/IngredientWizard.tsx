@@ -81,7 +81,10 @@ export default function IngredientWizard({
     }
   };
 
-  const handleInputChange = (field: keyof Ingredient, value: string | number | string[] | Record<string, any>) => {
+  const handleInputChange = (
+    field: keyof Ingredient,
+    value: string | number | string[] | Record<string, any>,
+  ) => {
     setFormData(prev => {
       const updated = {
         ...prev,
@@ -334,7 +337,7 @@ export default function IngredientWizard({
     };
 
     detectAllergens();
-  }, [wizardStep, formData.ingredient_name, formData.brand]);
+  }, [wizardStep, formData.ingredient_name, formData.brand, formData.allergen_source, formData.allergens]);
 
   const canProceed = useMemo(() => {
     // Step 1 and step 4 (review) require validation

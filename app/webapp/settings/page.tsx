@@ -2,6 +2,7 @@
 
 import { getArcadeStats } from '@/lib/arcadeStats';
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { PersonalitySettingsPanel } from './components/PersonalitySettingsPanel';
 import { AdaptiveNavSettingsPanel } from './components/AdaptiveNavSettingsPanel';
 import { useCountry } from '@/contexts/CountryContext';
@@ -131,6 +132,21 @@ export default function SettingsPage() {
             {(countryConfig.taxRate * 100).toFixed(1)}%
           </p>
         </div>
+      </div>
+
+      {/* Backup & Restore */}
+      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+        <h2 className="text-xl font-semibold">Backup & Restore</h2>
+        <p className="text-gray-300">
+          Backup your data to Google Drive or download encrypted backup files. Restore from backups
+          with full, selective, or merge options.
+        </p>
+        <Link
+          href="/webapp/settings/backup"
+          className="inline-block rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-white transition-all hover:shadow-lg"
+        >
+          Manage Backups
+        </Link>
       </div>
 
       <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">

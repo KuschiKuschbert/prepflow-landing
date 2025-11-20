@@ -20,6 +20,7 @@ export interface COGSCalculation {
   totalCost: number;
   wasteAdjustedCost: number;
   yieldAdjustedCost: number;
+  isConsumable?: boolean; // True if category === 'Consumables'
   // Legacy properties for compatibility
   id?: string;
   ingredient_id?: string;

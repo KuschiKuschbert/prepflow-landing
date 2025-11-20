@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import { Recipe } from '../types';
+import { useNotification } from '@/contexts/NotificationContext';
 
 interface UseRecipeHandlersProps {
   recipes: Recipe[];
@@ -16,7 +17,6 @@ interface UseRecipeHandlersProps {
     portions: number,
   ) => Promise<{ recipe: Recipe; isNew: boolean } | null>;
   fetchData: () => Promise<void>;
-  setSuccessMessage: (msg: string | null) => void;
   saveNow?: () => Promise<void>;
   setSaveError?: (error: string) => void;
 }
@@ -31,10 +31,10 @@ export function useRecipeHandlers({
   setShowCreateModal,
   createOrUpdateRecipe,
   fetchData,
-  setSuccessMessage,
   saveNow,
   setSaveError,
 }: UseRecipeHandlersProps) {
+  const { showSuccess, showError } = useNotification();
   const handleRecipeSelect = useCallback(
     (recipeId: string) => {
       setSelectedRecipe(recipeId);
@@ -58,8 +58,7 @@ export function useRecipeHandlers({
         if (result.recipe) {
           setSelectedRecipe(result.recipe.id);
           setDishPortions(result.recipe.yield || 1);
-          setSuccessMessage(`Recipe "${result.recipe.recipe_name}" created successfully!`);
-          setTimeout(() => setSuccessMessage(null), 3000);
+          showSuccess(`Recipe "${result.recipe.recipe_name}" created successfully!`);
         }
         return result.recipe;
       }
@@ -71,7 +70,7 @@ export function useRecipeHandlers({
       fetchData,
       setSelectedRecipe,
       setDishPortions,
-      setSuccessMessage,
+      showSuccess,
     ],
   );
 
@@ -80,15 +79,13 @@ export function useRecipeHandlers({
     if (!selectedRecipeData || calculations.length === 0) return;
     try {
       if (saveNow) await saveNow();
-      setSuccessMessage(`Recipe "${selectedRecipeData.recipe_name}" is complete! 🎉`);
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showSuccess(`Recipe "${selectedRecipeData.recipe_name}" is complete! 🎉`);
     } catch (err) {
       const errorMsg = 'Failed to save recipe. Please try again.';
       if (setSaveError) setSaveError(errorMsg);
-      setSuccessMessage(errorMsg);
-      setTimeout(() => setSuccessMessage(null), 3000);
+      showError(errorMsg);
     }
-  }, [recipes, selectedRecipe, calculations, saveNow, setSuccessMessage, setSaveError]);
+  }, [recipes, selectedRecipe, calculations, saveNow, showSuccess, showError, setSaveError]);
 
   return {
     handleRecipeSelect,

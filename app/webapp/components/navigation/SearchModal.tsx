@@ -2,7 +2,7 @@
 
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 
 interface SearchModalProps {
@@ -13,12 +13,104 @@ interface SearchModalProps {
   filtered: Array<{ href: string; label: string; icon: React.ReactNode; category?: string }>;
 }
 
+/**
+ * Search modal component for navigation search.
+ * Provides full-screen search interface with keyboard shortcuts (⌘K).
+ * Includes focus trap for accessibility and aria-live regions for screen readers.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {boolean} props.isOpen - Whether the modal is open
+ * @param {string} props.query - Current search query
+ * @param {Function} props.onChange - Callback when search query changes
+ * @param {Function} props.onClose - Callback when modal is closed
+ * @param {Array} props.filtered - Filtered navigation items matching the query
+ * @returns {JSX.Element} Search modal component
+ *
+ * @example
+ * ```tsx
+ * <SearchModal
+ *   isOpen={isSearchOpen}
+ *   query={searchQuery}
+ *   onChange={setSearchQuery}
+ *   onClose={() => setIsSearchOpen(false)}
+ *   filtered={filteredItems}
+ * />
+ * ```
+ */
 export function SearchModal({ isOpen, query, onChange, onClose, filtered }: SearchModalProps) {
   const { trackNavigation } = useNavigationTracking();
+  const modalRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus trap implementation
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      // Store trigger element (the element that opened the modal)
+      triggerRef.current = document.activeElement as HTMLElement;
+
+      // Get all focusable elements within the modal
+      const getFocusableElements = (): HTMLElement[] => {
+        if (!modalRef.current) return [];
+        return Array.from(
+          modalRef.current.querySelectorAll(
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        ) as HTMLElement[];
+      };
+
+      const focusableElements = getFocusableElements();
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      // Focus first element (input)
+      if (inputRef.current) {
+        inputRef.current.focus();
+      } else if (firstElement) {
+        firstElement.focus();
+      }
+
+      // Handle Tab key to trap focus
+      const handleTab = (e: KeyboardEvent) => {
+        if (e.key !== 'Tab') return;
+
+        if (focusableElements.length === 0) {
+          e.preventDefault();
+          return;
+        }
+
+        if (e.shiftKey) {
+          // Shift + Tab (backwards)
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          // Tab (forwards)
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
+      };
+
+      document.addEventListener('keydown', handleTab);
+
+      return () => {
+        document.removeEventListener('keydown', handleTab);
+        // Return focus to trigger element when modal closes
+        if (triggerRef.current && typeof triggerRef.current.focus === 'function') {
+          triggerRef.current.focus();
+        }
+      };
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
   return (
     <div
+      ref={modalRef}
       id="search-modal"
       role="dialog"
       aria-modal="true"
@@ -42,6 +134,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                   Search navigation
                 </h2>
                 <input
+                  ref={inputRef}
                   type="text"
                   placeholder="Search navigation&hellip;"
                   value={query}
@@ -66,11 +159,19 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
               </div>
             </div>
             <div className="max-h-96 overflow-y-auto p-4">
+              <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+                {filtered.length > 0
+                  ? `${filtered.length} result${filtered.length === 1 ? '' : 's'} found`
+                  : query
+                    ? `No results found for ${query}`
+                    : 'Start typing to search'}
+              </div>
               {filtered.length > 0 ? (
-                <div className="space-y-1">
+                <div className="space-y-1" role="listbox" aria-label="Search results">
                   {filtered.map(item => (
                     <Link
-                      aria-label={`Go to ${item.label}`}
+                      role="option"
+                      aria-label={`Go to ${item.label}${item.category ? ` in ${item.category}` : ''}`}
                       key={item.href}
                       href={item.href}
                       onClick={() => {
@@ -78,7 +179,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                         onClose();
                       }}
                       onMouseEnter={() => prefetchRoute(item.href)}
-                      className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[#2a2a2a]/50"
+                      className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
                     >
                       <span className="text-gray-400">{item.icon}</span>
                       <span className="text-gray-300">{item.label}</span>
@@ -87,7 +188,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                   ))}
                 </div>
               ) : (
-                <div className="py-8 text-center text-gray-400">
+                <div className="py-8 text-center text-gray-400" role="status" aria-live="polite">
                   No results found for &quot;{query}&quot;
                 </div>
               )}

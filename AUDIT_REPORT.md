@@ -55,6 +55,7 @@
 #### Hooks (30 files exceeding 100-line limit)
 
 **Most Critical:**
+
 - `app/webapp/menu-builder/hooks/useMenuDragDrop.ts` - **221 lines** (121% over limit)
 - `app/webapp/dish-builder/hooks/useDishBuilder.ts` - **144 lines** (44% over limit)
 - `app/webapp/ingredients/hooks/useIngredientAdd.ts` - **135 lines** (35% over limit)
@@ -62,6 +63,7 @@
 - `app/webapp/dish-builder/hooks/utils/dishSave.ts` - **121 lines** (21% over limit)
 
 **All Hook Violations:**
+
 - `app/components/landing/hooks/useAppleStyleAnimations.ts` - 115 lines
 - `app/webapp/cogs/hooks/useCOGSCalculations.ts` - 116 lines
 - `app/webapp/cogs/hooks/useIngredientAddition.ts` - 111 lines
@@ -131,11 +133,13 @@
 #### Utilities (12 files exceeding 150-line limit)
 
 **Most Critical:**
+
 - `lib/compliance/report-generator.ts` - **1,625 lines** (983% over limit) 🔴🔴🔴
   - **Action:** Split into multiple generator modules
   - **Priority:** 🔴 **CRITICAL** - Largest utility violation
 
 **All Utility Violations:**
+
 - `app/webapp/performance/utils/generatePerformanceTips.ts` - 171 lines
 - `app/webapp/prep-lists/utils/prepTechniques.ts` - 200 lines
 - `app/webapp/temperature/components/utils.ts` - **306 lines** (104% over limit)
@@ -169,6 +173,7 @@
 **MANDATORY:** All `console.log()` calls must be migrated to `logger.dev()`.
 
 **Files with console usage:**
+
 - `app/webapp/menu-builder/components/MenuEditor.tsx` - 2 instances (`console.error`)
 - `app/webapp/par-levels/page.tsx` - 3 instances (`console.log`)
 - `app/page.tsx` - console usage
@@ -192,16 +197,19 @@
 ### 4. Bundle Size Violations
 
 **Current Bundle Sizes:**
+
 - **Total:** 3,403 KB (580% over 500KB budget)
 - **JavaScript:** 3,250.5 KB (1,525% over 200KB budget)
 - **CSS:** 152.5 KB (205% over 50KB budget)
 
 **Performance Budgets:**
+
 - Total bundle: 500KB (500,000 bytes)
 - JavaScript bundle: 200KB (200,000 bytes)
 - CSS bundle: 50KB (50,000 bytes)
 
 **Action Required:**
+
 1. Analyze bundle composition: `npm run analyze`
 2. Implement code splitting for large components
 3. Lazy load non-critical components
@@ -217,11 +225,13 @@
 ### 5. npm Vulnerabilities (9 high severity)
 
 **Vulnerable Package:** `glob` (10.3.7 - 11.0.3)
+
 - **Severity:** High
 - **Issue:** Command injection via -c/--cmd executes matches with shell:true
 - **Affected:** Jest dependencies (`@jest/core`, `@jest/reporters`, `jest-runtime`)
 
 **Action Required:**
+
 ```bash
 # Review and update Jest dependencies
 npm audit fix --force  # May install breaking changes (Jest 29.7.0)
@@ -238,6 +248,7 @@ npm audit fix --force  # May install breaking changes (Jest 29.7.0)
 ### Phase 1: Critical File Refactoring (Week 1-2)
 
 **Priority Order:**
+
 1. 🔴 **`lib/compliance/report-generator.ts`** (1,625 lines) - Split into modules
 2. 🔴 **`app/webapp/menu-builder/components/MenuEditor.tsx`** (1,010 lines) - Split into sub-components
 3. 🔴 **`app/api/compliance/health-inspector-report/route.ts`** (708 lines) - Extract helpers
@@ -298,6 +309,7 @@ npm run cleanup:fix
 ## 📊 Progress Tracking
 
 ### Current Status
+
 - ✅ **TypeScript:** 0 errors
 - ✅ **ESLint:** 0 violations
 - ✅ **Prettier:** All formatted
@@ -308,6 +320,7 @@ npm run cleanup:fix
 - ⚠️ **Security:** 9 vulnerabilities
 
 ### Target Status
+
 - ✅ **File Sizes:** 0 violations
 - ✅ **Console.log:** 0 instances (all migrated)
 - ✅ **JSDoc:** 100% coverage

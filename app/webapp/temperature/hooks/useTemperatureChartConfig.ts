@@ -53,4 +53,3 @@ export function useTemperatureChartConfig(
 
   return { yAxisMin, yAxisMax, xAxisDomain, xAxisTicks };
 }
-

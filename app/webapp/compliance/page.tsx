@@ -26,7 +26,9 @@ export default function ComplianceTrackingPage() {
   const [types, setTypes] = useState<ComplianceType[]>([]);
   const [records, setRecords] = useState<ComplianceRecord[]>([]);
   const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
-  const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>('records');
+  const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>(
+    'records',
+  );
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [showAddType, setShowAddType] = useState(false);
   const [selectedType, setSelectedType] = useState('all');

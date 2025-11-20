@@ -46,7 +46,9 @@ export function useCategoryRename({
       // Optimistically update UI immediately
       if (itemsToUpdate.length > 0) {
         setMenuItems(prevItems =>
-          prevItems.map(item => (item.category === oldName ? { ...item, category: newName } : item)),
+          prevItems.map(item =>
+            item.category === oldName ? { ...item, category: newName } : item,
+          ),
         );
       }
       setCategories(categories.map(c => (c === oldName ? newName : c)));
@@ -105,14 +107,7 @@ export function useCategoryRename({
         logger.error('Failed to refresh statistics:', err);
       });
     },
-    [
-      menuId,
-      menuItems,
-      categories,
-      setMenuItems,
-      setCategories,
-      refreshStatistics,
-    ],
+    [menuId, menuItems, categories, setMenuItems, setCategories, refreshStatistics],
   );
 
   return { handleRenameCategory };

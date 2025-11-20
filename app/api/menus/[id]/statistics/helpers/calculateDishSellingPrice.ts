@@ -24,4 +24,3 @@ export async function calculateDishSellingPrice(dishId: string): Promise<number>
   // Recalculate GST-exclusive from final price
   return finalPriceInclGST / (1 + gstRate);
 }
-

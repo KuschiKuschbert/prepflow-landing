@@ -46,11 +46,12 @@ functions.forEach(({ name, startLine, endLine }) => {
   const funcContent = funcLines.join('\n');
 
   // Convert function name to file name (e.g., generateExecutiveSummary -> executive-summary.ts)
-  const fileName = name
-    .replace('generate', '')
-    .replace(/([A-Z])/g, '-$1')
-    .toLowerCase()
-    .slice(1) + '.ts';
+  const fileName =
+    name
+      .replace('generate', '')
+      .replace(/([A-Z])/g, '-$1')
+      .toLowerCase()
+      .slice(1) + '.ts';
 
   const filePath = path.join(sectionsDir, fileName);
 

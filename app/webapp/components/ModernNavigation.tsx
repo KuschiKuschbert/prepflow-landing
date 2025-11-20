@@ -7,15 +7,17 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { isArcadeDisabled, isTouchDevice, prefersReducedMotion } from '@/lib/arcadeGuards';
 import { useTranslation } from '@/lib/useTranslation';
 import { usePathname } from 'next/navigation';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
-import { MoreDrawer } from './navigation/MoreDrawer';
+import { NavigationPopover } from './navigation/NavigationPopover';
+import { AccountMenu } from './navigation/AccountMenu';
 import { useNavigationItems } from './navigation/nav-items';
 import { NavigationHeader } from './navigation/NavigationHeader';
 import PersistentSidebar from './navigation/PersistentSidebar';
 import { SearchModal } from './navigation/SearchModal';
 import { MobileFAB } from './navigation/MobileFAB';
+import { NavigationErrorBoundary } from './navigation/NavigationErrorBoundary';
 import { useWorkflowPreference } from '@/lib/workflow/preferences';
 
 // Utility function to ensure consistent class ordering
@@ -35,13 +37,26 @@ interface ModernNavigationProps {
   className?: string;
 }
 
+/**
+ * Main navigation orchestrator component for PrepFlow webapp.
+ * Manages all navigation components (header, sidebar, bottom nav, FAB, drawers, search).
+ * Handles keyboard shortcuts (⌘K for search, ⌘B for sidebar toggle).
+ * Includes error boundary and Easter egg interactions.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} [props.className=''] - Additional CSS classes
+ * @returns {JSX.Element} Modern navigation component
+ */
 const ModernNavigation = memo(function ModernNavigation({ className = '' }: ModernNavigationProps) {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const moreButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Detect if we're on desktop (768px+) - only used for keyboard shortcuts, not layout
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -115,14 +130,39 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     return pathname.startsWith(href);
   };
 
+  // Memoized callbacks for navigation components
+  const handleMoreClick = useCallback(() => {
+    setIsPopoverOpen(true);
+  }, []);
+
+  const handlePopoverClose = useCallback(() => {
+    setIsPopoverOpen(false);
+  }, []);
+
+  const handleAccountMenuClick = useCallback(() => {
+    setIsAccountMenuOpen(true);
+  }, []);
+
+  const handleAccountMenuClose = useCallback(() => {
+    setIsAccountMenuOpen(false);
+  }, []);
+
+  const handleSearchClick = useCallback(() => {
+    setIsSearchOpen(true);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setIsSearchOpen(false);
+  }, []);
+
   return (
-    <>
+    <NavigationErrorBoundary>
       <NavigationHeader
         className={className}
         menuButtonRef={menuButtonRef}
-        onMenuClick={() => {}} // No burger menu anymore
-        isSidebarOpen={false}
-        onSearchClick={() => setIsSearchOpen(true)}
+        onMenuClick={handleAccountMenuClick}
+        isSidebarOpen={isAccountMenuOpen}
+        onSearchClick={handleSearchClick}
         isSearchOpen={isSearchOpen}
         pathname={pathname}
         navigationItems={navigationItems}
@@ -143,27 +183,29 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <BottomNavBar
-          onMoreClick={() => setIsMoreDrawerOpen(true)}
-          onSearchClick={() => setIsSearchOpen(true)}
-        />
+        <BottomNavBar onMoreClick={handleMoreClick} moreButtonRef={moreButtonRef} />
       </div>
 
       {/* Mobile: Floating Action Button - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <MobileFAB onSearchClick={() => setIsSearchOpen(true)} />
+        <MobileFAB onSearchClick={handleSearchClick} />
       </div>
 
-      {/* Mobile: More Drawer - CSS handles visibility */}
+      {/* Mobile: Navigation Popover - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <MoreDrawer
-          isOpen={isMoreDrawerOpen}
-          onClose={() => setIsMoreDrawerOpen(false)}
-          onOpen={() => setIsMoreDrawerOpen(true)}
-          onSearchClick={() => {
-            setIsMoreDrawerOpen(false);
-            setIsSearchOpen(true);
-          }}
+        <NavigationPopover
+          isOpen={isPopoverOpen}
+          onClose={handlePopoverClose}
+          triggerRef={moreButtonRef}
+        />
+      </div>
+
+      {/* Mobile: Account Menu - CSS handles visibility */}
+      <div className="desktop:hidden block">
+        <AccountMenu
+          isOpen={isAccountMenuOpen}
+          onClose={handleAccountMenuClose}
+          triggerRef={menuButtonRef}
         />
       </div>
 
@@ -172,7 +214,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         isOpen={isSearchOpen}
         query={searchQuery}
         onChange={setSearchQuery}
-        onClose={() => setIsSearchOpen(false)}
+        onClose={handleSearchClose}
         filtered={filteredItems}
       />
 
@@ -186,7 +228,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
       {showDocketOverlay && !prefersReducedMotion() && !isArcadeDisabled() && !isTouchDevice() && (
         <CatchTheDocket isLoading={true} onLoadComplete={() => setShowDocketOverlay(false)} />
       )}
-    </>
+    </NavigationErrorBoundary>
   );
 });
 

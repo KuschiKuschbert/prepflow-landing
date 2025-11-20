@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { TemperatureEquipment } from '../types';
 import { handleGenerateSampleData } from './utils/generateSampleDataHandler';
+import { useConfirm } from '@/hooks/useConfirm';
 interface UseTemperatureEquipmentTabHandlersProps {
   equipment: TemperatureEquipment[];
   itemsPerPage: number;
@@ -26,6 +27,7 @@ export function useTemperatureEquipmentTabHandlers({
   onRefreshLogs,
 }: UseTemperatureEquipmentTabHandlersProps) {
   const { showSuccess, showError } = useNotification();
+  const { showConfirm, ConfirmDialog } = useConfirm();
   const [editingEquipment, setEditingEquipment] = useState<string | null>(null);
   const [selectedEquipment, setSelectedEquipment] = useState<TemperatureEquipment | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -88,18 +90,22 @@ export function useTemperatureEquipmentTabHandlers({
     }
   };
   const handleDeleteEquipment = async (equipmentId: string) => {
-    if (
-      confirm(
-        'Are you sure you want to delete this equipment? This will also delete all associated temperature logs.',
-      )
-    ) {
-      try {
-        await onDeleteEquipment(equipmentId);
-        const newTotalPages = Math.ceil((equipment.length - 1) / itemsPerPage);
-        if (currentPage > newTotalPages && newTotalPages > 0) setCurrentPage(newTotalPages);
-      } catch (error) {
-        // Handle error gracefully
-      }
+    const confirmed = await showConfirm({
+      title: 'Delete Equipment?',
+      message: "Delete this equipment? All its temperature logs disappear too. Can't undo this.",
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    });
+
+    if (!confirmed) return;
+
+    try {
+      await onDeleteEquipment(equipmentId);
+      const newTotalPages = Math.ceil((equipment.length - 1) / itemsPerPage);
+      if (currentPage > newTotalPages && newTotalPages > 0) setCurrentPage(newTotalPages);
+    } catch (error) {
+      // Handle error gracefully
     }
   };
   const toggleEquipmentStatus = async (equipmentId: string, currentStatus: boolean) => {
@@ -140,5 +146,6 @@ export function useTemperatureEquipmentTabHandlers({
     handleDeleteEquipment,
     toggleEquipmentStatus,
     handleGenerateSampleData: generateSampleData,
+    ConfirmDialog,
   };
 }

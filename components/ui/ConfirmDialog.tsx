@@ -1,5 +1,38 @@
 'use client';
 
+import { AlertCircle, AlertTriangle, Info } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Icon } from './Icon';
+
+/**
+ * Confirmation dialog component with Material Design 3 styling.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {boolean} props.isOpen - Whether the dialog is open
+ * @param {string} props.title - Dialog title
+ * @param {string} props.message - Dialog message
+ * @param {string} [props.confirmLabel='Confirm'] - Confirm button label
+ * @param {string} [props.cancelLabel='Cancel'] - Cancel button label
+ * @param {Function} props.onConfirm - Callback when confirmed
+ * @param {Function} props.onCancel - Callback when cancelled
+ * @param {'danger' | 'warning' | 'info'} [props.variant='warning'] - Dialog variant
+ * @returns {JSX.Element | null} Rendered dialog or null if not open
+ *
+ * @example
+ * ```tsx
+ * <ConfirmDialog
+ *   isOpen={showDialog}
+ *   title="Delete Ingredient"
+ *   message="Are you sure? This can't be undone."
+ *   variant="danger"
+ *   confirmLabel="Delete"
+ *   cancelLabel="Cancel"
+ *   onConfirm={handleDelete}
+ *   onCancel={() => setShowDialog(false)}
+ * />
+ * ```
+ */
 interface ConfirmDialogProps {
   isOpen: boolean;
   title: string;
@@ -21,6 +54,83 @@ export function ConfirmDialog({
   onCancel,
   variant = 'warning',
 }: ConfirmDialogProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Focus trap and keyboard handling
+  useEffect(() => {
+    if (isOpen && dialogRef.current) {
+      // Store trigger element (the element that opened the dialog)
+      triggerRef.current = document.activeElement as HTMLElement;
+
+      // Get all focusable elements within the dialog
+      const getFocusableElements = (): HTMLElement[] => {
+        if (!dialogRef.current) return [];
+        return Array.from(
+          dialogRef.current.querySelectorAll(
+            'button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        ) as HTMLElement[];
+      };
+
+      const focusableElements = getFocusableElements();
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      // Focus first element (cancel button)
+      if (cancelButtonRef.current) {
+        cancelButtonRef.current.focus();
+      } else if (firstElement) {
+        firstElement.focus();
+      }
+
+      // Handle Tab key to trap focus
+      const handleTab = (e: KeyboardEvent) => {
+        if (e.key !== 'Tab') return;
+
+        if (focusableElements.length === 0) {
+          e.preventDefault();
+          return;
+        }
+
+        if (e.shiftKey) {
+          // Shift + Tab (backwards)
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          // Tab (forwards)
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement?.focus();
+          }
+        }
+      };
+
+      // Handle Escape key
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onCancel();
+        }
+      };
+
+      document.addEventListener('keydown', handleTab);
+      document.addEventListener('keydown', handleEscape);
+
+      return () => {
+        document.removeEventListener('keydown', handleTab);
+        document.removeEventListener('keydown', handleEscape);
+        // Return focus to trigger element when dialog closes
+        if (triggerRef.current && typeof triggerRef.current.focus === 'function') {
+          triggerRef.current.focus();
+        }
+      };
+    }
+  }, [isOpen, onCancel]);
+
   if (!isOpen) return null;
 
   const variantStyles = {
@@ -51,6 +161,7 @@ export function ConfirmDialog({
 
       {/* Dialog */}
       <div
+        ref={dialogRef}
         className="desktop:p-6 relative z-50 mx-4 w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
         role="dialog"
         aria-modal="true"
@@ -60,49 +171,13 @@ export function ConfirmDialog({
         {/* Icon */}
         <div className="mb-4 flex justify-center">
           {variant === 'danger' && (
-            <svg
-              className={`h-12 w-12 ${styles.icon}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
+            <Icon icon={AlertTriangle} size="xl" className={styles.icon} aria-hidden={true} />
           )}
           {variant === 'warning' && (
-            <svg
-              className={`h-12 w-12 ${styles.icon}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
+            <Icon icon={AlertCircle} size="xl" className={styles.icon} aria-hidden={true} />
           )}
           {variant === 'info' && (
-            <svg
-              className={`h-12 w-12 ${styles.icon}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <Icon icon={Info} size="xl" className={styles.icon} aria-hidden={true} />
           )}
         </div>
 
@@ -119,14 +194,16 @@ export function ConfirmDialog({
         {/* Actions */}
         <div className="flex gap-3">
           <button
+            ref={cancelButtonRef}
             onClick={onCancel}
-            className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60"
+            className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
           >
             {cancelLabel}
           </button>
           <button
+            ref={confirmButtonRef}
             onClick={onConfirm}
-            className={`flex-1 rounded-2xl px-4 py-3 font-semibold transition-all duration-200 ${styles.confirm}`}
+            className={`flex-1 rounded-2xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${styles.confirm}`}
           >
             {confirmLabel}
           </button>

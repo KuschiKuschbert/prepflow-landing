@@ -202,7 +202,9 @@ export function MenuCard({
             {menu.description ? (
               <p className="flex-1 text-sm text-gray-400">{menu.description}</p>
             ) : (
-              <p className={`flex-1 text-sm ${isLocked ? 'text-gray-500' : 'text-gray-500 italic'}`}>
+              <p
+                className={`flex-1 text-sm ${isLocked ? 'text-gray-500' : 'text-gray-500 italic'}`}
+              >
                 {isLocked ? 'No description.' : 'No description. Double-click to add one.'}
               </p>
             )}

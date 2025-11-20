@@ -24,12 +24,38 @@ export async function backfillMissingIngredients(rows: any[], recipeId: string):
 
   if (!supabaseAdmin) return rows;
 
-  const { data: ingRows, error: ingError } = await supabaseAdmin
+  // Try to select with category first, fallback without if column doesn't exist
+  let { data: ingRows, error: ingError } = await supabaseAdmin
     .from('ingredients')
     .select(
-      'id, ingredient_name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage',
+      'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, unit, trim_peel_waste_percentage, yield_percentage, category',
     )
     .in('id', uniqueIds);
+
+  // If category column doesn't exist, retry without it
+  if (
+    ingError &&
+    (ingError as any).code === '42703' &&
+    (ingError as any).message?.includes('category')
+  ) {
+    logger.warn('[Recipes API] Category column not found in backfill, retrying without category', {
+      context: { endpoint: '/api/recipes/[id]/ingredients', recipeId },
+    });
+
+    const retryResult = await supabaseAdmin
+      .from('ingredients')
+      .select(
+        'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, unit, trim_peel_waste_percentage, yield_percentage',
+      )
+      .in('id', uniqueIds);
+
+    // Normalize the retry result to include category as null for type compatibility
+    ingRows = retryResult.data?.map((ing: any) => ({
+      ...ing,
+      category: ing.category ?? null,
+    })) as typeof ingRows;
+    ingError = retryResult.error;
+  }
 
   if (ingError || !ingRows) return rows;
 

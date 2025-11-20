@@ -145,7 +145,9 @@ export async function loadMenuData({
     } else {
       // Handle statistics loading failure gracefully - don't break the UI
       if (statsResponse.status === 404) {
-        logger.dev('[Menu Data Loading] Statistics endpoint not found (404) - this may be a Next.js routing issue. Try restarting the dev server.');
+        logger.dev(
+          '[Menu Data Loading] Statistics endpoint not found (404) - this may be a Next.js routing issue. Try restarting the dev server.',
+        );
       } else {
         logger.warn('[Menu Data Loading] Failed to load statistics', {
           status: statsResponse.status,

@@ -1,26 +1,30 @@
 'use client';
 
-import { X, Search, Store, MapPin } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { MapPin, Search, Store, Tag, X } from 'lucide-react';
 
 interface ActiveFilterChipsProps {
   searchTerm: string;
   supplierFilter: string;
   storageFilter: string;
+  categoryFilter?: string;
   onClearSearch: () => void;
   onClearSupplier: () => void;
   onClearStorage: () => void;
+  onClearCategory?: () => void;
 }
 
 export function ActiveFilterChips({
   searchTerm,
   supplierFilter,
   storageFilter,
+  categoryFilter,
   onClearSearch,
   onClearSupplier,
   onClearStorage,
+  onClearCategory,
 }: ActiveFilterChipsProps) {
-  if (!searchTerm && !supplierFilter && !storageFilter) return null;
+  if (!searchTerm && !supplierFilter && !storageFilter && !categoryFilter) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -59,6 +63,19 @@ export function ActiveFilterChips({
             onClick={onClearStorage}
             className="ml-1 text-[#D925C7]/70 transition-colors hover:text-[#D925C7]"
             aria-label="Remove storage filter"
+          >
+            <Icon icon={X} size="xs" className="text-current" aria-hidden={true} />
+          </button>
+        </div>
+      )}
+      {categoryFilter && onClearCategory && (
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1 text-xs font-medium text-[#29E7CD]">
+          <Icon icon={Tag} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+          <span>{categoryFilter}</span>
+          <button
+            onClick={onClearCategory}
+            className="ml-1 text-[#29E7CD]/70 transition-colors hover:text-[#29E7CD]"
+            aria-label="Remove category filter"
           >
             <Icon icon={X} size="xs" className="text-current" aria-hidden={true} />
           </button>

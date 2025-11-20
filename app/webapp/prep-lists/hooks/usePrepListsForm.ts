@@ -65,7 +65,18 @@ export function usePrepListsForm({
         setError,
       });
     },
-    [formData, editingPrepList, userId, prepLists, setPrepLists, showError, showSuccess, resetForm, refetchPrepLists, setError],
+    [
+      formData,
+      editingPrepList,
+      userId,
+      prepLists,
+      setPrepLists,
+      showError,
+      showSuccess,
+      resetForm,
+      refetchPrepLists,
+      setError,
+    ],
   );
 
   const addItem = useCallback(() => {
@@ -94,23 +105,20 @@ export function usePrepListsForm({
     [formData],
   );
 
-  const handleEdit = useCallback(
-    (prepList: PrepList) => {
-      setEditingPrepList(prepList);
-      setFormData({
-        kitchenSectionId: prepList.kitchen_section_id,
-        name: prepList.name,
-        notes: prepList.notes || '',
-        items: prepList.prep_list_items.map(item => ({
-          ingredientId: item.ingredient_id,
-          quantity: item.quantity.toString(),
-          unit: item.unit,
-          notes: item.notes || '',
-        })),
-      });
-    },
-    [],
-  );
+  const handleEdit = useCallback((prepList: PrepList) => {
+    setEditingPrepList(prepList);
+    setFormData({
+      kitchenSectionId: prepList.kitchen_section_id,
+      name: prepList.name,
+      notes: prepList.notes || '',
+      items: prepList.prep_list_items.map(item => ({
+        ingredientId: item.ingredient_id,
+        quantity: item.quantity.toString(),
+        unit: item.unit,
+        notes: item.notes || '',
+      })),
+    });
+  }, []);
 
   return {
     formData,

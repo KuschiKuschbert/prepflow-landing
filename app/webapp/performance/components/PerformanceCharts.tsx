@@ -42,5 +42,11 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
     return null;
   }
 
-  return <PerformanceChartsContent performanceItems={performanceItems} dateRange={dateRange} isMobile={isMobile} />;
+  return (
+    <PerformanceChartsContent
+      performanceItems={performanceItems}
+      dateRange={dateRange}
+      isMobile={isMobile}
+    />
+  );
 }

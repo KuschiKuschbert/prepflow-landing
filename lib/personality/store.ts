@@ -14,28 +14,36 @@ import { PRESETS } from './presets';
 const STORAGE_KEY = 'prepflow-personality';
 
 export function usePersonality() {
-  const [settings, setSettings] = useState<PersonalitySettings>(() => {
-    if (typeof window === 'undefined') return getDefaultSettings();
+  // Always start with default to prevent hydration mismatch
+  const [settings, setSettings] = useState<PersonalitySettings>(getDefaultSettings());
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load from localStorage after hydration
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return validateSettings(JSON.parse(stored));
+        const validated = validateSettings(JSON.parse(stored));
+        setSettings(validated);
       }
     } catch {
       // Invalid stored data, use defaults
     }
-    return getDefaultSettings();
-  });
 
-  // Persist to localStorage on change
+    setIsHydrated(true);
+  }, []);
+
+  // Persist to localStorage on change (only after hydration)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!isHydrated || typeof window === 'undefined') return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
     } catch {
       // Storage quota exceeded or disabled, ignore
     }
-  }, [settings]);
+  }, [settings, isHydrated]);
 
   const updateSettings = useCallback((patch: Partial<PersonalitySettings>) => {
     setSettings(prev => ({ ...prev, ...patch }));

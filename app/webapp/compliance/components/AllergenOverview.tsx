@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { logger } from '@/lib/logger';
@@ -27,11 +27,7 @@ export function AllergenOverview() {
   const [selectedAllergenFilter, setSelectedAllergenFilter] = useState<string>('all');
   const [showOnlyWithAllergens, setShowOnlyWithAllergens] = useState(false);
 
-  useEffect(() => {
-    fetchAllergenData();
-  }, [selectedAllergenFilter]);
-
-  const fetchAllergenData = async () => {
+  const fetchAllergenData = useCallback(async () => {
     try {
       setLoading(true);
       let url = '/api/compliance/allergens';
@@ -52,7 +48,11 @@ export function AllergenOverview() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedAllergenFilter]);
+
+  useEffect(() => {
+    fetchAllergenData();
+  }, [fetchAllergenData]);
 
   // Filter items by search query and allergen filter
   const filteredItems = items.filter(item => {
@@ -79,13 +79,13 @@ export function AllergenOverview() {
     <div className="space-y-6">
       {/* Filters */}
       <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
-        <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">
+        <div className="tablet:grid-cols-3 grid grid-cols-1 gap-4">
           {/* Search */}
           <div className="relative">
             <Icon
               icon={Search}
               size="sm"
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
               aria-hidden={true}
             />
             <input
@@ -93,7 +93,7 @@ export function AllergenOverview() {
               placeholder="Search dishes/recipes..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] pl-10 pr-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] py-2 pr-3 pl-10 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             />
           </div>
 
@@ -102,13 +102,13 @@ export function AllergenOverview() {
             <Icon
               icon={Filter}
               size="sm"
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
               aria-hidden={true}
             />
             <select
               value={selectedAllergenFilter}
               onChange={e => setSelectedAllergenFilter(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] pl-10 pr-3 py-2 text-sm text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-full appearance-none rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] py-2 pr-3 pl-10 text-sm text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             >
               <option value="all">All Items</option>
               <option value="gluten">Gluten-Free</option>
@@ -139,18 +139,18 @@ export function AllergenOverview() {
       </div>
 
       {/* Results */}
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#2a2a2a]">
             <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
                   Allergens
                 </th>
               </tr>
@@ -198,7 +198,7 @@ export function AllergenOverview() {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">
+      <div className="tablet:grid-cols-3 grid grid-cols-1 gap-4">
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
           <div className="text-sm text-gray-400">Total Items</div>
           <div className="mt-1 text-2xl font-bold text-white">{items.length}</div>

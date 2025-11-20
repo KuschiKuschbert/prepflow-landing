@@ -18,6 +18,38 @@ interface NavItemProps {
   compact?: boolean;
 }
 
+/**
+ * Navigation item component for links in navigation menus.
+ * Supports both compact and full modes with proper touch targets (≥44px).
+ * Includes focus indicators and prefetching on hover.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.href - Navigation href
+ * @param {string} props.label - Item label
+ * @param {ReactNode} props.icon - Icon component
+ * @param {string} props.color - Color class for active state
+ * @param {boolean} props.isActive - Whether the item is active
+ * @param {Function} [props.onClick] - Optional click handler
+ * @param {Function} [props.onTrack] - Optional tracking callback
+ * @param {string} [props.className] - Additional CSS classes
+ * @param {'sm' | 'md' | 'lg'} [props.iconSize='md'] - Icon size
+ * @param {boolean} [props.showLabel=true] - Whether to show label
+ * @param {boolean} [props.compact=false] - Whether to use compact mode
+ * @returns {JSX.Element} Navigation item
+ *
+ * @example
+ * ```tsx
+ * <NavItem
+ *   href="/webapp/recipes"
+ *   label="Recipes"
+ *   icon={<Icon icon={UtensilsCrossed} />}
+ *   color="text-[#29E7CD]"
+ *   isActive={pathname.startsWith('/webapp/recipes')}
+ *   compact={false}
+ * />
+ * ```
+ */
 export function NavItem({
   href,
   label,
@@ -53,7 +85,7 @@ export function NavItem({
         href={href}
         onClick={handleClick}
         onMouseEnter={() => prefetchRoute(href)}
-        className={`group flex min-h-[36px] items-center space-x-2 rounded-lg px-2 py-1.5 transition-all duration-200 ${
+        className={`group flex min-h-[44px] items-center space-x-2 rounded-lg px-2 py-2 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
           isActive
             ? `border border-[#29E7CD]/20 bg-[#29E7CD]/10 ${className}`
             : `hover:bg-[#2a2a2a]/30 ${className}`
@@ -83,7 +115,7 @@ export function NavItem({
       href={href}
       onClick={onClick}
       onMouseEnter={() => prefetchRoute(href)}
-      className={`group flex min-h-[44px] items-center space-x-3 rounded-lg px-3 py-2.5 transition-all duration-200 ${
+      className={`group flex min-h-[44px] items-center space-x-3 rounded-lg px-3 py-2.5 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
         isActive
           ? `border border-[#29E7CD]/20 bg-[#29E7CD]/10 ${className}`
           : `hover:bg-[#2a2a2a]/50 ${className}`

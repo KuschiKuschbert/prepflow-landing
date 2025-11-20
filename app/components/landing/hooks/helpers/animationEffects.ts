@@ -86,7 +86,13 @@ export function useAnimationEffects({
     setInitialWidths,
     setButtonHeights,
   );
-  useExpandedWidthMeasurement(expandedIndex, features, containerRefs, parentContainerRef, setContainerWidths);
+  useExpandedWidthMeasurement(
+    expandedIndex,
+    features,
+    containerRefs,
+    parentContainerRef,
+    setContainerWidths,
+  );
 
   const handleToggle = createToggleHandler(
     expandedIndex,

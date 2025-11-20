@@ -5,9 +5,10 @@
 
 import { formatTextInput } from '@/lib/text-utils';
 import { convertUnit } from '@/lib/unit-conversion';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 
 import { logger } from '@/lib/logger';
+import { autoDetectCategory } from '@/lib/ingredients/category-detection';
 interface Ingredient {
   id?: string;
   ingredient_name: string;
@@ -15,6 +16,7 @@ interface Ingredient {
   pack_size?: string;
   pack_size_unit?: string;
   pack_price?: number;
+  category?: string;
   unit?: string;
   cost_per_unit: number;
   cost_per_unit_as_purchased?: number;
@@ -40,6 +42,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
     pack_size: '',
     pack_size_unit: 'GM',
     pack_price: 0,
+    category: '',
     unit: 'GM', // Keep for backward compatibility but will use pack_size_unit for calculations
     cost_per_unit: 0,
     cost_per_unit_as_purchased: 0,
@@ -53,6 +56,8 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [autoDetectedCategory, setAutoDetectedCategory] = useState<string | null>(null);
+  const detectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (ingredient) {
@@ -63,6 +68,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         pack_size: ingredient.pack_size || '',
         pack_size_unit: packSizeUnit,
         pack_price: ingredient.pack_price || 0,
+        category: ingredient.category || '',
         unit: ingredient.unit || packSizeUnit, // Default to pack_size_unit
         cost_per_unit: ingredient.cost_per_unit || 0,
         cost_per_unit_as_purchased:
@@ -75,6 +81,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         product_code: ingredient.product_code || '',
         storage_location: ingredient.storage_location || '',
       });
+      setAutoDetectedCategory(null);
     } else {
       setFormData({
         ingredient_name: '',
@@ -82,6 +89,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         pack_size: '',
         pack_size_unit: 'GM',
         pack_price: 0,
+        category: '',
         unit: 'GM', // Keep for backward compatibility
         cost_per_unit: 0,
         cost_per_unit_as_purchased: 0,
@@ -92,6 +100,7 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
         product_code: '',
         storage_location: '',
       });
+      setAutoDetectedCategory(null);
     }
     setErrors({});
   }, [ingredient]);
@@ -147,8 +156,53 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
       if (['pack_price', 'pack_size', 'pack_size_unit'].includes(field)) {
         setTimeout(updateCostPerUnit, 100);
       }
+
+      // Auto-detect category when ingredient_name changes (debounced)
+      if (field === 'ingredient_name' && typeof formattedValue === 'string') {
+        // Clear existing timeout
+        if (detectionTimeoutRef.current) {
+          clearTimeout(detectionTimeoutRef.current);
+        }
+
+        // Only auto-detect if category is empty
+        const currentCategory = formData.category;
+        if (!currentCategory && formattedValue.trim().length > 2) {
+          const ingredientName = formattedValue;
+          const brand = formData.brand;
+          const storageLocation = formData.storage_location;
+
+          detectionTimeoutRef.current = setTimeout(async () => {
+            try {
+              const { category } = await autoDetectCategory(
+                ingredientName,
+                brand,
+                storageLocation,
+                true, // use AI
+              );
+
+              if (category) {
+                // Only update if category is still empty (user hasn't manually set it)
+                setFormData(prev => {
+                  if (!prev.category) {
+                    setAutoDetectedCategory(category);
+                    return { ...prev, category };
+                  }
+                  return prev;
+                });
+              }
+            } catch (error) {
+              logger.error('Error auto-detecting category:', error);
+            }
+          }, 500); // 500ms debounce
+        }
+      }
+
+      // Clear auto-detected indicator if user manually changes category
+      if (field === 'category') {
+        setAutoDetectedCategory(null);
+      }
     },
-    [errors, updateCostPerUnit],
+    [errors, updateCostPerUnit, formData.category, formData.brand, formData.storage_location],
   );
 
   const validateForm = useCallback((): boolean => {
@@ -200,11 +254,21 @@ export function useIngredientFormLogic({ ingredient, onSave }: UseIngredientForm
     [formData, validateForm, onSave],
   );
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (detectionTimeoutRef.current) {
+        clearTimeout(detectionTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return {
     formData,
     errors,
     handleInputChange,
     validateForm,
     handleSubmit,
+    autoDetectedCategory,
   };
 }

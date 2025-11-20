@@ -117,9 +117,7 @@ export async function createEquipment(
     const data = await response.json();
     if (data.success && data.item) {
       // Replace temp equipment with real equipment from server
-      setEquipment(prevEquipment =>
-        prevEquipment.map(eq => (eq.id === tempId ? data.item : eq)),
-      );
+      setEquipment(prevEquipment => prevEquipment.map(eq => (eq.id === tempId ? data.item : eq)));
       showSuccess('Equipment created successfully');
       // Optionally refresh in background for accuracy (non-blocking)
       fetchEquipment().catch(err => logger.error('Failed to refresh equipment:', err));

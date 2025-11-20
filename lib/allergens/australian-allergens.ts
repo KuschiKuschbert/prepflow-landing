@@ -73,7 +73,18 @@ export const AUSTRALIAN_ALLERGENS: Allergen[] = [
     code: 'gluten',
     displayName: 'Gluten',
     description: 'Gluten-containing cereals (wheat, rye, barley, oats)',
-    commonNames: ['gluten', 'wheat', 'flour', 'semolina', 'durum', 'bulgur', 'rye', 'barley', 'oats', 'triticale'],
+    commonNames: [
+      'gluten',
+      'wheat',
+      'flour',
+      'semolina',
+      'durum',
+      'bulgur',
+      'rye',
+      'barley',
+      'oats',
+      'triticale',
+    ],
     icon: 'Wheat',
   },
   {
@@ -86,7 +97,8 @@ export const AUSTRALIAN_ALLERGENS: Allergen[] = [
   {
     code: 'shellfish',
     displayName: 'Shellfish',
-    description: 'Shellfish (crustaceans and molluscs: prawns, crabs, lobsters, oysters, mussels, etc.)',
+    description:
+      'Shellfish (crustaceans and molluscs: prawns, crabs, lobsters, oysters, mussels, etc.)',
     commonNames: [
       'prawn',
       'shrimp',
@@ -173,7 +185,11 @@ export function containsAllergenKeywords(text: string, allergenCode: string): bo
   if (!allergen) return false;
 
   const lowerText = text.toLowerCase();
-  const keywords = [allergen.code, allergen.displayName.toLowerCase(), ...(allergen.commonNames || [])];
+  const keywords = [
+    allergen.code,
+    allergen.displayName.toLowerCase(),
+    ...(allergen.commonNames || []),
+  ];
 
   return keywords.some(keyword => lowerText.includes(keyword.toLowerCase()));
 }
@@ -219,10 +235,27 @@ export function detectAllergensFromText(text: string): string[] {
   const oldCodes = ['crustacea', 'molluscs', 'peanuts', 'tree_nuts', 'wheat'];
   oldCodes.forEach(oldCode => {
     const oldAllergen = {
-      crustacea: { keywords: ['crustacea', 'crustacean', 'prawn', 'shrimp', 'crab', 'lobster', 'crayfish'] },
-      molluscs: { keywords: ['mollusc', 'mollusk', 'oyster', 'mussel', 'scallop', 'clam', 'squid', 'octopus'] },
+      crustacea: {
+        keywords: ['crustacea', 'crustacean', 'prawn', 'shrimp', 'crab', 'lobster', 'crayfish'],
+      },
+      molluscs: {
+        keywords: ['mollusc', 'mollusk', 'oyster', 'mussel', 'scallop', 'clam', 'squid', 'octopus'],
+      },
       peanuts: { keywords: ['peanut', 'groundnut', 'arachis', 'monkey nut'] },
-      tree_nuts: { keywords: ['tree nut', 'almond', 'cashew', 'walnut', 'pecan', 'hazelnut', 'pistachio', 'brazil nut', 'macadamia', 'pine nut'] },
+      tree_nuts: {
+        keywords: [
+          'tree nut',
+          'almond',
+          'cashew',
+          'walnut',
+          'pecan',
+          'hazelnut',
+          'pistachio',
+          'brazil nut',
+          'macadamia',
+          'pine nut',
+        ],
+      },
       wheat: { keywords: ['wheat', 'flour', 'semolina', 'durum', 'bulgur'] },
     }[oldCode];
 

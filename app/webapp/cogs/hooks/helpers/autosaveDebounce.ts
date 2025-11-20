@@ -53,7 +53,10 @@ export function useAutosaveDebounce({
           sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
         }
         if (onSave) onSave();
-        setTimeout(() => setStatus((prev: AutosaveStatus) => (prev === 'saved' ? 'idle' : prev)), 2000);
+        setTimeout(
+          () => setStatus((prev: AutosaveStatus) => (prev === 'saved' ? 'idle' : prev)),
+          2000,
+        );
       } else {
         logger.error('[Autosave] Save failed:', result.error);
         setStatus('error');

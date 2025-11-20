@@ -4,12 +4,15 @@ import { useState, useCallback } from 'react';
 import { COGSCalculation } from '../types';
 import { useRecipeValidation } from './useRecipeValidation';
 import { useRecipeCRUD } from './useRecipeCRUD';
+import { useNotification } from '@/contexts/NotificationContext';
+import { usePrompt } from '@/hooks/usePrompt';
 
 import { logger } from '@/lib/logger';
 export const useRecipeSaving = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { showSuccess } = useNotification();
+  const { showPrompt, InputDialog } = usePrompt();
   const { validateCalculations } = useRecipeValidation();
   const { createOrUpdateRecipe, saveRecipeIngredients } = useRecipeCRUD({ setError });
 
@@ -20,8 +23,18 @@ export const useRecipeSaving = () => {
         return;
       }
 
-      const rawRecipeName = dishName || prompt('Enter a name for this recipe:');
-      if (!rawRecipeName) return;
+      let rawRecipeName = dishName;
+      if (!rawRecipeName) {
+        const promptResult = await showPrompt({
+          title: 'Save Recipe',
+          message: 'What should we call this recipe?',
+          placeholder: 'Recipe name',
+          type: 'text',
+          validation: v => (v.trim().length > 0 ? null : 'Recipe name is required'),
+        });
+        if (!promptResult) return;
+        rawRecipeName = promptResult;
+      }
 
       try {
         setLoading(true);
@@ -55,35 +68,29 @@ export const useRecipeSaving = () => {
 
         setError(null);
         const actionText = isNew ? 'saved' : 'updated';
-        setSuccessMessage(
-          `Recipe "${recipe.recipe_name}" ${actionText} successfully to Recipe Book!`,
-        );
-        setTimeout(() => setSuccessMessage(null), 5000);
+        showSuccess(`Recipe "${recipe.recipe_name}" ${actionText} successfully to Recipe Book!`);
       } catch (err: any) {
         logger.error('Recipe save error:', err);
         const errorMessage =
           err?.message || (err?.code ? `Database error (${err.code})` : 'Failed to save recipe');
         setError(`Failed to save recipe: ${errorMessage}`);
-        setSuccessMessage(null);
       } finally {
         setLoading(false);
       }
     },
-    [validateCalculations, createOrUpdateRecipe, saveRecipeIngredients],
+    [validateCalculations, createOrUpdateRecipe, saveRecipeIngredients, showSuccess, showPrompt],
   );
 
   const clearMessages = useCallback(() => {
     setError(null);
-    setSuccessMessage(null);
   }, []);
 
   return {
     loading,
     error,
-    successMessage,
     saveAsRecipe,
     clearMessages,
     setError,
-    setSuccessMessage,
+    InputDialog,
   };
 };

@@ -9,10 +9,7 @@ import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation'
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
 
@@ -27,10 +24,9 @@ export async function GET(
     const status = await aggregateRecipeDietaryStatus(id);
 
     if (!status) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     return NextResponse.json({
@@ -51,10 +47,7 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
 
@@ -72,10 +65,9 @@ export async function POST(
     const status = await aggregateRecipeDietaryStatus(id, useAI);
 
     if (!status) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     return NextResponse.json({
@@ -95,4 +87,3 @@ export async function POST(
     );
   }
 }
-

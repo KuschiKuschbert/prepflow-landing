@@ -30,7 +30,7 @@ export function AllergenDisplay({
   if (!allergens || allergens.length === 0) {
     if (!showEmpty) return null;
     return (
-      <div className={`text-gray-400 text-sm ${className}`}>
+      <div className={`text-sm text-gray-400 ${className}`}>
         <span className="italic">{emptyMessage}</span>
       </div>
     );
@@ -58,24 +58,14 @@ export function AllergenDisplay({
         {manualAllergens.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {manualAllergens.map(allergen => (
-              <AllergenBadge
-                key={allergen}
-                allergenCode={allergen}
-                source="manual"
-                size={size}
-              />
+              <AllergenBadge key={allergen} allergenCode={allergen} source="manual" size={size} />
             ))}
           </div>
         )}
         {aiAllergens.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {aiAllergens.map(allergen => (
-              <AllergenBadge
-                key={allergen}
-                allergenCode={allergen}
-                source="ai"
-                size={size}
-              />
+              <AllergenBadge key={allergen} allergenCode={allergen} source="ai" size={size} />
             ))}
           </div>
         )}
@@ -89,14 +79,8 @@ export function AllergenDisplay({
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {allergens.map(allergen => (
-        <AllergenBadge
-          key={allergen}
-          allergenCode={allergen}
-          source={source}
-          size={size}
-        />
+        <AllergenBadge key={allergen} allergenCode={allergen} source={source} size={size} />
       ))}
     </div>
   );
 }
-

@@ -51,8 +51,8 @@ export async function fetchDishWithRelations(dishId: string) {
     )
     .eq('dish_id', dishId);
 
-  // Fetch dish ingredients
-  const { data: dishIngredients } = await supabaseAdmin
+  // Fetch dish ingredients - try with category first, fallback without if column doesn't exist
+  let { data: dishIngredients, error: ingredientsError } = await supabaseAdmin
     .from('dish_ingredients')
     .select(
       `
@@ -74,6 +74,58 @@ export async function fetchDishWithRelations(dishId: string) {
     `,
     )
     .eq('dish_id', dishId);
+
+  // If category column doesn't exist, retry without it
+  if (
+    ingredientsError &&
+    (ingredientsError as any).code === '42703' &&
+    (ingredientsError as any).message?.includes('category')
+  ) {
+    logger.warn('[Dishes API] Category column not found, retrying without category', {
+      context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
+    });
+
+    const retryResult = await supabaseAdmin
+      .from('dish_ingredients')
+      .select(
+        `
+        id,
+        ingredient_id,
+        quantity,
+        unit,
+        ingredients (
+          id,
+          ingredient_name,
+          cost_per_unit,
+          cost_per_unit_incl_trim,
+          trim_peel_waste_percentage,
+          yield_percentage,
+          unit,
+          supplier_name
+        )
+      `,
+      )
+      .eq('dish_id', dishId);
+
+    // Normalize the retry result to include category as null/undefined for type compatibility
+    dishIngredients = retryResult.data?.map((item: any) => ({
+      ...item,
+      ingredients: item.ingredients?.map((ing: any) => ({
+        ...ing,
+        category: ing.category ?? null,
+      })),
+    })) as typeof dishIngredients;
+    ingredientsError = retryResult.error;
+  }
+
+  // Log error if still present (but don't fail the whole request)
+  if (ingredientsError) {
+    logger.warn('[Dishes API] Error fetching dish ingredients (non-fatal):', {
+      error: ingredientsError.message,
+      code: (ingredientsError as any).code,
+      context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
+    });
+  }
 
   return {
     ...dish,

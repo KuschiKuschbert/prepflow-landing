@@ -1569,6 +1569,110 @@ const nextConfig: NextConfig = {
 - **Smooth Transitions:** 300ms transitions for all interactive elements
 - **Visual Hierarchy:** Clear distinction between primary and secondary actions
 
+### **Notification System Standardization ✅**
+
+The PrepFlow application uses a standardized notification system with clear use case separation and consistent Material Design 3 styling.
+
+#### **Notification Types & Use Cases**
+
+1. **Toast Notifications** (`NotificationContext` / `useNotification()`)
+   - **Use for:** CRUD operation feedback, personality messages, temporary informational messages
+   - **Duration:** 3 seconds default, 8 seconds for personality messages
+   - **Position:** Fixed top-center (regular) or below header (personality)
+   - **Types:** success, error, warning, info, personality
+   - **Hook:** `useNotification()`
+   - **Example:**
+     ```typescript
+     const { showSuccess, showError, showWarning, showInfo } = useNotification();
+     showSuccess('Item saved successfully'); // 3s default
+     // Personality messages automatically get 8s duration via personality:addToast event
+     ```
+
+2. **Banner Warnings** (`GlobalWarning` / `useGlobalWarning()`)
+   - **Use for:** Critical system errors requiring immediate attention, temperature violations, system-wide warnings
+   - **Duration:** Persistent until dismissed
+   - **Position:** Fixed below header (full-width banner)
+   - **Types:** error, warning, info, success
+   - **Features:** Title + message, action buttons, dismissible
+   - **Hook:** `useGlobalWarning()`
+   - **Example:**
+     ```typescript
+     const { addWarning } = useGlobalWarning();
+     addWarning({
+       type: 'error',
+       title: 'Temperature Violation',
+       message: 'Freezer temperature above safe threshold',
+       dismissible: true,
+       action: {
+         label: 'View Details',
+         onClick: () => router.push('/webapp/temperature'),
+       },
+     });
+     ```
+
+3. **In-Page Alerts** (`KitchenAlerts`, `DashboardErrorAlert`)
+   - **Use for:** Context-specific alerts (dashboard, kitchen operations), errors requiring retry actions, multiple related alerts
+   - **Duration:** Persistent until dismissed
+   - **Position:** In-page component (not fixed)
+   - **Components:**
+     - `KitchenAlerts` - Dashboard component for kitchen-specific operational alerts
+     - `DashboardErrorAlert` - Dashboard-specific errors with retry functionality
+   - **Example:**
+     ```typescript
+     <KitchenAlerts /> // Dashboard component
+     <DashboardErrorAlert
+       variant="critical"
+       title="Failed to load data"
+       message="Unable to fetch dashboard statistics"
+       retryLabel="Retry"
+       onRetry={handleRetry}
+       disabled={loading}
+     />
+     ```
+
+4. **Modals** (`SessionTimeoutWarning`)
+   - **Use for:** Critical user actions requiring immediate response, session timeouts, confirmation dialogs
+   - **Duration:** Until user action
+   - **Position:** Centered modal with backdrop
+   - **Example:** Session timeout warnings (handled automatically by `useSessionTimeout` hook)
+
+#### **Personality Messages**
+
+Personality messages are automatically enhanced with:
+
+- **Longer Duration:** 8 seconds (vs 3 seconds for regular notifications)
+- **Enhanced Visibility:** Larger size (`max-w-lg` vs `max-w-md`), larger text (`text-base` vs `text-sm`)
+- **Better Positioning:** Below header with proper offset (accounts for header height)
+- **Enhanced Styling:** Gradient background (`from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20`), pulse animation, Sparkles icon
+- **Higher Z-Index:** `z-[60]` vs `z-50` for regular notifications
+
+Personality messages are triggered via `personality:addToast` events and automatically receive enhanced styling.
+
+#### **Standardized Styling**
+
+All notification systems use consistent Material Design 3 styling:
+
+- **Success:** `bg-green-500/10` background, `text-green-400` text, `border-green-500/30` border
+- **Error:** `bg-red-500/10` background, `text-red-400` text, `border-red-500/30` border
+- **Warning:** `bg-yellow-500/10` background, `text-yellow-400` text, `border-yellow-500/30` border
+- **Info:** `bg-[#29E7CD]/10` background, `text-[#29E7CD]` text, `border-[#29E7CD]/30` border
+- **Personality:** Gradient background, white text, pulse animation, Sparkles icon
+
+#### **Migration Notes**
+
+- **SuccessMessage components** have been migrated to use `NotificationContext` instead of custom components
+- **AnimatedToast** is deprecated (only used in AnimationShowcase demo)
+- All notification systems maintain backward compatibility during migration
+
+#### **Files**
+
+- `contexts/NotificationContext.tsx` - Toast notification system
+- `contexts/GlobalWarningContext.tsx` - Banner warning system
+- `components/GlobalWarning.tsx` - GlobalWarning component
+- `app/webapp/components/KitchenAlerts.tsx` - Kitchen alerts component
+- `app/webapp/components/DashboardErrorAlert.tsx` - Dashboard error alert component
+- `components/webapp/SessionTimeoutWarning.tsx` - Session timeout modal
+
 ## 📱 **Mobile Optimization**
 
 ### **Mobile Webapp Fixes ✅ (January 2025)**

@@ -21,9 +21,11 @@ interface SectionData {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { menuId, userId, error: validationError } = await import(
-      './helpers/validateRequest'
-    ).then(m => m.validateRequest(body));
+    const {
+      menuId,
+      userId,
+      error: validationError,
+    } = await import('./helpers/validateRequest').then(m => m.validateRequest(body));
 
     if (validationError) {
       return validationError;

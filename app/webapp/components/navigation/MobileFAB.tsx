@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Calculator, Package, Plus, Search, UtensilsCrossed } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 interface MobileFABProps {
@@ -14,7 +14,22 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(' ');
 };
 
-export function MobileFAB({ onSearchClick }: MobileFABProps) {
+/**
+ * Floating action button component for mobile devices.
+ * Provides quick access to common actions (Create Recipe, Create Ingredient, Quick Search).
+ * Auto-hides when bottom navigation is hidden (scroll down).
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Function} [props.onSearchClick] - Optional callback when quick search is triggered
+ * @returns {JSX.Element} Floating action button
+ *
+ * @example
+ * ```tsx
+ * <MobileFAB onSearchClick={() => setIsSearchOpen(true)} />
+ * ```
+ */
+export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -99,7 +114,7 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
         >
           <button
             onClick={handleCreateRecipe}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
             aria-label="Create Recipe"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
@@ -118,7 +133,7 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
 
           <button
             onClick={handleCreateIngredient}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
             aria-label="Create Ingredient"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#3B82F6]/20">
@@ -132,7 +147,7 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
 
           <button
             onClick={handleQuickSearch}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
             aria-label="Quick Search"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
@@ -151,11 +166,15 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] shadow-lg transition-all duration-200',
+          'flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] shadow-lg transition-transform duration-200',
           'hover:scale-110 hover:shadow-xl',
           'active:scale-95',
-          isOpen && 'rotate-45',
+          'focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none',
         )}
+        style={{
+          willChange: 'transform',
+          transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
+        }}
         aria-label={isOpen ? 'Close quick actions' : 'Open quick actions'}
         aria-expanded={isOpen}
       >
@@ -168,4 +187,4 @@ export function MobileFAB({ onSearchClick }: MobileFABProps) {
       </button>
     </div>
   );
-}
+});

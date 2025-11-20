@@ -1,0 +1,124 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { dishIds } = body;
+
+    if (!Array.isArray(dishIds) || dishIds.length === 0) {
+      return NextResponse.json(
+        { error: 'Missing required field', message: 'dishIds array is required' },
+        { status: 400 },
+      );
+    }
+
+    if (!supabaseAdmin) {
+      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+    }
+
+    // Check if any dishes are used in menu_items before attempting deletion
+    const { data: menuItemsData, error: menuItemsError } = await supabaseAdmin
+      .from('menu_items')
+      .select('dish_id')
+      .in('dish_id', dishIds)
+      .limit(1);
+
+    if (menuItemsError) {
+      logger.error('Error checking menu items usage:', menuItemsError);
+      return NextResponse.json(
+        { error: 'Failed to check dish usage', message: menuItemsError.message },
+        { status: 500 },
+      );
+    }
+
+    const usedInMenuItems = menuItemsData && menuItemsData.length > 0;
+
+    if (usedInMenuItems) {
+      return NextResponse.json(
+        {
+          error: 'Cannot delete dishes',
+          message: 'One or more dishes are used in menus. Please remove them from all menus first.',
+        },
+        { status: 400 },
+      );
+    }
+
+    // Delete dish ingredients first (child records)
+    const { error: dishIngredientsError } = await supabaseAdmin
+      .from('dish_ingredients')
+      .delete()
+      .in('dish_id', dishIds);
+
+    if (dishIngredientsError) {
+      logger.error('Error deleting dish ingredients:', dishIngredientsError);
+      return NextResponse.json(
+        {
+          error: 'Failed to delete dish ingredients',
+          message: dishIngredientsError.message,
+        },
+        { status: 500 },
+      );
+    }
+
+    // Delete dish recipes (child records)
+    const { error: dishRecipesError } = await supabaseAdmin
+      .from('dish_recipes')
+      .delete()
+      .in('dish_id', dishIds);
+
+    if (dishRecipesError) {
+      logger.error('Error deleting dish recipes:', dishRecipesError);
+      // Don't fail if dish_recipes table doesn't exist or has no records
+      if (!dishRecipesError.message.includes('does not exist')) {
+        return NextResponse.json(
+          {
+            error: 'Failed to delete dish recipes',
+            message: dishRecipesError.message,
+          },
+          { status: 500 },
+        );
+      }
+    }
+
+    // Delete dishes
+    const { error: dishesError } = await supabaseAdmin.from('dishes').delete().in('id', dishIds);
+
+    if (dishesError) {
+      logger.error('Error deleting dishes:', dishesError);
+      // Check if it's a foreign key constraint error
+      if (
+        dishesError.message.includes('foreign key constraint') ||
+        dishesError.message.includes('menu_items')
+      ) {
+        return NextResponse.json(
+          {
+            error: 'Cannot delete dishes',
+            message:
+              'One or more dishes are used in menus. Please remove them from all menus first.',
+          },
+          { status: 400 },
+        );
+      }
+      return NextResponse.json(
+        { error: 'Failed to delete dishes', message: dishesError.message },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `${dishIds.length} dish${dishIds.length > 1 ? 'es' : ''} deleted successfully`,
+    });
+  } catch (err) {
+    logger.error('Unexpected error:', err);
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        message: err instanceof Error ? err.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
+  }
+}

@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Trash2, Store, MapPin, Target, Zap } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useConfirm } from '@/hooks/useConfirm';
+import { usePrompt } from '@/hooks/usePrompt';
+import { useAlert } from '@/hooks/useAlert';
 
 interface Ingredient {
   id: string;
@@ -12,6 +15,7 @@ interface Ingredient {
   pack_size?: string;
   pack_size_unit?: string;
   pack_price?: number;
+  category?: string;
   unit?: string;
   cost_per_unit: number;
   cost_per_unit_as_purchased?: number;
@@ -43,6 +47,9 @@ export default function IngredientActions({
   loading = false,
 }: IngredientActionsProps) {
   const { t } = useTranslation();
+  const { showConfirm, ConfirmDialog } = useConfirm();
+  const { showPrompt, InputDialog } = usePrompt();
+  const { showAlert, AlertDialog } = useAlert();
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   const [showBulkMenu, setShowBulkMenu] = useState(false);
 
@@ -54,8 +61,15 @@ export default function IngredientActions({
   const handleBulkDelete = async () => {
     if (selectedCount === 0) return;
 
-    const confirmMessage = `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}?`;
-    if (!window.confirm(confirmMessage)) return;
+    const confirmed = await showConfirm({
+      title: `Delete ${selectedCount} Ingredient${selectedCount > 1 ? 's' : ''}?`,
+      message: `Delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}? This action can't be undone. Last chance to back out.`,
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    });
+
+    if (!confirmed) return;
 
     setBulkActionLoading(true);
     try {
@@ -69,9 +83,14 @@ export default function IngredientActions({
   const handleBulkUpdateSupplier = async () => {
     if (selectedCount === 0) return;
 
-    const newSupplier = window.prompt(
-      `Enter new supplier for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-    );
+    const newSupplier = await showPrompt({
+      title: 'Update Supplier',
+      message: `What supplier should these ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''} use?`,
+      placeholder: 'Supplier name',
+      type: 'text',
+      validation: v => (v.trim().length > 0 ? null : 'Supplier name is required'),
+    });
+
     if (!newSupplier?.trim()) return;
 
     setBulkActionLoading(true);
@@ -86,9 +105,14 @@ export default function IngredientActions({
   const handleBulkUpdateStorage = async () => {
     if (selectedCount === 0) return;
 
-    const newStorage = window.prompt(
-      `Enter new storage location for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-    );
+    const newStorage = await showPrompt({
+      title: 'Update Storage Location',
+      message: `Where should these ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''} be stored?`,
+      placeholder: 'Storage location',
+      type: 'text',
+      validation: v => (v.trim().length > 0 ? null : 'Storage location is required'),
+    });
+
     if (!newStorage?.trim()) return;
 
     setBulkActionLoading(true);
@@ -103,14 +127,31 @@ export default function IngredientActions({
   const handleBulkUpdateWastage = async () => {
     if (selectedCount === 0) return;
 
-    const wastageInput = window.prompt(
-      `Enter wastage percentage (0-100) for ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}:`,
-    );
+    const wastageInput = await showPrompt({
+      title: 'Update Wastage Percentage',
+      message: `What wastage percentage (0-100) for these ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}?`,
+      placeholder: '0-100',
+      type: 'number',
+      min: 0,
+      max: 100,
+      validation: v => {
+        const num = parseFloat(v);
+        if (isNaN(num) || num < 0 || num > 100) {
+          return 'Please enter a valid percentage between 0 and 100';
+        }
+        return null;
+      },
+    });
+
     if (!wastageInput) return;
 
     const wastage = parseFloat(wastageInput);
     if (isNaN(wastage) || wastage < 0 || wastage > 100) {
-      alert('Please enter a valid percentage between 0 and 100');
+      await showAlert({
+        title: 'Invalid Percentage',
+        message: "That's not a valid percentage. Give me something between 0 and 100, chef.",
+        variant: 'warning',
+      });
       return;
     }
 
@@ -138,92 +179,97 @@ export default function IngredientActions({
   }, [showBulkMenu]);
 
   return (
-    <div className="mb-6 flex flex-wrap gap-3">
-      {/* Bulk Actions */}
-      {selectedCount > 0 && (
-        <div className="relative z-[60]">
-          <button
-            onClick={() => setShowBulkMenu(!showBulkMenu)}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl"
-          >
-            <Icon icon={Zap} size="sm" className="text-current" aria-hidden={true} />
-            <span>Bulk Actions ({selectedCount})</span>
-          </button>
+    <>
+      <ConfirmDialog />
+      <InputDialog />
+      <AlertDialog />
+      <div className="mb-6 flex flex-wrap gap-3">
+        {/* Bulk Actions */}
+        {selectedCount > 0 && (
+          <div className="relative z-[60]">
+            <button
+              onClick={() => setShowBulkMenu(!showBulkMenu)}
+              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:from-orange-500/80 hover:to-red-500/80 hover:shadow-xl"
+            >
+              <Icon icon={Zap} size="sm" className="text-current" aria-hidden={true} />
+              <span>Bulk Actions ({selectedCount})</span>
+            </button>
 
-          {showBulkMenu && (
-            <>
-              <div
-                className="fixed inset-0 z-[55]"
-                onClick={() => setShowBulkMenu(false)}
-                aria-hidden={true}
-              />
-              <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-                <div className="p-1.5">
-                  <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
-                    {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
-                  </div>
+            {showBulkMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-[55]"
+                  onClick={() => setShowBulkMenu(false)}
+                  aria-hidden={true}
+                />
+                <div className="absolute top-full left-0 z-[60] mt-1.5 w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+                  <div className="p-1.5">
+                    <div className="border-b border-[#2a2a2a] px-2.5 py-1.5 text-xs text-gray-400">
+                      {selectedCount} ingredient{selectedCount > 1 ? 's' : ''} selected
+                    </div>
 
-                  <div className="mt-1.5 space-y-0.5">
-                    <button
-                      onClick={handleBulkDelete}
-                      disabled={bulkActionLoading}
-                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
-                    >
-                      <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
-                      <span>Delete Selected</span>
-                    </button>
+                    <div className="mt-1.5 space-y-0.5">
+                      <button
+                        onClick={handleBulkDelete}
+                        disabled={bulkActionLoading}
+                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10 disabled:opacity-50"
+                      >
+                        <Icon icon={Trash2} size="xs" className="text-red-400" aria-hidden={true} />
+                        <span>Delete Selected</span>
+                      </button>
 
-                    <button
-                      onClick={handleBulkUpdateSupplier}
-                      disabled={bulkActionLoading}
-                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                    >
-                      <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
-                      <span>Update Supplier</span>
-                    </button>
+                      <button
+                        onClick={handleBulkUpdateSupplier}
+                        disabled={bulkActionLoading}
+                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                      >
+                        <Icon icon={Store} size="xs" className="text-current" aria-hidden={true} />
+                        <span>Update Supplier</span>
+                      </button>
 
-                    <button
-                      onClick={handleBulkUpdateStorage}
-                      disabled={bulkActionLoading}
-                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                    >
-                      <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
-                      <span>Update Storage Location</span>
-                    </button>
+                      <button
+                        onClick={handleBulkUpdateStorage}
+                        disabled={bulkActionLoading}
+                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                      >
+                        <Icon icon={MapPin} size="xs" className="text-current" aria-hidden={true} />
+                        <span>Update Storage Location</span>
+                      </button>
 
-                    <button
-                      onClick={handleBulkUpdateWastage}
-                      disabled={bulkActionLoading}
-                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
-                    >
-                      <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
-                      <span>Update Wastage %</span>
-                    </button>
+                      <button
+                        onClick={handleBulkUpdateWastage}
+                        disabled={bulkActionLoading}
+                        className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+                      >
+                        <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
+                        <span>Update Wastage %</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
-        </div>
-      )}
+              </>
+            )}
+          </div>
+        )}
 
-      {/* Loading Indicator */}
-      {(loading || bulkActionLoading) && (
-        <div className="flex items-center gap-2 text-gray-400">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent"></div>
-          <span className="text-sm">{bulkActionLoading ? 'Processing...' : 'Loading...'}</span>
-        </div>
-      )}
+        {/* Loading Indicator */}
+        {(loading || bulkActionLoading) && (
+          <div className="flex items-center gap-2 text-gray-400">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent"></div>
+            <span className="text-sm">{bulkActionLoading ? 'Processing...' : 'Loading...'}</span>
+          </div>
+        )}
 
-      {/* Selected Items Summary */}
-      {selectedCount > 0 && (
-        <div className="flex items-center gap-2 text-sm text-gray-400">
-          <span>Selected:</span>
-          <span className="font-medium text-[#29E7CD]">{selectedCount}</span>
-          <span>of</span>
-          <span className="font-medium text-white">{filteredIngredients.length}</span>
-        </div>
-      )}
-    </div>
+        {/* Selected Items Summary */}
+        {selectedCount > 0 && (
+          <div className="flex items-center gap-2 text-sm text-gray-400">
+            <span>Selected:</span>
+            <span className="font-medium text-[#29E7CD]">{selectedCount}</span>
+            <span>of</span>
+            <span className="font-medium text-white">{filteredIngredients.length}</span>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

@@ -127,4 +127,3 @@ export function clearOptimizationCache(): void {
     // Ignore errors
   }
 }
-

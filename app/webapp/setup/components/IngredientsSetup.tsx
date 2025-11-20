@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface IngredientsSetupProps {
   setupProgress: {
@@ -72,8 +72,8 @@ export default function IngredientsSetup({
         <div className="mb-4 text-6xl">🥕</div>
         <h3 className="mb-2 text-2xl font-bold text-white">Ingredients Database</h3>
         <p className="text-lg text-gray-400">
-          Populate your database with ~40 common kitchen ingredients including costs, units, and
-          yield percentages
+          Populate your database with ~95 common kitchen ingredients (including consumables) with
+          costs, units, and yield percentages
         </p>
       </div>
 
@@ -83,7 +83,7 @@ export default function IngredientsSetup({
           <ul className="space-y-2 text-gray-300">
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
-              <span>~40 common ingredients (vegetables, meats, dairy, spices)</span>
+              <span>~95 common ingredients (vegetables, meats, dairy, spices, consumables)</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="text-[#29E7CD]">✓</span>
@@ -162,7 +162,7 @@ export default function IngredientsSetup({
             ) : (
               <span className="flex items-center justify-center space-x-2">
                 <span>🥕</span>
-                <span>Add ~40 Ingredients</span>
+                <span>Add ~95 Ingredients (including consumables)</span>
               </span>
             )}
           </button>

@@ -1,7 +1,17 @@
 import { Icon } from '@/components/ui/Icon';
 import { ArrowLeft } from 'lucide-react';
 
-export function RecipeDishEditorHeader({ onClose }: { onClose: () => void }) {
+interface RecipeDishEditorHeaderProps {
+  onClose: () => void;
+  selectedItem: { name: string; type: 'recipe' | 'dish' } | null;
+  capitalizeName: (name: string) => string;
+}
+
+export function RecipeDishEditorHeader({
+  onClose,
+  selectedItem,
+  capitalizeName,
+}: RecipeDishEditorHeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -13,8 +23,14 @@ export function RecipeDishEditorHeader({ onClose }: { onClose: () => void }) {
           <Icon icon={ArrowLeft} size="md" aria-hidden={true} />
         </button>
         <div>
-          <h2 className="text-2xl font-bold text-white">Recipe & Dish Editor</h2>
-          <p className="text-sm text-gray-400">Select a recipe or dish to edit its ingredients</p>
+          <h2 className="text-2xl font-bold text-white">
+            {selectedItem ? capitalizeName(selectedItem.name) : 'Recipe & Dish Editor'}
+          </h2>
+          <p className="text-sm text-gray-400">
+            {selectedItem
+              ? `Editing ${selectedItem.type === 'recipe' ? 'recipe' : 'dish'} ingredients`
+              : 'Select a recipe or dish to edit its ingredients'}
+          </p>
         </div>
       </div>
     </div>

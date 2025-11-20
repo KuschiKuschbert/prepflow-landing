@@ -1,4 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { BookOpen, UtensilsCrossed } from 'lucide-react';
 
 interface Item {
@@ -32,7 +33,10 @@ export function RecipeDishSelector({
           allItems.map(item => (
             <button
               key={`${item.type}-${item.id}`}
-              onClick={() => onSelectItem(item)}
+              onClick={() => {
+                logger.dev('RecipeDishSelector: Item clicked', { item });
+                onSelectItem(item);
+              }}
               className={`w-full rounded-xl border p-4 text-left transition-all duration-200 ${
                 selectedItem?.id === item.id && selectedItem?.type === item.type
                   ? 'border-[#29E7CD] bg-[#29E7CD]/10'

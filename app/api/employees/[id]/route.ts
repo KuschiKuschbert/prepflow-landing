@@ -118,4 +118,3 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     return handleEmployeeError(err, 'DELETE');
   }
 }
-

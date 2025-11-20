@@ -35,12 +35,9 @@ export function useMenuDragDrop({
     y: number;
   } | null>(null);
 
-  const handleDragStart = useCallback(
-    (event: DragStartEvent) => {
-      handleDragStartHelper(event, setActiveId, setInitialOffset, setInitialCursorPosition);
-    },
-    [],
-  );
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    handleDragStartHelper(event, setActiveId, setInitialOffset, setInitialCursorPosition);
+  }, []);
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {

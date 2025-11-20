@@ -29,8 +29,7 @@ export function useRecipeActions({
   rollbackRecipes,
 }: UseRecipeActionsProps) {
   const router = useRouter();
-  const { showError: showErrorNotification } = useNotification();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { showError: showErrorNotification, showSuccess } = useNotification();
   const bulkOps = useRecipeBulkOperations(
     recipes,
     fetchRecipes,
@@ -118,7 +117,7 @@ export function useRecipeActions({
           }
         }
         await fetchRecipes();
-        setSuccessMessage(`Recipe "${duplicateName}" duplicated successfully`);
+        showSuccess(`Recipe "${duplicateName}" duplicated successfully`);
         return newRecipe;
       } catch (err) {
         logger.error('Error duplicating recipe:', err);
@@ -126,11 +125,9 @@ export function useRecipeActions({
         return null;
       }
     },
-    [fetchRecipes, fetchRecipeIngredients, showErrorNotification],
+    [fetchRecipes, fetchRecipeIngredients, showErrorNotification, showSuccess],
   );
   return {
-    successMessage,
-    setSuccessMessage,
     ...deleteOps,
     ...bulkOps,
     ...shareOps,

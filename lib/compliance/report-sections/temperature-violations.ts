@@ -3,10 +3,17 @@
  * Extracted from report-generator.ts
  */
 
-import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus, formatAUD } from '../australian-standards';
+import {
+  formatAustralianDate,
+  getDaysUntilExpiry,
+  getExpiryStatus,
+  formatAUD,
+} from '../australian-standards';
 import type { ReportData, StatusColors, StatusLabels } from '../report-types';
 
-export function generateTemperatureViolations(violations: ReportData['temperature_violations']): string {
+export function generateTemperatureViolations(
+  violations: ReportData['temperature_violations'],
+): string {
   if (!violations || violations.total_violations === 0) {
     return `
       <div class="section">
@@ -109,4 +116,3 @@ export function generateTemperatureViolations(violations: ReportData['temperatur
     </div>
   `;
 }
-

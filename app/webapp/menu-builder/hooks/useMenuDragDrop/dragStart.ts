@@ -13,7 +13,9 @@ import { DragStartEvent } from '@dnd-kit/core';
  * @returns {number} returns.x - X coordinate
  * @returns {number} returns.y - Y coordinate
  */
-export function extractPointerCoordinates(activatorEvent: Event | null): { x: number; y: number } | null {
+export function extractPointerCoordinates(
+  activatorEvent: Event | null,
+): { x: number; y: number } | null {
   if (!activatorEvent) {
     return null;
   }
@@ -41,7 +43,10 @@ export function extractPointerCoordinates(activatorEvent: Event | null): { x: nu
  * @param {string} activeId - Active drag ID
  * @returns {HTMLElement | null} Dragged element or null
  */
-export function findDraggedElement(activatorEvent: Event | null, activeId: string): HTMLElement | null {
+export function findDraggedElement(
+  activatorEvent: Event | null,
+  activeId: string,
+): HTMLElement | null {
   // Try to find the dragged element - first try using the activatorEvent target
   let draggedElement: HTMLElement | null = null;
 

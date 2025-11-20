@@ -36,7 +36,10 @@ export function useMenuItemAddition({
   showError,
 }: UseMenuItemAdditionProps) {
   const handleCategorySelect = useCallback(
-    async (category: string, selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null) => {
+    async (
+      category: string,
+      selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null,
+    ) => {
       if (!selectedItem) return;
 
       // Find the dish or recipe data

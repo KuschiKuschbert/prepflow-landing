@@ -141,9 +141,7 @@ export function AllergenFilterDropdown({
                     key={allergen.code}
                     onClick={() => handleAllergenToggle(allergen.code)}
                     className={`mb-1 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm transition-colors ${
-                      isSelected
-                        ? `${activeBg} ${activeColor}`
-                        : 'text-gray-300 hover:bg-[#2a2a2a]'
+                      isSelected ? `${activeBg} ${activeColor}` : 'text-gray-300 hover:bg-[#2a2a2a]'
                     }`}
                   >
                     <div

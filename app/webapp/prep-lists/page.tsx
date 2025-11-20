@@ -89,14 +89,15 @@ export default function PrepListsPage() {
   });
 
   // CRUD operations
-  const { confirmDialog, handleDelete, handleStatusChange, cancelConfirmDialog } =
-    usePrepListsCRUD({
+  const { confirmDialog, handleDelete, handleStatusChange, cancelConfirmDialog } = usePrepListsCRUD(
+    {
       prepLists,
       setPrepLists,
       refetchPrepLists,
       showError,
       showSuccess,
-    });
+    },
+  );
 
   // Update prep lists from query data
   useEffect(() => {
@@ -120,7 +121,9 @@ export default function PrepListsPage() {
     openForm();
   };
 
-  const handleSaveBatch = async (prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>) => {
+  const handleSaveBatch = async (
+    prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>,
+  ) => {
     await handleSaveBatchPrepLists(prepLists, userId, refetchPrepLists, setError);
   };
 

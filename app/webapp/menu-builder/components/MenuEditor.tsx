@@ -6,12 +6,12 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import {
-    closestCenter,
-    DndContext,
-    DragOverlay,
-    PointerSensor,
-    useSensor,
-    useSensors,
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
 } from '@dnd-kit/core';
 import { Lock } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -160,7 +160,6 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
     }),
   );
 
-
   // Create drag modifier
   const centerOnCursor = createCenterOnCursorModifier({
     initialOffset,
@@ -308,7 +307,7 @@ export default function MenuEditor({ menu, onBack, onMenuUpdated }: MenuEditorPr
         <div className="mb-4 flex items-center justify-end gap-2">
           <button
             type="button"
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault();
               e.stopPropagation();
               handleLockMenu();

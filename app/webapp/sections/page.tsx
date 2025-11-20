@@ -104,6 +104,7 @@ export default function DishSectionsPage() {
     handleAssignDish,
     resetForm,
     getUnassignedDishes,
+    ConfirmDialog,
   } = useDishSectionActions({
     userId,
     kitchenSections,
@@ -343,6 +344,9 @@ export default function DishSectionsPage() {
           onSubmit={handleSubmit}
           onCancel={resetForm}
         />
+
+        {/* Confirm Dialog */}
+        <ConfirmDialog />
       </div>
     </ResponsivePageContainer>
   );

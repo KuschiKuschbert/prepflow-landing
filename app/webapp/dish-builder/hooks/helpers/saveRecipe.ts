@@ -28,7 +28,10 @@ export async function saveRecipe({ dishState, itemIngredients }: SaveRecipeProps
 
   const recipeResult = await recipeResponse.json();
   if (!recipeResponse.ok) {
-    return { success: false, error: recipeResult.error || recipeResult.message || 'Failed to save recipe' };
+    return {
+      success: false,
+      error: recipeResult.error || recipeResult.message || 'Failed to save recipe',
+    };
   }
 
   const recipeId = recipeResult.recipe?.id || recipeResult.recipe?.[0]?.id;
@@ -51,7 +54,10 @@ export async function saveRecipe({ dishState, itemIngredients }: SaveRecipeProps
 
   if (!ingredientsResponse.ok) {
     const ingredientsResult = await ingredientsResponse.json();
-    return { success: false, error: ingredientsResult.error || 'Failed to save recipe ingredients' };
+    return {
+      success: false,
+      error: ingredientsResult.error || 'Failed to save recipe ingredients',
+    };
   }
 
   return { success: true, recipe: recipeResult.recipe };

@@ -19,6 +19,7 @@ export function useCOGSCalculationLogic({
         .map(ri => {
           const ingredient = ingredients.find(i => i.id === ri.ingredient_id);
           if (!ingredient) return null;
+          const isConsumable = ingredient.category === 'Consumables';
           const baseCostPerUnit =
             ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
           const costPerUnit = convertIngredientCost(
@@ -28,6 +29,24 @@ export function useCOGSCalculationLogic({
             ri.quantity,
           );
           const totalCost = ri.quantity * costPerUnit;
+
+          // For consumables: simple calculation (no waste/yield)
+          if (isConsumable) {
+            return {
+              recipeId: ri.recipe_id || 'temp',
+              ingredientId: ri.ingredient_id,
+              ingredientName: ingredient.ingredient_name,
+              quantity: ri.quantity,
+              unit: ri.unit || ingredient.unit || 'kg',
+              costPerUnit,
+              totalCost,
+              wasteAdjustedCost: totalCost,
+              yieldAdjustedCost: totalCost,
+              isConsumable: true,
+            };
+          }
+
+          // For regular ingredients: apply waste/yield adjustments
           const wastePercent = ingredient.trim_peel_waste_percentage || 0;
           const yieldPercent = ingredient.yield_percentage || 100;
           const wasteAdjustedCost =
@@ -45,6 +64,7 @@ export function useCOGSCalculationLogic({
             totalCost,
             wasteAdjustedCost,
             yieldAdjustedCost,
+            isConsumable: false,
           };
         })
         .filter(Boolean) as COGSCalculation[];
@@ -65,7 +85,21 @@ export function useCOGSCalculationLogic({
           if (calc.ingredientId !== ingredientId) return calc;
           const ingredient = ingredients.find(ing => ing.id === ingredientId);
           if (!ingredient) return calc;
+          const isConsumable = ingredient.category === 'Consumables';
           const newTotalCost = newQuantity * calc.costPerUnit;
+
+          // For consumables: simple calculation
+          if (isConsumable) {
+            return {
+              ...calc,
+              quantity: newQuantity,
+              totalCost: newTotalCost,
+              wasteAdjustedCost: newTotalCost,
+              yieldAdjustedCost: newTotalCost,
+            };
+          }
+
+          // For regular ingredients: apply waste/yield
           const wastePercent = ingredient.trim_peel_waste_percentage || 0;
           const yieldPercent = ingredient.yield_percentage || 100;
           return {

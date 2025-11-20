@@ -47,8 +47,7 @@ export function PrepListPreviewSection({
   handleRemoveIngredient,
   handleIngredientSelect,
 }: PrepListPreviewSectionProps) {
-  const hasPrepInstructions =
-    section.prepInstructions && section.prepInstructions.length > 0;
+  const hasPrepInstructions = section.prepInstructions && section.prepInstructions.length > 0;
   const hasPrepTechniques =
     section.prepTechniques &&
     (section.prepTechniques.cutShapes.length > 0 ||

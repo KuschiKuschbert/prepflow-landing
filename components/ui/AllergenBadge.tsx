@@ -66,7 +66,7 @@ export function AllergenBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full bg-[#29E7CD]/10 border border-[#29E7CD]/20 text-[#29E7CD] ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[#29E7CD]/20 bg-[#29E7CD]/10 text-[#29E7CD] ${sizeClasses[size]} ${className}`}
       title={allergen?.description || displayName}
     >
       {IconComponent && (
@@ -79,12 +79,7 @@ export function AllergenBadge({
       )}
       <span>{displayName}</span>
       {source === 'ai' && (
-        <Icon
-          icon={Sparkles}
-          size="xs"
-          className="text-[#29E7CD]"
-          aria-label="AI detected"
-        />
+        <Icon icon={Sparkles} size="xs" className="text-[#29E7CD]" aria-label="AI detected" />
       )}
     </span>
   );

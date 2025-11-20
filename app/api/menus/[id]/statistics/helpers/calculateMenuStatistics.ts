@@ -28,8 +28,17 @@ export async function calculateMenuStatistics(menuItems: any[]) {
       recipe_id: item.recipe_id,
       has_dish: !!dish,
       has_recipe: !!recipe,
-      dish_data: dish ? { id: dish.id, name: dish.dish_name, selling_price: dish.selling_price } : null,
-      recipe_data: recipe ? { id: recipe.id, name: recipe.name, yield: recipe.yield, selling_price: recipe.selling_price } : null,
+      dish_data: dish
+        ? { id: dish.id, name: dish.dish_name, selling_price: dish.selling_price }
+        : null,
+      recipe_data: recipe
+        ? {
+            id: recipe.id,
+            name: recipe.name,
+            yield: recipe.yield,
+            selling_price: recipe.selling_price,
+          }
+        : null,
       actual_selling_price: item.actual_selling_price,
     });
 
@@ -119,7 +128,10 @@ export async function calculateMenuStatistics(menuItems: any[]) {
   // Calculate statistics with safety checks to prevent NaN/Infinity
   const averageProfitMargin =
     profitMargins.length > 0
-      ? profitMargins.reduce((sum, margin) => sum + (isNaN(margin) || !isFinite(margin) ? 0 : margin), 0) / profitMargins.length
+      ? profitMargins.reduce(
+          (sum, margin) => sum + (isNaN(margin) || !isFinite(margin) ? 0 : margin),
+          0,
+        ) / profitMargins.length
       : 0;
 
   const foodCostPercent =
@@ -127,13 +139,13 @@ export async function calculateMenuStatistics(menuItems: any[]) {
       ? (totalCOGS / totalRevenue) * 100
       : 0;
 
-  const grossProfit = isFinite(totalRevenue) && isFinite(totalCOGS)
-    ? totalRevenue - totalCOGS
-    : 0;
+  const grossProfit = isFinite(totalRevenue) && isFinite(totalCOGS) ? totalRevenue - totalCOGS : 0;
 
   // Ensure all values are finite numbers
-  const safeAverageProfitMargin = isNaN(averageProfitMargin) || !isFinite(averageProfitMargin) ? 0 : averageProfitMargin;
-  const safeFoodCostPercent = isNaN(foodCostPercent) || !isFinite(foodCostPercent) ? 0 : foodCostPercent;
+  const safeAverageProfitMargin =
+    isNaN(averageProfitMargin) || !isFinite(averageProfitMargin) ? 0 : averageProfitMargin;
+  const safeFoodCostPercent =
+    isNaN(foodCostPercent) || !isFinite(foodCostPercent) ? 0 : foodCostPercent;
   const safeGrossProfit = isNaN(grossProfit) || !isFinite(grossProfit) ? 0 : grossProfit;
   const safeTotalCOGS = isNaN(totalCOGS) || !isFinite(totalCOGS) ? 0 : totalCOGS;
   const safeTotalRevenue = isNaN(totalRevenue) || !isFinite(totalRevenue) ? 0 : totalRevenue;

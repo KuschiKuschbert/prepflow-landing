@@ -116,7 +116,10 @@ export async function ensureMenuDishExists(
 
   if (checkError && checkError.code !== 'PGRST116') {
     // PGRST116 is "not found" which is fine
-    logger.error(`Error checking menu_dish for recipe ${recipe.recipe_name || recipe.name}:`, checkError);
+    logger.error(
+      `Error checking menu_dish for recipe ${recipe.recipe_name || recipe.name}:`,
+      checkError,
+    );
     return null;
   }
 
@@ -140,7 +143,10 @@ export async function ensureMenuDishExists(
     .single();
 
   if (createError) {
-    logger.error(`Error creating menu_dish for recipe ${recipe.recipe_name || recipe.name}:`, createError);
+    logger.error(
+      `Error creating menu_dish for recipe ${recipe.recipe_name || recipe.name}:`,
+      createError,
+    );
     return null;
   }
 

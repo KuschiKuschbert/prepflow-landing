@@ -90,10 +90,13 @@ export function MenuItemHoverStatistics({
               return;
             }
             // After retry, suppress error to avoid console spam
-            logger.dev('[MenuItemHoverStatistics] Statistics endpoint not found after retry, skipping', {
-              menuId,
-              itemId: item.id,
-            });
+            logger.dev(
+              '[MenuItemHoverStatistics] Statistics endpoint not found after retry, skipping',
+              {
+                menuId,
+                itemId: item.id,
+              },
+            );
             setLoading(false);
             return;
           }
@@ -151,7 +154,7 @@ export function MenuItemHoverStatistics({
       }
     }
     setCurrentItemId(item.id);
-  }, [item.id]);
+  }, [item.id, currentItemId]);
 
   useEffect(() => {
     if (isVisible) {
@@ -206,7 +209,7 @@ export function MenuItemHoverStatistics({
         hoverTimeoutRef.current = null;
       }
     }
-  }, [isVisible, menuId, item.id, loadStatistics]);
+  }, [isVisible, menuId, item.id, item.dishes?.dish_name, item.recipes?.recipe_name, loadStatistics]);
 
   // Track mouse position globally and update tooltip position in real-time
   useEffect(() => {
@@ -330,7 +333,9 @@ export function MenuItemHoverStatistics({
                 </div>
                 <div>
                   <div className="text-gray-400">Revenue</div>
-                  <div className="font-medium text-white">${statistics.selling_price.toFixed(2)}</div>
+                  <div className="font-medium text-white">
+                    ${statistics.selling_price.toFixed(2)}
+                  </div>
                 </div>
                 <div>
                   <div className="text-gray-400">Gross Profit</div>
@@ -390,7 +395,9 @@ export function MenuItemHoverStatistics({
                   <div
                     className={`font-medium ${
                       statistics.recommended_selling_price > 0 &&
-                      (statistics.recommended_selling_price - statistics.cogs) / statistics.recommended_selling_price >= 0
+                      (statistics.recommended_selling_price - statistics.cogs) /
+                        statistics.recommended_selling_price >=
+                        0
                         ? 'text-[#29E7CD]'
                         : 'text-red-400'
                     }`}

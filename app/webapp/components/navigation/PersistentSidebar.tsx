@@ -10,6 +10,14 @@ import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useEffect, useState } from 'react';
 
+/**
+ * Persistent sidebar component for desktop navigation.
+ * Displays navigation items grouped by category with collapsible sections.
+ * Only visible on desktop (≥1025px).
+ *
+ * @component
+ * @returns {JSX.Element} Persistent sidebar
+ */
 export default function PersistentSidebar() {
   const pathname = usePathname();
   const { workflow } = useWorkflowPreference();

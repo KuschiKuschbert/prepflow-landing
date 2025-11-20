@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { MapPin, Store, Target, Trash2, Zap } from 'lucide-react';
+import { MapPin, Sparkles, Store, Target, Trash2, Zap } from 'lucide-react';
 import { useState } from 'react';
 
 interface IngredientBulkActionsMenuProps {
@@ -11,6 +11,7 @@ interface IngredientBulkActionsMenuProps {
   onBulkUpdateSupplier: () => void;
   onBulkUpdateStorage: () => void;
   onBulkUpdateWastage: () => void;
+  onBulkAutoCategorize?: () => void;
   showBulkMenu: boolean;
   onToggleBulkMenu: () => void;
   variant?: 'desktop' | 'mobile';
@@ -23,6 +24,7 @@ export function IngredientBulkActionsMenu({
   onBulkUpdateSupplier,
   onBulkUpdateStorage,
   onBulkUpdateWastage,
+  onBulkAutoCategorize,
   showBulkMenu,
   onToggleBulkMenu,
   variant = 'desktop',
@@ -89,6 +91,17 @@ export function IngredientBulkActionsMenu({
                   <Icon icon={Target} size="xs" className="text-current" aria-hidden={true} />
                   <span>Update Wastage %</span>
                 </button>
+
+                {onBulkAutoCategorize && (
+                  <button
+                    onClick={onBulkAutoCategorize}
+                    disabled={bulkActionLoading}
+                    className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10 disabled:opacity-50"
+                  >
+                    <Icon icon={Sparkles} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+                    <span>Auto-categorize</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

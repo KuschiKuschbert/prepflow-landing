@@ -2,7 +2,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { formatIngredientUpdates } from './formatIngredientUpdates';
-import { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } from '@/lib/allergens/cache-invalidation';
+import {
+  invalidateRecipesWithIngredient,
+  invalidateDishesWithIngredient,
+} from '@/lib/allergens/cache-invalidation';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 
 /**
@@ -47,7 +50,8 @@ export async function updateIngredient(id: string, updates: any) {
 
     if (!hasManualAllergens) {
       const ingredientName = formattedUpdates.ingredient_name || currentIngredient.ingredient_name;
-      const ingredientBrand = formattedUpdates.brand !== undefined ? formattedUpdates.brand : currentIngredient.brand;
+      const ingredientBrand =
+        formattedUpdates.brand !== undefined ? formattedUpdates.brand : currentIngredient.brand;
 
       if (ingredientName) {
         try {
@@ -55,10 +59,11 @@ export async function updateIngredient(id: string, updates: any) {
             ingredient_name: ingredientName,
             brand: ingredientBrand || undefined,
             allergens: (currentIngredient.allergens as string[]) || [],
-            allergen_source: (currentIngredient.allergen_source as {
-              manual?: boolean;
-              ai?: boolean;
-            }) || {},
+            allergen_source:
+              (currentIngredient.allergen_source as {
+                manual?: boolean;
+                ai?: boolean;
+              }) || {},
           });
 
           formattedUpdates.allergens = enriched.allergens;
@@ -110,12 +115,11 @@ export async function updateIngredient(id: string, updates: any) {
   // Invalidate cached allergens for affected recipes and dishes if allergens changed
   if (allergensChanged) {
     // Don't await - run in background
-    Promise.all([
-      invalidateRecipesWithIngredient(id),
-      invalidateDishesWithIngredient(id),
-    ]).catch(err => {
-      logger.error('[Ingredients API] Error invalidating allergen caches:', err);
-    });
+    Promise.all([invalidateRecipesWithIngredient(id), invalidateDishesWithIngredient(id)]).catch(
+      err => {
+        logger.error('[Ingredients API] Error invalidating allergen caches:', err);
+      },
+    );
   }
 
   return data;
