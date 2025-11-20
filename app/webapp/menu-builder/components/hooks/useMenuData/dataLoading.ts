@@ -1,7 +1,6 @@
 /**
  * Data loading utilities for menu data.
  */
-
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import type { Dish, MenuItem, MenuStatistics, Recipe } from '../../../types';
@@ -22,8 +21,6 @@ interface LoadMenuDataProps {
 
 /**
  * Load menu data from API.
- *
- * @param {LoadMenuDataProps} props - Data loading props
  */
 export async function loadMenuData({
   menuId,
@@ -47,62 +44,25 @@ export async function loadMenuData({
       fetch('/api/recipes?pageSize=1000'),
       fetch(`/api/menus/${menuId}/statistics`),
     ]);
-
-    logger.dev('[Menu Data Loading] All API calls completed', {
-      menuId,
-      menuStatus: menuResponse.status,
-      dishesStatus: dishesResponse.status,
-      recipesStatus: recipesResponse.status,
-      statsStatus: statsResponse.status,
-    });
-
+    logger.dev('[Menu Data Loading] All API calls completed', { menuId, menuStatus: menuResponse.status, dishesStatus: dishesResponse.status, recipesStatus: recipesResponse.status, statsStatus: statsResponse.status });
     const menuData = await menuResponse.json();
     const dishesData = await dishesResponse.json();
     const recipesData = await recipesResponse.json();
     const statsData = await statsResponse.json();
-
-    logger.dev('[Menu Data Loading] API responses parsed', {
-      menuId,
-      menuItemsCount: menuData.menu?.items?.length || 0,
-      statsSuccess: statsData.success,
-      statsData: statsData,
-    });
-
-    logger.dev('[Menu Data Loading] Statistics API Response:', {
-      status: statsResponse.status,
-      success: statsData.success,
-      statistics: statsData.statistics,
-      menuItemsCount: menuData.menu?.items?.length || 0,
-    });
+    logger.dev('[Menu Data Loading] API responses parsed', { menuId, menuItemsCount: menuData.menu?.items?.length || 0, statsSuccess: statsData.success, statsData });
 
     if (!menuResponse.ok) {
-      logger.error('Failed to load menu:', {
-        error: menuData.error || menuData.message,
-        status: menuResponse.status,
-        menuId,
-        fullResponse: menuData,
-      });
+      logger.error('Failed to load menu:', { error: menuData.error || menuData.message, status: menuResponse.status, menuId, fullResponse: menuData });
       onError?.(`Failed to load menu: ${menuData.error || menuData.message || 'Unknown error'}`);
       return;
     }
-
     if (menuData.success) {
       const items = menuData.menu.items || [];
       setMenuItems(items);
-      // Extract unique categories
-      const uniqueCategories = Array.from(
-        new Set(items.map((item: MenuItem) => item.category || 'Uncategorized')),
-      ) as string[];
+      const uniqueCategories = Array.from(new Set(items.map((item: MenuItem) => item.category || 'Uncategorized'))) as string[];
       const finalCategories = uniqueCategories.length > 0 ? uniqueCategories : ['Uncategorized'];
       setCategories(finalCategories);
-
-      // Cache menu data
-      const menuDataToCache = {
-        menuItems: items,
-        categories: finalCategories,
-        statistics: statsData.success ? statsData.statistics : null,
-      };
-      cacheData(menuCacheKey, menuDataToCache);
+      cacheData(menuCacheKey, { menuItems: items, categories: finalCategories, statistics: statsData.success ? statsData.statistics : null });
     }
 
     if (dishesData.success) {
@@ -124,53 +84,17 @@ export async function loadMenuData({
     }
 
     if (statsResponse.ok && statsData.success) {
-      logger.dev('[Menu Data Loading] Statistics loaded successfully', {
-        menuId,
-        statistics: statsData.statistics,
-        totalItems: statsData.statistics?.total_items,
-        totalRevenue: statsData.statistics?.total_revenue,
-        averageProfitMargin: statsData.statistics?.average_profit_margin,
-      });
-      logger.dev('[Menu Data Loading] ✅ Statistics loaded:', statsData.statistics);
+      logger.dev('[Menu Data Loading] Statistics loaded successfully', { menuId, statistics: statsData.statistics, totalItems: statsData.statistics?.total_items, totalRevenue: statsData.statistics?.total_revenue, averageProfitMargin: statsData.statistics?.average_profit_margin });
       setStatistics(statsData.statistics);
-      // Update cached menu data with statistics
-      const currentCached = getCachedData<{
-        menuItems: MenuItem[];
-        categories: string[];
-        statistics: MenuStatistics | null;
-      }>(menuCacheKey);
-      if (currentCached) {
-        cacheData(menuCacheKey, { ...currentCached, statistics: statsData.statistics });
-      }
+      const currentCached = getCachedData<{ menuItems: MenuItem[]; categories: string[]; statistics: MenuStatistics | null }>(menuCacheKey);
+      if (currentCached) cacheData(menuCacheKey, { ...currentCached, statistics: statsData.statistics });
     } else {
-      // Handle statistics loading failure gracefully - don't break the UI
       if (statsResponse.status === 404) {
-        logger.dev(
-          '[Menu Data Loading] Statistics endpoint not found (404) - this may be a Next.js routing issue. Try restarting the dev server.',
-        );
+        logger.dev('[Menu Data Loading] Statistics endpoint not found (404) - this may be a Next.js routing issue. Try restarting the dev server.');
       } else {
-        logger.warn('[Menu Data Loading] Failed to load statistics', {
-          status: statsResponse.status,
-          error: statsData.error || statsData.message,
-          menuId,
-          statsData,
-        });
+        logger.warn('[Menu Data Loading] Failed to load statistics', { status: statsResponse.status, error: statsData.error || statsData.message, menuId, statsData });
       }
-      // Set statistics to default empty values instead of null to ensure panel always shows
-      logger.warn('[Menu Data Loading] ⚠️ Statistics API failed, using defaults:', {
-        status: statsResponse.status,
-        error: statsData.error || statsData.message,
-      });
-      setStatistics({
-        total_items: 0,
-        total_dishes: 0,
-        total_recipes: 0,
-        total_cogs: 0,
-        total_revenue: 0,
-        gross_profit: 0,
-        average_profit_margin: 0,
-        food_cost_percent: 0,
-      });
+      setStatistics({ total_items: 0, total_dishes: 0, total_recipes: 0, total_cogs: 0, total_revenue: 0, gross_profit: 0, average_profit_margin: 0, food_cost_percent: 0 });
     }
   } catch (err) {
     logger.error('Failed to load menu data:', err);
