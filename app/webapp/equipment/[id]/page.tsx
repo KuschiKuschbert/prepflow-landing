@@ -1,5 +1,4 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -8,7 +7,6 @@ import { ArrowLeft, Thermometer } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
 import { logger } from '@/lib/logger';
 interface TemperatureEquipment {
   id: string;
@@ -111,8 +109,6 @@ export default function EquipmentPage() {
       showSuccess('Temperature logged successfully');
       setTemperature('');
       setNotes('');
-
-      // Refresh logs
       const logsRes = await fetch(
         `/api/temperature-logs?equipment_id=${equipmentId}&limit=5&pageSize=5`,
       );
@@ -130,19 +126,16 @@ export default function EquipmentPage() {
     if (!equipment) return { color: 'gray', label: 'Unknown' };
 
     const { min_temp_celsius, max_temp_celsius } = equipment;
-
     if (min_temp_celsius !== null && max_temp_celsius !== null) {
-      if (temp >= min_temp_celsius && temp <= max_temp_celsius) {
-        return { color: 'green', label: 'In Range' };
-      }
-      return { color: 'red', label: 'Out of Range' };
-    } else if (min_temp_celsius !== null) {
-      if (temp >= min_temp_celsius) {
-        return { color: 'green', label: 'In Range' };
-      }
-      return { color: 'red', label: 'Out of Range' };
+      return temp >= min_temp_celsius && temp <= max_temp_celsius
+        ? { color: 'green', label: 'In Range' }
+        : { color: 'red', label: 'Out of Range' };
     }
-
+    if (min_temp_celsius !== null) {
+      return temp >= min_temp_celsius
+        ? { color: 'green', label: 'In Range' }
+        : { color: 'red', label: 'Out of Range' };
+    }
     return { color: 'gray', label: 'No Threshold Set' };
   };
 
@@ -181,7 +174,6 @@ export default function EquipmentPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] p-4">
       <div className="mx-auto max-w-2xl space-y-6">
-        {/* Header */}
         <div className="flex items-center gap-4">
           <Link
             href="/webapp/temperature"
@@ -194,8 +186,6 @@ export default function EquipmentPage() {
             {equipment.location && <p className="text-sm text-gray-400">{equipment.location}</p>}
           </div>
         </div>
-
-        {/* Equipment Info Card */}
         <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           <div className="mb-6 flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
@@ -226,32 +216,14 @@ export default function EquipmentPage() {
             <div>
               <p className="mb-2 text-sm text-gray-400">Status</p>
               <div className="flex items-center gap-2">
-                <div
-                  className={`h-3 w-3 rounded-full ${
-                    status.color === 'green'
-                      ? 'bg-green-500'
-                      : status.color === 'red'
-                        ? 'bg-red-500'
-                        : 'bg-gray-500'
-                  }`}
-                />
-                <p
-                  className={`font-semibold ${
-                    status.color === 'green'
-                      ? 'text-green-400'
-                      : status.color === 'red'
-                        ? 'text-red-400'
-                        : 'text-gray-400'
-                  }`}
-                >
+                <div className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-green-500' : status.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`} />
+                <p className={`font-semibold ${status.color === 'green' ? 'text-green-400' : status.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}>
                   {status.label}
                 </p>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Quick Log Form */}
         <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           <h2 className="mb-4 text-xl font-bold text-white">Log Temperature</h2>
           <form onSubmit={handleSubmitTemperature} className="space-y-4">
@@ -290,8 +262,6 @@ export default function EquipmentPage() {
             </button>
           </form>
         </div>
-
-        {/* Recent Logs */}
         {recentLogs.length > 0 && (
           <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
             <h2 className="mb-4 text-xl font-bold text-white">Recent Logs</h2>
@@ -310,24 +280,8 @@ export default function EquipmentPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div
-                          className={`h-2 w-2 rounded-full ${
-                            logStatus.color === 'green'
-                              ? 'bg-green-500'
-                              : logStatus.color === 'red'
-                                ? 'bg-red-500'
-                                : 'bg-gray-500'
-                          }`}
-                        />
-                        <span
-                          className={`text-xs font-semibold ${
-                            logStatus.color === 'green'
-                              ? 'text-green-400'
-                              : logStatus.color === 'red'
-                                ? 'text-red-400'
-                                : 'text-gray-400'
-                          }`}
-                        >
+                        <div className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-green-500' : logStatus.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`} />
+                        <span className={`text-xs font-semibold ${logStatus.color === 'green' ? 'text-green-400' : logStatus.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}>
                           {logStatus.label}
                         </span>
                       </div>
