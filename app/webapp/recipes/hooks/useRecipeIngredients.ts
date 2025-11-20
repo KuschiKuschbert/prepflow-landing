@@ -26,7 +26,8 @@ export function useRecipeIngredients(setError: (error: string) => void) {
 
   fetchFromApiRef.current = fetchFromApi;
   const fetchFromClientJoinCallback = useCallback(
-    async (recipeId: string): Promise<RecipeIngredientWithDetails[]> => fetchFromClientJoin(recipeId, setError),
+    async (recipeId: string): Promise<RecipeIngredientWithDetails[]> =>
+      fetchFromClientJoin(recipeId, setError),
     [setError],
   );
   const fetchRecipeIngredients = useCallback(
@@ -77,7 +78,8 @@ export function useRecipeIngredients(setError: (error: string) => void) {
           }
         });
       }
-      const handleQueueError = (err: any) => logger.error('[RecipeIngredients] Queue processing error:', err);
+      const handleQueueError = (err: any) =>
+        logger.error('[RecipeIngredients] Queue processing error:', err);
       const batchPromise = performBatchFetch(recipeIds)
         .then(result => {
           globalBatchRequestCache.delete(cacheKey);

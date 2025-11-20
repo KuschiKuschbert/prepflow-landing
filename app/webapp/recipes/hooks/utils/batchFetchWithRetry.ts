@@ -41,11 +41,20 @@ export async function batchFetchWithRetry(
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => 'Unknown error');
-      const errorType = response.status >= 500 ? 'server error' : response.status >= 400 ? 'client error' : 'unknown error';
-      logger.error(`[RecipeIngredients] Batch fetch failed: ${response.status} ${errorType} - ${errorText}`);
+      const errorType =
+        response.status >= 500
+          ? 'server error'
+          : response.status >= 400
+            ? 'client error'
+            : 'unknown error';
+      logger.error(
+        `[RecipeIngredients] Batch fetch failed: ${response.status} ${errorType} - ${errorText}`,
+      );
       if (response.status >= 500 && retryCount < maxRetries && performBatchFetchRef.current) {
         const delay = getRetryDelay(retryCount);
-        logger.dev(`[RecipeIngredients] Retrying batch fetch after ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`);
+        logger.dev(
+          `[RecipeIngredients] Retrying batch fetch after ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`,
+        );
         await new Promise(resolve => setTimeout(resolve, delay));
         return performBatchFetchRef.current(recipeIds, retryCount + 1);
       }
@@ -55,7 +64,9 @@ export async function batchFetchWithRetry(
     const data = await response.json();
     const items = data?.items || {};
     const duration = Date.now() - startTime;
-    logger.dev(`[RecipeIngredients] Batch fetch completed in ${duration}ms, got ${Object.keys(items).length} recipe groups`);
+    logger.dev(
+      `[RecipeIngredients] Batch fetch completed in ${duration}ms, got ${Object.keys(items).length} recipe groups`,
+    );
     return items as Record<string, RecipeIngredientWithDetails[]>;
   } catch (err) {
     logger.error('[RecipeIngredients] Batch fetch exception:', err);
@@ -64,14 +75,24 @@ export async function batchFetchWithRetry(
       const isNetworkError = err.name === 'TypeError' && err.message.includes('fetch');
 
       if (isAbortError) {
-        logger.error(`[RecipeIngredients] Request timeout - server did not respond within ${timeoutMs}ms for ${recipeIds.length} recipes`);
+        logger.error(
+          `[RecipeIngredients] Request timeout - server did not respond within ${timeoutMs}ms for ${recipeIds.length} recipes`,
+        );
       } else if (isNetworkError) {
-        logger.error('[RecipeIngredients] Network error detected - check if dev server is running and API route exists');
+        logger.error(
+          '[RecipeIngredients] Network error detected - check if dev server is running and API route exists',
+        );
       }
-      if ((isNetworkError || isAbortError) && retryCount < maxRetries && performBatchFetchRef.current) {
+      if (
+        (isNetworkError || isAbortError) &&
+        retryCount < maxRetries &&
+        performBatchFetchRef.current
+      ) {
         const delay = getRetryDelay(retryCount);
         const errorType = isAbortError ? 'timeout' : 'network error';
-        logger.dev(`[RecipeIngredients] Retrying batch fetch after ${errorType} after ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`);
+        logger.dev(
+          `[RecipeIngredients] Retrying batch fetch after ${errorType} after ${delay}ms (attempt ${retryCount + 1}/${maxRetries})...`,
+        );
         await new Promise(resolve => setTimeout(resolve, delay));
         return performBatchFetchRef.current(recipeIds, retryCount + 1);
       }

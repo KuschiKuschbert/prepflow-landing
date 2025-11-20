@@ -82,7 +82,12 @@ export async function submitParLevelForm({
     const response = await fetch('/api/par-levels', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ingredientId: formData.ingredientId, parLevel: parLevelValue, reorderPoint: reorderPointValue, unit: formData.unit }),
+      body: JSON.stringify({
+        ingredientId: formData.ingredientId,
+        parLevel: parLevelValue,
+        reorderPoint: reorderPointValue,
+        unit: formData.unit,
+      }),
     });
     let result;
     try {
@@ -99,7 +104,8 @@ export async function submitParLevelForm({
     }
     if (response.ok && result.success && result.data) {
       const serverData = result.data;
-      if (!serverData.ingredients && tempParLevel.ingredients) serverData.ingredients = tempParLevel.ingredients;
+      if (!serverData.ingredients && tempParLevel.ingredients)
+        serverData.ingredients = tempParLevel.ingredients;
       setParLevels(prevItems => {
         const updated = prevItems.map(item => (item.id === tempId ? serverData : item));
         cacheData('par_levels', updated);
@@ -109,9 +115,22 @@ export async function submitParLevelForm({
       resetForm();
     } else {
       setParLevels(originalParLevels);
-      const errorMessage = result.message || result.error || `Failed to create par level (${response.status})`;
+      const errorMessage =
+        result.message || result.error || `Failed to create par level (${response.status})`;
       const instructions = result.details?.instructions || [];
-      logger.error('[Par Levels] POST API Error:', { status: response.status, error: errorMessage, details: result.details, code: result.code, fullResponse: result, requestBody: { ingredientId: formData.ingredientId, parLevel: parLevelValue, reorderPoint: reorderPointValue, unit: formData.unit } });
+      logger.error('[Par Levels] POST API Error:', {
+        status: response.status,
+        error: errorMessage,
+        details: result.details,
+        code: result.code,
+        fullResponse: result,
+        requestBody: {
+          ingredientId: formData.ingredientId,
+          parLevel: parLevelValue,
+          reorderPoint: reorderPointValue,
+          unit: formData.unit,
+        },
+      });
       if (instructions.length > 0) {
         showError(`${errorMessage}\n\n${instructions.join('\n')}`);
         logger.dev('[Par Levels] POST Error Instructions:', instructions);

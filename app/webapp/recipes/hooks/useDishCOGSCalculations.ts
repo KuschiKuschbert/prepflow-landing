@@ -66,7 +66,9 @@ export function useDishCOGSCalculations(
 
       const isConsumable = (ingredient as any).category === 'Consumables';
       const wasteAdjustedCostFinal = isConsumable ? totalCost : wasteAdjustedCost;
-      const yieldAdjustedCostFinal = isConsumable ? totalCost : wasteAdjustedCost / (yieldPercent / 100);
+      const yieldAdjustedCostFinal = isConsumable
+        ? totalCost
+        : wasteAdjustedCost / (yieldPercent / 100);
 
       allCalculations.push({
         recipeId: dish?.id || '',

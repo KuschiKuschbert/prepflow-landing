@@ -106,7 +106,8 @@ export function useTemperatureEquipmentTabHandlers({
       await onUpdateEquipment(equipmentId, { is_active: !currentStatus });
     } catch (error) {}
   };
-  const generateSampleData = () => handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs);
+  const generateSampleData = () =>
+    handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, equipment.length);
   return {

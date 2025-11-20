@@ -122,7 +122,14 @@ export default function DishesClient() {
       setHighlightingRowId(null);
       setHighlightingRowType(null);
     }
-  }, [viewMode, fetchItems, setEditingRecipe, setEditingItem, setHighlightingRowId, setHighlightingRowType]);
+  }, [
+    viewMode,
+    fetchItems,
+    setEditingRecipe,
+    setEditingItem,
+    setHighlightingRowId,
+    setHighlightingRowType,
+  ]);
   useDishesClientRecipePricing({
     paginatedRecipesList,
     recipePrices,
@@ -140,8 +147,12 @@ export default function DishesClient() {
     });
     return types;
   }, [dishes, recipes, selectedItems]);
-  const { optimisticallyUpdateDishes, optimisticallyUpdateRecipes, rollbackDishes, rollbackRecipes } =
-    useDishesOptimisticUpdates({ dishes, recipes, selectedItems, setDishes, setRecipes });
+  const {
+    optimisticallyUpdateDishes,
+    optimisticallyUpdateRecipes,
+    rollbackDishes,
+    rollbackRecipes,
+  } = useDishesOptimisticUpdates({ dishes, recipes, selectedItems, setDishes, setRecipes });
   const {
     bulkActionLoading,
     showBulkDeleteConfirm,

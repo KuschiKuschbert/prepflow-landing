@@ -216,8 +216,12 @@ export default function EquipmentPage() {
             <div>
               <p className="mb-2 text-sm text-gray-400">Status</p>
               <div className="flex items-center gap-2">
-                <div className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-green-500' : status.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`} />
-                <p className={`font-semibold ${status.color === 'green' ? 'text-green-400' : status.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}>
+                <div
+                  className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-green-500' : status.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`}
+                />
+                <p
+                  className={`font-semibold ${status.color === 'green' ? 'text-green-400' : status.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}
+                >
                   {status.label}
                 </p>
               </div>
@@ -280,8 +284,12 @@ export default function EquipmentPage() {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-green-500' : logStatus.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`} />
-                        <span className={`text-xs font-semibold ${logStatus.color === 'green' ? 'text-green-400' : logStatus.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}>
+                        <div
+                          className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-green-500' : logStatus.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`}
+                        />
+                        <span
+                          className={`text-xs font-semibold ${logStatus.color === 'green' ? 'text-green-400' : logStatus.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}
+                        >
                           {logStatus.label}
                         </span>
                       </div>

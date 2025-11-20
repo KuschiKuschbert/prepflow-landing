@@ -47,9 +47,18 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     convertIngredientQuantity,
     showError,
   });
-  const ingredientCalculations = useMemo(() => calculations.filter(calc => !calc.isConsumable), [calculations]);
-  const consumableCalculations = useMemo(() => calculations.filter(calc => calc.isConsumable), [calculations]);
-  const consumables = useMemo(() => ingredients.filter(ing => ing.category === 'Consumables'), [ingredients]);
+  const ingredientCalculations = useMemo(
+    () => calculations.filter(calc => !calc.isConsumable),
+    [calculations],
+  );
+  const consumableCalculations = useMemo(
+    () => calculations.filter(calc => calc.isConsumable),
+    [calculations],
+  );
+  const consumables = useMemo(
+    () => ingredients.filter(ing => ing.category === 'Consumables'),
+    [ingredients],
+  );
   const {
     ingredientSearch,
     showSuggestions,

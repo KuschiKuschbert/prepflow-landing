@@ -38,11 +38,19 @@ export function useCOGSCalculationLogic({
             totalCost,
           };
           if (isConsumable) {
-            return { ...baseCalc, wasteAdjustedCost: totalCost, yieldAdjustedCost: totalCost, isConsumable: true };
+            return {
+              ...baseCalc,
+              wasteAdjustedCost: totalCost,
+              yieldAdjustedCost: totalCost,
+              isConsumable: true,
+            };
           }
           const wastePercent = ingredient.trim_peel_waste_percentage || 0;
           const yieldPercent = ingredient.yield_percentage || 100;
-          const wasteAdjustedCost = !ingredient.cost_per_unit_incl_trim && wastePercent > 0 ? totalCost / (1 - wastePercent / 100) : totalCost;
+          const wasteAdjustedCost =
+            !ingredient.cost_per_unit_incl_trim && wastePercent > 0
+              ? totalCost / (1 - wastePercent / 100)
+              : totalCost;
           const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
           return { ...baseCalc, wasteAdjustedCost, yieldAdjustedCost, isConsumable: false };
         })

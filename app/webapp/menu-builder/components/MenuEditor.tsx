@@ -15,11 +15,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useMenuDragDrop } from '../hooks/useMenuDragDrop';
 import { Menu } from '../types';
 import CategoryManager from './CategoryManager';
-import CategorySelectorModal from './CategorySelectorModal';
 import DishPalette from './DishPalette';
 import { MenuCategoriesList } from './MenuCategoriesList';
-import { MenuItemStatisticsModal } from './MenuItemStatisticsModal';
 import { MenuLockButton } from './MenuLockButton';
+import { MenuEditorModals } from './MenuEditorModals';
 import { MenuLockedView } from './MenuLockedView';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
 import { DragOverlayContent } from './drag/DragOverlayContent';
@@ -273,34 +272,23 @@ export default function MenuEditor({ menu, onMenuUpdated }: MenuEditorProps) {
             return menuItem ? <DragOverlayContent menuItem={menuItem} /> : null;
           })()}
       </DragOverlay>
-      <CategorySelectorModal
-        isOpen={showCategoryModal}
+      <MenuEditorModals
+        showCategoryModal={showCategoryModal}
         categories={categories}
-        itemName={selectedItem?.name || ''}
+        selectedItem={selectedItem}
         anchorElement={anchorElement}
         onSelectCategory={handleCategorySelectWrapper}
-        onClose={() => {
+        onCloseCategoryModal={() => {
           setShowCategoryModal(false);
           setSelectedItem(null);
           setAnchorElement(null);
         }}
-      />
-      <MenuItemStatisticsModal
-        isOpen={selectedItemForStats !== null}
-        item={selectedItemForStats}
+        selectedItemForStats={selectedItemForStats}
         menuId={menu.id}
-        onClose={() => setSelectedItemForStats(null)}
-        onUpdatePrice={handleUpdateActualPrice}
-      />
-      <ConfirmDialog
-        isOpen={confirmDialog.isOpen}
-        title={confirmDialog.title}
-        message={confirmDialog.message}
-        confirmLabel="Confirm"
-        cancelLabel="Cancel"
-        onConfirm={confirmDialog.onConfirm}
-        onCancel={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
-        variant={confirmDialog.variant}
+        onCloseStatsModal={() => setSelectedItemForStats(null)}
+        onUpdatePrice={(itemId, price) => handleUpdateActualPrice(itemId, price)}
+        confirmDialog={confirmDialog}
+        onCloseConfirmDialog={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
       />
     </DndContext>
   );

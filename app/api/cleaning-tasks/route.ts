@@ -30,7 +30,10 @@ const CLEANING_AREAS_SELECT = `
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -92,7 +95,14 @@ export async function POST(request: NextRequest) {
     const { area_id, assigned_date, notes } = body;
 
     if (!area_id || !assigned_date) {
-      return NextResponse.json(ApiErrorHandler.createError('area_id and assigned_date are required', 'VALIDATION_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'area_id and assigned_date are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
     }
 
     const data = await createCleaningTask({

@@ -1,5 +1,5 @@
 'use client';
-import { MenuCategory } from './MenuCategory';
+import MenuCategory from './MenuCategory';
 import { MenuItem } from '../types';
 
 interface MenuCategoriesListProps {
@@ -7,11 +7,11 @@ interface MenuCategoriesListProps {
   menuItems: MenuItem[];
   menuId: string;
   onRemoveItem: (itemId: string) => void;
-  onRenameCategory: (oldName: string, newName: string) => void;
+  onRenameCategory: (oldName: string, newName: string) => Promise<void>;
   onMoveUp: (itemId: string) => void;
   onMoveDown: (itemId: string) => void;
   onMoveToCategory: (itemId: string, newCategory: string) => void;
-  onUpdateActualPrice: (itemId: string, newPrice: number) => void;
+  onUpdateActualPrice: (itemId: string, newPrice: number | null) => void;
   onShowStatistics: (item: MenuItem) => void;
 }
 

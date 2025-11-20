@@ -8,7 +8,7 @@ interface RecipeMetadataFormProps {
   editedYield: number;
   editedInstructions: string;
   onNameChange: (name: string) => void;
-  onYieldChange: (yield: number) => void;
+  onYieldChange: (recipeYield: number) => void;
   onInstructionsChange: (instructions: string) => void;
 }
 
@@ -37,7 +37,9 @@ export function RecipeMetadataForm({
             const name = e.target.value.trim().toLowerCase();
             if (!name || name === recipe.recipe_name.toLowerCase()) return;
             try {
-              const res = await fetch(`/api/recipes/exists?name=${encodeURIComponent(name)}`, { cache: 'no-store' });
+              const res = await fetch(`/api/recipes/exists?name=${encodeURIComponent(name)}`, {
+                cache: 'no-store',
+              });
               const json = await res.json();
               if (json?.exists) showWarning('A recipe with this name already exists.');
             } catch {}

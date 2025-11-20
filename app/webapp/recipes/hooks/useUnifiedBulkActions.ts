@@ -93,11 +93,12 @@ export function useUnifiedBulkActions({
       }
       const recipeCount = selectedRecipeIds.length;
       const dishCount = selectedDishIds.length;
-      const message = recipeCount > 0 && dishCount > 0
-        ? `${recipeCount} recipe${recipeCount > 1 ? 's' : ''} and ${dishCount} dish${dishCount > 1 ? 'es' : ''} deleted successfully!`
-        : recipeCount > 0
-          ? `${recipeCount} recipe${recipeCount > 1 ? 's' : ''} deleted successfully!`
-          : `${dishCount} dish${dishCount > 1 ? 'es' : ''} deleted successfully!`;
+      const message =
+        recipeCount > 0 && dishCount > 0
+          ? `${recipeCount} recipe${recipeCount > 1 ? 's' : ''} and ${dishCount} dish${dishCount > 1 ? 'es' : ''} deleted successfully!`
+          : recipeCount > 0
+            ? `${recipeCount} recipe${recipeCount > 1 ? 's' : ''} deleted successfully!`
+            : `${dishCount} dish${dishCount > 1 ? 'es' : ''} deleted successfully!`;
       showSuccess(message);
       onClearSelection();
     } catch (err) {
@@ -108,7 +109,20 @@ export function useUnifiedBulkActions({
     } finally {
       setBulkActionLoading(false);
     }
-  }, [selectedItems.size, selectedRecipeIds, selectedDishIds, recipes, dishes, optimisticallyUpdateRecipes, optimisticallyUpdateDishes, rollbackRecipes, rollbackDishes, onClearSelection, showSuccess, showError]);
+  }, [
+    selectedItems.size,
+    selectedRecipeIds,
+    selectedDishIds,
+    recipes,
+    dishes,
+    optimisticallyUpdateRecipes,
+    optimisticallyUpdateDishes,
+    rollbackRecipes,
+    rollbackDishes,
+    onClearSelection,
+    showSuccess,
+    showError,
+  ]);
   const cancelBulkDelete = useCallback(() => {
     setShowBulkDeleteConfirm(false);
   }, []);

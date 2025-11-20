@@ -39,7 +39,14 @@ export function useIngredientBulkUpdate({
         throw error;
       }
     },
-    [ingredients, setIngredients, setSelectedIngredients, exitSelectionMode, showSuccess, showError],
+    [
+      ingredients,
+      setIngredients,
+      setSelectedIngredients,
+      exitSelectionMode,
+      showSuccess,
+      showError,
+    ],
   );
   const handleBulkAutoCategorize = useCallback(
     async (ids: string[], useAI: boolean = true) => {
@@ -54,7 +61,9 @@ export function useIngredientBulkUpdate({
         const result = await response.json();
 
         if (!response.ok) {
-          throw new Error(result.error || result.message || 'Failed to auto-categorize ingredients');
+          throw new Error(
+            result.error || result.message || 'Failed to auto-categorize ingredients',
+          );
         }
         const { data: updatedIngredients, error: fetchError } = await supabase
           .from('ingredients')
@@ -64,14 +73,19 @@ export function useIngredientBulkUpdate({
         if (fetchError) throw fetchError;
         if (updatedIngredients) {
           const categoryMap = new Map(updatedIngredients.map(ing => [ing.id, ing.category]));
-          setIngredients(prevIngredients => prevIngredients.map(ing => {
-            const newCategory = categoryMap.get(ing.id);
-            return newCategory ? { ...ing, category: newCategory } : ing;
-          }));
+          setIngredients(prevIngredients =>
+            prevIngredients.map(ing => {
+              const newCategory = categoryMap.get(ing.id);
+              return newCategory ? { ...ing, category: newCategory } : ing;
+            }),
+          );
         }
         setSelectedIngredients(new Set());
         exitSelectionMode();
-        showSuccess(result.message || `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`);
+        showSuccess(
+          result.message ||
+            `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
+        );
       } catch (error) {
         setIngredients(originalIngredients);
         logger.error('Bulk auto-categorize failed:', error);
@@ -79,7 +93,14 @@ export function useIngredientBulkUpdate({
         throw error;
       }
     },
-    [ingredients, setIngredients, setSelectedIngredients, exitSelectionMode, showSuccess, showError],
+    [
+      ingredients,
+      setIngredients,
+      setSelectedIngredients,
+      exitSelectionMode,
+      showSuccess,
+      showError,
+    ],
   );
   const handleCategorizeAllUncategorized = useCallback(
     async (useAI: boolean = true, onRefresh?: () => void) => {
@@ -98,16 +119,23 @@ export function useIngredientBulkUpdate({
         if (onRefresh) {
           onRefresh();
         } else {
-          const { data: updatedIngredients, error: fetchError } = await supabase.from('ingredients').select('id, category');
+          const { data: updatedIngredients, error: fetchError } = await supabase
+            .from('ingredients')
+            .select('id, category');
           if (!fetchError && updatedIngredients) {
             const categoryMap = new Map(updatedIngredients.map(ing => [ing.id, ing.category]));
-            setIngredients(prevIngredients => prevIngredients.map(ing => {
-              const newCategory = categoryMap.get(ing.id);
-              return newCategory ? { ...ing, category: newCategory } : ing;
-            }));
+            setIngredients(prevIngredients =>
+              prevIngredients.map(ing => {
+                const newCategory = categoryMap.get(ing.id);
+                return newCategory ? { ...ing, category: newCategory } : ing;
+              }),
+            );
           }
         }
-        showSuccess(result.message || `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`);
+        showSuccess(
+          result.message ||
+            `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
+        );
       } catch (error) {
         logger.error('Categorize all failed:', error);
         showError(error instanceof Error ? error.message : 'Failed to categorize all ingredients');

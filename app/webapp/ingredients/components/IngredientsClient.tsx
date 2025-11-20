@@ -80,6 +80,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     setWizardStep,
     resetWizard,
     resetCSVImport,
+    setNewIngredient,
   } = useIngredientFormState();
   const { filteredIngredients } = useIngredientFiltering({
     ingredients,
@@ -189,23 +190,15 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     <>
       {!hideHeader && (
         <PageHeader
-          title={
-            Array.isArray(t('ingredients.title', 'Ingredients Management'))
-              ? t('ingredients.title', 'Ingredients Management').join('')
-              : t('ingredients.title', 'Ingredients Management')
-          }
-          subtitle={
-            Array.isArray(
-              t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory'),
-            )
-              ? t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory').join('')
-              : t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory')
-          }
+          title={String(t('ingredients.title', 'Ingredients Management'))}
+          subtitle={String(t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory'))}
           icon={Package}
         />
       )}
       {error && (
-        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">{error}</div>
+        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
+          {error}
+        </div>
       )}
       {showAddForm && (
         <IngredientWizard
@@ -221,7 +214,13 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         />
       )}
       {isHydrated && (
-        <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mb-4" />
+        <IngredientPagination
+          page={page}
+          totalPages={totalPages}
+          total={filteredTotal}
+          onPageChange={setPage}
+          className="mb-4"
+        />
       )}
       {(isHydrated || ingredients.length > 0) && (
         <IngredientTableWithFilters
@@ -261,7 +260,13 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         />
       )}
       {isHydrated && (
-        <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mt-4" />
+        <IngredientPagination
+          page={page}
+          totalPages={totalPages}
+          total={filteredTotal}
+          onPageChange={setPage}
+          className="mt-4"
+        />
       )}
       <IngredientEditDrawer
         isOpen={!!editingIngredient}

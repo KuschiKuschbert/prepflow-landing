@@ -130,9 +130,18 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
   }, [selectedItem]);
 
   const [showAddIngredient, setShowAddIngredient] = useState(false);
-  const ingredientCalculations = useMemo(() => calculations.filter(calc => !calc.isConsumable), [calculations]);
-  const consumableCalculations = useMemo(() => calculations.filter(calc => calc.isConsumable), [calculations]);
-  const totalCOGS = useMemo(() => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0), [calculations]);
+  const ingredientCalculations = useMemo(
+    () => calculations.filter(calc => !calc.isConsumable),
+    [calculations],
+  );
+  const consumableCalculations = useMemo(
+    () => calculations.filter(calc => calc.isConsumable),
+    [calculations],
+  );
+  const totalCOGS = useMemo(
+    () => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0),
+    [calculations],
+  );
 
   const costPerPortion = useMemo(() => {
     if (!selectedItem) return 0;
@@ -181,7 +190,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
             onSelectItem={setSelectedItem}
             capitalizeName={capitalizeName}
           />
-          )}
+        )}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           {!selectedItem ? (
             <div className="flex h-full min-h-[400px] items-center justify-center text-gray-400">
@@ -258,7 +267,11 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
               <div className="mt-4 border-t border-[#2a2a2a] pt-4">
                 <button
                   onClick={() => {
-                    logger.dev('Save button clicked:', { selectedItem, calculationsCount: calculations.length, saving });
+                    logger.dev('Save button clicked:', {
+                      selectedItem,
+                      calculationsCount: calculations.length,
+                      saving,
+                    });
                     handleSave();
                   }}
                   disabled={saving || calculations.length === 0 || !selectedItem}

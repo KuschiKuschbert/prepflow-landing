@@ -45,7 +45,19 @@ export function useDishSectionActions({
       try {
         const url = '/api/kitchen-sections';
         const method = editingSection ? 'PUT' : 'POST';
-        const body = editingSection ? { id: editingSection.id, name: formData.name, description: formData.description, color: formData.color } : { userId, name: formData.name, description: formData.description, color: formData.color };
+        const body = editingSection
+          ? {
+              id: editingSection.id,
+              name: formData.name,
+              description: formData.description,
+              color: formData.color,
+            }
+          : {
+              userId,
+              name: formData.name,
+              description: formData.description,
+              color: formData.color,
+            };
         const response = await fetch(url, {
           method,
           headers: { 'Content-Type': 'application/json' },
@@ -81,7 +93,8 @@ export function useDishSectionActions({
     async (id: string) => {
       const confirmed = await showConfirm({
         title: 'Delete Kitchen Section?',
-        message: 'Delete this kitchen section? All dishes will be unassigned. Still want to delete it?',
+        message:
+          'Delete this kitchen section? All dishes will be unassigned. Still want to delete it?',
         variant: 'danger',
         confirmLabel: 'Delete',
         cancelLabel: 'Cancel',

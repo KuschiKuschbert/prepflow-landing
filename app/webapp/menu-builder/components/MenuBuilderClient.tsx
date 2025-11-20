@@ -62,7 +62,7 @@ export default function MenuBuilderClient({
 
         setLoading(false);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to fetch menus. Please check your connection and try again.');
       setLoading(false);
     }
@@ -91,7 +91,7 @@ export default function MenuBuilderClient({
         }
         setCheckingDb(false);
         await fetchMenus(false);
-      } catch (err) {
+      } catch {
         setDbError('Failed to check database tables. Please try again.');
         setCheckingDb(false);
       }

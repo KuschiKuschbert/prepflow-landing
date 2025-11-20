@@ -1,12 +1,4 @@
-import { useImageTransitions } from '../utils/imageTransitions';
-import { useContainerHeight } from '../utils/containerDimensions';
-import {
-  useImageEntranceAnimation,
-  useContainerOpacityAnimation,
-  useStaggeredButtonAnimation,
-} from '../utils/animationEffects';
-import { useInitialWidthMeasurement, useExpandedWidthMeasurement } from '../utils/widthMeasurement';
-import { createToggleHandler } from '../utils/toggleHandler';
+import { useAnimationHooks } from './useAnimationHooks';
 
 interface Feature {
   title: string;
@@ -39,76 +31,6 @@ interface AnimationEffectsProps {
 /**
  * Setup animation effects and transitions.
  */
-export function useAnimationEffects({
-  displayFeature,
-  imageMounted,
-  expandedFeature,
-  setImageMounted,
-  features,
-  setButtonsVisible,
-  containerRefs,
-  initialWidths,
-  buttonHeights,
-  setInitialWidths,
-  setButtonHeights,
-  expandedIndex,
-  parentContainerRef,
-  setContainerWidths,
-  setExpandedIndex,
-  setScaleXValues,
-  setIsTransitioning,
-  imageContainerRef,
-}: AnimationEffectsProps) {
-  const {
-    currentImage,
-    previousImage,
-    isImageTransitioning,
-    previousImageOpacity,
-    currentImageOpacity,
-    imageDimensions,
-    setImageDimensions,
-    setNewImageLoaded,
-  } = useImageTransitions(displayFeature, imageMounted);
-  const containerHeight = useContainerHeight(imageDimensions, imageContainerRef);
-  useImageEntranceAnimation(imageMounted, imageContainerRef, expandedFeature, setImageMounted);
-  useContainerOpacityAnimation(imageMounted, imageContainerRef, expandedFeature);
-  useStaggeredButtonAnimation(features, setButtonsVisible);
-  useInitialWidthMeasurement(
-    features,
-    containerRefs,
-    initialWidths,
-    buttonHeights,
-    setInitialWidths,
-    setButtonHeights,
-  );
-  useExpandedWidthMeasurement(
-    expandedIndex,
-    features,
-    containerRefs,
-    parentContainerRef,
-    setContainerWidths,
-  );
-  const handleToggle = createToggleHandler(
-    expandedIndex,
-    features,
-    containerRefs,
-    parentContainerRef,
-    initialWidths,
-    setExpandedIndex,
-    setContainerWidths,
-    setScaleXValues,
-    setIsTransitioning,
-  );
-  return {
-    currentImage,
-    previousImage,
-    isImageTransitioning,
-    previousImageOpacity,
-    currentImageOpacity,
-    imageDimensions,
-    containerHeight,
-    setImageDimensions,
-    setNewImageLoaded,
-    handleToggle,
-  };
+export function useAnimationEffects(props: AnimationEffectsProps) {
+  return useAnimationHooks(props);
 }

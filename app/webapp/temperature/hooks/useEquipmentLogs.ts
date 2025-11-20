@@ -72,10 +72,14 @@ export function useEquipmentLogs({
           setLogs(filterLogsByTime(uniqueLogs));
           logger.dev(`✅ Found ${uniqueLogs.length} logs for equipment "${equipmentName}"`, {
             queriedLocations: uniqueLocations,
-            matchingLogs: uniqueLogs.slice(0, 3).map(l => ({ location: l.location, date: l.log_date })),
+            matchingLogs: uniqueLogs
+              .slice(0, 3)
+              .map(l => ({ location: l.location, date: l.log_date })),
           });
         } else {
-          logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, { queriedLocations: uniqueLocations });
+          logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, {
+            queriedLocations: uniqueLocations,
+          });
           setLogs([]);
         }
       } catch (err) {

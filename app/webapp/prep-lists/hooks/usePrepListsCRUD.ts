@@ -90,7 +90,9 @@ export function usePrepListsCRUD({
         showError('Prep list not found');
         return;
       }
-      setPrepLists(prevLists => prevLists.map(list => (list.id === id ? { ...list, status: status as any } : list)));
+      setPrepLists(prevLists =>
+        prevLists.map(list => (list.id === id ? { ...list, status: status as any } : list)),
+      );
 
       try {
         const response = await fetch('/api/prep-lists', {

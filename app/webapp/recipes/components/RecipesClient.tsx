@@ -163,7 +163,8 @@ export default function RecipesClient() {
   });
 
   const [showBulkMenu, setShowBulkMenu] = useState(false);
-  const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } = useRecipeFiltering(recipes, recipePrices);
+  const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } =
+    useRecipeFiltering(recipes, recipePrices);
 
   usePriceCalculationEffect({
     paginatedRecipes,

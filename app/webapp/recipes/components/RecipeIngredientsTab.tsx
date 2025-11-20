@@ -88,8 +88,10 @@ export function RecipeIngredientsTab({
   onRemoveCalculation,
   setCalculations,
 }: RecipeIngredientsTabProps) {
-  const currentCalculations = activeTab === 'ingredients' ? ingredientCalculations : consumableCalculations;
-  const emptyMessage = activeTab === 'ingredients' ? 'No ingredients added yet' : 'No consumables added yet';
+  const currentCalculations =
+    activeTab === 'ingredients' ? ingredientCalculations : consumableCalculations;
+  const emptyMessage =
+    activeTab === 'ingredients' ? 'No ingredients added yet' : 'No consumables added yet';
   return (
     <div className="flex flex-1 flex-col overflow-hidden border-t border-[#2a2a2a] pt-6">
       <div className="mb-4 flex gap-2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2">
@@ -105,7 +107,11 @@ export function RecipeIngredientsTab({
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              <Icon icon={tab === 'ingredients' ? Package : ShoppingBag} size="sm" aria-hidden={true} />
+              <Icon
+                icon={tab === 'ingredients' ? Package : ShoppingBag}
+                size="sm"
+                aria-hidden={true}
+              />
               {tab === 'ingredients' ? 'Ingredients' : 'Consumables'}
             </button>
           );

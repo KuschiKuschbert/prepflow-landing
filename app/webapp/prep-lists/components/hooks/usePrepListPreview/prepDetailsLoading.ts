@@ -77,7 +77,10 @@ export async function loadPrepDetails({
       });
     }
   } catch (err) {
-    logger.warn('Failed to load prep details:', err instanceof Error ? { error: err.message } : undefined);
+    logger.warn(
+      'Failed to load prep details:',
+      err instanceof Error ? { error: err.message } : undefined,
+    );
   } finally {
     setLoadingPrepDetails(false);
   }

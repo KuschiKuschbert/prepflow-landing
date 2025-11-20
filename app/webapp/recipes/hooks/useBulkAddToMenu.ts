@@ -22,11 +22,6 @@ export function useBulkAddToMenu({
   const [loadingMenus, setLoadingMenus] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
   const [showMenuDialog, setShowMenuDialog] = useState(false);
-  useEffect(() => {
-    if (showMenuDialog) {
-      fetchMenus();
-    }
-  }, [showMenuDialog, fetchMenus]);
 
   const fetchMenus = useCallback(async () => {
     setLoadingMenus(true);

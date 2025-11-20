@@ -28,18 +28,15 @@ export function useMenuItemRemoval({
   showError,
   showSuccess,
 }: UseMenuItemRemovalProps) {
-  const revertItemRemoval = useCallback(
-    (itemToRemove: MenuItem, prevItems: MenuItem[]) => {
-      const otherItems = prevItems.filter(item => item.id !== itemToRemove.id);
-      const insertIndex = otherItems.findIndex(
-        item => item.category === itemToRemove.category && item.position > itemToRemove.position,
-      );
-      return insertIndex === -1
-        ? [...otherItems, itemToRemove]
-        : [...otherItems.slice(0, insertIndex), itemToRemove, ...otherItems.slice(insertIndex)];
-    },
-    [],
-  );
+  const revertItemRemoval = useCallback((itemToRemove: MenuItem, prevItems: MenuItem[]) => {
+    const otherItems = prevItems.filter(item => item.id !== itemToRemove.id);
+    const insertIndex = otherItems.findIndex(
+      item => item.category === itemToRemove.category && item.position > itemToRemove.position,
+    );
+    return insertIndex === -1
+      ? [...otherItems, itemToRemove]
+      : [...otherItems.slice(0, insertIndex), itemToRemove, ...otherItems.slice(insertIndex)];
+  }, []);
 
   const performRemoveItem = useCallback(
     async (itemId: string, itemName: string) => {
