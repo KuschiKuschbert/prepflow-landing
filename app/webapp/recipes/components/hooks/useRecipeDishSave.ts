@@ -24,16 +24,24 @@ export function useRecipeDishSave({
   showSuccess,
 }: UseRecipeDishSaveProps) {
   const [saving, setSaving] = useState(false);
-
+  const handleError = useCallback(async (response: Response, itemType: string, itemId: string, count: number) => {
+    const result = await response.json().catch(() => ({ error: 'Unknown error' }));
+    logger.error(`Failed to save ${itemType} ingredients:`, {
+      status: response.status,
+      statusText: response.statusText,
+      error: result.error || result.message,
+      [`${itemType}Id`]: itemId,
+      ingredientsCount: count,
+    });
+    showError(result.error || result.message || `Failed to save ${itemType} ingredients (${response.status})`);
+  }, [showError]);
   const handleSave = useCallback(async () => {
     if (!selectedItem) {
       showError('Please select a recipe or dish to edit');
       return;
     }
     if (calculations.length === 0) {
-      showError(
-        `${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} must contain at least one ingredient`,
-      );
+      showError(`${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} must contain at least one ingredient`);
       return;
     }
     setSaving(true);
@@ -52,19 +60,7 @@ export function useRecipeDishSave({
           body: JSON.stringify({ ingredients: recipeIngredients, isUpdate: true }),
         });
         if (!response.ok) {
-          const result = await response.json().catch(() => ({ error: 'Unknown error' }));
-          logger.error('Failed to save recipe ingredients:', {
-            status: response.status,
-            statusText: response.statusText,
-            error: result.error || result.message,
-            recipeId: selectedItem.id,
-            ingredientsCount: recipeIngredients.length,
-          });
-          showError(
-            result.error ||
-              result.message ||
-              `Failed to save recipe ingredients (${response.status})`,
-          );
+          await handleError(response, 'recipe', selectedItem.id, recipeIngredients.length);
           return;
         }
         await response.json();
@@ -92,27 +88,13 @@ export function useRecipeDishSave({
           }),
         });
         if (!response.ok) {
-          const result = await response.json().catch(() => ({ error: 'Unknown error' }));
-          logger.error('Failed to save dish ingredients:', {
-            status: response.status,
-            statusText: response.statusText,
-            error: result.error || result.message,
-            dishId: selectedItem.id,
-            ingredientsCount: dishIngredients.length,
-          });
-          showError(
-            result.error ||
-              result.message ||
-              `Failed to save dish ingredients (${response.status})`,
-          );
+          await handleError(response, 'dish', selectedItem.id, dishIngredients.length);
           return;
         }
         await response.json();
         logger.dev('Dish ingredients saved successfully');
       }
-      showSuccess(
-        `${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} ingredients saved successfully`,
-      );
+      showSuccess(`${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} ingredients saved successfully`);
       onSave();
     } catch (err) {
       logger.error('Failed to save:', err);
@@ -120,6 +102,6 @@ export function useRecipeDishSave({
     } finally {
       setSaving(false);
     }
-  }, [calculations, selectedItem, allRecipes, allDishes, onSave, showError, showSuccess]);
+    }, [calculations, selectedItem, allRecipes, allDishes, onSave, showError, showSuccess, handleError]);
   return { saving, handleSave };
 }
