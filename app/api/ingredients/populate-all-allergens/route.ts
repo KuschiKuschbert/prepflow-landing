@@ -78,14 +78,7 @@ export async function POST(request: NextRequest) {
     if (!ingredients || ingredients.length === 0) {
       return NextResponse.json({
         success: true,
-        data: {
-          total: 0,
-          processed: 0,
-          successful: 0,
-          failed: 0,
-          skipped: 0,
-          results: [],
-        },
+        data: { total: 0, processed: 0, successful: 0, failed: 0, skipped: 0, results: [] },
       });
     }
 
@@ -99,10 +92,6 @@ export async function POST(request: NextRequest) {
         (ingredient.allergen_source as { manual?: boolean }).manual;
       return !hasManualAllergens;
     });
-
-    logger.dev(
-      `[Populate All Allergens] Found ${ingredientsToProcess.length} ingredients to process out of ${ingredients.length} total`,
-    );
 
     if (dry_run) {
       return NextResponse.json({
@@ -136,9 +125,6 @@ export async function POST(request: NextRequest) {
     let skipped = 0;
     for (let i = 0; i < ingredientsToProcess.length; i += batch_size) {
       const batch = ingredientsToProcess.slice(i, i + batch_size);
-      logger.dev(
-        `[Populate All Allergens] Processing batch ${Math.floor(i / batch_size) + 1}/${Math.ceil(ingredientsToProcess.length / batch_size)}`,
-      );
       for (const ingredient of batch) {
         try {
           const enriched = await enrichIngredientWithAllergensHybrid({
@@ -186,11 +172,6 @@ export async function POST(request: NextRequest) {
       }
     }
     skipped = ingredients.length - ingredientsToProcess.length;
-
-    logger.dev(
-      `[Populate All Allergens] Completed: ${successful} successful, ${failed} failed, ${skipped} skipped`,
-    );
-
     return NextResponse.json({
       success: true,
       data: {

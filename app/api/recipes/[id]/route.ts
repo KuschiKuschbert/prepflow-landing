@@ -25,13 +25,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       );
     }
 
-    // Fetch recipe
     const { data: recipe, error: fetchError } = await supabaseAdmin
       .from('recipes')
       .select('*')
       .eq('id', recipeId)
       .single();
-
     if (fetchError || !recipe) {
       return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
         status: 404,
@@ -42,18 +40,16 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       aggregateRecipeAllergens(recipeId),
       aggregateRecipeDietaryStatus(recipeId),
     ]);
-    const enrichedRecipe = {
-      ...recipe,
-      allergens: allergens || [],
-      is_vegetarian: dietaryStatus?.isVegetarian ?? null,
-      is_vegan: dietaryStatus?.isVegan ?? null,
-      dietary_confidence: dietaryStatus?.confidence ?? null,
-      dietary_method: dietaryStatus?.method ?? null,
-    };
-
     return NextResponse.json({
       success: true,
-      recipe: enrichedRecipe,
+      recipe: {
+        ...recipe,
+        allergens: allergens || [],
+        is_vegetarian: dietaryStatus?.isVegetarian ?? null,
+        is_vegan: dietaryStatus?.isVegan ?? null,
+        dietary_confidence: dietaryStatus?.confidence ?? null,
+        dietary_method: dietaryStatus?.method ?? null,
+      },
     });
   } catch (err) {
     logger.error('[Recipes API] Unexpected error:', {
@@ -149,7 +145,6 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
         { status: 500 },
       );
     }
-
     const validationError = await validateRecipeDelete(recipeId);
     if (validationError) return validationError;
     try {

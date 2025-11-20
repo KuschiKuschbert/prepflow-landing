@@ -2,6 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+const TABLE_NOT_FOUND_RESPONSE = {
+  success: true,
+  data: [],
+  message: 'Kitchen sections table not found. Please run database setup.',
+  instructions: [
+    'The kitchen_sections table does not exist.',
+    'To set up the database:',
+    '1. Visit /api/setup-menu-builder (GET) to get the SQL migration',
+    '2. Or open menu-builder-schema.sql from the project root',
+    '3. Copy and run the SQL in your Supabase SQL Editor',
+  ],
+};
+
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -32,18 +45,7 @@ export async function GET(request: NextRequest) {
         sectionsError = result.error;
         if (result.error.code === '42P01') {
           logger.warn('kitchen_sections table does not exist');
-          return NextResponse.json({
-            success: true,
-            data: [],
-            message: 'Kitchen sections table not found. Please run database setup.',
-            instructions: [
-              'The kitchen_sections table does not exist.',
-              'To set up the database:',
-              '1. Visit /api/setup-menu-builder (GET) to get the SQL migration',
-              '2. Or open menu-builder-schema.sql from the project root',
-              '3. Copy and run the SQL in your Supabase SQL Editor',
-            ],
-          });
+          return NextResponse.json(TABLE_NOT_FOUND_RESPONSE);
         }
         logger.error('Error fetching kitchen sections:', sectionsError);
         sections = [];
@@ -54,18 +56,7 @@ export async function GET(request: NextRequest) {
       sectionsError = err;
       if (err?.code === '42P01' || err?.message?.includes('does not exist')) {
         logger.warn('kitchen_sections table does not exist');
-        return NextResponse.json({
-          success: true,
-          data: [],
-          message: 'Kitchen sections table not found. Please run database setup.',
-          instructions: [
-            'The kitchen_sections table does not exist.',
-            'To set up the database:',
-            '1. Visit /api/setup-menu-builder (GET) to get the SQL migration',
-            '2. Or open menu-builder-schema.sql from the project root',
-            '3. Copy and run the SQL in your Supabase SQL Editor',
-          ],
-        });
+        return NextResponse.json(TABLE_NOT_FOUND_RESPONSE);
       }
       logger.error('Exception fetching kitchen sections:', err);
       sections = [];
@@ -152,55 +143,34 @@ export async function GET(request: NextRequest) {
     const dishSectionMap = new Map<string, string>();
     if (dishSections && dishSections.length > 0) {
       dishSections.forEach((ds: any) => {
-        if (ds.dish_id && ds.section_id) {
-          dishSectionMap.set(ds.dish_id, ds.section_id);
-        }
+        if (ds.dish_id && ds.section_id) dishSectionMap.set(ds.dish_id, ds.section_id);
       });
     }
     const dishesBySection = new Map<string, any[]>();
     normalizedDishes.forEach((dish: any) => {
       const sectionId = dish.kitchen_section_id || dishSectionMap.get(dish.id) || null;
       if (sectionId) {
-        if (!dishesBySection.has(sectionId)) {
-          dishesBySection.set(sectionId, []);
-        }
+        if (!dishesBySection.has(sectionId)) dishesBySection.set(sectionId, []);
         dishesBySection.get(sectionId)!.push(dish);
       }
     });
-    const mappedData = (sections || []).map((section: any) => {
-      const sectionId = section.id;
-      const sectionDishes = dishesBySection.get(sectionId) || [];
-      return {
+    const mappedData = (sections || [])
+      .map((section: any) => ({
         id: section.id,
         name: section.name || section.section_name,
         description: section.description,
         color: section.color || section.color_code || '#29E7CD',
         created_at: section.created_at,
         updated_at: section.updated_at,
-        menu_dishes: sectionDishes,
-      };
-    });
-    mappedData.sort((a, b) => a.name.localeCompare(b.name));
+        menu_dishes: dishesBySection.get(section.id) || [],
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
 
-    return NextResponse.json({
-      success: true,
-      data: mappedData,
-    });
+    return NextResponse.json({ success: true, data: mappedData });
   } catch (error: any) {
     logger.error('Kitchen sections API error:', error);
     if (error?.code === '42P01' || error?.message?.includes('does not exist')) {
-      return NextResponse.json({
-        success: true,
-        data: [],
-        message: 'Kitchen sections table not found. Please run database setup.',
-        instructions: [
-          'The kitchen_sections table does not exist.',
-          'To set up the database:',
-          '1. Visit /api/setup-menu-builder (GET) to get the SQL migration',
-          '2. Or open menu-builder-schema.sql from the project root',
-          '3. Copy and run the SQL in your Supabase SQL Editor',
-        ],
-      });
+      return NextResponse.json(TABLE_NOT_FOUND_RESPONSE);
     }
     return NextResponse.json(
       {

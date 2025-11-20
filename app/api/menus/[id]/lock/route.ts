@@ -61,36 +61,22 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         { status: 400 },
       );
     }
+    const migrationError = ApiErrorHandler.createError(
+      'Menu lock feature requires database migration. Please run: migrations/add-menu-lock.sql',
+      'MIGRATION_REQUIRED',
+      503,
+    );
     if (lockStatusError?.code === '42703') {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Menu lock feature requires database migration. Please run: migrations/add-menu-lock.sql',
-          'MIGRATION_REQUIRED',
-          503,
-        ),
-        { status: 503 },
-      );
+      return NextResponse.json(migrationError, { status: 503 });
     }
     const { data: updatedMenu, error: updateError } = await supabaseAdmin
       .from('menus')
-      .update({
-        is_locked: true,
-        locked_at: new Date().toISOString(),
-      })
+      .update({ is_locked: true, locked_at: new Date().toISOString() })
       .eq('id', menuId)
       .select()
       .single();
     if (updateError) {
-      if (updateError.code === '42703') {
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            'Menu lock feature requires database migration. Please run: migrations/add-menu-lock.sql',
-            'MIGRATION_REQUIRED',
-            503,
-          ),
-          { status: 503 },
-        );
-      }
+      if (updateError.code === '42703') return NextResponse.json(migrationError, { status: 503 });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to lock menu', 'DATABASE_ERROR', 500),
         { status: 500 },
@@ -115,14 +101,6 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   }
 }
 
-/**
- * Unlock a menu to allow modifications.
- *
- * @param {NextRequest} request - The incoming request
- * @param {Object} context - Route context containing params
- * @param {Promise<{id: string}>} context.params - Route parameters containing menu ID
- * @returns {Promise<NextResponse>} Response with unlocked menu data or error
- */
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id: menuId } = await context.params;
