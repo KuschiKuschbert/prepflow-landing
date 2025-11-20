@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-
 import { logger } from '@/lib/logger';
+
 const TABLE_NOT_FOUND_RESPONSE = {
   success: true,
   data: [],
@@ -15,7 +15,7 @@ const TABLE_NOT_FOUND_RESPONSE = {
   ],
 };
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
