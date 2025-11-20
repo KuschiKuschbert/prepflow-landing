@@ -46,27 +46,19 @@ export function setupRecipeSubscriptions(refs: SubscriptionRefs, recipes: Recipe
       if (recipeIdsToRefresh.length > 0) invalidateRecipeCache(recipeIdsToRefresh);
       if (refreshTypes.includes('prices')) {
         refs.refreshRecipePricesRef
-          .current(
-            refs.recipesRef.current,
-            refs.fetchRecipeIngredientsRef.current,
-            refs.fetchBatchRecipeIngredientsRef.current,
-          )
-          .catch(err => {
-            logger.error('Failed to refresh recipe prices after subscription change:', err);
-          });
+          .current(refs.recipesRef.current, refs.fetchRecipeIngredientsRef.current, refs.fetchBatchRecipeIngredientsRef.current)
+          .catch(err => logger.error('Failed to refresh recipe prices after subscription change:', err));
       }
       if (refreshTypes.includes('recipes')) {
-        refs.fetchRecipesRef.current().catch(err => {
-          logger.error('Failed to refresh recipes after subscription change:', err);
-        });
+        refs.fetchRecipesRef.current().catch(err => logger.error('Failed to refresh recipes after subscription change:', err));
       }
       recipeIdsToRefresh.forEach(id => {
-        if (refs.onIngredientsChangeRef.current) refs.onIngredientsChangeRef.current(id);
-        if (refs.onRecipeUpdatedRef.current) refs.onRecipeUpdatedRef.current(id);
+        refs.onIngredientsChangeRef.current?.(id);
+        refs.onRecipeUpdatedRef.current?.(id);
       });
     }, 300);
   };
-  const subscription = supabase
+  return supabase
     .channel('recipe-unified-changes')
     .on(
       'postgres_changes',
@@ -123,5 +115,4 @@ export function setupRecipeSubscriptions(refs: SubscriptionRefs, recipes: Recipe
       }
     })
     .subscribe();
-  return subscription;
 }
