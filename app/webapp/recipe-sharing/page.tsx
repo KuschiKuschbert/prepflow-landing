@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -106,7 +105,6 @@ export default function RecipeSharingPage() {
     element.click();
     document.body.removeChild(element);
   };
-
   const resetForm = () => {
     setFormData({
       recipeId: '',
@@ -116,7 +114,6 @@ export default function RecipeSharingPage() {
     });
     setShowForm(false);
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
@@ -131,7 +128,6 @@ export default function RecipeSharingPage() {
         return 'text-gray-400 bg-gray-400/10';
     }
   };
-
   const getShareTypeIcon = (type: string) => {
     switch (type) {
       case 'pdf':
@@ -144,7 +140,6 @@ export default function RecipeSharingPage() {
         return '📤';
     }
   };
-
   if (loading) {
     return (
       <ResponsivePageContainer>
@@ -157,11 +152,9 @@ export default function RecipeSharingPage() {
       </ResponsivePageContainer>
     );
   }
-
   return (
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
-        {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="mb-2 text-3xl font-bold text-white">
@@ -178,15 +171,11 @@ export default function RecipeSharingPage() {
             + {t('recipeSharing.shareRecipe', 'Share Recipe')}
           </button>
         </div>
-
-        {/* Error Message */}
         {error && (
           <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
             <p className="text-red-400">{error}</p>
           </div>
         )}
-
-        {/* Recipe Shares */}
         <div className="space-y-4">
           {recipeShares.length === 0 ? (
             <div className="py-12 text-center">
@@ -257,8 +246,6 @@ export default function RecipeSharingPage() {
             ))
           )}
         </div>
-
-        {/* Share Form Modal */}
         {showForm && (
           <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
             <div className="w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
