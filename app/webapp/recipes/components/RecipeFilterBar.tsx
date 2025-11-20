@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useMemo, useEffect } from 'react';
 import { RecipeSortField } from '../hooks/useRecipeFiltering';
 import { RecipeSearchBar } from './RecipeSearchBar';
@@ -56,8 +55,6 @@ export function RecipeFilterBar({
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showExcludeAllergenMenu, setShowExcludeAllergenMenu] = useState(false);
   const [showIncludeAllergenMenu, setShowIncludeAllergenMenu] = useState(false);
-
-  // Sync local search term with prop
   useEffect(() => {
     setLocalSearchTerm(searchTerm);
   }, [searchTerm]);
@@ -72,7 +69,6 @@ export function RecipeFilterBar({
     });
     return Array.from(categories).sort();
   }, [recipes]);
-
   const activeFilterCount =
     (searchTerm ? 1 : 0) +
     (categoryFilter ? 1 : 0) +
@@ -80,7 +76,6 @@ export function RecipeFilterBar({
     (includeAllergens.length > 0 ? 1 : 0) +
     (vegetarian ? 1 : 0) +
     (vegan ? 1 : 0);
-
   const handleClearAll = () => {
     setLocalSearchTerm('');
     onSearchChange('');
@@ -90,10 +85,14 @@ export function RecipeFilterBar({
     onVegetarianChange(false);
     onVeganChange(false);
   };
-
+  const closeOtherMenus = (except: string) => {
+    if (except !== 'category') setShowCategoryMenu(false);
+    if (except !== 'exclude') setShowExcludeAllergenMenu(false);
+    if (except !== 'include') setShowIncludeAllergenMenu(false);
+    if (except !== 'sort') setShowSortMenu(false);
+  };
   return (
     <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
-      {/* Search and Filters */}
       <div className="tablet:flex-row tablet:items-center tablet:gap-2 flex flex-col gap-2">
         <RecipeSearchBar
           searchTerm={localSearchTerm}
@@ -103,8 +102,6 @@ export function RecipeFilterBar({
             onSearchChange('');
           }}
         />
-
-        {/* Filter Buttons Row */}
         <div className="flex flex-wrap items-center gap-2">
           {uniqueCategories.length > 0 && (
             <FilterDropdown
@@ -115,9 +112,7 @@ export function RecipeFilterBar({
               isOpen={showCategoryMenu}
               onToggle={() => {
                 setShowCategoryMenu(!showCategoryMenu);
-                setShowSortMenu(false);
-                setShowExcludeAllergenMenu(false);
-                setShowIncludeAllergenMenu(false);
+                closeOtherMenus('category');
               }}
               onChange={onCategoryFilterChange}
               activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
@@ -133,9 +128,7 @@ export function RecipeFilterBar({
             isOpen={showExcludeAllergenMenu}
             onToggle={() => {
               setShowExcludeAllergenMenu(!showExcludeAllergenMenu);
-              setShowIncludeAllergenMenu(false);
-              setShowCategoryMenu(false);
-              setShowSortMenu(false);
+              closeOtherMenus('exclude');
             }}
             activeColor="border-red-500/50 bg-red-500/10 text-red-400"
             activeBg="bg-red-500/20"
@@ -149,18 +142,14 @@ export function RecipeFilterBar({
             isOpen={showIncludeAllergenMenu}
             onToggle={() => {
               setShowIncludeAllergenMenu(!showIncludeAllergenMenu);
-              setShowExcludeAllergenMenu(false);
-              setShowCategoryMenu(false);
-              setShowSortMenu(false);
+              closeOtherMenus('include');
             }}
             activeColor="border-blue-500/50 bg-blue-500/10 text-blue-400"
             activeBg="bg-blue-500/20"
           />
 
           <button
-            onClick={() => {
-              onVegetarianChange(!vegetarian);
-            }}
+            onClick={() => onVegetarianChange(!vegetarian)}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
               vegetarian
                 ? 'border-green-500/50 bg-green-500/10 text-green-400'
@@ -173,9 +162,7 @@ export function RecipeFilterBar({
           </button>
 
           <button
-            onClick={() => {
-              onVeganChange(!vegan);
-            }}
+            onClick={() => onVeganChange(!vegan)}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
               vegan
                 ? 'border-green-500/50 bg-green-500/10 text-green-400'
@@ -194,14 +181,10 @@ export function RecipeFilterBar({
             isOpen={showSortMenu}
             onToggle={() => {
               setShowSortMenu(!showSortMenu);
-              setShowCategoryMenu(false);
-              setShowExcludeAllergenMenu(false);
-              setShowIncludeAllergenMenu(false);
+              closeOtherMenus('sort');
             }}
             onClose={() => setShowSortMenu(false)}
           />
-
-          {/* Items per page selector */}
           <select
             value={itemsPerPage}
             onChange={e => onItemsPerPageChange(Number(e.target.value))}
@@ -224,8 +207,6 @@ export function RecipeFilterBar({
           )}
         </div>
       </div>
-
-      {/* Active Filter Chips */}
       {(searchTerm ||
         categoryFilter ||
         excludeAllergens.length > 0 ||
