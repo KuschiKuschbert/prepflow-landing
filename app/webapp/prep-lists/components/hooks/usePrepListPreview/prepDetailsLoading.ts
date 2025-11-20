@@ -23,8 +23,9 @@ export async function loadPrepDetails({
 }: PrepDetailsLoadingProps): Promise<void> {
   const recipeIds = sectionsWithPrepInstructions
     .flatMap(section => section.recipeGrouped)
-    .filter(item => item.instructions?.trim().length > 0)
-    .map(item => item.recipeId);
+    .filter(item => item.instructions && item.instructions.trim().length > 0)
+    .map(item => item.recipeId)
+    .filter((id): id is string => id !== undefined);
   if (recipeIds.length === 0) return;
 
   try {

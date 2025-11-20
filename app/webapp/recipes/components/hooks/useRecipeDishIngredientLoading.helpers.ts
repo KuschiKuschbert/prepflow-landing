@@ -70,7 +70,9 @@ export async function loadDishIngredients({
       ),
     );
   };
-  dishIngredients.forEach(di => processIngredient(di.ingredient_id, di.quantity, di.unit));
+  dishIngredients.forEach((di: { ingredient_id: string; quantity: number; unit: string }) =>
+    processIngredient(di.ingredient_id, di.quantity, di.unit),
+  );
   for (const dr of dishRecipes) {
     const recipe = recipes.find(r => r.id === dr.recipe_id);
     if (!recipe) continue;
@@ -80,8 +82,9 @@ export async function loadDishIngredients({
     const recipeData = await recipeResponse.json();
     const recipeYield = recipe.yield || 1;
     const quantity = dr.quantity || 1;
-    (recipeData.items || []).forEach(ri =>
-      processIngredient(ri.ingredient_id, (ri.quantity / recipeYield) * quantity, ri.unit),
+    (recipeData.items || []).forEach(
+      (ri: { ingredient_id: string; quantity: number; unit: string }) =>
+        processIngredient(ri.ingredient_id, (ri.quantity / recipeYield) * quantity, ri.unit),
     );
   }
   return allCalculations;

@@ -2,6 +2,13 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { logger } from '@/lib/logger';
+
+/**
+ * Cleans up test data (dev-only).
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Cleanup response
+ */
 export async function POST(request: NextRequest) {
   // Prevent cleanup in production
   if (process.env.NODE_ENV === 'production') {

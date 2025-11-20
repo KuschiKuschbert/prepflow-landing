@@ -9,6 +9,14 @@ import { authOptions } from '@/lib/auth-options';
 import { authenticateGoogleDrive, downloadBackupFromDrive } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
 
+/**
+ * Downloads backup file from Google Drive.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @param {Object} context - Route context
+ * @param {Promise<{fileId: string}>} context.params - Route parameters
+ * @returns {Promise<NextResponse>} Backup file response
+ */
 export async function GET(request: NextRequest, context: { params: Promise<{ fileId: string }> }) {
   try {
     const session = await getServerSession(authOptions);

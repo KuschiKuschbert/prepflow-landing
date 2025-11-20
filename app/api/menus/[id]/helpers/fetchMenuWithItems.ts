@@ -3,63 +3,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { calculateRecipeSellingPrice } from '../../[id]/statistics/helpers/calculateRecipeSellingPrice';
 import { calculateDishSellingPrice } from '../../[id]/statistics/helpers/calculateDishSellingPrice';
-
-/**
- * Extract column name from Supabase error message.
- *
- * @param {any} error - Supabase error object
- * @returns {string | null} Column name if found, null otherwise
- */
-function extractColumnName(error: any): string | null {
-  if (!error) return null;
-
-  const errorMessage = error.message || '';
-  const errorDetails = error.details || '';
-  const errorHint = error.hint || '';
-  const fullErrorText = `${errorMessage} ${errorDetails} ${errorHint}`;
-
-  // Try to extract column name from common error patterns
-  // Pattern: "column X does not exist" or "column X.Y does not exist"
-  const columnMatch = fullErrorText.match(
-    /column\s+["']?([\w.]+)["']?\s+(?:does\s+not\s+exist|not\s+found)/i,
-  );
-  if (columnMatch && columnMatch[1]) {
-    return columnMatch[1];
-  }
-
-  // Pattern: "Could not find column: X"
-  const columnMatch2 = fullErrorText.match(/could\s+not\s+find\s+column[:\s]+([\w.]+)/i);
-  if (columnMatch2 && columnMatch2[1]) {
-    return columnMatch2[1];
-  }
-
-  return null;
-}
-
-/**
- * Log detailed error information for debugging.
- *
- * @param {any} error - Supabase error object
- * @param {string} context - Context string for logging
- * @param {string} menuId - Menu ID
- */
-function logDetailedError(error: any, context: string, menuId: string) {
-  const errorCode = error?.code;
-  const errorMessage = error?.message || '';
-  const errorDetails = error?.details || '';
-  const errorHint = error?.hint || '';
-  const columnName = extractColumnName(error);
-
-  logger.error(`[Menus API] ${context}:`, {
-    error: errorMessage,
-    code: errorCode,
-    details: errorDetails,
-    hint: errorHint,
-    columnName: columnName || 'unknown',
-    fullError: process.env.NODE_ENV === 'development' ? error : undefined,
-    context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
-  });
-}
+import { extractColumnName, logDetailedError } from './fetchMenuWithItems.helpers';
 
 /**
  * Fetch menu with items.

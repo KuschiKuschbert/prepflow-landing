@@ -6,6 +6,8 @@ import { updateVisiblePricesWithDebounce } from './updateVisiblePricesWithDeboun
 
 /**
  * Build pricing calculation callbacks.
+ * @param {Object} params - Callback parameters
+ * @returns {Object} Pricing callbacks
  */
 export function buildPricingCallbacks({
   calculateRecommendedPrice,
@@ -38,14 +40,15 @@ export function buildPricingCallbacks({
       fetchBatchRecipeIngredients: fetchBatch,
       batchRequestCacheRef,
     });
+
   const calculateVisibleRecipePrices = async (
     visibleRecipes: Recipe[],
     fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
     fetchBatchRecipeIngredients?: (
       recipeIds: string[],
     ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
-  ) =>
-    calculateVisiblePrices({
+  ) => {
+    return calculateVisiblePrices({
       visibleRecipes,
       fetchRecipeIngredients,
       fetchBatchRecipeIngredients,
@@ -53,6 +56,8 @@ export function buildPricingCallbacks({
       calculateRecommendedPrice,
       fetchBatchWithDeduplication: fetchBatchWrapper,
     });
+  };
+
   const calculateAllRecipePrices = async (
     recipesData: Recipe[],
     fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
@@ -64,8 +69,10 @@ export function buildPricingCallbacks({
       setRecipePrices({});
       return;
     }
+
     inFlightRequestsRef.current.forEach(controller => controller.abort());
     inFlightRequestsRef.current.clear();
+
     const prices = await calculateAllPrices({
       recipesData,
       fetchRecipeIngredients,
@@ -73,8 +80,10 @@ export function buildPricingCallbacks({
       calculateRecommendedPrice,
       fetchBatchWithDeduplication: fetchBatchWrapper,
     });
+
     setRecipePrices(prices);
   };
+
   const updateVisibleRecipePrices = async (
     visibleRecipes: Recipe[],
     fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,

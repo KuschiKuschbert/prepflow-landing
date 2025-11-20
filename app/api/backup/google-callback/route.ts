@@ -9,6 +9,12 @@ import { authOptions } from '@/lib/auth-options';
 import { handleGoogleDriveCallback } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
 
+/**
+ * Handles Google OAuth callback and stores refresh token.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Redirect response
+ */
 export async function GET(request: NextRequest) {
   try {
     // Verify user is authenticated

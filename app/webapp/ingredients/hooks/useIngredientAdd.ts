@@ -1,4 +1,5 @@
 'use client';
+
 import { normalizeIngredientData } from '@/lib/ingredients/normalizeIngredientDataMain';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
@@ -45,7 +46,9 @@ export function useIngredientAdd<
 
   const handleAddIngredient = useCallback(
     async (ingredientData: Partial<T>) => {
+      // Store original state for rollback
       let originalIngredients: T[] = [];
+
       try {
         const { normalized, error: normalizeError } = normalizeIngredientData(ingredientData);
         if (normalizeError) {
@@ -53,6 +56,7 @@ export function useIngredientAdd<
           throw new Error(normalizeError);
         }
 
+        // Perform optimistic update
         const tempId = performOptimisticUpdate({
           normalized,
           originalIngredients,
@@ -62,6 +66,8 @@ export function useIngredientAdd<
           setNewIngredient,
           DEFAULT_INGREDIENT: DEFAULT_INGREDIENT as unknown as Partial<T>,
         });
+
+        // Insert ingredient (with API fallback)
         const { data, error } = await handleIngredientInsert(normalized, ingredientData);
 
         if (error) {
@@ -74,15 +80,19 @@ export function useIngredientAdd<
           );
           throw new Error(formatIngredientInsertError(error));
         }
+
+        // Replace temp ingredient with real ingredient from server
         if (data) {
           replaceWithServerIngredient([], tempId, data as T, setIngredients);
         }
 
         await queryClient.invalidateQueries({ queryKey: ['ingredients'] });
       } catch (error: any) {
+        // Revert optimistic update on error (if not already reverted)
         if (originalIngredients.length > 0) {
           setIngredients(originalIngredients);
         }
+        // Reopen form on error
         if (setShowAddForm) setShowAddForm(true);
         setError(`Failed to add ingredient: ${formatIngredientErrorMessage(error)}`);
         throw error;

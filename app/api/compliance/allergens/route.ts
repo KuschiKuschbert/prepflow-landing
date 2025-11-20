@@ -11,6 +11,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { batchAggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
 import { aggregateDishAllergens } from '@/lib/allergens/allergen-aggregation';
 
+/**
+ * Gets allergen overview data for compliance.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Allergen overview response
+ */
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {

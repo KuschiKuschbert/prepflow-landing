@@ -13,6 +13,12 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import type { EncryptionMode } from '@/lib/backup/types';
 
+/**
+ * Uploads backup file to Google Drive.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Upload response
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

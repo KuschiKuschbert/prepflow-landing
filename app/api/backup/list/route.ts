@@ -10,6 +10,12 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import type { BackupFile } from '@/lib/backup/types';
 
+/**
+ * Lists user's backups.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} List of backup files response
+ */
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

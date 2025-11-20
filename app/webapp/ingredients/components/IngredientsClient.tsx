@@ -1,10 +1,10 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
-import { useEffect, useState } from 'react';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { PageHeader } from '../../components/static/PageHeader';
 import { useIngredientActions } from '../hooks/useIngredientActions';
 import { useIngredientBulkUpdate } from '../hooks/useIngredientBulkUpdate';
@@ -113,6 +113,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   }, [ingredientsData]);
   const {
     handleAddIngredient,
+    handleUpdateIngredient,
     handleDeleteIngredient,
     handleBulkDelete,
     exportToCSV,
@@ -189,10 +190,17 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     <>
       {!hideHeader && (
         <PageHeader
-          title={String(t('ingredients.title', 'Ingredients Management'))}
-          subtitle={String(
-            t('ingredients.subtitle', 'Manage your kitchen ingredients and inventory'),
-          )}
+          title={(() => {
+            const title = t('ingredients.title', 'Ingredients Management');
+            return Array.isArray(title) ? title.join('') : title;
+          })()}
+          subtitle={(() => {
+            const subtitle = t(
+              'ingredients.subtitle',
+              'Manage your kitchen ingredients and inventory',
+            );
+            return Array.isArray(subtitle) ? subtitle.join('') : subtitle;
+          })()}
           icon={Package}
         />
       )}

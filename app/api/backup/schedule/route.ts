@@ -9,6 +9,12 @@ import { authOptions } from '@/lib/auth-options';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 
+/**
+ * Configures scheduled backups.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Schedule configuration response
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -70,6 +76,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * Cancels scheduled backups.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Cancellation response
+ */
 export async function DELETE(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

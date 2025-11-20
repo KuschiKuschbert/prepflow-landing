@@ -10,6 +10,12 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import type { BackupSettings } from '@/lib/backup/types';
 
+/**
+ * Gets backup settings for the current user.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Backup settings response
+ */
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -50,6 +56,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * Updates backup settings for the current user.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Update response
+ */
 export async function PUT(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

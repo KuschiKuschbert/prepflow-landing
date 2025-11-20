@@ -9,6 +9,12 @@ import { authOptions } from '@/lib/auth-options';
 import { authenticateGoogleDrive, listBackupsFromDrive } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
 
+/**
+ * Lists backup files from Google Drive.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} List of backup files response
+ */
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

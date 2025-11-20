@@ -50,3 +50,4 @@ CREATE INDEX IF NOT EXISTS idx_backup_schedules_next_backup ON backup_schedules(
 
 -- Create index for Google tokens
 CREATE INDEX IF NOT EXISTS idx_user_google_tokens_user_id ON user_google_tokens(user_id);
+

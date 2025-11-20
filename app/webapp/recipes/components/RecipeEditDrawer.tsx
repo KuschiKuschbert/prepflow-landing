@@ -274,23 +274,33 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
           filteredIngredients={filteredIngredients}
           selectedIngredient={selectedIngredient}
           highlightedIndex={highlightedIndex}
-          newIngredient={newIngredient}
+          newIngredient={{
+            quantity: newIngredient.quantity || 0,
+            unit: newIngredient.unit || 'kg',
+          }}
           consumableSearch={consumableSearch}
           showConsumableSuggestions={showConsumableSuggestions}
           filteredConsumables={filteredConsumables}
           selectedConsumable={selectedConsumable}
           consumableHighlightedIndex={consumableHighlightedIndex}
-          newConsumable={newConsumable}
+          newConsumable={{
+            quantity: newConsumable.quantity || 0,
+            unit: newConsumable.unit || 'kg',
+          }}
           onToggleAddIngredient={() => setShowAddIngredient(!showAddIngredient)}
           onSearchChange={handleSearchChange}
           onIngredientSelect={handleIngredientSelect}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e, filtered) =>
+            handleKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
+          }
           onQuantityChange={quantity => setNewIngredient(prev => ({ ...prev, quantity }))}
           onUnitChange={unit => setNewIngredient(prev => ({ ...prev, unit }))}
           onAddIngredient={handleAddIngredientWrapper}
           onConsumableSearchChange={handleConsumableSearchChange}
           onConsumableSelect={handleConsumableSelect}
-          onConsumableKeyDown={handleConsumableKeyDown}
+          onConsumableKeyDown={(e, filtered) =>
+            handleConsumableKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
+          }
           onConsumableQuantityChange={quantity => setNewConsumable(prev => ({ ...prev, quantity }))}
           onConsumableUnitChange={unit => setNewConsumable(prev => ({ ...prev, unit }))}
           onAddConsumable={handleAddConsumableWrapper}

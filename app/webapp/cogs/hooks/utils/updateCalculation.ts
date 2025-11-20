@@ -1,4 +1,4 @@
-import { COGSCalculation, Ingredient } from '../types';
+import { COGSCalculation, Ingredient } from '../../types';
 
 interface UpdateCalculationParams {
   ingredientId: string;

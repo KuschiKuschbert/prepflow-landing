@@ -11,6 +11,12 @@ import { authOptions } from '@/lib/auth-options';
 import { getGoogleDriveAuthUrl, disconnectGoogleDrive } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
 
+/**
+ * Handles Google Drive authentication and disconnection.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Authentication response
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -47,6 +53,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * Disconnects Google Drive for the current user.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Disconnection response
+ */
 export async function DELETE(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

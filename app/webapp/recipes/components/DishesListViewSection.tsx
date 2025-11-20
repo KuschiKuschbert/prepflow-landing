@@ -1,20 +1,27 @@
 'use client';
 import { DishesListView } from './DishesListView';
 import { DishesSidePanels } from './DishesSidePanels';
-import { Dish, Recipe } from '../types';
+import { Dish, Recipe, DishCostData, RecipePriceData } from '../types';
 import { DishSortField } from '../hooks/useDishFiltering';
 
+type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
+
 interface DishesListViewSectionProps {
-  allItems: any[];
-  paginatedItems: any[];
-  paginatedDishesList: Dish[];
-  paginatedRecipesList: Recipe[];
-  dishCosts: Map<string, number>;
-  recipePrices: Map<string, number>;
+  allItems: UnifiedItem[];
+  paginatedItems: UnifiedItem[];
+  paginatedDishesList: (Dish & { itemType: 'dish' })[];
+  paginatedRecipesList: (Recipe & { itemType: 'recipe' })[];
+  dishCosts: Map<string, DishCostData>;
+  recipePrices: Record<string, RecipePriceData>;
   selectedItems: Set<string>;
   highlightingRowId: string | null;
   highlightingRowType: 'recipe' | 'dish' | null;
-  filters: any;
+  filters: {
+    currentPage: number;
+    itemsPerPage: number;
+    sortField: string;
+    sortDirection: 'asc' | 'desc';
+  };
   isSelectionMode: boolean;
   capitalizeRecipeName: (name: string) => string;
   showDishPanel: boolean;
@@ -30,14 +37,14 @@ interface DishesListViewSectionProps {
   sidePanelsHandlers: any;
   updateFilters: (filters: any) => void;
   handleSelectAll: () => void;
-  handleSelectItem: (id: string) => void;
+  handleSelectItem: (itemId: string) => void;
   handlePreviewDish: (dish: Dish) => void;
   handlePreviewRecipe: (recipe: Recipe) => void;
   handleEditDish: (dish: Dish) => void;
   handleEditRecipe: (recipe: Recipe) => void;
   handleDeleteDish: (dish: Dish) => void;
   handleDeleteRecipe: (recipe: Recipe) => void;
-  startLongPress: (id: string, type: 'recipe' | 'dish') => void;
+  startLongPress: (itemId: string) => void;
   cancelLongPress: () => void;
   enterSelectionMode: () => void;
   setViewMode: (mode: 'list' | 'editor' | 'builder') => void;

@@ -8,6 +8,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { runScheduledBackups } from '@/lib/backup/scheduler';
 import { logger } from '@/lib/logger';
 
+/**
+ * Cron job endpoint for running scheduled backups.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Backup completion response
+ */
 export async function GET(request: NextRequest) {
   try {
     // Verify cron secret (if using Vercel Cron, this is handled automatically)

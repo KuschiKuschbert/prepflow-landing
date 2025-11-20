@@ -18,6 +18,11 @@ const EMPLOYEE_SELECT = `
   )
 `;
 
+/**
+ * Fetches active employees with their qualifications.
+ *
+ * @returns {Promise<{employees: Employee[] | null, qualifications: Qualification[] | null}>} Employees and qualifications data
+ */
 export async function fetchEmployees() {
   if (!supabaseAdmin) return { employees: null, qualifications: null };
 

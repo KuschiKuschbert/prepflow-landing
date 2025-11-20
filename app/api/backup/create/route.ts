@@ -12,6 +12,12 @@ import { exportUserData, convertToSQL } from '@/lib/backup/export';
 import { encryptBackup } from '@/lib/backup/encryption';
 import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
 
+/**
+ * Creates a manual backup of user data.
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Backup file response
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

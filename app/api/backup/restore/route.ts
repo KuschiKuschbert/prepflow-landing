@@ -9,8 +9,14 @@ import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
 import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
 import { restoreFull, restoreSelective, restoreMerge } from '@/lib/backup/restore';
-import type { RestoreMode, MergeOptions } from '@/lib/backup/types';
+import type { MergeOptions } from '@/lib/backup/types';
 
+/**
+ * Restores from backup (full, selective, or merge).
+ *
+ * @param {NextRequest} request - Next.js request object
+ * @returns {Promise<NextResponse>} Restore operation response
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
