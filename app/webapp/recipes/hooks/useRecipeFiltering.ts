@@ -53,18 +53,7 @@ export function useRecipeFiltering(
       filters.vegan,
     );
     return sortRecipes(filtered, recipePrices, filters.sortField, filters.sortDirection);
-  }, [
-    recipes,
-    recipePrices,
-    filters.searchTerm,
-    filters.categoryFilter,
-    filters.excludeAllergens,
-    filters.includeAllergens,
-    filters.vegetarian,
-    filters.vegan,
-    filters.sortField,
-    filters.sortDirection,
-  ]);
+  }, [recipes, recipePrices, filters]);
 
   const paginatedRecipes = useMemo(() => {
     const startIndex = (filters.currentPage - 1) * filters.itemsPerPage;
@@ -75,21 +64,21 @@ export function useRecipeFiltering(
   const totalPages = Math.ceil(filteredAndSortedRecipes.length / filters.itemsPerPage);
 
   const updateFilters = (updates: Partial<RecipeFilters>) => {
+    const resetPageFields = [
+      'searchTerm',
+      'categoryFilter',
+      'excludeAllergens',
+      'includeAllergens',
+      'vegetarian',
+      'vegan',
+      'sortField',
+      'sortDirection',
+    ];
+    const shouldResetPage = Object.keys(updates).some(key => resetPageFields.includes(key));
     setFilters(prev => ({
       ...prev,
       ...updates,
-      // Reset to page 1 when changing search, category, allergens, dietary, or sort
-      currentPage:
-        updates.searchTerm !== undefined ||
-        updates.categoryFilter !== undefined ||
-        updates.excludeAllergens !== undefined ||
-        updates.includeAllergens !== undefined ||
-        updates.vegetarian !== undefined ||
-        updates.vegan !== undefined ||
-        updates.sortField !== undefined ||
-        updates.sortDirection !== undefined
-          ? 1
-          : prev.currentPage,
+      currentPage: shouldResetPage ? 1 : prev.currentPage,
     }));
   };
 

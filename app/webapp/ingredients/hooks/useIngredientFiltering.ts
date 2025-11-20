@@ -61,37 +61,33 @@ export function useIngredientFiltering({
     });
 
     filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'name_asc':
-          return a.ingredient_name.localeCompare(b.ingredient_name);
-        case 'name_desc':
-          return b.ingredient_name.localeCompare(a.ingredient_name);
-        case 'brand_asc':
-          return (a.brand || '').localeCompare(b.brand || '');
-        case 'brand_desc':
-          return (b.brand || '').localeCompare(a.brand || '');
-        case 'pack_size_asc': {
+      const [field, order] = sortBy.split('_');
+      const isDesc = order === 'desc';
+      switch (field) {
+        case 'name':
+          return isDesc
+            ? b.ingredient_name.localeCompare(a.ingredient_name)
+            : a.ingredient_name.localeCompare(b.ingredient_name);
+        case 'brand':
+          return isDesc
+            ? (b.brand || '').localeCompare(a.brand || '')
+            : (a.brand || '').localeCompare(b.brand || '');
+        case 'pack':
           const aSize = parseFloat(a.pack_size || '0');
           const bSize = parseFloat(b.pack_size || '0');
-          return aSize - bSize;
-        }
-        case 'pack_size_desc': {
-          const aSize = parseFloat(a.pack_size || '0');
-          const bSize = parseFloat(b.pack_size || '0');
-          return bSize - aSize;
-        }
-        case 'cost_asc':
-          return (a.cost_per_unit || 0) - (b.cost_per_unit || 0);
-        case 'cost_desc':
-          return (b.cost_per_unit || 0) - (a.cost_per_unit || 0);
-        case 'supplier_asc':
-          return (a.supplier || '').localeCompare(b.supplier || '');
-        case 'supplier_desc':
-          return (b.supplier || '').localeCompare(a.supplier || '');
-        case 'stock_asc':
-          return (a.current_stock || 0) - (b.current_stock || 0);
-        case 'stock_desc':
-          return (b.current_stock || 0) - (a.current_stock || 0);
+          return isDesc ? bSize - aSize : aSize - bSize;
+        case 'cost':
+          return isDesc
+            ? (b.cost_per_unit || 0) - (a.cost_per_unit || 0)
+            : (a.cost_per_unit || 0) - (b.cost_per_unit || 0);
+        case 'supplier':
+          return isDesc
+            ? (b.supplier || '').localeCompare(a.supplier || '')
+            : (a.supplier || '').localeCompare(b.supplier || '');
+        case 'stock':
+          return isDesc
+            ? (b.current_stock || 0) - (a.current_stock || 0)
+            : (a.current_stock || 0) - (b.current_stock || 0);
         default:
           return 0;
       }

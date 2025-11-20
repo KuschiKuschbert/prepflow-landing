@@ -71,26 +71,19 @@ export function usePerformanceInsights(
 
   const fallbackInsights = useMemo(() => {
     const result: PerformanceInsight[] = [];
-    const hiddenGems = performanceItems.filter(
-      item => item.profit_category === 'High' && item.popularity_category === 'Low',
-    );
-    const hiddenGemInsight = generateHiddenGemInsight(hiddenGems);
-    if (hiddenGemInsight) result.push(hiddenGemInsight);
-    const bargainBuckets = performanceItems.filter(
-      item => item.profit_category === 'Low' && item.popularity_category === 'High',
-    );
-    const bargainBucketInsight = generateBargainBucketInsight(bargainBuckets);
-    if (bargainBucketInsight) result.push(bargainBucketInsight);
-    const burntToast = performanceItems.filter(
-      item => item.profit_category === 'Low' && item.popularity_category === 'Low',
-    );
-    const burntToastInsight = generateBurntToastInsight(burntToast);
-    if (burntToastInsight) result.push(burntToastInsight);
-    const chefsKiss = performanceItems.filter(
-      item => item.profit_category === 'High' && item.popularity_category === 'High',
-    );
-    const chefsKissInsight = generateChefsKissInsight(chefsKiss);
-    if (chefsKissInsight) result.push(chefsKissInsight);
+    const categories = [
+      { profit: 'High', popularity: 'Low', generator: generateHiddenGemInsight },
+      { profit: 'Low', popularity: 'High', generator: generateBargainBucketInsight },
+      { profit: 'Low', popularity: 'Low', generator: generateBurntToastInsight },
+      { profit: 'High', popularity: 'High', generator: generateChefsKissInsight },
+    ];
+    categories.forEach(({ profit, popularity, generator }) => {
+      const items = performanceItems.filter(
+        item => item.profit_category === profit && item.popularity_category === popularity,
+      );
+      const insight = generator(items);
+      if (insight) result.push(insight);
+    });
     return sortInsightsByPriority(result);
   }, [performanceItems]);
 

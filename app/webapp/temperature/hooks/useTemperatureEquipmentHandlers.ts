@@ -43,7 +43,6 @@ export function useTemperatureEquipmentHandlers({
       showError,
     });
   };
-
   const handleUpdateEquipment = async (
     equipmentId: string,
     updates: Partial<TemperatureEquipment>,
@@ -56,7 +55,6 @@ export function useTemperatureEquipmentHandlers({
       showSuccess,
     });
   };
-
   const handleCreateEquipment = async (
     name: string,
     equipmentType: string,
@@ -72,7 +70,6 @@ export function useTemperatureEquipmentHandlers({
       showSuccess,
     });
   };
-
   const handleDeleteEquipment = async (equipmentId: string) => {
     await deleteEquipment(equipmentId, {
       equipment,
@@ -82,7 +79,6 @@ export function useTemperatureEquipmentHandlers({
       showSuccess,
     });
   };
-
   const handleRefreshLogs = async () => {
     await handleRefreshLogsHelper({
       fetchAllLogs,
