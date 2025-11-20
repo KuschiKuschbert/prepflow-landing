@@ -1,12 +1,10 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { Bot } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-
 interface AISpecial {
   id: string;
   image_data: string;
@@ -103,7 +101,6 @@ export default function AISpecialsPage() {
         return 'text-gray-400 bg-gray-400/10';
     }
   };
-
   if (loading) {
     return (
       <ResponsivePageContainer>
@@ -121,7 +118,6 @@ export default function AISpecialsPage() {
       </ResponsivePageContainer>
     );
   }
-
   return (
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
@@ -182,7 +178,7 @@ export default function AISpecialsPage() {
             >
               {processing ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   <span>{t('aiSpecials.processing', 'Processing...')}</span>
                 </div>
               ) : (
@@ -278,7 +274,7 @@ export default function AISpecialsPage() {
                               <div
                                 className="h-2 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] transition-all duration-300"
                                 style={{ width: `${special.ai_response.confidence * 100}%` }}
-                              ></div>
+                              />
                             </div>
                             <span className="text-xs text-gray-400">
                               {Math.round(special.ai_response.confidence * 100)}%
@@ -289,7 +285,7 @@ export default function AISpecialsPage() {
                     )}
                     {special.status === 'processing' && (
                       <div className="flex items-center space-x-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent"></div>
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
                         <span className="text-sm text-gray-400">
                           {t('aiSpecials.processingImage', 'Processing image with AI...')}
                         </span>
