@@ -16,9 +16,6 @@ interface UseMenuEditorUIProps {
 
 /**
  * Hook for managing MenuEditor UI state and wrapper handlers.
- *
- * @param {UseMenuEditorUIProps} props - Hook props
- * @returns {Object} UI state and handlers
  */
 export function useMenuEditorUI({
   handleAddCategoryBase,
@@ -38,25 +35,16 @@ export function useMenuEditorUI({
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const [selectedItemForStats, setSelectedItemForStats] = useState<MenuItem | null>(null);
-
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     title: string;
     message: string;
     onConfirm: () => void;
     variant?: 'danger' | 'warning' | 'info';
-  }>({
-    isOpen: false,
-    title: '',
-    message: '',
-    onConfirm: () => {},
-    variant: 'warning',
-  });
-
+  }>({ isOpen: false, title: '', message: '', onConfirm: () => {}, variant: 'warning' });
   const handleAddCategory = () => {
     handleAddCategoryBase(newCategory, setNewCategory);
   };
-
   const handleRemoveCategory = async (category: string) => {
     handleRemoveCategoryBase(category, () => {
       setConfirmDialog({
@@ -71,7 +59,6 @@ export function useMenuEditorUI({
       });
     });
   };
-
   const handleRemoveItem = async (itemId: string) => {
     handleRemoveItemBase(itemId, () => {
       const item = menuItems.find(i => i.id === itemId);
@@ -88,7 +75,6 @@ export function useMenuEditorUI({
       });
     });
   };
-
   const handleItemTap = (
     item: { type: 'dish' | 'recipe'; id: string; name: string },
     element: HTMLElement,
@@ -97,14 +83,12 @@ export function useMenuEditorUI({
     setAnchorElement(element);
     setShowCategoryModal(true);
   };
-
   const handleCategorySelectWrapper = async (category: string) => {
     await handleCategorySelect(category, selectedItem);
     setShowCategoryModal(false);
     setSelectedItem(null);
     setAnchorElement(null);
   };
-
   return {
     newCategory,
     setNewCategory,
