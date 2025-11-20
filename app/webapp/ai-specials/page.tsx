@@ -19,13 +19,11 @@ interface AISpecial {
 export default function AISpecialsPage() {
   const { t } = useTranslation();
   const [aiSpecials, setAiSpecials] = useState<AISpecial[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState('');
-
-  // Mock user ID for now
   const userId = 'user-123';
 
   useEffect(() => {
@@ -33,12 +31,9 @@ export default function AISpecialsPage() {
   }, []);
 
   const fetchAISpecials = async () => {
-    // Disable loading state to prevent skeleton flashes during API errors
-    // setLoading(true);
     try {
       const response = await fetch(`/api/ai-specials?userId=${userId}`);
       const result = await response.json();
-
       if (result.success) {
         setAiSpecials(result.data);
       } else {
@@ -53,28 +48,21 @@ export default function AISpecialsPage() {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
+    if (file) setSelectedFile(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!selectedFile) {
       setError('Please select an image file');
       return;
     }
-
     setProcessing(true);
     setError(null);
-
     try {
-      // Convert file to base64
       const reader = new FileReader();
       reader.onload = async () => {
         const imageData = reader.result as string;
-
         const response = await fetch('/api/ai-specials', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -84,9 +72,7 @@ export default function AISpecialsPage() {
             prompt: prompt || undefined,
           }),
         });
-
         const result = await response.json();
-
         if (result.success) {
           await fetchAISpecials();
           setSelectedFile(null);
@@ -94,10 +80,8 @@ export default function AISpecialsPage() {
         } else {
           setError(result.message || 'Failed to process image');
         }
-
         setProcessing(false);
       };
-
       reader.readAsDataURL(selectedFile);
     } catch (err) {
       setError('Failed to process image');
@@ -124,17 +108,12 @@ export default function AISpecialsPage() {
     return (
       <ResponsivePageContainer>
         <div className="tablet:py-6 min-h-screen bg-transparent py-4">
-          {/* Header skeleton */}
           <div className="mb-8">
             <LoadingSkeleton variant="stats" height="64px" />
           </div>
-
-          {/* Upload form skeleton */}
           <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
             <LoadingSkeleton variant="form" height="200px" />
           </div>
-
-          {/* Results skeleton */}
           <div className="space-y-4">
             <LoadingSkeleton variant="card" count={3} height="120px" />
           </div>
@@ -146,7 +125,6 @@ export default function AISpecialsPage() {
   return (
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
-        {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
@@ -158,20 +136,15 @@ export default function AISpecialsPage() {
             </p>
           </div>
         </div>
-
-        {/* Error Message */}
         {error && (
           <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
             <p className="text-red-400">{error}</p>
           </div>
         )}
-
-        {/* Upload Form */}
         <div className="mb-8 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           <h2 className="mb-4 text-xl font-semibold text-white">
             {t('aiSpecials.uploadImage', 'Upload Ingredient Image')}
           </h2>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-300">
@@ -190,7 +163,6 @@ export default function AISpecialsPage() {
                 </p>
               )}
             </div>
-
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-300">
                 {t('aiSpecials.customPrompt', 'Custom Prompt (Optional)')}
@@ -203,7 +175,6 @@ export default function AISpecialsPage() {
                 placeholder="e.g., Create a vegetarian special using these ingredients"
               />
             </div>
-
             <button
               type="submit"
               disabled={processing || !selectedFile}
@@ -220,8 +191,6 @@ export default function AISpecialsPage() {
             </button>
           </form>
         </div>
-
-        {/* AI Specials Results */}
         <div className="space-y-4">
           {aiSpecials.length === 0 ? (
             <div className="py-12 text-center">
@@ -248,7 +217,6 @@ export default function AISpecialsPage() {
                   <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
                     <Icon icon={Bot} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
                   </div>
-
                   <div className="flex-1">
                     <div className="mb-3 flex items-center space-x-4">
                       <div>
@@ -265,10 +233,8 @@ export default function AISpecialsPage() {
                         {special.status.charAt(0).toUpperCase() + special.status.slice(1)}
                       </span>
                     </div>
-
                     {special.status === 'completed' && special.ai_response && (
                       <div className="space-y-4">
-                        {/* Ingredients Detected */}
                         <div>
                           <h4 className="mb-2 text-sm font-semibold text-white">
                             {t('aiSpecials.detectedIngredients', 'Detected Ingredients')}
@@ -286,8 +252,6 @@ export default function AISpecialsPage() {
                             )}
                           </div>
                         </div>
-
-                        {/* Special Suggestions */}
                         <div>
                           <h4 className="mb-2 text-sm font-semibold text-white">
                             {t('aiSpecials.specialSuggestions', 'Special Suggestions')}
@@ -305,8 +269,6 @@ export default function AISpecialsPage() {
                             )}
                           </div>
                         </div>
-
-                        {/* AI Confidence */}
                         {special.ai_response.confidence && (
                           <div className="flex items-center space-x-2">
                             <span className="text-xs text-gray-400">
@@ -325,7 +287,6 @@ export default function AISpecialsPage() {
                         )}
                       </div>
                     )}
-
                     {special.status === 'processing' && (
                       <div className="flex items-center space-x-2">
                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent"></div>
@@ -334,7 +295,6 @@ export default function AISpecialsPage() {
                         </span>
                       </div>
                     )}
-
                     {special.status === 'failed' && (
                       <div className="text-sm text-red-400">
                         {t(
