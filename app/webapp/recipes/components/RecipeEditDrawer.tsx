@@ -12,14 +12,11 @@ import { useIngredientSearch } from '../../cogs/hooks/useIngredientSearch';
 import { useIngredientAddition } from '../../cogs/hooks/useIngredientAddition';
 import { useCOGSCalculationLogic } from '../../cogs/hooks/useCOGSCalculationLogic';
 import { useIngredientConversion } from '../../cogs/hooks/useIngredientConversion';
-import { IngredientManager } from '../../cogs/components/IngredientManager';
-import { IngredientsList } from '../../cogs/components/IngredientsList';
 import { COGSCalculation } from '../../cogs/types';
 import { useRecipeEditIngredientLoading } from './hooks/useRecipeEditIngredientLoading';
 import { useRecipeEditIngredientSave } from './hooks/useRecipeEditIngredientSave';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { Icon } from '@/components/ui/Icon';
-import { Package, ShoppingBag } from 'lucide-react';
+import { RecipeMetadataForm } from './RecipeMetadataForm';
+import { RecipeIngredientsTab } from './RecipeIngredientsTab';
 interface RecipeEditDrawerProps {
   isOpen: boolean;
   recipe: Recipe | null;
@@ -243,152 +240,59 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
       }
     >
       <div className="flex max-h-[calc(100vh-200px)] flex-col space-y-6 overflow-hidden">
-        <div className="space-y-6">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Recipe Name *</label>
-            <input
-              type="text"
-              required
-              value={editedName}
-              onChange={e => setEditedName(e.target.value)}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-              placeholder="e.g., Chicken Stir-fry"
-              onBlur={async e => {
-                const name = e.target.value.trim().toLowerCase();
-                if (!name || name === recipe.recipe_name.toLowerCase()) return;
-                try {
-                  const res = await fetch(`/api/recipes/exists?name=${encodeURIComponent(name)}`, { cache: 'no-store' });
-                  const json = await res.json();
-                  if (json?.exists) showWarning('A recipe with this name already exists.');
-                } catch {}
-              }}
-            />
-          </div>
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Yield Portions</label>
-            <input
-              type="number"
-              min="1"
-              value={editedYield}
-              onChange={e => setEditedYield(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-              />
-          </div>
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Instructions</label>
-            <textarea
-              value={editedInstructions}
-              onChange={e => setEditedInstructions(e.target.value)}
-              rows={4}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-              placeholder="Step-by-step cooking instructions..."
-            />
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col overflow-hidden border-t border-[#2a2a2a] pt-6">
-          <div className="mb-4 flex gap-2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2">
-            {(['ingredients', 'consumables'] as const).map(tab => {
-              const isActive = activeTab === tab;
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition-all ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <Icon icon={tab === 'ingredients' ? Package : ShoppingBag} size="sm" aria-hidden={true} />
-                  {tab === 'ingredients' ? 'Ingredients' : 'Consumables'}
-                </button>
-              );
-            })}
-          </div>
-          <h3 className="mb-4 text-lg font-semibold text-white">
-            {activeTab === 'ingredients' ? 'Ingredients' : 'Consumables'}
-          </h3>
-          {dataError && (
-            <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
-              {dataError}
-            </div>
-          )}
-
-          {dataLoading || loadingIngredients ? (
-            <div className="space-y-3">
-              <LoadingSkeleton variant="card" />
-              <LoadingSkeleton variant="card" />
-            </div>
-          ) : (
-            <>
-              <div className="mb-4 flex-1 overflow-y-auto">
-                {(() => {
-                  const currentCalculations = activeTab === 'ingredients' ? ingredientCalculations : consumableCalculations;
-                  const emptyMessage = activeTab === 'ingredients' ? 'No ingredients added yet' : 'No consumables added yet';
-                  if (currentCalculations.length === 0) {
-                    return (
-                      <div className="flex h-32 items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/50 text-gray-400">
-                        <p>{emptyMessage}</p>
-                      </div>
-                    );
-                  }
-                  return (
-                    <IngredientsList
-                      calculations={currentCalculations}
-                      onUpdateCalculation={(ingredientId, newQuantity) => {
-                        updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
-                      }}
-                      onRemoveCalculation={ingredientId => {
-                        setCalculations(prev =>
-                          prev.filter(calc => calc.ingredientId !== ingredientId),
-                        );
-                      }}
-                    />
-                  );
-                })()}
-              </div>
-              <div className="border-t border-[#2a2a2a] pt-4">
-                {activeTab === 'ingredients' ? (
-                  <IngredientManager
-                    showAddIngredient={showAddIngredient}
-                    ingredients={ingredients}
-                    ingredientSearch={ingredientSearch}
-                    showSuggestions={showSuggestions}
-                    filteredIngredients={filteredIngredients}
-                    selectedIngredient={selectedIngredient}
-                    highlightedIndex={highlightedIndex}
-                    newIngredient={newIngredient}
-                    onToggleAddIngredient={() => setShowAddIngredient(!showAddIngredient)}
-                    onSearchChange={handleSearchChange}
-                    onIngredientSelect={handleIngredientSelect}
-                    onKeyDown={e => handleKeyDown(e, filteredIngredients)}
-                    onQuantityChange={quantity => setNewIngredient(prev => ({ ...prev, quantity }))}
-                    onUnitChange={unit => setNewIngredient(prev => ({ ...prev, unit }))}
-                    onAddIngredient={handleAddIngredientWrapper}
-                  />
-                ) : (
-                  <IngredientManager
-                    showAddIngredient={showAddIngredient}
-                    ingredients={consumables}
-                    ingredientSearch={consumableSearch}
-                    showSuggestions={showConsumableSuggestions}
-                    filteredIngredients={filteredConsumables}
-                    selectedIngredient={selectedConsumable}
-                    highlightedIndex={consumableHighlightedIndex}
-                    newIngredient={newConsumable}
-                    onToggleAddIngredient={() => setShowAddIngredient(!showAddIngredient)}
-                    onSearchChange={handleConsumableSearchChange}
-                    onIngredientSelect={handleConsumableSelect}
-                    onKeyDown={e => handleConsumableKeyDown(e, filteredConsumables)}
-                    onQuantityChange={quantity => setNewConsumable(prev => ({ ...prev, quantity }))}
-                    onUnitChange={unit => setNewConsumable(prev => ({ ...prev, unit }))}
-                    onAddIngredient={handleAddConsumableWrapper}
-                  />
-                )}
-              </div>
-            </>
-          )}
-        </div>
+        <RecipeMetadataForm
+          recipe={recipe}
+          editedName={editedName}
+          editedYield={editedYield}
+          editedInstructions={editedInstructions}
+          onNameChange={setEditedName}
+          onYieldChange={setEditedYield}
+          onInstructionsChange={setEditedInstructions}
+        />
+        <RecipeIngredientsTab
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          ingredientCalculations={ingredientCalculations}
+          consumableCalculations={consumableCalculations}
+          ingredients={ingredients}
+          consumables={consumables}
+          dataLoading={dataLoading}
+          loadingIngredients={loadingIngredients}
+          dataError={dataError}
+          showAddIngredient={showAddIngredient}
+          ingredientSearch={ingredientSearch}
+          showSuggestions={showSuggestions}
+          filteredIngredients={filteredIngredients}
+          selectedIngredient={selectedIngredient}
+          highlightedIndex={highlightedIndex}
+          newIngredient={newIngredient}
+          consumableSearch={consumableSearch}
+          showConsumableSuggestions={showConsumableSuggestions}
+          filteredConsumables={filteredConsumables}
+          selectedConsumable={selectedConsumable}
+          consumableHighlightedIndex={consumableHighlightedIndex}
+          newConsumable={newConsumable}
+          onToggleAddIngredient={() => setShowAddIngredient(!showAddIngredient)}
+          onSearchChange={handleSearchChange}
+          onIngredientSelect={handleIngredientSelect}
+          onKeyDown={handleKeyDown}
+          onQuantityChange={quantity => setNewIngredient(prev => ({ ...prev, quantity }))}
+          onUnitChange={unit => setNewIngredient(prev => ({ ...prev, unit }))}
+          onAddIngredient={handleAddIngredientWrapper}
+          onConsumableSearchChange={handleConsumableSearchChange}
+          onConsumableSelect={handleConsumableSelect}
+          onConsumableKeyDown={handleConsumableKeyDown}
+          onConsumableQuantityChange={quantity => setNewConsumable(prev => ({ ...prev, quantity }))}
+          onConsumableUnitChange={unit => setNewConsumable(prev => ({ ...prev, unit }))}
+          onAddConsumable={handleAddConsumableWrapper}
+          onUpdateCalculation={(ingredientId, newQuantity) => {
+            updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
+          }}
+          onRemoveCalculation={ingredientId => {
+            setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
+          }}
+          setCalculations={setCalculations}
+        />
       </div>
     </EditDrawer>
   );
