@@ -1,5 +1,4 @@
 'use client';
-
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useCallback, useEffect, useState } from 'react';
@@ -25,7 +24,7 @@ export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
   const [types, setTypes] = useState<ComplianceType[]>([]);
   const [records, setRecords] = useState<ComplianceRecord[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>(
     'records',
   );
@@ -102,17 +101,7 @@ export default function ComplianceTrackingPage() {
       const data = await response.json();
       if (data.success) {
         setRecords([data.data, ...records]);
-        setNewRecord({
-          compliance_type_id: '',
-          document_name: '',
-          issue_date: '',
-          expiry_date: '',
-          document_url: '',
-          photo_url: '',
-          notes: '',
-          reminder_enabled: true,
-          reminder_days_before: 30,
-        });
+        setNewRecord({ compliance_type_id: '', document_name: '', issue_date: '', expiry_date: '', document_url: '', photo_url: '', notes: '', reminder_enabled: true, reminder_days_before: 30 });
         setShowAddRecord(false);
       }
     } catch (error) {
@@ -158,9 +147,8 @@ export default function ComplianceTrackingPage() {
   }
 
   return (
-    <ResponsivePageContainer>
+      <ResponsivePageContainer>
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
             <Icon icon={ClipboardCheck} size="lg" aria-hidden={true} />
@@ -173,8 +161,6 @@ export default function ComplianceTrackingPage() {
             )}
           </p>
         </div>
-
-        {/* Tab Navigation */}
         <div className="mb-8">
           <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
             <button
@@ -219,11 +205,8 @@ export default function ComplianceTrackingPage() {
             </button>
           </div>
         </div>
-
-        {/* Records Tab */}
         {activeTab === 'records' && (
           <div className="space-y-6">
-            {/* Filters and Add Button */}
             <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
               <div className="tablet:flex-row flex flex-col gap-4">
                 <div>
@@ -268,8 +251,6 @@ export default function ComplianceTrackingPage() {
                 ➕ {t('compliance.addRecord', 'Add Compliance Record')}
               </button>
             </div>
-
-            {/* Add Record Form */}
             {showAddRecord && (
               <ComplianceRecordForm
                 formData={newRecord}
@@ -279,13 +260,9 @@ export default function ComplianceTrackingPage() {
                 onCancel={() => setShowAddRecord(false)}
               />
             )}
-
-            {/* Records List */}
             <ComplianceRecordsList records={records} />
           </div>
         )}
-
-        {/* Types Tab */}
         {activeTab === 'types' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -299,8 +276,6 @@ export default function ComplianceTrackingPage() {
                 ➕ {t('compliance.addType', 'Add Type')}
               </button>
             </div>
-
-            {/* Add Type Form */}
             {showAddType && (
               <ComplianceTypeForm
                 formData={newType}
@@ -309,16 +284,10 @@ export default function ComplianceTrackingPage() {
                 onCancel={() => setShowAddType(false)}
               />
             )}
-
-            {/* Types Grid */}
             <ComplianceTypesGrid types={types} />
           </div>
         )}
-
-        {/* Health Inspector Report Tab */}
         {activeTab === 'report' && <HealthInspectorReport />}
-
-        {/* Allergens Tab */}
         {activeTab === 'allergens' && (
           <div className="space-y-6">
             <div>
