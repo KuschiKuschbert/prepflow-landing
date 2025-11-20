@@ -21,13 +21,12 @@ export function generateBurgerInstructions(
   const cookingSurface =
     cookingMethod === 'grill/pan' ? 'grill or large skillet' : 'cooking surface';
   return `**Burger Preparation:**
-
 **Mise en Place:**
 1. Gather all ingredients and equipment
 2. Prepare work station with cutting board, knives, and mixing bowls
 3. Preheat ${cookingSurface} to medium-high heat
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: ${proteinName} - season and form into patties` : ''}${hasVegetables ? `\n${hasProtein ? '2' : '1'}. Prep vegetables: Wash, peel, and chop all vegetables as needed` : ''}${hasDairy ? `\n${hasProtein || hasVegetables ? (hasProtein && hasVegetables ? '3' : '2') : '1'}. Prepare dairy: ${cheeseName} - slice or grate as needed` : ''}
+${hasProtein ? `1. Prepare protein: ${proteinName} - season and form into patties` : ''}${hasVegetables ? `\n${hasProtein ? '2' : '1'}. Prep vegetables: Wash, peel, and chop all vegetables as needed` : ''}${hasDairy ? `\n${hasProtein && hasVegetables ? '3' : hasProtein || hasVegetables ? '2' : '1'}. Prepare dairy: ${cheeseName} - slice or grate as needed` : ''}
 **Cooking Method:**
 1. Heat cooking surface to medium-high (375°F/190°C)
 2. ${hasProtein ? 'Cook protein patties for 4-5 minutes per side for medium doneness' : 'Cook main ingredients'}
@@ -38,7 +37,6 @@ ${hasProtein ? `1. Prepare protein: ${proteinName} - season and form into pattie
 2. Layer ingredients: protein, vegetables, condiments
 3. Serve immediately while hot
 4. Yield: ${recipe.yield} ${recipe.yield_unit}
-
 **Professional Tips:**
 - Maintain consistent heat for even cooking
 - Don't press patties while cooking
@@ -65,13 +63,12 @@ export function generateSoupInstructions(
         ri.ingredients.ingredient_name.toLowerCase().includes('pasta'),
     )?.ingredients.ingredient_name || 'grains';
   return `**Soup Preparation:**
-
 **Mise en Place:**
 1. Gather all ingredients and large pot
 2. Prepare cutting board and sharp knives
 3. Have stock or broth ready at room temperature
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: Cut ${proteinName} into bite-sized pieces` : ''}${hasVegetables ? `\n${hasProtein ? '2' : '1'}. Prep vegetables: Dice aromatics (onions, carrots, celery) uniformly` : ''}${hasGrains ? `\n${hasProtein || hasVegetables ? (hasProtein && hasVegetables ? '3' : '2') : '1'}. Prepare grains: ${grainName} - rinse if needed` : ''}
+${hasProtein ? `1. Prepare protein: Cut ${proteinName} into bite-sized pieces` : ''}${hasVegetables ? `\n${hasProtein ? '2' : '1'}. Prep vegetables: Dice aromatics (onions, carrots, celery) uniformly` : ''}${hasGrains ? `\n${hasProtein && hasVegetables ? '3' : hasProtein || hasVegetables ? '2' : '1'}. Prepare grains: ${grainName} - rinse if needed` : ''}
 **Cooking Method:**
 1. Heat large pot over medium heat
 2. ${hasProtein ? 'Sear protein until browned, remove and set aside' : 'Start with aromatics'}
@@ -111,13 +108,12 @@ export function generateGeneralInstructions(
         ri.ingredients.ingredient_name.toLowerCase().includes('milk'),
     )?.ingredients.ingredient_name || 'dairy products';
   return `**${recipe.recipe_name} Preparation:**
-
 **Mise en Place:**
 1. Gather all ingredients and equipment
 2. Prepare work station with cutting board and knives
 3. Preheat cooking equipment as needed
 **Ingredient Prep:**
-${hasProtein ? `1. Prepare protein: ${proteinName} - cut, season, or prepare as needed` : ''}${hasVegetables ? `\n${hasProtein ? '2' : '1'}. Prep vegetables: Wash, peel, and cut vegetables uniformly` : ''}${hasDairy ? `\n${hasProtein || hasVegetables ? (hasProtein && hasVegetables ? '3' : '2') : '1'}. Prepare dairy: ${dairyName} - prepare as needed` : ''}
+${hasProtein ? `1. Prepare protein: ${proteinName} - cut, season, or prepare as needed` : ''}${hasVegetables ? `\n${hasProtein ? '2' : '1'}. Prep vegetables: Wash, peel, and cut vegetables uniformly` : ''}${hasDairy ? `\n${hasProtein && hasVegetables ? '3' : hasProtein || hasVegetables ? '2' : '1'}. Prepare dairy: ${dairyName} - prepare as needed` : ''}
 **Cooking Method:**
 1. Heat cooking surface to appropriate temperature
 2. ${hasProtein ? 'Cook protein first, then remove and set aside' : 'Start with base ingredients'}
