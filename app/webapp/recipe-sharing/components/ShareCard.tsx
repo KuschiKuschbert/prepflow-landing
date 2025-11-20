@@ -1,0 +1,85 @@
+'use client';
+import { useTranslation } from '@/lib/useTranslation';
+
+interface Recipe {
+  recipe_name: string;
+}
+
+interface RecipeShare {
+  id: string;
+  share_type: 'pdf' | 'link' | 'email';
+  recipient_email?: string;
+  notes?: string;
+  status: 'pending' | 'sent' | 'delivered' | 'failed';
+  created_at: string;
+  recipes: Recipe;
+}
+
+interface ShareCardProps {
+  share: RecipeShare;
+}
+
+function getStatusColor(status: string) {
+  switch (status) {
+    case 'pending':
+      return 'text-yellow-400 bg-yellow-400/10';
+    case 'sent':
+      return 'text-blue-400 bg-blue-400/10';
+    case 'delivered':
+      return 'text-green-400 bg-green-400/10';
+    case 'failed':
+      return 'text-red-400 bg-red-400/10';
+    default:
+      return 'text-gray-400 bg-gray-400/10';
+  }
+}
+
+function getShareTypeIcon(type: string) {
+  switch (type) {
+    case 'pdf':
+      return '📄';
+    case 'link':
+      return '🔗';
+    case 'email':
+      return '📧';
+    default:
+      return '📤';
+  }
+}
+
+export function ShareCard({ share }: ShareCardProps) {
+  const { t } = useTranslation();
+  return (
+    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="mb-3 flex items-center space-x-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
+              <span className="text-lg">{getShareTypeIcon(share.share_type)}</span>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">{share.recipes.recipe_name}</h3>
+              <p className="text-sm text-gray-400">
+                {share.share_type.toUpperCase()} • {share.recipient_email || 'No recipient'}
+              </p>
+            </div>
+          </div>
+          <div className="mb-4 flex items-center space-x-4">
+            <div>
+              <p className="mb-1 text-xs text-gray-400">{t('recipeSharing.status', 'Status')}</p>
+              <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(share.status)}`}>
+                {share.status.charAt(0).toUpperCase() + share.status.slice(1)}
+              </span>
+            </div>
+            <div>
+              <p className="mb-1 text-xs text-gray-400">{t('recipeSharing.shared', 'Shared')}</p>
+              <p className="font-semibold text-white">{new Date(share.created_at).toLocaleDateString()}</p>
+            </div>
+          </div>
+          {share.notes && <p className="text-sm text-gray-300">{share.notes}</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
+

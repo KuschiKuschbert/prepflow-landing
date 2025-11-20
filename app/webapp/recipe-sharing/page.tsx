@@ -4,8 +4,9 @@ import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { logger } from '@/lib/logger';
-import { X } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
+import { EmptyState } from './components/EmptyState';
+import { ShareCard } from './components/ShareCard';
+import { ShareFormModal } from './components/ShareFormModal';
 interface Recipe {
   id: string;
   recipe_name: string;
@@ -114,32 +115,6 @@ export default function RecipeSharingPage() {
     });
     setShowForm(false);
   };
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'text-yellow-400 bg-yellow-400/10';
-      case 'sent':
-        return 'text-blue-400 bg-blue-400/10';
-      case 'delivered':
-        return 'text-green-400 bg-green-400/10';
-      case 'failed':
-        return 'text-red-400 bg-red-400/10';
-      default:
-        return 'text-gray-400 bg-gray-400/10';
-    }
-  };
-  const getShareTypeIcon = (type: string) => {
-    switch (type) {
-      case 'pdf':
-        return '📄';
-      case 'link':
-        return '🔗';
-      case 'email':
-        return '📧';
-      default:
-        return '📤';
-    }
-  };
   if (loading) {
     return (
       <ResponsivePageContainer>
@@ -178,185 +153,19 @@ export default function RecipeSharingPage() {
         )}
         <div className="space-y-4">
           {recipeShares.length === 0 ? (
-            <div className="py-12 text-center">
-              <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <span className="text-3xl">📤</span>
-              </div>
-              <h3 className="mb-2 text-xl font-semibold text-white">
-                {t('recipeSharing.noShares', 'No Recipe Shares')}
-              </h3>
-              <p className="mb-6 text-gray-400">
-                {t('recipeSharing.noSharesDesc', 'Share your recipes with others as PDFs or links')}
-              </p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-              >
-                {t('recipeSharing.shareFirstRecipe', 'Share Your First Recipe')}
-              </button>
-            </div>
+            <EmptyState onShareClick={() => setShowForm(true)} />
           ) : (
-            recipeShares.map(share => (
-              <div
-                key={share.id}
-                className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="mb-3 flex items-center space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                        <span className="text-lg">{getShareTypeIcon(share.share_type)}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">
-                          {share.recipes.recipe_name}
-                        </h3>
-                        <p className="text-sm text-gray-400">
-                          {share.share_type.toUpperCase()} •{' '}
-                          {share.recipient_email || 'No recipient'}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mb-4 flex items-center space-x-4">
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('recipeSharing.status', 'Status')}
-                        </p>
-                        <span
-                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(share.status)}`}
-                        >
-                          {share.status.charAt(0).toUpperCase() + share.status.slice(1)}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="mb-1 text-xs text-gray-400">
-                          {t('recipeSharing.shared', 'Shared')}
-                        </p>
-                        <p className="font-semibold text-white">
-                          {new Date(share.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    {share.notes && <p className="text-sm text-gray-300">{share.notes}</p>}
-                  </div>
-                </div>
-              </div>
-            ))
+            recipeShares.map(share => <ShareCard key={share.id} share={share} />)
           )}
         </div>
-        {showForm && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-white">
-                  {t('recipeSharing.shareRecipe', 'Share Recipe')}
-                </h2>
-                <button
-                  onClick={resetForm}
-                  className="p-2 text-gray-400 transition-colors hover:text-white"
-                >
-                  <Icon icon={X} size="lg" aria-hidden={true} />
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-300">
-                    {t('recipeSharing.selectRecipe', 'Select Recipe')}
-                  </label>
-                  <select
-                    value={formData.recipeId}
-                    onChange={e => setFormData({ ...formData, recipeId: e.target.value })}
-                    className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    required
-                  >
-                    <option value="">
-                      {t('recipeSharing.chooseRecipe', 'Choose a recipe to share')}
-                    </option>
-                    {recipes.map(recipe => (
-                      <option key={recipe.id} value={recipe.id}>
-                        {recipe.recipe_name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-300">
-                    {t('recipeSharing.shareType', 'Share Type')}
-                  </label>
-                  <select
-                    value={formData.shareType}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        shareType: e.target.value as 'pdf' | 'link' | 'email',
-                      })
-                    }
-                    className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    required
-                  >
-                    <option value="pdf">📄 PDF Download</option>
-                    <option value="link">🔗 Shareable Link</option>
-                    <option value="email">📧 Email Recipe</option>
-                  </select>
-                </div>
-
-                {formData.shareType === 'email' && (
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                      {t('recipeSharing.recipientEmail', 'Recipient Email')}
-                    </label>
-                    <input
-                      type="email"
-                      value={formData.recipientEmail}
-                      onChange={e => setFormData({ ...formData, recipientEmail: e.target.value })}
-                      className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      placeholder="recipient@example.com"
-                      required={formData.shareType === 'email'}
-                    />
-                  </div>
-                )}
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-300">
-                    {t('recipeSharing.notes', 'Notes')}
-                  </label>
-                  <textarea
-                    value={formData.notes}
-                    onChange={e => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    rows={3}
-                    placeholder={String(
-                      t(
-                        'recipeSharing.notesPlaceholder',
-                        'Optional message to include with the shared recipe',
-                      ),
-                    )}
-                  />
-                </div>
-
-                <div className="flex space-x-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
-                  >
-                    {t('recipeSharing.cancel', 'Cancel')}
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-                  >
-                    {t('recipeSharing.share', 'Share')}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        <ShareFormModal
+          isOpen={showForm}
+          recipes={recipes}
+          formData={formData}
+          onFormDataChange={setFormData}
+          onSubmit={handleSubmit}
+          onClose={resetForm}
+        />
       </div>
     </ResponsivePageContainer>
   );
