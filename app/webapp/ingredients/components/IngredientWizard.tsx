@@ -1,5 +1,4 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import {
   formatBrandName,
@@ -24,7 +23,6 @@ import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
 import IngredientWizardStep4 from './IngredientWizardStep4';
 import { Ingredient, IngredientWizardProps } from './types';
-
 export default function IngredientWizard({
   suppliers = [],
   availableUnits = [],
@@ -121,7 +119,6 @@ export default function IngredientWizard({
       }
     }
   };
-
   const handleWastagePercentageChange = (wastage: number) => {
     const clampedWastage = Math.max(0, Math.min(100, Math.round(wastage)));
     const yieldPercentage = 100 - clampedWastage;
@@ -170,7 +167,6 @@ export default function IngredientWizard({
           ? formatIngredientName(formData.storage_location)
           : undefined,
       };
-
       await onSave(capitalizedIngredient);
       resetWizard();
     } catch (error: any) {
@@ -249,7 +245,6 @@ export default function IngredientWizard({
     formData.allergen_source,
     formData.allergens,
   ]);
-
   const canProceed = useMemo(() => {
     if (wizardStep === 1 || wizardStep === 4) return checkValidationHelper(1, formData);
     return true;
