@@ -1,7 +1,6 @@
 /**
  * Form submission logic for par levels.
  */
-
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import type { ParLevel, Ingredient } from '../../types';
@@ -23,8 +22,6 @@ interface FormSubmissionProps {
 
 /**
  * Submit par level form with optimistic updates.
- *
- * @param {FormSubmissionProps} props - Form submission props
  */
 export async function submitParLevelForm({
   formData,
@@ -39,8 +36,6 @@ export async function submitParLevelForm({
     showError('Please fill in all required fields');
     return;
   }
-
-  // Ensure reorderPointPercentage has a default value
   const reorderPointPercentageValue = formData.reorderPointPercentage || '50';
   const parLevelValue = parseFloat(formData.parLevel);
   const reorderPointPercentage = parseFloat(reorderPointPercentageValue);
@@ -59,16 +54,11 @@ export async function submitParLevelForm({
     showError('Reorder point percentage must be between 0 and 100');
     return;
   }
-
-  // Calculate actual reorder point from percentage
   const reorderPointValue = parLevelValue * (reorderPointPercentage / 100);
-
   if (reorderPointValue >= parLevelValue) {
     showError('Reorder point must be less than par level');
     return;
   }
-
-  // Create new par level
   const tempId = `temp-${Date.now()}`;
   const selectedIngredient = ingredients.find(ing => ing.id === formData.ingredientId);
   const tempParLevel: ParLevel = {
@@ -86,26 +76,14 @@ export async function submitParLevelForm({
       category: selectedIngredient?.category,
     },
   };
-
-  // Store original state for rollback
   const originalParLevels = [...parLevels];
-
-  // Optimistically add to UI immediately
   setParLevels(prevItems => [...prevItems, tempParLevel]);
-
   try {
     const response = await fetch('/api/par-levels', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ingredientId: formData.ingredientId,
-        parLevel: parLevelValue,
-        reorderPoint: reorderPointValue,
-        unit: formData.unit,
-      }),
+      body: JSON.stringify({ ingredientId: formData.ingredientId, parLevel: parLevelValue, reorderPoint: reorderPointValue, unit: formData.unit }),
     });
-
-    // Parse JSON even if status is not 200
     let result;
     try {
       const responseText = await response.text();
@@ -115,20 +93,13 @@ export async function submitParLevelForm({
       logger.dev('[Par Levels] POST Parsed result:', result);
     } catch (parseError) {
       logger.error('[Par Levels] POST Parse error:', parseError);
-      // Revert optimistic update on error
       setParLevels(originalParLevels);
       showError(`Server error (${response.status}). Please check the server logs.`);
       return;
     }
-
     if (response.ok && result.success && result.data) {
-      // Replace temp item with real item from server
-      // Ensure ingredients data is present (fallback to temp data if missing)
       const serverData = result.data;
-      if (!serverData.ingredients && tempParLevel.ingredients) {
-        serverData.ingredients = tempParLevel.ingredients;
-      }
-
+      if (!serverData.ingredients && tempParLevel.ingredients) serverData.ingredients = tempParLevel.ingredients;
       setParLevels(prevItems => {
         const updated = prevItems.map(item => (item.id === tempId ? serverData : item));
         cacheData('par_levels', updated);
@@ -137,42 +108,18 @@ export async function submitParLevelForm({
       showSuccess('Par level created successfully');
       resetForm();
     } else {
-      // Revert optimistic update on error
       setParLevels(originalParLevels);
-
-      // Show detailed error message with instructions if available
-      const errorMessage =
-        result.message || result.error || `Failed to create par level (${response.status})`;
+      const errorMessage = result.message || result.error || `Failed to create par level (${response.status})`;
       const instructions = result.details?.instructions || [];
-
-      // Log full error details for debugging
-      const errorDetails = {
-        status: response.status,
-        error: errorMessage,
-        details: result.details,
-        code: result.code,
-        fullResponse: result,
-        requestBody: {
-          ingredientId: formData.ingredientId,
-          parLevel: parLevelValue,
-          reorderPoint: reorderPointValue,
-          unit: formData.unit,
-        },
-      };
-
-      logger.error('[Par Levels] POST API Error:', errorDetails);
-
-      // Show error notification
+      logger.error('[Par Levels] POST API Error:', { status: response.status, error: errorMessage, details: result.details, code: result.code, fullResponse: result, requestBody: { ingredientId: formData.ingredientId, parLevel: parLevelValue, reorderPoint: reorderPointValue, unit: formData.unit } });
       if (instructions.length > 0) {
-        const fullMessage = `${errorMessage}\n\n${instructions.join('\n')}`;
-        showError(fullMessage);
+        showError(`${errorMessage}\n\n${instructions.join('\n')}`);
         logger.dev('[Par Levels] POST Error Instructions:', instructions);
       } else {
         showError(errorMessage);
       }
     }
   } catch (err) {
-    // Revert optimistic update on error
     setParLevels(originalParLevels);
     logger.error('[Par Levels] POST Exception:', err);
     showError('Failed to create par level. Please check your connection and try again.');
