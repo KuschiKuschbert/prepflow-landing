@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-
 import { logger } from '@/lib/logger';
+import { X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 interface Recipe {
   id: string;
   recipe_name: string;
@@ -30,7 +31,7 @@ export default function RecipeSharingPage() {
   const { t } = useTranslation();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipeShares, setRecipeShares] = useState<RecipeShare[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -39,8 +40,6 @@ export default function RecipeSharingPage() {
     recipientEmail: '',
     notes: '',
   });
-
-  // Mock user ID for now
   const userId = 'user-123';
 
   useEffect(() => {
@@ -52,10 +51,7 @@ export default function RecipeSharingPage() {
     try {
       const response = await fetch(`/api/recipes?userId=${userId}`);
       const result = await response.json();
-
-      if (result.success) {
-        setRecipes(result.data);
-      }
+      if (result.success) setRecipes(result.data);
     } catch (err) {
       logger.error('Failed to fetch recipes:', err);
     }
@@ -65,13 +61,12 @@ export default function RecipeSharingPage() {
     try {
       const response = await fetch(`/api/recipe-share?userId=${userId}`);
       const result = await response.json();
-
       if (result.success) {
         setRecipeShares(result.data);
       } else {
         setError(result.message || 'Failed to fetch recipe shares');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to fetch recipe shares');
     } finally {
       setLoading(false);
@@ -80,29 +75,24 @@ export default function RecipeSharingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const response = await fetch('/api/recipe-share', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
       const result = await response.json();
-
       if (result.success) {
         await fetchRecipeShares();
         resetForm();
         setError(null);
-
-        // If PDF generation, trigger download
         if (formData.shareType === 'pdf' && result.data.pdfContent) {
           downloadPDF(result.data.recipe, result.data.pdfContent);
         }
       } else {
         setError(result.message || 'Failed to share recipe');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to share recipe');
     }
   };
@@ -280,14 +270,7 @@ export default function RecipeSharingPage() {
                   onClick={resetForm}
                   className="p-2 text-gray-400 transition-colors hover:text-white"
                 >
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <Icon icon={X} size="lg" aria-hidden={true} />
                 </button>
               </div>
 
