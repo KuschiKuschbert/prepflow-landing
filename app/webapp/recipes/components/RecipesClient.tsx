@@ -1,13 +1,8 @@
 'use client';
-
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
-
 import { logger } from '@/lib/logger';
-// UI components
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-
-// Local hooks and types
 import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeActions } from '../hooks/useRecipeActions';
 import { useRecipeAutosaveListener } from '../hooks/useRecipeAutosaveListener';
@@ -18,8 +13,6 @@ import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { TablePagination } from '@/components/ui/TablePagination';
 import { RecipesEmptyState } from './RecipesEmptyState';
 import { RecipesErrorDisplay } from './RecipesErrorDisplay';
-
-// Local components
 import { UnifiedBulkActionsMenu } from './UnifiedBulkActionsMenu';
 import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
 import { BulkDeleteConfirmationModal } from './BulkDeleteConfirmationModal';
@@ -99,12 +92,7 @@ export default function RecipesClient() {
     },
   });
 
-  useRecipeRefreshEffects({
-    loading,
-    changedRecipeIds,
-    fetchRecipes,
-  });
-
+  useRecipeRefreshEffects({ loading, changedRecipeIds, fetchRecipes });
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
   const {
     recipeToDelete,
@@ -134,14 +122,8 @@ export default function RecipesClient() {
     optimisticallyUpdateRecipes,
     rollbackRecipes,
   });
-
-  // Create item types map (all recipes in this page)
   const selectedItemTypes = new Map<string, 'recipe' | 'dish'>();
-  selectedRecipes.forEach(id => {
-    selectedItemTypes.set(id, 'recipe');
-  });
-
-  // Unified bulk actions hook
+  selectedRecipes.forEach(id => selectedItemTypes.set(id, 'recipe'));
   const {
     bulkActionLoading,
     showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm,
@@ -161,14 +143,10 @@ export default function RecipesClient() {
     rollbackDishes: () => {},
     onClearSelection: () => setSelectedRecipes(new Set()),
   });
-
-  // Bulk share hook
   const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
     selectedRecipeIds,
     onSuccess: () => setSelectedRecipes(new Set()),
   });
-
-  // Bulk add to menu hook
   const {
     handleBulkAddToMenu,
     handleSelectMenu,
@@ -185,9 +163,7 @@ export default function RecipesClient() {
   });
 
   const [showBulkMenu, setShowBulkMenu] = useState(false);
-
-  const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } =
-    useRecipeFiltering(recipes, recipePrices);
+  const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } = useRecipeFiltering(recipes, recipePrices);
 
   usePriceCalculationEffect({
     paginatedRecipes,
@@ -224,10 +200,6 @@ export default function RecipesClient() {
     handleDuplicateRecipe,
     handleShareRecipe,
   });
-
-  // Show recipes immediately if we have cached data, even if loading
-  const showRecipes = recipes.length > 0 || !loading;
-
   if (loading && recipes.length === 0) return <PageSkeleton />;
 
   return (
@@ -245,7 +217,6 @@ export default function RecipesClient() {
           onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
         />
       </div>
-
       <BulkAddToMenuDialog
         show={showMenuDialog}
         menus={menus}
@@ -277,9 +248,7 @@ export default function RecipesClient() {
         handleDeleteRecipe={handleDeleteRecipe}
         capitalizeRecipeName={capitalizeRecipeName}
       />
-
       {recipes.length === 0 && <RecipesEmptyState />}
-
       <RecipesModals
         showUnifiedModal={showUnifiedModal}
         selectedRecipe={selectedRecipe}
