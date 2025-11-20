@@ -8,6 +8,7 @@ import { useRecipePricing } from '../hooks/useRecipePricing';
 import { Dish, Recipe } from '../types';
 import { DishesBulkActionsSection } from './DishesBulkActionsSection';
 import { DishesListView } from './DishesListView';
+import { DishesModalsSection } from './DishesModalsSection';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
 import { DishesEditorView } from './DishesEditorView';
 import { DishesSidePanels } from './DishesSidePanels';
@@ -21,6 +22,7 @@ import { useDishesClientHandlers } from './hooks/useDishesClientHandlers';
 import { useDishesClientSelection } from './hooks/useDishesClientSelection';
 import { useDishesClientPagination } from './hooks/useDishesClientPagination';
 import { useDishesClientRecipePricing } from './hooks/useDishesClientRecipePricing';
+import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers';
 import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
 import { useBulkShare } from '../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
@@ -206,6 +208,22 @@ export default function DishesClient() {
   });
   const [showBulkMenu, setShowBulkMenu] = useState(false);
   const selectedRecipeCount = selectedRecipeIds.length;
+  const sidePanelsHandlers = useDishesSidePanelsHandlers({
+    setShowDishPanel,
+    setSelectedDishForPreview,
+    setShowRecipePanel,
+    setSelectedRecipeForPreview,
+    setRecipeIngredients,
+    setShowDishEditDrawer,
+    setEditingDish,
+    handleEditDish,
+    handleDeleteDish,
+    handleEditRecipe,
+    handleDeleteRecipe,
+    confirmDeleteItem,
+    cancelDeleteItem,
+    fetchItems,
+  });
   if (loading) return <PageSkeleton />;
   return (
     <div>
@@ -228,23 +246,21 @@ export default function DishesClient() {
         onBulkAddToMenu={handleBulkAddToMenu}
         onToggleBulkMenu={() => setShowBulkMenu(!showBulkMenu)}
       />
-      <BulkAddToMenuDialog
-        show={showMenuDialog}
+      <DishesModalsSection
+        showMenuDialog={showMenuDialog}
         menus={menus}
         loadingMenus={loadingMenus}
-        onClose={() => setShowMenuDialog(false)}
-        onSelectMenu={handleSelectMenu}
-        onCreateNew={handleCreateNewMenu}
-      />
-      <UnifiedBulkDeleteConfirmationModal
-        show={showBulkDeleteConfirm}
+        showBulkDeleteConfirm={showBulkDeleteConfirm}
         selectedItems={selectedItems}
         selectedItemTypes={selectedItemTypes}
         recipes={recipes}
         dishes={dishes}
         capitalizeRecipeName={capitalizeRecipeName}
-        onConfirm={confirmBulkDelete}
-        onCancel={cancelBulkDelete}
+        onCloseMenuDialog={() => setShowMenuDialog(false)}
+        onSelectMenu={handleSelectMenu}
+        onCreateNewMenu={handleCreateNewMenu}
+        onConfirmBulkDelete={confirmBulkDelete}
+        onCancelBulkDelete={cancelBulkDelete}
       />
       <DishesViewModeToggle
         viewMode={viewMode}
@@ -308,42 +324,7 @@ export default function DishesClient() {
             showDishEditDrawer={showDishEditDrawer}
             editingDish={editingDish}
             capitalizeRecipeName={capitalizeRecipeName}
-            onDishPanelClose={() => {
-              setShowDishPanel(false);
-              setSelectedDishForPreview(null);
-            }}
-            onDishEdit={dish => {
-              setShowDishPanel(false);
-              setSelectedDishForPreview(null);
-              handleEditDish(dish);
-            }}
-            onDishDelete={dish => {
-              setShowDishPanel(false);
-              setSelectedDishForPreview(null);
-              handleDeleteDish(dish);
-            }}
-            onRecipePanelClose={() => {
-              setShowRecipePanel(false);
-              setSelectedRecipeForPreview(null);
-              setRecipeIngredients([]);
-            }}
-            onRecipeEdit={recipe => {
-              setShowRecipePanel(false);
-              setSelectedRecipeForPreview(null);
-              handleEditRecipe(recipe);
-            }}
-            onRecipeDelete={recipe => {
-              setShowRecipePanel(false);
-              setSelectedRecipeForPreview(null);
-              handleDeleteRecipe(recipe);
-            }}
-            onDeleteConfirm={confirmDeleteItem}
-            onDeleteCancel={cancelDeleteItem}
-            onDishEditDrawerClose={useCallback(() => {
-              setShowDishEditDrawer(false);
-              setEditingDish(null);
-            }, [setShowDishEditDrawer, setEditingDish])}
-            onDishEditDrawerSave={fetchItems}
+            {...sidePanelsHandlers}
           />
         </>
       )}
