@@ -8,7 +8,6 @@ import { useCleaningTasksQuery } from './hooks/useCleaningTasksQuery';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { Sparkles, ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-
 import { logger } from '@/lib/logger';
 interface CleaningArea {
   id: number;
@@ -37,7 +36,7 @@ export default function CleaningRosterPage() {
   const { t } = useTranslation();
   const [areas, setAreas] = useState<CleaningArea[]>([]);
   const [tasks, setTasks] = useState<CleaningTask[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'areas' | 'tasks'>('areas');
   const [showAddArea, setShowAddArea] = useState(false);
   const [showAddTask, setShowAddTask] = useState(false);
@@ -46,7 +45,6 @@ export default function CleaningRosterPage() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const { data: tasksData, isLoading: tasksLoading } = useCleaningTasksQuery(page, pageSize);
-
   const fetchAreas = async () => {
     try {
       const response = await fetch('/api/cleaning-areas');
@@ -58,27 +56,15 @@ export default function CleaningRosterPage() {
       logger.error('Error fetching areas:', error);
     }
   };
-
   useEffect(() => {
-    // Use setTimeout to avoid synchronous setState in effect (fetchAreas calls setAreas)
-    setTimeout(() => {
-      fetchAreas();
-    }, 0);
+    setTimeout(() => fetchAreas(), 0);
   }, []);
-
   useEffect(() => {
     const td = tasksData as any;
-    if (td?.items) {
-      // Use setTimeout to avoid synchronous setState in effect
-      setTimeout(() => {
-        setTasks(td.items as any);
-      }, 0);
-    }
+    if (td?.items) setTimeout(() => setTasks(td.items as any), 0);
   }, [tasksData]);
-
   const total = (tasksData as any)?.total || 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-
   const handleAddArea = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -97,7 +83,6 @@ export default function CleaningRosterPage() {
       logger.error('Error adding area:', error);
     }
   };
-
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -119,7 +104,6 @@ export default function CleaningRosterPage() {
       logger.error('Error adding task:', error);
     }
   };
-
   const handleCompleteTask = async (taskId: number) => {
     try {
       const response = await fetch('/api/cleaning-tasks', {
@@ -144,7 +128,6 @@ export default function CleaningRosterPage() {
       logger.error('Error completing task:', error);
     }
   };
-
   if (loading) {
     return (
       <ResponsivePageContainer>
@@ -157,11 +140,9 @@ export default function CleaningRosterPage() {
       </ResponsivePageContainer>
     );
   }
-
   return (
     <ResponsivePageContainer>
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
             <Icon icon={Sparkles} size="lg" aria-hidden={true} />
@@ -174,39 +155,35 @@ export default function CleaningRosterPage() {
             )}
           </p>
         </div>
-
-        {/* Tab Navigation */}
         <div className="mb-8">
           <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
-            <button
-              onClick={() => setActiveTab('areas')}
-              className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                activeTab === 'areas'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <MapPin className="mr-2 inline h-4 w-4" />
-              {t('cleaning.areas', 'Cleaning Areas')}
-            </button>
-            <button
-              onClick={() => setActiveTab('tasks')}
-              className={`flex items-center rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                activeTab === 'tasks'
-                  ? 'bg-[#29E7CD] text-black shadow-lg'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              <Icon icon={ClipboardCheck} size="sm" className="mr-2" aria-hidden={true} />
-              {t('cleaning.tasks', 'Cleaning Tasks')}
-            </button>
+            {(['areas', 'tasks'] as const).map(tab => {
+              const isActive = activeTab === tab;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex items-center rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
+                    isActive
+                      ? 'bg-[#29E7CD] text-black shadow-lg'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {tab === 'areas' ? (
+                    <MapPin className="mr-2 inline h-4 w-4" />
+                  ) : (
+                    <Icon icon={ClipboardCheck} size="sm" className="mr-2" aria-hidden={true} />
+                  )}
+                  {tab === 'areas'
+                    ? t('cleaning.areas', 'Cleaning Areas')
+                    : t('cleaning.tasks', 'Cleaning Tasks')}
+                </button>
+              );
+            })}
           </div>
         </div>
-
-        {/* Areas Tab */}
         {activeTab === 'areas' && (
           <div className="space-y-6">
-            {/* Add Area Button */}
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-semibold text-white">
                 {t('cleaning.manageAreas', 'Manage Cleaning Areas')}
@@ -219,8 +196,6 @@ export default function CleaningRosterPage() {
                 {t('cleaning.addArea', 'Add Area')}
               </button>
             </div>
-
-            {/* Add Area Form */}
             {showAddArea && (
               <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
                 <h3 className="mb-4 text-xl font-semibold text-white">
@@ -259,9 +234,7 @@ export default function CleaningRosterPage() {
                     <input
                       type="number"
                       value={newArea.frequency_days}
-                      onChange={e =>
-                        setNewArea({ ...newArea, frequency_days: parseInt(e.target.value) })
-                      }
+                      onChange={e => setNewArea({ ...newArea, frequency_days: parseInt(e.target.value) || 7 })}
                       className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                       min="1"
                       required
@@ -285,8 +258,6 @@ export default function CleaningRosterPage() {
                 </form>
               </div>
             )}
-
-            {/* Areas Grid */}
             <div className="adaptive-grid">
               {areas.map(area => (
                 <div
@@ -320,8 +291,7 @@ export default function CleaningRosterPage() {
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">
-                      {t('cleaning.everyDays', 'Every')} {area.frequency_days}{' '}
-                      {t('cleaning.days', 'days')}
+                      {t('cleaning.everyDays', 'Every')} {area.frequency_days} {t('cleaning.days', 'days')}
                     </span>
                     <button className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
                       {t('cleaning.edit', 'Edit')}
@@ -332,11 +302,8 @@ export default function CleaningRosterPage() {
             </div>
           </div>
         )}
-
-        {/* Tasks Tab */}
         {activeTab === 'tasks' && (
           <div className="space-y-6">
-            {/* Add Task Button */}
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-semibold text-white">
                 {t('cleaning.manageTasks', 'Manage Cleaning Tasks')}
@@ -345,11 +312,10 @@ export default function CleaningRosterPage() {
                 onClick={() => setShowAddTask(true)}
                 className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
               >
-                ➕ {t('cleaning.addTask', 'Add Task')}
+                <Icon icon={Plus} size="sm" className="mr-2" aria-hidden={true} />
+                {t('cleaning.addTask', 'Add Task')}
               </button>
             </div>
-
-            {/* Add Task Form */}
             {showAddTask && (
               <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
                 <h3 className="mb-4 text-xl font-semibold text-white">
@@ -366,9 +332,7 @@ export default function CleaningRosterPage() {
                       className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
                       required
                     >
-                      <option value="">
-                        {t('cleaning.selectAreaPlaceholder', 'Choose a cleaning area')}
-                      </option>
+                      <option value="">{t('cleaning.selectAreaPlaceholder', 'Choose a cleaning area')}</option>
                       {areas.map(area => (
                         <option key={area.id} value={area.id}>
                           {area.name}
@@ -418,14 +382,10 @@ export default function CleaningRosterPage() {
                 </form>
               </div>
             )}
-
-            {/* Tasks List */}
             <div className="space-y-4">
               {tasks.map(task => (
                 <TaskCard key={task.id} task={task} onComplete={handleCompleteTask} />
               ))}
-
-              {/* Pagination */}
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-sm text-gray-400">
                   Page {page} of {totalPages} ({total} items)
