@@ -36,42 +36,37 @@ export default function MenuBuilderClient({
   onBackRef.current = onBack;
   const hasInitializedRef = useRef(false);
 
-  const fetchMenus = useCallback(
-    async (updateSelected?: boolean) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch('/api/menus', { cache: 'no-store' });
-        const result = await response.json();
-        if (!response.ok) {
-          if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
-            setDbError('Menu builder tables are not set up. Please run the database migration.');
-          } else {
-            setError(result.error || result.message || 'Failed to fetch menus');
-          }
-          setLoading(false);
+  const fetchMenus = useCallback(async (updateSelected?: boolean) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/menus', { cache: 'no-store' });
+      const result = await response.json();
+      if (!response.ok) {
+        if (result.error?.includes('relation') || result.error?.includes('does not exist')) {
+          setDbError('Menu builder tables are not set up. Please run the database migration.');
         } else {
-          const updatedMenus = result.menus || [];
-          setMenus(updatedMenus);
-          cacheData('menu_builder_menus', updatedMenus);
-          if (updateSelected && selectedMenuRef.current) {
-            const updatedMenu = updatedMenus.find(
-              (m: Menu) => m.id === selectedMenuRef.current?.id,
-            );
-            if (updatedMenu) {
-              setSelectedMenuRef.current(updatedMenu);
-            }
-          }
-
-          setLoading(false);
+          setError(result.error || result.message || 'Failed to fetch menus');
         }
-      } catch (err) {
-        setError('Failed to fetch menus. Please check your connection and try again.');
+        setLoading(false);
+      } else {
+        const updatedMenus = result.menus || [];
+        setMenus(updatedMenus);
+        cacheData('menu_builder_menus', updatedMenus);
+        if (updateSelected && selectedMenuRef.current) {
+          const updatedMenu = updatedMenus.find((m: Menu) => m.id === selectedMenuRef.current?.id);
+          if (updatedMenu) {
+            setSelectedMenuRef.current(updatedMenu);
+          }
+        }
+
         setLoading(false);
       }
-    },
-    [],
-  );
+    } catch (err) {
+      setError('Failed to fetch menus. Please check your connection and try again.');
+      setLoading(false);
+    }
+  }, []);
   useEffect(() => {
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
@@ -91,10 +86,10 @@ export default function MenuBuilderClient({
             result.message ||
               'Menu builder tables are not set up. Please run the database migration.',
           );
+          setCheckingDb(false);
+          return;
+        }
         setCheckingDb(false);
-        return;
-      }
-      setCheckingDb(false);
         await fetchMenus(false);
       } catch (err) {
         setDbError('Failed to check database tables. Please try again.');
@@ -103,7 +98,7 @@ export default function MenuBuilderClient({
     };
 
     checkDatabaseTables();
-  }, []);
+  }, [fetchMenus]);
 
   const handleCreateMenu = useCallback(() => {
     setEditingMenu(null);

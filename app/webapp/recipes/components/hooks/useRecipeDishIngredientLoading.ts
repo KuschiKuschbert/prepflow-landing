@@ -135,14 +135,6 @@ export function useRecipeDishIngredientLoading({
       }
     };
     if (selectedItem && ingredients.length > 0) loadIngredients();
-  }, [
-    convertIngredientQuantity,
-    showError,
-    selectedItem?.id,
-    selectedItem?.type,
-    ingredients.length,
-    recipes.length,
-    allRecipes.length,
-  ]);
+  }, [convertIngredientQuantity, showError, selectedItem, ingredients, recipes, allRecipes]);
   return { calculations, setCalculations, loadingIngredients };
 }
