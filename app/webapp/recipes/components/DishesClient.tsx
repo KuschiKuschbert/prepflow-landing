@@ -30,11 +30,7 @@ import { DishSortField } from '../hooks/useDishFiltering';
 
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
-
-  // Recipe pricing hooks
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
-
-  // Data fetching
   const {
     dishes,
     recipes,
@@ -46,14 +42,9 @@ export default function DishesClient() {
     setError,
     fetchItems,
   } = useDishesClientData();
-
   const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
   const capitalizeRecipeName = formatRecipeName;
-
-  // AI Instructions hook
   const { generateAIInstructions } = useAIInstructions();
-
-  // Preview state
   const previewState = useDishesClientPreview({
     fetchRecipeIngredients,
     generateAIInstructions,
@@ -95,8 +86,6 @@ export default function DishesClient() {
     handleSelectAll,
     handleExitSelectionMode,
   } = useDishesClientSelection(dishes, recipes);
-
-  // Pagination
   const {
     allItems,
     paginatedItems,
@@ -105,7 +94,6 @@ export default function DishesClient() {
     filters,
     updateFilters,
   } = useDishesClientPagination({ dishes, recipes, dishCosts });
-
   const {
     showDeleteConfirm,
     itemToDelete,
@@ -131,11 +119,7 @@ export default function DishesClient() {
     setHighlightingRowType,
     setError,
   });
-
-  // Selection mode for long press
   const { startLongPress, cancelLongPress, enterSelectionMode } = useSelectionMode();
-
-  // Refresh items when switching from builder/editor to list view
   useEffect(() => {
     if (viewMode === 'list') {
       fetchItems();
@@ -144,16 +128,7 @@ export default function DishesClient() {
       setHighlightingRowId(null);
       setHighlightingRowType(null);
     }
-  }, [
-    viewMode,
-    fetchItems,
-    setEditingRecipe,
-    setEditingItem,
-    setHighlightingRowId,
-    setHighlightingRowType,
-  ]);
-
-  // Calculate recipe prices for visible recipes
+  }, [viewMode, fetchItems, setEditingRecipe, setEditingItem, setHighlightingRowId, setHighlightingRowType]);
   useDishesClientRecipePricing({
     paginatedRecipesList,
     recipePrices,
@@ -161,8 +136,6 @@ export default function DishesClient() {
     fetchRecipeIngredients,
     fetchBatchRecipeIngredients,
   });
-
-  // Create item types map for bulk actions
   const selectedItemTypes = useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
     dishes.forEach(d => {
@@ -177,47 +150,26 @@ export default function DishesClient() {
     });
     return types;
   }, [dishes, recipes, selectedItems]);
-
-  // Optimistic update functions
-  const optimisticallyUpdateDishes = useCallback(
-    (updater: (dishes: Dish[]) => Dish[]) => {
-      setDishes(updater(dishes));
-    },
-    [dishes, setDishes],
-  );
-
-  const optimisticallyUpdateRecipes = useCallback(
-    (updater: (recipes: Recipe[]) => Recipe[]) => {
-      setRecipes(updater(recipes));
-    },
-    [recipes, setRecipes],
-  );
-
-  // Store original state for rollback
+  const optimisticallyUpdateDishes = useCallback((updater: (dishes: Dish[]) => Dish[]) => {
+    setDishes(updater(dishes));
+  }, [dishes, setDishes]);
+  const optimisticallyUpdateRecipes = useCallback((updater: (recipes: Recipe[]) => Recipe[]) => {
+    setRecipes(updater(recipes));
+  }, [recipes, setRecipes]);
   const [originalDishes, setOriginalDishes] = useState<Dish[]>([]);
   const [originalRecipes, setOriginalRecipes] = useState<Recipe[]>([]);
-
   const rollbackDishes = useCallback(() => {
-    if (originalDishes.length > 0) {
-      setDishes(originalDishes);
-    }
+    if (originalDishes.length > 0) setDishes(originalDishes);
   }, [originalDishes, setDishes]);
-
   const rollbackRecipes = useCallback(() => {
-    if (originalRecipes.length > 0) {
-      setRecipes(originalRecipes);
-    }
+    if (originalRecipes.length > 0) setRecipes(originalRecipes);
   }, [originalRecipes, setRecipes]);
-
-  // Store original state before bulk operations
   useEffect(() => {
     if (selectedItems.size > 0) {
       setOriginalDishes([...dishes]);
       setOriginalRecipes([...recipes]);
     }
-  }, [selectedItems.size, dishes, recipes]); // Only update when selection changes
-
-  // Unified bulk actions hook
+  }, [selectedItems.size, dishes, recipes]);
   const {
     bulkActionLoading,
     showBulkDeleteConfirm,
@@ -238,14 +190,10 @@ export default function DishesClient() {
     rollbackDishes,
     onClearSelection: handleExitSelectionMode,
   });
-
-  // Bulk share hook
   const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
     selectedRecipeIds,
     onSuccess: handleExitSelectionMode,
   });
-
-  // Bulk add to menu hook
   const {
     handleBulkAddToMenu,
     handleSelectMenu,
@@ -260,15 +208,9 @@ export default function DishesClient() {
     selectedItemTypes,
     onSuccess: handleExitSelectionMode,
   });
-
   const [showBulkMenu, setShowBulkMenu] = useState(false);
-
   const selectedRecipeCount = selectedRecipeIds.length;
-
-  if (loading) {
-    return <PageSkeleton />;
-  }
-
+  if (loading) return <PageSkeleton />;
   return (
     <div>
       {error && (
@@ -276,15 +218,11 @@ export default function DishesClient() {
           {error}
         </div>
       )}
-
-      {/* Selection Mode Banner */}
       <SelectionModeBanner
         isSelectionMode={isSelectionMode}
         selectedCount={selectedItems.size}
         onExitSelectionMode={handleExitSelectionMode}
       />
-
-      {/* Bulk Actions Menu */}
       {isSelectionMode && selectedItems.size > 0 && (
         <div className="mb-4 flex items-center justify-between">
           <UnifiedBulkActionsMenu
@@ -299,7 +237,6 @@ export default function DishesClient() {
           />
         </div>
       )}
-
       <BulkAddToMenuDialog
         show={showMenuDialog}
         menus={menus}
@@ -319,7 +256,6 @@ export default function DishesClient() {
         onConfirm={confirmBulkDelete}
         onCancel={cancelBulkDelete}
       />
-
       <DishesViewModeToggle
         viewMode={viewMode}
         onViewModeChange={setViewMode}
@@ -365,7 +301,6 @@ export default function DishesClient() {
             onDeleteDish={handleDeleteDish}
             onDeleteRecipe={handleDeleteRecipe}
             onSortChange={(field: string, direction: 'asc' | 'desc') => {
-              // Cast to DishSortField since updateFilters expects it (unified view uses dish filtering)
               updateFilters({ sortField: field as DishSortField, sortDirection: direction });
             }}
             onStartLongPress={startLongPress}
@@ -373,7 +308,6 @@ export default function DishesClient() {
             onEnterSelectionMode={enterSelectionMode}
             onViewModeChange={setViewMode}
           />
-
           <DishesSidePanels
             showDishPanel={showDishPanel}
             selectedDishForPreview={selectedDishForPreview}
@@ -421,9 +355,7 @@ export default function DishesClient() {
               setShowDishEditDrawer(false);
               setEditingDish(null);
             }}
-            onDishEditDrawerSave={async () => {
-              await fetchItems();
-            }}
+            onDishEditDrawerSave={fetchItems}
           />
         </>
       )}
