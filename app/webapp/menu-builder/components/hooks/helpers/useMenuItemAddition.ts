@@ -1,7 +1,6 @@
 /**
  * Hook for adding menu items to categories.
  */
-
 import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import type { MenuItem, Dish, Recipe } from '../../../types';
@@ -20,9 +19,6 @@ interface UseMenuItemAdditionProps {
 
 /**
  * Hook for adding menu items to categories.
- *
- * @param {UseMenuItemAdditionProps} props - Hook dependencies
- * @returns {Function} handleCategorySelect function
  */
 export function useMenuItemAddition({
   menuId,
@@ -41,28 +37,19 @@ export function useMenuItemAddition({
       selectedItem: { type: 'dish' | 'recipe'; id: string; name: string } | null,
     ) => {
       if (!selectedItem) return;
-
-      // Find the dish or recipe data
       const dish = dishes.find(d => d.id === selectedItem.id);
       const recipe = recipes.find(r => r.id === selectedItem.id);
-
       if (!dish && !recipe) {
         showError('Item not found. Please try again.');
         return;
       }
-
-      // Get the highest position in the category for the new item
       const categoryItems = menuItems.filter(item => item.category === category);
-      const maxPosition =
-        categoryItems.length > 0 ? Math.max(...categoryItems.map(item => item.position)) : -1;
-      const newPosition = maxPosition + 1;
-
-      // Create optimistic menu item
+      const maxPosition = categoryItems.length > 0 ? Math.max(...categoryItems.map(item => item.position)) : -1;
       const optimisticItem: MenuItem = {
-        id: `temp-${Date.now()}`, // Temporary ID
+        id: `temp-${Date.now()}`,
         menu_id: menuId,
         category,
-        position: newPosition,
+        position: maxPosition + 1,
         ...(selectedItem.type === 'dish'
           ? {
               dish_id: selectedItem.id,
@@ -83,53 +70,27 @@ export function useMenuItemAddition({
               },
             }),
       };
-
-      // Optimistically update UI immediately
       setMenuItems([...menuItems, optimisticItem]);
-
-      // Update categories if needed
-      if (!categories.includes(category)) {
-        setCategories([...categories, category]);
-      }
-
-      // Make API call in background
+      if (!categories.includes(category)) setCategories([...categories, category]);
       try {
         const response = await fetch(`/api/menus/${menuId}/items`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(
-            selectedItem.type === 'dish'
-              ? { dish_id: selectedItem.id, category }
-              : { recipe_id: selectedItem.id, category },
-          ),
+          body: JSON.stringify(selectedItem.type === 'dish' ? { dish_id: selectedItem.id, category } : { recipe_id: selectedItem.id, category }),
         });
 
         const result = await response.json();
 
         if (response.ok && result.success && result.item) {
-          // Replace optimistic item with real item from API (includes full dish/recipe data)
-          setMenuItems(prevItems =>
-            prevItems.map(item => (item.id === optimisticItem.id ? result.item : item)),
-          );
-
-          // Update statistics in background (non-blocking)
-          refreshStatistics().catch(err => {
-            logger.error('Failed to refresh statistics:', err);
-          });
+          setMenuItems(prevItems => prevItems.map(item => (item.id === optimisticItem.id ? result.item : item)));
+          refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
         } else {
-          // Revert optimistic update on error
-          const errorMessage =
-            result.error || result.message || `Failed to add item (${response.status})`;
-          logger.error('[Menu Editor] API Error:', {
-            status: response.status,
-            error: errorMessage,
-            result,
-          });
+          const errorMessage = result.error || result.message || `Failed to add item (${response.status})`;
+          logger.error('[Menu Editor] API Error:', { status: response.status, error: errorMessage, result });
           setMenuItems(prevItems => prevItems.filter(item => item.id !== optimisticItem.id));
           showError(errorMessage);
         }
       } catch (err) {
-        // Revert optimistic update on error
         logger.error('[Menu Editor] Network Error:', err);
         setMenuItems(prevItems => prevItems.filter(item => item.id !== optimisticItem.id));
         showError('Failed to add item. Please check your connection and try again.');
