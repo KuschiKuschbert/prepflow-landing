@@ -1,5 +1,4 @@
 'use client';
-
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useEffect, useState } from 'react';
 import { useIngredientBulkActionsDialog } from '../hooks/useIngredientBulkActionsDialog';
@@ -150,10 +149,7 @@ export default function IngredientTableWithFilters({
 
   const { handleColumnSort, getSortIcon } = useIngredientTableSort(sortBy, onSortChange);
 
-  const handleDelete = async (id: string): Promise<void> => {
-    handleDeleteFromHook(id);
-  };
-
+  const handleDelete = async (id: string): Promise<void> => handleDeleteFromHook(id);
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     setDeletingId(deleteConfirmId);
@@ -196,7 +192,6 @@ export default function IngredientTableWithFilters({
       />
     );
   }
-
   return (
     <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
       <IngredientTableFilterBar
@@ -245,9 +240,7 @@ export default function IngredientTableWithFilters({
         isSelectionMode={isSelectionMode}
         onExitSelectionMode={() => {
           onSelectAll(false);
-          if (onExitSelectionMode) {
-            onExitSelectionMode();
-          }
+          onExitSelectionMode?.();
         }}
       />
 
