@@ -1,20 +1,16 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeName } from '@/lib/text-utils';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../hooks/useRecipePricing';
 import { Dish, Recipe } from '../types';
 import { DishesBulkActionsSection } from './DishesBulkActionsSection';
-import { DishesListView } from './DishesListView';
+import { DishesListViewSection } from './DishesListViewSection';
 import { DishesModalsSection } from './DishesModalsSection';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
 import { DishesEditorView } from './DishesEditorView';
-import { DishesSidePanels } from './DishesSidePanels';
-import { UnifiedBulkActionsMenu } from './UnifiedBulkActionsMenu';
-import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
-import { UnifiedBulkDeleteConfirmationModal } from './UnifiedBulkDeleteConfirmationModal';
 import { useDishesClientData } from './hooks/useDishesClientData';
 import { useDishesClientViewMode } from './hooks/useDishesClientViewMode';
 import { useDishesClientPreview } from './hooks/useDishesClientPreview';
@@ -23,11 +19,11 @@ import { useDishesClientSelection } from './hooks/useDishesClientSelection';
 import { useDishesClientPagination } from './hooks/useDishesClientPagination';
 import { useDishesClientRecipePricing } from './hooks/useDishesClientRecipePricing';
 import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers';
+import { useDishesOptimisticUpdates } from './hooks/useDishesOptimisticUpdates';
 import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
 import { useBulkShare } from '../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
-import { DishSortField } from '../hooks/useDishFiltering';
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
@@ -137,37 +133,15 @@ export default function DishesClient() {
   const selectedItemTypes = useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
     dishes.forEach(d => {
-      if (selectedItems.has(d.id)) {
-        types.set(d.id, 'dish');
-      }
+      if (selectedItems.has(d.id)) types.set(d.id, 'dish');
     });
     recipes.forEach(r => {
-      if (selectedItems.has(r.id)) {
-        types.set(r.id, 'recipe');
-      }
+      if (selectedItems.has(r.id)) types.set(r.id, 'recipe');
     });
     return types;
   }, [dishes, recipes, selectedItems]);
-  const optimisticallyUpdateDishes = useCallback((updater: (dishes: Dish[]) => Dish[]) => {
-    setDishes(updater(dishes));
-  }, [dishes, setDishes]);
-  const optimisticallyUpdateRecipes = useCallback((updater: (recipes: Recipe[]) => Recipe[]) => {
-    setRecipes(updater(recipes));
-  }, [recipes, setRecipes]);
-  const [originalDishes, setOriginalDishes] = useState<Dish[]>([]);
-  const [originalRecipes, setOriginalRecipes] = useState<Recipe[]>([]);
-  const rollbackDishes = useCallback(() => {
-    if (originalDishes.length > 0) setDishes(originalDishes);
-  }, [originalDishes, setDishes]);
-  const rollbackRecipes = useCallback(() => {
-    if (originalRecipes.length > 0) setRecipes(originalRecipes);
-  }, [originalRecipes, setRecipes]);
-  useEffect(() => {
-    if (selectedItems.size > 0) {
-      setOriginalDishes([...dishes]);
-      setOriginalRecipes([...recipes]);
-    }
-  }, [selectedItems.size, dishes, recipes]);
+  const { optimisticallyUpdateDishes, optimisticallyUpdateRecipes, rollbackDishes, rollbackRecipes } =
+    useDishesOptimisticUpdates({ dishes, recipes, selectedItems, setDishes, setRecipes });
   const {
     bulkActionLoading,
     showBulkDeleteConfirm,
@@ -280,53 +254,44 @@ export default function DishesClient() {
         onSave={fetchItems}
       />
       {viewMode === 'list' && (
-        <>
-          <DishesListView
-            allItems={allItems}
-            paginatedItems={paginatedItems}
-            paginatedDishesList={paginatedDishesList}
-            paginatedRecipesList={paginatedRecipesList}
-            dishCosts={dishCosts}
-            recipePrices={recipePrices}
-            selectedItems={selectedItems}
-            highlightingRowId={highlightingRowId}
-            highlightingRowType={highlightingRowType}
-            filters={filters}
-            isSelectionMode={isSelectionMode}
-            capitalizeRecipeName={capitalizeRecipeName}
-            onPageChange={page => updateFilters({ currentPage: page })}
-            onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
-            onSelectAll={handleSelectAll}
-            onSelectItem={handleSelectItem}
-            onPreviewDish={handlePreviewDish}
-            onPreviewRecipe={handlePreviewRecipe}
-            onEditDish={handleEditDish}
-            onEditRecipe={handleEditRecipe}
-            onDeleteDish={handleDeleteDish}
-            onDeleteRecipe={handleDeleteRecipe}
-            onSortChange={(field: string, direction: 'asc' | 'desc') => {
-              updateFilters({ sortField: field as DishSortField, sortDirection: direction });
-            }}
-            onStartLongPress={startLongPress}
-            onCancelLongPress={cancelLongPress}
-            onEnterSelectionMode={enterSelectionMode}
-            onViewModeChange={setViewMode}
-          />
-          <DishesSidePanels
-            showDishPanel={showDishPanel}
-            selectedDishForPreview={selectedDishForPreview}
-            showRecipePanel={showRecipePanel}
-            selectedRecipeForPreview={selectedRecipeForPreview}
-            recipeIngredients={recipeIngredients}
-            previewYield={previewYield}
-            showDeleteConfirm={showDeleteConfirm}
-            itemToDelete={itemToDelete}
-            showDishEditDrawer={showDishEditDrawer}
-            editingDish={editingDish}
-            capitalizeRecipeName={capitalizeRecipeName}
-            {...sidePanelsHandlers}
-          />
-        </>
+        <DishesListViewSection
+          allItems={allItems}
+          paginatedItems={paginatedItems}
+          paginatedDishesList={paginatedDishesList}
+          paginatedRecipesList={paginatedRecipesList}
+          dishCosts={dishCosts}
+          recipePrices={recipePrices}
+          selectedItems={selectedItems}
+          highlightingRowId={highlightingRowId}
+          highlightingRowType={highlightingRowType}
+          filters={filters}
+          isSelectionMode={isSelectionMode}
+          capitalizeRecipeName={capitalizeRecipeName}
+          showDishPanel={showDishPanel}
+          selectedDishForPreview={selectedDishForPreview}
+          showRecipePanel={showRecipePanel}
+          selectedRecipeForPreview={selectedRecipeForPreview}
+          recipeIngredients={recipeIngredients}
+          previewYield={previewYield}
+          showDeleteConfirm={showDeleteConfirm}
+          itemToDelete={itemToDelete}
+          showDishEditDrawer={showDishEditDrawer}
+          editingDish={editingDish}
+          sidePanelsHandlers={sidePanelsHandlers}
+          updateFilters={updateFilters}
+          handleSelectAll={handleSelectAll}
+          handleSelectItem={handleSelectItem}
+          handlePreviewDish={handlePreviewDish}
+          handlePreviewRecipe={handlePreviewRecipe}
+          handleEditDish={handleEditDish}
+          handleEditRecipe={handleEditRecipe}
+          handleDeleteDish={handleDeleteDish}
+          handleDeleteRecipe={handleDeleteRecipe}
+          startLongPress={startLongPress}
+          cancelLongPress={cancelLongPress}
+          enterSelectionMode={enterSelectionMode}
+          setViewMode={setViewMode}
+        />
       )}
     </div>
   );
