@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -7,9 +6,8 @@ import { useDishSectionActions } from './hooks/useDishSectionActions';
 import { DishSectionsHeader } from './components/DishSectionsHeader';
 import { SectionFormModal } from './components/SectionFormModal';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { UtensilsCrossed } from 'lucide-react';
+import { UtensilsCrossed, Edit, Trash2, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-
 import { logger } from '@/lib/logger';
 interface KitchenSection {
   id: string;
@@ -34,7 +32,7 @@ export default function DishSectionsPage() {
   const { t } = useTranslation();
   const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>([]);
   const [menuDishes, setMenuDishes] = useState<MenuDish[]>([]);
-  const [loading, setLoading] = useState(false); // Start with false to prevent skeleton flash
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingSection, setEditingSection] = useState<KitchenSection | null>(null);
@@ -43,8 +41,6 @@ export default function DishSectionsPage() {
     description: '',
     color: '#29E7CD',
   });
-
-  // Mock user ID for now
   const userId = 'user-123';
 
   useEffect(() => {
@@ -53,15 +49,12 @@ export default function DishSectionsPage() {
   }, []);
 
   const fetchKitchenSections = async () => {
-    // Disable loading state to prevent skeleton flashes during API errors
-    // setLoading(true);
     try {
       const response = await fetch(`/api/kitchen-sections?userId=${userId}`);
       const result = await response.json();
 
       if (result.success) {
         setKitchenSections(result.data || []);
-        // Show helpful message if tables don't exist
         if (result.message && result.instructions) {
           logger.warn('Kitchen sections:', result.message);
           logger.dev('Setup instructions:', result.instructions);
@@ -84,7 +77,6 @@ export default function DishSectionsPage() {
 
       if (result.success) {
         setMenuDishes(result.data || []);
-        // Show helpful message if tables don't exist
         if (result.message && result.instructions) {
           logger.warn('Menu dishes:', result.message);
           logger.dev('Setup instructions:', result.instructions);
@@ -137,17 +129,12 @@ export default function DishSectionsPage() {
   return (
     <ResponsivePageContainer>
       <div className="min-h-screen bg-transparent py-8 text-white">
-        {/* Header */}
         <DishSectionsHeader onAddClick={() => setShowForm(true)} />
-
-        {/* Error Message */}
         {error && (
           <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
             <p className="text-red-400">{error}</p>
           </div>
         )}
-
-        {/* Kitchen Sections */}
         <div className="space-y-6">
           {kitchenSections.length === 0 ? (
             <div className="py-12 text-center">
@@ -208,43 +195,17 @@ export default function DishSectionsPage() {
                       className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
                       title="Edit"
                     >
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                        />
-                      </svg>
+                      <Icon icon={Edit} size="md" aria-hidden={true} />
                     </button>
                     <button
                       onClick={() => handleDelete(section.id)}
                       className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
                       title="Delete"
                     >
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
+                      <Icon icon={Trash2} size="md" aria-hidden={true} />
                     </button>
                   </div>
                 </div>
-
-                {/* Dishes in this section */}
                 <div className="rounded-xl bg-[#2a2a2a]/30 p-4">
                   <h4 className="mb-3 text-sm font-semibold text-white">
                     {t('dishSections.dishesInSection', 'Dishes in this section')} (
@@ -270,19 +231,7 @@ export default function DishSectionsPage() {
                             className="rounded p-1 text-red-400 transition-colors hover:bg-red-400/10"
                             title="Unassign"
                           >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
+                            <Icon icon={X} size="sm" aria-hidden={true} />
                           </button>
                         </div>
                       ))}
@@ -293,8 +242,6 @@ export default function DishSectionsPage() {
             ))
           )}
         </div>
-
-        {/* Unassigned Dishes */}
         {getUnassignedDishes().length > 0 && (
           <div className="mt-8">
             <h2 className="mb-4 text-xl font-semibold text-white">
@@ -334,8 +281,6 @@ export default function DishSectionsPage() {
             </div>
           </div>
         )}
-
-        {/* Add/Edit Form Modal */}
         <SectionFormModal
           show={showForm}
           editingSection={editingSection}
@@ -344,8 +289,6 @@ export default function DishSectionsPage() {
           onSubmit={handleSubmit}
           onCancel={resetForm}
         />
-
-        {/* Confirm Dialog */}
         <ConfirmDialog />
       </div>
     </ResponsivePageContainer>
