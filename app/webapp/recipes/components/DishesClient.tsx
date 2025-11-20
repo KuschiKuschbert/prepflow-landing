@@ -1,5 +1,4 @@
 'use client';
-
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeName } from '@/lib/text-utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -27,7 +26,6 @@ import { useBulkShare } from '../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
 import { DishSortField } from '../hooks/useDishFiltering';
-
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
@@ -77,8 +75,6 @@ export default function DishesClient() {
     handlePreviewDish,
     handlePreviewRecipe,
   } = previewState;
-
-  // Selection
   const {
     selectedItems,
     isSelectionMode,
@@ -245,7 +241,6 @@ export default function DishesClient() {
         onSelectMenu={handleSelectMenu}
         onCreateNew={handleCreateNewMenu}
       />
-
       <UnifiedBulkDeleteConfirmationModal
         show={showBulkDeleteConfirm}
         selectedItems={selectedItems}
@@ -274,7 +269,6 @@ export default function DishesClient() {
         onEditingRecipeChange={setEditingRecipe}
         onSave={fetchItems}
       />
-
       {viewMode === 'list' && (
         <>
           <DishesListView
