@@ -72,8 +72,7 @@ export function useTemperatureEquipmentTabHandlers({
       );
       setNewEquipment({ name: '', equipmentType: '', location: '', minTemp: null, maxTemp: null });
       setShowCreateForm(false);
-      const newTotalPages = Math.ceil((equipment.length + 1) / itemsPerPage);
-      setCurrentPage(newTotalPages);
+      setCurrentPage(Math.ceil((equipment.length + 1) / itemsPerPage));
     } catch (error) {
       // Handle error gracefully
     }
@@ -115,8 +114,7 @@ export function useTemperatureEquipmentTabHandlers({
       // Handle error gracefully
     }
   };
-  const generateSampleData = () =>
-    handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs);
+  const generateSampleData = () => handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, equipment.length);
   return {
