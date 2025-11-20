@@ -1,7 +1,6 @@
 /**
  * Hook for managing prep list CRUD operations.
  */
-
 import { useState, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import type { PrepList } from '../types';
@@ -16,9 +15,6 @@ interface UsePrepListsCRUDProps {
 
 /**
  * Hook for managing prep list CRUD operations.
- *
- * @param {UsePrepListsCRUDProps} props - Hook dependencies
- * @returns {Object} CRUD handlers
  */
 export function usePrepListsCRUD({
   prepLists,
@@ -38,19 +34,15 @@ export function usePrepListsCRUD({
     message: '',
     onConfirm: () => {},
   });
-
+  const handleRefreshError = (err: any) => logger.error('Failed to refresh prep lists:', err);
   const performDelete = useCallback(
     async (id: string) => {
-      // Store original state for rollback
       const originalPrepLists = [...prepLists];
       const prepListToDelete = prepLists.find(list => list.id === id);
-
       if (!prepListToDelete) {
         showError('Prep list not found');
         return;
       }
-
-      // Optimistically remove from UI immediately
       setPrepLists(prevLists => prevLists.filter(list => list.id !== id));
 
       try {
@@ -62,16 +54,12 @@ export function usePrepListsCRUD({
 
         if (result.success) {
           showSuccess('Prep list deleted successfully');
-          // Optionally refresh in background for accuracy (non-blocking)
-          refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
+          refetchPrepLists().catch(handleRefreshError);
         } else {
-          // Revert optimistic update on error
           setPrepLists(originalPrepLists);
-          const errorMsg = result.message || 'Failed to delete prep list';
-          showError(errorMsg);
+          showError(result.message || 'Failed to delete prep list');
         }
       } catch (err) {
-        // Revert optimistic update on error
         setPrepLists(originalPrepLists);
         logger.error('Failed to delete prep list:', err);
         showError('Failed to delete prep list. Please check your connection and try again.');
@@ -79,7 +67,6 @@ export function usePrepListsCRUD({
     },
     [prepLists, setPrepLists, refetchPrepLists, showError, showSuccess],
   );
-
   const handleDelete = useCallback(
     (id: string) => {
       const prepList = prepLists.find(list => list.id === id);
@@ -95,22 +82,15 @@ export function usePrepListsCRUD({
     },
     [prepLists, performDelete],
   );
-
   const handleStatusChange = useCallback(
     async (id: string, status: string) => {
-      // Store original state for rollback
       const originalPrepLists = [...prepLists];
       const prepListToUpdate = prepLists.find(list => list.id === id);
-
       if (!prepListToUpdate) {
         showError('Prep list not found');
         return;
       }
-
-      // Optimistically update UI immediately
-      setPrepLists(prevLists =>
-        prevLists.map(list => (list.id === id ? { ...list, status: status as any } : list)),
-      );
+      setPrepLists(prevLists => prevLists.map(list => (list.id === id ? { ...list, status: status as any } : list)));
 
       try {
         const response = await fetch('/api/prep-lists', {
@@ -123,16 +103,12 @@ export function usePrepListsCRUD({
 
         if (result.success) {
           showSuccess('Status updated successfully');
-          // Optionally refresh in background for accuracy (non-blocking)
-          refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
+          refetchPrepLists().catch(handleRefreshError);
         } else {
-          // Revert optimistic update on error
           setPrepLists(originalPrepLists);
-          const errorMsg = result.message || 'Failed to update status';
-          showError(errorMsg);
+          showError(result.message || 'Failed to update status');
         }
       } catch (err) {
-        // Revert optimistic update on error
         setPrepLists(originalPrepLists);
         logger.error('Failed to update status:', err);
         showError('Failed to update status. Please check your connection and try again.');
@@ -140,7 +116,6 @@ export function usePrepListsCRUD({
     },
     [prepLists, setPrepLists, refetchPrepLists, showError, showSuccess],
   );
-
   const cancelConfirmDialog = useCallback(() => {
     setConfirmDialog(prev => ({ ...prev, isOpen: false }));
   }, []);
