@@ -48,4 +48,3 @@ export function AreaCard({ area }: AreaCardProps) {
     </div>
   );
 }
-

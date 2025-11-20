@@ -21,14 +21,18 @@ export function AddAreaForm({ newArea, onAreaChange, onSubmit, onCancel }: AddAr
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-white">{t('cleaning.addNewArea', 'Add New Cleaning Area')}</h3>
+        <h3 className="text-xl font-semibold text-white">
+          {t('cleaning.addNewArea', 'Add New Cleaning Area')}
+        </h3>
         <button onClick={onCancel} className="p-2 text-gray-400 transition-colors hover:text-white">
           <Icon icon={X} size="lg" aria-hidden={true} />
         </button>
       </div>
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">{t('cleaning.areaName', 'Area Name')}</label>
+          <label className="mb-2 block text-sm font-medium text-gray-300">
+            {t('cleaning.areaName', 'Area Name')}
+          </label>
           <input
             type="text"
             value={newArea.name}
@@ -57,7 +61,9 @@ export function AddAreaForm({ newArea, onAreaChange, onSubmit, onCancel }: AddAr
           <input
             type="number"
             value={newArea.frequency_days}
-            onChange={e => onAreaChange({ ...newArea, frequency_days: parseInt(e.target.value) || 7 })}
+            onChange={e =>
+              onAreaChange({ ...newArea, frequency_days: parseInt(e.target.value) || 7 })
+            }
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             min="1"
             required
@@ -82,4 +88,3 @@ export function AddAreaForm({ newArea, onAreaChange, onSubmit, onCancel }: AddAr
     </div>
   );
 }
-

@@ -42,46 +42,26 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       });
     }
 
-    // Build allergen matrix data
     const matrixData = (menu.items || []).map((item: MenuItem) => {
-      // Extract allergens - ensure it's always an array
       let allergens: string[] = [];
-
-      // Try item.allergens first (from enriched item)
       if (item.allergens && Array.isArray(item.allergens)) {
         allergens = item.allergens;
-      } else if (item.dish_id && item.dishes?.allergens) {
-        // Try dish allergens
-        if (Array.isArray(item.dishes.allergens)) {
-          allergens = item.dishes.allergens;
-        }
-      } else if (item.recipe_id && item.recipes?.allergens) {
-        // Try recipe allergens
-        if (Array.isArray(item.recipes.allergens)) {
-          allergens = item.recipes.allergens;
-        }
+      } else if (item.dish_id && item.dishes?.allergens && Array.isArray(item.dishes.allergens)) {
+        allergens = item.dishes.allergens;
+      } else if (
+        item.recipe_id &&
+        item.recipes?.allergens &&
+        Array.isArray(item.recipes.allergens)
+      ) {
+        allergens = item.recipes.allergens;
       }
-
-      // Consolidate allergens (map old codes to new) and validate
       const validAllergenCodes = AUSTRALIAN_ALLERGENS.map(a => a.code);
       allergens = consolidateAllergens(allergens).filter(code => validAllergenCodes.includes(code));
-
-      // Debug logging
-      logger.dev('[Allergen Matrix Export] Item allergens:', {
-        itemName: item.dish_id ? item.dishes?.dish_name : item.recipes?.recipe_name,
-        allergens,
-        allergensCount: allergens.length,
-        rawAllergens: item.allergens,
-        dishAllergens: item.dishes?.allergens,
-        recipeAllergens: item.recipes?.allergens,
-      });
-
       const isVegetarian =
         item.is_vegetarian ??
         (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
       const isVegan =
         item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
-
       return {
         name: item.dish_id ? item.dishes?.dish_name : item.recipes?.recipe_name || 'Unknown',
         type: item.dish_id ? 'Dish' : 'Recipe',
@@ -91,17 +71,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         category: item.category,
       };
     });
-
-    // Generate export based on format
-    if (format === 'csv') {
-      return generateCSV(menu.menu_name, matrixData);
-    } else if (format === 'pdf') {
-      // For PDF, we'll generate HTML and let the client print to PDF
-      // In a production environment, you might want to use a library like puppeteer or pdfkit
-      return generateHTML(menu.menu_name, matrixData, true);
-    } else {
-      return generateHTML(menu.menu_name, matrixData, false);
-    }
+    if (format === 'csv') return generateCSV(menu.menu_name, matrixData);
+    if (format === 'pdf') return generateHTML(menu.menu_name, matrixData, true);
+    return generateHTML(menu.menu_name, matrixData, false);
   } catch (err) {
     logger.error('[Allergen Matrix Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

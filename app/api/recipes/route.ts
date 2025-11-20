@@ -27,36 +27,19 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseAdmin.from('recipes').select('*', { count: 'exact' });
 
-    // Filter by category if provided
     if (category && category !== 'All') {
       query = query.eq('category', category);
     }
-
-    // Filter by allergens (using JSONB @> operator for efficient filtering)
     if (excludeAllergens.length > 0) {
-      // Exclude recipes that contain any of these allergens
       excludeAllergens.forEach(allergen => {
         query = query.not('allergens', 'cs', JSON.stringify([allergen]));
       });
     }
-
     if (includeAllergens.length > 0) {
-      // Include recipes that contain any of these allergens
-      // Use OR logic: recipes containing at least one of the specified allergens
-      // Note: Supabase doesn't support OR directly, so we'll filter client-side for now
-      // In production, consider using a more complex query or filtering after fetch
-      const allergenConditions = includeAllergens.map(allergen =>
-        supabaseAdmin!.from('recipes').select('id').contains('allergens', [allergen]),
-      );
+      // Filter client-side (Supabase doesn't support OR directly)
     }
-
-    // Filter by dietary suitability
-    if (vegetarian) {
-      query = query.eq('is_vegetarian', true);
-    }
-    if (vegan) {
-      query = query.eq('is_vegan', true);
-    }
+    if (vegetarian) query = query.eq('is_vegetarian', true);
+    if (vegan) query = query.eq('is_vegan', true);
 
     const { data: recipes, error, count } = await query.order('name').range(start, end);
 
@@ -70,8 +53,6 @@ export async function GET(request: NextRequest) {
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
-
-    // Filter by include_allergens client-side (if needed)
     let filteredRecipes = recipes || [];
     if (includeAllergens.length > 0) {
       filteredRecipes = filteredRecipes.filter(recipe => {
@@ -79,8 +60,6 @@ export async function GET(request: NextRequest) {
         return includeAllergens.some(allergen => recipeAllergens.includes(allergen));
       });
     }
-
-    // Batch aggregate allergens for recipes that don't have cached allergens
     const recipesNeedingAllergens = filteredRecipes.filter(
       r => !r.allergens || (Array.isArray(r.allergens) && r.allergens.length === 0),
     );
@@ -90,8 +69,6 @@ export async function GET(request: NextRequest) {
       );
       const recipeIds = recipesNeedingAllergens.map(r => r.id);
       const allergensByRecipe = await batchAggregateRecipeAllergens(recipeIds);
-
-      // Enrich recipes with aggregated allergens
       filteredRecipes = filteredRecipes.map(recipe => {
         if (allergensByRecipe[recipe.id]) {
           return { ...recipe, allergens: allergensByRecipe[recipe.id] };
@@ -99,8 +76,6 @@ export async function GET(request: NextRequest) {
         return recipe;
       });
     }
-
-    // Map 'name' column to 'recipe_name' for frontend compatibility
     const mappedRecipes = filteredRecipes.map(recipe => ({
       ...recipe,
       recipe_name: (recipe as any).name || (recipe as any).recipe_name,
@@ -119,7 +94,6 @@ export async function GET(request: NextRequest) {
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipes', method: 'GET' },
     });
-
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
@@ -162,78 +136,52 @@ export async function POST(request: NextRequest) {
 
     const existingRecipe =
       existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
-
+    const recipeData = {
+      yield: dishPortions || 1,
+      yield_unit: yield_unit || 'servings',
+      category: category || 'Uncategorized',
+      description: description || null,
+      instructions: instructions || null,
+    };
     if (existingRecipe && !checkError) {
-      // Update existing recipe
       const { data: updatedRecipe, error: updateError } = await supabaseAdmin
         .from('recipes')
-        .update({
-          yield: dishPortions || 1,
-          yield_unit: yield_unit || 'servings',
-          category: category || 'Uncategorized',
-          description: description || null,
-          instructions: instructions || null,
-          updated_at: new Date().toISOString(),
-        })
+        .update({ ...recipeData, updated_at: new Date().toISOString() })
         .eq('id', existingRecipe.id)
         .select()
         .single();
-
       if (updateError) {
         logger.error('[Recipes API] Database error updating recipe:', {
           error: updateError.message,
           code: (updateError as any).code,
           context: { endpoint: '/api/recipes', operation: 'PUT', recipeId: existingRecipe.id },
         });
-
         const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
         return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
-
-      return NextResponse.json({
-        success: true,
-        recipe: updatedRecipe,
-        isNew: false,
-      });
-    } else {
-      // Create new recipe
-      const { data: newRecipe, error: createError } = await supabaseAdmin
-        .from('recipes')
-        .insert({
-          name: name.trim(),
-          yield: dishPortions || 1,
-          yield_unit: yield_unit || 'servings',
-          category: category || 'Uncategorized',
-          description: description || null,
-          instructions: instructions || null,
-        })
-        .select()
-        .single();
-
-      if (createError) {
-        logger.error('[Recipes API] Database error creating recipe:', {
-          error: createError.message,
-          code: (createError as any).code,
-          context: { endpoint: '/api/recipes', operation: 'POST', recipeName: name },
-        });
-
-        const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
-        return NextResponse.json(apiError, { status: apiError.status || 500 });
-      }
-
-      return NextResponse.json({
-        success: true,
-        recipe: newRecipe,
-        isNew: true,
-      });
+      return NextResponse.json({ success: true, recipe: updatedRecipe, isNew: false });
     }
+    const { data: newRecipe, error: createError } = await supabaseAdmin
+      .from('recipes')
+      .insert({ name: name.trim(), ...recipeData })
+      .select()
+      .single();
+    if (createError) {
+      logger.error('[Recipes API] Database error creating recipe:', {
+        error: createError.message,
+        code: (createError as any).code,
+        context: { endpoint: '/api/recipes', operation: 'POST', recipeName: name },
+      });
+      const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
+    }
+    return NextResponse.json({ success: true, recipe: newRecipe, isNew: true });
   } catch (err) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipes', method: 'POST' },
     });
-
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'

@@ -23,33 +23,24 @@ const RATE_LIMIT_MAX = 5; // 5 batch requests per minute
 function checkRateLimit(userId: string): boolean {
   const now = Date.now();
   const userLimit = rateLimitMap.get(userId);
-
   if (!userLimit || now > userLimit.resetAt) {
     rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
     return true;
   }
-
-  if (userLimit.count >= RATE_LIMIT_MAX) {
-    return false;
-  }
-
+  if (userLimit.count >= RATE_LIMIT_MAX) return false;
   userLimit.count++;
   return true;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
         status: 401,
       });
     }
-
     const userId = session.user.email;
-
-    // Check rate limit
     if (!checkRateLimit(userId)) {
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -74,7 +65,6 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -82,13 +72,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Fetch ingredients without allergens
     const { data: ingredients, error: fetchError } = await supabaseAdmin
       .from('ingredients')
       .select('id, ingredient_name, brand, allergens, allergen_source')
       .in('id', ingredient_ids)
       .or('allergens.is.null,allergens.eq.[]');
-
     if (fetchError) {
       logger.error('[Batch AI Detection] Failed to fetch ingredients:', {
         error: fetchError.message,
@@ -98,7 +86,6 @@ export async function POST(request: NextRequest) {
         { status: 500 },
       );
     }
-
     if (!ingredients || ingredients.length === 0) {
       return NextResponse.json({
         success: true,
@@ -121,11 +108,8 @@ export async function POST(request: NextRequest) {
     let successful = 0;
     let failed = 0;
     let skipped = 0;
-
-    // Process ingredients one by one (to respect rate limits)
     for (const ingredient of ingredients) {
       try {
-        // Check if already has manual allergens
         const hasManualAllergens =
           ingredient.allergens &&
           Array.isArray(ingredient.allergens) &&
@@ -133,29 +117,17 @@ export async function POST(request: NextRequest) {
           ingredient.allergen_source &&
           typeof ingredient.allergen_source === 'object' &&
           (ingredient.allergen_source as { manual?: boolean }).manual;
-
         if (hasManualAllergens) {
           skipped++;
-          results.push({
-            ingredient_id: ingredient.id,
-            status: 'skipped',
-          });
+          results.push({ ingredient_id: ingredient.id, status: 'skipped' });
           continue;
         }
-
-        // Enrich with AI-detected allergens
         const enriched = await enrichIngredientWithAllergens({
           ingredient_name: ingredient.ingredient_name,
           brand: ingredient.brand || undefined,
           allergens: (ingredient.allergens as string[]) || [],
-          allergen_source:
-            (ingredient.allergen_source as {
-              manual?: boolean;
-              ai?: boolean;
-            }) || {},
+          allergen_source: (ingredient.allergen_source as { manual?: boolean; ai?: boolean }) || {},
         });
-
-        // Update ingredient in database
         const { error: updateError } = await supabaseAdmin
           .from('ingredients')
           .update({
@@ -163,19 +135,13 @@ export async function POST(request: NextRequest) {
             allergen_source: enriched.allergen_source,
           })
           .eq('id', ingredient.id);
-
-        if (updateError) {
-          throw updateError;
-        }
-
+        if (updateError) throw updateError;
         successful++;
         results.push({
           ingredient_id: ingredient.id,
           status: 'success',
           allergens: enriched.allergens,
         });
-
-        // Small delay to respect rate limits
         await new Promise(resolve => setTimeout(resolve, 200));
       } catch (err) {
         failed++;

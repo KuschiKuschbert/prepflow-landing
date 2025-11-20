@@ -38,13 +38,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       });
     }
 
-    // Aggregate allergens and dietary status (check cache first)
     const [allergens, dietaryStatus] = await Promise.all([
       aggregateRecipeAllergens(recipeId),
       aggregateRecipeDietaryStatus(recipeId),
     ]);
-
-    // Enrich recipe with allergens and dietary info
     const enrichedRecipe = {
       ...recipe,
       allergens: allergens || [],
@@ -64,7 +61,6 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipes/[id]', method: 'GET' },
     });
-
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
@@ -87,17 +83,10 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const body = await request.json();
     const { name } = body;
 
-    // Validate request
     const validationError = await validateRecipeUpdate(recipeId, name);
     if (validationError) return validationError;
-
-    // Build update data
     const updateData = buildUpdateData(body);
-
-    // Check if ingredients are being updated (which would affect allergens)
     const ingredientsChanged = body.ingredients !== undefined;
-
-    // Update recipe
     const { data: updatedRecipe, error: updateError } = await supabaseAdmin!
       .from('recipes')
       .update(updateData)
@@ -115,8 +104,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
-
-    // Invalidate allergen cache if ingredients changed
     if (ingredientsChanged) {
       Promise.all([
         invalidateRecipeAllergenCache(recipeId),
@@ -136,7 +123,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipes/[id]', method: 'PUT' },
     });
-
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
@@ -164,11 +150,8 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    // Validate deletion
     const validationError = await validateRecipeDelete(recipeId);
     if (validationError) return validationError;
-
-    // Delete recipe and cleanup
     try {
       await deleteRecipeAndCleanup(recipeId);
     } catch (error: any) {
@@ -206,7 +189,6 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipes/[id]', method: 'DELETE' },
     });
-
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
