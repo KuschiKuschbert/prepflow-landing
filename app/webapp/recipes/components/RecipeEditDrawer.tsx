@@ -1,5 +1,4 @@
 'use client';
-
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { EditDrawer } from '@/components/ui/EditDrawer';
 import { useAutosave } from '@/hooks/useAutosave';
@@ -100,7 +99,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     resetForm,
     setSaveError: setDataError,
   });
-
   const handleAddIngredientWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleAddIngredient(newIngredient, e);
@@ -127,7 +125,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
   }, [recipe]);
   const entityId = deriveAutosaveId('recipes', recipe?.id, [editedName]);
   const canAutosave = Boolean(editedName && recipe);
-
   const {
     status,
     error: autosaveError,
@@ -143,7 +140,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     },
     enabled: canAutosave && isOpen,
   });
-
   const handleSave = useCallback(async () => {
     if (!recipe || !editedName.trim()) return;
     if (calculations.length === 0) {
@@ -198,7 +194,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     showError,
     handleSaveIngredients,
   ]);
-
   if (!recipe) return null;
   const capitalizeRecipeName = (name: string) => {
     return name
@@ -269,7 +264,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
               }}
             />
           </div>
-
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">Yield Portions</label>
             <input
@@ -278,9 +272,8 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
               value={editedYield}
               onChange={e => setEditedYield(Math.max(1, parseInt(e.target.value) || 1))}
               className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            />
+              />
           </div>
-
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">Instructions</label>
             <textarea
