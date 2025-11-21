@@ -17,6 +17,7 @@ interface LoadMenuDataProps {
   setCategories: React.Dispatch<React.SetStateAction<string[]>>;
   setStatistics: React.Dispatch<React.SetStateAction<MenuStatistics | null>>;
   setLoading: (loading: boolean) => void;
+  showLoading?: boolean; // Whether to show loading state (default: true)
 }
 
 /**
@@ -34,14 +35,21 @@ export async function loadMenuData({
   setCategories,
   setStatistics,
   setLoading,
+  showLoading = true,
 }: LoadMenuDataProps): Promise<void> {
-  setLoading(true);
+  // Check if we have cached data - if so, don't show loading (background refresh)
+  const hasCachedData =
+    getCachedData(menuCacheKey) || getCachedData(dishesCacheKey) || getCachedData(recipesCacheKey);
+
+  if (showLoading && !hasCachedData) {
+    setLoading(true);
+  }
   try {
     const [menuResponse, dishesResponse, recipesResponse, statsResponse] = await Promise.all([
-      fetch(`/api/menus/${menuId}`),
-      fetch('/api/dishes?pageSize=1000'),
-      fetch('/api/recipes?pageSize=1000'),
-      fetch(`/api/menus/${menuId}/statistics`),
+      fetch(`/api/menus/${menuId}`, { cache: 'no-store' }),
+      fetch('/api/dishes?pageSize=1000', { cache: 'no-store' }),
+      fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
+      fetch(`/api/menus/${menuId}/statistics`, { cache: 'no-store' }),
     ]);
     const menuData = await menuResponse.json();
     const dishesData = await dishesResponse.json();
@@ -56,6 +64,9 @@ export async function loadMenuData({
         fullResponse: menuData,
       });
       onError?.(`Failed to load menu: ${menuData.error || menuData.message || 'Unknown error'}`);
+      if (showLoading && !hasCachedData) {
+        setLoading(false);
+      }
       return;
     }
     if (menuData.success) {
@@ -121,7 +132,13 @@ export async function loadMenuData({
     }
   } catch (err) {
     logger.error('Failed to load menu data:', err);
+    if (showLoading && !hasCachedData) {
+      setLoading(false);
+    }
   } finally {
-    setLoading(false);
+    // Only set loading to false if we were showing loading state
+    if (showLoading && !hasCachedData) {
+      setLoading(false);
+    }
   }
 }

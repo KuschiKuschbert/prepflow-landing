@@ -21,6 +21,7 @@ interface MenuItemActionsProps {
   handleMoveToCategory: (category: string) => void;
   reorderDropdownRef: React.RefObject<HTMLDivElement | null>;
   categoryDropdownRef: React.RefObject<HTMLDivElement | null>;
+  reorderButtonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**
@@ -46,6 +47,7 @@ export function MenuItemActions({
   handleMoveToCategory,
   reorderDropdownRef,
   categoryDropdownRef,
+  reorderButtonRef,
 }: MenuItemActionsProps) {
   return (
     <div className="desktop:opacity-0 desktop:group-hover:opacity-100 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
@@ -57,6 +59,7 @@ export function MenuItemActions({
         isFirst={isFirst}
         isLast={isLast}
         dropdownRef={reorderDropdownRef}
+        buttonRef={reorderButtonRef}
       />
 
       {onMoveToCategory && (

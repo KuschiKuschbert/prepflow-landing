@@ -15,12 +15,10 @@ export interface PopulateResults {
 export { populateBasicData } from './basic-data';
 export { populateTemperatureData } from './temperature-data';
 export { populateCleaningData } from './cleaning-data';
-export {
-  populateComplianceData,
-  populateMenuDishes,
-  populateKitchenSections,
-  populateSalesData,
-} from './other-data';
+export { populateComplianceData, populateKitchenSections, populateSalesData } from './other-data';
+export { populateMenuDishes } from './menu-dishes-data';
+export { populateDishes } from './dishes-data';
+export { populateMenus } from './menus-data';
 
 /**
  * Clean up existing test data
@@ -29,12 +27,20 @@ export async function cleanExistingData(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
 ): Promise<number> {
   const tablesToClean = [
+    // Child tables first (due to foreign key constraints)
     'temperature_logs',
     'recipe_ingredients',
+    'dish_ingredients',
+    'dish_recipes',
+    'menu_items',
     'prep_list_items',
     'order_list_items',
     'compliance_records',
+    'sales_data',
+    // Parent tables
     'menu_dishes',
+    'dishes',
+    'menus',
     'ingredients',
     'recipes',
     'temperature_equipment',

@@ -98,10 +98,11 @@ export default function TemperatureChartLazy({
               y1={Math.min(equipment.min_temp_celsius, equipment.max_temp_celsius)}
               y2={Math.max(equipment.min_temp_celsius, equipment.max_temp_celsius)}
               fill="#29E7CD"
-              fillOpacity={0.15}
+              fillOpacity={0.2}
               stroke="#29E7CD"
               strokeDasharray="5 5"
-              strokeOpacity={0.4}
+              strokeOpacity={0.5}
+              strokeWidth={1}
               ifOverflow="extendDomain"
             />
             {typeof yAxisMax === 'number' && yAxisMax > equipment.max_temp_celsius && (
@@ -150,15 +151,16 @@ export default function TemperatureChartLazy({
           <ReferenceLine
             y={equipment.min_temp_celsius}
             stroke="#29E7CD"
-            strokeWidth={2}
-            strokeDasharray="4 4"
-            strokeOpacity={0.7}
+            strokeWidth={3}
+            strokeDasharray="6 4"
+            strokeOpacity={0.9}
             label={{
               value: `Min: ${equipment.min_temp_celsius}°C`,
               position: 'right',
               fill: '#29E7CD',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 'bold',
+              offset: 10,
             }}
             ifOverflow="extendDomain"
           />
@@ -167,15 +169,16 @@ export default function TemperatureChartLazy({
           <ReferenceLine
             y={equipment.max_temp_celsius}
             stroke="#29E7CD"
-            strokeWidth={2}
-            strokeDasharray="4 4"
-            strokeOpacity={0.7}
+            strokeWidth={3}
+            strokeDasharray="6 4"
+            strokeOpacity={0.9}
             label={{
               value: `Max: ${equipment.max_temp_celsius}°C`,
               position: 'right',
               fill: '#29E7CD',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 'bold',
+              offset: 10,
             }}
             ifOverflow="extendDomain"
           />

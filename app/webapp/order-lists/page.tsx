@@ -8,6 +8,7 @@ import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { MenuIngredientsTable } from './components/MenuIngredientsTable';
+import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 
 interface Menu {
   id: string;
@@ -43,13 +44,19 @@ interface MenuIngredientsResponse {
 }
 
 export default function OrderListsPage() {
-  const [menus, setMenus] = useState<Menu[]>([]);
+  // Initialize with cached data for instant display
+  const [menus, setMenus] = useState<Menu[]>(() => getCachedData('order_lists_menus') || []);
   const [selectedMenuId, setSelectedMenuId] = useState<string>('');
   const [ingredientsData, setIngredientsData] = useState<MenuIngredientsResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!getCachedData('order_lists_menus'));
   const [loadingIngredients, setLoadingIngredients] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'storage' | 'name' | 'category'>('storage');
+
+  // Prefetch APIs on mount
+  useEffect(() => {
+    prefetchApi('/api/menus');
+  }, []);
 
   // Fetch menus on mount
   useEffect(() => {
@@ -72,6 +79,7 @@ export default function OrderListsPage() {
       if (result.success && result.menus) {
         const menusList = result.menus as Menu[];
         setMenus(menusList);
+        cacheData('order_lists_menus', menusList);
 
         // Default to most recently created menu
         if (menusList.length > 0) {
@@ -101,6 +109,8 @@ export default function OrderListsPage() {
       if (result.success) {
         setIngredientsData(result);
         setError(null);
+        // Cache ingredients data for this menu
+        cacheData(`order_lists_ingredients_${menuId}_${sort}`, result);
       } else {
         const errorMsg = result.message || result.error || 'Failed to fetch menu ingredients';
         setError(errorMsg);

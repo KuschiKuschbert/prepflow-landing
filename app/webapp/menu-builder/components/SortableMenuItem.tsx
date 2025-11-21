@@ -56,6 +56,7 @@ export function SortableMenuItem({
   const itemRef = useRef<HTMLDivElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const reorderButtonRef = useRef<HTMLButtonElement>(null);
 
   const {
     showCategoryDropdown,
@@ -83,6 +84,7 @@ export function SortableMenuItem({
     item,
     onHoverItem,
     onMouseMove,
+    reorderButtonRef,
   });
 
   // Don't apply transform when dragging - let DragOverlay handle the visual representation
@@ -105,51 +107,57 @@ export function SortableMenuItem({
   };
 
   return (
-    <div
-      ref={node => {
-        setNodeRef(node);
-        itemRef.current = node;
-      }}
-      data-sortable-id={item.id}
-      style={style}
-      onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={e => handleMouseLeave(e, tooltipRef)}
-      className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50"
-    >
-      <MenuItemContent item={item} />
+    <div className="relative">
+      {/* Vertical divider on top */}
+      <div className="absolute top-0 right-4 left-4 z-10 h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent" />
 
-      <MenuItemActions
-        onRemove={onRemove}
-        onMoveUp={onMoveUp}
-        onMoveDown={onMoveDown}
-        onMoveToCategory={onMoveToCategory}
-        availableCategories={availableCategories}
-        currentCategory={currentCategory}
-        isFirst={isFirst}
-        isLast={isLast}
-        showReorderDropdown={showReorderDropdown}
-        setShowReorderDropdown={setShowReorderDropdown}
-        showCategoryDropdown={showCategoryDropdown}
-        setShowCategoryDropdown={setShowCategoryDropdown}
-        handleMoveToCategory={handleMoveToCategory}
-        reorderDropdownRef={reorderDropdownRef}
-        categoryDropdownRef={categoryDropdownRef}
-      />
-
-      <MenuItemTooltip
-        item={item}
-        menuId={menuId}
-        isHovered={isHovered}
-        mousePosition={mousePosition}
-        tooltipRef={tooltipRef}
-        anchorElement={itemRef.current}
-        setIsHovered={setIsHovered}
-        setMousePosition={setMousePosition}
-        onHoverItem={onHoverItem}
+      <div
+        ref={node => {
+          setNodeRef(node);
+          itemRef.current = node;
+        }}
+        data-sortable-id={item.id}
+        style={style}
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
-      />
+        onMouseLeave={e => handleMouseLeave(e, tooltipRef)}
+        className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50"
+      >
+        <MenuItemContent item={item} />
+
+        <MenuItemActions
+          onRemove={onRemove}
+          onMoveUp={onMoveUp}
+          onMoveDown={onMoveDown}
+          onMoveToCategory={onMoveToCategory}
+          availableCategories={availableCategories}
+          currentCategory={currentCategory}
+          isFirst={isFirst}
+          isLast={isLast}
+          showReorderDropdown={showReorderDropdown}
+          setShowReorderDropdown={setShowReorderDropdown}
+          showCategoryDropdown={showCategoryDropdown}
+          setShowCategoryDropdown={setShowCategoryDropdown}
+          handleMoveToCategory={handleMoveToCategory}
+          reorderDropdownRef={reorderDropdownRef}
+          categoryDropdownRef={categoryDropdownRef}
+          reorderButtonRef={reorderButtonRef}
+        />
+
+        <MenuItemTooltip
+          item={item}
+          menuId={menuId}
+          isHovered={isHovered}
+          mousePosition={mousePosition}
+          tooltipRef={tooltipRef}
+          anchorElement={itemRef.current}
+          setIsHovered={setIsHovered}
+          setMousePosition={setMousePosition}
+          onHoverItem={onHoverItem}
+          onMouseMove={handleMouseMove}
+        />
+      </div>
     </div>
   );
 }

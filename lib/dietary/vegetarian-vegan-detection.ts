@@ -4,6 +4,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 
 export interface DietaryDetectionResult {
   isVegetarian: boolean;
@@ -157,13 +158,19 @@ export function isNonVegetarianIngredient(ingredientName: string, category?: str
 /**
  * Check if an ingredient is non-vegan
  * Uses allergens array if available (milk, eggs)
+ * Handles allergen consolidation and case-insensitive checking
  */
 export function isNonVeganIngredient(ingredientName: string, allergens?: string[]): boolean {
   const lowerName = ingredientName.toLowerCase();
 
   // Check allergens first (most reliable)
   if (allergens && Array.isArray(allergens)) {
-    if (allergens.includes('milk') || allergens.includes('eggs')) {
+    // Consolidate allergens to handle old codes (e.g., 'dairy' → 'milk')
+    const consolidated = consolidateAllergens(allergens);
+
+    // Check for milk or eggs (case-insensitive, but codes should be lowercase)
+    const lowerAllergens = consolidated.map(a => a.toLowerCase());
+    if (lowerAllergens.includes('milk') || lowerAllergens.includes('eggs')) {
       return true;
     }
   }
@@ -174,37 +181,53 @@ export function isNonVeganIngredient(ingredientName: string, allergens?: string[
 
 /**
  * Detect vegetarian/vegan suitability from ingredients (non-AI approach)
+ * Also checks recipe/dish name for meat/fish keywords
  */
 export function detectVegetarianVeganFromIngredients(
   ingredients: Ingredient[],
+  recipeOrDishName?: string,
 ): DietaryDetectionResult {
-  if (!ingredients || ingredients.length === 0) {
-    return {
-      isVegetarian: true,
-      isVegan: true,
-      confidence: 'high',
-      reason: 'No ingredients specified',
-      method: 'non-ai',
-    };
-  }
-
   let hasNonVegetarian = false;
   let hasNonVegan = false;
   const reasons: string[] = [];
 
+  // First, check the recipe/dish name for non-vegetarian keywords
+  // This catches cases where ingredients might not have clear meat names
+  if (recipeOrDishName) {
+    const nameIsNonVeg = isNonVegetarianIngredient(recipeOrDishName);
+    if (nameIsNonVeg) {
+      hasNonVegetarian = true;
+      reasons.push(`Recipe/dish name "${recipeOrDishName}" contains meat/fish keywords`);
+    }
+  }
+
+  if (!ingredients || ingredients.length === 0) {
+    // No ingredients - return based on name check or default to vegetarian/vegan
+    return {
+      isVegetarian: !hasNonVegetarian,
+      isVegan: !hasNonVegan && !hasNonVegetarian,
+      confidence: hasNonVegetarian ? 'high' : 'medium',
+      reason: hasNonVegetarian ? reasons.join('; ') : 'No ingredients specified',
+      method: 'non-ai',
+    };
+  }
+
+  // Check ingredients for non-vegetarian/vegan items
   ingredients.forEach(ingredient => {
     const name = ingredient.ingredient_name || '';
     const category = ingredient.category || '';
     const allergens = ingredient.allergens || [];
 
     // Check for non-vegetarian ingredients
-    if (isNonVegetarianIngredient(name, category)) {
+    const isNonVeg = isNonVegetarianIngredient(name, category);
+    if (isNonVeg) {
       hasNonVegetarian = true;
       reasons.push(`${name} contains meat/fish`);
     }
 
     // Check for non-vegan ingredients
-    if (isNonVeganIngredient(name, allergens)) {
+    const isNonVeganIng = isNonVeganIngredient(name, allergens);
+    if (isNonVeganIng) {
       hasNonVegan = true;
       if (!hasNonVegetarian) {
         // Only add reason if it's not already non-vegetarian
@@ -215,6 +238,18 @@ export function detectVegetarianVeganFromIngredients(
 
   const isVegetarian = !hasNonVegetarian;
   const isVegan = !hasNonVegan && isVegetarian;
+
+  // Log detection results for debugging
+  logger.dev('[Dietary Detection] Detection result:', {
+    recipeOrDishName,
+    ingredientCount: ingredients.length,
+    ingredientNames: ingredients.map(i => i.ingredient_name),
+    hasNonVegetarian,
+    hasNonVegan,
+    isVegetarian,
+    isVegan,
+    reasons,
+  });
 
   // Determine confidence based on ingredient clarity
   let confidence: 'high' | 'medium' | 'low' = 'high';
@@ -246,7 +281,7 @@ export async function detectVegetarianVeganWithAI(
 
   if (!isAIEnabled()) {
     logger.warn('[Dietary Detection] AI not enabled, falling back to non-AI detection');
-    return detectVegetarianVeganFromIngredients(ingredients);
+    return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
 
   const client = getOpenAIClient();
@@ -254,7 +289,7 @@ export async function detectVegetarianVeganWithAI(
     logger.warn(
       '[Dietary Detection] OpenAI client not available, falling back to non-AI detection',
     );
-    return detectVegetarianVeganFromIngredients(ingredients);
+    return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
 
   try {
@@ -316,7 +351,7 @@ Respond in JSON format:
   } catch (err) {
     logger.error('[Dietary Detection] AI detection failed:', err);
     // Fallback to non-AI detection
-    return detectVegetarianVeganFromIngredients(ingredients);
+    return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
 }
 
@@ -331,8 +366,8 @@ export async function detectDietarySuitability(
   description?: string,
   useAI?: boolean,
 ): Promise<DietaryDetectionResult> {
-  // First try non-AI detection
-  const nonAIResult = detectVegetarianVeganFromIngredients(ingredients);
+  // First try non-AI detection (includes name check)
+  const nonAIResult = detectVegetarianVeganFromIngredients(ingredients, recipeName);
 
   // If confidence is high and user didn't request AI, return non-AI result
   if (nonAIResult.confidence === 'high' && !useAI) {

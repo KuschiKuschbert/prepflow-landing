@@ -20,6 +20,39 @@ export async function handleIngredientInsert(
   normalized: any,
   originalIngredientData: any,
 ): Promise<{ data: any; error: InsertError | null }> {
+  // Automatically detect allergens if not manually set (same logic as createIngredient)
+  const isManuallySet =
+    normalized.allergen_source &&
+    typeof normalized.allergen_source === 'object' &&
+    normalized.allergen_source.manual === true;
+
+  if (!isManuallySet && normalized.ingredient_name) {
+    try {
+      const { enrichIngredientWithAllergensHybrid } = await import(
+        '@/lib/allergens/hybrid-allergen-detection'
+      );
+      const enriched = await enrichIngredientWithAllergensHybrid({
+        ingredient_name: normalized.ingredient_name,
+        brand: normalized.brand || undefined,
+        allergens: (normalized.allergens as string[]) || [],
+        allergen_source:
+          (normalized.allergen_source as {
+            manual?: boolean;
+            ai?: boolean;
+          }) || {},
+      });
+
+      normalized.allergens = enriched.allergens;
+      normalized.allergen_source = enriched.allergen_source;
+    } catch (err) {
+      // Don't fail insertion if allergen detection fails
+      logger.warn('[handleIngredientInsert] Failed to auto-detect allergens:', {
+        error: err instanceof Error ? err.message : String(err),
+        ingredient_name: normalized.ingredient_name,
+      });
+    }
+  }
+
   const { data, error } = await supabase.from('ingredients').insert([normalized]).select();
 
   if (error) {

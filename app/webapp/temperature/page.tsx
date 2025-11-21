@@ -3,7 +3,7 @@
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
 import TemperatureLogsTab from './components/TemperatureLogsTab';
@@ -17,6 +17,11 @@ import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
 import { logger } from '@/lib/logger';
 function TemperatureLogsPageContent() {
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('logs');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const {
     logs,
@@ -97,30 +102,32 @@ function TemperatureLogsPageContent() {
               newLog={newLog}
               setNewLog={setNewLog}
               onAddLog={handleAddLog}
-              onRefreshLogs={() => {}}
+              onRefreshLogs={handleRefreshLogs}
               isLoading={logsLoading}
             />
-            <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-gray-400">
-                Page {page} of {totalPages} ({total} items)
-              </span>
-              <div className="space-x-2">
-                <button
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page <= 1}
-                  className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
-                >
-                  Prev
-                </button>
-                <button
-                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                  disabled={page >= totalPages}
-                  className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
-                >
-                  Next
-                </button>
+            {isMounted && (
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-sm text-gray-400">
+                  Page {page} of {totalPages} ({total} items)
+                </span>
+                <div className="space-x-2">
+                  <button
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    disabled={page <= 1}
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                    disabled={page >= totalPages}
+                    className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
 

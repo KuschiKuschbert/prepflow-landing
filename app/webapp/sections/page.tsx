@@ -9,6 +9,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { UtensilsCrossed, Edit, Trash2, X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 interface KitchenSection {
   id: string;
   name: string;
@@ -30,8 +31,13 @@ interface MenuDish {
 
 export default function DishSectionsPage() {
   const { t } = useTranslation();
-  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>([]);
-  const [menuDishes, setMenuDishes] = useState<MenuDish[]>([]);
+  // Initialize with cached data for instant display
+  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>(
+    () => getCachedData('kitchen_sections') || [],
+  );
+  const [menuDishes, setMenuDishes] = useState<MenuDish[]>(
+    () => getCachedData('menu_dishes') || [],
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -42,6 +48,11 @@ export default function DishSectionsPage() {
     color: '#29E7CD',
   });
   const userId = 'user-123';
+
+  // Prefetch APIs on mount
+  useEffect(() => {
+    prefetchApis([`/api/kitchen-sections?userId=${userId}`, `/api/menu-dishes?userId=${userId}`]);
+  }, [userId]);
 
   useEffect(() => {
     fetchKitchenSections();
@@ -54,7 +65,9 @@ export default function DishSectionsPage() {
       const result = await response.json();
 
       if (result.success) {
-        setKitchenSections(result.data || []);
+        const sections = result.data || [];
+        setKitchenSections(sections);
+        cacheData('kitchen_sections', sections);
         if (result.message && result.instructions) {
           logger.warn('Kitchen sections:', result.message);
           logger.dev('Setup instructions:', result.instructions);
@@ -76,7 +89,9 @@ export default function DishSectionsPage() {
       const result = await response.json();
 
       if (result.success) {
-        setMenuDishes(result.data || []);
+        const dishes = result.data || [];
+        setMenuDishes(dishes);
+        cacheData('menu_dishes', dishes);
         if (result.message && result.instructions) {
           logger.warn('Menu dishes:', result.message);
           logger.dev('Setup instructions:', result.instructions);

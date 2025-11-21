@@ -8,7 +8,7 @@ const CLEANING_AREAS_SELECT = `
   *,
   cleaning_areas (
     id,
-    name,
+    area_name,
     description,
     frequency_days
   )

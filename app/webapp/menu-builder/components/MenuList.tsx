@@ -1,12 +1,15 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { Menu } from '../types';
+import { useNotification } from '@/contexts/NotificationContext';
+import { Menu, MenuItem } from '../types';
 import { EmptyMenuList } from './EmptyMenuList';
 import { useMenuDeletion } from './hooks/useMenuDeletion';
 import { useMenuEditing } from './hooks/useMenuEditing';
 import { MenuCard } from './MenuCard';
+import { printMenu } from '../utils/menuPrintUtils';
+import { logger } from '@/lib/logger';
 
 interface MenuListProps {
   menus: Menu[];
@@ -34,6 +37,20 @@ export default function MenuList({
 }: MenuListProps) {
   const editing = useMenuEditing({ menus, setMenus, onMenuUpdated });
   const deletion = useMenuDeletion({ menus, setMenus, onDeleteMenu });
+  const { showError, showInfo } = useNotification();
+  const [printingMenuId, setPrintingMenuId] = useState<string | null>(null);
+
+  // Debug logging for menu lock status
+  useEffect(() => {
+    const lockedMenus = menus.filter(m => m.is_locked);
+    if (lockedMenus.length > 0) {
+      logger.dev('[MenuList] Locked menus detected', {
+        lockedCount: lockedMenus.length,
+        lockedMenuIds: lockedMenus.map(m => m.id),
+        lockedMenuNames: lockedMenus.map(m => m.menu_name),
+      });
+    }
+  }, [menus]);
 
   // Use ref to access deletion.setMenuToDelete without depending on deletion object
   const deletionRef = useRef(deletion);
@@ -43,6 +60,59 @@ export default function MenuList({
   const handleCancelDelete = useCallback(() => {
     deletionRef.current.setMenuToDelete(null);
   }, []); // Empty deps - use ref for setMenuToDelete
+
+  /**
+   * Handle print menu action.
+   *
+   * Follows prep-lists pattern: synchronous, instant print.
+   * Fetches menu data first, then prints immediately (no AI generation).
+   *
+   * @param {Menu} menu - Menu to print
+   */
+  const handlePrintMenu = useCallback(
+    async (menu: Menu) => {
+      if (printingMenuId === menu.id) {
+        return; // Already printing
+      }
+
+      setPrintingMenuId(menu.id);
+
+      try {
+        // Fetch menu with items (quick fetch, no AI generation)
+        const response = await fetch(`/api/menus/${menu.id}`, { cache: 'no-store' });
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || errorData.message || 'Failed to fetch menu data');
+        }
+
+        const result = await response.json();
+        if (!result.success || !result.menu) {
+          throw new Error(result.error || result.message || 'Failed to load menu');
+        }
+
+        const menuData = result.menu;
+        const menuItems: MenuItem[] = menuData.items || [];
+
+        if (menuItems.length === 0) {
+          showError('This menu has no items to print.');
+          return;
+        }
+
+        // Print immediately (synchronous, instant - same pattern as prep-lists)
+        printMenu(menuData, menuItems);
+      } catch (error) {
+        logger.error('[MenuList] Print error:', error);
+        showError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to print menu. Please check your connection and try again.',
+        );
+      } finally {
+        setPrintingMenuId(null);
+      }
+    },
+    [printingMenuId, showError],
+  );
 
   if (menus.length === 0) {
     return <EmptyMenuList />;
@@ -78,6 +148,7 @@ export default function MenuList({
             onDeleteClick={deletion.handleDeleteClick}
             setEditTitle={editing.setEditTitle}
             setEditDescription={editing.setEditDescription}
+            onPrintClick={handlePrintMenu}
           />
         );
       })}

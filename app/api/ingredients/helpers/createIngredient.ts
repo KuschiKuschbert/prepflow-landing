@@ -27,16 +27,16 @@ export async function createIngredient(ingredientData: any) {
     );
   }
 
-  // Automatically detect allergens if not provided or manually set
-  const hasManualAllergens =
-    normalized.allergens &&
-    Array.isArray(normalized.allergens) &&
-    normalized.allergens.length > 0 &&
+  // Automatically detect allergens if not manually set
+  // Check if allergens are manually set (user explicitly set them)
+  const isManuallySet =
     normalized.allergen_source &&
     typeof normalized.allergen_source === 'object' &&
-    (normalized.allergen_source as { manual?: boolean }).manual;
+    (normalized.allergen_source as { manual?: boolean }).manual === true;
 
-  if (!hasManualAllergens && normalized.ingredient_name) {
+  // Always detect allergens for new ingredients unless they're manually set
+  // This ensures allergens are detected even if the wizard didn't detect them
+  if (!isManuallySet && normalized.ingredient_name) {
     try {
       const enriched = await enrichIngredientWithAllergensHybrid({
         ingredient_name: normalized.ingredient_name,
@@ -57,6 +57,12 @@ export async function createIngredient(ingredientData: any) {
           ingredient_name: normalized.ingredient_name,
           allergens: enriched.allergens,
           method: enriched.method,
+          wasManuallySet: isManuallySet,
+        });
+      } else {
+        logger.dev('[Ingredients API] No allergens detected on create:', {
+          ingredient_name: normalized.ingredient_name,
+          brand: normalized.brand,
         });
       }
     } catch (err) {
@@ -64,8 +70,14 @@ export async function createIngredient(ingredientData: any) {
       logger.warn('[Ingredients API] Failed to auto-detect allergens on create:', {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
+        ingredient_name: normalized.ingredient_name,
       });
     }
+  } else if (isManuallySet) {
+    logger.dev('[Ingredients API] Skipping allergen detection - manually set:', {
+      ingredient_name: normalized.ingredient_name,
+      allergens: normalized.allergens,
+    });
   }
 
   // Insert using admin client (bypasses RLS)

@@ -115,17 +115,33 @@ export async function populateBasicData(
   }
 
   // Recipes - check for existing ones first
-  const { data: existingRecipes } = await supabaseAdmin.from('recipes').select('recipe_name');
+  // Handle both 'name' and 'recipe_name' column names
+  const { data: existingRecipes } = await supabaseAdmin.from('recipes').select('*');
+
+  // Build set of existing recipe names (handle both column names)
   const existingRecipeNames = new Set(
-    (existingRecipes || []).map(r => r.recipe_name?.toLowerCase().trim()).filter(Boolean),
+    (existingRecipes || [])
+      .map(r => {
+        const name = r.recipe_name || r.name;
+        return name?.toLowerCase().trim();
+      })
+      .filter(Boolean),
   );
 
   const recipesToInsert = cleanSampleRecipes
     .filter(r => !existingRecipeNames.has(r.name?.toLowerCase().trim()))
-    .map(r => ({
-      ...r,
-      recipe_name: r.name,
-    }));
+    .map(r => {
+      // Use 'name' column and match API schema (yield and yield_unit)
+      // The API uses yield and yield_unit (see app/api/recipes/route.ts line 140-141)
+      const recipeData: any = {
+        name: r.name, // Primary column name
+        yield: r.yield || 1, // Default to 1 if not provided
+        yield_unit: r.yield_unit || 'servings', // Default to 'servings'
+        instructions: r.instructions || null,
+      };
+      // Don't include prep_time_minutes or cook_time_minutes - they may not exist in all schemas
+      return recipeData;
+    });
 
   let recipesData: any[] | undefined;
   if (recipesToInsert.length > 0) {
@@ -160,8 +176,12 @@ export async function populateBasicData(
     // Create case-insensitive maps for matching
     const recipeMap = new Map<string, string>();
     recipesData.forEach(r => {
-      recipeMap.set(r.recipe_name.toLowerCase().trim(), r.id);
-      recipeMap.set(r.recipe_name, r.id); // Also include exact match
+      // Handle both 'name' and 'recipe_name' columns
+      const name = r.name || r.recipe_name;
+      if (name) {
+        recipeMap.set(name.toLowerCase().trim(), r.id);
+        recipeMap.set(name, r.id); // Also include exact match
+      }
     });
 
     const ingredientMap = new Map<string, string>();

@@ -10,6 +10,7 @@ interface ItemStatistics {
   gross_profit: number;
   gross_profit_margin: number;
   food_cost_percent: number;
+  cogs_error?: string; // Optional error message if COGS calculation failed
 }
 
 interface MenuItemTooltipContentProps {
@@ -34,8 +35,19 @@ export function MenuItemTooltipContent({
     return <div className="text-xs text-red-400 transition-opacity duration-200">{error}</div>;
   }
   if (!statistics) return null;
+
+  // Show error message if COGS calculation failed
+  const hasCogsError = statistics.cogs_error != null;
+  const hasValidCogs = statistics.cogs > 0 || !hasCogsError;
+
   return (
     <div className="space-y-3 transition-opacity duration-200">
+      {hasCogsError && (
+        <div className="mb-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-2">
+          <div className="text-xs font-medium text-yellow-400">⚠️ Calculation Warning</div>
+          <div className="mt-1 text-xs text-yellow-300/80">{statistics.cogs_error}</div>
+        </div>
+      )}
       {statistics.actual_selling_price != null ? (
         <>
           <div className="mb-2 border-b border-[#2a2a2a] pb-2">
@@ -51,7 +63,13 @@ export function MenuItemTooltipContent({
                 </div>
               )}
           </div>
-          <StatisticsGrid statistics={statistics} />
+          {hasValidCogs ? (
+            <StatisticsGrid statistics={statistics} />
+          ) : (
+            <div className="text-xs text-gray-400">
+              Unable to calculate profit metrics - missing cost data
+            </div>
+          )}
         </>
       ) : statistics.recommended_selling_price != null ? (
         <>
@@ -64,10 +82,24 @@ export function MenuItemTooltipContent({
               ${statistics.recommended_selling_price.toFixed(2)}
             </div>
           </div>
-          <RecommendedPriceGrid statistics={statistics} />
+          {hasValidCogs ? (
+            <RecommendedPriceGrid statistics={statistics} />
+          ) : (
+            <div className="text-xs text-gray-400">
+              Unable to calculate profit metrics - missing cost data
+            </div>
+          )}
         </>
       ) : (
-        <StatisticsGrid statistics={statistics} />
+        <>
+          {hasValidCogs ? (
+            <StatisticsGrid statistics={statistics} />
+          ) : (
+            <div className="text-xs text-gray-400">
+              Unable to calculate statistics - missing cost or price data
+            </div>
+          )}
+        </>
       )}
     </div>
   );

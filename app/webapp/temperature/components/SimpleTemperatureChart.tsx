@@ -61,11 +61,10 @@ export default function SimpleTemperatureChart({
     <div className="tablet:p-6 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
       <div
         ref={chartContainerRef}
-        className="relative w-full"
+        className="relative w-full overflow-visible"
         style={{
-          height: height ? `${height}px` : '200px',
-          minHeight: height ? `${height}px` : '200px',
-          maxHeight: height ? `${height}px` : '300px',
+          height: height ? `${height}px` : '300px',
+          minHeight: height ? `${height}px` : '300px',
         }}
       >
         {chartData.length > 0 ? (

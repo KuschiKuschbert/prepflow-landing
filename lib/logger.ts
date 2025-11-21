@@ -39,13 +39,13 @@ export const logger = {
     console.error(`[ERROR] ${formatted}`);
   },
 
-  warn: (message: string, context?: ErrorContext): void => {
+  warn: (message: string, context?: ErrorContext | unknown): void => {
     const entry = createLogEntry('warn', message, context);
     const formatted = formatLogEntry(entry);
     console.warn(`[WARN] ${formatted}`);
   },
 
-  info: (message: string, context?: ErrorContext): void => {
+  info: (message: string, context?: ErrorContext | unknown): void => {
     if (isDev) {
       const entry = createLogEntry('info', message, context);
       const formatted = formatLogEntry(entry);

@@ -1,3 +1,7 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
 export interface TemperatureFiltersProps {
   selectedDate: string;
   setSelectedDate: (date: string) => void;
@@ -19,8 +23,53 @@ export function TemperatureFilters({
   onAddClick,
   t,
 }: TemperatureFiltersProps) {
-  const getTypeIcon = (type: string) =>
-    temperatureTypes.find(tt => tt.value === type)?.icon || '🌡️';
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only render equipment options after mount to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  /**
+   * Gets the icon for a given equipment type.
+   * Uses a deterministic lookup to prevent hydration mismatches.
+   * Normalizes the type comparison to ensure consistency between server and client.
+   */
+  const getTypeIcon = (type: string): string => {
+    if (!type) return '🌡️';
+    // Normalize type for comparison (trim and lowercase)
+    const normalizedType = type.trim().toLowerCase();
+    const matched = temperatureTypes.find(
+      tt => tt.value.toLowerCase() === normalizedType || tt.value === type,
+    );
+    return matched?.icon || '🌡️';
+  };
+
+  /**
+   * Validates and normalizes a date string to ensure it's valid.
+   * Returns a valid date string in YYYY-MM-DD format, or today's date if invalid.
+   */
+  const getValidDate = (dateString: string): string => {
+    if (!dateString) {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    return date.toISOString().split('T')[0];
+  };
+
+  /**
+   * Safely adjusts the selected date by the specified number of days.
+   */
+  const adjustDate = (days: number) => {
+    const validDate = getValidDate(selectedDate);
+    const currentDate = new Date(validDate);
+    currentDate.setDate(currentDate.getDate() + days);
+    setSelectedDate(currentDate.toISOString().split('T')[0]);
+  };
 
   return (
     <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
@@ -31,11 +80,7 @@ export function TemperatureFilters({
           </label>
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => {
-                const currentDate = new Date(selectedDate);
-                currentDate.setDate(currentDate.getDate() - 1);
-                setSelectedDate(currentDate.toISOString().split('T')[0]);
-              }}
+              onClick={() => adjustDate(-1)}
               className="flex items-center justify-center rounded-xl bg-[#2a2a2a] px-3 py-2 text-white transition-all duration-200 hover:bg-[#3a3a3a]"
               title="Previous day"
             >
@@ -43,16 +88,12 @@ export function TemperatureFilters({
             </button>
             <input
               type="date"
-              value={selectedDate}
+              value={getValidDate(selectedDate)}
               onChange={e => setSelectedDate(e.target.value)}
               className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             />
             <button
-              onClick={() => {
-                const currentDate = new Date(selectedDate);
-                currentDate.setDate(currentDate.getDate() + 1);
-                setSelectedDate(currentDate.toISOString().split('T')[0]);
-              }}
+              onClick={() => adjustDate(1)}
               className="flex items-center justify-center rounded-xl bg-[#2a2a2a] px-3 py-2 text-white transition-all duration-200 hover:bg-[#3a3a3a]"
               title="Next day"
             >
@@ -79,13 +120,22 @@ export function TemperatureFilters({
             className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
           >
             <option value="all">{t('temperature.allEquipment', 'All Equipment')}</option>
-            {equipment
-              .filter(eq => eq.is_active)
-              .map((item, index) => (
-                <option key={item.id ?? `eq-${index}`} value={item.equipment_type}>
-                  {getTypeIcon(item.equipment_type)} {item.name}
-                </option>
-              ))}
+            {isMounted &&
+              equipment
+                .filter(eq => eq.is_active)
+                .map((item, index) => {
+                  // Create a unique key combining id, name, and index to prevent duplicates
+                  const uniqueKey =
+                    item.id !== undefined
+                      ? `eq-${item.id}-${item.name}-${index}`
+                      : `eq-${item.name}-${item.equipment_type}-${index}`;
+                  const icon = getTypeIcon(item.equipment_type);
+                  return (
+                    <option key={uniqueKey} value={item.equipment_type}>
+                      {icon} {item.name}
+                    </option>
+                  );
+                })}
             {temperatureTypes
               .filter(
                 type =>

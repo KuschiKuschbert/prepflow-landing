@@ -55,7 +55,7 @@ export function EquipmentDrawerChartSection({
   }
 
   return (
-    <div style={{ height: `${chartHeight}px` }}>
+    <div className="w-full" style={{ minHeight: `${chartHeight}px`, height: `${chartHeight}px` }}>
       <SimpleTemperatureChart
         logs={logs}
         equipment={equipment}

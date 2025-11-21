@@ -7,6 +7,7 @@ import {
   detectCountryFromLocale,
   COUNTRY_CONFIGS,
 } from '@/lib/country-config';
+import { logger } from '@/lib/logger';
 
 interface CountryContextType {
   selectedCountry: string;
@@ -49,7 +50,9 @@ export function CountryProvider({ children }: CountryProviderProps) {
             }
           }
         } catch (ipError) {
-          console.warn('IP detection failed, falling back to browser locale:', ipError);
+          logger.warn('[CountryContext] IP detection failed, falling back to browser locale:', {
+            error: ipError instanceof Error ? ipError.message : String(ipError),
+          });
         }
 
         // Fallback to browser locale detection
@@ -57,7 +60,7 @@ export function CountryProvider({ children }: CountryProviderProps) {
         const detectedCountry = detectCountryFromLocale(browserLocale);
         setSelectedCountry(detectedCountry);
       } catch (error) {
-        console.error('Error loading country preference:', error);
+        logger.error('[CountryContext] Error loading country preference:', error);
         setSelectedCountry('AU'); // Default fallback
       } finally {
         setIsLoading(false);
@@ -73,7 +76,7 @@ export function CountryProvider({ children }: CountryProviderProps) {
       try {
         localStorage.setItem('prepflow-country', countryCode);
       } catch (error) {
-        console.error('Error saving country preference:', error);
+        logger.error('[CountryContext] Error saving country preference:', error);
       }
     }
   };

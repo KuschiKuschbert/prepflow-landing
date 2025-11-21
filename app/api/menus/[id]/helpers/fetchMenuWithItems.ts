@@ -4,6 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { calculateRecipeSellingPrice } from '../../[id]/statistics/helpers/calculateRecipeSellingPrice';
 import { calculateDishSellingPrice } from '../../[id]/statistics/helpers/calculateDishSellingPrice';
 import { extractColumnName, logDetailedError } from './fetchMenuWithItems.helpers';
+import { cacheRecommendedPrice } from '../items/[itemId]/helpers/cacheRecommendedPrice';
 
 /**
  * Fetch menu with items.
@@ -492,6 +493,12 @@ export async function fetchMenuWithItems(menuId: string) {
         if (item.dish_id && item.dishes) {
           try {
             recommendedPrice = await calculateDishSellingPrice(item.dishes.id);
+            // Cache the calculated price (non-blocking)
+            if (recommendedPrice != null && recommendedPrice > 0) {
+              cacheRecommendedPrice(menuId, item.id, item).catch(err => {
+                logger.error('[Menus API] Failed to cache dish recommended price:', err);
+              });
+            }
           } catch (err) {
             logger.error('[Menus API] Error calculating dish selling price:', err);
             recommendedPrice = null;
@@ -504,6 +511,12 @@ export async function fetchMenuWithItems(menuId: string) {
             // Divide by recipe yield to get per-serving price (matching frontend calculateRecipePrice logic)
             const recipeYield = item.recipes?.yield || 1;
             recommendedPrice = recipeYield > 0 ? fullRecipePrice / recipeYield : fullRecipePrice;
+            // Cache the calculated price (non-blocking)
+            if (recommendedPrice != null && recommendedPrice > 0) {
+              cacheRecommendedPrice(menuId, item.id, item).catch(err => {
+                logger.error('[Menus API] Failed to cache recipe recommended price:', err);
+              });
+            }
           } catch (err) {
             logger.error('[Menus API] Error calculating recipe selling price:', err);
             recommendedPrice = null;
@@ -561,102 +574,338 @@ export async function fetchMenuWithItems(menuId: string) {
       // Only process dietary/allergen info if columns exist (not in minimal fallback)
       if (!dietaryError && (item.dish_id || item.recipe_id)) {
         if (item.dish_id && item.dishes) {
-          // Use dish allergens/dietary if available, otherwise aggregate
+          // Aggregate allergens - prefer cached for performance, but validate against them
           const dishName = item.dishes.dish_name || 'Unknown Dish';
-          if (item.dishes.allergens !== undefined && item.dishes.allergens !== null) {
-            const normalized = normalizeAllergens(item.dishes.allergens, dishName);
+          const hasCachedAllergens =
+            item.dishes.allergens !== undefined &&
+            item.dishes.allergens !== null &&
+            Array.isArray(item.dishes.allergens) &&
+            item.dishes.allergens.length > 0;
 
-            // Debug logging
-            logger.dev('[Menus API] Dish allergens:', {
+          if (hasCachedAllergens) {
+            // Use cached allergens (faster) but normalize them
+            allergens = normalizeAllergens(item.dishes.allergens, dishName);
+            logger.dev('[Menus API] Using cached dish allergens:', {
               dishName,
-              rawAllergens: item.dishes.allergens,
-              normalized,
-              normalizedCount: normalized.length,
+              allergens,
+              dishId: item.dishes.id,
             });
-
-            if (normalized.length > 0) {
-              allergens = normalized;
-            } else {
-              // Column exists but is empty/null, try to aggregate
-              try {
-                const { aggregateDishAllergens } = await import(
-                  '@/lib/allergens/allergen-aggregation'
-                );
-                allergens = await aggregateDishAllergens(item.dishes.id);
-                logger.dev('[Menus API] Aggregated dish allergens:', {
-                  dishName,
-                  aggregated: allergens,
-                });
-              } catch (err) {
-                logger.warn('[Menus API] Error aggregating dish allergens:', {
-                  error: err instanceof Error ? err.message : String(err),
-                  stack: err instanceof Error ? err.stack : undefined,
-                });
-                allergens = [];
-              }
+          } else {
+            // Only aggregate if no cached allergens exist
+            try {
+              const { aggregateDishAllergens } = await import(
+                '@/lib/allergens/allergen-aggregation'
+              );
+              allergens = await aggregateDishAllergens(item.dishes.id, false); // Don't force
+              logger.dev('[Menus API] Aggregated dish allergens:', {
+                dishName,
+                aggregated: allergens,
+                dishId: item.dishes.id,
+              });
+            } catch (err) {
+              logger.warn('[Menus API] Error aggregating dish allergens:', {
+                error: err instanceof Error ? err.message : String(err),
+                stack: err instanceof Error ? err.stack : undefined,
+              });
+              allergens = [];
             }
           }
-          // Only set dietary fields if they exist in the response
-          if ('is_vegetarian' in item.dishes) {
-            isVegetarian = item.dishes.is_vegetarian ?? null;
-          }
-          if ('is_vegan' in item.dishes) {
-            isVegan = item.dishes.is_vegan ?? null;
-          }
-          if ('dietary_confidence' in item.dishes) {
-            dietaryConfidence = item.dishes.dietary_confidence ?? null;
-          }
-          if ('dietary_method' in item.dishes) {
-            dietaryMethod = item.dishes.dietary_method ?? null;
+          // Always trigger dietary recalculation to ensure fresh data
+          // This fixes stale cached values (e.g., dishes incorrectly marked as vegan)
+          try {
+            const { aggregateDishDietaryStatus } = await import(
+              '@/lib/dietary/dietary-aggregation'
+            );
+            const { consolidateAllergens } = await import('@/lib/allergens/australian-allergens');
+            const dietaryResult = await aggregateDishDietaryStatus(item.dishes.id, false, true);
+            if (dietaryResult) {
+              // Runtime validation: check for conflict between vegan status and allergens
+              let validatedIsVegan = dietaryResult.isVegan;
+              const consolidatedAllergens = consolidateAllergens(allergens || []);
+              if (validatedIsVegan === true) {
+                const hasMilk = consolidatedAllergens.includes('milk');
+                const hasEggs = consolidatedAllergens.includes('eggs');
+                if (hasMilk || hasEggs) {
+                  logger.warn(
+                    '[Menus API] Runtime validation: dish vegan=true but allergens include milk/eggs',
+                    {
+                      dishId: item.dishes.id,
+                      dishName,
+                      allergens: consolidatedAllergens,
+                      hasMilk,
+                      hasEggs,
+                    },
+                  );
+                  validatedIsVegan = false;
+                }
+              }
+
+              // Use fresh recalculated values (with validation)
+              logger.dev('[Menus API] Dish dietary recalculation result:', {
+                dishId: item.dishes.id,
+                dishName: dishName,
+                isVegetarian: dietaryResult.isVegetarian,
+                isVegan: validatedIsVegan,
+                wasCorrected: validatedIsVegan !== dietaryResult.isVegan,
+                confidence: dietaryResult.confidence,
+                method: dietaryResult.method,
+              });
+              isVegetarian = dietaryResult.isVegetarian;
+              isVegan = validatedIsVegan;
+              dietaryConfidence = dietaryResult.confidence;
+              dietaryMethod = dietaryResult.method;
+            } else {
+              // Fallback to cached values if recalculation fails
+              // But still validate against allergens
+              const { consolidateAllergens } = await import('@/lib/allergens/australian-allergens');
+              let cachedIsVegan = null;
+              if ('is_vegan' in item.dishes) {
+                cachedIsVegan = item.dishes.is_vegan ?? null;
+              }
+
+              // Validate cached vegan status against allergens
+              if (cachedIsVegan === true) {
+                const consolidatedAllergens = consolidateAllergens(allergens || []);
+                const hasMilk = consolidatedAllergens.includes('milk');
+                const hasEggs = consolidatedAllergens.includes('eggs');
+                if (hasMilk || hasEggs) {
+                  logger.warn(
+                    '[Menus API] Runtime validation: cached dish vegan=true but allergens include milk/eggs',
+                    {
+                      dishId: item.dishes.id,
+                      dishName,
+                      allergens: consolidatedAllergens,
+                      hasMilk,
+                      hasEggs,
+                    },
+                  );
+                  cachedIsVegan = false;
+                }
+              }
+
+              if ('is_vegetarian' in item.dishes) {
+                isVegetarian = item.dishes.is_vegetarian ?? null;
+              }
+              isVegan = cachedIsVegan;
+              if ('dietary_confidence' in item.dishes) {
+                dietaryConfidence = item.dishes.dietary_confidence ?? null;
+              }
+              if ('dietary_method' in item.dishes) {
+                dietaryMethod = item.dishes.dietary_method ?? null;
+              }
+            }
+          } catch (err) {
+            logger.warn(
+              '[Menus API] Error recalculating dish dietary status, using cached values:',
+              {
+                dishId: item.dishes.id,
+                error: err instanceof Error ? err.message : String(err),
+              },
+            );
+            // Fallback to cached values, but validate against allergens
+            const { consolidateAllergens } = await import('@/lib/allergens/australian-allergens');
+            let cachedIsVegan = null;
+            if ('is_vegan' in item.dishes) {
+              cachedIsVegan = item.dishes.is_vegan ?? null;
+            }
+
+            // Validate cached vegan status against allergens
+            if (cachedIsVegan === true) {
+              const consolidatedAllergens = consolidateAllergens(allergens || []);
+              const hasMilk = consolidatedAllergens.includes('milk');
+              const hasEggs = consolidatedAllergens.includes('eggs');
+              if (hasMilk || hasEggs) {
+                logger.warn(
+                  '[Menus API] Runtime validation: cached dish vegan=true but allergens include milk/eggs',
+                  {
+                    dishId: item.dishes.id,
+                    dishName,
+                    allergens: consolidatedAllergens,
+                    hasMilk,
+                    hasEggs,
+                  },
+                );
+                cachedIsVegan = false;
+              }
+            }
+
+            if ('is_vegetarian' in item.dishes) {
+              isVegetarian = item.dishes.is_vegetarian ?? null;
+            }
+            isVegan = cachedIsVegan;
+            if ('dietary_confidence' in item.dishes) {
+              dietaryConfidence = item.dishes.dietary_confidence ?? null;
+            }
+            if ('dietary_method' in item.dishes) {
+              dietaryMethod = item.dishes.dietary_method ?? null;
+            }
           }
         } else if (item.recipe_id && item.recipes) {
-          // Use recipe allergens/dietary if available, otherwise aggregate
+          // Aggregate allergens - prefer cached for performance, but validate against them
           const recipeName = item.recipes.name || item.recipes.recipe_name || 'Unknown Recipe';
-          if (item.recipes.allergens !== undefined && item.recipes.allergens !== null) {
-            const normalized = normalizeAllergens(item.recipes.allergens, recipeName);
+          const hasCachedAllergens =
+            item.recipes.allergens !== undefined &&
+            item.recipes.allergens !== null &&
+            Array.isArray(item.recipes.allergens) &&
+            item.recipes.allergens.length > 0;
 
-            // Debug logging
-            logger.dev('[Menus API] Recipe allergens:', {
+          if (hasCachedAllergens) {
+            // Use cached allergens (faster) but normalize them
+            allergens = normalizeAllergens(item.recipes.allergens, recipeName);
+            logger.dev('[Menus API] Using cached recipe allergens:', {
               recipeName,
-              rawAllergens: item.recipes.allergens,
-              normalized,
-              normalizedCount: normalized.length,
+              allergens,
+              recipeId: item.recipes.id,
             });
-
-            if (normalized.length > 0) {
-              allergens = normalized;
-            } else {
-              // Column exists but is empty/null, try to aggregate
-              try {
-                const { aggregateRecipeAllergens } = await import(
-                  '@/lib/allergens/allergen-aggregation'
-                );
-                allergens = await aggregateRecipeAllergens(item.recipes.id);
-                logger.dev('[Menus API] Aggregated recipe allergens:', {
-                  recipeName,
-                  aggregated: allergens,
-                });
-              } catch (err) {
-                logger.warn('[Menus API] Error aggregating recipe allergens:', {
-                  error: err instanceof Error ? err.message : String(err),
-                  stack: err instanceof Error ? err.stack : undefined,
-                });
-                allergens = [];
-              }
+          } else {
+            // Only aggregate if no cached allergens exist
+            try {
+              const { aggregateRecipeAllergens } = await import(
+                '@/lib/allergens/allergen-aggregation'
+              );
+              allergens = await aggregateRecipeAllergens(item.recipes.id, false); // Don't force
+              logger.dev('[Menus API] Aggregated recipe allergens:', {
+                recipeName,
+                aggregated: allergens,
+                recipeId: item.recipes.id,
+              });
+            } catch (err) {
+              logger.warn('[Menus API] Error aggregating recipe allergens:', {
+                error: err instanceof Error ? err.message : String(err),
+                stack: err instanceof Error ? err.stack : undefined,
+              });
+              allergens = [];
             }
           }
-          // Only set dietary fields if they exist in the response
-          if ('is_vegetarian' in item.recipes) {
-            isVegetarian = item.recipes.is_vegetarian ?? null;
-          }
-          if ('is_vegan' in item.recipes) {
-            isVegan = item.recipes.is_vegan ?? null;
-          }
-          if ('dietary_confidence' in item.recipes) {
-            dietaryConfidence = item.recipes.dietary_confidence ?? null;
-          }
-          if ('dietary_method' in item.recipes) {
-            dietaryMethod = item.recipes.dietary_method ?? null;
+          // Always trigger dietary recalculation to ensure fresh data
+          // This fixes stale cached values (e.g., recipes incorrectly marked as vegan)
+          try {
+            const { aggregateRecipeDietaryStatus } = await import(
+              '@/lib/dietary/dietary-aggregation'
+            );
+            const { consolidateAllergens } = await import('@/lib/allergens/australian-allergens');
+            const dietaryResult = await aggregateRecipeDietaryStatus(item.recipes.id, false, true);
+            if (dietaryResult) {
+              // Runtime validation: check for conflict between vegan status and allergens
+              let validatedIsVegan = dietaryResult.isVegan;
+              const consolidatedAllergens = consolidateAllergens(allergens || []);
+              if (validatedIsVegan === true) {
+                const hasMilk = consolidatedAllergens.includes('milk');
+                const hasEggs = consolidatedAllergens.includes('eggs');
+                if (hasMilk || hasEggs) {
+                  logger.warn(
+                    '[Menus API] Runtime validation: recipe vegan=true but allergens include milk/eggs',
+                    {
+                      recipeId: item.recipes.id,
+                      recipeName,
+                      allergens: consolidatedAllergens,
+                      hasMilk,
+                      hasEggs,
+                    },
+                  );
+                  validatedIsVegan = false;
+                }
+              }
+
+              // Use fresh recalculated values (with validation)
+              logger.dev('[Menus API] Recipe dietary recalculation result:', {
+                recipeId: item.recipes.id,
+                recipeName: recipeName,
+                isVegetarian: dietaryResult.isVegetarian,
+                isVegan: validatedIsVegan,
+                wasCorrected: validatedIsVegan !== dietaryResult.isVegan,
+                confidence: dietaryResult.confidence,
+                method: dietaryResult.method,
+              });
+              isVegetarian = dietaryResult.isVegetarian;
+              isVegan = validatedIsVegan;
+              dietaryConfidence = dietaryResult.confidence;
+              dietaryMethod = dietaryResult.method;
+            } else {
+              // Fallback to cached values if recalculation fails
+              // But still validate against allergens
+              const { consolidateAllergens } = await import('@/lib/allergens/australian-allergens');
+              let cachedIsVegan = null;
+              if ('is_vegan' in item.recipes) {
+                cachedIsVegan = item.recipes.is_vegan ?? null;
+              }
+
+              // Validate cached vegan status against allergens
+              if (cachedIsVegan === true) {
+                const consolidatedAllergens = consolidateAllergens(allergens || []);
+                const hasMilk = consolidatedAllergens.includes('milk');
+                const hasEggs = consolidatedAllergens.includes('eggs');
+                if (hasMilk || hasEggs) {
+                  logger.warn(
+                    '[Menus API] Runtime validation: cached recipe vegan=true but allergens include milk/eggs',
+                    {
+                      recipeId: item.recipes.id,
+                      recipeName,
+                      allergens: consolidatedAllergens,
+                      hasMilk,
+                      hasEggs,
+                    },
+                  );
+                  cachedIsVegan = false;
+                }
+              }
+
+              if ('is_vegetarian' in item.recipes) {
+                isVegetarian = item.recipes.is_vegetarian ?? null;
+              }
+              isVegan = cachedIsVegan;
+              if ('dietary_confidence' in item.recipes) {
+                dietaryConfidence = item.recipes.dietary_confidence ?? null;
+              }
+              if ('dietary_method' in item.recipes) {
+                dietaryMethod = item.recipes.dietary_method ?? null;
+              }
+            }
+          } catch (err) {
+            logger.warn(
+              '[Menus API] Error recalculating recipe dietary status, using cached values:',
+              {
+                recipeId: item.recipes.id,
+                error: err instanceof Error ? err.message : String(err),
+              },
+            );
+            // Fallback to cached values, but validate against allergens
+            const { consolidateAllergens } = await import('@/lib/allergens/australian-allergens');
+            let cachedIsVegan = null;
+            if ('is_vegan' in item.recipes) {
+              cachedIsVegan = item.recipes.is_vegan ?? null;
+            }
+
+            // Validate cached vegan status against allergens
+            if (cachedIsVegan === true) {
+              const consolidatedAllergens = consolidateAllergens(allergens || []);
+              const hasMilk = consolidatedAllergens.includes('milk');
+              const hasEggs = consolidatedAllergens.includes('eggs');
+              if (hasMilk || hasEggs) {
+                logger.warn(
+                  '[Menus API] Runtime validation: cached recipe vegan=true but allergens include milk/eggs',
+                  {
+                    recipeId: item.recipes.id,
+                    recipeName,
+                    allergens: consolidatedAllergens,
+                    hasMilk,
+                    hasEggs,
+                  },
+                );
+                cachedIsVegan = false;
+              }
+            }
+
+            if ('is_vegetarian' in item.recipes) {
+              isVegetarian = item.recipes.is_vegetarian ?? null;
+            }
+            isVegan = cachedIsVegan;
+            if ('dietary_confidence' in item.recipes) {
+              dietaryConfidence = item.recipes.dietary_confidence ?? null;
+            }
+            if ('dietary_method' in item.recipes) {
+              dietaryMethod = item.recipes.dietary_method ?? null;
+            }
           }
         }
       }
@@ -666,11 +915,35 @@ export async function fetchMenuWithItems(menuId: string) {
         item.recipes.recipe_name = item.recipes.name;
       }
 
+      // Final safety check: validate vegan status against allergens one more time
+      // This catches any edge cases where validation might have been missed
+      const { consolidateAllergens: finalConsolidateAllergens } = await import(
+        '@/lib/allergens/australian-allergens'
+      );
+      const finalAllergens = finalConsolidateAllergens(allergens || []);
+      let finalIsVegan = isVegan;
+      if (finalIsVegan === true) {
+        const hasMilk = finalAllergens.includes('milk');
+        const hasEggs = finalAllergens.includes('eggs');
+        if (hasMilk || hasEggs) {
+          logger.warn('[Menus API] Final validation: vegan=true but allergens include milk/eggs', {
+            itemId: item.id,
+            itemName: item.dish_id
+              ? item.dishes?.dish_name
+              : item.recipes?.recipe_name || item.recipes?.name,
+            allergens: finalAllergens,
+            hasMilk,
+            hasEggs,
+          });
+          finalIsVegan = false;
+        }
+      }
+
       const enrichedItem: any = {
         ...item,
-        allergens,
+        allergens: finalAllergens,
         is_vegetarian: isVegetarian,
-        is_vegan: isVegan,
+        is_vegan: finalIsVegan,
         dietary_confidence: dietaryConfidence,
         dietary_method: dietaryMethod,
       };

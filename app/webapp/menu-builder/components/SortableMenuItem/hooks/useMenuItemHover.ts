@@ -5,6 +5,7 @@ interface UseMenuItemHoverProps {
   item: MenuItem;
   onHoverItem?: (item: MenuItem | null) => void;
   onMouseMove?: (position: { x: number; y: number }) => void;
+  reorderButtonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**
@@ -13,11 +14,35 @@ interface UseMenuItemHoverProps {
  * @param {UseMenuItemHoverProps} props - Hook props
  * @returns {Object} Hover state and handlers
  */
-export function useMenuItemHover({ item, onHoverItem, onMouseMove }: UseMenuItemHoverProps) {
+export function useMenuItemHover({
+  item,
+  onHoverItem,
+  onMouseMove,
+  reorderButtonRef,
+}: UseMenuItemHoverProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number } | undefined>(
     undefined,
   );
+
+  /**
+   * Check if mouse is within exclusion zone (20px) of reorder button.
+   */
+  const isWithinReorderExclusionZone = (mouseX: number, mouseY: number): boolean => {
+    if (!reorderButtonRef?.current) return false;
+
+    const buttonRect = reorderButtonRef.current.getBoundingClientRect();
+    const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+    const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+    // Calculate distance from mouse to button center
+    const distanceX = Math.abs(mouseX - buttonCenterX);
+    const distanceY = Math.abs(mouseY - buttonCenterY);
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    // Exclude if within 20 pixels
+    return distance < 20;
+  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -25,12 +50,31 @@ export function useMenuItemHover({ item, onHoverItem, onMouseMove }: UseMenuItem
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    // Check if mouse is within exclusion zone of reorder button
+    const isInExclusionZone = isWithinReorderExclusionZone(e.clientX, e.clientY);
+
+    if (isInExclusionZone) {
+      // Hide tooltip if within exclusion zone
+      if (isHovered) {
+        setIsHovered(false);
+        onHoverItem?.(null);
+        setMousePosition(undefined);
+      }
+      return;
+    }
+
     // Track mouse position relative to viewport
     setMousePosition({
       x: e.clientX,
       y: e.clientY,
     });
     onMouseMove?.({ x: e.clientX, y: e.clientY });
+
+    // Show tooltip if not already shown and not in exclusion zone
+    if (!isHovered) {
+      setIsHovered(true);
+      onHoverItem?.(item);
+    }
   };
 
   const handleMouseLeave = (

@@ -11,10 +11,14 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { PriceListFormData, Supplier, SupplierFormData, SupplierPriceList } from './types';
 
 import { logger } from '@/lib/logger';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 export default function SuppliersPage() {
   const { t } = useTranslation();
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [priceLists, setPriceLists] = useState<SupplierPriceList[]>([]);
+  // Initialize with cached data for instant display
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => getCachedData('suppliers') || []);
+  const [priceLists, setPriceLists] = useState<SupplierPriceList[]>(
+    () => getCachedData('supplier_price_lists') || [],
+  );
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'suppliers' | 'priceLists'>('suppliers');
   const [showAddSupplier, setShowAddSupplier] = useState(false);
@@ -42,12 +46,18 @@ export default function SuppliersPage() {
     is_current: true,
   });
 
+  // Prefetch APIs on mount
+  useEffect(() => {
+    prefetchApis(['/api/suppliers', '/api/supplier-price-lists']);
+  }, []);
+
   const fetchSuppliers = useCallback(async () => {
     try {
       const response = await fetch('/api/suppliers');
       const data = await response.json();
       if (data.success) {
         setSuppliers(data.data);
+        cacheData('suppliers', data.data);
       }
     } catch (error) {
       logger.error('Error fetching suppliers:', error);
@@ -67,6 +77,10 @@ export default function SuppliersPage() {
       const data = await response.json();
       if (data.success) {
         setPriceLists(data.data);
+        // Cache price lists (only cache when no filter applied for instant display)
+        if (selectedSupplier === 'all') {
+          cacheData('supplier_price_lists', data.data);
+        }
       }
     } catch (error) {
       logger.error('Error fetching price lists:', error);
@@ -88,7 +102,9 @@ export default function SuppliersPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setSuppliers([...suppliers, data.data]);
+        const updatedSuppliers = [...suppliers, data.data];
+        setSuppliers(updatedSuppliers);
+        cacheData('suppliers', updatedSuppliers);
         setNewSupplier({
           name: '',
           contact_person: '',
@@ -121,7 +137,11 @@ export default function SuppliersPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setPriceLists([data.data, ...priceLists]);
+        const updatedPriceLists = [data.data, ...priceLists];
+        setPriceLists(updatedPriceLists);
+        if (selectedSupplier === 'all') {
+          cacheData('supplier_price_lists', updatedPriceLists);
+        }
         setNewPriceList({
           supplier_id: '',
           document_name: '',

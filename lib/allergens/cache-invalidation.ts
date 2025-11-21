@@ -1,10 +1,12 @@
 /**
  * Cache invalidation utilities for allergen and dietary caches
  * Invalidates cached allergens when ingredients, recipes, or dishes change
+ * Also invalidates dietary cache to ensure vegan/vegetarian status is recalculated
  */
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { invalidateDietaryCache } from '@/lib/dietary/dietary-aggregation';
 
 /**
  * Invalidate cached allergens for a specific recipe
@@ -30,6 +32,8 @@ export async function invalidateRecipeAllergenCache(recipeId: string): Promise<v
       });
     } else {
       logger.dev(`[Cache Invalidation] Invalidated allergen cache for recipe ${recipeId}`);
+      // Also invalidate dietary cache when allergens change
+      await invalidateDietaryCache(recipeId, 'recipe');
     }
   } catch (err) {
     logger.error('[Cache Invalidation] Error invalidating recipe allergen cache:', err);
@@ -83,6 +87,8 @@ export async function invalidateRecipesWithIngredient(ingredientId: string): Pro
       logger.dev(
         `[Cache Invalidation] Invalidated allergen cache for ${recipeIds.length} recipes containing ingredient ${ingredientId}`,
       );
+      // Also invalidate dietary cache for all affected recipes
+      await Promise.all(recipeIds.map(id => invalidateDietaryCache(id, 'recipe')));
     }
   } catch (err) {
     logger.error('[Cache Invalidation] Error invalidating recipes with ingredient:', err);
@@ -125,6 +131,8 @@ export async function invalidateDishAllergenCache(dishId: string): Promise<void>
       });
     } else {
       logger.dev(`[Cache Invalidation] Invalidated allergen cache for dish ${dishId}`);
+      // Also invalidate dietary cache when allergens change
+      await invalidateDietaryCache(dishId, 'dish');
     }
   } catch (err) {
     logger.error('[Cache Invalidation] Error invalidating dish allergen cache:', err);
@@ -175,6 +183,8 @@ export async function invalidateDishesWithRecipe(recipeId: string): Promise<void
       logger.dev(
         `[Cache Invalidation] Invalidated allergen cache for ${dishIds.length} dishes containing recipe ${recipeId}`,
       );
+      // Also invalidate dietary cache for all affected dishes
+      await Promise.all(dishIds.map(id => invalidateDietaryCache(id, 'dish')));
     }
   } catch (err) {
     logger.error('[Cache Invalidation] Error invalidating dishes with recipe:', err);
@@ -225,6 +235,8 @@ export async function invalidateDishesWithIngredient(ingredientId: string): Prom
       logger.dev(
         `[Cache Invalidation] Invalidated allergen cache for ${dishIds.length} dishes containing ingredient ${ingredientId}`,
       );
+      // Also invalidate dietary cache for all affected dishes
+      await Promise.all(dishIds.map(id => invalidateDietaryCache(id, 'dish')));
     }
   } catch (err) {
     logger.error('[Cache Invalidation] Error invalidating dishes with ingredient:', err);

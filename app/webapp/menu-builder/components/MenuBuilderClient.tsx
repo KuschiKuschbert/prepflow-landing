@@ -2,6 +2,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 import { AlertCircle, Database, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu } from '../types';
@@ -20,10 +21,21 @@ export default function MenuBuilderClient({
   setSelectedMenu,
   onBack,
 }: MenuBuilderClientProps) {
+  logger.dev('🟡 [MenuBuilderClient] COMPONENT EXECUTING - NEW CODE VERSION', {
+    selectedMenuId: selectedMenu?.id,
+    timestamp: new Date().toISOString(),
+  });
+
   const cachedMenus = getCachedData<Menu[]>('menu_builder_menus');
+  const cachedDbCheck = getCachedData<{ tablesExist: boolean; timestamp: number }>(
+    'menu_builder_db_check',
+  );
   const [menus, setMenus] = useState<Menu[]>(cachedMenus || []);
+  // Only show loading if we have no cached data
   const [loading, setLoading] = useState(!cachedMenus);
-  const [checkingDb, setCheckingDb] = useState(true);
+  // Only check DB if we don't have cached check result or it's expired (5 minutes)
+  const shouldCheckDb = !cachedDbCheck || Date.now() - cachedDbCheck.timestamp > 5 * 60 * 1000;
+  const [checkingDb, setCheckingDb] = useState(shouldCheckDb);
   const [error, setError] = useState<string | null>(null);
   const [dbError, setDbError] = useState<string | null>(null);
   const [showMenuForm, setShowMenuForm] = useState(false);
@@ -36,8 +48,13 @@ export default function MenuBuilderClient({
   onBackRef.current = onBack;
   const hasInitializedRef = useRef(false);
 
-  const fetchMenus = useCallback(async (updateSelected?: boolean) => {
-    setLoading(true);
+  const fetchMenus = useCallback(async (updateSelected?: boolean, showLoading = true) => {
+    logger.dev(
+      `[MenuBuilderClient] fetchMenus CALLED - updateSelected=${updateSelected}, showLoading=${showLoading}`,
+    );
+    if (showLoading) {
+      setLoading(true);
+    }
     setError(null);
     try {
       const response = await fetch('/api/menus', { cache: 'no-store' });
@@ -48,29 +65,61 @@ export default function MenuBuilderClient({
         } else {
           setError(result.error || result.message || 'Failed to fetch menus');
         }
-        setLoading(false);
+        if (showLoading) {
+          setLoading(false);
+        }
       } else {
         const updatedMenus = result.menus || [];
+        logger.dev(`[MenuBuilderClient] fetchMenus SUCCESS - Got ${updatedMenus.length} menus`, {
+          menuIds: updatedMenus.map((m: Menu) => m.id),
+          currentSelectedId: selectedMenuRef.current?.id,
+        });
+
         setMenus(updatedMenus);
         cacheData('menu_builder_menus', updatedMenus);
+
         if (updateSelected && selectedMenuRef.current) {
           const updatedMenu = updatedMenus.find((m: Menu) => m.id === selectedMenuRef.current?.id);
           if (updatedMenu) {
+            logger.dev(`[MenuBuilderClient] fetchMenus - Updating selectedMenu`, {
+              oldMenu: selectedMenuRef.current,
+              newMenu: updatedMenu,
+            });
             setSelectedMenuRef.current(updatedMenu);
           }
         }
 
-        setLoading(false);
+        if (showLoading) {
+          setLoading(false);
+        }
       }
     } catch {
       setError('Failed to fetch menus. Please check your connection and try again.');
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
   }, []);
   useEffect(() => {
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
 
+    // If we have cached DB check result and it's still valid, use it
+    if (cachedDbCheck && Date.now() - cachedDbCheck.timestamp <= 5 * 60 * 1000) {
+      if (!cachedDbCheck.tablesExist) {
+        setDbError('Menu builder tables are not set up. Please run the database migration.');
+      }
+      setCheckingDb(false);
+      // Fetch menus in background if we have cached menus (instant display)
+      if (cachedMenus && cachedMenus.length > 0) {
+        fetchMenus(false, false); // Don't show loading, refresh in background
+      } else {
+        fetchMenus(false, true); // Show loading if no cached menus
+      }
+      return;
+    }
+
+    // Check database in background while showing cached menus
     const checkDatabaseTables = async () => {
       setCheckingDb(true);
       setDbError(null);
@@ -81,6 +130,12 @@ export default function MenuBuilderClient({
         });
         const result = await response.json();
 
+        // Cache the DB check result
+        cacheData('menu_builder_db_check', {
+          tablesExist: result.success && result.tablesExist,
+          timestamp: Date.now(),
+        });
+
         if (!result.success || !result.tablesExist) {
           setDbError(
             result.message ||
@@ -90,7 +145,12 @@ export default function MenuBuilderClient({
           return;
         }
         setCheckingDb(false);
-        await fetchMenus(false);
+        // Fetch menus in background if we have cached menus (instant display)
+        if (cachedMenus && cachedMenus.length > 0) {
+          fetchMenus(false, false); // Don't show loading, refresh in background
+        } else {
+          fetchMenus(false, true); // Show loading if no cached menus
+        }
       } catch {
         setDbError('Failed to check database tables. Please try again.');
         setCheckingDb(false);
@@ -98,7 +158,7 @@ export default function MenuBuilderClient({
     };
 
     checkDatabaseTables();
-  }, [fetchMenus]);
+  }, [fetchMenus, cachedDbCheck, cachedMenus]);
 
   const handleCreateMenu = useCallback(() => {
     setEditingMenu(null);
@@ -139,7 +199,13 @@ export default function MenuBuilderClient({
     });
   }, []);
 
-  const handleMenuUpdated = useCallback(() => fetchMenus(false), [fetchMenus]);
+  const handleMenuUpdated = useCallback(() => {
+    logger.dev(
+      '[MenuBuilderClient] handleMenuUpdated CALLED - Calling fetchMenus with updateSelected=true',
+    );
+    // Update both menus list and selected menu if one is selected
+    fetchMenus(true);
+  }, [fetchMenus]);
   const handleDeleteMenu = useCallback((deletedMenuId: string) => {
     if (selectedMenuRef.current?.id === deletedMenuId) {
       setSelectedMenuRef.current(null);
@@ -185,11 +251,27 @@ export default function MenuBuilderClient({
     checkDatabaseTables();
   }, [fetchMenus]);
   const handleBack = useCallback(() => {
+    logger.dev('[MenuBuilderClient] handleBack CALLED - Refreshing menus list');
     onBackRef.current();
+    // Refresh menus list to show updated lock status and print buttons
     fetchMenus(false);
   }, [fetchMenus]);
 
-  if (checkingDb || loading) {
+  // Log when selectedMenu prop changes
+  useEffect(() => {
+    if (selectedMenu) {
+      logger.dev('[MenuBuilderClient] Rendering MenuEditor with selectedMenu', {
+        menuId: selectedMenu.id,
+        menuName: selectedMenu.menu_name,
+        isLocked: selectedMenu.is_locked,
+        lockedAt: selectedMenu.locked_at,
+      });
+    }
+  }, [selectedMenu]);
+
+  // Only show skeleton if we have no cached data AND are checking/loading
+  // If we have cached menus, show them immediately even while checking DB
+  if ((checkingDb || loading) && (!cachedMenus || cachedMenus.length === 0)) {
     return <PageSkeleton />;
   }
 

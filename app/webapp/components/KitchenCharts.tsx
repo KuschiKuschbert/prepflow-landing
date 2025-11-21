@@ -39,7 +39,7 @@ export default function KitchenCharts() {
       try {
         // Fetch fresh data in parallel
         const [performanceResponse, logsResult] = await Promise.all([
-          fetch('/api/dashboard/performance-summary'),
+          fetch('/api/dashboard/performance-summary?lockedMenuOnly=true'),
           supabase
             .from('temperature_logs')
             .select('log_date')

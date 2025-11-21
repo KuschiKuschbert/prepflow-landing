@@ -1,6 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
+import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 
 /**
  * Save recipe ingredients (with optional update mode).
@@ -8,6 +10,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @param {string} recipeId - Recipe ID
  * @param {Array} ingredients - Ingredients array
  * @param {boolean} isUpdate - If true, delete existing ingredients first
+ * @param {string} recipeName - Recipe name (for change tracking)
+ * @param {string} userEmail - User email (for change tracking)
  * @returns {Promise<Array>} Saved recipe ingredients
  * @throws {Error} If save fails
  */
@@ -15,6 +19,8 @@ export async function saveRecipeIngredients(
   recipeId: string,
   ingredients: any[],
   isUpdate: boolean,
+  recipeName?: string | null,
+  userEmail?: string | null,
 ): Promise<any[]> {
   if (!supabaseAdmin) throw new Error('Database connection not available');
 
@@ -56,6 +62,22 @@ export async function saveRecipeIngredients(
     });
     throw ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
   }
+
+  // Invalidate cached recommended prices for menu items using this recipe (with change tracking)
+  invalidateMenuItemsWithRecipe(
+    recipeId,
+    recipeName || undefined,
+    'ingredients_changed',
+    { field: 'ingredients', change: 'ingredients updated' },
+    userEmail || null,
+  ).catch(err => {
+    logger.error('[Recipes API] Error invalidating menu pricing cache:', err);
+  });
+
+  // Trigger dietary recalculation with force=true to ensure fresh status after ingredients change
+  aggregateRecipeDietaryStatus(recipeId, false, true).catch(err => {
+    logger.error('[Recipes API] Error recalculating dietary status:', err);
+  });
 
   return data || [];
 }

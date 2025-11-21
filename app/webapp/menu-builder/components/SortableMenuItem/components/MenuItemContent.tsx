@@ -5,6 +5,8 @@ import { ChefHat, Utensils } from 'lucide-react';
 import { MenuItem } from '../../../types';
 import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
+import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { logger } from '@/lib/logger';
 
 interface MenuItemContentProps {
   item: MenuItem;
@@ -21,6 +23,32 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
   const isRecipe = !!item.recipe_id;
   const isDish = !!item.dish_id;
 
+  // Final client-side validation: ensure vegan status doesn't conflict with allergens
+  const itemAllergens =
+    item.allergens || (isDish ? item.dishes?.allergens : item.recipes?.allergens) || [];
+  const consolidatedAllergens = consolidateAllergens(itemAllergens);
+  const itemIsVegan = item.is_vegan ?? (isDish ? item.dishes?.is_vegan : item.recipes?.is_vegan);
+
+  // Validate and correct vegan status if it conflicts with allergens
+  let validatedIsVegan = itemIsVegan;
+  if (validatedIsVegan === true && consolidatedAllergens.length > 0) {
+    const hasMilk = consolidatedAllergens.includes('milk');
+    const hasEggs = consolidatedAllergens.includes('eggs');
+    if (hasMilk || hasEggs) {
+      logger.warn(
+        '[MenuItemContent] Final validation: vegan=true but allergens include milk/eggs',
+        {
+          itemId: item.id,
+          itemName: isDish ? item.dishes?.dish_name : item.recipes?.recipe_name,
+          allergens: consolidatedAllergens,
+          hasMilk,
+          hasEggs,
+        },
+      );
+      validatedIsVegan = false; // Correct the conflict
+    }
+  }
+
   return (
     <div className="flex flex-1 items-center gap-2">
       {isDish ? (
@@ -33,17 +61,22 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
           <>
             <div className="font-medium text-white">{item.dishes?.dish_name || 'Unknown Dish'}</div>
             <div className="flex items-baseline gap-2">
-              {item.recommended_selling_price != null && (
-                <div className="text-xs text-gray-500">
-                  Recommended: ${item.recommended_selling_price.toFixed(2)}
-                </div>
-              )}
+              {/* Show "Recommended:" label only if actual price exists and differs from recommended */}
+              {item.actual_selling_price != null &&
+                item.recommended_selling_price != null &&
+                Math.abs(item.actual_selling_price - item.recommended_selling_price) > 0.01 && (
+                  <div className="text-xs text-gray-500">
+                    Recommended: ${item.recommended_selling_price.toFixed(2)}
+                  </div>
+                )}
               <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
                 {item.actual_selling_price != null ? (
                   <>${item.actual_selling_price.toFixed(2)}</>
-                ) : (
-                  item.dishes?.selling_price != null && <>${item.dishes.selling_price.toFixed(2)}</>
-                )}
+                ) : item.dishes?.selling_price != null ? (
+                  <>${item.dishes.selling_price.toFixed(2)}</>
+                ) : item.recommended_selling_price != null ? (
+                  <>${item.recommended_selling_price.toFixed(2)}</>
+                ) : null}
               </div>
             </div>
             {/* Allergens and Dietary Info for Dish */}
@@ -61,7 +94,7 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
                 />
                 <DietaryBadge
                   isVegetarian={item.is_vegetarian ?? item.dishes?.is_vegetarian}
-                  isVegan={item.is_vegan ?? item.dishes?.is_vegan}
+                  isVegan={isDish ? validatedIsVegan : (item.is_vegan ?? item.dishes?.is_vegan)}
                   confidence={item.dietary_confidence || item.dishes?.dietary_confidence}
                   size="sm"
                 />
@@ -74,21 +107,23 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
               {item.recipes?.recipe_name || 'Unknown Recipe'}
             </div>
             <div className="flex items-baseline gap-2">
-              {item.recommended_selling_price != null && (
-                <div className="text-xs text-gray-500">
-                  Recommended: ${item.recommended_selling_price.toFixed(2)}
-                </div>
-              )}
+              {/* Show "Recommended:" label only if actual price exists and differs from recommended */}
+              {item.actual_selling_price != null &&
+                item.recommended_selling_price != null &&
+                Math.abs(item.actual_selling_price - item.recommended_selling_price) > 0.01 && (
+                  <div className="text-xs text-gray-500">
+                    Recommended: ${item.recommended_selling_price.toFixed(2)}
+                  </div>
+                )}
               <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
                 {item.actual_selling_price != null ? (
                   <>${item.actual_selling_price.toFixed(2)}</>
-                ) : (
-                  item.recommended_selling_price != null && (
-                    <>${item.recommended_selling_price.toFixed(2)}</>
-                  )
-                )}
+                ) : item.recommended_selling_price != null ? (
+                  <>${item.recommended_selling_price.toFixed(2)}</>
+                ) : null}
               </div>
-              {item.recommended_selling_price != null && (
+              {/* Show "per serve" only when using recommended price (no actual price set) */}
+              {item.actual_selling_price == null && item.recommended_selling_price != null && (
                 <div className="text-xs text-gray-400">per serve</div>
               )}
             </div>
@@ -107,7 +142,7 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
                 />
                 <DietaryBadge
                   isVegetarian={item.is_vegetarian ?? item.recipes?.is_vegetarian}
-                  isVegan={item.is_vegan ?? item.recipes?.is_vegan}
+                  isVegan={isRecipe ? validatedIsVegan : (item.is_vegan ?? item.recipes?.is_vegan)}
                   confidence={item.dietary_confidence || item.recipes?.dietary_confidence}
                   size="sm"
                 />

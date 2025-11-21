@@ -9,6 +9,8 @@ import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/aust
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import { generateHTML } from './helpers/generateHTML';
 import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
+import { aggregateDishDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -43,7 +45,40 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       });
     }
 
-    const matrixData = (menu.items || []).map((item: MenuItem) => {
+    // Ensure fresh dietary data by triggering recalculation for all recipes/dishes
+    // This ensures the allergen matrix always shows accurate vegan/vegetarian status
+    const dietaryRecalculations = (menu.items || []).map(async (item: MenuItem) => {
+      try {
+        if (item.recipe_id) {
+          // Force recalculation for recipes to ensure fresh dietary status
+          await aggregateRecipeDietaryStatus(item.recipe_id, false, true);
+        } else if (item.dish_id) {
+          // Force recalculation for dishes to ensure fresh dietary status
+          await aggregateDishDietaryStatus(item.dish_id, false, true);
+        }
+      } catch (err) {
+        // Log but don't fail the export if recalculation fails
+        logger.warn('[Allergen Matrix Export] Failed to recalculate dietary status:', {
+          itemId: item.recipe_id || item.dish_id,
+          type: item.recipe_id ? 'recipe' : 'dish',
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    });
+
+    // Wait for all dietary recalculations to complete (in parallel)
+    await Promise.all(dietaryRecalculations);
+
+    // Re-fetch menu with items to get updated dietary status
+    const menuWithFreshData = await fetchMenuWithItems(menuId);
+
+    if (!menuWithFreshData) {
+      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
+    }
+
+    const matrixData = (menuWithFreshData.items || []).map((item: MenuItem) => {
       let allergens: string[] = [];
       if (item.allergens && Array.isArray(item.allergens)) {
         allergens = item.allergens;
@@ -72,9 +107,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         category: item.category,
       };
     });
-    if (format === 'csv') return generateCSV(menu.menu_name, matrixData);
-    if (format === 'pdf') return generateHTML(menu.menu_name, matrixData, true);
-    return generateHTML(menu.menu_name, matrixData, false);
+    if (format === 'csv') return generateCSV(menuWithFreshData.menu_name, matrixData);
+    if (format === 'pdf') return generateHTML(menuWithFreshData.menu_name, matrixData, true);
+    return generateHTML(menuWithFreshData.menu_name, matrixData, false);
   } catch (err) {
     logger.error('[Allergen Matrix Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -106,15 +141,15 @@ function generateCSV(menuName: string, matrixData: any[]): NextResponse {
   ];
   const rows = matrixData.map(item => {
     const allergenColumns = AUSTRALIAN_ALLERGENS.map(allergen =>
-      item.allergens.includes(allergen.code) ? 'Yes' : 'No',
+      item.allergens.includes(allergen.code) ? 'Yes' : '',
     );
     return [
       item.name,
       item.type,
       item.category || '',
       ...allergenColumns,
-      item.isVegetarian ? 'Yes' : 'No',
-      item.isVegan ? 'Yes' : 'No',
+      item.isVegetarian ? 'Yes' : '',
+      item.isVegan ? 'Yes' : '',
     ];
   });
 

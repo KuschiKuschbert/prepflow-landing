@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 import { buildUpdateData } from './helpers/buildUpdateData';
 import { deleteRecipeAndCleanup } from './helpers/deleteRecipeAndCleanup';
 import { validateRecipeDelete } from './helpers/validateRecipeDelete';
@@ -12,6 +13,8 @@ import {
   invalidateRecipeAllergenCache,
   invalidateDishesWithRecipe,
 } from '@/lib/allergens/cache-invalidation';
+import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
+import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -36,17 +39,64 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       });
     }
 
+    // Always aggregate allergens and dietary status (even if cached)
+    // This ensures we have the latest data from ingredients
     const [allergens, dietaryStatus] = await Promise.all([
       aggregateRecipeAllergens(recipeId),
       aggregateRecipeDietaryStatus(recipeId),
     ]);
+
+    // Consolidate allergens for validation
+    const consolidatedAllergens = consolidateAllergens(allergens || []);
+
+    // Runtime validation: check for conflict between vegan status and allergens
+    let validatedIsVegan = dietaryStatus?.isVegan ?? null;
+    if (validatedIsVegan === true) {
+      const hasMilk = consolidatedAllergens.includes('milk');
+      const hasEggs = consolidatedAllergens.includes('eggs');
+      if (hasMilk || hasEggs) {
+        logger.warn(
+          '[Recipes API] Runtime validation: vegan=true but allergens include milk/eggs',
+          {
+            recipeId,
+            recipeName: recipe.recipe_name,
+            allergens: consolidatedAllergens,
+            hasMilk,
+            hasEggs,
+          },
+        );
+        validatedIsVegan = false;
+      }
+    }
+
+    // Update recipe cache with aggregated allergens if they differ
+    if (
+      allergens &&
+      allergens.length > 0 &&
+      (!recipe.allergens || JSON.stringify(recipe.allergens) !== JSON.stringify(allergens))
+    ) {
+      // Update cache in background (don't await)
+      supabaseAdmin
+        .from('recipes')
+        .update({ allergens })
+        .eq('id', recipeId)
+        .then(({ error }) => {
+          if (error) {
+            logger.warn('[Recipes API] Failed to cache aggregated allergens:', {
+              recipeId,
+              error: error.message,
+            });
+          }
+        });
+    }
+
     return NextResponse.json({
       success: true,
       recipe: {
         ...recipe,
-        allergens: allergens || [],
+        allergens: consolidatedAllergens,
         is_vegetarian: dietaryStatus?.isVegetarian ?? null,
-        is_vegan: dietaryStatus?.isVegan ?? null,
+        is_vegan: validatedIsVegan,
         dietary_confidence: dietaryStatus?.confidence ?? null,
         dietary_method: dietaryStatus?.method ?? null,
       },
@@ -81,8 +131,72 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
     const validationError = await validateRecipeUpdate(recipeId, name);
     if (validationError) return validationError;
+
+    // Get user email for change tracking
+    let userEmail: string | null = null;
+    try {
+      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+      userEmail = (token?.email as string) || null;
+    } catch (tokenError) {
+      // Continue without user email if auth fails (for development)
+      logger.warn('[Recipes API] Could not get user email for change tracking:', tokenError);
+    }
+
+    // Fetch current recipe to detect changes
+    let currentRecipe: any = null;
+    try {
+      const { data } = await supabaseAdmin!
+        .from('recipes')
+        .select('recipe_name, yield, instructions')
+        .eq('id', recipeId)
+        .single();
+      currentRecipe = data;
+    } catch (err) {
+      logger.warn('[Recipes API] Could not fetch current recipe for change detection:', err);
+    }
+
     const updateData = buildUpdateData(body);
     const ingredientsChanged = body.ingredients !== undefined;
+    const yieldChanged = body.yield !== undefined;
+
+    // Detect changes
+    const changeDetails: any = {};
+    let changeType = 'updated';
+
+    if (currentRecipe) {
+      if (
+        yieldChanged &&
+        updateData.yield !== undefined &&
+        updateData.yield !== currentRecipe.yield
+      ) {
+        changeType = 'yield_changed';
+        changeDetails.yield = {
+          field: 'yield',
+          before: currentRecipe.yield,
+          after: updateData.yield,
+          change: updateData.yield > currentRecipe.yield ? 'increased' : 'decreased',
+        };
+      }
+
+      if (
+        updateData.instructions !== undefined &&
+        updateData.instructions !== currentRecipe.instructions
+      ) {
+        changeDetails.instructions = {
+          field: 'instructions',
+          change: 'instructions updated',
+        };
+      }
+    }
+
+    if (ingredientsChanged) {
+      changeType = 'ingredients_changed';
+      changeDetails.ingredients = {
+        field: 'ingredients',
+        change: 'ingredients updated',
+      };
+    }
+
     const { data: updatedRecipe, error: updateError } = await supabaseAdmin!
       .from('recipes')
       .update(updateData)
@@ -100,12 +214,28 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
+
+    const recipeName = updatedRecipe.recipe_name || currentRecipe?.recipe_name || 'Unknown Recipe';
+
     if (ingredientsChanged) {
       Promise.all([
         invalidateRecipeAllergenCache(recipeId),
         invalidateDishesWithRecipe(recipeId),
       ]).catch(err => {
         logger.error('[Recipes API] Error invalidating allergen caches:', err);
+      });
+    }
+    // Invalidate cached recommended prices if ingredients or yield changed (affects per-serving price)
+    // Also track changes for locked menus
+    if (ingredientsChanged || yieldChanged) {
+      invalidateMenuItemsWithRecipe(
+        recipeId,
+        recipeName,
+        changeType,
+        changeDetails,
+        userEmail,
+      ).catch(err => {
+        logger.error('[Recipes API] Error invalidating menu pricing cache:', err);
       });
     }
 

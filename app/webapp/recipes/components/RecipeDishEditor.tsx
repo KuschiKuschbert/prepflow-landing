@@ -246,6 +246,11 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                 )}
               </div>
               <div className="border-t border-[#2a2a2a] pt-4">
+                {dataError && (
+                  <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+                    {dataError}
+                  </div>
+                )}
                 <IngredientManager
                   showAddIngredient={showAddIngredient}
                   ingredients={ingredients}
@@ -255,7 +260,10 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                   selectedIngredient={selectedIngredient}
                   highlightedIndex={highlightedIndex}
                   newIngredient={newIngredient}
-                  onToggleAddIngredient={() => setShowAddIngredient(!showAddIngredient)}
+                  onToggleAddIngredient={() => {
+                    setShowAddIngredient(!showAddIngredient);
+                    setError(''); // Clear error when toggling
+                  }}
                   onSearchChange={handleSearchChange}
                   onIngredientSelect={handleIngredientSelect}
                   onKeyDown={e => handleKeyDown(e, filteredIngredients)}

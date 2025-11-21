@@ -1,7 +1,8 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Check, Edit2, Lock, Trash2, X } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import { Check, Edit2, Lock, Printer, Trash2, X } from 'lucide-react';
 import { Menu } from '../types';
 
 interface MenuCardProps {
@@ -25,6 +26,7 @@ interface MenuCardProps {
   onDeleteClick: (menu: Menu) => void;
   setEditTitle: (title: string) => void;
   setEditDescription: (description: string) => void;
+  onPrintClick?: (menu: Menu) => void;
 }
 
 /**
@@ -55,8 +57,18 @@ export function MenuCard({
   onDeleteClick,
   setEditTitle,
   setEditDescription,
+  onPrintClick,
 }: MenuCardProps) {
   const isLocked = menu.is_locked || false;
+
+  // Debug logging for print button visibility
+  if (isLocked) {
+    logger.dev('[MenuCard] Menu is locked, print button should be visible', {
+      menuId: menu.id,
+      menuName: menu.menu_name,
+      hasOnPrintClick: !!onPrintClick,
+    });
+  }
 
   return (
     <div
@@ -225,7 +237,33 @@ export function MenuCard({
       {/* Menu Stats */}
       <div className="flex items-center justify-between text-sm text-gray-500">
         <span>{menu.items_count || 0} dishes</span>
-        <span>{new Date(menu.updated_at).toLocaleDateString()}</span>
+        <div className="flex items-center gap-3">
+          {isLocked && (
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                if (onPrintClick) {
+                  onPrintClick(menu);
+                } else {
+                  logger.warn(
+                    '[MenuCard] Print button clicked but onPrintClick handler not provided',
+                    {
+                      menuId: menu.id,
+                      menuName: menu.menu_name,
+                    },
+                  );
+                }
+              }}
+              className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-xs font-medium text-[#29E7CD] transition-all hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20"
+              aria-label={`Print menu "${menu.menu_name}"`}
+              title="Print menu"
+            >
+              <Icon icon={Printer} size="sm" aria-hidden={true} />
+              <span>Print</span>
+            </button>
+          )}
+          <span>{new Date(menu.updated_at).toLocaleDateString()}</span>
+        </div>
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import IngredientEditDrawer from './IngredientEditDrawer';
 import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
+import { BulkAllergenDetection } from './BulkAllergenDetection';
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -207,6 +208,15 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
       {error && (
         <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
           {error}
+        </div>
+      )}
+      {!hideHeader && (
+        <div className="mb-6 flex justify-end">
+          <BulkAllergenDetection
+            onComplete={() => {
+              refetchIngredients();
+            }}
+          />
         </div>
       )}
       {showAddForm && (

@@ -6,16 +6,22 @@ import { DateRange } from '../types';
 import { calculatePerformanceScore } from './calculatePerformanceScore';
 
 import { logger } from '@/lib/logger';
-export async function fetchPerformanceData(dateRange?: DateRange) {
-  logger.dev('🔄 Fetching performance data from /api/performance...', { dateRange });
+export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly = false) {
+  logger.dev('🔄 Fetching performance data from /api/performance...', {
+    dateRange,
+    lockedMenuOnly,
+  });
 
-  // Build query string with date range parameters
+  // Build query string with date range parameters and menu filter
   const params = new URLSearchParams();
   if (dateRange?.startDate) {
     params.append('startDate', dateRange.startDate.toISOString().split('T')[0]);
   }
   if (dateRange?.endDate) {
     params.append('endDate', dateRange.endDate.toISOString().split('T')[0]);
+  }
+  if (lockedMenuOnly) {
+    params.append('lockedMenuOnly', 'true');
   }
 
   const queryString = params.toString();

@@ -200,21 +200,28 @@ export async function enrichIngredientWithAllergensHybrid(ingredient: {
   confidence?: 'high' | 'medium' | 'low';
   method?: 'non-ai' | 'ai' | 'hybrid';
 }> {
-  const manualAllergens = ingredient.allergens || [];
-  const hasManualAllergens = manualAllergens.length > 0;
+  const existingAllergens = ingredient.allergens || [];
+  // Check if allergens are manually set (not AI-detected)
+  const isManuallySet =
+    ingredient.allergen_source &&
+    typeof ingredient.allergen_source === 'object' &&
+    ingredient.allergen_source.manual === true;
 
-  // If ingredient already has manual allergens, don't use detection
-  if (hasManualAllergens) {
+  // If ingredient has manually set allergens, don't re-detect
+  if (isManuallySet && existingAllergens.length > 0) {
     return {
-      allergens: manualAllergens,
+      allergens: existingAllergens,
       allergen_source: {
         manual: true,
-        ai: false,
+        ai: ingredient.allergen_source?.ai || false,
         non_ai: false,
         hybrid: false,
       },
     };
   }
+
+  // If allergens exist but weren't manually set, we can still re-detect or use existing
+  // But for new ingredients without allergens, always detect
 
   // Use hybrid detection
   const detectionResult = await detectAllergensHybrid(
@@ -223,21 +230,23 @@ export async function enrichIngredientWithAllergensHybrid(ingredient: {
     ingredient.forceAI || false,
   );
 
-  // Merge manual and detected allergens (consolidate and deduplicate)
-  const allAllergens = consolidateAllergens([...manualAllergens, ...detectionResult.allergens]);
+  // Merge existing and detected allergens (consolidate and deduplicate)
+  // If existing allergens were AI-detected, we can re-detect and merge
+  // If no existing allergens, use detected ones
+  const allAllergens = consolidateAllergens([...existingAllergens, ...detectionResult.allergens]);
 
   return {
     allergens: allAllergens,
     allergen_source: {
-      manual: hasManualAllergens,
-      ai: detectionResult.method === 'ai' || detectionResult.method === 'hybrid',
+      manual: isManuallySet ?? false, // Preserve manual flag if it was manually set
+      ai:
+        detectionResult.method === 'ai' ||
+        detectionResult.method === 'hybrid' ||
+        ingredient.allergen_source?.ai ||
+        false,
       non_ai: detectionResult.method === 'non-ai' || detectionResult.method === 'hybrid',
       hybrid: detectionResult.method === 'hybrid',
-      ai_detected_at:
-        (detectionResult.method === 'ai' || detectionResult.method === 'hybrid') &&
-        detectionResult.allergens.length > 0
-          ? new Date().toISOString()
-          : undefined,
+      // ai_detected_at is not part of the allergen_source type, so we don't include it here
     },
     composition: detectionResult.composition,
     confidence: detectionResult.confidence,

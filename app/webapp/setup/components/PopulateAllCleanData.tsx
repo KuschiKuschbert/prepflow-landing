@@ -3,6 +3,7 @@
 import { useCountry } from '@/contexts/CountryContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useEffect, useState } from 'react';
+import { BulkAllergenDetection } from '../../ingredients/components/BulkAllergenDetection';
 
 interface PopulateAllCleanDataProps {
   onDataPopulated?: () => void;
@@ -25,7 +26,7 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
     const confirmed = await showConfirm({
       title: 'Start Fresh?',
       message:
-        'This will wipe your current test data and replace it with fresh ingredients (~95 including consumables), ~14 recipes, sales data, and all the trimmings. Ready to start fresh?',
+        'This will wipe your current test data and replace it with fresh ingredients (~95), ~14 recipes, 24 dishes, 3 menus, sales data, and all the trimmings. Ready to start fresh?',
       variant: 'info',
       confirmLabel: 'Start Fresh',
       cancelLabel: 'Cancel',
@@ -95,6 +96,14 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-[#29E7CD]">✓</span>
+                <span>24 dishes with recipe links (for Menu Builder & Dish Builder)</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-[#29E7CD]">✓</span>
+                <span>3 menus with menu items (Lunch, Dinner, Weekend Specials)</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-[#29E7CD]">✓</span>
                 <span>15-20 suppliers (Australian business names)</span>
               </li>
               <li className="flex items-center space-x-2">
@@ -111,9 +120,21 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-[#29E7CD]">✓</span>
-                <span>All data properly linked (recipes to ingredients, etc.)</span>
+                <span>
+                  All data properly linked (dishes ↔ recipes, menus ↔ dishes/recipes, etc.)
+                </span>
               </li>
             </ul>
+          </div>
+
+          {/* Bulk Allergen Detection */}
+          <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
+            <h4 className="mb-4 text-lg font-semibold text-white">Allergen Detection</h4>
+            <p className="mb-4 text-sm text-gray-400">
+              Detect allergens for ingredients that don&apos;t have them yet. This uses AI and
+              pattern matching to identify allergens from ingredient names and brands.
+            </p>
+            <BulkAllergenDetection />
           </div>
 
           {isProduction && (

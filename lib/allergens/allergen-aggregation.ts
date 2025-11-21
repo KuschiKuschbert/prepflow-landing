@@ -7,12 +7,20 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { getAllergenDisplayName, consolidateAllergens } from './australian-allergens';
+import { invalidateDietaryCache } from '@/lib/dietary/dietary-aggregation';
 
 /**
  * Aggregate allergens for a single recipe
  * Checks cache first, then aggregates from ingredients if needed
+ *
+ * @param {string} recipeId - Recipe ID
+ * @param {boolean} force - Force aggregation even if cached allergens exist
+ * @returns {Promise<string[]>} Aggregated allergens
  */
-export async function aggregateRecipeAllergens(recipeId: string): Promise<string[]> {
+export async function aggregateRecipeAllergens(
+  recipeId: string,
+  force: boolean = false,
+): Promise<string[]> {
   if (!supabaseAdmin) {
     logger.error('[Allergen Aggregation] Supabase admin client not available');
     return [];
@@ -34,8 +42,13 @@ export async function aggregateRecipeAllergens(recipeId: string): Promise<string
       return [];
     }
 
-    // Return cached allergens if available
-    if (recipe?.allergens && Array.isArray(recipe.allergens) && recipe.allergens.length > 0) {
+    // Return cached allergens if available and not forcing
+    if (
+      !force &&
+      recipe?.allergens &&
+      Array.isArray(recipe.allergens) &&
+      recipe.allergens.length > 0
+    ) {
       return recipe.allergens;
     }
 
@@ -70,8 +83,18 @@ export async function aggregateRecipeAllergens(recipeId: string): Promise<string
     const allergenSet = new Set<string>();
     recipeIngredients.forEach(ri => {
       const ingredient = ri.ingredients as { allergens?: string[] } | null;
-      if (ingredient?.allergens && Array.isArray(ingredient.allergens)) {
-        ingredient.allergens.forEach(allergen => allergenSet.add(allergen));
+      // Handle null, undefined, empty arrays, and non-array values gracefully
+      if (
+        ingredient?.allergens &&
+        Array.isArray(ingredient.allergens) &&
+        ingredient.allergens.length > 0
+      ) {
+        ingredient.allergens.forEach(allergen => {
+          // Only add valid string allergens
+          if (typeof allergen === 'string' && allergen.length > 0) {
+            allergenSet.add(allergen);
+          }
+        });
       }
     });
 
@@ -80,6 +103,9 @@ export async function aggregateRecipeAllergens(recipeId: string): Promise<string
 
     // Cache the result
     await supabaseAdmin.from('recipes').update({ allergens }).eq('id', recipeId);
+
+    // Invalidate dietary cache when allergens change (forces recalculation)
+    await invalidateDietaryCache(recipeId, 'recipe');
 
     return allergens;
   } catch (err) {
@@ -130,10 +156,20 @@ export async function batchAggregateRecipeAllergens(
 
     recipeIngredients?.forEach(ri => {
       const ingredient = ri.ingredients as { allergens?: string[] } | null;
-      if (ingredient?.allergens && Array.isArray(ingredient.allergens)) {
+      // Handle null, undefined, empty arrays, and non-array values gracefully
+      if (
+        ingredient?.allergens &&
+        Array.isArray(ingredient.allergens) &&
+        ingredient.allergens.length > 0
+      ) {
         const recipeId = ri.recipe_id as string;
         if (allergensByRecipe[recipeId]) {
-          ingredient.allergens.forEach(allergen => allergensByRecipe[recipeId].add(allergen));
+          ingredient.allergens.forEach(allergen => {
+            // Only add valid string allergens
+            if (typeof allergen === 'string' && allergen.length > 0) {
+              allergensByRecipe[recipeId].add(allergen);
+            }
+          });
         }
       }
     });
@@ -163,6 +199,14 @@ export async function batchAggregateRecipeAllergens(
                   recipeId: update.id,
                   error: error.message,
                 });
+              } else {
+                // Invalidate dietary cache when allergens change
+                invalidateDietaryCache(update.id, 'recipe').catch(err => {
+                  logger.error('[Allergen Aggregation] Failed to invalidate dietary cache:', {
+                    recipeId: update.id,
+                    error: err instanceof Error ? err.message : String(err),
+                  });
+                });
               }
             }),
         ),
@@ -179,8 +223,15 @@ export async function batchAggregateRecipeAllergens(
 /**
  * Aggregate allergens for a single dish
  * Aggregates from both dish recipes and dish ingredients
+ *
+ * @param {string} dishId - Dish ID
+ * @param {boolean} force - Force aggregation even if cached allergens exist
+ * @returns {Promise<string[]>} Aggregated allergens
  */
-export async function aggregateDishAllergens(dishId: string): Promise<string[]> {
+export async function aggregateDishAllergens(
+  dishId: string,
+  force: boolean = false,
+): Promise<string[]> {
   if (!supabaseAdmin) {
     logger.error('[Allergen Aggregation] Supabase admin client not available');
     return [];
@@ -199,8 +250,8 @@ export async function aggregateDishAllergens(dishId: string): Promise<string[]> 
       return [];
     }
 
-    // Return cached allergens if available
-    if (dish?.allergens && Array.isArray(dish.allergens) && dish.allergens.length > 0) {
+    // Return cached allergens if available and not forcing
+    if (!force && dish?.allergens && Array.isArray(dish.allergens) && dish.allergens.length > 0) {
       return dish.allergens;
     }
 
@@ -222,8 +273,14 @@ export async function aggregateDishAllergens(dishId: string): Promise<string[]> 
     if (!recipesError && dishRecipes) {
       dishRecipes.forEach(dr => {
         const recipe = dr.recipes as { allergens?: string[] } | null;
-        if (recipe?.allergens && Array.isArray(recipe.allergens)) {
-          recipe.allergens.forEach(allergen => allergenSet.add(allergen));
+        // Handle null, undefined, empty arrays, and non-array values gracefully
+        if (recipe?.allergens && Array.isArray(recipe.allergens) && recipe.allergens.length > 0) {
+          recipe.allergens.forEach(allergen => {
+            // Only add valid string allergens
+            if (typeof allergen === 'string' && allergen.length > 0) {
+              allergenSet.add(allergen);
+            }
+          });
         }
       });
     }
@@ -244,8 +301,18 @@ export async function aggregateDishAllergens(dishId: string): Promise<string[]> 
     if (!ingredientsError && dishIngredients) {
       dishIngredients.forEach(di => {
         const ingredient = di.ingredients as { allergens?: string[] } | null;
-        if (ingredient?.allergens && Array.isArray(ingredient.allergens)) {
-          ingredient.allergens.forEach(allergen => allergenSet.add(allergen));
+        // Handle null, undefined, empty arrays, and non-array values gracefully
+        if (
+          ingredient?.allergens &&
+          Array.isArray(ingredient.allergens) &&
+          ingredient.allergens.length > 0
+        ) {
+          ingredient.allergens.forEach(allergen => {
+            // Only add valid string allergens
+            if (typeof allergen === 'string' && allergen.length > 0) {
+              allergenSet.add(allergen);
+            }
+          });
         }
       });
     }
@@ -255,6 +322,9 @@ export async function aggregateDishAllergens(dishId: string): Promise<string[]> 
 
     // Cache the result
     await supabaseAdmin.from('dishes').update({ allergens }).eq('id', dishId);
+
+    // Invalidate dietary cache when allergens change (forces recalculation)
+    await invalidateDietaryCache(dishId, 'dish');
 
     return allergens;
   } catch (err) {
@@ -268,4 +338,62 @@ export async function aggregateDishAllergens(dishId: string): Promise<string[]> 
  */
 export function getAllergenDisplayNames(allergenCodes: string[]): string[] {
   return allergenCodes.map(code => getAllergenDisplayName(code));
+}
+
+/**
+ * Extract allergen sources from ingredients
+ * Maps allergen codes to ingredient names
+ *
+ * @param {Array<{ ingredient_name: string; allergens?: string[] }>} ingredients - Array of ingredients with allergen data
+ * @returns {Record<string, string[]>} Map of allergen codes to ingredient names
+ */
+export function extractAllergenSources(
+  ingredients: Array<{ ingredient_name: string; allergens?: string[] }>,
+): Record<string, string[]> {
+  const sources: Record<string, string[]> = {};
+
+  ingredients.forEach(ingredient => {
+    if (!ingredient.allergens || !Array.isArray(ingredient.allergens)) return;
+
+    ingredient.allergens.forEach(allergen => {
+      if (typeof allergen === 'string' && allergen.length > 0) {
+        if (!sources[allergen]) {
+          sources[allergen] = [];
+        }
+        if (!sources[allergen].includes(ingredient.ingredient_name)) {
+          sources[allergen].push(ingredient.ingredient_name);
+        }
+      }
+    });
+  });
+
+  return sources;
+}
+
+/**
+ * Merge allergen sources from multiple sources
+ * Combines multiple allergen source records, deduplicating ingredient names
+ *
+ * @param {...Record<string, string[]>} sources - Multiple allergen source records to merge
+ * @returns {Record<string, string[]>} Merged allergen sources
+ */
+export function mergeAllergenSources(
+  ...sources: Record<string, string[]>[]
+): Record<string, string[]> {
+  const merged: Record<string, string[]> = {};
+
+  sources.forEach(source => {
+    Object.entries(source).forEach(([allergen, ingredientNames]) => {
+      if (!merged[allergen]) {
+        merged[allergen] = [];
+      }
+      ingredientNames.forEach(name => {
+        if (!merged[allergen].includes(name)) {
+          merged[allergen].push(name);
+        }
+      });
+    });
+  });
+
+  return merged;
 }

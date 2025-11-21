@@ -8,6 +8,7 @@ import { Icon } from '@/components/ui/Icon';
 import { UploadForm } from './components/UploadForm';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
+import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 interface AISpecial {
   id: string;
   image_data: string;
@@ -19,13 +20,21 @@ interface AISpecial {
 
 export default function AISpecialsPage() {
   const { t } = useTranslation();
-  const [aiSpecials, setAiSpecials] = useState<AISpecial[]>([]);
+  // Initialize with cached data for instant display
+  const [aiSpecials, setAiSpecials] = useState<AISpecial[]>(
+    () => getCachedData('ai_specials') || [],
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState('');
   const userId = 'user-123';
+
+  // Prefetch API on mount
+  useEffect(() => {
+    prefetchApi(`/api/ai-specials?userId=${userId}`);
+  }, [userId]);
 
   useEffect(() => {
     fetchAISpecials();
@@ -37,6 +46,7 @@ export default function AISpecialsPage() {
       const result = await response.json();
       if (result.success) {
         setAiSpecials(result.data);
+        cacheData('ai_specials', result.data);
       } else {
         setError(result.message || 'Failed to fetch AI specials');
       }
@@ -70,6 +80,7 @@ export default function AISpecialsPage() {
         });
         const result = await response.json();
         if (result.success) {
+          // Refresh list and cache will be updated by fetchAISpecials
           await fetchAISpecials();
           setSelectedFile(null);
           setPrompt('');

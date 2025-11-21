@@ -11,6 +11,7 @@ interface ReorderDropdownProps {
   isFirst: boolean;
   isLast: boolean;
   dropdownRef: React.RefObject<HTMLDivElement | null>;
+  buttonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**
@@ -28,12 +29,14 @@ export function ReorderDropdown({
   isFirst,
   isLast,
   dropdownRef,
+  buttonRef,
 }: ReorderDropdownProps) {
   if (!onMoveUp && !onMoveDown) return null;
 
   return (
     <div ref={dropdownRef} className="relative">
       <button
+        ref={buttonRef}
         onClick={e => {
           e.stopPropagation();
           onToggle();

@@ -2,7 +2,7 @@
  * Hook for fetching par levels and ingredients data.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import type { ParLevel, Ingredient } from '../types';
 
@@ -79,11 +79,18 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
       if (result.success) {
         const items = result.data?.items || result.data || [];
         setIngredients(items);
+        // Cache ingredients for par levels page
+        cacheData('par_levels_ingredients', items);
       }
     } catch (err) {
       logger.error('Failed to fetch ingredients:', err);
     }
   }, []);
+  // Prefetch APIs on mount
+  useEffect(() => {
+    prefetchApis(['/api/par-levels', '/api/ingredients']);
+  }, []);
+
   useEffect(() => {
     fetchParLevels();
     fetchIngredients();

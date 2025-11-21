@@ -45,74 +45,137 @@ export async function calculateMenuStatistics(menuItems: any[]) {
     // Handle dishes
     if (dish) {
       dishCount++;
-      // Price priority: menu_items.actual_selling_price > dish.selling_price > calculated recommended
-      const sellingPrice =
-        item.actual_selling_price ??
-        (dish.selling_price ? parseFloat(dish.selling_price) : null) ??
-        (await calculateDishSellingPrice(dish.id));
+      try {
+        // Price priority: menu_items.actual_selling_price > dish.selling_price > calculated recommended
+        let sellingPrice =
+          item.actual_selling_price ?? (dish.selling_price ? parseFloat(dish.selling_price) : null);
 
-      const dishCost = await calculateDishCost(dish.id);
-      totalCOGS += dishCost || 0;
+        // Calculate recommended price if needed (with error handling)
+        if (sellingPrice == null) {
+          try {
+            sellingPrice = await calculateDishSellingPrice(dish.id);
+          } catch (err) {
+            logger.error('[calculateMenuStatistics] Error calculating dish selling price:', {
+              dish_id: dish.id,
+              error: err,
+            });
+            // Continue without selling price - will skip revenue calculation
+          }
+        }
 
-      // Only add to revenue and calculate margin if we have a valid selling price
-      if (sellingPrice != null && sellingPrice > 0 && !isNaN(sellingPrice)) {
-        totalRevenue += sellingPrice;
-        const grossProfit = sellingPrice - dishCost;
-        const margin = (grossProfit / sellingPrice) * 100;
-        profitMargins.push(margin);
-        logger.dev('[calculateMenuStatistics] Dish processed:', {
+        // Calculate COGS (with error handling)
+        let dishCost = 0;
+        try {
+          dishCost = await calculateDishCost(dish.id);
+        } catch (err) {
+          logger.error('[calculateMenuStatistics] Error calculating dish cost:', {
+            dish_id: dish.id,
+            error: err,
+          });
+          // Continue with 0 COGS - will still calculate other statistics
+        }
+
+        totalCOGS += dishCost || 0;
+
+        // Only add to revenue and calculate margin if we have a valid selling price
+        if (sellingPrice != null && sellingPrice > 0 && !isNaN(sellingPrice)) {
+          totalRevenue += sellingPrice;
+          const grossProfit = sellingPrice - dishCost;
+          const margin = (grossProfit / sellingPrice) * 100;
+          profitMargins.push(margin);
+          logger.dev('[calculateMenuStatistics] Dish processed:', {
+            dish_id: dish.id,
+            sellingPrice,
+            dishCost,
+            grossProfit,
+            margin,
+          });
+        } else {
+          logger.warn('[calculateMenuStatistics] Dish skipped - invalid selling price:', {
+            dish_id: dish.id,
+            sellingPrice,
+            dishCost,
+          });
+        }
+      } catch (err) {
+        logger.error('[calculateMenuStatistics] Unexpected error processing dish:', {
           dish_id: dish.id,
-          sellingPrice,
-          dishCost,
-          grossProfit,
-          margin,
+          error: err,
         });
-      } else {
-        logger.warn('[calculateMenuStatistics] Dish skipped - invalid selling price:', {
-          dish_id: dish.id,
-          sellingPrice,
-          dishCost,
-        });
+        // Continue processing other items instead of failing completely
       }
     }
 
     // Handle recipes - use per-serving price
     if (recipe) {
       recipeCount++;
-      const fullRecipeCost = await calculateRecipeCost(recipe.id, 1);
-      const recipeYield = recipe.yield || 1;
-      const recipeCostPerServing = recipeYield > 0 ? fullRecipeCost / recipeYield : fullRecipeCost;
-      totalCOGS += recipeCostPerServing || 0;
+      try {
+        // Calculate COGS (with error handling)
+        let fullRecipeCost = 0;
+        try {
+          fullRecipeCost = await calculateRecipeCost(recipe.id, 1);
+        } catch (err) {
+          logger.error('[calculateMenuStatistics] Error calculating recipe cost:', {
+            recipe_id: recipe.id,
+            error: err,
+          });
+          // Continue with 0 COGS - will still calculate other statistics
+        }
 
-      // Price priority: menu_items.actual_selling_price > recipe.selling_price (per serving) > calculated recommended (per serving)
-      const fullRecipeRecommendedPrice = await calculateRecipeSellingPrice(recipe.id);
-      const recipeRecommendedPricePerServing =
-        recipeYield > 0 ? fullRecipeRecommendedPrice / recipeYield : fullRecipeRecommendedPrice;
+        const recipeYield = recipe.yield || 1;
+        const recipeCostPerServing =
+          recipeYield > 0 ? fullRecipeCost / recipeYield : fullRecipeCost;
+        totalCOGS += recipeCostPerServing || 0;
 
-      const sellingPrice =
-        item.actual_selling_price ??
-        (recipe.selling_price ? parseFloat(recipe.selling_price) : null) ??
-        recipeRecommendedPricePerServing;
+        // Price priority: menu_items.actual_selling_price > recipe.selling_price (per serving) > calculated recommended (per serving)
+        let sellingPrice =
+          item.actual_selling_price ??
+          (recipe.selling_price ? parseFloat(recipe.selling_price) : null);
 
-      // Only add to revenue and calculate margin if we have a valid selling price
-      if (sellingPrice != null && sellingPrice > 0 && !isNaN(sellingPrice)) {
-        totalRevenue += sellingPrice;
-        const grossProfit = sellingPrice - recipeCostPerServing;
-        const margin = (grossProfit / sellingPrice) * 100;
-        profitMargins.push(margin);
-        logger.dev('[calculateMenuStatistics] Recipe processed:', {
+        // Calculate recommended price if needed (with error handling)
+        if (sellingPrice == null) {
+          try {
+            const fullRecipeRecommendedPrice = await calculateRecipeSellingPrice(recipe.id);
+            const recipeRecommendedPricePerServing =
+              recipeYield > 0
+                ? fullRecipeRecommendedPrice / recipeYield
+                : fullRecipeRecommendedPrice;
+            sellingPrice = recipeRecommendedPricePerServing;
+          } catch (err) {
+            logger.error('[calculateMenuStatistics] Error calculating recipe selling price:', {
+              recipe_id: recipe.id,
+              error: err,
+            });
+            // Continue without selling price - will skip revenue calculation
+          }
+        }
+
+        // Only add to revenue and calculate margin if we have a valid selling price
+        if (sellingPrice != null && sellingPrice > 0 && !isNaN(sellingPrice)) {
+          totalRevenue += sellingPrice;
+          const grossProfit = sellingPrice - recipeCostPerServing;
+          const margin = (grossProfit / sellingPrice) * 100;
+          profitMargins.push(margin);
+          logger.dev('[calculateMenuStatistics] Recipe processed:', {
+            recipe_id: recipe.id,
+            sellingPrice,
+            recipeCostPerServing,
+            grossProfit,
+            margin,
+          });
+        } else {
+          logger.warn('[calculateMenuStatistics] Recipe skipped - invalid selling price:', {
+            recipe_id: recipe.id,
+            sellingPrice,
+            recipeCostPerServing,
+          });
+        }
+      } catch (err) {
+        logger.error('[calculateMenuStatistics] Unexpected error processing recipe:', {
           recipe_id: recipe.id,
-          sellingPrice,
-          recipeCostPerServing,
-          grossProfit,
-          margin,
+          error: err,
         });
-      } else {
-        logger.warn('[calculateMenuStatistics] Recipe skipped - invalid selling price:', {
-          recipe_id: recipe.id,
-          sellingPrice,
-          recipeCostPerServing,
-        });
+        // Continue processing other items instead of failing completely
       }
     }
   }

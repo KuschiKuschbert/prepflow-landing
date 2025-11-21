@@ -5,6 +5,7 @@ import { Ingredient } from '../types';
 import { useIngredientConversion } from './useIngredientConversion';
 import { validateIngredientInput } from './helpers/ingredientValidation';
 import { processIngredientAddition } from './helpers/ingredientProcessing';
+import { logger } from '@/lib/logger';
 
 interface NewIngredient {
   ingredient_id?: string;
@@ -41,8 +42,21 @@ export function useIngredientAddition({
     async (newIngredient: NewIngredient, e?: React.FormEvent) => {
       if (e) e.preventDefault();
 
+      logger.dev('[useIngredientAddition] Attempting to add ingredient:', {
+        ingredient_id: newIngredient.ingredient_id,
+        quantity: newIngredient.quantity,
+        unit: newIngredient.unit,
+      });
+
+      // Clear any previous errors
+      setSaveError('');
+
       // Validate input
       if (!validateIngredientInput(newIngredient, setSaveError)) {
+        logger.warn('[useIngredientAddition] Validation failed:', {
+          ingredient_id: newIngredient.ingredient_id,
+          quantity: newIngredient.quantity,
+        });
         return;
       }
 
@@ -55,9 +69,19 @@ export function useIngredientAddition({
           ing => ing.id === newIngredient.ingredient_id,
         );
         if (!selectedIngredientData) {
-          setSaveError('Ingredient not found');
+          logger.error('[useIngredientAddition] Ingredient not found in list:', {
+            ingredient_id: newIngredient.ingredient_id,
+            availableIngredients: ingredients.length,
+          });
+          setSaveError('Ingredient not found. Please select an ingredient from the list.');
           return;
         }
+
+        logger.dev('[useIngredientAddition] Processing ingredient addition:', {
+          ingredient_name: selectedIngredientData.ingredient_name,
+          quantity: newIngredient.quantity,
+          unit: newIngredient.unit,
+        });
 
         processIngredientAddition({
           newIngredient: {
@@ -74,8 +98,12 @@ export function useIngredientAddition({
           addCalculation,
           resetForm,
         });
+
+        logger.dev('[useIngredientAddition] Ingredient added successfully');
       } catch (err) {
-        setSaveError('Failed to add ingredient');
+        logger.error('[useIngredientAddition] Error adding ingredient:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Failed to add ingredient';
+        setSaveError(`Failed to add ingredient: ${errorMessage}`);
       }
     },
     [

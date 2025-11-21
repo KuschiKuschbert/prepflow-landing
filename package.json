@@ -42,7 +42,8 @@
     "cleanup:report": "node scripts/cleanup.js --report",
     "cleanup:all": "node scripts/cleanup.js --check --fix --report",
     "cleanup:staged": "node scripts/cleanup.js --staged",
-    "pre-deploy": "bash scripts/pre-deploy-check.sh"
+    "pre-deploy": "bash scripts/pre-deploy-check.sh",
+    "find-allergen-conflicts": "node scripts/find-allergen-vegan-conflicts.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

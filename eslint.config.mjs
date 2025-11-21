@@ -12,6 +12,22 @@ export default defineConfig([
       'react-hooks/purity': 'off',
       'react-hooks/refs': 'off',
       'react-hooks/set-state-in-effect': 'off',
+      // Prevent console usage - use logger instead
+      'no-console': 'error',
+    },
+  },
+  {
+    // Allow console in logger.ts (it's the logger implementation)
+    files: ['lib/logger.ts', 'lib/logger/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    // Allow console in scripts (scripts are CLI tools)
+    files: ['scripts/**/*.js', 'scripts/**/*.ts'],
+    rules: {
+      'no-console': 'off',
     },
   },
 ]);

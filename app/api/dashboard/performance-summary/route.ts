@@ -32,11 +32,31 @@ export async function GET(request: NextRequest) {
       endDate: today,
     };
 
-    // Fetch dishes with sales data
-    const { data: dishes, error: dishesError } = await supabaseAdmin
-      .from('menu_dishes')
-      .select(
-        `
+    // Get menu filter from query parameters
+    const { searchParams } = new URL(request.url);
+    const menuIdParam = searchParams.get('menuId');
+    const lockedMenuOnly = searchParams.get('lockedMenuOnly') === 'true';
+
+    // If filtering by locked menu, find the locked menu first
+    let targetMenuId: string | null = menuIdParam || null;
+    if (lockedMenuOnly && !targetMenuId) {
+      const { data: lockedMenu } = await supabaseAdmin
+        .from('menus')
+        .select('id')
+        .eq('is_locked', true)
+        .single();
+
+      if (lockedMenu) {
+        targetMenuId = lockedMenu.id;
+        logger.dev('[Performance Summary API] Filtering by locked menu:', { menuId: targetMenuId });
+      } else {
+        logger.dev('[Performance Summary API] No locked menu found, showing all dishes');
+      }
+    }
+
+    // Build base query
+    let dishesQuery = supabaseAdmin.from('menu_dishes').select(
+      `
         id,
         name,
         selling_price,
@@ -48,8 +68,53 @@ export async function GET(request: NextRequest) {
           date
         )
       `,
-      )
-      .order('created_at', { ascending: false });
+    );
+
+    // Filter by menu if menuId is provided
+    if (targetMenuId) {
+      // Get dish IDs from menu_items for this menu
+      const { data: menuItems, error: menuItemsError } = await supabaseAdmin
+        .from('menu_items')
+        .select('dish_id')
+        .eq('menu_id', targetMenuId)
+        .not('dish_id', 'is', null);
+
+      if (menuItemsError) {
+        logger.error('[Performance Summary API] Error fetching menu items:', menuItemsError);
+        // Continue without filtering if there's an error
+      } else if (menuItems && menuItems.length > 0) {
+        const dishIds = menuItems.map(item => item.dish_id).filter(Boolean) as string[];
+        dishesQuery = dishesQuery.in('id', dishIds);
+        logger.dev('[Performance Summary API] Filtering dishes by menu:', {
+          menuId: targetMenuId,
+          dishCount: dishIds.length,
+        });
+      } else {
+        // No dishes in this menu, return empty result
+        logger.dev('[Performance Summary API] No dishes found in menu:', { menuId: targetMenuId });
+        return NextResponse.json({
+          success: true,
+          topSellers: [],
+          bottomSellers: [],
+          hiddenGems: [],
+          categoryCounts: {
+            chefsKiss: 0,
+            hiddenGem: 0,
+            bargainBucket: 0,
+            burntToast: 0,
+          },
+          dateRange: {
+            startDate: dateRange.startDate.toISOString().split('T')[0],
+            endDate: dateRange.endDate.toISOString().split('T')[0],
+          },
+          filteredByMenu: targetMenuId,
+        });
+      }
+    }
+
+    const { data: dishes, error: dishesError } = await dishesQuery.order('created_at', {
+      ascending: false,
+    });
 
     if (dishesError) {
       logger.error('Error fetching dishes:', dishesError);

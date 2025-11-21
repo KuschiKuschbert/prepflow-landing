@@ -40,12 +40,21 @@ export function useEquipmentLogs({
       setIsLoading(false);
       return;
     }
-    const fetchLogs = async () => {
+    const cacheKey = `equipment_logs_${equipmentName}`;
+    const cachedLogs = getCachedData<TemperatureLog[]>(cacheKey);
+
+    // Optimistic display: Show cached data immediately if available
+    if (cachedLogs && cachedLogs.length > 0) {
+      setLogs(filterLogsByTime(cachedLogs));
+      setIsLoading(false); // Don't show loading if we have cached data
+    } else {
       setIsLoading(true);
-      setError(null);
-      const cacheKey = `equipment_logs_${equipmentName}`;
-      const cachedLogs = getCachedData<TemperatureLog[]>(cacheKey);
-      if (cachedLogs) setLogs(filterLogsByTime(cachedLogs));
+    }
+
+    setError(null);
+
+    // Fetch fresh data in background
+    const fetchLogs = async () => {
       try {
         const locationsToQuery = [
           ...(equipmentLocation ? [equipmentLocation] : []),
@@ -80,11 +89,13 @@ export function useEquipmentLogs({
           logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, {
             queriedLocations: uniqueLocations,
           });
-          setLogs([]);
+          // Only set empty if we didn't have cached data
+          if (!cachedLogs) setLogs([]);
         }
       } catch (err) {
         logger.error('Error fetching equipment logs:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch logs');
+        // Only set empty if we didn't have cached data
         if (!cachedLogs) setLogs([]);
       } finally {
         setIsLoading(false);

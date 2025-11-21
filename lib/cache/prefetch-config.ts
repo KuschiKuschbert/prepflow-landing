@@ -4,24 +4,31 @@
  */
 
 export const PREFETCH_MAP: Record<string, string[]> = {
-  '/webapp': ['/api/dashboard/stats'],
+  '/webapp': [
+    '/api/dashboard/stats',
+    '/api/dashboard/performance-summary',
+    '/api/dashboard/menu-summary',
+    '/api/dashboard/recipe-readiness',
+  ],
   '/webapp/ingredients': ['/api/ingredients'],
   '/webapp/recipes': ['/api/recipes'],
   '/webapp/cogs': [],
   '/webapp/performance': ['/api/performance'],
   '/webapp/temperature': ['/api/temperature-logs'],
-  '/webapp/cleaning': [],
-  '/webapp/compliance': [],
-  '/webapp/suppliers': [],
-  '/webapp/par-levels': [],
-  '/webapp/order-lists': [],
-  '/webapp/sections': [],
+  '/webapp/cleaning': ['/api/cleaning-areas', '/api/cleaning-tasks'],
+  '/webapp/compliance': ['/api/compliance-records', '/api/compliance-types'],
+  '/webapp/suppliers': ['/api/suppliers', '/api/supplier-price-lists'],
+  '/webapp/par-levels': ['/api/par-levels', '/api/ingredients'],
+  '/webapp/order-lists': ['/api/menus'],
+  '/webapp/sections': ['/api/kitchen-sections', '/api/menu-dishes'],
   '/webapp/prep-lists': [
     '/api/prep-lists?userId=user-123&page=1&pageSize=10',
     '/api/kitchen-sections',
     '/api/ingredients?page=1&pageSize=50',
   ],
-  '/webapp/ai-specials': [],
+  '/webapp/ai-specials': ['/api/ai-specials'],
+  '/webapp/dish-builder': ['/api/dishes', '/api/recipes'],
+  '/webapp/menu-builder': ['/api/menus', '/api/dishes?pageSize=1000', '/api/recipes?pageSize=1000'],
   '/webapp/setup': [],
 };
 

@@ -13,6 +13,7 @@ interface EquipmentStatusCardProps {
   isSelected: boolean;
   isCompact: boolean;
   onSelect: () => void;
+  onHover?: () => void;
 }
 
 export function EquipmentStatusCard({
@@ -23,6 +24,7 @@ export function EquipmentStatusCard({
   isSelected,
   isCompact,
   onSelect,
+  onHover,
 }: EquipmentStatusCardProps) {
   const isOutOfRange = status.status === 'out-of-range';
   const needsSetup = status.status === 'no-thresholds';
@@ -30,16 +32,17 @@ export function EquipmentStatusCard({
   return (
     <button
       onClick={onSelect}
-      className={`group relative w-full overflow-hidden rounded-3xl border bg-[#1f1f1f] text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${
+      onMouseEnter={onHover ? () => onHover() : undefined}
+      className={`group relative w-full overflow-hidden rounded-3xl border bg-[#1f1f1f] text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] ${
         isCompact ? 'p-3' : 'p-5'
       } ${
         isSelected
-          ? 'border-[#29E7CD] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/5 ring-2 ring-[#29E7CD]/30'
+          ? 'scale-[1.02] border-[#29E7CD] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/5 ring-2 ring-[#29E7CD]/30'
           : isOutOfRange
-            ? 'border-red-500/50 hover:border-red-500/70 hover:bg-red-500/5'
+            ? 'scale-100 border-red-500/50 ring-0 hover:border-red-500/70 hover:bg-red-500/5'
             : needsSetup
-              ? 'border-yellow-500/50 hover:border-yellow-500/70 hover:bg-yellow-500/5'
-              : 'border-[#2a2a2a] hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5'
+              ? 'scale-100 border-yellow-500/50 ring-0 hover:border-yellow-500/70 hover:bg-yellow-500/5'
+              : 'scale-100 border-[#2a2a2a] ring-0 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5'
       }`}
     >
       {/* Gradient accent on hover */}

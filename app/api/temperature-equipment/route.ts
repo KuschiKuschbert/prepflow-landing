@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { applyQueenslandStandards } from './helpers/applyQueenslandStandards';
+import { detectTemperatureThresholds } from './helpers/detectTemperatureThresholds';
 import { handleTemperatureEquipmentError } from './helpers/handleTemperatureEquipmentError';
 
 export async function GET() {
@@ -54,6 +55,33 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
+    // Automatically detect thresholds if not provided (only if explicitly null/undefined)
+    let minTemp =
+      body.min_temp_celsius !== undefined && body.min_temp_celsius !== null
+        ? body.min_temp_celsius
+        : null;
+    let maxTemp =
+      body.max_temp_celsius !== undefined && body.max_temp_celsius !== null
+        ? body.max_temp_celsius
+        : null;
+
+    // Auto-detect if thresholds are null/undefined
+    if (minTemp === null || maxTemp === null) {
+      const detectedThresholds = detectTemperatureThresholds(body.name, body.equipment_type);
+      if (minTemp === null) {
+        minTemp = detectedThresholds.min_temp_celsius;
+      }
+      if (maxTemp === null) {
+        maxTemp = detectedThresholds.max_temp_celsius;
+      }
+      logger.dev('[Temperature Equipment API] Auto-detected thresholds:', {
+        name: body.name,
+        equipment_type: body.equipment_type,
+        detected: detectedThresholds,
+        applied: { min_temp_celsius: minTemp, max_temp_celsius: maxTemp },
+      });
+    }
+
     const { data, error } = await supabaseAdmin
       .from('temperature_equipment')
       .insert([
@@ -61,8 +89,8 @@ export async function POST(request: NextRequest) {
           name: body.name,
           equipment_type: body.equipment_type,
           location: body.location || null,
-          min_temp_celsius: body.min_temp_celsius || null,
-          max_temp_celsius: body.max_temp_celsius || null,
+          min_temp_celsius: minTemp,
+          max_temp_celsius: maxTemp,
           is_active: body.is_active !== false,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),

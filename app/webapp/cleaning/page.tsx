@@ -11,6 +11,7 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 interface CleaningArea {
   id: number;
   name: string;
@@ -36,7 +37,8 @@ interface CleaningTask {
 
 export default function CleaningRosterPage() {
   const { t } = useTranslation();
-  const [areas, setAreas] = useState<CleaningArea[]>([]);
+  // Initialize with cached data for instant display
+  const [areas, setAreas] = useState<CleaningArea[]>(() => getCachedData('cleaning_areas') || []);
   const [tasks, setTasks] = useState<CleaningTask[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'areas' | 'tasks'>('areas');
@@ -47,24 +49,37 @@ export default function CleaningRosterPage() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const { data: tasksData, isLoading: tasksLoading } = useCleaningTasksQuery(page, pageSize);
+
+  // Prefetch APIs on mount
+  useEffect(() => {
+    prefetchApis(['/api/cleaning-areas', '/api/cleaning-tasks']);
+  }, []);
+
   const fetchAreas = async () => {
     try {
       const response = await fetch('/api/cleaning-areas');
       const data = await response.json();
       if (data.success) {
         setAreas(data.data);
+        cacheData('cleaning_areas', data.data);
       }
     } catch (error) {
       logger.error('Error fetching areas:', error);
     }
   };
   useEffect(() => {
-    setTimeout(() => fetchAreas(), 0);
+    fetchAreas();
   }, []);
   useEffect(() => {
     const td = tasksData as any;
-    if (td?.items) setTimeout(() => setTasks(td.items as any), 0);
-  }, [tasksData]);
+    if (td?.items) {
+      setTasks(td.items as any);
+      // Cache tasks for instant display on next visit
+      if (page === 1) {
+        cacheData('cleaning_tasks_page_1', td.items);
+      }
+    }
+  }, [tasksData, page]);
   const total = (tasksData as any)?.total || 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const handleAddArea = async (e: React.FormEvent) => {
@@ -77,7 +92,9 @@ export default function CleaningRosterPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setAreas([...areas, data.data]);
+        const updatedAreas = [...areas, data.data];
+        setAreas(updatedAreas);
+        cacheData('cleaning_areas', updatedAreas);
         setNewArea({ name: '', description: '', frequency_days: 7 });
         setShowAddArea(false);
       }
@@ -98,7 +115,11 @@ export default function CleaningRosterPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setTasks([data.data, ...tasks]);
+        const updatedTasks = [data.data, ...tasks];
+        setTasks(updatedTasks);
+        if (page === 1) {
+          cacheData('cleaning_tasks_page_1', updatedTasks);
+        }
         setNewTask({ area_id: '', assigned_date: '', notes: '' });
         setShowAddTask(false);
       }
@@ -118,13 +139,15 @@ export default function CleaningRosterPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setTasks(
-          tasks.map(task =>
-            task.id === taskId
-              ? { ...task, status: 'completed', completed_date: data.data.completed_date }
-              : task,
-          ),
+        const updatedTasks = tasks.map(task =>
+          task.id === taskId
+            ? { ...task, status: 'completed' as const, completed_date: data.data.completed_date }
+            : task,
         );
+        setTasks(updatedTasks as CleaningTask[]);
+        if (page === 1) {
+          cacheData('cleaning_tasks_page_1', updatedTasks);
+        }
       }
     } catch (error) {
       logger.error('Error completing task:', error);

@@ -48,7 +48,8 @@ export default function ChefPerformanceInsights() {
       }
 
       try {
-        const response = await fetch('/api/dashboard/performance-summary');
+        // Filter by locked menu if available
+        const response = await fetch('/api/dashboard/performance-summary?lockedMenuOnly=true');
         if (!response.ok) {
           throw new Error('Failed to fetch performance summary');
         }

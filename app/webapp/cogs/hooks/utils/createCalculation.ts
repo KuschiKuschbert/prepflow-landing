@@ -37,7 +37,14 @@ export function createCalculation(
   // For regular ingredients: apply waste/yield
   const wastePercent = ingredientData.trim_peel_waste_percentage || 0;
   const yieldPercent = ingredientData.yield_percentage || 100;
-  const wasteAdjusted = totalCost * (1 + wastePercent / 100);
+
+  // Calculate waste-adjusted cost (if not already included in cost_per_unit_incl_trim)
+  let wasteAdjusted = totalCost;
+  if (!ingredientData.cost_per_unit_incl_trim && wastePercent > 0) {
+    wasteAdjusted = totalCost / (1 - wastePercent / 100);
+  }
+
+  // Calculate yield-adjusted cost (final cost per usable portion)
   const yieldAdjusted = wasteAdjusted / (yieldPercent / 100);
 
   return {

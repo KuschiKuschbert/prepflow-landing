@@ -10,6 +10,8 @@ import {
   populateMenuDishes,
   populateKitchenSections,
   populateSalesData,
+  populateDishes,
+  populateMenus,
 } from '@/lib/populate-helpers';
 
 export async function POST(request: NextRequest) {
@@ -32,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     // Step 2-4: Populate basic data
     logger.dev('📦 Populating basic data...');
-    const { recipesData } = await populateBasicData(supabaseAdmin, results);
+    const { recipesData, ingredientsData } = await populateBasicData(supabaseAdmin, results);
 
     // Step 5-6: Populate temperature data
     logger.dev('🌡️ Populating temperature data...');
@@ -46,15 +48,54 @@ export async function POST(request: NextRequest) {
     logger.dev('📋 Populating compliance data...');
     await populateComplianceData(supabaseAdmin, results);
 
-    // Step 10: Populate menu dishes
-    logger.dev('🍽️ Populating menu dishes...');
+    // Step 10: Populate dishes (new dishes system for Menu Builder & Dish Builder)
+    logger.dev('🍽️ Populating dishes...');
+
+    // Check if dishes table exists
+    const { error: dishesTableError } = await supabaseAdmin.from('dishes').select('id').limit(1);
+    if (dishesTableError && dishesTableError.code === '42P01') {
+      results.errors.push({
+        table: 'dishes',
+        error: 'Dishes table does not exist. Please run menu-builder-schema.sql migration first.',
+      });
+      logger.error('Dishes table does not exist. Run menu-builder-schema.sql migration.');
+    } else if (!recipesData || recipesData.length === 0) {
+      results.errors.push({
+        table: 'dishes',
+        error: 'Cannot create dishes: No recipes available (recipes population failed)',
+      });
+      logger.warn('Skipping dishes population: No recipes available');
+    } else {
+      await populateDishes(supabaseAdmin, results, recipesData || [], ingredientsData || []);
+    }
+
+    // Step 11: Get dishes data for menu population
+    const { data: dishesData } = await supabaseAdmin.from('dishes').select('id, dish_name');
+
+    // Step 12: Populate menus and menu items
+    logger.dev('📋 Populating menus...');
+
+    // Check if menus table exists
+    const { error: menusTableError } = await supabaseAdmin.from('menus').select('id').limit(1);
+    if (menusTableError && menusTableError.code === '42P01') {
+      results.errors.push({
+        table: 'menus',
+        error: 'Menus table does not exist. Please run menu-builder-schema.sql migration first.',
+      });
+      logger.error('Menus table does not exist. Run menu-builder-schema.sql migration.');
+    } else {
+      await populateMenus(supabaseAdmin, results, dishesData || [], recipesData || []);
+    }
+
+    // Step 13: Populate menu dishes (old system for Performance page compatibility)
+    logger.dev('🍽️ Populating menu dishes (legacy)...');
     await populateMenuDishes(supabaseAdmin, results, recipesData || []);
 
-    // Step 11: Populate kitchen sections
+    // Step 14: Populate kitchen sections
     logger.dev('🍽️ Populating kitchen sections...');
     await populateKitchenSections(supabaseAdmin, results);
 
-    // Step 12: Populate sales data (for Performance page)
+    // Step 15: Populate sales data (for Performance page)
     logger.dev('📊 Populating sales data...');
     await populateSalesData(supabaseAdmin, results, recipesData || []);
 

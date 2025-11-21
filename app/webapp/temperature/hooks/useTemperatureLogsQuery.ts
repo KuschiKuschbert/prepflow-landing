@@ -1,6 +1,7 @@
 'use client';
 
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 import { useQuery } from '@tanstack/react-query';
 import { TemperatureLog } from '../types';
 
@@ -34,12 +35,24 @@ export function useTemperatureLogsQuery(
       params.append('page', page.toString());
       params.append('pageSize', pageSize.toString());
 
-      const res = await fetch(`/api/temperature-logs?${params.toString()}`, {
+      const url = `/api/temperature-logs?${params.toString()}`;
+      const res = await fetch(url, {
         cache: 'no-store',
       });
       if (!res.ok) throw new Error('Failed to fetch temperature logs');
       const json = await res.json();
       const data = json.data;
+
+      // Debug logging
+      logger.dev('[useTemperatureLogsQuery] Query result:', {
+        url,
+        params: { date, type, page, pageSize },
+        success: json.success,
+        itemsCount: data?.items?.length || 0,
+        total: data?.total || 0,
+        hasData: !!data,
+      });
+
       // Cache first page for instant display
       if (page === 1 && data?.items) {
         cacheData(cacheKey, data.items);

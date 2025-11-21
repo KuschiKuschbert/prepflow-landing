@@ -6,6 +6,7 @@ import {
   invalidateRecipesWithIngredient,
   invalidateDishesWithIngredient,
 } from '@/lib/allergens/cache-invalidation';
+import { invalidateMenuItemsWithIngredient } from '@/lib/menu-pricing/cache-invalidation';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 
 /**
@@ -13,10 +14,11 @@ import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-alle
  *
  * @param {string} id - Ingredient ID
  * @param {Object} updates - Update data
+ * @param {string} userEmail - User email (for change tracking)
  * @returns {Promise<Object>} Updated ingredient
  * @throws {Error} If update fails
  */
-export async function updateIngredient(id: string, updates: any) {
+export async function updateIngredient(id: string, updates: any, userEmail?: string | null) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Check if allergens are being updated (explicitly or auto-detected)
@@ -118,6 +120,58 @@ export async function updateIngredient(id: string, updates: any) {
     Promise.all([invalidateRecipesWithIngredient(id), invalidateDishesWithIngredient(id)]).catch(
       err => {
         logger.error('[Ingredients API] Error invalidating allergen caches:', err);
+      },
+    );
+  }
+
+  // Invalidate cached recommended prices if cost changed
+  const costChanged =
+    formattedUpdates.cost_per_unit !== undefined ||
+    formattedUpdates.cost_per_unit_as_purchased !== undefined ||
+    formattedUpdates.cost_per_unit_incl_trim !== undefined ||
+    formattedUpdates.trim_peel_waste_percentage !== undefined ||
+    formattedUpdates.yield_percentage !== undefined;
+
+  if (costChanged) {
+    // Build change details
+    const changeDetails: any = {};
+    if (formattedUpdates.cost_per_unit !== undefined) {
+      changeDetails.cost_per_unit = {
+        field: 'cost_per_unit',
+        change: 'cost per unit updated',
+      };
+    }
+    if (formattedUpdates.cost_per_unit_as_purchased !== undefined) {
+      changeDetails.cost_per_unit_as_purchased = {
+        field: 'cost_per_unit_as_purchased',
+        change: 'cost per unit as purchased updated',
+      };
+    }
+    if (formattedUpdates.cost_per_unit_incl_trim !== undefined) {
+      changeDetails.cost_per_unit_incl_trim = {
+        field: 'cost_per_unit_incl_trim',
+        change: 'cost per unit including trim updated',
+      };
+    }
+    if (formattedUpdates.trim_peel_waste_percentage !== undefined) {
+      changeDetails.trim_peel_waste_percentage = {
+        field: 'trim_peel_waste_percentage',
+        change: 'trim/peel/waste percentage updated',
+      };
+    }
+    if (formattedUpdates.yield_percentage !== undefined) {
+      changeDetails.yield_percentage = {
+        field: 'yield_percentage',
+        change: 'yield percentage updated',
+      };
+    }
+
+    const ingredientName = data.ingredient_name || 'Unknown Ingredient';
+
+    // Don't await - run in background
+    invalidateMenuItemsWithIngredient(id, ingredientName, changeDetails, userEmail || null).catch(
+      err => {
+        logger.error('[Ingredients API] Error invalidating menu pricing cache:', err);
       },
     );
   }

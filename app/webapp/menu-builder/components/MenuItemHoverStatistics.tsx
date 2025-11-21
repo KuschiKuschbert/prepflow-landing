@@ -21,6 +21,7 @@ interface ItemStatistics {
   gross_profit: number;
   gross_profit_margin: number;
   food_cost_percent: number;
+  cogs_error?: string; // Optional error message if COGS calculation failed
 }
 const statisticsCache = new Map<
   string,
@@ -97,6 +98,7 @@ export function MenuItemHoverStatistics({
   menuId,
   isVisible,
   mousePosition,
+  anchorElement,
 }: MenuItemHoverStatisticsProps) {
   const [statistics, setStatistics] = useState<ItemStatistics | null>(null);
   const [loading, setLoading] = useState(false);
@@ -122,7 +124,9 @@ export function MenuItemHoverStatistics({
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/menus/${menuId}/items/${item.id}/statistics`);
+        const response = await fetch(`/api/menus/${menuId}/items/${item.id}/statistics`, {
+          credentials: 'include',
+        });
         if (!response.ok) {
           if (response.status === 404) {
             if (retryCount < 1) {
@@ -219,34 +223,94 @@ export function MenuItemHoverStatistics({
       return;
     }
 
+    // Helper function to get position from anchor element if mouse position unavailable
+    const getPositionFromAnchor = (): { x: number; y: number } | null => {
+      if (!anchorElement) return null;
+      const rect = anchorElement.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      };
+    };
+
     let currentPos = mousePosition;
     const updatePosition = (pos?: { x: number; y: number }) => {
-      const position = pos || currentPos || mousePosition;
-      if (!position || typeof position.x !== 'number' || typeof position.y !== 'number') return;
+      // Try to get position from parameter, then currentPos, then mousePosition, then anchorElement
+      let position = pos || currentPos || mousePosition;
+
+      // Fallback to anchor element if mouse position is unavailable
+      if (!position || typeof position.x !== 'number' || typeof position.y !== 'number') {
+        const anchorPos = getPositionFromAnchor();
+        position = anchorPos || undefined;
+      }
+
+      // If still no valid position, don't update
+      if (!position || typeof position.x !== 'number' || typeof position.y !== 'number') {
+        return;
+      }
+
       const tooltipWidth = 256;
       const tooltipHeight = tooltipRef.current?.offsetHeight || 200;
       const padding = 8;
       const offset = 12;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      let left = position.x + offset;
-      let top = position.y - tooltipHeight / 2;
+
+      // Calculate buttons area (right side of menu item) to avoid overlap
+      let buttonsAreaRight = viewportWidth; // Default to viewport edge
+      if (anchorElement) {
+        const rect = anchorElement.getBoundingClientRect();
+        // Buttons are typically on the right side, estimate ~120px from right edge
+        buttonsAreaRight = rect.right - 120;
+      }
+
+      // Prefer positioning tooltip to the left of the mouse/buttons area
+      let left = position.x - tooltipWidth - offset;
+
+      // If tooltip would overlap with buttons area, position further left
+      if (left + tooltipWidth > buttonsAreaRight - padding) {
+        left = buttonsAreaRight - tooltipWidth - offset - padding;
+      }
+
+      // If tooltip would go off left edge, position to the right instead
+      if (left < padding) {
+        left = position.x + offset;
+        // But ensure it doesn't overlap buttons area
+        if (left + tooltipWidth > buttonsAreaRight - padding) {
+          // Position to the left of buttons area
+          left = buttonsAreaRight - tooltipWidth - offset - padding;
+        }
+      }
+
+      // Ensure tooltip doesn't go off screen
       if (left + tooltipWidth > viewportWidth - padding) {
-        left = position.x - tooltipWidth - offset;
+        left = viewportWidth - tooltipWidth - padding;
       }
       if (left < padding) left = padding;
+
+      // Vertical positioning
+      let top = position.y - tooltipHeight / 2;
       if (top < padding) top = position.y + offset;
       if (top + tooltipHeight > viewportHeight - padding) {
         top = position.y - tooltipHeight - offset;
         if (top < padding) top = padding;
       }
+
       setTooltipPosition({ left, top });
     };
     const handleGlobalMouseMove = (e: MouseEvent) => {
       currentPos = { x: e.clientX, y: e.clientY };
       updatePosition(currentPos);
     };
-    if (mousePosition) updatePosition();
+
+    // Initial positioning - try mousePosition first, then anchorElement
+    if (mousePosition) {
+      updatePosition(mousePosition);
+    } else {
+      // Use anchor element as fallback for initial positioning
+      updatePosition();
+    }
+
     window.addEventListener('mousemove', handleGlobalMouseMove);
     window.addEventListener('resize', () => updatePosition());
     window.addEventListener('scroll', () => updatePosition(), true);
@@ -255,8 +319,13 @@ export function MenuItemHoverStatistics({
       window.removeEventListener('resize', () => updatePosition());
       window.removeEventListener('scroll', () => updatePosition(), true);
     };
-  }, [isVisible, mousePosition]);
+  }, [isVisible, mousePosition, anchorElement]);
   if (!isVisible) return null;
+
+  // Only render tooltip if we have valid coordinates
+  // This prevents the tooltip from appearing at (0,0) before positioning is calculated
+  const hasValidPosition = tooltipPosition.left !== undefined && tooltipPosition.top !== undefined;
+
   const tooltipContent = (
     <div
       ref={tooltipRef}
@@ -264,7 +333,8 @@ export function MenuItemHoverStatistics({
       style={{
         left: tooltipPosition.left !== undefined ? `${tooltipPosition.left}px` : undefined,
         top: tooltipPosition.top !== undefined ? `${tooltipPosition.top}px` : undefined,
-        animation: 'fadeInUp 0.2s ease-out forwards',
+        animation: hasValidPosition ? 'fadeInUp 0.2s ease-out forwards' : undefined,
+        visibility: hasValidPosition ? 'visible' : 'hidden',
       }}
       role="tooltip"
     >

@@ -221,10 +221,11 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-xl"
+            disabled={!selectedIngredient || !newIngredient.quantity || newIngredient.quantity <= 0}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
-            <span>Add Ingredient to Dish</span>
+            <span>Add Ingredient</span>
           </button>
         </form>
       )}

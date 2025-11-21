@@ -1,5 +1,6 @@
 import { COGSCalculation } from '../../../cogs/types';
 import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
+import { logger } from '@/lib/logger';
 import {
   LoadRecipeIngredientsParams,
   LoadDishIngredientsParams,
@@ -47,9 +48,23 @@ export async function loadDishIngredients({
   const response = await fetch(`/api/dishes/${dishId}`, { cache: 'no-store' });
   if (!response.ok) throw new Error(`Failed to fetch dish: ${response.statusText}`);
   const data = await response.json();
-  if (!data.success || !data.dish) return [];
+  if (!data.success || !data.dish) {
+    logger.warn('[loadDishIngredients] Dish not found or invalid response', { dishId, data });
+    return [];
+  }
   const dishRecipes = data.dish.recipes || [];
   const dishIngredients = data.dish.ingredients || [];
+
+  logger.dev('[loadDishIngredients] Fetched dish data', {
+    dishId,
+    dishRecipesCount: dishRecipes.length,
+    dishIngredientsCount: dishIngredients.length,
+    dishRecipes: dishRecipes,
+    dishIngredients: dishIngredients,
+    availableIngredientsCount: ingredients.length,
+    availableRecipesCount: recipes.length,
+  });
+
   const allCalculations: COGSCalculation[] = [];
   const processIngredient = (ingId: string, qty: number, unit: string) => {
     const ingredientData = ingredients.find(ing => ing.id === ingId);

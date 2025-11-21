@@ -33,10 +33,10 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
       setAnalyticsLoading(true);
       try {
         const response = await fetch(`/api/temperature-logs?limit=${limit || 1000}`);
-        const data = await response.json();
-        if (data.success && data.items) {
-          setAllLogs(data.items);
-          cacheData('temperature_all_logs', data.items);
+        const json = await response.json();
+        if (json.success && json.data?.items) {
+          setAllLogs(json.data.items);
+          cacheData('temperature_all_logs', json.data.items);
           setLastAnalyticsFetch(Date.now());
         }
       } catch (error) {
@@ -51,17 +51,29 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
     try {
       const response = await fetch('/api/temperature-equipment');
       const data = await response.json();
-      if (data.success && data.items) {
-        setEquipment(data.items);
-        cacheData('temperature_equipment', data.items);
+      if (data.success && data.data) {
+        setEquipment(data.data);
+        cacheData('temperature_equipment', data.data);
       }
     } catch (error) {
       logger.error('Error fetching equipment:', error);
     }
   }, []);
   useEffect(() => {
-    const ld = logsData as any;
-    setLogs(ld?.items || []);
+    if (logsData) {
+      // Handle both direct items array and wrapped response
+      const items = Array.isArray(logsData) ? logsData : (logsData as any)?.items || [];
+      setLogs(items);
+      logger.dev('[TemperaturePageData] Updated logs:', {
+        count: items.length,
+        hasData: !!logsData,
+        logsDataType: typeof logsData,
+        logsDataKeys: logsData ? Object.keys(logsData as any) : [],
+      });
+    } else {
+      logger.dev('[TemperaturePageData] logsData is undefined');
+      setLogs([]);
+    }
   }, [logsData]);
   useEffect(() => {
     prefetchApis(['/api/temperature-equipment']);

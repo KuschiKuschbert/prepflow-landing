@@ -16,7 +16,7 @@ export function DishPreviewModalRecipesList({ dishDetails }: DishPreviewModalRec
         {dishDetails.recipes.map((dr, index) => (
           <div key={index} className="rounded-lg bg-[#2a2a2a]/30 p-3 text-sm text-gray-300">
             <span className="font-medium text-white">
-              {dr.recipes?.recipe_name || 'Unknown Recipe'}
+              {dr.recipes?.recipe_name || (dr.recipes as any)?.name || 'Unknown Recipe'}
             </span>
             <span className="ml-2 text-gray-400">× {dr.quantity}</span>
           </div>

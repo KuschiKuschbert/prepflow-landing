@@ -2,7 +2,8 @@
 
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
-import { useState } from 'react';
+import { logger } from '@/lib/logger';
+import { useState, useEffect } from 'react';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { AddTemperatureLogForm } from './AddTemperatureLogForm';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
@@ -10,6 +11,7 @@ import { TemperatureFilters } from './TemperatureFilters';
 import { TemperatureLogsLoadingState } from './TemperatureLogsLoadingState';
 import { TemperatureLogsEmptyState } from './TemperatureLogsEmptyState';
 import { TemperatureLogsTimePeriodHeader } from './TemperatureLogsTimePeriodHeader';
+import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
 import { TemperatureLogCard } from './TemperatureLogCard';
 import {
   formatDateString as formatDateStringUtil,
@@ -63,6 +65,42 @@ export default function TemperatureLogsTab({
   const { formatDate } = useCountryFormatting();
   const [drawerEquipment, setDrawerEquipment] = useState<TemperatureEquipment | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Sample data generation for empty state
+  const { isGenerating, handleGenerateSampleData } = useSampleDataGeneration({
+    onRefreshLogs: async () => {
+      // Refresh logs using the parent's refresh handler
+      if (onRefreshLogs) {
+        await onRefreshLogs();
+      }
+    },
+  });
+
+  // Ensure consistent initial render between server and client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Debug logging
+  useEffect(() => {
+    if (isMounted) {
+      logger.dev('[TemperatureLogsTab] State:', {
+        isMounted,
+        isLoading,
+        logsCount: logs.length,
+        hasLogs: logs.length > 0,
+        logsSample: logs.slice(0, 2),
+        renderingState: !isMounted
+          ? 'loading (not mounted)'
+          : isLoading
+            ? 'loading (isLoading=true)'
+            : logs.length === 0
+              ? 'empty (no logs)'
+              : 'logs (has logs)',
+      });
+    }
+  }, [isMounted, isLoading, logs]);
 
   const handleLogClick = (log: TemperatureLog) => {
     if (log.location) {
@@ -141,10 +179,16 @@ export default function TemperatureLogsTab({
 
       {/* Logs List */}
       <div className="space-y-6">
-        {isLoading ? (
+        {!isMounted ? (
+          <TemperatureLogsLoadingState />
+        ) : isLoading ? (
           <TemperatureLogsLoadingState />
         ) : logs.length === 0 ? (
-          <TemperatureLogsEmptyState />
+          <TemperatureLogsEmptyState
+            equipmentCount={equipment.length}
+            isGenerating={isGenerating}
+            onGenerateSampleData={handleGenerateSampleData}
+          />
         ) : (
           groupLogsByTimePeriod(logs).map(timeGroup => (
             <div key={timeGroup.period} className="space-y-4">

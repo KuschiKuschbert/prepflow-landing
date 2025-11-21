@@ -79,6 +79,8 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
     }
   }, [menuId]);
   const loadMenuData = useCallback(async () => {
+    // Only show loading if we don't have cached data (background refresh pattern)
+    const hasCachedData = cachedMenuData || cachedDishes || cachedRecipes;
     await loadMenuDataHelper({
       menuId,
       menuCacheKey,
@@ -91,6 +93,7 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
       setCategories,
       setStatistics,
       setLoading,
+      showLoading: !hasCachedData, // Don't show loading if we have cached data
     });
   }, [
     menuId,
@@ -98,6 +101,9 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
     dishesCacheKey,
     recipesCacheKey,
     onError,
+    cachedMenuData,
+    cachedDishes,
+    cachedRecipes,
     setMenuItems,
     setDishes,
     setRecipes,

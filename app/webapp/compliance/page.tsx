@@ -19,10 +19,16 @@ import {
 import { getTypeIconEmoji } from './utils';
 import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
-  const [types, setTypes] = useState<ComplianceType[]>([]);
-  const [records, setRecords] = useState<ComplianceRecord[]>([]);
+  // Initialize with cached data for instant display
+  const [types, setTypes] = useState<ComplianceType[]>(
+    () => getCachedData('compliance_types') || [],
+  );
+  const [records, setRecords] = useState<ComplianceRecord[]>(
+    () => getCachedData('compliance_records') || [],
+  );
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>(
     'records',
@@ -48,12 +54,18 @@ export default function ComplianceTrackingPage() {
     renewal_frequency_days: '',
   });
 
+  // Prefetch APIs on mount
+  useEffect(() => {
+    prefetchApis(['/api/compliance-records', '/api/compliance-types']);
+  }, []);
+
   const fetchTypes = useCallback(async () => {
     try {
       const response = await fetch('/api/compliance-types');
       const data = await response.json();
       if (data.success) {
         setTypes(data.data);
+        cacheData('compliance_types', data.data);
       }
     } catch (error) {
       logger.error('Error fetching types:', error);
@@ -72,6 +84,10 @@ export default function ComplianceTrackingPage() {
       const data = await response.json();
       if (data.success) {
         setRecords(data.data);
+        // Cache records (only cache when no filters applied for instant display)
+        if (selectedType === 'all' && selectedStatus === 'all') {
+          cacheData('compliance_records', data.data);
+        }
       }
     } catch (error) {
       logger.error('Error fetching records:', error);
@@ -99,7 +115,11 @@ export default function ComplianceTrackingPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setRecords([data.data, ...records]);
+        const updatedRecords = [data.data, ...records];
+        setRecords(updatedRecords);
+        if (selectedType === 'all' && selectedStatus === 'all') {
+          cacheData('compliance_records', updatedRecords);
+        }
         setNewRecord({
           compliance_type_id: '',
           document_name: '',
@@ -133,7 +153,9 @@ export default function ComplianceTrackingPage() {
       });
       const data = await response.json();
       if (data.success) {
-        setTypes([...types, data.data]);
+        const updatedTypes = [...types, data.data];
+        setTypes(updatedTypes);
+        cacheData('compliance_types', updatedTypes);
         setNewType({ name: '', description: '', renewal_frequency_days: '' });
         setShowAddType(false);
       }

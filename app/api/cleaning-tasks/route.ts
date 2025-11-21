@@ -11,7 +11,7 @@ const CLEANING_AREAS_SELECT = `
   *,
   cleaning_areas (
     id,
-    name,
+    area_name,
     description,
     frequency_days
   )
@@ -40,11 +40,51 @@ export async function GET(request: NextRequest) {
     const areaId = searchParams.get('area_id');
     const status = searchParams.get('status');
     const date = searchParams.get('date');
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
+
+    // First, get total count for pagination
+    let countQuery = supabaseAdmin
+      .from('cleaning_tasks')
+      .select('*', { count: 'exact', head: true });
+    if (areaId) countQuery = countQuery.eq('area_id', areaId);
+    if (status) countQuery = countQuery.eq('status', status);
+    if (date) countQuery = countQuery.eq('assigned_date', date);
+
+    const { count, error: countError } = await countQuery;
+
+    if (countError) {
+      const errorCode = (countError as any).code;
+
+      // Handle missing table gracefully
+      if (errorCode === '42P01') {
+        logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
+        return NextResponse.json({
+          success: true,
+          data: [],
+          total: 0,
+        });
+      }
+
+      logger.error('[Cleaning Tasks API] Database error fetching count:', {
+        error: countError.message,
+        code: errorCode,
+        context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
+      });
+
+      const apiError = ApiErrorHandler.fromSupabaseError(countError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
+    }
+
+    // Then fetch paginated data
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
 
     let query = supabaseAdmin
       .from('cleaning_tasks')
       .select(CLEANING_AREAS_SELECT)
-      .order('assigned_date', { ascending: false });
+      .order('assigned_date', { ascending: false })
+      .range(from, to);
 
     if (areaId) {
       query = query.eq('area_id', areaId);
@@ -59,9 +99,21 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
+      const errorCode = (error as any).code;
+
+      // Handle missing table gracefully
+      if (errorCode === '42P01') {
+        logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
+        return NextResponse.json({
+          success: true,
+          data: [],
+          total: 0,
+        });
+      }
+
       logger.error('[Cleaning Tasks API] Database error fetching tasks:', {
         error: error.message,
-        code: (error as any).code,
+        code: errorCode,
         context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
       });
 
@@ -72,8 +124,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: data || [],
+      total: count || 0,
     });
-  } catch (err) {
+  } catch (err: any) {
+    // Handle ApiError objects thrown by helper functions
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: err.status || 500 });
+    }
     return handleCleaningTaskError(err, 'GET');
   }
 }

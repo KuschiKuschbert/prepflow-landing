@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 import { backfillMissingIngredients } from './helpers/backfillMissingIngredients';
 import { handleRecipeIngredientsError } from './helpers/handleRecipeIngredientsError';
 import { mapRecipeIngredients } from './helpers/mapRecipeIngredients';
@@ -45,7 +46,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
           cost_per_unit_incl_trim,
           trim_peel_waste_percentage,
           yield_percentage,
-          category
+          category,
+          brand,
+          allergens,
+          allergen_source
         )
       `,
       )
@@ -73,7 +77,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
             cost_per_unit,
             cost_per_unit_incl_trim,
             trim_peel_waste_percentage,
-            yield_percentage
+            yield_percentage,
+            brand,
+            allergens,
+            allergen_source
           )
         `,
         )
@@ -125,6 +132,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
+    const recipeId = id;
     const body = await request.json();
     const { ingredients, isUpdate } = body;
 
@@ -142,7 +150,36 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const data = await saveRecipeIngredients(id, ingredients, isUpdate);
+    // Get user email for change tracking
+    let userEmail: string | null = null;
+    try {
+      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+      userEmail = (token?.email as string) || null;
+    } catch (tokenError) {
+      // Continue without user email if auth fails (for development)
+      logger.warn('[Recipes API] Could not get user email for change tracking:', tokenError);
+    }
+
+    // Fetch recipe name for change tracking
+    let recipeName: string | null = null;
+    try {
+      const { data } = await supabaseAdmin
+        .from('recipes')
+        .select('recipe_name')
+        .eq('id', recipeId)
+        .single();
+      recipeName = data?.recipe_name || null;
+    } catch (err) {
+      logger.warn('[Recipes API] Could not fetch recipe name for change tracking:', err);
+    }
+
+    const data = await saveRecipeIngredients(
+      recipeId,
+      ingredients,
+      isUpdate,
+      recipeName,
+      userEmail,
+    );
 
     return NextResponse.json({
       success: true,

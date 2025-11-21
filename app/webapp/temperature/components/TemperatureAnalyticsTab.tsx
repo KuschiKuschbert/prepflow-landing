@@ -10,6 +10,7 @@ import { TemperatureAnalyticsEmptyState } from './TemperatureAnalyticsEmptyState
 import { GenerateSampleDataButton } from './GenerateSampleDataButton';
 import { useEquipmentStatus } from '../hooks/useEquipmentStatus';
 import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
+import { prefetchApi, getCachedData } from '@/lib/cache/data-cache';
 import './temperature-charts.css';
 import { useTemperatureFilters } from './useTemperatureFilters';
 
@@ -119,6 +120,23 @@ export default function TemperatureAnalyticsTab({
     setSelectedEquipmentId(equipment.id);
   };
 
+  // Prefetch equipment logs on hover for instant drawer opening
+  const handleCardHover = useCallback((equipment: TemperatureEquipment) => {
+    const cacheKey = `equipment_logs_${equipment.name}`;
+    const cached = getCachedData<TemperatureLog[]>(cacheKey);
+    if (!cached) {
+      // Prefetch logs for this equipment
+      const locationsToQuery = [
+        ...(equipment.location ? [equipment.location] : []),
+        ...(equipment.name ? [equipment.name] : []),
+      ].filter(Boolean);
+      const uniqueLocations = [...new Set(locationsToQuery)];
+      uniqueLocations.forEach(loc => {
+        prefetchApi(`/api/temperature-logs?location=${loc}&pageSize=1000`);
+      });
+    }
+  }, []);
+
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
     setDrawerEquipment(null);
@@ -187,6 +205,7 @@ export default function TemperatureAnalyticsTab({
                 isSelected={isSelected}
                 isCompact={isCompact}
                 onSelect={() => handleEquipmentCardClick(item)}
+                onHover={() => handleCardHover(item)}
               />
             );
           })

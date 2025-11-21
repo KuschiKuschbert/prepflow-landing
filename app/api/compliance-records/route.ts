@@ -8,13 +8,13 @@ import { handleComplianceError } from './helpers/handleComplianceError';
 import { updateComplianceRecord } from './helpers/updateComplianceRecord';
 
 const COMPLIANCE_TYPES_SELECT = `
-      *,
-      compliance_types (
-        id,
-        type_name,
-        description
-      )
-    `;
+  *,
+  compliance_types (
+    id,
+    type_name,
+    description
+  )
+`;
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,9 +44,20 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
+      const errorCode = (error as any).code;
+
+      // Handle missing table gracefully
+      if (errorCode === '42P01') {
+        logger.dev('[Compliance Records API] Table does not exist, returning empty array');
+        return NextResponse.json({
+          success: true,
+          data: [],
+        });
+      }
+
       logger.error('[Compliance Records API] Database error fetching records:', {
         error: error.message,
-        code: (error as any).code,
+        code: errorCode,
         context: {
           endpoint: '/api/compliance-records',
           operation: 'GET',
@@ -62,7 +73,11 @@ export async function GET(request: NextRequest) {
       success: true,
       data: data || [],
     });
-  } catch (err) {
+  } catch (err: any) {
+    // Handle ApiError objects thrown by helper functions
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: err.status || 500 });
+    }
     return handleComplianceError(err, 'GET');
   }
 }
