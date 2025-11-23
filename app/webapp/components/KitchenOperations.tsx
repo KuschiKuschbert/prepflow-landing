@@ -106,7 +106,7 @@ export default function KitchenOperations() {
       description: 'Ingredients needing restock',
       icon: AlertTriangle,
       color: stats.ingredientsLowStock > 0 ? '#F59E0B' : '#29E7CD',
-      href: '/webapp/ingredients',
+      href: '/webapp/recipes#ingredients',
       status: stats.ingredientsLowStock > 0 ? 'warning' : 'good',
     },
     {

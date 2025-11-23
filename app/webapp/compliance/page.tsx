@@ -22,13 +22,10 @@ import { Icon } from '@/components/ui/Icon';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
-  // Initialize with cached data for instant display
-  const [types, setTypes] = useState<ComplianceType[]>(
-    () => getCachedData('compliance_types') || [],
-  );
-  const [records, setRecords] = useState<ComplianceRecord[]>(
-    () => getCachedData('compliance_records') || [],
-  );
+  // Initialize with empty arrays to avoid hydration mismatch
+  // Cached data will be loaded in useEffect after mount
+  const [types, setTypes] = useState<ComplianceType[]>([]);
+  const [records, setRecords] = useState<ComplianceRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>(
     'records',
@@ -97,6 +94,18 @@ export default function ComplianceTrackingPage() {
   }, [selectedType, selectedStatus]);
 
   useEffect(() => {
+    // Load cached data for instant display (client-only)
+    const cachedTypes = getCachedData<ComplianceType[]>('compliance_types');
+    if (cachedTypes && cachedTypes.length > 0) {
+      setTypes(cachedTypes);
+    }
+
+    const cachedRecords = getCachedData<ComplianceRecord[]>('compliance_records');
+    if (cachedRecords && cachedRecords.length > 0) {
+      setRecords(cachedRecords);
+    }
+
+    // Fetch fresh data
     fetchTypes();
     fetchRecords();
   }, [fetchTypes, fetchRecords]);

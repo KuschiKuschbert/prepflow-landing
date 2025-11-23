@@ -43,3 +43,7 @@ temp/.next/
 
 # Cleanup reports
 cleanup-reports/
+
+# Supabase
+.supabase/
+supabase/.temp/

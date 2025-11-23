@@ -8,7 +8,12 @@ const CLEANING_AREAS_SELECT = `
     id,
     area_name,
     description,
-    frequency_days
+    cleaning_frequency
+  ),
+  kitchen_sections:section_id (
+    id,
+    section_name,
+    description
   )
 `;
 

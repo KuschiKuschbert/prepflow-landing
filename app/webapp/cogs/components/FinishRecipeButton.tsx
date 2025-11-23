@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { CheckCircle2, Sparkles } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface FinishRecipeButtonProps {
   onFinish: () => void;
@@ -25,7 +25,14 @@ export function FinishRecipeButton({
 }: FinishRecipeButtonProps) {
   const [isFinishing, setIsFinishing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [message] = useState(finishMessages[Math.floor(Math.random() * finishMessages.length)]);
+  // Initialize with first message to avoid hydration mismatch
+  // Random message will be set in useEffect after mount
+  const [message, setMessage] = useState(finishMessages[0]);
+
+  // Set random message after mount (client-only)
+  useEffect(() => {
+    setMessage(finishMessages[Math.floor(Math.random() * finishMessages.length)]);
+  }, []);
 
   const handleFinish = async () => {
     if (disabled || !hasIngredients) return;

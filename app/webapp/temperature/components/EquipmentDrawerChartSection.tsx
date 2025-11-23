@@ -10,6 +10,7 @@ interface EquipmentDrawerChartSectionProps {
   timeFilter: '24h' | '7d' | '30d' | 'all';
   chartHeight: number;
   isLoading: boolean;
+  statistics?: import('./utils').TemperatureStatistics | null;
 }
 
 export function EquipmentDrawerChartSection({
@@ -18,6 +19,7 @@ export function EquipmentDrawerChartSection({
   timeFilter,
   chartHeight,
   isLoading,
+  statistics,
 }: EquipmentDrawerChartSectionProps) {
   if (isLoading) {
     return <LoadingSkeleton variant="chart" height={`${chartHeight}px`} />;
@@ -61,6 +63,7 @@ export function EquipmentDrawerChartSection({
         equipment={equipment}
         timeFilter={timeFilter}
         height={chartHeight}
+        statistics={statistics}
       />
     </div>
   );

@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [75, 90], // Support both default (75) and high quality (90)
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -162,6 +163,27 @@ const nextConfig: NextConfig = {
     // Removed conflicting file-loader rule that was causing 404 errors
 
     return config;
+  },
+
+  // Redirects for SEO (301 permanent redirects for moved pages)
+  async redirects() {
+    return [
+      {
+        source: '/webapp/ingredients',
+        destination: '/webapp/recipes#ingredients',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/webapp/cogs',
+        destination: '/webapp/recipes#dishes',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/webapp/dish-builder',
+        destination: '/webapp/recipes?builder=true#dishes',
+        permanent: true, // 301 redirect
+      },
+    ];
   },
 
   // Headers for performance and security

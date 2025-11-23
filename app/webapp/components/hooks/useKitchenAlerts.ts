@@ -34,7 +34,7 @@ export function useKitchenAlerts() {
       title: 'Low Stock Alert',
       message: `${stats.ingredientsLowStock} ingredient(s) need restocking`,
       actionLabel: 'View Ingredients',
-      actionHref: '/webapp/ingredients',
+      actionHref: '/webapp/recipes#ingredients',
     });
   }
 

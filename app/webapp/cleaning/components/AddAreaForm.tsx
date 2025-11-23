@@ -4,9 +4,9 @@ import { Icon } from '@/components/ui/Icon';
 import { X } from 'lucide-react';
 
 interface CleaningArea {
-  name: string;
+  area_name: string;
   description: string;
-  frequency_days: number;
+  cleaning_frequency?: string;
 }
 
 interface AddAreaFormProps {
@@ -35,8 +35,8 @@ export function AddAreaForm({ newArea, onAreaChange, onSubmit, onCancel }: AddAr
           </label>
           <input
             type="text"
-            value={newArea.name}
-            onChange={e => onAreaChange({ ...newArea, name: e.target.value })}
+            value={newArea.area_name}
+            onChange={e => onAreaChange({ ...newArea, area_name: e.target.value })}
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             placeholder="e.g., Kitchen Floors, Prep Tables"
             required
@@ -56,32 +56,29 @@ export function AddAreaForm({ newArea, onAreaChange, onSubmit, onCancel }: AddAr
         </div>
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
-            {t('cleaning.frequency', 'Cleaning Frequency (days)')}
+            {t('cleaning.frequency', 'Cleaning Frequency')}
           </label>
           <input
-            type="number"
-            value={newArea.frequency_days}
-            onChange={e =>
-              onAreaChange({ ...newArea, frequency_days: parseInt(e.target.value) || 7 })
-            }
+            type="text"
+            value={newArea.cleaning_frequency || ''}
+            onChange={e => onAreaChange({ ...newArea, cleaning_frequency: e.target.value })}
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            min="1"
-            required
+            placeholder="e.g., Daily, Weekly"
           />
         </div>
-        <div className="flex space-x-4">
-          <button
-            type="submit"
-            className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
-          >
-            {t('cleaning.save', 'Save Area')}
-          </button>
+        <div className="desktop:flex-row desktop:justify-end flex flex-col-reverse gap-3 pt-4">
           <button
             type="button"
             onClick={onCancel}
             className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
           >
             {t('cleaning.cancel', 'Cancel')}
+          </button>
+          <button
+            type="submit"
+            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+          >
+            {t('cleaning.save', 'Save Area')}
           </button>
         </div>
       </form>

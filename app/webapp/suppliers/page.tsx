@@ -14,11 +14,10 @@ import { logger } from '@/lib/logger';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 export default function SuppliersPage() {
   const { t } = useTranslation();
-  // Initialize with cached data for instant display
-  const [suppliers, setSuppliers] = useState<Supplier[]>(() => getCachedData('suppliers') || []);
-  const [priceLists, setPriceLists] = useState<SupplierPriceList[]>(
-    () => getCachedData('supplier_price_lists') || [],
-  );
+  // Initialize with empty arrays to avoid hydration mismatch
+  // Cached data will be loaded in useEffect after mount
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [priceLists, setPriceLists] = useState<SupplierPriceList[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'suppliers' | 'priceLists'>('suppliers');
   const [showAddSupplier, setShowAddSupplier] = useState(false);
@@ -88,6 +87,18 @@ export default function SuppliersPage() {
   }, [selectedSupplier]);
 
   useEffect(() => {
+    // Load cached data for instant display (client-only)
+    const cachedSuppliers = getCachedData<Supplier[]>('suppliers');
+    if (cachedSuppliers && cachedSuppliers.length > 0) {
+      setSuppliers(cachedSuppliers);
+    }
+
+    const cachedPriceLists = getCachedData<SupplierPriceList[]>('supplier_price_lists');
+    if (cachedPriceLists && cachedPriceLists.length > 0) {
+      setPriceLists(cachedPriceLists);
+    }
+
+    // Fetch fresh data
     fetchSuppliers();
     fetchPriceLists();
   }, [fetchSuppliers, fetchPriceLists]);

@@ -1,7 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+// Temporarily import directly to debug why dynamic import isn't working
+import TemperatureChartLazy from './TemperatureChartLazy';
 import { TemperatureEquipment } from '../types';
+import { logger } from '@/lib/logger';
 
 interface ChartDataPoint {
   timestamp: string;
@@ -22,18 +24,15 @@ interface TemperatureChartContentProps {
   formatXAxisLabel: (tickItem: number | string) => string;
   formatTooltipLabel: (label: number | string) => string;
   formatTooltipValue: (value: number) => string;
+  statistics?: import('./utils').TemperatureStatistics | null;
 }
 
-// Lazy load Recharts to reduce initial bundle size
-const TemperatureChart = dynamic(() => import('./TemperatureChartLazy'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#29E7CD] border-t-transparent" />
-    </div>
-  ),
-});
-
 export function TemperatureChartContent(props: TemperatureChartContentProps) {
-  return <TemperatureChart {...props} />;
+  logger.dev('[TemperatureChartContent] Rendering, props:', {
+    chartDataLength: props.chartData.length,
+    equipmentName: props.equipment.name,
+    min_temp: props.equipment.min_temp_celsius,
+    max_temp: props.equipment.max_temp_celsius,
+  });
+  return <TemperatureChartLazy {...props} />;
 }

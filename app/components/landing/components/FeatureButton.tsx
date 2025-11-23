@@ -1,19 +1,23 @@
 'use client';
 
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
 import { Plus } from 'lucide-react';
-import { RefObject } from 'react';
 
 interface Feature {
   title: string;
   description: string;
+  cta?: {
+    text: string;
+    href: string;
+    action?: () => void;
+  };
 }
 
 interface FeatureButtonProps {
   feature: Feature;
   index: number;
   isExpanded: boolean;
-  isCurrentlyTransitioning: boolean;
   isVisible: boolean;
   containerWidth?: number;
   initialWidth?: number;
@@ -22,16 +26,12 @@ interface FeatureButtonProps {
   containerRef: (el: HTMLButtonElement | null) => void;
   buttonRef: (el: HTMLButtonElement | null) => void;
   contentRef: (el: HTMLSpanElement | null) => void;
-  ANIMATION_DURATION: number;
-  ANIMATION_EASING: string;
-  BORDER_RADIUS_EASING: string;
 }
 
 export function FeatureButton({
   feature,
   index,
   isExpanded,
-  isCurrentlyTransitioning,
   isVisible,
   containerWidth,
   initialWidth,
@@ -40,12 +40,15 @@ export function FeatureButton({
   containerRef,
   buttonRef,
   contentRef,
-  ANIMATION_DURATION,
-  ANIMATION_EASING,
-  BORDER_RADIUS_EASING,
 }: FeatureButtonProps) {
+  const borderRadius = isExpanded
+    ? '24px'
+    : buttonHeight
+      ? `${Math.min(buttonHeight / 2, 50)}px`
+      : '20px';
+
   return (
-    <button
+    <motion.button
       key={feature.title}
       id={`feature-button-${index}`}
       ref={el => {
@@ -53,140 +56,105 @@ export function FeatureButton({
         buttonRef(el);
       }}
       onClick={onToggle}
-      onMouseEnter={e => {
-        if (!isExpanded && !isCurrentlyTransitioning) {
-          e.currentTarget.style.transform = 'translateZ(0) scale(1.02)';
-          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
-        }
-      }}
-      onMouseLeave={e => {
-        if (!isExpanded && !isCurrentlyTransitioning) {
-          e.currentTarget.style.transform = 'translateZ(0) scale(1)';
-          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-        }
-      }}
-      className="relative flex w-fit border text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
-      style={{
+      layout
+      initial={{ opacity: 0, scale: 0.98, y: 10 }}
+      animate={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible
-          ? 'translateZ(0) scale(1) translateY(0)'
-          : 'translateZ(0) scale(0.98) translateY(10px)',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        flexShrink: 0,
-        flexGrow: 0,
+        scale: isVisible ? 1 : 0.98,
+        y: isVisible ? 0 : 10,
+      }}
+      transition={{
+        type: 'spring',
+        bounce: 0,
+        duration: 0.6,
+        opacity: { duration: 0.2 },
+        layout: {
+          type: 'spring',
+          bounce: 0,
+          duration: 0.6,
+        },
+      }}
+      className={`relative flex border text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+        !isExpanded ? 'hover:scale-[1.02] hover:border-white/18 hover:bg-white/12' : ''
+      }`}
+      style={{
         width:
           isExpanded && containerWidth
             ? `${containerWidth}px`
             : initialWidth
               ? `${initialWidth}px`
-              : 'max-content',
-        maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
-        minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
-        minWidth: 0,
-        borderRadius: (() => {
-          if (isExpanded) {
-            return '24px';
-          }
-          if (buttonHeight) {
-            const pillRadius = Math.min(buttonHeight / 2, 50);
-            return `${Math.round(pillRadius)}px`;
-          }
-          return '20px';
-        })(),
-        contain: 'layout style paint',
-        backfaceVisibility: 'hidden',
-        willChange: isCurrentlyTransitioning
-          ? 'width, max-height, border-radius, padding, border-color, background-color, transform, opacity'
-          : 'auto',
-        transition: isCurrentlyTransitioning
-          ? `opacity 400ms ${ANIMATION_EASING}, transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, width ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, max-height ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}, padding ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, border-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, background-color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`
-          : isVisible
-            ? `opacity 400ms ${ANIMATION_EASING}, transform 400ms ${ANIMATION_EASING}, border-radius ${ANIMATION_DURATION}ms ${BORDER_RADIUS_EASING}, border-color 200ms ${ANIMATION_EASING}, background-color 200ms ${ANIMATION_EASING}`
-            : `opacity 400ms ${ANIMATION_EASING}, transform 400ms ${ANIMATION_EASING}`,
+              : 'auto',
+        borderRadius,
         borderColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
         borderWidth: '1px',
         backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.1)',
         cursor: 'pointer',
         padding: isExpanded ? '0.75rem 1rem' : '0.625rem 0.875rem',
         overflow: 'hidden',
-        height: isExpanded ? 'auto' : undefined,
+        maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
+        minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
       }}
       aria-expanded={isExpanded}
       aria-controls={`feature-content-${index}`}
     >
-      <span
-        id={`feature-content-${index}`}
-        ref={contentRef}
-        className="text-fluid-sm tablet:text-fluid-base text-left"
-        style={{
-          whiteSpace: isExpanded ? 'normal' : 'nowrap',
-          overflowWrap: 'break-word',
-          wordBreak: 'break-word',
-          maxWidth: '100%',
-          width: '100%',
-          minWidth: 0,
-          flexShrink: 1,
-          lineHeight: '1.5',
-          opacity: 1,
-          transform: 'translateZ(0)',
-        }}
+      <motion.div
+        layout
+        className={`flex w-full items-center ${isExpanded ? 'flex-col items-start gap-4' : 'flex-row gap-3'}`}
       >
-        <span
-          className={
-            isExpanded
-              ? 'text-fluid-base tablet:text-fluid-lg font-semibold text-white'
-              : 'text-fluid-sm tablet:text-fluid-base font-medium text-white/90'
-          }
-          style={{
-            display: 'inline-block',
-            opacity: 1,
-            transform: 'translateZ(0)',
-            transition: isCurrentlyTransitioning
-              ? `font-weight ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, color ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, font-size ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`
-              : 'none',
-          }}
-        >
-          {feature.title}
-          {isExpanded && '.'}
-        </span>
-        <span
-          className="text-fluid-sm tablet:text-fluid-base text-gray-300"
-          style={{
-            display: 'inline-block',
-            marginLeft: isExpanded ? '0.25rem' : '0',
-            whiteSpace: isExpanded ? 'normal' : 'nowrap',
-            overflowWrap: 'break-word',
-            wordBreak: 'break-word',
-            maxWidth: isExpanded ? '1000px' : '0px',
-            overflow: 'hidden',
-            opacity: isExpanded ? 1 : 0,
-            transform: 'translateZ(0)',
-            transition: isCurrentlyTransitioning
-              ? `max-width ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, opacity ${ANIMATION_DURATION}ms ${ANIMATION_EASING}, margin-left ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`
-              : 'none',
-            verticalAlign: 'baseline',
-            willChange: isCurrentlyTransitioning ? 'max-width, opacity' : 'auto',
-            pointerEvents: isExpanded ? 'auto' : 'none',
-          }}
-        >
-          {feature.description}
-        </span>
-      </span>
+        <div className="flex w-full items-center gap-3">
+          <span
+            id={`feature-content-${index}`}
+            ref={contentRef}
+            className="min-w-0 flex-1 text-left"
+            style={{
+              whiteSpace: isExpanded ? 'normal' : 'nowrap',
+              overflowWrap: 'break-word',
+              wordBreak: 'break-word',
+            }}
+          >
+            <motion.span
+              layout="position"
+              className={
+                isExpanded
+                  ? 'text-fluid-base tablet:text-fluid-lg font-semibold text-white'
+                  : 'text-fluid-sm tablet:text-fluid-base font-medium text-white/90'
+              }
+            >
+              {feature.title}
+              {isExpanded && '.'}
+            </motion.span>
+          </span>
 
-      <div
-        className="ml-1.5 flex-shrink-0"
-        style={{
-          transform: isExpanded ? 'rotate(45deg)' : 'rotate(0deg)',
-          transition: `transform ${ANIMATION_DURATION}ms ${ANIMATION_EASING}`,
-        }}
-      >
-        <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
-      </div>
-    </button>
+          <motion.div
+            layout="position"
+            className="flex-shrink-0"
+            animate={{
+              rotate: isExpanded ? 45 : 0,
+            }}
+            transition={{
+              type: 'spring',
+              bounce: 0,
+              duration: 0.4,
+            }}
+          >
+            <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
+          </motion.div>
+        </div>
+
+        <AnimatePresence mode="popLayout">
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="text-fluid-sm tablet:text-fluid-base w-full text-gray-300"
+            >
+              {feature.description}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.button>
   );
 }

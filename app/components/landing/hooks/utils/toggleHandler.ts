@@ -43,13 +43,14 @@ export function createToggleHandler(
           return newScales;
         });
         setIsTransitioning(index);
+        // Use double RAF for smoother animation start
         requestAnimationFrame(() => {
-          setTimeout(() => {
+          requestAnimationFrame(() => {
             setExpandedIndex(index);
             setTimeout(() => {
               setIsTransitioning((prev: number | null) => (prev === index ? null : prev));
-            }, ANIMATION_DURATION + 50);
-          }, 0);
+            }, ANIMATION_DURATION + 100);
+          });
         });
       } else {
         setExpandedIndex(index);

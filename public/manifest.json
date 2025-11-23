@@ -94,7 +94,7 @@
       "name": "Ingredients",
       "short_name": "Ingredients",
       "description": "Manage your ingredient inventory",
-      "url": "/webapp/ingredients",
+      "url": "/webapp/recipes#ingredients",
       "icons": [
         {
           "src": "/icons/icon-96x96.png",
@@ -118,7 +118,7 @@
       "name": "COGS Calculator",
       "short_name": "COGS",
       "description": "Calculate cost of goods sold",
-      "url": "/webapp/cogs",
+      "url": "/webapp/recipes#dishes",
       "icons": [
         {
           "src": "/icons/icon-96x96.png",

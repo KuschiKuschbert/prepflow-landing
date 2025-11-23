@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 
 // External components
 import ScrollTracker from '../components/ScrollTracker';
@@ -8,19 +8,24 @@ import ScrollTracker from '../components/ScrollTracker';
 // UI components
 import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
+import { LandingSectionSkeleton } from '../components/ui/LandingSectionSkeleton';
 
-// Landing page components
-import CloserLook from './components/landing/CloserLook';
-import FinalCTA from './components/landing/FinalCTA';
+// Above-the-fold components (synchronous - critical for initial render)
 import AppHero from './components/landing/Hero';
 import Highlights from './components/landing/Highlights';
-import LandingFooter from './components/landing/LandingFooter';
 import LandingHeader from './components/landing/LandingHeader';
-import Performance from './components/landing/Performance';
-import SafeAnimatedBackground from './components/landing/SafeAnimatedBackground';
-import SafeGradientOrbs from './components/landing/SafeGradientOrbs';
 import LandingBackground from './components/landing/LandingBackground';
-import TechnicalSpecs from './components/landing/TechnicalSpecs';
+
+// Below-the-fold components (lazy-loaded for better performance)
+const CloserLook = lazy(() => import('./components/landing/CloserLook'));
+const Performance = lazy(() => import('./components/landing/Performance'));
+const TechnicalSpecs = lazy(() => import('./components/landing/TechnicalSpecs'));
+const FinalCTA = lazy(() => import('./components/landing/FinalCTA'));
+const LandingFooter = lazy(() => import('./components/landing/LandingFooter'));
+
+// Background effects (lazy-loaded - defer until after initial render)
+const SafeAnimatedBackground = lazy(() => import('./components/landing/SafeAnimatedBackground'));
+const SafeGradientOrbs = lazy(() => import('./components/landing/SafeGradientOrbs'));
 
 // Hooks and utilities
 import { useEngagementTracking } from '../hooks/useEngagementTracking';
@@ -132,9 +137,11 @@ export default function Page() {
         {/* Beautiful Grid Background */}
         <LandingBackground />
 
-        {/* Animated Background Effects - Apple-style */}
-        <SafeAnimatedBackground />
-        <SafeGradientOrbs />
+        {/* Animated Background Effects - Apple-style (lazy-loaded) */}
+        <Suspense fallback={null}>
+          <SafeAnimatedBackground />
+          <SafeGradientOrbs />
+        </Suspense>
 
         {/* Content overlay - ensures content is above background */}
         <div className="relative z-10">
@@ -148,19 +155,29 @@ export default function Page() {
           <Highlights />
 
           {/* Take a Closer Look - 6 expandable feature sections with screenshots */}
-          <CloserLook />
+          <Suspense fallback={<LandingSectionSkeleton />}>
+            <CloserLook />
+          </Suspense>
 
           {/* Performance - Visual comparisons and performance metrics */}
-          <Performance />
+          <Suspense fallback={<LandingSectionSkeleton />}>
+            <Performance />
+          </Suspense>
 
           {/* Technical Specs - Organized capabilities and features */}
-          <TechnicalSpecs />
+          <Suspense fallback={<LandingSectionSkeleton />}>
+            <TechnicalSpecs />
+          </Suspense>
 
           {/* Final CTA - Register/Buy buttons */}
-          <FinalCTA trackEngagement={trackEngagement} />
+          <Suspense fallback={<LandingSectionSkeleton />}>
+            <FinalCTA trackEngagement={trackEngagement} />
+          </Suspense>
 
           {/* Footer */}
-          <LandingFooter />
+          <Suspense fallback={null}>
+            <LandingFooter />
+          </Suspense>
         </div>
       </main>
     </>

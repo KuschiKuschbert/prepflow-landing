@@ -68,16 +68,18 @@ export function useExpandedWidthMeasurement(
           : button.parentElement?.getBoundingClientRect().width || Infinity;
         const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1920;
         const borderWidth = 2;
-        const sectionPadding = 32;
+        const sectionPadding = 16; // Reduced from 32 to allow more expansion
         const isDesktop = viewportWidth >= 1024;
-        const imageSpace = isDesktop ? (viewportWidth >= 1280 ? 180 : 200) : 0;
+        const imageSpace = isDesktop ? (viewportWidth >= 1280 ? 120 : 140) : 0; // Reduced from 180/200 to allow more expansion
+        const widthMultiplier = 1.15; // Add 15% more width for better horizontal expansion
+        const expandedWidthWithMultiplier = buttonWithContentWidth * widthMultiplier;
         const maxAllowedWidth = Math.min(
           parentWidth - sectionPadding,
           viewportWidth - sectionPadding - imageSpace,
-          buttonWithContentWidth + borderWidth,
+          expandedWidthWithMultiplier + borderWidth,
         );
         const totalWidth = Math.max(
-          buttonWithContentWidth + borderWidth,
+          expandedWidthWithMultiplier + borderWidth,
           Math.ceil(maxAllowedWidth),
         );
         setContainerWidths(prev => {

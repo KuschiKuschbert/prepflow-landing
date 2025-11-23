@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import { FeatureButton } from './components/FeatureButton';
 import { FeatureImageContainer } from './components/FeatureImageContainer';
@@ -13,6 +14,11 @@ interface Feature {
   screenshotAlt: string;
   details: string[];
   color: string;
+  cta?: {
+    text: string;
+    href: string;
+    action?: () => void;
+  };
 }
 
 interface AppleStyleFeaturesProps {
@@ -20,7 +26,7 @@ interface AppleStyleFeaturesProps {
   sectionTitle?: string;
 }
 
-export default function AppleStyleFeatures({
+function AppleStyleFeatures({
   features,
   sectionTitle = 'Take a closer look.',
 }: AppleStyleFeaturesProps) {
@@ -101,7 +107,6 @@ export default function AppleStyleFeatures({
                   feature={feature}
                   index={index}
                   isExpanded={isExpanded}
-                  isCurrentlyTransitioning={isCurrentlyTransitioning}
                   isVisible={isVisible}
                   containerWidth={containerWidths[index]}
                   initialWidth={initialWidths[index]}
@@ -116,9 +121,6 @@ export default function AppleStyleFeatures({
                   contentRef={el => {
                     contentRefs.current[index] = el;
                   }}
-                  ANIMATION_DURATION={ANIMATION_DURATION}
-                  ANIMATION_EASING={ANIMATION_EASING}
-                  BORDER_RADIUS_EASING={BORDER_RADIUS_EASING}
                 />
               );
             })}
@@ -143,3 +145,5 @@ export default function AppleStyleFeatures({
     </section>
   );
 }
+
+export default React.memo(AppleStyleFeatures);

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useEffect, useState } from 'react';
 
@@ -42,7 +43,7 @@ const metrics: Metric[] = [
   },
 ];
 
-function AnimatedCounter({
+const AnimatedCounter = React.memo(function AnimatedCounter({
   value,
   suffix,
   color,
@@ -91,9 +92,9 @@ function AnimatedCounter({
       </div>
     </div>
   );
-}
+});
 
-export default function Performance() {
+function Performance() {
   return (
     <section className="tablet:py-20 relative bg-transparent py-16">
       <div className="mx-auto max-w-7xl px-6">
@@ -165,3 +166,5 @@ export default function Performance() {
     </section>
   );
 }
+
+export default React.memo(Performance);

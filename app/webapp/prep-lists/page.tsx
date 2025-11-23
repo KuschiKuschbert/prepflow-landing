@@ -27,8 +27,9 @@ export default function PrepListsPage() {
   const userId = 'user-123';
   const pageSize = 10;
 
-  // Initialize with cached data for instant display
-  const [prepLists, setPrepLists] = useState<PrepList[]>(() => getCachedData('prep_lists') || []);
+  // Initialize with empty array to avoid hydration mismatch
+  // Cached data will be loaded in useEffect after mount
+  const [prepLists, setPrepLists] = useState<PrepList[]>([]);
 
   // Modals
   const {
@@ -98,6 +99,14 @@ export default function PrepListsPage() {
       showSuccess,
     },
   );
+
+  // Load cached data on mount for instant display (client-only)
+  useEffect(() => {
+    const cachedPrepLists = getCachedData<PrepList[]>('prep_lists');
+    if (cachedPrepLists && cachedPrepLists.length > 0) {
+      setPrepLists(cachedPrepLists);
+    }
+  }, []);
 
   // Update prep lists from query data
   useEffect(() => {

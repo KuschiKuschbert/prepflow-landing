@@ -23,7 +23,9 @@ interface UseParLevelsDataProps {
  * Hook for fetching par levels and ingredients data.
  */
 export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLevelsDataReturn {
-  const [parLevels, setParLevels] = useState<ParLevel[]>(() => getCachedData('par_levels') || []);
+  // Initialize with empty array to avoid hydration mismatch
+  // Cached data will be loaded in useEffect after mount
+  const [parLevels, setParLevels] = useState<ParLevel[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -92,6 +94,13 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
   }, []);
 
   useEffect(() => {
+    // Load cached data for instant display (client-only)
+    const cachedParLevels = getCachedData<ParLevel[]>('par_levels');
+    if (cachedParLevels && cachedParLevels.length > 0) {
+      setParLevels(cachedParLevels);
+    }
+
+    // Fetch fresh data
     fetchParLevels();
     fetchIngredients();
   }, [fetchParLevels, fetchIngredients]);

@@ -15,6 +15,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
         className="absolute -top-1/4 -left-1/4 h-[800px] w-[800px] rounded-full bg-[#29E7CD] opacity-10 blur-3xl"
         style={{
           animation: 'float 20s ease-in-out infinite',
+          willChange: 'transform',
         }}
       />
 
@@ -24,6 +25,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
         style={{
           animation: 'float 25s ease-in-out infinite reverse',
           animationDelay: '2s',
+          willChange: 'transform',
         }}
       />
 
@@ -33,6 +35,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
         style={{
           animation: 'float 18s ease-in-out infinite',
           animationDelay: '1s',
+          willChange: 'transform',
         }}
       />
 
@@ -42,6 +45,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
         style={{
           animation: 'float 15s ease-in-out infinite',
           animationDelay: '3s',
+          willChange: 'transform',
         }}
       />
 
@@ -50,6 +54,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
         style={{
           animation: 'float 22s ease-in-out infinite reverse',
           animationDelay: '4s',
+          willChange: 'transform',
         }}
       />
     </div>

@@ -51,6 +51,13 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
             >
               How it works
             </a>
+            <Link
+              href="/webapp/guide"
+              className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+              aria-label="View PrepFlow guides"
+            >
+              Guide
+            </Link>
           </nav>
 
           {/* Desktop Actions */}

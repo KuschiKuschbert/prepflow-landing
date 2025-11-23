@@ -5,7 +5,7 @@ import { convertToCOGSCalculations } from './recipeCalculationHelpers';
 import { storeRecipeForEditing } from './recipeEditHelpers';
 
 /**
- * Handle editing a recipe by loading it into COGS calculator.
+ * Handle editing a recipe by loading it into dishes tab.
  *
  * @param {Recipe} recipe - Recipe to edit
  * @param {Function} fetchRecipeIngredients - Function to fetch recipe ingredients
@@ -22,7 +22,7 @@ export async function handleEditRecipe(
     const ingredients = await fetchRecipeIngredients(recipe.id);
     const calculations = convertToCOGSCalculations(ingredients, recipe.id);
     storeRecipeForEditing(recipe, calculations);
-    router.push('/webapp/cogs');
+    router.push('/webapp/recipes#dishes');
   } catch (err) {
     setError('Failed to load recipe for editing');
   }

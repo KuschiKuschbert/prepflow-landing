@@ -30,3 +30,7 @@ CREATE INDEX IF NOT EXISTS idx_menu_change_tracking_handled
 -- Add comment to table
 COMMENT ON TABLE menu_change_tracking IS 'Tracks changes to dishes/recipes/ingredients used by locked menus';
 
+
+
+
+

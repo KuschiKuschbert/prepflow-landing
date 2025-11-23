@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { Button } from '@/components/ui/Button';
 import { Plus, Upload, Download } from 'lucide-react';
 import { IngredientBulkActionsMenu } from './IngredientBulkActionsMenu';
 
@@ -65,30 +66,36 @@ export function IngredientTableHeader({
           {/* Action Buttons */}
           {onAddIngredient && (
             <div className="flex items-center gap-2">
-              <button
+              <Button
+                variant="primary"
+                size="sm"
                 onClick={onAddIngredient}
-                className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
+                className="flex items-center gap-1.5"
               >
                 <Icon icon={Plus} size="xs" className="text-current" aria-hidden={true} />
                 <span>Add</span>
-              </button>
+              </Button>
               {onImportCSV && (
-                <button
+                <Button
+                  variant="secondary"
+                  size="sm"
                   onClick={onImportCSV}
-                  className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
+                  className="flex items-center gap-1.5"
                 >
                   <Icon icon={Upload} size="xs" className="text-current" aria-hidden={true} />
                   <span>Import</span>
-                </button>
+                </Button>
               )}
               {onExportCSV && (
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={onExportCSV}
-                  className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
+                  className="flex items-center gap-1.5"
                 >
                   <Icon icon={Download} size="xs" className="text-current" aria-hidden={true} />
                   <span>Export</span>
-                </button>
+                </Button>
               )}
               {/* Selection Mode Indicator + Bulk Actions Button - Desktop: in action buttons section */}
               {isSelectionMode && (

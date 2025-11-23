@@ -43,13 +43,24 @@
     "cleanup:all": "node scripts/cleanup.js --check --fix --report",
     "cleanup:staged": "node scripts/cleanup.js --staged",
     "pre-deploy": "bash scripts/pre-deploy-check.sh",
-    "find-allergen-conflicts": "node scripts/find-allergen-vegan-conflicts.js"
+    "find-allergen-conflicts": "node scripts/find-allergen-vegan-conflicts.js",
+    "supabase:status": "npx supabase status",
+    "supabase:migrate": "npx supabase db push",
+    "supabase:migrate:reset": "npx supabase db reset",
+    "supabase:migrate:clean": "npx supabase migration repair --status reverted",
+    "supabase:link": "npx supabase link --project-ref $(echo $NEXT_PUBLIC_SUPABASE_URL | sed 's|https://\\([^.]*\\)\\.supabase\\.co|\\1|')",
+    "supabase:diff": "npx supabase db diff",
+    "supabase:generate": "npx supabase migration new",
+    "supabase:migrate:cleaning": "bash scripts/supabase-migrate-cleaning.sh",
+    "supabase:verify:cleaning": "node scripts/verify-cleaning-migration.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "2.78.0",
     "@svgr/webpack": "^8.1.0",
@@ -75,6 +86,7 @@
     "react-qr-code": "^2.0.18",
     "recharts": "^2.8.0",
     "stripe": "^19.2.0",
+    "three": "^0.181.2",
     "web-vitals": "^5.1.0",
     "zod": "^4.1.12"
   },
@@ -100,6 +112,7 @@
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "0.7.1",
     "sharp": "^0.34.3",
+    "supabase": "^2.58.5",
     "tailwindcss": "^4.1.13",
     "ts-prune": "^0.10.3",
     "typescript": "^5.9.2"

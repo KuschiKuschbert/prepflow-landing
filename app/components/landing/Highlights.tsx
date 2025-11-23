@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import Image from 'next/image';
 import { Leaf, Bot, Thermometer, BookOpen, BarChart3, LucideIcon } from 'lucide-react';
@@ -51,7 +52,13 @@ const highlights: Highlight[] = [
   },
 ];
 
-function HighlightCard({ highlight, index }: { highlight: Highlight; index: number }) {
+const HighlightCard = React.memo(function HighlightCard({
+  highlight,
+  index,
+}: {
+  highlight: Highlight;
+  index: number;
+}) {
   const { ref, animationStyle } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.2,
     triggerOnce: true,
@@ -84,6 +91,7 @@ function HighlightCard({ highlight, index }: { highlight: Highlight; index: numb
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+            loading="lazy"
           />
         </div>
       )}
@@ -95,9 +103,9 @@ function HighlightCard({ highlight, index }: { highlight: Highlight; index: numb
       />
     </div>
   );
-}
+});
 
-export default function Highlights() {
+function Highlights() {
   return (
     <section className="tablet:py-20 relative bg-transparent py-16">
       <div className="mx-auto max-w-7xl px-6">
@@ -118,3 +126,5 @@ export default function Highlights() {
     </section>
   );
 }
+
+export default React.memo(Highlights);

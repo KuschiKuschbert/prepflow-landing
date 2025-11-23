@@ -4,6 +4,46 @@
 
 This document maps the new screenshots to their appropriate locations on the landing page.
 
+## Screenshot Requirements
+
+All screenshots must follow these requirements for consistency and professional appearance:
+
+### Navigation State Requirements
+
+- **Sidebar:** Visible (PersistentSidebar open) - shows navigation categories on desktop viewport (≥1025px)
+- **Navbar:** Hidden/collapsed (header visible but sidebar takes space) - modern navigation header should be visible
+- **Temp Alert:** Visible (GlobalWarning component showing at least one warning) - temperature alerts/banners should be displayed below header
+
+### UI State Requirements
+
+- **Clean UI:** Focus on the feature being showcased, no clutter
+- **Consistent styling:** Dark theme, proper spacing, no unnecessary elements
+- **Optimized buttons:** Use standardized Button component (not inline gradient styles)
+- **Full page capture:** Show complete feature interface with all relevant elements
+
+### Screenshot Capture Process
+
+1. Navigate to the feature page (e.g., `/webapp/ingredients`, `/webapp/recipes#ingredients`)
+2. Ensure sidebar is visible (desktop viewport ≥1025px)
+3. Trigger a temperature warning or use dev tools to show GlobalWarning component
+4. Verify buttons are using standardized Button component (not inline gradients)
+5. Capture full page screenshot showing:
+   - Modern navigation header
+   - Persistent sidebar on left (desktop)
+   - GlobalWarning banner below header (if applicable)
+   - Feature content with optimized buttons
+   - Complete feature interface
+6. Capture at 1200x800px (3:2 aspect ratio) for features, 1920x1080 for hero
+7. Optimize image (WebP format, compression)
+
+### Screenshots Needing Updates
+
+The following screenshots should be updated to reflect the new navigation state and button optimizations:
+
+- **Ingredients Management Screenshot** (`ingredients-management-screenshot.png`) - Update to show standardized buttons, sidebar, and temp alert
+- **Recipe Book Screenshot** (`recipe-book-screenshot.png`) - Update to show sidebar, temp alert, and optimized buttons
+- All other feature screenshots should follow the same requirements when updated
+
 ## Screenshot Files
 
 ### 1. Dashboard Screenshot
@@ -28,18 +68,23 @@ This document maps the new screenshots to their appropriate locations on the lan
 ### 3. Ingredients Management Screenshot
 
 - **File:** `/images/ingredients-management-screenshot.png`
-- **Content:** Ingredients Management table showing search bar, filters (Supplier, Storage, Sort), action buttons (Add, Import, Export), and detailed ingredients table with columns: Name, Brand, Pack Size, Cost/Unit, Supplier, Stock, and Actions
+- **Content:** Ingredients Management table showing search bar, filters (Supplier, Storage, Sort), standardized action buttons (Add, Import, Export using Button component), detailed ingredients table with columns: Name, Brand, Pack Size, Cost/Unit, Supplier, Stock, and Actions
+- **Navigation State:** Sidebar visible, navbar visible, temp alert visible (GlobalWarning)
 - **Used in:**
   - Highlights section: "Ingredients Management" card
   - Closer Look section: "Ingredients & Stock" feature
+- **Status:** ⚠️ Needs update - buttons now use standardized Button component, should show sidebar and temp alert
 
 ### 4. Recipe Book Screenshot (NEW)
 
 - **File:** `/images/recipe-book-screenshot.png`
 - **Content:** Recipe Book interface showing "How Recipe Book Works" section (Manual Recipes vs From COGS Calculations), navigation tabs (Recipes, Dishes), action buttons (Add Recipe, Refresh Recipes), and recipes table with columns: NAME, RECOMMENDED PRICE, PROFIT MARGIN, CONTRIBUTING MARGIN, CREATED, ACTIONS
+- **Navigation State:** Sidebar visible, navbar visible, temp alert visible (GlobalWarning)
+- **Target Page:** `/webapp/recipes#ingredients` (Ingredients tab)
 - **Used in:**
   - Highlights section: "Recipe Management" card
   - Closer Look section: "Recipe Book" feature (NEW)
+- **Status:** ⚠️ Needs update - should show sidebar, temp alert, and optimized buttons
 
 ### 5. Cleaning Roster Screenshot
 

@@ -10,9 +10,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
     '/api/dashboard/menu-summary',
     '/api/dashboard/recipe-readiness',
   ],
-  '/webapp/ingredients': ['/api/ingredients'],
-  '/webapp/recipes': ['/api/recipes'],
-  '/webapp/cogs': [],
+  '/webapp/recipes': ['/api/recipes', '/api/ingredients'],
   '/webapp/performance': ['/api/performance'],
   '/webapp/temperature': ['/api/temperature-logs'],
   '/webapp/cleaning': ['/api/cleaning-areas', '/api/cleaning-tasks'],
@@ -27,7 +25,6 @@ export const PREFETCH_MAP: Record<string, string[]> = {
     '/api/ingredients?page=1&pageSize=50',
   ],
   '/webapp/ai-specials': ['/api/ai-specials'],
-  '/webapp/dish-builder': ['/api/dishes', '/api/recipes'],
   '/webapp/menu-builder': ['/api/menus', '/api/dishes?pageSize=1000', '/api/recipes?pageSize=1000'],
   '/webapp/setup': [],
 };

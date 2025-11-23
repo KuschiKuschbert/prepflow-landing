@@ -112,6 +112,34 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+
+        {/* Resource Preloading - Critical for Performance */}
+        {/* Preload hero dashboard screenshot (above-the-fold, critical for LCP) */}
+        <link
+          rel="preload"
+          href="/images/dashboard-screenshot.png"
+          as="image"
+          type="image/png"
+          fetchPriority="high"
+        />
+
+        {/* DNS Prefetch for external domains */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://dev-7myakdl4itf644km.us.auth0.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+        {/* Preconnect to critical third-party domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://dev-7myakdl4itf644km.us.auth0.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
         {/* Global Grid Background */}

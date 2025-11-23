@@ -44,11 +44,12 @@ interface MenuIngredientsResponse {
 }
 
 export default function OrderListsPage() {
-  // Initialize with cached data for instant display
-  const [menus, setMenus] = useState<Menu[]>(() => getCachedData('order_lists_menus') || []);
+  // Initialize with empty array to avoid hydration mismatch
+  // Cached data will be loaded in useEffect after mount
+  const [menus, setMenus] = useState<Menu[]>([]);
   const [selectedMenuId, setSelectedMenuId] = useState<string>('');
   const [ingredientsData, setIngredientsData] = useState<MenuIngredientsResponse | null>(null);
-  const [loading, setLoading] = useState(!getCachedData('order_lists_menus'));
+  const [loading, setLoading] = useState(true);
   const [loadingIngredients, setLoadingIngredients] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'storage' | 'name' | 'category'>('storage');
@@ -60,6 +61,20 @@ export default function OrderListsPage() {
 
   // Fetch menus on mount
   useEffect(() => {
+    // Load cached data for instant display (client-only)
+    const cachedMenus = getCachedData<Menu[]>('order_lists_menus');
+    if (cachedMenus && cachedMenus.length > 0) {
+      setMenus(cachedMenus);
+      setLoading(false);
+
+      // Default to most recently created menu
+      const mostRecent = cachedMenus.sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      )[0];
+      setSelectedMenuId(mostRecent.id);
+    }
+
+    // Fetch fresh data
     fetchMenus();
   }, []);
 

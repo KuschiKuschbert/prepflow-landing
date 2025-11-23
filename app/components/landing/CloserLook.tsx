@@ -21,6 +21,11 @@ interface Feature {
   screenshotAlt: string;
   details: string[];
   color: string;
+  cta?: {
+    text: string;
+    href: string;
+    action?: () => void; // Optional analytics tracking
+  };
 }
 
 const features: Feature[] = [
@@ -39,6 +44,10 @@ const features: Feature[] = [
       'Automatic unit conversion and normalization',
     ],
     color: '#29E7CD',
+    cta: {
+      text: 'Manage Ingredients',
+      href: '/webapp/ingredients',
+    },
   },
   {
     title: 'COGS Calculator',
@@ -54,6 +63,10 @@ const features: Feature[] = [
       'Gross profit margin analysis',
     ],
     color: '#D925C7',
+    cta: {
+      text: 'Calculate COGS',
+      href: '/webapp/cogs',
+    },
   },
   {
     title: 'Recipe Book',
@@ -61,7 +74,7 @@ const features: Feature[] = [
     icon: BookOpen, // Lucide icon instead of emoji
     screenshot: '/images/recipe-book-screenshot.png',
     screenshotAlt:
-      'PrepFlow Recipe Book showing recipes list with pricing, profit margins, and contributing margins',
+      'PrepFlow Recipe Book Ingredients tab showing standardized buttons, sidebar navigation, and ingredients management interface',
     details: [
       'Complete recipe library with all your dishes',
       'Recommended pricing with food cost percentages',
@@ -70,6 +83,10 @@ const features: Feature[] = [
       'Easy recipe editing and management',
     ],
     color: '#29E7CD',
+    cta: {
+      text: 'View Recipes',
+      href: '/webapp/recipes',
+    },
   },
   {
     title: 'Performance Analysis',
@@ -88,6 +105,10 @@ const features: Feature[] = [
       'Comprehensive analytics with donut charts, scatter plots, and bar charts',
     ],
     color: '#3B82F6',
+    cta: {
+      text: 'Analyze Performance',
+      href: '/webapp/performance',
+    },
   },
   {
     title: 'Cleaning & Compliance',
@@ -103,6 +124,10 @@ const features: Feature[] = [
       'Automated reminders and notifications',
     ],
     color: '#29E7CD',
+    cta: {
+      text: 'Manage Cleaning',
+      href: '/webapp/cleaning',
+    },
   },
   {
     title: 'Temperature Monitoring',
@@ -120,6 +145,10 @@ const features: Feature[] = [
       'Equipment status dashboard with visual indicators',
     ],
     color: '#D925C7',
+    cta: {
+      text: 'Monitor Temperature',
+      href: '/webapp/temperature',
+    },
   },
   {
     title: 'Settings & Configuration',
@@ -135,6 +164,10 @@ const features: Feature[] = [
       'Integration settings and API keys',
     ],
     color: '#3B82F6',
+    cta: {
+      text: 'Open Settings',
+      href: '/webapp/settings',
+    },
   },
 ];
 

@@ -6,10 +6,14 @@ console.log('🖼️ Starting image optimization...');
 
 const imagePaths = [
   'public/images/dashboard-screenshot.png',
-  'public/images/prepflow-logo.png',
-  'public/images/recipe-screenshot.png',
+  'public/images/ingredients-management-screenshot.png',
+  'public/images/cogs-calculator-screenshot.png',
+  'public/images/recipe-book-screenshot.png',
+  'public/images/performance-analysis-screenshot.png',
+  'public/images/cleaning-roster-screenshot.png',
+  'public/images/temperature-monitoring-screenshot.png',
   'public/images/settings-screenshot.png',
-  'public/images/stocklist-screenshot.png',
+  'public/images/prepflow-logo.png',
   'public/icons/icon-144x144.png',
 ];
 

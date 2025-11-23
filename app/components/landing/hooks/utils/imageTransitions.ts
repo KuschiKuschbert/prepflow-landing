@@ -30,26 +30,39 @@ export function useImageTransitions(displayFeature: Feature, imageMounted: boole
       setPreviousImageOpacity(1);
       setCurrentImageOpacity(0);
       setNewImageLoaded(false);
-      setCurrentImage(newImage);
+
+      // Preload new image completely BEFORE starting transition
       const img = new window.Image();
       img.src = newImage.screenshot;
       img.onload = () => {
+        // Image is fully loaded and ready
         setNewImageLoaded(true);
+        if (img.naturalWidth && img.naturalHeight) {
+          setImageDimensions({ width: img.naturalWidth, height: img.naturalHeight });
+        }
+        // Small delay to ensure image is rendered, then start transition
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            setPreviousImageOpacity(0);
-            setCurrentImageOpacity(1);
+            setCurrentImage(newImage);
+            // Framer Motion will handle the smooth crossfade
+            setTimeout(() => {
+              setPreviousImageOpacity(0);
+              setCurrentImageOpacity(1);
+            }, 50);
           });
         });
       };
       img.onerror = () => {
+        // Even on error, proceed with transition
         setNewImageLoaded(true);
-        requestAnimationFrame(() => {
+        setCurrentImage(newImage);
+        setTimeout(() => {
           setPreviousImageOpacity(0);
           setCurrentImageOpacity(1);
-        });
+        }, 50);
       };
     } else if (!currentImage) {
+      // First image - set immediately
       setCurrentImage(newImage);
       setCurrentImageOpacity(1);
       setNewImageLoaded(true);

@@ -136,6 +136,7 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
       ref={canvasRef}
       className={`fixed inset-0 -z-10 h-full w-full ${className}`}
       aria-hidden={true}
+      style={{ willChange: 'contents' }}
     />
   );
 }

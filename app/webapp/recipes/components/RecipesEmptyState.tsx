@@ -18,7 +18,7 @@ export function RecipesEmptyState() {
       </p>
       <div className="tablet:flex-row tablet:justify-center flex flex-col items-center gap-3">
         <a
-          href="/webapp/cogs"
+          href="/webapp/recipes#dishes"
           className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
         >
           <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />

@@ -133,7 +133,10 @@ export function AddTemperatureLogForm({
             {equipment
               .filter(eq => eq.is_active)
               .map((item, index) => (
-                <option key={item.id ?? `eq-${index}`} value={item.equipment_type}>
+                <option
+                  key={`equipment-${item.id ?? index}-${item.equipment_type}-${item.name}`}
+                  value={item.equipment_type}
+                >
                   {getTypeIcon(item.equipment_type)} {item.name} (
                   {getTypeLabel(item.equipment_type)})
                 </option>
@@ -146,7 +149,7 @@ export function AddTemperatureLogForm({
                   type.value === 'food_cold_holding',
               )
               .map(type => (
-                <option key={type.value} value={type.value}>
+                <option key={`type-${type.value}`} value={type.value}>
                   {type.icon} {type.label} (Food Safety)
                 </option>
               ))}

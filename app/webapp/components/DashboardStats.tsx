@@ -158,7 +158,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
       {/* Low Stock Alerts */}
       {stats.ingredientsLowStock !== undefined && (
         <Link
-          href="/webapp/ingredients"
+          href="/webapp/recipes#ingredients"
           className="group tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg transition-all duration-200 hover:border-[#F59E0B]/50 hover:shadow-xl"
         >
           <div className="flex items-center justify-between">
