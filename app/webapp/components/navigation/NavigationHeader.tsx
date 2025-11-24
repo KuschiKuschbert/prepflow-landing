@@ -12,6 +12,7 @@ import { Search, Menu } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 
 interface NavigationHeaderProps {
   className?: string;
@@ -156,7 +157,7 @@ export function NavigationHeader({
               }}
             >
               <BrandMark
-                src="/images/prepflow-logo.svg"
+                src="/images/prepflow-logo.png"
                 alt="PrepFlow Logo"
                 width={24}
                 height={24}
@@ -170,28 +171,26 @@ export function NavigationHeader({
               />
             </Link>
             <Link href="/webapp" className="desktop:inline hidden">
-              <span className="text-lg font-semibold text-white">PrepFlow</span>
+              <span
+                className={`${LANDING_TYPOGRAPHY.lg} font-semibold text-white transition-colors hover:text-[#29E7CD]`}
+              >
+                PrepFlow
+              </span>
             </Link>
             <AutosaveGlobalIndicator />
           </div>
         </div>
-        <div
-          className={cn(
-            'hidden',
-            'items-center',
-            'space-x-2',
-            'text-sm',
-            'text-gray-400',
-            'desktop:flex',
-          )}
-        >
-          <Link href="/webapp" className={cn('transition-colors', 'hover:text-[#29E7CD]')}>
+        <div className={cn('hidden', 'items-center', 'space-x-2', 'desktop:flex')}>
+          <Link
+            href="/webapp"
+            className={`${LANDING_TYPOGRAPHY.sm} text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]`}
+          >
             Dashboard
           </Link>
           {pathname !== '/webapp' && (
             <>
-              <span>/</span>
-              <span className="text-[#29E7CD]">
+              <span className={`${LANDING_TYPOGRAPHY.sm} text-gray-500`}>/</span>
+              <span className={`${LANDING_TYPOGRAPHY.sm} font-medium text-[#29E7CD]`}>
                 {navigationItems.find(item => isActive(item.href))?.label || 'Page'}
               </span>
             </>
@@ -223,7 +222,7 @@ export function NavigationHeader({
           <div className="desktop:flex hidden items-center space-x-2">
             {userName && (
               <span
-                className="text-xs text-gray-400"
+                className={`${LANDING_TYPOGRAPHY.xs} text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]`}
                 title={userEmail || 'Logged in user'}
                 aria-label={`Logged in as ${userName}`}
               >

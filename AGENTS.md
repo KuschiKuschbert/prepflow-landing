@@ -75,6 +75,79 @@
 - Performance: Lighthouse ≥ 90; CLS < 0.1; LCP < 2.5s
 - Analytics: tour_open/close, step navigation, CTA clicks
 
+### Landing Page Style System
+
+**Style System Decision Tree:**
+
+1. **Is this a public marketing page?** → Use landing page styles
+2. **Is this an authenticated webapp page?** → Use webapp styles
+3. **Is this a conversion-focused component?** → Use landing page styles
+4. **Is this a data management interface?** → Use webapp styles
+
+**Landing Page Style Resources:**
+
+- **Style Guide:** `docs/LANDING_PAGE_STYLE_GUIDE.md` - Complete landing page style reference
+- **Migration Guide:** `docs/LANDING_STYLE_MIGRATION.md` - Examples and best practices for applying landing styles
+- **Style Utilities:** `lib/landing-styles.ts` - Centralized style constants and utilities
+- **Design System:** `.cursor/rules/design.mdc` - Landing page style system documentation
+
+**Key Landing Page Components:**
+
+- `components/ui/MagneticButton.tsx` - Interactive button with magnetic hover effect
+- `components/ui/GlowCard.tsx` - Card component with radial gradient glow effect
+- `components/ui/ScrollReveal.tsx` - Scroll-triggered animation component
+- `components/landing/LandingBackground.tsx` - Dynamic background effects system
+
+**When to Use Landing Page Styles:**
+
+- ✅ Marketing pages (`/`, `/pricing`, `/features`, etc.)
+- ✅ Public-facing content (landing pages, marketing sections)
+- ✅ Conversion-focused components (CTAs, hero sections, feature showcases)
+- ✅ Marketing emails and promotional content
+
+**When to Use Webapp Styles:**
+
+- ✅ Authenticated webapp pages (`/webapp/**`)
+- ✅ Data-heavy interfaces (tables, forms, dashboards)
+- ✅ Internal tools and admin interfaces
+- ✅ Functional components (navigation, settings, data management)
+
+**Quick Reference:**
+
+```typescript
+// Import style utilities
+import {
+  LANDING_COLORS,
+  LANDING_TYPOGRAPHY,
+  LANDING_SPACING,
+  getGlowColor,
+  getSectionClasses,
+} from '@/lib/landing-styles';
+
+// Use landing page components
+import { MagneticButton } from '@/components/ui/MagneticButton';
+import { GlowCard } from '@/components/ui/GlowCard';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
+
+// Apply fluid typography
+<h2 className="text-fluid-3xl font-bold text-white">Title</h2>
+
+// Structure sections
+<section className={getSectionClasses({ padding: 'large' })}>
+  <div className="mx-auto max-w-7xl px-6">
+    <ScrollReveal variant="fade-up">
+      {/* Content */}
+    </ScrollReveal>
+  </div>
+</section>
+```
+
+**See Also:**
+
+- `docs/LANDING_PAGE_STYLE_GUIDE.md` - Complete style guide with all patterns
+- `docs/LANDING_STYLE_MIGRATION.md` - Migration examples and best practices
+- `.cursor/rules/design.mdc` (Landing Page Style System) - Design system documentation
+
 ## Development Utilities
 
 - Reset and Seed (dev-only):
@@ -726,6 +799,8 @@ npm run codemod:console:write
 
 ## 🎨 **Material Design 3 Design System**
 
+**Note:** This design system applies to the webapp (`/webapp/**`). For landing page styles, see the **Landing Page Style System** section above and `docs/LANDING_PAGE_STYLE_GUIDE.md`.
+
 ### **Color Palette**
 
 ```css
@@ -736,6 +811,13 @@ npm run codemod:console:write
   /* Border gray - Subtle borders */ --surface: #2a2a2a /* Surface color - Elevated elements */
   --surface-variant: #2a2a2a/30 /* Surface variant - Subtle backgrounds */;
 ```
+
+**Style System Decision Tree:**
+
+- **Landing Page Styles:** Use for marketing pages, public content, conversion-focused components
+  - See: `docs/LANDING_PAGE_STYLE_GUIDE.md` and `.cursor/rules/design.mdc` (Landing Page Style System)
+- **Webapp Styles (Material Design 3):** Use for authenticated pages, data interfaces, functional components
+  - See: `.cursor/rules/design.mdc` (Material Design 3 Design System)
 
 ### **Material Design 3 Typography**
 

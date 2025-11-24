@@ -6,7 +6,7 @@ export function RecipesHeader() {
     <div className="mb-8">
       <div className="mb-4 flex items-center gap-4">
         <Image
-          src="/images/prepflow-logo.svg"
+          src="/images/prepflow-logo.png"
           alt="PrepFlow Logo"
           width={40}
           height={40}

@@ -1,46 +1,78 @@
+'use client';
+
 import { useTranslation } from '../../../../lib/useTranslation';
+import { GlowCard } from '@/components/ui/GlowCard';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import {
+  LANDING_COLORS,
+  LANDING_TYPOGRAPHY,
+  LANDING_LAYOUT,
+  LANDING_GRIDS,
+  getSectionClasses,
+  getStaggerDelay,
+  getGlowColor,
+} from '@/lib/landing-styles';
 
 export function BenefitsSection() {
   const { t } = useTranslation();
 
+  const benefits = [
+    {
+      title: t('benefits.profit.title', 'Stop Losing Money'),
+      description: t(
+        'benefits.profit.description',
+        "Find the dishes bleeding profit and fix them. Or remove them. Your call—but now you'll know.",
+      ),
+      color: LANDING_COLORS.primary,
+    },
+    {
+      title: t('benefits.time.title', 'No More 2 AM Excel'),
+      description: t(
+        'benefits.time.description',
+        'Calculations happen automatically. No formulas to break. No spreadsheets to maintain. Just accurate costs, instantly.',
+      ),
+      color: LANDING_COLORS.secondary,
+    },
+    {
+      title: t('benefits.confidence.title', 'Price Without Guessing'),
+      description: t(
+        'benefits.confidence.description',
+        'Set your target margin. Get the price. No math, no stress, no "is this right?" moments.',
+      ),
+      color: LANDING_COLORS.accent,
+    },
+  ];
+
   return (
-    <section id="benefits" className="py-20">
-      <h3 className="text-fluid-3xl desktop:text-fluid-4xl mb-12 text-center font-bold tracking-tight">
-        {t('benefits.title', 'What PrepFlow Helps You Achieve')}
-      </h3>
-      <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid gap-8">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h4 className="text-fluid-lg mb-3 font-semibold text-[#29E7CD]">
-            {t('benefits.profit.title', 'Increase Profit Margins')}
-          </h4>
-          <p className="text-gray-300">
-            {t(
-              'benefits.profit.description',
-              'Identify and eliminate profit leaks with accurate cost calculations.',
-            )}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h4 className="text-fluid-lg mb-3 font-semibold text-[#3B82F6]">
-            {t('benefits.time.title', 'Save Time')}
-          </h4>
-          <p className="text-gray-300">
-            {t(
-              'benefits.time.description',
-              'Automate calculations and reduce manual work by hours every week.',
-            )}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h4 className="text-fluid-lg mb-3 font-semibold text-[#D925C7]">
-            {t('benefits.confidence.title', 'Price with Confidence')}
-          </h4>
-          <p className="text-gray-300">
-            {t(
-              'benefits.confidence.description',
-              'Make data-driven pricing decisions that maximize profitability.',
-            )}
-          </p>
+    <section id="benefits" className={getSectionClasses({ padding: 'large' })}>
+      <div className={LANDING_LAYOUT.container}>
+        <ScrollReveal variant="fade-up">
+          <h3
+            className={`${LANDING_TYPOGRAPHY['4xl']} desktop:text-fluid-5xl mb-16 text-center font-light tracking-tight text-white`}
+          >
+            {t('benefits.title', 'What You Get')}
+          </h3>
+        </ScrollReveal>
+        <div className={`${LANDING_GRIDS['1-2-3']} gap-12`}>
+          {benefits.map((benefit, index) => (
+            <ScrollReveal
+              key={`benefit-${index}-${benefit.title}`}
+              variant="fade-up"
+              delay={getStaggerDelay(index)}
+            >
+              <GlowCard glowColor={getGlowColor(benefit.color)} className="p-8">
+                <h4
+                  className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light`}
+                  style={{ color: benefit.color }}
+                >
+                  {benefit.title}
+                </h4>
+                <p className={`${LANDING_TYPOGRAPHY.base} leading-relaxed text-gray-400`}>
+                  {benefit.description}
+                </p>
+              </GlowCard>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>

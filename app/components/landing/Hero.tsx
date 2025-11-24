@@ -1,8 +1,10 @@
 'use client';
 
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { MagneticButton } from '@/components/ui/MagneticButton';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface HeroProps {
   onTourClick?: () => void;
@@ -12,19 +14,6 @@ interface HeroProps {
 export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
   const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
-  const { ref: textRef, animationStyle: textAnimationStyle } = useScrollAnimation<HTMLDivElement>({
-    threshold: 0.2,
-    triggerOnce: true,
-    delay: 0,
-  });
-
-  const { ref: imageRef, animationStyle: imageAnimationStyle } = useScrollAnimation<HTMLDivElement>(
-    {
-      threshold: 0.2,
-      triggerOnce: true,
-      delay: 100,
-    },
-  );
 
   const handleSignIn = () => {
     if (trackEngagement) {
@@ -60,57 +49,68 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
   return (
     <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-transparent">
       <div className="tablet:py-20 mx-auto w-full max-w-7xl px-6 py-16 text-center">
-        {/* Headline - Apple Style */}
-        <div ref={textRef} style={textAnimationStyle} className="mb-8">
-          <h1 className="text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl large-desktop:text-fluid-4xl xl:text-fluid-4xl font-bold tracking-tight text-white">
+        {/* Headline - MacBook Pro Style */}
+        <ScrollReveal variant="fade-up" className="mb-12">
+          <h1 className="text-fluid-5xl tablet:text-fluid-6xl desktop:text-fluid-7xl large-desktop:text-fluid-7xl xl:text-fluid-8xl font-light tracking-tight text-white">
             PrepFlow
           </h1>
-          <p className="text-fluid-2xl tablet:text-fluid-3xl desktop:text-fluid-3xl mt-6 font-medium text-gray-300">
-            Kitchen Management Platform.
+          <p className="text-fluid-xl tablet:text-fluid-2xl desktop:text-fluid-3xl mt-8 font-light text-gray-300">
+            Know your costs. Price with confidence.
           </p>
-          <p className="text-fluid-2xl tablet:text-fluid-3xl desktop:text-fluid-3xl mt-2 font-medium text-gray-300">
-            Now supercharged by AI.
-          </p>
-        </div>
+        </ScrollReveal>
 
-        {/* CTAs - Minimal Apple Style */}
-        <div className="tablet:flex-row mt-12 flex flex-col items-center justify-center gap-4">
+        {/* CTAs - MacBook Pro Style */}
+        <ScrollReveal
+          variant="fade-up"
+          delay={0.2}
+          className="tablet:flex-row mt-16 flex flex-col items-center justify-center gap-4"
+        >
           {isAuthenticated ? (
-            <button
+            <MagneticButton
               onClick={handleGoToDashboard}
               className="text-fluid-lg rounded-full border border-white/20 bg-white px-8 py-3 font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
               aria-label="Go to Dashboard"
+              strength={0.4}
+              maxDistance={15}
             >
               Go to Dashboard
-            </button>
+            </MagneticButton>
           ) : (
             <>
-              <button
+              <MagneticButton
                 onClick={handleRegister}
-                className="text-fluid-lg rounded-full border border-white/20 bg-white px-8 py-3 font-medium text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="text-fluid-base tablet:text-fluid-lg rounded-full border border-white/20 bg-white px-10 py-4 font-normal text-black transition-all hover:bg-gray-100 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Register for PrepFlow"
+                strength={0.4}
+                maxDistance={15}
               >
-                Register
-              </button>
-              <button
+                Get Started
+              </MagneticButton>
+              <MagneticButton
                 onClick={handleSignIn}
-                className="text-fluid-lg rounded-full border border-white/20 bg-transparent px-8 py-3 font-medium text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
+                className="text-fluid-base tablet:text-fluid-lg rounded-full border border-white/20 bg-transparent px-10 py-4 font-normal text-white transition-all hover:bg-white/10 focus:ring-2 focus:ring-white/50 focus:outline-none"
                 aria-label="Sign in to PrepFlow"
+                strength={0.4}
+                maxDistance={15}
               >
                 Sign In
-              </button>
+              </MagneticButton>
             </>
           )}
-        </div>
+        </ScrollReveal>
 
-        {/* Dashboard Screenshot - Large, Centered */}
-        <div
-          ref={imageRef}
-          style={imageAnimationStyle}
-          className="mt-16 flex items-center justify-center"
+        {/* Dashboard Screenshot - MacBook Pro Style */}
+        <ScrollReveal
+          variant="scale-up"
+          delay={0.4}
+          className="mt-24 flex items-center justify-center"
         >
           <div className="w-full max-w-6xl">
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#1f1f1f]/30 shadow-2xl backdrop-blur-sm">
+            <motion.div
+              className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#1f1f1f]/30 shadow-2xl backdrop-blur-sm"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
               <Image
                 src="/images/dashboard-screenshot.png"
                 alt="PrepFlow Dashboard showing kitchen management overview"
@@ -121,9 +121,9 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
                 quality={90}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
               />
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Smooth Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">

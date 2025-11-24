@@ -9,12 +9,15 @@ import ScrollTracker from '../components/ScrollTracker';
 import { ScrollProgress } from '../components/ui/ScrollProgress';
 import { ScrollToTop } from '../components/ui/ScrollToTop';
 import { LandingSectionSkeleton } from '../components/ui/LandingSectionSkeleton';
+import { ScrollReveal } from '../components/ui/ScrollReveal';
 
 // Above-the-fold components (synchronous - critical for initial render)
 import AppHero from './components/landing/Hero';
 import Highlights from './components/landing/Highlights';
 import LandingHeader from './components/landing/LandingHeader';
 import LandingBackground from './components/landing/LandingBackground';
+import { MobileBottomNav } from './components/landing/MobileBottomNav';
+import { MobileMenuDrawer } from './components/landing/MobileMenuDrawer';
 
 // Below-the-fold components (lazy-loaded for better performance)
 const CloserLook = lazy(() => import('./components/landing/CloserLook'));
@@ -26,6 +29,7 @@ const LandingFooter = lazy(() => import('./components/landing/LandingFooter'));
 // Background effects (lazy-loaded - defer until after initial render)
 const SafeAnimatedBackground = lazy(() => import('./components/landing/SafeAnimatedBackground'));
 const SafeGradientOrbs = lazy(() => import('./components/landing/SafeGradientOrbs'));
+const BackgroundLogo = lazy(() => import('../components/ui/BackgroundLogo'));
 
 // Hooks and utilities
 import { useEngagementTracking } from '../hooks/useEngagementTracking';
@@ -39,6 +43,9 @@ export default function Page() {
 
   // Engagement tracking
   const { trackEngagement } = useEngagementTracking();
+
+  // Mobile drawer state
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
   // Performance monitoring - track page load time
   React.useEffect(() => {
@@ -55,7 +62,7 @@ export default function Page() {
       '@type': 'SoftwareApplication',
       name: 'PrepFlow',
       description:
-        'Kitchen project management software for restaurants, cafés, and food trucks. Track ingredients, manage recipes, calculate COGS, and optimize pricing.',
+        'Restaurant profitability platform for Australian restaurants, cafés, and food trucks. Calculate COGS, optimize pricing, track compliance, and monitor temperature—all in one place.',
       url: 'https://www.prepflow.org',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web Browser',
@@ -64,11 +71,6 @@ export default function Page() {
         price: '29',
         priceCurrency: 'AUD',
         availability: 'https://schema.org/InStock',
-      },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.8',
-        ratingCount: '127',
       },
       publisher: {
         '@type': 'Organization',
@@ -114,7 +116,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <main
-        className="relative min-h-screen scroll-smooth bg-transparent text-white"
+        className="desktop:pb-0 relative min-h-screen scroll-smooth bg-transparent pb-20 text-white"
         style={
           {
             '--primary-color': '#29E7CD',
@@ -134,13 +136,14 @@ export default function Page() {
         {/* Base background color */}
         <div className="fixed inset-0 -z-20 bg-[#0a0a0a]" aria-hidden="true" />
 
-        {/* Beautiful Grid Background */}
+        {/* Beautiful Grid Background with Enhanced Effects */}
         <LandingBackground />
 
         {/* Animated Background Effects - Apple-style (lazy-loaded) */}
         <Suspense fallback={null}>
           <SafeAnimatedBackground />
           <SafeGradientOrbs />
+          <BackgroundLogo />
         </Suspense>
 
         {/* Content overlay - ensures content is above background */}
@@ -179,6 +182,19 @@ export default function Page() {
             <LandingFooter />
           </Suspense>
         </div>
+
+        {/* Mobile Bottom Navigation */}
+        <MobileBottomNav
+          onMenuClick={() => setIsDrawerOpen(true)}
+          trackEngagement={trackEngagement}
+        />
+
+        {/* Mobile Menu Drawer */}
+        <MobileMenuDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          trackEngagement={trackEngagement}
+        />
       </main>
     </>
   );

@@ -73,12 +73,12 @@ export function LeadMagnetSection() {
       <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-10 shadow-2xl backdrop-blur-sm">
         <div className="text-center">
           <h2 className="text-fluid-3xl desktop:text-fluid-4xl mb-6 font-bold tracking-tight">
-            {t('leadMagnet.title', 'Get Your Free COGS Calculator')}
+            {t('leadMagnet.title', 'Try It Free First')}
           </h2>
           <p className="text-fluid-lg mx-auto max-w-2xl text-gray-300">
             {t(
               'leadMagnet.description',
-              'Download our free Excel template to start calculating COGS immediately. No signup required.',
+              'Download our free Excel COGS calculator. See how it works. No signup required.',
             )}
           </p>
           <div className="mt-8">

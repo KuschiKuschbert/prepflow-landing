@@ -1,33 +1,43 @@
 import { useTranslation } from '../../../../lib/useTranslation';
+import { LANDING_TYPOGRAPHY, LANDING_LAYOUT, getSectionClasses } from '@/lib/landing-styles';
 
 export function TrustSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="border-t border-gray-700 py-16">
-      <div className="mb-8 text-center">
-        <h3 className="text-fluid-2xl mb-4 font-bold tracking-tight">
-          {t('trust.title', 'Trusted by Restaurants Worldwide')}
+    <section className={`border-t border-gray-700 ${getSectionClasses({ padding: 'small' })}`}>
+      <div className={`${LANDING_LAYOUT.container} mb-8 text-center`}>
+        <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-4 font-bold tracking-tight`}>
+          {t('trust.title', 'Built for Australian Restaurants')}
         </h3>
         <p className="text-gray-400">
           {t(
             'trust.subtitle',
-            'Join hundreds of restaurants already using PrepFlow to maximize their profits',
+            'Designed specifically for Australian restaurants, cafés, and food trucks with Queensland compliance standards.',
           )}
         </p>
       </div>
-      <div className="desktop:grid-cols-3 grid gap-8">
+      <div className={`${LANDING_LAYOUT.container} desktop:grid-cols-3 grid gap-8`}>
         <div className="text-center">
-          <div className="text-fluid-3xl mb-2 font-bold text-[#29E7CD]">500+</div>
-          <div className="text-gray-400">{t('trust.restaurants', 'Restaurants')}</div>
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-[#29E7CD]`}>
+            {/* LANDING_COLORS.primary */}
+            100%
+          </div>
+          <div className="text-gray-400">{t('trust.compliant', 'QLD Compliant')}</div>
         </div>
         <div className="text-center">
-          <div className="text-fluid-3xl mb-2 font-bold text-[#3B82F6]">$2M+</div>
-          <div className="text-gray-400">{t('trust.savings', 'Cost Savings')}</div>
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-[#3B82F6]`}>
+            {/* LANDING_COLORS.secondary */}
+            Manual
+          </div>
+          <div className="text-gray-400">{t('trust.monitoring', 'Temperature Logging')}</div>
         </div>
         <div className="text-center">
-          <div className="text-fluid-3xl mb-2 font-bold text-[#D925C7]">4.8★</div>
-          <div className="text-gray-400">{t('trust.rating', 'Customer Rating')}</div>
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-[#D925C7]`}>
+            {/* LANDING_COLORS.accent */}
+            Real-time
+          </div>
+          <div className="text-gray-400">{t('trust.calculations', 'COGS Calculations')}</div>
         </div>
       </div>
     </section>

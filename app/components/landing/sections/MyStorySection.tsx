@@ -1,52 +1,76 @@
 import OptimizedImage from '../../../../components/OptimizedImage';
 import { useTranslation } from '../../../../lib/useTranslation';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import {
+  LANDING_COLORS,
+  LANDING_TYPOGRAPHY,
+  LANDING_LAYOUT,
+  getSectionClasses,
+  getStaggerDelay,
+} from '@/lib/landing-styles';
 
 export function MyStorySection() {
   const { t } = useTranslation();
 
   return (
-    <section className="border-t border-gray-700 py-20">
-      <div className="mb-16 text-center">
-        <h2 className="text-fluid-3xl desktop:text-fluid-4xl mb-6 font-bold tracking-tight">
-          {t('story.title', 'My Story: From Frustration to Solution')}
-        </h2>
-        <p className="text-fluid-lg mx-auto max-w-3xl text-gray-300">
-          {t('story.subtitle', "I've been where you are. Here's how PrepFlow came to be.")}
-        </p>
-      </div>
-      <div className="desktop:grid-cols-2 grid gap-12">
-        <div className="space-y-6">
-          <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-            <h3 className="text-fluid-xl mb-3 font-semibold text-[#29E7CD]">
-              {t('story.frustration.title', 'The Frustration')}
-            </h3>
-            <p className="text-gray-300">
-              {t(
-                'story.frustration.description',
-                'Running a restaurant, I was constantly guessing at costs. Spreadsheets were messy, calculations were wrong, and I was losing money without knowing it.',
-              )}
-            </p>
+    <section className={getSectionClasses({ padding: 'medium', border: true })}>
+      <div className={LANDING_LAYOUT.container}>
+        <ScrollReveal variant="fade-up" className="mb-16 text-center">
+          <h2
+            className={`${LANDING_TYPOGRAPHY['3xl']} desktop:${LANDING_TYPOGRAPHY['4xl']} mb-6 font-bold tracking-tight text-white`}
+          >
+            {t('story.title', 'Built by Someone Who Gets It')}
+          </h2>
+          <p className={`${LANDING_TYPOGRAPHY.lg} mx-auto max-w-3xl text-gray-300`}>
+            {t('story.subtitle', "I've been where you are. This is the tool I wish I had.")}
+          </p>
+        </ScrollReveal>
+        <div className="desktop:grid-cols-2 grid gap-12">
+          <div className="space-y-6">
+            <ScrollReveal variant="fade-up" delay={0.1}>
+              <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
+                <h3
+                  className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold`}
+                  style={{ color: LANDING_COLORS.primary }}
+                >
+                  {t('story.frustration.title', 'The Frustration')}
+                </h3>
+                <p className="text-gray-300">
+                  {t(
+                    'story.frustration.description',
+                    "I was guessing at costs. Excel formulas broke. I lost money and didn't know why. Sound familiar?",
+                  )}
+                </p>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal variant="fade-up" delay={0.2}>
+              <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
+                <h3
+                  className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold`}
+                  style={{ color: LANDING_COLORS.accent }}
+                >
+                  {t('story.solution.title', 'The Solution')}
+                </h3>
+                <p className="text-gray-300">
+                  {t(
+                    'story.solution.description',
+                    'So I built PrepFlow. Real costs. Live calculations. No guesswork. The tool I wish I had when I was losing money.',
+                  )}
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
-          <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-            <h3 className="text-fluid-xl mb-3 font-semibold text-[#D925C7]">
-              {t('story.solution.title', 'The Solution')}
-            </h3>
-            <p className="text-gray-300">
-              {t(
-                'story.solution.description',
-                "I built PrepFlow to solve these exact problems. It's the tool I wish I had when I was struggling with manual calculations and hidden costs.",
-              )}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center justify-center">
-          <OptimizedImage
-            src="/images/chef-working.jpg"
-            alt="Chef working in kitchen"
-            width={500}
-            height={400}
-            className="rounded-2xl shadow-2xl"
-          />
+          <ScrollReveal variant="fade-up" delay={0.3}>
+            <div className="flex items-center justify-center">
+              <OptimizedImage
+                src="/images/chef-working.jpg"
+                alt="Chef working in kitchen"
+                width={500}
+                height={400}
+                className="rounded-2xl shadow-2xl"
+              />
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

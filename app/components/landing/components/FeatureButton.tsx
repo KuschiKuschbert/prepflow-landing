@@ -7,6 +7,7 @@ import { Plus } from 'lucide-react';
 interface Feature {
   title: string;
   description: string;
+  color?: string;
   cta?: {
     text: string;
     href: string;
@@ -74,9 +75,16 @@ export function FeatureButton({
           duration: 0.6,
         },
       }}
-      className={`relative flex border text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+      className={`relative flex border text-left transition-all duration-300 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
         !isExpanded ? 'hover:scale-[1.02] hover:border-white/18 hover:bg-white/12' : ''
       }`}
+      whileHover={
+        !isExpanded
+          ? {
+              scale: 1.02,
+            }
+          : {}
+      }
       style={{
         width:
           isExpanded && containerWidth
@@ -93,6 +101,11 @@ export function FeatureButton({
         overflow: 'hidden',
         maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
         minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
+        boxShadow: isExpanded
+          ? feature.color
+            ? `0 0 20px ${feature.color}40, 0 0 40px ${feature.color}20`
+            : '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)'
+          : 'none',
       }}
       aria-expanded={isExpanded}
       aria-controls={`feature-content-${index}`}
@@ -116,8 +129,8 @@ export function FeatureButton({
               layout="position"
               className={
                 isExpanded
-                  ? 'text-fluid-base tablet:text-fluid-lg font-semibold text-white'
-                  : 'text-fluid-sm tablet:text-fluid-base font-medium text-white/90'
+                  ? 'text-fluid-lg tablet:text-fluid-xl font-light text-white'
+                  : 'text-fluid-base tablet:text-fluid-lg font-light text-white/90'
               }
             >
               {feature.title}
@@ -148,7 +161,7 @@ export function FeatureButton({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="text-fluid-sm tablet:text-fluid-base w-full text-gray-300"
+              className="text-fluid-base tablet:text-fluid-lg w-full leading-relaxed text-gray-400"
             >
               {feature.description}
             </motion.div>

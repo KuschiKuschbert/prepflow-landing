@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import { LANDING_COLORS } from '@/lib/landing-styles';
 import { QrCode } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 
@@ -39,6 +40,9 @@ export function EquipmentActionButtons({
         }}
         disabled={quickTempLoading[item.id] || !item.is_active}
         className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2.5 text-sm font-semibold text-black shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+        style={{
+          background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
+        }}
       >
         {quickTempLoading[item.id]
           ? t('temperature.logging', 'Logging...')

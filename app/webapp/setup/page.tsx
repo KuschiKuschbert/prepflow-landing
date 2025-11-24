@@ -65,7 +65,7 @@ export default function SetupPageRefactored() {
         <div className="mb-8">
           <div className="mb-6 flex items-center space-x-4">
             <Image
-              src="/images/prepflow-logo.svg"
+              src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
               width={120}
               height={40}

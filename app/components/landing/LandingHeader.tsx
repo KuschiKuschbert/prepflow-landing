@@ -10,6 +10,7 @@ import { BrandMark } from '../../../components/BrandMark';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
+import { MagneticButton } from '../../../components/ui/MagneticButton';
 interface LandingHeaderProps {
   trackEngagement: (event: string) => void;
 }
@@ -24,19 +25,23 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
       <div className="tablet:px-6 tablet:py-4 mx-auto max-w-7xl px-4 py-3">
         <div className="flex items-center justify-between gap-2">
-          {/* Logo */}
+          {/* Logo - More prominent with animations */}
           <Link href="/" className="flex shrink-0 items-center">
             <BrandMark
-              src="/images/prepflow-logo.svg"
+              src="/images/prepflow-logo.png"
               alt="PrepFlow Logo"
-              width={48}
-              height={48}
-              className="tablet:h-12 tablet:w-12 h-10 w-10"
+              width={64}
+              height={64}
+              className="tablet:h-20 tablet:w-20 desktop:h-24 desktop:w-24 h-16 w-16"
+              floating={true}
+              glowOnHover={true}
+              animationIntensity={0.8}
             />
+            <span className="sr-only">PrepFlow</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="tablet:flex hidden items-center space-x-8">
+          <nav className="desktop:flex hidden items-center space-x-8">
             <a
               href="#features"
               className="rounded text-gray-300 transition-colors hover:text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
@@ -61,22 +66,24 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
           </nav>
 
           {/* Desktop Actions */}
-          <div className="tablet:flex hidden items-center gap-4">
+          <div className="desktop:flex hidden items-center gap-4">
             <LanguageSwitcher className="mr-4" />
             {!isLoading &&
               (isAuthenticated ? (
-                <button
+                <MagneticButton
                   className={BUTTON_STYLES.primary}
                   onClick={() => {
                     trackEngagement('header_go_to_dashboard_click');
                     window.location.href = '/webapp';
                   }}
+                  strength={0.3}
+                  maxDistance={10}
                 >
                   Go to Dashboard
-                </button>
+                </MagneticButton>
               ) : (
                 <>
-                  <button
+                  <MagneticButton
                     className={BUTTON_STYLES.secondary}
                     onClick={() => {
                       trackEngagement('header_sign_in_click');
@@ -87,10 +94,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                       } catch (_) {}
                       signIn('auth0', { callbackUrl: '/webapp' });
                     }}
+                    strength={0.3}
+                    maxDistance={10}
                   >
                     {t('nav.signIn', 'Sign in')}
-                  </button>
-                  <button
+                  </MagneticButton>
+                  <MagneticButton
                     className={BUTTON_STYLES.primary}
                     onClick={() => {
                       trackEngagement('header_register_click');
@@ -101,17 +110,19 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                       } catch (_) {}
                       signIn('auth0', { callbackUrl: '/webapp' });
                     }}
+                    strength={0.3}
+                    maxDistance={10}
                   >
                     {t('nav.register', 'Register')}
-                  </button>
+                  </MagneticButton>
                 </>
               ))}
           </div>
 
           {/* Mobile Header - Simplified: Just logo and CTA */}
-          <div className="tablet:hidden flex flex-1 items-center justify-end gap-2">
+          <div className="desktop:hidden flex flex-1 items-center justify-end gap-2">
             {!isLoading && (
-              <button
+              <MagneticButton
                 className="text-fluid-xs flex min-h-[40px] items-center justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#29E7CD]/25 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
                 onClick={() => {
                   if (isAuthenticated) {
@@ -127,9 +138,11 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                     signIn('auth0', { callbackUrl: '/webapp' });
                   }
                 }}
+                strength={0.25}
+                maxDistance={8}
               >
                 {isAuthenticated ? 'Go to Dashboard' : t('nav.register', 'Get Started')}
-              </button>
+              </MagneticButton>
             )}
           </div>
         </div>

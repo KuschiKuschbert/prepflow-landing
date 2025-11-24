@@ -247,6 +247,439 @@ import { Zap, Store, MapPin } from 'lucide-react';
 - **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Material Design 3 spacing
 - **Styling:** Consistent colors (`bg-[#2a2a2a]`), border radius (`rounded-xl`, `rounded-2xl`, `rounded-3xl`), and animations (`animate-pulse`)
 
+## 🎨 **Landing Page Style System**
+
+### **Overview**
+
+The landing page uses a distinct style system optimized for marketing and conversion, while maintaining consistency with the overall Material Design 3 foundation. This section documents when and how to use landing page styles vs. webapp styles.
+
+**See Also:**
+- `docs/LANDING_PAGE_STYLE_GUIDE.md` - Complete landing page style guide
+- `lib/landing-styles.ts` - Centralized landing page style utilities
+- `docs/LANDING_STYLE_MIGRATION.md` - Migration guide for applying landing styles
+
+### **When to Use Landing Page Styles**
+
+**Use Landing Page Styles For:**
+- ✅ Marketing pages (`/`, `/pricing`, `/features`, etc.)
+- ✅ Public-facing content (landing pages, marketing sections)
+- ✅ Conversion-focused components (CTAs, hero sections, feature showcases)
+- ✅ Marketing emails and promotional content
+- ✅ Public documentation pages
+
+**Use Webapp Styles For:**
+- ✅ Authenticated webapp pages (`/webapp/**`)
+- ✅ Data-heavy interfaces (tables, forms, dashboards)
+- ✅ Internal tools and admin interfaces
+- ✅ Functional components (navigation, settings, data management)
+
+**Decision Tree:**
+1. Is this a public marketing page? → Use landing page styles
+2. Is this an authenticated webapp page? → Use webapp styles
+3. Is this a conversion-focused component? → Use landing page styles
+4. Is this a data management interface? → Use webapp styles
+
+### **Webapp Landing Style Integration**
+
+**Hybrid Approach:** Landing page styles enhance user-facing elements (headers, CTAs, empty states) while Material Design 3 remains the default for data interfaces (tables, forms, dashboards).
+
+**When to Use Landing Styles in Webapp:**
+
+- ✅ **Page Headers** - Use `PageHeader` with `useLandingStyles={true}`
+- ✅ **Navigation** - Breadcrumbs and user info in `NavigationHeader`
+- ✅ **CTAs and Action Buttons** - Primary conversion-focused buttons
+- ✅ **Empty States** - User guidance and onboarding
+- ✅ **Quick Actions** - Dashboard action cards
+- ✅ **Welcome Sections** - Feature introductions
+
+**When to Use Material Design 3 in Webapp:**
+
+- ✅ **Data Tables** - All table components
+- ✅ **Forms** - Input fields, selects, checkboxes
+- ✅ **Dashboards** - Data visualization and analytics
+- ✅ **Modals** - Dialog boxes and overlays
+- ✅ **Toasts** - Notification messages
+- ✅ **Settings Pages** - Configuration interfaces
+
+**Webapp Landing Style Resources:**
+
+- [Webapp Landing Style Usage Guide](docs/WEBAPP_LANDING_STYLE_USAGE.md)
+- [Webapp Style Decision Helpers](lib/webapp-styles.ts)
+- [Landing Styles Utility File](lib/landing-styles.ts) - Includes `WEBAPP_LANDING_PRESETS` and helper functions
+
+**Component Usage Examples:**
+
+```tsx
+// PageHeader with landing styles
+<PageHeader
+  title="Recipes"
+  subtitle="Manage your recipe collection"
+  useLandingStyles={true}
+/>
+
+// Button with landing styles
+<Button
+  variant="primary"
+  landingStyle={true}
+  magnetic={true}
+  glow={true}
+  onClick={handleClick}
+>
+  Add Recipe
+</Button>
+
+// EmptyState component
+<EmptyState
+  title="No recipes found"
+  message="Start by creating your first recipe"
+  icon={Plus}
+  useLandingStyles={true}
+  variant="landing"
+  animated={true}
+/>
+```
+
+**Style Decision Helpers:**
+
+```tsx
+import {
+  shouldUseLandingStyles,
+  getComponentStyleVariant,
+  getAnimationConfig,
+} from '@/lib/webapp-styles';
+
+// Check if component should use landing styles
+const useLanding = shouldUseLandingStyles('header', { userFacing: true });
+
+// Get recommended style variant
+const variant = getComponentStyleVariant('cta', { userFacing: true });
+
+// Get animation configuration
+const animConfig = getAnimationConfig('emptyState', { userFacing: true });
+```
+
+### **Landing Page Color Palette**
+
+The landing page uses the same color palette as the webapp, but with enhanced visual effects:
+
+```css
+--primary-color: #29E7CD /* Electric Cyan - Primary Actions */
+--secondary-color: #3B82F6 /* Blue - Secondary Actions */
+--accent-color: #D925C7 /* Vibrant Magenta - Accent Elements */
+--bg-color: #0a0a0a /* Dark background */
+--text-color: #ffffff /* White text */
+--gray-300: #d1d5db
+--gray-400: #9ca3af
+--gray-500: #6b7280
+--gray-600: #4b5563
+--gray-700: #374151
+--gray-800: #1f2937
+```
+
+**Usage:**
+- Set CSS variables in component `style` prop for dynamic theming
+- Use `lib/landing-styles.ts` constants for consistent color references
+- Apply glow effects and gradients for visual interest
+
+### **Landing Page Typography**
+
+**Fluid Typography System:**
+
+The landing page uses fluid typography classes that scale smoothly across all screen sizes:
+
+- `.text-fluid-xs` - Small captions (clamp(0.625rem, 1.4vw, 0.75rem))
+- `.text-fluid-sm` - Body text, labels (clamp(0.875rem, 1.6vw, 1rem))
+- `.text-fluid-base` - Standard body text (clamp(1rem, 2vw, 1.125rem))
+- `.text-fluid-lg` - Large body text (clamp(1.125rem, 2.4vw, 1.25rem))
+- `.text-fluid-xl` - Section headers (clamp(1.25rem, 3vw, 1.5rem))
+- `.text-fluid-2xl` - Large headers (clamp(1.5rem, 4vw, 2rem))
+- `.text-fluid-3xl` - Hero subheadings (clamp(1.875rem, 5vw, 2.5rem))
+- `.text-fluid-4xl` - Hero headlines (clamp(2.25rem, 6vw, 3.5rem))
+
+**Typography Hierarchy:**
+
+- **Hero Headlines:** `text-fluid-4xl` with `font-bold` and `tracking-tight`
+- **Section Headers:** `text-fluid-2xl` or `text-fluid-3xl` with `font-bold`
+- **Body Text:** `text-fluid-base` or `text-fluid-lg` with `text-gray-400`
+- **Captions:** `text-fluid-sm` or `text-fluid-xs` with `text-gray-500`
+
+**Usage:**
+- Always use fluid typography classes for landing page content
+- Combine with responsive breakpoints for fine-tuning: `text-fluid-2xl tablet:text-fluid-3xl`
+- Use `font-light` for hero sections, `font-bold` for emphasis
+
+### **Landing Page Components**
+
+#### **MagneticButton**
+
+**Location:** `components/ui/MagneticButton.tsx`
+
+**Purpose:** Interactive button with magnetic hover effect for enhanced engagement
+
+**Props:**
+- `strength?: number` - Magnetic pull strength (default: 0.3)
+- `maxDistance?: number` - Maximum pull distance in pixels (default: 20)
+- `scaleOnHover?: boolean` - Enable scale animation on hover (default: true)
+- `hoverScale?: number` - Scale factor on hover (default: 1.05)
+
+**Usage:**
+```typescript
+import { MagneticButton } from '@/components/ui/MagneticButton';
+
+<MagneticButton
+  className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] rounded-2xl px-8 py-4"
+  onClick={handleClick}
+>
+  Get Started
+</MagneticButton>
+```
+
+**When to Use:**
+- Primary CTAs on landing pages
+- Conversion-focused buttons
+- Hero section actions
+- Feature call-to-actions
+
+**When NOT to Use:**
+- Webapp functional buttons (use standard Button component)
+- Form submissions (use standard form buttons)
+- Navigation links (use Link component)
+
+#### **GlowCard**
+
+**Location:** `components/ui/GlowCard.tsx`
+
+**Purpose:** Card component with radial gradient glow effect following mouse cursor
+
+**Props:**
+- `glowColor?: string` - RGBA color for glow effect (default: primary color)
+- `glowIntensity?: number` - Glow intensity multiplier (default: 1.0)
+
+**Usage:**
+```typescript
+import { GlowCard } from '@/components/ui/GlowCard';
+
+<GlowCard glowColor="rgba(41, 231, 205, 0.15)" className="p-8">
+  <h3>Feature Title</h3>
+  <p>Feature description</p>
+</GlowCard>
+```
+
+**When to Use:**
+- Feature showcase cards
+- Highlight sections
+- Testimonial cards
+- Metric displays
+
+**When NOT to Use:**
+- Data tables (use standard table styling)
+- Form containers (use standard card styling)
+- Webapp dashboard cards (use Material Design 3 cards)
+
+#### **ScrollReveal**
+
+**Location:** `components/ui/ScrollReveal.tsx`
+
+**Purpose:** Animates children into view as they scroll into viewport
+
+**Props:**
+- `variant?: 'fade-up' | 'fade-in' | 'scale-up' | 'slide-left' | 'slide-right'` - Animation type
+- `delay?: number` - Animation delay in seconds
+- `duration?: number` - Animation duration in seconds
+- `offset?: number` - Viewport offset trigger (0-1)
+- `once?: boolean` - Animate only once (default: true)
+
+**Usage:**
+```typescript
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
+
+<ScrollReveal variant="fade-up" delay={0.2}>
+  <h2>Section Title</h2>
+</ScrollReveal>
+```
+
+**When to Use:**
+- Landing page sections
+- Feature introductions
+- Testimonial reveals
+- CTA sections
+
+**When NOT to Use:**
+- Webapp data loading (use LoadingSkeleton)
+- Form fields (no animation needed)
+- Navigation elements (use standard transitions)
+
+### **Landing Page Layout Patterns**
+
+#### **Section Structure**
+
+**Standard Section Pattern:**
+```typescript
+<section className="tablet:py-20 relative bg-transparent py-16">
+  <div className="mx-auto max-w-7xl px-6">
+    <ScrollReveal variant="fade-up">
+      <h2 className="text-fluid-3xl font-bold text-white">Section Title</h2>
+    </ScrollReveal>
+    {/* Section content */}
+  </div>
+</section>
+```
+
+**Key Elements:**
+- `relative` positioning for background effects
+- `bg-transparent` for dark theme integration
+- Responsive padding: `py-16 tablet:py-20`
+- Max width container: `max-w-7xl mx-auto px-6`
+- ScrollReveal for entrance animations
+
+#### **Grid Layouts**
+
+**Feature Grid:**
+```typescript
+<div className="tablet:grid-cols-2 desktop:grid-cols-3 grid gap-8">
+  {features.map((feature, index) => (
+    <ScrollReveal key={feature.id} variant="fade-up" delay={index * 0.1}>
+      <GlowCard className="p-8">
+        {/* Feature content */}
+      </GlowCard>
+    </ScrollReveal>
+  ))}
+</div>
+```
+
+**Metric Grid:**
+```typescript
+<div className="tablet:grid-cols-2 desktop:grid-cols-4 grid gap-12">
+  {metrics.map((metric, index) => (
+    <ScrollReveal key={metric.label} variant="fade-up" delay={index * 0.1}>
+      <GlowCard className="p-10 text-center">
+        {/* Metric content */}
+      </GlowCard>
+    </ScrollReveal>
+  ))}
+</div>
+```
+
+### **Landing Page Animations**
+
+**Animation Principles:**
+- Use `ScrollReveal` for scroll-triggered animations
+- Stagger animations with `delay={index * 0.1}` for sequential reveals
+- Respect `prefers-reduced-motion` for accessibility
+- Use Framer Motion for complex interactions
+
+**Common Animation Patterns:**
+
+1. **Fade Up on Scroll:**
+```typescript
+<ScrollReveal variant="fade-up" delay={0}>
+  <Component />
+</ScrollReveal>
+```
+
+2. **Staggered Grid Items:**
+```typescript
+{items.map((item, index) => (
+  <ScrollReveal key={item.id} variant="fade-up" delay={index * 0.1}>
+    <ItemCard item={item} />
+  </ScrollReveal>
+))}
+```
+
+3. **Scale on Hover (MagneticButton):**
+```typescript
+<MagneticButton scaleOnHover={true} hoverScale={1.05}>
+  Button Text
+</MagneticButton>
+```
+
+### **Landing Page Background Effects**
+
+**Dynamic Background System:**
+
+The landing page uses `LandingBackground` component for immersive visual effects:
+
+- **Mouse-following spotlight:** Radial gradient following cursor
+- **Logo watermarks:** Subtle brand marks in corners
+- **Tron-like neon grid:** Animated grid overlay
+- **Corner glows:** Gradient glows in corners
+- **Fine noise texture:** Subtle texture overlay
+
+**Configuration:**
+- Theme settings in `lib/theme.ts` (`backgroundTheme` object)
+- Adjustable grid size, opacity, and glow intensity
+- Performance-optimized with `will-change` and `content-visibility`
+
+**Usage:**
+- Include `LandingBackground` in landing page layout
+- Configure via `backgroundTheme` in `lib/theme.ts`
+- Test performance impact on low-end devices
+
+### **Performance Optimizations**
+
+**Landing Page Specific:**
+
+- **Lazy Loading:** Use `next/dynamic` for heavy components
+- **Image Optimization:** Use `next/image` with proper sizing
+- **Animation Performance:** Use `will-change` sparingly
+- **Content Visibility:** Use `content-visibility: auto` for off-screen sections
+- **Reduced Motion:** Respect `prefers-reduced-motion` media query
+
+**Best Practices:**
+
+1. **Lazy Load Heavy Components:**
+```typescript
+const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
+  loading: () => <LoadingSkeleton variant="card" />,
+});
+```
+
+2. **Optimize Images:**
+```typescript
+<Image
+  src="/images/hero.png"
+  alt="Hero image"
+  width={1200}
+  height={800}
+  priority // For above-the-fold images
+/>
+```
+
+3. **Respect Reduced Motion:**
+```typescript
+const prefersReducedMotion = useReducedMotion();
+const animationDuration = prefersReducedMotion ? 0 : 0.5;
+```
+
+### **Style Utilities**
+
+**Centralized Style Constants:**
+
+Use `lib/landing-styles.ts` for consistent style application:
+
+```typescript
+import {
+  LANDING_COLORS,
+  LANDING_TYPOGRAPHY,
+  LANDING_SPACING,
+  LANDING_ANIMATIONS,
+  getGlowColor,
+  getSectionClasses,
+} from '@/lib/landing-styles';
+
+// Use constants
+const buttonClasses = `${LANDING_SPACING.button} ${LANDING_TYPOGRAPHY.button}`;
+
+// Use utility functions
+const glowColor = getGlowColor('#29E7CD');
+const sectionClasses = getSectionClasses({ padding: 'large' });
+```
+
+**See Also:**
+- `lib/landing-styles.ts` - Complete style utilities reference
+- `docs/LANDING_PAGE_STYLE_GUIDE.md` - Detailed style guide
+- `docs/LANDING_STYLE_MIGRATION.md` - Migration examples
+
 ## 📊 **Analytics & Tracking**
 
 ### **Required Tracking Events**

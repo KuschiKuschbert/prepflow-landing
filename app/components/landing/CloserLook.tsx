@@ -31,7 +31,7 @@ interface Feature {
 const features: Feature[] = [
   {
     title: 'Ingredients & Stock',
-    description: 'Track costs, suppliers, and inventory.',
+    description: 'Track costs, suppliers, stock. Automatic unit conversion.',
     icon: Leaf, // Lucide icon instead of emoji
     screenshot: '/images/ingredients-management-screenshot.png',
     screenshotAlt:
@@ -51,7 +51,7 @@ const features: Feature[] = [
   },
   {
     title: 'COGS Calculator',
-    description: 'Build recipes with live cost calculations and pricing recommendations.',
+    description: 'See costs live as you build. Get pricing recommendations instantly.',
     icon: DollarSign, // Lucide icon instead of emoji
     screenshot: '/images/cogs-calculator-screenshot.png',
     screenshotAlt: 'PrepFlow COGS Calculator showing Create Dish and Cost Analysis sections',
@@ -70,7 +70,7 @@ const features: Feature[] = [
   },
   {
     title: 'Recipe Book',
-    description: 'Manage your recipe collection with pricing, margins, and profitability insights.',
+    description: 'Your complete recipe library. Pricing, margins, profitability—all in one place.',
     icon: BookOpen, // Lucide icon instead of emoji
     screenshot: '/images/recipe-book-screenshot.png',
     screenshotAlt:
@@ -90,19 +90,19 @@ const features: Feature[] = [
   },
   {
     title: 'Performance Analysis',
-    description: "Dynamic menu analysis with Chef's Kiss, Hidden Gem, and more.",
+    description: "Chef's Kiss, Hidden Gems, Bargain Buckets—know what makes money.",
     icon: BarChart3, // Lucide icon instead of emoji
     screenshot: '/images/performance-analysis-screenshot.png',
     screenshotAlt:
       "PrepFlow Performance Analysis Dashboard showing KPIs, Chef's Kiss and Bargain Bucket categorization tables, popularity donut chart, scatter plot analysis, and contributing profit margin bar chart",
     details: [
-      'Dynamic profit threshold analysis with real-time KPIs',
-      'Popularity-based menu item classification with visual charts',
-      "Chef's Kiss: High profit + High popularity (categorized in table)",
-      'Hidden Gem: High profit + Low popularity (scatter plot analysis)',
-      'Bargain Bucket: Low profit + High popularity (categorized in table)',
-      'Burnt Toast: Low profit + Low popularity (scatter plot analysis)',
-      'Comprehensive analytics with donut charts, scatter plots, and bar charts',
+      'Dynamic profit thresholds that adapt to your menu data',
+      'Real-time KPIs and menu item classification',
+      "Chef's Kiss: High profit + High popularity—keep and feature these",
+      'Hidden Gem: High profit + Low popularity—market these better',
+      'Bargain Bucket: Low profit + High popularity—adjust pricing or portions',
+      'Burnt Toast: Low profit + Low popularity—consider removing',
+      'Visual analytics with charts and scatter plots',
     ],
     color: '#3B82F6',
     cta: {
@@ -112,16 +112,16 @@ const features: Feature[] = [
   },
   {
     title: 'Cleaning & Compliance',
-    description: 'Track cleaning tasks and compliance records with audit trails.',
+    description: 'Track tasks, keep records, maintain audit trails. Health inspections covered.',
     icon: Sparkles, // Lucide icon instead of emoji
     screenshot: '/images/cleaning-roster-screenshot.png',
     screenshotAlt: 'PrepFlow Cleaning Roster showing cleaning areas and task management',
     details: [
-      'Cleaning area management with schedules',
+      'Cleaning area management with customizable schedules',
       'Task tracking with photo verification',
-      'Compliance record keeping',
-      'Audit trail for health inspections',
-      'Automated reminders and notifications',
+      'Compliance record keeping with types and categories',
+      'Complete audit trail for health inspections',
+      'Standard task templates for quick setup',
     ],
     color: '#29E7CD',
     cta: {
@@ -138,9 +138,9 @@ const features: Feature[] = [
       'PrepFlow Temperature Monitoring showing equipment status dashboard with color-coded cards for In Range, Out of Range, Setup Required, and No Data status',
     details: [
       'Queensland-compliant temperature thresholds',
-      'Real-time equipment monitoring with status indicators',
+      'Manual temperature logging with equipment tracking',
       'Temperature log tracking and analytics',
-      'Automatic alert system for violations',
+      'Dashboard alerts calculated on load for violations',
       'Compliance reporting and audit trails',
       'Equipment status dashboard with visual indicators',
     ],
@@ -152,16 +152,16 @@ const features: Feature[] = [
   },
   {
     title: 'Settings & Configuration',
-    description: 'Customize region, currency, units, and privacy settings.',
+    description: 'Region, units, billing, account—configure everything your way.',
     icon: Settings, // Lucide icon instead of emoji
     screenshot: '/images/settings-screenshot.png',
     screenshotAlt: 'PrepFlow Settings showing region & units configuration and privacy controls',
     details: [
-      'Region and unit system configuration',
-      'Currency and tax settings (GST support)',
-      'Privacy controls and data management',
-      'User preferences and notifications',
-      'Integration settings and API keys',
+      'Region and unit system configuration (metric/imperial)',
+      'GST calculation settings for Australian businesses',
+      'Billing and subscription management',
+      'Account settings and preferences',
+      'Data export and account deletion options',
     ],
     color: '#3B82F6',
     cta: {

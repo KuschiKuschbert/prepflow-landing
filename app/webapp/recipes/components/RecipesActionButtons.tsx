@@ -2,6 +2,7 @@
 
 import { Plus, RefreshCw } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { LANDING_COLORS } from '@/lib/landing-styles';
 
 interface RecipesActionButtonsProps {
   onRefresh: () => void;
@@ -14,6 +15,9 @@ export function RecipesActionButtons({ onRefresh, loading = false }: RecipesActi
       <a
         href="/webapp/recipes#dishes"
         className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
+        style={{
+          background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
+        }}
       >
         <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
         Add Recipe
@@ -22,6 +26,9 @@ export function RecipesActionButtons({ onRefresh, loading = false }: RecipesActi
         onClick={onRefresh}
         disabled={loading}
         className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+        style={{
+          background: `linear-gradient(to right, ${LANDING_COLORS.secondary}, ${LANDING_COLORS.primary})`,
+        }}
       >
         <Icon
           icon={RefreshCw}

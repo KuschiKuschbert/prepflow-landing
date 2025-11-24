@@ -5,6 +5,9 @@ import { LucideIcon } from 'lucide-react';
 import { FeatureButton } from './components/FeatureButton';
 import { FeatureImageContainer } from './components/FeatureImageContainer';
 import { useAppleStyleAnimations } from './hooks/useAppleStyleAnimations';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
+
+// Spotlight component removed - using simpler background effects in LandingBackground
 
 interface Feature {
   title: string;
@@ -74,13 +77,13 @@ function AppleStyleFeatures({
   };
 
   return (
-    <section className="tablet:py-20 relative bg-transparent py-16">
+    <section className="tablet:py-32 relative bg-transparent py-24">
       <div className="desktop:max-w-[92%] tablet:px-6 desktop:px-8 mx-auto w-full max-w-[95%] px-4 xl:max-w-[90%] 2xl:max-w-7xl">
-        <div className="mb-16 text-center">
-          <h2 className="text-fluid-3xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold tracking-tight text-white">
+        <ScrollReveal variant="fade-up" className="mb-20 text-center">
+          <h2 className="text-fluid-4xl tablet:text-fluid-5xl desktop:text-fluid-6xl font-light tracking-tight text-white">
             {sectionTitle}
           </h2>
-        </div>
+        </ScrollReveal>
 
         <div
           className="desktop:flex-row desktop:gap-8 desktop:items-stretch flex flex-col gap-12 xl:gap-12"

@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { BarChart3, Sparkles, TrendingUp, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { Button } from '@/components/ui/Button';
+import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import Link from 'next/link';
 
 import { logger } from '@/lib/logger';
@@ -90,8 +92,10 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
         </div>
       </div>
 
-      <h3 className="mb-3 text-2xl font-semibold text-white">No Performance Data Yet</h3>
-      <p className="mx-auto mb-8 max-w-2xl text-gray-400">
+      <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-3 font-semibold text-white`}>
+        No Performance Data Yet
+      </h3>
+      <p className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-gray-400`}>
         Performance analysis helps you understand which menu items are profitable, which are
         popular, and which need attention. Generate sales data from your recipes to see insights and
         recommendations.
@@ -140,12 +144,13 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       )}
 
       <div className="tablet:flex-row flex flex-col items-center justify-center gap-4">
-        <button
+        <Button
           onClick={handleGenerateSalesData}
           disabled={isGenerating}
-          className={`rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 font-semibold text-white transition-all hover:shadow-xl hover:shadow-[#29E7CD]/20 ${
-            isGenerating ? 'cursor-not-allowed opacity-50' : ''
-          }`}
+          variant="primary"
+          landingStyle={true}
+          glow={true}
+          className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4"
         >
           {isGenerating ? (
             <span className="flex items-center gap-2">
@@ -169,7 +174,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
           ) : (
             'Generate Sales Data'
           )}
-        </button>
+        </Button>
 
         <Link
           href="/webapp/recipes"

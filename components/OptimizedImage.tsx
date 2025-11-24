@@ -15,9 +15,6 @@ export default function OptimizedImage({
   priority = false,
   ...props
 }: OptimizedImageProps) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [isLoading, setIsLoading] = useState(true);
-
   // Convert PNG/JPG to optimized formats
   const getOptimizedSrc = (originalSrc: string) => {
     if (
@@ -35,6 +32,13 @@ export default function OptimizedImage({
     }
     return { original: originalSrc };
   };
+
+  // Start with the best format available
+  const optimized = getOptimizedSrc(src);
+  const initialSrc = optimized.avif || optimized.webp || optimized.original;
+
+  const [imgSrc, setImgSrc] = useState(initialSrc);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleError = () => {
     const optimized = getOptimizedSrc(src);
@@ -55,10 +59,6 @@ export default function OptimizedImage({
     setIsLoading(false);
   };
 
-  // Start with the best format available
-  const optimized = getOptimizedSrc(src);
-  const initialSrc = optimized.avif || optimized.webp || optimized.original;
-
   const { style: incomingStyle, ...restProps } = props;
 
   const combinedStyle: CSSProperties = {
@@ -66,6 +66,9 @@ export default function OptimizedImage({
     transition: 'opacity 0.3s ease-in-out',
     ...incomingStyle,
   };
+
+  // Use priority to determine loading strategy
+  const loadingStrategy = priority ? ('eager' as const) : ('lazy' as const);
 
   return (
     <div className="relative">
@@ -83,6 +86,7 @@ export default function OptimizedImage({
         src={imgSrc}
         alt={alt}
         priority={priority}
+        loading={loadingStrategy}
         onError={handleError}
         onLoad={handleLoad}
         style={combinedStyle}

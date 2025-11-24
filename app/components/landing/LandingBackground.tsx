@@ -1,20 +1,46 @@
 /**
  * Landing page background effects component
+ * Enhanced with Framer Motion animations
  */
+
+'use client';
 
 import React from 'react';
 import { backgroundTheme } from '@/lib/theme';
+import { LogoWatermark } from '@/components/ui/LogoWatermark';
 
 const LandingBackground = React.memo(function LandingBackground() {
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <>
       {/* Base gradient */}
       <div
-        className="fixed inset-0 -z-10"
+        className="fixed inset-0 -z-20"
         style={{
           background: 'linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%)',
         }}
       />
+
+      {/* Simple CSS spotlight that follows mouse */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(41, 231, 205, 0.06), transparent 40%)`,
+        }}
+      />
+
+      {/* Logo watermark */}
+      <LogoWatermark count={3} opacity={0.02} size={300} />
 
       {/* Tron-like neon grid */}
       <div
@@ -23,10 +49,10 @@ const LandingBackground = React.memo(function LandingBackground() {
           backgroundImage: `linear-gradient(rgba(41,231,205,${backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
           backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
           backgroundPosition: '0px 0px, 0px 0px',
+          maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
         }}
       />
-
-      {/* Diagonal sweep removed: static background only */}
 
       {/* Corner glows */}
       <div
@@ -59,8 +85,6 @@ const LandingBackground = React.memo(function LandingBackground() {
           backgroundSize: '256px 256px',
         }}
       />
-
-      {/* No keyframes (no animation) */}
     </>
   );
 });

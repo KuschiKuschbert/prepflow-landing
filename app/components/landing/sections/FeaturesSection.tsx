@@ -1,44 +1,82 @@
+'use client';
+
 import { useTranslation } from '../../../../lib/useTranslation';
+import { GlowCard } from '@/components/ui/GlowCard';
+import { motion } from 'framer-motion';
+import {
+  LANDING_COLORS,
+  LANDING_TYPOGRAPHY,
+  LANDING_LAYOUT,
+  getSectionClasses,
+} from '@/lib/landing-styles';
 
 export function FeaturesSection() {
   const { t } = useTranslation();
 
+  const features = [
+    {
+      title: t('features.cogs.title', 'Know Your Real Costs'),
+      description: t(
+        'features.cogs.description',
+        'Stop guessing. See exactly what each dish costs—ingredients, waste, labor. Updates live as you build recipes.',
+      ),
+      color: 'cyan' as const,
+    },
+    {
+      title: t('features.pricing.title', 'Price with Confidence'),
+      description: t(
+        'features.pricing.description',
+        'Hit your target margins every time. Get instant pricing recommendations that maximize profit without scaring customers away.',
+      ),
+      color: 'blue' as const,
+    },
+    {
+      title: t('features.insights.title', 'Find Your Profit Stars'),
+      description: t(
+        'features.insights.description',
+        "See which dishes make you money and which drain it. Chef's Kiss, Hidden Gems, Bargain Buckets—know what to feature, fix, or remove.",
+      ),
+      color: 'magenta' as const,
+    },
+  ];
+
+  // Color classes using centralized constants (Tailwind requires full class names)
+  const getColorClass = (color: 'cyan' | 'blue' | 'magenta') => {
+    switch (color) {
+      case 'cyan':
+        return 'text-[#29E7CD]'; // LANDING_COLORS.primary
+      case 'blue':
+        return 'text-[#3B82F6]'; // LANDING_COLORS.secondary
+      case 'magenta':
+        return 'text-[#D925C7]'; // LANDING_COLORS.accent
+    }
+  };
+
   return (
-    <section id="features" className="py-20">
-      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid gap-8">
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h3 className="text-fluid-xl mb-3 font-semibold text-[#29E7CD]">
-            {t('features.cogs.title', 'Accurate COGS Calculation')}
-          </h3>
-          <p className="text-gray-300">
-            {t(
-              'features.cogs.description',
-              'Calculate exact cost of goods sold for every dish with ingredient costs, waste factors, and yield adjustments.',
-            )}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h3 className="text-fluid-xl mb-3 font-semibold text-[#3B82F6]">
-            {t('features.pricing.title', 'Smart Pricing Tool')}
-          </h3>
-          <p className="text-gray-300">
-            {t(
-              'features.pricing.description',
-              'Set optimal prices based on target profit margins and market positioning.',
-            )}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-          <h3 className="text-fluid-xl mb-3 font-semibold text-[#D925C7]">
-            {t('features.insights.title', 'Profit Insights')}
-          </h3>
-          <p className="text-gray-300">
-            {t(
-              'features.insights.description',
-              'Get actionable insights on which dishes are profit stars and which need attention.',
-            )}
-          </p>
-        </div>
+    <section id="features" className={getSectionClasses({ padding: 'large' })}>
+      <div
+        className={`${LANDING_LAYOUT.container} tablet:grid-cols-2 desktop:grid-cols-3 grid gap-12`}
+      >
+        {features.map((feature, index) => (
+          <motion.div
+            key={`feature-${index}-${feature.title}`}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <GlowCard glowColor={feature.color} className="p-8">
+              <h3
+                className={`${LANDING_TYPOGRAPHY['2xl']} mb-4 font-light ${getColorClass(feature.color)}`}
+              >
+                {feature.title}
+              </h3>
+              <p className={`${LANDING_TYPOGRAPHY.base} leading-relaxed text-gray-400`}>
+                {feature.description}
+              </p>
+            </GlowCard>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

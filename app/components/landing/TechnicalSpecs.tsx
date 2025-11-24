@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Zap, Rocket, Plug, Laptop, Mail, ChevronDown, LucideIcon } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 interface SpecCategory {
   title: string;
@@ -15,14 +16,18 @@ const specCategories: SpecCategory[] = [
     title: 'Core Features',
     icon: Zap,
     items: [
-      'Ingredients Management',
-      'Recipe Builder',
+      'Ingredients & Inventory Management',
+      'Recipe Builder & Library',
       'COGS Calculator',
-      'Performance Analysis',
+      'Menu Performance Analysis',
       'Temperature Monitoring',
-      'Cleaning Roster',
+      'Cleaning Task Management',
       'Compliance Records',
       'Supplier Management',
+      'Menu Builder',
+      'Dish Builder',
+      'Par Level Management',
+      'Prep Lists & Order Lists',
     ],
   },
   {
@@ -30,13 +35,16 @@ const specCategories: SpecCategory[] = [
     icon: Rocket,
     items: [
       'Real-time cost calculations',
-      'AI-powered menu optimization',
+      'Dynamic menu performance analysis',
+      'AI-powered specials suggestions',
+      'AI allergen detection',
       'Compliance tracking (QLD standards)',
-      'Multi-currency support',
       'GST calculation (Australian)',
       'Automated unit conversion',
       'CSV import/export',
       'Photo verification for tasks',
+      'Menu builder with change tracking',
+      'Prep lists and order lists',
     ],
   },
   {
@@ -52,7 +60,7 @@ const specCategories: SpecCategory[] = [
   {
     title: 'Support',
     icon: Mail,
-    items: ['Email support', 'Documentation', 'Help center', 'Community forum'],
+    items: ['Email support', 'Documentation'],
   },
 ];
 
@@ -67,21 +75,23 @@ export default function TechnicalSpecs() {
     <section className="desktop:py-20 relative bg-transparent py-16">
       <div className="mx-auto max-w-7xl px-6">
         {/* Section Header */}
-        <div className="mb-16 text-center">
+        <ScrollReveal variant="fade-up" className="mb-16 text-center">
           <h2 className="text-fluid-4xl desktop:text-fluid-4xl large-desktop:text-fluid-4xl font-bold tracking-tight text-white">
             Technical Specifications
           </h2>
           <p className="text-fluid-xl mt-4 text-gray-400">Everything you need to know.</p>
-        </div>
+        </ScrollReveal>
 
         {/* Specs Grid */}
         <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid gap-6">
-          {specCategories.map(category => {
+          {specCategories.map((category, index) => {
             const isExpanded = expandedCategory === category.title;
 
             return (
-              <div
+              <ScrollReveal
                 key={category.title}
+                variant="fade-up"
+                delay={index * 0.1}
                 className="rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-6 transition-all duration-300 hover:border-white/20 hover:bg-[#1f1f1f]/50"
               >
                 {/* Category Header */}
@@ -124,19 +134,23 @@ export default function TechnicalSpecs() {
                     ))}
                   </ul>
                 </div>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* Additional Info */}
-        <div className="mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8 text-center">
+        <ScrollReveal
+          variant="fade-up"
+          delay={0.4}
+          className="mt-16 rounded-2xl border border-white/10 bg-[#1f1f1f]/30 p-8 text-center"
+        >
           <h3 className="text-fluid-2xl font-bold text-white">Ready to get started?</h3>
           <p className="mt-4 text-gray-400">
             PrepFlow works in any modern web browser. No installation required. Start managing your
             kitchen in minutes.
           </p>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

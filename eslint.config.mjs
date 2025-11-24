@@ -14,6 +14,8 @@ export default defineConfig([
       'react-hooks/set-state-in-effect': 'off',
       // Prevent console usage - use logger instead
       'no-console': 'error',
+      // next/font/google automatically handles preconnect, so this is a false positive
+      '@next/next/google-font-preconnect': 'off',
     },
   },
   {

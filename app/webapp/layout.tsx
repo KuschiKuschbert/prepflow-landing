@@ -17,6 +17,7 @@ import '../globals.css';
 import { DraftRecovery } from './components/DraftRecovery';
 import ModernNavigation from './components/ModernNavigation';
 import { PersonalityScheduler } from './components/PersonalityScheduler';
+import { WebappBackground } from '@/components/ui/WebappBackground';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -137,6 +138,15 @@ function WebAppLayoutContent({
     <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
       {/* Pulsating Concentric Circles Background */}
       <SafeAnimatedBackground />
+
+      {/* Webapp Background Effects (spotlight, grid, glows, particles) */}
+      <WebappBackground
+        spotlight={true}
+        grid={false}
+        cornerGlows={false}
+        watermarks={false}
+        particles={true}
+      />
 
       {/* Modern Navigation */}
       <ErrorBoundary>
