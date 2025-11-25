@@ -16,7 +16,7 @@ import AppHero from './components/landing/Hero';
 import Highlights from './components/landing/Highlights';
 import LandingHeader from './components/landing/LandingHeader';
 import LandingBackground from './components/landing/LandingBackground';
-import { MobileBottomNav } from './components/landing/MobileBottomNav';
+import { ModernMobileNav } from './components/landing/ModernMobileNav';
 import { MobileMenuDrawer } from './components/landing/MobileMenuDrawer';
 
 // Below-the-fold components (lazy-loaded for better performance)
@@ -184,7 +184,7 @@ export default function Page() {
         </div>
 
         {/* Mobile Bottom Navigation */}
-        <MobileBottomNav
+        <ModernMobileNav
           onMenuClick={() => setIsDrawerOpen(true)}
           trackEngagement={trackEngagement}
         />

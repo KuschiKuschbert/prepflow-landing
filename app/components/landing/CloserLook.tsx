@@ -33,7 +33,7 @@ const features: Feature[] = [
     title: 'Ingredients & Stock',
     description: 'Track costs, suppliers, stock. Automatic unit conversion.',
     icon: Leaf, // Lucide icon instead of emoji
-    screenshot: '/images/ingredients-management-screenshot.png',
+    screenshot: '/images/ingredients-management-screenshot.webp',
     screenshotAlt:
       'PrepFlow Ingredients Management showing inventory tracking with costs, suppliers, and stock levels',
     details: [
@@ -53,7 +53,7 @@ const features: Feature[] = [
     title: 'COGS Calculator',
     description: 'See costs live as you build. Get pricing recommendations instantly.',
     icon: DollarSign, // Lucide icon instead of emoji
-    screenshot: '/images/cogs-calculator-screenshot.png',
+    screenshot: '/images/cogs-calculator-screenshot.webp',
     screenshotAlt: 'PrepFlow COGS Calculator showing Create Dish and Cost Analysis sections',
     details: [
       'Live cost calculations as you build recipes',
@@ -72,7 +72,7 @@ const features: Feature[] = [
     title: 'Recipe Book',
     description: 'Your complete recipe library. Pricing, margins, profitability—all in one place.',
     icon: BookOpen, // Lucide icon instead of emoji
-    screenshot: '/images/recipe-book-screenshot.png',
+    screenshot: '/images/recipe-book-screenshot.webp',
     screenshotAlt:
       'PrepFlow Recipe Book Ingredients tab showing standardized buttons, sidebar navigation, and ingredients management interface',
     details: [
@@ -92,7 +92,7 @@ const features: Feature[] = [
     title: 'Performance Analysis',
     description: "Chef's Kiss, Hidden Gems, Bargain Buckets—know what makes money.",
     icon: BarChart3, // Lucide icon instead of emoji
-    screenshot: '/images/performance-analysis-screenshot.png',
+    screenshot: '/images/performance-analysis-screenshot.webp',
     screenshotAlt:
       "PrepFlow Performance Analysis Dashboard showing KPIs, Chef's Kiss and Bargain Bucket categorization tables, popularity donut chart, scatter plot analysis, and contributing profit margin bar chart",
     details: [
@@ -114,7 +114,7 @@ const features: Feature[] = [
     title: 'Cleaning & Compliance',
     description: 'Track tasks, keep records, maintain audit trails. Health inspections covered.',
     icon: Sparkles, // Lucide icon instead of emoji
-    screenshot: '/images/cleaning-roster-screenshot.png',
+    screenshot: '/images/cleaning-roster-screenshot.webp',
     screenshotAlt: 'PrepFlow Cleaning Roster showing cleaning areas and task management',
     details: [
       'Cleaning area management with customizable schedules',
@@ -133,7 +133,7 @@ const features: Feature[] = [
     title: 'Temperature Monitoring',
     description: 'QLD-compliant monitoring with smart thresholds and alerts.',
     icon: Thermometer, // Lucide icon instead of emoji
-    screenshot: '/images/temperature-monitoring-screenshot.png',
+    screenshot: '/images/temperature-monitoring-screenshot.webp',
     screenshotAlt:
       'PrepFlow Temperature Monitoring showing equipment status dashboard with color-coded cards for In Range, Out of Range, Setup Required, and No Data status',
     details: [
@@ -154,7 +154,7 @@ const features: Feature[] = [
     title: 'Settings & Configuration',
     description: 'Region, units, billing, account—configure everything your way.',
     icon: Settings, // Lucide icon instead of emoji
-    screenshot: '/images/settings-screenshot.png',
+    screenshot: '/images/settings-screenshot.webp',
     screenshotAlt: 'PrepFlow Settings showing region & units configuration and privacy controls',
     details: [
       'Region and unit system configuration (metric/imperial)',

@@ -16,7 +16,7 @@ const specCategories: SpecCategory[] = [
     title: 'Core Features',
     icon: Zap,
     items: [
-      'Ingredients & Inventory Management',
+      'Ingredients Management',
       'Recipe Builder & Library',
       'COGS Calculator',
       'Menu Performance Analysis',

@@ -75,7 +75,7 @@ export function FeatureButton({
           duration: 0.6,
         },
       }}
-      className={`relative flex border text-left transition-all duration-300 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+      className={`relative flex border text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
         !isExpanded ? 'hover:scale-[1.02] hover:border-white/18 hover:bg-white/12' : ''
       }`}
       whileHover={
