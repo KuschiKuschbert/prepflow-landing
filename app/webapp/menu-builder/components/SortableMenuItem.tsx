@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useRef } from 'react';
@@ -101,8 +102,17 @@ export function SortableMenuItem({
       (e.target as HTMLElement).closest('[role="menu"]') ||
       (e.target as HTMLElement).closest('[role="menuitem"]')
     ) {
+      logger.dev('[SortableMenuItem] Click ignored (button/dropdown)', {
+        itemId: item.id,
+        target: (e.target as HTMLElement).tagName,
+      });
       return;
     }
+    logger.dev('[SortableMenuItem] Item clicked, opening price edit popup', {
+      itemId: item.id,
+      itemName: item.dishes?.dish_name || item.recipes?.recipe_name,
+      hasOnClickItem: !!onClickItem,
+    });
     onClickItem?.(item);
   };
 
@@ -124,7 +134,7 @@ export function SortableMenuItem({
         onMouseLeave={e => handleMouseLeave(e, tooltipRef)}
         className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50"
       >
-        <MenuItemContent item={item} />
+        <MenuItemContent item={item} menuId={menuId} />
 
         <MenuItemActions
           onRemove={onRemove}

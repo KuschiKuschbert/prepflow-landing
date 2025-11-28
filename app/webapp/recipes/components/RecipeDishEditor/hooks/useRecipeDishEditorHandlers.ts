@@ -1,0 +1,53 @@
+import { useCallback } from 'react';
+import { Ingredient } from '../../../../cogs/types';
+import { COGSCalculation } from '../../../../cogs/types';
+
+interface UseRecipeDishEditorHandlersProps {
+  handleAddIngredient: (
+    ingredient: { ingredient_id: string; quantity: number; unit: string },
+    e?: React.FormEvent,
+  ) => Promise<void>;
+  newIngredient: { ingredient_id?: string; quantity: number; unit: string };
+  setNewIngredient: React.Dispatch<
+    React.SetStateAction<{ ingredient_id?: string; quantity: number; unit: string }>
+  >;
+}
+
+/**
+ * Hook for managing ingredient-related handlers in RecipeDishEditor
+ */
+export function useRecipeDishEditorHandlers({
+  handleAddIngredient,
+  newIngredient,
+  setNewIngredient,
+}: UseRecipeDishEditorHandlersProps) {
+  const handleAddIngredientWrapper = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      await handleAddIngredient(newIngredient, e);
+    },
+    [handleAddIngredient, newIngredient],
+  );
+
+  const handleIngredientClick = useCallback(
+    async (ingredient: Ingredient) => {
+      const defaultQuantity = 1;
+      const defaultUnit = ingredient.unit || 'kg';
+
+      await handleAddIngredient(
+        {
+          ingredient_id: ingredient.id,
+          quantity: defaultQuantity,
+          unit: defaultUnit,
+        },
+        undefined,
+      );
+    },
+    [handleAddIngredient],
+  );
+
+  return {
+    handleAddIngredientWrapper,
+    handleIngredientClick,
+  };
+}

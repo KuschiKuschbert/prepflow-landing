@@ -115,7 +115,7 @@ export function BrandMark({
           alt={alt}
           width={width}
           height={height}
-          sizes="24px"
+          sizes={`${width}px`}
           priority={true}
           style={{
             width: '100%',

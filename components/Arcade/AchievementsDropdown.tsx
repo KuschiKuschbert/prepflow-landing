@@ -21,14 +21,25 @@ interface AchievementsDropdownProps {
 export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOpen, onClose }) => {
   const [stats, setStats] = useState(() => getArcadeStats());
 
+  // Update stats when dropdown opens to ensure fresh data
   useEffect(() => {
+    if (isOpen) {
+      setStats(getArcadeStats());
+    }
+  }, [isOpen]);
+
+  // Only listen to stats updates when dropdown is open to avoid setState during render
+  useEffect(() => {
+    if (!isOpen) return;
+
     const handleStatsUpdate = () => {
+      // Only update if dropdown is still open
       setStats(getArcadeStats());
     };
 
     window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
     return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
-  }, []);
+  }, [isOpen]);
 
   // Close on Escape key
   useEffect(() => {

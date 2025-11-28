@@ -34,8 +34,14 @@ export const addStat = (key: string, value: number = 1): number => {
   const newValue = current + value;
   localStorage.setItem(key, String(newValue));
 
-  // Dispatch custom event for listeners
-  window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+  // Dispatch custom event asynchronously to avoid setState during render
+  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
+  // This prevents React 19 Strict Mode warnings about setState during render
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+    }, 0);
+  });
 
   return newValue;
 };
@@ -47,7 +53,14 @@ export const setStat = (key: string, value: number): void => {
   const newValue = Math.max(current, value); // Only update if new value is higher
   localStorage.setItem(key, String(newValue));
 
-  window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+  // Dispatch custom event asynchronously to avoid setState during render
+  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
+  // This prevents React 19 Strict Mode warnings about setState during render
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+    }, 0);
+  });
 };
 
 export const getSessionStats = (): ArcadeStats => {
@@ -74,8 +87,14 @@ export const addSessionStat = (key: string, value: number = 1): number => {
   const newValue = current + value;
   sessionStorage.setItem(key, String(newValue));
 
-  // Dispatch custom event for listeners
-  window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+  // Dispatch custom event asynchronously to avoid setState during render
+  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
+  // This prevents React 19 Strict Mode warnings about setState during render
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+    }, 0);
+  });
 
   return newValue;
 };
@@ -87,7 +106,14 @@ export const setSessionStat = (key: string, value: number): void => {
   const newValue = Math.max(current, value); // Only update if new value is higher
   sessionStorage.setItem(key, String(newValue));
 
-  window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+  // Dispatch custom event asynchronously to avoid setState during render
+  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
+  // This prevents React 19 Strict Mode warnings about setState during render
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+    }, 0);
+  });
 };
 
 export const clearSessionStats = (): void => {
@@ -97,8 +123,13 @@ export const clearSessionStats = (): void => {
     sessionStorage.removeItem(key);
   });
 
-  // Dispatch update event to refresh UI
-  window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+  // Dispatch update event asynchronously to avoid setState during render
+  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
+    }, 0);
+  });
 };
 
 export const clearArcadeStats = (): void => {
@@ -108,8 +139,13 @@ export const clearArcadeStats = (): void => {
     localStorage.removeItem(key);
   });
 
-  // Dispatch update event to refresh UI
-  window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+  // Dispatch update event asynchronously to avoid setState during render
+  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
+    }, 0);
+  });
 };
 
 export { STAT_KEYS };

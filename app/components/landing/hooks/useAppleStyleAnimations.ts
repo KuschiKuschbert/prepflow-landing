@@ -1,14 +1,8 @@
-import { useImageTransitions } from './utils/imageTransitions';
-import { useContainerHeight } from './utils/containerDimensions';
 import { useAnimationState } from './helpers/animationState';
 import { createAnimationReturn } from './helpers/animationReturn';
 import { setupAnimationEffects } from './helpers/animationSetup';
-import {
-  useImageEntranceAnimation,
-  useContainerOpacityAnimation,
-  useStaggeredButtonAnimation,
-} from './utils/animationEffects';
-import { useInitialWidthMeasurement, useExpandedWidthMeasurement } from './utils/widthMeasurement';
+import { useImageAnimations } from './useAppleStyleAnimations/useImageAnimations';
+import { useButtonAnimations } from './useAppleStyleAnimations/useButtonAnimations';
 
 interface Feature {
   title: string;
@@ -43,36 +37,28 @@ export function useAppleStyleAnimations(features: Feature[]) {
   } = useAnimationState(features);
   const expandedFeature = expandedIndex !== null ? features[expandedIndex] : null;
   const displayFeature = expandedFeature || features[0];
-  const {
-    currentImage,
-    previousImage,
-    isImageTransitioning,
-    previousImageOpacity,
-    currentImageOpacity,
-    imageDimensions,
-    setImageDimensions,
-    setNewImageLoaded,
-  } = useImageTransitions(displayFeature, imageMounted);
 
-  const containerHeight = useContainerHeight(imageDimensions, imageContainerRef);
-  useImageEntranceAnimation(imageMounted, imageContainerRef, expandedFeature, setImageMounted);
-  useContainerOpacityAnimation(imageMounted, imageContainerRef, expandedFeature);
-  useStaggeredButtonAnimation(features, setButtonsVisible);
-  useInitialWidthMeasurement(
+  const imageAnimations = useImageAnimations({
+    displayFeature,
+    imageMounted,
+    expandedFeature,
+    setImageMounted,
+    imageContainerRef,
+  });
+
+  useButtonAnimations({
     features,
+    setButtonsVisible,
     containerRefs,
     initialWidths,
     buttonHeights,
     setInitialWidths,
     setButtonHeights,
-  );
-  useExpandedWidthMeasurement(
     expandedIndex,
-    features,
-    containerRefs,
     parentContainerRef,
     setContainerWidths,
-  );
+  });
+
   const handleToggle = setupAnimationEffects({
     features,
     expandedIndex,
@@ -84,18 +70,12 @@ export function useAppleStyleAnimations(features: Feature[]) {
     setScaleXValues,
     setIsTransitioning,
   });
+
   return createAnimationReturn({
     expandedIndex,
     expandedFeature,
     displayFeature,
-    currentImage,
-    previousImage,
-    isImageTransitioning,
-    previousImageOpacity,
-    currentImageOpacity,
-    imageMounted,
-    imageDimensions,
-    containerHeight,
+    ...imageAnimations,
     containerWidths,
     initialWidths,
     buttonHeights,
@@ -107,7 +87,5 @@ export function useAppleStyleAnimations(features: Feature[]) {
     parentContainerRef,
     imageContainerRef,
     handleToggle,
-    setImageDimensions,
-    setNewImageLoaded,
   });
 }

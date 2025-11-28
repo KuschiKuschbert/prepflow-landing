@@ -17,6 +17,7 @@ interface DishesListViewSectionProps {
   highlightingRowId: string | null;
   highlightingRowType: 'recipe' | 'dish' | null;
   filters: {
+    searchTerm?: string;
     currentPage: number;
     itemsPerPage: number;
     sortField: string;
@@ -105,6 +106,7 @@ export function DishesListViewSection({
         capitalizeRecipeName={capitalizeRecipeName}
         onPageChange={page => updateFilters({ currentPage: page })}
         onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
+        onSearchChange={searchTerm => updateFilters({ searchTerm, currentPage: 1 })}
         onSelectAll={handleSelectAll}
         onSelectItem={handleSelectItem}
         onPreviewDish={handlePreviewDish}
@@ -113,9 +115,10 @@ export function DishesListViewSection({
         onEditRecipe={handleEditRecipe}
         onDeleteDish={handleDeleteDish}
         onDeleteRecipe={handleDeleteRecipe}
-        onSortChange={(field: string, direction: 'asc' | 'desc') =>
-          updateFilters({ sortField: field as DishSortField, sortDirection: direction })
-        }
+        onSortChange={(field: string, direction: 'asc' | 'desc') => {
+          // Accept both dish and recipe sort fields
+          updateFilters({ sortField: field, sortDirection: direction });
+        }}
         onStartLongPress={startLongPress}
         onCancelLongPress={cancelLongPress}
         onEnterSelectionMode={enterSelectionMode}

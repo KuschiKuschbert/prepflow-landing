@@ -17,6 +17,7 @@ import '../globals.css';
 import { DraftRecovery } from './components/DraftRecovery';
 import ModernNavigation from './components/ModernNavigation';
 import { PersonalityScheduler } from './components/PersonalityScheduler';
+import { NetworkStatusBanner } from './components/NetworkStatusBanner';
 import { WebappBackground } from '@/components/ui/WebappBackground';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -152,6 +153,9 @@ function WebAppLayoutContent({
       <ErrorBoundary>
         <ModernNavigation />
       </ErrorBoundary>
+
+      {/* Network Status Banner */}
+      <NetworkStatusBanner />
 
       {/* Global Warning System */}
       <GlobalWarning onHeightChange={handleWarningHeightChange} />

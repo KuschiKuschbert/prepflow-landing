@@ -159,9 +159,9 @@ export function NavigationHeader({
               <BrandMark
                 src="/images/prepflow-logo.png"
                 alt="PrepFlow Logo"
-                width={24}
-                height={24}
-                className="flex h-6 min-h-[44px] w-6 min-w-[44px] cursor-pointer touch-manipulation items-center justify-center"
+                width={48}
+                height={48}
+                className="flex h-12 min-h-[44px] w-12 min-w-[44px] cursor-pointer touch-manipulation items-center justify-center"
                 onClick={handleLogoClick}
                 onTouchStart={handleLogoTouchStart}
                 onTouchEnd={handleLogoTouchEnd}

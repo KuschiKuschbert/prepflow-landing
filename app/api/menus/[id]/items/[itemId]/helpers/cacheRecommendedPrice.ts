@@ -29,9 +29,9 @@ export async function cacheRecommendedPrice(
     if (menuItem.dish_id) {
       recommendedPrice = await calculateDishSellingPrice(menuItem.dish_id);
     } else if (menuItem.recipe_id) {
-      const fullRecipePrice = await calculateRecipeSellingPrice(menuItem.recipe_id);
-      const recipeYield = menuItem.recipes?.yield || 1;
-      recommendedPrice = recipeYield > 0 ? fullRecipePrice / recipeYield : fullRecipePrice;
+      // calculateRecipeSellingPrice already returns per-serving price
+      // (since calculateRecipeCost(recipeId, 1) returns per-serving cost)
+      recommendedPrice = await calculateRecipeSellingPrice(menuItem.recipe_id);
     }
 
     // Cache the calculated price

@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useState } from 'react';
 import { Dish, Recipe, RecipeIngredientWithDetails } from '../../types';
 
@@ -32,13 +34,27 @@ export function useDishesClientPreview({
   const [highlightingRowId, setHighlightingRowId] = useState<string | null>(null);
   const [highlightingRowType, setHighlightingRowType] = useState<'recipe' | 'dish' | null>(null);
 
-  const handlePreviewDish = useCallback((dish: Dish) => {
-    setSelectedDishForPreview(dish);
-    setShowDishPanel(true);
-  }, []);
+  const handlePreviewDish = useCallback(
+    (dish: Dish) => {
+      // Close recipe panel if open to prevent cache overload
+      if (showRecipePanel) {
+        setShowRecipePanel(false);
+        setSelectedRecipeForPreview(null);
+        setRecipeIngredients([]);
+      }
+      setSelectedDishForPreview(dish);
+      setShowDishPanel(true);
+    },
+    [showRecipePanel],
+  );
 
   const handlePreviewRecipe = useCallback(
     async (recipe: Recipe) => {
+      // Close dish panel if open to prevent cache overload
+      if (showDishPanel) {
+        setShowDishPanel(false);
+        setSelectedDishForPreview(null);
+      }
       try {
         const ingredients = await fetchRecipeIngredients(recipe.id);
         setSelectedRecipeForPreview(recipe);
@@ -53,7 +69,7 @@ export function useDishesClientPreview({
         setError('Failed to load recipe details');
       }
     },
-    [fetchRecipeIngredients, generateAIInstructions, setError],
+    [showDishPanel, fetchRecipeIngredients, generateAIInstructions, setError],
   );
 
   return {

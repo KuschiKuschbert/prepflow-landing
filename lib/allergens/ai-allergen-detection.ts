@@ -4,7 +4,12 @@
  */
 
 import { logger } from '@/lib/logger';
-import { getOpenAIClient, isAIEnabled } from '@/lib/ai/openai-client';
+import {
+  getGeminiClient,
+  isAIEnabled,
+  getModelForTask,
+  type TaskType,
+} from '@/lib/ai/gemini-client';
 import { supabaseAdmin } from '@/lib/supabase';
 import {
   getAllAllergenCodes,
@@ -182,9 +187,9 @@ export async function detectAllergensFromIngredient(
     };
   }
 
-  const client = getOpenAIClient();
+  const client = getGeminiClient();
   if (!client) {
-    logger.warn('[AI Allergen Detection] OpenAI client not available');
+    logger.warn('[AI Allergen Detection] Gemini client not available');
     return {
       allergens: [],
       confidence: 'low',
@@ -211,24 +216,21 @@ Allergens: [comma-separated list of allergen names, or "none" if no allergens]
 
 Be thorough and check for hidden allergens in processed ingredients.`;
 
-    const response = await client.chat.completions.create({
-      model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are a food safety expert analyzing ingredients for allergen content according to Australian FSANZ standards. Be precise and thorough.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.3, // Lower temperature for more consistent results
-      max_tokens: 500,
+    const taskType: TaskType = 'text';
+    const model = getModelForTask(taskType);
+    const geminiModel = client.getGenerativeModel({
+      model,
+      systemInstruction:
+        'You are a food safety expert analyzing ingredients for allergen content according to Australian FSANZ standards. Be precise and thorough.',
+      generationConfig: {
+        temperature: 0.3, // Lower temperature for more consistent results
+        maxOutputTokens: 500,
+      },
     });
 
-    const content = response.choices[0]?.message?.content || '';
+    const result = await geminiModel.generateContent(prompt);
+    const response = await result.response;
+    const content = response.text();
     const { allergens, composition } = parseAIResponse(content);
 
     // Cache the result

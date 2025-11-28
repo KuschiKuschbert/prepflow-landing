@@ -1,20 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
-import { cacheData } from '@/lib/cache/data-cache';
-import { logger } from '@/lib/logger';
-
-interface CleaningArea {
-  id: string;
-  area_name: string;
-  description?: string;
-  cleaning_frequency?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import { addCleaningArea } from './useCleaningAreas/helpers/addCleaningArea';
+import { deleteCleaningArea } from './useCleaningAreas/helpers/deleteCleaningArea';
+import type { CleaningArea } from './useCleaningAreas/types';
 
 interface UseCleaningAreasProps {
   areas: CleaningArea[];
@@ -31,54 +22,13 @@ export function useCleaningAreas({ areas, setAreas, onTaskRefresh }: UseCleaning
 
   const handleAddArea = useCallback(
     async (newArea: { area_name: string; description: string; cleaning_frequency: string }) => {
-      const tempId = `temp-${Date.now()}`;
-      const tempArea: CleaningArea = {
-        id: tempId,
-        area_name: newArea.area_name,
-        description: newArea.description,
-        cleaning_frequency: newArea.cleaning_frequency,
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      // Store original state for rollback
-      const originalAreas = [...areas];
-
-      // Optimistically add to UI immediately
-      setAreas(prevAreas => [...prevAreas, tempArea]);
-
-      try {
-        const response = await fetch('/api/cleaning-areas', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newArea),
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success && result.data) {
-          // Replace temp area with real area from server
-          setAreas(prevAreas => {
-            const updated = prevAreas.map(a => (a.id === tempId ? result.data : a));
-            cacheData('cleaning_areas', updated);
-            return updated;
-          });
-          showSuccess('Cleaning area created successfully');
-          return { success: true, data: result.data };
-        } else {
-          // Revert optimistic update on error
-          setAreas(originalAreas);
-          showError(result.error || result.message || 'Failed to create cleaning area');
-          return { success: false, error: result.error || result.message };
-        }
-      } catch (err) {
-        // Revert optimistic update on error
-        setAreas(originalAreas);
-        logger.error('Error creating area:', err);
-        showError('Failed to create cleaning area. Please check your connection and try again.');
-        return { success: false, error: 'Failed to create cleaning area' };
-      }
+      return addCleaningArea({
+        newArea,
+        areas,
+        setAreas,
+        onSuccess: showSuccess,
+        onError: showError,
+      });
     },
     [areas, setAreas, showSuccess, showError],
   );
@@ -98,42 +48,14 @@ export function useCleaningAreas({ areas, setAreas, onTaskRefresh }: UseCleaning
 
       if (!confirmed) return { success: false, error: 'Cancelled' };
 
-      // Store original state for rollback
-      const originalAreas = [...areas];
-
-      // Optimistically remove from UI immediately
-      setAreas(prevAreas => prevAreas.filter(a => a.id !== areaId));
-
-      try {
-        const response = await fetch(`/api/cleaning-areas?id=${areaId}`, {
-          method: 'DELETE',
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-          setAreas(prevAreas => {
-            const updated = prevAreas.filter(a => a.id !== areaId);
-            cacheData('cleaning_areas', updated);
-            return updated;
-          });
-          showSuccess('Cleaning area deleted successfully');
-          // Refresh tasks in case any were deleted
-          onTaskRefresh?.();
-          return { success: true };
-        } else {
-          // Revert optimistic update on error
-          setAreas(originalAreas);
-          showError(result.error || result.message || 'Failed to delete area');
-          return { success: false, error: result.error || result.message };
-        }
-      } catch (err) {
-        // Revert optimistic update on error
-        setAreas(originalAreas);
-        logger.error('Error deleting area:', err);
-        showError('Failed to delete area. Please check your connection and try again.');
-        return { success: false, error: 'Failed to delete area' };
-      }
+      return deleteCleaningArea({
+        areaId,
+        areas,
+        setAreas,
+        onSuccess: showSuccess,
+        onError: showError,
+        onTaskRefresh,
+      });
     },
     [areas, setAreas, showConfirm, showSuccess, showError, onTaskRefresh],
   );

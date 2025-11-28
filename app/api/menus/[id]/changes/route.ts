@@ -8,13 +8,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
-import { getToken } from 'next-auth/jwt';
 import {
   getMenuChanges,
   markChangesHandled,
   clearMenuChanges,
 } from '@/lib/menu-lock/change-tracking';
+import { validateAuth, validateMenuExists } from './helpers/validateRequest';
 
 /**
  * GET /api/menus/[id]/changes
@@ -31,42 +30,16 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    // Get user email for auth (optional for development)
-    try {
-      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-      if (!token?.email && process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-          { status: 401 },
-        );
-      }
-    } catch (tokenError) {
-      if (process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Authentication error', 'AUTH_ERROR', 401),
-          { status: 401 },
-        );
-      }
+    // Validate authentication
+    const { error: authError } = await validateAuth(request, false);
+    if (authError) {
+      return authError;
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    // Verify menu exists
-    const { data: menu, error: menuError } = await supabaseAdmin
-      .from('menus')
-      .select('id')
-      .eq('id', menuId)
-      .single();
-
-    if (menuError || !menu) {
-      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
-        status: 404,
-      });
+    // Validate menu exists
+    const { error: menuError } = await validateMenuExists(menuId);
+    if (menuError) {
+      return menuError;
     }
 
     const changes = await getMenuChanges(menuId);
@@ -105,44 +78,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    // Get user email for auth
-    let userEmail: string | null = null;
-    try {
-      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-      userEmail = (token?.email as string) || null;
-      if (!userEmail && process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-          { status: 401 },
-        );
-      }
-    } catch (tokenError) {
-      if (process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Authentication error', 'AUTH_ERROR', 401),
-          { status: 401 },
-        );
-      }
+    // Validate authentication
+    const { error: authError } = await validateAuth(request, true);
+    if (authError) {
+      return authError;
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    // Verify menu exists
-    const { data: menu, error: menuError } = await supabaseAdmin
-      .from('menus')
-      .select('id')
-      .eq('id', menuId)
-      .single();
-
-    if (menuError || !menu) {
-      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
-        status: 404,
-      });
+    // Validate menu exists
+    const { error: menuError } = await validateMenuExists(menuId);
+    if (menuError) {
+      return menuError;
     }
 
     await markChangesHandled(menuId);
@@ -180,42 +125,16 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       );
     }
 
-    // Get user email for auth
-    try {
-      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-      if (!token?.email && process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-          { status: 401 },
-        );
-      }
-    } catch (tokenError) {
-      if (process.env.NODE_ENV === 'production') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Authentication error', 'AUTH_ERROR', 401),
-          { status: 401 },
-        );
-      }
+    // Validate authentication
+    const { error: authError } = await validateAuth(request, false);
+    if (authError) {
+      return authError;
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    // Verify menu exists
-    const { data: menu, error: menuError } = await supabaseAdmin
-      .from('menus')
-      .select('id')
-      .eq('id', menuId)
-      .single();
-
-    if (menuError || !menu) {
-      return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
-        status: 404,
-      });
+    // Validate menu exists
+    const { error: menuError } = await validateMenuExists(menuId);
+    if (menuError) {
+      return menuError;
     }
 
     await clearMenuChanges(menuId);

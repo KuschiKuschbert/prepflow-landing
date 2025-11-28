@@ -41,8 +41,28 @@ export default function KitchenOperations() {
       }
 
       try {
-        const response = await fetch('/api/dashboard/stats');
-        if (!response.ok) throw new Error('Failed to fetch stats');
+        const response = await fetch('/api/dashboard/stats', { cache: 'no-store' });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          let errorMessage = 'Failed to fetch kitchen operations stats';
+
+          if (response.status === 0 || response.status >= 500) {
+            errorMessage = 'Server error: Unable to fetch stats. Please try again later.';
+          } else if (response.status === 404) {
+            errorMessage = 'Stats endpoint not found. Please check your connection.';
+          } else if (response.status >= 400 && response.status < 500) {
+            errorMessage = 'Unable to fetch stats. Please check your permissions.';
+          }
+
+          logger.error('Error fetching kitchen operations stats:', {
+            status: response.status,
+            statusText: response.statusText,
+            error: errorText,
+          });
+          // Keep cached stats if available, don't clear them
+          return;
+        }
 
         const result = await response.json();
         if (result.success) {
@@ -58,6 +78,14 @@ export default function KitchenOperations() {
         }
       } catch (err) {
         logger.error('Error fetching kitchen operations stats:', err);
+
+        // Check if it's a network error
+        if (err instanceof TypeError && err.message.includes('fetch')) {
+          logger.error(
+            'Network error: Unable to connect to server. Using cached data if available.',
+          );
+          // Keep cached stats if available, don't clear them
+        }
       } finally {
         setLoading(false);
       }

@@ -40,25 +40,34 @@ export function useDishesClientData() {
       setRecipes(recipesList);
       setLoading(false);
 
-      // Fetch costs for all dishes
-      const costPromises = dishesList.map(async (dish: Dish) => {
+      // Fetch costs for all dishes using batch endpoint
+      if (dishesList.length > 0) {
         try {
-          const costResponse = await fetch(`/api/dishes/${dish.id}/cost`);
-          const costResult = await costResponse.json();
-          if (costResult.success && costResult.cost) {
-            return { dishId: dish.id, cost: costResult.cost };
+          const dishIds = dishesList.map((dish: Dish) => dish.id);
+          const batchResponse = await fetch('/api/dishes/cost/batch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dishIds }),
+          });
+
+          const batchResult = await batchResponse.json();
+          if (batchResult.success && batchResult.costs) {
+            const costMap = new Map<string, DishCostData>();
+            Object.entries(batchResult.costs).forEach(([dishId, cost]) => {
+              costMap.set(dishId, cost as DishCostData);
+            });
+            setDishCosts(costMap);
+          } else {
+            logger.error('Failed to fetch batch dish costs:', batchResult.error);
           }
         } catch (err) {
-          logger.error(`Failed to fetch cost for dish ${dish.id}:`, err);
+          logger.error('Failed to fetch batch dish costs:', err);
+          // Fallback: set empty map if batch fails
+          setDishCosts(new Map());
         }
-        return null;
-      });
-
-      const costMap = new Map<string, DishCostData>();
-      (await Promise.all(costPromises)).forEach(c => {
-        if (c) costMap.set(c.dishId, c.cost);
-      });
-      setDishCosts(costMap);
+      } else {
+        setDishCosts(new Map());
+      }
 
       // Note: Recipe price calculation is handled by useDishesClientRecipePricing
       // based on visible/paginated recipes, not here

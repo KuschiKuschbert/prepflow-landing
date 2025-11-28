@@ -28,10 +28,7 @@ export function COGSTableRow({
   onEditQuantityChange,
 }: COGSTableRowProps) {
   return (
-    <tr
-      key={calc.ingredientId || `calc-${index}`}
-      className="transition-colors hover:bg-[#2a2a2a]/20"
-    >
+    <tr className="transition-colors hover:bg-[#2a2a2a]/20">
       <td className="px-6 py-4 text-sm text-white">{calc.ingredientName}</td>
       <td className="px-6 py-4 text-sm text-gray-300">
         {editingIngredient === calc.ingredientId ? (

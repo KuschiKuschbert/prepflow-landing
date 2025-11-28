@@ -8,7 +8,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { processRecipeAllergens } from './helpers/processRecipeAllergens';
+import { processIngredientAllergens } from './helpers/processIngredientAllergens';
+import type { AllergenSource } from './helpers/processRecipeAllergens';
 
 /**
  * Gets allergen sources for a dish (which recipes/ingredients contribute which allergens).
@@ -46,7 +48,6 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
     if (dishError || !dish) {
       const errorCode = (dishError as any).code;
       if (errorCode === '42P01') {
-        // Table doesn't exist
         return NextResponse.json(
           ApiErrorHandler.createError('Dishes table not found', 'NOT_FOUND', 404),
           { status: 404 },
@@ -57,135 +58,14 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       });
     }
 
-    const allergenSources: Record<
-      string,
-      Array<{
-        source_type: 'recipe' | 'ingredient';
-        source_id: string;
-        source_name: string;
-        quantity?: number;
-        unit?: string;
-        allergen_source?: {
-          manual?: boolean;
-          ai?: boolean;
-        };
-      }>
-    > = {};
-
+    const allergenSources: Record<string, AllergenSource[]> = {};
     const allAllergens = new Set<string>();
 
-    // Fetch allergens from dish recipes
-    const { data: dishRecipes, error: recipesError } = await supabaseAdmin
-      .from('dish_recipes')
-      .select(
-        `
-        recipe_id,
-        quantity,
-        unit,
-        recipes (
-          id,
-          name,
-          recipe_name,
-          allergens
-        )
-      `,
-      )
-      .eq('dish_id', dishId);
+    // Process recipe allergens
+    await processRecipeAllergens(dishId, allergenSources, allAllergens);
 
-    if (!recipesError && dishRecipes) {
-      dishRecipes.forEach(dr => {
-        const recipe = dr.recipes as unknown as {
-          id: string;
-          name?: string;
-          recipe_name?: string;
-          allergens?: string[];
-        } | null;
-
-        if (!recipe) return;
-
-        const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
-        const allergens = (recipe.allergens as string[]) || [];
-        const consolidatedAllergens = consolidateAllergens(allergens);
-
-        consolidatedAllergens.forEach(allergen => {
-          if (typeof allergen === 'string' && allergen.length > 0) {
-            allAllergens.add(allergen);
-
-            if (!allergenSources[allergen]) {
-              allergenSources[allergen] = [];
-            }
-
-            allergenSources[allergen].push({
-              source_type: 'recipe',
-              source_id: recipe.id,
-              source_name: recipeName,
-              quantity: dr.quantity || undefined,
-              unit: dr.unit || undefined,
-            });
-          }
-        });
-      });
-    }
-
-    // Fetch allergens from dish ingredients
-    const { data: dishIngredients, error: ingredientsError } = await supabaseAdmin
-      .from('dish_ingredients')
-      .select(
-        `
-        ingredient_id,
-        quantity,
-        unit,
-        ingredients (
-          id,
-          ingredient_name,
-          brand,
-          allergens,
-          allergen_source
-        )
-      `,
-      )
-      .eq('dish_id', dishId);
-
-    if (!ingredientsError && dishIngredients) {
-      dishIngredients.forEach(di => {
-        const ingredient = di.ingredients as unknown as {
-          id: string;
-          ingredient_name: string;
-          brand?: string;
-          allergens?: string[];
-          allergen_source?: {
-            manual?: boolean;
-            ai?: boolean;
-          };
-        } | null;
-
-        if (!ingredient) return;
-
-        const allergens = (ingredient.allergens as string[]) || [];
-        const consolidatedAllergens = consolidateAllergens(allergens);
-
-        consolidatedAllergens.forEach(allergen => {
-          if (typeof allergen === 'string' && allergen.length > 0) {
-            allAllergens.add(allergen);
-
-            if (!allergenSources[allergen]) {
-              allergenSources[allergen] = [];
-            }
-
-            allergenSources[allergen].push({
-              source_type: 'ingredient',
-              source_id: ingredient.id,
-              source_name: ingredient.brand
-                ? `${ingredient.ingredient_name} (${ingredient.brand})`
-                : ingredient.ingredient_name,
-              quantity: di.quantity || undefined,
-              unit: di.unit || undefined,
-              allergen_source: ingredient.allergen_source || undefined,
-            });
-          }
-        });
-      });
-    }
+    // Process ingredient allergens
+    await processIngredientAllergens(dishId, allergenSources, allAllergens);
 
     // Convert to array format
     const allergenSourcesArray = Object.entries(allergenSources).map(

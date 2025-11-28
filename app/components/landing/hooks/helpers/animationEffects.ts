@@ -1,11 +1,5 @@
-import { useImageTransitions } from '../utils/imageTransitions';
-import { useContainerHeight } from '../utils/containerDimensions';
-import {
-  useImageEntranceAnimation,
-  useContainerOpacityAnimation,
-  useStaggeredButtonAnimation,
-} from '../utils/animationEffects';
-import { useInitialWidthMeasurement, useExpandedWidthMeasurement } from '../utils/widthMeasurement';
+import { useImageAnimations } from './useAnimationEffects/useImageAnimations';
+import { useButtonAnimations } from './useAnimationEffects/useButtonAnimations';
 import { createToggleHandler } from '../utils/toggleHandler';
 
 interface Feature {
@@ -59,35 +53,27 @@ export function useAnimationEffects({
   setIsTransitioning,
   imageContainerRef,
 }: AnimationEffectsProps) {
-  const {
-    currentImage,
-    previousImage,
-    isImageTransitioning,
-    previousImageOpacity,
-    currentImageOpacity,
-    imageDimensions,
-    setImageDimensions,
-    setNewImageLoaded,
-  } = useImageTransitions(displayFeature, imageMounted);
-  const containerHeight = useContainerHeight(imageDimensions, imageContainerRef);
-  useImageEntranceAnimation(imageMounted, imageContainerRef, expandedFeature, setImageMounted);
-  useContainerOpacityAnimation(imageMounted, imageContainerRef, expandedFeature);
-  useStaggeredButtonAnimation(features, setButtonsVisible);
-  useInitialWidthMeasurement(
+  const imageAnimations = useImageAnimations({
+    displayFeature,
+    imageMounted,
+    expandedFeature,
+    setImageMounted,
+    imageContainerRef,
+  });
+
+  useButtonAnimations({
     features,
+    setButtonsVisible,
     containerRefs,
     initialWidths,
     buttonHeights,
     setInitialWidths,
     setButtonHeights,
-  );
-  useExpandedWidthMeasurement(
     expandedIndex,
-    features,
-    containerRefs,
     parentContainerRef,
     setContainerWidths,
-  );
+  });
+
   const handleToggle = createToggleHandler(
     expandedIndex,
     features,
@@ -99,16 +85,9 @@ export function useAnimationEffects({
     setScaleXValues,
     setIsTransitioning,
   );
+
   return {
-    currentImage,
-    previousImage,
-    isImageTransitioning,
-    previousImageOpacity,
-    currentImageOpacity,
-    imageDimensions,
-    containerHeight,
-    setImageDimensions,
-    setNewImageLoaded,
+    ...imageAnimations,
     handleToggle,
   };
 }

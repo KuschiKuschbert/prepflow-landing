@@ -43,17 +43,19 @@ const nextConfig: NextConfig = {
   },
 
   // Remove dev tools from production
-  ...(process.env.NODE_ENV === 'production' && {
-    webpack: (config, { dev, isServer }) => {
-      // Remove Next.js dev tools from production
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'next/dist/compiled/next-dev-tools': false,
-      };
+  ...(process.env.NODE_ENV === 'production'
+    ? {
+        webpack: (config, { dev, isServer }) => {
+          // Remove Next.js dev tools from production
+          config.resolve.alias = {
+            ...config.resolve.alias,
+            'next/dist/compiled/next-dev-tools': false,
+          };
 
-      return config;
-    },
-  }),
+          return config;
+        },
+      }
+    : {}),
 
   // Turbopack configuration (moved from experimental)
   turbopack: {
@@ -188,7 +190,7 @@ const nextConfig: NextConfig = {
 
   // Headers for performance and security
   async headers() {
-    const headers = [
+    const baseHeaders = [
       {
         source: '/(.*)',
         headers: [
@@ -232,6 +234,33 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+    ];
+
+    // Development: Disable caching for webapp routes to prevent stale component issues
+    // TEMPORARILY DISABLED - causing config compilation error
+    // TODO: Re-enable with proper syntax after debugging
+    // if (process.env.NODE_ENV === 'development') {
+    //   baseHeaders.push({
+    //     source: '/webapp/(.*)',
+    //     headers: [
+    //       {
+    //         key: 'Cache-Control',
+    //         value: 'no-cache, no-store, must-revalidate, max-age=0',
+    //       },
+    //       {
+    //         key: 'Pragma',
+    //         value: 'no-cache',
+    //       },
+    //       {
+    //         key: 'Expires',
+    //         value: '0',
+    //       },
+    //     ],
+    //   });
+    // }
+
+    const headers = [
+      ...baseHeaders,
       {
         source: '/images/(.*)',
         headers: [

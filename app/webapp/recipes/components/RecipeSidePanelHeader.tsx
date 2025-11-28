@@ -19,15 +19,9 @@ export function RecipeSidePanelHeader({
     <div className="flex-shrink-0 border-b border-[#2a2a2a] p-6">
       <div className="mb-4 flex items-start justify-between">
         <div className="flex-1 pr-4">
-          <h2 id="recipe-panel-title" className="mb-2 text-xl font-bold text-white">
+          <h2 id="recipe-panel-title" className="text-xl font-bold text-white">
             {capitalizeRecipeName(recipe.recipe_name)}
           </h2>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-400">Yield:</span>
-            <span className="font-medium text-white">
-              {recipe.yield} {recipe.yield_unit}
-            </span>
-          </div>
         </div>
         <button
           onClick={onClose}

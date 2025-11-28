@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { calculateRecommendedPrice } from '../../helpers/calculateRecommendedPrice';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -151,6 +152,16 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const grossProfitMargin = sellingPrice > 0 ? (grossProfit / sellingPrice) * 100 : 0;
     const foodCostPercent = sellingPrice > 0 ? (totalCost / sellingPrice) * 100 : 0;
 
+    // Calculate contributing margin (Revenue excl GST - Food Cost)
+    const gstRate = 0.1; // 10% GST for Australia
+    const sellingPriceExclGST = sellingPrice / (1 + gstRate);
+    const contributingMargin = sellingPriceExclGST - totalCost;
+    const contributingMarginPercent =
+      sellingPriceExclGST > 0 ? (contributingMargin / sellingPriceExclGST) * 100 : 0;
+
+    // Calculate recommended price using same formula as recipes
+    const recommendedPrice = calculateRecommendedPrice(totalCost);
+
     return NextResponse.json({
       success: true,
       cost: {
@@ -159,6 +170,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         gross_profit: grossProfit,
         gross_profit_margin: grossProfitMargin,
         food_cost_percent: foodCostPercent,
+        contributingMargin: contributingMargin,
+        contributingMarginPercent: contributingMarginPercent,
+        recommendedPrice: recommendedPrice,
       },
     });
   } catch (err) {

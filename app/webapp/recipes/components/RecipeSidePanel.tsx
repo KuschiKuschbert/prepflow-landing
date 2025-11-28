@@ -1,17 +1,24 @@
 'use client';
 
-import { useEffect, useRef, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
-import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat } from 'lucide-react';
-import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
+import { useMemo } from 'react';
+import { createPortal } from 'react-dom';
+import { COGSTable } from '../../cogs/components/COGSTable';
 import { COGSCalculation } from '../../cogs/types';
-import { COGSCalculation as RecipeCOGSCalculation } from '../types';
-import { RecipeSidePanelHeader } from './RecipeSidePanelHeader';
-import { RecipeSidePanelCostSummary } from './RecipeSidePanelCostSummary';
+import { useSidePanelCommon } from '../hooks/useSidePanelCommon';
+import { convertToPerPortion } from '../hooks/utils/convertToPerPortion';
+import { calculateRecipePrice } from '../hooks/utils/pricingHelpers';
+import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
+import {
+  Recipe,
+  COGSCalculation as RecipeCOGSCalculation,
+  RecipeIngredientWithDetails,
+} from '../types';
+import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { RecipeSidePanelActions } from './RecipeSidePanelActions';
+import { RecipeSidePanelCostSummary } from './RecipeSidePanelCostSummary';
+import { RecipeSidePanelHeader } from './RecipeSidePanelHeader';
 
 interface RecipeSidePanelProps {
   isOpen: boolean;
@@ -43,36 +50,12 @@ export function RecipeSidePanel({
   capitalizeRecipeName,
   formatQuantity,
 }: RecipeSidePanelProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
-  const [mounted, setMounted] = useState(false);
-  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({
-    position: 'fixed',
-    top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
-    height: 'calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top))',
-    right: 0,
+  // Use shared hook for common side panel functionality
+  const { panelRef, mounted, panelStyle } = useSidePanelCommon({
+    isOpen,
+    onClose,
+    onEdit: recipe ? () => onEditRecipe(recipe) : undefined,
   });
-
-  // Update panel position based on screen size
-  useEffect(() => {
-    const updatePanelStyle = () => {
-      const isDesktop = window.innerWidth >= 1024;
-      setPanelStyle({
-        position: 'fixed',
-        top: isDesktop
-          ? 'calc(var(--header-height-desktop) + var(--safe-area-inset-top))'
-          : 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
-        height: isDesktop
-          ? 'calc(100vh - var(--header-height-desktop) - var(--safe-area-inset-top))'
-          : 'calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top))',
-        right: 0,
-      });
-    };
-
-    updatePanelStyle();
-    window.addEventListener('resize', updatePanelStyle);
-    return () => window.removeEventListener('resize', updatePanelStyle);
-  }, []);
 
   // Convert recipe ingredients to COGS calculations for summary
   const calculations: COGSCalculation[] = useMemo(() => {
@@ -109,81 +92,17 @@ export function RecipeSidePanel({
     return totalCOGS / recipe.yield;
   }, [totalCOGS, recipe]);
 
-  // Keyboard shortcuts and focus management
-  useEffect(() => {
-    if (!isOpen) return;
+  // Convert calculations to per-portion for breakdown display
+  const perPortionCalculations = useMemo(() => {
+    if (!recipe || recipe.yield <= 0) return calculations;
+    return convertToPerPortion(calculations, recipe.yield);
+  }, [calculations, recipe]);
 
-    // Store current scroll position
-    const scrollY = window.scrollY;
-    previousActiveElement.current = document.activeElement as HTMLElement;
-
-    // Focus panel without scrolling
-    if (panelRef.current) {
-      panelRef.current.focus({ preventScroll: true });
-      // Restore scroll position immediately in case focus caused any scroll
-      window.scrollTo(0, scrollY);
-    }
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'e' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        // Press E to edit (only if not in an input field)
-        const target = e.target as HTMLElement;
-        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-          if (recipe) {
-            onEditRecipe(recipe);
-          }
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      // Restore focus without scrolling
-      if (previousActiveElement.current) {
-        previousActiveElement.current.focus({ preventScroll: true });
-      }
-    };
-  }, [isOpen, onClose, onEditRecipe, recipe]);
-
-  // Prevent body scroll when panel is open on mobile
-  // Also prevent scroll restoration when panel opens
-  useEffect(() => {
-    if (isOpen) {
-      // Store scroll position
-      const scrollY = window.scrollY;
-      document.body.style.overflow = 'hidden';
-      // Prevent scroll restoration
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      // Restore scroll position if it changed
-      requestAnimationFrame(() => {
-        if (window.scrollY !== scrollY) {
-          window.scrollTo(0, scrollY);
-        }
-      });
-    } else {
-      document.body.style.overflow = '';
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'auto';
-      }
-    }
-    return () => {
-      document.body.style.overflow = '';
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'auto';
-      }
-    };
-  }, [isOpen]);
-
-  // Mount check for portal
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Calculate recipe price data for profit metrics
+  const recipePrice = useMemo(() => {
+    if (!recipe || recipeIngredients.length === 0) return null;
+    return calculateRecipePrice(recipe, recipeIngredients);
+  }, [recipe, recipeIngredients]);
 
   if (!isOpen || !recipe || !mounted) return null;
 
@@ -226,7 +145,32 @@ export function RecipeSidePanel({
               calculations={calculations}
               totalCOGS={totalCOGS}
               costPerPortion={costPerPortion}
+              recipePrice={recipePrice}
             />
+
+            {/* COGS Breakdown (per portion) */}
+            {perPortionCalculations.length > 0 && (
+              <div>
+                <h3 className="mb-3 text-sm font-semibold text-white">
+                  COGS Breakdown (per portion)
+                </h3>
+                <div className="rounded-lg bg-[#1f1f1f] p-4">
+                  <COGSTable
+                    calculations={perPortionCalculations}
+                    editingIngredient={null}
+                    editQuantity={0}
+                    onEditIngredient={() => {}}
+                    onSaveEdit={() => {}}
+                    onCancelEdit={() => {}}
+                    onRemoveIngredient={() => {}}
+                    onEditQuantityChange={() => {}}
+                    totalCOGS={costPerPortion}
+                    costPerPortion={costPerPortion}
+                    dishPortions={1}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Ingredients Summary */}
             <div>
@@ -235,6 +179,9 @@ export function RecipeSidePanel({
                 <h3 className="text-sm font-semibold text-white">
                   Ingredients ({recipeIngredients.length})
                 </h3>
+                <span className="text-xs text-gray-500">
+                  - Yield: {recipe.yield} {recipe.yield_unit || 'servings'}
+                </span>
               </div>
               <RecipeIngredientsList
                 recipeIngredients={recipeIngredients}

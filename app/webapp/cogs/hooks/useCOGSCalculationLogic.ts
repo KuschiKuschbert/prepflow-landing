@@ -1,6 +1,6 @@
 'use client';
-import { useCallback } from 'react';
 import { convertIngredientCost } from '@/lib/unit-conversion';
+import { useCallback } from 'react';
 import { COGSCalculation, Ingredient, RecipeIngredient } from '../types';
 import { updateCalculation as updateCalculationUtil } from './utils/updateCalculation';
 
@@ -52,7 +52,8 @@ export function useCOGSCalculationLogic({
             !ingredient.cost_per_unit_incl_trim && wastePercent > 0
               ? totalCost / (1 - wastePercent / 100)
               : totalCost;
-          const yieldAdjustedCost = wasteAdjustedCost * (yieldPercent / 100);
+          // Yield adjustment: divide by yield percentage (if 50% yield, need 2x raw ingredient)
+          const yieldAdjustedCost = wasteAdjustedCost / (yieldPercent / 100);
           return { ...baseCalc, wasteAdjustedCost, yieldAdjustedCost, isConsumable: false };
         })
         .filter(Boolean) as COGSCalculation[];

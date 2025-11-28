@@ -1,6 +1,5 @@
 'use client';
 import { StatisticsGrid } from './MenuItemHoverStatistics';
-import { RecommendedPriceGrid } from './MenuItemHoverStatistics';
 
 interface ItemStatistics {
   cogs: number;
@@ -39,6 +38,14 @@ export function MenuItemTooltipContent({
   // Show error message if COGS calculation failed
   const hasCogsError = statistics.cogs_error != null;
   const hasValidCogs = statistics.cogs > 0 || !hasCogsError;
+  const hasMenuPrice = statistics.selling_price > 0;
+
+  // Determine recommended price display and highlighting
+  const hasRecommendedPrice = statistics.recommended_selling_price != null;
+  const recommendedHigher =
+    hasRecommendedPrice &&
+    statistics.recommended_selling_price! > statistics.selling_price &&
+    Math.abs(statistics.recommended_selling_price! - statistics.selling_price) > 0.01;
 
   return (
     <div className="space-y-3 transition-opacity duration-200">
@@ -48,42 +55,27 @@ export function MenuItemTooltipContent({
           <div className="mt-1 text-xs text-yellow-300/80">{statistics.cogs_error}</div>
         </div>
       )}
-      {statistics.actual_selling_price != null ? (
+      {hasMenuPrice ? (
         <>
           <div className="mb-2 border-b border-[#2a2a2a] pb-2">
             <div className="text-xs text-gray-400">Selling Price</div>
-            <div className="text-sm font-semibold text-white">
-              ${statistics.actual_selling_price.toFixed(2)}
-            </div>
-            {statistics.recommended_selling_price != null &&
-              Math.abs(statistics.actual_selling_price - statistics.recommended_selling_price) >
-                0.01 && (
-                <div className="mt-1 text-xs text-gray-500">
-                  Recommended: ${statistics.recommended_selling_price.toFixed(2)}
+            <div className="flex items-baseline gap-2">
+              <div className="text-sm font-semibold text-white">
+                ${statistics.selling_price.toFixed(2)}
+              </div>
+              {hasRecommendedPrice && (
+                <div
+                  className={`text-xs ${
+                    recommendedHigher ? 'font-medium text-yellow-400' : 'text-gray-500'
+                  }`}
+                >
+                  (${statistics.recommended_selling_price!.toFixed(2)})
                 </div>
               )}
+            </div>
           </div>
           {hasValidCogs ? (
             <StatisticsGrid statistics={statistics} />
-          ) : (
-            <div className="text-xs text-gray-400">
-              Unable to calculate profit metrics - missing cost data
-            </div>
-          )}
-        </>
-      ) : statistics.recommended_selling_price != null ? (
-        <>
-          <div className="mb-2 rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-2">
-            <div className="mb-1 flex items-center gap-1.5">
-              <div className="text-xs font-medium text-[#29E7CD]">Recommended Price</div>
-              <div className="text-xs text-gray-400">(Projected)</div>
-            </div>
-            <div className="text-sm font-semibold text-[#29E7CD]">
-              ${statistics.recommended_selling_price.toFixed(2)}
-            </div>
-          </div>
-          {hasValidCogs ? (
-            <RecommendedPriceGrid statistics={statistics} />
           ) : (
             <div className="text-xs text-gray-400">
               Unable to calculate profit metrics - missing cost data

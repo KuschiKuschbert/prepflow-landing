@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Dish } from '../types';
-import { DishSidePanelHeader } from './DishSidePanelHeader';
-import { DishSidePanelContent } from './DishSidePanelContent';
-import { DishSidePanelActions } from './DishSidePanelActions';
-import { useDishSidePanelData } from '../hooks/useDishSidePanelData';
 import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
+import { useDishSidePanelData } from '../hooks/useDishSidePanelData';
+import { useSidePanelCommon } from '../hooks/useSidePanelCommon';
+import { Dish } from '../types';
+import { DishSidePanelActions } from './DishSidePanelActions';
+import { DishSidePanelContent } from './DishSidePanelContent';
+import { DishSidePanelHeader } from './DishSidePanelHeader';
 
 import { logger } from '@/lib/logger';
 export interface DishSidePanelProps {
@@ -19,36 +20,13 @@ export interface DishSidePanelProps {
 }
 
 export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishSidePanelProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
-  const [mounted, setMounted] = useState(false);
-  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({
-    position: 'fixed',
-    top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
-    height: 'calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top))',
-    right: 0,
+  // Use shared hook for common side panel functionality
+  const { panelRef, mounted, panelStyle } = useSidePanelCommon({
+    isOpen,
+    onClose,
+    onEdit: dish ? () => onEdit(dish) : undefined,
   });
 
-  // Update panel position based on screen size
-  useEffect(() => {
-    const updatePanelStyle = () => {
-      const isDesktop = window.innerWidth >= 1024;
-      setPanelStyle({
-        position: 'fixed',
-        top: isDesktop
-          ? 'calc(var(--header-height-desktop) + var(--safe-area-inset-top))'
-          : 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
-        height: isDesktop
-          ? 'calc(100vh - var(--header-height-desktop) - var(--safe-area-inset-top))'
-          : 'calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top))',
-        right: 0,
-      });
-    };
-
-    updatePanelStyle();
-    window.addEventListener('resize', updatePanelStyle);
-    return () => window.removeEventListener('resize', updatePanelStyle);
-  }, []);
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
   const [editQuantity, setEditQuantity] = useState<number>(0);
 
@@ -90,76 +68,6 @@ export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishS
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   };
-
-  // Keyboard shortcuts and focus management
-  useEffect(() => {
-    if (!isOpen) return;
-
-    // Store current scroll position
-    const scrollY = window.scrollY;
-
-    // Focus panel without scrolling
-    if (panelRef.current) {
-      panelRef.current.focus({ preventScroll: true });
-      // Restore scroll position immediately in case focus caused any scroll
-      window.scrollTo(0, scrollY);
-    }
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'e' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const target = e.target as HTMLElement;
-        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-          if (dish) {
-            onEdit(dish);
-          }
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose, onEdit, dish]);
-
-  // Prevent body scroll when panel is open on mobile
-  // Also prevent scroll restoration when panel opens
-  useEffect(() => {
-    if (isOpen) {
-      // Store scroll position
-      const scrollY = window.scrollY;
-      document.body.style.overflow = 'hidden';
-      // Prevent scroll restoration
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
-      // Restore scroll position if it changed
-      requestAnimationFrame(() => {
-        if (window.scrollY !== scrollY) {
-          window.scrollTo(0, scrollY);
-        }
-      });
-    } else {
-      document.body.style.overflow = '';
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'auto';
-      }
-    }
-    return () => {
-      document.body.style.overflow = '';
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'auto';
-      }
-    };
-  }, [isOpen]);
-
-  // Mount check for portal
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   if (!isOpen || !dish || !mounted) return null;
 

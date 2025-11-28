@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { loadImage } from './imageTransitions/helpers/loadImage';
 
 interface Feature {
   title: string;
@@ -31,48 +32,41 @@ export function useImageTransitions(displayFeature: Feature, imageMounted: boole
       setCurrentImageOpacity(0);
       setNewImageLoaded(false);
 
-      // Preload new image completely BEFORE starting transition
-      const img = new window.Image();
-      img.src = newImage.screenshot;
-      img.onload = () => {
-        // Image is fully loaded and ready
-        setNewImageLoaded(true);
-        if (img.naturalWidth && img.naturalHeight) {
-          setImageDimensions({ width: img.naturalWidth, height: img.naturalHeight });
-        }
-        // Small delay to ensure image is rendered, then start transition
-        requestAnimationFrame(() => {
+      loadImage(
+        newImage.screenshot,
+        dimensions => {
+          if (dimensions) {
+            setImageDimensions(dimensions);
+          }
+          setNewImageLoaded(true);
           requestAnimationFrame(() => {
-            setCurrentImage(newImage);
-            // Framer Motion will handle the smooth crossfade
-            setTimeout(() => {
-              setPreviousImageOpacity(0);
-              setCurrentImageOpacity(1);
-            }, 50);
+            requestAnimationFrame(() => {
+              setCurrentImage(newImage);
+              setTimeout(() => {
+                setPreviousImageOpacity(0);
+                setCurrentImageOpacity(1);
+              }, 50);
+            });
           });
-        });
-      };
-      img.onerror = () => {
-        // Even on error, proceed with transition
-        setNewImageLoaded(true);
-        setCurrentImage(newImage);
-        setTimeout(() => {
-          setPreviousImageOpacity(0);
-          setCurrentImageOpacity(1);
-        }, 50);
-      };
+        },
+        () => {
+          setNewImageLoaded(true);
+          setCurrentImage(newImage);
+          setTimeout(() => {
+            setPreviousImageOpacity(0);
+            setCurrentImageOpacity(1);
+          }, 50);
+        },
+      );
     } else if (!currentImage) {
-      // First image - set immediately
       setCurrentImage(newImage);
       setCurrentImageOpacity(1);
       setNewImageLoaded(true);
-      const img = new window.Image();
-      img.src = newImage.screenshot;
-      img.onload = () => {
-        if (img.naturalWidth && img.naturalHeight) {
-          setImageDimensions({ width: img.naturalWidth, height: img.naturalHeight });
+      loadImage(newImage.screenshot, dimensions => {
+        if (dimensions) {
+          setImageDimensions(dimensions);
         }
-      };
+      });
     }
   }, [displayFeature, imageMounted, currentImage]);
 

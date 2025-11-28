@@ -48,7 +48,8 @@ export default function DishBuilderClient({
 
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
   const [editQuantity, setEditQuantity] = useState<number>(0);
-  const { showSuccess } = useNotification();
+  const [saving, setSaving] = useState(false);
+  const { showSuccess, showError } = useNotification();
 
   // Quantity modal state
   const [showQuantityModal, setShowQuantityModal] = useState(false);
@@ -202,16 +203,32 @@ export default function DishBuilderClient({
 
   // Save handler
   const handleSave = async () => {
-    const result = await saveDish();
-    if (result.success) {
-      const itemType = dishState.itemType === 'dish' ? 'Dish' : 'Recipe';
-      showSuccess(`${itemType} "${dishState.dishName}" saved successfully!`);
-      // Notify parent after a delay
-      setTimeout(() => {
-        if (onSaveSuccess) {
-          onSaveSuccess();
-        }
-      }, 2000);
+    if (saving) return; // Prevent double-clicks
+
+    setSaving(true);
+    try {
+      const result = await saveDish();
+      if (result.success) {
+        const itemType = dishState.itemType === 'dish' ? 'Dish' : 'Recipe';
+        showSuccess(`${itemType} "${dishState.dishName}" saved successfully!`);
+        // Notify parent after a delay
+        setTimeout(() => {
+          if (onSaveSuccess) {
+            onSaveSuccess();
+          }
+        }, 2000);
+      } else {
+        // Error is already set by saveDish via setError
+        showError(result.error || `Failed to save ${dishState.itemType}`);
+      }
+    } catch (err) {
+      logger.error('[DishBuilderClient] Error in handleSave:', err);
+      const errorMessage =
+        err instanceof Error ? err.message : `Failed to save ${dishState.itemType}`;
+      setError(errorMessage);
+      showError(errorMessage);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -261,6 +278,7 @@ export default function DishBuilderClient({
               recommendedPrice={pricingCalculation?.sellPriceInclGST || 0}
               ingredientCount={calculations.length}
               onSave={handleSave}
+              saving={saving}
             />
 
             {/* Cost Analysis Section */}

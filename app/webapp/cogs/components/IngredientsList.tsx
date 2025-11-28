@@ -1,9 +1,9 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { Check, Edit, Trash2, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { COGSCalculation } from '../types';
-import { Edit, Trash2, Check, X } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 
 interface IngredientsListProps {
   calculations: COGSCalculation[];
@@ -96,7 +96,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
       <div className="space-y-1.5">
         {calculations.map((calc, index) => (
           <div
-            key={calc.ingredientId || index}
+            key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
             className="group flex items-center justify-between rounded-lg bg-[#1f1f1f]/50 px-2 py-1.5 text-sm transition-colors hover:bg-[#2a2a2a]/50"
           >
             <span className="text-gray-300">{calc.ingredientName}</span>

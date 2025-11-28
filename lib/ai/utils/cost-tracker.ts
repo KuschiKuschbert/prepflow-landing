@@ -8,13 +8,25 @@ import { AICostTracking } from '../types';
 
 import { logger } from '@/lib/logger';
 
-// Cost per 1M tokens (as of 2024)
+// Cost per 1M tokens (as of 2024-2025)
+// Gemini pricing (current as of 2025)
 const MODEL_COSTS: Record<string, { input: number; output: number }> = {
-  'gpt-4o-mini': { input: 0.15, output: 0.6 },
-  'gpt-4o': { input: 2.5, output: 10.0 },
-  'gpt-4o-vision': { input: 2.5, output: 10.0 },
-  'gpt-4-turbo': { input: 10.0, output: 30.0 },
-  'gpt-3.5-turbo': { input: 0.5, output: 1.5 },
+  // Gemini 2.5 models (current)
+  'gemini-2.5-flash': { input: 0.075, output: 0.3 }, // Fast, cost-effective model for text generation
+  'gemini-2.5-pro-preview-06-05': { input: 1.25, output: 5.0 }, // Pro model with vision capabilities
+  'gemini-2.5-pro-preview-05-06': { input: 1.25, output: 5.0 }, // Pro model variant
+  'gemini-2.5-pro-preview-03-25': { input: 1.25, output: 5.0 }, // Pro model variant
+  'gemini-2.5-pro-vtea-da-csi': { input: 1.25, output: 5.0 }, // Pro model variant
+  // Legacy Gemini models (kept for reference)
+  'gemini-pro': { input: 0.5, output: 1.5 }, // Legacy model (may not be available)
+  'gemini-1.5-flash': { input: 0.075, output: 0.3 }, // Legacy model (may not be available)
+  'gemini-1.5-pro': { input: 1.25, output: 5.0 }, // Legacy model (may not be available)
+  // Legacy OpenAI models (kept for reference, not used)
+  // 'gpt-4o-mini': { input: 0.15, output: 0.6 },
+  // 'gpt-4o': { input: 2.5, output: 10.0 },
+  // 'gpt-4o-vision': { input: 2.5, output: 10.0 },
+  // 'gpt-4-turbo': { input: 10.0, output: 30.0 },
+  // 'gpt-3.5-turbo': { input: 0.5, output: 1.5 },
 };
 
 /**
@@ -25,7 +37,7 @@ export function calculateCost(
   promptTokens: number,
   completionTokens: number,
 ): number {
-  const costs = MODEL_COSTS[model] || MODEL_COSTS['gpt-4o-mini'];
+  const costs = MODEL_COSTS[model] || MODEL_COSTS['gemini-2.5-flash'];
   const inputCost = (promptTokens / 1_000_000) * costs.input;
   const outputCost = (completionTokens / 1_000_000) * costs.output;
   return inputCost + outputCost;

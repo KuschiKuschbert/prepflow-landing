@@ -43,8 +43,17 @@ export function useKitchenAlertsData() {
       }
 
       try {
-        const [statsResponse, logsResult, equipmentResult] = await Promise.all([
-          fetch('/api/dashboard/stats'),
+        let statsResponse: Response | null = null;
+        try {
+          statsResponse = await fetch('/api/dashboard/stats', { cache: 'no-store' });
+        } catch (fetchError) {
+          logger.error('Network error fetching kitchen alerts:', fetchError);
+          // Keep cached data if available
+          setLoading(false);
+          return;
+        }
+
+        const [logsResult, equipmentResult] = await Promise.all([
           supabase
             .from('temperature_logs')
             .select('id, log_date, log_time, temperature_celsius, location')
@@ -57,17 +66,35 @@ export function useKitchenAlertsData() {
         ]);
 
         if (statsResponse.ok) {
-          const statsJson = await statsResponse.json();
-          if (statsJson.success) {
-            setStats({
-              ingredientsLowStock: statsJson.ingredientsLowStock,
-              recipesWithoutCost: statsJson.recipesWithoutCost,
-              temperatureChecksToday: statsJson.temperatureChecksToday,
-              cleaningTasksPending: statsJson.cleaningTasksPending,
-            });
+          try {
+            const statsJson = await statsResponse.json();
+            if (statsJson.success) {
+              setStats({
+                ingredientsLowStock: statsJson.ingredientsLowStock,
+                recipesWithoutCost: statsJson.recipesWithoutCost,
+                temperatureChecksToday: statsJson.temperatureChecksToday,
+                cleaningTasksPending: statsJson.cleaningTasksPending,
+              });
+            }
+          } catch (parseError) {
+            logger.error('Error parsing kitchen alerts stats:', parseError);
           }
+        } else {
+          logger.error('Error fetching kitchen alerts stats:', {
+            status: statsResponse.status,
+            statusText: statsResponse.statusText,
+          });
         }
 
+        // Log Supabase errors but still try to use data if available
+        if (logsResult.error) {
+          logger.error('Error fetching temperature logs for alerts:', logsResult.error);
+        }
+        if (equipmentResult.error) {
+          logger.error('Error fetching temperature equipment for alerts:', equipmentResult.error);
+        }
+
+        // Use data if available (even if there were errors)
         if (
           !logsResult.error &&
           logsResult.data &&
@@ -77,9 +104,21 @@ export function useKitchenAlertsData() {
           setTemperatureAlerts(
             calculateTemperatureAlerts(logsResult.data || [], equipmentResult.data || []),
           );
+        } else if (cachedLogs && cachedEquipment) {
+          // Fallback to cached data if fresh fetch failed
+          const todayLogs = (cachedLogs || []).filter((log: any) => log.log_date === today);
+          setTemperatureAlerts(calculateTemperatureAlerts(todayLogs, cachedEquipment));
         }
       } catch (err) {
         logger.error('Error fetching kitchen alerts:', err);
+
+        // Check if it's a network error
+        if (err instanceof TypeError && err.message.includes('fetch')) {
+          logger.error(
+            'Network error: Unable to connect to server. Using cached data if available.',
+          );
+          // Keep cached data if available
+        }
       } finally {
         setLoading(false);
       }

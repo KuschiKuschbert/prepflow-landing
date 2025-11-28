@@ -15,6 +15,19 @@ export async function GET(_req: NextRequest) {
     const today = new Date().toISOString().split('T')[0];
 
     // Fetch all data in parallel for better performance
+    // Add timeout to prevent hanging (10 seconds max)
+    const fetchWithTimeout = async <T>(
+      promise: Promise<T>,
+      timeoutMs: number = 10000,
+    ): Promise<T> => {
+      return Promise.race([
+        promise,
+        new Promise<T>((_, reject) =>
+          setTimeout(() => reject(new Error('Database query timeout')), timeoutMs),
+        ),
+      ]);
+    };
+
     const [
       { count: ing },
       { count: rec },
@@ -24,29 +37,32 @@ export async function GET(_req: NextRequest) {
       { data: allIngredients },
       { count: tempChecksToday },
       { count: cleaningTasksPending },
-    ] = await Promise.all([
-      // Basic counts
-      supabaseAdmin.from('ingredients').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('recipes').select('*', { count: 'exact', head: true }),
-      // Fetch dish prices (dishes have selling_price, not recipes)
-      supabaseAdmin.from('dishes').select('selling_price').not('selling_price', 'is', null),
-      // Menu dishes count (from menu_items)
-      supabaseAdmin.from('menu_items').select('*', { count: 'exact', head: true }),
-      // All recipes for completeness check
-      supabaseAdmin.from('recipes').select('id'),
-      // All ingredients for stock check
-      supabaseAdmin.from('ingredients').select('id, current_stock, min_stock_level'),
-      // Temperature checks today
-      supabaseAdmin
-        .from('temperature_logs')
-        .select('*', { count: 'exact', head: true })
-        .eq('log_date', today),
-      // Pending cleaning tasks
-      supabaseAdmin
-        .from('cleaning_tasks')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'pending'),
-    ]);
+    ] = await fetchWithTimeout(
+      Promise.all([
+        // Basic counts
+        supabaseAdmin.from('ingredients').select('*', { count: 'exact', head: true }),
+        supabaseAdmin.from('recipes').select('*', { count: 'exact', head: true }),
+        // Fetch dish prices (dishes have selling_price, not recipes)
+        supabaseAdmin.from('dishes').select('selling_price').not('selling_price', 'is', null),
+        // Menu dishes count (from menu_items)
+        supabaseAdmin.from('menu_items').select('*', { count: 'exact', head: true }),
+        // All recipes for completeness check
+        supabaseAdmin.from('recipes').select('id'),
+        // All ingredients for stock check
+        supabaseAdmin.from('ingredients').select('id, current_stock, min_stock_level'),
+        // Temperature checks today
+        supabaseAdmin
+          .from('temperature_logs')
+          .select('*', { count: 'exact', head: true })
+          .eq('log_date', today),
+        // Pending cleaning tasks
+        supabaseAdmin
+          .from('cleaning_tasks')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending'),
+      ]),
+      10000, // 10 second timeout
+    );
 
     // Calculate average dish price from dishes table
     // Handle case where dishes table doesn't exist gracefully

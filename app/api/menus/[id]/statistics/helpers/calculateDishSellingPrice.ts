@@ -4,7 +4,7 @@ import { calculateDishCost } from './calculateDishCost';
  * Calculate selling price for a dish using standard pricing logic (70% gross profit target).
  *
  * @param {string} dishId - Dish ID
- * @returns {Promise<number>} GST-exclusive selling price
+ * @returns {Promise<number>} GST-inclusive selling price
  */
 export async function calculateDishSellingPrice(dishId: string): Promise<number> {
   const dishCost = await calculateDishCost(dishId);
@@ -21,6 +21,6 @@ export async function calculateDishSellingPrice(dishId: string): Promise<number>
   // Apply charm pricing: Math.ceil() - 0.01 (matching COGS method)
   const finalPriceInclGST = Math.ceil(sellPriceInclGST) - 0.01;
 
-  // Recalculate GST-exclusive from final price
-  return finalPriceInclGST / (1 + gstRate);
+  // Return GST-inclusive price (matching recipe/dish builder)
+  return finalPriceInclGST;
 }

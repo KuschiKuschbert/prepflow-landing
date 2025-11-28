@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import { TrendingUp, TrendingDown, Sparkles, ExternalLink } from 'lucide-react';
+import { ExternalLink, Sparkles, TrendingDown, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -134,7 +134,7 @@ export default function ChefPerformanceInsights() {
             <div className="space-y-2">
               {data.topSellers.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={`top-seller-${item.id}`}
                   className="tablet:p-3 flex items-center justify-between rounded-lg bg-[#1f1f1f] p-2"
                 >
                   <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ export default function ChefPerformanceInsights() {
             <div className="space-y-2">
               {data.bottomSellers.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={`bottom-seller-${item.id}`}
                   className="tablet:p-3 flex items-center justify-between rounded-lg bg-[#1f1f1f] p-2"
                 >
                   <div className="flex items-center gap-2">
@@ -204,7 +204,7 @@ export default function ChefPerformanceInsights() {
             <div className="space-y-2">
               {data.hiddenGems.map(item => (
                 <Link
-                  key={item.id}
+                  key={`hidden-gem-${item.id}`}
                   href="/webapp/menu-builder"
                   className="tablet:p-3 flex items-center justify-between rounded-lg bg-[#1f1f1f] p-2 transition-colors hover:bg-[#2a2a2a]"
                 >

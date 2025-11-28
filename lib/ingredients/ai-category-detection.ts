@@ -1,10 +1,15 @@
 /**
  * AI-based ingredient category detection.
- * Uses OpenAI API to categorize ingredients when rule-based detection fails.
+ * Uses Gemini API to categorize ingredients when rule-based detection fails.
  * Follows the same pattern as allergen detection.
  */
 
-import { getOpenAIClient, isAIEnabled } from '@/lib/ai/openai-client';
+import {
+  getGeminiClient,
+  isAIEnabled,
+  getModelForTask,
+  type TaskType,
+} from '@/lib/ai/gemini-client';
 import { logger } from '@/lib/logger';
 import { STANDARD_CATEGORIES, type IngredientCategory } from './category-detection';
 
@@ -38,9 +43,9 @@ export async function detectCategoryWithAI(
     };
   }
 
-  const client = getOpenAIClient();
+  const client = getGeminiClient();
   if (!client) {
-    logger.warn('[AI Category Detection] OpenAI client not available');
+    logger.warn('[AI Category Detection] Gemini client not available');
     return {
       category: 'Other',
       confidence: 'low',
@@ -57,24 +62,21 @@ Respond with ONLY the category name from the list above. Choose the most specifi
 
 Category:`;
 
-    const response = await client.chat.completions.create({
-      model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are a restaurant inventory expert. Categorize ingredients accurately into food-based categories. Be precise and choose the most specific category.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.3, // Lower temperature for more consistent results
-      max_tokens: 50,
+    const taskType: TaskType = 'text';
+    const model = getModelForTask(taskType);
+    const geminiModel = client.getGenerativeModel({
+      model,
+      systemInstruction:
+        'You are a restaurant inventory expert. Categorize ingredients accurately into food-based categories. Be precise and choose the most specific category.',
+      generationConfig: {
+        temperature: 0.3, // Lower temperature for more consistent results
+        maxOutputTokens: 50,
+      },
     });
 
-    const content = response.choices[0]?.message?.content?.trim() || '';
+    const result = await geminiModel.generateContent(prompt);
+    const response = await result.response;
+    const content = response.text().trim();
 
     // Find matching category (case-insensitive, partial match)
     const detectedCategory =

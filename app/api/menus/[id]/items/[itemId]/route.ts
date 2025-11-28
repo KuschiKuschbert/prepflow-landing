@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { fetchMenuItem } from './helpers/fetchMenuItem';
 import { syncPrice } from './helpers/syncPrice';
 import { validateMenuItemRequest } from './helpers/validateMenuItemRequest';
@@ -65,6 +65,13 @@ export async function PUT(
       updateData.actual_selling_price = actual_selling_price === null ? null : actual_selling_price;
     }
 
+    logger.dev('[Menu Item API] Updating menu item', {
+      menuId,
+      menuItemId,
+      updateData,
+      actual_selling_price,
+    });
+
     // Update menu_items table
     const { data: updatedItem, error: updateError } = await supabaseAdmin
       .from('menu_items')
@@ -75,7 +82,7 @@ export async function PUT(
       .single();
 
     if (updateError) {
-      logger.error('Error updating menu item:', updateError);
+      logger.error('[Menu Item API] Error updating menu item:', updateError);
       return NextResponse.json(
         {
           success: false,
@@ -86,9 +93,24 @@ export async function PUT(
       );
     }
 
+    logger.dev('[Menu Item API] Menu item updated successfully', {
+      menuItemId,
+      updatedItem,
+      actual_selling_price: updatedItem?.actual_selling_price,
+    });
+
     // Sync actual_selling_price to dish or recipe table
     if (actual_selling_price !== undefined) {
+      logger.dev('[Menu Item API] Syncing price to dish/recipe', {
+        menuItemId,
+        dish_id: menuItem?.dish_id,
+        recipe_id: menuItem?.recipe_id,
+        actual_selling_price,
+      });
       await syncPrice(menuItem!, actual_selling_price);
+      logger.dev('[Menu Item API] Price sync completed', {
+        menuItemId,
+      });
     }
 
     return NextResponse.json({

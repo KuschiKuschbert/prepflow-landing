@@ -74,7 +74,6 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err: any) {
-    // Handle ApiError objects thrown by helper functions
     if (err && typeof err === 'object' && 'status' in err) {
       return NextResponse.json(err, { status: err.status || 500 });
     }
@@ -126,9 +125,7 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    if (err.status) return NextResponse.json(err, { status: err.status });
     return handleComplianceError(err, 'POST');
   }
 }
@@ -172,9 +169,7 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    if (err.status) return NextResponse.json(err, { status: err.status });
     return handleComplianceError(err, 'PUT');
   }
 }
@@ -192,15 +187,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     await deleteComplianceRecord(id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Compliance record deleted successfully',
-    });
+    return NextResponse.json({ success: true, message: 'Compliance record deleted successfully' });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    if (err.status) return NextResponse.json(err, { status: err.status });
     return handleComplianceError(err, 'DELETE');
   }
 }

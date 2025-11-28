@@ -16,6 +16,23 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
   }
 
   try {
+    // Fetch recipe yield first
+    const { data: recipe, error: recipeError } = await supabaseAdmin
+      .from('recipes')
+      .select('yield')
+      .eq('id', recipeId)
+      .single();
+
+    if (recipeError) {
+      logger.error('[calculateRecipeCost] Error fetching recipe yield:', {
+        recipeId,
+        error: recipeError,
+      });
+      // Continue with default yield of 1 if recipe not found
+    }
+
+    const recipeYield = recipe?.yield && recipe.yield > 0 ? recipe.yield : 1; // Default to 1 if not set or invalid
+
     const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
       .from('recipe_ingredients')
       .select(
@@ -71,10 +88,28 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
         const yieldPercent = ingredient.yield_percentage || 100;
 
         let adjustedCost = ingredientQuantity * costPerUnit * quantity;
+        const baseCost = adjustedCost;
+
         if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {
           adjustedCost = adjustedCost / (1 - wastePercent / 100);
         }
+        const wasteAdjustedCost = adjustedCost;
+
         adjustedCost = adjustedCost / (yieldPercent / 100);
+        const finalCost = adjustedCost;
+
+        logger.dev('[calculateRecipeCost] Ingredient calculation breakdown', {
+          recipeId,
+          quantity,
+          ingredientName: ingredient.ingredient_name || 'Unknown',
+          ingredientQuantity,
+          costPerUnit,
+          baseCost,
+          wastePercent,
+          wasteAdjustedCost,
+          yieldPercent,
+          finalCost,
+        });
 
         recipeCost += adjustedCost;
       }
@@ -83,6 +118,7 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
     logger.dev('[calculateRecipeCost] Calculation complete', {
       recipeId,
       recipeCost,
+      recipeYield,
       ingredientCount,
       missingCostCount,
       quantity,
@@ -96,7 +132,22 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
       });
     }
 
-    return recipeCost;
+    // Divide by recipe yield to get cost per serving
+    const costPerServing = recipeCost / recipeYield;
+
+    // Multiply by quantity (how many servings the dish needs)
+    const finalCost = costPerServing * quantity;
+
+    logger.dev('[calculateRecipeCost] Final cost calculation', {
+      recipeId,
+      recipeCost,
+      recipeYield,
+      costPerServing,
+      quantity,
+      finalCost,
+    });
+
+    return finalCost;
   } catch (err) {
     logger.error('[calculateRecipeCost] Unexpected error:', {
       recipeId,

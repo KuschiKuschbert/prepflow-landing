@@ -1,4 +1,4 @@
-import { filterSalesDataByDateRange, parseDateRange } from '@/lib/api/performance/dateFiltering';
+import { filterSalesDataByDateRange } from '@/lib/api/performance/dateFiltering';
 import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/dishDeduplication';
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
@@ -8,20 +8,13 @@ import {
   calculateAverageProfitMargin,
   calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { findTargetMenuId } from './helpers/findTargetMenuId';
+import { fetchPerformanceDishes } from './helpers/fetchPerformanceDishes';
+import { generatePerformanceSummary } from './helpers/generatePerformanceSummary';
 
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
     // Default to last 7 days for dashboard summary
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -37,94 +30,30 @@ export async function GET(request: NextRequest) {
     const menuIdParam = searchParams.get('menuId');
     const lockedMenuOnly = searchParams.get('lockedMenuOnly') === 'true';
 
-    // If filtering by locked menu, find the locked menu first
-    let targetMenuId: string | null = menuIdParam || null;
-    if (lockedMenuOnly && !targetMenuId) {
-      const { data: lockedMenu } = await supabaseAdmin
-        .from('menus')
-        .select('id')
-        .eq('is_locked', true)
-        .single();
+    // Find target menu ID
+    const targetMenuId = await findTargetMenuId(menuIdParam, lockedMenuOnly);
 
-      if (lockedMenu) {
-        targetMenuId = lockedMenu.id;
-        logger.dev('[Performance Summary API] Filtering by locked menu:', { menuId: targetMenuId });
-      } else {
-        logger.dev('[Performance Summary API] No locked menu found, showing all dishes');
-      }
-    }
+    // Fetch dishes
+    const { dishes, isEmpty } = await fetchPerformanceDishes(targetMenuId);
 
-    // Build base query
-    let dishesQuery = supabaseAdmin.from('menu_dishes').select(
-      `
-        id,
-        name,
-        selling_price,
-        profit_margin,
-        sales_data (
-          id,
-          number_sold,
-          popularity_percentage,
-          date
-        )
-      `,
-    );
-
-    // Filter by menu if menuId is provided
-    if (targetMenuId) {
-      // Get dish IDs from menu_items for this menu
-      const { data: menuItems, error: menuItemsError } = await supabaseAdmin
-        .from('menu_items')
-        .select('dish_id')
-        .eq('menu_id', targetMenuId)
-        .not('dish_id', 'is', null);
-
-      if (menuItemsError) {
-        logger.error('[Performance Summary API] Error fetching menu items:', menuItemsError);
-        // Continue without filtering if there's an error
-      } else if (menuItems && menuItems.length > 0) {
-        const dishIds = menuItems.map(item => item.dish_id).filter(Boolean) as string[];
-        dishesQuery = dishesQuery.in('id', dishIds);
-        logger.dev('[Performance Summary API] Filtering dishes by menu:', {
-          menuId: targetMenuId,
-          dishCount: dishIds.length,
-        });
-      } else {
-        // No dishes in this menu, return empty result
-        logger.dev('[Performance Summary API] No dishes found in menu:', { menuId: targetMenuId });
-        return NextResponse.json({
-          success: true,
-          topSellers: [],
-          bottomSellers: [],
-          hiddenGems: [],
-          categoryCounts: {
-            chefsKiss: 0,
-            hiddenGem: 0,
-            bargainBucket: 0,
-            burntToast: 0,
-          },
-          dateRange: {
-            startDate: dateRange.startDate.toISOString().split('T')[0],
-            endDate: dateRange.endDate.toISOString().split('T')[0],
-          },
-          filteredByMenu: targetMenuId,
-        });
-      }
-    }
-
-    const { data: dishes, error: dishesError } = await dishesQuery.order('created_at', {
-      ascending: false,
-    });
-
-    if (dishesError) {
-      logger.error('Error fetching dishes:', dishesError);
-      return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not retrieve menu dishes from database',
+    if (isEmpty) {
+      return NextResponse.json({
+        success: true,
+        topSellers: [],
+        bottomSellers: [],
+        hiddenGems: [],
+        categoryCounts: {
+          chefsKiss: 0,
+          hiddenGem: 0,
+          bargainBucket: 0,
+          burntToast: 0,
         },
-        { status: 500 },
-      );
+        dateRange: {
+          startDate: dateRange.startDate.toISOString().split('T')[0],
+          endDate: dateRange.endDate.toISOString().split('T')[0],
+        },
+        filteredByMenu: targetMenuId,
+      });
     }
 
     // Filter sales_data by date range (last 7 days)
@@ -174,70 +103,12 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // Filter items with sales (number_sold > 0)
-    const itemsWithSales = performanceData.filter(item => item.number_sold > 0);
-
-    // Top 3 selling items (by number_sold)
-    const topSellers = [...itemsWithSales]
-      .sort((a, b) => b.number_sold - a.number_sold)
-      .slice(0, 3)
-      .map(item => ({
-        id: item.id,
-        name: item.name,
-        number_sold: item.number_sold,
-        menu_item_class: item.menu_item_class,
-      }));
-
-    // Bottom 3 items (lowest sales)
-    const bottomSellers = [...itemsWithSales]
-      .sort((a, b) => a.number_sold - b.number_sold)
-      .slice(0, 3)
-      .map(item => ({
-        id: item.id,
-        name: item.name,
-        number_sold: item.number_sold,
-        menu_item_class: item.menu_item_class,
-      }));
-
-    // Hidden gems (high profit, low sales - promotion opportunities)
-    const hiddenGems = itemsWithSales
-      .filter(
-        item =>
-          item.profit_category === 'High' &&
-          item.popularity_category === 'Low' &&
-          item.menu_item_class === 'Hidden Gem',
-      )
-      .sort((a, b) => b.gross_profit_percentage - a.gross_profit_percentage)
-      .slice(0, 3)
-      .map(item => ({
-        id: item.id,
-        name: item.name,
-        gross_profit_percentage: item.gross_profit_percentage,
-        number_sold: item.number_sold,
-      }));
-
-    // Category counts - ensure all dishes are included, even those without sales
-    // Verify all dishes have a menu_item_class assigned
-    const categoryCounts = {
-      chefsKiss: performanceData.filter(item => item.menu_item_class === "Chef's Kiss").length,
-      hiddenGem: performanceData.filter(item => item.menu_item_class === 'Hidden Gem').length,
-      bargainBucket: performanceData.filter(item => item.menu_item_class === 'Bargain Bucket')
-        .length,
-      burntToast: performanceData.filter(item => item.menu_item_class === 'Burnt Toast').length,
-    };
-
-    // Debug: Log if any dishes don't have a category assigned
-    const dishesWithoutCategory = performanceData.filter(item => !item.menu_item_class);
-    if (dishesWithoutCategory.length > 0) {
-      logger.warn(`Warning: ${dishesWithoutCategory.length} dishes without category assignment`);
-    }
+    // Generate summary
+    const summary = generatePerformanceSummary(performanceData);
 
     return NextResponse.json({
       success: true,
-      topSellers,
-      bottomSellers,
-      hiddenGems,
-      categoryCounts,
+      ...summary,
       dateRange: {
         startDate: dateRange.startDate.toISOString().split('T')[0],
         endDate: dateRange.endDate.toISOString().split('T')[0],
@@ -248,7 +119,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Internal server error',
-        message: 'An unexpected error occurred',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred',
       },
       { status: 500 },
     );

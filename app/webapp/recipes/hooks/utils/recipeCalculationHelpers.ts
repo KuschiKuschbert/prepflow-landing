@@ -9,7 +9,9 @@ export function convertToCOGSCalculations(
 ): COGSCalculation[] {
   return recipeIngredients.map(ri => {
     const ingredient = ri.ingredients;
-    const quantity = ri.quantity;
+    // Parse quantity to handle string/number conversion
+    const quantity =
+      typeof ri.quantity === 'number' ? ri.quantity : parseFloat(String(ri.quantity)) || 0;
     const isConsumable = ingredient.category === 'Consumables';
     // Use cost_per_unit_incl_trim if available, otherwise cost_per_unit
     const baseCostPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;

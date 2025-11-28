@@ -1,19 +1,18 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { Dish } from '../types';
-import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
-import { COGSTable } from '../../cogs/components/COGSTable';
-import { COGSCalculation } from '../../cogs/types';
-import { useDishPreviewModalData } from '../hooks/useDishPreviewModalData';
-import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
-import { DishPreviewModalHeader } from './DishPreviewModalHeader';
-import { DishPreviewModalCostInfo } from './DishPreviewModalCostInfo';
-import { DishPreviewModalRecipesList } from './DishPreviewModalRecipesList';
-import { DishPreviewModalIngredientsList } from './DishPreviewModalIngredientsList';
-import { DishPreviewModalActions } from './DishPreviewModalActions';
-
 import { logger } from '@/lib/logger';
+import { useEffect, useState } from 'react';
+import { COGSTable } from '../../cogs/components/COGSTable';
+import { COGSTableGrouped } from '../../cogs/components/COGSTableGrouped';
+import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
+import { useDishPreviewModalData } from '../hooks/useDishPreviewModalData';
+import { Dish } from '../types';
+import { DishPreviewModalActions } from './DishPreviewModalActions';
+import { DishPreviewModalCostInfo } from './DishPreviewModalCostInfo';
+import { DishPreviewModalHeader } from './DishPreviewModalHeader';
+import { DishPreviewModalIngredientsList } from './DishPreviewModalIngredientsList';
+import { DishPreviewModalRecipesList } from './DishPreviewModalRecipesList';
+
 interface DishPreviewModalProps {
   dish: Dish;
   onClose: () => void;
@@ -39,6 +38,28 @@ export default function DishPreviewModal({
     recipeIngredientsMap,
     dish,
   );
+
+  // Debug: Log if recipe ingredients are missing
+  useEffect(() => {
+    if (dishDetails && !loading) {
+      const recipes = dishDetails.recipes || [];
+      const missingRecipes = recipes.filter(r => r.recipe_id && !recipeIngredientsMap[r.recipe_id]);
+      if (missingRecipes.length > 0) {
+        logger.warn('[DishPreviewModal] Missing recipe ingredients', {
+          dishId: dish.id,
+          missingRecipeIds: missingRecipes.map(r => r.recipe_id),
+          recipeIngredientsMapKeys: Object.keys(recipeIngredientsMap),
+        });
+      }
+      logger.dev('[DishPreviewModal] Calculations summary', {
+        dishId: dish.id,
+        totalCalculations: calculations.length,
+        recipeCalculations: calculations.filter(c => c.recipeId !== dish.id).length,
+        standaloneCalculations: calculations.filter(c => c.recipeId === dish.id).length,
+        recipeIngredientsMapKeys: Object.keys(recipeIngredientsMap),
+      });
+    }
+  }, [dishDetails, recipeIngredientsMap, calculations, loading, dish.id]);
 
   const handleEditIngredient = (ingredientId: string, currentQuantity: number) => {
     setEditingIngredient(ingredientId);
@@ -125,19 +146,36 @@ export default function DishPreviewModal({
               {calculations.length > 0 && (
                 <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
                   <h3 className="mb-4 text-lg font-semibold text-white">COGS Breakdown</h3>
-                  <COGSTable
-                    calculations={calculations}
-                    editingIngredient={editingIngredient}
-                    editQuantity={editQuantity}
-                    onEditIngredient={handleEditIngredient}
-                    onSaveEdit={handleSaveEdit}
-                    onCancelEdit={handleCancelEdit}
-                    onRemoveIngredient={handleRemoveIngredient}
-                    onEditQuantityChange={setEditQuantity}
-                    totalCOGS={totalCOGS}
-                    costPerPortion={costPerPortion}
-                    dishPortions={1}
-                  />
+                  {dishDetails ? (
+                    <COGSTableGrouped
+                      calculations={calculations}
+                      dishDetails={dishDetails}
+                      editingIngredient={editingIngredient}
+                      editQuantity={editQuantity}
+                      onEditIngredient={handleEditIngredient}
+                      onSaveEdit={handleSaveEdit}
+                      onCancelEdit={handleCancelEdit}
+                      onRemoveIngredient={handleRemoveIngredient}
+                      onEditQuantityChange={setEditQuantity}
+                      totalCOGS={totalCOGS}
+                      costPerPortion={costPerPortion}
+                      dishPortions={1}
+                    />
+                  ) : (
+                    <COGSTable
+                      calculations={calculations}
+                      editingIngredient={editingIngredient}
+                      editQuantity={editQuantity}
+                      onEditIngredient={handleEditIngredient}
+                      onSaveEdit={handleSaveEdit}
+                      onCancelEdit={handleCancelEdit}
+                      onRemoveIngredient={handleRemoveIngredient}
+                      onEditQuantityChange={setEditQuantity}
+                      totalCOGS={totalCOGS}
+                      costPerPortion={costPerPortion}
+                      dishPortions={1}
+                    />
+                  )}
                 </div>
               )}
 

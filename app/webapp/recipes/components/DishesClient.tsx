@@ -11,6 +11,7 @@ import { DishesListViewSection } from './DishesListViewSection';
 import { DishesModalsSection } from './DishesModalsSection';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
 import { DishesEditorView } from './DishesEditorView';
+import { ErrorBanner } from './DishesClient/components/ErrorBanner';
 import { useDishesClientData } from './hooks/useDishesClientData';
 import { useDishesClientViewMode } from './hooks/useDishesClientViewMode';
 import { useDishesClientPreview } from './hooks/useDishesClientPreview';
@@ -19,10 +20,7 @@ import { useDishesClientSelection } from './hooks/useDishesClientSelection';
 import { useDishesClientPagination } from './hooks/useDishesClientPagination';
 import { useDishesClientRecipePricing } from './hooks/useDishesClientRecipePricing';
 import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers';
-import { useDishesOptimisticUpdates } from './hooks/useDishesOptimisticUpdates';
-import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
-import { useBulkShare } from '../hooks/useBulkShare';
-import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
+import { useDishesClientBulkActions } from './DishesClient/hooks/useDishesClientBulkActions';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
@@ -87,7 +85,7 @@ export default function DishesClient() {
     paginatedRecipesList,
     filters,
     updateFilters,
-  } = useDishesClientPagination({ dishes, recipes, dishCosts });
+  } = useDishesClientPagination({ dishes, recipes, dishCosts, recipePrices });
   const {
     showDeleteConfirm,
     itemToDelete,
@@ -147,51 +145,38 @@ export default function DishesClient() {
     });
     return types;
   }, [dishes, recipes, selectedItems]);
-  const {
-    optimisticallyUpdateDishes,
-    optimisticallyUpdateRecipes,
-    rollbackDishes,
-    rollbackRecipes,
-  } = useDishesOptimisticUpdates({ dishes, recipes, selectedItems, setDishes, setRecipes });
+
   const {
     bulkActionLoading,
+    bulkShareLoading,
+    addToMenuLoading,
+    showBulkMenu,
+    setShowBulkMenu,
     showBulkDeleteConfirm,
     setShowBulkDeleteConfirm,
     handleBulkDelete,
     confirmBulkDelete,
     cancelBulkDelete,
-    selectedRecipeIds,
-    selectedDishIds,
-  } = useUnifiedBulkActions({
-    recipes,
-    dishes,
-    selectedItems,
-    selectedItemTypes,
-    optimisticallyUpdateRecipes,
-    optimisticallyUpdateDishes,
-    rollbackRecipes,
-    rollbackDishes,
-    onClearSelection: handleExitSelectionMode,
-  });
-  const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
-    selectedRecipeIds,
-    onSuccess: handleExitSelectionMode,
-  });
-  const {
+    handleBulkShare,
     handleBulkAddToMenu,
     handleSelectMenu,
     handleCreateNewMenu,
     menus,
     loadingMenus,
-    addLoading: addToMenuLoading,
     showMenuDialog,
     setShowMenuDialog,
-  } = useBulkAddToMenu({
+    selectedRecipeIds,
+    selectedDishIds,
+  } = useDishesClientBulkActions({
+    dishes,
+    recipes,
     selectedItems,
     selectedItemTypes,
-    onSuccess: handleExitSelectionMode,
+    setDishes,
+    setRecipes,
+    onClearSelection: handleExitSelectionMode,
   });
-  const [showBulkMenu, setShowBulkMenu] = useState(false);
+
   const selectedRecipeCount = selectedRecipeIds.length;
   const sidePanelsHandlers = useDishesSidePanelsHandlers({
     setShowDishPanel,
@@ -212,11 +197,7 @@ export default function DishesClient() {
   if (loading) return <PageSkeleton />;
   return (
     <div>
-      {error && (
-        <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400">
-          {error}
-        </div>
-      )}
+      <ErrorBanner error={error} />
       <DishesBulkActionsSection
         isSelectionMode={isSelectionMode}
         selectedCount={selectedItems.size}

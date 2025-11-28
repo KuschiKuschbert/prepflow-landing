@@ -1,7 +1,11 @@
 'use client';
 import { useCallback } from 'react';
 import { KitchenSection, MenuDish, FormData } from './types';
-import { useConfirm } from '@/hooks/useConfirm';
+import { handleSubmit as submitForm } from './useDishSectionActions/helpers/handleSubmit';
+import { useHandleDelete } from './useDishSectionActions/helpers/handleDelete';
+import { handleAssignDish as assignDish } from './useDishSectionActions/helpers/handleAssignDish';
+import { handleEdit as editSection } from './useDishSectionActions/helpers/handleEdit';
+
 interface UseDishSectionActionsProps {
   userId: string;
   kitchenSections: KitchenSection[];
@@ -20,12 +24,9 @@ interface UseDishSectionActionsProps {
 
 export function useDishSectionActions({
   userId,
-  kitchenSections,
   menuDishes,
   editingSection,
   formData,
-  setKitchenSections,
-  setMenuDishes,
   setError,
   setFormData,
   setShowForm,
@@ -33,118 +34,61 @@ export function useDishSectionActions({
   fetchKitchenSections,
   fetchMenuDishes,
 }: UseDishSectionActionsProps) {
-  const { showConfirm, ConfirmDialog } = useConfirm();
   const resetForm = useCallback(() => {
     setFormData({ name: '', description: '', color: '#29E7CD' });
     setShowForm(false);
     setEditingSection(null);
   }, [setFormData, setShowForm, setEditingSection]);
-  const handleSubmit = useCallback(
+
+  const onSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      try {
-        const url = '/api/kitchen-sections';
-        const method = editingSection ? 'PUT' : 'POST';
-        const body = editingSection
-          ? {
-              id: editingSection.id,
-              name: formData.name,
-              description: formData.description,
-              color: formData.color,
-            }
-          : {
-              userId,
-              name: formData.name,
-              description: formData.description,
-              color: formData.color,
-            };
-        const response = await fetch(url, {
-          method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-        const result = await response.json();
-        if (result.success) {
-          await fetchKitchenSections();
-          resetForm();
-          setError(null);
-        } else {
-          setError(result.message || 'Failed to save kitchen section');
-        }
-      } catch (err) {
-        setError('Failed to save kitchen section');
-      }
+      await submitForm({
+        editingSection,
+        formData,
+        userId,
+        fetchKitchenSections,
+        resetForm,
+        setError,
+      });
     },
     [editingSection, formData, userId, fetchKitchenSections, resetForm, setError],
   );
-  const handleEdit = useCallback(
+
+  const onEdit = useCallback(
     (section: KitchenSection) => {
-      setEditingSection(section);
-      setFormData({
-        name: section.name,
-        description: section.description || '',
-        color: section.color,
-      });
-      setShowForm(true);
+      editSection(section, { setEditingSection, setFormData, setShowForm });
     },
     [setEditingSection, setFormData, setShowForm],
   );
-  const handleDelete = useCallback(
-    async (id: string) => {
-      const confirmed = await showConfirm({
-        title: 'Delete Kitchen Section?',
-        message:
-          'Delete this kitchen section? All dishes will be unassigned. Still want to delete it?',
-        variant: 'danger',
-        confirmLabel: 'Delete',
-        cancelLabel: 'Cancel',
-      });
-      if (!confirmed) return;
-      try {
-        const response = await fetch(`/api/kitchen-sections?id=${id}`, { method: 'DELETE' });
-        const result = await response.json();
-        if (result.success) {
-          await fetchKitchenSections();
-          await fetchMenuDishes();
-        } else {
-          setError(result.message || 'Failed to delete kitchen section');
-        }
-      } catch (err) {
-        setError('Failed to delete kitchen section');
-      }
-    },
-    [fetchKitchenSections, fetchMenuDishes, setError, showConfirm],
-  );
-  const handleAssignDish = useCallback(
+
+  const { handleDelete, ConfirmDialog } = useHandleDelete({
+    fetchKitchenSections,
+    fetchMenuDishes,
+    setError,
+  });
+
+  const onAssignDish = useCallback(
     async (dishId: string, sectionId: string | null) => {
-      try {
-        const response = await fetch('/api/assign-dish-section', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dishId, sectionId }),
-        });
-        const result = await response.json();
-        if (result.success) {
-          await fetchMenuDishes();
-          await fetchKitchenSections();
-        } else {
-          setError(result.message || 'Failed to assign dish to section');
-        }
-      } catch (err) {
-        setError('Failed to assign dish to section');
-      }
+      await assignDish(dishId, sectionId, {
+        fetchMenuDishes,
+        fetchKitchenSections,
+        setError,
+      });
     },
     [fetchMenuDishes, fetchKitchenSections, setError],
   );
+
   const getUnassignedDishes = useCallback(
     () => menuDishes.filter(dish => !dish.kitchen_section_id),
     [menuDishes],
   );
+
   return {
-    handleSubmit,
-    handleEdit,
+    handleSubmit: onSubmit,
+    handleEdit: onEdit,
     handleDelete,
-    handleAssignDish,
+    handleAssignDish: onAssignDish,
     resetForm,
     getUnassignedDishes,
     ConfirmDialog,

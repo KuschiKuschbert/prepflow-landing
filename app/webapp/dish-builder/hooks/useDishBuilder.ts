@@ -41,7 +41,6 @@ export function useDishBuilder() {
     setPricingStrategy,
   } = usePricing(costPerPortion);
   const { convertIngredientQuantity } = useIngredientConversion();
-
   const calculationsRef = useRef(calculations);
   useEffect(() => {
     calculationsRef.current = calculations;

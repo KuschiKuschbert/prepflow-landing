@@ -21,7 +21,9 @@ import IngredientEditDrawer from './IngredientEditDrawer';
 import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-import { BulkAllergenDetection } from './BulkAllergenDetection';
+import { IngredientsHeader } from './IngredientsClient/components/IngredientsHeader';
+import { IngredientsErrorBanner } from './IngredientsClient/components/IngredientsErrorBanner';
+import { IngredientsBulkActions } from './IngredientsClient/components/IngredientsBulkActions';
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -189,36 +191,14 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   if (loading || isLoading) return <PageSkeleton />;
   return (
     <>
-      {!hideHeader && (
-        <PageHeader
-          title={(() => {
-            const title = t('ingredients.title', 'Ingredients Management');
-            return Array.isArray(title) ? title.join('') : title;
-          })()}
-          subtitle={(() => {
-            const subtitle = t(
-              'ingredients.subtitle',
-              'Manage your kitchen ingredients and inventory',
-            );
-            return Array.isArray(subtitle) ? subtitle.join('') : subtitle;
-          })()}
-          icon={Package}
-        />
-      )}
-      {error && (
-        <div className="mb-6 rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
-          {error}
-        </div>
-      )}
-      {!hideHeader && (
-        <div className="mb-6 flex justify-end">
-          <BulkAllergenDetection
-            onComplete={() => {
-              refetchIngredients();
-            }}
-          />
-        </div>
-      )}
+      <IngredientsHeader hideHeader={hideHeader} />
+      <IngredientsErrorBanner error={error} />
+      <IngredientsBulkActions
+        hideHeader={hideHeader}
+        onComplete={() => {
+          refetchIngredients();
+        }}
+      />
       {showAddForm && (
         <IngredientWizard
           suppliers={suppliers}

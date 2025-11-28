@@ -4,15 +4,13 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
-import type { Guide } from '../data/guide-types';
-
-interface GuideProgress {
-  guideId: string;
-  currentStepIndex: number;
-  completedSteps: number[];
-  completedAt?: number;
-  lastViewedAt: number;
-}
+import { loadProgress, saveProgress } from './useGuideProgress/helpers/storage';
+import {
+  createProgressUpdate,
+  createStepCompleteUpdate,
+  createGuideCompleteUpdate,
+} from './useGuideProgress/helpers/progressUpdates';
+import type { GuideProgress } from './useGuideProgress/types';
 
 interface UseGuideProgressReturn {
   getProgress: (guideId: string) => GuideProgress | null;
@@ -23,27 +21,6 @@ interface UseGuideProgressReturn {
   isGuideComplete: (guideId: string) => boolean;
   getCompletionRate: (guideId: string) => number;
   clearProgress: (guideId: string) => void;
-}
-
-const STORAGE_KEY = 'prepflow_guide_progress';
-
-function loadProgress(): Record<string, GuideProgress> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveProgress(progress: Record<string, GuideProgress>): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  } catch {
-    // Ignore storage errors
-  }
 }
 
 export function useGuideProgress(): UseGuideProgressReturn {
@@ -61,78 +38,39 @@ export function useGuideProgress(): UseGuideProgressReturn {
   );
 
   const updateProgress = useCallback((guideId: string, stepIndex: number) => {
-    setProgress(prev => {
-      const existing = prev[guideId];
-      return {
-        ...prev,
-        [guideId]: {
-          guideId,
-          currentStepIndex: stepIndex,
-          completedSteps: existing?.completedSteps || [],
-          lastViewedAt: Date.now(),
-        },
-      };
-    });
+    setProgress(prev => ({
+      ...prev,
+      [guideId]: createProgressUpdate(guideId, stepIndex, prev[guideId]),
+    }));
   }, []);
 
   const markStepComplete = useCallback((guideId: string, stepIndex: number) => {
-    setProgress(prev => {
-      const existing = prev[guideId];
-      const completedSteps = existing?.completedSteps || [];
-      if (!completedSteps.includes(stepIndex)) {
-        completedSteps.push(stepIndex);
-      }
-      return {
-        ...prev,
-        [guideId]: {
-          guideId,
-          currentStepIndex: existing?.currentStepIndex || stepIndex,
-          completedSteps,
-          lastViewedAt: Date.now(),
-        },
-      };
-    });
+    setProgress(prev => ({
+      ...prev,
+      [guideId]: createStepCompleteUpdate(guideId, stepIndex, prev[guideId]),
+    }));
   }, []);
 
   const markGuideComplete = useCallback((guideId: string) => {
-    setProgress(prev => {
-      const existing = prev[guideId];
-      return {
-        ...prev,
-        [guideId]: {
-          guideId,
-          currentStepIndex: existing?.currentStepIndex || 0,
-          completedSteps: existing?.completedSteps || [],
-          completedAt: Date.now(),
-          lastViewedAt: Date.now(),
-        },
-      };
-    });
+    setProgress(prev => ({
+      ...prev,
+      [guideId]: createGuideCompleteUpdate(guideId, prev[guideId]),
+    }));
   }, []);
 
   const isStepComplete = useCallback(
-    (guideId: string, stepIndex: number): boolean => {
-      const guideProgress = progress[guideId];
-      return guideProgress?.completedSteps.includes(stepIndex) || false;
-    },
+    (guideId: string, stepIndex: number): boolean =>
+      progress[guideId]?.completedSteps.includes(stepIndex) || false,
     [progress],
   );
 
   const isGuideComplete = useCallback(
-    (guideId: string): boolean => {
-      const guideProgress = progress[guideId];
-      return guideProgress?.completedAt !== undefined;
-    },
+    (guideId: string): boolean => progress[guideId]?.completedAt !== undefined,
     [progress],
   );
 
   const getCompletionRate = useCallback(
-    (guideId: string): number => {
-      const guideProgress = progress[guideId];
-      if (!guideProgress) return 0;
-      // This will be calculated based on total steps when we have the guide data
-      return guideProgress.completedSteps.length;
-    },
+    (guideId: string): number => progress[guideId]?.completedSteps.length || 0,
     [progress],
   );
 

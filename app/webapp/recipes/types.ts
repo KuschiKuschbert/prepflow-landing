@@ -145,4 +145,7 @@ export interface DishCostData {
   gross_profit: number;
   gross_profit_margin: number;
   food_cost_percent: number;
+  contributingMargin: number;
+  contributingMarginPercent: number;
+  recommendedPrice: number;
 }

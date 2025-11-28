@@ -128,11 +128,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if recipe already exists
-    const { data: existingRecipes, error: checkError } = await supabaseAdmin
+    // Check if recipe already exists (try recipe_name first, fallback to name for compatibility)
+    let existingRecipes: any[] | null = null;
+    let checkError: any = null;
+
+    // Try recipe_name first (newer schema)
+    const checkResult = await supabaseAdmin
       .from('recipes')
-      .select('id, name')
-      .ilike('name', name.trim());
+      .select('id, recipe_name, name')
+      .ilike('recipe_name', name.trim());
+
+    if (checkResult.error && (checkResult.error as any).code === '42703') {
+      // Column doesn't exist, try name (older schema)
+      const fallbackResult = await supabaseAdmin
+        .from('recipes')
+        .select('id, name')
+        .ilike('name', name.trim());
+      existingRecipes = fallbackResult.data;
+      checkError = fallbackResult.error;
+    } else {
+      existingRecipes = checkResult.data;
+      checkError = checkResult.error;
+    }
 
     const existingRecipe =
       existingRecipes && existingRecipes.length > 0 ? existingRecipes[0] : null;
@@ -161,11 +178,35 @@ export async function POST(request: NextRequest) {
       }
       return NextResponse.json({ success: true, recipe: updatedRecipe, isNew: false });
     }
-    const { data: newRecipe, error: createError } = await supabaseAdmin
-      .from('recipes')
-      .insert({ name: name.trim(), ...recipeData })
-      .select()
-      .single();
+    // Try recipe_name first (newer schema), fallback to name (older schema)
+    let newRecipe: any = null;
+    let createError: any = null;
+
+    try {
+      const insertResult = await supabaseAdmin
+        .from('recipes')
+        .insert({ recipe_name: name.trim(), ...recipeData })
+        .select()
+        .single();
+
+      if (insertResult.error && (insertResult.error as any).code === '42703') {
+        // Column doesn't exist, try name (older schema)
+        logger.warn('[Recipes API] recipe_name column not found, trying name column');
+        const fallbackResult = await supabaseAdmin
+          .from('recipes')
+          .insert({ name: name.trim(), ...recipeData })
+          .select()
+          .single();
+        newRecipe = fallbackResult.data;
+        createError = fallbackResult.error;
+      } else {
+        newRecipe = insertResult.data;
+        createError = insertResult.error;
+      }
+    } catch (insertErr) {
+      logger.error('[Recipes API] Error during recipe insert:', insertErr);
+      createError = insertErr;
+    }
     if (createError) {
       logger.error('[Recipes API] Database error creating recipe:', {
         error: createError.message,

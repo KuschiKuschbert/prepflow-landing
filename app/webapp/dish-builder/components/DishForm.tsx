@@ -10,6 +10,7 @@ interface DishFormProps {
   recommendedPrice: number;
   ingredientCount: number;
   onSave: () => void;
+  saving?: boolean;
 }
 
 export default function DishForm({
@@ -18,6 +19,7 @@ export default function DishForm({
   recommendedPrice,
   ingredientCount,
   onSave,
+  saving = false,
 }: DishFormProps) {
   const handleApplyRecommendedPrice = () => {
     if (recommendedPrice > 0) {
@@ -258,6 +260,7 @@ export default function DishForm({
           <button
             onClick={onSave}
             disabled={
+              saving ||
               !dishState.dishName.trim() ||
               ingredientCount === 0 ||
               (dishState.itemType === 'dish' && dishState.sellingPrice <= 0) ||
@@ -265,11 +268,13 @@ export default function DishForm({
             }
             className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {ingredientCount === 0
-              ? 'Add Ingredients First'
-              : dishState.itemType === 'dish'
-                ? 'Save Dish'
-                : 'Save Recipe'}
+            {saving
+              ? 'Saving...'
+              : ingredientCount === 0
+                ? 'Add Ingredients First'
+                : dishState.itemType === 'dish'
+                  ? 'Save Dish'
+                  : 'Save Recipe'}
           </button>
           {ingredientCount === 0 && (
             <p className="mt-2 text-center text-xs text-gray-400">

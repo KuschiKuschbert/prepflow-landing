@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { COGSCalculation } from '../types';
 import { useCOGSTableSort } from '../hooks/useCOGSTableSort';
+import { COGSCalculation } from '../types';
 import { COGSTableEmptyState } from './COGSTableEmptyState';
-import { COGSTableMobileCard } from './COGSTableMobileCard';
 import { COGSTableHeader } from './COGSTableHeader';
+import { COGSTableMobileCard } from './COGSTableMobileCard';
 import { COGSTableRow } from './COGSTableRow';
 import { COGSTableSummary } from './COGSTableSummary';
 
@@ -62,7 +62,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
         <div className="space-y-3">
           {calculations.map((calc, index) => (
             <COGSTableMobileCard
-              key={calc.ingredientId || `calc-${index}`}
+              key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
               calc={calc}
               index={index}
               editingIngredient={editingIngredient}
@@ -89,7 +89,7 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
             <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
               {calculations.map((calc, index) => (
                 <COGSTableRow
-                  key={calc.ingredientId || `calc-${index}`}
+                  key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
                   calc={calc}
                   index={index}
                   editingIngredient={editingIngredient}

@@ -5,7 +5,6 @@ import {
   CartesianGrid,
   ComposedChart,
   Line,
-  ReferenceArea,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
@@ -14,6 +13,9 @@ import {
 } from 'recharts';
 import { logger } from '@/lib/logger';
 import { TemperatureEquipment } from '../types';
+import { ReferenceAreas } from './components/ReferenceAreas';
+import { calculateYAxisBounds } from './utils/calculateYAxisBounds';
+import { prepareChartData } from './utils/prepareChartData';
 
 interface ChartDataPoint {
   timestamp: string;
@@ -60,18 +62,7 @@ export default function TemperatureChartLazy({
     throw err;
   }
 
-  // Calculate actual numeric Y-axis bounds
-  // yAxisMin/yAxisMax can be strings like 'dataMin - 1', so we need to calculate from data
-  const dataMin = chartData.length > 0 ? Math.min(...chartData.map(d => d.temperature)) : -30;
-  const dataMax = chartData.length > 0 ? Math.max(...chartData.map(d => d.temperature)) : 30;
-
-  const minWithThreshold =
-    equipment.min_temp_celsius !== null ? Math.min(dataMin, equipment.min_temp_celsius) : dataMin;
-  const maxWithThreshold =
-    equipment.max_temp_celsius !== null ? Math.max(dataMax, equipment.max_temp_celsius) : dataMax;
-  const padding = Math.max(1, (maxWithThreshold - minWithThreshold) * 0.1);
-  const yMin = minWithThreshold - padding;
-  const yMax = maxWithThreshold + padding;
+  const { yMin, yMax } = calculateYAxisBounds(chartData, equipment);
 
   // Debug logging - always log to see what's happening
   const temperatures = chartData.map(d => d.temperature);
@@ -103,19 +94,7 @@ export default function TemperatureChartLazy({
     willShowRedAbove: tempsAboveMax.length > 0,
   });
 
-  // Create data with red area boundaries for ComposedChart
-  // For red area below: fill from yMin to min_temp_celsius
-  // For red area above: fill from max_temp_celsius to yMax
-  const chartDataWithAreas = chartData.map((point, index) => ({
-    ...point,
-    // Red area below threshold - constant value at min_temp_celsius (fills from yMin to this)
-    redAreaBelow: equipment.min_temp_celsius !== null ? equipment.min_temp_celsius : yMin,
-    // Red area above threshold - constant value at yMax (fills from max_temp_celsius to this)
-    // Use a value higher than max_temp_celsius to ensure it fills to the top
-    redAreaAbove: yMax, // Always set to yMax to fill the entire top area
-    // Also add a helper value for the top boundary
-    topBoundary: yMax,
-  }));
+  const chartDataWithAreas = prepareChartData(chartData, equipment, yMin, yMax);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -124,118 +103,13 @@ export default function TemperatureChartLazy({
         margin={{ top: 10, right: 20, left: 10, bottom: 30 }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" opacity={0.5} />
-        {/* ReferenceArea components - MUST render BEFORE axes to appear behind */}
-        {(() => {
-          const shouldRenderBoth =
-            chartData.length > 0 &&
-            equipment.min_temp_celsius !== null &&
-            equipment.max_temp_celsius !== null;
-          const shouldRenderMinOnly =
-            chartData.length > 0 &&
-            equipment.min_temp_celsius !== null &&
-            equipment.max_temp_celsius === null;
-          const shouldRenderMaxOnly =
-            chartData.length > 0 &&
-            equipment.min_temp_celsius === null &&
-            equipment.max_temp_celsius !== null;
-
-          logger.dev('[ReferenceArea] Render conditions:', {
-            shouldRenderBoth,
-            shouldRenderMinOnly,
-            shouldRenderMaxOnly,
-            chartDataLength: chartData.length,
-            min_temp_celsius: equipment.min_temp_celsius,
-            max_temp_celsius: equipment.max_temp_celsius,
-          });
-
-          if (shouldRenderBoth) {
-            logger.dev('[ReferenceArea] Rendering both thresholds:', {
-              x1: xAxisDomain[0],
-              x2: xAxisDomain[1],
-              redBelow: { y1: yMin, y2: equipment.min_temp_celsius },
-              redAbove: { y1: equipment.max_temp_celsius, y2: yMax },
-            });
-            return (
-              <>
-                {/* Red area below minimum threshold */}
-                <ReferenceArea
-                  x1={xAxisDomain[0]}
-                  x2={xAxisDomain[1]}
-                  y1={yMin}
-                  y2={equipment.min_temp_celsius}
-                  fill="#dc2626"
-                  fillOpacity={0.9}
-                  stroke="none"
-                  ifOverflow="extendDomain"
-                />
-                {/* Red area above maximum threshold */}
-                <ReferenceArea
-                  x1={xAxisDomain[0]}
-                  x2={xAxisDomain[1]}
-                  y1={equipment.max_temp_celsius}
-                  y2={yMax}
-                  fill="#dc2626"
-                  fillOpacity={0.9}
-                  stroke="none"
-                  ifOverflow="extendDomain"
-                />
-              </>
-            );
-          }
-          return null;
-        })()}
-        {(() => {
-          const shouldRenderMinOnly =
-            chartData.length > 0 &&
-            equipment.min_temp_celsius !== null &&
-            equipment.max_temp_celsius === null;
-          if (shouldRenderMinOnly) {
-            logger.dev('[ReferenceArea] Rendering min only:', {
-              x1: xAxisDomain[0],
-              x2: xAxisDomain[1],
-              redBelow: { y1: yMin, y2: equipment.min_temp_celsius },
-            });
-            return (
-              <ReferenceArea
-                x1={xAxisDomain[0]}
-                x2={xAxisDomain[1]}
-                y1={yMin}
-                y2={equipment.min_temp_celsius}
-                fill="#dc2626"
-                fillOpacity={0.9}
-                stroke="none"
-                ifOverflow="extendDomain"
-              />
-            );
-          }
-          return null;
-        })()}
-        {(() => {
-          const shouldRenderMaxOnly =
-            chartData.length > 0 &&
-            equipment.min_temp_celsius === null &&
-            equipment.max_temp_celsius !== null;
-          if (shouldRenderMaxOnly) {
-            logger.dev('[ReferenceArea] Rendering max only:', {
-              x1: xAxisDomain[0],
-              x2: xAxisDomain[1],
-              redAbove: { y1: equipment.max_temp_celsius, y2: yMax },
-            });
-            return (
-              <ReferenceArea
-                x1={xAxisDomain[0]}
-                x2={xAxisDomain[1]}
-                y1={equipment.max_temp_celsius}
-                y2={yMax}
-                fill="#dc2626"
-                fillOpacity={0.9}
-                stroke="none"
-                ifOverflow="extendDomain"
-              />
-            );
-          }
-          return null;
-        })()}
+        <ReferenceAreas
+          chartDataLength={chartData.length}
+          equipment={equipment}
+          xAxisDomain={xAxisDomain}
+          yMin={yMin}
+          yMax={yMax}
+        />
         <XAxis
           dataKey="xIndex"
           type="number"

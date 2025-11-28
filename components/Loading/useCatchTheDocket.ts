@@ -220,14 +220,17 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
     if (!isLoading && !gameFinished && caught > 0) {
       setGameFinished(true);
 
-      const newTotal = addStat(STAT_KEYS.DOCKETS, caught);
-      addSessionStat(STAT_KEYS.DOCKETS, caught);
+      // Update stats asynchronously to avoid setState during render
+      setTimeout(() => {
+        const newTotal = addStat(STAT_KEYS.DOCKETS, caught);
+        addSessionStat(STAT_KEYS.DOCKETS, caught);
 
-      if ([10, 25, 50, 100].includes(newTotal)) {
-        throwConfetti(1.5);
-      } else if (caught > 0) {
-        throwConfetti(1);
-      }
+        if ([10, 25, 50, 100].includes(newTotal)) {
+          throwConfetti(1.5);
+        } else if (caught > 0) {
+          throwConfetti(1);
+        }
+      }, 0);
 
       playSound(successSound.current, 1000);
     }
@@ -241,16 +244,19 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
       setDockets(prev => prev.filter(d => d.id !== id));
       setCaught(prev => {
         const newCaught = prev + 1;
+        playSound(clickSound.current, 800);
+        return newCaught;
+      });
 
+      // Update stats outside the state setter to avoid setState during render
+      // Use setTimeout to ensure it runs after the current render cycle
+      setTimeout(() => {
         const newTotal = addStat(STAT_KEYS.DOCKETS, 1);
         addSessionStat(STAT_KEYS.DOCKETS, 1);
         if ([10, 25, 50, 100].includes(newTotal)) {
           throwConfetti(1);
         }
-
-        playSound(clickSound.current, 800);
-        return newCaught;
-      });
+      }, 0);
     },
     [gameFinished, playSound],
   );

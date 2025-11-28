@@ -1,20 +1,19 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
-import {
-  Recipe,
-  RecipeIngredientWithDetails,
-  COGSCalculation as RecipeCOGSCalculation,
-} from '../types';
-import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
+import { X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { COGSTable } from '../../cogs/components/COGSTable';
-import { COGSTableSummary } from '../../cogs/components/COGSTableSummary';
 import { PricingTool } from '../../cogs/components/PricingTool';
 import { usePricing } from '../../cogs/hooks/usePricing';
 import { COGSCalculation } from '../../cogs/types';
+import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
+import {
+  Recipe,
+  COGSCalculation as RecipeCOGSCalculation,
+  RecipeIngredientWithDetails,
+} from '../types';
 
 interface RecipeCOGSModalProps {
   isOpen: boolean;
@@ -93,8 +92,9 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
       fetch(`/api/recipes/${recipe.id}/ingredients`)
         .then(res => res.json())
         .then(data => {
-          if (data.success && data.ingredients) {
-            setRecipeIngredients(data.ingredients);
+          // API returns { items: [...] } format
+          if (data.items && Array.isArray(data.items)) {
+            setRecipeIngredients(data.items);
           } else {
             setError(data.error || 'Failed to load recipe ingredients');
           }

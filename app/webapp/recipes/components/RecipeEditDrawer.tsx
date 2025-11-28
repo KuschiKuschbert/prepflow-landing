@@ -17,6 +17,8 @@ import { useRecipeEditIngredientLoading } from './hooks/useRecipeEditIngredientL
 import { useRecipeEditIngredientSave } from './hooks/useRecipeEditIngredientSave';
 import { RecipeMetadataForm } from './RecipeMetadataForm';
 import { RecipeIngredientsTab } from './RecipeIngredientsTab';
+import { RecipeEditFooter } from './components/RecipeEditFooter';
+import { useRecipeEditHandlers } from './hooks/useRecipeEditHandlers';
 interface RecipeEditDrawerProps {
   isOpen: boolean;
   recipe: Recipe | null;
@@ -105,14 +107,11 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     resetForm,
     setSaveError: setDataError,
   });
-  const handleAddIngredientWrapper = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleAddIngredient(newIngredient, e);
-  };
-  const handleAddConsumableWrapper = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleAddIngredient(newConsumable, e);
-  };
+  const { handleAddIngredientWrapper, handleAddConsumableWrapper } = useRecipeEditHandlers({
+    handleAddIngredient,
+    newIngredient,
+    newConsumable,
+  });
   const { savingIngredients, handleSaveIngredients } = useRecipeEditIngredientSave({
     recipe,
     calculations,
@@ -216,36 +215,18 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
       onSave={handleSave}
       saving={saving || savingIngredients || status === 'saving'}
       footer={
-        <div className="flex items-center justify-between">
-          <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-2xl bg-[#2a2a2a] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:bg-[#3a3a3a]"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={
-                saving ||
-                savingIngredients ||
-                status === 'saving' ||
-                !editedName.trim() ||
-                (ingredientCalculations.length === 0 && consumableCalculations.length === 0)
-              }
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {saving || savingIngredients || status === 'saving'
-                ? 'Saving...'
-                : ingredientCalculations.length === 0 && consumableCalculations.length === 0
-                  ? 'Add Ingredients to Save'
-                  : 'Save'}
-            </button>
-          </div>
-        </div>
+        <RecipeEditFooter
+          saving={saving}
+          savingIngredients={savingIngredients}
+          autosaveStatus={status}
+          autosaveError={autosaveError}
+          editedName={editedName}
+          ingredientCalculationsCount={ingredientCalculations.length}
+          consumableCalculationsCount={consumableCalculations.length}
+          onSave={handleSave}
+          onClose={onClose}
+          onRetryAutosave={saveNow}
+        />
       }
     >
       <div className="flex max-h-[calc(100vh-200px)] flex-col space-y-6 overflow-hidden">

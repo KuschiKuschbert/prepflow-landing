@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import { supabase } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
+import { handleBulkUpdate as updateBulk } from './useIngredientBulkUpdate/helpers/handleBulkUpdate';
+import { handleBulkAutoCategorize as categorizeBulk } from './useIngredientBulkUpdate/helpers/handleBulkAutoCategorize';
+import { handleCategorizeAllUncategorized as categorizeAll } from './useIngredientBulkUpdate/helpers/handleCategorizeAll';
 
 interface UseIngredientBulkUpdateProps {
   ingredients: any[];
@@ -17,27 +18,17 @@ export function useIngredientBulkUpdate({
   exitSelectionMode,
 }: UseIngredientBulkUpdateProps) {
   const { showSuccess, showError } = useNotification();
+
   const handleBulkUpdate = useCallback(
     async (ids: string[], updates: Partial<any>) => {
-      const originalIngredients = [...ingredients];
-      setIngredients(prevIngredients =>
-        prevIngredients.map(ing => (ids.includes(ing.id) ? { ...ing, ...updates } : ing)),
-      );
-
-      try {
-        const { error } = await supabase.from('ingredients').update(updates).in('id', ids);
-        if (error) {
-          setIngredients(originalIngredients);
-          throw error;
-        }
-        setSelectedIngredients(new Set());
-        exitSelectionMode();
-        showSuccess('Ingredients updated successfully');
-      } catch (error) {
-        logger.error('Bulk update failed:', error);
-        showError('Failed to update ingredients');
-        throw error;
-      }
+      await updateBulk(ids, updates, {
+        ingredients,
+        setIngredients,
+        setSelectedIngredients,
+        exitSelectionMode,
+        showSuccess,
+        showError,
+      });
     },
     [
       ingredients,
@@ -48,50 +39,17 @@ export function useIngredientBulkUpdate({
       showError,
     ],
   );
+
   const handleBulkAutoCategorize = useCallback(
     async (ids: string[], useAI: boolean = true) => {
-      const originalIngredients = [...ingredients];
-      try {
-        const response = await fetch('/api/ingredients/auto-categorize', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ingredientIds: ids, useAI }),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            result.error || result.message || 'Failed to auto-categorize ingredients',
-          );
-        }
-        const { data: updatedIngredients, error: fetchError } = await supabase
-          .from('ingredients')
-          .select('id, category')
-          .in('id', ids);
-
-        if (fetchError) throw fetchError;
-        if (updatedIngredients) {
-          const categoryMap = new Map(updatedIngredients.map(ing => [ing.id, ing.category]));
-          setIngredients(prevIngredients =>
-            prevIngredients.map(ing => {
-              const newCategory = categoryMap.get(ing.id);
-              return newCategory ? { ...ing, category: newCategory } : ing;
-            }),
-          );
-        }
-        setSelectedIngredients(new Set());
-        exitSelectionMode();
-        showSuccess(
-          result.message ||
-            `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
-        );
-      } catch (error) {
-        setIngredients(originalIngredients);
-        logger.error('Bulk auto-categorize failed:', error);
-        showError(error instanceof Error ? error.message : 'Failed to auto-categorize ingredients');
-        throw error;
-      }
+      await categorizeBulk(ids, useAI, {
+        ingredients,
+        setIngredients,
+        setSelectedIngredients,
+        exitSelectionMode,
+        showSuccess,
+        showError,
+      });
     },
     [
       ingredients,
@@ -102,47 +60,17 @@ export function useIngredientBulkUpdate({
       showError,
     ],
   );
+
   const handleCategorizeAllUncategorized = useCallback(
     async (useAI: boolean = true, onRefresh?: () => void) => {
-      try {
-        const response = await fetch('/api/ingredients/auto-categorize', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ categorizeAll: true, useAI }),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.error || result.message || 'Failed to categorize all ingredients');
-        }
-        if (onRefresh) {
-          onRefresh();
-        } else {
-          const { data: updatedIngredients, error: fetchError } = await supabase
-            .from('ingredients')
-            .select('id, category');
-          if (!fetchError && updatedIngredients) {
-            const categoryMap = new Map(updatedIngredients.map(ing => [ing.id, ing.category]));
-            setIngredients(prevIngredients =>
-              prevIngredients.map(ing => {
-                const newCategory = categoryMap.get(ing.id);
-                return newCategory ? { ...ing, category: newCategory } : ing;
-              }),
-            );
-          }
-        }
-        showSuccess(
-          result.message ||
-            `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
-        );
-      } catch (error) {
-        logger.error('Categorize all failed:', error);
-        showError(error instanceof Error ? error.message : 'Failed to categorize all ingredients');
-        throw error;
-      }
+      await categorizeAll(useAI, onRefresh, {
+        setIngredients,
+        showSuccess,
+        showError,
+      });
     },
-    [showSuccess, showError, setIngredients],
+    [setIngredients, showSuccess, showError],
   );
+
   return { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized };
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Dish, DishWithDetails, DishCostData, RecipeIngredientWithDetails } from '../types';
+import { useEffect, useState } from 'react';
+import { Dish, DishCostData, DishWithDetails, RecipeIngredientWithDetails } from '../types';
 
 import { logger } from '@/lib/logger';
 export function useDishPreviewModalData(dish: Dish) {
@@ -24,8 +24,23 @@ export function useDishPreviewModalData(dish: Dish) {
             try {
               const response = await fetch(`/api/recipes/${dishRecipe.recipe_id}/ingredients`);
               const data = await response.json();
-              if (data.success && data.ingredients) {
-                ingredientsMap[dishRecipe.recipe_id] = data.ingredients;
+              // API returns { items: [...] } format
+              if (data.items && Array.isArray(data.items)) {
+                ingredientsMap[dishRecipe.recipe_id] = data.items;
+                logger.dev('[useDishPreviewModalData] Loaded recipe ingredients', {
+                  recipeId: dishRecipe.recipe_id,
+                  ingredientCount: data.items.length,
+                  ingredientNames: data.items.map(
+                    (ri: any) => ri.ingredients?.ingredient_name || 'Unknown',
+                  ),
+                });
+              } else {
+                logger.warn('[useDishPreviewModalData] Recipe ingredients not in expected format', {
+                  recipeId: dishRecipe.recipe_id,
+                  responseKeys: Object.keys(data),
+                  hasItems: !!data.items,
+                  itemsIsArray: Array.isArray(data.items),
+                });
               }
             } catch (err) {
               logger.error(`Failed to fetch ingredients for recipe ${dishRecipe.recipe_id}:`, err);

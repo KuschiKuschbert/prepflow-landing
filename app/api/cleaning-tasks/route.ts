@@ -6,27 +6,10 @@ import { createCleaningTask } from './helpers/createCleaningTask';
 import { deleteCleaningTask } from './helpers/deleteCleaningTask';
 import { handleCleaningTaskError } from './helpers/handleCleaningTaskError';
 import { updateCleaningTask } from './helpers/updateCleaningTask';
-
-const CLEANING_TASKS_SELECT = `
-  *,
-  cleaning_areas (
-    id,
-    area_name,
-    description,
-    cleaning_frequency
-  ),
-  temperature_equipment:equipment_id (
-    id,
-    name,
-    equipment_type,
-    location
-  ),
-  kitchen_sections:section_id (
-    id,
-    section_name,
-    description
-  )
-`;
+import { validateCreateTaskRequest } from './helpers/validateCleaningTaskRequest';
+import { parseCreateTaskBody } from './helpers/parseCreateTaskBody';
+import { buildUpdateData } from './helpers/buildUpdateData';
+import { handleGetRequest } from './helpers/handleGetRequest';
 
 /**
  * GET /api/cleaning-tasks
@@ -55,144 +38,18 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const startDate = searchParams.get('start_date');
-    const endDate = searchParams.get('end_date');
-    const areaId = searchParams.get('area_id');
-    const equipmentId = searchParams.get('equipment_id');
-    const sectionId = searchParams.get('section_id');
-    const frequencyType = searchParams.get('frequency_type');
-    const status = searchParams.get('status');
-    const date = searchParams.get('date');
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const pageSize = parseInt(searchParams.get('pageSize') || '100', 10);
 
-    // Build query for tasks
-    let query = supabaseAdmin.from('cleaning_tasks').select(CLEANING_TASKS_SELECT);
-
-    // Apply filters
-    if (areaId) query = query.eq('area_id', areaId);
-    if (equipmentId) query = query.eq('equipment_id', equipmentId);
-    if (sectionId) query = query.eq('section_id', sectionId);
-    if (frequencyType) query = query.eq('frequency_type', frequencyType);
-    if (status) query = query.eq('status', status);
-    if (date) query = query.eq('assigned_date', date);
-
-    // Order by task name
-    query = query.order('task_name', { ascending: true });
-
-    // If date range provided, don't paginate (we need all tasks for the range)
-    if (startDate && endDate) {
-      const { data: tasks, error: tasksError } = await query;
-
-      if (tasksError) {
-        const errorCode = (tasksError as any).code;
-
-        if (errorCode === '42P01') {
-          logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
-          return NextResponse.json({
-            success: true,
-            data: [],
-            total: 0,
-          });
-        }
-
-        logger.error('[Cleaning Tasks API] Database error fetching tasks:', {
-          error: tasksError.message,
-          code: errorCode,
-          context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
-        });
-
-        const apiError = ApiErrorHandler.fromSupabaseError(tasksError, 500);
-        return NextResponse.json(apiError, { status: apiError.status || 500 });
-      }
-
-      // Fetch completions for date range
-      const taskIds = (tasks || []).map((t: any) => t.id);
-      let completionsQuery = supabaseAdmin
-        .from('cleaning_task_completions')
-        .select('*')
-        .gte('completion_date', startDate)
-        .lte('completion_date', endDate);
-
-      if (taskIds.length > 0) {
-        completionsQuery = completionsQuery.in('task_id', taskIds);
-      }
-
-      const { data: completions, error: completionsError } = await completionsQuery;
-
-      if (completionsError && (completionsError as any).code !== '42P01') {
-        logger.error('[Cleaning Tasks API] Database error fetching completions:', {
-          error: completionsError.message,
-          code: (completionsError as any).code,
-        });
-      }
-
-      // Group completions by task_id
-      const completionsByTask = new Map<string, any[]>();
-      (completions || []).forEach((c: any) => {
-        if (!completionsByTask.has(c.task_id)) {
-          completionsByTask.set(c.task_id, []);
-        }
-        completionsByTask.get(c.task_id)!.push(c);
-      });
-
-      // Attach completions to tasks
-      const tasksWithCompletions = (tasks || []).map((task: any) => ({
-        ...task,
-        completions: completionsByTask.get(task.id) || [],
-      }));
-
-      return NextResponse.json({
-        success: true,
-        data: tasksWithCompletions,
-        total: tasksWithCompletions.length,
-      });
-    }
-
-    // Legacy pagination support (when no date range)
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize - 1;
-
-    const { count, error: countError } = await supabaseAdmin
-      .from('cleaning_tasks')
-      .select('*', { count: 'exact', head: true });
-
-    if (countError && (countError as any).code !== '42P01') {
-      logger.error('[Cleaning Tasks API] Database error fetching count:', {
-        error: countError.message,
-        code: (countError as any).code,
-      });
-    }
-
-    query = query.range(from, to);
-    const { data, error } = await query;
-
-    if (error) {
-      const errorCode = (error as any).code;
-
-      if (errorCode === '42P01') {
-        logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
-        return NextResponse.json({
-          success: true,
-          data: [],
-          total: 0,
-        });
-      }
-
-      logger.error('[Cleaning Tasks API] Database error fetching tasks:', {
-        error: error.message,
-        code: errorCode,
-        context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: data || [],
-      total: count || 0,
+    return handleGetRequest({
+      startDate: searchParams.get('start_date'),
+      endDate: searchParams.get('end_date'),
+      areaId: searchParams.get('area_id'),
+      equipmentId: searchParams.get('equipment_id'),
+      sectionId: searchParams.get('section_id'),
+      frequencyType: searchParams.get('frequency_type'),
+      status: searchParams.get('status'),
+      date: searchParams.get('date'),
+      page: parseInt(searchParams.get('page') || '1', 10),
+      pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     });
   } catch (err: any) {
     if (err && typeof err === 'object' && 'status' in err) {
@@ -223,53 +80,17 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      task_name,
-      frequency_type,
-      area_id,
-      assigned_date,
-      equipment_id,
-      section_id,
-      is_standard_task,
-      standard_task_type,
-      description,
-      notes,
-    } = body;
+    const taskData = parseCreateTaskBody(body);
 
-    // Area is always required
-    if (!area_id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('area_id is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    // Task name and frequency type are required for new schema
-    if (!task_name) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('task_name is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    if (!frequency_type) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('frequency_type is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
+    // Validate request
+    const validationError = validateCreateTaskRequest(taskData);
+    if (validationError) {
+      return validationError;
     }
 
     const data = await createCleaningTask({
-      task_name,
-      frequency_type,
-      area_id,
-      assigned_date,
-      equipment_id,
-      section_id,
-      is_standard_task: is_standard_task || false,
-      standard_task_type,
-      description,
-      notes,
+      ...taskData,
+      is_standard_task: taskData.is_standard_task || false,
     });
 
     return NextResponse.json({
@@ -301,7 +122,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, status, completed_date, notes, photo_url } = body;
+    const { id } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -310,12 +131,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const updateData: any = {};
-    if (status !== undefined) updateData.status = status;
-    if (completed_date !== undefined) updateData.completed_date = completed_date;
-    if (notes !== undefined) updateData.notes = notes;
-    if (photo_url !== undefined) updateData.photo_url = photo_url;
-
+    const updateData = buildUpdateData(body);
     const data = await updateCleaningTask(id, updateData);
 
     return NextResponse.json({

@@ -277,17 +277,17 @@ export async function detectVegetarianVeganWithAI(
   ingredients: Ingredient[],
   description?: string,
 ): Promise<DietaryDetectionResult> {
-  const { getOpenAIClient, isAIEnabled, getDefaultModel } = await import('@/lib/ai/openai-client');
+  const { getGeminiClient, isAIEnabled, getModelForTask } = await import('@/lib/ai/gemini-client');
 
   if (!isAIEnabled()) {
     logger.warn('[Dietary Detection] AI not enabled, falling back to non-AI detection');
     return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
 
-  const client = getOpenAIClient();
+  const client = getGeminiClient();
   if (!client) {
     logger.warn(
-      '[Dietary Detection] OpenAI client not available, falling back to non-AI detection',
+      '[Dietary Detection] Gemini client not available, falling back to non-AI detection',
     );
     return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
@@ -318,24 +318,22 @@ Respond in JSON format:
   "reason": "brief explanation"
 }`;
 
-    const completion = await client.chat.completions.create({
-      model: getDefaultModel(),
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are a dietary analysis expert. Analyze recipes and determine their suitability for vegetarians and vegans. Always respond with valid JSON.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.3,
-      response_format: { type: 'json_object' },
+    const taskType = 'text' as const;
+    const model = getModelForTask(taskType);
+    const geminiModel = client.getGenerativeModel({
+      model,
+      systemInstruction:
+        'You are a dietary analysis expert. Analyze recipes and determine their suitability for vegetarians and vegans. Always respond with valid JSON.',
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 500,
+        responseMimeType: 'application/json',
+      },
     });
 
-    const responseText = completion.choices[0]?.message?.content;
+    const result = await geminiModel.generateContent(prompt);
+    const response = await result.response;
+    const responseText = response.text();
     if (!responseText) {
       throw new Error('No response from AI');
     }

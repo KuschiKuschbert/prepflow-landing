@@ -1,27 +1,25 @@
 'use client';
-import { useCallback, useMemo, useState, useEffect } from 'react';
-import { Recipe, Dish } from '../types';
-import { useCOGSDataFetching } from '../../cogs/hooks/useCOGSDataFetching';
-import { useCOGSCalculationLogic } from '../../cogs/hooks/useCOGSCalculationLogic';
-import { useIngredientConversion } from '../../cogs/hooks/useIngredientConversion';
-import { IngredientsList } from '../../cogs/components/IngredientsList';
-import { IngredientManager } from '../../cogs/components/IngredientManager';
-import { useIngredientAddition } from '../../cogs/hooks/useIngredientAddition';
-import { useIngredientSearch } from '../../cogs/hooks/useIngredientSearch';
-import { useNotification } from '@/contexts/NotificationContext';
-import { Icon } from '@/components/ui/Icon';
-import { Save } from 'lucide-react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCOGSCalculationLogic } from '../../cogs/hooks/useCOGSCalculationLogic';
+import { useCOGSDataFetching } from '../../cogs/hooks/useCOGSDataFetching';
+import { useIngredientAddition } from '../../cogs/hooks/useIngredientAddition';
+import { useIngredientConversion } from '../../cogs/hooks/useIngredientConversion';
+import { useIngredientSearch } from '../../cogs/hooks/useIngredientSearch';
+import { COGSCalculation } from '../../cogs/types';
+import { Dish, Recipe } from '../types';
 import { useRecipeDishEditorData } from './hooks/useRecipeDishEditorData';
 import { useRecipeDishIngredientLoading } from './hooks/useRecipeDishIngredientLoading';
 import { useRecipeDishSave } from './hooks/useRecipeDishSave';
-import { RecipeDishEditorHeader } from './RecipeDishEditor/Header';
-import { RecipeDishSelector } from './RecipeDishEditor/RecipeDishSelector';
-import { IngredientListPanel } from './RecipeDishEditor/IngredientListPanel';
+import { EmptyState } from './RecipeDishEditor/components/EmptyState';
+import { IngredientEditorPanel } from './RecipeDishEditor/components/IngredientEditorPanel';
 import { CostSummary } from './RecipeDishEditor/CostSummary';
-import { COGSCalculation } from '../../cogs/types';
-import { Ingredient } from '../../cogs/types';
-import { logger } from '@/lib/logger';
+import { RecipeDishEditorHeader } from './RecipeDishEditor/Header';
+import { useRecipeDishEditorHandlers } from './RecipeDishEditor/hooks/useRecipeDishEditorHandlers';
+import { IngredientListPanel } from './RecipeDishEditor/IngredientListPanel';
+import { RecipeDishSelector } from './RecipeDishEditor/RecipeDishSelector';
 
 interface RecipeDishEditorProps {
   item?: Recipe | Dish | null;
@@ -99,27 +97,11 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     setSaveError: setError,
   });
 
-  const handleAddIngredientWrapper = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleAddIngredient(newIngredient, e);
-  };
-  const handleIngredientClick = useCallback(
-    async (ingredient: Ingredient) => {
-      // Add ingredient with default quantity of 1 and ingredient's unit
-      const defaultQuantity = 1;
-      const defaultUnit = ingredient.unit || 'kg';
-
-      await handleAddIngredient(
-        {
-          ingredient_id: ingredient.id,
-          quantity: defaultQuantity,
-          unit: defaultUnit,
-        },
-        undefined,
-      );
-    },
-    [handleAddIngredient],
-  );
+  const { handleAddIngredientWrapper, handleIngredientClick } = useRecipeDishEditorHandlers({
+    handleAddIngredient,
+    newIngredient,
+    setNewIngredient,
+  });
 
   useEffect(() => {
     fetchData();
@@ -193,21 +175,14 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
         )}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           {!selectedItem ? (
-            <div className="flex h-full min-h-[400px] items-center justify-center text-gray-400">
-              <div className="text-center">
-                <p className="mb-2 text-lg">Select a recipe or dish</p>
-                <p className="text-sm">Choose an item from the left to edit its ingredients</p>
-              </div>
-            </div>
+            <EmptyState />
           ) : loadingIngredients && calculations.length === 0 ? (
             <div className="space-y-4">
               <LoadingSkeleton variant="text" width="w-48" height="h-6" />
               <LoadingSkeleton variant="card" />
             </div>
           ) : (
-            <div
-              className={`flex h-full flex-col transition-opacity duration-200 ${loadingIngredients ? 'opacity-60' : 'opacity-100'}`}
-            >
+            <>
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-white">
@@ -218,7 +193,6 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                   </p>
                 </div>
               </div>
-
               <CostSummary
                 totalCOGS={totalCOGS}
                 costPerPortion={costPerPortion}
@@ -226,85 +200,51 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                 consumableCount={consumableCalculations.length}
                 itemType={selectedItem.type}
               />
-              <div className="mb-6 flex-1 overflow-y-auto">
-                {calculations.length > 0 ? (
-                  <IngredientsList
-                    calculations={calculations}
-                    onUpdateCalculation={(ingredientId, newQuantity) => {
-                      updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
-                    }}
-                    onRemoveCalculation={ingredientId => {
-                      setCalculations(prev =>
-                        prev.filter(calc => calc.ingredientId !== ingredientId),
-                      );
-                    }}
-                  />
-                ) : (
-                  <div className="flex h-32 items-center justify-center text-gray-400">
-                    <p>No ingredients or consumables added yet</p>
-                  </div>
-                )}
-              </div>
-              <div className="border-t border-[#2a2a2a] pt-4">
-                {dataError && (
-                  <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
-                    {dataError}
-                  </div>
-                )}
-                <IngredientManager
-                  showAddIngredient={showAddIngredient}
-                  ingredients={ingredients}
-                  ingredientSearch={ingredientSearch}
-                  showSuggestions={showSuggestions}
-                  filteredIngredients={filteredIngredients}
-                  selectedIngredient={selectedIngredient}
-                  highlightedIndex={highlightedIndex}
-                  newIngredient={newIngredient}
-                  onToggleAddIngredient={() => {
-                    setShowAddIngredient(!showAddIngredient);
-                    setError(''); // Clear error when toggling
-                  }}
-                  onSearchChange={handleSearchChange}
-                  onIngredientSelect={handleIngredientSelect}
-                  onKeyDown={e => handleKeyDown(e, filteredIngredients)}
-                  onQuantityChange={quantity => setNewIngredient(prev => ({ ...prev, quantity }))}
-                  onUnitChange={unit => setNewIngredient(prev => ({ ...prev, unit }))}
-                  onAddIngredient={handleAddIngredientWrapper}
-                />
-              </div>
-              <div className="mt-4 border-t border-[#2a2a2a] pt-4">
-                <button
-                  onClick={() => {
-                    logger.dev('Save button clicked:', {
-                      selectedItem,
-                      calculationsCount: calculations.length,
-                      saving,
-                    });
-                    handleSave();
-                  }}
-                  disabled={saving || calculations.length === 0 || !selectedItem}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
-                  aria-label={
-                    saving
-                      ? 'Saving changes...'
-                      : calculations.length === 0
-                        ? 'Add at least one ingredient to save'
-                        : !selectedItem
-                          ? 'Please select a recipe or dish'
-                          : 'Save changes'
-                  }
-                >
-                  <Icon icon={Save} size="sm" className="text-white" aria-hidden={true} />
-                  <span>
-                    {saving
-                      ? 'Saving...'
-                      : calculations.length === 0
-                        ? 'Add Ingredients to Save'
-                        : 'Save Changes'}
-                  </span>
-                </button>
-              </div>
-            </div>
+              <IngredientEditorPanel
+                selectedItem={selectedItem}
+                loadingIngredients={loadingIngredients}
+                calculations={calculations}
+                ingredientCalculations={ingredientCalculations}
+                consumableCalculations={consumableCalculations}
+                totalCOGS={totalCOGS}
+                costPerPortion={costPerPortion}
+                ingredients={ingredients}
+                ingredientSearch={ingredientSearch}
+                showSuggestions={showSuggestions}
+                filteredIngredients={filteredIngredients}
+                selectedIngredient={selectedIngredient}
+                highlightedIndex={highlightedIndex}
+                newIngredient={newIngredient}
+                dataError={dataError}
+                showAddIngredient={showAddIngredient}
+                saving={saving}
+                capitalizeName={capitalizeName}
+                onToggleAddIngredient={() => {
+                  setShowAddIngredient(!showAddIngredient);
+                  setError('');
+                }}
+                onSearchChange={handleSearchChange}
+                onIngredientSelect={handleIngredientSelect}
+                onKeyDown={handleKeyDown}
+                onQuantityChange={quantity => setNewIngredient(prev => ({ ...prev, quantity }))}
+                onUnitChange={unit => setNewIngredient(prev => ({ ...prev, unit }))}
+                onAddIngredient={handleAddIngredientWrapper}
+                onUpdateCalculation={(ingredientId, newQuantity) => {
+                  updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
+                }}
+                onRemoveCalculation={ingredientId => {
+                  setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
+                }}
+                onSave={() => {
+                  logger.dev('Save button clicked:', {
+                    selectedItem,
+                    calculationsCount: calculations.length,
+                    saving,
+                  });
+                  handleSave();
+                }}
+              />
+            </>
           )}
         </div>
       </div>

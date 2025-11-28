@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-import { Recipe, RecipePriceData } from '../types';
-import { Edit, Trash2, Check, Eye } from 'lucide-react';
+import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { Check, Edit, Eye, Trash2 } from 'lucide-react';
+import React from 'react';
+import { Recipe, RecipePriceData } from '../types';
 import { formatRecipeDate } from '../utils/formatDate';
-import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 
 interface RecipeTableRowProps {
   recipe: Recipe;
@@ -109,25 +109,9 @@ export function RecipeTableRow({
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
-          <div className="flex flex-col">
-            <span className="font-semibold text-white">
-              ${recipePrice.recommendedPrice.toFixed(2)}
-              {recipe.yield > 1 && (
-                <span className="ml-1 text-xs font-normal text-gray-400">
-                  /portion ($
-                  {(recipePrice.recommendedPrice * recipe.yield).toFixed(2)} total)
-                </span>
-              )}
-            </span>
-            <span className="text-xs text-gray-400">
-              {recipePrice.foodCostPercent.toFixed(1)}% food cost
-            </span>
-          </div>
+          `$${recipePrice.recommendedPrice.toFixed(2)}`
         ) : (
-          <div className="flex flex-col gap-1">
-            <LoadingSkeleton variant="text" width="w-20" height="h-4" />
-            <LoadingSkeleton variant="text" width="w-16" height="h-3" />
-          </div>
+          <LoadingSkeleton variant="text" width="w-20" height="h-4" />
         )}
       </td>
       <td
