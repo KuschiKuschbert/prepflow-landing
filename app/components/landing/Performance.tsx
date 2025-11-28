@@ -57,9 +57,9 @@ const AnimatedCounter = React.memo(function AnimatedCounter({
 }) {
   const [count, setCount] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
-  const [ref, isIntersecting] = useIntersectionObserver<HTMLDivElement>({
+  const { ref, isIntersecting } = useIntersectionObserver({
     threshold: 0.5,
-    triggerOnce: true,
+    rootMargin: '50px',
   });
 
   useEffect(() => {

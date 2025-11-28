@@ -28,7 +28,7 @@ interface IngredientEditorPanelProps {
   onToggleAddIngredient: () => void;
   onSearchChange: (value: string) => void;
   onIngredientSelect: (ingredient: Ingredient) => void;
-  onKeyDown: (e: React.KeyboardEvent, filtered: Ingredient[]) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, filtered: Ingredient[]) => void;
   onQuantityChange: (quantity: number) => void;
   onUnitChange: (unit: string) => void;
   onAddIngredient: (e: React.FormEvent) => Promise<void>;

@@ -16,6 +16,10 @@ export interface MenuItem {
  * @returns {Promise<Record<string, MenuItem[]>>} Map of item ID to menu items
  */
 export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
+  if (!supabaseAdmin) {
+    throw new Error('Database connection not available');
+  }
+
   const menuItemsMap: Record<string, MenuItem[]> = {};
   try {
     const { data: menuItems, error: menuItemsError } = await supabaseAdmin

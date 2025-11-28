@@ -1,6 +1,6 @@
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
-import { MenuItem } from '../../../../types';
+import type { MenuItem } from '@/app/webapp/menu-builder/types';
 
 const VALID_ALLERGEN_CODES = AUSTRALIAN_ALLERGENS.map(a => a.code);
 
@@ -63,8 +63,8 @@ export function processMenuItem(item: MenuItem): MenuItemWithAllergens {
 
   return {
     id: item.id,
-    menuItemId: item.dish_id || item.recipe_id || item.id,
-    name: item.dish_id ? item.dishes?.dish_name : item.recipes?.recipe_name || 'Unknown',
+    menuItemId: item.dish_id || item.recipe_id || item.id || '',
+    name: (item.dish_id ? item.dishes?.dish_name : item.recipes?.recipe_name) || 'Unknown',
     type: item.dish_id ? 'dish' : 'recipe',
     allergens: finalAllergens,
     isVegetarian,

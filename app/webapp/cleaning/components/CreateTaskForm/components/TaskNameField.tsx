@@ -2,15 +2,12 @@
  * Task Name input field component
  */
 
-import { Icon } from '@/components/ui/Icon';
-import { Info } from 'lucide-react';
-
 interface TaskNameFieldProps {
   value: string;
   onChange: (value: string) => void;
   onBlur: (value: string) => void;
   error?: string;
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export function TaskNameField({ value, onChange, onBlur, error, inputRef }: TaskNameFieldProps) {

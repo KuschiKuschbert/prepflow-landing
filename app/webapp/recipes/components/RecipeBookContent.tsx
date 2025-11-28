@@ -1,9 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import DishesClient from './DishesClient';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientsTab } from './IngredientsTab';
 import { RecipeManagementTabs, type RecipeManagementTab } from './RecipeManagementTabs';
+
+// Lazy load DishesClient to reduce initial bundle size (uses dnd-kit, heavy components)
+const DishesClient = dynamic(() => import('./DishesClient'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
 
 export function RecipeBookContent() {
   // Initialize with consistent default to prevent hydration mismatch

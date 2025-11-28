@@ -1,5 +1,5 @@
 import { ReferenceArea } from 'recharts';
-import { TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment } from '@/app/webapp/temperature/types';
 import { logger } from '@/lib/logger';
 
 interface ReferenceAreasProps {

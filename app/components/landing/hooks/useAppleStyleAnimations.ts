@@ -76,6 +76,7 @@ export function useAppleStyleAnimations(features: Feature[]) {
     expandedFeature,
     displayFeature,
     ...imageAnimations,
+    imageMounted,
     containerWidths,
     initialWidths,
     buttonHeights,

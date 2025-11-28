@@ -9,7 +9,7 @@ interface UseSidePanelCommonProps {
 }
 
 interface UseSidePanelCommonReturn {
-  panelRef: RefObject<HTMLDivElement>;
+  panelRef: RefObject<HTMLDivElement | null>;
   previousActiveElement: RefObject<HTMLElement | null>;
   mounted: boolean;
   panelStyle: React.CSSProperties;

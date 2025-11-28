@@ -37,7 +37,7 @@ export async function fetchDishWithRelations(dishId: string) {
   // Fetch dish recipes
   const validDishRecipes = await fetchDishRecipes(dishId);
 
-  console.log('[fetchDishWithRelations] After fetchDishRecipes:', {
+  logger.dev('[fetchDishWithRelations] After fetchDishRecipes:', {
     dishId,
     validDishRecipesCount: validDishRecipes.length,
     validDishRecipes: JSON.stringify(validDishRecipes),

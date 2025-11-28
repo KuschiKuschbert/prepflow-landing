@@ -8,24 +8,17 @@
 import { useState } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { TablePagination } from '@/components/ui/TablePagination';
-import { useAllergenData } from './hooks/useAllergenData';
-import { useAllergenFilters } from './hooks/useAllergenFilters';
-import { useAllergenExport } from './hooks/useAllergenExport';
-import { usePagination } from './hooks/usePagination';
-import { ExportDropdown } from './components/ExportDropdown';
-import { FilterBar } from './components/FilterBar';
-import { AllergenTable } from './components/AllergenTable';
-import { AllergenCards } from './components/AllergenCards';
+import { useAllergenData } from './AllergenOverview/hooks/useAllergenData';
+import { useAllergenFilters } from './AllergenOverview/hooks/useAllergenFilters';
+import { useAllergenExport } from './AllergenOverview/hooks/useAllergenExport';
+import { usePagination } from './AllergenOverview/hooks/usePagination';
+import { ExportDropdown } from './AllergenOverview/components/ExportDropdown';
+import { FilterBar } from './AllergenOverview/components/FilterBar';
+import { AllergenTable } from './AllergenOverview/components/AllergenTable';
+import { AllergenCards } from './AllergenOverview/components/AllergenCards';
+import type { AllergenItem } from './AllergenOverview/types';
 
-export interface AllergenItem {
-  id: string;
-  name: string;
-  description?: string;
-  type: 'recipe' | 'dish';
-  allergens: string[];
-  allergenSources?: Record<string, string[]>; // allergen_code -> ingredient names
-  menus: Array<{ menu_id: string; menu_name: string }>;
-}
+// Types moved to ./types.ts to avoid circular dependencies
 
 export function AllergenOverview() {
   const [selectedAllergenFilter, setSelectedAllergenFilter] = useState<string>('all');

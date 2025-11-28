@@ -1,45 +1,19 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
+
+import { useState } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useDishSectionActions } from './hooks/useDishSectionActions';
 import { DishSectionsHeader } from './components/DishSectionsHeader';
 import { SectionFormModal } from './components/SectionFormModal';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { UtensilsCrossed, Edit, Trash2, X } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { logger } from '@/lib/logger';
-import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
-interface KitchenSection {
-  id: string;
-  name: string;
-  description?: string;
-  color: string;
-  created_at: string;
-  updated_at: string;
-  menu_dishes: MenuDish[];
-}
-
-interface MenuDish {
-  id: string;
-  name: string;
-  description?: string;
-  selling_price: number;
-  category: string;
-  kitchen_section_id?: string;
-}
+import { useSectionsData } from './hooks/useSectionsData';
+import { SectionsEmptyState } from './components/SectionsEmptyState';
+import { SectionsList } from './components/SectionsList';
+import { UnassignedDishes } from './components/UnassignedDishes';
+import type { KitchenSection } from './types';
 
 export default function DishSectionsPage() {
-  const { t } = useTranslation();
-  // Initialize with cached data for instant display
-  const [kitchenSections, setKitchenSections] = useState<KitchenSection[]>(
-    () => getCachedData('kitchen_sections') || [],
-  );
-  const [menuDishes, setMenuDishes] = useState<MenuDish[]>(
-    () => getCachedData('menu_dishes') || [],
-  );
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const userId = 'user-123';
   const [showForm, setShowForm] = useState(false);
   const [editingSection, setEditingSection] = useState<KitchenSection | null>(null);
   const [formData, setFormData] = useState({
@@ -47,62 +21,18 @@ export default function DishSectionsPage() {
     description: '',
     color: '#29E7CD',
   });
-  const userId = 'user-123';
 
-  // Prefetch APIs on mount
-  useEffect(() => {
-    prefetchApis([`/api/kitchen-sections?userId=${userId}`, `/api/menu-dishes?userId=${userId}`]);
-  }, [userId]);
-
-  useEffect(() => {
-    fetchKitchenSections();
-    fetchMenuDishes();
-  }, []);
-
-  const fetchKitchenSections = async () => {
-    try {
-      const response = await fetch(`/api/kitchen-sections?userId=${userId}`);
-      const result = await response.json();
-
-      if (result.success) {
-        const sections = result.data || [];
-        setKitchenSections(sections);
-        cacheData('kitchen_sections', sections);
-        if (result.message && result.instructions) {
-          logger.warn('Kitchen sections:', result.message);
-          logger.dev('Setup instructions:', result.instructions);
-        }
-      } else {
-        setError(result.message || 'Failed to fetch kitchen sections');
-      }
-    } catch (err) {
-      logger.error('Failed to fetch kitchen sections:', err);
-      setError('Failed to fetch kitchen sections. Please check your connection.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchMenuDishes = async () => {
-    try {
-      const response = await fetch(`/api/menu-dishes?userId=${userId}`);
-      const result = await response.json();
-
-      if (result.success) {
-        const dishes = result.data || [];
-        setMenuDishes(dishes);
-        cacheData('menu_dishes', dishes);
-        if (result.message && result.instructions) {
-          logger.warn('Menu dishes:', result.message);
-          logger.dev('Setup instructions:', result.instructions);
-        }
-      } else {
-        logger.error('Failed to fetch menu dishes:', result);
-      }
-    } catch (err) {
-      logger.error('Failed to fetch menu dishes:', err);
-    }
-  };
+  const {
+    kitchenSections,
+    menuDishes,
+    loading,
+    error,
+    setKitchenSections,
+    setMenuDishes,
+    setError,
+    fetchKitchenSections,
+    fetchMenuDishes,
+  } = useSectionsData(userId);
 
   const {
     handleSubmit,
@@ -152,150 +82,22 @@ export default function DishSectionsPage() {
         )}
         <div className="space-y-6">
           {kitchenSections.length === 0 ? (
-            <div className="py-12 text-center">
-              <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon
-                  icon={UtensilsCrossed}
-                  size="xl"
-                  className="text-[#29E7CD]"
-                  aria-hidden={true}
-                />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold text-white">
-                {t('dishSections.noSections', 'No Kitchen Sections')}
-              </h3>
-              <p className="mb-6 text-gray-400">
-                {t(
-                  'dishSections.noSectionsDesc',
-                  'Create kitchen sections to organize your dishes for prep lists',
-                )}
-              </p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-              >
-                {t('dishSections.createFirstSection', 'Create Your First Section')}
-              </button>
-            </div>
+            <SectionsEmptyState onAddClick={() => setShowForm(true)} />
           ) : (
-            kitchenSections.map(section => (
-              <div
-                key={section.id}
-                className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div
-                      className="flex h-12 w-12 items-center justify-center rounded-xl"
-                      style={{ backgroundColor: `${section.color}20` }}
-                    >
-                      <Icon
-                        icon={UtensilsCrossed}
-                        size="md"
-                        className="text-current"
-                        aria-hidden={true}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{section.name}</h3>
-                      {section.description && (
-                        <p className="text-sm text-gray-400">{section.description}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleEdit(section)}
-                      className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
-                      title="Edit"
-                    >
-                      <Icon icon={Edit} size="md" aria-hidden={true} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(section.id)}
-                      className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
-                      title="Delete"
-                    >
-                      <Icon icon={Trash2} size="md" aria-hidden={true} />
-                    </button>
-                  </div>
-                </div>
-                <div className="rounded-xl bg-[#2a2a2a]/30 p-4">
-                  <h4 className="mb-3 text-sm font-semibold text-white">
-                    {t('dishSections.dishesInSection', 'Dishes in this section')} (
-                    {section.menu_dishes.length})
-                  </h4>
-                  {section.menu_dishes.length === 0 ? (
-                    <p className="text-sm text-gray-400">
-                      {t('dishSections.noDishesInSection', 'No dishes assigned to this section')}
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {section.menu_dishes.map(dish => (
-                        <div
-                          key={dish.id}
-                          className="flex items-center justify-between rounded-lg bg-[#1f1f1f] p-3"
-                        >
-                          <div>
-                            <p className="text-sm font-semibold text-white">{dish.name}</p>
-                            <p className="text-xs text-gray-400">{dish.category}</p>
-                          </div>
-                          <button
-                            onClick={() => handleAssignDish(dish.id, null)}
-                            className="rounded p-1 text-red-400 transition-colors hover:bg-red-400/10"
-                            title="Unassign"
-                          >
-                            <Icon icon={X} size="sm" aria-hidden={true} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
+            <SectionsList
+              sections={kitchenSections}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onUnassignDish={dishId => handleAssignDish(dishId, null)}
+            />
           )}
         </div>
-        {getUnassignedDishes().length > 0 && (
-          <div className="mt-8">
-            <h2 className="mb-4 text-xl font-semibold text-white">
-              {t('dishSections.unassignedDishes', 'Unassigned Dishes')} (
-              {getUnassignedDishes().length})
-            </h2>
-            <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-              <div className="space-y-3">
-                {getUnassignedDishes().map(dish => (
-                  <div
-                    key={dish.id}
-                    className="flex items-center justify-between rounded-lg bg-[#2a2a2a]/30 p-4"
-                  >
-                    <div>
-                      <p className="font-semibold text-white">{dish.name}</p>
-                      <p className="text-sm text-gray-400">{dish.category}</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <select
-                        value=""
-                        onChange={e => handleAssignDish(dish.id, e.target.value || null)}
-                        className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                      >
-                        <option value="">
-                          {t('dishSections.assignToSection', 'Assign to section')}
-                        </option>
-                        {kitchenSections.map(section => (
-                          <option key={section.id} value={section.id}>
-                            {section.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+
+        <UnassignedDishes
+          unassignedDishes={getUnassignedDishes()}
+          sections={kitchenSections}
+          onAssignDish={handleAssignDish}
+        />
         <SectionFormModal
           show={showForm}
           editingSection={editingSection}

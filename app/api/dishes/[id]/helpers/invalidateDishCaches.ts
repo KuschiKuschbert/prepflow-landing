@@ -3,6 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import type { ChangeType } from '@/lib/menu-lock/change-tracking';
 
 /**
  * Invalidates allergen cache for a dish
@@ -32,7 +33,7 @@ export async function invalidateAllergenCache(dishId: string): Promise<void> {
 export async function invalidateMenuPricingCache(
   dishId: string,
   dishName: string,
-  changeType: string,
+  changeType: ChangeType,
   changeDetails: any,
   userEmail: string | null,
 ): Promise<void> {
@@ -57,7 +58,7 @@ export async function invalidateMenuPricingCache(
 export async function trackChangeForLockedMenus(
   dishId: string,
   dishName: string,
-  changeType: string,
+  changeType: ChangeType,
   changeDetails: any,
   userEmail: string | null,
 ): Promise<void> {

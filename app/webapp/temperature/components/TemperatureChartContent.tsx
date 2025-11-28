@@ -1,9 +1,14 @@
 'use client';
 
-// Temporarily import directly to debug why dynamic import isn't working
-import TemperatureChartLazy from './TemperatureChartLazy';
+import dynamic from 'next/dynamic';
 import { TemperatureEquipment } from '../types';
 import { logger } from '@/lib/logger';
+
+// Lazy load Recharts component to reduce initial bundle size
+const TemperatureChartLazy = dynamic(() => import('./TemperatureChartLazy'), {
+  ssr: false,
+  loading: () => null, // Chart handles its own loading state
+});
 
 interface ChartDataPoint {
   timestamp: string;

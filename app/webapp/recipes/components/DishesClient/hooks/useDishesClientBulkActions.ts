@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Dish, Recipe } from '../../types';
+import type { Dish, Recipe } from '@/app/webapp/recipes/types';
 import { useUnifiedBulkActions } from '../../../hooks/useUnifiedBulkActions';
 import { useBulkShare } from '../../../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../../../hooks/useBulkAddToMenu';

@@ -1,24 +1,71 @@
 'use client';
 
 import GlobalWarning from '@/components/GlobalWarning';
-import CatchTheDocketOverlay from '@/components/Loading/CatchTheDocketOverlay';
 import ReactQueryProvider from '@/components/ReactQueryProvider';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
-import { SessionTimeoutWarning } from '@/components/webapp/SessionTimeoutWarning';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { useTranslation } from '@/lib/useTranslation';
 import { Inter } from 'next/font/google';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider, useGlobalWarning } from '../../contexts/GlobalWarningContext';
 import { NotificationProvider } from '../../contexts/NotificationContext';
-import SafeAnimatedBackground from '../components/landing/SafeAnimatedBackground';
 import '../globals.css';
-import { DraftRecovery } from './components/DraftRecovery';
 import ModernNavigation from './components/ModernNavigation';
-import { PersonalityScheduler } from './components/PersonalityScheduler';
 import { NetworkStatusBanner } from './components/NetworkStatusBanner';
-import { WebappBackground } from '@/components/ui/WebappBackground';
+
+// Lazy load non-critical components to reduce initial bundle size
+const CatchTheDocketOverlay = dynamic(() => import('@/components/Loading/CatchTheDocketOverlay'), {
+  ssr: false,
+  loading: () => null, // No loading state needed for overlay
+});
+
+const SessionTimeoutWarning = dynamic(
+  () =>
+    import('@/components/webapp/SessionTimeoutWarning').then(mod => ({
+      default: mod.SessionTimeoutWarning,
+    })),
+  {
+    ssr: false,
+    loading: () => null, // No loading state needed for modal
+  },
+);
+
+const SafeAnimatedBackground = dynamic(
+  () => import('../components/landing/SafeAnimatedBackground'),
+  {
+    ssr: false,
+    loading: () => null, // Background can load asynchronously
+  },
+);
+
+const DraftRecovery = dynamic(
+  () => import('./components/DraftRecovery').then(mod => ({ default: mod.DraftRecovery })),
+  {
+    ssr: false,
+    loading: () => null, // Draft recovery can load asynchronously
+  },
+);
+
+const PersonalityScheduler = dynamic(
+  () =>
+    import('./components/PersonalityScheduler').then(mod => ({
+      default: mod.PersonalityScheduler,
+    })),
+  {
+    ssr: false,
+    loading: () => null, // Personality system can load asynchronously
+  },
+);
+
+const WebappBackground = dynamic(
+  () => import('@/components/ui/WebappBackground').then(mod => ({ default: mod.WebappBackground })),
+  {
+    ssr: false,
+    loading: () => null, // Background effects can load asynchronously
+  },
+);
 
 const inter = Inter({ subsets: ['latin'] });
 

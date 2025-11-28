@@ -2,8 +2,8 @@
  * Helper for fetching paginated cleaning tasks
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Fetches paginated cleaning tasks
@@ -18,6 +18,10 @@ export async function fetchPaginatedTasks(
   page: number,
   pageSize: number,
 ): Promise<{ data: any[]; total: number }> {
+  if (!supabaseAdmin) {
+    throw new Error('Database connection not available');
+  }
+
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 

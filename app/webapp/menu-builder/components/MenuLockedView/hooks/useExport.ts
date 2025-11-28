@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { Menu } from '../../types';
+import type { Menu } from '@/app/webapp/menu-builder/types';
 import type { ExportContentType, ExportFormat } from '../components/ExportOptions';
 
 export function useExport(menu: Menu) {

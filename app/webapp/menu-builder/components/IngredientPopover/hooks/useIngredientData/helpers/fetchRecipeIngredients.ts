@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { IngredientData } from '../useIngredientData';
+import { IngredientData } from '../../useIngredientData';
 
 export async function fetchRecipeIngredients(recipeId: string): Promise<IngredientData[]> {
   const response = await fetch(`/api/recipes/${recipeId}/ingredients`);

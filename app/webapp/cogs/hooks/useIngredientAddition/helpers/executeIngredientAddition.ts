@@ -19,11 +19,10 @@ interface ExecuteIngredientAdditionParams {
   selectedRecipe: string | null;
   currentCalculations: import('../../../types').COGSCalculation[];
   convertIngredientQuantity: (
-    ingredient: Ingredient,
     quantity: number,
-    fromUnit: string,
-    toUnit: string,
-  ) => number;
+    userUnit: string,
+    ingredientUnit: string,
+  ) => { convertedQuantity: number; convertedUnit: string; conversionNote: string };
   updateCalculation: (ingredientId: string, quantity: number) => void;
   addCalculation: (calc: import('../../../types').COGSCalculation) => void;
   resetForm: () => void;

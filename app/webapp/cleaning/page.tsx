@@ -1,24 +1,24 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { ClipboardCheck, MapPin, Plus } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import dynamic from 'next/dynamic';
+import { PageHeader } from '../components/static/PageHeader';
+import { AreaCard } from './components/AreaCard';
 import { CleaningGrid } from './components/CleaningGrid';
 import { CleaningStats } from './components/CleaningStats';
-import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { PageHeader } from '../components/static/PageHeader';
-import { ClipboardCheck, Plus, MapPin } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { useCleaningAreas } from './hooks/useCleaningAreas';
-import { useCleaningPageData } from './hooks/useCleaningPageData';
-import { useCleaningKeyboardShortcuts } from './hooks/useCleaningKeyboardShortcuts';
-import { useStatsDates } from './hooks/useStatsDates';
-import { useCleaningModals } from './hooks/useCleaningModals';
-import { useCleaningHandlers } from './hooks/useCleaningHandlers';
 import { CleaningTabs } from './components/CleaningTabs';
 import { GridFilterBar } from './components/GridFilterBar';
-import { AreaCard } from './components/AreaCard';
+import { useCleaningAreas } from './hooks/useCleaningAreas';
+import { useCleaningHandlers } from './hooks/useCleaningHandlers';
+import { useCleaningKeyboardShortcuts } from './hooks/useCleaningKeyboardShortcuts';
+import { useCleaningModals } from './hooks/useCleaningModals';
+import { useCleaningPageData } from './hooks/useCleaningPageData';
+import { useStatsDates } from './hooks/useStatsDates';
 
 // Lazy load modals - only load when needed
 const CreateTaskForm = dynamic(
@@ -281,7 +281,7 @@ export default function CleaningRosterPage() {
             onTaskUpdate={handleTaskUpdate}
             onCreateTask={areaId => {
               setShowCreateTask(areaId);
-              setShowAreaTasks(false);
+              closeAreaTasks();
             }}
           />
         </div>

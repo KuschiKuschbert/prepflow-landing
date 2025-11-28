@@ -1,4 +1,4 @@
-import { TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment } from '@/app/webapp/temperature/types';
 
 interface ChartDataPoint {
   timestamp: string;

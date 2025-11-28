@@ -33,6 +33,7 @@ interface RecipeCardProps {
 }
 
 export function RecipeCard({
+  id,
   title,
   baseYield,
   ingredients,
@@ -208,7 +209,7 @@ export function RecipeCard({
                 className="shrink-0 rounded-full p-2 text-gray-400 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
                 aria-label="Close recipe card"
               >
-                <Icon icon={X} size="md" aria-hidden="true" />
+                <Icon icon={X} size="md" aria-hidden={true} />
               </button>
             </div>
 

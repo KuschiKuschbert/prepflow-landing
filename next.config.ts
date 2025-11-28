@@ -75,7 +75,7 @@ const nextConfig: NextConfig = {
       config.optimization.splitChunks = {
         chunks: 'all',
         minSize: 20000,
-        maxSize: 200000, // Reduced for better code splitting
+        maxSize: 150000, // Further reduced for better code splitting (was 200KB)
         cacheGroups: {
           // Vendor chunks
           vendor: {
@@ -93,11 +93,11 @@ const nextConfig: NextConfig = {
             priority: 20,
             reuseExistingChunk: true,
           },
-          // Supabase chunk
+          // Supabase chunk (async - only load when needed)
           supabase: {
             test: /[\\/]node_modules[\\/]@supabase[\\/]/,
             name: 'supabase',
-            chunks: 'all',
+            chunks: 'async', // Async loading - only load when Supabase is actually used
             priority: 15,
             reuseExistingChunk: true,
           },
@@ -126,13 +126,26 @@ const nextConfig: NextConfig = {
             reuseExistingChunk: true,
           },
           // Recharts chunk (charting library - already lazy loaded)
+          // Higher priority and enforce single chunk to prevent splitting
           recharts: {
             test: /[\\/]node_modules[\\/]recharts[\\/]/,
             name: 'recharts',
             chunks: 'async', // Only load when needed (lazy loaded)
+            priority: 30, // Higher priority to ensure single chunk
+            enforce: true, // Force single chunk (ignore maxSize)
+            reuseExistingChunk: true,
+          },
+          // React Query chunk (data fetching library - can be async)
+          reactQuery: {
+            test: /[\\/]node_modules[\\/]@tanstack\/react-query[\\/]/,
+            name: 'react-query',
+            chunks: 'async', // Only load when React Query is used
             priority: 20,
             reuseExistingChunk: true,
           },
+          // Server-only dependencies (exclude from client bundle)
+          // Note: These are automatically excluded from client bundle by Next.js
+          // No need for special webpack config - Next.js handles server/client separation
           // Common chunk
           common: {
             name: 'common',

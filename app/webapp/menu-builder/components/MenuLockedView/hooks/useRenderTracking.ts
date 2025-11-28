@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { logger } from '@/lib/logger';
-import { Menu, MenuItem } from '../../types';
+import type { Menu, MenuItem } from '@/app/webapp/menu-builder/types';
 
 export function useRenderTracking(menu: Menu, menuItems: MenuItem[]) {
   const prevMenuRef = useRef(menu);

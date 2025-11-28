@@ -2,12 +2,12 @@
  * Recipe allergen aggregation helper
  */
 
-import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import {
   batchAggregateRecipeAllergens,
   extractAllergenSources,
 } from '@/lib/allergens/allergen-aggregation';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export interface RecipeAllergenData {
   allergensByRecipe: Record<string, string[]>;
@@ -28,6 +28,10 @@ export async function aggregateRecipeAllergens(recipes: any[]): Promise<RecipeAl
     allergensByRecipe = await batchAggregateRecipeAllergens(recipeIds);
   } catch (err) {
     logger.warn('[Allergen Export] Error batch aggregating recipe allergens:', err);
+  }
+
+  if (!supabaseAdmin) {
+    throw new Error('Database connection not available');
   }
 
   // Fetch ingredient sources for recipes

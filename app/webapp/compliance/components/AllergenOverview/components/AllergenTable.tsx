@@ -4,8 +4,8 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Search } from 'lucide-react';
-import { AllergenDisplay } from '@/components/compliance/AllergenDisplay';
-import type { AllergenItem } from '../AllergenOverview';
+import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
+import type { AllergenItem } from '../types';
 
 interface AllergenTableProps {
   items: AllergenItem[];
@@ -77,7 +77,7 @@ export function AllergenTable({
               const ingredientAllergenMap: Record<string, string[]> = {};
               if (item.allergenSources) {
                 Object.entries(item.allergenSources).forEach(([allergen, ingredients]) => {
-                  ingredients.forEach(ingredientName => {
+                  (ingredients as string[]).forEach((ingredientName: string) => {
                     if (!ingredientAllergenMap[ingredientName]) {
                       ingredientAllergenMap[ingredientName] = [];
                     }

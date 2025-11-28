@@ -13,9 +13,9 @@ import {
 } from 'recharts';
 import { logger } from '@/lib/logger';
 import { TemperatureEquipment } from '../types';
-import { ReferenceAreas } from './components/ReferenceAreas';
-import { calculateYAxisBounds } from './utils/calculateYAxisBounds';
-import { prepareChartData } from './utils/prepareChartData';
+import { ReferenceAreas } from '@/app/webapp/temperature/components/TemperatureChartLazy/components/ReferenceAreas';
+import { calculateYAxisBounds } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/calculateYAxisBounds';
+import { prepareChartData } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/prepareChartData';
 
 interface ChartDataPoint {
   timestamp: string;
@@ -36,6 +36,8 @@ interface TemperatureChartContentProps {
   formatXAxisLabel: (tickItem: number | string) => string;
   formatTooltipLabel: (label: number | string) => string;
   formatTooltipValue: (value: number) => string;
+  dataMin?: number;
+  dataMax?: number;
 }
 
 export default function TemperatureChartLazy({
@@ -66,6 +68,8 @@ export default function TemperatureChartLazy({
 
   // Debug logging - always log to see what's happening
   const temperatures = chartData.map(d => d.temperature);
+  const dataMin = temperatures.length > 0 ? Math.min(...temperatures) : 0;
+  const dataMax = temperatures.length > 0 ? Math.max(...temperatures) : 0;
   const tempsBelowMin = temperatures.filter(
     t => equipment.min_temp_celsius !== null && t < equipment.min_temp_celsius,
   );

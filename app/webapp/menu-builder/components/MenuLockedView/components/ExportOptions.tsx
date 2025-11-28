@@ -38,9 +38,9 @@ const CONTENT_OPTIONS: Array<{ value: ExportContentType; label: string }> = [
 export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProps) {
   // Log version on mount to verify new code is running
   useEffect(() => {
-    logger.dev('[ExportOptions] Component version:', EXPORT_OPTIONS_VERSION);
-    console.log('[ExportOptions] ✅ NEW VERSION LOADED:', EXPORT_OPTIONS_VERSION);
-    console.log('[ExportOptions] 🔥 CACHE BUST - Version 2.0.0-dropdown is running!');
+    logger.dev('[ExportOptions] Component version:', { version: EXPORT_OPTIONS_VERSION });
+    logger.dev('[ExportOptions] NEW VERSION LOADED:', { version: EXPORT_OPTIONS_VERSION });
+    logger.dev('[ExportOptions] CACHE BUST - Version 2.0.0-dropdown is running!');
     // Also log to window for easy debugging
     if (typeof window !== 'undefined') {
       (window as any).__EXPORT_OPTIONS_VERSION__ = EXPORT_OPTIONS_VERSION;

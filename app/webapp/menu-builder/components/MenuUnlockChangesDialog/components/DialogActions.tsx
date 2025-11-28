@@ -6,7 +6,7 @@ interface DialogActionsProps {
   onRecalculatePrices: () => void;
   onReviewChanges?: () => void;
   onDismiss: () => void;
-  dismissButtonRef: React.RefObject<HTMLButtonElement>;
+  dismissButtonRef: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**

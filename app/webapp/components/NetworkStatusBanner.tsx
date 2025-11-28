@@ -34,7 +34,7 @@ export function NetworkStatusBanner() {
           className="fixed top-0 right-0 left-0 z-[100] bg-red-500/90 px-4 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-sm"
         >
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
-            <Icon icon={WifiOff} size="sm" aria-hidden="true" />
+            <Icon icon={WifiOff} size="sm" aria-hidden={true} />
             <span>You&apos;re offline. Some features may not work until you reconnect.</span>
           </div>
         </motion.div>
@@ -48,7 +48,7 @@ export function NetworkStatusBanner() {
           className="fixed top-0 right-0 left-0 z-[100] bg-green-500/90 px-4 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-sm"
         >
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
-            <Icon icon={Wifi} size="sm" aria-hidden="true" />
+            <Icon icon={Wifi} size="sm" aria-hidden={true} />
             <span>Connection restored. You&apos;re back online.</span>
           </div>
         </motion.div>

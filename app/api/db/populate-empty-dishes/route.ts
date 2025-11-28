@@ -3,7 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import { dishHasDirectIngredients } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { populateDishes } from './helpers/populateDishes';
-import { populateRecipes } from './helpers/populateRecipes';
+import { populateRecipes, type PopulateRecipesResult } from './helpers/populateRecipes';
 
 /**
  * GET: Diagnostic endpoint - returns dishes with no ingredients
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
       .select('id, name')
       .order('name');
 
-    let recipesResult = { populated: [], skipped: [], errors: [] };
+    let recipesResult: PopulateRecipesResult = { populated: [], skipped: [], errors: [] };
     if (!recipesError && recipes && recipes.length > 0) {
       recipesResult = await populateRecipes(recipes, ingredients);
     }

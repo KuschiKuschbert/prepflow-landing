@@ -2,10 +2,10 @@
  * Hook for handling task submission
  */
 
-import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
 import type { FrequencyType } from '@/lib/cleaning/frequency-calculator';
+import { logger } from '@/lib/logger';
+import { useState } from 'react';
 
 interface FormData {
   task_name: string;
@@ -26,7 +26,7 @@ interface UseTaskSubmissionProps {
   setErrors: (errors: Record<string, string>) => void;
   setShowAdvanced: (show: boolean) => void;
   setFrequencyManuallySet: (set: boolean) => void;
-  taskNameInputRef: React.RefObject<HTMLInputElement>;
+  taskNameInputRef: React.RefObject<HTMLInputElement | null>;
   validateField: (field: string, value: string) => boolean;
 }
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
-import type { AllergenItem } from './AllergenOverview';
+import type { AllergenItem } from './AllergenOverview/types';
 
 interface AllergenOverviewMobileCardProps {
   item: AllergenItem;

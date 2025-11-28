@@ -1,9 +1,10 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { enrichDishWithAllergens } from './helpers/enrichDishWithAllergens';
 import { fetchDishWithRelations } from './helpers/fetchDishWithRelations';
 import { handleDishError } from './helpers/handleDishError';
-import { enrichDishWithAllergens } from './helpers/enrichDishWithAllergens';
 import { handlePutRequest } from './helpers/handlePutRequest';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {

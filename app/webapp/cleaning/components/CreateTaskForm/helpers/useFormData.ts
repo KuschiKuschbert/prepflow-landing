@@ -2,8 +2,8 @@
  * Hook for fetching form data (areas, equipment, sections)
  */
 
-import { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Equipment {
   id: string;
@@ -29,16 +29,7 @@ export function useFormData(isOpen: boolean) {
   const [sections, setSections] = useState<KitchenSection[]>([]);
   const [fetching, setFetching] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      setFetching(true);
-      Promise.all([fetchAreas(), fetchEquipment(), fetchSections()]).finally(() => {
-        setFetching(false);
-      });
-    }
-  }, [isOpen]);
-
-  const fetchAreas = async () => {
+  const fetchAreas = useCallback(async () => {
     try {
       const response = await fetch('/api/cleaning-areas');
       const data = await response.json();
@@ -48,9 +39,9 @@ export function useFormData(isOpen: boolean) {
     } catch (error) {
       logger.error('Error fetching areas:', error);
     }
-  };
+  }, []);
 
-  const fetchEquipment = async () => {
+  const fetchEquipment = useCallback(async () => {
     try {
       const response = await fetch('/api/temperature-equipment');
       const data = await response.json();
@@ -60,9 +51,9 @@ export function useFormData(isOpen: boolean) {
     } catch (error) {
       logger.error('Error fetching equipment:', error);
     }
-  };
+  }, []);
 
-  const fetchSections = async () => {
+  const fetchSections = useCallback(async () => {
     try {
       const response = await fetch('/api/kitchen-sections');
       const data = await response.json();
@@ -72,7 +63,16 @@ export function useFormData(isOpen: boolean) {
     } catch (error) {
       logger.error('Error fetching sections:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFetching(true);
+      Promise.all([fetchAreas(), fetchEquipment(), fetchSections()]).finally(() => {
+        setFetching(false);
+      });
+    }
+  }, [isOpen, fetchAreas, fetchEquipment, fetchSections]);
 
   return { areas, equipment, sections, fetching };
 }

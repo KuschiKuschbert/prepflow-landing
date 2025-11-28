@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react';
 import { logger } from '@/lib/logger';
-import { MenuItem } from '../../types';
+import type { MenuItem } from '@/app/webapp/menu-builder/types';
 import { processMenuItem } from './useMenuItemsWithAllergens/helpers/processMenuItem';
 
 export interface MenuItemWithAllergens {

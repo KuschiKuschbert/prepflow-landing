@@ -1,6 +1,8 @@
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MenuItem } from '../../types';
+import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import { getCachedStatistics, setCachedStatistics } from './useStatisticsLoading/helpers/cacheUtils';
+import { fetchStatistics } from './useStatisticsLoading/helpers/fetchStatistics';
 
 interface ItemStatistics {
   cogs: number;
@@ -13,12 +15,6 @@ interface ItemStatistics {
   cogs_error?: string;
 }
 
-const statisticsCache = new Map<
-  string,
-  { data: ItemStatistics; timestamp: number; expiry: number }
->();
-const CACHE_EXPIRY_MS = 5 * 60 * 1000;
-
 /**
  * Hook for loading menu item statistics with caching
  */
@@ -30,81 +26,28 @@ export function useStatisticsLoading(menuId: string, item: MenuItem, isVisible: 
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadStatistics = useCallback(
-    async (retryCount = 0) => {
-      const cacheKey = `${menuId}-${item.id}`;
-      const cached = statisticsCache.get(cacheKey);
-      const now = Date.now();
-
-      // Invalidate cache if price changed
-      const priceChanged =
-        cached &&
-        cached.data.actual_selling_price !== item.actual_selling_price &&
-        (cached.data.actual_selling_price != null || item.actual_selling_price != null);
-      if (priceChanged) {
-        statisticsCache.delete(cacheKey);
-        logger.dev('[useStatisticsLoading] Cache invalidated - price changed', {
-          itemId: item.id,
-          oldPrice: cached.data.actual_selling_price,
-          newPrice: item.actual_selling_price,
-        });
-      }
-
-      // Check cache (after potential invalidation)
-      const freshCached = statisticsCache.get(cacheKey);
-      if (freshCached && now < freshCached.expiry) {
-        setStatistics(freshCached.data);
+    async () => {
+      const cached = getCachedStatistics(menuId, item);
+      if (cached) {
+        setStatistics(cached);
         return;
       }
 
       setLoading(true);
       setError(null);
-      try {
-        const response = await fetch(`/api/menus/${menuId}/items/${item.id}/statistics`, {
-          credentials: 'include',
-        });
-        if (!response.ok) {
-          if (response.status === 404) {
-            if (retryCount < 1) {
-              logger.dev('[MenuItemHoverStatistics] 404, retrying...', { menuId, itemId: item.id });
-              setTimeout(() => loadStatistics(retryCount + 1), 500);
-              return;
-            }
-            logger.dev('[MenuItemHoverStatistics] 404 after retry, skipping', {
-              menuId,
-              itemId: item.id,
-            });
-            setLoading(false);
-            return;
-          }
-          const errorData = await response.json().catch(() => ({}));
-          setError(errorData.error || errorData.message || 'Failed to load statistics');
-          setLoading(false);
-          return;
-        }
-        const result = await response.json();
-        if (result.success) {
-          logger.dev('[MenuItemHoverStatistics] Statistics loaded', { cacheKey });
-          setStatistics(result.statistics);
-          statisticsCache.set(cacheKey, {
-            data: result.statistics,
-            timestamp: now,
-            expiry: now + CACHE_EXPIRY_MS,
-          });
-        } else {
-          logger.error('[MenuItemHoverStatistics] API error', {
-            cacheKey,
-            error: result.error || result.message,
-          });
-          setError(result.error || result.message || 'Failed to load statistics');
-        }
-      } catch (err) {
-        logger.error('Failed to load item statistics:', err);
-        setError('Failed to load statistics');
-      } finally {
-        setLoading(false);
+
+      const result = await fetchStatistics(menuId, item.id);
+
+      if (result.success && result.statistics) {
+        setStatistics(result.statistics);
+        setCachedStatistics(menuId, item.id, result.statistics);
+      } else {
+        setError(result.error || 'Failed to load statistics');
       }
+
+      setLoading(false);
     },
-    [menuId, item.id, item.actual_selling_price],
+    [menuId, item],
   );
 
   useEffect(() => {
@@ -127,31 +70,14 @@ export function useStatisticsLoading(menuId: string, item: MenuItem, isVisible: 
         hoverTimeoutRef.current = null;
       }
     };
+
     if (isVisible) {
       logger.dev('[MenuItemHoverStatistics] Loading statistics', { menuId, itemId: item.id });
       clearHoverTimeout();
-      const cacheKey = `${menuId}-${item.id}`;
-      const cached = statisticsCache.get(cacheKey);
-      const now = Date.now();
 
-      // Invalidate cache if price changed
-      const priceChanged =
-        cached &&
-        cached.data.actual_selling_price !== item.actual_selling_price &&
-        (cached.data.actual_selling_price != null || item.actual_selling_price != null);
-      if (priceChanged) {
-        statisticsCache.delete(cacheKey);
-        logger.dev('[useStatisticsLoading] Cache invalidated in useEffect - price changed', {
-          itemId: item.id,
-          oldPrice: cached.data.actual_selling_price,
-          newPrice: item.actual_selling_price,
-        });
-      }
-
-      // Check cache (after potential invalidation)
-      const freshCached = statisticsCache.get(cacheKey);
-      if (freshCached && now < freshCached.expiry) {
-        setStatistics(freshCached.data);
+      const cached = getCachedStatistics(menuId, item);
+      if (cached) {
+        setStatistics(cached);
         setLoading(false);
         setError(null);
       } else {
@@ -159,19 +85,12 @@ export function useStatisticsLoading(menuId: string, item: MenuItem, isVisible: 
         setError(null);
         hoverTimeoutRef.current = setTimeout(() => loadStatistics(), 100);
       }
+
       return clearHoverTimeout;
     } else {
       clearHoverTimeout();
     }
-  }, [
-    isVisible,
-    menuId,
-    item.id,
-    item.actual_selling_price,
-    item.dishes?.dish_name,
-    item.recipes?.recipe_name,
-    loadStatistics,
-  ]);
+  }, [isVisible, menuId, item, loadStatistics]);
 
   return { statistics, loading, error };
 }

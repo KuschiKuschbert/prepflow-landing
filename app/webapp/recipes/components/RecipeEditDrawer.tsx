@@ -17,8 +17,8 @@ import { useRecipeEditIngredientLoading } from './hooks/useRecipeEditIngredientL
 import { useRecipeEditIngredientSave } from './hooks/useRecipeEditIngredientSave';
 import { RecipeMetadataForm } from './RecipeMetadataForm';
 import { RecipeIngredientsTab } from './RecipeIngredientsTab';
-import { RecipeEditFooter } from './components/RecipeEditFooter';
-import { useRecipeEditHandlers } from './hooks/useRecipeEditHandlers';
+import { RecipeEditFooter } from '@/app/webapp/recipes/components/RecipeEditDrawer/components/RecipeEditFooter';
+import { useRecipeEditHandlers } from '@/app/webapp/recipes/components/RecipeEditDrawer/hooks/useRecipeEditHandlers';
 interface RecipeEditDrawerProps {
   isOpen: boolean;
   recipe: Recipe | null;

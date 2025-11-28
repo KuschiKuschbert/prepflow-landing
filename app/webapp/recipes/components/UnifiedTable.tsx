@@ -28,7 +28,7 @@ interface UnifiedTableProps {
   onEditRecipe: (recipe: Recipe) => void;
   onDeleteDish: (dish: Dish) => void;
   onDeleteRecipe: (recipe: Recipe) => void;
-  onSortChange: (field: string, direction: 'asc' | 'desc') => void;
+  onSortChange?: (field: string, direction: 'asc' | 'desc') => void;
   onStartLongPress: () => void;
   onCancelLongPress: () => void;
   onEnterSelectionMode: () => void;
@@ -62,6 +62,7 @@ export function UnifiedTable({
   const allSelected = items.length > 0 && items.every(item => selectedItems.has(item.id));
 
   const handleColumnSort = (field: UnifiedSortField) => {
+    if (!onSortChange) return;
     const newDirection = sortField === field && sortDirection === 'asc' ? 'desc' : 'asc';
     onSortChange(field, newDirection);
   };

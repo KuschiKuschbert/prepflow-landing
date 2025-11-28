@@ -3,9 +3,9 @@
  */
 
 import { Icon } from '@/components/ui/Icon';
-import { Info } from 'lucide-react';
-import { FrequencyPreview } from '../FrequencyPreview';
 import type { FrequencyType } from '@/lib/cleaning/frequency-calculator';
+import { Info } from 'lucide-react';
+import { FrequencyPreview } from '../../FrequencyPreview';
 
 interface FrequencyFieldProps {
   value: FrequencyType | string;

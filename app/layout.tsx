@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { logger } from '@/lib/logger';
 import './globals.css';
 
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -173,7 +172,7 @@ export default function RootLayout({
                     for(let registration of registrations) {
                       registration.unregister().then(function(success) {
                         if (success) {
-                          console.log('🗑️ Development: Service Worker unregistered');
+                          // Service worker unregistered in development
                         }
                       });
                     }
@@ -184,7 +183,7 @@ export default function RootLayout({
                       for (let name of names) {
                         caches.delete(name);
                       }
-                      console.log('🗑️ Development: All caches cleared');
+                      // All caches cleared in development
                     });
                   }
                 }

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { IngredientData, RecipeSource } from '../useIngredientData';
+import { IngredientData, RecipeSource } from '../../useIngredientData';
 
 export async function fetchDishIngredients(
   dishId: string,

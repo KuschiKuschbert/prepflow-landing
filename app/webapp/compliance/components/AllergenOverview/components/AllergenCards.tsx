@@ -4,8 +4,8 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Search } from 'lucide-react';
-import { AllergenOverviewMobileCard } from './AllergenOverviewMobileCard';
-import type { AllergenItem } from '../AllergenOverview';
+import { AllergenOverviewMobileCard } from '../../AllergenOverviewMobileCard';
+import type { AllergenItem } from '../types';
 
 interface AllergenCardsProps {
   items: AllergenItem[];

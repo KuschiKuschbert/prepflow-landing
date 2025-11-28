@@ -13,7 +13,7 @@ import { MenuDisplayView } from './MenuDisplayView';
 import { AllergenMatrixTable } from './MenuLockedView/components/AllergenMatrixTable';
 import { ExportOptions } from './MenuLockedView/components/ExportOptions';
 import { LockedStatusBanner } from './MenuLockedView/components/LockedStatusBanner';
-import { RecipeCardsView } from './MenuLockedView/components/RecipeCardsView';
+import { RecipeCardsView } from './MenuLockedView/components/RecipeCardsView/RecipeCardsView';
 import { useExport } from './MenuLockedView/hooks/useExport';
 import { useMenuItemSelection } from './MenuLockedView/hooks/useMenuItemSelection';
 import { useMenuItemsWithAllergens } from './MenuLockedView/hooks/useMenuItemsWithAllergens';

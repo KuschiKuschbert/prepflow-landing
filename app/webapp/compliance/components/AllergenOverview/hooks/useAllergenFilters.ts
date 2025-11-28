@@ -3,7 +3,7 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import type { AllergenItem } from '../AllergenOverview';
+import type { AllergenItem } from '../types';
 
 export function useAllergenFilters(items: AllergenItem[], selectedAllergenFilter: string) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,7 +29,9 @@ export function useAllergenFilters(items: AllergenItem[], selectedAllergenFilter
 
   const filteredItems = useMemo(() => filterItems(items), [items, filterItems]);
 
-  const hasActiveFilters = searchQuery || selectedAllergenFilter !== 'all' || showOnlyWithAllergens;
+  const hasActiveFilters: boolean = Boolean(
+    searchQuery || selectedAllergenFilter !== 'all' || showOnlyWithAllergens,
+  );
 
   const clearFilters = useCallback(() => {
     setSearchQuery('');

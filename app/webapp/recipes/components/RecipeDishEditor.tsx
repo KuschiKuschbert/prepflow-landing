@@ -214,7 +214,11 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
                 filteredIngredients={filteredIngredients}
                 selectedIngredient={selectedIngredient}
                 highlightedIndex={highlightedIndex}
-                newIngredient={newIngredient}
+                newIngredient={{
+                  ingredient_id: newIngredient.ingredient_id,
+                  quantity: newIngredient.quantity ?? 0,
+                  unit: newIngredient.unit || 'kg',
+                }}
                 dataError={dataError}
                 showAddIngredient={showAddIngredient}
                 saving={saving}

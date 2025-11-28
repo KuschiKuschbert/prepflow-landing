@@ -36,7 +36,7 @@ export async function invalidateAndReaggregate(ingredients: any[]): Promise<void
       ]);
 
       // Find all recipes using this ingredient
-      const { data: recipeIngredients } = await supabaseAdmin
+      const { data: recipeIngredients } = await supabaseAdmin!
         .from('recipe_ingredients')
         .select('recipe_id')
         .eq('ingredient_id', ingredient.id);
@@ -45,7 +45,7 @@ export async function invalidateAndReaggregate(ingredients: any[]): Promise<void
       }
 
       // Find all dishes using this ingredient
-      const { data: dishIngredients } = await supabaseAdmin
+      const { data: dishIngredients } = await supabaseAdmin!
         .from('dish_ingredients')
         .select('dish_id')
         .eq('ingredient_id', ingredient.id);

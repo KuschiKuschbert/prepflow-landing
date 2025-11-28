@@ -83,11 +83,11 @@ async function batchFetchDishes(
     }> = [];
     if (dish.dish_recipes) {
       for (const dr of dish.dish_recipes) {
-        const recipe = dr.recipes;
+        const recipe = dr.recipes as any;
         if (!recipe || !Array.isArray(recipe.recipe_ingredients)) continue;
 
         // Handle both recipe_name and name columns
-        const recipeName = (recipe as any).recipe_name || (recipe as any).name || 'Unknown Recipe';
+        const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
 
         const recipeIngredients = recipe.recipe_ingredients.map((ri: any) => ({
           name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',

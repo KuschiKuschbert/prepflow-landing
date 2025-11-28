@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@/lib/logger';
-import type { AllergenItem } from '../AllergenOverview';
+import type { AllergenItem } from '../types';
 
 export function useAllergenData(selectedAllergenFilter: string) {
   const [items, setItems] = useState<AllergenItem[]>([]);

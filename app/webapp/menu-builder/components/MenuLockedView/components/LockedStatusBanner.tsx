@@ -1,6 +1,6 @@
 import { Icon } from '@/components/ui/Icon';
 import { Lock } from 'lucide-react';
-import { Menu } from '../../types';
+import type { Menu } from '@/app/webapp/menu-builder/types';
 
 interface LockedStatusBannerProps {
   menu: Menu;

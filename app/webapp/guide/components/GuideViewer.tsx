@@ -5,14 +5,18 @@
 
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { GuideControls } from './GuideControls';
 import { ScreenshotGuide } from './formats/ScreenshotGuide';
 import { InteractiveDemo } from './formats/InteractiveDemo';
 import { VideoGuide } from './formats/VideoGuide';
-import { ThreeJSGuide } from './formats/ThreeJSGuide';
 import { HybridGuide } from './formats/HybridGuide';
 import type { GuideStep } from '../data/guide-types';
+
+// Lazy load Three.js components (not currently used but kept for future use)
+const ThreeJSGuide = lazy(() =>
+  import('./formats/ThreeJSGuide').then(m => ({ default: m.ThreeJSGuide })),
+);
 
 interface GuideViewerProps {
   step: GuideStep;
@@ -52,7 +56,17 @@ export function GuideViewer({
         break;
       case 'threejs':
         if (step.content.threejs) {
-          return <ThreeJSGuide content={step.content.threejs} />;
+          return (
+            <Suspense
+              fallback={
+                <div className="flex h-96 items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+                  <div className="text-center text-gray-400">Loading 3D simulation...</div>
+                </div>
+              }
+            >
+              <ThreeJSGuide content={step.content.threejs} />
+            </Suspense>
+          );
         }
         break;
       case 'hybrid':

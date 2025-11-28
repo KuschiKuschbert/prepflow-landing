@@ -2,9 +2,8 @@
  * Helper for fetching cleaning tasks with completions for a date range
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import { buildCleaningTasksQuery } from './buildCleaningTasksQuery';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Fetches cleaning tasks with completions for a date range
@@ -36,6 +35,10 @@ export async function fetchTasksWithCompletions(
     });
 
     throw tasksError;
+  }
+
+  if (!supabaseAdmin) {
+    throw new Error('Database connection not available');
   }
 
   // Fetch completions for date range

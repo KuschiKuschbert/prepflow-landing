@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 interface UseDialogFocusTrapProps {
   isOpen: boolean;
   onClose: () => void;
-  dismissButtonRef: React.RefObject<HTMLButtonElement>;
+  dismissButtonRef: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**

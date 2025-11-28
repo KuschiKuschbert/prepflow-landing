@@ -1,6 +1,6 @@
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import { Menu } from '@/types/menu-builder';
+import type { Menu } from '../../../types';
 import { useCallback, useState } from 'react';
 
 /**

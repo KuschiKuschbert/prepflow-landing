@@ -5,9 +5,24 @@ import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import { useState, useEffect } from 'react';
 
-import TemperatureEquipmentTab from './components/TemperatureEquipmentTab';
-import TemperatureLogsTab from './components/TemperatureLogsTab';
-import TemperatureAnalyticsTab from './components/TemperatureAnalyticsTab';
+import dynamic from 'next/dynamic';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+
+// Lazy load temperature tabs to reduce initial bundle size (TemperatureAnalyticsTab uses Recharts)
+const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEquipmentTab'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const TemperatureLogsTab = dynamic(() => import('./components/TemperatureLogsTab'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
+const TemperatureAnalyticsTab = dynamic(() => import('./components/TemperatureAnalyticsTab'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
 import { PageHeader } from './components/PageHeader';
 import { TabNavigation } from './components/TabNavigation';
 import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoadingState';

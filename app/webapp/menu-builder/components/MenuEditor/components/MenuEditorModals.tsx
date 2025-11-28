@@ -22,7 +22,7 @@ interface MenuEditorModalsProps {
     isOpen: boolean;
     title: string;
     message: string;
-    variant: 'danger' | 'warning' | 'info';
+    variant?: 'danger' | 'warning' | 'info';
     onConfirm: () => void;
   };
   setConfirmDialog: React.Dispatch<
@@ -30,7 +30,7 @@ interface MenuEditorModalsProps {
       isOpen: boolean;
       title: string;
       message: string;
-      variant: 'danger' | 'warning' | 'info';
+      variant?: 'danger' | 'warning' | 'info';
       onConfirm: () => void;
     }>
   >;

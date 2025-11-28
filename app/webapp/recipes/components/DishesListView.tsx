@@ -14,7 +14,7 @@ type RecipeSortField =
   | 'profit_margin'
   | 'contributing_margin'
   | 'created';
-type UnifiedSortField = DishSortField | RecipeSortField;
+export type UnifiedSortField = DishSortField | RecipeSortField;
 
 interface DishesListViewProps {
   allItems: UnifiedItem[];

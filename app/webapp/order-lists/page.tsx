@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { PageHeader } from '../components/static/PageHeader';
@@ -7,7 +8,19 @@ import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
-import { MenuIngredientsTable } from './components/MenuIngredientsTable';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+
+// Lazy load order list components to reduce initial bundle size
+const MenuIngredientsTable = dynamic(
+  () =>
+    import('./components/MenuIngredientsTable').then(mod => ({
+      default: mod.MenuIngredientsTable,
+    })),
+  {
+    ssr: false,
+    loading: () => <PageSkeleton />,
+  },
+);
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 
 interface Menu {

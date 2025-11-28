@@ -16,8 +16,8 @@ export async function fetchDishRecipes(dishId: string): Promise<any[]> {
     throw new Error('Database connection not available');
   }
 
-  console.log('[fetchDishRecipes] Starting fetch for dishId:', dishId);
-  console.log('[fetchDishRecipes] Using supabaseAdmin:', !!supabaseAdmin);
+  logger.dev('[fetchDishRecipes] Starting fetch for dishId:', { dishId });
+  logger.dev('[fetchDishRecipes] Using supabaseAdmin:', { available: !!supabaseAdmin });
 
   // Fetch dish_recipes separately to avoid nested relation issues (same approach as audit endpoint)
   // Note: Using same query format as audit endpoint (select only recipe_id, quantity)
@@ -26,7 +26,7 @@ export async function fetchDishRecipes(dishId: string): Promise<any[]> {
     .select('recipe_id, quantity')
     .eq('dish_id', dishId);
 
-  console.log('[fetchDishRecipes] Query result:', {
+  logger.dev('[fetchDishRecipes] Query result:', {
     dishId,
     dishRecipesDataCount: dishRecipesData?.length || 0,
     dishRecipesData: JSON.stringify(dishRecipesData),
@@ -104,7 +104,6 @@ export async function fetchDishRecipes(dishId: string): Promise<any[]> {
       if (!hasRecipe && dr.recipe_id) {
         logger.warn('[Dishes API] dish_recipes entry references non-existent recipe:', {
           dishId,
-          dishRecipeId: dr.id,
           recipeId: dr.recipe_id,
         });
       }

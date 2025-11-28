@@ -3,6 +3,8 @@
  * Helper functions for scaling ingredient quantities based on prep quantity
  */
 
+import { logger } from '@/lib/logger';
+
 export interface Ingredient {
   name: string;
   quantity: number;
@@ -43,7 +45,7 @@ export function scaleIngredients(
 
     // Debug logging (remove in production)
     if (process.env.NODE_ENV === 'development') {
-      console.log(
+      logger.dev(
         `[scaleIngredients] ${ingredient.name}: ${quantity} ${ingredient.unit} × ${prepQty} = ${scaledQuantity} ${ingredient.unit}`,
         {
           quantity,

@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import { COGSCalculation } from '../../../../cogs/types';
-import { Ingredient } from '../../../../cogs/types';
+import { Ingredient, RecipeIngredient } from '../../../../cogs/types';
 
 interface UseRecipeEditHandlersProps {
   handleAddIngredient: (
     ingredient: { ingredient_id: string; quantity: number; unit: string },
     e?: React.FormEvent,
   ) => Promise<void>;
-  newIngredient: { ingredient_id?: string; quantity: number; unit: string };
-  newConsumable: { ingredient_id?: string; quantity: number; unit: string };
+  newIngredient: Partial<RecipeIngredient>;
+  newConsumable: Partial<RecipeIngredient>;
 }
 
 /**
@@ -22,7 +22,15 @@ export function useRecipeEditHandlers({
   const handleAddIngredientWrapper = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      await handleAddIngredient(newIngredient, e);
+      if (!newIngredient.ingredient_id) return;
+      await handleAddIngredient(
+        {
+          ingredient_id: newIngredient.ingredient_id,
+          quantity: newIngredient.quantity ?? 0,
+          unit: newIngredient.unit || 'kg',
+        },
+        e,
+      );
     },
     [handleAddIngredient, newIngredient],
   );
@@ -30,7 +38,15 @@ export function useRecipeEditHandlers({
   const handleAddConsumableWrapper = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      await handleAddIngredient(newConsumable, e);
+      if (!newConsumable.ingredient_id) return;
+      await handleAddIngredient(
+        {
+          ingredient_id: newConsumable.ingredient_id,
+          quantity: newConsumable.quantity ?? 0,
+          unit: newConsumable.unit || 'kg',
+        },
+        e,
+      );
     },
     [handleAddIngredient, newConsumable],
   );

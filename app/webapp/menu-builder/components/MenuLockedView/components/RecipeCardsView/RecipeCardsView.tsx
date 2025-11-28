@@ -1,0 +1,234 @@
+/**
+ * Recipe Cards View Component
+ * Displays all recipe cards for a locked menu with scaling functionality
+ */
+
+'use client';
+
+import { logger } from '@/lib/logger';
+import { Loader2, RefreshCw } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { EmptyState } from './components/EmptyState';
+import { MainCardsGrid } from './components/MainCardsGrid';
+import { SubRecipeSections } from './components/SubRecipeSections';
+import { useCardGeneration } from './hooks/useCardGeneration';
+import { useRecipeCards } from './hooks/useRecipeCards';
+import { RecipeCardsViewProps } from './types';
+
+export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const { cards, subRecipeCards, loading, error, setCards, setSubRecipeCards, pollingRef } =
+    useRecipeCards({
+      menuId,
+      onError: (err: string) => logger.error('[RecipeCardsView] Error from useRecipeCards:', err),
+    });
+
+  const { generating, handleGenerateCards } = useCardGeneration({
+    menuId,
+    onSuccess: async () => {
+      // Refresh cards after successful generation
+      setTimeout(async () => {
+        try {
+          logger.dev('[RecipeCardsView] Refreshing cards after generation...');
+          const refreshResponse = await fetch(`/api/menus/${menuId}/recipe-cards`);
+          if (refreshResponse.ok) {
+            const refreshData = await refreshResponse.json();
+            logger.dev('[RecipeCardsView] Refresh response:', {
+              success: refreshData.success,
+              cardCount: refreshData.cards?.length || 0,
+            });
+            if (refreshData.success) {
+              if (refreshData.cards) {
+                setCards(refreshData.cards);
+              }
+              if (refreshData.subRecipeCards) {
+                setSubRecipeCards(refreshData.subRecipeCards);
+              }
+              const totalCards =
+                (refreshData.cards?.length || 0) +
+                (refreshData.subRecipeCards?.sauces?.length || 0) +
+                (refreshData.subRecipeCards?.marinades?.length || 0) +
+                (refreshData.subRecipeCards?.brines?.length || 0) +
+                (refreshData.subRecipeCards?.slowCooked?.length || 0) +
+                (refreshData.subRecipeCards?.other?.length || 0);
+              if (totalCards === 0) {
+                const noCardsError =
+                  'No recipe cards were generated. This might be because:\n' +
+                  '1. AI service is not configured (check GEMINI_API_KEY)\n' +
+                  '2. Menu items have no ingredients\n' +
+                  '3. Generation failed silently - check server logs';
+                logger.warn('[RecipeCardsView]', { error: noCardsError });
+              } else {
+                logger.dev(
+                  `[RecipeCardsView] Successfully loaded ${refreshData.cards.length} recipe cards`,
+                );
+              }
+            }
+          } else {
+            const refreshError = 'Failed to refresh recipe cards';
+            logger.error('[RecipeCardsView]', {
+              error: refreshError,
+              status: refreshResponse.status,
+            });
+          }
+        } catch (refreshErr) {
+          logger.error('[RecipeCardsView] Error refreshing cards:', refreshErr);
+        }
+      }, 2000); // Wait 2 seconds for generation to complete
+    },
+  });
+
+  // Handle Escape key to close expanded card
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && expandedCardId) {
+        setExpandedCardId(null);
+      }
+    };
+
+    if (expandedCardId) {
+      document.addEventListener('keydown', handleEscape);
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+      };
+    }
+  }, [expandedCardId]);
+
+  const handleCardClick = (cardId: string) => {
+    if (expandedCardId === cardId) {
+      setExpandedCardId(null);
+    } else {
+      setExpandedCardId(cardId);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-[#29E7CD]" />
+        <p className="mt-4 text-sm text-gray-400">
+          {generating
+            ? 'Generating recipe cards... This may take 2-3 minutes for large menus.'
+            : 'Loading recipe cards...'}
+        </p>
+        {generating && (
+          <p className="mt-2 text-xs text-gray-500">
+            Processing menu items with AI. Please wait...
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg border border-red-500/50 bg-red-500/10 p-6 text-center">
+        <p className="text-red-400">{error}</p>
+      </div>
+    );
+  }
+
+  const totalCards =
+    cards.length +
+    subRecipeCards.sauces.length +
+    subRecipeCards.marinades.length +
+    subRecipeCards.brines.length +
+    subRecipeCards.slowCooked.length +
+    subRecipeCards.other.length;
+
+  if (totalCards === 0) {
+    return (
+      <EmptyState
+        menuId={menuId}
+        generating={generating}
+        loading={loading}
+        error={error}
+        isGeneratingInBackground={pollingRef.current !== null}
+        onGenerate={() => {
+          handleGenerateCards().catch((err: unknown) => {
+            logger.error('[RecipeCardsView] Error in handleGenerateCards:', err);
+          });
+        }}
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex-1 rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3">
+          <p className="text-xs text-gray-300">
+            <strong className="text-[#29E7CD]">Recipe Cards:</strong> All ingredients are normalized
+            to 1 serving. Use the prep quantity input on each card to scale ingredients for your
+            desired batch size.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            logger.dev('[RecipeCardsView] Regenerate button clicked!', { menuId, generating });
+            if (!generating) {
+              handleGenerateCards().catch((err: unknown) => {
+                logger.error('[RecipeCardsView] Error in handleGenerateCards:', err);
+              });
+            }
+          }}
+          disabled={generating || loading}
+          className="flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          aria-label="Regenerate recipe cards for this menu"
+        >
+          {generating ? (
+            <>
+              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+              Regenerating...
+            </>
+          ) : (
+            <>
+              <RefreshCw className="mr-2 h-3 w-3" />
+              Regenerate
+            </>
+          )}
+        </button>
+      </div>
+
+      {error && (
+        <div className="rounded-lg border border-red-500/50 bg-red-500/10 p-4">
+          <p className="text-sm font-semibold text-red-400">Error:</p>
+          <p className="mt-2 text-sm whitespace-pre-line text-red-300">{error}</p>
+        </div>
+      )}
+
+      <div className="relative">
+        {/* Main Recipe Cards Section */}
+        {cards.length > 0 && (
+          <div className="mb-8">
+            <h2 className="mb-4 text-xl font-bold text-white">Main Recipe Cards</h2>
+            <MainCardsGrid
+              cards={cards}
+              expandedCardId={expandedCardId}
+              onCardClick={handleCardClick}
+            />
+          </div>
+        )}
+
+        {/* Sub-Recipe Cards Sections */}
+        {(subRecipeCards.sauces.length > 0 ||
+          subRecipeCards.marinades.length > 0 ||
+          subRecipeCards.brines.length > 0 ||
+          subRecipeCards.slowCooked.length > 0 ||
+          subRecipeCards.other.length > 0) && (
+          <div className="space-y-8">
+            <h2 className="text-xl font-bold text-white">Sub-Recipes & Prep Items</h2>
+            <SubRecipeSections
+              subRecipeCards={subRecipeCards}
+              expandedCardId={expandedCardId}
+              onCardClick={handleCardClick}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

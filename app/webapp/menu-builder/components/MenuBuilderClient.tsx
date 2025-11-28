@@ -1,7 +1,7 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { logger } from '@/lib/logger';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu } from '../types';
 import MenuEditor from './MenuEditor';
 import MenuForm from './MenuForm';
@@ -54,28 +54,28 @@ export default function MenuBuilderClient({
   });
 
   // Handle fetchMenus result for updating selected menu
-  const handleFetchMenusResult = async (
-    updateSelected: boolean | undefined,
-    showLoading: boolean,
-  ) => {
-    try {
-      const result = await fetchMenus(updateSelected, showLoading);
-      if (result?.updateSelected && result?.menus && selectedMenu) {
-        const updatedMenu = result.menus.find((m: Menu) => m.id === selectedMenu.id);
-        if (updatedMenu) {
-          logger.dev(`[MenuBuilderClient] fetchMenus - Updating selectedMenu`, {
-            oldMenu: selectedMenu,
-            newMenu: updatedMenu,
-          });
-          setSelectedMenu(updatedMenu);
+  const handleFetchMenusResult = useCallback(
+    async (updateSelected: boolean | undefined, showLoading: boolean) => {
+      try {
+        const result = await fetchMenus(updateSelected, showLoading);
+        if (result?.updateSelected && result?.menus && selectedMenu) {
+          const updatedMenu = result.menus.find((m: Menu) => m.id === selectedMenu.id);
+          if (updatedMenu) {
+            logger.dev(`[MenuBuilderClient] fetchMenus - Updating selectedMenu`, {
+              oldMenu: selectedMenu,
+              newMenu: updatedMenu,
+            });
+            setSelectedMenu(updatedMenu);
+          }
+        }
+      } catch (err) {
+        if (err instanceof Error && err.message === 'DB_ERROR') {
+          setDbError('Menu builder tables are not set up. Please run the database migration.');
         }
       }
-    } catch (err) {
-      if (err instanceof Error && err.message === 'DB_ERROR') {
-        setDbError('Menu builder tables are not set up. Please run the database migration.');
-      }
-    }
-  };
+    },
+    [fetchMenus, selectedMenu, setSelectedMenu, setDbError],
+  );
   useEffect(() => {
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
@@ -108,7 +108,7 @@ export default function MenuBuilderClient({
     };
 
     performCheck();
-  }, [cachedDbCheck, cachedMenus, checkDatabaseTables, handleFetchMenusResult]);
+  }, [cachedDbCheck, cachedMenus, checkDatabaseTables, handleFetchMenusResult, setDbError]);
 
   const handleRetryFetch = () => {
     handleFetchMenusResult(false, true);

@@ -1,12 +1,13 @@
 'use client';
 
-import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Check, Edit, Eye, Trash2 } from 'lucide-react';
-import React from 'react';
 import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
 import { formatRecipeDate } from '../utils/formatDate';
+import { useUnifiedTableRowHandlers } from './UnifiedTableRow/hooks/useUnifiedTableRowHandlers';
+import { getItemName } from './UnifiedTableRow/utils/getItemName';
+import { getRowStyles } from './UnifiedTableRow/utils/getRowStyles';
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 
@@ -50,51 +51,28 @@ export function UnifiedTableRow({
   onEnterSelectionMode,
 }: UnifiedTableRowProps) {
   const isSelected = selectedItems.has(item.id);
-  const isDish = item.itemType === 'dish';
-  const dish = isDish ? (item as Dish) : null;
-  const recipe = !isDish ? (item as Recipe) : null;
 
-  const longPressHandlers = useLongPress({
-    onLongPress: () => {
-      if (!isSelectionMode) {
-        onEnterSelectionMode?.();
-        if (!isSelected) onSelectItem(item.id);
-      }
-    },
-    onCancel: onCancelLongPress,
-    delay: 500,
+  const { isDish, dish, recipe, longPressHandlers, handleRowClick } = useUnifiedTableRowHandlers({
+    item,
+    isSelectionMode,
+    isSelected,
+    onSelectItem,
+    onPreviewDish,
+    onPreviewRecipe,
+    onCancelLongPress,
+    onEnterSelectionMode,
   });
 
-  const handleRowClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('a')) {
-      return;
-    }
+  const { borderColor, bgColor, hoverColor, selectedColor } = getRowStyles(isDish);
 
-    if (isSelectionMode) {
-      e.preventDefault();
-      e.stopPropagation();
-      onSelectItem(item.id);
-    } else {
-      if (isDish && dish) {
-        onPreviewDish(dish);
-      } else if (recipe) {
-        onPreviewRecipe(recipe);
-      }
-    }
-  };
-
-  const borderColor = isDish ? 'border-[#29E7CD]/30' : 'border-[#3B82F6]/30';
-  const bgColor = isDish ? 'bg-[#29E7CD]/2' : 'bg-[#3B82F6]/2';
-  const hoverColor = isDish ? 'hover:bg-[#29E7CD]/5' : 'hover:bg-[#3B82F6]/5';
-  const selectedColor = isDish ? 'bg-[#29E7CD]/10' : 'bg-[#3B82F6]/10';
-
-  const itemName =
-    isDish && dish
-      ? capitalizeDishName(dish.dish_name)
-      : recipe
-        ? capitalizeRecipeName(recipe.recipe_name)
-        : '';
+  const itemName = getItemName({
+    item,
+    isDish,
+    dish,
+    recipe,
+    capitalizeDishName,
+    capitalizeRecipeName,
+  });
 
   return (
     <tr
