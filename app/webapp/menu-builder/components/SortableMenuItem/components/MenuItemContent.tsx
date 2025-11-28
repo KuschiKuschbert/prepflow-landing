@@ -1,15 +1,18 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
-import { ChefHat, Utensils } from 'lucide-react';
-import { MenuItem } from '../../../types';
 import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
+import { Icon } from '@/components/ui/Icon';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
+import { AlertCircle, AlertTriangle, ChefHat, Utensils } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { MenuItem } from '../../../types';
+import { useMenuItemStatistics } from '../hooks/useMenuItemStatistics';
 
 interface MenuItemContentProps {
   item: MenuItem;
+  menuId: string;
 }
 
 /**
@@ -19,7 +22,53 @@ interface MenuItemContentProps {
  * @param {MenuItemContentProps} props - Component props
  * @returns {JSX.Element} Menu item content
  */
-export function MenuItemContent({ item }: MenuItemContentProps) {
+export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
+  const prevItemRef = useRef<MenuItem>(item);
+  const renderCountRef = useRef(0);
+
+  // Log component render and item prop changes
+  useEffect(() => {
+    renderCountRef.current += 1;
+    const itemReferenceChanged = prevItemRef.current !== item;
+    const priceChanged = prevItemRef.current.actual_selling_price !== item.actual_selling_price;
+
+    logger.dev('[MenuItemContent] Component render', {
+      itemId: item.id,
+      itemName: item.dishes?.dish_name || item.recipes?.recipe_name,
+      renderCount: renderCountRef.current,
+      itemReferenceChanged,
+      priceChanged,
+      itemReference: item,
+      prevItemReference: prevItemRef.current,
+      referencesEqual: prevItemRef.current === item,
+      actual_selling_price: item.actual_selling_price,
+      actual_selling_price_type: typeof item.actual_selling_price,
+      prev_actual_selling_price: prevItemRef.current.actual_selling_price,
+      prev_actual_selling_price_type: typeof prevItemRef.current.actual_selling_price,
+      dishes_selling_price: item.dishes?.selling_price,
+      recommended_selling_price: item.recommended_selling_price,
+    });
+
+    if (itemReferenceChanged || priceChanged) {
+      logger.dev('[MenuItemContent] Item prop changed', {
+        itemId: item.id,
+        itemName: item.dishes?.dish_name || item.recipes?.recipe_name,
+        itemReferenceChanged,
+        priceChanged,
+        oldPrice: prevItemRef.current.actual_selling_price,
+        oldPriceType: typeof prevItemRef.current.actual_selling_price,
+        newPrice: item.actual_selling_price,
+        newPriceType: typeof item.actual_selling_price,
+        oldItemReference: prevItemRef.current,
+        newItemReference: item,
+      });
+    }
+
+    prevItemRef.current = item;
+  }, [item, menuId]);
+
+  // Load statistics for warning/critical icons
+  const { hasWarning, hasCritical } = useMenuItemStatistics(menuId, item);
   const isRecipe = !!item.recipe_id;
   const isDish = !!item.dish_id;
 
@@ -69,14 +118,32 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
                     Recommended: ${item.recommended_selling_price.toFixed(2)}
                   </div>
                 )}
-              <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
-                {item.actual_selling_price != null ? (
-                  <>${item.actual_selling_price.toFixed(2)}</>
-                ) : item.dishes?.selling_price != null ? (
-                  <>${item.dishes.selling_price.toFixed(2)}</>
-                ) : item.recommended_selling_price != null ? (
-                  <>${item.recommended_selling_price.toFixed(2)}</>
-                ) : null}
+              <div className="flex items-center gap-1.5">
+                <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
+                  {item.actual_selling_price != null ? (
+                    <>${item.actual_selling_price.toFixed(2)}</>
+                  ) : item.dishes?.selling_price != null ? (
+                    <>${item.dishes.selling_price.toFixed(2)}</>
+                  ) : item.recommended_selling_price != null ? (
+                    <>${item.recommended_selling_price.toFixed(2)}</>
+                  ) : null}
+                </div>
+                {hasCritical && (
+                  <Icon
+                    icon={AlertCircle}
+                    size="xs"
+                    className="text-red-400"
+                    aria-label="Critical: Profit margin or food cost needs immediate attention"
+                  />
+                )}
+                {!hasCritical && hasWarning && (
+                  <Icon
+                    icon={AlertTriangle}
+                    size="xs"
+                    className="text-yellow-400"
+                    aria-label="Warning: Profit margin or food cost may need adjustment"
+                  />
+                )}
               </div>
             </div>
             {/* Allergens and Dietary Info for Dish */}
@@ -115,12 +182,30 @@ export function MenuItemContent({ item }: MenuItemContentProps) {
                     Recommended: ${item.recommended_selling_price.toFixed(2)}
                   </div>
                 )}
-              <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
-                {item.actual_selling_price != null ? (
-                  <>${item.actual_selling_price.toFixed(2)}</>
-                ) : item.recommended_selling_price != null ? (
-                  <>${item.recommended_selling_price.toFixed(2)}</>
-                ) : null}
+              <div className="flex items-center gap-1.5">
+                <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
+                  {item.actual_selling_price != null ? (
+                    <>${item.actual_selling_price.toFixed(2)}</>
+                  ) : item.recommended_selling_price != null ? (
+                    <>${item.recommended_selling_price.toFixed(2)}</>
+                  ) : null}
+                </div>
+                {hasCritical && (
+                  <Icon
+                    icon={AlertCircle}
+                    size="xs"
+                    className="text-red-400"
+                    aria-label="Critical: Profit margin or food cost needs immediate attention"
+                  />
+                )}
+                {!hasCritical && hasWarning && (
+                  <Icon
+                    icon={AlertTriangle}
+                    size="xs"
+                    className="text-yellow-400"
+                    aria-label="Warning: Profit margin or food cost may need adjustment"
+                  />
+                )}
               </div>
               {/* Show "per serve" only when using recommended price (no actual price set) */}
               {item.actual_selling_price == null && item.recommended_selling_price != null && (
