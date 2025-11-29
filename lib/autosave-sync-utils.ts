@@ -28,7 +28,8 @@ export type EntityType =
   | 'temperature_logs'
   | 'cleaning_tasks'
   | 'cleaning_areas'
-  | 'par_levels';
+  | 'par_levels'
+  | 'equipment_maintenance';
 
 /**
  * Extract detailed error message from Supabase error

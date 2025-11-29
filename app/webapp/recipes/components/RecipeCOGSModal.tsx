@@ -149,89 +149,91 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-6xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
-        {/* Header */}
-        <div className="sticky top-0 border-b border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <h2 className="mb-2 text-2xl font-bold text-white">
-                {capitalizeRecipeName(recipe.recipe_name)} - COGS Breakdown
-              </h2>
-              {recipe.description && <p className="text-gray-400">{recipe.description}</p>}
-              <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
-                <span>
-                  Yield: {recipe.yield} {recipe.yield_unit}
-                </span>
-                <div className="flex items-center gap-2">
-                  <span>Portions:</span>
-                  <input
-                    type="number"
-                    value={dishPortions}
-                    onChange={e => setDishPortions(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="h-8 w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-                    min="1"
-                  />
+      <div className="max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
+          {/* Header */}
+          <div className="sticky top-0 border-b border-[#2a2a2a] bg-[#1f1f1f] p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h2 className="mb-2 text-2xl font-bold text-white">
+                  {capitalizeRecipeName(recipe.recipe_name)} - COGS Breakdown
+                </h2>
+                {recipe.description && <p className="text-gray-400">{recipe.description}</p>}
+                <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
+                  <span>
+                    Yield: {recipe.yield} {recipe.yield_unit}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span>Portions:</span>
+                    <input
+                      type="number"
+                      value={dishPortions}
+                      onChange={e => setDishPortions(Math.max(1, parseInt(e.target.value) || 1))}
+                      className="h-8 w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      min="1"
+                    />
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={onClose}
+                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                aria-label="Close modal"
+              >
+                <Icon icon={X} size="md" />
+              </button>
             </div>
-            <button
-              onClick={onClose}
-              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-              aria-label="Close modal"
-            >
-              <Icon icon={X} size="md" />
-            </button>
           </div>
-        </div>
 
-        {/* Content */}
-        <div className="p-6">
-          {loading ? (
-            <div className="py-12 text-center text-gray-400">Loading ingredients...</div>
-          ) : error ? (
-            <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-red-400">
-              {error}
-            </div>
-          ) : calculations.length === 0 ? (
-            <div className="py-12 text-center text-gray-400">
-              No ingredients found for this recipe.
-            </div>
-          ) : (
-            <>
-              {/* COGS Table */}
-              <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
-                <h3 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Breakdown</h3>
-                <COGSTable
-                  calculations={calculations}
-                  editingIngredient={editingIngredient}
-                  editQuantity={editQuantity}
-                  onEditIngredient={handleEditIngredient}
-                  onSaveEdit={handleSaveEdit}
-                  onCancelEdit={handleCancelEdit}
-                  onRemoveIngredient={handleRemoveIngredient}
-                  onEditQuantityChange={setEditQuantity}
-                  totalCOGS={totalCOGS}
-                  costPerPortion={costPerPortion}
-                  dishPortions={dishPortions}
-                />
+          {/* Content */}
+          <div className="p-6">
+            {loading ? (
+              <div className="py-12 text-center text-gray-400">Loading ingredients...</div>
+            ) : error ? (
+              <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-red-400">
+                {error}
               </div>
-
-              {/* Pricing Tool */}
-              {costPerPortion > 0 && (
-                <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
-                  <PricingTool
+            ) : calculations.length === 0 ? (
+              <div className="py-12 text-center text-gray-400">
+                No ingredients found for this recipe.
+              </div>
+            ) : (
+              <>
+                {/* COGS Table */}
+                <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+                  <h3 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Breakdown</h3>
+                  <COGSTable
+                    calculations={calculations}
+                    editingIngredient={editingIngredient}
+                    editQuantity={editQuantity}
+                    onEditIngredient={handleEditIngredient}
+                    onSaveEdit={handleSaveEdit}
+                    onCancelEdit={handleCancelEdit}
+                    onRemoveIngredient={handleRemoveIngredient}
+                    onEditQuantityChange={setEditQuantity}
+                    totalCOGS={totalCOGS}
                     costPerPortion={costPerPortion}
-                    targetGrossProfit={targetGrossProfit}
-                    pricingStrategy={pricingStrategy}
-                    pricingCalculation={pricingCalculation}
-                    allStrategyPrices={allStrategyPrices}
-                    onTargetGrossProfitChange={setTargetGrossProfit}
-                    onPricingStrategyChange={setPricingStrategy}
+                    dishPortions={dishPortions}
                   />
                 </div>
-              )}
-            </>
-          )}
+
+                {/* Pricing Tool */}
+                {costPerPortion > 0 && (
+                  <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+                    <PricingTool
+                      costPerPortion={costPerPortion}
+                      targetGrossProfit={targetGrossProfit}
+                      pricingStrategy={pricingStrategy}
+                      pricingCalculation={pricingCalculation}
+                      allStrategyPrices={allStrategyPrices}
+                      onTargetGrossProfitChange={setTargetGrossProfit}
+                      onPricingStrategyChange={setPricingStrategy}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

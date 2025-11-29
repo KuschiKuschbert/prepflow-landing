@@ -124,66 +124,68 @@ export default function DishPreviewModal({
       aria-modal="true"
       aria-labelledby="dish-modal-title"
     >
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
-        <DishPreviewModalHeader
-          dish={dish}
-          capitalizeDishName={capitalizeDishName}
-          onClose={onClose}
-          onEdit={onEdit}
-        />
+      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
+          <DishPreviewModalHeader
+            dish={dish}
+            capitalizeDishName={capitalizeDishName}
+            onClose={onClose}
+            onEdit={onEdit}
+          />
 
-        {/* Content */}
-        <div className="p-6">
-          {loading ? (
-            <div className="py-12 text-center text-gray-400">Loading...</div>
-          ) : (
-            <>
-              {costData && <DishPreviewModalCostInfo costData={costData} />}
+          {/* Content */}
+          <div className="p-6">
+            {loading ? (
+              <div className="py-12 text-center text-gray-400">Loading...</div>
+            ) : (
+              <>
+                {costData && <DishPreviewModalCostInfo costData={costData} />}
 
-              {dishDetails && <DishPreviewModalRecipesList dishDetails={dishDetails} />}
+                {dishDetails && <DishPreviewModalRecipesList dishDetails={dishDetails} />}
 
-              {/* COGS Breakdown */}
-              {calculations.length > 0 && (
-                <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
-                  <h3 className="mb-4 text-lg font-semibold text-white">COGS Breakdown</h3>
-                  {dishDetails ? (
-                    <COGSTableGrouped
-                      calculations={calculations}
-                      dishDetails={dishDetails}
-                      editingIngredient={editingIngredient}
-                      editQuantity={editQuantity}
-                      onEditIngredient={handleEditIngredient}
-                      onSaveEdit={handleSaveEdit}
-                      onCancelEdit={handleCancelEdit}
-                      onRemoveIngredient={handleRemoveIngredient}
-                      onEditQuantityChange={setEditQuantity}
-                      totalCOGS={totalCOGS}
-                      costPerPortion={costPerPortion}
-                      dishPortions={1}
-                    />
-                  ) : (
-                    <COGSTable
-                      calculations={calculations}
-                      editingIngredient={editingIngredient}
-                      editQuantity={editQuantity}
-                      onEditIngredient={handleEditIngredient}
-                      onSaveEdit={handleSaveEdit}
-                      onCancelEdit={handleCancelEdit}
-                      onRemoveIngredient={handleRemoveIngredient}
-                      onEditQuantityChange={setEditQuantity}
-                      totalCOGS={totalCOGS}
-                      costPerPortion={costPerPortion}
-                      dishPortions={1}
-                    />
-                  )}
-                </div>
-              )}
+                {/* COGS Breakdown */}
+                {calculations.length > 0 && (
+                  <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+                    <h3 className="mb-4 text-lg font-semibold text-white">COGS Breakdown</h3>
+                    {dishDetails ? (
+                      <COGSTableGrouped
+                        calculations={calculations}
+                        dishDetails={dishDetails}
+                        editingIngredient={editingIngredient}
+                        editQuantity={editQuantity}
+                        onEditIngredient={handleEditIngredient}
+                        onSaveEdit={handleSaveEdit}
+                        onCancelEdit={handleCancelEdit}
+                        onRemoveIngredient={handleRemoveIngredient}
+                        onEditQuantityChange={setEditQuantity}
+                        totalCOGS={totalCOGS}
+                        costPerPortion={costPerPortion}
+                        dishPortions={1}
+                      />
+                    ) : (
+                      <COGSTable
+                        calculations={calculations}
+                        editingIngredient={editingIngredient}
+                        editQuantity={editQuantity}
+                        onEditIngredient={handleEditIngredient}
+                        onSaveEdit={handleSaveEdit}
+                        onCancelEdit={handleCancelEdit}
+                        onRemoveIngredient={handleRemoveIngredient}
+                        onEditQuantityChange={setEditQuantity}
+                        totalCOGS={totalCOGS}
+                        costPerPortion={costPerPortion}
+                        dishPortions={1}
+                      />
+                    )}
+                  </div>
+                )}
 
-              {dishDetails && <DishPreviewModalIngredientsList dishDetails={dishDetails} />}
+                {dishDetails && <DishPreviewModalIngredientsList dishDetails={dishDetails} />}
 
-              <DishPreviewModalActions onEdit={onEdit} onDelete={onDelete} />
-            </>
-          )}
+                <DishPreviewModalActions onEdit={onEdit} onDelete={onDelete} />
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

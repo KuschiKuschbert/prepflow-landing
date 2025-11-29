@@ -116,7 +116,7 @@ export default function KitchenOperations() {
       description: 'Dishes available on active menus',
       icon: UtensilsCrossed,
       color: '#29E7CD',
-      href: '/webapp/menu-builder',
+      href: '/webapp/recipes#menu-builder',
       status: 'good',
     },
     {

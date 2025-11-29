@@ -203,92 +203,97 @@ export default function CSVImportModal({
 
   return (
     <div className="bg-opacity-50 fixed inset-0 z-[70] flex items-center justify-center bg-black p-4 backdrop-blur-sm">
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-[#1f1f1f] shadow-2xl">
-        {/* Header */}
-        <div className="desktop:p-6 border-b border-[#2a2a2a] p-4">
-          <div className="flex items-center justify-between">
-            <h2 className="desktop:text-2xl text-xl font-bold text-white">
-              📁 Import Ingredients from CSV
-            </h2>
-            <button
-              onClick={handleClose}
-              className="rounded-full bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white"
-            >
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="desktop:space-y-6 desktop:p-6 space-y-4 p-4">
-          {/* File Upload */}
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Upload CSV File</label>
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            />
-            <p className="mt-1 text-xs text-gray-400">
-              Supported columns: name, brand, cost, unit, supplier, code, location, pack_size
-            </p>
-          </div>
-
-          {/* Error Display */}
-          {error && (
-            <div className="rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
-              {error}
+      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
+          {/* Header */}
+          <div className="desktop:p-6 border-b border-[#2a2a2a] p-4">
+            <div className="flex items-center justify-between">
+              <h2 className="desktop:text-2xl text-xl font-bold text-white">
+                📁 Import Ingredients from CSV
+              </h2>
+              <button
+                onClick={handleClose}
+                className="rounded-full bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white"
+              >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
             </div>
-          )}
+          </div>
 
-          {/* Preview */}
-          {parsedIngredients.length > 0 && (
-            <>
-              <CSVImportPreview
-                parsedIngredients={parsedIngredients}
-                selectedIngredients={selectedIngredients}
-                onSelectIngredient={handleSelectIngredient}
-                onSelectAll={handleSelectAll}
-                getDisplayCost={getDisplayCost}
+          {/* Content */}
+          <div className="desktop:space-y-6 desktop:p-6 space-y-4 p-4">
+            {/* File Upload */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-300">
+                Upload CSV File
+              </label>
+              <input
+                type="file"
+                accept=".csv"
+                onChange={handleFileUpload}
+                className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
               />
-
-              <div className="mt-4 flex justify-end space-x-3">
-                <button
-                  onClick={handleClose}
-                  className="px-4 py-2 text-gray-400 transition-colors hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleImport}
-                  disabled={loading || selectedIngredients.size === 0}
-                  className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {loading ? 'Importing...' : `Import Selected (${selectedIngredients.size})`}
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* Instructions */}
-          <div className="rounded-lg border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-4">
-            <h4 className="mb-2 text-sm font-semibold text-white">📋 CSV Format Instructions</h4>
-            <div className="space-y-1 text-xs text-gray-400">
-              <p>• First row should contain column headers</p>
-              <p>• Required columns: name (or ingredient), cost (or price), unit</p>
-              <p>
-                • Optional columns: brand, supplier, code (or sku), location (or storage), pack_size
+              <p className="mt-1 text-xs text-gray-400">
+                Supported columns: name, brand, cost, unit, supplier, code, location, pack_size
               </p>
-              <p>• Values will be automatically formatted and capitalized</p>
-              <p>• Empty rows will be skipped</p>
+            </div>
+
+            {/* Error Display */}
+            {error && (
+              <div className="rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
+                {error}
+              </div>
+            )}
+
+            {/* Preview */}
+            {parsedIngredients.length > 0 && (
+              <>
+                <CSVImportPreview
+                  parsedIngredients={parsedIngredients}
+                  selectedIngredients={selectedIngredients}
+                  onSelectIngredient={handleSelectIngredient}
+                  onSelectAll={handleSelectAll}
+                  getDisplayCost={getDisplayCost}
+                />
+
+                <div className="mt-4 flex justify-end space-x-3">
+                  <button
+                    onClick={handleClose}
+                    className="px-4 py-2 text-gray-400 transition-colors hover:text-white"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleImport}
+                    disabled={loading || selectedIngredients.size === 0}
+                    className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {loading ? 'Importing...' : `Import Selected (${selectedIngredients.size})`}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Instructions */}
+            <div className="rounded-lg border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-4">
+              <h4 className="mb-2 text-sm font-semibold text-white">📋 CSV Format Instructions</h4>
+              <div className="space-y-1 text-xs text-gray-400">
+                <p>• First row should contain column headers</p>
+                <p>• Required columns: name (or ingredient), cost (or price), unit</p>
+                <p>
+                  • Optional columns: brand, supplier, code (or sku), location (or storage),
+                  pack_size
+                </p>
+                <p>• Values will be automatically formatted and capitalized</p>
+                <p>• Empty rows will be skipped</p>
+              </div>
             </div>
           </div>
         </div>

@@ -2,13 +2,10 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import { memo } from 'react';
-import { useMenuDragDrop } from '../hooks/useMenuDragDrop';
 import { Menu } from '../types';
 import CategoryManager from './CategoryManager';
 import DishPalette from './DishPalette';
-import { DragOverlayContent } from './drag/DragOverlayContent';
 import { useCategoryOperations } from './hooks/useCategoryOperations';
 import { useMenuData } from './hooks/useMenuData';
 import { useMenuEditorUI } from './hooks/useMenuEditorUI';
@@ -16,7 +13,6 @@ import { useMenuItemOperations } from './hooks/useMenuItemOperations';
 import { MenuCategoriesList } from './MenuCategoriesList';
 import { LockedMenuView } from './MenuEditor/components/LockedMenuView';
 import { MenuEditorModals } from './MenuEditor/components/MenuEditorModals';
-import { useDragDropSetup } from './MenuEditor/hooks/useDragDropSetup';
 import { useMenuLockManagement } from './MenuEditor/hooks/useMenuLockManagement';
 import { usePriceRecalculation } from './MenuEditor/hooks/usePriceRecalculation';
 import { useRenderTracking } from './MenuEditor/hooks/useRenderTracking';
@@ -128,21 +124,6 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
     handleCategorySelect,
     menuItems,
   });
-  const { activeId, initialOffset, initialCursorPosition, handleDragStart, handleDragEnd } =
-    useMenuDragDrop({
-      menuId: menu.id,
-      menuItems,
-      setMenuItems,
-      onStatisticsUpdate: refreshStatistics,
-      onMenuDataReload: loadMenuData,
-      dishes,
-      recipes,
-      notifications: { showError, showSuccess },
-    });
-  const { sensors, centerOnCursor } = useDragDropSetup({
-    initialOffset,
-    initialCursorPosition,
-  });
 
   const {
     menuLockStatus,
@@ -179,49 +160,40 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
     );
   }
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div>
-        <MenuLockButton lockLoading={lockLoading} onLock={handleLockMenu} />
-        <div className="large-desktop:grid-cols-4 grid grid-cols-1 gap-6">
-          <div className="large-desktop:col-span-1">
-            <DishPalette dishes={dishes} recipes={recipes} onItemTap={handleItemTap} />
-          </div>
-          <div className="large-desktop:col-span-3">
-            <MenuStatisticsPanel statistics={statistics} />
-            <CategoryManager
-              categories={categories}
-              newCategory={newCategory}
-              onNewCategoryChange={setNewCategory}
-              onAddCategory={handleAddCategory}
-              onRemoveCategory={handleRemoveCategory}
-            />
-            <MenuCategoriesList
-              categories={categories}
-              menuItems={menuItems}
-              menuId={menu.id}
-              onRemoveItem={handleRemoveItem}
-              onRenameCategory={handleRenameCategory}
-              onMoveUp={handleMoveUp}
-              onMoveDown={handleMoveDown}
-              onMoveToCategory={handleMoveToCategory}
-              onUpdateActualPrice={handleUpdateActualPrice}
-              onShowStatistics={item => setSelectedItemForStats(item)}
-            />
-          </div>
+    <div>
+      <MenuLockButton lockLoading={lockLoading} onLock={handleLockMenu} />
+      <div className="large-desktop:grid-cols-4 grid grid-cols-1 gap-6">
+        {/* Desktop: DishPalette in sidebar */}
+        <div className="large-desktop:col-span-1 large-desktop:order-1 order-4">
+          <DishPalette dishes={dishes} recipes={recipes} onItemTap={handleItemTap} />
+        </div>
+        {/* Main content area */}
+        <div className="large-desktop:col-span-3 large-desktop:order-2 order-1 space-y-6">
+          {/* Statistics - only show if there are menu items */}
+          {menuItems.length > 0 && <MenuStatisticsPanel statistics={statistics} />}
+          {/* CategoryManager - create categories first */}
+          <CategoryManager
+            categories={categories}
+            newCategory={newCategory}
+            onNewCategoryChange={setNewCategory}
+            onAddCategory={handleAddCategory}
+            onRemoveCategory={handleRemoveCategory}
+          />
+          {/* MenuCategoriesList - view categories and assigned items */}
+          <MenuCategoriesList
+            categories={categories}
+            menuItems={menuItems}
+            menuId={menu.id}
+            onRemoveItem={handleRemoveItem}
+            onRenameCategory={handleRenameCategory}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+            onMoveToCategory={handleMoveToCategory}
+            onUpdateActualPrice={handleUpdateActualPrice}
+            onShowStatistics={item => setSelectedItemForStats(item)}
+          />
         </div>
       </div>
-      <DragOverlay dropAnimation={null} modifiers={[centerOnCursor]}>
-        {activeId &&
-          (() => {
-            const menuItem = menuItems.find(item => item.id === activeId);
-            return menuItem ? <DragOverlayContent menuItem={menuItem} /> : null;
-          })()}
-      </DragOverlay>
       <MenuEditorModals
         showCategoryModal={showCategoryModal}
         categories={categories}
@@ -243,7 +215,7 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
         handleDismissChanges={handleDismissChanges}
         handleCloseUnlockDialog={handleCloseUnlockDialog}
       />
-    </DndContext>
+    </div>
   );
 }
 

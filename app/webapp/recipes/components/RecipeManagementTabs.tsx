@@ -1,10 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Package, UtensilsCrossed } from 'lucide-react';
+import { FileText, Package, UtensilsCrossed } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
-export type RecipeManagementTab = 'dishes' | 'ingredients';
+export type RecipeManagementTab = 'dishes' | 'ingredients' | 'menu-builder';
 
 interface RecipeManagementTabsProps {
   activeTab: RecipeManagementTab;
@@ -30,7 +30,7 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
       <div className="flex flex-wrap gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
         <button
           onClick={() => handleTabChange('ingredients')}
-          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
             activeTab === 'ingredients'
               ? 'bg-[#29E7CD] text-black shadow-lg'
               : 'text-gray-400 hover:text-white'
@@ -38,12 +38,12 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
           aria-pressed={activeTab === 'ingredients'}
           aria-label="View ingredients"
         >
-          <Icon icon={Package} size="sm" />
-          <span>Ingredients</span>
+          <Icon icon={Package} size="sm" className="flex-shrink-0" />
+          <span className="truncate">Ingredients</span>
         </button>
         <button
           onClick={() => handleTabChange('dishes')}
-          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
             activeTab === 'dishes'
               ? 'bg-[#29E7CD] text-black shadow-lg'
               : 'text-gray-400 hover:text-white'
@@ -51,8 +51,21 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
           aria-pressed={activeTab === 'dishes'}
           aria-label="View dishes and recipes"
         >
-          <Icon icon={UtensilsCrossed} size="sm" />
-          <span>Dishes & Recipes</span>
+          <Icon icon={UtensilsCrossed} size="sm" className="flex-shrink-0" />
+          <span className="truncate">Dishes & Recipes</span>
+        </button>
+        <button
+          onClick={() => handleTabChange('menu-builder')}
+          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+            activeTab === 'menu-builder'
+              ? 'bg-[#29E7CD] text-black shadow-lg'
+              : 'text-gray-400 hover:text-white'
+          }`}
+          aria-pressed={activeTab === 'menu-builder'}
+          aria-label="View menu builder"
+        >
+          <Icon icon={FileText} size="sm" className="flex-shrink-0" />
+          <span className="truncate">Menu Builder</span>
         </button>
       </div>
     </div>

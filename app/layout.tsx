@@ -115,14 +115,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
 
         {/* Resource Preloading - Critical for Performance */}
-        {/* Preload hero dashboard screenshot (above-the-fold, critical for LCP) */}
-        <link
-          rel="preload"
-          href="/images/dashboard-screenshot.png"
-          as="image"
-          type="image/png"
-          fetchPriority="high"
-        />
+        {/* Note: dashboard-screenshot.png preload removed - Image component with priority prop handles preloading automatically */}
+        {/* Preloading here caused warnings on non-landing pages where image isn't used */}
 
         {/* DNS Prefetch for external domains */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />

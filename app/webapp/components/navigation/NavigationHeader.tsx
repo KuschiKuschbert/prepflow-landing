@@ -3,22 +3,20 @@
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import AutosaveGlobalIndicator from '../AutosaveGlobalIndicator';
 import Link from 'next/link';
-import { useRef, useEffect, useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BrandMark } from '@/components/BrandMark';
 import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { useSession } from 'next-auth/react';
-import { Search, Menu } from 'lucide-react';
+import { Search, Settings2, User } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { prefetchRoute } from '@/lib/cache/prefetch-config';
 
 interface NavigationHeaderProps {
   className?: string;
-  menuButtonRef: React.RefObject<HTMLButtonElement | null>;
-  onMenuClick: () => void;
-  isSidebarOpen: boolean;
   onSearchClick: () => void;
   isSearchOpen: boolean;
   pathname: string;
@@ -32,6 +30,10 @@ interface NavigationHeaderProps {
   handleLogoMouseUp: () => void;
   handleLogoMouseLeave: () => void;
   shouldPreventNavigation: React.RefObject<boolean | null>;
+  // New prop for Settings Drawer (Mobile)
+  onUserClick: () => void;
+  // Ref for user button (for bubble animation positioning)
+  userButtonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -45,29 +47,10 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
  *
  * @component
  * @param {Object} props - Component props
- * @param {string} [props.className] - Additional CSS classes
- * @param {RefObject} props.menuButtonRef - Ref for menu button (legacy, not used)
- * @param {Function} props.onMenuClick - Menu click handler (legacy, no-op)
- * @param {boolean} props.isSidebarOpen - Whether sidebar is open (legacy, always false)
- * @param {Function} props.onSearchClick - Callback when search button is clicked
- * @param {boolean} props.isSearchOpen - Whether search modal is open
- * @param {string} props.pathname - Current pathname
- * @param {Array} props.navigationItems - Array of navigation items
- * @param {Function} props.isActive - Function to check if a href is active
- * @param {Function} props.handleLogoClick - Logo click handler
- * @param {Function} props.handleLogoTouchStart - Logo touch start handler
- * @param {Function} props.handleLogoTouchEnd - Logo touch end handler
- * @param {Function} props.handleLogoMouseDown - Logo mouse down handler
- * @param {Function} props.handleLogoMouseUp - Logo mouse up handler
- * @param {Function} props.handleLogoMouseLeave - Logo mouse leave handler
- * @param {RefObject} props.shouldPreventNavigation - Ref to prevent navigation (for easter eggs)
  * @returns {JSX.Element} Navigation header
  */
 export function NavigationHeader({
   className = '',
-  menuButtonRef,
-  onMenuClick,
-  isSidebarOpen,
   onSearchClick,
   isSearchOpen,
   pathname,
@@ -80,10 +63,14 @@ export function NavigationHeader({
   handleLogoMouseUp,
   handleLogoMouseLeave,
   shouldPreventNavigation,
+  onUserClick,
+  userButtonRef,
 }: NavigationHeaderProps) {
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
   const userName = session?.user?.name || userEmail?.split('@')[0];
+  const [isDesktopUserMenuOpen, setIsDesktopUserMenuOpen] = useState(false);
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
 
   // Auto-hide header on mobile/tablet when scrolling down (not desktop)
   // Uses custom breakpoint: desktop = 1025px+ (from tailwind.config.ts)
@@ -107,6 +94,37 @@ export function NavigationHeader({
       setIsVisible(true);
     }
   }, [direction, isAtTop, isDesktop]);
+
+  // Close desktop user menu when clicking outside
+  useEffect(() => {
+    if (!isDesktopUserMenuOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        desktopMenuRef.current &&
+        !desktopMenuRef.current.contains(event.target as Node) &&
+        !(event.target as Element).closest('button[aria-label="Open user settings"]')
+      ) {
+        setIsDesktopUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isDesktopUserMenuOpen]);
+
+  const handleUserAvatarClick = () => {
+    if (isDesktop) {
+      setIsDesktopUserMenuOpen(!isDesktopUserMenuOpen);
+    } else {
+      onUserClick(); // Trigger Mobile Drawer
+    }
+  };
 
   return (
     <header
@@ -134,16 +152,6 @@ export function NavigationHeader({
     >
       <div className="desktop:px-4 flex items-center justify-between px-3 py-2">
         <div className="desktop:space-x-3 flex items-center space-x-2">
-          {/* Burger menu button (mobile only) */}
-          <button
-            ref={menuButtonRef}
-            onClick={onMenuClick}
-            className="desktop:hidden flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
-            aria-label="Open account menu"
-            aria-expanded={isSidebarOpen}
-          >
-            <Icon icon={Menu} size="md" className="text-gray-400" aria-hidden={true} />
-          </button>
           <div className="flex items-center space-x-2">
             <Link
               href="/webapp"
@@ -196,7 +204,7 @@ export function NavigationHeader({
             </>
           )}
         </div>
-        <div className="desktop:space-x-3 flex items-center space-x-2">
+        <div className="desktop:space-x-3 relative flex items-center space-x-2">
           <button
             onClick={onSearchClick}
             className={cn(
@@ -219,19 +227,108 @@ export function NavigationHeader({
             <Icon icon={Search} size="md" className="text-gray-400" aria-hidden={true} />
           </button>
           <NavbarStats />
-          <div className="desktop:flex hidden items-center space-x-2">
-            {userName && (
-              <span
-                className={`${LANDING_TYPOGRAPHY.xs} text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]`}
-                title={userEmail || 'Logged in user'}
-                aria-label={`Logged in as ${userName}`}
+
+          {/* User Avatar Trigger (Handles both Mobile Drawer & Desktop Popover) */}
+          {/* Always show on mobile, only show on desktop if userName exists */}
+          {(userName || !isDesktop) && (
+            <>
+              <button
+                ref={userButtonRef}
+                onClick={handleUserAvatarClick}
+                className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xs font-bold text-black shadow-md transition-transform hover:scale-105 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+                aria-label="Open user settings"
+                aria-expanded={isDesktopUserMenuOpen}
               >
-                {userName}
-              </span>
-            )}
-            <LanguageSwitcher />
-            <LogoutButton />
-          </div>
+                {userName ? (
+                  userName[0].toUpperCase()
+                ) : (
+                  <Icon icon={User} size="sm" className="text-black" aria-hidden={true} />
+                )}
+              </button>
+
+              {/* Desktop "Google Drive Style" Floating Bubble */}
+              {isDesktop && isDesktopUserMenuOpen && (
+                <div
+                  ref={desktopMenuRef}
+                  className="animate-scale-in absolute top-full right-0 z-50 mt-3 w-[350px] origin-top-right rounded-[28px] border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
+                >
+                  {/* Header: Centered Profile */}
+                  <div className="flex flex-col items-center space-y-2 pb-4">
+                    <div className="relative">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xl font-bold text-black shadow-inner">
+                        {userName ? (
+                          userName[0].toUpperCase()
+                        ) : (
+                          <Icon icon={User} size="sm" className="text-black" aria-hidden={true} />
+                        )}
+                      </div>
+                      {/* Camera icon overlay (optional) */}
+                      <div className="absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border border-[#1f1f1f] bg-[#2a2a2a] text-white">
+                        <div className="h-2 w-2 rounded-full bg-[#29E7CD]" />
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-medium text-white">
+                        Hi, {userName || 'User'}!
+                      </div>
+                      <div className="text-sm text-gray-400">{userEmail}</div>
+                    </div>
+
+                    <Link
+                      href="/webapp/settings"
+                      onClick={() => setIsDesktopUserMenuOpen(false)}
+                      className="mt-2 inline-flex items-center justify-center rounded-full border border-gray-600 px-6 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#2a2a2a]"
+                    >
+                      Manage your Account
+                    </Link>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="my-2 border-t border-[#2a2a2a]" />
+
+                  {/* List Options */}
+                  <div className="space-y-1">
+                    <Link
+                      href="/webapp/settings"
+                      onClick={() => setIsDesktopUserMenuOpen(false)}
+                      onMouseEnter={() => prefetchRoute('/webapp/settings')}
+                      className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                    >
+                      <Icon icon={Settings2} size="sm" className="text-gray-400" />
+                      <span>Settings</span>
+                    </Link>
+
+                    <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white">
+                      <div className="flex items-center space-x-3">
+                        <span className="flex h-4 w-4 items-center justify-center">🌐</span>
+                        <span>Language</span>
+                      </div>
+                      <div className="ml-auto">
+                        <LanguageSwitcher />
+                      </div>
+                    </div>
+
+                    <div className="flex w-full items-center justify-center pt-2">
+                      <div className="w-full">
+                        <LogoutButton />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="mt-4 flex justify-center text-[10px] text-gray-500">
+                    <Link href="/privacy" className="mx-2 hover:text-gray-300">
+                      Privacy Policy
+                    </Link>
+                    <span>•</span>
+                    <Link href="/terms" className="mx-2 hover:text-gray-300">
+                      Terms of Service
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </header>

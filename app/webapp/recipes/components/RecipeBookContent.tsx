@@ -12,6 +12,12 @@ const DishesClient = dynamic(() => import('./DishesClient'), {
   loading: () => <PageSkeleton />,
 });
 
+// Lazy load MenuBuilderTab to reduce initial bundle size (uses dnd-kit, heavy components)
+const MenuBuilderTab = dynamic(() => import('./MenuBuilderTab'), {
+  ssr: false,
+  loading: () => <PageSkeleton />,
+});
+
 export function RecipeBookContent() {
   // Initialize with consistent default to prevent hydration mismatch
   // Use 'ingredients' as default, will be updated from URL hash in useEffect on client
@@ -26,7 +32,7 @@ export function RecipeBookContent() {
       if (typeof window === 'undefined') return;
 
       const hash = window.location.hash.slice(1);
-      if (hash === 'dishes' || hash === 'ingredients') {
+      if (hash === 'dishes' || hash === 'ingredients' || hash === 'menu-builder') {
         setActiveTab(hash as RecipeManagementTab);
       } else if (hash === 'recipes' || hash === 'calculator') {
         // Redirect old recipes/calculator hash to dishes tab
@@ -57,6 +63,7 @@ export function RecipeBookContent() {
         <>
           {activeTab === 'ingredients' && <IngredientsTab />}
           {activeTab === 'dishes' && <DishesClient />}
+          {activeTab === 'menu-builder' && <MenuBuilderTab />}
         </>
       )}
     </div>

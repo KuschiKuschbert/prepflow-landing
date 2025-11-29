@@ -105,51 +105,53 @@ export function AreaTasksModal({
       aria-modal="true"
       aria-labelledby="area-tasks-modal-title"
     >
-      <div
-        className="tablet:max-w-lg desktop:max-w-2xl tablet:mx-0 relative mx-2 mb-8 flex w-full max-w-full flex-col rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl"
-        onClick={e => e.stopPropagation()}
-      >
-        <AreaTasksModalHeader
-          area={area}
-          onClose={onClose}
-          onCreateTask={() => onCreateTask(area.id)}
-        />
+      <div className="tablet:max-w-lg desktop:max-w-2xl tablet:mx-0 relative mx-2 mb-8 w-full max-w-full rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+        <div
+          className="flex w-full flex-col rounded-3xl bg-[#1f1f1f]/95"
+          onClick={e => e.stopPropagation()}
+        >
+          <AreaTasksModalHeader
+            area={area}
+            onClose={onClose}
+            onCreateTask={() => onCreateTask(area.id)}
+          />
 
-        <div className="tablet:p-5 tablet:max-h-[65vh] desktop:max-h-[70vh] max-h-[60vh] flex-1 overflow-y-auto p-4">
-          {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <div className="text-gray-400">Loading tasks...</div>
-            </div>
-          ) : tasks.length === 0 ? (
-            <EmptyTasksState onCreateTask={() => onCreateTask(area.id)} />
-          ) : (
-            <div className="space-y-2">
-              {tasks.map(task => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  isEditing={editingTaskId === task.id}
-                  editFormData={editFormData}
-                  onEditFormChange={setEditFormData}
-                  onSave={() => handleSaveEdit(task.id)}
-                  onCancel={cancelEdit}
-                  onEdit={() => startEdit(task)}
-                  onDelete={() => handleDelete(task.id, task.task_name || 'task')}
-                  formatFrequencyType={formatFrequencyType}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+          <div className="tablet:p-5 tablet:max-h-[65vh] desktop:max-h-[70vh] max-h-[60vh] flex-1 overflow-y-auto p-4">
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-gray-400">Loading tasks...</div>
+              </div>
+            ) : tasks.length === 0 ? (
+              <EmptyTasksState onCreateTask={() => onCreateTask(area.id)} />
+            ) : (
+              <div className="space-y-2">
+                {tasks.map(task => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    isEditing={editingTaskId === task.id}
+                    editFormData={editFormData}
+                    onEditFormChange={setEditFormData}
+                    onSave={() => handleSaveEdit(task.id)}
+                    onCancel={cancelEdit}
+                    onEdit={() => startEdit(task)}
+                    onDelete={() => handleDelete(task.id, task.task_name || 'task')}
+                    formatFrequencyType={formatFrequencyType}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="tablet:px-5 tablet:py-3 border-t border-[#2a2a2a] bg-[#1f1f1f] px-4 py-2.5">
-          <div className="tablet:text-sm flex items-center justify-between text-xs text-gray-500">
-            <span>
-              {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
-            </span>
-            <span className="desktop:inline hidden">
-              Press <kbd className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">Esc</kbd> to close
-            </span>
+          <div className="tablet:px-5 tablet:py-3 border-t border-[#2a2a2a] bg-[#1f1f1f] px-4 py-2.5">
+            <div className="tablet:text-sm flex items-center justify-between text-xs text-gray-500">
+              <span>
+                {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
+              </span>
+              <span className="desktop:inline hidden">
+                Press <kbd className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">Esc</kbd> to close
+              </span>
+            </div>
           </div>
         </div>
       </div>

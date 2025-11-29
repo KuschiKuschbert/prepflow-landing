@@ -73,78 +73,80 @@ export function QuantityInputModal({
       />
 
       {/* Dialog */}
-      <div
-        className="desktop:p-6 relative z-[65] w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-        onKeyDown={handleKeyDown}
-      >
-        {/* Icon */}
-        <div className="mb-4 flex justify-center">
-          <Icon icon={Package} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
-        </div>
-
-        {/* Title */}
-        <h2
-          id="dialog-title"
-          className="desktop:text-xl mb-2 text-center text-lg font-bold text-white"
+      <div className="relative z-[65] w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div
+          className="desktop:p-6 rounded-3xl bg-[#1f1f1f]/95 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+          onKeyDown={handleKeyDown}
         >
-          Add Ingredient
-        </h2>
-
-        {/* Ingredient Name */}
-        <p id="dialog-description" className="mb-4 text-center text-sm text-gray-300">
-          {ingredientName}
-        </p>
-
-        {/* Quantity Input */}
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-gray-300">Quantity</label>
-          <div className="flex items-center gap-3">
-            <input
-              ref={inputRef}
-              type="number"
-              step="0.01"
-              min="0.01"
-              value={quantity}
-              onChange={e => {
-                setQuantity(e.target.value);
-                setError(null); // Clear error on input change
-              }}
-              placeholder="0.00"
-              className={`flex-1 rounded-2xl border ${
-                error ? 'border-red-500' : 'border-[#2a2a2a]'
-              } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none`}
-              aria-invalid={error ? 'true' : 'false'}
-              aria-describedby={error ? 'error-message' : undefined}
-            />
-            <div className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 text-sm font-medium text-gray-300">
-              {unit}
-            </div>
+          {/* Icon */}
+          <div className="mb-4 flex justify-center">
+            <Icon icon={Package} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
           </div>
-          {error && (
-            <p id="error-message" className="mt-2 text-sm text-red-400" role="alert">
-              {error}
-            </p>
-          )}
-        </div>
 
-        {/* Actions */}
-        <div className="flex gap-3">
-          <button
-            onClick={onCancel}
-            className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60"
+          {/* Title */}
+          <h2
+            id="dialog-title"
+            className="desktop:text-xl mb-2 text-center text-lg font-bold text-white"
           >
-            Cancel
-          </button>
-          <button
-            onClick={handleConfirm}
-            className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
-          >
-            Add
-          </button>
+            Add Ingredient
+          </h2>
+
+          {/* Ingredient Name */}
+          <p id="dialog-description" className="mb-4 text-center text-sm text-gray-300">
+            {ingredientName}
+          </p>
+
+          {/* Quantity Input */}
+          <div className="mb-4">
+            <label className="mb-2 block text-sm font-medium text-gray-300">Quantity</label>
+            <div className="flex items-center gap-3">
+              <input
+                ref={inputRef}
+                type="number"
+                step="0.01"
+                min="0.01"
+                value={quantity}
+                onChange={e => {
+                  setQuantity(e.target.value);
+                  setError(null); // Clear error on input change
+                }}
+                placeholder="0.00"
+                className={`flex-1 rounded-2xl border ${
+                  error ? 'border-red-500' : 'border-[#2a2a2a]'
+                } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none`}
+                aria-invalid={error ? 'true' : 'false'}
+                aria-describedby={error ? 'error-message' : undefined}
+              />
+              <div className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 text-sm font-medium text-gray-300">
+                {unit}
+              </div>
+            </div>
+            {error && (
+              <p id="error-message" className="mt-2 text-sm text-red-400" role="alert">
+                {error}
+              </p>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            <button
+              onClick={onCancel}
+              className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirm}
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
+            >
+              Add
+            </button>
+          </div>
         </div>
       </div>
     </div>

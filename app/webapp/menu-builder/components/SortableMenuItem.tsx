@@ -1,8 +1,6 @@
 'use client';
 
 import { logger } from '@/lib/logger';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { useRef } from 'react';
 import { MenuItem } from '../types';
 import { MenuItemActions } from './SortableMenuItem/components/MenuItemActions';
@@ -46,14 +44,6 @@ export function SortableMenuItem({
   onClickItem,
   onMouseMove,
 }: SortableMenuItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.id,
-    data: {
-      type: 'menu-item',
-      item,
-    },
-  });
-
   const itemRef = useRef<HTMLDivElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -88,13 +78,6 @@ export function SortableMenuItem({
     reorderButtonRef,
   });
 
-  // Don't apply transform when dragging - let DragOverlay handle the visual representation
-  const style = {
-    transform: isDragging ? 'none' : CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0 : 1,
-  };
-
   const handleClick = (e: React.MouseEvent) => {
     // Don't trigger if clicking on buttons or dropdowns
     if (
@@ -122,12 +105,7 @@ export function SortableMenuItem({
       <div className="absolute top-0 right-4 left-4 z-10 h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent" />
 
       <div
-        ref={node => {
-          setNodeRef(node);
-          itemRef.current = node;
-        }}
-        data-sortable-id={item.id}
-        style={style}
+        ref={itemRef}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}

@@ -1,14 +1,14 @@
 'use client';
 
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { usePathname } from 'next/navigation';
-import { LogoutButton } from '../LogoutButton';
 import { CategorySection } from './CategorySection';
+import { ExpandableCategorySection } from './ExpandableCategorySection';
+import { NavItem } from './NavItem';
 import { useNavigationItems } from './nav-items';
 import { NewButton } from './NewButton';
 import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Persistent sidebar component for desktop navigation.
@@ -23,28 +23,53 @@ export default function PersistentSidebar() {
   const { workflow } = useWorkflowPreference();
   const { trackNavigation } = useNavigationTracking();
   const [mounted, setMounted] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+
+  const allItems = useNavigationItems(workflow);
+
+  // Group items by category
+  const groupedItems = useMemo(
+    () =>
+      allItems.reduce(
+        (acc, item) => {
+          const category = item.category || 'other';
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(item);
+          return acc;
+        },
+        {} as Record<string, typeof allItems>,
+      ),
+    [allItems],
+  );
+
+  const isActive = useCallback(
+    (href: string) => {
+      if (href === '/webapp') return pathname === '/webapp';
+      return pathname.startsWith(href);
+    },
+    [pathname],
+  );
 
   // Prevent hydration mismatch by only rendering navigation after mount
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const allItems = useNavigationItems(workflow);
+  // Auto-expand category if it contains active item
+  useEffect(() => {
+    if (!mounted) return;
+    const activeCategory = Object.entries(groupedItems).find(([category, items]) => {
+      if (category === 'primary') return false;
+      return items.some(item => isActive(item.href));
+    })?.[0];
+    if (activeCategory) {
+      setExpandedCategory(activeCategory);
+    }
+  }, [pathname, mounted, groupedItems, isActive]);
 
-  // Group items by category
-  const groupedItems = allItems.reduce(
-    (acc, item) => {
-      const category = item.category || 'other';
-      if (!acc[category]) acc[category] = [];
-      acc[category].push(item);
-      return acc;
-    },
-    {} as Record<string, typeof allItems>,
-  );
-
-  const isActive = (href: string) => {
-    if (href === '/webapp') return pathname === '/webapp';
-    return pathname.startsWith(href);
+  // Handle category toggle - collapse others when opening new one
+  const handleCategoryToggle = (category: string) => {
+    setExpandedCategory(prev => (prev === category ? null : category));
   };
 
   return (
@@ -62,34 +87,44 @@ export default function PersistentSidebar() {
         {/* Collapsible content */}
         <div className="tablet:p-4 desktop:p-5 flex-1 overflow-y-auto p-3">
           {mounted &&
-            Object.entries(groupedItems).map(([category, items]) => (
-              <CategorySection
-                key={category}
-                category={category}
-                items={items}
-                isActive={isActive}
-                onTrack={trackNavigation}
-                workflow={workflow}
-              />
-            ))}
+            Object.entries(groupedItems).map(([category, items]) => {
+              // Primary items shown directly without category header
+              if (category === 'primary') {
+                return (
+                  <div key={category} className="mb-4 space-y-0.5">
+                    {items.map(item => (
+                      <NavItem
+                        key={item.href}
+                        href={item.href}
+                        label={item.label}
+                        icon={item.icon}
+                        color={item.color}
+                        isActive={isActive(item.href)}
+                        onTrack={trackNavigation}
+                        iconSize="md"
+                        showLabel={true}
+                      />
+                    ))}
+                  </div>
+                );
+              }
+              // Secondary groups shown as expandable sections
+              return (
+                <ExpandableCategorySection
+                  key={category}
+                  category={category}
+                  items={items}
+                  isActive={isActive}
+                  onTrack={trackNavigation}
+                  workflow={workflow}
+                  isExpanded={expandedCategory === category}
+                  onToggle={handleCategoryToggle}
+                />
+              );
+            })}
         </div>
 
-        {/* Footer with settings */}
-        <div className="tablet:p-4 desktop:p-5 border-t border-[#2a2a2a] p-3">
-          <div>
-            <div className="mb-2 text-xs tracking-wider text-gray-400 uppercase">Settings</div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Language</span>
-                <LanguageSwitcher />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Account</span>
-                <LogoutButton />
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Settings removed from footer - now in Header Profile Popup */}
       </div>
     </aside>
   );

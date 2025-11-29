@@ -92,7 +92,7 @@ export default function MenuOverview() {
           </p>
         </div>
         <Link
-          href="/webapp/menu-builder"
+          href="/webapp/recipes#menu-builder"
           className="text-fluid-xs tablet:text-fluid-sm flex items-center gap-1 text-[#29E7CD] transition-colors hover:text-[#D925C7]"
         >
           View Menus
@@ -250,7 +250,7 @@ export default function MenuOverview() {
           )}
           {data.dishesWithoutCosts > 0 && (
             <Link
-              href="/webapp/menu-builder"
+              href="/webapp/recipes#menu-builder"
               className="text-fluid-xs tablet:px-4 tablet:py-2.5 tablet:text-fluid-sm flex-1 rounded-lg border border-yellow-500/50 bg-yellow-500/10 px-3 py-2 text-center font-medium text-yellow-400 transition-colors hover:bg-yellow-500/20"
             >
               Fix Pricing
@@ -261,7 +261,7 @@ export default function MenuOverview() {
 
       <div className="tablet:mt-6 mt-4">
         <Link
-          href="/webapp/menu-builder"
+          href="/webapp/recipes#menu-builder"
           className="text-fluid-xs tablet:px-6 tablet:py-3 tablet:text-fluid-sm flex items-center justify-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 font-medium text-white transition-colors hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]/50"
         >
           <Icon icon={Plus} size="sm" aria-hidden={true} />

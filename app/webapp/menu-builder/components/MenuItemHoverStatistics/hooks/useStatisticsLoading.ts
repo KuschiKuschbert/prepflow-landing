@@ -1,7 +1,10 @@
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { MenuItem } from '@/app/webapp/menu-builder/types';
-import { getCachedStatistics, setCachedStatistics } from './useStatisticsLoading/helpers/cacheUtils';
+import {
+  getCachedStatistics,
+  setCachedStatistics,
+} from './useStatisticsLoading/helpers/cacheUtils';
 import { fetchStatistics } from './useStatisticsLoading/helpers/fetchStatistics';
 
 interface ItemStatistics {
@@ -25,30 +28,27 @@ export function useStatisticsLoading(menuId: string, item: MenuItem, isVisible: 
   const [currentItemId, setCurrentItemId] = useState<string | null>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const loadStatistics = useCallback(
-    async () => {
-      const cached = getCachedStatistics(menuId, item);
-      if (cached) {
-        setStatistics(cached);
-        return;
-      }
+  const loadStatistics = useCallback(async () => {
+    const cached = getCachedStatistics(menuId, item);
+    if (cached) {
+      setStatistics(cached);
+      return;
+    }
 
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      const result = await fetchStatistics(menuId, item.id);
+    const result = await fetchStatistics(menuId, item.id);
 
-      if (result.success && result.statistics) {
-        setStatistics(result.statistics);
-        setCachedStatistics(menuId, item.id, result.statistics);
-      } else {
-        setError(result.error || 'Failed to load statistics');
-      }
+    if (result.success && result.statistics) {
+      setStatistics(result.statistics);
+      setCachedStatistics(menuId, item.id, result.statistics);
+    } else {
+      setError(result.error || 'Failed to load statistics');
+    }
 
-      setLoading(false);
-    },
-    [menuId, item],
-  );
+    setLoading(false);
+  }, [menuId, item]);
 
   useEffect(() => {
     if (currentItemId !== null && currentItemId !== item.id) {

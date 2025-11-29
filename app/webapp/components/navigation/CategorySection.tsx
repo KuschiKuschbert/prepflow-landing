@@ -24,45 +24,35 @@ interface CategorySectionProps {
  * @param {WorkflowType} workflow - Current workflow type
  * @returns {string} Display label for the category
  */
-function getCategoryLabel(category: string, workflow: WorkflowType = 'daily-operations'): string {
-  const workflowLabels: Record<WorkflowType, Record<string, string>> = {
-    'daily-operations': {
-      'morning-prep': 'Morning Prep',
-      service: 'Service',
-      'end-of-day': 'End of Day',
-      planning: 'Planning',
-      tools: 'Tools',
-      other: 'Other',
-    },
-    'setup-planning-operations': {
-      setup: 'Setup',
-      planning: 'Planning',
-      operations: 'Operations',
-      analysis: 'Analysis',
-      tools: 'Tools',
-      other: 'Other',
-    },
-    'menu-first': {
-      menu: 'Menu',
-      inventory: 'Inventory',
-      operations: 'Operations',
-      overview: 'Overview',
-      tools: 'Tools',
-      other: 'Other',
-    },
+export function getCategoryLabel(
+  category: string,
+  workflow: WorkflowType = 'daily-operations',
+): string {
+  // Unified category labels (same across all workflows)
+  const categoryLabels: Record<string, string> = {
+    primary: 'Primary',
+    kitchen: 'Kitchen',
+    inventory: 'Inventory',
+    more: 'More',
+    other: 'Other',
   };
 
   // Fallback to legacy labels for backward compatibility
   const legacyLabels: Record<string, string> = {
     core: 'Core Features',
     operations: 'Operations',
-    inventory: 'Inventory',
-    kitchen: 'Kitchen',
+    'morning-prep': 'Morning Prep',
+    service: 'Service',
+    'end-of-day': 'End of Day',
+    planning: 'Planning',
     tools: 'Tools',
-    other: 'Other',
+    setup: 'Setup',
+    analysis: 'Analysis',
+    menu: 'Menu',
+    overview: 'Overview',
   };
 
-  return workflowLabels[workflow]?.[category] || legacyLabels[category] || category;
+  return categoryLabels[category] || legacyLabels[category] || category;
 }
 
 /**

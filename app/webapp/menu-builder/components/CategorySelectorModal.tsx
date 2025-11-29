@@ -81,38 +81,40 @@ export default function CategorySelectorModal({
       <div className="fixed inset-0 z-[75] bg-black/20" onClick={onClose} aria-hidden="true" />
       {/* Popover positioned near the item */}
       <div
-        className="fixed z-[80] w-[280px] rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl"
+        className="fixed z-[80] w-[280px] rounded-xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl"
         style={{
           left: `${popoverPosition.left}px`,
           top: `${popoverPosition.top}px`,
           maxHeight: `320px`,
         }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
-          <p className="text-sm font-medium text-gray-300">Add to category</p>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-            aria-label="Close"
-          >
-            <Icon icon={X} size="sm" />
-          </button>
-        </div>
-        {/* Categories list */}
-        <div className="max-h-[260px] overflow-y-auto">
-          {categories.map(category => (
+        <div className="rounded-xl bg-[#1f1f1f]/95" style={{ maxHeight: `320px` }}>
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
+            <p className="text-sm font-medium text-gray-300">Add to category</p>
             <button
-              key={category}
-              onClick={() => {
-                onSelectCategory(category);
-                onClose();
-              }}
-              className="w-full border-b border-[#2a2a2a]/50 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD]"
+              onClick={onClose}
+              className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+              aria-label="Close"
             >
-              <span className="text-sm font-medium text-white">{category}</span>
+              <Icon icon={X} size="sm" />
             </button>
-          ))}
+          </div>
+          {/* Categories list */}
+          <div className="max-h-[260px] overflow-y-auto">
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => {
+                  onSelectCategory(category);
+                  onClose();
+                }}
+                className="w-full border-b border-[#2a2a2a]/50 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD]"
+              >
+                <span className="text-sm font-medium text-white">{category}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </>

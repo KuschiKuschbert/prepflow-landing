@@ -79,99 +79,103 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-2xl rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-              <Icon icon={ChefHat} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px]">
+        <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
+                <Icon icon={ChefHat} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+              </div>
+              <h2 className="text-xl font-semibold text-white">
+                {t('prepLists.generateFromMenu', 'Generate Prep List from Menu')}
+              </h2>
             </div>
-            <h2 className="text-xl font-semibold text-white">
-              {t('prepLists.generateFromMenu', 'Generate Prep List from Menu')}
-            </h2>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-400 transition-colors hover:text-white"
-            aria-label="Close"
-          >
-            <Icon icon={X} size="md" aria-hidden={true} />
-          </button>
-        </div>
-
-        {error && (
-          <div className="mb-4 rounded-xl border border-red-400/20 bg-red-400/10 p-3">
-            <p className="text-sm text-red-400">{error}</p>
-          </div>
-        )}
-
-        <div className="space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
-              {t('prepLists.selectMenu', 'Select Menu')}
-            </label>
-            {fetchingMenus ? (
-              <div className="flex items-center justify-center rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-8">
-                <Loader2 className="h-5 w-5 animate-spin text-[#29E7CD]" />
-                <span className="ml-2 text-sm text-gray-400">Loading menus...</span>
-              </div>
-            ) : menus.length === 0 ? (
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-8 text-center">
-                <p className="text-sm text-gray-400">No menus found. Create a menu first.</p>
-              </div>
-            ) : (
-              <select
-                value={selectedMenuId}
-                onChange={e => {
-                  setSelectedMenuId(e.target.value);
-                  setError(null);
-                }}
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              >
-                <option value="">{t('prepLists.selectMenuPlaceholder', 'Choose a menu...')}</option>
-                {menus.map(menu => (
-                  <option key={menu.id} value={menu.id}>
-                    {menu.menu_name} {menu.items_count ? `(${menu.items_count} items)` : ''}
-                  </option>
-                ))}
-              </select>
-            )}
+            <button
+              onClick={onClose}
+              className="p-2 text-gray-400 transition-colors hover:text-white"
+              aria-label="Close"
+            >
+              <Icon icon={X} size="md" aria-hidden={true} />
+            </button>
           </div>
 
-          {selectedMenu && (
-            <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-              <p className="text-sm text-gray-400">
-                {t(
-                  'prepLists.menuInfo',
-                  'This will generate prep lists for all recipes and dishes in the selected menu, grouped by kitchen section.',
-                )}
-              </p>
+          {error && (
+            <div className="mb-4 rounded-xl border border-red-400/20 bg-red-400/10 p-3">
+              <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
-        </div>
 
-        <div className="mt-6 flex space-x-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
-          >
-            {t('prepLists.cancel', 'Cancel')}
-          </button>
-          <button
-            type="button"
-            onClick={handleGenerate}
-            disabled={!selectedMenuId || loading || fetchingMenus}
-            className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t('prepLists.generating', 'Generating...')}
-              </span>
-            ) : (
-              t('prepLists.generate', 'Generate Prep List')
+          <div className="space-y-4">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-300">
+                {t('prepLists.selectMenu', 'Select Menu')}
+              </label>
+              {fetchingMenus ? (
+                <div className="flex items-center justify-center rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-8">
+                  <Loader2 className="h-5 w-5 animate-spin text-[#29E7CD]" />
+                  <span className="ml-2 text-sm text-gray-400">Loading menus...</span>
+                </div>
+              ) : menus.length === 0 ? (
+                <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-8 text-center">
+                  <p className="text-sm text-gray-400">No menus found. Create a menu first.</p>
+                </div>
+              ) : (
+                <select
+                  value={selectedMenuId}
+                  onChange={e => {
+                    setSelectedMenuId(e.target.value);
+                    setError(null);
+                  }}
+                  className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                >
+                  <option value="">
+                    {t('prepLists.selectMenuPlaceholder', 'Choose a menu...')}
+                  </option>
+                  {menus.map(menu => (
+                    <option key={menu.id} value={menu.id}>
+                      {menu.menu_name} {menu.items_count ? `(${menu.items_count} items)` : ''}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            {selectedMenu && (
+              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
+                <p className="text-sm text-gray-400">
+                  {t(
+                    'prepLists.menuInfo',
+                    'This will generate prep lists for all recipes and dishes in the selected menu, grouped by kitchen section.',
+                  )}
+                </p>
+              </div>
             )}
-          </button>
+          </div>
+
+          <div className="mt-6 flex space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+            >
+              {t('prepLists.cancel', 'Cancel')}
+            </button>
+            <button
+              type="button"
+              onClick={handleGenerate}
+              disabled={!selectedMenuId || loading || fetchingMenus}
+              className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('prepLists.generating', 'Generating...')}
+                </span>
+              ) : (
+                t('prepLists.generate', 'Generate Prep List')
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

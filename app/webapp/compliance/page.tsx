@@ -8,17 +8,19 @@ import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useComplianceData } from './hooks/useComplianceData';
 import { useComplianceForms } from './hooks/useComplianceForms';
+import { useEquipmentMaintenance } from './hooks/useEquipmentMaintenance';
 import { ComplianceTabs } from './components/ComplianceTabs';
 import { ComplianceFilters } from './components/ComplianceFilters';
 import { ComplianceContent } from './components/ComplianceContent';
 
 export default function ComplianceTrackingPage() {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'records' | 'types' | 'report' | 'allergens'>(
-    'records',
-  );
+  const [activeTab, setActiveTab] = useState<
+    'records' | 'types' | 'report' | 'allergens' | 'equipment'
+  >('records');
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [showAddType, setShowAddType] = useState(false);
+  const [showAddEquipment, setShowAddEquipment] = useState(false);
   const [selectedType, setSelectedType] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
 
@@ -38,6 +40,13 @@ export default function ComplianceTrackingPage() {
       setShowAddRecord,
       setShowAddType,
     });
+
+  const {
+    records: equipmentRecords,
+    newEquipment,
+    setNewEquipment,
+    handleAddEquipment,
+  } = useEquipmentMaintenance();
 
   if (loading) {
     return (
@@ -97,20 +106,43 @@ export default function ComplianceTrackingPage() {
           </div>
         )}
 
+        {activeTab === 'equipment' && (
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-2xl font-semibold text-white">Equipment Maintenance</h2>
+            <button
+              onClick={() => setShowAddEquipment(true)}
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+            >
+              ➕ Add Maintenance Record
+            </button>
+          </div>
+        )}
+
         <ComplianceContent
           activeTab={activeTab}
           types={types}
           records={records}
           showAddRecord={showAddRecord}
           showAddType={showAddType}
+          showAddEquipment={showAddEquipment}
           newRecord={newRecord}
           newType={newType}
+          newEquipment={newEquipment}
+          equipmentRecords={equipmentRecords}
           onRecordFormChange={setNewRecord}
           onTypeFormChange={setNewType}
+          onEquipmentFormChange={setNewEquipment}
           onRecordSubmit={handleAddRecord}
           onTypeSubmit={handleAddType}
+          onEquipmentSubmit={async e => {
+            const success = await handleAddEquipment(e);
+            if (success) {
+              setShowAddEquipment(false);
+            }
+          }}
           onRecordCancel={() => setShowAddRecord(false)}
           onTypeCancel={() => setShowAddType(false)}
+          onEquipmentCancel={() => setShowAddEquipment(false)}
         />
       </div>
     </ResponsivePageContainer>

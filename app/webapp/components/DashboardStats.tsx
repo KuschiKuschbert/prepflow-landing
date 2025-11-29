@@ -85,7 +85,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
       {/* Active Menu Dishes */}
       {stats.totalMenuDishes !== undefined && (
         <Link
-          href="/webapp/menu-builder"
+          href="/webapp/recipes#menu-builder"
           className="group tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
         >
           <div className="flex items-center justify-between">

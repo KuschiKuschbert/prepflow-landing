@@ -10,6 +10,7 @@ import type {
   ComplianceType,
   ComplianceTypeFormData,
 } from '../types';
+import type { EquipmentMaintenanceFormData } from './EquipmentMaintenanceForm';
 
 // Lazy load compliance components to reduce initial bundle size
 const ComplianceRecordForm = dynamic(
@@ -60,20 +61,44 @@ const AllergenOverview = dynamic(
   },
 );
 
+const EquipmentMaintenanceForm = dynamic(
+  () =>
+    import('./EquipmentMaintenanceForm').then(mod => ({ default: mod.EquipmentMaintenanceForm })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
+
+const EquipmentMaintenanceList = dynamic(
+  () =>
+    import('./EquipmentMaintenanceList').then(mod => ({ default: mod.EquipmentMaintenanceList })),
+  {
+    ssr: false,
+    loading: () => <PageSkeleton />,
+  },
+);
+
 interface ComplianceContentProps {
-  activeTab: 'records' | 'types' | 'report' | 'allergens';
+  activeTab: 'records' | 'types' | 'report' | 'allergens' | 'equipment';
   types: ComplianceType[];
   records: ComplianceRecord[];
   showAddRecord: boolean;
   showAddType: boolean;
+  showAddEquipment: boolean;
   newRecord: ComplianceRecordFormData;
   newType: ComplianceTypeFormData;
+  newEquipment: EquipmentMaintenanceFormData;
+  equipmentRecords: any[];
   onRecordFormChange: (data: ComplianceRecordFormData) => void;
   onTypeFormChange: (data: ComplianceTypeFormData) => void;
+  onEquipmentFormChange: (data: EquipmentMaintenanceFormData) => void;
   onRecordSubmit: (e: React.FormEvent) => void;
   onTypeSubmit: (e: React.FormEvent) => void;
+  onEquipmentSubmit: (e: React.FormEvent) => void;
   onRecordCancel: () => void;
   onTypeCancel: () => void;
+  onEquipmentCancel: () => void;
 }
 
 export function ComplianceContent({
@@ -82,14 +107,20 @@ export function ComplianceContent({
   records,
   showAddRecord,
   showAddType,
+  showAddEquipment,
   newRecord,
   newType,
+  newEquipment,
+  equipmentRecords,
   onRecordFormChange,
   onTypeFormChange,
+  onEquipmentFormChange,
   onRecordSubmit,
   onTypeSubmit,
+  onEquipmentSubmit,
   onRecordCancel,
   onTypeCancel,
+  onEquipmentCancel,
 }: ComplianceContentProps) {
   if (activeTab === 'records') {
     return (
@@ -138,6 +169,22 @@ export function ComplianceContent({
           </p>
         </div>
         <AllergenOverview />
+      </div>
+    );
+  }
+
+  if (activeTab === 'equipment') {
+    return (
+      <div className="space-y-6">
+        {showAddEquipment && (
+          <EquipmentMaintenanceForm
+            formData={newEquipment}
+            onChange={onEquipmentFormChange}
+            onSubmit={onEquipmentSubmit}
+            onCancel={onEquipmentCancel}
+          />
+        )}
+        <EquipmentMaintenanceList records={equipmentRecords} />
       </div>
     );
   }

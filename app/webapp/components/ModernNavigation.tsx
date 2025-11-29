@@ -10,8 +10,8 @@ import { usePathname } from 'next/navigation';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
-import { NavigationPopover } from './navigation/NavigationPopover';
-import { AccountMenu } from './navigation/AccountMenu';
+import { MobileNavigationDrawer } from './navigation/MobileNavigationDrawer';
+import { SettingsDrawer } from './navigation/SettingsDrawer';
 import { useNavigationItems } from './navigation/nav-items';
 import { NavigationHeader } from './navigation/NavigationHeader';
 import PersistentSidebar from './navigation/PersistentSidebar';
@@ -19,11 +19,6 @@ import { SearchModal } from './navigation/SearchModal';
 import { MobileFAB } from './navigation/MobileFAB';
 import { NavigationErrorBoundary } from './navigation/NavigationErrorBoundary';
 import { useWorkflowPreference } from '@/lib/workflow/preferences';
-
-// Utility function to ensure consistent class ordering
-const cn = (...classes: (string | undefined | null | false)[]): string => {
-  return classes.filter(Boolean).join(' ');
-};
 
 interface NavigationItem {
   href: string;
@@ -51,12 +46,12 @@ interface ModernNavigationProps {
 const ModernNavigation = memo(function ModernNavigation({ className = '' }: ModernNavigationProps) {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
-  const moreButtonRef = useRef<HTMLButtonElement | null>(null);
+  const userButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Detect if we're on desktop (768px+) - only used for keyboard shortcuts, not layout
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -131,20 +126,12 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   };
 
   // Memoized callbacks for navigation components
-  const handleMoreClick = useCallback(() => {
-    setIsPopoverOpen(true);
+  const handleMenuClick = useCallback(() => {
+    setIsDrawerOpen(true);
   }, []);
 
-  const handlePopoverClose = useCallback(() => {
-    setIsPopoverOpen(false);
-  }, []);
-
-  const handleAccountMenuClick = useCallback(() => {
-    setIsAccountMenuOpen(true);
-  }, []);
-
-  const handleAccountMenuClose = useCallback(() => {
-    setIsAccountMenuOpen(false);
+  const handleDrawerClose = useCallback(() => {
+    setIsDrawerOpen(false);
   }, []);
 
   const handleSearchClick = useCallback(() => {
@@ -155,13 +142,18 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     setIsSearchOpen(false);
   }, []);
 
+  const handleUserClick = useCallback(() => {
+    setIsSettingsOpen(true);
+  }, []);
+
+  const handleSettingsClose = useCallback(() => {
+    setIsSettingsOpen(false);
+  }, []);
+
   return (
     <NavigationErrorBoundary>
       <NavigationHeader
         className={className}
-        menuButtonRef={menuButtonRef}
-        onMenuClick={handleAccountMenuClick}
-        isSidebarOpen={isAccountMenuOpen}
         onSearchClick={handleSearchClick}
         isSearchOpen={isSearchOpen}
         pathname={pathname}
@@ -174,6 +166,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         handleLogoMouseUp={handleLogoMouseUp}
         handleLogoMouseLeave={handleLogoMouseLeave}
         shouldPreventNavigation={shouldPreventNavigation}
+        onUserClick={handleUserClick}
+        userButtonRef={userButtonRef}
       />
 
       {/* Desktop: Persistent Sidebar - CSS handles visibility */}
@@ -183,7 +177,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <BottomNavBar onMoreClick={handleMoreClick} moreButtonRef={moreButtonRef} />
+        <BottomNavBar onMenuClick={handleMenuClick} menuButtonRef={menuButtonRef} />
       </div>
 
       {/* Mobile: Floating Action Button - CSS handles visibility */}
@@ -191,23 +185,21 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         <MobileFAB onSearchClick={handleSearchClick} />
       </div>
 
-      {/* Mobile: Navigation Popover - CSS handles visibility */}
+      {/* Mobile: Navigation Drawer - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <NavigationPopover
-          isOpen={isPopoverOpen}
-          onClose={handlePopoverClose}
-          triggerRef={moreButtonRef}
+        <MobileNavigationDrawer
+          isOpen={isDrawerOpen}
+          onClose={handleDrawerClose}
+          menuButtonRef={menuButtonRef}
         />
       </div>
 
-      {/* Mobile: Account Menu - CSS handles visibility */}
-      <div className="desktop:hidden block">
-        <AccountMenu
-          isOpen={isAccountMenuOpen}
-          onClose={handleAccountMenuClose}
-          triggerRef={menuButtonRef}
-        />
-      </div>
+      {/* Universal Settings Drawer */}
+      <SettingsDrawer
+        isOpen={isSettingsOpen}
+        onClose={handleSettingsClose}
+        userButtonRef={userButtonRef}
+      />
 
       {/* Search Modal */}
       <SearchModal

@@ -148,57 +148,59 @@ export function UnifiedRecipeModal({
       aria-modal="true"
       aria-labelledby="recipe-modal-title"
     >
-      <div
-        ref={modalRef}
-        className="animate-in zoom-in-95 flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-[#1f1f1f] shadow-2xl duration-200 focus:outline-none"
-        tabIndex={-1}
-      >
-        <UnifiedRecipeModalHeader
-          recipe={recipe}
-          activeTab={activeTab}
-          dishPortions={dishPortions}
-          shareLoading={shareLoading}
-          capitalizeRecipeName={capitalizeRecipeName}
-          onEditRecipe={onEditRecipe}
-          onShareRecipe={onShareRecipe}
-          onPrint={onPrint}
-          onDuplicateRecipe={onDuplicateRecipe}
-          onClose={onClose}
-          onSetActiveTab={setActiveTab}
-          onDishPortionsChange={setDishPortions}
-        />
+      <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl duration-200">
+        <div
+          ref={modalRef}
+          className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-2xl bg-[#1f1f1f]/95 focus:outline-none"
+          tabIndex={-1}
+        >
+          <UnifiedRecipeModalHeader
+            recipe={recipe}
+            activeTab={activeTab}
+            dishPortions={dishPortions}
+            shareLoading={shareLoading}
+            capitalizeRecipeName={capitalizeRecipeName}
+            onEditRecipe={onEditRecipe}
+            onShareRecipe={onShareRecipe}
+            onPrint={onPrint}
+            onDuplicateRecipe={onDuplicateRecipe}
+            onClose={onClose}
+            onSetActiveTab={setActiveTab}
+            onDishPortionsChange={setDishPortions}
+          />
 
-        {/* Content */}
-        <div className="tablet:p-5 desktop:p-6 flex-1 overflow-y-auto p-4">
-          {activeTab === 'preview' && (
-            <UnifiedRecipeModalPreviewTab
-              recipe={recipe}
-              recipeIngredients={recipeIngredients}
-              aiInstructions={aiInstructions}
-              generatingInstructions={generatingInstructions}
-              previewYield={previewYield}
-              formatQuantity={formatQuantity}
-            />
-          )}
+          {/* Content */}
+          <div className="tablet:p-5 desktop:p-6 flex-1 overflow-y-auto p-4">
+            {activeTab === 'preview' && (
+              <UnifiedRecipeModalPreviewTab
+                recipe={recipe}
+                recipeIngredients={recipeIngredients}
+                aiInstructions={aiInstructions}
+                generatingInstructions={generatingInstructions}
+                previewYield={previewYield}
+                formatQuantity={formatQuantity}
+              />
+            )}
 
-          {activeTab === 'ingredients' && (
-            <UnifiedRecipeModalIngredientsTab
-              recipe={recipe}
-              recipeIngredients={recipeIngredients}
-              previewYield={previewYield}
-              formatQuantity={formatQuantity}
-              onEditRecipe={onEditRecipe}
-            />
-          )}
+            {activeTab === 'ingredients' && (
+              <UnifiedRecipeModalIngredientsTab
+                recipe={recipe}
+                recipeIngredients={recipeIngredients}
+                previewYield={previewYield}
+                formatQuantity={formatQuantity}
+                onEditRecipe={onEditRecipe}
+              />
+            )}
 
-          {activeTab === 'cogs' && (
-            <UnifiedRecipeModalCogsTab
-              calculations={calculations}
-              totalCOGS={totalCOGS}
-              costPerPortion={costPerPortion}
-              dishPortions={dishPortions}
-            />
-          )}
+            {activeTab === 'cogs' && (
+              <UnifiedRecipeModalCogsTab
+                calculations={calculations}
+                totalCOGS={totalCOGS}
+                costPerPortion={costPerPortion}
+                dishPortions={dishPortions}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

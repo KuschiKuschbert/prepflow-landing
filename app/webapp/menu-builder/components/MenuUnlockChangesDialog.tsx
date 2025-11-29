@@ -61,23 +61,25 @@ export function MenuUnlockChangesDialog({
       />
 
       {/* Dialog */}
-      <div
-        ref={dialogRef}
-        className="desktop:p-8 relative z-50 w-full max-w-2xl rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-      >
-        <DialogHeader summary={summary} onClose={onClose} />
-        <ChangesList changes={changes} />
-        <DialogActions
-          recalculating={recalculating}
-          onRecalculatePrices={handleRecalculatePrices}
-          onReviewChanges={onReviewChanges}
-          onDismiss={handleDismiss}
-          dismissButtonRef={dismissButtonRef}
-        />
+      <div className="relative z-50 w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div
+          ref={dialogRef}
+          className="desktop:p-8 rounded-3xl bg-[#1f1f1f]/95 p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+        >
+          <DialogHeader summary={summary} onClose={onClose} />
+          <ChangesList changes={changes} />
+          <DialogActions
+            recalculating={recalculating}
+            onRecalculatePrices={handleRecalculatePrices}
+            onReviewChanges={onReviewChanges}
+            onDismiss={handleDismiss}
+            dismissButtonRef={dismissButtonRef}
+          />
+        </div>
       </div>
     </div>
   );

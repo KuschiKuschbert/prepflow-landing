@@ -160,58 +160,60 @@ export function MenuItemPriceEditPopup({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/30 p-4">
-      <div
-        ref={popupRef}
-        className="relative w-full max-w-sm rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-xl"
-        onClick={e => e.stopPropagation()}
-      >
-        <button
-          onClick={handleCancel}
-          className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-          aria-label="Close"
+      <div className="relative w-full max-w-sm rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+        <div
+          ref={popupRef}
+          className="rounded-2xl bg-[#1f1f1f]/95 p-6"
+          onClick={e => e.stopPropagation()}
         >
-          <Icon icon={X} size="sm" />
-        </button>
-
-        <h3 className="mb-4 text-lg font-semibold text-white">Edit Price: {itemName}</h3>
-
-        {item.recommended_selling_price != null && (
-          <div className="mb-3 text-xs text-gray-400">
-            Recommended: ${item.recommended_selling_price.toFixed(2)}
-            {isRecipe && ' per serve'}
-          </div>
-        )}
-
-        <div className="mb-4">
-          <label className="mb-2 block text-sm text-gray-400">
-            Actual Selling Price{isRecipe && ' (per serve)'}
-          </label>
-          <input
-            ref={inputRef}
-            type="text"
-            inputMode="decimal"
-            value={priceValue}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            placeholder="0.00"
-          />
-          {error && <div className="mt-1 text-xs text-red-400">{error}</div>}
-        </div>
-
-        <div className="flex gap-2">
-          <button
-            onClick={handleSave}
-            className="flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-black transition-all hover:shadow-lg"
-          >
-            Save
-          </button>
           <button
             onClick={handleCancel}
-            className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 font-medium text-gray-300 transition-colors hover:bg-[#3a3a3a]"
+            className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+            aria-label="Close"
           >
-            Cancel
+            <Icon icon={X} size="sm" />
           </button>
+
+          <h3 className="mb-4 text-lg font-semibold text-white">Edit Price: {itemName}</h3>
+
+          {item.recommended_selling_price != null && (
+            <div className="mb-3 text-xs text-gray-400">
+              Recommended: ${item.recommended_selling_price.toFixed(2)}
+              {isRecipe && ' per serve'}
+            </div>
+          )}
+
+          <div className="mb-4">
+            <label className="mb-2 block text-sm text-gray-400">
+              Actual Selling Price{isRecipe && ' (per serve)'}
+            </label>
+            <input
+              ref={inputRef}
+              type="text"
+              inputMode="decimal"
+              value={priceValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              placeholder="0.00"
+            />
+            {error && <div className="mt-1 text-xs text-red-400">{error}</div>}
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={handleSave}
+              className="flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-black transition-all hover:shadow-lg"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancel}
+              className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 font-medium text-gray-300 transition-colors hover:bg-[#3a3a3a]"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>

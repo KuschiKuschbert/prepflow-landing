@@ -45,58 +45,60 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
         className="desktop:mt-20 mx-auto mt-12 w-full max-w-2xl px-4"
         onClick={e => e.stopPropagation()}
       >
-        <div className="desktop:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-fluid-xl font-semibold">{step.title}</h3>
-            <button
-              className="rounded-lg p-2 hover:bg-[#2a2a2a]/50"
-              aria-label="Close"
-              onClick={onClose}
-            >
-              ✕
-            </button>
-          </div>
-          <p className="text-gray-300">{step.description}</p>
-          <div className="mt-6 flex items-center justify-between">
-            <button
-              className="rounded-2xl border border-[#2a2a2a] px-4 py-2 disabled:opacity-50"
-              disabled={index === 0}
-              onClick={() => {
-                trackEvent('tour_prev', 'engagement', steps[index]?.key, index);
-                setIndex(i => Math.max(i - 1, 0));
-              }}
-            >
-              Back
-            </button>
-            <div className="flex gap-1">
-              {steps.map((s, i) => (
-                <span
-                  key={s.key}
-                  className={`h-2 w-2 rounded-full ${i === index ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a]'}`}
-                />
-              ))}
+        <div className="desktop:p-6 rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+          <div className="desktop:p-6 rounded-2xl bg-[#1f1f1f]/95 p-4">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-fluid-xl font-semibold">{step.title}</h3>
+              <button
+                className="rounded-lg p-2 hover:bg-[#2a2a2a]/50"
+                aria-label="Close"
+                onClick={onClose}
+              >
+                ✕
+              </button>
             </div>
-            <button
-              className="rounded-2xl bg-[#29E7CD] px-4 py-2 text-black"
-              onClick={() => {
-                if (index === last) {
-                  trackEvent('tour_complete', 'engagement');
-                  onClose();
-                  // Redirect to login/register after tour completion
-                  try {
-                    if (typeof window !== 'undefined') {
-                      sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
-                    }
-                  } catch (_) {}
-                  signIn('auth0', { callbackUrl: '/webapp' });
-                } else {
-                  trackEvent('tour_next', 'engagement', steps[index]?.key, index + 1);
-                  setIndex(i => Math.min(i + 1, last));
-                }
-              }}
-            >
-              {index === last ? 'Get Started' : 'Next'}
-            </button>
+            <p className="text-gray-300">{step.description}</p>
+            <div className="mt-6 flex items-center justify-between">
+              <button
+                className="rounded-2xl border border-[#2a2a2a] px-4 py-2 disabled:opacity-50"
+                disabled={index === 0}
+                onClick={() => {
+                  trackEvent('tour_prev', 'engagement', steps[index]?.key, index);
+                  setIndex(i => Math.max(i - 1, 0));
+                }}
+              >
+                Back
+              </button>
+              <div className="flex gap-1">
+                {steps.map((s, i) => (
+                  <span
+                    key={s.key}
+                    className={`h-2 w-2 rounded-full ${i === index ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a]'}`}
+                  />
+                ))}
+              </div>
+              <button
+                className="rounded-2xl bg-[#29E7CD] px-4 py-2 text-black"
+                onClick={() => {
+                  if (index === last) {
+                    trackEvent('tour_complete', 'engagement');
+                    onClose();
+                    // Redirect to login/register after tour completion
+                    try {
+                      if (typeof window !== 'undefined') {
+                        sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
+                      }
+                    } catch (_) {}
+                    signIn('auth0', { callbackUrl: '/webapp' });
+                  } else {
+                    trackEvent('tour_next', 'engagement', steps[index]?.key, index + 1);
+                    setIndex(i => Math.min(i + 1, last));
+                  }
+                }}
+              >
+                {index === last ? 'Get Started' : 'Next'}
+              </button>
+            </div>
           </div>
         </div>
       </div>

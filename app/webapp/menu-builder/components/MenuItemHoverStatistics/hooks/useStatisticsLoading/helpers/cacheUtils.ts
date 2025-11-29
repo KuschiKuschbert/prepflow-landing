@@ -60,4 +60,3 @@ export function setCachedStatistics(menuId: string, itemId: string, data: ItemSt
     expiry: now + CACHE_EXPIRY_MS,
   });
 }
-

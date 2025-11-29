@@ -44,7 +44,9 @@ export async function fetchStatistics(
 
     const result = await response.json();
     if (result.success) {
-      logger.dev('[MenuItemHoverStatistics] Statistics loaded', { cacheKey: `${menuId}-${itemId}` });
+      logger.dev('[MenuItemHoverStatistics] Statistics loaded', {
+        cacheKey: `${menuId}-${itemId}`,
+      });
       return { success: true, statistics: result.statistics };
     } else {
       logger.error('[MenuItemHoverStatistics] API error', {
@@ -61,4 +63,3 @@ export async function fetchStatistics(
     return { success: false, error: 'Failed to load statistics' };
   }
 }
-

@@ -1,0 +1,1561 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cleanup Report</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 20px;
+        background: #0a0a0a;
+        color: #fff;
+      }
+      .summary {
+        background: #1f1f1f;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .summary h2 {
+        margin-top: 0;
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .summary-item {
+        background: #2a2a2a;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .summary-item .value {
+        font-size: 2em;
+        font-weight: bold;
+        color: #29e7cd;
+      }
+      .violations {
+        margin-top: 20px;
+      }
+      .file-group {
+        background: #1f1f1f;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+      }
+      .file-group h3 {
+        margin-top: 0;
+        color: #29e7cd;
+      }
+      .violation {
+        background: #2a2a2a;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        border-left: 4px solid;
+      }
+      .violation.critical {
+        border-color: #ef4444;
+      }
+      .violation.warning {
+        border-color: #f59e0b;
+      }
+      .violation.info {
+        border-color: #3b82f6;
+      }
+      .violation-meta {
+        font-size: 0.9em;
+        color: #9ca3af;
+        margin-top: 5px;
+      }
+      a {
+        color: #29e7cd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧹 Cleanup Report</h1>
+    <div class="summary">
+      <h2>Summary</h2>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="value">129</div>
+          <div>Total Violations</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">71</div>
+          <div>Critical</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">58</div>
+          <div>Warning</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">0</div>
+          <div>Info</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">95</div>
+          <div>Files Affected</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">4</div>
+          <div>Standards Violated</div>
+        </div>
+      </div>
+    </div>
+    <div class="violations">
+      <h2>Violations by File</h2>
+      <div class="file-group">
+        <h3>app/api/compliance/health-inspector-report/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 708 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/ingredients/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 321 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/items/[itemId]/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 204 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/par-levels/helpers/createParLevel.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 303 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/par-levels/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 335 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/prep-lists/generate-from-menu/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 316 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/components/landing/hooks/useAppleStyleAnimations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 115 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/cogs/hooks/useCOGSCalculations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 116 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/cogs/hooks/useIngredientAddition.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 111 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/cogs/hooks/useRecipeIngredientsAutosave.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 102 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/components/hooks/useTemperatureStatus.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 107 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/dish-builder/hooks/useDishBuilder.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 144 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/dish-builder/hooks/utils/dishSave.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 121 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/dish-builder/hooks/utils/ingredientManagement.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/employees/components/EmployeeForm.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 451 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/hooks/useIngredientAdd.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 135 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/hooks/useIngredientCSV.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 128 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuCategory.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 702 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuEditor.tsx (3 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 1010 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 472)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 483)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuList.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 459 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/hooks/useMenuDragDrop.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 221 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/par-levels/page.tsx (15 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds page limit: 569 lines (limit 500)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 53)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 56)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 62)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 64)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 67)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 93)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 99)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 208)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 209)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 211)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 214)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 263)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 269)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 278)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/performance/hooks/usePerformanceInsights.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 105 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/performance/utils/generatePerformanceTips.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 171 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/components/PrepListPreview.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 307 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/components/hooks/usePrepListPreview.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 175 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/hooks/usePrepListExport.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 463 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/page.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds page limit: 535 lines (limit 500)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/utils/prepTechniques.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 200 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/hooks/useDishesClientHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 111 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 159 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/hooks/useRecipeDishSave.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 126 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/hooks/useRecipeHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 117 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useDishCOGSCalculations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 102 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useDishCostCalculation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 101 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useRecipeActions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 142 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useRecipeIngredients.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 113 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 150 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 128 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/sections/hooks/useDishSectionActions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 147 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/components/utils.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 306 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useEquipmentLogs.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 107 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useTemperatureEquipmentHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 207 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 145 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useTemperaturePageData.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 112 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>components/CountrySetup.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 301 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useAutosave.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 112 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useDrawerSwipe.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 205 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useLogoInteractions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 121 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useNavigationTracking.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 267 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useOptimisticMutation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 102 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useParallelFetch.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 106 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useSessionTimeout.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/utils/drawerTouchMoveHandler.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 127 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ai/ai-service.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 166 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/analytics.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 161 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/compliance/report-generator.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 1625 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/country-config.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 198 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ingredients/migrate-to-standard-units.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 175 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/logger.ts (6 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 166 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.log() should be migrated to logger.dev()</strong
+          ><span style="color: #9ca3af"> (line 115)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 137)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.warn() should be migrated to logger.warn()</strong
+          ><span style="color: #9ca3af"> (line 143)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.info() should be migrated to logger.info()</strong
+          ><span style="color: #9ca3af"> (line 150)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.debug() should be migrated to logger.debug()</strong
+          ><span style="color: #9ca3af"> (line 158)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/navigation-optimization/optimizer.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 210 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/navigation-optimization/patternAnalyzer.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 220 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/optimistic-updates.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 281 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/performance-monitor.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 185 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/temperature-log-generator.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 167 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/check-performance-budget.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 341 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/generate-performance-report.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 402 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/optimize-performance.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 361 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/send-performance-report.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 334 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/account/delete/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 5)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/account/export/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 5)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai/chat/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 12)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai/performance-insights/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 16)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai/performance-tips/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 17)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai/prep-details/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 15)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai/recipe-instructions/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 13)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai-specials/route.ts (2 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 9)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 119)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/assign-dish-section/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 5)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/billing/create-checkout-session/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 19)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/billing/create-portal-session/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 9)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/cleaning-areas/route.ts (4 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 10)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 46)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: PUT</strong
+          ><span style="color: #9ca3af"> (line 77)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: DELETE</strong
+          ><span style="color: #9ca3af"> (line 110)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/cleaning-tasks/route.ts (4 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 20)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 71)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: PUT</strong
+          ><span style="color: #9ca3af"> (line 106)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: DELETE</strong
+          ><span style="color: #9ca3af"> (line 139)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/cleanup-test-data/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 5)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/compliance-records/route.ts (4 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 19)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 70)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: PUT</strong
+          ><span style="color: #9ca3af"> (line 121)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: DELETE</strong
+          ><span style="color: #9ca3af"> (line 167)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/compliance-types/route.ts (2 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 6)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 66)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dashboard/menu-summary/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 5)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dashboard/performance-summary/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 14)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dashboard/recipe-readiness/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 9)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dashboard/stats/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 6)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/db/integrity/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: GET</strong
+          ><span style="color: #9ca3af"> (line 4)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/db/reset/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 4)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/db/reset-self/route.ts (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Missing JSDoc for exported function/component: POST</strong
+          ><span style="color: #9ca3af"> (line 17)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#jsdoc-requirements">development.mdc#jsdoc-requirements</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>.next/static (3 violations)</h3>
+        <div class="violation warning">
+          <strong>Total bundle size 3403.0KB exceeds budget of 488KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>JavaScript bundle size 3250.5KB exceeds budget of 195KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>CSS bundle size 152.5KB exceeds budget of 49KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="violations">
+      <h2>Violations by Standard</h2>
+      <div class="file-group" id="development.mdc#file-size-limits">
+        <h3>development.mdc#file-size-limits (71 violations)</h3>
+        <ul>
+          <li>
+            app/api/compliance/health-inspector-report/route.ts - File exceeds api limit: 708 lines
+            (limit 200)
+          </li>
+          <li>
+            app/api/menus/[id]/ingredients/route.ts - File exceeds api limit: 321 lines (limit 200)
+          </li>
+          <li>
+            app/api/menus/[id]/items/[itemId]/route.ts - File exceeds api limit: 204 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/par-levels/helpers/createParLevel.ts - File exceeds api limit: 303 lines (limit
+            200)
+          </li>
+          <li>app/api/par-levels/route.ts - File exceeds api limit: 335 lines (limit 200)</li>
+          <li>
+            app/api/prep-lists/generate-from-menu/route.ts - File exceeds api limit: 316 lines
+            (limit 200)
+          </li>
+          <li>
+            app/components/landing/hooks/useAppleStyleAnimations.ts - File exceeds hook limit: 115
+            lines (limit 100)
+          </li>
+          <li>
+            app/webapp/cogs/hooks/useCOGSCalculations.ts - File exceeds hook limit: 116 lines (limit
+            100)
+          </li>
+          <li>
+            app/webapp/cogs/hooks/useIngredientAddition.ts - File exceeds hook limit: 111 lines
+            (limit 100)
+          </li>
+          <li>
+            app/webapp/cogs/hooks/useRecipeIngredientsAutosave.ts - File exceeds hook limit: 102
+            lines (limit 100)
+          </li>
+          <li>... and 61 more</li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#console-log-migration">
+        <h3>development.mdc#console-log-migration (21 violations)</h3>
+        <ul>
+          <li>
+            app/webapp/menu-builder/components/MenuEditor.tsx:472 - console.error() should be
+            migrated to logger.error()
+          </li>
+          <li>
+            app/webapp/menu-builder/components/MenuEditor.tsx:483 - console.error() should be
+            migrated to logger.error()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:53 - console.log() should be migrated to logger.dev()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:56 - console.log() should be migrated to logger.dev()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:62 - console.log() should be migrated to logger.dev()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:64 - console.log() should be migrated to logger.dev()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:67 - console.error() should be migrated to logger.error()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:93 - console.error() should be migrated to logger.error()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:99 - console.error() should be migrated to logger.error()
+          </li>
+          <li>
+            app/webapp/par-levels/page.tsx:208 - console.log() should be migrated to logger.dev()
+          </li>
+          <li>... and 11 more</li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#jsdoc-requirements">
+        <h3>development.mdc#jsdoc-requirements (34 violations)</h3>
+        <ul>
+          <li>
+            app/api/account/delete/route.ts:5 - Missing JSDoc for exported function/component: POST
+          </li>
+          <li>
+            app/api/account/export/route.ts:5 - Missing JSDoc for exported function/component: GET
+          </li>
+          <li>app/api/ai/chat/route.ts:12 - Missing JSDoc for exported function/component: POST</li>
+          <li>
+            app/api/ai/performance-insights/route.ts:16 - Missing JSDoc for exported
+            function/component: POST
+          </li>
+          <li>
+            app/api/ai/performance-tips/route.ts:17 - Missing JSDoc for exported function/component:
+            POST
+          </li>
+          <li>
+            app/api/ai/prep-details/route.ts:15 - Missing JSDoc for exported function/component:
+            POST
+          </li>
+          <li>
+            app/api/ai/recipe-instructions/route.ts:13 - Missing JSDoc for exported
+            function/component: POST
+          </li>
+          <li>
+            app/api/ai-specials/route.ts:9 - Missing JSDoc for exported function/component: POST
+          </li>
+          <li>
+            app/api/ai-specials/route.ts:119 - Missing JSDoc for exported function/component: GET
+          </li>
+          <li>
+            app/api/assign-dish-section/route.ts:5 - Missing JSDoc for exported function/component:
+            POST
+          </li>
+          <li>... and 24 more</li>
+        </ul>
+      </div>
+      <div class="file-group" id="operations.mdc#performance-standards">
+        <h3>operations.mdc#performance-standards (3 violations)</h3>
+        <ul>
+          <li>.next/static - Total bundle size 3403.0KB exceeds budget of 488KB</li>
+          <li>.next/static - JavaScript bundle size 3250.5KB exceeds budget of 195KB</li>
+          <li>.next/static - CSS bundle size 152.5KB exceeds budget of 49KB</li>
+        </ul>
+      </div>
+    </div>
+    <div
+      style="
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #2a2a2a;
+        color: #9ca3af;
+        font-size: 0.9em;
+      "
+    >
+      Generated at 2025-11-18T06:48:50.536Z
+    </div>
+  </body>
+</html>

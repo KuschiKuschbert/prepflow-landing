@@ -18,6 +18,7 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
  * Floating action button component for mobile devices.
  * Provides quick access to common actions (Create Recipe, Create Ingredient, Quick Search).
  * Auto-hides when bottom navigation is hidden (scroll down).
+ * Optimized for landscape mode with smaller size.
  *
  * @component
  * @param {Object} props - Component props
@@ -105,19 +106,19 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
   if (!isVisible) return null;
 
   return (
-    <div className="desktop:hidden fixed right-4 bottom-20 z-[70]">
+    <div className="desktop:hidden fixed right-4 bottom-20 z-[70] landscape:bottom-16">
       {/* Quick Actions Menu */}
       {isOpen && (
         <div
           ref={menuRef}
-          className="mb-3 flex flex-col gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 shadow-2xl"
+          className="mb-3 flex flex-col gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 shadow-2xl landscape:gap-1 landscape:p-1.5"
         >
           <button
             onClick={handleCreateRecipe}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:px-3 landscape:py-2"
             aria-label="Create Recipe"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 landscape:h-8 landscape:w-8">
               <Icon
                 icon={UtensilsCrossed}
                 size="sm"
@@ -126,36 +127,40 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-white">Create Recipe</span>
-              <span className="text-xs text-gray-400">Add new dish</span>
+              <span className="text-sm font-medium text-white landscape:text-xs">
+                Create Recipe
+              </span>
+              <span className="text-xs text-gray-400 landscape:text-[10px]">Add new dish</span>
             </div>
           </button>
 
           <button
             onClick={handleCreateIngredient}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:px-3 landscape:py-2"
             aria-label="Create Ingredient"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#3B82F6]/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#3B82F6]/20 landscape:h-8 landscape:w-8">
               <Icon icon={Package} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-white">Create Ingredient</span>
-              <span className="text-xs text-gray-400">Add new item</span>
+              <span className="text-sm font-medium text-white landscape:text-xs">
+                Create Ingredient
+              </span>
+              <span className="text-xs text-gray-400 landscape:text-[10px]">Add new item</span>
             </div>
           </button>
 
           <button
             onClick={handleQuickSearch}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:px-3 landscape:py-2"
             aria-label="Quick Search"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 landscape:h-8 landscape:w-8">
               <Icon icon={Search} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-white">Quick Search</span>
-              <span className="text-xs text-gray-400">Find anything</span>
+              <span className="text-sm font-medium text-white landscape:text-xs">Quick Search</span>
+              <span className="text-xs text-gray-400 landscape:text-[10px]">Find anything</span>
             </div>
           </button>
         </div>
@@ -170,6 +175,7 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
           'hover:scale-110 hover:shadow-xl',
           'active:scale-95',
           'focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none',
+          'landscape:h-10 landscape:w-10',
         )}
         style={{
           willChange: 'transform',
@@ -181,7 +187,7 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
         <Icon
           icon={Plus}
           size="lg"
-          className="text-white transition-transform duration-200"
+          className="text-white transition-transform duration-200 landscape:scale-75"
           aria-hidden={true}
         />
       </button>

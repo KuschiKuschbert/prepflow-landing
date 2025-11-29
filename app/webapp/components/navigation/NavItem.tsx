@@ -85,7 +85,7 @@ export function NavItem({
         href={href}
         onClick={handleClick}
         onMouseEnter={() => prefetchRoute(href)}
-        className={`group flex min-h-[44px] items-center space-x-2 rounded-lg px-2 py-2 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
+        className={`group flex min-h-[44px] items-center space-x-2 rounded-lg px-3 py-3 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
           isActive
             ? `border border-[#29E7CD]/20 bg-[#29E7CD]/10 ${className}`
             : `hover:bg-[#2a2a2a]/30 ${className}`
@@ -99,7 +99,7 @@ export function NavItem({
         </span>
         {showLabel && (
           <span
-            className={`text-xs font-medium ${
+            className={`text-sm font-medium ${
               isActive ? 'text-white/90' : 'text-gray-300/90 group-hover:text-white'
             }`}
           >

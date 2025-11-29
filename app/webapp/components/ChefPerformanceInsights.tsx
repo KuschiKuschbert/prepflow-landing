@@ -205,7 +205,7 @@ export default function ChefPerformanceInsights() {
               {data.hiddenGems.map(item => (
                 <Link
                   key={`hidden-gem-${item.id}`}
-                  href="/webapp/menu-builder"
+                  href="/webapp/recipes#menu-builder"
                   className="tablet:p-3 flex items-center justify-between rounded-lg bg-[#1f1f1f] p-2 transition-colors hover:bg-[#2a2a2a]"
                 >
                   <div className="flex items-center gap-2">

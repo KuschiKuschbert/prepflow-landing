@@ -159,54 +159,56 @@ export function ConfirmDialog({
         aria-hidden="true"
       />
 
-      {/* Dialog */}
-      <div
-        ref={dialogRef}
-        className="desktop:p-6 relative z-50 mx-4 w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-      >
-        {/* Icon */}
-        <div className="mb-4 flex justify-center">
-          {variant === 'danger' && (
-            <Icon icon={AlertTriangle} size="xl" className={styles.icon} aria-hidden={true} />
-          )}
-          {variant === 'warning' && (
-            <Icon icon={AlertCircle} size="xl" className={styles.icon} aria-hidden={true} />
-          )}
-          {variant === 'info' && (
-            <Icon icon={Info} size="xl" className={styles.icon} aria-hidden={true} />
-          )}
-        </div>
+      {/* Dialog with gradient border */}
+      <div className="relative z-50 mx-4 w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div
+          ref={dialogRef}
+          className="desktop:p-6 rounded-3xl bg-[#1f1f1f]/95 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+        >
+          {/* Icon */}
+          <div className="mb-4 flex justify-center">
+            {variant === 'danger' && (
+              <Icon icon={AlertTriangle} size="xl" className={styles.icon} aria-hidden={true} />
+            )}
+            {variant === 'warning' && (
+              <Icon icon={AlertCircle} size="xl" className={styles.icon} aria-hidden={true} />
+            )}
+            {variant === 'info' && (
+              <Icon icon={Info} size="xl" className={styles.icon} aria-hidden={true} />
+            )}
+          </div>
 
-        {/* Title */}
-        <h2 id="dialog-title" className="text-fluid-xl mb-3 text-center font-bold text-white">
-          {title}
-        </h2>
+          {/* Title */}
+          <h2 id="dialog-title" className="text-fluid-xl mb-3 text-center font-bold text-white">
+            {title}
+          </h2>
 
-        {/* Message */}
-        <p id="dialog-description" className="mb-6 text-center text-gray-300">
-          {message}
-        </p>
+          {/* Message */}
+          <p id="dialog-description" className="mb-6 text-center text-gray-300">
+            {message}
+          </p>
 
-        {/* Actions */}
-        <div className="flex gap-3">
-          <button
-            ref={cancelButtonRef}
-            onClick={onCancel}
-            className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
-          >
-            {cancelLabel}
-          </button>
-          <button
-            ref={confirmButtonRef}
-            onClick={onConfirm}
-            className={`flex-1 rounded-2xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${styles.confirm}`}
-          >
-            {confirmLabel}
-          </button>
+          {/* Actions */}
+          <div className="flex gap-3">
+            <button
+              ref={cancelButtonRef}
+              onClick={onCancel}
+              className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+            >
+              {cancelLabel}
+            </button>
+            <button
+              ref={confirmButtonRef}
+              onClick={onConfirm}
+              className={`flex-1 rounded-2xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${styles.confirm}`}
+            >
+              {confirmLabel}
+            </button>
+          </div>
         </div>
       </div>
     </div>

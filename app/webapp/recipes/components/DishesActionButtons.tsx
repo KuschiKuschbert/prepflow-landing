@@ -20,7 +20,7 @@ export function DishesActionButtons({ onAddDish }: DishesActionButtonsProps) {
         Add Dish
       </button>
       <Link
-        href="/webapp/menu-builder"
+        href="/webapp/recipes#menu-builder"
         className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-6 py-3 font-medium text-white transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a] hover:shadow-lg"
       >
         <Icon icon={FileText} size="sm" />

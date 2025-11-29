@@ -155,52 +155,54 @@ export default function IngredientEditModal({
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" />
 
       {/* Modal Card - Responsive */}
-      <div
-        ref={modalRef}
-        className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl transition-all duration-300"
-        onClick={e => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="ingredient-edit-modal-title"
-      >
-        {/* Header with close button - Responsive */}
-        <div className="desktop:px-4 desktop:py-2.5 sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm">
-          <h2
-            id="ingredient-edit-modal-title"
-            className="desktop:text-xl text-lg font-bold text-white"
-          >
-            Edit Ingredient
-          </h2>
-          <button
-            onClick={onClose}
-            className="rounded-full p-2 text-gray-400 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
-            aria-label="Close modal"
-          >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
+      <div className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl transition-all duration-300">
+        <div
+          ref={modalRef}
+          className="max-h-[calc(90vh-10vh)] w-full overflow-hidden rounded-3xl bg-[#1f1f1f]/95"
+          onClick={e => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ingredient-edit-modal-title"
+        >
+          {/* Header with close button - Responsive */}
+          <div className="desktop:px-4 desktop:py-2.5 sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm">
+            <h2
+              id="ingredient-edit-modal-title"
+              className="desktop:text-xl text-lg font-bold text-white"
+            >
+              Edit Ingredient
+            </h2>
+            <button
+              onClick={onClose}
+              className="rounded-full p-2 text-gray-400 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              aria-label="Close modal"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
 
-        {/* Scrollable content - Responsive */}
-        <div ref={scrollableContentRef} className="max-h-[calc(90vh-10vh-4rem)] overflow-y-auto">
-          <div className="desktop:p-4 p-3">
-            <IngredientForm
-              ingredient={ingredient}
-              suppliers={suppliers}
-              availableUnits={availableUnits}
-              onSave={async (ingredientData: Partial<Ingredient>) => {
-                await onSave(ingredientData);
-                onClose();
-              }}
-              onCancel={onClose}
-              loading={loading}
-            />
+          {/* Scrollable content - Responsive */}
+          <div ref={scrollableContentRef} className="max-h-[calc(90vh-10vh-4rem)] overflow-y-auto">
+            <div className="desktop:p-4 p-3">
+              <IngredientForm
+                ingredient={ingredient}
+                suppliers={suppliers}
+                availableUnits={availableUnits}
+                onSave={async (ingredientData: Partial<Ingredient>) => {
+                  await onSave(ingredientData);
+                  onClose();
+                }}
+                onCancel={onClose}
+                loading={loading}
+              />
+            </div>
           </div>
         </div>
       </div>

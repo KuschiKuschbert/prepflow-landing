@@ -81,34 +81,44 @@ export function EquipmentQRCodeModal({
       aria-modal="true"
       aria-labelledby="qr-code-title"
     >
-      <div
-        ref={modalRef}
-        className="tablet:p-4 desktop:max-w-lg relative flex max-h-[95vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-3 shadow-2xl"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Gradient accent */}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[#29E7CD]/10 via-transparent to-[#D925C7]/10 opacity-50" />
-
-        {/* Close button */}
-        <button
-          ref={closeButtonRef}
-          onClick={onClose}
-          className="absolute top-3 right-3 z-10 rounded-full bg-[#2a2a2a]/80 p-1.5 backdrop-blur-sm transition-all hover:scale-110 hover:bg-[#3a3a3a] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
-          aria-label="Close QR code modal"
+      <div className="tablet:p-4 desktop:max-w-lg relative max-h-[95vh] w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+        <div
+          ref={modalRef}
+          className="flex max-h-[95vh] w-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1f1f1f]/95 to-[#2a2a2a]/95 p-3"
+          onClick={e => e.stopPropagation()}
         >
-          <Icon icon={X} size="sm" className="text-gray-400" />
-        </button>
+          {/* Gradient accent */}
+          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[#29E7CD]/10 via-transparent to-[#D925C7]/10 opacity-50" />
 
-        <EquipmentQRCodeModalHeader
-          equipment={equipment}
-          getTypeLabel={getTypeLabel}
-          copied={copied}
-          onCopyId={handleCopyId}
-        />
+          {/* Close button */}
+          <button
+            ref={closeButtonRef}
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 rounded-full bg-[#2a2a2a]/80 p-1.5 backdrop-blur-sm transition-all hover:scale-110 hover:bg-[#3a3a3a] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+            aria-label="Close QR code modal"
+          >
+            <Icon icon={X} size="sm" className="text-gray-400" />
+          </button>
 
-        <EquipmentQRCodeDisplay equipmentUrl={equipmentUrl} baseUrl={baseUrl} printRef={printRef} />
+          <EquipmentQRCodeModalHeader
+            equipment={equipment}
+            getTypeLabel={getTypeLabel}
+            copied={copied}
+            onCopyId={handleCopyId}
+          />
 
-        <EquipmentQRCodeModalActions printRef={printRef} equipment={equipment} onClose={onClose} />
+          <EquipmentQRCodeDisplay
+            equipmentUrl={equipmentUrl}
+            baseUrl={baseUrl}
+            printRef={printRef}
+          />
+
+          <EquipmentQRCodeModalActions
+            printRef={printRef}
+            equipment={equipment}
+            onClose={onClose}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,3541 @@
+{
+  "timestamp": "2025-11-18T06:48:50.535Z",
+  "summary": {
+    "total": 129,
+    "bySeverity": {
+      "critical": 71,
+      "warning": 58,
+      "info": 0
+    },
+    "byStandard": 4,
+    "byFile": 95
+  },
+  "violations": [
+    {
+      "file": "app/api/compliance/health-inspector-report/route.ts",
+      "message": "File exceeds api limit: 708 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/ingredients/route.ts",
+      "message": "File exceeds api limit: 321 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/items/[itemId]/route.ts",
+      "message": "File exceeds api limit: 204 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/par-levels/helpers/createParLevel.ts",
+      "message": "File exceeds api limit: 303 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/par-levels/route.ts",
+      "message": "File exceeds api limit: 335 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/prep-lists/generate-from-menu/route.ts",
+      "message": "File exceeds api limit: 316 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/components/landing/hooks/useAppleStyleAnimations.ts",
+      "message": "File exceeds hook limit: 115 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/cogs/hooks/useCOGSCalculations.ts",
+      "message": "File exceeds hook limit: 116 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/cogs/hooks/useIngredientAddition.ts",
+      "message": "File exceeds hook limit: 111 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/cogs/hooks/useRecipeIngredientsAutosave.ts",
+      "message": "File exceeds hook limit: 102 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/components/hooks/useTemperatureStatus.ts",
+      "message": "File exceeds hook limit: 107 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/dish-builder/hooks/useDishBuilder.ts",
+      "message": "File exceeds hook limit: 144 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/dish-builder/hooks/utils/dishSave.ts",
+      "message": "File exceeds hook limit: 121 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/dish-builder/hooks/utils/ingredientManagement.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/employees/components/EmployeeForm.tsx",
+      "message": "File exceeds component limit: 451 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/hooks/useIngredientAdd.ts",
+      "message": "File exceeds hook limit: 135 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/hooks/useIngredientCSV.ts",
+      "message": "File exceeds hook limit: 128 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuCategory.tsx",
+      "message": "File exceeds component limit: 702 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+      "message": "File exceeds component limit: 1010 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuList.tsx",
+      "message": "File exceeds component limit: 459 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/hooks/useMenuDragDrop.ts",
+      "message": "File exceeds hook limit: 221 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "message": "File exceeds page limit: 569 lines (limit 500)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/performance/hooks/usePerformanceInsights.ts",
+      "message": "File exceeds hook limit: 105 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/performance/utils/generatePerformanceTips.ts",
+      "message": "File exceeds util limit: 171 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/components/PrepListPreview.tsx",
+      "message": "File exceeds component limit: 307 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/components/hooks/usePrepListPreview.ts",
+      "message": "File exceeds hook limit: 175 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/hooks/usePrepListExport.ts",
+      "message": "File exceeds hook limit: 463 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/page.tsx",
+      "message": "File exceeds page limit: 535 lines (limit 500)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/utils/prepTechniques.ts",
+      "message": "File exceeds util limit: 200 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useDishesClientHandlers.ts",
+      "message": "File exceeds hook limit: 111 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+      "message": "File exceeds hook limit: 159 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeDishSave.ts",
+      "message": "File exceeds hook limit: 126 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeHandlers.ts",
+      "message": "File exceeds hook limit: 117 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useDishCOGSCalculations.ts",
+      "message": "File exceeds hook limit: 102 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useDishCostCalculation.ts",
+      "message": "File exceeds hook limit: 101 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useRecipeActions.ts",
+      "message": "File exceeds hook limit: 142 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useRecipeIngredients.ts",
+      "message": "File exceeds hook limit: 113 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts",
+      "message": "File exceeds hook limit: 150 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts",
+      "message": "File exceeds hook limit: 128 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/sections/hooks/useDishSectionActions.ts",
+      "message": "File exceeds hook limit: 147 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/components/utils.ts",
+      "message": "File exceeds component limit: 306 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useEquipmentLogs.ts",
+      "message": "File exceeds hook limit: 107 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers.ts",
+      "message": "File exceeds hook limit: 207 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts",
+      "message": "File exceeds hook limit: 145 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useTemperaturePageData.ts",
+      "message": "File exceeds hook limit: 112 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "components/CountrySetup.tsx",
+      "message": "File exceeds component limit: 301 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useAutosave.ts",
+      "message": "File exceeds hook limit: 112 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useDrawerSwipe.ts",
+      "message": "File exceeds hook limit: 205 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useLogoInteractions.ts",
+      "message": "File exceeds hook limit: 121 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useNavigationTracking.ts",
+      "message": "File exceeds hook limit: 267 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useOptimisticMutation.ts",
+      "message": "File exceeds hook limit: 102 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useParallelFetch.ts",
+      "message": "File exceeds hook limit: 106 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useSessionTimeout.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/utils/drawerTouchMoveHandler.ts",
+      "message": "File exceeds hook limit: 127 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/ai/ai-service.ts",
+      "message": "File exceeds util limit: 166 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/analytics.ts",
+      "message": "File exceeds util limit: 161 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/compliance/report-generator.ts",
+      "message": "File exceeds util limit: 1625 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/country-config.ts",
+      "message": "File exceeds util limit: 198 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/ingredients/migrate-to-standard-units.ts",
+      "message": "File exceeds util limit: 175 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/logger.ts",
+      "message": "File exceeds util limit: 166 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/navigation-optimization/optimizer.ts",
+      "message": "File exceeds util limit: 210 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/navigation-optimization/patternAnalyzer.ts",
+      "message": "File exceeds util limit: 220 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/optimistic-updates.ts",
+      "message": "File exceeds util limit: 281 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/performance-monitor.ts",
+      "message": "File exceeds util limit: 185 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/temperature-log-generator.ts",
+      "message": "File exceeds util limit: 167 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/check-performance-budget.js",
+      "message": "File exceeds component limit: 341 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/generate-performance-report.js",
+      "message": "File exceeds component limit: 402 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/optimize-performance.js",
+      "message": "File exceeds component limit: 361 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/send-performance-report.js",
+      "message": "File exceeds component limit: 334 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+      "line": 472,
+      "column": 9,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+      "line": 483,
+      "column": 7,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 53,
+      "column": 5,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 56,
+      "column": 7,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 62,
+      "column": 9,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 64,
+      "column": 9,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 67,
+      "column": 9,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 93,
+      "column": 9,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 99,
+      "column": 11,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 208,
+      "column": 9,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 209,
+      "column": 9,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 211,
+      "column": 9,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 214,
+      "column": 9,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 263,
+      "column": 9,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 269,
+      "column": 11,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/webapp/par-levels/page.tsx",
+      "line": 278,
+      "column": 7,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "lib/logger.ts",
+      "line": 115,
+      "column": 7,
+      "message": "console.log() should be migrated to logger.dev()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "lib/logger.ts",
+      "line": 137,
+      "column": 5,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "lib/logger.ts",
+      "line": 143,
+      "column": 5,
+      "message": "console.warn() should be migrated to logger.warn()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "lib/logger.ts",
+      "line": 150,
+      "column": 7,
+      "message": "console.info() should be migrated to logger.info()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "lib/logger.ts",
+      "line": 158,
+      "column": 7,
+      "message": "console.debug() should be migrated to logger.debug()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/api/account/delete/route.ts",
+      "line": 5,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/account/export/route.ts",
+      "line": 5,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai/chat/route.ts",
+      "line": 12,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai/performance-insights/route.ts",
+      "line": 16,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai/performance-tips/route.ts",
+      "line": 17,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai/prep-details/route.ts",
+      "line": 15,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai/recipe-instructions/route.ts",
+      "line": 13,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai-specials/route.ts",
+      "line": 9,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/ai-specials/route.ts",
+      "line": 119,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/assign-dish-section/route.ts",
+      "line": 5,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/billing/create-checkout-session/route.ts",
+      "line": 19,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/billing/create-portal-session/route.ts",
+      "line": 9,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-areas/route.ts",
+      "line": 10,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-areas/route.ts",
+      "line": 46,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-areas/route.ts",
+      "line": 77,
+      "message": "Missing JSDoc for exported function/component: PUT",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-areas/route.ts",
+      "line": 110,
+      "message": "Missing JSDoc for exported function/component: DELETE",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-tasks/route.ts",
+      "line": 20,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-tasks/route.ts",
+      "line": 71,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-tasks/route.ts",
+      "line": 106,
+      "message": "Missing JSDoc for exported function/component: PUT",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleaning-tasks/route.ts",
+      "line": 139,
+      "message": "Missing JSDoc for exported function/component: DELETE",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/cleanup-test-data/route.ts",
+      "line": 5,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/compliance-records/route.ts",
+      "line": 19,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/compliance-records/route.ts",
+      "line": 70,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/compliance-records/route.ts",
+      "line": 121,
+      "message": "Missing JSDoc for exported function/component: PUT",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/compliance-records/route.ts",
+      "line": 167,
+      "message": "Missing JSDoc for exported function/component: DELETE",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/compliance-types/route.ts",
+      "line": 6,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/compliance-types/route.ts",
+      "line": 66,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/dashboard/menu-summary/route.ts",
+      "line": 5,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/dashboard/performance-summary/route.ts",
+      "line": 14,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/dashboard/recipe-readiness/route.ts",
+      "line": 9,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/dashboard/stats/route.ts",
+      "line": 6,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/db/integrity/route.ts",
+      "line": 4,
+      "message": "Missing JSDoc for exported function/component: GET",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/db/reset/route.ts",
+      "line": 4,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": "app/api/db/reset-self/route.ts",
+      "line": 17,
+      "message": "Missing JSDoc for exported function/component: POST",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#jsdoc-requirements",
+      "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+    },
+    {
+      "file": ".next/static",
+      "message": "Total bundle size 3403.0KB exceeds budget of 488KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards) and operations.mdc (Performance Standards). Consider code splitting, lazy loading, and removing unused dependencies."
+    },
+    {
+      "file": ".next/static",
+      "message": "JavaScript bundle size 3250.5KB exceeds budget of 195KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+    },
+    {
+      "file": ".next/static",
+      "message": "CSS bundle size 152.5KB exceeds budget of 49KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards). Consider CSS purging, removing unused styles, and splitting CSS files."
+    }
+  ],
+  "groupedByFile": {
+    "app/api/compliance/health-inspector-report/route.ts": [
+      {
+        "file": "app/api/compliance/health-inspector-report/route.ts",
+        "message": "File exceeds api limit: 708 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/ingredients/route.ts": [
+      {
+        "file": "app/api/menus/[id]/ingredients/route.ts",
+        "message": "File exceeds api limit: 321 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/items/[itemId]/route.ts": [
+      {
+        "file": "app/api/menus/[id]/items/[itemId]/route.ts",
+        "message": "File exceeds api limit: 204 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/par-levels/helpers/createParLevel.ts": [
+      {
+        "file": "app/api/par-levels/helpers/createParLevel.ts",
+        "message": "File exceeds api limit: 303 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/par-levels/route.ts": [
+      {
+        "file": "app/api/par-levels/route.ts",
+        "message": "File exceeds api limit: 335 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/prep-lists/generate-from-menu/route.ts": [
+      {
+        "file": "app/api/prep-lists/generate-from-menu/route.ts",
+        "message": "File exceeds api limit: 316 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/components/landing/hooks/useAppleStyleAnimations.ts": [
+      {
+        "file": "app/components/landing/hooks/useAppleStyleAnimations.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/cogs/hooks/useCOGSCalculations.ts": [
+      {
+        "file": "app/webapp/cogs/hooks/useCOGSCalculations.ts",
+        "message": "File exceeds hook limit: 116 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/cogs/hooks/useIngredientAddition.ts": [
+      {
+        "file": "app/webapp/cogs/hooks/useIngredientAddition.ts",
+        "message": "File exceeds hook limit: 111 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/cogs/hooks/useRecipeIngredientsAutosave.ts": [
+      {
+        "file": "app/webapp/cogs/hooks/useRecipeIngredientsAutosave.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/components/hooks/useTemperatureStatus.ts": [
+      {
+        "file": "app/webapp/components/hooks/useTemperatureStatus.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/dish-builder/hooks/useDishBuilder.ts": [
+      {
+        "file": "app/webapp/dish-builder/hooks/useDishBuilder.ts",
+        "message": "File exceeds hook limit: 144 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/dish-builder/hooks/utils/dishSave.ts": [
+      {
+        "file": "app/webapp/dish-builder/hooks/utils/dishSave.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/dish-builder/hooks/utils/ingredientManagement.ts": [
+      {
+        "file": "app/webapp/dish-builder/hooks/utils/ingredientManagement.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/employees/components/EmployeeForm.tsx": [
+      {
+        "file": "app/webapp/employees/components/EmployeeForm.tsx",
+        "message": "File exceeds component limit: 451 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/hooks/useIngredientAdd.ts": [
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientAdd.ts",
+        "message": "File exceeds hook limit: 135 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/hooks/useIngredientCSV.ts": [
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientCSV.ts",
+        "message": "File exceeds hook limit: 128 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuCategory.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuCategory.tsx",
+        "message": "File exceeds component limit: 702 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuEditor.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "message": "File exceeds component limit: 1010 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "line": 472,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "line": 483,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuList.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuList.tsx",
+        "message": "File exceeds component limit: 459 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/hooks/useMenuDragDrop.ts": [
+      {
+        "file": "app/webapp/menu-builder/hooks/useMenuDragDrop.ts",
+        "message": "File exceeds hook limit: 221 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/par-levels/page.tsx": [
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "message": "File exceeds page limit: 569 lines (limit 500)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 53,
+        "column": 5,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 56,
+        "column": 7,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 62,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 64,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 67,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 93,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 99,
+        "column": 11,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 208,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 209,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 211,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 214,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 263,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 269,
+        "column": 11,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 278,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "app/webapp/performance/hooks/usePerformanceInsights.ts": [
+      {
+        "file": "app/webapp/performance/hooks/usePerformanceInsights.ts",
+        "message": "File exceeds hook limit: 105 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/performance/utils/generatePerformanceTips.ts": [
+      {
+        "file": "app/webapp/performance/utils/generatePerformanceTips.ts",
+        "message": "File exceeds util limit: 171 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/components/PrepListPreview.tsx": [
+      {
+        "file": "app/webapp/prep-lists/components/PrepListPreview.tsx",
+        "message": "File exceeds component limit: 307 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/components/hooks/usePrepListPreview.ts": [
+      {
+        "file": "app/webapp/prep-lists/components/hooks/usePrepListPreview.ts",
+        "message": "File exceeds hook limit: 175 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/hooks/usePrepListExport.ts": [
+      {
+        "file": "app/webapp/prep-lists/hooks/usePrepListExport.ts",
+        "message": "File exceeds hook limit: 463 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/page.tsx": [
+      {
+        "file": "app/webapp/prep-lists/page.tsx",
+        "message": "File exceeds page limit: 535 lines (limit 500)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/utils/prepTechniques.ts": [
+      {
+        "file": "app/webapp/prep-lists/utils/prepTechniques.ts",
+        "message": "File exceeds util limit: 200 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useDishesClientHandlers.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useDishesClientHandlers.ts",
+        "message": "File exceeds hook limit: 111 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+        "message": "File exceeds hook limit: 159 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeDishSave.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishSave.ts",
+        "message": "File exceeds hook limit: 126 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeHandlers.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeHandlers.ts",
+        "message": "File exceeds hook limit: 117 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useDishCOGSCalculations.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useDishCOGSCalculations.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useDishCostCalculation.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useDishCostCalculation.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useRecipeActions.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeActions.ts",
+        "message": "File exceeds hook limit: 142 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useRecipeIngredients.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeIngredients.ts",
+        "message": "File exceeds hook limit: 113 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts",
+        "message": "File exceeds hook limit: 150 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts",
+        "message": "File exceeds hook limit: 128 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/sections/hooks/useDishSectionActions.ts": [
+      {
+        "file": "app/webapp/sections/hooks/useDishSectionActions.ts",
+        "message": "File exceeds hook limit: 147 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/components/utils.ts": [
+      {
+        "file": "app/webapp/temperature/components/utils.ts",
+        "message": "File exceeds component limit: 306 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useEquipmentLogs.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useEquipmentLogs.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers.ts",
+        "message": "File exceeds hook limit: 207 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts",
+        "message": "File exceeds hook limit: 145 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperaturePageData.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperaturePageData.ts",
+        "message": "File exceeds hook limit: 112 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "components/CountrySetup.tsx": [
+      {
+        "file": "components/CountrySetup.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useAutosave.ts": [
+      {
+        "file": "hooks/useAutosave.ts",
+        "message": "File exceeds hook limit: 112 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useDrawerSwipe.ts": [
+      {
+        "file": "hooks/useDrawerSwipe.ts",
+        "message": "File exceeds hook limit: 205 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useLogoInteractions.ts": [
+      {
+        "file": "hooks/useLogoInteractions.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useNavigationTracking.ts": [
+      {
+        "file": "hooks/useNavigationTracking.ts",
+        "message": "File exceeds hook limit: 267 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useOptimisticMutation.ts": [
+      {
+        "file": "hooks/useOptimisticMutation.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useParallelFetch.ts": [
+      {
+        "file": "hooks/useParallelFetch.ts",
+        "message": "File exceeds hook limit: 106 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useSessionTimeout.ts": [
+      {
+        "file": "hooks/useSessionTimeout.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/utils/drawerTouchMoveHandler.ts": [
+      {
+        "file": "hooks/utils/drawerTouchMoveHandler.ts",
+        "message": "File exceeds hook limit: 127 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/ai/ai-service.ts": [
+      {
+        "file": "lib/ai/ai-service.ts",
+        "message": "File exceeds util limit: 166 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/analytics.ts": [
+      {
+        "file": "lib/analytics.ts",
+        "message": "File exceeds util limit: 161 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/compliance/report-generator.ts": [
+      {
+        "file": "lib/compliance/report-generator.ts",
+        "message": "File exceeds util limit: 1625 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/country-config.ts": [
+      {
+        "file": "lib/country-config.ts",
+        "message": "File exceeds util limit: 198 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/ingredients/migrate-to-standard-units.ts": [
+      {
+        "file": "lib/ingredients/migrate-to-standard-units.ts",
+        "message": "File exceeds util limit: 175 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/logger.ts": [
+      {
+        "file": "lib/logger.ts",
+        "message": "File exceeds util limit: 166 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 115,
+        "column": 7,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 137,
+        "column": 5,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 143,
+        "column": 5,
+        "message": "console.warn() should be migrated to logger.warn()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 150,
+        "column": 7,
+        "message": "console.info() should be migrated to logger.info()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 158,
+        "column": 7,
+        "message": "console.debug() should be migrated to logger.debug()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "lib/navigation-optimization/optimizer.ts": [
+      {
+        "file": "lib/navigation-optimization/optimizer.ts",
+        "message": "File exceeds util limit: 210 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/navigation-optimization/patternAnalyzer.ts": [
+      {
+        "file": "lib/navigation-optimization/patternAnalyzer.ts",
+        "message": "File exceeds util limit: 220 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/optimistic-updates.ts": [
+      {
+        "file": "lib/optimistic-updates.ts",
+        "message": "File exceeds util limit: 281 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/performance-monitor.ts": [
+      {
+        "file": "lib/performance-monitor.ts",
+        "message": "File exceeds util limit: 185 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/temperature-log-generator.ts": [
+      {
+        "file": "lib/temperature-log-generator.ts",
+        "message": "File exceeds util limit: 167 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/check-performance-budget.js": [
+      {
+        "file": "scripts/check-performance-budget.js",
+        "message": "File exceeds component limit: 341 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/generate-performance-report.js": [
+      {
+        "file": "scripts/generate-performance-report.js",
+        "message": "File exceeds component limit: 402 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/optimize-performance.js": [
+      {
+        "file": "scripts/optimize-performance.js",
+        "message": "File exceeds component limit: 361 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/send-performance-report.js": [
+      {
+        "file": "scripts/send-performance-report.js",
+        "message": "File exceeds component limit: 334 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/account/delete/route.ts": [
+      {
+        "file": "app/api/account/delete/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/account/export/route.ts": [
+      {
+        "file": "app/api/account/export/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/ai/chat/route.ts": [
+      {
+        "file": "app/api/ai/chat/route.ts",
+        "line": 12,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/ai/performance-insights/route.ts": [
+      {
+        "file": "app/api/ai/performance-insights/route.ts",
+        "line": 16,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/ai/performance-tips/route.ts": [
+      {
+        "file": "app/api/ai/performance-tips/route.ts",
+        "line": 17,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/ai/prep-details/route.ts": [
+      {
+        "file": "app/api/ai/prep-details/route.ts",
+        "line": 15,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/ai/recipe-instructions/route.ts": [
+      {
+        "file": "app/api/ai/recipe-instructions/route.ts",
+        "line": 13,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/ai-specials/route.ts": [
+      {
+        "file": "app/api/ai-specials/route.ts",
+        "line": 9,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai-specials/route.ts",
+        "line": 119,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/assign-dish-section/route.ts": [
+      {
+        "file": "app/api/assign-dish-section/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/billing/create-checkout-session/route.ts": [
+      {
+        "file": "app/api/billing/create-checkout-session/route.ts",
+        "line": 19,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/billing/create-portal-session/route.ts": [
+      {
+        "file": "app/api/billing/create-portal-session/route.ts",
+        "line": 9,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/cleaning-areas/route.ts": [
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 10,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 46,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 77,
+        "message": "Missing JSDoc for exported function/component: PUT",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 110,
+        "message": "Missing JSDoc for exported function/component: DELETE",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/cleaning-tasks/route.ts": [
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 20,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 71,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 106,
+        "message": "Missing JSDoc for exported function/component: PUT",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 139,
+        "message": "Missing JSDoc for exported function/component: DELETE",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/cleanup-test-data/route.ts": [
+      {
+        "file": "app/api/cleanup-test-data/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/compliance-records/route.ts": [
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 19,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 70,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 121,
+        "message": "Missing JSDoc for exported function/component: PUT",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 167,
+        "message": "Missing JSDoc for exported function/component: DELETE",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/compliance-types/route.ts": [
+      {
+        "file": "app/api/compliance-types/route.ts",
+        "line": 6,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-types/route.ts",
+        "line": 66,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/dashboard/menu-summary/route.ts": [
+      {
+        "file": "app/api/dashboard/menu-summary/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/dashboard/performance-summary/route.ts": [
+      {
+        "file": "app/api/dashboard/performance-summary/route.ts",
+        "line": 14,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/dashboard/recipe-readiness/route.ts": [
+      {
+        "file": "app/api/dashboard/recipe-readiness/route.ts",
+        "line": 9,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/dashboard/stats/route.ts": [
+      {
+        "file": "app/api/dashboard/stats/route.ts",
+        "line": 6,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/db/integrity/route.ts": [
+      {
+        "file": "app/api/db/integrity/route.ts",
+        "line": 4,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/db/reset/route.ts": [
+      {
+        "file": "app/api/db/reset/route.ts",
+        "line": 4,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "app/api/db/reset-self/route.ts": [
+      {
+        "file": "app/api/db/reset-self/route.ts",
+        "line": 17,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    ".next/static": [
+      {
+        "file": ".next/static",
+        "message": "Total bundle size 3403.0KB exceeds budget of 488KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards) and operations.mdc (Performance Standards). Consider code splitting, lazy loading, and removing unused dependencies."
+      },
+      {
+        "file": ".next/static",
+        "message": "JavaScript bundle size 3250.5KB exceeds budget of 195KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+      },
+      {
+        "file": ".next/static",
+        "message": "CSS bundle size 152.5KB exceeds budget of 49KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider CSS purging, removing unused styles, and splitting CSS files."
+      }
+    ]
+  },
+  "groupedByStandard": {
+    "development.mdc#file-size-limits": [
+      {
+        "file": "app/api/compliance/health-inspector-report/route.ts",
+        "message": "File exceeds api limit: 708 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/ingredients/route.ts",
+        "message": "File exceeds api limit: 321 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/items/[itemId]/route.ts",
+        "message": "File exceeds api limit: 204 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/par-levels/helpers/createParLevel.ts",
+        "message": "File exceeds api limit: 303 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/par-levels/route.ts",
+        "message": "File exceeds api limit: 335 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/prep-lists/generate-from-menu/route.ts",
+        "message": "File exceeds api limit: 316 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/components/landing/hooks/useAppleStyleAnimations.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/cogs/hooks/useCOGSCalculations.ts",
+        "message": "File exceeds hook limit: 116 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/cogs/hooks/useIngredientAddition.ts",
+        "message": "File exceeds hook limit: 111 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/cogs/hooks/useRecipeIngredientsAutosave.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/components/hooks/useTemperatureStatus.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/dish-builder/hooks/useDishBuilder.ts",
+        "message": "File exceeds hook limit: 144 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/dish-builder/hooks/utils/dishSave.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/dish-builder/hooks/utils/ingredientManagement.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/employees/components/EmployeeForm.tsx",
+        "message": "File exceeds component limit: 451 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientAdd.ts",
+        "message": "File exceeds hook limit: 135 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientCSV.ts",
+        "message": "File exceeds hook limit: 128 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuCategory.tsx",
+        "message": "File exceeds component limit: 702 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "message": "File exceeds component limit: 1010 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuList.tsx",
+        "message": "File exceeds component limit: 459 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/hooks/useMenuDragDrop.ts",
+        "message": "File exceeds hook limit: 221 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "message": "File exceeds page limit: 569 lines (limit 500)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/performance/hooks/usePerformanceInsights.ts",
+        "message": "File exceeds hook limit: 105 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/performance/utils/generatePerformanceTips.ts",
+        "message": "File exceeds util limit: 171 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/components/PrepListPreview.tsx",
+        "message": "File exceeds component limit: 307 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/components/hooks/usePrepListPreview.ts",
+        "message": "File exceeds hook limit: 175 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/hooks/usePrepListExport.ts",
+        "message": "File exceeds hook limit: 463 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/page.tsx",
+        "message": "File exceeds page limit: 535 lines (limit 500)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/utils/prepTechniques.ts",
+        "message": "File exceeds util limit: 200 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useDishesClientHandlers.ts",
+        "message": "File exceeds hook limit: 111 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+        "message": "File exceeds hook limit: 159 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishSave.ts",
+        "message": "File exceeds hook limit: 126 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeHandlers.ts",
+        "message": "File exceeds hook limit: 117 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useDishCOGSCalculations.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useDishCostCalculation.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeActions.ts",
+        "message": "File exceeds hook limit: 142 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeIngredients.ts",
+        "message": "File exceeds hook limit: 113 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts",
+        "message": "File exceeds hook limit: 150 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts",
+        "message": "File exceeds hook limit: 128 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/sections/hooks/useDishSectionActions.ts",
+        "message": "File exceeds hook limit: 147 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/components/utils.ts",
+        "message": "File exceeds component limit: 306 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useEquipmentLogs.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers.ts",
+        "message": "File exceeds hook limit: 207 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts",
+        "message": "File exceeds hook limit: 145 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useTemperaturePageData.ts",
+        "message": "File exceeds hook limit: 112 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "components/CountrySetup.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useAutosave.ts",
+        "message": "File exceeds hook limit: 112 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useDrawerSwipe.ts",
+        "message": "File exceeds hook limit: 205 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useLogoInteractions.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useNavigationTracking.ts",
+        "message": "File exceeds hook limit: 267 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useOptimisticMutation.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useParallelFetch.ts",
+        "message": "File exceeds hook limit: 106 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useSessionTimeout.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/utils/drawerTouchMoveHandler.ts",
+        "message": "File exceeds hook limit: 127 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/ai/ai-service.ts",
+        "message": "File exceeds util limit: 166 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/analytics.ts",
+        "message": "File exceeds util limit: 161 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/compliance/report-generator.ts",
+        "message": "File exceeds util limit: 1625 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/country-config.ts",
+        "message": "File exceeds util limit: 198 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/ingredients/migrate-to-standard-units.ts",
+        "message": "File exceeds util limit: 175 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/logger.ts",
+        "message": "File exceeds util limit: 166 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/navigation-optimization/optimizer.ts",
+        "message": "File exceeds util limit: 210 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/navigation-optimization/patternAnalyzer.ts",
+        "message": "File exceeds util limit: 220 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/optimistic-updates.ts",
+        "message": "File exceeds util limit: 281 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/performance-monitor.ts",
+        "message": "File exceeds util limit: 185 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/temperature-log-generator.ts",
+        "message": "File exceeds util limit: 167 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/check-performance-budget.js",
+        "message": "File exceeds component limit: 341 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/generate-performance-report.js",
+        "message": "File exceeds component limit: 402 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/optimize-performance.js",
+        "message": "File exceeds component limit: 361 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/send-performance-report.js",
+        "message": "File exceeds component limit: 334 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "development.mdc#console-log-migration": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "line": 472,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "line": 483,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 53,
+        "column": 5,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 56,
+        "column": 7,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 62,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 64,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 67,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 93,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 99,
+        "column": 11,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 208,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 209,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 211,
+        "column": 9,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 214,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 263,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 269,
+        "column": 11,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/webapp/par-levels/page.tsx",
+        "line": 278,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 115,
+        "column": 7,
+        "message": "console.log() should be migrated to logger.dev()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 137,
+        "column": 5,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 143,
+        "column": 5,
+        "message": "console.warn() should be migrated to logger.warn()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 150,
+        "column": 7,
+        "message": "console.info() should be migrated to logger.info()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "lib/logger.ts",
+        "line": 158,
+        "column": 7,
+        "message": "console.debug() should be migrated to logger.debug()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "development.mdc#jsdoc-requirements": [
+      {
+        "file": "app/api/account/delete/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/account/export/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai/chat/route.ts",
+        "line": 12,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai/performance-insights/route.ts",
+        "line": 16,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai/performance-tips/route.ts",
+        "line": 17,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai/prep-details/route.ts",
+        "line": 15,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai/recipe-instructions/route.ts",
+        "line": 13,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai-specials/route.ts",
+        "line": 9,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/ai-specials/route.ts",
+        "line": 119,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/assign-dish-section/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/billing/create-checkout-session/route.ts",
+        "line": 19,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/billing/create-portal-session/route.ts",
+        "line": 9,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 10,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 46,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 77,
+        "message": "Missing JSDoc for exported function/component: PUT",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-areas/route.ts",
+        "line": 110,
+        "message": "Missing JSDoc for exported function/component: DELETE",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 20,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 71,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 106,
+        "message": "Missing JSDoc for exported function/component: PUT",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "line": 139,
+        "message": "Missing JSDoc for exported function/component: DELETE",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/cleanup-test-data/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 19,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 70,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 121,
+        "message": "Missing JSDoc for exported function/component: PUT",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "line": 167,
+        "message": "Missing JSDoc for exported function/component: DELETE",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-types/route.ts",
+        "line": 6,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/compliance-types/route.ts",
+        "line": 66,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/dashboard/menu-summary/route.ts",
+        "line": 5,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/dashboard/performance-summary/route.ts",
+        "line": 14,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/dashboard/recipe-readiness/route.ts",
+        "line": 9,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/dashboard/stats/route.ts",
+        "line": 6,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/db/integrity/route.ts",
+        "line": 4,
+        "message": "Missing JSDoc for exported function/component: GET",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/db/reset/route.ts",
+        "line": 4,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      },
+      {
+        "file": "app/api/db/reset-self/route.ts",
+        "line": 17,
+        "message": "Missing JSDoc for exported function/component: POST",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#jsdoc-requirements",
+        "reference": "See cleanup.mdc (JSDoc Requirements) and development.mdc (JSDoc Templates)"
+      }
+    ],
+    "operations.mdc#performance-standards": [
+      {
+        "file": ".next/static",
+        "message": "Total bundle size 3403.0KB exceeds budget of 488KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards) and operations.mdc (Performance Standards). Consider code splitting, lazy loading, and removing unused dependencies."
+      },
+      {
+        "file": ".next/static",
+        "message": "JavaScript bundle size 3250.5KB exceeds budget of 195KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+      },
+      {
+        "file": ".next/static",
+        "message": "CSS bundle size 152.5KB exceeds budget of 49KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider CSS purging, removing unused styles, and splitting CSS files."
+      }
+    ]
+  }
+}

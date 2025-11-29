@@ -32,4 +32,12 @@ export default defineConfig([
       'no-console': 'off',
     },
   },
+  {
+    // Allow console in e2e tests (test debugging)
+    files: ['e2e/**/*.ts', 'e2e/**/*.js'],
+    rules: {
+      'no-console': 'off',
+      'react-hooks/rules-of-hooks': 'off', // Playwright fixtures use 'use' which conflicts with React hooks rule
+    },
+  },
 ]);

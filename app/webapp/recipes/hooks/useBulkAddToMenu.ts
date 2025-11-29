@@ -78,7 +78,7 @@ export function useBulkAddToMenu({
         showSuccess(
           `${count} item${count > 1 ? 's' : ''} added to menu successfully! Opening menu editor...`,
         );
-        router.push(`/webapp/menu-builder?menuId=${menuId}`);
+        router.push(`/webapp/recipes#menu-builder`);
         onSuccess?.();
       } catch (err) {
         logger.error('Bulk add to menu failed:', err);
@@ -91,7 +91,7 @@ export function useBulkAddToMenu({
   );
   const handleCreateNewMenu = useCallback(() => {
     setShowMenuDialog(false);
-    router.push('/webapp/menu-builder');
+    router.push('/webapp/recipes#menu-builder');
   }, [router]);
   return {
     handleBulkAddToMenu,
