@@ -3,6 +3,7 @@ import { convertIngredientCost } from '@/lib/unit-conversion';
 import { useCallback } from 'react';
 import { COGSCalculation, Ingredient, RecipeIngredient } from '../types';
 import { updateCalculation as updateCalculationUtil } from './utils/updateCalculation';
+import { useOnCOGSCalculated } from '@/lib/personality/hooks';
 
 interface UseCOGSCalculationLogicProps {
   ingredients: Ingredient[];
@@ -13,6 +14,8 @@ export function useCOGSCalculationLogic({
   ingredients,
   setCalculations,
 }: UseCOGSCalculationLogicProps) {
+  const onCOGSCalculated = useOnCOGSCalculated();
+
   const calculateCOGS = useCallback(
     (recipeIngredients: RecipeIngredient[]) => {
       const calculations: COGSCalculation[] = recipeIngredients
@@ -58,8 +61,13 @@ export function useCOGSCalculationLogic({
         })
         .filter(Boolean) as COGSCalculation[];
       setCalculations(calculations);
+
+      // Trigger personality hook when COGS is calculated
+      if (calculations.length > 0) {
+        onCOGSCalculated();
+      }
     },
-    [ingredients, setCalculations],
+    [ingredients, setCalculations, onCOGSCalculated],
   );
   const updateCalculation = useCallback(
     (

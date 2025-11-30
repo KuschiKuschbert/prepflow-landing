@@ -11,14 +11,12 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
 import { MobileNavigationDrawer } from './navigation/MobileNavigationDrawer';
-import { SettingsDrawer } from './navigation/SettingsDrawer';
 import { useNavigationItems } from './navigation/nav-items';
 import { NavigationHeader } from './navigation/NavigationHeader';
 import PersistentSidebar from './navigation/PersistentSidebar';
 import { SearchModal } from './navigation/SearchModal';
 import { MobileFAB } from './navigation/MobileFAB';
 import { NavigationErrorBoundary } from './navigation/NavigationErrorBoundary';
-import { useWorkflowPreference } from '@/lib/workflow/preferences';
 
 interface NavigationItem {
   href: string;
@@ -47,7 +45,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   const { t } = useTranslation();
   const pathname = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -74,11 +71,8 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
   // CatchTheDocket trigger hook
   const { showDocketOverlay, setShowDocketOverlay } = useCatchTheDocketTrigger();
 
-  // Get workflow preference
-  const { workflow } = useWorkflowPreference();
-
   // Navigation items organized by category
-  const navigationItems: NavigationItem[] = useNavigationItems(workflow) as NavigationItem[];
+  const navigationItems: NavigationItem[] = useNavigationItems() as NavigationItem[];
 
   // Filter items based on search query
   const filteredItems = navigationItems.filter(item =>
@@ -142,13 +136,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     setIsSearchOpen(false);
   }, []);
 
-  const handleUserClick = useCallback(() => {
-    setIsSettingsOpen(true);
-  }, []);
-
-  const handleSettingsClose = useCallback(() => {
-    setIsSettingsOpen(false);
-  }, []);
 
   return (
     <NavigationErrorBoundary>
@@ -166,7 +153,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         handleLogoMouseUp={handleLogoMouseUp}
         handleLogoMouseLeave={handleLogoMouseLeave}
         shouldPreventNavigation={shouldPreventNavigation}
-        onUserClick={handleUserClick}
         userButtonRef={userButtonRef}
       />
 
@@ -193,13 +179,6 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
           menuButtonRef={menuButtonRef}
         />
       </div>
-
-      {/* Universal Settings Drawer */}
-      <SettingsDrawer
-        isOpen={isSettingsOpen}
-        onClose={handleSettingsClose}
-        userButtonRef={userButtonRef}
-      />
 
       {/* Search Modal */}
       <SearchModal

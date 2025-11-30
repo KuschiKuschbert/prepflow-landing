@@ -8,6 +8,7 @@
 import { useMemo } from 'react';
 import { Menu, MenuItem } from '../types';
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
+import { FoodImageDisplay } from '@/components/ui/FoodImageDisplay';
 
 interface MenuDisplayViewProps {
   menu: Menu;
@@ -101,11 +102,34 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
                 item.dietary_confidence ||
                 (isDish ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
 
+              // Get image URLs from dish or recipe
+              const imageUrl = isDish
+                ? (item.dishes as any)?.image_url
+                : (item.recipes as any)?.image_url;
+              const imageUrlAlternative = isDish
+                ? (item.dishes as any)?.image_url_alternative
+                : (item.recipes as any)?.image_url_alternative;
+              const entityId = isDish ? item.dish_id : item.recipe_id;
+
               return (
                 <div
                   key={item.id}
                   className="group rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-5 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg"
                 >
+                  {/* Food Image */}
+                  {(imageUrl || imageUrlAlternative) && (
+                    <div className="mb-4">
+                      <FoodImageDisplay
+                        imageUrl={imageUrl}
+                        imageUrlAlternative={imageUrlAlternative}
+                        alt={itemName}
+                        className="w-full"
+                        priority={false}
+                        showToggle={true}
+                      />
+                    </div>
+                  )}
+
                   {/* Item Header with Name and Price */}
                   <div className="mb-3 flex items-start justify-between gap-4">
                     <h4 className="flex-1 text-lg font-semibold text-white">{itemName}</h4>

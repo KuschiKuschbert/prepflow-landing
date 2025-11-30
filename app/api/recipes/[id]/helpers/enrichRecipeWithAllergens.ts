@@ -72,3 +72,4 @@ export async function enrichRecipeWithAllergens(recipeId: string, recipe: any) {
     dietary_method: dietaryStatus?.method ?? null,
   };
 }
+

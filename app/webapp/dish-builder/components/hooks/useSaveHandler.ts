@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useOnRecipeCreated, useOnDishCreated } from '@/lib/personality/hooks';
 
 interface UseSaveHandlerProps {
   dishState: {
@@ -24,6 +25,8 @@ export function useSaveHandler({
 }: UseSaveHandlerProps) {
   const [saving, setSaving] = useState(false);
   const { showSuccess, showError } = useNotification();
+  const onRecipeCreated = useOnRecipeCreated();
+  const onDishCreated = useOnDishCreated();
 
   const handleSave = async () => {
     if (saving) return; // Prevent double-clicks
@@ -34,6 +37,14 @@ export function useSaveHandler({
       if (result.success) {
         const itemType = dishState.itemType === 'dish' ? 'Dish' : 'Recipe';
         showSuccess(`${itemType} "${dishState.dishName}" saved successfully!`);
+
+        // Trigger personality hooks
+        if (dishState.itemType === 'recipe') {
+          onRecipeCreated();
+        } else {
+          onDishCreated();
+        }
+
         // Notify parent after a delay
         setTimeout(() => {
           if (onSaveSuccess) {

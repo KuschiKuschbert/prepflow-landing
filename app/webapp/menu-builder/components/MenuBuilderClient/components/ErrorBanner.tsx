@@ -28,3 +28,4 @@ export function ErrorBanner({ error, onRetry }: ErrorBannerProps) {
     </div>
   );
 }
+

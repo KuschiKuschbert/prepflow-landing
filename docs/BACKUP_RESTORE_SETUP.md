@@ -303,3 +303,4 @@ SELECT * FROM backup_metadata;
 ## Support
 
 For issues or questions, refer to the main project documentation or contact support.
+

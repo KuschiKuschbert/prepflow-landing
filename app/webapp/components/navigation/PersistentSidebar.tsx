@@ -6,7 +6,6 @@ import { ExpandableCategorySection } from './ExpandableCategorySection';
 import { NavItem } from './NavItem';
 import { useNavigationItems } from './nav-items';
 import { NewButton } from './NewButton';
-import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -20,12 +19,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
  */
 export default function PersistentSidebar() {
   const pathname = usePathname();
-  const { workflow } = useWorkflowPreference();
   const { trackNavigation } = useNavigationTracking();
   const [mounted, setMounted] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
-  const allItems = useNavigationItems(workflow);
+  const allItems = useNavigationItems();
 
   // Group items by category
   const groupedItems = useMemo(
@@ -116,7 +114,6 @@ export default function PersistentSidebar() {
                   items={items}
                   isActive={isActive}
                   onTrack={trackNavigation}
-                  workflow={workflow}
                   isExpanded={expandedCategory === category}
                   onToggle={handleCategoryToggle}
                 />

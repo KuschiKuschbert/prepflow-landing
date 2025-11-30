@@ -123,6 +123,8 @@ export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishS
               onEditQuantityChange={setEditQuantity}
               totalCOGS={totalCOGS}
               costPerPortion={costPerPortion}
+              dishId={currentDish.id}
+              dishName={currentDish.dish_name}
             />
           </div>
 

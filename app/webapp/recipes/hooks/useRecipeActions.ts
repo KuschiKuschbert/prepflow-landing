@@ -1,15 +1,16 @@
 'use client';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import { useOnRecipeCreated } from '@/lib/personality/hooks';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { useRecipeBulkOperations } from './useRecipeBulkOperations';
 import { useRecipeDeleteOperations } from './useRecipeDeleteOperations';
 import { useRecipeShareOperations } from './useRecipeShareOperations';
 import { convertToCOGSCalculations } from './utils/recipeCalculationHelpers';
 import { storeRecipeForEditing } from './utils/recipeEditHelpers';
-import { logger } from '@/lib/logger';
 interface UseRecipeActionsProps {
   recipes: Recipe[];
   fetchRecipes: () => Promise<void>;
@@ -30,6 +31,7 @@ export function useRecipeActions({
 }: UseRecipeActionsProps) {
   const router = useRouter();
   const { showError: showErrorNotification, showSuccess } = useNotification();
+  const onRecipeCreated = useOnRecipeCreated();
   const bulkOps = useRecipeBulkOperations(
     recipes,
     fetchRecipes,
@@ -53,13 +55,17 @@ export function useRecipeActions({
           return false;
         }
         await fetchRecipes();
+
+        // Trigger personality hook for recipe creation
+        onRecipeCreated();
+
         return true;
       } catch {
         showErrorNotification('Failed to add recipe');
         return false;
       }
     },
-    [fetchRecipes, showErrorNotification],
+    [fetchRecipes, showErrorNotification, onRecipeCreated],
   );
   const handleEditFromPreview = useCallback(
     async (selectedRecipe: Recipe, recipeIngredients: RecipeIngredientWithDetails[]) => {

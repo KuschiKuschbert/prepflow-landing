@@ -1,0 +1,248 @@
+
+> prepflow-landing@0.1.1 test:e2e
+> playwright test e2e/system-audit.spec.ts
+
+
+Running 7 tests using 1 worker
+
+Starting E2E test suite with 7 tests
+(node:41758) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:41758) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › e2e/system-audit.spec.ts:296:7 › System Audit › 1. Chef Workflow - Login (7.1s)
+✅ QA Audit Report generated: QA_AUDIT_REPORT.md
+   📊 Summary: 2 pages visited, 2 errors found
+   📸 Screenshots: 0 taken
+No search input found for menu deletion
+  ✘  2 [chromium] › e2e/system-audit.spec.ts:314:7 › System Audit › 2. Chef Workflow - Create Ingredient (22.5s)
+(node:42518) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:42518) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✅ QA Audit Report generated: QA_AUDIT_REPORT.md
+   📊 Summary: 1 pages visited, 1 errors found
+   📸 Screenshots: 0 taken
+No search input found for menu deletion
+  ✘  3 [chromium] › e2e/system-audit.spec.ts:396:7 › System Audit › 3. Chef Workflow - Create Recipe/Dish (1.0m)
+(node:43804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:43804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✅ QA Audit Report generated: QA_AUDIT_REPORT.md
+   📊 Summary: 1 pages visited, 1 errors found
+   📸 Screenshots: 0 taken
+No search input found for menu deletion
+  ✘  4 [chromium] › e2e/system-audit.spec.ts:451:7 › System Audit › 4. Chef Workflow - Create Menu Cycle (1.0m)
+(node:45082) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45082) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✅ QA Audit Report generated: QA_AUDIT_REPORT.md
+   📊 Summary: 1 pages visited, 1 errors found
+   📸 Screenshots: 0 taken
+No search input found for menu deletion
+  ✘  5 [chromium] › e2e/system-audit.spec.ts:519:7 › System Audit › 5. Chef Workflow - Temperature Log (1.0m)
+(node:46391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✅ QA Audit Report generated: QA_AUDIT_REPORT.md
+   📊 Summary: 1 pages visited, 3 errors found
+   📸 Screenshots: 0 taken
+No search input found for menu deletion
+  ✘  6 [chromium] › e2e/system-audit.spec.ts:557:7 › System Audit › 6. Chef Workflow - Equipment Maintenance Log (1.0m)
+(node:47701) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:47701) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Gremlin crawler visited 0 pages and collected 0 total links
+✅ QA Audit Report generated: QA_AUDIT_REPORT.md
+   📊 Summary: 0 pages visited, 1 errors found
+   📸 Screenshots: 0 taken
+No search input found for menu deletion
+  ✓  7 [chromium] › e2e/system-audit.spec.ts:598:7 › System Audit › 7. Gremlin Crawler - Scan and Visit All Links (4.0s)
+
+
+  1) [chromium] › e2e/system-audit.spec.ts:314:7 › System Audit › 2. Chef Workflow - Create Ingredient 
+
+    TimeoutError: locator.waitFor: Timeout 15000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('input[name="ingredient_name"]').first() to be visible[22m
+
+
+      330 |     // Try waiting for the ingredient name input field which is the first field in Step 1
+      331 |     const nameInput = page.locator('input[name="ingredient_name"]').first();
+    > 332 |     await nameInput.waitFor({ state: 'visible', timeout: 15000 });
+          |                     ^
+      333 |
+      334 |     // Fill ingredient form - Step 1: Basic info
+      335 |     const ingredientName = `${TEST_PREFIX}_Flour`;
+        at /Users/danielkuschmierz/prepflow-landing/e2e/system-audit.spec.ts:332:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--8a77e-orkflow---Create-Ingredient-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--8a77e-orkflow---Create-Ingredient-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--8a77e-orkflow---Create-Ingredient-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/system-audit-System-Audit--8a77e-orkflow---Create-Ingredient-chromium/error-context.md
+
+  2) [chromium] › e2e/system-audit.spec.ts:396:7 › System Audit › 3. Chef Workflow - Create Recipe/Dish 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+    [2m  - waiting for locator('button:has-text("New Recipe"), button:has-text("Add Recipe")').first()[22m
+
+
+      404 |     // Click "New Recipe" or "Add Recipe" button
+      405 |     const addButton = page.locator('button:has-text("New Recipe"), button:has-text("Add Recipe")').first();
+    > 406 |     await addButton.click();
+          |                     ^
+      407 |     await page.waitForTimeout(500);
+      408 |
+      409 |     // Fill recipe form
+        at /Users/danielkuschmierz/prepflow-landing/e2e/system-audit.spec.ts:406:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--172c0-rkflow---Create-Recipe-Dish-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--172c0-rkflow---Create-Recipe-Dish-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--172c0-rkflow---Create-Recipe-Dish-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/system-audit-System-Audit--172c0-rkflow---Create-Recipe-Dish-chromium/error-context.md
+
+  3) [chromium] › e2e/system-audit.spec.ts:451:7 › System Audit › 4. Chef Workflow - Create Menu Cycle 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: page.fill: Target page, context or browser has been closed
+    Call log:
+    [2m  - waiting for locator('input[name="menu_name"], input[placeholder*="Menu Name"]')[22m
+    [2m    2 × waiting for" http://localhost:3000/webapp/recipes" navigation to finish...[22m
+    [2m      - navigated to "http://localhost:3000/webapp/recipes#ingredients"[22m
+
+
+      464 |     // Fill menu form
+      465 |     const menuName = `${TEST_PREFIX}_Menu`;
+    > 466 |     await page.fill('input[name="menu_name"], input[placeholder*="Menu Name"]', menuName);
+          |                ^
+      467 |
+      468 |     // Save menu
+      469 |     const saveButton = page.locator('button:has-text("Save"), button:has-text("Create Menu")').first();
+        at /Users/danielkuschmierz/prepflow-landing/e2e/system-audit.spec.ts:466:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--353e0-orkflow---Create-Menu-Cycle-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--353e0-orkflow---Create-Menu-Cycle-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--353e0-orkflow---Create-Menu-Cycle-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/system-audit-System-Audit--353e0-orkflow---Create-Menu-Cycle-chromium/error-context.md
+
+  4) [chromium] › e2e/system-audit.spec.ts:519:7 › System Audit › 5. Chef Workflow - Temperature Log 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+    [2m  - waiting for locator('button:has-text("Add Log"), button:has-text("New Log")').first()[22m
+    [2m    - waiting for" http://localhost:3000/webapp/recipes" navigation to finish...[22m
+    [2m    - navigated to "http://localhost:3000/webapp/recipes"[22m
+
+
+      527 |     // Click "Add Log" or "New Log" button
+      528 |     const addButton = page.locator('button:has-text("Add Log"), button:has-text("New Log")').first();
+    > 529 |     await addButton.click();
+          |                     ^
+      530 |     await page.waitForTimeout(500);
+      531 |
+      532 |     // Select equipment (fridge)
+        at /Users/danielkuschmierz/prepflow-landing/e2e/system-audit.spec.ts:529:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit-5-Chef-Workflow---Temperature-Log-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit-5-Chef-Workflow---Temperature-Log-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit-5-Chef-Workflow---Temperature-Log-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/system-audit-System-Audit-5-Chef-Workflow---Temperature-Log-chromium/error-context.md
+
+  5) [chromium] › e2e/system-audit.spec.ts:557:7 › System Audit › 6. Chef Workflow - Equipment Maintenance Log 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: page.fill: Target page, context or browser has been closed
+    Call log:
+    [2m  - waiting for locator('input[name="equipment_name"]')[22m
+    [2m    2 × waiting for" http://localhost:3000/webapp/recipes" navigation to finish...[22m
+    [2m      - navigated to "http://localhost:3000/webapp/recipes#ingredients"[22m
+    [2m    - waiting for" http://localhost:3000/webapp/menu-builder" navigation to finish...[22m
+    [2m    - navigated to "http://localhost:3000/webapp/menu-builder"[22m
+
+
+      577 |
+      578 |     // Fill maintenance form
+    > 579 |     await page.fill('input[name="equipment_name"]', `${TEST_PREFIX}_Fridge`);
+          |                ^
+      580 |     await page.selectOption('select[name="equipment_type"]', 'fridge');
+      581 |
+      582 |     // Set maintenance date (today)
+        at /Users/danielkuschmierz/prepflow-landing/e2e/system-audit.spec.ts:579:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--7f0b1---Equipment-Maintenance-Log-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--7f0b1---Equipment-Maintenance-Log-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/system-audit-System-Audit--7f0b1---Equipment-Maintenance-Log-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/system-audit-System-Audit--7f0b1---Equipment-Maintenance-Log-chromium/error-context.md
+
+  5 failed
+    [chromium] › e2e/system-audit.spec.ts:314:7 › System Audit › 2. Chef Workflow - Create Ingredient 
+    [chromium] › e2e/system-audit.spec.ts:396:7 › System Audit › 3. Chef Workflow - Create Recipe/Dish 
+    [chromium] › e2e/system-audit.spec.ts:451:7 › System Audit › 4. Chef Workflow - Create Menu Cycle 
+    [chromium] › e2e/system-audit.spec.ts:519:7 › System Audit › 5. Chef Workflow - Temperature Log 
+    [chromium] › e2e/system-audit.spec.ts:557:7 › System Audit › 6. Chef Workflow - Equipment Maintenance Log 
+  2 passed (5.8m)
+
+=== Test Suite Complete ===
+Status: failed
+Duration: 348.54s
+
+Total errors collected: 0
+QA Audit Report generated: /Users/danielkuschmierz/prepflow-landing/QA_AUDIT_REPORT.md
+
+✅ QA_AUDIT_REPORT.md generated in project root

@@ -5,7 +5,6 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { NavItem } from './NavItem';
 import type { NavigationItemConfig } from './nav-items';
-import type { WorkflowType } from '@/lib/workflow/preferences';
 import { getCategoryLabel } from './CategorySection';
 
 interface ExpandableCategorySectionProps {
@@ -14,7 +13,6 @@ interface ExpandableCategorySectionProps {
   isActive: (href: string) => boolean;
   onItemClick?: (href: string) => void;
   onTrack?: (href: string) => void;
-  workflow?: WorkflowType;
   defaultExpanded?: boolean;
   // Controlled mode props (for desktop sidebar)
   isExpanded?: boolean;
@@ -32,7 +30,6 @@ interface ExpandableCategorySectionProps {
  * @param {Function} props.isActive - Function to check if href is active
  * @param {Function} [props.onItemClick] - Optional click handler
  * @param {Function} [props.onTrack] - Optional tracking callback
- * @param {WorkflowType} [props.workflow='daily-operations'] - Current workflow type
  * @param {boolean} [props.defaultExpanded=false] - Whether section is expanded by default
  * @returns {JSX.Element} Expandable category section
  */
@@ -42,7 +39,6 @@ export function ExpandableCategorySection({
   isActive,
   onItemClick,
   onTrack,
-  workflow = 'daily-operations',
   defaultExpanded = false,
   isExpanded: controlledExpanded,
   onToggle,
@@ -77,9 +73,9 @@ export function ExpandableCategorySection({
         onClick={handleToggle}
         className="mb-1.5 flex min-h-[44px] w-full items-center justify-between rounded-lg px-3 py-3 text-xs font-semibold tracking-wider text-gray-500 uppercase transition-colors hover:bg-[#2a2a2a] hover:text-gray-400"
         aria-expanded={isExpanded}
-        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${getCategoryLabel(category, workflow)} section`}
+        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${getCategoryLabel(category)} section`}
       >
-        <span>{getCategoryLabel(category, workflow)}</span>
+        <span>{getCategoryLabel(category)}</span>
         <Icon
           icon={isExpanded ? ChevronDown : ChevronRight}
           size="xs"

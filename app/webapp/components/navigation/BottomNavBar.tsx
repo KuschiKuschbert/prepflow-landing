@@ -2,7 +2,6 @@
 
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
-import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { memo, useEffect, useState, useRef } from 'react';
@@ -33,9 +32,8 @@ export const BottomNavBar = memo(function BottomNavBar({
   const internalRef = useRef<HTMLButtonElement>(null);
   const buttonRef = menuButtonRef || internalRef;
   const pathname = usePathname();
-  const { workflow } = useWorkflowPreference();
   const { trackNavigation } = useNavigationTracking();
-  const allItems = useNavigationItems(workflow);
+  const allItems = useNavigationItems();
   const { direction, isAtTop } = useScrollDirection();
   const [isVisible, setIsVisible] = useState(true);
   const [mounted, setMounted] = useState(false);

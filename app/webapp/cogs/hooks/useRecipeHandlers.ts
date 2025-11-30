@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import { Recipe } from '../types';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useOnRecipeCreated } from '@/lib/personality/hooks';
 
 interface UseRecipeHandlersProps {
   recipes: Recipe[];
@@ -35,6 +36,8 @@ export function useRecipeHandlers({
   setSaveError,
 }: UseRecipeHandlersProps) {
   const { showSuccess, showError } = useNotification();
+  const onRecipeCreated = useOnRecipeCreated();
+
   const handleRecipeSelect = useCallback(
     (recipeId: string) => {
       setSelectedRecipe(recipeId);
@@ -59,6 +62,11 @@ export function useRecipeHandlers({
           setSelectedRecipe(result.recipe.id);
           setDishPortions(result.recipe.yield || 1);
           showSuccess(`Recipe "${result.recipe.recipe_name}" created successfully!`);
+
+          // Trigger personality hook for new recipes
+          if (result.isNew) {
+            onRecipeCreated();
+          }
         }
         return result.recipe;
       }
@@ -71,6 +79,7 @@ export function useRecipeHandlers({
       setSelectedRecipe,
       setDishPortions,
       showSuccess,
+      onRecipeCreated,
     ],
   );
 

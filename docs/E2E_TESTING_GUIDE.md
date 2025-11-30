@@ -337,3 +337,4 @@ For issues or questions:
 2. Review test output in terminal
 3. Check `test-failures/` for screenshots
 4. Review Playwright HTML report: `npm run test:e2e:report`
+

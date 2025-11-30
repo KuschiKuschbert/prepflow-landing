@@ -16,7 +16,6 @@ import {
   Users,
   UtensilsCrossed,
 } from 'lucide-react';
-import type { WorkflowType } from '@/lib/workflow/preferences';
 import { useEffect, useState, useMemo } from 'react';
 import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { optimizeNavigationItems } from '@/lib/navigation-optimization/optimizer';
@@ -30,77 +29,39 @@ export interface NavigationItemConfig {
 }
 
 /**
- * Get category for a navigation item based on workflow type.
+ * Get category for a navigation item.
  *
  * @param {string} href - Navigation item href
- * @param {WorkflowType} workflow - Current workflow type
  * @returns {string} Category name for the item
  */
-function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
-  const categoryMap: Record<WorkflowType, Record<string, string>> = {
-    'daily-operations': {
-      '/webapp': 'primary',
-      '/webapp/recipes': 'primary',
-      '/webapp/performance': 'primary',
-      '/webapp/prep-lists': 'primary',
-      '/webapp/temperature': 'primary',
-      '/webapp/cleaning': 'kitchen',
-      '/webapp/compliance': 'kitchen',
-      '/webapp/suppliers': 'inventory',
-      '/webapp/par-levels': 'inventory',
-      '/webapp/order-lists': 'inventory',
-      '/webapp/sections': 'more',
-      '/webapp/employees': 'more',
-      '/webapp/ai-specials': 'more',
-      '/webapp/guide': 'more',
-    },
-    'setup-planning-operations': {
-      '/webapp': 'primary',
-      '/webapp/recipes': 'primary',
-      '/webapp/performance': 'primary',
-      '/webapp/prep-lists': 'primary',
-      '/webapp/temperature': 'primary',
-      '/webapp/cleaning': 'kitchen',
-      '/webapp/compliance': 'kitchen',
-      '/webapp/suppliers': 'inventory',
-      '/webapp/par-levels': 'inventory',
-      '/webapp/order-lists': 'inventory',
-      '/webapp/sections': 'more',
-      '/webapp/employees': 'more',
-      '/webapp/ai-specials': 'more',
-      '/webapp/guide': 'more',
-    },
-    'menu-first': {
-      '/webapp': 'primary',
-      '/webapp/recipes': 'primary',
-      '/webapp/performance': 'primary',
-      '/webapp/prep-lists': 'primary',
-      '/webapp/temperature': 'primary',
-      '/webapp/cleaning': 'kitchen',
-      '/webapp/compliance': 'kitchen',
-      '/webapp/suppliers': 'inventory',
-      '/webapp/par-levels': 'inventory',
-      '/webapp/order-lists': 'inventory',
-      '/webapp/sections': 'more',
-      '/webapp/employees': 'more',
-      '/webapp/ai-specials': 'more',
-      '/webapp/guide': 'more',
-    },
+function getCategoryForItem(href: string): string {
+  const categoryMap: Record<string, string> = {
+    '/webapp': 'primary',
+    '/webapp/recipes': 'primary',
+    '/webapp/performance': 'primary',
+    '/webapp/prep-lists': 'primary',
+    '/webapp/temperature': 'primary',
+    '/webapp/cleaning': 'kitchen',
+    '/webapp/compliance': 'kitchen',
+    '/webapp/suppliers': 'inventory',
+    '/webapp/par-levels': 'inventory',
+    '/webapp/order-lists': 'inventory',
+    '/webapp/sections': 'more',
+    '/webapp/employees': 'more',
+    '/webapp/ai-specials': 'more',
+    '/webapp/guide': 'more',
   };
 
-  return categoryMap[workflow][href] || 'other';
+  return categoryMap[href] || 'other';
 }
 
 /**
- * Hook to get navigation items organized by workflow.
+ * Hook to get navigation items organized by category.
  * Applies adaptive optimization when enabled.
  *
- * @param {WorkflowType} workflow - Current workflow type
  * @returns {NavigationItemConfig[]} Array of navigation items with categories
  */
-export function useNavigationItems(
-  workflow: WorkflowType = 'daily-operations',
-): NavigationItemConfig[] {
+export function useNavigationItems(): NavigationItemConfig[] {
   const { t } = useTranslation();
   const { settings } = useAdaptiveNavSettings();
   const [optimizedItems, setOptimizedItems] = useState<NavigationItemConfig[] | null>(null);
@@ -195,14 +156,14 @@ export function useNavigationItems(
     [t],
   );
 
-  // Assign categories based on workflow
+  // Assign categories to items
   const itemsWithCategories = useMemo(
     () =>
       baseItems.map(item => ({
         ...item,
-        category: getCategoryForWorkflow(item.href, workflow),
+        category: getCategoryForItem(item.href),
       })),
-    [workflow, baseItems],
+    [baseItems],
   );
 
   // Apply optimization if enabled (with debouncing)

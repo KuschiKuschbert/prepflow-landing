@@ -787,70 +787,301 @@ body {
   transform: translate(-50%, -50%);
 }
 
+/* Success Sparkles Animation */
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(360deg);
+  }
+}
+
+.pf-sparkle-on::before {
+  content: '✨';
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: sparkle 1.5s ease-out forwards;
+  transform: translateX(-50%);
+}
+
+.pf-sparkle-on::after {
+  content: '✨';
+  position: fixed;
+  top: 20%;
+  left: 45%;
+  font-size: 20px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: sparkle 1.5s ease-out 0.2s forwards;
+  transform: translateX(-50%);
+}
+
+/* Error Shake Animation */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.pf-shake-on {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Celebration Glow Animation */
+@keyframes celebrationGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(41, 231, 205, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(217, 37, 199, 0.8), 0 0 60px rgba(41, 231, 205, 0.6);
+  }
+}
+
+.pf-celebration-glow {
+  animation: celebrationGlow 2s ease-in-out infinite;
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .pf-steam-on::before {
+  .pf-steam-on::before,
+  .pf-sparkle-on::before,
+  .pf-sparkle-on::after {
     animation: none;
     display: none;
+  }
+
+  .pf-shake-on {
+    animation: none;
+  }
+
+  .pf-celebration-glow {
+    animation: none;
   }
 }
 
 /* Seasonal Logo Overlays */
 .pf-seasonal-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
   pointer-events: none;
   z-index: 20;
 }
 
-/* Santa Hat (Dec 24-26) */
+/* Santa Hat (Dec 24-26) - Enhanced */
 [data-seasonal='santaHat'] .pf-seasonal-overlay.pf-seasonal-santaHat::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(220, 38, 38, 0.4) 0%,
+      rgba(34, 197, 94, 0.3) 30%,
+      rgba(220, 38, 38, 0.2) 50%,
+      transparent 100%
+    );
+  border-radius: 50%;
+  animation: santaGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(220, 38, 38, 0.5),
+    0 0 40px rgba(34, 197, 94, 0.4),
+    inset 0 0 10px rgba(220, 38, 38, 0.3);
+}
+
+[data-seasonal='santaHat'] .pf-seasonal-overlay.pf-seasonal-santaHat::after {
   content: '🎅';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  filter: drop-shadow(0 0 4px rgba(220, 38, 38, 0.8));
+  animation: santaBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes santaGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes santaBounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-6px);
+  }
+}
+
+/* Lightsaber Glow (May 4) - Enhanced Star Wars Theme */
+[data-seasonal='lightsaber'] .pf-seasonal-overlay.pf-seasonal-lightsaber::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 0, 0.6) 0%,
+      rgba(41, 231, 205, 0.5) 20%,
+      rgba(41, 231, 205, 0.3) 40%,
+      rgba(41, 231, 205, 0.1) 60%,
+      transparent 100%
+    );
+  border-radius: 50%;
+  animation: lightsaberGlow 1.5s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(41, 231, 205, 0.6),
+    0 0 40px rgba(41, 231, 205, 0.4),
+    0 0 60px rgba(41, 231, 205, 0.2),
+    inset 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+[data-seasonal='lightsaber'] .pf-seasonal-overlay.pf-seasonal-lightsaber::after {
+  content: '⚔️';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 16px;
+  filter: drop-shadow(0 0 4px rgba(41, 231, 205, 0.8)) drop-shadow(0 0 8px rgba(41, 231, 205, 0.6));
+  animation: lightsaberHum 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Lightsaber glow animation - more dramatic pulsing */
+@keyframes lightsaberGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+    box-shadow:
+      0 0 20px rgba(41, 231, 205, 0.6),
+      0 0 40px rgba(41, 231, 205, 0.4),
+      0 0 60px rgba(41, 231, 205, 0.2),
+      inset 0 0 10px rgba(255, 255, 0, 0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow:
+      0 0 30px rgba(41, 231, 205, 0.8),
+      0 0 60px rgba(41, 231, 205, 0.6),
+      0 0 90px rgba(41, 231, 205, 0.4),
+      inset 0 0 15px rgba(255, 255, 0, 0.5);
+  }
+}
+
+/* Lightsaber hum animation - subtle vibration */
+@keyframes lightsaberHum {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 4px rgba(41, 231, 205, 0.8)) drop-shadow(0 0 8px rgba(41, 231, 205, 0.6));
+  }
+  25% {
+    transform: scale(1.05) rotate(-2deg);
+    filter: drop-shadow(0 0 6px rgba(41, 231, 205, 1)) drop-shadow(0 0 12px rgba(41, 231, 205, 0.8));
+  }
+  75% {
+    transform: scale(1.05) rotate(2deg);
+    filter: drop-shadow(0 0 6px rgba(41, 231, 205, 1)) drop-shadow(0 0 12px rgba(41, 231, 205, 0.8));
+  }
+}
+
+/* Chef's Toque (Oct 20) - Enhanced */
+[data-seasonal='toque'] .pf-seasonal-overlay.pf-seasonal-toque::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 215, 0, 0.5) 0%,
+    rgba(255, 215, 0, 0.3) 30%,
+    rgba(255, 215, 0, 0.1) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: toqueGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 0.6),
+    0 0 40px rgba(255, 215, 0, 0.4),
+    inset 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+[data-seasonal='toque'] .pf-seasonal-overlay.pf-seasonal-toque::after {
+  content: '👨‍🍳';
   position: absolute;
   top: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 16px;
-  animation: bounce 1s ease-in-out infinite;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.8));
+  animation: toqueFloat 2s ease-in-out infinite;
+  transform-origin: center;
 }
 
-/* Lightsaber Glow (May 4) */
-[data-seasonal='lightsaber'] .pf-seasonal-overlay.pf-seasonal-lightsaber::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(41, 231, 205, 0.4) 0%,
-    rgba(41, 231, 205, 0.2) 50%,
-    transparent 100%
-  );
-  border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
+@keyframes toqueGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
-[data-seasonal='lightsaber'] .pf-seasonal-overlay.pf-seasonal-lightsaber::after {
-  content: '⚡';
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  font-size: 12px;
-}
-
-/* Chef's Toque (Oct 20) */
-[data-seasonal='toque'] .pf-seasonal-overlay.pf-seasonal-toque::before {
-  content: '👨‍🍳';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
+@keyframes toqueFloat {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-50%) translateY(-3px) rotate(-3deg);
+  }
+  75% {
+    transform: translateX(-50%) translateY(-3px) rotate(3deg);
+  }
 }
 
 @keyframes bounce {
@@ -863,10 +1094,1024 @@ body {
   }
 }
 
+/* Star Wars Sparkles (May 4) */
+.pf-lightsaber-sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(41, 231, 205, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 21;
+  box-shadow: 0 0 6px rgba(41, 231, 205, 1);
+}
+
+.pf-sparkle-1 {
+  top: 20%;
+  left: 10%;
+  animation: sparkleFloat 3s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.pf-sparkle-2 {
+  top: 60%;
+  right: 15%;
+  animation: sparkleFloat 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.pf-sparkle-3 {
+  bottom: 20%;
+  left: 50%;
+  animation: sparkleFloat 3s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateY(0) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+  }
+}
+
+/* Santa Snowflakes (Dec 24-26) */
+.pf-snowflake {
+  position: absolute;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 21;
+  opacity: 0.7;
+  animation: snowflakeFall 4s linear infinite;
+}
+
+.pf-snowflake-1 {
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.pf-snowflake-2 {
+  top: 30%;
+  right: 25%;
+  animation-delay: 1.3s;
+}
+
+.pf-snowflake-3 {
+  bottom: 20%;
+  left: 60%;
+  animation-delay: 2.6s;
+}
+
+@keyframes snowflakeFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Chef Sparkles (Oct 20) */
+.pf-chef-sparkle {
+  position: absolute;
+  font-size: 10px;
+  pointer-events: none;
+  z-index: 21;
+  color: rgba(255, 215, 0, 0.8);
+  animation: chefSparkleFloat 3s ease-in-out infinite;
+}
+
+.pf-chef-sparkle-1 {
+  top: 15%;
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.pf-chef-sparkle-2 {
+  top: 50%;
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.pf-chef-sparkle-3 {
+  bottom: 25%;
+  left: 55%;
+  animation-delay: 2s;
+}
+
+@keyframes chefSparkleFloat {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateY(0) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.1);
+  }
+}
+
+/* Seasonal Banner (All Effects) */
+.pf-seasonal-banner {
+  text-align: center;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pf-seasonal-text {
+  font-family: 'Arial Black', 'Arial Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-shadow:
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor,
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: seasonalGlow 2s ease-in-out infinite;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+@keyframes seasonalGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      2px 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 15px currentColor,
+      0 0 30px currentColor,
+      0 0 45px currentColor,
+      2px 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0.95;
+  }
+}
+
+/* New Year's Day (Jan 1) */
+[data-seasonal='newYear'] .pf-seasonal-overlay.pf-seasonal-newYear::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 215, 0, 0.6) 0%,
+    rgba(255, 165, 0, 0.4) 30%,
+    rgba(255, 215, 0, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: newYearGlow 1.5s ease-in-out infinite;
+  box-shadow:
+    0 0 25px rgba(255, 215, 0, 0.7),
+    0 0 50px rgba(255, 165, 0, 0.5),
+    inset 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+[data-seasonal='newYear'] .pf-seasonal-overlay.pf-seasonal-newYear::after {
+  content: '🎉';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.8));
+  animation: newYearBounce 1s ease-in-out infinite;
+}
+
+@keyframes newYearGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes newYearBounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(15deg);
+  }
+}
+
+/* Australia Day (Jan 26) */
+[data-seasonal='australiaDay'] .pf-seasonal-overlay.pf-seasonal-australiaDay::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 102, 51, 0.4) 0%,
+      rgba(255, 204, 0, 0.3) 30%,
+      rgba(0, 102, 51, 0.2) 50%,
+      transparent 100%
+    );
+  border-radius: 50%;
+  animation: australiaDayGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(0, 102, 51, 0.5),
+    0 0 40px rgba(255, 204, 0, 0.4);
+}
+
+[data-seasonal='australiaDay'] .pf-seasonal-overlay.pf-seasonal-australiaDay::after {
+  content: '🇦🇺';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(0, 102, 51, 0.8));
+  animation: australiaDayFloat 2s ease-in-out infinite;
+}
+
+@keyframes australiaDayGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes australiaDayFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(5deg);
+  }
+}
+
+/* Valentine's Day (Feb 14) */
+[data-seasonal='valentines'] .pf-seasonal-overlay.pf-seasonal-valentines::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 20, 147, 0.5) 0%,
+    rgba(255, 105, 180, 0.3) 30%,
+    rgba(255, 20, 147, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: valentinesGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(255, 20, 147, 0.6),
+    0 0 40px rgba(255, 105, 180, 0.4);
+}
+
+[data-seasonal='valentines'] .pf-seasonal-overlay.pf-seasonal-valentines::after {
+  content: '💝';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 20, 147, 0.8));
+  animation: valentinesPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes valentinesGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes valentinesPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* ANZAC Day (Apr 25) - Respectful */
+[data-seasonal='anzac'] .pf-seasonal-overlay.pf-seasonal-anzac::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(139, 0, 0, 0.3) 0%,
+    rgba(139, 0, 0, 0.2) 40%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: anzacGlow 3s ease-in-out infinite;
+}
+
+[data-seasonal='anzac'] .pf-seasonal-overlay.pf-seasonal-anzac::after {
+  content: '🇦🇺🇳🇿';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 14px;
+  opacity: 0.9;
+  animation: anzacRespect 4s ease-in-out infinite;
+}
+
+@keyframes anzacGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes anzacRespect {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Easter (Variable) */
+[data-seasonal='easter'] .pf-seasonal-overlay.pf-seasonal-easter::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 182, 193, 0.4) 0%,
+    rgba(221, 160, 221, 0.3) 30%,
+    rgba(255, 182, 193, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: easterGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(255, 182, 193, 0.5),
+    0 0 40px rgba(221, 160, 221, 0.4);
+}
+
+[data-seasonal='easter'] .pf-seasonal-overlay.pf-seasonal-easter::after {
+  content: '🐰';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 182, 193, 0.8));
+  animation: easterHop 2s ease-in-out infinite;
+}
+
+@keyframes easterGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes easterHop {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+}
+
+/* Independence Day US (July 4) */
+[data-seasonal='independenceDay'] .pf-seasonal-overlay.pf-seasonal-independenceDay::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(220, 38, 38, 0.4) 0%,
+      rgba(255, 255, 255, 0.3) 20%,
+      rgba(0, 48, 143, 0.3) 40%,
+      transparent 100%
+    );
+  border-radius: 50%;
+  animation: independenceGlow 1.5s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(220, 38, 38, 0.6),
+    0 0 40px rgba(0, 48, 143, 0.5);
+}
+
+[data-seasonal='independenceDay'] .pf-seasonal-overlay.pf-seasonal-independenceDay::after {
+  content: '🇺🇸';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(220, 38, 38, 0.8));
+  animation: independenceWave 2s ease-in-out infinite;
+}
+
+@keyframes independenceGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes independenceWave {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(3deg);
+  }
+}
+
+/* Halloween (Oct 31) */
+[data-seasonal='halloween'] .pf-seasonal-overlay.pf-seasonal-halloween::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(255, 140, 0, 0.5) 0%,
+      rgba(138, 43, 226, 0.4) 30%,
+      rgba(255, 140, 0, 0.2) 60%,
+      transparent 100%
+    );
+  border-radius: 50%;
+  animation: halloweenGlow 1.8s ease-in-out infinite;
+  box-shadow:
+    0 0 25px rgba(255, 140, 0, 0.6),
+    0 0 50px rgba(138, 43, 226, 0.5);
+}
+
+[data-seasonal='halloween'] .pf-seasonal-overlay.pf-seasonal-halloween::after {
+  content: '🎃';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.9));
+  animation: halloweenFloat 2s ease-in-out infinite;
+}
+
+@keyframes halloweenGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes halloweenFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(5deg);
+  }
+}
+
+/* Boxing Day (Dec 26) */
+[data-seasonal='boxingDay'] .pf-seasonal-overlay.pf-seasonal-boxingDay::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 215, 0, 0.4) 0%,
+    rgba(220, 38, 38, 0.3) 30%,
+    rgba(255, 215, 0, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: boxingDayGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 0.5),
+    0 0 40px rgba(220, 38, 38, 0.4);
+}
+
+[data-seasonal='boxingDay'] .pf-seasonal-overlay.pf-seasonal-boxingDay::after {
+  content: '🎁';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.8));
+  animation: boxingDayBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes boxingDayGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes boxingDayBounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(10deg);
+  }
+}
+
+/* New Year's Eve (Dec 31) */
+[data-seasonal='newYearsEve'] .pf-seasonal-overlay.pf-seasonal-newYearsEve::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 215, 0, 0.6) 0%,
+    rgba(255, 20, 147, 0.4) 25%,
+    rgba(255, 215, 0, 0.3) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: newYearsEveGlow 1s ease-in-out infinite;
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.7),
+    0 0 60px rgba(255, 20, 147, 0.6);
+}
+
+[data-seasonal='newYearsEve'] .pf-seasonal-overlay.pf-seasonal-newYearsEve::after {
+  content: '🥳';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.9));
+  animation: newYearsEveCelebrate 0.8s ease-in-out infinite;
+}
+
+@keyframes newYearsEveGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes newYearsEveCelebrate {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(-10deg);
+  }
+  75% {
+    transform: scale(1.2) rotate(10deg);
+  }
+}
+
+/* Mother's Day (Variable) */
+[data-seasonal='mothersDay'] .pf-seasonal-overlay.pf-seasonal-mothersDay::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 20, 147, 0.4) 0%,
+    rgba(255, 182, 193, 0.3) 30%,
+    rgba(255, 20, 147, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: mothersDayGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(255, 20, 147, 0.5),
+    0 0 40px rgba(255, 182, 193, 0.4);
+}
+
+[data-seasonal='mothersDay'] .pf-seasonal-overlay.pf-seasonal-mothersDay::after {
+  content: '💐';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 20, 147, 0.8));
+  animation: mothersDayFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes mothersDayGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes mothersDayFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-3deg);
+  }
+}
+
+/* Father's Day (Variable) */
+[data-seasonal='fathersDay'] .pf-seasonal-overlay.pf-seasonal-fathersDay::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 48, 143, 0.4) 0%,
+    rgba(70, 130, 180, 0.3) 30%,
+    rgba(0, 48, 143, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: fathersDayGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(0, 48, 143, 0.5),
+    0 0 40px rgba(70, 130, 180, 0.4);
+}
+
+[data-seasonal='fathersDay'] .pf-seasonal-overlay.pf-seasonal-fathersDay::after {
+  content: '👔';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(0, 48, 143, 0.8));
+  animation: fathersDayPulse 2s ease-in-out infinite;
+}
+
+@keyframes fathersDayGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fathersDayPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Labour Day (Variable) */
+[data-seasonal='labourDay'] .pf-seasonal-overlay.pf-seasonal-labourDay::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 140, 0, 0.4) 0%,
+    rgba(255, 215, 0, 0.3) 30%,
+    rgba(255, 140, 0, 0.2) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: labourDayGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(255, 140, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+[data-seasonal='labourDay'] .pf-seasonal-overlay.pf-seasonal-labourDay::after {
+  content: '🛠️';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255, 140, 0, 0.8));
+  animation: labourDayWork 2s ease-in-out infinite;
+}
+
+@keyframes labourDayGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes labourDayWork {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+/* Queen's/King's Birthday (Variable) */
+[data-seasonal='royalBirthday'] .pf-seasonal-overlay.pf-seasonal-royalBirthday::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(138, 43, 226, 0.5) 0%,
+    rgba(255, 215, 0, 0.4) 30%,
+    rgba(138, 43, 226, 0.3) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: royalBirthdayGlow 2s ease-in-out infinite;
+  box-shadow:
+    0 0 25px rgba(138, 43, 226, 0.6),
+    0 0 50px rgba(255, 215, 0, 0.5);
+}
+
+[data-seasonal='royalBirthday'] .pf-seasonal-overlay.pf-seasonal-royalBirthday::after {
+  content: '👑';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(138, 43, 226, 0.9));
+  animation: royalBirthdayShine 2s ease-in-out infinite;
+}
+
+@keyframes royalBirthdayGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes royalBirthdayShine {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 6px rgba(138, 43, 226, 0.9));
+  }
+  50% {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 1));
+  }
+}
+
+/* New Year Confetti */
+.pf-confetti {
+  position: absolute;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 21;
+  animation: confettiFall 3s ease-in-out infinite;
+}
+
+.pf-confetti-1 {
+  top: 10%;
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.pf-confetti-2 {
+  top: 40%;
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.pf-confetti-3 {
+  bottom: 25%;
+  left: 55%;
+  animation-delay: 2s;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(80px) rotate(360deg);
+  }
+}
+
+/* Valentine Hearts */
+.pf-heart {
+  position: absolute;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 21;
+  animation: heartFloat 3s ease-in-out infinite;
+}
+
+.pf-heart-1 {
+  top: 15%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.pf-heart-2 {
+  top: 50%;
+  right: 25%;
+  animation-delay: 1.2s;
+}
+
+.pf-heart-3 {
+  bottom: 20%;
+  left: 60%;
+  animation-delay: 2.4s;
+}
+
+@keyframes heartFloat {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateY(0) scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.1);
+  }
+}
+
+/* Easter Elements */
+.pf-easter-egg {
+  position: absolute;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 21;
+  animation: easterFloat 3s ease-in-out infinite;
+}
+
+.pf-easter-egg-1 {
+  top: 12%;
+  left: 18%;
+  animation-delay: 0s;
+}
+
+.pf-easter-egg-2 {
+  top: 45%;
+  right: 22%;
+  animation-delay: 1.1s;
+}
+
+.pf-easter-egg-3 {
+  bottom: 22%;
+  left: 58%;
+  animation-delay: 2.2s;
+}
+
+@keyframes easterFloat {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-8px) rotate(10deg);
+  }
+}
+
+/* Halloween Elements */
+.pf-halloween {
+  position: absolute;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 21;
+  animation: halloweenFloat 3s ease-in-out infinite;
+}
+
+.pf-halloween-1 {
+  top: 10%;
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.pf-halloween-2 {
+  top: 40%;
+  right: 20%;
+  animation-delay: 1.3s;
+}
+
+.pf-halloween-3 {
+  bottom: 25%;
+  left: 55%;
+  animation-delay: 2.6s;
+}
+
+@keyframes halloweenFloat {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-12px) rotate(-10deg);
+  }
+}
+
 /* Respect reduced motion for seasonal animations */
 @media (prefers-reduced-motion: reduce) {
   [data-seasonal] .pf-seasonal-overlay::before,
   [data-seasonal] .pf-seasonal-overlay::after {
+    animation: none !important;
+  }
+
+  .pf-lightsaber-sparkle,
+  .pf-snowflake,
+  .pf-chef-sparkle,
+  .pf-confetti,
+  .pf-heart,
+  .pf-easter-egg,
+  .pf-halloween {
+    display: none;
+  }
+
+  .pf-seasonal-text {
     animation: none !important;
   }
 }

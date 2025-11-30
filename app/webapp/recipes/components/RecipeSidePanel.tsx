@@ -1,5 +1,6 @@
 'use client';
 
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat } from 'lucide-react';
 import { useMemo } from 'react';
@@ -11,9 +12,9 @@ import { convertToPerPortion } from '../hooks/utils/convertToPerPortion';
 import { calculateRecipePrice } from '../hooks/utils/pricingHelpers';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
 import {
-  Recipe,
-  COGSCalculation as RecipeCOGSCalculation,
-  RecipeIngredientWithDetails,
+    Recipe,
+    COGSCalculation as RecipeCOGSCalculation,
+    RecipeIngredientWithDetails,
 } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { RecipeSidePanelActions } from './RecipeSidePanelActions';
@@ -37,6 +38,7 @@ interface RecipeSidePanelProps {
     unit: string;
     original: string;
   };
+  onImagesGenerated?: (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => void;
 }
 
 export function RecipeSidePanel({
@@ -49,6 +51,7 @@ export function RecipeSidePanel({
   onDeleteRecipe,
   capitalizeRecipeName,
   formatQuantity,
+  onImagesGenerated,
 }: RecipeSidePanelProps) {
   // Use shared hook for common side panel functionality
   const { panelRef, mounted, panelStyle } = useSidePanelCommon({
@@ -141,6 +144,22 @@ export function RecipeSidePanel({
             className="flex-1 space-y-6 overflow-x-hidden overflow-y-auto p-6"
             style={{ WebkitOverflowScrolling: 'touch' }}
           >
+            {/* Food Image Generation */}
+            {recipe && (
+              <FoodImageGenerator
+                entityType="recipe"
+                entityId={recipe.id}
+                entityName={recipe.recipe_name}
+                imageUrl={(recipe as any)?.image_url}
+                imageUrlAlternative={(recipe as any)?.image_url_alternative}
+                onImagesGenerated={(primaryUrl, alternativeUrl) => {
+                  onImagesGenerated?.(recipe.id, primaryUrl, alternativeUrl);
+                }}
+                className="mb-6"
+                compact={false}
+              />
+            )}
+
             <RecipeSidePanelCostSummary
               calculations={calculations}
               totalCOGS={totalCOGS}

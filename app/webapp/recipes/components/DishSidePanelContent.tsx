@@ -8,6 +8,7 @@ import { COGSTableGrouped } from '../../cogs/components/COGSTableGrouped';
 import { COGSCalculation } from '../../cogs/types';
 import { DishCostData, DishWithDetails } from '../types';
 import { DishSidePanelCostInfo } from './DishSidePanelCostInfo';
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface DishSidePanelContentProps {
   loading: boolean;
@@ -23,6 +24,8 @@ interface DishSidePanelContentProps {
   onEditQuantityChange: (quantity: number) => void;
   totalCOGS: number;
   costPerPortion: number;
+  dishId?: string;
+  dishName?: string;
 }
 
 export function DishSidePanelContent({
@@ -39,6 +42,8 @@ export function DishSidePanelContent({
   onEditQuantityChange,
   totalCOGS,
   costPerPortion,
+  dishId,
+  dishName,
 }: DishSidePanelContentProps) {
   if (loading) {
     return (
@@ -51,6 +56,19 @@ export function DishSidePanelContent({
 
   return (
     <>
+      {/* Food Image Generation */}
+      {dishId && dishName && (
+        <FoodImageGenerator
+          entityType="dish"
+          entityId={dishId}
+          entityName={dishName}
+          imageUrl={(dishDetails as any)?.image_url}
+          imageUrlAlternative={(dishDetails as any)?.image_url_alternative}
+          className="mb-6"
+          compact={false}
+        />
+      )}
+
       {costData && <DishSidePanelCostInfo costData={costData} />}
 
       {dishDetails?.recipes && dishDetails.recipes.length > 0 && (

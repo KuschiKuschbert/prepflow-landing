@@ -1,19 +1,22 @@
 'use client';
 
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import AutosaveGlobalIndicator from '../AutosaveGlobalIndicator';
-import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
-import { BrandMark } from '@/components/BrandMark';
-import { LogoutButton } from '../LogoutButton';
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
-import { useSession } from 'next-auth/react';
-import { Search, Settings2, User } from 'lucide-react';
+import { BrandMark } from '@/components/BrandMark';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { Icon } from '@/components/ui/Icon';
-import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useUserAvatar } from '@/hooks/useUserAvatar';
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
+import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { getAvatarUrl, getDefaultAvatar } from '@/lib/user-avatar';
+import { Search, Settings, Settings2, User } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import AutosaveGlobalIndicator from '../AutosaveGlobalIndicator';
+import { LogoutButton } from '../LogoutButton';
 
 interface NavigationHeaderProps {
   className?: string;
@@ -30,9 +33,7 @@ interface NavigationHeaderProps {
   handleLogoMouseUp: () => void;
   handleLogoMouseLeave: () => void;
   shouldPreventNavigation: React.RefObject<boolean | null>;
-  // New prop for Settings Drawer (Mobile)
-  onUserClick: () => void;
-  // Ref for user button (for bubble animation positioning)
+  // Ref for user button (for popover positioning)
   userButtonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
@@ -63,20 +64,25 @@ export function NavigationHeader({
   handleLogoMouseUp,
   handleLogoMouseLeave,
   shouldPreventNavigation,
-  onUserClick,
   userButtonRef,
 }: NavigationHeaderProps) {
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
   const userName = session?.user?.name || userEmail?.split('@')[0];
+  const { avatar: userAvatar } = useUserAvatar();
   const [isDesktopUserMenuOpen, setIsDesktopUserMenuOpen] = useState(false);
   const desktopMenuRef = useRef<HTMLDivElement>(null);
+
+  // Get avatar URL or default initials
+  const avatarUrl = getAvatarUrl(userAvatar);
+  const defaultInitials = getDefaultAvatar(userName || userEmail || '');
 
   // Auto-hide header on mobile/tablet when scrolling down (not desktop)
   // Uses custom breakpoint: desktop = 1025px+ (from tailwind.config.ts)
   const { direction, isAtTop } = useScrollDirection();
   const isDesktop = useMediaQuery('(min-width: 1025px)'); // Match custom desktop breakpoint
   const [isVisible, setIsVisible] = useState(true);
+  const [seasonalEffect, setSeasonalEffect] = useState<string | null>(null);
 
   useEffect(() => {
     // Always show on desktop (1025px+)
@@ -94,6 +100,78 @@ export function NavigationHeader({
       setIsVisible(true);
     }
   }, [direction, isAtTop, isDesktop]);
+
+  // Check for seasonal effects
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const checkSeasonal = () => {
+      const seasonal = document.documentElement.getAttribute('data-seasonal');
+      setSeasonalEffect(seasonal);
+    };
+
+    checkSeasonal();
+
+    // Listen for changes to data-seasonal attribute
+    const observer = new MutationObserver(() => {
+      checkSeasonal();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-seasonal'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Banner text mapping
+  const getBannerText = (effect: string | null): string | null => {
+    if (!effect) return null;
+    const banners: Record<string, string> = {
+      lightsaber: 'May the 4th be with you',
+      toque: 'Happy Chef\'s Day! 👨‍🍳',
+      santaHat: 'Merry Chaosmas, Chef! 🎅',
+      newYear: 'Happy New Year! 🎉',
+      australiaDay: 'Happy Australia Day! 🇦🇺',
+      valentines: 'Happy Valentine\'s Day! 💝',
+      anzac: 'Lest We Forget 🇦🇺🇳🇿',
+      easter: 'Happy Easter! 🐰',
+      independenceDay: 'Happy 4th of July! 🇺🇸',
+      halloween: 'Happy Halloween! 🎃',
+      boxingDay: 'Happy Boxing Day! 🎁',
+      newYearsEve: 'Happy New Year\'s Eve! 🥳',
+      mothersDay: 'Happy Mother\'s Day! 💐',
+      fathersDay: 'Happy Father\'s Day! 👔',
+      labourDay: 'Happy Labour Day! 🛠️',
+      royalBirthday: 'Happy [King\'s/Queen\'s] Birthday! 👑',
+    };
+    return banners[effect] || null;
+  };
+
+  // Banner color mapping
+  const getBannerColor = (effect: string | null): string => {
+    if (!effect) return '#FFE81F';
+    const colors: Record<string, string> = {
+      lightsaber: '#FFE81F',
+      toque: '#FFD700',
+      santaHat: '#DC2626',
+      newYear: '#FFD700',
+      australiaDay: '#006633',
+      valentines: '#FF1493',
+      anzac: '#8B0000',
+      easter: '#FFB6C1',
+      independenceDay: '#DC2626',
+      halloween: '#FF8C00',
+      boxingDay: '#FFD700',
+      newYearsEve: '#FFD700',
+      mothersDay: '#FF1493',
+      fathersDay: '#00308F',
+      labourDay: '#FF8C00',
+      royalBirthday: '#8A2BE2',
+    };
+    return colors[effect] || '#FFE81F';
+  };
 
   // Close desktop user menu when clicking outside
   useEffect(() => {
@@ -119,11 +197,7 @@ export function NavigationHeader({
   }, [isDesktopUserMenuOpen]);
 
   const handleUserAvatarClick = () => {
-    if (isDesktop) {
-      setIsDesktopUserMenuOpen(!isDesktopUserMenuOpen);
-    } else {
-      onUserClick(); // Trigger Mobile Drawer
-    }
+    setIsDesktopUserMenuOpen(!isDesktopUserMenuOpen);
   };
 
   return (
@@ -150,7 +224,7 @@ export function NavigationHeader({
         transform: !isDesktop && !isVisible ? 'translateY(-100%)' : 'translateY(0)',
       }}
     >
-      <div className="desktop:px-4 flex items-center justify-between px-3 py-2">
+      <div className="desktop:px-4 relative flex items-center justify-between px-3 py-2">
         <div className="desktop:space-x-3 flex items-center space-x-2">
           <div className="flex items-center space-x-2">
             <Link
@@ -186,6 +260,17 @@ export function NavigationHeader({
               </span>
             </Link>
             <AutosaveGlobalIndicator />
+            {/* Seasonal Banner - Next to autosave indicator */}
+            {seasonalEffect && isDesktop && getBannerText(seasonalEffect) && (
+              <div className="pf-seasonal-banner ml-2 pointer-events-none">
+                <span
+                  className="pf-seasonal-text text-xs desktop:text-sm font-bold tracking-wider uppercase"
+                  style={{ color: getBannerColor(seasonalEffect) }}
+                >
+                  {getBannerText(seasonalEffect)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className={cn('hidden', 'items-center', 'space-x-2', 'desktop:flex')}>
@@ -231,32 +316,48 @@ export function NavigationHeader({
           {/* User Avatar Trigger (Handles both Mobile Drawer & Desktop Popover) */}
           {/* Always show on mobile, only show on desktop if userName exists */}
           {(userName || !isDesktop) && (
-            <>
+            <div className="relative">
               <button
                 ref={userButtonRef}
                 onClick={handleUserAvatarClick}
-                className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xs font-bold text-black shadow-md transition-transform hover:scale-105 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+                className="relative flex h-[40px] w-[40px] items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xs font-bold text-black shadow-md transition-transform hover:scale-105 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
                 aria-label="Open user settings"
                 aria-expanded={isDesktopUserMenuOpen}
               >
-                {userName ? (
-                  userName[0].toUpperCase()
+                {avatarUrl ? (
+                  <Image
+                    src={avatarUrl}
+                    alt={userName || 'User avatar'}
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                    unoptimized
+                  />
                 ) : (
-                  <Icon icon={User} size="sm" className="text-black" aria-hidden={true} />
+                  <span>{defaultInitials}</span>
                 )}
               </button>
 
-              {/* Desktop "Google Drive Style" Floating Bubble */}
-              {isDesktop && isDesktopUserMenuOpen && (
+              {/* User Menu Popover - Works on both mobile and desktop */}
+              {isDesktopUserMenuOpen && (
                 <div
                   ref={desktopMenuRef}
-                  className="animate-scale-in absolute top-full right-0 z-50 mt-3 w-[350px] origin-top-right rounded-[28px] border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
+                  className="animate-scale-in absolute top-full right-0 z-50 mt-3 w-[350px] max-w-[calc(100vw-2rem)] origin-top-right rounded-[28px] border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
                 >
                   {/* Header: Centered Profile */}
                   <div className="flex flex-col items-center space-y-2 pb-4">
                     <div className="relative">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xl font-bold text-black shadow-inner">
-                        {userName ? (
+                      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xl font-bold text-black shadow-inner">
+                        {avatarUrl ? (
+                          <Image
+                            src={avatarUrl}
+                            alt={userName || 'User avatar'}
+                            fill
+                            sizes="64px"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : userName ? (
                           userName[0].toUpperCase()
                         ) : (
                           <Icon icon={User} size="sm" className="text-black" aria-hidden={true} />
@@ -298,6 +399,16 @@ export function NavigationHeader({
                       <span>Settings</span>
                     </Link>
 
+                    <Link
+                      href="/webapp/setup"
+                      onClick={() => setIsDesktopUserMenuOpen(false)}
+                      onMouseEnter={() => prefetchRoute('/webapp/setup')}
+                      className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                    >
+                      <Icon icon={Settings} size="sm" className="text-gray-400" />
+                      <span>Setup</span>
+                    </Link>
+
                     <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white">
                       <div className="flex items-center space-x-3">
                         <span className="flex h-4 w-4 items-center justify-center">🌐</span>
@@ -327,7 +438,7 @@ export function NavigationHeader({
                   </div>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>

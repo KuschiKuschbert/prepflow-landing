@@ -3,7 +3,6 @@
 import { useSession } from 'next-auth/react';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useNavigationItems } from './nav-items';
 import { ExpandableCategorySection } from './ExpandableCategorySection';
@@ -27,9 +26,8 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
 }: MobileNavigationDrawerProps) {
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
-  const { workflow } = useWorkflowPreference();
   const { trackNavigation } = useNavigationTracking();
-  const allItems = useNavigationItems(workflow);
+  const allItems = useNavigationItems();
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const hasAutoExpandedRef = useRef(false);
 
@@ -190,7 +188,6 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
                     isActive={isActive}
                     onItemClick={handleItemClick}
                     onTrack={trackNavigation}
-                    workflow={workflow}
                     isExpanded={expandedCategory === category}
                     onToggle={handleCategoryToggle}
                   />

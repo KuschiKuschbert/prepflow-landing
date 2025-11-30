@@ -46,3 +46,4 @@ export function createGuideCompleteUpdate(
     lastViewedAt: Date.now(),
   };
 }
+

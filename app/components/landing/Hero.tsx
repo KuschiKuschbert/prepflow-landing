@@ -118,7 +118,6 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
                 height={1080}
                 className="h-auto w-full"
                 priority
-                loading="eager"
                 quality={90}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1152px"
               />

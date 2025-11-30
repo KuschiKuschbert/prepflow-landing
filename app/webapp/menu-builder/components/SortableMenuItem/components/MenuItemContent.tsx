@@ -9,6 +9,8 @@ import { AlertCircle, AlertTriangle, ChefHat, Utensils } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { MenuItem } from '../../../types';
 import { useMenuItemStatistics } from '../hooks/useMenuItemStatistics';
+import { FoodImageDisplay } from '@/components/ui/FoodImageDisplay';
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface MenuItemContentProps {
   item: MenuItem;
@@ -98,13 +100,43 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
     }
   }
 
+  // Get image URLs from dish or recipe
+  const imageUrl = isDish
+    ? (item.dishes as any)?.image_url
+    : (item.recipes as any)?.image_url;
+  const imageUrlAlternative = isDish
+    ? (item.dishes as any)?.image_url_alternative
+    : (item.recipes as any)?.image_url_alternative;
+  const hasImages = !!(imageUrl || imageUrlAlternative);
+  const entityId = isDish ? item.dish_id : item.recipe_id;
+  const entityName = isDish
+    ? item.dishes?.dish_name || 'Unknown Dish'
+    : item.recipes?.recipe_name || 'Unknown Recipe';
+
   return (
     <div className="flex flex-1 items-center gap-2">
+      {/* Type Icon */}
       {isDish ? (
         <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" />
       ) : isRecipe ? (
         <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
       ) : null}
+
+      {/* Image Generation Button (compact) - only show if no images exist */}
+      {!hasImages && entityId && (
+        <div className="flex-shrink-0" onClick={e => e.stopPropagation()}>
+          <FoodImageGenerator
+            entityType={isDish ? 'dish' : 'recipe'}
+            entityId={entityId}
+            entityName={entityName}
+            imageUrl={null}
+            imageUrlAlternative={null}
+            compact={true}
+            showDisplay={false}
+          />
+        </div>
+      )}
+
       <div className="flex-1">
         {isDish ? (
           <>

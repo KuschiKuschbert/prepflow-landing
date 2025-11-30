@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { logger } from '@/lib/logger';
+import { useOnTemperatureLogged } from '@/lib/personality/hooks';
 interface TemperatureEquipment {
   id: string;
   name: string;
@@ -36,6 +37,7 @@ export default function EquipmentPage() {
   const router = useRouter();
   const { formatDate } = useCountryFormatting();
   const { showSuccess, showError } = useNotification();
+  const onTemperatureLogged = useOnTemperatureLogged();
   const equipmentId = params.id as string;
 
   const [equipment, setEquipment] = useState<TemperatureEquipment | null>(null);
@@ -105,6 +107,9 @@ export default function EquipmentPage() {
       if (!response.ok) {
         throw new Error('Failed to log temperature');
       }
+
+      // Trigger personality hook for temperature logging
+      onTemperatureLogged();
 
       showSuccess('Temperature logged successfully');
       setTemperature('');

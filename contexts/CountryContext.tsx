@@ -45,6 +45,12 @@ export function CountryProvider({ children }: CountryProviderProps) {
             const data = await response.json();
             if (data.success && data.country && COUNTRY_CONFIGS[data.country]) {
               setSelectedCountry(data.country);
+              // Save auto-detected country to localStorage
+              try {
+                localStorage.setItem('prepflow-country', data.country);
+              } catch (storageError) {
+                logger.warn('[CountryContext] Failed to save auto-detected country:', storageError);
+              }
               setIsLoading(false);
               return;
             }
@@ -59,6 +65,12 @@ export function CountryProvider({ children }: CountryProviderProps) {
         const browserLocale = navigator.language || 'en-AU';
         const detectedCountry = detectCountryFromLocale(browserLocale);
         setSelectedCountry(detectedCountry);
+        // Save auto-detected country to localStorage
+        try {
+          localStorage.setItem('prepflow-country', detectedCountry);
+        } catch (storageError) {
+          logger.warn('[CountryContext] Failed to save auto-detected country:', storageError);
+        }
       } catch (error) {
         logger.error('[CountryContext] Error loading country preference:', error);
         setSelectedCountry('AU'); // Default fallback

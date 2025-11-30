@@ -207,3 +207,4 @@ export function generateRecipeCardsHTML(cards: RecipeCardData[]): string {
 
   return cardsContent;
 }
+

@@ -59,6 +59,14 @@ const PersonalityScheduler = dynamic(
   },
 );
 
+const AchievementToast = dynamic(
+  () => import('./components/AchievementToast').then(mod => ({ default: mod.AchievementToast })),
+  {
+    ssr: false,
+    loading: () => null, // Achievement toast can load asynchronously
+  },
+);
+
 const WebappBackground = dynamic(
   () => import('@/components/ui/WebappBackground').then(mod => ({ default: mod.WebappBackground })),
   {
@@ -212,6 +220,9 @@ function WebAppLayoutContent({
 
       {/* Personality System Scheduler */}
       <PersonalityScheduler />
+
+      {/* Achievement Toast */}
+      <AchievementToast />
 
       {/* Main Content - responsive padding handled by CSS in globals.css */}
       <main className="webapp-main-content bg-transparent">

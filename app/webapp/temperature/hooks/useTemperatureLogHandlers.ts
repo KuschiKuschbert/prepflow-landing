@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useOnTemperatureLogged } from '@/lib/personality/hooks';
 
 interface UseTemperatureLogHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
@@ -9,6 +10,7 @@ export function useTemperatureLogHandlers({
   activeTab,
   fetchAllLogs,
 }: UseTemperatureLogHandlersProps) {
+  const onTemperatureLogged = useOnTemperatureLogged();
   const [newLog, setNewLog] = useState({
     log_date: '',
     log_time: '',
@@ -36,6 +38,9 @@ export function useTemperatureLogHandlers({
 
       const data = await response.json();
       if (data.success) {
+        // Trigger personality hook for temperature logging
+        onTemperatureLogged();
+
         setNewLog({
           log_date: new Date().toISOString().split('T')[0],
           log_time: new Date().toTimeString().split(' ')[0].substring(0, 5),

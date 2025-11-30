@@ -1,8 +1,8 @@
-import { getGeminiClient, isAIEnabled, getModelForTask, type TaskType } from '../gemini-client';
+import { getGeminiClient, getModelForTask, isAIEnabled, type TaskType } from '../gemini-client';
 import { buildKitchenContext } from '../prompts/kitchen-context';
+import type { AIRequestOptions, AIResponse } from '../types';
 import { parseAIError } from '../utils/errorParser';
 import { processAIResponse } from '../utils/responseProcessor';
-import type { AIRequestOptions, AIResponse } from '../types';
 
 /**
  * Generate AI response from vision (image analysis).
@@ -37,7 +37,7 @@ export async function generateAIVisionResponse(
   const kitchenContext = buildKitchenContext(countryCode);
   const fullPrompt = `${prompt}\n\n${kitchenContext}\n\nAnalyze the image and provide recommendations specific to the user's location and regulations.`;
 
-  // Use vision model (gemini-1.5-pro has vision capabilities)
+  // Use vision model (gemini-2.5-flash supports vision capabilities and is free tier)
   const taskType: TaskType = 'vision';
   const model = options.model || getModelForTask(taskType);
   const temperature = options.temperature ?? 0.7;

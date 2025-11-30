@@ -29,6 +29,7 @@ interface DishesSidePanelsProps {
   onDeleteCancel: () => void;
   onDishEditDrawerClose: () => void;
   onDishEditDrawerSave: () => Promise<void>;
+  onRecipeImagesGenerated?: (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => void;
 }
 
 export function DishesSidePanels({
@@ -53,6 +54,7 @@ export function DishesSidePanels({
   onDeleteCancel,
   onDishEditDrawerClose,
   onDishEditDrawerSave,
+  onRecipeImagesGenerated,
 }: DishesSidePanelsProps) {
   const formatQuantity = (q: number, u: string) =>
     formatQuantityUtil(q, u, previewYield, selectedRecipeForPreview?.yield || 1);
@@ -79,6 +81,7 @@ export function DishesSidePanels({
         onDeleteRecipe={onRecipeDelete}
         capitalizeRecipeName={capitalizeRecipeName}
         formatQuantity={formatQuantity}
+        onImagesGenerated={onRecipeImagesGenerated}
       />
 
       {/* Delete Confirmation Modal */}

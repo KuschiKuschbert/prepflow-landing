@@ -16,6 +16,7 @@ interface UseDishesSidePanelsHandlersProps {
   confirmDeleteItem: () => void;
   cancelDeleteItem: () => void;
   fetchItems: () => Promise<void>;
+  onRecipeImagesGenerated?: (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => void;
 }
 
 export function useDishesSidePanelsHandlers({
@@ -33,6 +34,7 @@ export function useDishesSidePanelsHandlers({
   confirmDeleteItem,
   cancelDeleteItem,
   fetchItems,
+  onRecipeImagesGenerated,
 }: UseDishesSidePanelsHandlersProps) {
   const closeDishPanel = useCallback(() => {
     setShowDishPanel(false);
@@ -89,5 +91,6 @@ export function useDishesSidePanelsHandlers({
     onDeleteCancel: cancelDeleteItem,
     onDishEditDrawerClose,
     onDishEditDrawerSave: fetchItems,
+    onRecipeImagesGenerated,
   };
 }

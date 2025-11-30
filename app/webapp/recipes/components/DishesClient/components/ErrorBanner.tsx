@@ -14,3 +14,4 @@ export function ErrorBanner({ error }: ErrorBannerProps) {
     </div>
   );
 }
+

@@ -8,6 +8,7 @@ import {
 } from './useTemperatureEquipmentHandlers/equipmentCRUD';
 import { handleQuickTempLog as handleQuickTempLogHelper } from './useTemperatureEquipmentHandlers/quickTempLog';
 import { handleRefreshLogs as handleRefreshLogsHelper } from './useTemperatureEquipmentHandlers/refreshLogs';
+import { useOnTemperatureLogged } from '@/lib/personality/hooks';
 interface UseTemperatureEquipmentHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
@@ -26,6 +27,7 @@ export function useTemperatureEquipmentHandlers({
   setEquipment,
 }: UseTemperatureEquipmentHandlersProps) {
   const { showError, showSuccess } = useNotification();
+  const onTemperatureLogged = useOnTemperatureLogged();
   const [quickTempLoading, setQuickTempLoading] = useState<{ [key: string]: boolean }>({});
 
   const handleQuickTempLog = async (
@@ -33,7 +35,7 @@ export function useTemperatureEquipmentHandlers({
     equipmentName: string,
     equipmentType: string,
   ) => {
-    await handleQuickTempLogHelper({
+    const success = await handleQuickTempLogHelper({
       equipmentId,
       equipmentName,
       equipmentType,
@@ -42,6 +44,11 @@ export function useTemperatureEquipmentHandlers({
       setQuickTempLoading,
       showError,
     });
+
+    // Trigger personality hook after successful quick temp log
+    if (success) {
+      onTemperatureLogged();
+    }
   };
   const handleUpdateEquipment = async (
     equipmentId: string,

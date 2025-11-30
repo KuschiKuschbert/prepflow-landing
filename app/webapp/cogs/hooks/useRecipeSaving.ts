@@ -6,6 +6,7 @@ import { useRecipeValidation } from './useRecipeValidation';
 import { useRecipeCRUD } from './useRecipeCRUD';
 import { useNotification } from '@/contexts/NotificationContext';
 import { usePrompt } from '@/hooks/usePrompt';
+import { useOnRecipeCreated } from '@/lib/personality/hooks';
 
 import { logger } from '@/lib/logger';
 export const useRecipeSaving = () => {
@@ -15,6 +16,7 @@ export const useRecipeSaving = () => {
   const { showPrompt, InputDialog } = usePrompt();
   const { validateCalculations } = useRecipeValidation();
   const { createOrUpdateRecipe, saveRecipeIngredients } = useRecipeCRUD({ setError });
+  const onRecipeCreated = useOnRecipeCreated();
 
   const saveAsRecipe = useCallback(
     async (calculations: COGSCalculation[], dishName: string, dishPortions: number) => {
@@ -69,6 +71,11 @@ export const useRecipeSaving = () => {
         setError(null);
         const actionText = isNew ? 'saved' : 'updated';
         showSuccess(`Recipe "${recipe.recipe_name}" ${actionText} successfully to Recipe Book!`);
+
+        // Trigger personality hook for new recipes
+        if (isNew) {
+          onRecipeCreated();
+        }
       } catch (err: any) {
         logger.error('Recipe save error:', err);
         const errorMessage =
@@ -78,7 +85,7 @@ export const useRecipeSaving = () => {
         setLoading(false);
       }
     },
-    [validateCalculations, createOrUpdateRecipe, saveRecipeIngredients, showSuccess, showPrompt],
+    [validateCalculations, createOrUpdateRecipe, saveRecipeIngredients, showSuccess, showPrompt, onRecipeCreated],
   );
 
   const clearMessages = useCallback(() => {

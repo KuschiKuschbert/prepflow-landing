@@ -26,6 +26,14 @@ export const PREFETCH_MAP: Record<string, string[]> = {
   ],
   '/webapp/ai-specials': ['/api/ai-specials'],
   '/webapp/menu-builder': ['/api/menus', '/api/dishes?pageSize=1000', '/api/recipes?pageSize=1000'],
+  '/webapp/settings': [
+    '/api/user/profile',
+    '/api/user/notifications',
+    '/api/user/sessions',
+    '/api/user/login-history',
+    '/api/user/data-usage',
+    '/api/user/activity?limit=5',
+  ],
   '/webapp/setup': [],
 };
 

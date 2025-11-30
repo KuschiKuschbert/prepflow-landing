@@ -45,7 +45,7 @@ export function BrandMark({
   onMouseDown,
   onMouseUp,
   onMouseLeave,
-  floating = true,
+  floating = false,
   glowOnHover = true,
   animationIntensity = 1,
 }: BrandMarkProps) {
@@ -54,11 +54,29 @@ export function BrandMark({
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const effect = checkSeasonalMatch();
-    setSeasonalEffect(effect);
-    if (effect) {
-      document.documentElement.setAttribute('data-seasonal', effect);
-    }
+
+    // Check for seasonal match and also read from DOM (for manual testing)
+    const checkSeasonal = () => {
+      const domEffect = document.documentElement.getAttribute('data-seasonal');
+      const dateEffect = checkSeasonalMatch();
+      const effect = domEffect || dateEffect;
+      setSeasonalEffect(effect);
+      if (dateEffect && !domEffect) {
+        document.documentElement.setAttribute('data-seasonal', dateEffect);
+      }
+    };
+
+    checkSeasonal();
+
+    // Listen for changes to data-seasonal attribute (for manual testing)
+    const observer = new MutationObserver(() => {
+      checkSeasonal();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-seasonal'],
+    });
 
     // Check for reduced motion preference
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -69,14 +87,19 @@ export function BrandMark({
     };
 
     mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    return () => {
+      observer.disconnect();
+      mediaQuery.removeEventListener('change', handleChange);
+    };
   }, []);
 
-  const shouldAnimate = floating && !reducedMotion && animationIntensity > 0;
+  // Enable floating automatically when seasonal effect is active
+  const effectiveFloating = floating || (seasonalEffect !== null);
+  const shouldAnimate = effectiveFloating && !reducedMotion && animationIntensity > 0;
 
   return (
     <motion.div
-      className={`relative inline-flex items-center justify-center overflow-hidden ${className}`}
+      className={`relative inline-flex items-center justify-center ${seasonalEffect ? 'overflow-visible' : 'overflow-hidden'} ${className}`}
       animate={
         shouldAnimate
           ? {
@@ -141,7 +164,65 @@ export function BrandMark({
       )}
       {/* Seasonal overlays rendered via CSS based on data-seasonal attribute */}
       {seasonalEffect && (
-        <div className={`pf-seasonal-overlay pf-seasonal-${seasonalEffect}`} aria-hidden="true" />
+        <>
+          <div className={`pf-seasonal-overlay pf-seasonal-${seasonalEffect}`} aria-hidden="true" />
+          {/* Star Wars sparkles */}
+          {seasonalEffect === 'lightsaber' && !reducedMotion && (
+            <>
+              <div className="pf-lightsaber-sparkle pf-sparkle-1" aria-hidden="true" />
+              <div className="pf-lightsaber-sparkle pf-sparkle-2" aria-hidden="true" />
+              <div className="pf-lightsaber-sparkle pf-sparkle-3" aria-hidden="true" />
+            </>
+          )}
+          {/* Santa snowflakes */}
+          {seasonalEffect === 'santaHat' && !reducedMotion && (
+            <>
+              <div className="pf-snowflake pf-snowflake-1" aria-hidden="true">❄️</div>
+              <div className="pf-snowflake pf-snowflake-2" aria-hidden="true">❄️</div>
+              <div className="pf-snowflake pf-snowflake-3" aria-hidden="true">❄️</div>
+            </>
+          )}
+          {/* Chef's Day sparkles */}
+          {seasonalEffect === 'toque' && !reducedMotion && (
+            <>
+              <div className="pf-chef-sparkle pf-chef-sparkle-1" aria-hidden="true">✨</div>
+              <div className="pf-chef-sparkle pf-chef-sparkle-2" aria-hidden="true">✨</div>
+              <div className="pf-chef-sparkle pf-chef-sparkle-3" aria-hidden="true">✨</div>
+            </>
+          )}
+          {/* New Year confetti */}
+          {(seasonalEffect === 'newYear' || seasonalEffect === 'newYearsEve') && !reducedMotion && (
+            <>
+              <div className="pf-confetti pf-confetti-1" aria-hidden="true">🎊</div>
+              <div className="pf-confetti pf-confetti-2" aria-hidden="true">🎉</div>
+              <div className="pf-confetti pf-confetti-3" aria-hidden="true">✨</div>
+            </>
+          )}
+          {/* Valentine hearts */}
+          {seasonalEffect === 'valentines' && !reducedMotion && (
+            <>
+              <div className="pf-heart pf-heart-1" aria-hidden="true">💖</div>
+              <div className="pf-heart pf-heart-2" aria-hidden="true">💕</div>
+              <div className="pf-heart pf-heart-3" aria-hidden="true">💗</div>
+            </>
+          )}
+          {/* Easter eggs */}
+          {seasonalEffect === 'easter' && !reducedMotion && (
+            <>
+              <div className="pf-easter-egg pf-easter-egg-1" aria-hidden="true">🥚</div>
+              <div className="pf-easter-egg pf-easter-egg-2" aria-hidden="true">🐣</div>
+              <div className="pf-easter-egg pf-easter-egg-3" aria-hidden="true">🌸</div>
+            </>
+          )}
+          {/* Halloween bats/pumpkins */}
+          {seasonalEffect === 'halloween' && !reducedMotion && (
+            <>
+              <div className="pf-halloween pf-halloween-1" aria-hidden="true">🦇</div>
+              <div className="pf-halloween pf-halloween-2" aria-hidden="true">🎃</div>
+              <div className="pf-halloween pf-halloween-3" aria-hidden="true">👻</div>
+            </>
+          )}
+        </>
       )}
     </motion.div>
   );

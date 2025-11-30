@@ -1,216 +1,135 @@
 'use client';
 
-import { getArcadeStats } from '@/lib/arcadeStats';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { PersonalitySettingsPanel } from './components/PersonalitySettingsPanel';
-import { AdaptiveNavSettingsPanel } from './components/AdaptiveNavSettingsPanel';
-import { useCountry } from '@/contexts/CountryContext';
-import { getAvailableCountries } from '@/lib/country-config';
-import { useNotification } from '@/contexts/NotificationContext';
-import {
-  useWorkflowPreference,
-  getWorkflowDisplayName,
-  getWorkflowDescription,
-  type WorkflowType,
-} from '@/lib/workflow/preferences';
+import { prefetchApis } from '@/lib/cache/data-cache';
+import dynamic from 'next/dynamic';
+import { useEffect, useMemo, useState } from 'react';
+import { SectionSkeleton } from './components/SectionSkeleton';
+import { SettingsLayout, SettingsSection } from './components/SettingsLayout';
+
+// Lazy load all section components for code splitting
+const ProfileAccountSection = dynamic(
+  () =>
+    import('./components/sections/ProfileAccountSection').then(mod => ({
+      default: mod.ProfileAccountSection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
+
+const SecuritySection = dynamic(
+  () =>
+    import('./components/sections/SecuritySection').then(mod => ({
+      default: mod.SecuritySection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
+
+const PreferencesSection = dynamic(
+  () =>
+    import('./components/sections/PreferencesSection').then(mod => ({
+      default: mod.PreferencesSection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
+
+const DataBackupSection = dynamic(
+  () =>
+    import('./components/sections/DataBackupSection').then(mod => ({
+      default: mod.DataBackupSection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
+
+const PrivacyLegalSection = dynamic(
+  () =>
+    import('./components/sections/PrivacyLegalSection').then(mod => ({
+      default: mod.PrivacyLegalSection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
+
+const AdvancedSection = dynamic(
+  () =>
+    import('./components/sections/AdvancedSection').then(mod => ({
+      default: mod.AdvancedSection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
 
 export default function SettingsPage() {
-  const [busy, setBusy] = useState(false);
-  const [arcadeStats, setArcadeStats] = useState({ tomatoes: 0, dockets: 0, fires: 0 });
-  const { selectedCountry, countryConfig, setCountry } = useCountry();
-  const availableCountries = getAvailableCountries();
-  const { workflow, setWorkflow } = useWorkflowPreference();
+  // Always start with 'profile' for SSR consistency, then sync on client
+  const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
 
-  const { showSuccess, showError } = useNotification();
-
-  const request = async (path: string, method: 'GET' | 'POST') => {
-    setBusy(true);
-    try {
-      const res = await fetch(path, { method });
-      const data = await res.json();
-      if (res.ok) {
-        showSuccess(data.message || 'Done');
-      } else {
-        showError(data.message || 'Error');
-      }
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  // Load arcade stats after hydration and update when they change
+  // Prefetch all settings API endpoints on mount
   useEffect(() => {
-    // Load stats from localStorage only on client after hydration
-    setArcadeStats(getArcadeStats());
-
-    // Keep existing event listener for updates
-    const handleStatsUpdate = () => {
-      setArcadeStats(getArcadeStats());
-    };
-
-    window.addEventListener('arcade:statsUpdated', handleStatsUpdate);
-    return () => window.removeEventListener('arcade:statsUpdated', handleStatsUpdate);
+    prefetchApis([
+      '/api/user/profile',
+      '/api/user/notifications',
+      '/api/user/sessions',
+      '/api/user/login-history',
+      '/api/user/data-usage',
+      '/api/user/activity?limit=5',
+      '/api/backup/settings',
+      '/api/backup/list',
+    ]);
   }, []);
 
-  const workflowOptions: WorkflowType[] = [
-    'daily-operations',
-    'setup-planning-operations',
-    'menu-first',
-  ];
+  // Sync with URL hash or sessionStorage after hydration
+  useEffect(() => {
+    // Check URL hash first
+    const hash = window.location.hash.slice(1);
+    if (hash && ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced'].includes(hash)) {
+      setActiveSection(hash as SettingsSection);
+      return;
+    }
+
+    // Check sessionStorage
+    const stored = sessionStorage.getItem('settings_active_section');
+    if (stored && ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced'].includes(stored)) {
+      setActiveSection(stored as SettingsSection);
+    }
+  }, []);
+
+  // Memoize section rendering to ensure stable component instances
+  const renderSection = useMemo(() => {
+    switch (activeSection) {
+      case 'profile':
+        return <ProfileAccountSection key="profile-section" />;
+      case 'security':
+        return <SecuritySection key="security-section" />;
+      case 'preferences':
+        return <PreferencesSection key="preferences-section" />;
+      case 'data':
+        return <DataBackupSection key="data-section" />;
+      case 'privacy':
+        return <PrivacyLegalSection key="privacy-section" />;
+      case 'advanced':
+        return <AdvancedSection key="advanced-section" />;
+      default:
+        return <ProfileAccountSection key="profile-section-default" />;
+    }
+  }, [activeSection]);
 
   return (
-    <div className="mx-auto max-w-3xl p-6 text-white">
-      <h1 className="mb-4 text-3xl font-bold">Settings</h1>
-
-      {/* Navigation Workflow Selection */}
-      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-        <h2 className="text-xl font-semibold">Navigation Workflow</h2>
-        <p className="text-sm text-gray-300">
-          Choose how you want your navigation organized. This affects how menu items are grouped in
-          the sidebar and mobile navigation.
-        </p>
-        <div className="space-y-3">
-          {workflowOptions.map(option => (
-            <label
-              key={option}
-              className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
-                workflow === option
-                  ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10'
-                  : 'border-[#2a2a2a] bg-[#2a2a2a]/20 hover:border-[#2a2a2a]/50'
-              }`}
-            >
-              <input
-                type="radio"
-                name="workflow"
-                value={option}
-                checked={workflow === option}
-                onChange={() => setWorkflow(option)}
-                className="mt-1 h-4 w-4 cursor-pointer border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
-              />
-              <div className="flex-1">
-                <div className="font-medium text-white">{getWorkflowDisplayName(option)}</div>
-                <div className="mt-1 text-xs text-gray-400">{getWorkflowDescription(option)}</div>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Country/Region Selection */}
-      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-        <h2 className="text-xl font-semibold">Region & Units</h2>
-        <p className="text-sm text-gray-300">
-          Select your country to automatically configure units (metric/imperial) and regional
-          settings.
-        </p>
-        <div>
-          <label htmlFor="country-select" className="mb-2 block text-sm font-medium text-gray-300">
-            Country
-          </label>
-          <select
-            id="country-select"
-            value={selectedCountry}
-            onChange={e => setCountry(e.target.value)}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-          >
-            {availableCountries.map(country => (
-              <option key={country.code} value={country.code}>
-                {country.name} (
-                {country.unitSystem === 'metric'
-                  ? 'Metric (g/ml)'
-                  : country.unitSystem === 'imperial'
-                    ? 'Imperial (oz/lb)'
-                    : 'Mixed'}
-                )
-              </option>
-            ))}
-          </select>
-          <p className="mt-2 text-xs text-gray-400">
-            Current unit system: <span className="font-medium">{countryConfig.unitSystem}</span> •
-            Currency: {countryConfig.currency} • Tax: {countryConfig.taxName}{' '}
-            {(countryConfig.taxRate * 100).toFixed(1)}%
-          </p>
-        </div>
-      </div>
-
-      {/* Backup & Restore */}
-      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-        <h2 className="text-xl font-semibold">Backup & Restore</h2>
-        <p className="text-gray-300">
-          Backup your data to Google Drive or download encrypted backup files. Restore from backups
-          with full, selective, or merge options.
-        </p>
-        <Link
-          href="/webapp/settings/backup"
-          className="inline-block rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-white transition-all hover:shadow-lg"
-        >
-          Manage Backups
-        </Link>
-      </div>
-
-      <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-        <h2 className="text-xl font-semibold">Privacy controls</h2>
-        <p className="text-gray-300">
-          You can export or request deletion of your data at any time.
-        </p>
-        <div className="flex gap-3">
-          <button
-            disabled={busy}
-            className="rounded-2xl border border-[#2a2a2a] px-4 py-2 hover:bg-[#2a2a2a]/40"
-            onClick={() => request('/api/account/export', 'GET')}
-          >
-            Export my data
-          </button>
-          <button
-            disabled={busy}
-            className="rounded-2xl border border-[#2a2a2a] px-4 py-2 hover:bg-[#2a2a2a]/40"
-            onClick={() => request('/api/account/delete', 'POST')}
-          >
-            Request deletion
-          </button>
-        </div>
-      </div>
-
-      {/* Arcade Stats - Fun Feature */}
-      <div className="mt-8 rounded-2xl border border-[#2a2a2a]/30 bg-[#1f1f1f]/30 p-6">
-        <h2 className="mb-2 text-lg font-semibold text-gray-400">Arcade Stats</h2>
-        <p className="mb-4 text-sm text-gray-500">
-          Your all-time stats across all sessions. Just for fun! 🎮
-        </p>
-        <div className="desktop:grid-cols-3 desktop:gap-4 grid grid-cols-2 gap-3">
-          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
-            <div className="mb-1 text-2xl">🍅</div>
-            <div className="mb-1 text-xs text-gray-500">Tomatoes Thrown</div>
-            <div className="text-xl font-bold text-[#29E7CD]">{arcadeStats.tomatoes}</div>
-          </div>
-          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
-            <div className="mb-1 text-2xl">📋</div>
-            <div className="mb-1 text-xs text-gray-500">Dockets Caught</div>
-            <div className="text-xl font-bold text-[#3B82F6]">{arcadeStats.dockets}</div>
-          </div>
-          <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/20 p-4">
-            <div className="mb-1 text-2xl">🔥</div>
-            <div className="mb-1 text-xs text-gray-500">Fires Extinguished</div>
-            <div className="text-xl font-bold text-[#E74C3C]">{arcadeStats.fires}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Experimental Features */}
-      <div className="mt-8 space-y-6">
-        <h2 className="text-xl font-semibold">Experimental Features</h2>
-        <p className="text-sm text-gray-400">
-          Try out new features that are still in development. These may change or be removed in
-          future updates.
-        </p>
-
-        {/* Adaptive Navigation Optimization */}
-        <AdaptiveNavSettingsPanel />
-
-        {/* PrepFlow Personality Settings */}
-        <PersonalitySettingsPanel />
-      </div>
-    </div>
+    <SettingsLayout activeSection={activeSection} onSectionChange={setActiveSection}>
+      {renderSection}
+    </SettingsLayout>
   );
 }

@@ -4,9 +4,10 @@
 
 import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { useNotification } from '@/contexts/NotificationContext';
-import { useWorkflowPreference } from '@/lib/workflow/preferences';
 import { useNavigationItems } from '@/app/webapp/components/navigation/nav-items';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { Beaker, Info, Download } from 'lucide-react';
 
 /**
  * Get display name for a category.
@@ -35,8 +36,14 @@ function getCategoryDisplayName(category: string): string {
 export function AdaptiveNavSettingsPanel() {
   const { settings, updateSettings } = useAdaptiveNavSettings();
   const { showInfo, showError } = useNotification();
-  const { workflow } = useWorkflowPreference();
-  const allItems = useNavigationItems(workflow);
+  const allItems = useNavigationItems();
+  const [isLoadingFromServer, setIsLoadingFromServer] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering conditional content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Get available categories for current workflow
   const availableCategories = useMemo(() => {
@@ -79,6 +86,30 @@ export function AdaptiveNavSettingsPanel() {
     }
   };
 
+  const handleLoadFromServer = async () => {
+    setIsLoadingFromServer(true);
+    try {
+      const response = await fetch('/api/navigation-optimization/preferences', {
+        method: 'GET',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        updateSettings({
+          enabled: data.enabled || false,
+          selectedSections: data.selectedSections || [],
+        });
+        showInfo('Preferences loaded from server');
+      } else {
+        showError('Failed to load preferences from server');
+      }
+    } catch (err) {
+      showError('Failed to load preferences from server');
+    } finally {
+      setIsLoadingFromServer(false);
+    }
+  };
+
   const formatLastUpdated = (timestamp?: number) => {
     if (!timestamp) return 'Never';
     const date = new Date(timestamp);
@@ -89,7 +120,16 @@ export function AdaptiveNavSettingsPanel() {
     <div className="mt-8 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Adaptive Navigation</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-semibold">Adaptive Navigation</h2>
+            <span
+              className="inline-flex items-center gap-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-400"
+              title="This feature is experimental and may change"
+            >
+              <Icon icon={Beaker} size="xs" className="text-yellow-400" aria-hidden={true} />
+              Experimental
+            </span>
+          </div>
           <p className="mt-1 text-sm text-gray-400">
             Automatically reorder navigation items based on your usage patterns
           </p>
@@ -105,7 +145,7 @@ export function AdaptiveNavSettingsPanel() {
         </label>
       </div>
 
-      {settings.enabled && (
+      {mounted && settings.enabled && (
         <>
           {/* Section Selection */}
           <div>
@@ -166,9 +206,7 @@ export function AdaptiveNavSettingsPanel() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Sections optimized:</span>
-                <span className="text-gray-300">
-                  {settings.selectedSections?.length || 0} of {availableCategories.length}
-                </span>
+                <span className="text-gray-300">{settings.selectedSections?.length || 0}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Last updated:</span>
@@ -178,12 +216,38 @@ export function AdaptiveNavSettingsPanel() {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 border-t border-[#2a2a2a] pt-4">
+          <div className="flex flex-wrap gap-3 border-t border-[#2a2a2a] pt-4">
+            <div className="relative group">
+              <button
+                onClick={handleSyncToServer}
+                className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 flex items-center gap-2"
+                aria-label="Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions"
+              >
+                Sync to Server
+                <Icon icon={Info} size="xs" className="text-gray-400" aria-hidden={true} />
+              </button>
+              <div className="absolute bottom-full left-0 mb-2 hidden w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-xs text-gray-300 shadow-lg group-hover:block z-10 pointer-events-none">
+                Syncs your local preferences (enabled state and selected sections) to the server
+                database so they persist across devices and browser sessions. Currently uses
+                localStorage by default; syncing saves preferences to your account.
+              </div>
+            </div>
             <button
-              onClick={handleSyncToServer}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50"
+              onClick={handleLoadFromServer}
+              disabled={isLoadingFromServer}
+              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              Sync to Server
+              {isLoadingFromServer ? (
+                <>
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <Icon icon={Download} size="xs" className="text-gray-300" aria-hidden={true} />
+                  Load from Server
+                </>
+              )}
             </button>
             <button
               onClick={() => {
@@ -198,7 +262,7 @@ export function AdaptiveNavSettingsPanel() {
         </>
       )}
 
-      {!settings.enabled && (
+      {mounted && !settings.enabled && (
         <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
           <p className="text-sm text-gray-400">
             Enable adaptive navigation to automatically optimize your navigation bar based on when

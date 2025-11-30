@@ -16,6 +16,7 @@ interface QuickTempLogProps {
  * Handle quick temperature log creation.
  *
  * @param {QuickTempLogProps} props - Quick temp log props
+ * @returns {Promise<boolean>} Success status
  */
 export async function handleQuickTempLog({
   equipmentId,
@@ -25,7 +26,7 @@ export async function handleQuickTempLog({
   fetchAllLogs,
   setQuickTempLoading,
   showError,
-}: QuickTempLogProps): Promise<void> {
+}: QuickTempLogProps): Promise<boolean> {
   setQuickTempLoading(prev => ({ ...prev, [equipmentId]: true }));
   try {
     const response = await fetch('/api/temperature-logs', {
@@ -42,11 +43,16 @@ export async function handleQuickTempLog({
       }),
     });
     const data = await response.json();
-    if (data.success && activeTab === 'analytics') {
-      fetchAllLogs(1000).catch(() => {});
+    if (data.success) {
+      if (activeTab === 'analytics') {
+        fetchAllLogs(1000).catch(() => {});
+      }
+      return true;
     }
+    return false;
   } catch (error) {
     showError('Failed to log temperature. Please try again.');
+    return false;
   } finally {
     setQuickTempLoading(prev => ({ ...prev, [equipmentId]: false }));
   }

@@ -54,7 +54,37 @@ export class ApiErrorHandler {
   static isClientError(error: ApiError): boolean {
     return isClientError(error);
   }
-  static getErrorMessage(error: ApiError): string {
+  static getErrorMessage(error: ApiError, usePersonality = false): string {
+    // Try to get personality error message if enabled
+    if (usePersonality && typeof window !== 'undefined') {
+      try {
+        // Dynamic import to avoid circular dependencies
+        const personalityModule = require('./personality/ui');
+        const { dispatchErrorPersonality } = personalityModule;
+        let errorType: 'validation' | 'network' | 'server' | 'notFound' | null = null;
+
+        if (this.isNetworkError(error)) {
+          errorType = 'network';
+        } else if (this.isServerError(error)) {
+          errorType = 'server';
+        } else if (this.isRowNotFoundError(error)) {
+          errorType = 'notFound';
+        } else if (this.isClientError(error) && error.status === 400) {
+          errorType = 'validation';
+        }
+
+        if (errorType && dispatchErrorPersonality) {
+          const personalityMsg = dispatchErrorPersonality.pick(errorType);
+          if (personalityMsg) {
+            return personalityMsg;
+          }
+        }
+      } catch {
+        // Fall through to default messages if personality system not available
+      }
+    }
+
+    // Default error messages
     if (this.isNetworkError(error))
       return 'Network connection failed. Please check your internet connection.';
     if (this.isServerError(error)) return 'Server error occurred. Please try again later.';

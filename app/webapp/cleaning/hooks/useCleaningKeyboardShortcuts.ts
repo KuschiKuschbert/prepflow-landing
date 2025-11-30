@@ -54,3 +54,4 @@ export function useCleaningKeyboardShortcuts({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeTab, onCreateTask, onAddArea, onSetActiveTab]);
 }
+

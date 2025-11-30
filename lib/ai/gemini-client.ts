@@ -63,8 +63,10 @@ export function getDefaultModel(): string {
  * Get model for specific task type (auto-selection)
  *
  * - text: gemini-2.5-flash (fast, cost-effective for recipes, descriptions, instructions)
- * - vision: gemini-2.5-pro-preview-06-05 (has vision capabilities for image analysis)
- * - complex: gemini-2.5-pro-preview-06-05 (better quality for performance insights, detailed analysis)
+ * - vision: gemini-2.5-flash (supports vision capabilities for image analysis, free tier)
+ * - complex: gemini-2.5-flash (suitable for performance insights, detailed analysis, free tier)
+ *
+ * All tasks use gemini-2.5-flash to stay within free tier limits.
  */
 export function getModelForTask(taskType: TaskType): string {
   // Allow override via environment variable
@@ -74,9 +76,9 @@ export function getModelForTask(taskType: TaskType): string {
 
   switch (taskType) {
     case 'vision':
-      return process.env.GEMINI_VISION_MODEL || 'gemini-2.5-pro-preview-06-05';
+      return process.env.GEMINI_VISION_MODEL || 'gemini-2.5-flash';
     case 'complex':
-      return process.env.GEMINI_COMPLEX_MODEL || 'gemini-2.5-pro-preview-06-05';
+      return process.env.GEMINI_COMPLEX_MODEL || 'gemini-2.5-flash';
     case 'text':
     default:
       return process.env.GEMINI_TEXT_MODEL || 'gemini-2.5-flash';

@@ -7,6 +7,7 @@ import { handleIngredientInsert } from './helpers/handleIngredientInsert';
 import { handleIngredientInsertError, formatIngredientInsertError } from './helpers/errorHandling';
 import { performOptimisticUpdate, replaceWithServerIngredient } from './helpers/optimisticUpdate';
 import { formatIngredientErrorMessage } from './helpers/errorMessageFormatting';
+import { useOnIngredientAdded } from '@/lib/personality/hooks';
 
 interface UseIngredientAddProps<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },
@@ -43,6 +44,7 @@ export function useIngredientAdd<
   setNewIngredient,
 }: UseIngredientAddProps<T>) {
   const queryClient = useQueryClient();
+  const onIngredientAdded = useOnIngredientAdded();
 
   const handleAddIngredient = useCallback(
     async (ingredientData: Partial<T>) => {
@@ -84,6 +86,8 @@ export function useIngredientAdd<
         // Replace temp ingredient with real ingredient from server
         if (data) {
           replaceWithServerIngredient([], tempId, data as T, setIngredients);
+          // Trigger personality hook for ingredient addition
+          onIngredientAdded();
         }
 
         await queryClient.invalidateQueries({ queryKey: ['ingredients'] });
@@ -98,7 +102,7 @@ export function useIngredientAdd<
         throw error;
       }
     },
-    [setIngredients, setError, setShowAddForm, setWizardStep, setNewIngredient, queryClient],
+    [setIngredients, setError, setShowAddForm, setWizardStep, setNewIngredient, queryClient, onIngredientAdded],
   );
 
   return { handleAddIngredient };

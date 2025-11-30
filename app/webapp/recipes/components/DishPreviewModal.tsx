@@ -12,6 +12,7 @@ import { DishPreviewModalCostInfo } from './DishPreviewModalCostInfo';
 import { DishPreviewModalHeader } from './DishPreviewModalHeader';
 import { DishPreviewModalIngredientsList } from './DishPreviewModalIngredientsList';
 import { DishPreviewModalRecipesList } from './DishPreviewModalRecipesList';
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface DishPreviewModalProps {
   dish: Dish;
@@ -139,6 +140,17 @@ export default function DishPreviewModal({
               <div className="py-12 text-center text-gray-400">Loading...</div>
             ) : (
               <>
+                {/* Food Image Generation */}
+                <FoodImageGenerator
+                  entityType="dish"
+                  entityId={dish.id}
+                  entityName={dish.dish_name}
+                  imageUrl={(dishDetails as any)?.image_url || (dish as any)?.image_url}
+                  imageUrlAlternative={(dishDetails as any)?.image_url_alternative || (dish as any)?.image_url_alternative}
+                  className="mb-6"
+                  compact={false}
+                />
+
                 {costData && <DishPreviewModalCostInfo costData={costData} />}
 
                 {dishDetails && <DishPreviewModalRecipesList dishDetails={dishDetails} />}

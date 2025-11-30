@@ -3,7 +3,6 @@
 import React from 'react';
 import { NavItem } from './NavItem';
 import type { NavigationItemConfig } from './nav-items';
-import type { WorkflowType } from '@/lib/workflow/preferences';
 
 interface CategorySectionProps {
   category: string;
@@ -14,20 +13,15 @@ interface CategorySectionProps {
   showLabels?: boolean;
   iconSize?: 'sm' | 'md' | 'lg';
   compact?: boolean;
-  workflow?: WorkflowType;
 }
 
 /**
- * Get category display label based on workflow type.
+ * Get category display label.
  *
  * @param {string} category - Category name
- * @param {WorkflowType} workflow - Current workflow type
  * @returns {string} Display label for the category
  */
-export function getCategoryLabel(
-  category: string,
-  workflow: WorkflowType = 'daily-operations',
-): string {
+export function getCategoryLabel(category: string): string {
   // Unified category labels (same across all workflows)
   const categoryLabels: Record<string, string> = {
     primary: 'Primary',
@@ -57,7 +51,7 @@ export function getCategoryLabel(
 
 /**
  * Category section component for navigation items.
- * Groups navigation items by category with workflow-adaptive labels.
+ * Groups navigation items by category.
  *
  * @component
  * @param {Object} props - Component props
@@ -69,7 +63,6 @@ export function getCategoryLabel(
  * @param {boolean} [props.showLabels=true] - Whether to show item labels
  * @param {'sm' | 'md' | 'lg'} [props.iconSize='md'] - Icon size
  * @param {boolean} [props.compact=false] - Whether to use compact mode
- * @param {WorkflowType} [props.workflow='daily-operations'] - Current workflow type
  * @returns {JSX.Element} Category section
  */
 export function CategorySection({
@@ -81,7 +74,6 @@ export function CategorySection({
   showLabels = true,
   iconSize = 'md',
   compact = false,
-  workflow = 'daily-operations',
 }: CategorySectionProps) {
   return (
     <div className="mb-3">
@@ -90,7 +82,7 @@ export function CategorySection({
           className="mb-1.5 text-[10px] font-semibold tracking-wider text-gray-500 uppercase"
           suppressHydrationWarning
         >
-          {getCategoryLabel(category, workflow)}
+          {getCategoryLabel(category)}
         </h3>
       )}
       <div className="space-y-0.5">

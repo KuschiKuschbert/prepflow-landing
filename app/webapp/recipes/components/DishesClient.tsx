@@ -1,7 +1,7 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeName } from '@/lib/text-utils';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../hooks/useRecipePricing';
@@ -178,6 +178,29 @@ export default function DishesClient() {
   });
 
   const selectedRecipeCount = selectedRecipeIds.length;
+
+  // Callback to update recipe with generated images
+  const handleRecipeImagesGenerated = useCallback(
+    (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => {
+      setRecipes(prevRecipes =>
+        prevRecipes.map(recipe =>
+          recipe.id === recipeId
+            ? { ...recipe, image_url: primaryUrl, image_url_alternative: alternativeUrl }
+            : recipe,
+        ),
+      );
+      // Also update selectedRecipeForPreview if it's the same recipe
+      if (selectedRecipeForPreview?.id === recipeId) {
+        setSelectedRecipeForPreview({
+          ...selectedRecipeForPreview,
+          image_url: primaryUrl,
+          image_url_alternative: alternativeUrl,
+        });
+      }
+    },
+    [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview],
+  );
+
   const sidePanelsHandlers = useDishesSidePanelsHandlers({
     setShowDishPanel,
     setSelectedDishForPreview,
@@ -193,6 +216,7 @@ export default function DishesClient() {
     confirmDeleteItem,
     cancelDeleteItem,
     fetchItems,
+    onRecipeImagesGenerated: handleRecipeImagesGenerated,
   });
   if (loading) return <PageSkeleton />;
   return (

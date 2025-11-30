@@ -66,3 +66,4 @@ export function formatChangeDetails(change: MenuChangeTracking): string {
 
   return parts.join(', ');
 }
+

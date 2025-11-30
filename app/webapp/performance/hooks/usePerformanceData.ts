@@ -7,6 +7,7 @@ import { fetchPerformanceData as fetchPerformanceApi } from '../utils/performanc
 import { usePerformanceImportExport } from './usePerformanceImportExport';
 import { usePerformanceState } from './usePerformanceState';
 import { usePreviousPeriodData } from './usePreviousPeriodData';
+import { useOnPerformanceAnalyzed } from '@/lib/personality/hooks';
 
 import { logger } from '@/lib/logger';
 export function usePerformanceData(dateRange?: DateRange) {
@@ -16,6 +17,7 @@ export function usePerformanceData(dateRange?: DateRange) {
 
   const [state, setState] = useState<PerformanceState>(usePerformanceState(dateRange));
   const { previousPeriodData, fetchPreviousPeriodData } = usePreviousPeriodData();
+  const onPerformanceAnalyzed = useOnPerformanceAnalyzed();
 
   const fetchPerformanceData = async () => {
     logger.dev('🔄 usePerformanceData: Starting fetch...', { dateRange });
@@ -30,6 +32,11 @@ export function usePerformanceData(dateRange?: DateRange) {
 
       cacheData(cacheKey, newState);
       setState(prev => ({ ...prev, ...newState, loading: false }));
+
+      // Trigger personality hook when performance analysis completes
+      if (newState.performanceItems.length > 0) {
+        onPerformanceAnalyzed();
+      }
 
       // Fetch previous period data for trend comparison
       await fetchPreviousPeriodData(dateRange);

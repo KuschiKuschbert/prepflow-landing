@@ -54,3 +54,4 @@ export function IngredientList({ ingredients }: IngredientListProps) {
     </div>
   );
 }
+
