@@ -1,4 +1,8 @@
-import { getGeminiClient, getModelForTask, isAIEnabled, type TaskType } from '../gemini-client';
+import {
+  isAIEnabled,
+  analyzeImageWithHuggingFace,
+  getHuggingFaceVisionModel,
+} from '../huggingface-client';
 import { buildKitchenContext } from '../prompts/kitchen-context';
 import type { AIRequestOptions, AIResponse } from '../types';
 import { parseAIError } from '../utils/errorParser';
@@ -26,95 +30,28 @@ export async function generateAIVisionResponse(
     };
   }
 
-  const client = getGeminiClient();
-  if (!client) {
-    return {
-      content: '',
-      error: 'AI client not available',
-    };
-  }
-
   const kitchenContext = buildKitchenContext(countryCode);
   const fullPrompt = `${prompt}\n\n${kitchenContext}\n\nAnalyze the image and provide recommendations specific to the user's location and regulations.`;
 
-  // Use vision model (gemini-2.5-flash supports vision capabilities and is free tier)
-  const taskType: TaskType = 'vision';
-  const model = options.model || getModelForTask(taskType);
-  const temperature = options.temperature ?? 0.7;
-  const maxOutputTokens = options.maxTokens ?? 1000;
+  const model = options.model || getHuggingFaceVisionModel();
 
   try {
-    // Get the model instance
-    const geminiModel = client.getGenerativeModel({
+    const result = await analyzeImageWithHuggingFace(imageUrl, fullPrompt, {
       model,
-      generationConfig: {
-        temperature,
-        maxOutputTokens,
-      },
     });
 
-    // Convert image URL to base64 if needed
-    // Gemini requires base64 data, so we need to fetch URLs and convert them
-    let imageData: string;
-    let mimeType = 'image/jpeg'; // Default
-
-    if (imageUrl.startsWith('data:')) {
-      // Data URL format: data:image/png;base64,...
-      const [mimePart, base64Data] = imageUrl.split(',');
-      const mimeMatch = mimePart.match(/data:([^;]+)/);
-      mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-      imageData = base64Data;
-    } else if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      // Public URL - fetch and convert to base64
-      try {
-        const response = await fetch(imageUrl);
-        const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        imageData = buffer.toString('base64');
-        // Try to detect mime type from response headers
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.startsWith('image/')) {
-          mimeType = contentType;
-        }
-      } catch (fetchError) {
-        return {
-          content: '',
-          error: `Failed to fetch image from URL: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`,
-        };
-      }
-    } else {
-      // Assume base64 string
-      imageData = imageUrl;
+    if (!result) {
+      return {
+        content: '',
+        error: 'Hugging Face vision analysis returned null',
+      };
     }
 
-    // Generate content with image and text prompt
-    // Gemini expects parts array with text and image parts
-    const parts = [
-      { text: fullPrompt },
-      {
-        inlineData: {
-          data: imageData,
-          mimeType,
-        },
-      },
-    ];
+    // Hugging Face vision models don't provide token usage in the same way
+    // We'll estimate or leave undefined
+    const usage = undefined;
 
-    const result = await geminiModel.generateContent(parts);
-
-    const response = await result.response;
-    const content = response.text();
-
-    // Extract token usage from response
-    const usageMetadata = result.response.usageMetadata;
-    const usage = usageMetadata
-      ? {
-          promptTokens: usageMetadata.promptTokenCount || 0,
-          completionTokens: usageMetadata.candidatesTokenCount || 0,
-          totalTokens: usageMetadata.totalTokenCount || 0,
-        }
-      : undefined;
-
-    return processAIResponse(content, usage, model, 'vision', undefined, countryCode, options);
+    return processAIResponse(result.content, usage, model, 'vision', undefined, countryCode, options);
   } catch (error) {
     const aiError = parseAIError(error as Error);
     return { content: '', error: aiError.message };

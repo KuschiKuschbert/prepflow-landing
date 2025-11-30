@@ -570,7 +570,7 @@ export async function generateRecipeCardsForMenu(menuId: string) {
   if (successCount === 0 && itemsToProcess.length > 0) {
     let errorMessage: string;
     if (hasBillingError) {
-      errorMessage = `Failed to generate recipe cards: OpenAI account billing issue detected. Please check your OpenAI account billing details and ensure the account is active. This is not a rate limit issue - the account needs to be activated.`;
+      errorMessage = `Failed to generate recipe cards: Hugging Face API issue detected. Please check your HUGGINGFACE_API_KEY and ensure the account is active. This is not a rate limit issue - the API key needs to be valid.`;
     } else {
       errorMessage = `Failed to generate any recipe cards. Processed ${itemsToProcess.length} items: ${successCount} succeeded, ${errorCount} errors, ${skippedCount} skipped.${errors.length > 0 ? ` First error: ${errors[0]}` : ' No errors logged - items may have been skipped silently (check if dishes/recipes have ingredients).'}`;
     }

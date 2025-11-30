@@ -1,0 +1,3095 @@
+{
+  "timestamp": "2025-11-21T08:11:02.970Z",
+  "summary": {
+    "total": 118,
+    "bySeverity": {
+      "critical": 114,
+      "warning": 4,
+      "info": 0
+    },
+    "byStandard": 3,
+    "byFile": 116
+  },
+  "violations": [
+    {
+      "file": "app/api/cleaning-tasks/route.ts",
+      "message": "File exceeds api limit: 257 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/compliance/allergens/export/route.ts",
+      "message": "File exceeds api limit: 559 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/compliance/allergens/route.ts",
+      "message": "File exceeds api limit: 353 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/compliance-records/route.ts",
+      "message": "File exceeds api limit: 207 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/dashboard/performance-summary/route.ts",
+      "message": "File exceeds api limit: 257 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/db/populate-empty-dishes/route.ts",
+      "message": "File exceeds api limit: 375 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/dishes/[id]/allergen-sources/route.ts",
+      "message": "File exceeds api limit: 221 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/dishes/[id]/helpers/fetchDishWithRelations.ts",
+      "message": "File exceeds api limit: 287 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/dishes/[id]/route.ts",
+      "message": "File exceeds api limit: 335 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/ingredients/detect-missing-allergens/route.ts",
+      "message": "File exceeds api limit: 263 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/allergen-matrix/export/helpers/generateHTML.ts",
+      "message": "File exceeds api limit: 224 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/changes/route.ts",
+      "message": "File exceeds api limit: 240 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/helpers/fetchMenuWithItems.ts",
+      "message": "File exceeds api limit: 965 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/items/[itemId]/statistics/route.ts",
+      "message": "File exceeds api limit: 230 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/lock/route.ts",
+      "message": "File exceeds api limit: 312 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/statistics/helpers/calculateMenuStatistics.ts",
+      "message": "File exceeds api limit: 227 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/recipes/[id]/route.ts",
+      "message": "File exceeds api limit: 331 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/components/landing/hooks/helpers/animationEffects.ts",
+      "message": "File exceeds hook limit: 115 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/components/landing/hooks/useAppleStyleAnimations.ts",
+      "message": "File exceeds hook limit: 114 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/cogs/hooks/useIngredientAddition.ts",
+      "message": "File exceeds hook limit: 121 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/compliance/components/AllergenOverview.tsx",
+      "message": "File exceeds component limit: 609 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/dish-builder/hooks/useDishBuilder.ts",
+      "message": "File exceeds hook limit: 101 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/components/IngredientTableWithFilters.tsx",
+      "message": "File exceeds component limit: 301 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/components/IngredientsClient.tsx",
+      "message": "File exceeds component limit: 317 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/hooks/useIngredientAdd.ts",
+      "message": "File exceeds hook limit: 106 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/hooks/useIngredientBulkUpdate.ts",
+      "message": "File exceeds hook limit: 149 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/IngredientPopover.tsx",
+      "message": "File exceeds component limit: 507 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuBuilderClient.tsx",
+      "message": "File exceeds component limit: 375 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+      "message": "File exceeds component limit: 600 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuItemHoverStatistics.tsx",
+      "message": "File exceeds component limit: 349 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuLockedView.tsx",
+      "message": "File exceeds component limit: 547 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/MenuUnlockChangesDialog.tsx",
+      "message": "File exceeds component limit: 381 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/SortableMenuItem/hooks/useMenuItemHover.ts",
+      "message": "File exceeds hook limit: 105 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/helpers/useMenuItemAddition.ts",
+      "message": "File exceeds hook limit: 126 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/helpers/useMenuItemReorder.ts",
+      "message": "File exceeds hook limit: 113 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts",
+      "message": "File exceeds hook limit: 145 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/useMenuData.ts",
+      "message": "File exceeds hook limit: 132 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/useMenuEditing.ts",
+      "message": "File exceeds hook limit: 108 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/useMenuEditorUI.ts",
+      "message": "File exceeds hook limit: 128 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/components/hooks/useMenuItemOperations.ts",
+      "message": "File exceeds hook limit: 107 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/hooks/useMenuDragDrop/dragEnd.ts",
+      "message": "File exceeds hook limit: 111 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/utils/formatMenuForPrint.ts",
+      "message": "File exceeds util limit: 219 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/utils/menuPrintStyles.ts",
+      "message": "File exceeds util limit: 286 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/menu-builder/utils/menuPrintTemplate.ts",
+      "message": "File exceeds util limit: 290 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/par-levels/hooks/useParLevelsCRUD.ts",
+      "message": "File exceeds hook limit: 109 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/par-levels/hooks/useParLevelsData.ts",
+      "message": "File exceeds hook limit: 108 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/par-levels/hooks/useParLevelsForm/formSubmission.ts",
+      "message": "File exceeds hook limit: 147 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/performance/utils/generatePerformanceTips/tipCategories.ts",
+      "message": "File exceeds util limit: 215 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/hooks/usePrepListsCRUD.ts",
+      "message": "File exceeds hook limit: 132 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/hooks/usePrepListsForm.ts",
+      "message": "File exceeds hook limit: 115 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/prep-lists/utils/formatGeneratedPrepList.ts",
+      "message": "File exceeds util limit: 191 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/DishesClient.tsx",
+      "message": "File exceeds component limit: 310 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/RecipeDishEditor.tsx",
+      "message": "File exceeds component limit: 320 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/RecipeEditDrawer.tsx",
+      "message": "File exceeds component limit: 319 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.helpers.ts",
+      "message": "File exceeds hook limit: 107 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+      "message": "File exceeds hook limit: 116 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeDishSave.ts",
+      "message": "File exceeds hook limit: 125 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeEditIngredientLoading.ts",
+      "message": "File exceeds hook limit: 101 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/hooks/useRecipeHandlers.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useBulkAddToMenu.ts",
+      "message": "File exceeds hook limit: 107 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useDishCOGSCalculations.ts",
+      "message": "File exceeds hook limit: 102 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useDishCostCalculation.ts",
+      "message": "File exceeds hook limit: 101 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useRecipeActions.ts",
+      "message": "File exceeds hook limit: 140 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useRecipeIngredients.ts",
+      "message": "File exceeds hook limit: 101 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/useUnifiedBulkActions.ts",
+      "message": "File exceeds hook limit: 141 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts",
+      "message": "File exceeds hook limit: 103 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts",
+      "message": "File exceeds hook limit: 146 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts",
+      "message": "File exceeds hook limit: 124 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/sections/hooks/useDishSectionActions.ts",
+      "message": "File exceeds hook limit: 153 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useEquipmentLogs.ts",
+      "message": "File exceeds hook limit: 114 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/equipmentCRUD.ts",
+      "message": "File exceeds hook limit: 137 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts",
+      "message": "File exceeds hook limit: 143 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/temperature/hooks/useTemperaturePageData.ts",
+      "message": "File exceeds hook limit: 113 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "components/CountrySetup.tsx",
+      "message": "File exceeds component limit: 301 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "components/ui/InputDialog.tsx",
+      "message": "File exceeds component limit: 308 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useAutosave.ts",
+      "message": "File exceeds hook limit: 112 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useConfirm.tsx",
+      "message": "File exceeds hook limit: 104 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useDrawerSwipe/touchStartHandlers.ts",
+      "message": "File exceeds hook limit: 115 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useLogoInteractions.ts",
+      "message": "File exceeds hook limit: 121 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useNavigationTracking.ts",
+      "message": "File exceeds hook limit: 115 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useOptimisticMutation.ts",
+      "message": "File exceeds hook limit: 102 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useParallelFetch.ts",
+      "message": "File exceeds hook limit: 106 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/usePrompt.tsx",
+      "message": "File exceeds hook limit: 121 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/useSessionTimeout.ts",
+      "message": "File exceeds hook limit: 110 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "hooks/utils/drawerTouchMoveHandler.ts",
+      "message": "File exceeds hook limit: 127 lines (limit 100)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/allergens/ai-allergen-detection.ts",
+      "message": "File exceeds util limit: 288 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/allergens/allergen-aggregation.ts",
+      "message": "File exceeds util limit: 400 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/allergens/australian-allergens.ts",
+      "message": "File exceeds util limit: 280 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/allergens/cache-invalidation.ts",
+      "message": "File exceeds util limit: 245 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/allergens/hybrid-allergen-detection.ts",
+      "message": "File exceeds util limit: 256 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/analytics.ts",
+      "message": "File exceeds util limit: 161 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/backup/encryption.ts",
+      "message": "File exceeds util limit: 414 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/backup/export.ts",
+      "message": "File exceeds util limit: 275 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/backup/google-drive.ts",
+      "message": "File exceeds util limit: 482 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/backup/restore.ts",
+      "message": "File exceeds util limit: 410 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/backup/scheduler.ts",
+      "message": "File exceeds util limit: 174 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/compliance/report-generator.ts",
+      "message": "File exceeds util limit: 235 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/compliance/report-types.ts",
+      "message": "File exceeds util limit: 167 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/country-config/configs.ts",
+      "message": "File exceeds util limit: 157 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/dietary/dietary-aggregation.ts",
+      "message": "File exceeds util limit: 541 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/dietary/vegetarian-vegan-detection.ts",
+      "message": "File exceeds util limit: 395 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/exports/pdf-template.ts",
+      "message": "File exceeds util limit: 320 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/ingredients/category-detection.ts",
+      "message": "File exceeds util limit: 361 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/ingredients/normalizeIngredientData.ts",
+      "message": "File exceeds util limit: 153 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/menu-lock/change-tracking.ts",
+      "message": "File exceeds util limit: 354 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/menu-pricing/cache-invalidation.ts",
+      "message": "File exceeds util limit: 404 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/navigation-optimization/optimizer.ts",
+      "message": "File exceeds util limit: 210 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/populate-helpers/dishes-data-helpers.ts",
+      "message": "File exceeds util limit: 170 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/populate-helpers/populate-empty-dishes-helpers.ts",
+      "message": "File exceeds util limit: 463 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/check-performance-budget.js",
+      "message": "File exceeds component limit: 341 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/generate-performance-report.js",
+      "message": "File exceeds component limit: 402 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/optimize-performance.js",
+      "message": "File exceeds component limit: 361 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "scripts/send-performance-report.js",
+      "message": "File exceeds component limit: 334 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "/Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+      "line": 113,
+      "column": 6,
+      "message": "ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include it or remove the dependency array. (react-hooks/exhaustive-deps)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#eslint-configuration",
+      "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+    },
+    {
+      "file": ".next/static",
+      "message": "Total bundle size 3887.5KB exceeds budget of 488KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards) and operations.mdc (Performance Standards). Consider code splitting, lazy loading, and removing unused dependencies."
+    },
+    {
+      "file": ".next/static",
+      "message": "JavaScript bundle size 3730.6KB exceeds budget of 195KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+    },
+    {
+      "file": ".next/static",
+      "message": "CSS bundle size 156.9KB exceeds budget of 49KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards). Consider CSS purging, removing unused styles, and splitting CSS files."
+    }
+  ],
+  "groupedByFile": {
+    "app/api/cleaning-tasks/route.ts": [
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "message": "File exceeds api limit: 257 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/compliance/allergens/export/route.ts": [
+      {
+        "file": "app/api/compliance/allergens/export/route.ts",
+        "message": "File exceeds api limit: 559 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/compliance/allergens/route.ts": [
+      {
+        "file": "app/api/compliance/allergens/route.ts",
+        "message": "File exceeds api limit: 353 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/compliance-records/route.ts": [
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "message": "File exceeds api limit: 207 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/dashboard/performance-summary/route.ts": [
+      {
+        "file": "app/api/dashboard/performance-summary/route.ts",
+        "message": "File exceeds api limit: 257 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/db/populate-empty-dishes/route.ts": [
+      {
+        "file": "app/api/db/populate-empty-dishes/route.ts",
+        "message": "File exceeds api limit: 375 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/dishes/[id]/allergen-sources/route.ts": [
+      {
+        "file": "app/api/dishes/[id]/allergen-sources/route.ts",
+        "message": "File exceeds api limit: 221 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/dishes/[id]/helpers/fetchDishWithRelations.ts": [
+      {
+        "file": "app/api/dishes/[id]/helpers/fetchDishWithRelations.ts",
+        "message": "File exceeds api limit: 287 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/dishes/[id]/route.ts": [
+      {
+        "file": "app/api/dishes/[id]/route.ts",
+        "message": "File exceeds api limit: 335 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/ingredients/detect-missing-allergens/route.ts": [
+      {
+        "file": "app/api/ingredients/detect-missing-allergens/route.ts",
+        "message": "File exceeds api limit: 263 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/allergen-matrix/export/helpers/generateHTML.ts": [
+      {
+        "file": "app/api/menus/[id]/allergen-matrix/export/helpers/generateHTML.ts",
+        "message": "File exceeds api limit: 224 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/changes/route.ts": [
+      {
+        "file": "app/api/menus/[id]/changes/route.ts",
+        "message": "File exceeds api limit: 240 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/helpers/fetchMenuWithItems.ts": [
+      {
+        "file": "app/api/menus/[id]/helpers/fetchMenuWithItems.ts",
+        "message": "File exceeds api limit: 965 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/items/[itemId]/statistics/route.ts": [
+      {
+        "file": "app/api/menus/[id]/items/[itemId]/statistics/route.ts",
+        "message": "File exceeds api limit: 230 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/lock/route.ts": [
+      {
+        "file": "app/api/menus/[id]/lock/route.ts",
+        "message": "File exceeds api limit: 312 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/statistics/helpers/calculateMenuStatistics.ts": [
+      {
+        "file": "app/api/menus/[id]/statistics/helpers/calculateMenuStatistics.ts",
+        "message": "File exceeds api limit: 227 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/recipes/[id]/route.ts": [
+      {
+        "file": "app/api/recipes/[id]/route.ts",
+        "message": "File exceeds api limit: 331 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/components/landing/hooks/helpers/animationEffects.ts": [
+      {
+        "file": "app/components/landing/hooks/helpers/animationEffects.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/components/landing/hooks/useAppleStyleAnimations.ts": [
+      {
+        "file": "app/components/landing/hooks/useAppleStyleAnimations.ts",
+        "message": "File exceeds hook limit: 114 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/cogs/hooks/useIngredientAddition.ts": [
+      {
+        "file": "app/webapp/cogs/hooks/useIngredientAddition.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/compliance/components/AllergenOverview.tsx": [
+      {
+        "file": "app/webapp/compliance/components/AllergenOverview.tsx",
+        "message": "File exceeds component limit: 609 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/dish-builder/hooks/useDishBuilder.ts": [
+      {
+        "file": "app/webapp/dish-builder/hooks/useDishBuilder.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/components/IngredientTableWithFilters.tsx": [
+      {
+        "file": "app/webapp/ingredients/components/IngredientTableWithFilters.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/components/IngredientsClient.tsx": [
+      {
+        "file": "app/webapp/ingredients/components/IngredientsClient.tsx",
+        "message": "File exceeds component limit: 317 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/hooks/useIngredientAdd.ts": [
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientAdd.ts",
+        "message": "File exceeds hook limit: 106 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/hooks/useIngredientBulkUpdate.ts": [
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientBulkUpdate.ts",
+        "message": "File exceeds hook limit: 149 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/IngredientPopover.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/IngredientPopover.tsx",
+        "message": "File exceeds component limit: 507 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuBuilderClient.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuBuilderClient.tsx",
+        "message": "File exceeds component limit: 375 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuEditor.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "message": "File exceeds component limit: 600 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuItemHoverStatistics.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuItemHoverStatistics.tsx",
+        "message": "File exceeds component limit: 349 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuLockedView.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuLockedView.tsx",
+        "message": "File exceeds component limit: 547 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/MenuUnlockChangesDialog.tsx": [
+      {
+        "file": "app/webapp/menu-builder/components/MenuUnlockChangesDialog.tsx",
+        "message": "File exceeds component limit: 381 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/SortableMenuItem/hooks/useMenuItemHover.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/SortableMenuItem/hooks/useMenuItemHover.ts",
+        "message": "File exceeds hook limit: 105 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/helpers/useMenuItemAddition.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/helpers/useMenuItemAddition.ts",
+        "message": "File exceeds hook limit: 126 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/helpers/useMenuItemReorder.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/helpers/useMenuItemReorder.ts",
+        "message": "File exceeds hook limit: 113 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts",
+        "message": "File exceeds hook limit: 145 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/useMenuData.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuData.ts",
+        "message": "File exceeds hook limit: 132 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/useMenuEditing.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuEditing.ts",
+        "message": "File exceeds hook limit: 108 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/useMenuEditorUI.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuEditorUI.ts",
+        "message": "File exceeds hook limit: 128 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/components/hooks/useMenuItemOperations.ts": [
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuItemOperations.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/hooks/useMenuDragDrop/dragEnd.ts": [
+      {
+        "file": "app/webapp/menu-builder/hooks/useMenuDragDrop/dragEnd.ts",
+        "message": "File exceeds hook limit: 111 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/utils/formatMenuForPrint.ts": [
+      {
+        "file": "app/webapp/menu-builder/utils/formatMenuForPrint.ts",
+        "message": "File exceeds util limit: 219 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/utils/menuPrintStyles.ts": [
+      {
+        "file": "app/webapp/menu-builder/utils/menuPrintStyles.ts",
+        "message": "File exceeds util limit: 286 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/menu-builder/utils/menuPrintTemplate.ts": [
+      {
+        "file": "app/webapp/menu-builder/utils/menuPrintTemplate.ts",
+        "message": "File exceeds util limit: 290 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/par-levels/hooks/useParLevelsCRUD.ts": [
+      {
+        "file": "app/webapp/par-levels/hooks/useParLevelsCRUD.ts",
+        "message": "File exceeds hook limit: 109 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/par-levels/hooks/useParLevelsData.ts": [
+      {
+        "file": "app/webapp/par-levels/hooks/useParLevelsData.ts",
+        "message": "File exceeds hook limit: 108 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/par-levels/hooks/useParLevelsForm/formSubmission.ts": [
+      {
+        "file": "app/webapp/par-levels/hooks/useParLevelsForm/formSubmission.ts",
+        "message": "File exceeds hook limit: 147 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/performance/utils/generatePerformanceTips/tipCategories.ts": [
+      {
+        "file": "app/webapp/performance/utils/generatePerformanceTips/tipCategories.ts",
+        "message": "File exceeds util limit: 215 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/hooks/usePrepListsCRUD.ts": [
+      {
+        "file": "app/webapp/prep-lists/hooks/usePrepListsCRUD.ts",
+        "message": "File exceeds hook limit: 132 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/hooks/usePrepListsForm.ts": [
+      {
+        "file": "app/webapp/prep-lists/hooks/usePrepListsForm.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/prep-lists/utils/formatGeneratedPrepList.ts": [
+      {
+        "file": "app/webapp/prep-lists/utils/formatGeneratedPrepList.ts",
+        "message": "File exceeds util limit: 191 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/DishesClient.tsx": [
+      {
+        "file": "app/webapp/recipes/components/DishesClient.tsx",
+        "message": "File exceeds component limit: 310 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/RecipeDishEditor.tsx": [
+      {
+        "file": "app/webapp/recipes/components/RecipeDishEditor.tsx",
+        "message": "File exceeds component limit: 320 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/RecipeEditDrawer.tsx": [
+      {
+        "file": "app/webapp/recipes/components/RecipeEditDrawer.tsx",
+        "message": "File exceeds component limit: 319 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.helpers.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.helpers.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+        "message": "File exceeds hook limit: 116 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeDishSave.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishSave.ts",
+        "message": "File exceeds hook limit: 125 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeEditIngredientLoading.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeEditIngredientLoading.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/hooks/useRecipeHandlers.ts": [
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeHandlers.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useBulkAddToMenu.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useBulkAddToMenu.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useDishCOGSCalculations.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useDishCOGSCalculations.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useDishCostCalculation.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useDishCostCalculation.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useRecipeActions.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeActions.ts",
+        "message": "File exceeds hook limit: 140 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useRecipeIngredients.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeIngredients.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/useUnifiedBulkActions.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/useUnifiedBulkActions.ts",
+        "message": "File exceeds hook limit: 141 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts",
+        "message": "File exceeds hook limit: 103 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts",
+        "message": "File exceeds hook limit: 146 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts": [
+      {
+        "file": "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts",
+        "message": "File exceeds hook limit: 124 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/sections/hooks/useDishSectionActions.ts": [
+      {
+        "file": "app/webapp/sections/hooks/useDishSectionActions.ts",
+        "message": "File exceeds hook limit: 153 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useEquipmentLogs.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useEquipmentLogs.ts",
+        "message": "File exceeds hook limit: 114 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/equipmentCRUD.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/equipmentCRUD.ts",
+        "message": "File exceeds hook limit: 137 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts",
+        "message": "File exceeds hook limit: 143 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperaturePageData.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperaturePageData.ts",
+        "message": "File exceeds hook limit: 113 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "components/CountrySetup.tsx": [
+      {
+        "file": "components/CountrySetup.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "components/ui/InputDialog.tsx": [
+      {
+        "file": "components/ui/InputDialog.tsx",
+        "message": "File exceeds component limit: 308 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useAutosave.ts": [
+      {
+        "file": "hooks/useAutosave.ts",
+        "message": "File exceeds hook limit: 112 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useConfirm.tsx": [
+      {
+        "file": "hooks/useConfirm.tsx",
+        "message": "File exceeds hook limit: 104 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useDrawerSwipe/touchStartHandlers.ts": [
+      {
+        "file": "hooks/useDrawerSwipe/touchStartHandlers.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useLogoInteractions.ts": [
+      {
+        "file": "hooks/useLogoInteractions.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useNavigationTracking.ts": [
+      {
+        "file": "hooks/useNavigationTracking.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useOptimisticMutation.ts": [
+      {
+        "file": "hooks/useOptimisticMutation.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useParallelFetch.ts": [
+      {
+        "file": "hooks/useParallelFetch.ts",
+        "message": "File exceeds hook limit: 106 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/usePrompt.tsx": [
+      {
+        "file": "hooks/usePrompt.tsx",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/useSessionTimeout.ts": [
+      {
+        "file": "hooks/useSessionTimeout.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "hooks/utils/drawerTouchMoveHandler.ts": [
+      {
+        "file": "hooks/utils/drawerTouchMoveHandler.ts",
+        "message": "File exceeds hook limit: 127 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/allergens/ai-allergen-detection.ts": [
+      {
+        "file": "lib/allergens/ai-allergen-detection.ts",
+        "message": "File exceeds util limit: 288 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/allergens/allergen-aggregation.ts": [
+      {
+        "file": "lib/allergens/allergen-aggregation.ts",
+        "message": "File exceeds util limit: 400 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/allergens/australian-allergens.ts": [
+      {
+        "file": "lib/allergens/australian-allergens.ts",
+        "message": "File exceeds util limit: 280 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/allergens/cache-invalidation.ts": [
+      {
+        "file": "lib/allergens/cache-invalidation.ts",
+        "message": "File exceeds util limit: 245 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/allergens/hybrid-allergen-detection.ts": [
+      {
+        "file": "lib/allergens/hybrid-allergen-detection.ts",
+        "message": "File exceeds util limit: 256 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/analytics.ts": [
+      {
+        "file": "lib/analytics.ts",
+        "message": "File exceeds util limit: 161 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/backup/encryption.ts": [
+      {
+        "file": "lib/backup/encryption.ts",
+        "message": "File exceeds util limit: 414 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/backup/export.ts": [
+      {
+        "file": "lib/backup/export.ts",
+        "message": "File exceeds util limit: 275 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/backup/google-drive.ts": [
+      {
+        "file": "lib/backup/google-drive.ts",
+        "message": "File exceeds util limit: 482 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/backup/restore.ts": [
+      {
+        "file": "lib/backup/restore.ts",
+        "message": "File exceeds util limit: 410 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/backup/scheduler.ts": [
+      {
+        "file": "lib/backup/scheduler.ts",
+        "message": "File exceeds util limit: 174 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/compliance/report-generator.ts": [
+      {
+        "file": "lib/compliance/report-generator.ts",
+        "message": "File exceeds util limit: 235 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/compliance/report-types.ts": [
+      {
+        "file": "lib/compliance/report-types.ts",
+        "message": "File exceeds util limit: 167 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/country-config/configs.ts": [
+      {
+        "file": "lib/country-config/configs.ts",
+        "message": "File exceeds util limit: 157 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/dietary/dietary-aggregation.ts": [
+      {
+        "file": "lib/dietary/dietary-aggregation.ts",
+        "message": "File exceeds util limit: 541 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/dietary/vegetarian-vegan-detection.ts": [
+      {
+        "file": "lib/dietary/vegetarian-vegan-detection.ts",
+        "message": "File exceeds util limit: 395 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/exports/pdf-template.ts": [
+      {
+        "file": "lib/exports/pdf-template.ts",
+        "message": "File exceeds util limit: 320 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/ingredients/category-detection.ts": [
+      {
+        "file": "lib/ingredients/category-detection.ts",
+        "message": "File exceeds util limit: 361 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/ingredients/normalizeIngredientData.ts": [
+      {
+        "file": "lib/ingredients/normalizeIngredientData.ts",
+        "message": "File exceeds util limit: 153 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/menu-lock/change-tracking.ts": [
+      {
+        "file": "lib/menu-lock/change-tracking.ts",
+        "message": "File exceeds util limit: 354 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/menu-pricing/cache-invalidation.ts": [
+      {
+        "file": "lib/menu-pricing/cache-invalidation.ts",
+        "message": "File exceeds util limit: 404 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/navigation-optimization/optimizer.ts": [
+      {
+        "file": "lib/navigation-optimization/optimizer.ts",
+        "message": "File exceeds util limit: 210 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/populate-helpers/dishes-data-helpers.ts": [
+      {
+        "file": "lib/populate-helpers/dishes-data-helpers.ts",
+        "message": "File exceeds util limit: 170 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/populate-helpers/populate-empty-dishes-helpers.ts": [
+      {
+        "file": "lib/populate-helpers/populate-empty-dishes-helpers.ts",
+        "message": "File exceeds util limit: 463 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/check-performance-budget.js": [
+      {
+        "file": "scripts/check-performance-budget.js",
+        "message": "File exceeds component limit: 341 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/generate-performance-report.js": [
+      {
+        "file": "scripts/generate-performance-report.js",
+        "message": "File exceeds component limit: 402 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/optimize-performance.js": [
+      {
+        "file": "scripts/optimize-performance.js",
+        "message": "File exceeds component limit: 361 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "scripts/send-performance-report.js": [
+      {
+        "file": "scripts/send-performance-report.js",
+        "message": "File exceeds component limit: 334 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "/Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts": [
+      {
+        "file": "/Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+        "line": 113,
+        "column": 6,
+        "message": "ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include it or remove the dependency array. (react-hooks/exhaustive-deps)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#eslint-configuration",
+        "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+      }
+    ],
+    ".next/static": [
+      {
+        "file": ".next/static",
+        "message": "Total bundle size 3887.5KB exceeds budget of 488KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards) and operations.mdc (Performance Standards). Consider code splitting, lazy loading, and removing unused dependencies."
+      },
+      {
+        "file": ".next/static",
+        "message": "JavaScript bundle size 3730.6KB exceeds budget of 195KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+      },
+      {
+        "file": ".next/static",
+        "message": "CSS bundle size 156.9KB exceeds budget of 49KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider CSS purging, removing unused styles, and splitting CSS files."
+      }
+    ]
+  },
+  "groupedByStandard": {
+    "development.mdc#file-size-limits": [
+      {
+        "file": "app/api/cleaning-tasks/route.ts",
+        "message": "File exceeds api limit: 257 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/compliance/allergens/export/route.ts",
+        "message": "File exceeds api limit: 559 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/compliance/allergens/route.ts",
+        "message": "File exceeds api limit: 353 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/compliance-records/route.ts",
+        "message": "File exceeds api limit: 207 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/dashboard/performance-summary/route.ts",
+        "message": "File exceeds api limit: 257 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/db/populate-empty-dishes/route.ts",
+        "message": "File exceeds api limit: 375 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/dishes/[id]/allergen-sources/route.ts",
+        "message": "File exceeds api limit: 221 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/dishes/[id]/helpers/fetchDishWithRelations.ts",
+        "message": "File exceeds api limit: 287 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/dishes/[id]/route.ts",
+        "message": "File exceeds api limit: 335 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/ingredients/detect-missing-allergens/route.ts",
+        "message": "File exceeds api limit: 263 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/allergen-matrix/export/helpers/generateHTML.ts",
+        "message": "File exceeds api limit: 224 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/changes/route.ts",
+        "message": "File exceeds api limit: 240 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/helpers/fetchMenuWithItems.ts",
+        "message": "File exceeds api limit: 965 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/items/[itemId]/statistics/route.ts",
+        "message": "File exceeds api limit: 230 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/lock/route.ts",
+        "message": "File exceeds api limit: 312 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/statistics/helpers/calculateMenuStatistics.ts",
+        "message": "File exceeds api limit: 227 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipes/[id]/route.ts",
+        "message": "File exceeds api limit: 331 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/components/landing/hooks/helpers/animationEffects.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/components/landing/hooks/useAppleStyleAnimations.ts",
+        "message": "File exceeds hook limit: 114 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/cogs/hooks/useIngredientAddition.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/compliance/components/AllergenOverview.tsx",
+        "message": "File exceeds component limit: 609 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/dish-builder/hooks/useDishBuilder.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/components/IngredientTableWithFilters.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/components/IngredientsClient.tsx",
+        "message": "File exceeds component limit: 317 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientAdd.ts",
+        "message": "File exceeds hook limit: 106 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/hooks/useIngredientBulkUpdate.ts",
+        "message": "File exceeds hook limit: 149 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/IngredientPopover.tsx",
+        "message": "File exceeds component limit: 507 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuBuilderClient.tsx",
+        "message": "File exceeds component limit: 375 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuEditor.tsx",
+        "message": "File exceeds component limit: 600 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuItemHoverStatistics.tsx",
+        "message": "File exceeds component limit: 349 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuLockedView.tsx",
+        "message": "File exceeds component limit: 547 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/MenuUnlockChangesDialog.tsx",
+        "message": "File exceeds component limit: 381 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/SortableMenuItem/hooks/useMenuItemHover.ts",
+        "message": "File exceeds hook limit: 105 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/helpers/useMenuItemAddition.ts",
+        "message": "File exceeds hook limit: 126 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/helpers/useMenuItemReorder.ts",
+        "message": "File exceeds hook limit: 113 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts",
+        "message": "File exceeds hook limit: 145 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuData.ts",
+        "message": "File exceeds hook limit: 132 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuEditing.ts",
+        "message": "File exceeds hook limit: 108 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuEditorUI.ts",
+        "message": "File exceeds hook limit: 128 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/components/hooks/useMenuItemOperations.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/hooks/useMenuDragDrop/dragEnd.ts",
+        "message": "File exceeds hook limit: 111 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/utils/formatMenuForPrint.ts",
+        "message": "File exceeds util limit: 219 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/utils/menuPrintStyles.ts",
+        "message": "File exceeds util limit: 286 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/menu-builder/utils/menuPrintTemplate.ts",
+        "message": "File exceeds util limit: 290 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/par-levels/hooks/useParLevelsCRUD.ts",
+        "message": "File exceeds hook limit: 109 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/par-levels/hooks/useParLevelsData.ts",
+        "message": "File exceeds hook limit: 108 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/par-levels/hooks/useParLevelsForm/formSubmission.ts",
+        "message": "File exceeds hook limit: 147 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/performance/utils/generatePerformanceTips/tipCategories.ts",
+        "message": "File exceeds util limit: 215 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/hooks/usePrepListsCRUD.ts",
+        "message": "File exceeds hook limit: 132 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/hooks/usePrepListsForm.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/prep-lists/utils/formatGeneratedPrepList.ts",
+        "message": "File exceeds util limit: 191 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/DishesClient.tsx",
+        "message": "File exceeds component limit: 310 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/RecipeDishEditor.tsx",
+        "message": "File exceeds component limit: 320 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/RecipeEditDrawer.tsx",
+        "message": "File exceeds component limit: 319 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.helpers.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+        "message": "File exceeds hook limit: 116 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeDishSave.ts",
+        "message": "File exceeds hook limit: 125 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeEditIngredientLoading.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/hooks/useRecipeHandlers.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useBulkAddToMenu.ts",
+        "message": "File exceeds hook limit: 107 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useDishCOGSCalculations.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useDishCostCalculation.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeActions.ts",
+        "message": "File exceeds hook limit: 140 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useRecipeIngredients.ts",
+        "message": "File exceeds hook limit: 101 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/useUnifiedBulkActions.ts",
+        "message": "File exceeds hook limit: 141 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts",
+        "message": "File exceeds hook limit: 103 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts",
+        "message": "File exceeds hook limit: 146 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts",
+        "message": "File exceeds hook limit: 124 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/sections/hooks/useDishSectionActions.ts",
+        "message": "File exceeds hook limit: 153 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useEquipmentLogs.ts",
+        "message": "File exceeds hook limit: 114 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/equipmentCRUD.ts",
+        "message": "File exceeds hook limit: 137 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts",
+        "message": "File exceeds hook limit: 143 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/temperature/hooks/useTemperaturePageData.ts",
+        "message": "File exceeds hook limit: 113 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "components/CountrySetup.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "components/ui/InputDialog.tsx",
+        "message": "File exceeds component limit: 308 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useAutosave.ts",
+        "message": "File exceeds hook limit: 112 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useConfirm.tsx",
+        "message": "File exceeds hook limit: 104 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useDrawerSwipe/touchStartHandlers.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useLogoInteractions.ts",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useNavigationTracking.ts",
+        "message": "File exceeds hook limit: 115 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useOptimisticMutation.ts",
+        "message": "File exceeds hook limit: 102 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useParallelFetch.ts",
+        "message": "File exceeds hook limit: 106 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/usePrompt.tsx",
+        "message": "File exceeds hook limit: 121 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/useSessionTimeout.ts",
+        "message": "File exceeds hook limit: 110 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "hooks/utils/drawerTouchMoveHandler.ts",
+        "message": "File exceeds hook limit: 127 lines (limit 100)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/allergens/ai-allergen-detection.ts",
+        "message": "File exceeds util limit: 288 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/allergens/allergen-aggregation.ts",
+        "message": "File exceeds util limit: 400 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/allergens/australian-allergens.ts",
+        "message": "File exceeds util limit: 280 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/allergens/cache-invalidation.ts",
+        "message": "File exceeds util limit: 245 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/allergens/hybrid-allergen-detection.ts",
+        "message": "File exceeds util limit: 256 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/analytics.ts",
+        "message": "File exceeds util limit: 161 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/backup/encryption.ts",
+        "message": "File exceeds util limit: 414 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/backup/export.ts",
+        "message": "File exceeds util limit: 275 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/backup/google-drive.ts",
+        "message": "File exceeds util limit: 482 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/backup/restore.ts",
+        "message": "File exceeds util limit: 410 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/backup/scheduler.ts",
+        "message": "File exceeds util limit: 174 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/compliance/report-generator.ts",
+        "message": "File exceeds util limit: 235 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/compliance/report-types.ts",
+        "message": "File exceeds util limit: 167 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/country-config/configs.ts",
+        "message": "File exceeds util limit: 157 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/dietary/dietary-aggregation.ts",
+        "message": "File exceeds util limit: 541 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/dietary/vegetarian-vegan-detection.ts",
+        "message": "File exceeds util limit: 395 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/exports/pdf-template.ts",
+        "message": "File exceeds util limit: 320 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/ingredients/category-detection.ts",
+        "message": "File exceeds util limit: 361 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/ingredients/normalizeIngredientData.ts",
+        "message": "File exceeds util limit: 153 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/menu-lock/change-tracking.ts",
+        "message": "File exceeds util limit: 354 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/menu-pricing/cache-invalidation.ts",
+        "message": "File exceeds util limit: 404 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/navigation-optimization/optimizer.ts",
+        "message": "File exceeds util limit: 210 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/populate-helpers/dishes-data-helpers.ts",
+        "message": "File exceeds util limit: 170 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/populate-helpers/populate-empty-dishes-helpers.ts",
+        "message": "File exceeds util limit: 463 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/check-performance-budget.js",
+        "message": "File exceeds component limit: 341 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/generate-performance-report.js",
+        "message": "File exceeds component limit: 402 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/optimize-performance.js",
+        "message": "File exceeds component limit: 361 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "scripts/send-performance-report.js",
+        "message": "File exceeds component limit: 334 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "development.mdc#eslint-configuration": [
+      {
+        "file": "/Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts",
+        "line": 113,
+        "column": 6,
+        "message": "ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include it or remove the dependency array. (react-hooks/exhaustive-deps)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#eslint-configuration",
+        "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+      }
+    ],
+    "operations.mdc#performance-standards": [
+      {
+        "file": ".next/static",
+        "message": "Total bundle size 3887.5KB exceeds budget of 488KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards) and operations.mdc (Performance Standards). Consider code splitting, lazy loading, and removing unused dependencies."
+      },
+      {
+        "file": ".next/static",
+        "message": "JavaScript bundle size 3730.6KB exceeds budget of 195KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+      },
+      {
+        "file": ".next/static",
+        "message": "CSS bundle size 156.9KB exceeds budget of 49KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider CSS purging, removing unused styles, and splitting CSS files."
+      }
+    ]
+  }
+}

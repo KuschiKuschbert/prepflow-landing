@@ -5,11 +5,10 @@
 
 import { logger } from '@/lib/logger';
 import {
-  getGeminiClient,
   isAIEnabled,
-  getModelForTask,
-  type TaskType,
-} from '@/lib/ai/gemini-client';
+  generateTextWithHuggingFace,
+  getHuggingFaceTextModel,
+} from '@/lib/ai/huggingface-client';
 import { supabaseAdmin } from '@/lib/supabase';
 import {
   getAllAllergenCodes,
@@ -187,16 +186,6 @@ export async function detectAllergensFromIngredient(
     };
   }
 
-  const client = getGeminiClient();
-  if (!client) {
-    logger.warn('[AI Allergen Detection] Gemini client not available');
-    return {
-      allergens: [],
-      confidence: 'low',
-      cached: false,
-    };
-  }
-
   try {
     // Build prompt for AI
     const allergenList = AUSTRALIAN_ALLERGENS.map(a => a.displayName).join(', ');
@@ -216,21 +205,29 @@ Allergens: [comma-separated list of allergen names, or "none" if no allergens]
 
 Be thorough and check for hidden allergens in processed ingredients.`;
 
-    const taskType: TaskType = 'text';
-    const model = getModelForTask(taskType);
-    const geminiModel = client.getGenerativeModel({
-      model,
-      systemInstruction:
-        'You are a food safety expert analyzing ingredients for allergen content according to Australian FSANZ standards. Be precise and thorough.',
-      generationConfig: {
-        temperature: 0.3, // Lower temperature for more consistent results
-        maxOutputTokens: 500,
+    const messages = [
+      {
+        role: 'system' as const,
+        content:
+          'You are a food safety expert analyzing ingredients for allergen content according to Australian FSANZ standards. Be precise and thorough.',
       },
+      {
+        role: 'user' as const,
+        content: prompt,
+      },
+    ];
+
+    const result = await generateTextWithHuggingFace(messages, {
+      model: getHuggingFaceTextModel(),
+      temperature: 0.3, // Lower temperature for more consistent results
+      maxTokens: 500,
     });
 
-    const result = await geminiModel.generateContent(prompt);
-    const response = await result.response;
-    const content = response.text();
+    if (!result || !result.content) {
+      throw new Error('No response from AI');
+    }
+
+    const content = result.content;
     const { allergens, composition } = parseAIResponse(content);
 
     // Cache the result

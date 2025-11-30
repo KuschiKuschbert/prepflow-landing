@@ -3,14 +3,21 @@
  * POST /api/recipes/[id]/generate-image
  *
  * Generates photorealistic food images for a recipe based on its name and ingredients.
- * Returns primary and alternative plating style images.
+ * By default, generates 1 image with the 'classic' plating method.
+ * Users can optionally specify multiple plating methods in the request body.
  */
 
-import { generateFoodImages } from '@/lib/ai/ai-service/image-generation';
-import { isAIEnabled } from '@/lib/ai/gemini-client';
+import {
+  generateFoodImages,
+  generateFoodImagesForMethods,
+  type PlatingMethod,
+  type FoodImageResult,
+} from '@/lib/ai/ai-service/image-generation';
+import type { AIResponse } from '@/lib/ai/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { uploadImageToStorage } from '@/lib/storage/upload-image';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -31,10 +38,19 @@ function checkRateLimit(userId: string): boolean {
   return true;
 }
 
-export async function POST(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const recipeId = id;
+
+    // Parse request body to get optional platingMethods array
+    let body: { platingMethods?: string[] } = {};
+    try {
+      body = await req.json();
+    } catch (e) {
+      // Body is optional, continue with default behavior
+    }
+    const selectedPlatingMethods = body.platingMethods as PlatingMethod[] | undefined;
 
     if (!recipeId) {
       return NextResponse.json(
@@ -46,7 +62,7 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
     // Check authentication using getToken (more reliable for API routes)
     let token;
     try {
-      token = await getToken({ req: _req, secret: process.env.NEXTAUTH_SECRET });
+      token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     } catch (tokenError) {
       logger.error('[Recipe Image Generation] Error getting token:', {
         error: tokenError instanceof Error ? tokenError.message : String(tokenError),
@@ -70,7 +86,7 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
         hasToken: !!token,
         tokenEmail: token?.email,
         tokenSub: token?.sub,
-        cookies: _req.headers.get('cookie') ? 'present' : 'missing',
+        cookies: req.headers.get('cookie') ? 'present' : 'missing',
       });
     }
 
@@ -81,7 +97,7 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
       logger.warn('[Recipe Image Generation] Unauthorized attempt:', {
         recipeId,
         hasToken: !!token,
-        cookies: _req.headers.get('cookie') ? 'present' : 'missing',
+        cookies: req.headers.get('cookie') ? 'present' : 'missing',
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'AUTH_ERROR', 401),
@@ -102,10 +118,12 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
     }
 
     // Check if AI is enabled
+    const { isAIEnabled } = await import('@/lib/ai/huggingface-client');
     if (!isAIEnabled()) {
+      logger.error('[Recipe Image Generation] AI not enabled - missing HUGGINGFACE_API_KEY');
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'AI service is not enabled. Please configure GEMINI_API_KEY to generate images.',
+          'Image generation service is not available. Please configure HUGGINGFACE_API_KEY to generate images.',
           'SERVICE_UNAVAILABLE',
           503,
         ),
@@ -121,10 +139,12 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
     }
 
     // Fetch recipe with ingredients
-    // Note: Column name is 'name', not 'recipe_name' (database uses 'name')
+    // Note: Column name is 'name' (migration to 'recipe_name' may not have been applied)
     const { data: recipe, error: recipeError } = await supabaseAdmin
       .from('recipes')
-      .select('id, name, description, image_url, image_url_alternative')
+      .select(
+        'id, name, description, image_url, image_url_alternative, image_url_modern, image_url_minimalist, plating_methods_images',
+      )
       .eq('id', recipeId)
       .single();
 
@@ -141,12 +161,19 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
 
     // Check if images already exist - allow regeneration by not returning early
     // Users can regenerate images by clicking the regenerate button
-    const hasExistingImages = !!(recipe.image_url && recipe.image_url_alternative);
+    const hasExistingImages = !!(
+      recipe.image_url ||
+      recipe.image_url_alternative ||
+      recipe.image_url_modern ||
+      recipe.image_url_minimalist
+    );
     if (hasExistingImages) {
       logger.dev('[Recipe Image Generation] Existing images found, will regenerate', {
         recipeId,
-        hasPrimary: !!recipe.image_url,
-        hasAlternative: !!recipe.image_url_alternative,
+        hasClassic: !!recipe.image_url,
+        hasRustic: !!recipe.image_url_alternative,
+        hasModern: !!recipe.image_url_modern,
+        hasMinimalist: !!recipe.image_url_minimalist,
       });
     }
 
@@ -203,41 +230,170 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
     // Get recipe name (database uses 'name' column)
     const recipeName = (recipe as any).name || 'Recipe';
 
-    // Generate images
-    logger.dev('[Recipe Image Generation] Generating images', {
+    // Determine which plating methods to generate
+    const defaultMethod: PlatingMethod[] = ['classic']; // Default: generate only one image
+    const additionalMethods: PlatingMethod[] = [
+      'modern',
+      'rustic',
+      'minimalist',
+      'landscape',
+      'futuristic',
+      'hide_and_seek',
+      'super_bowl',
+      'bathing',
+      'deconstructed',
+      'stacking',
+      'brush_stroke',
+      'free_form',
+    ];
+
+    let methodsToGenerate: PlatingMethod[];
+    if (selectedPlatingMethods && selectedPlatingMethods.length > 0) {
+      // User selected specific methods
+      methodsToGenerate = selectedPlatingMethods;
+      logger.dev('[Recipe Image Generation] Generating images for selected plating methods', {
+        recipeId,
+        recipeName,
+        methods: methodsToGenerate,
+        ingredientCount: ingredientNames.length,
+      });
+    } else {
+      // Default: generate only one image (classic method)
+      methodsToGenerate = defaultMethod;
+      logger.dev('[Recipe Image Generation] Generating single image with classic plating method', {
+        recipeId,
+        recipeName,
+        ingredientCount: ingredientNames.length,
+      });
+    }
+
+    // Generate images for selected methods
+    logger.dev('[Recipe Image Generation] Starting image generation:', {
       recipeId,
       recipeName,
+      methodsToGenerate,
       ingredientCount: ingredientNames.length,
     });
 
-    const { primary, alternative } = await generateFoodImages(recipeName, ingredientNames);
-
-    if (primary.error || alternative.error) {
-      const errorMessage = primary.error || alternative.error || 'Failed to generate images';
-      logger.error('[Recipe Image Generation] Image generation failed:', {
+    let imageResults: Record<string, AIResponse<FoodImageResult>>;
+    try {
+      imageResults = await generateFoodImagesForMethods(recipeName, ingredientNames, methodsToGenerate);
+    } catch (genError) {
+      logger.error('[Recipe Image Generation] Image generation threw error:', {
+        error: genError instanceof Error ? genError.message : String(genError),
+        stack: genError instanceof Error ? genError.stack : undefined,
         recipeId,
-        primaryError: primary.error,
-        alternativeError: alternative.error,
+        recipeName,
       });
       return NextResponse.json(
-        ApiErrorHandler.createError(errorMessage, 'AI_SERVICE_ERROR', 500),
+        ApiErrorHandler.createError(
+          `Failed to generate images: ${genError instanceof Error ? genError.message : String(genError)}`,
+          'AI_SERVICE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
 
-    // Store images in database
+    // Check for errors - log but continue with successful images
+    const errors: string[] = [];
+    const successfulMethods: string[] = [];
+    for (const [method, result] of Object.entries(imageResults)) {
+      if (result.error) {
+        errors.push(`${method}: ${result.error}`);
+        logger.error(`[Recipe Image Generation] Failed to generate ${method} image:`, {
+          error: result.error,
+          recipeId,
+          method,
+        });
+      } else if (result.content?.imageUrl) {
+        successfulMethods.push(method);
+      }
+    }
+
+    logger.dev('[Recipe Image Generation] Generation results:', {
+      recipeId,
+      successfulMethods,
+      errors,
+      totalMethods: methodsToGenerate.length,
+    });
+
+    if (errors.length > 0) {
+      logger.warn('[Recipe Image Generation] Some images failed to generate:', {
+        recipeId,
+        errors,
+        successfulMethods,
+      });
+      // Continue if at least one image was generated successfully
+      if (errors.length === methodsToGenerate.length) {
+        const errorMessage = errors.length === 1
+          ? `Failed to generate image: ${errors[0]}`
+          : `Failed to generate all images. Errors: ${errors.join('; ')}`;
+        return NextResponse.json(
+          ApiErrorHandler.createError(errorMessage, 'AI_SERVICE_ERROR', 500),
+          { status: 500 },
+        );
+      }
+    }
+
+    // Upload images to Supabase Storage and get public URLs
     const updateData: {
       image_url?: string;
       image_url_alternative?: string;
+      image_url_modern?: string;
+      image_url_minimalist?: string;
+      plating_methods_images?: Record<string, string>;
     } = {};
 
-    if (primary.content?.imageUrl) {
-      updateData.image_url = primary.content.imageUrl;
-    }
-    if (alternative.content?.imageUrl) {
-      updateData.image_url_alternative = alternative.content.imageUrl;
+    // Get existing plating_methods_images JSON or initialize empty object
+    const existingPlatingImages =
+      (recipe.plating_methods_images as Record<string, string>) || {};
+
+    try {
+      // Process each generated image
+      for (const [method, result] of Object.entries(imageResults)) {
+        if (!result.content?.imageUrl) continue;
+
+        const publicUrl = await uploadImageToStorage(
+          result.content.imageUrl,
+          `recipe-${recipeId}-${method}`,
+        );
+
+        // Store in appropriate column based on method type
+        if (method === 'classic') {
+          updateData.image_url = publicUrl;
+        } else if (method === 'modern') {
+          updateData.image_url_modern = publicUrl;
+        } else if (method === 'rustic') {
+          updateData.image_url_alternative = publicUrl;
+        } else if (method === 'minimalist') {
+          updateData.image_url_minimalist = publicUrl;
+        } else {
+          // Store additional methods in JSON column
+          if (!updateData.plating_methods_images) {
+            updateData.plating_methods_images = { ...existingPlatingImages };
+          }
+          updateData.plating_methods_images[method] = publicUrl;
+        }
+      }
+    } catch (uploadError) {
+      logger.error('[Recipe Image Generation] Failed to upload images to storage:', {
+        error: uploadError instanceof Error ? uploadError.message : String(uploadError),
+        recipeId,
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          uploadError instanceof Error
+            ? uploadError.message
+            : 'Failed to upload images to storage',
+          'STORAGE_ERROR',
+          500,
+        ),
+        { status: 500 },
+      );
     }
 
+    // Store public URLs in database
     if (Object.keys(updateData).length > 0) {
       const { error: updateError } = await supabaseAdmin
         .from('recipes')
@@ -245,26 +401,51 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
         .eq('id', recipeId);
 
       if (updateError) {
-        logger.error('[Recipe Image Generation] Failed to save images to database:', {
+        logger.error('[Recipe Image Generation] Failed to save image URLs to database:', {
           error: updateError.message,
           recipeId,
         });
-        // Don't fail the request - images were generated, just not saved
-        // Return the images anyway
+        return NextResponse.json(
+          ApiErrorHandler.createError(
+            'Images uploaded but failed to save URLs to database',
+            'DATABASE_ERROR',
+            500,
+          ),
+          { status: 500 },
+        );
       }
     }
 
-    logger.dev('[Recipe Image Generation] Successfully generated images', {
+    logger.dev('[Recipe Image Generation] Successfully generated and uploaded images', {
       recipeId,
-      hasPrimary: !!primary.content?.imageUrl,
-      hasAlternative: !!alternative.content?.imageUrl,
+      methodsGenerated: methodsToGenerate,
+      hasClassic: !!updateData.image_url,
+      hasModern: !!updateData.image_url_modern,
+      hasRustic: !!updateData.image_url_alternative,
+      hasMinimalist: !!updateData.image_url_minimalist,
+      additionalMethodsCount: Object.keys(updateData.plating_methods_images || {}).length,
     });
 
-    return NextResponse.json({
+    // Build response with all generated images
+    const response: Record<string, string | null | boolean> = {
       success: true,
-      imageUrl: primary.content?.imageUrl || null,
-      imageUrlAlternative: alternative.content?.imageUrl || null,
-    });
+      classic: updateData.image_url || null,
+      modern: updateData.image_url_modern || null,
+      rustic: updateData.image_url_alternative || null,
+      minimalist: updateData.image_url_minimalist || null,
+      // Legacy aliases for backward compatibility
+      imageUrl: updateData.image_url || null,
+      imageUrlAlternative: updateData.image_url_alternative || null,
+    };
+
+    // Add additional plating method images to response
+    if (updateData.plating_methods_images) {
+      for (const [method, url] of Object.entries(updateData.plating_methods_images)) {
+        response[method] = url;
+      }
+    }
+
+    return NextResponse.json(response);
   } catch (err) {
     logger.error('[Recipe Image Generation] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

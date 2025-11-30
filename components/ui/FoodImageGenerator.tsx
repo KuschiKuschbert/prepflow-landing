@@ -12,9 +12,16 @@ interface FoodImageGeneratorProps {
   entityType: 'recipe' | 'dish';
   entityId: string;
   entityName: string;
-  imageUrl?: string | null;
-  imageUrlAlternative?: string | null;
-  onImagesGenerated?: (primaryUrl: string | null, alternativeUrl: string | null) => void;
+  imageUrl?: string | null; // Classic/primary
+  imageUrlAlternative?: string | null; // Rustic
+  imageUrlModern?: string | null; // Modern
+  imageUrlMinimalist?: string | null; // Minimalist
+  onImagesGenerated?: (images: {
+    classic: string | null;
+    modern: string | null;
+    rustic: string | null;
+    minimalist: string | null;
+  }) => void;
   className?: string;
   showDisplay?: boolean; // Whether to show the image display component
   compact?: boolean; // Compact mode for smaller spaces
@@ -36,6 +43,8 @@ export function FoodImageGenerator({
   entityName,
   imageUrl,
   imageUrlAlternative,
+  imageUrlModern,
+  imageUrlMinimalist,
   onImagesGenerated,
   className = '',
   showDisplay = true,
@@ -43,13 +52,15 @@ export function FoodImageGenerator({
 }: FoodImageGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [generatedPrimary, setGeneratedPrimary] = useState<string | null>(imageUrl || null);
-  const [generatedAlternative, setGeneratedAlternative] = useState<string | null>(
-    imageUrlAlternative || null,
+  const [generatedClassic, setGeneratedClassic] = useState<string | null>(imageUrl || null);
+  const [generatedRustic, setGeneratedRustic] = useState<string | null>(imageUrlAlternative || null);
+  const [generatedModern, setGeneratedModern] = useState<string | null>(imageUrlModern || null);
+  const [generatedMinimalist, setGeneratedMinimalist] = useState<string | null>(
+    imageUrlMinimalist || null,
   );
   const { showSuccess, showError } = useNotification();
 
-  const hasImages = !!(generatedPrimary || generatedAlternative);
+  const hasImages = !!(generatedClassic || generatedRustic || generatedModern || generatedMinimalist);
   const endpoint = `/api/${entityType === 'recipe' ? 'recipes' : 'dishes'}/${entityId}/generate-image`;
 
   const handleGenerate = async () => {
@@ -76,12 +87,22 @@ export function FoodImageGenerator({
       }
 
       if (data.success) {
-        const primary = data.imageUrl || null;
-        const alternative = data.imageUrlAlternative || null;
+        // Handle new format with 4 plating methods
+        const classic = data.classic || data.imageUrl || null;
+        const modern = data.modern || null;
+        const rustic = data.rustic || data.imageUrlAlternative || null;
+        const minimalist = data.minimalist || null;
 
-        setGeneratedPrimary(primary);
-        setGeneratedAlternative(alternative);
-        onImagesGenerated?.(primary, alternative);
+        setGeneratedClassic(classic);
+        setGeneratedModern(modern);
+        setGeneratedRustic(rustic);
+        setGeneratedMinimalist(minimalist);
+        onImagesGenerated?.({
+          classic,
+          modern,
+          rustic,
+          minimalist,
+        });
 
         if (data.cached) {
           showSuccess('Images loaded from cache');
@@ -156,10 +177,13 @@ export function FoodImageGenerator({
             </div>
           ) : (
             <FoodImageDisplay
-              imageUrl={generatedPrimary}
-              imageUrlAlternative={generatedAlternative}
+              imageUrl={generatedClassic}
+              imageUrlAlternative={generatedRustic}
+              imageUrlModern={generatedModern}
+              imageUrlMinimalist={generatedMinimalist}
               alt={`${entityName} food image`}
               priority={false}
+              showSelector={true}
             />
           )}
         </div>

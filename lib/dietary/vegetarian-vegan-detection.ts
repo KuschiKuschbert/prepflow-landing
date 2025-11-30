@@ -277,18 +277,14 @@ export async function detectVegetarianVeganWithAI(
   ingredients: Ingredient[],
   description?: string,
 ): Promise<DietaryDetectionResult> {
-  const { getGeminiClient, isAIEnabled, getModelForTask } = await import('@/lib/ai/gemini-client');
+  const {
+    isAIEnabled,
+    generateTextWithHuggingFace,
+    getHuggingFaceTextModel,
+  } = await import('@/lib/ai/huggingface-client');
 
   if (!isAIEnabled()) {
     logger.warn('[Dietary Detection] AI not enabled, falling back to non-AI detection');
-    return detectVegetarianVeganFromIngredients(ingredients, recipeName);
-  }
-
-  const client = getGeminiClient();
-  if (!client) {
-    logger.warn(
-      '[Dietary Detection] Gemini client not available, falling back to non-AI detection',
-    );
     return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
 
@@ -318,24 +314,33 @@ Respond in JSON format:
   "reason": "brief explanation"
 }`;
 
-    const taskType = 'text' as const;
-    const model = getModelForTask(taskType);
-    const geminiModel = client.getGenerativeModel({
-      model,
-      systemInstruction:
-        'You are a dietary analysis expert. Analyze recipes and determine their suitability for vegetarians and vegans. Always respond with valid JSON.',
-      generationConfig: {
-        temperature: 0.3,
-        maxOutputTokens: 500,
-        responseMimeType: 'application/json',
+    const messages = [
+      {
+        role: 'system' as const,
+        content:
+          'You are a dietary analysis expert. Analyze recipes and determine their suitability for vegetarians and vegans. Always respond with valid JSON.',
       },
+      {
+        role: 'user' as const,
+        content: prompt,
+      },
+    ];
+
+    const result = await generateTextWithHuggingFace(messages, {
+      model: getHuggingFaceTextModel(),
+      temperature: 0.3,
+      maxTokens: 500,
     });
 
-    const result = await geminiModel.generateContent(prompt);
-    const response = await result.response;
-    const responseText = response.text();
-    if (!responseText) {
+    if (!result || !result.content) {
       throw new Error('No response from AI');
+    }
+
+    // Extract JSON from response (may contain markdown code blocks)
+    let responseText = result.content.trim();
+    const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/) || responseText.match(/```\s*([\s\S]*?)\s*```/);
+    if (jsonMatch) {
+      responseText = jsonMatch[1].trim();
     }
 
     const parsed = JSON.parse(responseText);

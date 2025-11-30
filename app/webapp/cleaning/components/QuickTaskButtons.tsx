@@ -52,3 +52,5 @@ export function QuickTaskButtons({ onSelect, selectedAreaId }: QuickTaskButtonsP
     </div>
   );
 }
+
+

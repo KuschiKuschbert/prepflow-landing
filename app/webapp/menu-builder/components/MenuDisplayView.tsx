@@ -102,13 +102,19 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
                 item.dietary_confidence ||
                 (isDish ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
 
-              // Get image URLs from dish or recipe
+              // Get image URLs from dish or recipe (all plating methods)
               const imageUrl = isDish
                 ? (item.dishes as any)?.image_url
                 : (item.recipes as any)?.image_url;
               const imageUrlAlternative = isDish
                 ? (item.dishes as any)?.image_url_alternative
                 : (item.recipes as any)?.image_url_alternative;
+              const imageUrlModern = isDish
+                ? (item.dishes as any)?.image_url_modern
+                : (item.recipes as any)?.image_url_modern;
+              const imageUrlMinimalist = isDish
+                ? (item.dishes as any)?.image_url_minimalist
+                : (item.recipes as any)?.image_url_minimalist;
               const entityId = isDish ? item.dish_id : item.recipe_id;
 
               return (
@@ -117,15 +123,17 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
                   className="group rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-5 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg"
                 >
                   {/* Food Image */}
-                  {(imageUrl || imageUrlAlternative) && (
+                  {(imageUrl || imageUrlAlternative || imageUrlModern || imageUrlMinimalist) && (
                     <div className="mb-4">
                       <FoodImageDisplay
                         imageUrl={imageUrl}
                         imageUrlAlternative={imageUrlAlternative}
+                        imageUrlModern={imageUrlModern}
+                        imageUrlMinimalist={imageUrlMinimalist}
                         alt={itemName}
                         className="w-full"
                         priority={false}
-                        showToggle={true}
+                        showSelector={true}
                       />
                     </div>
                   )}

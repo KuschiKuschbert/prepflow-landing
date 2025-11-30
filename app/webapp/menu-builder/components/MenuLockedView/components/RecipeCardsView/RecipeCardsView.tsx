@@ -54,7 +54,7 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
               if (totalCards === 0) {
                 const noCardsError =
                   'No recipe cards were generated. This might be because:\n' +
-                  '1. AI service is not configured (check GEMINI_API_KEY)\n' +
+                  '1. AI service is not configured (check HUGGINGFACE_API_KEY)\n' +
                   '2. Menu items have no ingredients\n' +
                   '3. Generation failed silently - check server logs';
                 logger.warn('[RecipeCardsView]', { error: noCardsError });

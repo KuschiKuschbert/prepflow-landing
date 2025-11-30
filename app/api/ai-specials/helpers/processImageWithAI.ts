@@ -1,6 +1,6 @@
 /**
  * Process image with AI (mock implementation).
- * In production, this would call OpenAI Vision API.
+ * In production, this would call Hugging Face Vision API.
  *
  * @param {string} imageData - Image data URL or public URL
  * @param {string} [prompt] - Optional prompt
@@ -10,7 +10,7 @@ export async function processImageWithAI(imageData: string, prompt?: string) {
   // Simulate AI processing delay
   await new Promise(resolve => setTimeout(resolve, 2000));
 
-  // Mock AI response - in real implementation, this would call OpenAI Vision API
+  // Mock AI response - in real implementation, this would call Hugging Face Vision API
   const mockIngredients = [
     'Fresh tomatoes',
     'Basil leaves',

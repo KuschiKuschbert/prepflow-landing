@@ -22,6 +22,14 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Allow images from Supabase Storage
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
   },
 
   // Experimental features for performance
@@ -30,7 +38,8 @@ const nextConfig: NextConfig = {
       '@supabase/supabase-js',
       '@vercel/analytics',
       'recharts',
-      'lucide-react',
+      // Temporarily disabled lucide-react to fix HMR RotateCcw error
+      // 'lucide-react',
       'framer-motion',
       '@dnd-kit/core',
       '@dnd-kit/sortable',

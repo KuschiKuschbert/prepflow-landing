@@ -5,11 +5,10 @@
  */
 
 import {
-  getGeminiClient,
   isAIEnabled,
-  getModelForTask,
-  type TaskType,
-} from '@/lib/ai/gemini-client';
+  generateTextWithHuggingFace,
+  getHuggingFaceTextModel,
+} from '@/lib/ai/huggingface-client';
 import { logger } from '@/lib/logger';
 import { STANDARD_CATEGORIES, type IngredientCategory } from './category-detection';
 
@@ -43,15 +42,6 @@ export async function detectCategoryWithAI(
     };
   }
 
-  const client = getGeminiClient();
-  if (!client) {
-    logger.warn('[AI Category Detection] Gemini client not available');
-    return {
-      category: 'Other',
-      confidence: 'low',
-    };
-  }
-
   try {
     const categoryList = STANDARD_CATEGORIES.join(', ');
     const prompt = `Categorize this restaurant ingredient into one of these food categories: ${categoryList}.
@@ -62,21 +52,29 @@ Respond with ONLY the category name from the list above. Choose the most specifi
 
 Category:`;
 
-    const taskType: TaskType = 'text';
-    const model = getModelForTask(taskType);
-    const geminiModel = client.getGenerativeModel({
-      model,
-      systemInstruction:
-        'You are a restaurant inventory expert. Categorize ingredients accurately into food-based categories. Be precise and choose the most specific category.',
-      generationConfig: {
-        temperature: 0.3, // Lower temperature for more consistent results
-        maxOutputTokens: 50,
+    const messages = [
+      {
+        role: 'system' as const,
+        content:
+          'You are a restaurant inventory expert. Categorize ingredients accurately into food-based categories. Be precise and choose the most specific category.',
       },
+      {
+        role: 'user' as const,
+        content: prompt,
+      },
+    ];
+
+    const result = await generateTextWithHuggingFace(messages, {
+      model: getHuggingFaceTextModel(),
+      temperature: 0.3, // Lower temperature for more consistent results
+      maxTokens: 50,
     });
 
-    const result = await geminiModel.generateContent(prompt);
-    const response = await result.response;
-    const content = response.text().trim();
+    if (!result || !result.content) {
+      throw new Error('No response from AI');
+    }
+
+    const content = result.content.trim();
 
     // Find matching category (case-insensitive, partial match)
     const detectedCategory =

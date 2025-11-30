@@ -179,13 +179,27 @@ export default function DishesClient() {
 
   const selectedRecipeCount = selectedRecipeIds.length;
 
-  // Callback to update recipe with generated images
+  // Callback to update recipe with generated images (all 4 plating methods)
   const handleRecipeImagesGenerated = useCallback(
-    (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => {
+    (
+      recipeId: string,
+      images: {
+        classic: string | null;
+        modern: string | null;
+        rustic: string | null;
+        minimalist: string | null;
+      },
+    ) => {
       setRecipes(prevRecipes =>
         prevRecipes.map(recipe =>
           recipe.id === recipeId
-            ? { ...recipe, image_url: primaryUrl, image_url_alternative: alternativeUrl }
+            ? {
+                ...recipe,
+                image_url: images.classic,
+                image_url_alternative: images.rustic,
+                image_url_modern: images.modern,
+                image_url_minimalist: images.minimalist,
+              }
             : recipe,
         ),
       );
@@ -193,8 +207,10 @@ export default function DishesClient() {
       if (selectedRecipeForPreview?.id === recipeId) {
         setSelectedRecipeForPreview({
           ...selectedRecipeForPreview,
-          image_url: primaryUrl,
-          image_url_alternative: alternativeUrl,
+          image_url: images.classic,
+          image_url_alternative: images.rustic,
+          image_url_modern: images.modern,
+          image_url_minimalist: images.minimalist,
         });
       }
     },

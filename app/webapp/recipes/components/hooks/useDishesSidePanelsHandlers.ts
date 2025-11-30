@@ -16,7 +16,15 @@ interface UseDishesSidePanelsHandlersProps {
   confirmDeleteItem: () => void;
   cancelDeleteItem: () => void;
   fetchItems: () => Promise<void>;
-  onRecipeImagesGenerated?: (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => void;
+  onRecipeImagesGenerated?: (
+    recipeId: string,
+    images: {
+      classic: string | null;
+      modern: string | null;
+      rustic: string | null;
+      minimalist: string | null;
+    },
+  ) => void;
 }
 
 export function useDishesSidePanelsHandlers({

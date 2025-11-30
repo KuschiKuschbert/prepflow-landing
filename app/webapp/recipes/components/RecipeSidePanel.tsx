@@ -38,7 +38,15 @@ interface RecipeSidePanelProps {
     unit: string;
     original: string;
   };
-  onImagesGenerated?: (recipeId: string, primaryUrl: string | null, alternativeUrl: string | null) => void;
+  onImagesGenerated?: (
+    recipeId: string,
+    images: {
+      classic: string | null;
+      modern: string | null;
+      rustic: string | null;
+      minimalist: string | null;
+    },
+  ) => void;
 }
 
 export function RecipeSidePanel({
@@ -152,8 +160,10 @@ export function RecipeSidePanel({
                 entityName={recipe.recipe_name}
                 imageUrl={(recipe as any)?.image_url}
                 imageUrlAlternative={(recipe as any)?.image_url_alternative}
-                onImagesGenerated={(primaryUrl, alternativeUrl) => {
-                  onImagesGenerated?.(recipe.id, primaryUrl, alternativeUrl);
+                imageUrlModern={(recipe as any)?.image_url_modern}
+                imageUrlMinimalist={(recipe as any)?.image_url_minimalist}
+                onImagesGenerated={images => {
+                  onImagesGenerated?.(recipe.id, images);
                 }}
                 className="mb-6"
                 compact={false}

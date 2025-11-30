@@ -15,6 +15,14 @@ export interface Recipe {
   is_vegan?: boolean;
   dietary_confidence?: string;
   dietary_method?: string;
+  // Image URLs for different plating methods
+  image_url?: string | null; // Classic plating (primary)
+  image_url_alternative?: string | null; // Rustic plating
+  image_url_modern?: string | null; // Modern plating
+  image_url_minimalist?: string | null; // Minimalist plating
+  // Additional plating method images stored as JSON
+  // Keys: landscape, futuristic, hide_and_seek, super_bowl, bathing, deconstructed, stacking, brush_stroke, free_form
+  plating_methods_images?: Record<string, string | null>;
 }
 
 export interface RecipeIngredient {
@@ -84,6 +92,14 @@ export interface Dish {
   is_vegan?: boolean;
   dietary_confidence?: string;
   dietary_method?: string;
+  // Image URLs for different plating methods
+  image_url?: string | null; // Classic plating (primary)
+  image_url_alternative?: string | null; // Rustic plating
+  image_url_modern?: string | null; // Modern plating
+  image_url_minimalist?: string | null; // Minimalist plating
+  // Additional plating method images stored as JSON
+  // Keys: landscape, futuristic, hide_and_seek, super_bowl, bathing, deconstructed, stacking, brush_stroke, free_form
+  plating_methods_images?: Record<string, string | null>;
 }
 
 // Unified Item Types (for Recipes & Dishes view)

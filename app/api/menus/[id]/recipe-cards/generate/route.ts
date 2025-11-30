@@ -64,7 +64,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
       // Check if AI is enabled before attempting generation
       logger.dev(`[Generate Recipe Cards API] Checking if AI is enabled...`);
-      const { isAIEnabled } = await import('@/lib/ai/gemini-client');
+      const { isAIEnabled } = await import('@/lib/ai/huggingface-client');
       const aiEnabled = isAIEnabled();
       logger.dev(`[Generate Recipe Cards API] AI enabled: ${aiEnabled}`);
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         );
         return NextResponse.json(
           ApiErrorHandler.createError(
-            'AI service is not enabled. Please configure GEMINI_API_KEY to generate recipe cards.',
+            'AI service is not enabled. Please configure HUGGINGFACE_API_KEY to generate recipe cards.',
             'AI_NOT_ENABLED',
             503,
           ),
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       let userMessage = 'Failed to generate recipe cards';
       if (errorMessage.includes('AI') || errorMessage.includes('API key')) {
         userMessage =
-          'AI service is not configured. Please set GEMINI_API_KEY environment variable.';
+          'AI service is not configured. Please set HUGGINGFACE_API_KEY environment variable.';
       } else if (errorMessage.includes('no ingredients')) {
         userMessage =
           'Some menu items have no ingredients. Please add ingredients to your dishes/recipes first.';

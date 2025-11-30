@@ -1,10 +1,8 @@
 import {
-  getGeminiClient,
   isAIEnabled,
-  getDefaultModel,
-  getModelForTask,
-  type TaskType,
-} from '../gemini-client';
+  generateTextWithHuggingFace,
+  getHuggingFaceTextModel,
+} from '../huggingface-client';
 import { buildKitchenContext } from '../prompts/kitchen-context';
 import { generateCacheKey, getCachedAIResponse } from '../cache/ai-cache';
 import { checkRateLimit } from '../utils/rate-limiter';
@@ -81,63 +79,38 @@ Always provide responses that are:
       ? `${systemInstruction}\n\n${systemMessages.map(msg => msg.content).join('\n\n')}`
       : systemInstruction;
 
-  const client = getGeminiClient();
-  if (!client) {
-    return {
-      content: '',
-      error: 'AI client not available',
-    };
-  }
+  // Build messages array with system instruction
+  const allMessages: AIChatMessage[] = [
+    { role: 'system', content: fullSystemInstruction },
+    ...conversationMessages,
+  ];
 
-  // Determine task type for auto model selection
-  const taskType: TaskType = 'text'; // Default for chat/text generation
-  const model = options.model || getModelForTask(taskType);
+  const model = options.model || getHuggingFaceTextModel();
   const temperature = options.temperature ?? 0.7;
-  const maxOutputTokens = options.maxTokens ?? 2000;
-
-  // Get the model instance
-  const geminiModel = client.getGenerativeModel({
-    model,
-    systemInstruction: fullSystemInstruction,
-    generationConfig: {
-      temperature,
-      maxOutputTokens,
-    },
-  });
-
-  // Convert conversation messages to Gemini chat history format
-  // For single request, use the last user message
-  // For multi-turn conversations, build chat history
-  let prompt = '';
-  if (conversationMessages.length === 1) {
-    // Single message - use directly
-    prompt = conversationMessages[0].content;
-  } else {
-    // Multiple messages - combine user messages (Gemini handles context)
-    // Take the last user message as the prompt
-    const userMessages = conversationMessages.filter(msg => msg.role === 'user');
-    prompt =
-      userMessages[userMessages.length - 1]?.content || conversationMessages[0]?.content || '';
-  }
+  const maxTokens = options.maxTokens ?? 2000;
 
   let lastError: Error | null = null;
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
-      const result = await geminiModel.generateContent(prompt);
-      const response = await result.response;
-      const content = response.text();
+      const result = await generateTextWithHuggingFace(allMessages, {
+        model,
+        temperature,
+        maxTokens,
+      });
 
-      // Extract token usage from response
-      const usageMetadata = result.response.usageMetadata;
-      const usage = usageMetadata
-        ? {
-            promptTokens: usageMetadata.promptTokenCount || 0,
-            completionTokens: usageMetadata.candidatesTokenCount || 0,
-            totalTokens: usageMetadata.totalTokenCount || 0,
-          }
-        : undefined;
+      if (!result) {
+        throw new Error('Hugging Face text generation returned null');
+      }
 
-      return processAIResponse(content, usage, model, 'chat', messages, countryCode, options);
+      return processAIResponse(
+        result.content,
+        result.usage,
+        model,
+        'chat',
+        messages,
+        countryCode,
+        options,
+      );
     } catch (error) {
       lastError = error as Error;
       const aiError = parseAIError(error as Error);

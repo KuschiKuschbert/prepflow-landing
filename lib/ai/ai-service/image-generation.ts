@@ -1,19 +1,42 @@
 /**
- * Food image generation service using Gemini API
+ * Food image generation service using Hugging Face Inference Providers
  *
  * Generates photorealistic food images based on dish/recipe names and ingredients.
- * Provides two presentation alternatives (primary and alternative plating styles).
+ * Supports multiple plating methods: classic, modern, rustic, and minimalist.
  */
 
-import { getGeminiClient, isAIEnabled, getModelForTask, type TaskType } from '../gemini-client';
+import {
+  isAIEnabled,
+  generateImageWithHuggingFace,
+  getHuggingFaceImageModel,
+} from '../huggingface-client';
 import { logger } from '@/lib/logger';
 import type { AIRequestOptions, AIResponse } from '../types';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
 
+/**
+ * Predefined plating methods for food image generation
+ */
+export type PlatingMethod =
+  | 'classic'
+  | 'modern'
+  | 'rustic'
+  | 'minimalist'
+  | 'landscape'
+  | 'futuristic'
+  | 'hide_and_seek'
+  | 'super_bowl'
+  | 'bathing'
+  | 'deconstructed'
+  | 'stacking'
+  | 'brush_stroke'
+  | 'free_form';
+
 export interface FoodImageGenerationOptions extends AIRequestOptions {
-  alternative?: boolean; // Generate alternative plating style
+  platingMethod?: PlatingMethod | string; // Plating method to use
+  alternative?: boolean; // Deprecated: Use platingMethod instead
 }
 
 export interface FoodImageResult {
@@ -23,17 +46,17 @@ export interface FoodImageResult {
 }
 
 /**
- * Build a detailed prompt for food image generation
+ * Build a detailed prompt for food image generation based on plating method
  *
  * @param dishName - Name of the dish/recipe
  * @param ingredients - List of ingredient names
- * @param alternative - Whether to generate alternative plating style
+ * @param platingMethod - Plating method to use (classic, modern, rustic, minimalist, or custom description)
  * @returns Formatted prompt for image generation
  */
 export function buildFoodImagePrompt(
   dishName: string,
   ingredients: string[],
-  alternative: boolean = false,
+  platingMethod: PlatingMethod | string = 'classic',
 ): string {
   // Sanitize dish name (remove special characters that might confuse the model)
   const sanitizedName = dishName.trim().replace(/[^\w\s-]/g, '');
@@ -43,21 +66,76 @@ export function buildFoodImagePrompt(
   const ingredientCount = ingredients.length;
   const moreIngredients = ingredientCount > 10 ? ` and ${ingredientCount - 10} more ingredients` : '';
 
-  if (alternative) {
-    // Alternative prompt: Top-down overhead view with different plating
-    return `A top-down overhead view of ${sanitizedName} featuring ${keyIngredients}${moreIngredients}, beautifully arranged on a rustic wooden board or modern ceramic plate. Professional food photography, natural lighting, vibrant colors, restaurant menu quality, appetizing presentation, shallow depth of field, food styling, commercial photography style.`;
-  } else {
-    // Primary prompt: Side view with elegant plating
-    return `A photorealistic, professional food photography image of ${sanitizedName}. The dish features ${keyIngredients}${moreIngredients}. It is beautifully plated on a white ceramic plate or elegant dish, with professional garnishing and food styling. Professional restaurant-quality photography, natural lighting, shallow depth of field, appetizing presentation, commercial food photography, high resolution, detailed textures.`;
+  // Base prompt components
+  const basePrompt = `A photorealistic, professional food photography image of ${sanitizedName}. The dish features ${keyIngredients}${moreIngredients}.`;
+  const qualitySuffix = 'Professional restaurant-quality photography, natural lighting, shallow depth of field, appetizing presentation, commercial food photography, high resolution, detailed textures.';
+
+  // Generate prompt based on plating method
+  switch (platingMethod) {
+    case 'classic':
+      // Classic: Side view with elegant plating on white ceramic
+      return `${basePrompt} It is beautifully plated on a white ceramic plate or elegant dish, with professional garnishing and food styling. Traditional, centered presentation with main protein, starch, and vegetables arranged in a balanced, symmetrical way. ${qualitySuffix}`;
+
+    case 'modern':
+      // Modern: Contemporary plating with geometric arrangements
+      return `${basePrompt} It is artfully arranged on a modern ceramic plate or contemporary dishware with geometric patterns, minimalist garnishing, and sophisticated food styling. Contemporary restaurant presentation, clean lines, artistic composition. ${qualitySuffix}`;
+
+    case 'rustic':
+      // Rustic: Top-down overhead view with artisanal presentation
+      return `A top-down overhead view of ${sanitizedName} featuring ${keyIngredients}${moreIngredients}, beautifully arranged on a rustic wooden board or artisanal ceramic plate. Natural, artisanal presentation with organic garnishing. Professional food photography, natural lighting, vibrant colors, restaurant menu quality, appetizing presentation, shallow depth of field, food styling, commercial photography style.`;
+
+    case 'minimalist':
+      // Minimalist: Clean, simple plating with negative space
+      return `${basePrompt} It is elegantly plated on a simple white or neutral-colored plate with clean lines, minimal garnishing, and generous negative space. Minimalist presentation, sophisticated simplicity, refined food styling. ${qualitySuffix}`;
+
+    case 'landscape':
+      // Landscape: Horizontal arrangement creating visual flow
+      return `${basePrompt} It is arranged horizontally across the plate creating visual flow, with ingredients positioned to guide the eye from left to right. Landscape plating technique with elegant horizontal composition. ${qualitySuffix}`;
+
+    case 'futuristic':
+      // Futuristic: Modern, geometric arrangements with precise placement
+      return `${basePrompt} It is arranged with modern, geometric precision using negative space and architectural elements. Futuristic plating technique with precise placement, clean lines, and contemporary aesthetic. ${qualitySuffix}`;
+
+    case 'hide_and_seek':
+      // Hide and seek: Layered presentation with partially hidden ingredients
+      return `${basePrompt} It is presented with layered components where some ingredients are partially hidden, creating depth and intrigue. Hide and seek plating technique with strategic layering and visual discovery. ${qualitySuffix}`;
+
+    case 'super_bowl':
+      // Super bowl: Deep bowl presentation with layered arrangement
+      return `${basePrompt} It is beautifully arranged in a deep bowl with ingredients layered or arranged in concentric circles. Super bowl technique with vertical depth and visual interest. ${qualitySuffix}`;
+
+    case 'bathing':
+      // Bathing: Ingredients arranged in or around sauce/broth
+      return `${basePrompt} It is arranged with ingredients positioned in or around a sauce or broth, creating a "bathing" effect with visual appeal. Bathing plating technique with sauce integration. ${qualitySuffix}`;
+
+    case 'deconstructed':
+      // Deconstructed: Components separated and arranged individually
+      return `${basePrompt} It is presented with components separated and arranged individually on the plate, allowing each element to be seen clearly. Deconstructed plating technique with component separation. ${qualitySuffix}`;
+
+    case 'stacking':
+      // Stacking: Vertical presentation with layered ingredients
+      return `${basePrompt} It is presented vertically with ingredients stacked on top of each other, creating height and visual interest. Stacking method with layered presentation. ${qualitySuffix}`;
+
+    case 'brush_stroke':
+      // Brush stroke: Artistic presentation mimicking brush strokes
+      return `${basePrompt} It is artistically arranged with sauces and purees applied like brush strokes, creating an abstract, painterly effect. The brush stroke plating technique with artistic sauce application. ${qualitySuffix}`;
+
+    case 'free_form':
+      // Free form: Organic, asymmetrical arrangement
+      return `${basePrompt} It is arranged organically with asymmetrical placement following natural shapes and flows, creating a dynamic, less structured presentation. Free form plating technique with organic composition. ${qualitySuffix}`;
+
+    default:
+      // Custom plating method: Use the provided description
+      if (typeof platingMethod === 'string' && platingMethod.trim().length > 0) {
+        return `${basePrompt} ${platingMethod}. ${qualitySuffix}`;
+      }
+      // Fallback to classic if invalid
+      return `${basePrompt} It is beautifully plated on a white ceramic plate or elegant dish, with professional garnishing and food styling. ${qualitySuffix}`;
   }
 }
 
 /**
- * Generate a food image using Gemini API
- *
- * NOTE: This implementation assumes Gemini API supports image generation.
- * The exact API method may need to be verified and adjusted based on
- * the actual Gemini 2.5 Flash Image API capabilities.
+ * Generate a food image using Hugging Face Inference Providers
  *
  * @param prompt - Image generation prompt
  * @param options - Generation options
@@ -76,169 +154,56 @@ export async function generateFoodImage(
     };
   }
 
-  const client = getGeminiClient();
-  if (!client) {
-    return {
-      content: {
-        imageUrl: '',
-      },
-      error: 'AI client not available',
-    };
-  }
-
-  const taskType: TaskType = 'vision'; // Using vision task type for image-related operations
-  const model = options.model || getModelForTask(taskType);
-  const temperature = options.temperature ?? 0.7;
-  const maxOutputTokens = options.maxTokens ?? 1000;
-
+  const model = options.model || getHuggingFaceImageModel();
   let lastError: Error | null = null;
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
-      // Get the model instance
-      const geminiModel = client.getGenerativeModel({
+      logger.dev('[Image Generation] Generating image with Hugging Face:', {
         model,
-        generationConfig: {
-          temperature,
-          maxOutputTokens,
-        },
+        prompt: prompt.substring(0, 100),
+        attempt: attempt + 1,
       });
 
-      // TODO: Verify the exact Gemini API method for image generation
-      // The Gemini API may use a different method than generateContent for image generation
-      // Possible methods to check:
-      // - generateImages() - if available
-      // - generateContent() with image generation parameters
-      // - A separate image generation endpoint
-
-      // For now, we'll attempt to use generateContent with a prompt that requests image generation
-      // This may need to be adjusted based on actual API capabilities
-      const imageGenerationPrompt = `Generate a photorealistic food image based on this description: ${prompt}. Return the image as a base64-encoded data URL.`;
-
-      const result = await geminiModel.generateContent(imageGenerationPrompt);
-      const response = await result.response;
-      const content = response.text();
-
-      // Parse the response - Gemini might return:
-      // 1. A base64 data URL directly in the text
-      // 2. A JSON object with image data
-      // 3. A URL to the generated image
-
-      let imageUrl = '';
-      let imageData: string | undefined;
-      let mimeType = 'image/jpeg';
-
-      // Log the raw response for debugging (truncated to avoid huge logs)
-      logger.dev('[Image Generation] Raw API response:', {
-        responseLength: content.length,
-        responsePreview: content.substring(0, 500),
+      const result = await generateImageWithHuggingFace(prompt, {
+        model,
+        negativePrompt: 'blurry, low quality, distorted, ugly, unappetizing, bad lighting',
+        numInferenceSteps: 30,
+        guidanceScale: 7.5,
       });
 
-      // Try to extract base64 data URL from response
-      // More strict regex: must have complete data URL format
-      const base64Match = content.match(/data:image\/([^;]+);base64,([A-Za-z0-9+/=]+)/);
-      if (base64Match && base64Match[2].length > 100) {
-        // Validate base64 string is substantial (at least 100 chars)
-        mimeType = `image/${base64Match[1]}`;
-        imageData = base64Match[2];
-        imageUrl = `data:${mimeType};base64,${imageData}`;
-
-        // Validate the data URL is complete
-        if (imageUrl.length < 200) {
-          logger.warn('[Image Generation] Data URL seems too short, might be truncated:', {
-            urlLength: imageUrl.length,
-            urlPreview: imageUrl.substring(0, 100),
-          });
-        }
-      } else {
-        // Try to parse as JSON
-        try {
-          const jsonResponse = JSON.parse(content);
-          if (jsonResponse.imageUrl) {
-            imageUrl = jsonResponse.imageUrl;
-          } else if (jsonResponse.imageData) {
-            imageData = jsonResponse.imageData;
-            // Validate base64 data
-            if (typeof imageData === 'string' && imageData.length > 100) {
-              imageUrl = `data:${mimeType};base64,${imageData}`;
-            } else {
-              logger.warn('[Image Generation] Invalid imageData in JSON response:', {
-                dataLength: imageData?.length || 0,
-              });
-            }
-          }
-        } catch {
-          // If not JSON, treat as URL or error
-          if (content.startsWith('http://') || content.startsWith('https://')) {
-            imageUrl = content.trim();
-          } else {
-            logger.warn('[Image Generation] Unexpected response format:', {
-              contentLength: content.length,
-              contentPreview: content.substring(0, 500),
-              hasDataUrl: content.includes('data:image'),
-            });
-            return {
-              content: {
-                imageUrl: '',
-              },
-              error: `Unexpected response format from image generation API. Gemini may not support image generation via generateContent. Response: ${content.substring(0, 200)}`,
-            };
-          }
-        }
+      if (!result) {
+        throw new Error('Hugging Face image generation returned null');
       }
 
-      // Final validation
-      if (!imageUrl || imageUrl.length < 50) {
-        logger.error('[Image Generation] Invalid or empty image URL generated:', {
-          imageUrlLength: imageUrl?.length || 0,
-          imageUrlPreview: imageUrl?.substring(0, 100),
-        });
-        return {
-          content: {
-            imageUrl: '',
-          },
-          error: 'No valid image data found in API response. Gemini generateContent API may not support image generation.',
-        };
-      }
+      // Extract base64 data from data URL
+      const imageData = result.imageUrl.split(',')[1];
 
-      // Validate data URL format if it's a data URL
-      if (imageUrl.startsWith('data:')) {
-        const dataUrlParts = imageUrl.split(',');
-        if (dataUrlParts.length !== 2 || dataUrlParts[1].length < 100) {
-          logger.error('[Image Generation] Invalid data URL format:', {
-            partsCount: dataUrlParts.length,
-            dataLength: dataUrlParts[1]?.length || 0,
-          });
-          return {
-            content: {
-              imageUrl: '',
-            },
-            error: 'Invalid data URL format generated',
-          };
-        }
-      }
-
-      // Extract token usage from response
-      const usageMetadata = result.response.usageMetadata;
-      const usage = usageMetadata
-        ? {
-            promptTokens: usageMetadata.promptTokenCount || 0,
-            completionTokens: usageMetadata.candidatesTokenCount || 0,
-            totalTokens: usageMetadata.totalTokenCount || 0,
-          }
-        : undefined;
+      logger.dev('[Image Generation] Image generated successfully:', {
+        dataUrlLength: result.imageUrl.length,
+        mimeType: result.mimeType,
+        hasImageData: !!imageData,
+      });
 
       return {
         content: {
-          imageUrl,
+          imageUrl: result.imageUrl,
           imageData,
-          mimeType,
+          mimeType: result.mimeType,
         },
-        usage,
+        usage: {
+          promptTokens: 0,
+          completionTokens: 0,
+          totalTokens: 0,
+        },
       };
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      logger.error(`[Image Generation] Attempt ${attempt + 1} failed:`, lastError);
+      logger.error(`[Image Generation] Attempt ${attempt + 1} failed:`, {
+        error: lastError.message,
+        stack: lastError.stack,
+        model,
+      });
 
       // Wait before retry (exponential backoff)
       if (attempt < MAX_RETRIES - 1) {
@@ -256,33 +221,93 @@ export async function generateFoodImage(
 }
 
 /**
- * Generate food images (primary and alternative) in parallel
+ * Generate food images with multiple plating methods in parallel
+ *
+ * Generates 4 images with different plating styles:
+ * - classic: Traditional elegant plating (primary)
+ * - modern: Contemporary minimalist plating
+ * - rustic: Rustic/artisanal plating (alternative)
+ * - minimalist: Clean, simple plating
  *
  * @param dishName - Name of the dish/recipe
  * @param ingredients - List of ingredient names
  * @param options - Generation options
- * @returns Object with primary and alternative image results
+ * @returns Object with all 4 plating method image results
  */
 export async function generateFoodImages(
   dishName: string,
   ingredients: string[],
   options: FoodImageGenerationOptions = {},
 ): Promise<{
+  classic: AIResponse<FoodImageResult>;
+  modern: AIResponse<FoodImageResult>;
+  rustic: AIResponse<FoodImageResult>;
+  minimalist: AIResponse<FoodImageResult>;
+  // Legacy aliases for backward compatibility
   primary: AIResponse<FoodImageResult>;
   alternative: AIResponse<FoodImageResult>;
 }> {
-  // Build prompts for both images
-  const primaryPrompt = buildFoodImagePrompt(dishName, ingredients, false);
-  const alternativePrompt = buildFoodImagePrompt(dishName, ingredients, true);
+  // Build prompts for all 4 plating methods
+  const classicPrompt = buildFoodImagePrompt(dishName, ingredients, 'classic');
+  const modernPrompt = buildFoodImagePrompt(dishName, ingredients, 'modern');
+  const rusticPrompt = buildFoodImagePrompt(dishName, ingredients, 'rustic');
+  const minimalistPrompt = buildFoodImagePrompt(dishName, ingredients, 'minimalist');
 
-  // Generate both images in parallel
-  const [primaryResult, alternativeResult] = await Promise.all([
-    generateFoodImage(primaryPrompt, { ...options, alternative: false }),
-    generateFoodImage(alternativePrompt, { ...options, alternative: true }),
+  // Generate all 4 images in parallel
+  const [classicResult, modernResult, rusticResult, minimalistResult] = await Promise.all([
+    generateFoodImage(classicPrompt, { ...options, platingMethod: 'classic' }),
+    generateFoodImage(modernPrompt, { ...options, platingMethod: 'modern' }),
+    generateFoodImage(rusticPrompt, { ...options, platingMethod: 'rustic' }),
+    generateFoodImage(minimalistPrompt, { ...options, platingMethod: 'minimalist' }),
   ]);
 
   return {
-    primary: primaryResult,
-    alternative: alternativeResult,
+    classic: classicResult,
+    modern: modernResult,
+    rustic: rusticResult,
+    minimalist: minimalistResult,
+    // Legacy aliases for backward compatibility
+    primary: classicResult,
+    alternative: rusticResult,
   };
+}
+
+/**
+ * Generate food images for specific plating methods
+ *
+ * @param dishName - Name of the dish/recipe
+ * @param ingredients - List of ingredient names
+ * @param platingMethods - Array of plating methods to generate
+ * @param options - Generation options
+ * @returns Object with image results for each requested plating method
+ */
+export async function generateFoodImagesForMethods(
+  dishName: string,
+  ingredients: string[],
+  platingMethods: PlatingMethod[],
+  options: FoodImageGenerationOptions = {},
+): Promise<Record<string, AIResponse<FoodImageResult>>> {
+  // Build prompts for all requested plating methods
+  const prompts = platingMethods.map(method => ({
+    method,
+    prompt: buildFoodImagePrompt(dishName, ingredients, method),
+  }));
+
+  // Generate all images in parallel
+  const results = await Promise.all(
+    prompts.map(({ method, prompt }) =>
+      generateFoodImage(prompt, { ...options, platingMethod: method }).then(result => ({
+        method,
+        result,
+      })),
+    ),
+  );
+
+  // Convert array to object keyed by method name
+  const resultObject: Record<string, AIResponse<FoodImageResult>> = {};
+  for (const { method, result } of results) {
+    resultObject[method] = result;
+  }
+
+  return resultObject;
 }
