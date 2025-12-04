@@ -159,7 +159,9 @@ export async function PUT(req: NextRequest) {
           ...updates,
           updated_at: new Date().toISOString(),
         })
-        .select('first_name, last_name, business_name, email, created_at, last_login, email_verified')
+        .select(
+          'first_name, last_name, business_name, email, created_at, last_login, email_verified',
+        )
         .single();
 
       if (createError) {

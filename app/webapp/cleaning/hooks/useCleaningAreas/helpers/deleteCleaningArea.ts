@@ -60,4 +60,3 @@ export async function deleteCleaningArea({
     return { success: false, error: 'Failed to delete area' };
   }
 }
-

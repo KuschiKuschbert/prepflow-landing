@@ -12,9 +12,9 @@ import { convertToPerPortion } from '../hooks/utils/convertToPerPortion';
 import { calculateRecipePrice } from '../hooks/utils/pricingHelpers';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
 import {
-    Recipe,
-    COGSCalculation as RecipeCOGSCalculation,
-    RecipeIngredientWithDetails,
+  Recipe,
+  COGSCalculation as RecipeCOGSCalculation,
+  RecipeIngredientWithDetails,
 } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { RecipeSidePanelActions } from './RecipeSidePanelActions';
@@ -119,20 +119,17 @@ export function RecipeSidePanel({
 
   const panelContent = (
     <>
-      {/* Backdrop - only on mobile */}
+      {/* Backdrop - mobile and desktop */}
       <div
-        className="desktop:hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
-        style={{
-          top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
-        }}
+        className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm transition-opacity duration-200"
         onClick={onClose}
-        aria-hidden="true"
+        aria-hidden={true}
       />
 
-      {/* Side Panel */}
+      {/* Side Panel with gradient border */}
       <div
         ref={panelRef}
-        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out ${
+        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md overflow-hidden rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={panelStyle}
@@ -141,7 +138,7 @@ export function RecipeSidePanel({
         aria-modal="true"
         aria-labelledby="recipe-panel-title"
       >
-        <div className="flex h-full flex-col overflow-hidden">
+        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[#1f1f1f]">
           <RecipeSidePanelHeader
             recipe={recipe}
             capitalizeRecipeName={capitalizeRecipeName}

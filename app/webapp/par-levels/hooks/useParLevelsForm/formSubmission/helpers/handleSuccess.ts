@@ -29,4 +29,3 @@ export function handleSuccess({
   showSuccess('Par level created successfully');
   resetForm();
 }
-

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide explains when and how to use landing page styles in the webapp context. The webapp follows a **hybrid approach**: landing page styles enhance user-facing elements (headers, CTAs, empty states) while Material Design 3 remains the default for data interfaces (tables, forms, dashboards).
+This guide explains when and how to use landing page styles in the webapp context. The webapp follows a **hybrid approach**: landing page styles enhance user-facing elements (headers, CTAs, empty states) while Cyber Carrot Design System remains the default for data interfaces (tables, forms, dashboards).
 
 ## Decision Tree
 
@@ -17,9 +17,9 @@ Use landing page styles for:
 5. **Quick Actions** - Dashboard action cards
 6. **Welcome Sections** - Feature introductions
 
-### When to Use Material Design 3
+### When to Use Cyber Carrot Design System
 
-Use Material Design 3 for:
+Use Cyber Carrot Design System for:
 
 1. **Data Tables** - All table components
 2. **Forms** - Input fields, selects, checkboxes
@@ -169,7 +169,7 @@ When migrating existing components:
 
 ## Examples
 
-### Before (Material Design 3)
+### Before (Cyber Carrot Design System)
 
 ```tsx
 <div className="mb-4">

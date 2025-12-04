@@ -132,11 +132,11 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
       <div
         className="fixed inset-0 z-[65] bg-black/20 backdrop-blur-[1px] transition-opacity duration-200"
         onClick={onClose}
-        aria-hidden="true"
+        aria-hidden={true}
       />
 
       {/* Floating Menu Card - Animated from button position (bottom-right) */}
-      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[300px] overflow-hidden rounded-xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[300px] overflow-hidden rounded-xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div
           ref={menuRef}
           className="flex h-full flex-col overflow-hidden rounded-xl bg-[#1f1f1f]/95"

@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Edit, Power, PowerOff, QrCode, Trash2 } from 'lucide-react';
+import { Edit, Power, PowerOff, QrCode, Trash2, LucideIcon, MapPin } from 'lucide-react';
 import React from 'react';
 import { TemperatureEquipment } from '../types';
 
@@ -17,7 +17,7 @@ interface EquipmentListTableMobileCardsProps {
   onUpdate: (id: string, updates: Partial<TemperatureEquipment>) => void;
   onEquipmentClick?: (equipment: TemperatureEquipment) => void;
   onShowQRCode?: (equipment: TemperatureEquipment) => void;
-  getTypeIcon: (type: string) => string;
+  getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
   getLastLogInfo?: (equipment: TemperatureEquipment) => {
     date: string;
@@ -68,13 +68,21 @@ export function EquipmentListTableMobileCards({
         >
           <div className="flex items-start gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <span className="text-2xl">{getTypeIcon(item.equipment_type)}</span>
+              <Icon
+                icon={getTypeIcon(item.equipment_type)}
+                size="lg"
+                className="text-[#29E7CD]"
+                aria-hidden={true}
+              />
             </div>
             <div className="min-w-0 flex-1">
               <div className="mb-2 text-base font-semibold text-white">{item.name}</div>
               <div className="mb-2 text-sm text-gray-400">{getTypeLabel(item.equipment_type)}</div>
               {item.location && (
-                <div className="mb-2 text-xs text-gray-500">📍 {item.location}</div>
+                <div className="mb-2 flex items-center gap-1 text-xs text-gray-500">
+                  <Icon icon={MapPin} size="xs" className="text-gray-500" aria-hidden={true} />
+                  <span>{item.location}</span>
+                </div>
               )}
               <div className="mb-2 text-sm font-medium text-[#29E7CD]">
                 {item.min_temp_celsius !== null && item.max_temp_celsius !== null

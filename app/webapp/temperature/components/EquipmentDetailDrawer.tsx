@@ -14,24 +14,15 @@ import { EquipmentDrawerChartSection } from './EquipmentDrawerChartSection';
 import { EquipmentDrawerStatisticsSection } from './EquipmentDrawerStatisticsSection';
 import { EquipmentDrawerFooter } from './EquipmentDrawerFooter';
 import { calculateTemperatureStatistics } from './utils';
+import { Icon } from '@/components/ui/Icon';
+import { getTypeIconComponent, getTypeLabel } from '../utils/temperatureUtils';
+import { AlertTriangle } from 'lucide-react';
 
 interface EquipmentDetailDrawerProps {
-  equipment: TemperatureEquipment | null;
+  equipment: TemperatureEquipment;
   isOpen: boolean;
   onClose: () => void;
 }
-
-const temperatureTypes = [
-  { value: 'fridge', label: 'Fridge', icon: '🧊' },
-  { value: 'freezer', label: 'Freezer', icon: '❄️' },
-  { value: 'food_cooking', label: 'Food Cooking', icon: '🔥' },
-  { value: 'food_hot_holding', label: 'Food Hot Holding', icon: '🍲' },
-  { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '🥗' },
-  { value: 'storage', label: 'Storage', icon: '📦' },
-];
-
-const getTypeIcon = (type: string) => temperatureTypes.find(t => t.value === type)?.icon || '🌡️';
-const getTypeLabel = (type: string) => temperatureTypes.find(t => t.value === type)?.label || type;
 
 export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentDetailDrawerProps) {
   const { t } = useTranslation();
@@ -86,17 +77,17 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+        className={`fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm transition-opacity duration-200 ease-out ${
           isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={onClose}
-        aria-hidden="true"
+        aria-hidden={true}
       />
 
-      {/* Drawer */}
+      {/* Drawer with gradient border */}
       <div
         ref={drawerRef}
-        className={`fixed right-0 z-[75] w-full transform bg-[#0a0a0a] shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed right-0 z-[75] w-full transform rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           !isMobile ? 'desktop:w-[600px] large-desktop:w-[700px] xl:w-[800px]' : ''
         } ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         style={{
@@ -113,7 +104,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
         aria-modal="true"
         aria-labelledby="equipment-detail-title"
       >
-        <div className="flex h-full flex-col overflow-hidden">
+        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[#0a0a0a]">
           <EquipmentDrawerHeader
             equipment={equipment}
             isMobile={isMobile}
@@ -121,7 +112,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
             onTouchStart={handleHeaderTouchStart}
             onTouchMove={handleHeaderTouchMove}
             onTouchEnd={handleHeaderTouchEnd}
-            getTypeIcon={getTypeIcon}
+            getTypeIcon={getTypeIconComponent}
             getTypeLabel={getTypeLabel}
           />
 
@@ -162,8 +153,14 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
                   </label>
                   {(equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) && (
                     <div className="flex items-center gap-2 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-3 py-2">
+                      <Icon
+                        icon={AlertTriangle}
+                        size="sm"
+                        className="text-yellow-400"
+                        aria-hidden={true}
+                      />
                       <span className="text-xs font-medium text-yellow-400">
-                        ⚠️ Temperature thresholds not configured
+                        Temperature thresholds not configured
                       </span>
                     </div>
                   )}

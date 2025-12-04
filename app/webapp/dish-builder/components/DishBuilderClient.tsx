@@ -148,25 +148,27 @@ export default function DishBuilderClient({
               saving={saving}
             />
 
-            {/* Cost Analysis Section */}
-            <CostAnalysisSection
-              calculations={calculations}
-              editingIngredient={editingIngredient}
-              editQuantity={editQuantity}
-              onEditIngredient={handleEditIngredient}
-              onSaveEdit={handleSaveEdit}
-              onCancelEdit={handleCancelEdit}
-              onRemoveIngredient={handleRemoveIngredient}
-              onEditQuantityChange={setEditQuantity}
-              totalCOGS={totalCOGS}
-              costPerPortion={costPerPortion}
-              targetGrossProfit={targetGrossProfit}
-              pricingStrategy={pricingStrategy}
-              pricingCalculation={pricingCalculation}
-              allStrategyPrices={allStrategyPrices}
-              onTargetGrossProfitChange={setTargetGrossProfit}
-              onPricingStrategyChange={setPricingStrategy}
-            />
+            {/* Cost Analysis Section - Only show when ingredients are added */}
+            {calculations.length > 0 && (
+              <CostAnalysisSection
+                calculations={calculations}
+                editingIngredient={editingIngredient}
+                editQuantity={editQuantity}
+                onEditIngredient={handleEditIngredient}
+                onSaveEdit={handleSaveEdit}
+                onCancelEdit={handleCancelEdit}
+                onRemoveIngredient={handleRemoveIngredient}
+                onEditQuantityChange={setEditQuantity}
+                totalCOGS={totalCOGS}
+                costPerPortion={costPerPortion}
+                targetGrossProfit={targetGrossProfit}
+                pricingStrategy={pricingStrategy}
+                pricingCalculation={pricingCalculation}
+                allStrategyPrices={allStrategyPrices}
+                onTargetGrossProfitChange={setTargetGrossProfit}
+                onPricingStrategyChange={setPricingStrategy}
+              />
+            )}
           </DishDropZone>
         </div>
       </div>

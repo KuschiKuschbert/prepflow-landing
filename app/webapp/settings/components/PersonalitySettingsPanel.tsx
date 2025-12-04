@@ -4,7 +4,10 @@
 
 import { usePersonality } from '@/lib/personality/store';
 import { useNotification } from '@/contexts/NotificationContext';
-import { getUnlockedAchievements, getAchievementProgress } from '@/lib/personality/achievement-tracker';
+import {
+  getUnlockedAchievements,
+  getAchievementProgress,
+} from '@/lib/personality/achievement-tracker';
 import { getAllAchievements } from '@/lib/personality/achievements';
 import { getBehaviorProfile } from '@/lib/personality/behavior-tracker';
 import { useEffect, useState } from 'react';
@@ -57,7 +60,7 @@ export function PersonalitySettingsPanel() {
                 {progress.unlocked} / {progress.total} ({progress.percentage}%)
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-2 desktop:grid-cols-3">
+            <div className="desktop:grid-cols-3 grid grid-cols-2 gap-2">
               {getAllAchievements().map(achievement => {
                 const unlocked = achievements.find(a => a.id === achievement.id);
                 return (
@@ -71,9 +74,7 @@ export function PersonalitySettingsPanel() {
                   >
                     <div className="text-2xl">{achievement.icon}</div>
                     <div className="mt-1 text-xs font-medium text-gray-300">{achievement.name}</div>
-                    {unlocked && (
-                      <div className="mt-1 text-xs text-[#29E7CD]">Unlocked!</div>
-                    )}
+                    {unlocked && <div className="mt-1 text-xs text-[#29E7CD]">Unlocked!</div>}
                   </div>
                 );
               })}
@@ -90,14 +91,17 @@ export function PersonalitySettingsPanel() {
               </div>
               <div>
                 <span className="font-medium text-gray-300">Save Frequency:</span>{' '}
-                {behaviorProfile.saveFrequency.charAt(0).toUpperCase() + behaviorProfile.saveFrequency.slice(1)}
+                {behaviorProfile.saveFrequency.charAt(0).toUpperCase() +
+                  behaviorProfile.saveFrequency.slice(1)}
               </div>
               <div>
                 <span className="font-medium text-gray-300">Session Duration:</span>{' '}
-                {behaviorProfile.sessionDuration.charAt(0).toUpperCase() + behaviorProfile.sessionDuration.slice(1)}
+                {behaviorProfile.sessionDuration.charAt(0).toUpperCase() +
+                  behaviorProfile.sessionDuration.slice(1)}
               </div>
               <div className="mt-2 text-xs text-gray-500">
-                Personality adapts based on your usage patterns. Keep using PrepFlow to unlock more insights!
+                Personality adapts based on your usage patterns. Keep using PrepFlow to unlock more
+                insights!
               </div>
             </div>
           </div>

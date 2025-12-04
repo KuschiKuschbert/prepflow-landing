@@ -731,7 +731,7 @@ LANDING_ANIMATIONS.stagger.large; // 0.15
 ## Additional Resources
 
 - **Style Guide:** `docs/LANDING_PAGE_STYLE_GUIDE.md` - Complete style reference
-- **Design System:** `.cursor/rules/design.mdc` - Material Design 3 guidelines
+- **Design System:** `.cursor/rules/design.mdc` - Cyber Carrot Design System guidelines
 - **Style Utilities:** `lib/landing-styles.ts` - Centralized style constants
 - **Component Examples:** `app/components/landing/` - Reference implementations
 
@@ -757,5 +757,3 @@ When migrating a component to landing page styles, ensure:
 ---
 
 **Remember:** Landing page styles are optimized for conversion and visual impact. Use webapp styles for functional interfaces and data management.
-
-

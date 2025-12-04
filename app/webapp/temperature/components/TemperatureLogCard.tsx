@@ -1,9 +1,19 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
 import OptimizedImage from '@/components/OptimizedImage';
 import { useTranslation } from '@/lib/useTranslation';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { getStatusColor } from './utils';
+import {
+  LucideIcon,
+  MapPin,
+  CheckCircle2,
+  AlertTriangle,
+  User,
+  Camera,
+  Pencil,
+} from 'lucide-react';
 
 interface TemperatureLogCardProps {
   log: TemperatureLog;
@@ -12,7 +22,7 @@ interface TemperatureLogCardProps {
   formatDateString: (dateString: string) => string;
   getTemperatureStatus: (temp: number, location: string) => string;
   getFoodSafetyStatus: (temp: number, logTime: string, logDate: string, type: string) => any;
-  getTypeIcon: (type: string) => string;
+  getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
   onLogClick: (log: TemperatureLog) => void;
 }
@@ -57,7 +67,12 @@ export function TemperatureLogCard({
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="flex min-w-0 flex-1 items-start gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 shadow-lg">
-              <span className="text-2xl">{getTypeIcon(log.temperature_type)}</span>
+              <Icon
+                icon={getTypeIcon(log.temperature_type)}
+                size="lg"
+                className="text-[#29E7CD]"
+                aria-hidden={true}
+              />
             </div>
             <div className="min-w-0 flex-1">
               <h4 className="mb-1 truncate text-lg font-semibold text-white">
@@ -75,9 +90,39 @@ export function TemperatureLogCard({
           <div className="flex shrink-0 flex-col items-end gap-2">
             <span className="text-3xl font-bold text-[#29E7CD]">{log.temperature_celsius}°C</span>
             <span
-              className={`rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(status)}`}
+              className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(status)}`}
             >
-              {status === 'high' ? '⚠️ High' : status === 'low' ? '⚠️ Low' : '✅ Normal'}
+              {status === 'high' ? (
+                <>
+                  <Icon
+                    icon={AlertTriangle}
+                    size="xs"
+                    className="text-red-400"
+                    aria-hidden={true}
+                  />
+                  High
+                </>
+              ) : status === 'low' ? (
+                <>
+                  <Icon
+                    icon={AlertTriangle}
+                    size="xs"
+                    className="text-blue-400"
+                    aria-hidden={true}
+                  />
+                  Low
+                </>
+              ) : (
+                <>
+                  <Icon
+                    icon={CheckCircle2}
+                    size="xs"
+                    className="text-green-400"
+                    aria-hidden={true}
+                  />
+                  Normal
+                </>
+              )}
             </span>
           </div>
         </div>
@@ -87,13 +132,13 @@ export function TemperatureLogCard({
           <div className="mb-4 space-y-2 rounded-2xl bg-[#2a2a2a]/30 p-3">
             {log.location && log.location !== getTypeLabel(log.temperature_type) && (
               <div className="flex items-center gap-2 text-sm text-gray-300">
-                <span>📍</span>
+                <Icon icon={MapPin} size="sm" className="text-gray-300" aria-hidden={true} />
                 <span>{log.location}</span>
               </div>
             )}
             {log.logged_by && (
               <div className="flex items-center gap-2 text-xs text-gray-400">
-                <span>👤</span>
+                <Icon icon={User} size="sm" className="text-gray-400" aria-hidden={true} />
                 <span>
                   {t('temperature.loggedBy', 'Logged by')}: {log.logged_by}
                 </span>
@@ -115,7 +160,12 @@ export function TemperatureLogCard({
             }`}
           >
             <div className="flex items-start gap-3">
-              <span className="text-xl">{foodSafety.icon}</span>
+              <Icon
+                icon={foodSafety.icon}
+                size="lg"
+                className={foodSafety.color}
+                aria-hidden={true}
+              />
               <div className="flex-1">
                 <p className={`mb-1 text-sm font-semibold ${foodSafety.color}`}>
                   Queensland 2-Hour/4-Hour Rule
@@ -144,15 +194,17 @@ export function TemperatureLogCard({
         <div className="flex gap-2">
           <button
             onClick={e => e.stopPropagation()}
-            className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] hover:shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] hover:shadow-lg"
           >
-            📷 {t('temperature.addPhoto', 'Add Photo')}
+            <Icon icon={Camera} size="sm" className="text-white" aria-hidden={true} />
+            {t('temperature.addPhoto', 'Add Photo')}
           </button>
           <button
             onClick={e => e.stopPropagation()}
-            className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] hover:shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] hover:shadow-lg"
           >
-            ✏️ {t('temperature.edit', 'Edit')}
+            <Icon icon={Pencil} size="sm" className="text-white" aria-hidden={true} />
+            {t('temperature.edit', 'Edit')}
           </button>
         </div>
       </div>

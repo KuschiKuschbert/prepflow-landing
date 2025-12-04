@@ -3,9 +3,8 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
-import { Package } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { PageHeader } from '../../components/static/PageHeader';
 import { useIngredientActions } from '../hooks/useIngredientActions';
 import { useIngredientBulkUpdate } from '../hooks/useIngredientBulkUpdate';
 import { useIngredientData } from '../hooks/useIngredientData';
@@ -21,9 +20,9 @@ import IngredientEditDrawer from './IngredientEditDrawer';
 import IngredientPagination from './IngredientPagination';
 import IngredientTableWithFilters from './IngredientTableWithFilters';
 import IngredientWizard from './IngredientWizard';
-import { IngredientsHeader } from './IngredientsClient/components/IngredientsHeader';
-import { IngredientsErrorBanner } from './IngredientsClient/components/IngredientsErrorBanner';
 import { IngredientsBulkActions } from './IngredientsClient/components/IngredientsBulkActions';
+import { IngredientsErrorBanner } from './IngredientsClient/components/IngredientsErrorBanner';
+import { IngredientsHeader } from './IngredientsClient/components/IngredientsHeader';
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -51,6 +50,8 @@ interface IngredientsClientProps {
 }
 export default function IngredientsClient({ hideHeader = false }: IngredientsClientProps = {}) {
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const {
     isSelectionMode,
     startLongPress,
@@ -114,6 +115,18 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   useEffect(() => {
     if (ingredientsData?.items) setIngredients(ingredientsData.items as Ingredient[]);
   }, [ingredientsData]);
+
+  // Check for action=new query parameter and open wizard
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'new' && !showAddForm) {
+      setShowAddForm(true);
+      resetWizard();
+      // Clean up URL by removing query parameter
+      const newUrl = window.location.pathname;
+      router.replace(newUrl);
+    }
+  }, [searchParams, showAddForm, setShowAddForm, resetWizard, router]);
   const {
     handleAddIngredient,
     handleUpdateIngredient,

@@ -57,11 +57,11 @@ export function MenuUnlockChangesDialog({
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
-        aria-hidden="true"
+        aria-hidden={true}
       />
 
       {/* Dialog */}
-      <div className="relative z-50 w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="relative z-50 w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div
           ref={dialogRef}
           className="desktop:p-8 rounded-3xl bg-[#1f1f1f]/95 p-6"
@@ -84,5 +84,3 @@ export function MenuUnlockChangesDialog({
     </div>
   );
 }
-
-

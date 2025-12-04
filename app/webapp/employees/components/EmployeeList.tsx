@@ -26,7 +26,7 @@ export function EmployeeList({
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            aria-hidden="true"
+            aria-hidden={true}
           >
             <path
               strokeLinecap="round"
@@ -43,7 +43,7 @@ export function EmployeeList({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="tablet:grid-cols-2 desktop:grid-cols-2 grid grid-cols-1 gap-4">
       {employees.map(employee => (
         <EmployeeCard
           key={employee.id}

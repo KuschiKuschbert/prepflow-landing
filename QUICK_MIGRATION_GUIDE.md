@@ -114,5 +114,3 @@ bash scripts/setup-supabase.sh
 ## 📚 More Info
 
 See `docs/SUPABASE_SETUP.md` for complete Supabase CLI documentation.
-
-

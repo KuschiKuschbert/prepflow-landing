@@ -234,7 +234,7 @@ export default function TemperatureAnalyticsTab({
 
       {/* Equipment Detail Drawer */}
       <EquipmentDetailDrawer
-        equipment={drawerEquipment}
+        equipment={drawerEquipment!}
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
       />

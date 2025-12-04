@@ -105,4 +105,3 @@ export function useCleaningPageData(startDate: Date, endDate: Date, activeTab: '
     refetchTasks: fetchTasks,
   };
 }
-

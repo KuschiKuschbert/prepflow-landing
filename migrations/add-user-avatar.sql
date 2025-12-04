@@ -9,3 +9,8 @@ CREATE INDEX IF NOT EXISTS idx_users_avatar ON users(avatar);
 -- Add comment
 COMMENT ON COLUMN users.avatar IS 'User avatar ID (e.g., "avatar-01"). NULL means use initials fallback.';
 
+
+
+
+
+

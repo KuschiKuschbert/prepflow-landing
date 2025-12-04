@@ -1,4 +1,29 @@
+import {
+  Snowflake,
+  Flame,
+  ChefHat,
+  Package,
+  Thermometer,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
+  LucideIcon,
+} from 'lucide-react';
+
 export const temperatureTypes = [
+  { value: 'fridge', label: 'Fridge', icon: Snowflake },
+  { value: 'freezer', label: 'Freezer', icon: Snowflake },
+  { value: 'food_cooking', label: 'Food Cooking', icon: Flame },
+  { value: 'food_hot_holding', label: 'Food Hot Holding', icon: Flame },
+  { value: 'food_cold_holding', label: 'Food Cold Holding', icon: Snowflake },
+  { value: 'storage', label: 'Storage', icon: Package },
+];
+
+/**
+ * Temperature types with icon strings for use in select options.
+ * Select options cannot use React components, so this provides emoji strings.
+ */
+export const temperatureTypesForSelect: Array<{ value: string; label: string; icon: string }> = [
   { value: 'fridge', label: 'Fridge', icon: '🧊' },
   { value: 'freezer', label: 'Freezer', icon: '❄️' },
   { value: 'food_cooking', label: 'Food Cooking', icon: '🔥' },
@@ -7,9 +32,20 @@ export const temperatureTypes = [
   { value: 'storage', label: 'Storage', icon: '📦' },
 ];
 
-export function getTypeIcon(type: string): string {
+/**
+ * Get Lucide icon component for equipment type
+ */
+export function getTypeIconComponent(type: string): LucideIcon {
   const typeInfo = temperatureTypes.find(t => t.value === type);
-  return typeInfo?.icon || '🌡️';
+  return typeInfo?.icon || Thermometer;
+}
+
+/**
+ * @deprecated Use getTypeIconComponent instead. Kept for backward compatibility.
+ */
+export function getTypeIcon(type: string): string {
+  // Return empty string - components should use getTypeIconComponent with Icon wrapper
+  return '';
 }
 
 export function getTypeLabel(type: string): string {
@@ -27,7 +63,7 @@ export function getFoodSafetyStatus(temp: number, logTime: string, logDate: stri
       status: 'safe',
       message: 'Outside danger zone',
       color: 'text-green-400',
-      icon: '✅',
+      icon: CheckCircle2,
     };
   }
 
@@ -40,21 +76,21 @@ export function getFoodSafetyStatus(temp: number, logTime: string, logDate: stri
       status: 'safe',
       message: `${(2 - hoursInDangerZone).toFixed(1)}h remaining - can refrigerate`,
       color: 'text-green-400',
-      icon: '✅',
+      icon: CheckCircle2,
     };
   } else if (hoursInDangerZone < 4) {
     return {
       status: 'warning',
       message: `${(4 - hoursInDangerZone).toFixed(1)}h remaining - use immediately`,
       color: 'text-yellow-400',
-      icon: '⚠️',
+      icon: AlertTriangle,
     };
   } else {
     return {
       status: 'danger',
       message: `${hoursInDangerZone.toFixed(1)}h in danger zone - DISCARD`,
       color: 'text-red-400',
-      icon: '🚨',
+      icon: AlertCircle,
     };
   }
 }

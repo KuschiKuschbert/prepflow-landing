@@ -8,9 +8,9 @@ export default async function middleware(req: NextRequest) {
   const isProduction = process.env.NODE_ENV === 'production';
   const authConfigured = Boolean(
     process.env.NEXTAUTH_SECRET &&
-      process.env.AUTH0_ISSUER_BASE_URL &&
-      process.env.AUTH0_CLIENT_ID &&
-      process.env.AUTH0_CLIENT_SECRET,
+    process.env.AUTH0_ISSUER_BASE_URL &&
+    process.env.AUTH0_CLIENT_ID &&
+    process.env.AUTH0_CLIENT_SECRET,
   );
 
   // Always allow auth and selected public APIs

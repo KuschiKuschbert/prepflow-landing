@@ -66,14 +66,19 @@ async function createBucket(bucketName, publicBucket = true, options = {}) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${serviceRoleKey}`,
-        'apikey': serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        apikey: serviceRoleKey,
       },
       body: JSON.stringify({
         name: bucketName,
         public: publicBucket,
         file_size_limit: options.fileSizeLimit || 10485760, // 10MB default
-        allowed_mime_types: options.allowedMimeTypes || ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+        allowed_mime_types: options.allowedMimeTypes || [
+          'image/jpeg',
+          'image/jpg',
+          'image/png',
+          'image/webp',
+        ],
       }),
     });
 
@@ -87,7 +92,9 @@ async function createBucket(bucketName, publicBucket = true, options = {}) {
     console.log(`✅ Successfully created bucket '${bucketName}'`);
     console.log(`   - Public: ${publicBucket}`);
     console.log(`   - File size limit: ${(options.fileSizeLimit || 10485760) / 1024 / 1024}MB`);
-    console.log(`   - Allowed MIME types: ${(options.allowedMimeTypes || ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']).join(', ')}`);
+    console.log(
+      `   - Allowed MIME types: ${(options.allowedMimeTypes || ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']).join(', ')}`,
+    );
 
     return { created: true, exists: false, data };
   } catch (err) {
@@ -120,4 +127,3 @@ async function main() {
 
 // Run the script
 main();
-

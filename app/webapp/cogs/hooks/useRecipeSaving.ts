@@ -85,7 +85,14 @@ export const useRecipeSaving = () => {
         setLoading(false);
       }
     },
-    [validateCalculations, createOrUpdateRecipe, saveRecipeIngredients, showSuccess, showPrompt, onRecipeCreated],
+    [
+      validateCalculations,
+      createOrUpdateRecipe,
+      saveRecipeIngredients,
+      showSuccess,
+      showPrompt,
+      onRecipeCreated,
+    ],
   );
 
   const clearMessages = useCallback(() => {

@@ -79,7 +79,7 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px]">
+      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
         <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">

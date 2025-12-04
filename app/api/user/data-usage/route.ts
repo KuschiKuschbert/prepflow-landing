@@ -112,10 +112,7 @@ export async function GET() {
       },
     };
 
-    const total_size_bytes = Object.values(usage).reduce(
-      (sum, item) => sum + item.size_bytes,
-      0,
-    );
+    const total_size_bytes = Object.values(usage).reduce((sum, item) => sum + item.size_bytes, 0);
 
     return NextResponse.json({
       usage,

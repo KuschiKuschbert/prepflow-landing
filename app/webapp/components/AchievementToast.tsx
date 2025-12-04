@@ -84,19 +84,19 @@ export function AchievementToast() {
 
   return (
     <div
-      className="fixed left-1/2 top-20 z-[90] -translate-x-1/2 transform transition-all duration-300"
+      className="fixed top-20 left-1/2 z-[90] -translate-x-1/2 transform transition-all duration-300"
       style={{
         opacity: isVisible ? 1 : 0,
         transform: `translateX(-50%) translateY(${isVisible ? '0' : '-20px'})`,
       }}
     >
-      <div className="mx-auto max-w-md rounded-3xl border-2 border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-6 shadow-2xl backdrop-blur-md">
+      <div className="mx-auto max-w-md rounded-3xl border-2 border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-6 shadow-2xl backdrop-blur-md">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-4xl">
+          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-4xl">
             {currentAchievement.icon}
           </div>
           <div className="flex-1">
-            <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-[#29E7CD]">
+            <div className="mb-1 text-xs font-semibold tracking-wider text-[#29E7CD] uppercase">
               Achievement Unlocked!
             </div>
             <div className="text-xl font-bold text-white">{currentAchievement.name}</div>
@@ -107,4 +107,3 @@ export function AchievementToast() {
     </div>
   );
 }
-

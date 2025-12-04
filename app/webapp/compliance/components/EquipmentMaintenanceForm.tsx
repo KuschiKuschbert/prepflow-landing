@@ -4,6 +4,7 @@ import React from 'react';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useStaff } from '@/hooks/useStaff';
 
 export interface EquipmentMaintenanceFormData {
   equipment_name: string;
@@ -54,6 +55,7 @@ export function EquipmentMaintenanceForm({
   loading = false,
 }: EquipmentMaintenanceFormProps) {
   const { showError } = useNotification();
+  const { staff, loading: staffLoading } = useStaff();
 
   // Autosave integration
   const entityId = (formData as any).id || 'new';
@@ -61,9 +63,9 @@ export function EquipmentMaintenanceForm({
     entityId !== 'new' ||
     Boolean(
       formData.equipment_name &&
-        formData.maintenance_date &&
-        formData.maintenance_type &&
-        formData.description,
+      formData.maintenance_date &&
+      formData.maintenance_type &&
+      formData.description,
     );
 
   const {
@@ -189,13 +191,26 @@ export function EquipmentMaintenanceForm({
         </div>
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">Performed By</label>
-          <input
-            type="text"
-            value={formData.performed_by}
-            onChange={e => onChange({ ...formData, performed_by: e.target.value })}
+          <select
+            value={formData.performed_by || ''}
+            onChange={e => {
+              const selectedStaff = staff.find(s => s.id === e.target.value);
+              onChange({
+                ...formData,
+                performed_by: selectedStaff ? selectedStaff.full_name : e.target.value,
+              });
+            }}
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            placeholder="e.g., John Doe"
-          />
+            disabled={staffLoading}
+          >
+            <option value="">{staffLoading ? 'Loading staff...' : 'Select staff member'}</option>
+            {staff.map(member => (
+              <option key={member.id} value={member.id}>
+                {member.full_name}
+                {member.role ? ` (${member.role})` : ''}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="desktop:col-span-2 flex items-center space-x-2">
           <input
@@ -251,4 +266,3 @@ export function EquipmentMaintenanceForm({
     </div>
   );
 }
-

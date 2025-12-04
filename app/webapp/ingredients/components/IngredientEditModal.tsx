@@ -155,7 +155,7 @@ export default function IngredientEditModal({
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" />
 
       {/* Modal Card - Responsive */}
-      <div className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl transition-all duration-300">
+      <div className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-all duration-300">
         <div
           ref={modalRef}
           className="max-h-[calc(90vh-10vh)] w-full overflow-hidden rounded-3xl bg-[#1f1f1f]/95"

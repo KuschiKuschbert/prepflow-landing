@@ -21,6 +21,27 @@ export function AvatarSelectionPanel() {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // Memoize card width calculation
+  const cardWidth = useMemo(() => 160 + 16, []); // card width + gap
+
+  // Scroll to specific avatar (memoized)
+  const scrollToAvatar = useMemo(
+    () => (index: number) => {
+      if (!scrollContainerRef.current) return;
+
+      const container = scrollContainerRef.current;
+      const containerCenter = container.clientWidth / 2;
+      const cardCenter = cardWidth / 2;
+      const scrollPosition = index * cardWidth + cardCenter - containerCenter;
+
+      container.scrollTo({
+        left: Math.max(0, Math.min(scrollPosition, container.scrollWidth - container.clientWidth)),
+        behavior: 'smooth',
+      });
+    },
+    [cardWidth],
+  );
+
   // Find selected avatar index and scroll to it
   useEffect(() => {
     if (avatar) {
@@ -33,10 +54,7 @@ export function AvatarSelectionPanel() {
     } else {
       setSelectedIndex(0);
     }
-  }, [avatar]);
-
-  // Memoize card width calculation
-  const cardWidth = useMemo(() => 160 + 16, []); // card width + gap
+  }, [avatar, scrollToAvatar]);
 
   // Check scroll position for fade indicators and update selected index
   const checkScrollPosition = useMemo(
@@ -54,24 +72,6 @@ export function AvatarSelectionPanel() {
       const centeredIndex = Math.round(centerPosition / cardWidth);
       const clampedIndex = Math.max(0, Math.min(centeredIndex, AVAILABLE_AVATARS.length - 1));
       setSelectedIndex(clampedIndex);
-    },
-    [cardWidth],
-  );
-
-  // Scroll to specific avatar (memoized)
-  const scrollToAvatar = useMemo(
-    () => (index: number) => {
-      if (!scrollContainerRef.current) return;
-
-      const container = scrollContainerRef.current;
-      const containerCenter = container.clientWidth / 2;
-      const cardCenter = cardWidth / 2;
-      const scrollPosition = index * cardWidth + cardCenter - containerCenter;
-
-      container.scrollTo({
-        left: Math.max(0, Math.min(scrollPosition, container.scrollWidth - container.clientWidth)),
-        behavior: 'smooth',
-      });
     },
     [cardWidth],
   );
@@ -130,18 +130,18 @@ export function AvatarSelectionPanel() {
       <div className="relative">
         {/* Left Fade Gradient */}
         {canScrollLeft && (
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-[#1f1f1f]/50 to-transparent" />
+          <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-16 bg-gradient-to-r from-[#1f1f1f]/50 to-transparent" />
         )}
 
         {/* Right Fade Gradient */}
         {canScrollRight && (
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-[#1f1f1f]/50 to-transparent" />
+          <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-16 bg-gradient-to-l from-[#1f1f1f]/50 to-transparent" />
         )}
 
         {/* Scroll Container */}
         <div
           ref={scrollContainerRef}
-          className="scrollbar-hide flex gap-4 overflow-x-auto pb-4 pt-2 px-4"
+          className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pt-2 pb-4"
           style={{
             scrollSnapType: 'x mandatory',
             WebkitOverflowScrolling: 'touch',
@@ -165,10 +165,10 @@ export function AvatarSelectionPanel() {
                 disabled={loading}
                 className={`group relative flex-shrink-0 snap-center transition-all duration-300 ${
                   isSelected
-                    ? 'scale-110 z-20'
+                    ? 'z-20 scale-110'
                     : isCenter
-                      ? 'scale-100 z-10'
-                      : 'scale-90 z-0 opacity-60'
+                      ? 'z-10 scale-100'
+                      : 'z-0 scale-90 opacity-60'
                 } ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                 style={{
                   scrollSnapAlign: 'center',
@@ -201,9 +201,9 @@ export function AvatarSelectionPanel() {
 
                   {/* Selection Indicator */}
                   {isSelected && (
-                  <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#29E7CD] shadow-lg">
-                    <Icon icon={Check} size="xs" className="text-black" aria-hidden={true} />
-                  </div>
+                    <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#29E7CD] shadow-lg">
+                      <Icon icon={Check} size="xs" className="text-black" aria-hidden={true} />
+                    </div>
                   )}
 
                   {/* Avatar Name */}
@@ -232,7 +232,7 @@ export function AvatarSelectionPanel() {
           <button
             onClick={scrollLeft}
             disabled={!canScrollLeft}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-400 transition-all hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-400 transition-all hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-30"
             aria-label="Scroll left"
           >
             <Icon icon={ChevronLeft} size="sm" aria-hidden={true} />
@@ -245,9 +245,7 @@ export function AvatarSelectionPanel() {
                 <div
                   key={index}
                   className={`h-1.5 rounded-full transition-all ${
-                    isSelected
-                      ? 'w-6 bg-[#29E7CD]'
-                      : 'w-1.5 bg-[#2a2a2a]'
+                    isSelected ? 'w-6 bg-[#29E7CD]' : 'w-1.5 bg-[#2a2a2a]'
                   }`}
                   aria-hidden={true}
                 />
@@ -258,7 +256,7 @@ export function AvatarSelectionPanel() {
           <button
             onClick={scrollRight}
             disabled={!canScrollRight}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-400 transition-all hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-400 transition-all hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-30"
             aria-label="Scroll right"
           >
             <Icon icon={ChevronRight} size="sm" aria-hidden={true} />

@@ -13,3 +13,8 @@ ON menu_recipe_cards(data_hash);
 COMMENT ON COLUMN menu_recipe_cards.data_hash IS 'SHA256 hash of normalized ingredients, instructions, description, and yield. Used to detect changes and reuse existing cards.';
 
 
+
+
+
+
+

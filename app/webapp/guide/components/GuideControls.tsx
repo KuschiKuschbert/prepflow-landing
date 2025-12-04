@@ -43,7 +43,7 @@ export function GuideControls({
       <div className="flex-1">
         <div className="h-2 w-full overflow-hidden rounded-full bg-[#2a2a2a]">
           <div
-            className="h-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] transition-all duration-300"
+            className="h-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] transition-all duration-300"
             style={{ width: `${progress}%` }}
             role="progressbar"
             aria-valuenow={progress}
@@ -57,7 +57,7 @@ export function GuideControls({
       {isLastStep ? (
         <button
           onClick={onComplete || onNext}
-          className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-2 text-sm font-medium text-black transition-all hover:shadow-lg"
+          className="rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-6 py-2 text-sm font-medium text-black transition-all hover:shadow-lg hover:shadow-[#FF6B00]/25"
           aria-label="Complete guide"
         >
           Complete
@@ -65,7 +65,7 @@ export function GuideControls({
       ) : (
         <button
           onClick={onNext}
-          className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-medium text-black transition-all hover:shadow-lg"
+          className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-4 py-2 text-sm font-medium text-black transition-all hover:shadow-lg hover:shadow-[#FF6B00]/25"
           aria-label="Next step"
         >
           Next

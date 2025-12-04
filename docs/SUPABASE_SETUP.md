@@ -169,5 +169,3 @@ After setting up Supabase CLI:
 2. ✅ Link project: `npm run supabase:link`
 3. ✅ Run cleaning migration: `npm run supabase:migrate:cleaning`
 4. ✅ Verify: Check Supabase dashboard that tables/columns exist
-
-

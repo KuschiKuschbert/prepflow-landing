@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
 
 /**
- * Input dialog component with Material Design 3 styling.
+ * Input dialog component with Cyber Carrot Design System styling.
  *
  * @component
  * @param {Object} props - Component props
@@ -208,7 +208,7 @@ export function InputDialog({
     info: {
       icon: 'text-[#29E7CD]',
       confirm:
-        'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80',
+        'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] hover:from-[#29E7CD]/80 hover:via-[#FF6B00]/80 hover:to-[#D925C7]/80 hover:shadow-[#FF6B00]/25',
     },
     warning: {
       icon: 'text-yellow-400',
@@ -229,7 +229,7 @@ export function InputDialog({
       />
 
       {/* Dialog with gradient border */}
-      <div className="relative z-50 w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="relative z-50 w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div
           ref={dialogRef}
           className="desktop:p-6 rounded-3xl bg-[#1f1f1f]/95 p-4"

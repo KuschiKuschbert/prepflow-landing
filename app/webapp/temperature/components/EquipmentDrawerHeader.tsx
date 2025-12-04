@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { X } from 'lucide-react';
+import { X, LucideIcon } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 
 interface EquipmentDrawerHeaderProps {
@@ -11,7 +11,7 @@ interface EquipmentDrawerHeaderProps {
   onTouchStart: (e: React.TouchEvent) => void;
   onTouchMove: (e: React.TouchEvent) => void;
   onTouchEnd: (e: React.TouchEvent) => void;
-  getTypeIcon: (type: string) => string;
+  getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
 }
 
@@ -36,13 +36,18 @@ export function EquipmentDrawerHeader({
     >
       {/* Swipe indicator for mobile */}
       {isMobile && (
-        <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-[#2a2a2a]" aria-hidden="true" />
+        <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-[#2a2a2a]" aria-hidden={true} />
       )}
 
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-            <span className="text-2xl">{getTypeIcon(equipment.equipment_type)}</span>
+            <Icon
+              icon={getTypeIcon(equipment.equipment_type)}
+              size="lg"
+              className="text-[#29E7CD]"
+              aria-hidden={true}
+            />
           </div>
           <div>
             <h2 id="equipment-detail-title" className="text-xl font-bold text-white">

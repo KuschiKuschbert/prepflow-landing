@@ -179,4 +179,3 @@ The `QA_AUDIT_REPORT.md` includes:
 - Browser is visible (headed mode) for debugging
 - All form inputs are fuzzed but NOT submitted (to avoid junk data)
 - Test data is automatically cleaned up after tests complete
-

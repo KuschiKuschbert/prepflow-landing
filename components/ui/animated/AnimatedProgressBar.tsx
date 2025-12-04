@@ -21,7 +21,7 @@ export function AnimatedProgressBar({ progress, label, className = '' }: Animate
       )}
       <div className="h-2 w-full overflow-hidden rounded-full bg-[#2a2a2a]">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] transition-all duration-1000 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] transition-all duration-1000 ease-out"
           style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
         />
       </div>

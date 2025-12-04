@@ -122,6 +122,7 @@ export default function Page() {
             '--primary-color': '#29E7CD',
             '--secondary-color': '#3B82F6',
             '--accent-color': '#D925C7',
+            '--tertiary-color': '#FF6B00',
             '--bg-color': '#0a0a0a',
             '--text-color': '#ffffff',
             '--gray-300': '#d1d5db',

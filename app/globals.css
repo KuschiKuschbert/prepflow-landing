@@ -6,6 +6,7 @@
   --primary: #29e7cd;
   --secondary: #3b82f6;
   --accent: #d925c7;
+  --tertiary: #ff6b00;
   --muted: #1f1f1f;
   --border: #2a2a2a;
 
@@ -16,6 +17,7 @@
   /* Navigation dimensions */
   --bottom-navbar-height: 56px;
   --sidebar-width: 256px; /* 64 * 4px = 256px for base screens (w-64) */
+  --sidebar-actual-width: 20rem; /* Dynamic sidebar width - updated by PersistentSidebar component */
 
   /* Safe area insets for iOS devices with notches */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
@@ -25,6 +27,17 @@
 
   /* Warning bar height (default 0 when no warnings, ~60-70px when visible) */
   --warning-height: 0px;
+
+  /* Animation timing variables */
+  --animation-fast: 150ms;
+  --animation-normal: 250ms;
+  --animation-slow: 350ms;
+
+  /* Modern easing functions */
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --easing-decelerated: cubic-bezier(0, 0, 0.2, 1);
+  --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Landscape optimizations for mobile devices */
@@ -84,7 +97,10 @@
       var(--header-height-desktop) + var(--safe-area-inset-top) + var(--warning-height) + 1.5rem
     );
     padding-bottom: 0;
-    margin-left: 20rem; /* 320px sidebar = 20rem (w-80) for desktop screens */
+    margin-left: var(
+      --sidebar-actual-width
+    ); /* Dynamic sidebar width - adjusts when sidebar expands/collapses */
+    transition: margin-left 0.3s var(--easing-standard);
   }
 }
 
@@ -268,7 +284,7 @@ nav[aria-label='Bottom navigation'] {
 @keyframes scale-in-bubble {
   from {
     opacity: 0;
-    transform: scale(0.1);
+    transform: scale(0.8);
   }
   to {
     opacity: 1;
@@ -458,6 +474,15 @@ nav[aria-label='Bottom navigation'] {
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   .animate-fade-in,
   .animate-fade-in-up,
   .animate-fade-in-down,
@@ -859,7 +884,9 @@ body {
     box-shadow: 0 0 20px rgba(41, 231, 205, 0.5);
   }
   50% {
-    box-shadow: 0 0 40px rgba(217, 37, 199, 0.8), 0 0 60px rgba(41, 231, 205, 0.6);
+    box-shadow:
+      0 0 40px rgba(217, 37, 199, 0.8),
+      0 0 60px rgba(41, 231, 205, 0.6);
   }
 }
 
@@ -904,14 +931,13 @@ body {
   left: 4px;
   right: 4px;
   bottom: 4px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(220, 38, 38, 0.4) 0%,
-      rgba(34, 197, 94, 0.3) 30%,
-      rgba(220, 38, 38, 0.2) 50%,
-      transparent 100%
-    );
+  background: radial-gradient(
+    ellipse at center,
+    rgba(220, 38, 38, 0.4) 0%,
+    rgba(34, 197, 94, 0.3) 30%,
+    rgba(220, 38, 38, 0.2) 50%,
+    transparent 100%
+  );
   border-radius: 50%;
   animation: santaGlow 2s ease-in-out infinite;
   box-shadow:
@@ -932,7 +958,8 @@ body {
 }
 
 @keyframes santaGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -943,7 +970,8 @@ body {
 }
 
 @keyframes santaBounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) translateY(0);
   }
   50% {
@@ -959,15 +987,14 @@ body {
   left: 4px;
   right: 4px;
   bottom: 4px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255, 255, 0, 0.6) 0%,
-      rgba(41, 231, 205, 0.5) 20%,
-      rgba(41, 231, 205, 0.3) 40%,
-      rgba(41, 231, 205, 0.1) 60%,
-      transparent 100%
-    );
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 0, 0.6) 0%,
+    rgba(41, 231, 205, 0.5) 20%,
+    rgba(41, 231, 205, 0.3) 40%,
+    rgba(41, 231, 205, 0.1) 60%,
+    transparent 100%
+  );
   border-radius: 50%;
   animation: lightsaberGlow 1.5s ease-in-out infinite;
   box-shadow:
@@ -990,7 +1017,8 @@ body {
 
 /* Lightsaber glow animation - more dramatic pulsing */
 @keyframes lightsaberGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
     box-shadow:
@@ -1012,9 +1040,11 @@ body {
 
 /* Lightsaber hum animation - subtle vibration */
 @keyframes lightsaberHum {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
-    filter: drop-shadow(0 0 4px rgba(41, 231, 205, 0.8)) drop-shadow(0 0 8px rgba(41, 231, 205, 0.6));
+    filter: drop-shadow(0 0 4px rgba(41, 231, 205, 0.8))
+      drop-shadow(0 0 8px rgba(41, 231, 205, 0.6));
   }
   25% {
     transform: scale(1.05) rotate(-2deg);
@@ -1062,7 +1092,8 @@ body {
 }
 
 @keyframes toqueGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1073,7 +1104,8 @@ body {
 }
 
 @keyframes toqueFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) translateY(0) rotate(0deg);
   }
   25% {
@@ -1128,7 +1160,8 @@ body {
 }
 
 @keyframes sparkleFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: translateY(0) scale(0.8);
   }
@@ -1206,7 +1239,8 @@ body {
 }
 
 @keyframes chefSparkleFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
     transform: translateY(0) scale(0.8);
   }
@@ -1239,7 +1273,8 @@ body {
 }
 
 @keyframes seasonalGlow {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow:
       0 0 10px currentColor,
       0 0 20px currentColor,
@@ -1291,7 +1326,8 @@ body {
 }
 
 @keyframes newYearGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1302,7 +1338,8 @@ body {
 }
 
 @keyframes newYearBounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
@@ -1318,14 +1355,13 @@ body {
   left: 4px;
   right: 4px;
   bottom: 4px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(0, 102, 51, 0.4) 0%,
-      rgba(255, 204, 0, 0.3) 30%,
-      rgba(0, 102, 51, 0.2) 50%,
-      transparent 100%
-    );
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 102, 51, 0.4) 0%,
+    rgba(255, 204, 0, 0.3) 30%,
+    rgba(0, 102, 51, 0.2) 50%,
+    transparent 100%
+  );
   border-radius: 50%;
   animation: australiaDayGlow 2s ease-in-out infinite;
   box-shadow:
@@ -1344,7 +1380,8 @@ body {
 }
 
 @keyframes australiaDayGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: scale(1);
   }
@@ -1355,7 +1392,8 @@ body {
 }
 
 @keyframes australiaDayFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -1396,7 +1434,8 @@ body {
 }
 
 @keyframes valentinesGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1407,7 +1446,8 @@ body {
 }
 
 @keyframes valentinesPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -1444,7 +1484,8 @@ body {
 }
 
 @keyframes anzacGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
   }
   50% {
@@ -1453,7 +1494,8 @@ body {
 }
 
 @keyframes anzacRespect {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
   }
   50% {
@@ -1494,7 +1536,8 @@ body {
 }
 
 @keyframes easterGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1505,7 +1548,8 @@ body {
 }
 
 @keyframes easterHop {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -1521,14 +1565,13 @@ body {
   left: 4px;
   right: 4px;
   bottom: 4px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(220, 38, 38, 0.4) 0%,
-      rgba(255, 255, 255, 0.3) 20%,
-      rgba(0, 48, 143, 0.3) 40%,
-      transparent 100%
-    );
+  background: radial-gradient(
+    ellipse at center,
+    rgba(220, 38, 38, 0.4) 0%,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(0, 48, 143, 0.3) 40%,
+    transparent 100%
+  );
   border-radius: 50%;
   animation: independenceGlow 1.5s ease-in-out infinite;
   box-shadow:
@@ -1547,7 +1590,8 @@ body {
 }
 
 @keyframes independenceGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1558,7 +1602,8 @@ body {
 }
 
 @keyframes independenceWave {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
@@ -1574,14 +1619,13 @@ body {
   left: 4px;
   right: 4px;
   bottom: 4px;
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255, 140, 0, 0.5) 0%,
-      rgba(138, 43, 226, 0.4) 30%,
-      rgba(255, 140, 0, 0.2) 60%,
-      transparent 100%
-    );
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 140, 0, 0.5) 0%,
+    rgba(138, 43, 226, 0.4) 30%,
+    rgba(255, 140, 0, 0.2) 60%,
+    transparent 100%
+  );
   border-radius: 50%;
   animation: halloweenGlow 1.8s ease-in-out infinite;
   box-shadow:
@@ -1600,7 +1644,8 @@ body {
 }
 
 @keyframes halloweenGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: scale(1);
   }
@@ -1611,7 +1656,8 @@ body {
 }
 
 @keyframes halloweenFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   25% {
@@ -1655,7 +1701,8 @@ body {
 }
 
 @keyframes boxingDayGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1666,7 +1713,8 @@ body {
 }
 
 @keyframes boxingDayBounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
@@ -1707,7 +1755,8 @@ body {
 }
 
 @keyframes newYearsEveGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1718,7 +1767,8 @@ body {
 }
 
 @keyframes newYearsEveCelebrate {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
   25% {
@@ -1762,7 +1812,8 @@ body {
 }
 
 @keyframes mothersDayGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1773,7 +1824,8 @@ body {
 }
 
 @keyframes mothersDayFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -1814,7 +1866,8 @@ body {
 }
 
 @keyframes fathersDayGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1825,7 +1878,8 @@ body {
 }
 
 @keyframes fathersDayPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -1866,7 +1920,8 @@ body {
 }
 
 @keyframes labourDayGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1877,7 +1932,8 @@ body {
 }
 
 @keyframes labourDayWork {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg);
   }
   25% {
@@ -1921,7 +1977,8 @@ body {
 }
 
 @keyframes royalBirthdayGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
     transform: scale(1);
   }
@@ -1932,7 +1989,8 @@ body {
 }
 
 @keyframes royalBirthdayShine {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
     filter: drop-shadow(0 0 6px rgba(138, 43, 226, 0.9));
   }
@@ -2008,7 +2066,8 @@ body {
 }
 
 @keyframes heartFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
     transform: translateY(0) scale(0.9);
   }
@@ -2046,7 +2105,8 @@ body {
 }
 
 @keyframes easterFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: translateY(0) rotate(0deg);
   }
@@ -2084,7 +2144,8 @@ body {
 }
 
 @keyframes halloweenFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: translateY(0) rotate(0deg);
   }

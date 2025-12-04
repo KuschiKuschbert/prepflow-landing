@@ -107,7 +107,10 @@ export function ConnectedAccountsPanel() {
 
   if (loading) {
     return (
-      <div ref={ref} className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div
+        ref={ref}
+        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      >
         <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
         <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
       </div>
@@ -115,7 +118,10 @@ export function ConnectedAccountsPanel() {
   }
 
   return (
-    <div ref={ref} className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div
+      ref={ref}
+      className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+    >
       <div>
         <h2 className="text-xl font-semibold">Connected Accounts</h2>
         <p className="mt-1 text-sm text-gray-300">

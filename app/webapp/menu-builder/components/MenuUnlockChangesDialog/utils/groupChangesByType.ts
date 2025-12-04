@@ -18,4 +18,3 @@ export function groupChangesByType(changes: MenuChangeTracking[]) {
 
   return grouped;
 }
-

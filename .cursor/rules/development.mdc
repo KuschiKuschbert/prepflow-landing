@@ -292,7 +292,7 @@ export function useMyHook(param: string) {
 - ❌ `prompt()` - Use `usePrompt` hook instead
 - ❌ `alert()` - Use `useAlert` hook instead
 
-**Why:** Native dialogs are inaccessible, unstyled, and break user experience. Our custom dialogs follow Material Design 3, are fully accessible, and use PrepFlow's voice.
+**Why:** Native dialogs are inaccessible, unstyled, and break user experience. Our custom dialogs follow Cyber Carrot Design System, are fully accessible, and use PrepFlow's voice.
 
 ### **Dialog Hook Usage**
 
@@ -335,6 +335,10 @@ export function useMyHook(param: string) {
 - ✅ "Disconnect Google Drive? You'll need to reconnect if you want to upload backups later."
 - ❌ "Are you sure you want to delete this item?" (too generic)
 - ❌ "⚠️ DELETE??? 😱" (too casual/unprofessional)
+
+**See Also:**
+- `docs/VOICE_ENHANCEMENT_GUIDE.md` - Comprehensive voice enhancement guide with examples for dialogs, dropdowns, and input fields (MANDATORY for all new code)
+- `.cursor/rules/dialogs.mdc` - Dialog usage standards and PrepFlow voice guidelines
 
 ### **Accessibility Requirements**
 
@@ -570,20 +574,26 @@ Optimizes images in `public/images/` and `public/icons/` directories:
 
 For complete documentation of all scripts, see `docs/SCRIPTS.md`.
 
-## 🎨 **Material Design 3 Design System**
+## 🎨 **Cyber Carrot Design System**
 
 ### **Color Palette**
 
 ```css
 --primary: #29e7cd /* Electric Cyan - Primary Actions */ --secondary: #3b82f6
   /* Blue - Secondary Actions */ --accent: #d925c7 /* Vibrant Magenta - Accent Elements */
+  --tertiary: #ff6b00 /* Cyber Orange - Warm Accents & Carrot Theme */
   --background: #0a0a0a /* Dark background */ --foreground: #ffffff /* White text */
   --muted: #1f1f1f /* Dark gray - Cards & Containers */ --border: #2a2a2a
   /* Border gray - Subtle borders */ --surface: #2a2a2a /* Surface color - Elevated elements */
   --surface-variant: #2a2a2a/30 /* Surface variant - Subtle backgrounds */;
 ```
 
-### **Material Design 3 Typography**
+**Cyber Carrot Gradient Pattern:**
+- **Gradient Borders:** `bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-[1px]`
+- **Creates:** Glowing gradient border effect (Cyan → Orange → Magenta → Cyan)
+- **Used In:** Popups, modals, dropdowns, elevated components
+
+### **Cyber Carrot Typography**
 
 - **Primary Font:** Geist Sans (Google Fonts)
 - **Monospace:** Geist Mono (for technical content)
@@ -595,7 +605,7 @@ For complete documentation of all scripts, see `docs/SCRIPTS.md`.
   - Label Large: sm (Labels & metadata)
   - Label Small: xs (Captions & fine print)
 
-### **Material Design 3 Component Guidelines**
+### **Cyber Carrot Component Guidelines**
 
 #### **Containers & Cards**
 
@@ -657,7 +667,7 @@ For complete documentation of all scripts, see `docs/SCRIPTS.md`.
 
 - **Input Fields:** `border border-[#2a2a2a]` with `focus:ring-2 focus:ring-[#29E7CD]`
 - **Focus States:** Cyan ring with smooth transitions
-- **Validation:** Color-coded feedback with Material 3 styling
+- **Validation:** Color-coded feedback with Cyber Carrot styling
 
 #### **Selection Controls & Checkboxes**
 
@@ -795,12 +805,12 @@ import { Zap, Store, MapPin } from 'lucide-react';
 
 - **Large Icons:** `w-20 h-20` with gradient backgrounds
 - **Contextual Messaging:** Different messages for different states
-- **Call-to-Actions:** Prominent buttons with Material 3 styling
+- **Call-to-Actions:** Prominent buttons with Cyber Carrot styling
 
 ### **Material Design 3 UX Guidelines**
 
-- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Material Design 3 principles
-- **Mobile Navigation:** Material 3 navigation rail with proper spacing
+- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Cyber Carrot design principles
+- **Mobile Navigation:** Cyber Carrot navigation rail with proper spacing
 - **Accessibility:** Focus rings, ARIA labels, keyboard navigation
 - **Smooth Transitions:** 200-300ms transitions for all interactions
 - **Touch Targets:** Minimum 44px for mobile, proper spacing
@@ -813,7 +823,7 @@ import { Zap, Store, MapPin } from 'lucide-react';
 - **Page-Level:** `PageSkeleton` for full-page loading states
 - **Landing Page:** `HeroSkeleton`, `PricingSkeleton` for marketing page
 - **Dynamic Imports:** Proper skeleton components replace inline animate-pulse divs
-- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Material Design 3 spacing
+- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Cyber Carrot spacing
 - **Styling:** Consistent colors (`bg-[#2a2a2a]`), border radius (`rounded-xl`, `rounded-2xl`, `rounded-3xl`), and animations (`animate-pulse`)
 
 ## 📊 **Analytics & Tracking**

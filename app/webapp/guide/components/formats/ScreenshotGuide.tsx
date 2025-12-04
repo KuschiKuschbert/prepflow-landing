@@ -28,7 +28,7 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
         {/* Image */}
         <div className="relative aspect-video w-full">
           {!imageLoaded && !imageError && (
-            <div className="absolute inset-0 animate-pulse bg-[#2a2a2a]" aria-hidden="true" />
+            <div className="absolute inset-0 animate-pulse bg-[#2a2a2a]" aria-hidden={true} />
           )}
           {imageError ? (
             // Placeholder when image fails to load

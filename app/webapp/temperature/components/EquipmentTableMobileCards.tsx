@@ -1,5 +1,7 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { LucideIcon } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 
 interface EquipmentTableMobileCardsProps {
@@ -10,7 +12,7 @@ interface EquipmentTableMobileCardsProps {
   onSelect: (equipment: TemperatureEquipment) => void;
   startIndex: number;
   endIndex: number;
-  getTypeIcon: (type: string) => string;
+  getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
 }
 
@@ -54,7 +56,12 @@ export function EquipmentTableMobileCards({
           >
             <div className="flex items-start gap-3">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                <span className="text-2xl">{getTypeIcon(item.equipment_type)}</span>
+                <Icon
+                  icon={getTypeIcon(item.equipment_type)}
+                  size="lg"
+                  className="text-[#29E7CD]"
+                  aria-hidden={true}
+                />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="mb-1 text-base font-semibold text-white">{item.name}</div>

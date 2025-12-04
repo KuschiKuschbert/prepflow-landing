@@ -17,7 +17,7 @@ export function InteractiveToast({ message, tip, learnMoreUrl, onClose }: Intera
   const [showTip, setShowTip] = useState(false);
 
   return (
-    <div className="group relative max-w-md rounded-2xl border border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-4 shadow-xl backdrop-blur-md">
+    <div className="group relative max-w-md rounded-2xl border border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-4 shadow-xl backdrop-blur-md">
       <div className="flex items-start gap-3">
         <div className="flex-1">
           <p className="text-sm font-medium text-white">{message}</p>

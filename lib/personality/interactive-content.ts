@@ -9,7 +9,7 @@ export interface InteractiveMessage {
 export const interactiveMessages: Record<string, InteractiveMessage[]> = {
   ingredients: [
     {
-      message: 'That\'s a lot of onions. Someone\'s making French onion soup?',
+      message: "That's a lot of onions. Someone's making French onion soup?",
       tip: 'Tip: Organize ingredients by storage location to speed up prep.',
       learnMoreUrl: '/webapp/ingredients',
     },
@@ -60,4 +60,3 @@ export function getInteractiveMessage(context: string): InteractiveMessage | nul
   const randomIndex = Math.floor(Math.random() * messages.length);
   return messages[randomIndex];
 }
-

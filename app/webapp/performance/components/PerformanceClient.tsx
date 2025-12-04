@@ -1,14 +1,11 @@
 'use client';
 
-import PerformanceActions from '../components/PerformanceActions';
-import PerformanceCharts from '../components/PerformanceCharts';
 import PerformanceDateRange from '../components/PerformanceDateRange';
 import PerformanceEmptyState from '../components/PerformanceEmptyState';
 import PerformanceFilters from '../components/PerformanceFilters';
 import PerformanceHeader from '../components/PerformanceHeader';
 import PerformanceImportModal from '../components/PerformanceImportModal';
 import PerformanceInsights from '../components/PerformanceInsights';
-import PerformanceMetadata from '../components/PerformanceMetadata';
 import PerformanceSummaryCards from '../components/PerformanceSummaryCards';
 import PerformanceTrends from '../components/PerformanceTrends';
 import { TablePagination } from '@/components/ui/TablePagination';
@@ -66,17 +63,13 @@ export default function PerformanceClient() {
     updateState({ showImportModal: false, csvData: '' });
   };
 
-  // Handle charts toggle
-  const handleToggleCharts = () => {
-    updateState({ showCharts: !state.showCharts });
-  };
-
   return (
     <>
       <PerformanceHeader
         performanceScore={state.performanceScore}
         performanceAlerts={state.performanceAlerts}
         performanceItems={state.performanceItems}
+        metadata={state.metadata}
       />
 
       {hasData ? (
@@ -102,28 +95,6 @@ export default function PerformanceClient() {
             performanceScore={state.performanceScore}
           />
 
-          {/* Methodology Metadata - Collapsible */}
-          <PerformanceMetadata metadata={state.metadata} />
-
-          {/* Filters - Sticky on scroll */}
-          <PerformanceFilters
-            filters={filters}
-            performanceItems={state.performanceItems}
-            filteredAndSortedItems={filteredAndSortedItems}
-            onFiltersChange={updateFilters}
-          />
-
-          {/* Actions */}
-          <PerformanceActions
-            showImportModal={state.showImportModal}
-            showCharts={state.showCharts}
-            onImportClick={handleImportClick}
-            onExportCSV={handleExportCSV}
-            onToggleCharts={handleToggleCharts}
-          />
-
-          {/* Charts - Removed for better screen space optimization */}
-
           {/* Table Pagination - Top */}
           <TablePagination
             page={filters.currentPage}
@@ -132,16 +103,30 @@ export default function PerformanceClient() {
             itemsPerPage={filters.itemsPerPage}
             onPageChange={handlePageChange}
             onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
-            className="mb-4"
+            className="mb-3"
           />
 
-          {/* Performance Table */}
-          <PerformanceTable
-            performanceItems={paginatedItems}
-            sortBy={filters.sortBy}
-            sortOrder={filters.sortOrder}
-            onSortChange={(field, order) => updateFilters({ sortBy: field, sortOrder: order })}
-          />
+          {/* Table Container with Filters */}
+          <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+            {/* Filters - Attached to table */}
+            <PerformanceFilters
+              filters={filters}
+              performanceItems={state.performanceItems}
+              filteredAndSortedItems={filteredAndSortedItems}
+              onFiltersChange={updateFilters}
+              showImportModal={state.showImportModal}
+              onImportClick={handleImportClick}
+              onExportCSV={handleExportCSV}
+            />
+
+            {/* Performance Table */}
+            <PerformanceTable
+              performanceItems={paginatedItems}
+              sortBy={filters.sortBy}
+              sortOrder={filters.sortOrder}
+              onSortChange={(field, order) => updateFilters({ sortBy: field, sortOrder: order })}
+            />
+          </div>
 
           {/* Table Pagination - Bottom */}
           <TablePagination
@@ -151,7 +136,7 @@ export default function PerformanceClient() {
             itemsPerPage={filters.itemsPerPage}
             onPageChange={handlePageChange}
             onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
-            className="mt-4"
+            className="mt-3"
           />
         </>
       ) : (

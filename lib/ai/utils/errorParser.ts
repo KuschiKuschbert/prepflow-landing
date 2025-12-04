@@ -31,7 +31,8 @@ export function parseAIError(error: Error): AIError {
   ) {
     return {
       type: 'RATE_LIMITED',
-      message: 'AI service rate limit exceeded. Please try again later.',
+      message:
+        "The AI's had a bit too much on its plate. Give it a moment to catch its breath and try again.",
       details: error,
       retryable: true,
     };
@@ -56,7 +57,8 @@ export function parseAIError(error: Error): AIError {
   if (errorString.includes('timeout') || errorString.includes('timed out')) {
     return {
       type: 'TIMEOUT',
-      message: 'AI request timed out. Please try again.',
+      message:
+        "The AI's taking longer than expected. Give it another shot - sometimes good things take time.",
       details: error,
       retryable: true,
     };
@@ -109,7 +111,7 @@ export function parseAIError(error: Error): AIError {
 
   return {
     type: 'UNKNOWN',
-    message: 'An unexpected error occurred with the AI service.',
+    message: "Something went sideways with the AI. We're looking into it - try again in a moment.",
     details: error,
     retryable: true,
   };

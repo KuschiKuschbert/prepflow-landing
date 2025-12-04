@@ -30,5 +30,3 @@ export function LandingSectionSkeleton() {
     </div>
   );
 }
-
-

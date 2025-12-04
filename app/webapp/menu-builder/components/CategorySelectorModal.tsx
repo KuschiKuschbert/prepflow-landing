@@ -78,10 +78,10 @@ export default function CategorySelectorModal({
   const popoverContent = (
     <>
       {/* Backdrop - lighter, clickable to close */}
-      <div className="fixed inset-0 z-[75] bg-black/20" onClick={onClose} aria-hidden="true" />
+      <div className="fixed inset-0 z-[75] bg-black/20" onClick={onClose} aria-hidden={true} />
       {/* Popover positioned near the item */}
       <div
-        className="fixed z-[80] w-[280px] rounded-xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl"
+        className="fixed z-[80] w-[280px] rounded-xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl"
         style={{
           left: `${popoverPosition.left}px`,
           top: `${popoverPosition.top}px`,

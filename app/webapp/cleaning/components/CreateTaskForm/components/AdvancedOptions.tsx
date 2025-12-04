@@ -17,6 +17,12 @@ interface KitchenSection {
   name: string;
 }
 
+interface StaffMember {
+  id: string;
+  full_name: string;
+  role: string | null;
+}
+
 interface AdvancedOptionsProps {
   showAdvanced: boolean;
   onToggle: () => void;
@@ -28,9 +34,13 @@ interface AdvancedOptionsProps {
   sectionId: string;
   description: string;
   areaId: string;
+  assignedToEmployeeId: string;
+  staff: StaffMember[];
+  staffLoading: boolean;
   onEquipmentChange: (id: string) => void;
   onSectionChange: (id: string) => void;
   onDescriptionChange: (desc: string) => void;
+  onAssignedToChange: (id: string) => void;
 }
 
 export function AdvancedOptions({
@@ -44,9 +54,13 @@ export function AdvancedOptions({
   sectionId,
   description,
   areaId,
+  assignedToEmployeeId,
+  staff,
+  staffLoading,
   onEquipmentChange,
   onSectionChange,
   onDescriptionChange,
+  onAssignedToChange,
 }: AdvancedOptionsProps) {
   return (
     <div className="border-t border-[#2a2a2a] pt-3">
@@ -125,6 +139,24 @@ export function AdvancedOptions({
           </div>
 
           <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-300">Assigned To</label>
+            <select
+              value={assignedToEmployeeId}
+              onChange={e => onAssignedToChange(e.target.value)}
+              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              disabled={staffLoading}
+            >
+              <option value="">None (Unassigned)</option>
+              {staff.map(member => (
+                <option key={member.id} value={member.id}>
+                  {member.full_name}
+                  {member.role ? ` (${member.role})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-300">Description</label>
             <textarea
               value={description}
@@ -139,4 +171,3 @@ export function AdvancedOptions({
     </div>
   );
 }
-

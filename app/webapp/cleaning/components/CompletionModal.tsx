@@ -82,7 +82,7 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+      <div className="relative w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
         <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-xl font-bold text-white">Task Details</h2>

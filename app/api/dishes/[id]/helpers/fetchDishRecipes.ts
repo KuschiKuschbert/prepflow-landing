@@ -67,7 +67,7 @@ export async function fetchDishRecipes(dishId: string): Promise<any[]> {
   // Fetch recipe details - use 'name' column (database uses 'name', not 'recipe_name')
   const { data: recipesData, error: recipesError } = await supabaseAdmin
     .from('recipes')
-    .select('id, name, description, yield, yield_unit')
+    .select('id, name, description, yield, yield_unit, instructions')
     .in('id', recipeIds);
 
   if (recipesError) {
@@ -92,6 +92,7 @@ export async function fetchDishRecipes(dishId: string): Promise<any[]> {
           description: r.description,
           yield: r.yield,
           yield_unit: r.yield_unit,
+          instructions: r.instructions, // Include instructions for image generation
         },
       ];
     }),

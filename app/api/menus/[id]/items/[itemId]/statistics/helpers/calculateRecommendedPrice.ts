@@ -25,14 +25,12 @@ export async function calculateRecommendedPrice(
 
   // Always calculate dynamically based on COGS and target margin
   if (menuItem.dish_id && dish) {
-    const { calculateDishSellingPrice } = await import(
-      '../../../../statistics/helpers/calculateDishSellingPrice'
-    );
+    const { calculateDishSellingPrice } =
+      await import('../../../../statistics/helpers/calculateDishSellingPrice');
     recommendedPrice = await calculateDishSellingPrice(dish.id);
   } else if (menuItem.recipe_id) {
-    const { calculateRecipeSellingPrice } = await import(
-      '../../../../statistics/helpers/calculateRecipeSellingPrice'
-    );
+    const { calculateRecipeSellingPrice } =
+      await import('../../../../statistics/helpers/calculateRecipeSellingPrice');
     // calculateRecipeSellingPrice already returns per-serving price
     // (since calculateRecipeCost(recipeId, 1) returns per-serving cost)
     recommendedPrice = await calculateRecipeSellingPrice(menuItem.recipe_id);

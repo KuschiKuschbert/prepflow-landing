@@ -6,6 +6,11 @@ import React from 'react';
 import { TemperatureEquipment } from '../types';
 import { EquipmentTablePagination } from './EquipmentTablePagination';
 import { EquipmentTableMobileCards } from './EquipmentTableMobileCards';
+import {
+  getTypeIconComponent,
+  getTypeLabel,
+  temperatureTypesForSelect,
+} from '../utils/temperatureUtils';
 
 interface EquipmentTableProps {
   equipment: TemperatureEquipment[];
@@ -20,15 +25,6 @@ interface EquipmentTableProps {
   onPageChange: (page: number) => void;
 }
 
-const temperatureTypes = [
-  { value: 'fridge', label: 'Fridge', icon: '🧊' },
-  { value: 'freezer', label: 'Freezer', icon: '❄️' },
-  { value: 'food_cooking', label: 'Food Cooking', icon: '🔥' },
-  { value: 'food_hot_holding', label: 'Food Hot Holding', icon: '🍲' },
-  { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '🥗' },
-  { value: 'storage', label: 'Storage', icon: '📦' },
-];
-
 export function EquipmentTable({
   equipment,
   equipmentStatuses,
@@ -41,9 +37,7 @@ export function EquipmentTable({
   totalItems,
   onPageChange,
 }: EquipmentTableProps) {
-  const getTypeIcon = (type: string) => temperatureTypes.find(t => t.value === type)?.icon || '🌡️';
-  const getTypeLabel = (type: string) =>
-    temperatureTypes.find(t => t.value === type)?.label || type;
+  const getTypeIcon = (type: string) => getTypeIconComponent(type);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -107,7 +101,12 @@ export function EquipmentTable({
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-                          <span className="text-xl">{getTypeIcon(item.equipment_type)}</span>
+                          <Icon
+                            icon={getTypeIcon(item.equipment_type)}
+                            size="lg"
+                            className="text-[#29E7CD]"
+                            aria-hidden={true}
+                          />
                         </div>
                         <div className="min-w-0">
                           <div className="text-sm font-semibold text-white transition-colors group-hover:text-[#29E7CD]">

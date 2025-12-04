@@ -56,5 +56,3 @@ export function TrendCard({ direction, percentageChange }: TrendCardProps) {
     </div>
   );
 }
-
-

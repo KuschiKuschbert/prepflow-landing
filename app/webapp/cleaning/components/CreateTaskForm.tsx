@@ -8,6 +8,7 @@ import { useFormValidation } from './CreateTaskForm/helpers/useFormValidation';
 import { useTaskSubmission } from './CreateTaskForm/helpers/useTaskSubmission';
 import { useFormData } from './CreateTaskForm/helpers/useFormData';
 import { useFilteredOptions } from './CreateTaskForm/helpers/useFilteredOptions';
+import { useStaff } from '@/hooks/useStaff';
 import { TaskNameField } from './CreateTaskForm/components/TaskNameField';
 import { FrequencyField } from './CreateTaskForm/components/FrequencyField';
 import { AdvancedOptions } from './CreateTaskForm/components/AdvancedOptions';
@@ -44,6 +45,7 @@ export function CreateTaskForm({
 
   const { errors, setErrors, validateField } = useFormValidation();
   const { areas, equipment, sections, fetching } = useFormData(isOpen);
+  const { staff, loading: staffLoading } = useStaff();
   const { filteredEquipment, filteredSections } = useFilteredOptions(
     equipment,
     sections,
@@ -97,6 +99,7 @@ export function CreateTaskForm({
           equipment_id: '',
           section_id: '',
           description: '',
+          assigned_to_employee_id: '',
         });
       }
       setErrors({});
@@ -223,8 +226,12 @@ export function CreateTaskForm({
             sectionId={formData.section_id}
             description={formData.description}
             areaId={formData.area_id}
+            assignedToEmployeeId={formData.assigned_to_employee_id}
+            staff={staff}
+            staffLoading={staffLoading}
             onEquipmentChange={id => setFormData({ ...formData, equipment_id: id })}
             onSectionChange={id => setFormData({ ...formData, section_id: id })}
+            onAssignedToChange={id => setFormData({ ...formData, assigned_to_employee_id: id })}
             onDescriptionChange={desc => setFormData({ ...formData, description: desc })}
           />
 

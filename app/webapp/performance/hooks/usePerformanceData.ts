@@ -2,7 +2,7 @@
 
 import { cacheData, prefetchApi } from '@/lib/cache/data-cache';
 import { useEffect, useState } from 'react';
-import { DateRange, PerformanceState } from '../types';
+import type { DateRange, PerformanceState } from '../types';
 import { fetchPerformanceData as fetchPerformanceApi } from '../utils/performance-api';
 import { usePerformanceImportExport } from './usePerformanceImportExport';
 import { usePerformanceState } from './usePerformanceState';

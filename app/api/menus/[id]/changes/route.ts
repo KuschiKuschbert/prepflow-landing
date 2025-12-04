@@ -156,5 +156,3 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
     );
   }
 }
-
-

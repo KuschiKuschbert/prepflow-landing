@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-12-04T11:40:32.180Z",
+  "preDeploy": {
+    "status": "unknown",
+    "details": {}
+  },
+  "deadCode": {
+    "removed": 0,
+    "files": []
+  },
+  "voiceConsistency": {
+    "violations": 49,
+    "byType": {
+      "generic-message": 19,
+      "missing-contraction": 18,
+      "technical-jargon": 12
+    },
+    "bySeverity": {
+      "warning": 25,
+      "info": 24
+    },
+    "files": [
+      "app/api/ai-specials/helpers/handleAISpecialsError.ts",
+      "app/api/menus/[id]/helpers/fetchMenuWithItems.ts",
+      "app/api/menus/[id]/ingredients/helpers/fetchIngredientsWithParLevels.ts",
+      "app/api/recipe-share/helpers/fetchRecipeWithIngredients.ts",
+      "app/api/recipe-share/helpers/handleRecipeShareError.ts",
+      "app/api/setup-cleaning-tasks/helpers/validateCleaningTables.ts",
+      "app/components/landing/Resources.tsx",
+      "app/privacy-policy/page.tsx",
+      "app/terms-of-service/page.tsx",
+      "app/webapp/ingredients/components/BulkAllergenDetection.tsx",
+      "app/webapp/order-lists/page.tsx",
+      "app/webapp/recipes/components/BulkDeleteConfirmationModal.tsx",
+      "app/webapp/recipes/components/DeleteConfirmationModal.tsx",
+      "app/webapp/recipes/components/DishEditDrawer.tsx",
+      "app/webapp/roster/components/RosterBuilder.tsx",
+      "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx",
+      "app/webapp/settings/components/ImportExportHistoryPanel.tsx",
+      "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+      "app/webapp/settings/components/ProfileInformationPanel.tsx",
+      "app/webapp/settings/components/SecurityPanel.tsx",
+      "app/webapp/setup/components/IngredientsSetup.tsx",
+      "app/webapp/setup/components/TestDataGenerator.tsx",
+      "app/webapp/setup/page.tsx",
+      "app/webapp/temperature/hooks/useSampleDataGeneration.ts",
+      "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/quickTempLog.ts",
+      "app/webapp/temperature/hooks/utils/generateSampleDataHandler.ts",
+      "components/ui/FoodImageGenerator.tsx",
+      "hooks/useConfirm.tsx",
+      "lib/ai/utils/errorParser.ts",
+      "lib/api-error-handler/supabaseErrorParser.ts"
+    ],
+    "autoFixed": 0
+  },
+  "manualReview": []
+}

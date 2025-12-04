@@ -284,7 +284,10 @@ export function useContextualPersonality() {
  * @param actionType - Type of action (create, update, delete)
  * @param isMilestone - Whether this is a milestone achievement
  */
-export function useOnSuccess(actionType: 'create' | 'update' | 'delete' = 'create', isMilestone = false) {
+export function useOnSuccess(
+  actionType: 'create' | 'update' | 'delete' = 'create',
+  isMilestone = false,
+) {
   const { settings } = usePersonality();
 
   return useCallback(() => {

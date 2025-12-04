@@ -42,4 +42,3 @@ export function generateCSV(menuName: string, menuData: MenuDisplayData[]): Next
     },
   });
 }
-

@@ -25,7 +25,7 @@ export async function fetchMenuWithItems(menuId: string) {
   if (menuError || !menu) {
     logDetailedError(menuError, 'Menu not found', menuId);
     throw ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404, {
-      message: 'The requested menu could not be found',
+      message: "The requested menu couldn't be found",
     });
   }
 

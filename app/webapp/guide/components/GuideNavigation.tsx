@@ -120,7 +120,7 @@ export function GuideNavigation({
             >
               <div className="flex items-start gap-4">
                 {guide.icon && (
-                  <span className="text-2xl" aria-hidden="true">
+                  <span className="text-2xl" aria-hidden={true}>
                     {guide.icon}
                   </span>
                 )}

@@ -14,4 +14,3 @@ export function IngredientsErrorBanner({ error }: IngredientsErrorBannerProps) {
     </div>
   );
 }
-

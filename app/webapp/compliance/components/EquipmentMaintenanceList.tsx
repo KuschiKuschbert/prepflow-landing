@@ -92,4 +92,3 @@ export function EquipmentMaintenanceList({ records }: EquipmentMaintenanceListPr
     </div>
   );
 }
-

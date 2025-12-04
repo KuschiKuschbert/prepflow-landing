@@ -27,10 +27,7 @@ export function useIsVisible<T extends HTMLElement = HTMLElement>(
 
       // Element is visible if any part of it is in the viewport
       const isInViewport =
-        rect.bottom > 0 &&
-        rect.right > 0 &&
-        rect.top < viewportHeight &&
-        rect.left < viewportWidth;
+        rect.bottom > 0 && rect.right > 0 && rect.top < viewportHeight && rect.left < viewportWidth;
 
       return isInViewport;
     };

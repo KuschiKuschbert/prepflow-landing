@@ -43,7 +43,7 @@ export async function fetchRecipeWithIngredients(recipeId: string) {
       context: { endpoint: '/api/recipe-share', operation: 'POST', recipeId },
     });
     throw ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404, {
-      message: 'Could not find the specified recipe',
+      message: "couldn't find the specified recipe",
     });
   }
 

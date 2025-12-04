@@ -5,8 +5,11 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { Ingredient } from '@/app/webapp/ingredients/types';
-import { buildPlatingMethodDetectionPrompt, type PlatingMethodSuggestion } from './prompts/plating-method-detection';
+import type { Ingredient } from '@/app/webapp/ingredients/components/types';
+import {
+  buildPlatingMethodDetectionPrompt,
+  type PlatingMethodSuggestion,
+} from './prompts/plating-method-detection';
 
 export interface PlatingMethodDetectionResult {
   suggestions: PlatingMethodSuggestion[];
@@ -28,11 +31,8 @@ export async function detectSuitablePlatingMethods(
   ingredients: Ingredient[],
   description?: string,
 ): Promise<PlatingMethodDetectionResult> {
-  const {
-    isAIEnabled,
-    generateTextWithHuggingFace,
-    getHuggingFaceTextModel,
-  } = await import('@/lib/ai/huggingface-client');
+  const { isAIEnabled, generateTextWithHuggingFace, getHuggingFaceTextModel } =
+    await import('@/lib/ai/huggingface-client');
 
   if (!isAIEnabled()) {
     logger.warn('[Plating Method Detection] AI not enabled, using fallback suggestions');
@@ -172,4 +172,3 @@ function getFallbackSuggestions(
     method: 'fallback',
   };
 }
-

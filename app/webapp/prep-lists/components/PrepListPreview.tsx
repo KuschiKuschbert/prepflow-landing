@@ -69,7 +69,7 @@ export function PrepListPreview({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[90vh] w-full max-w-6xl flex-col rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px]">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
         <div className="flex h-[90vh] w-full flex-col rounded-3xl bg-[#1f1f1f]/95">
           {/* Header */}
           <PrepListPreviewHeader

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { prefersReducedMotion } from '@/lib/arcadeGuards';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { getCategoryLabel } from './CategorySection';
 import { NavItem } from './NavItem';
 import type { NavigationItemConfig } from './nav-items';
-import { getCategoryLabel } from './CategorySection';
 
 interface ExpandableCategorySectionProps {
   category: string;
@@ -17,6 +18,8 @@ interface ExpandableCategorySectionProps {
   // Controlled mode props (for desktop sidebar)
   isExpanded?: boolean;
   onToggle?: (category: string) => void;
+  // Collapsed sidebar mode
+  isCollapsed?: boolean;
 }
 
 /**
@@ -42,6 +45,7 @@ export function ExpandableCategorySection({
   defaultExpanded = false,
   isExpanded: controlledExpanded,
   onToggle,
+  isCollapsed = false,
 }: ExpandableCategorySectionProps) {
   // Use controlled mode if props provided, otherwise use uncontrolled
   const isControlled = controlledExpanded !== undefined && onToggle !== undefined;
@@ -67,6 +71,53 @@ export function ExpandableCategorySection({
     }
   };
 
+  // When sidebar is collapsed, show category header and conditionally show items
+  if (isCollapsed) {
+    return (
+      <div className="mb-4">
+        {/* Category header - compact version when sidebar is collapsed */}
+        <button
+          onClick={handleToggle}
+          className="mb-1.5 flex min-h-[32px] w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-semibold tracking-wider text-gray-500 uppercase transition-colors hover:bg-[#2a2a2a] hover:text-gray-400"
+          aria-expanded={isExpanded}
+          aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${getCategoryLabel(category)} section`}
+        >
+          {/* Category label hidden when sidebar is collapsed, but space maintained for positioning */}
+          <span className="sr-only">{getCategoryLabel(category)}</span>
+          <Icon
+            icon={isExpanded ? ChevronDown : ChevronRight}
+            size="xs"
+            className="text-gray-500 transition-transform duration-200"
+            style={{
+              transitionTimingFunction: 'var(--easing-standard)',
+              transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+            }}
+            aria-hidden={true}
+          />
+        </button>
+        {/* Items shown only when category group is expanded */}
+        {isExpanded && (
+          <div className="space-y-1">
+            {items.map(item => (
+              <NavItem
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                icon={item.icon}
+                color={item.color}
+                isActive={isActive(item.href)}
+                onClick={onItemClick ? () => onItemClick(item.href) : undefined}
+                onTrack={onTrack}
+                iconSize="md"
+                showLabel={false}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="mb-4">
       <button
@@ -79,26 +130,44 @@ export function ExpandableCategorySection({
         <Icon
           icon={isExpanded ? ChevronDown : ChevronRight}
           size="xs"
-          className="text-gray-500 transition-transform"
+          className="text-gray-500 transition-transform duration-200"
+          style={{
+            transitionTimingFunction: 'var(--easing-standard)',
+            transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+          }}
           aria-hidden={true}
         />
       </button>
       {isExpanded && (
         <div className="space-y-1">
-          {items.map(item => (
-            <NavItem
-              key={item.href}
-              href={item.href}
-              label={item.label}
-              icon={item.icon}
-              color={item.color}
-              isActive={isActive(item.href)}
-              onClick={onItemClick ? () => onItemClick(item.href) : undefined}
-              onTrack={onTrack}
-              iconSize="md"
-              showLabel={true}
-            />
-          ))}
+          {items.map((item, index) => {
+            const reducedMotion = prefersReducedMotion();
+            return (
+              <div
+                key={item.href}
+                style={{
+                  animationName: reducedMotion ? 'none' : 'fadeInUp',
+                  animationDuration: reducedMotion ? '0s' : '0.3s',
+                  animationTimingFunction: reducedMotion ? 'ease' : 'var(--easing-standard)',
+                  animationFillMode: reducedMotion ? 'none' : 'forwards',
+                  animationDelay: reducedMotion ? '0ms' : `${index * 20}ms`,
+                  opacity: reducedMotion ? 1 : 0,
+                }}
+              >
+                <NavItem
+                  href={item.href}
+                  label={item.label}
+                  icon={item.icon}
+                  color={item.color}
+                  isActive={isActive(item.href)}
+                  onClick={onItemClick ? () => onItemClick(item.href) : undefined}
+                  onTrack={onTrack}
+                  iconSize="md"
+                  showLabel={true}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

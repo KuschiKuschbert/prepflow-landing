@@ -107,7 +107,29 @@ export default function DishBuilderDragDrop({
 
   return (
     <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
-      <h3 className="mb-4 text-lg font-semibold text-white">Tap to Add to Dish</h3>
+      <h3 className="mb-3 text-lg font-semibold text-white">Tap to Add to Dish</h3>
+
+      {/* Compact Instructions Banner */}
+      <div className="mb-4 rounded-lg border border-[#29E7CD]/20 bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-3">
+        <div className="flex items-start gap-2 text-xs text-gray-300">
+          <Icon
+            icon={ChefHat}
+            size="sm"
+            className="mt-0.5 shrink-0 text-[#29E7CD]"
+            aria-hidden={true}
+          />
+          <div className="flex-1 space-y-1">
+            <div>
+              <span className="font-medium text-white">Tap a recipe</span> to add all ingredients at
+              once
+            </div>
+            <div>
+              <span className="font-medium text-white">Tap an ingredient</span> to add individually
+            </div>
+            <div className="text-gray-400">COGS and pricing calculate automatically</div>
+          </div>
+        </div>
+      </div>
 
       {/* Tabs */}
       <div className="mb-4 flex gap-2 border-b border-[#2a2a2a]">

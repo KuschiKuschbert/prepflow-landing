@@ -10,5 +10,3 @@ export const metadata: Metadata = {
 export default function BadRequestLayout({ children }: { children: React.ReactNode }) {
   return children;
 }
-
-

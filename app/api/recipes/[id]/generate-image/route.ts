@@ -44,13 +44,49 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const recipeId = id;
 
     // Parse request body to get optional platingMethods array
-    let body: { platingMethods?: string[] } = {};
+    let selectedPlatingMethods: PlatingMethod[] | undefined;
     try {
-      body = await req.json();
-    } catch (e) {
+      const body = await req.json().catch(() => ({}));
+      if (
+        body.platingMethods &&
+        Array.isArray(body.platingMethods) &&
+        body.platingMethods.length > 0
+      ) {
+        // Validate and cast plating methods to ensure type safety
+        selectedPlatingMethods = body.platingMethods.filter(
+          (method: string): method is PlatingMethod => {
+            const validMethods: PlatingMethod[] = [
+              'classic',
+              'modern',
+              'rustic',
+              'minimalist',
+              'landscape',
+              'futuristic',
+              'hide_and_seek',
+              'super_bowl',
+              'bathing',
+              'deconstructed',
+              'stacking',
+              'brush_stroke',
+              'free_form',
+            ];
+            return validMethods.includes(method as PlatingMethod);
+          },
+        );
+
+        logger.dev('[Recipe Image Generation] Parsed plating methods from request:', {
+          raw: body.platingMethods,
+          validated: selectedPlatingMethods,
+          recipeId,
+        });
+      }
+    } catch (error) {
       // Body is optional, continue with default behavior
+      logger.dev('[Recipe Image Generation] Failed to parse request body:', {
+        error: error instanceof Error ? error.message : String(error),
+        recipeId,
+      });
     }
-    const selectedPlatingMethods = body.platingMethods as PlatingMethod[] | undefined;
 
     if (!recipeId) {
       return NextResponse.json(
@@ -91,7 +127,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     }
 
     // Get userId from token (email or sub), with fallback for development
-    const userId = token?.email || token?.sub || (process.env.NODE_ENV === 'development' ? 'dev-user' : null);
+    const userId =
+      token?.email || token?.sub || (process.env.NODE_ENV === 'development' ? 'dev-user' : null);
 
     if (!userId && process.env.NODE_ENV === 'production') {
       logger.warn('[Recipe Image Generation] Unauthorized attempt:', {
@@ -143,7 +180,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const { data: recipe, error: recipeError } = await supabaseAdmin
       .from('recipes')
       .select(
-        'id, name, description, image_url, image_url_alternative, image_url_modern, image_url_minimalist, plating_methods_images',
+        'id, name, description, instructions, image_url, image_url_alternative, image_url_modern, image_url_minimalist, plating_methods_images',
       )
       .eq('id', recipeId)
       .single();
@@ -153,10 +190,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         error: recipeError?.message,
         recipeId,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Check if images already exist - allow regeneration by not returning early
@@ -277,7 +313,21 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     let imageResults: Record<string, AIResponse<FoodImageResult>>;
     try {
-      imageResults = await generateFoodImagesForMethods(recipeName, ingredientNames, methodsToGenerate);
+      // Get recipe instructions for image generation
+      const recipeInstructions = (recipe as any).instructions || null;
+      logger.dev('[Recipe Image Generation] Recipe instructions:', {
+        recipeId,
+        hasInstructions: !!recipeInstructions,
+        instructionLength: recipeInstructions?.length || 0,
+      });
+
+      imageResults = await generateFoodImagesForMethods(
+        recipeName,
+        ingredientNames,
+        methodsToGenerate,
+        {},
+        recipeInstructions,
+      );
     } catch (genError) {
       logger.error('[Recipe Image Generation] Image generation threw error:', {
         error: genError instanceof Error ? genError.message : String(genError),
@@ -326,9 +376,10 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       });
       // Continue if at least one image was generated successfully
       if (errors.length === methodsToGenerate.length) {
-        const errorMessage = errors.length === 1
-          ? `Failed to generate image: ${errors[0]}`
-          : `Failed to generate all images. Errors: ${errors.join('; ')}`;
+        const errorMessage =
+          errors.length === 1
+            ? `Failed to generate image: ${errors[0]}`
+            : `Failed to generate all images. Errors: ${errors.join('; ')}`;
         return NextResponse.json(
           ApiErrorHandler.createError(errorMessage, 'AI_SERVICE_ERROR', 500),
           { status: 500 },
@@ -346,8 +397,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     } = {};
 
     // Get existing plating_methods_images JSON or initialize empty object
-    const existingPlatingImages =
-      (recipe.plating_methods_images as Record<string, string>) || {};
+    const existingPlatingImages = (recipe.plating_methods_images as Record<string, string>) || {};
 
     try {
       // Process each generated image
@@ -383,9 +433,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       });
       return NextResponse.json(
         ApiErrorHandler.createError(
-          uploadError instanceof Error
-            ? uploadError.message
-            : 'Failed to upload images to storage',
+          uploadError instanceof Error ? uploadError.message : 'Failed to upload images to storage',
           'STORAGE_ERROR',
           500,
         ),

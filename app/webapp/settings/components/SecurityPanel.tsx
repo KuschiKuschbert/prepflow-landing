@@ -162,7 +162,10 @@ export function SecurityPanel() {
 
   if (loading) {
     return (
-      <div ref={ref} className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div
+        ref={ref}
+        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      >
         <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
         <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
       </div>
@@ -170,7 +173,10 @@ export function SecurityPanel() {
   }
 
   return (
-    <div ref={ref} className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div
+      ref={ref}
+      className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+    >
       <div>
         <h2 className="text-xl font-semibold">Account Security</h2>
         <p className="mt-1 text-sm text-gray-300">
@@ -267,7 +273,12 @@ export function SecurityPanel() {
               >
                 <div className="flex items-center gap-3">
                   {log.successful ? (
-                    <Icon icon={CheckCircle} size="sm" className="text-green-400" aria-hidden={true} />
+                    <Icon
+                      icon={CheckCircle}
+                      size="sm"
+                      className="text-green-400"
+                      aria-hidden={true}
+                    />
                   ) : (
                     <Icon icon={XCircle} size="sm" className="text-red-400" aria-hidden={true} />
                   )}

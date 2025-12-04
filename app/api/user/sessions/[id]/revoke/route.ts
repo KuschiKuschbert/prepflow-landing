@@ -15,10 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * @param {Promise<{ id: string }>} context.params - Route parameters
  * @returns {Promise<NextResponse>} Revocation response
  */
-export async function POST(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -67,4 +64,3 @@ export async function POST(
     );
   }
 }
-

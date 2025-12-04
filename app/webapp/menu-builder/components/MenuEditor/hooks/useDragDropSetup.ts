@@ -21,4 +21,3 @@ export function useDragDropSetup({ initialOffset, initialCursorPosition }: DragD
 
   return { sensors, centerOnCursor };
 }
-

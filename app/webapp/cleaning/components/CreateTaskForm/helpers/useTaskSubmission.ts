@@ -15,6 +15,7 @@ interface FormData {
   equipment_id: string;
   section_id: string;
   description: string;
+  assigned_to_employee_id: string;
 }
 
 interface UseTaskSubmissionProps {
@@ -77,6 +78,7 @@ export function useTaskSubmission({
           equipment_id: formData.equipment_id || null,
           section_id: formData.section_id || null,
           description: formData.description?.trim() || null,
+          assigned_to_employee_id: formData.assigned_to_employee_id || null,
         }),
       });
 
@@ -98,6 +100,7 @@ export function useTaskSubmission({
           equipment_id: '',
           section_id: '',
           description: '',
+          assigned_to_employee_id: '',
         }));
         setErrors({});
         setFrequencyManuallySet(false);
@@ -111,6 +114,7 @@ export function useTaskSubmission({
           equipment_id: '',
           section_id: '',
           description: '',
+          assigned_to_employee_id: '',
         });
         setErrors({});
         setShowAdvanced(false);

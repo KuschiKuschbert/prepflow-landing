@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { NavItem } from './NavItem';
 import type { NavigationItemConfig } from './nav-items';
 
@@ -25,6 +24,7 @@ export function getCategoryLabel(category: string): string {
   // Unified category labels (same across all workflows)
   const categoryLabels: Record<string, string> = {
     primary: 'Primary',
+    operations: 'Operations',
     kitchen: 'Kitchen',
     inventory: 'Inventory',
     more: 'More',

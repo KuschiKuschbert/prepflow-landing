@@ -43,6 +43,13 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     }
 
     // Fetch recipe with ingredients
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
     const { data: recipe, error: recipeError } = await supabaseAdmin
       .from('recipes')
       .select('id, name, description')
@@ -54,10 +61,9 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         error: recipeError?.message,
         recipeId,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Fetch recipe ingredients
@@ -139,13 +145,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       stack: error instanceof Error ? error.stack : undefined,
     });
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to suggest plating methods',
-        'INTERNAL_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError('Failed to suggest plating methods', 'INTERNAL_ERROR', 500),
       { status: 500 },
     );
   }
 }
-

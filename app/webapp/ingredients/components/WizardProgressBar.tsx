@@ -14,7 +14,7 @@ export function WizardProgressBar({ currentStep, totalSteps }: WizardProgressBar
             <div
               className={`h-1 flex-1 rounded-full transition-all duration-200 ${
                 step <= currentStep
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]'
+                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7]'
                   : 'bg-[#2a2a2a]'
               }`}
             />

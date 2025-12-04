@@ -74,7 +74,6 @@ function getHuggingFaceApiKey(): string | null {
   return process.env.HUGGINGFACE_API_KEY || null;
 }
 
-
 /**
  * Get the image generation model to use
  */
@@ -118,7 +117,8 @@ export async function generateImageWithHuggingFace(
   const client = getHfInferenceClient();
 
   if (!client) {
-    const errorMsg = 'Hugging Face API key is required for image generation. Please set HUGGINGFACE_API_KEY environment variable.';
+    const errorMsg =
+      'Hugging Face API key is required for image generation. Please set HUGGINGFACE_API_KEY environment variable.';
     logger.error('[Hugging Face]', errorMsg);
     throw new Error(errorMsg);
   }
@@ -173,7 +173,8 @@ export async function generateImageWithHuggingFace(
         });
         usedProvider = FALLBACK_IMAGE_PROVIDER;
       } catch (fallbackError) {
-        const fallbackErrorMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
+        const fallbackErrorMsg =
+          fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
         const errorDetails = {
           primary: provider,
           fallback: FALLBACK_IMAGE_PROVIDER,
@@ -277,7 +278,8 @@ export async function generateImageWithHuggingFace(
       const errorMsg = `Unexpected image result type: ${typeof imageResult}. Expected Blob or string.`;
       logger.error('[Hugging Face] Unexpected image result type', {
         type: typeof imageResult,
-        hasArrayBuffer: imageResult && typeof imageResult === 'object' && 'arrayBuffer' in imageResult,
+        hasArrayBuffer:
+          imageResult && typeof imageResult === 'object' && 'arrayBuffer' in imageResult,
         provider: usedProvider,
         model,
       });
@@ -319,7 +321,10 @@ export async function generateTextWithHuggingFace(
     temperature?: number;
     maxTokens?: number;
   } = {},
-): Promise<{ content: string; usage?: { promptTokens: number; completionTokens: number; totalTokens: number } } | null> {
+): Promise<{
+  content: string;
+  usage?: { promptTokens: number; completionTokens: number; totalTokens: number };
+} | null> {
   const model = options.model || getHuggingFaceTextModel();
   const apiKey = getHuggingFaceApiKey();
 
@@ -438,7 +443,8 @@ export async function analyzeImageWithHuggingFace(
   } = {},
 ): Promise<{ content: string } | null> {
   logger.warn('[Hugging Face] Vision/image analysis is not available:', {
-    reason: 'Router API does not support vision models. Old inference API is deprecated (410 Gone).',
+    reason:
+      'Router API does not support vision models. Old inference API is deprecated (410 Gone).',
     solution: 'Vision analysis requires Hugging Face Inference Endpoints (paid service).',
     model: options.model || getHuggingFaceVisionModel(),
   });
@@ -447,4 +453,3 @@ export async function analyzeImageWithHuggingFace(
   // The calling code should handle this gracefully
   return null;
 }
-

@@ -34,7 +34,9 @@ export async function handleGenerateSampleData(
     }
   } catch (error) {
     logger.error('Error generating sample data:', error);
-    showError('Failed to generate sample data. Please try again.');
+    showError(
+      "Couldn't whip up that sample data. Give it another shot - sometimes the kitchen needs a moment.",
+    );
   } finally {
     setIsGenerating(false);
   }

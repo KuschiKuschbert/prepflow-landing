@@ -2,7 +2,7 @@
 
 **Last Updated:** January 2025
 
-This guide documents the design system used on the PrepFlow landing page (`/`). These styles are distinct from the webapp styles and should be used exclusively for marketing/landing pages.
+This guide documents the Cyber Carrot design system used on the PrepFlow landing page (`/`). These styles are part of the Cyber Carrot Design System but optimized for marketing/landing pages, distinct from webapp styles.
 
 ## Table of Contents
 
@@ -30,6 +30,7 @@ The landing page uses CSS variables defined in `app/globals.css` and inline styl
   --primary: #29e7cd; /* Electric Cyan - Primary Actions */
   --secondary: #3b82f6; /* Blue - Secondary Actions */
   --accent: #d925c7; /* Vibrant Magenta - Accent Elements */
+  --tertiary: #ff6b00; /* Cyber Orange - Warm Accents & Carrot Theme */
   --muted: #1f1f1f; /* Dark gray - Cards & Containers */
   --border: #2a2a2a; /* Border gray - Subtle borders */
 }
@@ -44,6 +45,7 @@ style={{
   '--primary-color': '#29E7CD',
   '--secondary-color': '#3B82F6',
   '--accent-color': '#D925C7',
+  '--tertiary-color': '#FF6B00',
   '--bg-color': '#0a0a0a',
   '--text-color': '#ffffff',
   '--gray-300': '#d1d5db',
@@ -60,8 +62,24 @@ style={{
 - **Primary (`#29E7CD`)**: Primary CTAs, links, highlights, icons
 - **Secondary (`#3B82F6`)**: Secondary actions, supporting elements
 - **Accent (`#D925C7`)**: Accent elements, special highlights
+- **Tertiary (`#FF6B00`)**: Cyber Orange - Warm accents, special callouts, gradient borders (Cyber Carrot pattern)
 - **Background (`#0a0a0a`)**: Main background color
 - **Gray Scale**: Use for text hierarchy (`gray-300` for primary, `gray-400` for secondary, `gray-500` for muted)
+
+### Cyber Carrot Gradient Pattern
+
+The Cyber Carrot gradient border creates a glowing effect using all three accent colors:
+
+```tsx
+// Gradient border pattern (Cyan → Orange → Magenta → Cyan)
+className =
+  'bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-[1px] rounded-2xl';
+
+// Inner container
+className = 'rounded-xl bg-[#1f1f1f]/95';
+```
+
+**Usage:** Popups, modals, dropdowns, and elevated components that need visual emphasis.
 
 ### Color Examples
 
@@ -687,7 +705,7 @@ All animations respect `prefers-reduced-motion`:
 - Webapp pages (`/webapp/**`)
 - Dashboard components
 - Data tables
-- Forms (use Material Design 3 styles)
+- Forms (use Cyber Carrot Design System styles)
 - Admin interfaces
 
 ### Style System Decision Tree
@@ -701,11 +719,11 @@ Is this a landing/marketing page?
 │   ├─ Fluid typography
 │   └─ Landing background effects
 │
-└─ No → Use Material Design 3 Styles
+└─ No → Use Cyber Carrot Design System Styles
     ├─ Standard Button component
     ├─ Card component
     ├─ Fixed typography scale
-    └─ Material Design 3 patterns
+    └─ Cyber Carrot Design System patterns
 ```
 
 ---
@@ -789,13 +807,11 @@ Is this a landing/marketing page?
 
 ## Related Documentation
 
-- [Material Design 3 Design System](.cursor/rules/design.mdc) - Webapp design system
+- [Cyber Carrot Design System](.cursor/rules/design.mdc) - Webapp design system
 - [Landing Style Migration Guide](LANDING_STYLE_MIGRATION.md) - Migration examples
 - [Tailwind Utilities](lib/tailwind-utils.ts) - Shared style constants
 - [Landing Styles](lib/landing-styles.ts) - Landing page style utilities
 
 ---
 
-**Note:** This style guide is specific to the landing page. For webapp styling, refer to the Material Design 3 design system documentation.
-
-
+**Note:** This style guide is specific to the landing page. For webapp styling, refer to the Cyber Carrot Design System documentation.

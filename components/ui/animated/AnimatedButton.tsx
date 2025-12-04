@@ -36,13 +36,13 @@ export function AnimatedButton({
 
   const variantClasses = {
     primary: `
-      bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white
-      hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80
-      focus:ring-[#29E7CD] shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25
+      bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white
+      hover:from-[#29E7CD]/80 hover:via-[#FF6B00]/80 hover:to-[#D925C7]/80
+      focus:ring-[#29E7CD] shadow-lg hover:shadow-xl hover:shadow-[#FF6B00]/25
     `,
     secondary: `
       bg-[#2a2a2a] text-white border border-[#3a3a3a]
-      hover:bg-[#3a3a3a] hover:border-[#29E7CD]/50
+      hover:bg-[#3a3a3a] hover:border-[#FF6B00]/50
       focus:ring-[#29E7CD]
     `,
     outline: `

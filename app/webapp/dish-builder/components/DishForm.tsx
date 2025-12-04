@@ -1,8 +1,8 @@
 'use client';
 
-import { DishBuilderState } from '../types';
 import { Icon } from '@/components/ui/Icon';
-import { ChefHat, DollarSign, Package, BookOpen, UtensilsCrossed } from 'lucide-react';
+import { BookOpen, ChefHat, DollarSign, Package, UtensilsCrossed } from 'lucide-react';
+import { DishBuilderState } from '../types';
 
 interface DishFormProps {
   dishState: DishBuilderState;
@@ -278,7 +278,7 @@ export default function DishForm({
           </button>
           {ingredientCount === 0 && (
             <p className="mt-2 text-center text-xs text-gray-400">
-              Drag recipes or ingredients to start building your{' '}
+              Tap recipes or ingredients from the left panel to start building your{' '}
               {dishState.itemType === 'dish' ? 'dish' : 'recipe'}
             </p>
           )}

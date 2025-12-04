@@ -26,11 +26,5 @@ export interface ExpandedRecipeIngredient {
   unit: string;
 }
 
-export interface DragItem {
-  type: 'recipe' | 'ingredient';
-  id: string;
-  data: Recipe | Ingredient;
-}
-
 // Re-export types from COGS for convenience
 export type { COGSCalculation, PricingCalculation, Ingredient, Recipe };

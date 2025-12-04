@@ -114,14 +114,14 @@ export default function PerformanceDateRange({
   };
 
   return (
-    <div className="tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6 mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3">
-      <div className="tablet:mb-3 mb-2 flex items-center gap-2">
+    <div className="tablet:mb-3 tablet:p-3 desktop:mb-4 desktop:p-4 mb-2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2.5">
+      <div className="tablet:mb-2 mb-1.5 flex items-center gap-2">
         <Icon icon={Calendar} size="sm" className="text-[#29E7CD]" />
-        <h3 className="text-base font-semibold text-white">Time Period</h3>
+        <h3 className="text-sm font-semibold text-white">Time Period</h3>
       </div>
 
       {/* Preset Buttons */}
-      <div className="mb-3 flex flex-wrap gap-1.5">
+      <div className="mb-2 flex flex-wrap gap-1.5">
         {PRESETS.map(preset => (
           <button
             key={preset.value}
@@ -139,26 +139,26 @@ export default function PerformanceDateRange({
 
       {/* Custom Date Range Inputs */}
       {dateRange.preset === 'custom' && (
-        <div className="tablet:grid-cols-2 grid grid-cols-1 gap-4">
+        <div className="tablet:grid-cols-2 grid grid-cols-1 gap-3">
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">Start Date</label>
+            <label className="mb-1.5 text-xs font-medium text-gray-300">Start Date</label>
             <input
               type="date"
               value={formatDate(dateRange.startDate)}
               onChange={handleStartDateChange}
               max={formatDate(dateRange.endDate || new Date())}
-              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-base text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             />
           </div>
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">End Date</label>
+            <label className="mb-1.5 text-xs font-medium text-gray-300">End Date</label>
             <input
               type="date"
               value={formatDate(dateRange.endDate)}
               onChange={handleEndDateChange}
               max={formatDate(new Date())}
               min={formatDate(dateRange.startDate)}
-              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-base text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
             />
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function PerformanceDateRange({
 
       {/* Display Current Range */}
       {isHydrated && dateRange.preset !== 'custom' && dateRange.startDate && dateRange.endDate && (
-        <div className="mt-3 text-xs text-gray-400">
+        <div className="mt-2 text-xs text-gray-400">
           {dateRange.preset === 'all' ? (
             <span>Showing all available data</span>
           ) : (

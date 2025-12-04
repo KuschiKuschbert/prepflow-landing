@@ -20,6 +20,16 @@ const CLEANING_TASKS_SELECT = `
     id,
     section_name,
     description
+  ),
+  assigned_to_employee:assigned_to_employee_id (
+    id,
+    full_name,
+    role
+  ),
+  assigned_by_employee:assigned_by_employee_id (
+    id,
+    full_name,
+    role
   )
 `;
 
@@ -41,6 +51,8 @@ export async function createCleaningTask(taskData: {
   standard_task_type?: string | null;
   description?: string | null;
   notes?: string | null;
+  assigned_to_employee_id?: string | null;
+  assigned_by_employee_id?: string | null;
 }) {
   if (!supabaseAdmin) throw new Error('Database connection not available');
 
@@ -65,6 +77,12 @@ export async function createCleaningTask(taskData: {
   // Legacy schema fields (for backward compatibility)
   if (taskData.assigned_date) insertData.assigned_date = taskData.assigned_date;
   if (taskData.notes) insertData.notes = taskData.notes;
+
+  // Staff assignment fields
+  if (taskData.assigned_to_employee_id)
+    insertData.assigned_to_employee_id = taskData.assigned_to_employee_id;
+  if (taskData.assigned_by_employee_id)
+    insertData.assigned_by_employee_id = taskData.assigned_by_employee_id;
 
   // First try insert without SELECT to see if insert itself works
   const { data: insertResult, error: insertError } = await supabaseAdmin

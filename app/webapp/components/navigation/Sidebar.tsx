@@ -1,9 +1,10 @@
 'use client';
 
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { prefersReducedMotion } from '@/lib/arcadeGuards';
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
 import React, { RefObject } from 'react';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { LogoutButton } from '../LogoutButton';
 
 interface SidebarProps {
@@ -21,6 +22,42 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
   const cn = (...classes: (string | undefined | null | false)[]) =>
     classes.filter(Boolean).join(' ');
 
+  // Click outside to close
+  React.useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Element;
+
+      // Don't close if clicking inside the sidebar
+      if (sidebarRef.current?.contains(target)) {
+        return;
+      }
+
+      // Don't close if clicking on modals or dialogs
+      if (target.closest('[role="dialog"]') || target.closest('[aria-modal="true"]')) {
+        return;
+      }
+
+      // Don't close if clicking on dropdowns or menus
+      if (target.closest('[role="menu"]') || target.closest('[role="listbox"]')) {
+        return;
+      }
+
+      // Close the sidebar
+      onClose();
+    };
+
+    // Use mousedown instead of click to catch clicks before they bubble
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen, onClose, sidebarRef]);
+
   return (
     <aside
       id="app-sidebar"
@@ -37,19 +74,24 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'w-72',
         'desktop:w-80',
         'transform',
-        'border-r',
-        'border-[#2a2a2a]',
-        'bg-[#1f1f1f]',
+        'rounded-r-3xl',
+        'bg-gradient-to-r',
+        'from-[#29E7CD]/20',
+        'via-[#D925C7]/20',
+        'to-[#29E7CD]/20',
+        'p-[1px]',
         'transition-transform',
         'duration-300',
-        'ease-in-out',
         'will-change-transform',
         'pt-[var(--header-height-mobile)]',
         'desktop:pt-[var(--header-height-desktop)]',
         isOpen ? 'translate-x-0' : '-translate-x-full',
       )}
+      style={{
+        transitionTimingFunction: 'var(--easing-emphasized)',
+      }}
     >
-      <div className="flex h-full flex-col overflow-y-auto">
+      <div className="flex h-full flex-col overflow-y-auto rounded-r-3xl bg-[#1f1f1f]">
         <div
           className={cn(
             'flex',
@@ -120,46 +162,59 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                 {category === 'other' && 'Other'}
               </h3>
               <div className="space-y-1">
-                {items.map(item => (
-                  <Link
-                    aria-current={isActive(item.href) ? 'page' : undefined}
-                    key={item.href}
-                    href={item.href}
-                    onClick={onClose}
-                    onMouseEnter={() => {
-                      // Prefetch API endpoints when hovering over any link
-                      prefetchRoute(item.href);
-                    }}
-                    className={cn(
-                      'group',
-                      'flex',
-                      'items-center',
-                      'space-x-3',
-                      'rounded-lg',
-                      'px-3',
-                      'py-2.5',
-                      'min-h-[44px]',
-                      'transition-all',
-                      'duration-200',
-                      isActive(item.href)
-                        ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10'
-                        : 'hover:bg-[#2a2a2a]/50',
-                    )}
-                  >
-                    <span className={cn(isActive(item.href) ? item.color : `text-gray-400`)}>
-                      {item.icon}
-                    </span>
-                    <span
+                {items.map((item, index) => {
+                  const reducedMotion = prefersReducedMotion();
+                  return (
+                    <Link
+                      aria-current={isActive(item.href) ? 'page' : undefined}
+                      key={item.href}
+                      href={item.href}
+                      onClick={onClose}
+                      onMouseEnter={() => {
+                        // Prefetch API endpoints when hovering over any link
+                        prefetchRoute(item.href);
+                      }}
                       className={cn(
-                        'text-sm',
-                        'font-medium',
-                        isActive(item.href) ? 'text-white' : 'text-gray-300 group-hover:text-white',
+                        'group',
+                        'flex',
+                        'items-center',
+                        'space-x-4',
+                        'rounded-lg',
+                        'px-4',
+                        'py-3',
+                        'min-h-[44px]',
+                        'transition-all',
+                        'duration-200',
+                        isActive(item.href)
+                          ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
+                          : 'hover:scale-[1.02] hover:bg-[#2a2a2a]/50',
                       )}
+                      style={{
+                        transitionTimingFunction: 'var(--easing-standard)',
+                        animation: reducedMotion
+                          ? 'none'
+                          : `fadeInUp 0.3s var(--easing-standard) forwards`,
+                        animationDelay: reducedMotion ? '0ms' : `${index * 20}ms`,
+                        opacity: reducedMotion ? 1 : 0,
+                      }}
                     >
-                      {item.label}
-                    </span>
-                  </Link>
-                ))}
+                      <span className={cn(isActive(item.href) ? item.color : `text-gray-400`)}>
+                        {item.icon}
+                      </span>
+                      <span
+                        className={cn(
+                          'text-sm',
+                          'font-medium',
+                          isActive(item.href)
+                            ? 'text-white'
+                            : 'text-gray-300 group-hover:text-white',
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           ))}

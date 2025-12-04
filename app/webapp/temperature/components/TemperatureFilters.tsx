@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export interface TemperatureFiltersProps {
   selectedDate: string;
@@ -29,19 +31,36 @@ export function TemperatureFilters({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   /**
-   * Gets the icon for a given equipment type.
+   * Safely converts an icon value to a string for rendering in select options.
+   * Prevents React component objects from being rendered directly.
+   * Returns empty string if icon is a React component or other non-string value.
+   */
+  const getIconString = (icon: unknown): string => {
+    if (typeof icon === 'string') {
+      return icon;
+    }
+    // If it's a React component or other object, return empty string
+    // (can't render React components in <option> elements)
+    return '';
+  };
+
+  /**
+   * Gets the icon string for a given equipment type (for use in select options).
    * Uses a deterministic lookup to prevent hydration mismatches.
    * Normalizes the type comparison to ensure consistency between server and client.
+   * Note: Returns emoji string for select options compatibility.
    */
   const getTypeIcon = (type: string): string => {
-    if (!type) return '🌡️';
+    if (!type) return '';
     // Normalize type for comparison (trim and lowercase)
     const normalizedType = type.trim().toLowerCase();
     const matched = temperatureTypes.find(
       tt => tt.value.toLowerCase() === normalizedType || tt.value === type,
     );
-    return matched?.icon || '🌡️';
+    // Return emoji string for select options (can't use React components in <option>)
+    return getIconString(matched?.icon) || '';
   };
 
   /**
@@ -145,7 +164,7 @@ export function TemperatureFilters({
               )
               .map(type => (
                 <option key={type.value} value={type.value}>
-                  {type.icon} {type.label}
+                  {getIconString(type.icon)} {type.label}
                 </option>
               ))}
           </select>
@@ -153,9 +172,10 @@ export function TemperatureFilters({
       </div>
       <button
         onClick={onAddClick}
-        className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+        className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
       >
-        ➕ {t('temperature.addLog', 'Add Temperature Log')}
+        <Icon icon={Plus} size="md" className="text-black" aria-hidden={true} />
+        {t('temperature.addLog', 'Add Temperature Log')}
       </button>
     </div>
   );

@@ -28,7 +28,7 @@ interface ConfirmOptions {
  * const handleDelete = async () => {
  *   const confirmed = await showConfirm({
  *     title: 'Delete Ingredient',
- *     message: 'Are you sure? This can\'t be undone.',
+ *     message: 'Delete this ingredient? This action can\'t be undone. Last chance to back out.',
  *     variant: 'danger',
  *     confirmLabel: 'Delete',
  *     cancelLabel: 'Cancel'

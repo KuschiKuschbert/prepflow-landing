@@ -127,7 +127,7 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
         onTouchStart={e => e.stopPropagation()}
       >
         <div className="mx-4 w-full max-w-2xl">
-          <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+          <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
             <div className="rounded-2xl bg-[#1f1f1f]/95">
               <div className="desktop:p-4 border-b border-[#2a2a2a] p-3">
                 <div className="relative">

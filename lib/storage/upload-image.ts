@@ -123,4 +123,3 @@ export async function uploadImagesToStorage(
   );
   return Promise.all(uploadPromises);
 }
-

@@ -37,7 +37,7 @@ export function parseSupabaseError(
   };
   if (!isPostgrestError(error)) {
     return {
-      message: 'Database error occurred',
+      message: "Something went wrong while saving your data. We're on it - try again in a moment.",
       code: 'DATABASE_ERROR',
       status: defaultStatus,
       details: error instanceof Error ? { message: error.message, stack: error.stack } : error,
@@ -54,7 +54,8 @@ export function parseSupabaseError(
   switch (errorCode) {
     case SUPABASE_ERROR_CODES.TABLE_NOT_FOUND:
       return {
-        message: 'Database table not found',
+        message:
+          "We couldn't find what we're looking for. This might be a setup issue - check your configuration.",
         code: 'TABLE_NOT_FOUND',
         status: 500,
         details:
@@ -65,7 +66,8 @@ export function parseSupabaseError(
       };
     case SUPABASE_ERROR_CODES.COLUMN_NOT_FOUND:
       return {
-        message: 'Database column not found',
+        message:
+          "We couldn't find what we're looking for. This might be a setup issue - check your configuration.",
         code: 'COLUMN_NOT_FOUND',
         status: 500,
         details:
@@ -94,7 +96,7 @@ export function parseSupabaseError(
       };
     case SUPABASE_ERROR_CODES.FOREIGN_KEY_VIOLATION:
       return {
-        message: 'Referenced record does not exist',
+        message: "Referenced record doesn't exist",
         code: 'FOREIGN_KEY_VIOLATION',
         status: 400,
         details:

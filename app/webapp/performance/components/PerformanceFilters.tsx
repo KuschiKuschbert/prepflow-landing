@@ -1,45 +1,65 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { PerformanceFilters as PerformanceFiltersType } from '../types';
 import { PerformanceItem } from '../types';
+import { LANDING_COLORS } from '@/lib/landing-styles';
 
 interface PerformanceFiltersProps {
   filters: PerformanceFiltersType;
   performanceItems: PerformanceItem[];
   filteredAndSortedItems: PerformanceItem[];
   onFiltersChange: (filters: PerformanceFiltersType) => void;
+  // Action buttons props
+  showImportModal: boolean;
+  onImportClick: () => void;
+  onExportCSV: () => void;
 }
 
 const MENU_ITEM_CLASSES = ["Chef's Kiss", 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'] as const;
-
-const QUICK_PRESETS = {
-  'Show Hidden Gems': ['Hidden Gem'],
-  'Show Bargain Buckets': ['Bargain Bucket'],
-  'Show Burnt Toast': ['Burnt Toast'],
-  "Show Chef's Kiss": ["Chef's Kiss"],
-} as const;
 
 export default function PerformanceFilters({
   filters,
   performanceItems,
   filteredAndSortedItems,
   onFiltersChange,
+  showImportModal,
+  onImportClick,
+  onExportCSV,
 }: PerformanceFiltersProps) {
-  const [isSticky, setIsSticky] = useState(false);
-  const filterRef = useRef<HTMLDivElement>(null);
+  // Tooltip states for action buttons
+  const [importTooltipVisible, setImportTooltipVisible] = useState(false);
+  const [exportTooltipVisible, setExportTooltipVisible] = useState(false);
+
+  // Refs for button positions
+  const importButtonRef = useRef<HTMLButtonElement>(null);
+  const exportButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Tooltip positions
+  const [importTooltipPos, setImportTooltipPos] = useState({ top: 0, left: 0 });
+  const [exportTooltipPos, setExportTooltipPos] = useState({ top: 0, left: 0 });
+
+  // Update tooltip positions when buttons are hovered
+  useEffect(() => {
+    if (importTooltipVisible && importButtonRef.current) {
+      const rect = importButtonRef.current.getBoundingClientRect();
+      setImportTooltipPos({
+        top: rect.top - 8, // Position above button
+        left: rect.left + rect.width / 2, // Center horizontally
+      });
+    }
+  }, [importTooltipVisible]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (filterRef.current) {
-        const rect = filterRef.current.getBoundingClientRect();
-        setIsSticky(rect.top <= 0);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (exportTooltipVisible && exportButtonRef.current) {
+      const rect = exportButtonRef.current.getBoundingClientRect();
+      setExportTooltipPos({
+        top: rect.top - 8,
+        left: rect.left + rect.width / 2,
+      });
+    }
+  }, [exportTooltipVisible]);
 
   const handleFilterChange = (key: keyof PerformanceFiltersType, value: any) => {
     onFiltersChange({
@@ -57,10 +77,6 @@ export default function PerformanceFilters({
     handleFilterChange('menuItemClass', newClasses);
   };
 
-  const handleQuickPreset = (preset: string[]) => {
-    handleFilterChange('menuItemClass', preset);
-  };
-
   // Calculate counts for each menu item class
   const classCounts = MENU_ITEM_CLASSES.reduce(
     (acc, className) => {
@@ -74,130 +90,190 @@ export default function PerformanceFilters({
     (filters.menuItemClass?.length || 0) > 0 || filters.searchTerm.length > 0;
 
   return (
-    <div
-      ref={filterRef}
-      className={`tablet:mb-4 tablet:space-y-3 desktop:mb-6 desktop:space-y-4 mb-3 space-y-2 transition-all ${
-        isSticky
-          ? 'tablet:p-4 desktop:p-6 sticky top-0 z-40 rounded-b-xl border-b border-[#2a2a2a] bg-[#1f1f1f] p-3 shadow-lg'
-          : ''
-      }`}
-    >
-      {/* Result count */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-400">
-          Showing <span className="font-semibold text-white">{filteredAndSortedItems.length}</span>{' '}
-          of <span className="font-semibold text-white">{performanceItems.length}</span> items
-        </div>
-        {hasActiveFilters && (
-          <button
-            onClick={() => {
-              handleFilterChange('menuItemClass', []);
-              handleFilterChange('searchTerm', '');
-            }}
-            className="text-fluid-sm text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
-          >
-            Clear All Filters
-          </button>
-        )}
-      </div>
+    <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
+      {/* Single Row: Actions, Result count, Filters, Search/Sort */}
+      <div className="tablet:flex-row flex flex-col items-center gap-2">
+        {/* Action Buttons - Moved to left (less frequently used) */}
+        <div className="flex items-center gap-1">
+          {/* Import Button with Tooltip */}
+          <div className="relative">
+            <button
+              ref={importButtonRef}
+              onClick={onImportClick}
+              className="flex items-center justify-center rounded-lg px-1.5 py-1 text-xs font-medium text-black transition-colors"
+              style={{
+                backgroundColor: LANDING_COLORS.primary,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = `${LANDING_COLORS.primary}CC`;
+                setImportTooltipVisible(true);
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = LANDING_COLORS.primary;
+                setImportTooltipVisible(false);
+              }}
+            >
+              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M3 3a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 13.293a1 1 0 011.414 0L10 15.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            {importTooltipVisible &&
+              typeof window !== 'undefined' &&
+              createPortal(
+                <div
+                  className="fixed z-[100] w-48 -translate-x-1/2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 text-xs text-gray-300 shadow-lg"
+                  style={{
+                    top: `${importTooltipPos.top - 40}px`,
+                    left: `${importTooltipPos.left}px`,
+                  }}
+                  onMouseEnter={() => setImportTooltipVisible(true)}
+                  onMouseLeave={() => setImportTooltipVisible(false)}
+                >
+                  Import sales data from CSV file
+                  <div className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-4 border-t-[#1f1f1f] border-r-transparent border-b-transparent border-l-transparent" />
+                </div>,
+                document.body,
+              )}
+          </div>
 
-      {/* Quick Filter Presets */}
-      <div className="flex flex-col gap-2">
-        <label className="text-xs font-medium text-gray-300">Quick Filters</label>
-        <div className="flex flex-wrap gap-1.5">
-          {Object.entries(QUICK_PRESETS).map(([presetName, presetClasses]) => {
-            const isActive = presetClasses.every(cls => filters.menuItemClass?.includes(cls));
-            return (
-              <button
-                key={presetName}
-                onClick={() => handleQuickPreset([...presetClasses])}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-                  isActive
-                    ? 'border-2 border-[#29E7CD] bg-[#29E7CD]/20 text-[#29E7CD] shadow-lg shadow-[#29E7CD]/20'
-                    : 'border border-[#2a2a2a] bg-[#2a2a2a] text-gray-400 hover:border-[#29E7CD]/50 hover:text-[#29E7CD]'
-                }`}
-              >
-                {presetName}
-              </button>
-            );
-          })}
+          {/* Export Button with Tooltip */}
+          <div className="relative">
+            <button
+              ref={exportButtonRef}
+              onClick={onExportCSV}
+              className="flex items-center justify-center rounded-lg px-1.5 py-1 text-xs font-medium text-white transition-colors"
+              style={{
+                backgroundColor: LANDING_COLORS.secondary,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = `${LANDING_COLORS.secondary}CC`;
+                setExportTooltipVisible(true);
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = LANDING_COLORS.secondary;
+                setExportTooltipVisible(false);
+              }}
+            >
+              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            {exportTooltipVisible &&
+              typeof window !== 'undefined' &&
+              createPortal(
+                <div
+                  className="fixed z-[100] w-48 -translate-x-1/2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 text-xs text-gray-300 shadow-lg"
+                  style={{
+                    top: `${exportTooltipPos.top - 40}px`,
+                    left: `${exportTooltipPos.left}px`,
+                  }}
+                  onMouseEnter={() => setExportTooltipVisible(true)}
+                  onMouseLeave={() => setExportTooltipVisible(false)}
+                >
+                  Export performance data to CSV
+                  <div className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-4 border-t-[#1f1f1f] border-r-transparent border-b-transparent border-l-transparent" />
+                </div>,
+                document.body,
+              )}
+          </div>
         </div>
-      </div>
 
-      {/* Filter by Class Chips */}
-      <div className="flex flex-col gap-2">
-        <label className="text-xs font-medium text-gray-300">Filter by Class</label>
-        <div className="flex flex-wrap gap-1.5">
+        {/* Result count */}
+        <div className="text-xs whitespace-nowrap text-gray-400">
+          <span className="font-semibold text-white">{filteredAndSortedItems.length}</span>/
+          <span className="font-semibold text-white">{performanceItems.length}</span>
+        </div>
+
+        {/* Filter by Class Chips - Compact inline */}
+        <div className="flex flex-wrap items-center gap-1">
           {MENU_ITEM_CLASSES.map(className => {
             const isActive = filters.menuItemClass?.includes(className) || false;
             const count = classCounts[className];
+            // Shortened labels for compact display
+            const shortLabel =
+              className === "Chef's Kiss"
+                ? 'Kiss'
+                : className === 'Hidden Gem'
+                  ? 'Gem'
+                  : className === 'Bargain Bucket'
+                    ? 'Bargain'
+                    : 'Toast';
 
             return (
               <button
                 key={className}
                 onClick={() => handleMenuItemClassToggle(className)}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                className={`rounded-full px-1.5 py-0.5 text-xs font-medium transition-all ${
                   isActive
                     ? className === "Chef's Kiss"
-                      ? 'border-2 border-green-500 bg-green-500/20 text-green-400 shadow-lg shadow-green-500/20'
+                      ? 'border-2 border-green-500 bg-green-500/20 text-green-400'
                       : className === 'Hidden Gem'
-                        ? 'border-2 border-blue-500 bg-blue-500/20 text-blue-400 shadow-lg shadow-blue-500/20'
+                        ? 'border-2 border-blue-500 bg-blue-500/20 text-blue-400'
                         : className === 'Bargain Bucket'
-                          ? 'border-2 border-yellow-500 bg-yellow-500/20 text-yellow-400 shadow-lg shadow-yellow-500/20'
-                          : 'border-2 border-red-500 bg-red-500/20 text-red-400 shadow-lg shadow-red-500/20'
+                          ? 'border-2 border-yellow-500 bg-yellow-500/20 text-yellow-400'
+                          : 'border-2 border-red-500 bg-red-500/20 text-red-400'
                     : 'border border-[#2a2a2a] bg-[#2a2a2a] text-gray-400 hover:border-[#29E7CD]/50 hover:text-[#29E7CD]'
                 }`}
+                title={className}
               >
-                {className}
-                <span className={`ml-2 ${isActive ? 'opacity-100' : 'opacity-60'}`}>({count})</span>
+                {shortLabel}
+                <span className={`ml-1 ${isActive ? 'opacity-100' : 'opacity-60'}`}>({count})</span>
               </button>
             );
           })}
+          {hasActiveFilters && (
+            <button
+              onClick={() => {
+                handleFilterChange('menuItemClass', []);
+                handleFilterChange('searchTerm', '');
+              }}
+              className="px-1 text-xs text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
+            >
+              Clear
+            </button>
+          )}
         </div>
-      </div>
 
-      {/* Search and Sort Controls */}
-      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-3">
-        <div className="flex flex-col">
-          <label className="mb-1.5 text-xs font-medium text-gray-300">Search</label>
+        {/* Search and Sort Controls - Compact inline (right side, most frequently used) */}
+        <div className="flex flex-1 items-center gap-1.5">
           <input
             type="text"
-            placeholder="Search dishes..."
+            placeholder="Search..."
             value={filters.searchTerm}
             onChange={e => handleFilterChange('searchTerm', e.target.value)}
-            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="min-w-0 flex-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-2 py-1 text-xs text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="mb-1.5 text-xs font-medium text-gray-300">Sort By</label>
           <select
             value={filters.sortBy}
             onChange={e => handleFilterChange('sortBy', e.target.value)}
-            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-1.5 py-1 text-xs text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           >
-            <option value="name">Dish Name</option>
-            <option value="number_sold">Number Sold</option>
-            <option value="popularity_percentage">Popularity %</option>
-            <option value="total_revenue">Total Revenue</option>
-            <option value="total_cost">Total Cost</option>
-            <option value="total_profit">Total Profit</option>
-            <option value="gross_profit_percentage">Gross Profit %</option>
-            <option value="profit_category">Profit Category</option>
-            <option value="popularity_category">Popularity Category</option>
-            <option value="menu_item_class">Menu Item Class</option>
+            <option value="name">Name</option>
+            <option value="number_sold">Sold</option>
+            <option value="popularity_percentage">Popularity</option>
+            <option value="total_revenue">Revenue</option>
+            <option value="total_cost">Cost</option>
+            <option value="total_profit">Profit</option>
+            <option value="gross_profit_percentage">Profit %</option>
+            <option value="profit_category">Profit Cat</option>
+            <option value="popularity_category">Popularity Cat</option>
+            <option value="menu_item_class">Class</option>
           </select>
-        </div>
-
-        <div className="flex flex-col">
-          <label className="mb-1.5 text-xs font-medium text-gray-300">Order</label>
           <select
             value={filters.sortOrder}
             onChange={e => handleFilterChange('sortOrder', e.target.value as 'asc' | 'desc')}
-            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-1.5 py-1 text-xs text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           >
-            <option value="desc">Descending</option>
-            <option value="asc">Ascending</option>
+            <option value="desc">↓</option>
+            <option value="asc">↑</option>
           </select>
         </div>
       </div>

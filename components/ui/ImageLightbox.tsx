@@ -25,7 +25,13 @@ interface ImageLightboxProps {
   platingMethod?: string;
 }
 
-export function ImageLightbox({ isOpen, imageUrl, alt, onClose, platingMethod }: ImageLightboxProps) {
+export function ImageLightbox({
+  isOpen,
+  imageUrl,
+  alt,
+  onClose,
+  platingMethod,
+}: ImageLightboxProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement | HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -129,7 +135,7 @@ export function ImageLightbox({ isOpen, imageUrl, alt, onClose, platingMethod }:
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-all duration-200 hover:bg-black/80 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-transparent"
+        className="absolute top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/80 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none"
         aria-label="Close image viewer"
       >
         <Icon icon={X} size="md" aria-hidden={true} />
@@ -141,7 +147,12 @@ export function ImageLightbox({ isOpen, imageUrl, alt, onClose, platingMethod }:
         {isLoading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3 rounded-2xl bg-black/60 px-6 py-4 backdrop-blur-sm">
-              <Icon icon={Loader2} size="xl" className="animate-spin text-[#29E7CD]" aria-hidden={true} />
+              <Icon
+                icon={Loader2}
+                size="xl"
+                className="animate-spin text-[#29E7CD]"
+                aria-hidden={true}
+              />
               <p className="text-sm font-medium text-white">Loading image...</p>
             </div>
           </div>
@@ -205,4 +216,3 @@ export function ImageLightbox({ isOpen, imageUrl, alt, onClose, platingMethod }:
     </div>
   );
 }
-

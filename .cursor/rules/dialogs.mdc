@@ -6,7 +6,7 @@ alwaysApply: true
 
 ### Overview
 
-PrepFlow uses standardized Material Design 3 dialog components with PrepFlow's friendly, kitchen-themed voice. All dialogs are accessible, keyboard-navigable, and follow consistent styling patterns.
+PrepFlow uses standardized Cyber Carrot Design System dialog components with PrepFlow's friendly, kitchen-themed voice. All dialogs are accessible, keyboard-navigable, and follow consistent styling patterns.
 
 ### Dialog Components
 
@@ -268,6 +268,9 @@ export function MyComponent() {
 - ❌ "⚠️ DELETE??? 😱" (too casual/unprofessional)
 - ❌ "This operation will permanently remove the selected entity from the database." (too technical)
 
+**See Also:**
+- `docs/VOICE_ENHANCEMENT_GUIDE.md` - Comprehensive voice enhancement guide with examples for dialogs, dropdowns, and input fields (MANDATORY for all new code)
+
 ### When to Use Which Hook
 
 **Decision Tree:**
@@ -337,7 +340,7 @@ export function MyComponent() {
 </div>
 ```
 
-### Material Design 3 Styling
+### Cyber Carrot Styling
 
 **Dialog Container:**
 - Border radius: `rounded-3xl` (soft and friendly)
@@ -350,7 +353,7 @@ export function MyComponent() {
 - Click to close: Backdrop click closes dialog (optional, configurable)
 
 **Buttons:**
-- Primary: Material 3 gradient (`from-[#29E7CD] to-[#D925C7]`) for confirm actions
+- Primary: Cyber Carrot gradient (`from-[#29E7CD] to-[#D925C7]`) for confirm actions
 - Secondary: `bg-[#2a2a2a]/40` with `border border-[#2a2a2a]` for cancel actions
 - Focus ring: `focus:ring-2 focus:ring-[#29E7CD]` (visible focus indicators)
 
@@ -360,7 +363,7 @@ export function MyComponent() {
 - Colors: Match variant (danger=red, warning=yellow, info=cyan)
 
 **Typography:**
-- Title: `text-fluid-xl` (Material 3 text hierarchy)
+- Title: `text-fluid-xl` (Cyber Carrot text hierarchy)
 - Message: `text-fluid-sm` (readable but not overwhelming)
 - Colors: `text-white` for titles, `text-gray-300` for messages
 
@@ -413,7 +416,7 @@ return (
 
 **Visual Testing:**
 - [ ] Z-index layering correct (no clipping behind other elements)
-- [ ] Material Design 3 styling consistent (looks good, feels good)
+- [ ] Cyber Carrot styling consistent (looks good, feels good)
 - [ ] Icons use Icon component with Lucide icons (no inline SVG)
 - [ ] All variants (danger, warning, info) work correctly (test each one)
 - [ ] Mobile touch interactions work (tap outside to close, etc.)
@@ -429,6 +432,6 @@ return (
 
 ### Related Documentation
 
-- **Design System:** See `design.mdc` for Material Design 3 guidelines
+- **Design System:** See `design.mdc` for Cyber Carrot Design System guidelines
 - **Development Standards:** See `development.mdc` for dialog usage standards
 - **Accessibility:** See `testing.mdc` for accessibility testing requirements

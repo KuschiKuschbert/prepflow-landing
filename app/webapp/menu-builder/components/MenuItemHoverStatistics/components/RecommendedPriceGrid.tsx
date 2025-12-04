@@ -40,4 +40,3 @@ export function RecommendedPriceGrid({ statistics }: { statistics: ItemStatistic
     </div>
   );
 }
-

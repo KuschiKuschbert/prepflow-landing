@@ -103,11 +103,13 @@ export function calculateFathersDay(year: number, country: 'au' | 'us' = 'au'): 
 export function calculateLabourDay(year: number, country: 'au' | 'us' = 'au'): Date {
   if (country === 'au') {
     const october = new Date(year, 9, 1); // October 1st
-    const firstMonday = october.getDay() === 1 ? 1 : october.getDay() === 0 ? 2 : 9 - october.getDay();
+    const firstMonday =
+      october.getDay() === 1 ? 1 : october.getDay() === 0 ? 2 : 9 - october.getDay();
     return new Date(year, 9, firstMonday);
   } else {
     const september = new Date(year, 8, 1); // September 1st
-    const firstMonday = september.getDay() === 1 ? 1 : september.getDay() === 0 ? 2 : 9 - september.getDay();
+    const firstMonday =
+      september.getDay() === 1 ? 1 : september.getDay() === 0 ? 2 : 9 - september.getDay();
     return new Date(year, 8, firstMonday);
   }
 }
@@ -201,7 +203,14 @@ export function silenceFor24h(): number {
  * Get the current page context from the URL path
  * @returns Context string or null if not in webapp
  */
-export function getCurrentContext(): 'ingredients' | 'recipes' | 'cogs' | 'performance' | 'temperature' | 'menu' | null {
+export function getCurrentContext():
+  | 'ingredients'
+  | 'recipes'
+  | 'cogs'
+  | 'performance'
+  | 'temperature'
+  | 'menu'
+  | null {
   if (typeof window === 'undefined') return null;
 
   const path = window.location.pathname;
@@ -212,7 +221,8 @@ export function getCurrentContext(): 'ingredients' | 'recipes' | 'cogs' | 'perfo
   if (path.startsWith('/webapp/cogs')) return 'cogs';
   if (path.startsWith('/webapp/performance')) return 'performance';
   if (path.startsWith('/webapp/temperature')) return 'temperature';
-  if (path.startsWith('/webapp/menu-builder') || path.startsWith('/webapp/dish-builder')) return 'menu';
+  if (path.startsWith('/webapp/menu-builder') || path.startsWith('/webapp/dish-builder'))
+    return 'menu';
 
   return null;
 }

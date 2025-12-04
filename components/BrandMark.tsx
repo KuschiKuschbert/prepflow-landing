@@ -94,7 +94,7 @@ export function BrandMark({
   }, []);
 
   // Enable floating automatically when seasonal effect is active
-  const effectiveFloating = floating || (seasonalEffect !== null);
+  const effectiveFloating = floating || seasonalEffect !== null;
   const shouldAnimate = effectiveFloating && !reducedMotion && animationIntensity > 0;
 
   return (
@@ -177,49 +177,85 @@ export function BrandMark({
           {/* Santa snowflakes */}
           {seasonalEffect === 'santaHat' && !reducedMotion && (
             <>
-              <div className="pf-snowflake pf-snowflake-1" aria-hidden="true">❄️</div>
-              <div className="pf-snowflake pf-snowflake-2" aria-hidden="true">❄️</div>
-              <div className="pf-snowflake pf-snowflake-3" aria-hidden="true">❄️</div>
+              <div className="pf-snowflake pf-snowflake-1" aria-hidden="true">
+                ❄️
+              </div>
+              <div className="pf-snowflake pf-snowflake-2" aria-hidden="true">
+                ❄️
+              </div>
+              <div className="pf-snowflake pf-snowflake-3" aria-hidden="true">
+                ❄️
+              </div>
             </>
           )}
           {/* Chef's Day sparkles */}
           {seasonalEffect === 'toque' && !reducedMotion && (
             <>
-              <div className="pf-chef-sparkle pf-chef-sparkle-1" aria-hidden="true">✨</div>
-              <div className="pf-chef-sparkle pf-chef-sparkle-2" aria-hidden="true">✨</div>
-              <div className="pf-chef-sparkle pf-chef-sparkle-3" aria-hidden="true">✨</div>
+              <div className="pf-chef-sparkle pf-chef-sparkle-1" aria-hidden="true">
+                ✨
+              </div>
+              <div className="pf-chef-sparkle pf-chef-sparkle-2" aria-hidden="true">
+                ✨
+              </div>
+              <div className="pf-chef-sparkle pf-chef-sparkle-3" aria-hidden="true">
+                ✨
+              </div>
             </>
           )}
           {/* New Year confetti */}
           {(seasonalEffect === 'newYear' || seasonalEffect === 'newYearsEve') && !reducedMotion && (
             <>
-              <div className="pf-confetti pf-confetti-1" aria-hidden="true">🎊</div>
-              <div className="pf-confetti pf-confetti-2" aria-hidden="true">🎉</div>
-              <div className="pf-confetti pf-confetti-3" aria-hidden="true">✨</div>
+              <div className="pf-confetti pf-confetti-1" aria-hidden="true">
+                🎊
+              </div>
+              <div className="pf-confetti pf-confetti-2" aria-hidden="true">
+                🎉
+              </div>
+              <div className="pf-confetti pf-confetti-3" aria-hidden="true">
+                ✨
+              </div>
             </>
           )}
           {/* Valentine hearts */}
           {seasonalEffect === 'valentines' && !reducedMotion && (
             <>
-              <div className="pf-heart pf-heart-1" aria-hidden="true">💖</div>
-              <div className="pf-heart pf-heart-2" aria-hidden="true">💕</div>
-              <div className="pf-heart pf-heart-3" aria-hidden="true">💗</div>
+              <div className="pf-heart pf-heart-1" aria-hidden="true">
+                💖
+              </div>
+              <div className="pf-heart pf-heart-2" aria-hidden="true">
+                💕
+              </div>
+              <div className="pf-heart pf-heart-3" aria-hidden="true">
+                💗
+              </div>
             </>
           )}
           {/* Easter eggs */}
           {seasonalEffect === 'easter' && !reducedMotion && (
             <>
-              <div className="pf-easter-egg pf-easter-egg-1" aria-hidden="true">🥚</div>
-              <div className="pf-easter-egg pf-easter-egg-2" aria-hidden="true">🐣</div>
-              <div className="pf-easter-egg pf-easter-egg-3" aria-hidden="true">🌸</div>
+              <div className="pf-easter-egg pf-easter-egg-1" aria-hidden="true">
+                🥚
+              </div>
+              <div className="pf-easter-egg pf-easter-egg-2" aria-hidden="true">
+                🐣
+              </div>
+              <div className="pf-easter-egg pf-easter-egg-3" aria-hidden="true">
+                🌸
+              </div>
             </>
           )}
           {/* Halloween bats/pumpkins */}
           {seasonalEffect === 'halloween' && !reducedMotion && (
             <>
-              <div className="pf-halloween pf-halloween-1" aria-hidden="true">🦇</div>
-              <div className="pf-halloween pf-halloween-2" aria-hidden="true">🎃</div>
-              <div className="pf-halloween pf-halloween-3" aria-hidden="true">👻</div>
+              <div className="pf-halloween pf-halloween-1" aria-hidden="true">
+                🦇
+              </div>
+              <div className="pf-halloween pf-halloween-2" aria-hidden="true">
+                🎃
+              </div>
+              <div className="pf-halloween pf-halloween-3" aria-hidden="true">
+                👻
+              </div>
             </>
           )}
         </>

@@ -2,7 +2,7 @@
  * Performance API utilities
  */
 
-import { DateRange } from '../types';
+import type { DateRange } from '../types';
 import { calculatePerformanceScore } from './calculatePerformanceScore';
 
 import { logger } from '@/lib/logger';

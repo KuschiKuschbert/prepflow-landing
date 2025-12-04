@@ -41,7 +41,7 @@ export function COGSCalculatorModal({ isOpen, item, onClose }: COGSCalculatorMod
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
-      <div className="relative max-h-[90vh] w-full max-w-7xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="relative max-h-[90vh] w-full max-w-7xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div className="max-h-[90vh] w-full overflow-hidden rounded-3xl bg-[#1f1f1f]/95">
           {/* Modal Header */}
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#2a2a2a] bg-[#1f1f1f] p-6">

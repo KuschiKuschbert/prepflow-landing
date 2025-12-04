@@ -24,6 +24,7 @@ const eslintCheck = require('./cleanup/checks/eslint');
 const deadCodeCheck = require('./cleanup/checks/dead-code');
 const securityCheck = require('./cleanup/checks/security');
 const performanceCheck = require('./cleanup/checks/performance');
+const voiceConsistencyCheck = require('./cleanup/checks/voice-consistency');
 
 // Import all fix modules
 const breakpointsFix = require('./cleanup/fixes/breakpoints');
@@ -31,6 +32,7 @@ const consoleLogsFix = require('./cleanup/fixes/console-logs');
 const unusedImportsFix = require('./cleanup/fixes/unused-imports');
 const prettierFix = require('./cleanup/fixes/prettier');
 const deadCodeFix = require('./cleanup/fixes/dead-code');
+const voiceConsistencyFix = require('./cleanup/fixes/voice-consistency');
 
 // Import utilities
 const {
@@ -55,6 +57,7 @@ const CHECK_MODULES = [
   deadCodeCheck,
   securityCheck,
   performanceCheck,
+  voiceConsistencyCheck,
 ];
 
 // All fix modules (mapped by check name)
@@ -64,6 +67,7 @@ const FIX_MODULES = {
   'unused-imports': unusedImportsFix,
   prettier: prettierFix,
   'dead-code': deadCodeFix,
+  'voice-consistency': voiceConsistencyFix,
 };
 
 /**

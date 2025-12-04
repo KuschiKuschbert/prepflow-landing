@@ -101,9 +101,7 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
   }
 
   // Get image URLs from dish or recipe
-  const imageUrl = isDish
-    ? (item.dishes as any)?.image_url
-    : (item.recipes as any)?.image_url;
+  const imageUrl = isDish ? (item.dishes as any)?.image_url : (item.recipes as any)?.image_url;
   const imageUrlAlternative = isDish
     ? (item.dishes as any)?.image_url_alternative
     : (item.recipes as any)?.image_url_alternative;
@@ -122,15 +120,41 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
         <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
       ) : null}
 
-      {/* Image Generation Button (compact) - only show if no images exist */}
-      {!hasImages && entityId && (
+      {/* Image Generation Button (compact) - always show to allow regeneration */}
+      {entityId && (
         <div className="flex-shrink-0" onClick={e => e.stopPropagation()}>
           <FoodImageGenerator
             entityType={isDish ? 'dish' : 'recipe'}
             entityId={entityId}
             entityName={entityName}
-            imageUrl={null}
-            imageUrlAlternative={null}
+            imageUrl={
+              hasImages
+                ? isDish
+                  ? (item.dishes as any)?.image_url
+                  : (item.recipes as any)?.image_url
+                : null
+            }
+            imageUrlAlternative={
+              hasImages
+                ? isDish
+                  ? (item.dishes as any)?.image_url_alternative
+                  : (item.recipes as any)?.image_url_alternative
+                : null
+            }
+            imageUrlModern={
+              hasImages
+                ? isDish
+                  ? (item.dishes as any)?.image_url_modern
+                  : (item.recipes as any)?.image_url_modern
+                : null
+            }
+            imageUrlMinimalist={
+              hasImages
+                ? isDish
+                  ? (item.dishes as any)?.image_url_minimalist
+                  : (item.recipes as any)?.image_url_minimalist
+                : null
+            }
             compact={true}
             showDisplay={false}
           />

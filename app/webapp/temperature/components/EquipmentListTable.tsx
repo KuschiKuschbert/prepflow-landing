@@ -9,6 +9,7 @@ import {
   PowerOff,
   QrCode,
   Trash2,
+  LucideIcon,
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { TemperatureEquipment } from '../types';
@@ -16,6 +17,7 @@ import { EquipmentListTableFilters } from './EquipmentListTableFilters';
 import { EquipmentListTableMobileCards } from './EquipmentListTableMobileCards';
 import { EquipmentListTableDesktop } from './EquipmentListTableDesktop';
 import { TablePagination } from '@/components/ui/TablePagination';
+import { getTypeIconComponent } from '../utils/temperatureUtils';
 interface EquipmentListTableProps {
   equipment: TemperatureEquipment[];
   editingId: string | null;
@@ -69,7 +71,7 @@ export function EquipmentListTable({
   const [filterType, setFilterType] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
-  const getTypeIcon = (type: string) => temperatureTypes.find(t => t.value === type)?.icon || '🌡️';
+  const getTypeIcon = (type: string): LucideIcon => getTypeIconComponent(type);
   const getTypeLabel = React.useCallback(
     (type: string) => temperatureTypes.find(t => t.value === type)?.label || type,
     [temperatureTypes],

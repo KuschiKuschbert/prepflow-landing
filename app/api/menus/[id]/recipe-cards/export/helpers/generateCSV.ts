@@ -61,4 +61,3 @@ export function generateCSV(menuName: string, cards: RecipeCardData[]): NextResp
     },
   });
 }
-

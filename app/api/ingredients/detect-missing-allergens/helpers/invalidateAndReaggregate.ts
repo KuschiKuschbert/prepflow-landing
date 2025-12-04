@@ -16,9 +16,8 @@ export async function invalidateAndReaggregate(ingredients: any[]): Promise<void
     throw new Error('Database connection not available');
   }
 
-  const { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } = await import(
-    '@/lib/allergens/cache-invalidation'
-  );
+  const { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } =
+    await import('@/lib/allergens/cache-invalidation');
   const { batchAggregateRecipeAllergens } = await import('@/lib/allergens/allergen-aggregation');
   const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');
 

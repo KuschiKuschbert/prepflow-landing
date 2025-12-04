@@ -48,7 +48,7 @@ export function IngredientPopover({
     <div
       ref={popoverRef}
       data-ingredient-popover
-      className="fixed z-[75] flex max-h-[500px] w-[400px] flex-col rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl"
+      className="fixed z-[75] flex max-h-[500px] w-[400px] flex-col rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl"
       style={{
         left: `${popoverPosition.left}px`,
         top: `${popoverPosition.top}px`,

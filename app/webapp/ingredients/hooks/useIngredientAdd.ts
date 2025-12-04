@@ -102,7 +102,15 @@ export function useIngredientAdd<
         throw error;
       }
     },
-    [setIngredients, setError, setShowAddForm, setWizardStep, setNewIngredient, queryClient, onIngredientAdded],
+    [
+      setIngredients,
+      setError,
+      setShowAddForm,
+      setWizardStep,
+      setNewIngredient,
+      queryClient,
+      onIngredientAdded,
+    ],
   );
 
   return { handleAddIngredient };

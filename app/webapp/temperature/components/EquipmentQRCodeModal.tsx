@@ -81,7 +81,7 @@ export function EquipmentQRCodeModal({
       aria-modal="true"
       aria-labelledby="qr-code-title"
     >
-      <div className="tablet:p-4 desktop:max-w-lg relative max-h-[95vh] w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="tablet:p-4 desktop:max-w-lg relative max-h-[95vh] w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div
           ref={modalRef}
           className="flex max-h-[95vh] w-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1f1f1f]/95 to-[#2a2a2a]/95 p-3"

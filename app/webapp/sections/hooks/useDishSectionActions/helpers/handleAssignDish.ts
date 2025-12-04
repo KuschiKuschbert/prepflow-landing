@@ -26,4 +26,3 @@ export async function handleAssignDish(
     setError('Failed to assign dish to section');
   }
 }
-

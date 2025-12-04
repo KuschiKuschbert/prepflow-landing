@@ -21,7 +21,7 @@ export default function PerformanceImportModal({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-2xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px]">
+      <div className="w-full max-w-2xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
         <div className="rounded-2xl bg-[#1f1f1f]/95 p-6">
           <h3 className="mb-4 text-xl font-semibold text-white">Import Sales Data</h3>
           <p className="mb-4 text-gray-300">

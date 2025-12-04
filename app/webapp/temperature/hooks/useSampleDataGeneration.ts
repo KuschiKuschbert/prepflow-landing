@@ -35,11 +35,16 @@ export function useSampleDataGeneration({ onRefreshLogs }: UseSampleDataGenerati
           }, 500);
         }
       } else {
-        showError(data.error || 'Failed to generate sample data');
+        showError(
+          data.error ||
+            "Couldn't whip up that sample data. Give it another shot - sometimes the kitchen needs a moment.",
+        );
       }
     } catch (error) {
       logger.error('Error generating sample data:', error);
-      showError('Failed to generate sample data. Please try again.');
+      showError(
+        "Couldn't whip up that sample data. Give it another shot - sometimes the kitchen needs a moment.",
+      );
     } finally {
       setIsGenerating(false);
     }

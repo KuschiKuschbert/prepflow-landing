@@ -64,7 +64,7 @@ export function HelpSupportPanel() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 gap-3 desktop:grid-cols-2">
+      <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
         <a
           href="mailto:hello@prepflow.org?subject=PrepFlow Support"
           className="flex items-center gap-3 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4 transition-colors hover:bg-[#2a2a2a]/40"
@@ -133,7 +133,10 @@ export function HelpSupportPanel() {
           </div>
 
           <div>
-            <label htmlFor="support-subject" className="mb-2 block text-sm font-medium text-gray-300">
+            <label
+              htmlFor="support-subject"
+              className="mb-2 block text-sm font-medium text-gray-300"
+            >
               Subject
             </label>
             <input
@@ -149,7 +152,10 @@ export function HelpSupportPanel() {
           </div>
 
           <div>
-            <label htmlFor="support-message" className="mb-2 block text-sm font-medium text-gray-300">
+            <label
+              htmlFor="support-message"
+              className="mb-2 block text-sm font-medium text-gray-300"
+            >
               Message
             </label>
             <textarea
@@ -189,4 +195,3 @@ export function HelpSupportPanel() {
     </div>
   );
 }
-

@@ -1,7 +1,9 @@
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
 import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { getDefaultTemperatureRange } from '../utils/getDefaultTemperatureRange';
+import { Plus } from 'lucide-react';
 
 interface CreateEquipmentFormProps {
   show: boolean;
@@ -54,7 +56,10 @@ export function CreateEquipmentForm({
   return (
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">➕ Add New Equipment</h3>
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-white">
+          <Icon icon={Plus} size="md" className="text-white" aria-hidden={true} />
+          Add New Equipment
+        </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
       <form onSubmit={onSubmit} className="space-y-4">

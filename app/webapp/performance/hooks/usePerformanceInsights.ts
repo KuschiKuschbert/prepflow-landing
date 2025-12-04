@@ -1,9 +1,9 @@
 'use client';
 
 import { useCountry } from '@/contexts/CountryContext';
+import { logger } from '@/lib/logger';
 import { useEffect, useMemo, useState } from 'react';
 import { PerformanceItem } from '../types';
-import { logger } from '@/lib/logger';
 import {
   generateBargainBucketInsight,
   generateBurntToastInsight,
@@ -87,7 +87,10 @@ export function usePerformanceInsights(
     return sortInsightsByPriority(result);
   }, [performanceItems]);
 
+  // Always show fallback insights immediately, only replace with AI if successful
+  // This prevents flickering when AI loads or fails
   const insights = aiInsights.length > 0 ? aiInsights : fallbackInsights;
+
   return {
     insights,
     hasInsights: insights.length > 0,

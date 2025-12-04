@@ -82,3 +82,8 @@ CREATE INDEX IF NOT EXISTS idx_import_export_logs_operation_type ON import_expor
 -- Add comment
 COMMENT ON TABLE import_export_logs IS 'Audit log of data import/export operations for compliance and user history.';
 
+
+
+
+
+

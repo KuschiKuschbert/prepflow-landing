@@ -110,6 +110,12 @@ const STANDARDS_CONFIG = {
       bundleSize: 200,
     },
   },
+  'voice-consistency': {
+    name: 'PrepFlow Voice Consistency',
+    source: '.cursor/rules/dialogs.mdc#prepflow-voice-guidelines',
+    severity: 'info',
+    fixable: true,
+  },
 };
 
 /**

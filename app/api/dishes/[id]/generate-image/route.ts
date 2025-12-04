@@ -8,17 +8,17 @@
  * Users can optionally specify multiple plating methods in the request body.
  */
 
+import type { FoodImageResult, PlatingMethod } from '@/lib/ai/ai-service/image-generation';
 import { generateFoodImagesForMethods } from '@/lib/ai/ai-service/image-generation';
-import type { PlatingMethod, FoodImageResult } from '@/lib/ai/ai-service/image-generation';
 import type { AIResponse } from '@/lib/ai/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { uploadImageToStorage } from '@/lib/storage/upload-image';
-import { fetchDishIngredients } from '../helpers/fetchDishIngredients';
-import { fetchDishRecipes } from '../helpers/fetchDishRecipes';
+import { supabaseAdmin } from '@/lib/supabase';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchDishIngredients } from '../helpers/fetchDishIngredients';
+import { fetchDishRecipes } from '../helpers/fetchDishRecipes';
 
 // Rate limiting: 10 generations per user per hour
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -95,7 +95,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     // Fetch dish
     const { data: dish, error: dishError } = await supabaseAdmin
       .from('dishes')
-      .select('id, dish_name, description, image_url, image_url_alternative, image_url_modern, image_url_minimalist')
+      .select(
+        'id, dish_name, description, image_url, image_url_alternative, image_url_modern, image_url_minimalist',
+      )
       .eq('id', dishId)
       .single();
 
@@ -104,10 +106,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         error: dishError?.message,
         dishId,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Dish not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Dish not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     // Check if images already exist (optional: skip if exists)
@@ -157,12 +158,27 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     // Fetch dish recipes using helper function (handles nested relations properly)
     let dishRecipes: any[] = [];
+    let recipeInstructions: string[] = [];
     try {
       dishRecipes = await fetchDishRecipes(dishId);
       logger.dev('[Dish Image Generation] Fetched dish recipes:', {
         dishId,
         count: dishRecipes.length,
         recipeIds: dishRecipes.map(dr => dr.recipe_id || dr.id),
+      });
+
+      // Collect instructions from all recipes
+      dishRecipes.forEach(dr => {
+        const recipe = dr.recipes || dr;
+        if (recipe?.instructions && recipe.instructions.trim().length > 0) {
+          recipeInstructions.push(recipe.instructions.trim());
+        }
+      });
+
+      logger.dev('[Dish Image Generation] Collected recipe instructions:', {
+        dishId,
+        instructionCount: recipeInstructions.length,
+        hasInstructions: recipeInstructions.length > 0,
       });
     } catch (error) {
       logger.error('[Dish Image Generation] Failed to fetch dish recipes:', {
@@ -203,8 +219,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
           recipeIngredients.forEach(ri => {
             const ingredient = ri.ingredients;
             if (ingredient && typeof ingredient === 'object' && ingredient !== null) {
-              const name =
-                (ingredient as any).ingredient_name || (ingredient as any).name;
+              const name = (ingredient as any).ingredient_name || (ingredient as any).name;
               if (name && typeof name === 'string') {
                 recipeIngredientNamesSet.add(name);
               }
@@ -265,11 +280,45 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     let selectedPlatingMethods: PlatingMethod[] | undefined;
     try {
       const body = await req.json().catch(() => ({}));
-      if (body.platingMethods && Array.isArray(body.platingMethods) && body.platingMethods.length > 0) {
-        selectedPlatingMethods = body.platingMethods;
+      if (
+        body.platingMethods &&
+        Array.isArray(body.platingMethods) &&
+        body.platingMethods.length > 0
+      ) {
+        // Validate and cast plating methods to ensure type safety
+        selectedPlatingMethods = body.platingMethods.filter(
+          (method: string): method is PlatingMethod => {
+            const validMethods: PlatingMethod[] = [
+              'classic',
+              'modern',
+              'rustic',
+              'minimalist',
+              'landscape',
+              'futuristic',
+              'hide_and_seek',
+              'super_bowl',
+              'bathing',
+              'deconstructed',
+              'stacking',
+              'brush_stroke',
+              'free_form',
+            ];
+            return validMethods.includes(method as PlatingMethod);
+          },
+        );
+
+        logger.dev('[Dish Image Generation] Parsed plating methods from request:', {
+          raw: body.platingMethods,
+          validated: selectedPlatingMethods,
+          dishId,
+        });
       }
-    } catch {
+    } catch (error) {
       // No body or invalid JSON - use defaults
+      logger.dev('[Dish Image Generation] Failed to parse request body:', {
+        error: error instanceof Error ? error.message : String(error),
+        dishId,
+      });
     }
 
     // Determine which plating methods to generate
@@ -303,10 +352,16 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     let imageResults: Record<string, AIResponse<FoodImageResult>>;
     try {
+      // Combine all recipe instructions into a single string (first 500 chars to keep prompt manageable)
+      const combinedInstructions =
+        recipeInstructions.length > 0 ? recipeInstructions.join(' ').substring(0, 500) : null;
+
       imageResults = await generateFoodImagesForMethods(
         dish.dish_name || 'Dish',
         ingredientNames,
         methodsToGenerate,
+        {},
+        combinedInstructions,
       );
     } catch (genError) {
       logger.error('[Dish Image Generation] Image generation failed:', {
@@ -324,11 +379,14 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       );
     }
 
-    // Extract results for each method (with fallbacks for methods not generated)
+    // Extract results for each method - handle both old and new method names
     const classic = imageResults.classic || { content: { imageUrl: '' }, error: 'Not generated' };
     const modern = imageResults.modern || { content: { imageUrl: '' }, error: 'Not generated' };
     const rustic = imageResults.rustic || { content: { imageUrl: '' }, error: 'Not generated' };
-    const minimalist = imageResults.minimalist || { content: { imageUrl: '' }, error: 'Not generated' };
+    const minimalist = imageResults.minimalist || {
+      content: { imageUrl: '' },
+      error: 'Not generated',
+    };
 
     // Check if any images failed
     const hasErrors = Object.values(imageResults).some(result => result.error);
@@ -350,35 +408,31 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       image_url_modern?: string;
       image_url_minimalist?: string;
     } = {};
+    const generatedImages: Record<string, string | null> = {};
 
     try {
-      if (classic.content?.imageUrl) {
-        const publicUrl = await uploadImageToStorage(
-          classic.content.imageUrl,
-          `dish-${dishId}-classic`,
-        );
-        updateData.image_url = publicUrl;
-      }
-      if (modern.content?.imageUrl) {
-        const publicUrl = await uploadImageToStorage(
-          modern.content.imageUrl,
-          `dish-${dishId}-modern`,
-        );
-        updateData.image_url_modern = publicUrl;
-      }
-      if (rustic.content?.imageUrl) {
-        const publicUrl = await uploadImageToStorage(
-          rustic.content.imageUrl,
-          `dish-${dishId}-rustic`,
-        );
-        updateData.image_url_alternative = publicUrl;
-      }
-      if (minimalist.content?.imageUrl) {
-        const publicUrl = await uploadImageToStorage(
-          minimalist.content.imageUrl,
-          `dish-${dishId}-minimalist`,
-        );
-        updateData.image_url_minimalist = publicUrl;
+      // Upload all generated images and store URLs
+      for (const [method, result] of Object.entries(imageResults)) {
+        if (result.content?.imageUrl) {
+          const publicUrl = await uploadImageToStorage(
+            result.content.imageUrl,
+            `dish-${dishId}-${method}`,
+          );
+          generatedImages[method] = publicUrl;
+
+          // Map to database columns for backward compatibility
+          if (method === 'classic') {
+            updateData.image_url = publicUrl;
+          } else if (method === 'modern') {
+            updateData.image_url_modern = publicUrl;
+          } else if (method === 'rustic') {
+            updateData.image_url_alternative = publicUrl;
+          } else if (method === 'minimalist') {
+            updateData.image_url_minimalist = publicUrl;
+          }
+        } else {
+          generatedImages[method] = null;
+        }
       }
     } catch (uploadError) {
       logger.error('[Dish Image Generation] Failed to upload images to storage:', {
@@ -424,10 +478,13 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     return NextResponse.json({
       success: true,
-      classic: updateData.image_url || null,
-      modern: updateData.image_url_modern || null,
-      rustic: updateData.image_url_alternative || null,
-      minimalist: updateData.image_url_minimalist || null,
+      // Return all generated methods dynamically
+      ...generatedImages,
+      // Legacy field mappings for backward compatibility
+      classic: generatedImages.classic || updateData.image_url || null,
+      modern: generatedImages.modern || updateData.image_url_modern || null,
+      rustic: generatedImages.rustic || updateData.image_url_alternative || null,
+      minimalist: generatedImages.minimalist || updateData.image_url_minimalist || null,
       // Legacy aliases for backward compatibility
       imageUrl: updateData.image_url || null,
       imageUrlAlternative: updateData.image_url_alternative || null,

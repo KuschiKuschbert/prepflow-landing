@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Edit, Power, PowerOff, QrCode, Trash2 } from 'lucide-react';
+import { Edit, Power, PowerOff, QrCode, Trash2, LucideIcon } from 'lucide-react';
 import React from 'react';
 import { TemperatureEquipment } from '../types';
 
@@ -17,7 +17,7 @@ interface EquipmentListTableRowProps {
   onUpdate: (id: string, updates: Partial<TemperatureEquipment>) => void;
   onEquipmentClick?: (equipment: TemperatureEquipment) => void;
   onShowQRCode?: (equipment: TemperatureEquipment) => void;
-  getTypeIcon: (type: string) => string;
+  getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
   getLastLogDate?: (equipment: TemperatureEquipment) => string | null;
   getLastLogInfo?: (equipment: TemperatureEquipment) => {
@@ -59,7 +59,12 @@ export function EquipmentListTableRow({
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <span className="text-xl">{getTypeIcon(item.equipment_type)}</span>
+              <Icon
+                icon={getTypeIcon(item.equipment_type)}
+                size="lg"
+                className="text-[#29E7CD]"
+                aria-hidden={true}
+              />
             </div>
             <div className="min-w-0">
               <div className="text-sm font-semibold text-white transition-colors group-hover:text-[#29E7CD]">

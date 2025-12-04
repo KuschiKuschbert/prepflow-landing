@@ -1,0 +1,1055 @@
+{
+  "total": 49,
+  "byType": {
+    "generic-message": 19,
+    "missing-contraction": 18,
+    "technical-jargon": 12
+  },
+  "bySeverity": {
+    "warning": 25,
+    "info": 24
+  },
+  "files": {
+    "app/api/ai-specials/helpers/handleAISpecialsError.ts": [
+      {
+        "file": "app/api/ai-specials/helpers/handleAISpecialsError.ts",
+        "line": 21,
+        "message": "generic-message: \"An unexpected error occurred\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "An unexpected error occurred",
+        "violation": {
+          "type": "generic-message",
+          "text": "An unexpected error occurred",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "app/api/menus/[id]/helpers/fetchMenuWithItems.ts": [
+      {
+        "file": "app/api/menus/[id]/helpers/fetchMenuWithItems.ts",
+        "line": 28,
+        "message": "missing-contraction: \"The requested menu could not be found\" - Consider using \"couldn't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "The requested menu could not be found",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "The requested menu could not be found",
+          "rule": {
+            "pattern": {},
+            "fix": "couldn't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"couldn't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "app/api/menus/[id]/ingredients/helpers/fetchIngredientsWithParLevels.ts": [
+      {
+        "file": "app/api/menus/[id]/ingredients/helpers/fetchIngredientsWithParLevels.ts",
+        "line": 50,
+        "message": "technical-jargon: \"One or more database columns are missing. Please ensure your database schema is up to date.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "One or more database columns are missing. Please ensure your database schema is up to date.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "One or more database columns are missing. Please ensure your database schema is up to date.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "app/api/recipe-share/helpers/fetchRecipeWithIngredients.ts": [
+      {
+        "file": "app/api/recipe-share/helpers/fetchRecipeWithIngredients.ts",
+        "line": 46,
+        "message": "missing-contraction: \"Could not find the specified recipe\" - Consider using \"couldn't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Could not find the specified recipe",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Could not find the specified recipe",
+          "rule": {
+            "pattern": {},
+            "fix": "couldn't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"couldn't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "app/api/recipe-share/helpers/handleRecipeShareError.ts": [
+      {
+        "file": "app/api/recipe-share/helpers/handleRecipeShareError.ts",
+        "line": 21,
+        "message": "generic-message: \"An unexpected error occurred\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "An unexpected error occurred",
+        "violation": {
+          "type": "generic-message",
+          "text": "An unexpected error occurred",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "app/api/setup-cleaning-tasks/helpers/validateCleaningTables.ts": [
+      {
+        "file": "app/api/setup-cleaning-tasks/helpers/validateCleaningTables.ts",
+        "line": 26,
+        "message": "technical-jargon: \"Database connection not available\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Database connection not available",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Database connection not available",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "app/components/landing/Resources.tsx": [
+      {
+        "file": "app/components/landing/Resources.tsx",
+        "line": 25,
+        "message": "technical-jargon: \"Reliable database, protected access, and regular backups.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Reliable database, protected access, and regular backups.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Reliable database, protected access, and regular backups.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/privacy-policy/page.tsx": [
+      {
+        "file": "app/privacy-policy/page.tsx",
+        "line": 50,
+        "message": "missing-contraction: \"By using PrepFlow, you agree to the collection and use of information in accordance\n                with this policy. If you do not agree with our policies and practices, please do not\n                use our service.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "By using PrepFlow, you agree to the collection and use of information in accordance\n                with this policy. If you do not agree with our policies and practices, please do not\n                use our service.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "By using PrepFlow, you agree to the collection and use of information in accordance\n                with this policy. If you do not agree with our policies and practices, please do not\n                use our service.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/privacy-policy/page.tsx",
+        "line": 110,
+        "message": "missing-contraction: \"We do not sell, trade, or rent your personal information to third parties. We may\n                share your information only in the following circumstances:\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "We do not sell, trade, or rent your personal information to third parties. We may\n                share your information only in the following circumstances:",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "We do not sell, trade, or rent your personal information to third parties. We may\n                share your information only in the following circumstances:",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/privacy-policy/page.tsx",
+        "line": 241,
+        "message": "missing-contraction: \"PrepFlow is not intended for use by individuals under the age of 18. We do not\n                knowingly collect personal information from children. If you believe we have\n                collected information from a child, please contact us immediately.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "PrepFlow is not intended for use by individuals under the age of 18. We do not\n                knowingly collect personal information from children. If you believe we have\n                collected information from a child, please contact us immediately.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "PrepFlow is not intended for use by individuals under the age of 18. We do not\n                knowingly collect personal information from children. If you believe we have\n                collected information from a child, please contact us immediately.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/terms-of-service/page.tsx": [
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 51,
+        "message": "missing-contraction: \"By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to\n                be bound by the terms and provision of this agreement. If you do not agree to abide\n                by the above, please do not use this service.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to\n                be bound by the terms and provision of this agreement. If you do not agree to abide\n                by the above, please do not use this service.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to\n                be bound by the terms and provision of this agreement. If you do not agree to abide\n                by the above, please do not use this service.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 76,
+        "message": "missing-contraction: \"The Service is designed to assist restaurant owners, managers, and chefs in making\n                informed business decisions. However, we do not guarantee specific financial\n                outcomes.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "The Service is designed to assist restaurant owners, managers, and chefs in making\n                informed business decisions. However, we do not guarantee specific financial\n                outcomes.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "The Service is designed to assist restaurant owners, managers, and chefs in making\n                informed business decisions. However, we do not guarantee specific financial\n                outcomes.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 199,
+        "message": "missing-contraction: \"We strive to provide reliable service but\n                cannot guarantee uninterrupted access. The Service may be temporarily unavailable\n                due to maintenance, updates, or technical issues.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "We strive to provide reliable service but\n                cannot guarantee uninterrupted access. The Service may be temporarily unavailable\n                due to maintenance, updates, or technical issues.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "We strive to provide reliable service but\n                cannot guarantee uninterrupted access. The Service may be temporarily unavailable\n                due to maintenance, updates, or technical issues.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 209,
+        "message": "missing-contraction: \"PrepFlow is a tool to assist decision-making,\n                but we do not guarantee specific financial results, increased profits, or business\n                success.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "PrepFlow is a tool to assist decision-making,\n                but we do not guarantee specific financial results, increased profits, or business\n                success.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "PrepFlow is a tool to assist decision-making,\n                but we do not guarantee specific financial results, increased profits, or business\n                success.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 282,
+        "message": "missing-contraction: \"If a dispute cannot be resolved amicably, it shall be subject to the exclusive\n                jurisdiction of the courts of Australia.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "If a dispute cannot be resolved amicably, it shall be subject to the exclusive\n                jurisdiction of the courts of Australia.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "If a dispute cannot be resolved amicably, it shall be subject to the exclusive\n                jurisdiction of the courts of Australia.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/ingredients/components/BulkAllergenDetection.tsx": [
+      {
+        "file": "app/webapp/ingredients/components/BulkAllergenDetection.tsx",
+        "line": 83,
+        "message": "generic-message: \"Network error occurred while detecting allergens\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "Network error occurred while detecting allergens",
+        "violation": {
+          "type": "generic-message",
+          "text": "Network error occurred while detecting allergens",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/order-lists/page.tsx": [
+      {
+        "file": "app/webapp/order-lists/page.tsx",
+        "line": 193,
+        "message": "technical-jargon: \"This usually means your database schema needs to be updated. Check the server logs\n                for more details.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "This usually means your database schema needs to be updated. Check the server logs\n                for more details.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "This usually means your database schema needs to be updated. Check the server logs\n                for more details.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/recipes/components/BulkDeleteConfirmationModal.tsx": [
+      {
+        "file": "app/webapp/recipes/components/BulkDeleteConfirmationModal.tsx",
+        "line": 48,
+        "message": "missing-contraction: \"This action cannot be undone\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "This action cannot be undone",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "This action cannot be undone",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/recipes/components/DeleteConfirmationModal.tsx": [
+      {
+        "file": "app/webapp/recipes/components/DeleteConfirmationModal.tsx",
+        "line": 60,
+        "message": "missing-contraction: \"This action cannot be undone\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "This action cannot be undone",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "This action cannot be undone",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/recipes/components/DishEditDrawer.tsx": [
+      {
+        "file": "app/webapp/recipes/components/DishEditDrawer.tsx",
+        "line": 140,
+        "message": "generic-message: \"Failed to load dish details. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to load dish details. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to load dish details. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/roster/components/RosterBuilder.tsx": [
+      {
+        "file": "app/webapp/roster/components/RosterBuilder.tsx",
+        "line": 373,
+        "message": "generic-message: \"Failed to update shift. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to update shift. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to update shift. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/roster/components/RosterBuilder.tsx",
+        "line": 425,
+        "message": "generic-message: \"Failed to create shift. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to create shift. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to create shift. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/roster/components/RosterBuilder.tsx",
+        "line": 544,
+        "message": "generic-message: \"Failed to delete shift. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to delete shift. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to delete shift. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/roster/components/RosterBuilder.tsx",
+        "line": 654,
+        "message": "generic-message: \"Failed to remove employee from roster. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to remove employee from roster. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to remove employee from roster. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/roster/components/RosterBuilder.tsx",
+        "line": 750,
+        "message": "generic-message: \"Failed to delete shifts. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to delete shifts. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to delete shifts. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx",
+        "line": 229,
+        "message": "technical-jargon: \"Syncs your local preferences (enabled state and selected sections) to the server\n                database so they persist across devices and browser sessions. Currently uses\n                localStorage by default; syncing saves preferences to your account.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Syncs your local preferences (enabled state and selected sections) to the server\n                database so they persist across devices and browser sessions. Currently uses\n                localStorage by default; syncing saves preferences to your account.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Syncs your local preferences (enabled state and selected sections) to the server\n                database so they persist across devices and browser sessions. Currently uses\n                localStorage by default; syncing saves preferences to your account.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx",
+        "line": 224,
+        "message": "technical-jargon: \"Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "accessibility"
+      }
+    ],
+    "app/webapp/settings/components/ImportExportHistoryPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/ImportExportHistoryPanel.tsx",
+        "line": 117,
+        "message": "technical-jargon: \"No import/export history found. History will be tracked after database migration is\n          applied.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "No import/export history found. History will be tracked after database migration is\n          applied.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "No import/export history found. History will be tracked after database migration is\n          applied.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/settings/components/PrivacyControlsPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+        "line": 139,
+        "message": "missing-contraction: \"Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+        "line": 247,
+        "message": "technical-jargon: \"No recent activity found. Activity will be tracked after database migration is applied.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "No recent activity found. Activity will be tracked after database migration is applied.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "No recent activity found. Activity will be tracked after database migration is applied.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+        "line": 341,
+        "message": "missing-contraction: \"Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+        "line": 341,
+        "message": "missing-contraction: \"Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.\" - Consider using \"you'll\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+          "rule": {
+            "pattern": {},
+            "fix": "you'll",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"you'll\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/settings/components/ProfileInformationPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/ProfileInformationPanel.tsx",
+        "line": 408,
+        "message": "missing-contraction: \"Email is managed by your authentication provider and cannot be changed here.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Email is managed by your authentication provider and cannot be changed here.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Email is managed by your authentication provider and cannot be changed here.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/settings/components/SecurityPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/SecurityPanel.tsx",
+        "line": 258,
+        "message": "technical-jargon: \"No login history found. History will be tracked after database migration is applied.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "No login history found. History will be tracked after database migration is applied.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "No login history found. History will be tracked after database migration is applied.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/setup/components/IngredientsSetup.tsx": [
+      {
+        "file": "app/webapp/setup/components/IngredientsSetup.tsx",
+        "line": 73,
+        "message": "technical-jargon: \"Ingredients Database\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Ingredients Database",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Ingredients Database",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/setup/components/TestDataGenerator.tsx": [
+      {
+        "file": "app/webapp/setup/components/TestDataGenerator.tsx",
+        "line": 36,
+        "message": "generic-message: \"Network error occurred while generating test data\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "Network error occurred while generating test data",
+        "violation": {
+          "type": "generic-message",
+          "text": "Network error occurred while generating test data",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/setup/page.tsx": [
+      {
+        "file": "app/webapp/setup/page.tsx",
+        "line": 187,
+        "message": "missing-contraction: \"Delete your lists and shares. Does not affect global recipes/ingredients.\" - Consider using \"doesn't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Delete your lists and shares. Does not affect global recipes/ingredients.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Delete your lists and shares. Does not affect global recipes/ingredients.",
+          "rule": {
+            "pattern": {},
+            "fix": "doesn't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"doesn't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/temperature/hooks/useSampleDataGeneration.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useSampleDataGeneration.ts",
+        "line": 42,
+        "message": "generic-message: \"Failed to generate sample data. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to generate sample data. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to generate sample data. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/quickTempLog.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/quickTempLog.ts",
+        "line": 54,
+        "message": "generic-message: \"Failed to log temperature. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to log temperature. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to log temperature. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/temperature/hooks/utils/generateSampleDataHandler.ts": [
+      {
+        "file": "app/webapp/temperature/hooks/utils/generateSampleDataHandler.ts",
+        "line": 37,
+        "message": "generic-message: \"Failed to generate sample data. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to generate sample data. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to generate sample data. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "components/ui/FoodImageGenerator.tsx": [
+      {
+        "file": "components/ui/FoodImageGenerator.tsx",
+        "line": 333,
+        "message": "generic-message: \"Maximum 10 generations per hour. Please try again later.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Maximum 10 generations per hour. Please try again later.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Maximum 10 generations per hour. Please try again later.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "hooks/useConfirm.tsx": [
+      {
+        "file": "hooks/useConfirm.tsx",
+        "line": 31,
+        "message": "generic-message: \"Are you sure? This can\\\" - Use PrepFlow voice with kitchen metaphors",
+        "severity": "warning",
+        "fixable": false,
+        "text": "Are you sure? This can\\",
+        "violation": {
+          "type": "generic-message",
+          "text": "Are you sure? This can\\",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Use PrepFlow voice with kitchen metaphors",
+            "severity": "warning"
+          },
+          "suggestion": "Use PrepFlow voice with kitchen metaphors",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "lib/ai/utils/errorParser.ts": [
+      {
+        "file": "lib/ai/utils/errorParser.ts",
+        "line": 34,
+        "message": "generic-message: \"AI service rate limit exceeded. Please try again later.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "AI service rate limit exceeded. Please try again later.",
+        "violation": {
+          "type": "generic-message",
+          "text": "AI service rate limit exceeded. Please try again later.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/ai/utils/errorParser.ts",
+        "line": 59,
+        "message": "generic-message: \"AI request timed out. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "AI request timed out. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "AI request timed out. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/ai/utils/errorParser.ts",
+        "line": 112,
+        "message": "generic-message: \"An unexpected error occurred with the AI service.\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "An unexpected error occurred with the AI service.",
+        "violation": {
+          "type": "generic-message",
+          "text": "An unexpected error occurred with the AI service.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "lib/api-error-handler/supabaseErrorParser.ts": [
+      {
+        "file": "lib/api-error-handler/supabaseErrorParser.ts",
+        "line": 40,
+        "message": "generic-message: \"Database error occurred\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "Database error occurred",
+        "violation": {
+          "type": "generic-message",
+          "text": "Database error occurred",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/api-error-handler/supabaseErrorParser.ts",
+        "line": 40,
+        "message": "technical-jargon: \"Database error occurred\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Database error occurred",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Database error occurred",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/api-error-handler/supabaseErrorParser.ts",
+        "line": 68,
+        "message": "technical-jargon: \"Database column not found\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Database column not found",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Database column not found",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/api-error-handler/supabaseErrorParser.ts",
+        "line": 97,
+        "message": "missing-contraction: \"Referenced record does not exist\" - Consider using \"doesn't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Referenced record does not exist",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Referenced record does not exist",
+          "rule": {
+            "pattern": {},
+            "fix": "doesn't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"doesn't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "dialog"
+      }
+    ]
+  },
+  "timestamp": "2025-12-04T11:38:18.048Z"
+}

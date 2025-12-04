@@ -109,10 +109,10 @@ export default function BillingSettingsPage() {
               <p className="mt-1 text-sm text-gray-300">Your active subscription details</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 desktop:grid-cols-2">
+            <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
               <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
                 <p className="text-xs text-gray-500">Plan</p>
-                <p className="text-lg font-semibold capitalize text-white">
+                <p className="text-lg font-semibold text-white capitalize">
                   {subscriptionData.subscription.tier}
                 </p>
               </div>
@@ -129,7 +129,7 @@ export default function BillingSettingsPage() {
                     }
                     aria-hidden={true}
                   />
-                  <p className="text-lg font-semibold capitalize text-white">
+                  <p className="text-lg font-semibold text-white capitalize">
                     {subscriptionData.subscription.status}
                   </p>
                 </div>
@@ -158,7 +158,7 @@ export default function BillingSettingsPage() {
               <p className="mt-1 text-sm text-gray-300">Your current data usage</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 desktop:grid-cols-3">
+            <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
               <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
                 <div className="flex items-center gap-2">
                   <Icon icon={Package} size="md" className="text-[#29E7CD]" aria-hidden={true} />
@@ -186,9 +186,7 @@ export default function BillingSettingsPage() {
                   <Icon icon={CreditCard} size="md" className="text-[#D925C7]" aria-hidden={true} />
                   <div>
                     <p className="text-xs text-gray-500">Menu Dishes</p>
-                    <p className="text-2xl font-bold text-white">
-                      {subscriptionData.usage.dishes}
-                    </p>
+                    <p className="text-2xl font-bold text-white">{subscriptionData.usage.dishes}</p>
                   </div>
                 </div>
               </div>
@@ -224,8 +222,8 @@ export default function BillingSettingsPage() {
             </div>
 
             <p className="text-xs text-gray-500">
-              The billing portal allows you to update your payment method, view billing history,
-              and manage your subscription.
+              The billing portal allows you to update your payment method, view billing history, and
+              manage your subscription.
             </p>
           </div>
         </>

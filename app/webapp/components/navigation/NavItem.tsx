@@ -85,17 +85,47 @@ export function NavItem({
         href={href}
         onClick={handleClick}
         onMouseEnter={() => prefetchRoute(href)}
-        className={`group flex min-h-[44px] items-center space-x-2 rounded-lg px-3 py-3 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
-          isActive
-            ? `border border-[#29E7CD]/20 bg-[#29E7CD]/10 ${className}`
-            : `hover:bg-[#2a2a2a]/30 ${className}`
-        }`}
+        className={`group flex min-h-[44px] items-center py-3 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
+          showLabel
+            ? `space-x-3 rounded-lg px-4 transition-all duration-200 ${
+                isActive
+                  ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
+                  : 'hover:scale-[1.02] hover:bg-[#2a2a2a]/30'
+              }`
+            : 'justify-center rounded-none !border-0 !bg-transparent px-3 !shadow-none !outline-none hover:!bg-transparent'
+        } ${showLabel ? className : ''}`}
+        style={{
+          ...(showLabel
+            ? {
+                transitionTimingFunction: 'var(--easing-standard)',
+              }
+            : {
+                backgroundColor: 'transparent !important',
+                border: 'none !important',
+                borderRadius: '0 !important',
+                boxShadow: 'none !important',
+                outline: 'none !important',
+                transition: 'none',
+              }),
+        }}
         aria-current={isActive ? 'page' : undefined}
       >
         <span
-          className={`${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} flex items-center justify-center ${iconSizeClasses.sm}`}
+          className={`flex flex-shrink-0 items-center justify-center ${
+            showLabel
+              ? `${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} ${iconSizeClasses.sm}`
+              : `flex aspect-square h-10 w-10 items-center justify-center rounded-full border-2 ${
+                  isActive
+                    ? 'border-[#29E7CD]/50'
+                    : 'border-transparent group-hover:border-[#2a2a2a]/50'
+                } ${isActive ? color : 'text-gray-400 group-hover:text-gray-300'}`
+          }`}
         >
-          {icon}
+          {showLabel ? (
+            icon
+          ) : (
+            <span className={`${iconSizeClasses.sm} flex items-center justify-center`}>{icon}</span>
+          )}
         </span>
         {showLabel && (
           <span
@@ -115,17 +145,49 @@ export function NavItem({
       href={href}
       onClick={onClick}
       onMouseEnter={() => prefetchRoute(href)}
-      className={`group flex min-h-[44px] items-center space-x-3 rounded-lg px-3 py-2.5 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
-        isActive
-          ? `border border-[#29E7CD]/20 bg-[#29E7CD]/10 ${className}`
-          : `hover:bg-[#2a2a2a]/50 ${className}`
-      }`}
+      className={`${showLabel ? 'group' : ''} flex ${showLabel ? 'min-h-[44px]' : ''} items-center ${showLabel ? 'py-3' : 'py-0'} ${
+        showLabel
+          ? `space-x-4 rounded-lg px-4 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
+              isActive
+                ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
+                : 'hover:scale-[1.02] hover:bg-[#2a2a2a]/50'
+            }`
+          : 'justify-center rounded-none !border-0 !bg-transparent px-0 py-0 !shadow-none !ring-0 !outline-none hover:!bg-transparent focus:!ring-0'
+      } ${showLabel ? className : ''}`}
+      style={{
+        ...(showLabel
+          ? {
+              transitionTimingFunction: 'var(--easing-standard)',
+            }
+          : {
+              backgroundColor: 'transparent !important',
+              border: 'none !important',
+              borderRadius: '0 !important',
+              boxShadow: 'none !important',
+              outline: 'none !important',
+              transition: 'none',
+            }),
+      }}
       aria-current={isActive ? 'page' : undefined}
     >
       <span
-        className={`${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} flex items-center justify-center ${iconSizeClasses[iconSize]}`}
+        className={`flex flex-shrink-0 items-center justify-center ${
+          showLabel
+            ? `${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} ${iconSizeClasses[iconSize]}`
+            : `flex aspect-square h-10 w-10 items-center justify-center rounded-full border-2 ${
+                isActive
+                  ? 'border-[#29E7CD]/50'
+                  : 'border-transparent group-hover:border-[#2a2a2a]/50'
+              } ${isActive ? color : 'text-gray-400 group-hover:text-gray-300'}`
+        }`}
       >
-        {icon}
+        {showLabel ? (
+          icon
+        ) : (
+          <span className={`${iconSizeClasses[iconSize]} flex items-center justify-center`}>
+            {icon}
+          </span>
+        )}
       </span>
       {showLabel && (
         <span

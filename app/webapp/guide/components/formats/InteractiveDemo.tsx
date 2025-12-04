@@ -157,7 +157,7 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
         <div
           ref={overlayRef}
           className={`rounded-lg transition-all ${getHighlightClass()}`}
-          aria-hidden="true"
+          aria-hidden={true}
         />
       )}
 

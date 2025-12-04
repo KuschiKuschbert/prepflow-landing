@@ -394,5 +394,3 @@ The copy folder's approach prioritizes:
 4. **Consistency** - ScrollReveal everywhere, same patterns throughout
 
 Apply these patterns consistently across the entire codebase for a snappier, smoother experience.
-
-

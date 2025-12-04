@@ -75,7 +75,7 @@
 - Performance: Lighthouse ≥ 90; CLS < 0.1; LCP < 2.5s
 - Analytics: tour_open/close, step navigation, CTA clicks
 
-### Landing Page Style System
+### Landing Page Style System (Cyber Carrot)
 
 **Style System Decision Tree:**
 
@@ -146,7 +146,7 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 - `docs/LANDING_PAGE_STYLE_GUIDE.md` - Complete style guide with all patterns
 - `docs/LANDING_STYLE_MIGRATION.md` - Migration examples and best practices
-- `.cursor/rules/design.mdc` (Landing Page Style System) - Design system documentation
+- `.cursor/rules/design.mdc` (Landing Page Style System - Cyber Carrot) - Design system documentation
 
 ## Development Utilities
 
@@ -414,6 +414,23 @@ mobile/                 # React Native app (future)
 - **Functions:** camelCase with descriptive verbs (e.g., `trackUserEngagement`)
 - **Constants:** UPPER_SNAKE_CASE (e.g., `GTM_EVENTS`)
 - **CSS Classes:** Tailwind utility classes with custom CSS variables
+
+### **Voice & Tone Standards**
+
+**MANDATORY:** All user-facing text (dialogs, dropdowns, input fields, error messages) must follow PrepFlow's cheeky kitchen humor voice.
+
+**Key Principles:**
+
+- Professional but friendly, kitchen-themed metaphors when appropriate
+- Use contractions ("can't", "won't", "you'll") for natural speech
+- Clear and direct, avoid technical jargon
+- Add personality without being unprofessional
+
+**See Also:**
+
+- `docs/VOICE_ENHANCEMENT_GUIDE.md` - Comprehensive voice enhancement guide with examples for dialogs, dropdowns, and input fields (MANDATORY for all new code)
+- `.cursor/rules/dialogs.mdc` - Dialog usage standards and PrepFlow voice guidelines
+- `.cursor/rules/development.mdc` - Development standards including voice guidelines
 
 ### **Testing Requirements**
 
@@ -797,29 +814,36 @@ npm run codemod:console:write
 
 **Status:** ✅ Breakpoint and Console migrations fully implemented and tested
 
-## 🎨 **Material Design 3 Design System**
+## 🎨 **Cyber Carrot Design System**
 
-**Note:** This design system applies to the webapp (`/webapp/**`). For landing page styles, see the **Landing Page Style System** section above and `docs/LANDING_PAGE_STYLE_GUIDE.md`.
+**Note:** This design system applies to the webapp (`/webapp/**`). For landing page styles, see the **Landing Page Style System (Cyber Carrot)** section above and `docs/LANDING_PAGE_STYLE_GUIDE.md`.
 
 ### **Color Palette**
 
 ```css
 --primary: #29e7cd /* Electric Cyan - Primary Actions */ --secondary: #3b82f6
   /* Blue - Secondary Actions */ --accent: #d925c7 /* Vibrant Magenta - Accent Elements */
-  --background: #0a0a0a /* Dark background */ --foreground: #ffffff /* White text */
-  --muted: #1f1f1f /* Dark gray - Cards & Containers */ --border: #2a2a2a
-  /* Border gray - Subtle borders */ --surface: #2a2a2a /* Surface color - Elevated elements */
-  --surface-variant: #2a2a2a/30 /* Surface variant - Subtle backgrounds */;
+  --tertiary: #ff6b00 /* Cyber Orange - Warm Accents & Carrot Theme */ --background: #0a0a0a
+  /* Dark background */ --foreground: #ffffff /* White text */ --muted: #1f1f1f
+  /* Dark gray - Cards & Containers */ --border: #2a2a2a /* Border gray - Subtle borders */
+  --surface: #2a2a2a /* Surface color - Elevated elements */ --surface-variant: #2a2a2a/30
+  /* Surface variant - Subtle backgrounds */;
 ```
+
+**Cyber Carrot Gradient Pattern:**
+
+- **Gradient Borders:** `bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-[1px]`
+- **Creates:** Glowing gradient border effect (Cyan → Orange → Magenta → Cyan)
+- **Used In:** Popups, modals, dropdowns, elevated components
 
 **Style System Decision Tree:**
 
 - **Landing Page Styles:** Use for marketing pages, public content, conversion-focused components
-  - See: `docs/LANDING_PAGE_STYLE_GUIDE.md` and `.cursor/rules/design.mdc` (Landing Page Style System)
-- **Webapp Styles (Material Design 3):** Use for authenticated pages, data interfaces, functional components
-  - See: `.cursor/rules/design.mdc` (Material Design 3 Design System)
+  - See: `docs/LANDING_PAGE_STYLE_GUIDE.md` and `.cursor/rules/design.mdc` (Landing Page Style System - Cyber Carrot)
+- **Webapp Styles (Cyber Carrot Design System):** Use for authenticated pages, data interfaces, functional components
+  - See: `.cursor/rules/design.mdc` (Cyber Carrot Design System)
 
-### **Material Design 3 Typography**
+### **Cyber Carrot Typography**
 
 - **Primary Font:** Geist Sans (Google Fonts)
 - **Monospace:** Geist Mono (for technical content)
@@ -831,7 +855,7 @@ npm run codemod:console:write
   - Label Large: sm (Labels & metadata)
   - Label Small: xs (Captions & fine print)
 
-### **Material Design 3 Component Guidelines**
+### **Cyber Carrot Component Guidelines**
 
 #### **Containers & Cards**
 
@@ -842,7 +866,7 @@ npm run codemod:console:write
 
 #### **Buttons & Actions**
 
-- **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] to-[#D925C7]` with `rounded-2xl`
+- **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7]` with `rounded-2xl` and `hover:shadow-[#FF6B00]/25` for orange glow
 - **Secondary Buttons:** `bg-[#29E7CD]/10` with `hover:bg-[#29E7CD]/20`
 - **Icon Buttons:** `rounded-full` with `p-2` and hover scaling
 - **Hover Effects:** `hover:shadow-xl` and `transition-all duration-200`
@@ -893,7 +917,7 @@ npm run codemod:console:write
 
 - **Input Fields:** `border border-[#2a2a2a]` with `focus:ring-2 focus:ring-[#29E7CD]`
 - **Focus States:** Cyan ring with smooth transitions
-- **Validation:** Color-coded feedback with Material 3 styling
+- **Validation:** Color-coded feedback with Cyber Carrot styling
 
 #### **Selection Controls & Checkboxes**
 
@@ -974,7 +998,7 @@ import { Zap, Store, MapPin } from 'lucide-react';
 
 **Implementation Note:** Always ensure dropdowns and modals have proper z-index values to prevent clipping behind other elements. Use backdrop divs with appropriate z-index to block interactions when dropdowns are open.
 
-### **Material Design 3 Animation System**
+### **Cyber Carrot Animation System**
 
 ```css
 /* Keyframe Animations */
@@ -1011,7 +1035,7 @@ import { Zap, Store, MapPin } from 'lucide-react';
 }
 ```
 
-### **Material Design 3 Layout Patterns**
+### **Cyber Carrot Layout Patterns**
 
 #### **Mobile-First Cards**
 
@@ -1031,12 +1055,12 @@ import { Zap, Store, MapPin } from 'lucide-react';
 
 - **Large Icons:** `w-20 h-20` with gradient backgrounds
 - **Contextual Messaging:** Different messages for different states
-- **Call-to-Actions:** Prominent buttons with Material 3 styling
+- **Call-to-Actions:** Prominent buttons with Cyber Carrot styling
 
-### **Material Design 3 UX Guidelines**
+### **Cyber Carrot UX Guidelines**
 
-- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Material Design 3 principles
-- **Mobile Navigation:** Material 3 navigation rail with proper spacing
+- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Cyber Carrot design principles
+- **Mobile Navigation:** Cyber Carrot navigation rail with proper spacing
 - **Accessibility:** Focus rings, ARIA labels, keyboard navigation
 - **Smooth Transitions:** 200-300ms transitions for all interactions
 - **Touch Targets:** Minimum 44px for mobile, proper spacing
@@ -1049,7 +1073,7 @@ import { Zap, Store, MapPin } from 'lucide-react';
 - **Page-Level:** `PageSkeleton` for full-page loading states
 - **Landing Page:** `HeroSkeleton`, `PricingSkeleton` for marketing page
 - **Dynamic Imports:** Proper skeleton components replace inline animate-pulse divs
-- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Material Design 3 spacing
+- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Cyber Carrot spacing
 - **Styling:** Consistent colors (`bg-[#2a2a2a]`), border radius (`rounded-xl`, `rounded-2xl`, `rounded-3xl`), and animations (`animate-pulse`)
 
 ## 📊 **Analytics & Tracking**
@@ -1580,7 +1604,7 @@ const nextConfig: NextConfig = {
 ### **Comprehensive Loading Skeleton System ✅**
 
 - **Unified LoadingSkeleton Component:** Single component with multiple variants (stats, table, form, chart, card, list, button)
-- **Material Design 3 Compliance:** All skeletons follow Material Design 3 principles with proper colors, spacing, and animations
+- **Cyber Carrot Compliance:** All skeletons follow Cyber Carrot design principles with proper colors, spacing, and animations
 - **Contextual Skeletons:** Appropriate skeleton variants for different content types (TableSkeleton, FormSkeleton, ChartSkeleton)
 - **Consistent Positioning:** All skeletons properly centered and styled across the entire webapp
 - **Dynamic Import Optimization:** Removed unnecessary dynamic imports from lightweight components to eliminate persistent skeleton placeholders
@@ -1653,7 +1677,7 @@ const nextConfig: NextConfig = {
 
 ### **Notification System Standardization ✅**
 
-The PrepFlow application uses a standardized notification system with clear use case separation and consistent Material Design 3 styling.
+The PrepFlow application uses a standardized notification system with clear use case separation and consistent Cyber Carrot styling.
 
 #### **Notification Types & Use Cases**
 
@@ -1725,14 +1749,14 @@ Personality messages are automatically enhanced with:
 - **Longer Duration:** 8 seconds (vs 3 seconds for regular notifications)
 - **Enhanced Visibility:** Larger size (`max-w-lg` vs `max-w-md`), larger text (`text-base` vs `text-sm`)
 - **Better Positioning:** Below header with proper offset (accounts for header height)
-- **Enhanced Styling:** Gradient background (`from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20`), pulse animation, Sparkles icon
+- **Enhanced Styling:** Cyber Carrot gradient background (`from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20`), pulse animation, Sparkles icon
 - **Higher Z-Index:** `z-[60]` vs `z-50` for regular notifications
 
 Personality messages are triggered via `personality:addToast` events and automatically receive enhanced styling.
 
 #### **Standardized Styling**
 
-All notification systems use consistent Material Design 3 styling:
+All notification systems use consistent Cyber Carrot styling:
 
 - **Success:** `bg-green-500/10` background, `text-green-400` text, `border-green-500/30` border
 - **Error:** `bg-red-500/10` background, `text-red-400` text, `border-red-500/30` border
@@ -1973,17 +1997,17 @@ Run `npm run detect-breakpoints` to analyze breakpoint usage across the codebase
    - **Icon Standardization:** All icons use Icon wrapper component for consistent sizing and accessibility
    - **Table Components Updated:** PerformanceTable, IngredientTable, RecipeTable, DishTable, COGSTable, EquipmentTable, EquipmentListTable
 
-2. **Comprehensive Loading Skeleton System:** Unified LoadingSkeleton component with multiple variants (stats, table, form, chart, card, list, button) following Material Design 3 principles
+2. **Comprehensive Loading Skeleton System:** Unified LoadingSkeleton component with multiple variants (stats, table, form, chart, card, list, button) following Cyber Carrot design principles
 3. **Skeleton Positioning Fix:** Resolved skeleton positioning issues by removing unnecessary dynamic imports from dashboard components
 4. **Dynamic Import Optimization:** Replaced inline animate-pulse divs with proper LoadingSkeleton components in dynamic imports
-5. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Material Design 3 styling across the entire webapp
+5. **Consistent Skeleton Styling:** All skeletons now appear properly centered with consistent Cyber Carrot styling across the entire webapp
 6. **Modern Navigation System:** Collapsible sidebar with organized categories and smart search
 7. **Lead Generation:** ExitIntentPopup with lead magnet offer
 8. **Accessibility:** Focus management and keyboard navigation
 9. **Smooth Scrolling:** Enhanced navigation with progress indicators
 10. **Visual Feedback:** Hover effects and smooth transitions
 11. **Recharts Integration:** Migrated from Chart.js to Recharts for 60% smaller bundle and better performance
-12. **Chart Interactions:** Smooth SVG-based animations with Material Design 3 styling
+12. **Chart Interactions:** Smooth SVG-based animations with Cyber Carrot styling
 13. **Responsive Charts:** Auto-detection between desktop and mobile chart versions
 14. **Chart Performance:** Optimized SVG rendering with efficient data filtering for large datasets
 15. **Mobile Webapp Fixes:** Comprehensive mobile fixes ensuring full feature parity - header height compensation, touch event support, z-index layering, iOS safe area support, mobile-responsive components, overflow prevention, and component refactoring (January 2025)
@@ -2054,7 +2078,7 @@ Run `npm run detect-breakpoints` to analyze breakpoint usage across the codebase
 2. **API Endpoints**: All endpoints tested and working correctly (59 endpoints)
 3. **Component Architecture**: Split large components (Recipes: 1,670 → 673 lines, COGS: 1,634 → 459 lines)
 4. **Error Boundaries**: Implemented React error boundaries for better error handling
-5. **Loading States**: Comprehensive skeleton system with Material Design 3 compliance
+5. **Loading States**: Comprehensive skeleton system with Cyber Carrot compliance
 6. **Modern Navigation Experience**: Touch-friendly navigation and responsive charts
 
 #### **📋 Next Steps**
@@ -2664,12 +2688,12 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - ✅ **Native React components** - no wrapper needed
 - ✅ **Smooth SVG animations** - better performance than Canvas
 - ✅ **React Native ready** - perfect for future mobile app
-- ✅ **Material Design 3 compatible** - seamless integration
+- ✅ **Cyber Carrot Design System compatible** - seamless integration
 - ✅ **Tree-shakable** - only import what you use
 
 #### **Chart Features**
 
-- **Smooth Line Drawing**: 1-second Material Design 3 animations
+- **Smooth Line Drawing**: 1-second Cyber Carrot animations
 - **Responsive Design**: Auto-adapts to all screen sizes
 - **Touch Support**: Full mobile gesture support
 - **Real-time Updates**: Optimized for live temperature data
@@ -2686,7 +2710,7 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 
 - **Component**: `RechartsTemperatureChart.tsx`
 - **Library**: Recharts (recharts)
-- **Styling**: Material Design 3 with Tailwind CSS
+- **Styling**: Cyber Carrot Design System with Tailwind CSS
 - **Responsive**: Auto-detection between desktop and mobile
 - **Accessibility**: Full keyboard and screen reader support
 

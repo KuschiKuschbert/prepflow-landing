@@ -131,7 +131,7 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
       </button>
 
       <div className="flex items-start gap-2 rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3">
-        <Icon icon={Info} size="sm" className="text-[#29E7CD] mt-0.5" aria-hidden={true} />
+        <Icon icon={Info} size="sm" className="mt-0.5 text-[#29E7CD]" aria-hidden={true} />
         <p className="text-xs text-gray-400">
           Copy this information when contacting support to help us troubleshoot issues faster.
         </p>
@@ -139,4 +139,3 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
     </div>
   );
 }
-

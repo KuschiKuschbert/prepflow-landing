@@ -72,4 +72,3 @@ export async function handleGetRequest(params: GetRequestParams): Promise<NextRe
     return NextResponse.json(apiError, { status: apiError.status || 500 });
   }
 }
-

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { LucideIcon } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 import { EquipmentListTableRow } from './EquipmentListTableRow';
 
@@ -16,7 +17,7 @@ interface EquipmentListTableDesktopProps {
   onUpdate: (id: string, updates: Partial<TemperatureEquipment>) => void;
   onEquipmentClick?: (equipment: TemperatureEquipment) => void;
   onShowQRCode?: (equipment: TemperatureEquipment) => void;
-  getTypeIcon: (type: string) => string;
+  getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
   getLastLogDate?: (equipment: TemperatureEquipment) => string | null;
   getLastLogInfo?: (equipment: TemperatureEquipment) => {

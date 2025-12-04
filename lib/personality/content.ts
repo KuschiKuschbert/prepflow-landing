@@ -88,39 +88,75 @@ export const content = {
     late: ['Still here? The bed misses you.', 'Late night: when the real magic happens.'],
   },
   seasonal: [
-    { day: '01-01', effect: 'newYear', message: 'New year, new recipes. Let\'s make this one profitable.' },
-    { day: '01-26', effect: 'australiaDay', message: 'G\'day! Time to optimize those margins, mate.' },
-    { day: '02-14', effect: 'valentines', message: 'Love your menu? Show it some margin love too.' },
+    {
+      day: '01-01',
+      effect: 'newYear',
+      message: "New year, new recipes. Let's make this one profitable.",
+    },
+    {
+      day: '01-26',
+      effect: 'australiaDay',
+      message: "G'day! Time to optimize those margins, mate.",
+    },
+    {
+      day: '02-14',
+      effect: 'valentines',
+      message: 'Love your menu? Show it some margin love too.',
+    },
     { day: '04-25', effect: 'anzac', message: 'Lest we forget. Thank you to all who served.' },
-    { day: '05-04', effect: 'lightsaber', message: 'May the Force (and your mise) be with you. 🎬⚔️' },
-    { day: '07-04', effect: 'independenceDay', message: 'Celebrate freedom... and profitable menus.' },
-    { day: '10-20', effect: 'toque', message: 'Happy Chef\'s Day! You deserve a raise. Again.' },
-    { day: '10-31', effect: 'halloween', message: 'Spooky margins? Let\'s fix that.' },
-    { day: '12-26', effect: 'boxingDay', message: 'Box up those profits. You\'ve earned it.' },
+    {
+      day: '05-04',
+      effect: 'lightsaber',
+      message: 'May the Force (and your mise) be with you. 🎬⚔️',
+    },
+    {
+      day: '07-04',
+      effect: 'independenceDay',
+      message: 'Celebrate freedom... and profitable menus.',
+    },
+    { day: '10-20', effect: 'toque', message: "Happy Chef's Day! You deserve a raise. Again." },
+    { day: '10-31', effect: 'halloween', message: "Spooky margins? Let's fix that." },
+    { day: '12-26', effect: 'boxingDay', message: "Box up those profits. You've earned it." },
     { day: '12-31', effect: 'newYearsEve', message: 'One more day to hit those targets!' },
     { range: ['12-24', '12-26'], effect: 'santaHat', message: 'Merry chaosmas, Chef.' },
     { variable: 'easter', effect: 'easter', message: 'Hop to it! Time to optimize those costs.' },
-    { variable: 'mothersDay', effect: 'mothersDay', message: 'To all the amazing moms running kitchens. You\'re incredible.' },
-    { variable: 'fathersDay', effect: 'fathersDay', message: 'To all the dads keeping kitchens running. Thank you.' },
-    { variable: 'labourDay', effect: 'labourDay', message: 'Celebrating the hard work that makes kitchens great.' },
-    { variable: 'royalBirthday', effect: 'royalBirthday', message: 'Royal treatment for your menu profits.' },
+    {
+      variable: 'mothersDay',
+      effect: 'mothersDay',
+      message: "To all the amazing moms running kitchens. You're incredible.",
+    },
+    {
+      variable: 'fathersDay',
+      effect: 'fathersDay',
+      message: 'To all the dads keeping kitchens running. Thank you.',
+    },
+    {
+      variable: 'labourDay',
+      effect: 'labourDay',
+      message: 'Celebrating the hard work that makes kitchens great.',
+    },
+    {
+      variable: 'royalBirthday',
+      effect: 'royalBirthday',
+      message: 'Royal treatment for your menu profits.',
+    },
   ],
   // Context-aware messages by page/feature
   context: {
     ingredients: {
       zen: [
-        'That\'s a lot of onions. Someone\'s making French onion soup?',
+        "That's a lot of onions. Someone's making French onion soup?",
         'Stock levels looking organized. Like a well-kept walk-in.',
         'Ingredient added. One step closer to perfection.',
       ],
       spicy: [
         'Another ingredient? Your supplier must love you.',
         'Stock levels: organized chaos. Perfect.',
-        'Ingredient saved. Now let\'s cook something.',
+        "Ingredient saved. Now let's cook something.",
       ],
       wise: [
-        'Every ingredient tells a story. This one\'s ready to shine.',
-        'Good ingredients make great dishes. You\'re building something special.',
+        "Every ingredient tells a story. This one's ready to shine.",
+        "Good ingredients make great dishes. You're building something special.",
         'Ingredient logged. Knowledge is mise en place.',
       ],
       passive: [
@@ -142,7 +178,7 @@ export const content = {
       ],
       spicy: [
         'Recipe saved! Time to make it happen.',
-        'Another masterpiece. Let\'s see if it works.',
+        "Another masterpiece. Let's see if it works.",
         'Recipe logged. Now cook it, chef.',
       ],
       wise: [
@@ -150,11 +186,7 @@ export const content = {
         'Knowledge preserved. Future you will appreciate this.',
         'Recipe documented. Wisdom passed down.',
       ],
-      passive: [
-        'Recipe saved. Moving on.',
-        'Done. Next recipe?',
-        'Saved. You\'re welcome.',
-      ],
+      passive: ['Recipe saved. Moving on.', 'Done. Next recipe?', "Saved. You're welcome."],
       gremlin: [
         'Recipe saved. Or is it? Better check twice.',
         'Added to the book. Probably.',
@@ -169,8 +201,8 @@ export const content = {
       ],
       spicy: [
         'Margins calculated. Time to optimize?',
-        'COGS done. Now let\'s make some money.',
-        'Costs crunched. Numbers don\'t lie.',
+        "COGS done. Now let's make some money.",
+        "Costs crunched. Numbers don't lie.",
       ],
       wise: [
         'Understanding costs is understanding your business.',
@@ -197,7 +229,7 @@ export const content = {
       spicy: [
         'Performance report: some winners, some losers.',
         'Menu analyzed. Time to make changes?',
-        'Insights ready. Let\'s optimize this menu.',
+        "Insights ready. Let's optimize this menu.",
       ],
       wise: [
         'Performance data tells the truth. Listen to it.',
@@ -217,7 +249,7 @@ export const content = {
     },
     temperature: {
       zen: [
-        'Freezer\'s behaving. For now.',
+        "Freezer's behaving. For now.",
         'Temperature logged. Safety first.',
         'Equipment monitored. Like watching a soufflé.',
       ],
@@ -250,7 +282,7 @@ export const content = {
       ],
       spicy: [
         'Menu updated! Time to make some money.',
-        'Dish added. Let\'s see if it sells.',
+        "Dish added. Let's see if it sells.",
         'Menu saved. Service ready?',
       ],
       wise: [
@@ -258,11 +290,7 @@ export const content = {
         'Dish added. Wisdom in curation.',
         'Menu saved. Knowledge preserved.',
       ],
-      passive: [
-        'Menu updated. Moving on.',
-        'Done. Next dish?',
-        'Saved. Menu ready.',
-      ],
+      passive: ['Menu updated. Moving on.', 'Done. Next dish?', 'Saved. Menu ready.'],
       gremlin: [
         'Menu updated. Probably. Maybe check the POS?',
         'Dish added. Or did I?',
@@ -281,7 +309,7 @@ export const content = {
       spicy: [
         'Already exists! Pick a different name, chef.',
         'Duplicate detected. Try again with a unique name.',
-        'That name\'s taken. Be more creative.',
+        "That name's taken. Be more creative.",
       ],
       wise: [
         'Already exists. Every name tells a story - make yours unique.',
@@ -301,25 +329,21 @@ export const content = {
     },
     network: {
       zen: [
-        'Connection lost. Like a dropped spatula, we\'ll pick it back up.',
-        'Network hiccup. Breathe, it\'ll reconnect.',
+        "Connection lost. Like a dropped spatula, we'll pick it back up.",
+        "Network hiccup. Breathe, it'll reconnect.",
         'Connection issue. The cloud will wait.',
       ],
       spicy: [
         'Connection lost! Check your internet, chef.',
         'Network error. Try again in a moment.',
-        'Connection failed. The internet\'s being difficult.',
+        "Connection failed. The internet's being difficult.",
       ],
       wise: [
         'Connection lost. Patience is a virtue, chef.',
         'Network issue. Wisdom: try again.',
         'Connection failed. Every connection is temporary.',
       ],
-      passive: [
-        'Connection lost. Try again.',
-        'Network error. Next.',
-        'Failed. Retry.',
-      ],
+      passive: ['Connection lost. Try again.', 'Network error. Next.', 'Failed. Retry.'],
       gremlin: [
         'Connection lost. Or is it? Check your router.',
         'Network error. Probably. Maybe.',
@@ -329,11 +353,11 @@ export const content = {
     server: {
       zen: [
         'Something went wrong. The kitchen gremlins are at it again.',
-        'Server hiccup. Like a misbehaving oven, it\'ll recover.',
-        'Error occurred. Breathe, we\'ll fix it.',
+        "Server hiccup. Like a misbehaving oven, it'll recover.",
+        "Error occurred. Breathe, we'll fix it.",
       ],
       spicy: [
-        'Server error! Something\'s broken. We\'re on it.',
+        "Server error! Something's broken. We're on it.",
         'Something went wrong. The gremlins are back.',
         'Error detected. Time to troubleshoot.',
       ],
@@ -342,11 +366,7 @@ export const content = {
         'Something went wrong. Every error is a lesson.',
         'Error occurred. Patience, chef.',
       ],
-      passive: [
-        'Server error. Try again.',
-        'Error occurred. Next.',
-        'Failed. Retry.',
-      ],
+      passive: ['Server error. Try again.', 'Error occurred. Next.', 'Failed. Retry.'],
       gremlin: [
         'Server error. Or is it? Check the logs.',
         'Something went wrong. Probably. Maybe.',
@@ -355,9 +375,9 @@ export const content = {
     },
     notFound: {
       zen: [
-        'That recipe\'s gone walkabout. Check the recipe book?',
-        'Not found. Like a missing ingredient, it\'s somewhere.',
-        'Item missing. Perhaps it\'s in another list?',
+        "That recipe's gone walkabout. Check the recipe book?",
+        "Not found. Like a missing ingredient, it's somewhere.",
+        "Item missing. Perhaps it's in another list?",
       ],
       spicy: [
         'Not found! Check your lists, chef.',
@@ -367,13 +387,9 @@ export const content = {
       wise: [
         'Not found. Wisdom: check your other lists.',
         'Item missing. Every item has a place.',
-        'Not found. Perhaps it\'s elsewhere?',
+        "Not found. Perhaps it's elsewhere?",
       ],
-      passive: [
-        'Not found. Check other lists.',
-        'Missing. Next.',
-        'Not here. Look elsewhere.',
-      ],
+      passive: ['Not found. Check other lists.', 'Missing. Next.', 'Not here. Look elsewhere.'],
       gremlin: [
         'Not found. Or is it? Check twice.',
         'Missing? Probably. Maybe.',
@@ -391,7 +407,7 @@ export const content = {
       ],
       spicy: [
         'Created! Time to make it happen.',
-        'Done! Let\'s see what you can do with this.',
+        "Done! Let's see what you can do with this.",
         'Created. Now use it, chef.',
       ],
       wise: [
@@ -399,11 +415,7 @@ export const content = {
         'Item created. Wisdom in building.',
         'Created. Knowledge preserved.',
       ],
-      passive: [
-        'Created. Moving on.',
-        'Done. Next.',
-        'Saved. Ready.',
-      ],
+      passive: ['Created. Moving on.', 'Done. Next.', 'Saved. Ready.'],
       gremlin: [
         'Created. Probably. Maybe check the list.',
         'Done. Or did I? Check twice.',
@@ -416,26 +428,14 @@ export const content = {
         'Changes saved. Like adjusting seasoning, perfect.',
         'Updated. Everything in its place.',
       ],
-      spicy: [
-        'Updated! Changes applied.',
-        'Saved! Ready to use.',
-        'Updated. Let\'s go.',
-      ],
+      spicy: ['Updated! Changes applied.', 'Saved! Ready to use.', "Updated. Let's go."],
       wise: [
         'Updated. Every change is progress.',
         'Changes saved. Wisdom in iteration.',
         'Updated. Knowledge refined.',
       ],
-      passive: [
-        'Updated. Moving on.',
-        'Done. Next.',
-        'Saved. Ready.',
-      ],
-      gremlin: [
-        'Updated. Probably. Maybe check.',
-        'Done. Or did I?',
-        'Saved. Check twice.',
-      ],
+      passive: ['Updated. Moving on.', 'Done. Next.', 'Saved. Ready.'],
+      gremlin: ['Updated. Probably. Maybe check.', 'Done. Or did I?', 'Saved. Check twice.'],
     },
     delete: {
       zen: [
@@ -453,22 +453,14 @@ export const content = {
         'Removed. Wisdom in decluttering.',
         'Deleted. Space for new growth.',
       ],
-      passive: [
-        'Deleted. Moving on.',
-        'Done. Next.',
-        'Removed. Ready.',
-      ],
-      gremlin: [
-        'Deleted. Probably. Maybe check.',
-        'Removed. Or did I?',
-        'Done. Check twice.',
-      ],
+      passive: ['Deleted. Moving on.', 'Done. Next.', 'Removed. Ready.'],
+      gremlin: ['Deleted. Probably. Maybe check.', 'Removed. Or did I?', 'Done. Check twice.'],
     },
     milestone: [
-      'Milestone reached! You\'re on fire, chef.',
+      "Milestone reached! You're on fire, chef.",
       'Achievement unlocked! Keep going.',
       'Major milestone! Celebrate this one.',
-      'Incredible progress! You\'re crushing it.',
+      "Incredible progress! You're crushing it.",
       'Milestone achieved! Time to celebrate.',
     ],
   },

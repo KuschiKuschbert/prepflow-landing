@@ -97,9 +97,13 @@ export function generateRealMetricsMessage(): string | null {
   // Dish count messages
   if (metrics.dishCount > 0) {
     if (spirit === 'zen') {
-      messages.push(`Your menu has ${metrics.dishCount} dishes. Time to add a lucky ${metrics.dishCount + 1}th?`);
+      messages.push(
+        `Your menu has ${metrics.dishCount} dishes. Time to add a lucky ${metrics.dishCount + 1}th?`,
+      );
     } else if (spirit === 'spicy') {
-      messages.push(`${metrics.dishCount} dishes on the menu. Let's make it ${metrics.dishCount + 1}!`);
+      messages.push(
+        `${metrics.dishCount} dishes on the menu. Let's make it ${metrics.dishCount + 1}!`,
+      );
     } else if (spirit === 'wise') {
       messages.push(`${metrics.dishCount} dishes. Every dish tells a story.`);
     } else if (spirit === 'passive') {
@@ -128,4 +132,3 @@ export function generateRealMetricsMessage(): string | null {
 
   return pick(messages);
 }
-

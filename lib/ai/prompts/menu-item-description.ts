@@ -90,5 +90,3 @@ Generate the menu description now:`;
 
   return prompt;
 }
-
-

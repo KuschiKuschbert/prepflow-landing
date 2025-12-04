@@ -20,31 +20,45 @@ import {
   getTemperatureStatus as getTemperatureStatusUtil,
   groupLogsByTimePeriod,
 } from './utils';
+import {
+  getTypeIconComponent,
+  getTypeLabel,
+  temperatureTypesForSelect,
+} from '../utils/temperatureUtils';
 
 interface TemperatureLogsTabProps {
   logs: TemperatureLog[];
   equipment: TemperatureEquipment[];
   selectedDate: string;
-  setSelectedDate: (date: string) => void;
+  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
   selectedType: string;
-  setSelectedType: (type: string) => void;
+  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
   showAddLog: boolean;
   setShowAddLog: (show: boolean) => void;
-  newLog: any;
-  setNewLog: (log: any) => void;
-  onAddLog: (e: React.FormEvent) => void;
-  onRefreshLogs: () => void;
+  newLog: {
+    log_date: string;
+    log_time: string;
+    temperature_type: string;
+    temperature_celsius: string;
+    location: string;
+    notes: string;
+    logged_by: string;
+  };
+  setNewLog: React.Dispatch<
+    React.SetStateAction<{
+      log_date: string;
+      log_time: string;
+      temperature_type: string;
+      temperature_celsius: string;
+      location: string;
+      notes: string;
+      logged_by: string;
+    }>
+  >;
+  onAddLog: (e: React.FormEvent) => Promise<void>;
+  onRefreshLogs: () => Promise<void>;
   isLoading?: boolean;
 }
-
-const temperatureTypes = [
-  { value: 'fridge', label: 'Fridge', icon: '🧊' },
-  { value: 'freezer', label: 'Freezer', icon: '❄️' },
-  { value: 'food_cooking', label: 'Food Cooking', icon: '🔥' },
-  { value: 'food_hot_holding', label: 'Food Hot Holding', icon: '🍲' },
-  { value: 'food_cold_holding', label: 'Food Cold Holding', icon: '🥗' },
-  { value: 'storage', label: 'Storage', icon: '📦' },
-];
 
 export default function TemperatureLogsTab({
   logs,
@@ -106,7 +120,7 @@ export default function TemperatureLogsTab({
     if (log.location) {
       // Find equipment by matching location with equipment name OR equipment location
       const matchingEquipment = equipment.find(
-        eq => eq.name === log.location || eq.location === log.location,
+        (eq: TemperatureEquipment) => eq.name === log.location || eq.location === log.location,
       );
       if (matchingEquipment) {
         setDrawerEquipment(matchingEquipment);
@@ -126,9 +140,7 @@ export default function TemperatureLogsTab({
     getTemperatureStatusUtil(temp, location, equipment);
   const getFoodSafetyStatus = (temp: number, logTime: string, logDate: string, type: string) =>
     getFoodSafetyStatusUtil(temp, logTime, logDate, type);
-  const getTypeIcon = (type: string) => temperatureTypes.find(t => t.value === type)?.icon || '🌡️';
-  const getTypeLabel = (type: string) =>
-    temperatureTypes.find(t => t.value === type)?.label || type;
+  const getTypeIcon = (type: string) => getTypeIconComponent(type);
 
   // Convert equipment IDs from string to number for TemperatureFilters component
   const equipmentForFilters: Array<{
@@ -136,7 +148,7 @@ export default function TemperatureLogsTab({
     name: string;
     equipment_type: string;
     is_active: boolean;
-  }> = equipment.map(eq => {
+  }> = equipment.map((eq: TemperatureEquipment) => {
     const parsedId = eq.id && !isNaN(parseInt(eq.id, 10)) ? parseInt(eq.id, 10) : undefined;
     return {
       id: parsedId,
@@ -161,7 +173,7 @@ export default function TemperatureLogsTab({
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         equipment={equipmentForFilters}
-        temperatureTypes={temperatureTypes}
+        temperatureTypes={temperatureTypesForSelect}
         onAddClick={() => setShowAddLog(true)}
         t={tString}
       />
@@ -174,7 +186,7 @@ export default function TemperatureLogsTab({
         setNewLog={setNewLog}
         onAddLog={onAddLog}
         equipment={equipmentForFilters}
-        temperatureTypes={temperatureTypes}
+        temperatureTypes={temperatureTypesForSelect}
       />
 
       {/* Logs List */}
@@ -206,7 +218,7 @@ export default function TemperatureLogsTab({
                     key={log.id}
                     log={log}
                     equipment={equipment}
-                    temperatureTypes={temperatureTypes}
+                    temperatureTypes={temperatureTypesForSelect}
                     formatDateString={formatDateString}
                     getTemperatureStatus={getTemperatureStatus}
                     getFoodSafetyStatus={getFoodSafetyStatus}
@@ -223,7 +235,7 @@ export default function TemperatureLogsTab({
 
       {/* Equipment Detail Drawer */}
       <EquipmentDetailDrawer
-        equipment={drawerEquipment}
+        equipment={drawerEquipment!}
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
       />

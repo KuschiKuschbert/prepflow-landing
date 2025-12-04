@@ -217,16 +217,16 @@ export function AdaptiveNavSettingsPanel() {
 
           {/* Actions */}
           <div className="flex flex-wrap gap-3 border-t border-[#2a2a2a] pt-4">
-            <div className="relative group">
+            <div className="group relative">
               <button
                 onClick={handleSyncToServer}
-                className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 flex items-center gap-2"
+                className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50"
                 aria-label="Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions"
               >
                 Sync to Server
                 <Icon icon={Info} size="xs" className="text-gray-400" aria-hidden={true} />
               </button>
-              <div className="absolute bottom-full left-0 mb-2 hidden w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-xs text-gray-300 shadow-lg group-hover:block z-10 pointer-events-none">
+              <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 hidden w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-xs text-gray-300 shadow-lg group-hover:block">
                 Syncs your local preferences (enabled state and selected sections) to the server
                 database so they persist across devices and browser sessions. Currently uses
                 localStorage by default; syncing saves preferences to your account.
@@ -235,7 +235,7 @@ export function AdaptiveNavSettingsPanel() {
             <button
               onClick={handleLoadFromServer}
               disabled={isLoadingFromServer}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoadingFromServer ? (
                 <>

@@ -3,10 +3,17 @@
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
-import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import dynamic from 'next/dynamic';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { PageHeader } from './components/PageHeader';
+import { TabNavigation } from './components/TabNavigation';
+import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoadingState';
+import { useTemperaturePageData } from './hooks/useTemperaturePageData';
+import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
 
 // Lazy load temperature tabs to reduce initial bundle size (TemperatureAnalyticsTab uses Recharts)
 const TemperatureEquipmentTab = dynamic(() => import('./components/TemperatureEquipmentTab'), {
@@ -23,14 +30,11 @@ const TemperatureAnalyticsTab = dynamic(() => import('./components/TemperatureAn
   ssr: false,
   loading: () => <PageSkeleton />,
 });
-import { PageHeader } from './components/PageHeader';
-import { TabNavigation } from './components/TabNavigation';
-import { TemperatureLogsLoadingState } from './components/TemperatureLogsLoadingState';
-import { useTemperaturePageData } from './hooks/useTemperaturePageData';
-import { useTemperaturePageHandlers } from './hooks/useTemperaturePageHandlers';
 
 import { logger } from '@/lib/logger';
 function TemperatureLogsPageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'logs' | 'equipment' | 'analytics'>('logs');
   const [isMounted, setIsMounted] = useState(false);
 
@@ -83,6 +87,20 @@ function TemperatureLogsPageContent() {
   });
 
   useTemperatureWarnings({ allLogs, equipment });
+
+  // Check for action=new query parameter and open add log form
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'new' && !showAddLog) {
+      // Ensure logs tab is active
+      setActiveTab('logs');
+      // Open the add log form
+      setShowAddLog(true);
+      // Clean up URL by removing query parameter
+      const newUrl = window.location.pathname;
+      router.replace(newUrl);
+    }
+  }, [searchParams, showAddLog, setShowAddLog, router]);
 
   // Show loading state while fetching equipment
   if (loading) {
@@ -178,7 +196,9 @@ function TemperatureLogsPageContent() {
 export default function TemperatureLogsPage() {
   return (
     <ErrorBoundary>
-      <TemperatureLogsPageContent />
+      <Suspense fallback={<PageSkeleton />}>
+        <TemperatureLogsPageContent />
+      </Suspense>
     </ErrorBoundary>
   );
 }

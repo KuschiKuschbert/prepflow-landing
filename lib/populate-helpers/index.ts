@@ -13,6 +13,7 @@ export interface PopulateResults {
 }
 
 export { populateBasicData } from './basic-data';
+export { populateStaff } from './populate-staff';
 export { populateTemperatureData } from './temperature-data';
 export { populateCleaningData } from './cleaning-data';
 export { populateComplianceData, populateKitchenSections, populateSalesData } from './other-data';

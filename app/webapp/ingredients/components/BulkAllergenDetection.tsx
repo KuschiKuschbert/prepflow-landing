@@ -129,5 +129,3 @@ export function BulkAllergenDetection({ onComplete }: BulkAllergenDetectionProps
     </>
   );
 }
-
-

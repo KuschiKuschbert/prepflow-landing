@@ -317,5 +317,3 @@ export function escapeHtml(text: string): string {
   };
   return String(text).replace(/[&<>"']/g, m => map[m]);
 }
-
-

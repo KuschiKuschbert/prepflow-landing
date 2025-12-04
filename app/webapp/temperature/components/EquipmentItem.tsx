@@ -1,5 +1,5 @@
 import { TemperatureEquipment } from '../types';
-import { getTypeIcon, getTypeLabel } from '../utils/temperatureUtils';
+import { getTypeIconComponent, getTypeLabel } from '../utils/temperatureUtils';
 import { EquipmentItemHeader } from './EquipmentItemHeader';
 import { EquipmentTemperatureRange } from './EquipmentTemperatureRange';
 import { EquipmentLastLogInfo } from './EquipmentLastLogInfo';
@@ -71,7 +71,7 @@ export function EquipmentItem({
             name={item.name}
             equipmentType={item.equipment_type}
             location={item.location}
-            typeIcon={getTypeIcon(item.equipment_type)}
+            typeIcon={getTypeIconComponent(item.equipment_type)}
             typeLabel={getTypeLabel(item.equipment_type)}
           />
           <EquipmentTemperatureRange

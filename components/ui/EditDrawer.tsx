@@ -46,6 +46,42 @@ export function EditDrawer({
   const [isSwiping, setIsSwiping] = useState(false);
   const [translateX, setTranslateX] = useState(0);
 
+  // Click outside to close (matching recipe side panel behavior)
+  useEffect(() => {
+    if (!isOpen || preventClose) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Element;
+
+      // Don't close if clicking inside the drawer
+      if (drawerRef.current?.contains(target)) {
+        return;
+      }
+
+      // Don't close if clicking on modals or dialogs
+      if (target.closest('[role="dialog"]') || target.closest('[aria-modal="true"]')) {
+        return;
+      }
+
+      // Don't close if clicking on dropdowns or menus
+      if (target.closest('[role="menu"]') || target.closest('[role="listbox"]')) {
+        return;
+      }
+
+      // Close the drawer
+      onClose();
+    };
+
+    // Use mousedown instead of click to catch clicks before they bubble
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen, onClose, preventClose]);
+
   // Close on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -156,7 +192,7 @@ export function EditDrawer({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+        className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm transition-opacity duration-200"
         onClick={preventClose ? undefined : onClose}
         aria-hidden="true"
         style={{
@@ -164,10 +200,10 @@ export function EditDrawer({
         }}
       />
 
-      {/* Drawer */}
+      {/* Drawer with gradient border */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 z-[75] h-full ${widthClass} transform bg-[#1f1f1f] shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-[75] h-full ${widthClass} transform rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="dialog"
@@ -175,13 +211,13 @@ export function EditDrawer({
         aria-labelledby="edit-drawer-title"
         style={{
           transform: `translateX(${isSwiping ? translateX : 0}px)`,
-          transition: isSwiping ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: isSwiping ? 'none' : 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="flex h-full flex-col">
+        <div className="flex h-full flex-col rounded-l-3xl bg-[#1f1f1f]">
           {/* Header */}
           <div
             className="desktop:px-6 desktop:py-4 sticky top-0 z-10 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-4 py-3 backdrop-blur-sm"

@@ -40,5 +40,3 @@ export function HybridGuide({ content, className = '' }: HybridGuideProps) {
     </div>
   );
 }
-
-

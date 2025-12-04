@@ -145,7 +145,7 @@ export function NotificationsPanel() {
       <button
         onClick={() => onChange(!checked)}
         disabled={saving}
-        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] disabled:opacity-50 ${
+        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none disabled:opacity-50 ${
           checked ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a]'
         }`}
         role="switch"
@@ -163,7 +163,10 @@ export function NotificationsPanel() {
 
   if (loading) {
     return (
-      <div ref={ref} className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div
+        ref={ref}
+        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      >
         <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
         <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
       </div>
@@ -171,7 +174,10 @@ export function NotificationsPanel() {
   }
 
   return (
-    <div ref={ref} className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div
+      ref={ref}
+      className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+    >
       <div>
         <h2 className="text-xl font-semibold">Notifications & Preferences</h2>
         <p className="mt-1 text-sm text-gray-300">
@@ -249,7 +255,10 @@ export function NotificationsPanel() {
             <select
               value={preferences.inApp.emailDigest}
               onChange={e =>
-                updatePreference('inApp.emailDigest', e.target.value as NotificationPreferences['inApp']['emailDigest'])
+                updatePreference(
+                  'inApp.emailDigest',
+                  e.target.value as NotificationPreferences['inApp']['emailDigest'],
+                )
               }
               disabled={saving}
               className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] disabled:opacity-50"

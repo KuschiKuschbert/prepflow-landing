@@ -51,7 +51,9 @@ export async function handleQuickTempLog({
     }
     return false;
   } catch (error) {
-    showError('Failed to log temperature. Please try again.');
+    showError(
+      "Couldn't log that temperature. Give it another shot - sometimes the system needs a moment.",
+    );
     return false;
   } finally {
     setQuickTempLoading(prev => ({ ...prev, [equipmentId]: false }));

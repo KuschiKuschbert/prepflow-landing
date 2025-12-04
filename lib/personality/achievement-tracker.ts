@@ -337,4 +337,3 @@ export function getAchievementProgress(): {
 export function getStats(): AchievementStats {
   return loadStats();
 }
-

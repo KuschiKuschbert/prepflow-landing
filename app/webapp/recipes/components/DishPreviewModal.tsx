@@ -125,7 +125,7 @@ export default function DishPreviewModal({
       aria-modal="true"
       aria-labelledby="dish-modal-title"
     >
-      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
           <DishPreviewModalHeader
             dish={dish}
@@ -146,9 +146,17 @@ export default function DishPreviewModal({
                   entityId={dish.id}
                   entityName={dish.dish_name}
                   imageUrl={(dishDetails as any)?.image_url || (dish as any)?.image_url}
-                  imageUrlAlternative={(dishDetails as any)?.image_url_alternative || (dish as any)?.image_url_alternative}
-                  imageUrlModern={(dishDetails as any)?.image_url_modern || (dish as any)?.image_url_modern}
-                  imageUrlMinimalist={(dishDetails as any)?.image_url_minimalist || (dish as any)?.image_url_minimalist}
+                  imageUrlAlternative={
+                    (dishDetails as any)?.image_url_alternative ||
+                    (dish as any)?.image_url_alternative
+                  }
+                  imageUrlModern={
+                    (dishDetails as any)?.image_url_modern || (dish as any)?.image_url_modern
+                  }
+                  imageUrlMinimalist={
+                    (dishDetails as any)?.image_url_minimalist ||
+                    (dish as any)?.image_url_minimalist
+                  }
                   className="mb-6"
                   compact={false}
                 />

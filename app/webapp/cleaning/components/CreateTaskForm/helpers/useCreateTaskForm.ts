@@ -15,6 +15,7 @@ interface FormData {
   equipment_id: string;
   section_id: string;
   description: string;
+  assigned_to_employee_id: string;
 }
 
 export function useCreateTaskForm(preselectedAreaId?: string) {
@@ -29,6 +30,7 @@ export function useCreateTaskForm(preselectedAreaId?: string) {
     equipment_id: '',
     section_id: '',
     description: '',
+    assigned_to_employee_id: '',
   });
 
   // Frequency recommendations based on task name

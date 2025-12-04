@@ -1,0 +1,90 @@
+/**
+ * Roster Page
+ * Main page for roster management.
+ *
+ * @module webapp/roster/page
+ */
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { RosterBuilder } from './components/RosterBuilder';
+import { PageHeader } from '@/app/webapp/components/static/PageHeader';
+import { LoadingSkeleton, PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { logger } from '@/lib/logger';
+import { Calendar } from 'lucide-react';
+import type { Shift, Employee } from './types';
+
+export default function RosterPage() {
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [shifts, setShifts] = useState<Shift[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch employees
+        const employeesResponse = await fetch('/api/staff/employees');
+        const employeesData = await employeesResponse.json();
+        if (employeesData.success) {
+          setEmployees(employeesData.employees || []);
+        }
+
+        // Fetch shifts for current week
+        const weekStart = new Date();
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // Start of week (Sunday)
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekEnd.getDate() + 7);
+
+        const shiftsResponse = await fetch(
+          `/api/roster/shifts?start_date=${weekStart.toISOString().split('T')[0]}&end_date=${weekEnd.toISOString().split('T')[0]}&status=all`,
+        );
+        const shiftsData = await shiftsResponse.json();
+        if (shiftsData.success) {
+          setShifts(shiftsData.shifts || []);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load roster data');
+        logger.error('Failed to load roster data', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title="Roster" icon={Calendar} />
+        <PageSkeleton />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title="Roster" icon={Calendar} />
+        <div className="rounded-3xl border border-red-500/50 bg-red-500/10 p-6">
+          <p className="text-red-400">Error loading roster: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Roster Builder"
+        subtitle="Drag and drop shifts to build your weekly roster"
+        icon={Calendar}
+      />
+      <RosterBuilder employees={employees} shifts={shifts} />
+    </div>
+  );
+}

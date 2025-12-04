@@ -24,7 +24,7 @@ export function LegalCompliancePanel() {
       {/* Legal Documents */}
       <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
         <h3 className="text-lg font-medium">Legal Documents</h3>
-        <div className="grid grid-cols-1 gap-3 desktop:grid-cols-2">
+        <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
           <Link
             href="/terms-of-service"
             className="flex items-center gap-3 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4 transition-colors hover:bg-[#2a2a2a]/40"
@@ -64,4 +64,3 @@ export function LegalCompliancePanel() {
     </div>
   );
 }
-

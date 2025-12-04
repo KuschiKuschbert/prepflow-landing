@@ -96,9 +96,8 @@ export async function aggregateRecipeDietaryStatus(
 
     if (!recipeIngredients || recipeIngredients.length === 0) {
       // No ingredients - check recipe name for non-vegetarian keywords
-      const { isNonVegetarianIngredient } = await import(
-        '@/lib/dietary/vegetarian-vegan-detection'
-      );
+      const { isNonVegetarianIngredient } =
+        await import('@/lib/dietary/vegetarian-vegan-detection');
       const recipeName = recipeData?.recipe_name || '';
 
       // If recipe name contains meat/fish keywords, mark as non-vegetarian

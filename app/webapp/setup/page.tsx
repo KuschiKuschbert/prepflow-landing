@@ -185,7 +185,7 @@ export default function SetupPageRefactored() {
               </div>
               <h2 className="mb-2 text-3xl font-bold text-white">Reset your data</h2>
               <p className="text-lg text-gray-400">
-                Delete your lists and shares. Does not affect global recipes/ingredients.
+                Delete your lists and shares. Doesn&apos;t affect global recipes/ingredients.
               </p>
             </div>
             <ResetSelfDataCard defaultReseed={true} />

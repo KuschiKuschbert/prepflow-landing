@@ -1,4 +1,5 @@
 import { TemperatureEquipment } from '../../types';
+import { CheckCircle2, AlertTriangle, AlertCircle, LucideIcon } from 'lucide-react';
 
 /**
  * Temperature status utilities.
@@ -50,11 +51,21 @@ export function getFoodSafetyStatus(
   logTime: string,
   logDate: string,
   type: string,
-): null | { status: 'safe' | 'warning' | 'danger'; message: string; color: string; icon: string } {
+): null | {
+  status: 'safe' | 'warning' | 'danger';
+  message: string;
+  color: string;
+  icon: LucideIcon;
+} {
   if (type !== 'food_cooking' && type !== 'food_hot_holding' && type !== 'food_cold_holding')
     return null;
   if (temp < 5 || temp > 60)
-    return { status: 'safe', message: 'Outside danger zone', color: 'text-green-400', icon: '✅' };
+    return {
+      status: 'safe',
+      message: 'Outside danger zone',
+      color: 'text-green-400',
+      icon: CheckCircle2,
+    };
   const logDateTime = new Date(`${logDate}T${logTime}`);
   const now = new Date();
   const hoursInDangerZone = (now.getTime() - logDateTime.getTime()) / (1000 * 60 * 60);
@@ -63,21 +74,21 @@ export function getFoodSafetyStatus(
       status: 'safe',
       message: `${(2 - hoursInDangerZone).toFixed(1)}h remaining - can refrigerate`,
       color: 'text-green-400',
-      icon: '✅',
+      icon: CheckCircle2,
     };
   } else if (hoursInDangerZone < 4) {
     return {
       status: 'warning',
       message: `${(4 - hoursInDangerZone).toFixed(1)}h remaining - use immediately`,
       color: 'text-yellow-400',
-      icon: '⚠️',
+      icon: AlertTriangle,
     };
   } else {
     return {
       status: 'danger',
       message: `${hoursInDangerZone.toFixed(1)}h in danger zone - DISCARD`,
       color: 'text-red-400',
-      icon: '🚨',
+      icon: AlertCircle,
     };
   }
 }

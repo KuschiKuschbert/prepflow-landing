@@ -32,7 +32,9 @@ export async function GET() {
           user_agent: 'Current Session',
           ip_address: null, // Not available in server-side context
           location: null,
-          created_at: session.expires ? new Date(Date.now() - 3600000).toISOString() : new Date().toISOString(), // Approximate
+          created_at: session.expires
+            ? new Date(Date.now() - 3600000).toISOString()
+            : new Date().toISOString(), // Approximate
           expires_at: session.expires,
           is_current: true,
         },
@@ -59,4 +61,3 @@ export async function GET() {
     );
   }
 }
-

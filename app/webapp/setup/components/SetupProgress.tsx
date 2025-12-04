@@ -55,7 +55,9 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
               {!isLast && (
                 <div
                   className={`h-px w-8 transition-colors duration-200 ${
-                    isCompleted ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a]'
+                    isCompleted
+                      ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#29E7CD]'
+                      : 'bg-[#2a2a2a]'
                   }`}
                 ></div>
               )}

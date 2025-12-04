@@ -25,8 +25,6 @@ export default function PerformanceSummaryCards({
     if (performanceItems.length === 0) {
       return {
         totalProfit: 0,
-        totalRevenue: 0,
-        totalCost: 0,
         averageProfitMargin: 0,
         categoryCounts: {
           "Chef's Kiss": 0,
@@ -41,14 +39,6 @@ export default function PerformanceSummaryCards({
     // Calculate totals
     const totalProfit = performanceItems.reduce(
       (sum, item) => sum + item.gross_profit * item.number_sold,
-      0,
-    );
-    const totalRevenue = performanceItems.reduce(
-      (sum, item) => sum + (item.selling_price * item.number_sold) / 1.1,
-      0,
-    );
-    const totalCost = performanceItems.reduce(
-      (sum, item) => sum + item.food_cost * item.number_sold,
       0,
     );
 
@@ -78,8 +68,6 @@ export default function PerformanceSummaryCards({
 
     return {
       totalProfit,
-      totalRevenue,
-      totalCost,
       averageProfitMargin,
       categoryCounts,
       topPerformer,
@@ -113,7 +101,7 @@ export default function PerformanceSummaryCards({
   }
 
   return (
-    <SummaryCardGrid className="tablet:mb-4 desktop:mb-6 mb-3" gap="sm">
+    <SummaryCardGrid className="tablet:mb-3 desktop:mb-4 mb-2" gap="sm">
       {/* Total Profit Card */}
       <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
@@ -195,34 +183,6 @@ export default function PerformanceSummaryCards({
         ) : (
           <div className="text-fluid-xs text-gray-500">No data</div>
         )}
-      </div>
-
-      {/* Total Revenue Card */}
-      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
-        <div className="mb-1.5 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Icon icon={TrendingUp} size="sm" className="text-green-400" />
-            <span className="text-fluid-xs text-gray-400">Total Revenue</span>
-          </div>
-        </div>
-        <div className="text-fluid-lg font-bold text-white">
-          {formatCurrency(summary.totalRevenue)}
-        </div>
-        <div className="text-fluid-xs mt-0.5 text-gray-500">ex GST</div>
-      </div>
-
-      {/* Total Cost Card */}
-      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
-        <div className="mb-1.5 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Icon icon={Package} size="sm" className="text-orange-400" />
-            <span className="text-fluid-xs text-gray-400">Total Cost</span>
-          </div>
-        </div>
-        <div className="text-fluid-lg font-bold text-white">
-          {formatCurrency(summary.totalCost)}
-        </div>
-        <div className="text-fluid-xs mt-0.5 text-gray-500">food costs</div>
       </div>
     </SummaryCardGrid>
   );

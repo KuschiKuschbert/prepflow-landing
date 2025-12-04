@@ -164,7 +164,8 @@ function ProfileInformationPanelComponent() {
       logger.dev('[ProfileInformationPanel] Skipping API call - user has modified form', {
         mountId: currentMountId,
         fromRef: userHasModifiedRef.current,
-        fromStorage: typeof window !== 'undefined' && sessionStorage.getItem(USER_MODIFIED_KEY) === 'true',
+        fromStorage:
+          typeof window !== 'undefined' && sessionStorage.getItem(USER_MODIFIED_KEY) === 'true',
       });
       return;
     }
@@ -206,10 +207,13 @@ function ProfileInformationPanelComponent() {
 
         // Handle 401 (Unauthorized) gracefully - user not authenticated
         if (response.status === 401) {
-          logger.dev('[ProfileInformationPanel] User not authenticated (401), using session email', {
-            mountId: currentMountId,
-            sessionEmail,
-          });
+          logger.dev(
+            '[ProfileInformationPanel] User not authenticated (401), using session email',
+            {
+              mountId: currentMountId,
+              sessionEmail,
+            },
+          );
           // Use email from session if available, even if API fails
           if (sessionEmail && !profile) {
             setProfile({
@@ -403,7 +407,7 @@ function ProfileInformationPanelComponent() {
             type="email"
             value={profile?.email || sessionEmail || ''}
             disabled
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-gray-400 cursor-not-allowed"
+            className="w-full cursor-not-allowed rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-gray-400"
           />
           <p className="mt-1 text-xs text-gray-500">
             Email is managed by your authentication provider and cannot be changed here.
@@ -415,36 +419,36 @@ function ProfileInformationPanelComponent() {
           <label htmlFor="first_name" className="mb-2 block text-sm font-medium text-gray-300">
             First Name
           </label>
-            <input
-              id="first_name"
-              type="text"
-              value={formData.first_name}
-              onChange={e => {
-                const newValue = e.target.value;
-                logger.dev('[ProfileInformationPanel] First name onChange', {
+          <input
+            id="first_name"
+            type="text"
+            value={formData.first_name}
+            onChange={e => {
+              const newValue = e.target.value;
+              logger.dev('[ProfileInformationPanel] First name onChange', {
+                mountId: mountIdRef.current,
+                newValue,
+                previousValue: formData.first_name,
+              });
+              userHasModifiedRef.current = true;
+              // Persist to sessionStorage to survive remounts
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
+              }
+              setFormData(prev => {
+                const updated = { ...prev, first_name: newValue };
+                logger.dev('[ProfileInformationPanel] setFormData called for first_name', {
                   mountId: mountIdRef.current,
-                  newValue,
-                  previousValue: formData.first_name,
+                  previous: prev.first_name,
+                  updated: updated.first_name,
                 });
-                userHasModifiedRef.current = true;
-                // Persist to sessionStorage to survive remounts
-                if (typeof window !== 'undefined') {
-                  sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
-                }
-                setFormData(prev => {
-                  const updated = { ...prev, first_name: newValue };
-                  logger.dev('[ProfileInformationPanel] setFormData called for first_name', {
-                    mountId: mountIdRef.current,
-                    previous: prev.first_name,
-                    updated: updated.first_name,
-                  });
-                  return updated;
-                });
-              }}
-              maxLength={100}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="Enter your first name"
-            />
+                return updated;
+              });
+            }}
+            maxLength={100}
+            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            placeholder="Enter your first name"
+          />
         </div>
 
         {/* Last Name */}
@@ -452,36 +456,36 @@ function ProfileInformationPanelComponent() {
           <label htmlFor="last_name" className="mb-2 block text-sm font-medium text-gray-300">
             Last Name
           </label>
-            <input
-              id="last_name"
-              type="text"
-              value={formData.last_name}
-              onChange={e => {
-                const newValue = e.target.value;
-                logger.dev('[ProfileInformationPanel] Last name onChange', {
+          <input
+            id="last_name"
+            type="text"
+            value={formData.last_name}
+            onChange={e => {
+              const newValue = e.target.value;
+              logger.dev('[ProfileInformationPanel] Last name onChange', {
+                mountId: mountIdRef.current,
+                newValue,
+                previousValue: formData.last_name,
+              });
+              userHasModifiedRef.current = true;
+              // Persist to sessionStorage to survive remounts
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
+              }
+              setFormData(prev => {
+                const updated = { ...prev, last_name: newValue };
+                logger.dev('[ProfileInformationPanel] setFormData called for last_name', {
                   mountId: mountIdRef.current,
-                  newValue,
-                  previousValue: formData.last_name,
+                  previous: prev.last_name,
+                  updated: updated.last_name,
                 });
-                userHasModifiedRef.current = true;
-                // Persist to sessionStorage to survive remounts
-                if (typeof window !== 'undefined') {
-                  sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
-                }
-                setFormData(prev => {
-                  const updated = { ...prev, last_name: newValue };
-                  logger.dev('[ProfileInformationPanel] setFormData called for last_name', {
-                    mountId: mountIdRef.current,
-                    previous: prev.last_name,
-                    updated: updated.last_name,
-                  });
-                  return updated;
-                });
-              }}
-              maxLength={100}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="Enter your last name"
-            />
+                return updated;
+              });
+            }}
+            maxLength={100}
+            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            placeholder="Enter your last name"
+          />
         </div>
 
         {/* Business Name */}
@@ -489,41 +493,41 @@ function ProfileInformationPanelComponent() {
           <label htmlFor="business_name" className="mb-2 block text-sm font-medium text-gray-300">
             Business Name
           </label>
-            <input
-              id="business_name"
-              type="text"
-              value={formData.business_name}
-              onChange={e => {
-                const newValue = e.target.value;
-                logger.dev('[ProfileInformationPanel] Business name onChange', {
+          <input
+            id="business_name"
+            type="text"
+            value={formData.business_name}
+            onChange={e => {
+              const newValue = e.target.value;
+              logger.dev('[ProfileInformationPanel] Business name onChange', {
+                mountId: mountIdRef.current,
+                newValue,
+                previousValue: formData.business_name,
+              });
+              userHasModifiedRef.current = true;
+              // Persist to sessionStorage to survive remounts
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
+              }
+              setFormData(prev => {
+                const updated = { ...prev, business_name: newValue };
+                logger.dev('[ProfileInformationPanel] setFormData called for business_name', {
                   mountId: mountIdRef.current,
-                  newValue,
-                  previousValue: formData.business_name,
+                  previous: prev.business_name,
+                  updated: updated.business_name,
                 });
-                userHasModifiedRef.current = true;
-                // Persist to sessionStorage to survive remounts
-                if (typeof window !== 'undefined') {
-                  sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
-                }
-                setFormData(prev => {
-                  const updated = { ...prev, business_name: newValue };
-                  logger.dev('[ProfileInformationPanel] setFormData called for business_name', {
-                    mountId: mountIdRef.current,
-                    previous: prev.business_name,
-                    updated: updated.business_name,
-                  });
-                  return updated;
-                });
-              }}
-              maxLength={255}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-              placeholder="Enter your business name"
-            />
+                return updated;
+              });
+            }}
+            maxLength={255}
+            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            placeholder="Enter your business name"
+          />
         </div>
 
         {/* Account Metadata */}
         <div className="border-t border-[#2a2a2a] pt-4">
-          <div className="grid grid-cols-1 gap-3 desktop:grid-cols-2">
+          <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
             <div>
               <p className="text-xs text-gray-500">Account Created</p>
               <p className="text-sm font-medium text-gray-300">

@@ -45,7 +45,7 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
         className="desktop:mt-20 mx-auto mt-12 w-full max-w-2xl px-4"
         onClick={e => e.stopPropagation()}
       >
-        <div className="desktop:p-6 rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+        <div className="desktop:p-6 rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
           <div className="desktop:p-6 rounded-2xl bg-[#1f1f1f]/95 p-4">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-fluid-xl font-semibold">{step.title}</h3>

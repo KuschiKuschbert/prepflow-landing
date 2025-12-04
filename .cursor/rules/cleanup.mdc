@@ -137,9 +137,9 @@ alwaysApply: true
 - See `design.mdc` (Icon Standards) for complete guidelines
 - See `components/ui/Icon.tsx` for Icon component implementation
 
-### **Material Design 3 Standards**
+### **Cyber Carrot Design System Standards**
 
-**Source:** `design.mdc` (Material Design 3 Design System)
+**Source:** `design.mdc` (Cyber Carrot Design System)
 
 **Standards:**
 - Border radius: `rounded-3xl` (containers), `rounded-2xl` (cards)
@@ -153,7 +153,7 @@ alwaysApply: true
 - Fix: Manual fixes required
 
 **Related:**
-- See `design.mdc` (Material Design 3 Design System) for complete guidelines
+- See `design.mdc` (Cyber Carrot Design System) for complete guidelines
 
 ---
 

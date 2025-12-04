@@ -16,6 +16,8 @@ export interface CreateTaskBody {
   standard_task_type?: string;
   description?: string;
   notes?: string;
+  assigned_to_employee_id?: string;
+  assigned_by_employee_id?: string;
 }
 
 /**
@@ -50,4 +52,3 @@ export function validateCreateTaskRequest(body: CreateTaskBody): NextResponse | 
 
   return null;
 }
-

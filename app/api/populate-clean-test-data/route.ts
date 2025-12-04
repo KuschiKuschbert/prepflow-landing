@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import {
   cleanExistingData,
   populateBasicData,
+  populateStaff,
   populateTemperatureData,
   populateCleaningData,
   populateComplianceData,
@@ -35,6 +36,10 @@ export async function POST(request: NextRequest) {
     // Step 2-4: Populate basic data
     logger.dev('📦 Populating basic data...');
     const { recipesData, ingredientsData } = await populateBasicData(supabaseAdmin, results);
+
+    // Step 4.5: Populate staff members
+    logger.dev('👥 Populating staff members...');
+    await populateStaff(supabaseAdmin, results);
 
     // Step 5-6: Populate temperature data
     logger.dev('🌡️ Populating temperature data...');

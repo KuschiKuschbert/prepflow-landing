@@ -4,7 +4,7 @@
  * Generates AI prompts to analyze dishes and suggest suitable plating methods
  */
 
-import type { Ingredient } from '@/app/webapp/ingredients/types';
+import type { Ingredient } from '@/app/webapp/ingredients/components/types';
 
 export interface PlatingMethodSuggestion {
   method: string;
@@ -71,4 +71,3 @@ Return ONLY valid JSON, no additional text or markdown formatting.`;
 
   return prompt;
 }
-

@@ -9,5 +9,3 @@ export const metadata: Metadata = {
 export default function WebAppGuideLayout({ children }: { children: React.ReactNode }) {
   return children;
 }
-
-

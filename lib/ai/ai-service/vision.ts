@@ -51,7 +51,15 @@ export async function generateAIVisionResponse(
     // We'll estimate or leave undefined
     const usage = undefined;
 
-    return processAIResponse(result.content, usage, model, 'vision', undefined, countryCode, options);
+    return processAIResponse(
+      result.content,
+      usage,
+      model,
+      'vision',
+      undefined,
+      countryCode,
+      options,
+    );
   } catch (error) {
     const aiError = parseAIError(error as Error);
     return { content: '', error: aiError.message };

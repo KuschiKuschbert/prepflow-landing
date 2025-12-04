@@ -1,11 +1,27 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { User, Shield, Settings, Database, Lock, Code, ChevronRight } from 'lucide-react';
+import {
+  User,
+  Shield,
+  Settings,
+  Database,
+  Lock,
+  Code,
+  ChevronRight,
+  HelpCircle,
+} from 'lucide-react';
 import { ReactNode, useEffect } from 'react';
 import { RegionSelector } from './RegionSelector';
 
-export type SettingsSection = 'profile' | 'security' | 'preferences' | 'data' | 'privacy' | 'advanced';
+export type SettingsSection =
+  | 'profile'
+  | 'security'
+  | 'preferences'
+  | 'data'
+  | 'privacy'
+  | 'advanced'
+  | 'faq';
 
 interface SettingsLayoutProps {
   activeSection: SettingsSection;
@@ -20,6 +36,7 @@ const sections: Array<{ id: SettingsSection; label: string; icon: typeof User }>
   { id: 'data', label: 'Data & Backup', icon: Database },
   { id: 'privacy', label: 'Privacy & Legal', icon: Lock },
   { id: 'advanced', label: 'Advanced', icon: Code },
+  { id: 'faq', label: 'FAQ', icon: HelpCircle },
 ];
 
 /**
@@ -54,6 +71,7 @@ export function SettingsLayout({ activeSection, onSectionChange, children }: Set
       data: () => import('./sections/DataBackupSection'),
       privacy: () => import('./sections/PrivacyLegalSection'),
       advanced: () => import('./sections/AdvancedSection'),
+      faq: () => import('./sections/FAQSection'),
     };
 
     // Prefetch the module (Next.js will handle this efficiently)
@@ -65,17 +83,20 @@ export function SettingsLayout({ activeSection, onSectionChange, children }: Set
   };
 
   return (
-    <div className="mx-auto max-w-7xl p-4 desktop:p-6">
-      <div className="mb-6 flex flex-col gap-4 desktop:flex-row desktop:items-center desktop:justify-between">
+    <div className="desktop:p-6 mx-auto max-w-7xl p-4">
+      <div className="desktop:flex-row desktop:items-center desktop:justify-between mb-6 flex flex-col gap-4">
         <h1 className="text-3xl font-bold text-white">Settings</h1>
-        <div className="flex justify-end desktop:block">
+        <div className="desktop:block flex justify-end">
           <RegionSelector />
         </div>
       </div>
 
       {/* Mobile: Dropdown selector */}
-      <div className="mb-6 block desktop:hidden">
-        <label htmlFor="settings-section-select" className="mb-2 block text-sm font-medium text-gray-300">
+      <div className="desktop:hidden mb-6 block">
+        <label
+          htmlFor="settings-section-select"
+          className="mb-2 block text-sm font-medium text-gray-300"
+        >
           Section
         </label>
         <select
@@ -92,9 +113,9 @@ export function SettingsLayout({ activeSection, onSectionChange, children }: Set
         </select>
       </div>
 
-      <div className="flex flex-col gap-6 desktop:flex-row">
+      <div className="desktop:flex-row flex flex-col gap-6">
         {/* Sidebar Navigation - Desktop */}
-        <aside className="hidden desktop:block desktop:w-64 desktop:flex-shrink-0">
+        <aside className="desktop:block desktop:w-64 desktop:flex-shrink-0 hidden">
           <nav
             className="sticky space-y-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4"
             style={{ top: 'calc(var(--header-height-desktop) + 1.5rem)' }}
@@ -116,7 +137,12 @@ export function SettingsLayout({ activeSection, onSectionChange, children }: Set
                   <Icon icon={section.icon} size="md" aria-hidden={true} />
                   <span className="flex-1 font-medium">{section.label}</span>
                   {isActive && (
-                    <Icon icon={ChevronRight} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+                    <Icon
+                      icon={ChevronRight}
+                      size="sm"
+                      className="text-[#29E7CD]"
+                      aria-hidden={true}
+                    />
                   )}
                 </button>
               );

@@ -71,7 +71,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
                   onClick={() => onTargetGrossProfitChange(gp)}
                   className={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${
                     targetGrossProfit === gp
-                      ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
                       : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
                   }`}
                 >
@@ -97,7 +97,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
               onClick={() => onPricingStrategyChange('charm')}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 pricingStrategy === 'charm'
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
                   : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
               }`}
             >
@@ -108,7 +108,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
               onClick={() => onPricingStrategyChange('whole')}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 pricingStrategy === 'whole'
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
                   : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
               }`}
             >
@@ -119,7 +119,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
               onClick={() => onPricingStrategyChange('real')}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 pricingStrategy === 'real'
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
                   : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
               }`}
             >
@@ -130,7 +130,7 @@ export const PricingTool: React.FC<PricingToolProps> = ({
         </div>
 
         {/* Hero Selling Price Card */}
-        <div className="mb-4 rounded-2xl border-2 border-[#29E7CD]/50 bg-gradient-to-br from-[#29E7CD]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-6 shadow-lg">
+        <div className="mb-4 rounded-2xl border-2 border-[#29E7CD]/50 bg-gradient-to-br from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-6 shadow-lg">
           <div className="mb-2 text-xs font-medium tracking-wide text-gray-400 uppercase">
             Recommended Selling Price
           </div>

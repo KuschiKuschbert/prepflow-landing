@@ -284,4 +284,3 @@ export async function runMonkeyTest(
 
   return result;
 }
-

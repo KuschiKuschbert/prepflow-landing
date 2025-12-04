@@ -1,12 +1,12 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
 import { GlowCard } from '@/components/ui/GlowCard';
-import { useTranslation } from '@/lib/useTranslation';
+import { Icon } from '@/components/ui/Icon';
 import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
-import { BookOpen, DollarSign, Rocket, Settings, ThermometerSun, Utensils } from 'lucide-react';
-import Link from 'next/link';
+import { useTranslation } from '@/lib/useTranslation';
 import { motion } from 'framer-motion';
+import { BookOpen, DollarSign, Rocket, ThermometerSun, Utensils } from 'lucide-react';
+import Link from 'next/link';
 
 export default function QuickActions() {
   const { t } = useTranslation();
@@ -16,7 +16,7 @@ export default function QuickActions() {
       title: 'Add Ingredient',
       description: 'Add new ingredients to your inventory',
       icon: Utensils,
-      href: '/webapp/recipes#ingredients',
+      href: '/webapp/recipes#ingredients', // Use final destination to avoid redirect hydration mismatch
       color: 'from-[#29E7CD] to-[#D925C7]', // primary to accent
       glowColor: LANDING_COLORS.primary,
     },
@@ -24,7 +24,7 @@ export default function QuickActions() {
       title: 'Create Recipe',
       description: 'Build new recipes with cost calculation',
       icon: BookOpen,
-      href: '/webapp/recipes',
+      href: '/webapp/recipes', // Simplified to avoid hydration mismatch
       color: 'from-[#3B82F6] to-[#29E7CD]', // secondary to primary
       glowColor: LANDING_COLORS.secondary,
     },
@@ -32,7 +32,7 @@ export default function QuickActions() {
       title: 'Temperature Log',
       description: 'Log temperature readings for compliance',
       icon: ThermometerSun,
-      href: '/webapp/temperature',
+      href: '/webapp/temperature', // Simplified to avoid hydration mismatch
       color: 'from-[#F59E0B] to-[#EF4444]', // Keep non-landing colors for this
       glowColor: '#F59E0B',
     },

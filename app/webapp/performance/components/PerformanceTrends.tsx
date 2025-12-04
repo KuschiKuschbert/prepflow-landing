@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { PerformanceItem } from '../types';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, ChevronDown, ChevronUp } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 interface PerformanceTrendsProps {
@@ -19,6 +19,8 @@ export default function PerformanceTrends({
   previousItems,
   dateRange,
 }: PerformanceTrendsProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const trends = useMemo(() => {
     if (!previousItems || previousItems.length === 0) {
       return null;
@@ -121,67 +123,86 @@ export default function PerformanceTrends({
   };
 
   return (
-    <div className="tablet:mb-4 tablet:p-4 desktop:mb-6 desktop:p-6 mb-3 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3">
-      <h3 className="mb-2 text-base font-semibold text-white">Trend Analysis</h3>
-      <p className="mb-3 text-xs text-gray-400">
-        Comparing current period to {getPreviousPeriodLabel()}
-      </p>
-
-      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-3">
-        {/* Profit Trend */}
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-          <div className="mb-1.5 flex items-center justify-between">
-            <span className="text-xs text-gray-400">Total Profit</span>
-            {getTrendIcon(trends.profitChange)}
+    <div className="tablet:mb-3 tablet:p-2 desktop:mb-4 desktop:p-3 mb-2 overflow-hidden rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2">
+      {/* Always visible header */}
+      <div className="tablet:p-2 desktop:p-3 p-1.5">
+        <div className="tablet:mb-1.5 mb-1 flex items-center justify-between">
+          <div>
+            <h3 className="mb-0.5 text-sm font-semibold text-white">Trend Analysis</h3>
+            <p className="text-xs text-gray-400">
+              Comparing current period to {getPreviousPeriodLabel()}
+            </p>
           </div>
-          <div className="mb-1 text-lg font-bold text-white">
-            {formatCurrency(trends.currentTotalProfit)}
-          </div>
-          <div className={`text-xs font-semibold ${getTrendColor(trends.profitChange)}`}>
-            {trends.profitChange > 0 ? '+' : ''}
-            {trends.profitChange.toFixed(1)}% vs previous
-          </div>
-          <div className="mt-0.5 text-xs text-gray-500">
-            Previous: {formatCurrency(trends.previousTotalProfit)}
-          </div>
-        </div>
-
-        {/* Revenue Trend */}
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-          <div className="mb-1.5 flex items-center justify-between">
-            <span className="text-xs text-gray-400">Total Revenue</span>
-            {getTrendIcon(trends.revenueChange)}
-          </div>
-          <div className="mb-1 text-lg font-bold text-white">
-            {formatCurrency(trends.currentTotalRevenue)}
-          </div>
-          <div className={`text-xs font-semibold ${getTrendColor(trends.revenueChange)}`}>
-            {trends.revenueChange > 0 ? '+' : ''}
-            {trends.revenueChange.toFixed(1)}% vs previous
-          </div>
-          <div className="mt-0.5 text-xs text-gray-500">
-            Previous: {formatCurrency(trends.previousTotalRevenue)}
-          </div>
-        </div>
-
-        {/* Units Sold Trend */}
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-          <div className="mb-1.5 flex items-center justify-between">
-            <span className="text-xs text-gray-400">Units Sold</span>
-            {getTrendIcon(trends.soldChange)}
-          </div>
-          <div className="mb-1 text-lg font-bold text-white">
-            {formatNumber(trends.currentTotalSold)}
-          </div>
-          <div className={`text-xs font-semibold ${getTrendColor(trends.soldChange)}`}>
-            {trends.soldChange > 0 ? '+' : ''}
-            {trends.soldChange.toFixed(1)}% vs previous
-          </div>
-          <div className="mt-0.5 text-xs text-gray-500">
-            Previous: {formatNumber(trends.previousTotalSold)}
-          </div>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-2 py-0.5 text-xs text-gray-300 transition-colors hover:border-[#29E7CD]/50 hover:text-[#29E7CD]"
+          >
+            <span>{isExpanded ? 'Hide' : 'Show'} Trends</span>
+            <Icon icon={isExpanded ? ChevronUp : ChevronDown} size="xs" />
+          </button>
         </div>
       </div>
+
+      {/* Expandable content */}
+      {isExpanded && (
+        <div className="tablet:p-2 desktop:p-3 border-t border-[#2a2a2a] bg-[#2a2a2a]/30 p-1.5">
+          <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-2">
+            {/* Profit Trend */}
+            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2">
+              <div className="mb-1 flex items-center justify-between">
+                <span className="text-xs text-gray-400">Total Profit</span>
+                {getTrendIcon(trends.profitChange)}
+              </div>
+              <div className="mb-0.5 text-base font-bold text-white">
+                {formatCurrency(trends.currentTotalProfit)}
+              </div>
+              <div className={`text-xs font-semibold ${getTrendColor(trends.profitChange)}`}>
+                {trends.profitChange > 0 ? '+' : ''}
+                {trends.profitChange.toFixed(1)}% vs previous
+              </div>
+              <div className="mt-0.5 text-xs text-gray-500">
+                Previous: {formatCurrency(trends.previousTotalProfit)}
+              </div>
+            </div>
+
+            {/* Revenue Trend */}
+            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2">
+              <div className="mb-1 flex items-center justify-between">
+                <span className="text-xs text-gray-400">Total Revenue</span>
+                {getTrendIcon(trends.revenueChange)}
+              </div>
+              <div className="mb-0.5 text-base font-bold text-white">
+                {formatCurrency(trends.currentTotalRevenue)}
+              </div>
+              <div className={`text-xs font-semibold ${getTrendColor(trends.revenueChange)}`}>
+                {trends.revenueChange > 0 ? '+' : ''}
+                {trends.revenueChange.toFixed(1)}% vs previous
+              </div>
+              <div className="mt-0.5 text-xs text-gray-500">
+                Previous: {formatCurrency(trends.previousTotalRevenue)}
+              </div>
+            </div>
+
+            {/* Units Sold Trend */}
+            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2">
+              <div className="mb-1 flex items-center justify-between">
+                <span className="text-xs text-gray-400">Units Sold</span>
+                {getTrendIcon(trends.soldChange)}
+              </div>
+              <div className="mb-0.5 text-base font-bold text-white">
+                {formatNumber(trends.currentTotalSold)}
+              </div>
+              <div className={`text-xs font-semibold ${getTrendColor(trends.soldChange)}`}>
+                {trends.soldChange > 0 ? '+' : ''}
+                {trends.soldChange.toFixed(1)}% vs previous
+              </div>
+              <div className="mt-0.5 text-xs text-gray-500">
+                Previous: {formatNumber(trends.previousTotalSold)}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Plus } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 import { CreateEquipmentForm } from './CreateEquipmentForm';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
@@ -15,7 +15,7 @@ import { EquipmentEmptyState } from './EquipmentEmptyState';
 import { EquipmentCardsPagination } from './EquipmentCardsPagination';
 import { useTemperatureEquipmentTabHandlers } from '../hooks/useTemperatureEquipmentTabHandlers';
 import { useEquipmentLogInfo } from '../hooks/useEquipmentLogInfo';
-import { temperatureTypes } from '../utils/temperatureUtils';
+import { temperatureTypesForSelect } from '../utils/temperatureUtils';
 
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];
@@ -128,7 +128,7 @@ export default function TemperatureEquipmentTab({
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <span className="text-lg">➕</span>
+            <Icon icon={Plus} size="md" className="text-black" aria-hidden={true} />
             <span>{t('temperature.addEquipment', 'Add Equipment')}</span>
           </button>
         </div>
@@ -137,7 +137,7 @@ export default function TemperatureEquipmentTab({
       {/* Create New Equipment Form */}
       <CreateEquipmentForm
         show={showCreateForm}
-        temperatureTypes={temperatureTypes}
+        temperatureTypes={temperatureTypesForSelect}
         newEquipment={newEquipment}
         setNewEquipment={setNewEquipment}
         onSubmit={handleCreateEquipment}
@@ -151,7 +151,7 @@ export default function TemperatureEquipmentTab({
           equipment={equipment}
           editingId={editingEquipment}
           setEditingId={setEditingEquipment}
-          temperatureTypes={temperatureTypes}
+          temperatureTypes={temperatureTypesForSelect}
           quickTempLoading={quickTempLoading}
           onQuickTempLog={onQuickTempLog}
           onToggleStatus={toggleEquipmentStatus}
@@ -184,7 +184,7 @@ export default function TemperatureEquipmentTab({
                 item={item as any}
                 editingId={editingEquipment}
                 setEditingId={setEditingEquipment}
-                temperatureTypes={temperatureTypes}
+                temperatureTypes={temperatureTypesForSelect}
                 quickTempLoading={quickTempLoading}
                 onQuickTempLog={onQuickTempLog}
                 onToggleStatus={toggleEquipmentStatus}
@@ -202,7 +202,7 @@ export default function TemperatureEquipmentTab({
 
       {/* Equipment Detail Drawer */}
       <EquipmentDetailDrawer
-        equipment={selectedEquipment}
+        equipment={selectedEquipment!}
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
       />
@@ -213,7 +213,7 @@ export default function TemperatureEquipmentTab({
           equipment={qrCodeEquipment}
           isOpen={isQRCodeModalOpen}
           onClose={handleCloseQRCodeModal}
-          temperatureTypes={temperatureTypes}
+          temperatureTypes={temperatureTypesForSelect}
         />
       )}
 

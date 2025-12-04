@@ -277,11 +277,8 @@ export async function detectVegetarianVeganWithAI(
   ingredients: Ingredient[],
   description?: string,
 ): Promise<DietaryDetectionResult> {
-  const {
-    isAIEnabled,
-    generateTextWithHuggingFace,
-    getHuggingFaceTextModel,
-  } = await import('@/lib/ai/huggingface-client');
+  const { isAIEnabled, generateTextWithHuggingFace, getHuggingFaceTextModel } =
+    await import('@/lib/ai/huggingface-client');
 
   if (!isAIEnabled()) {
     logger.warn('[Dietary Detection] AI not enabled, falling back to non-AI detection');
@@ -338,7 +335,9 @@ Respond in JSON format:
 
     // Extract JSON from response (may contain markdown code blocks)
     let responseText = result.content.trim();
-    const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/) || responseText.match(/```\s*([\s\S]*?)\s*```/);
+    const jsonMatch =
+      responseText.match(/```json\s*([\s\S]*?)\s*```/) ||
+      responseText.match(/```\s*([\s\S]*?)\s*```/);
     if (jsonMatch) {
       responseText = jsonMatch[1].trim();
     }

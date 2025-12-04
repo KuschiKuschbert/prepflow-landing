@@ -1,1 +1,1382 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cleanup Report</title><style>body{font-family:system-ui,sans-serif;margin:20px;background:#0a0a0a;color:#fff}.summary{background:#1f1f1f;padding:20px;border-radius:8px;margin-bottom:20px}.summary h2{margin-top:0}.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}.summary-item{background:#2a2a2a;padding:15px;border-radius:8px}.summary-item .value{font-size:2em;font-weight:bold;color:#29e7cd}.violations{margin-top:20px}.file-group{background:#1f1f1f;padding:15px;margin-bottom:15px;border-radius:8px}.file-group h3{margin-top:0;color:#29e7cd}.violation{background:#2a2a2a;padding:10px;margin:5px 0;border-radius:4px;border-left:4px solid}.violation.critical{border-color:#ef4444}.violation.warning{border-color:#f59e0b}.violation.info{border-color:#3b82f6}.violation-meta{font-size:0.9em;color:#9ca3af;margin-top:5px}a{color:#29e7cd}</style></head><body><h1>🧹 Cleanup Report</h1><div class="summary"><h2>Summary</h2><div class="summary-grid"><div class="summary-item"><div class="value">118</div><div>Total Violations</div></div><div class="summary-item"><div class="value">114</div><div>Critical</div></div><div class="summary-item"><div class="value">4</div><div>Warning</div></div><div class="summary-item"><div class="value">0</div><div>Info</div></div><div class="summary-item"><div class="value">116</div><div>Files Affected</div></div><div class="summary-item"><div class="value">3</div><div>Standards Violated</div></div></div></div><div class="violations"><h2>Violations by File</h2><div class="file-group"><h3>app/api/cleaning-tasks/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 257 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/compliance/allergens/export/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 559 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/compliance/allergens/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 353 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/compliance-records/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 207 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/dashboard/performance-summary/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 257 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/db/populate-empty-dishes/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 375 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/dishes/[id]/allergen-sources/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 221 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/dishes/[id]/helpers/fetchDishWithRelations.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 287 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/dishes/[id]/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 335 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/ingredients/detect-missing-allergens/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 263 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/menus/[id]/allergen-matrix/export/helpers/generateHTML.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 224 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/menus/[id]/changes/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 240 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/menus/[id]/helpers/fetchMenuWithItems.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 965 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/menus/[id]/items/[itemId]/statistics/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 230 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/menus/[id]/lock/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 312 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/menus/[id]/statistics/helpers/calculateMenuStatistics.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 227 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/api/recipes/[id]/route.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds api limit: 331 lines (limit 200)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/components/landing/hooks/helpers/animationEffects.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 115 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/components/landing/hooks/useAppleStyleAnimations.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 114 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/cogs/hooks/useIngredientAddition.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 121 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/compliance/components/AllergenOverview.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 609 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/dish-builder/hooks/useDishBuilder.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 101 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/ingredients/components/IngredientTableWithFilters.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 301 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/ingredients/components/IngredientsClient.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 317 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/ingredients/hooks/useIngredientAdd.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 106 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/ingredients/hooks/useIngredientBulkUpdate.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 149 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/IngredientPopover.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 507 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/MenuBuilderClient.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 375 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/MenuEditor.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 600 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/MenuItemHoverStatistics.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 349 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/MenuLockedView.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 547 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/MenuUnlockChangesDialog.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 381 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/SortableMenuItem/hooks/useMenuItemHover.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 105 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/helpers/useMenuItemAddition.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 126 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/helpers/useMenuItemReorder.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 113 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 145 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/useMenuData.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 132 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/useMenuEditing.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 108 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/useMenuEditorUI.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 128 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/components/hooks/useMenuItemOperations.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 107 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/hooks/useMenuDragDrop/dragEnd.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 111 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/utils/formatMenuForPrint.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 219 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/utils/menuPrintStyles.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 286 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/menu-builder/utils/menuPrintTemplate.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 290 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/par-levels/hooks/useParLevelsCRUD.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 109 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/par-levels/hooks/useParLevelsData.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 108 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/par-levels/hooks/useParLevelsForm/formSubmission.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 147 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/performance/utils/generatePerformanceTips/tipCategories.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 215 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/prep-lists/hooks/usePrepListsCRUD.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 132 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/prep-lists/hooks/usePrepListsForm.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 115 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/prep-lists/utils/formatGeneratedPrepList.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 191 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/DishesClient.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 310 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/RecipeDishEditor.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 320 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/RecipeEditDrawer.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 319 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.helpers.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 107 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 116 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/hooks/useRecipeDishSave.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 125 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/hooks/useRecipeEditIngredientLoading.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 101 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/components/hooks/useRecipeHandlers.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 110 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/useBulkAddToMenu.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 107 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/useDishCOGSCalculations.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 102 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/useDishCostCalculation.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 101 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/useRecipeActions.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 140 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/useRecipeIngredients.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 101 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/useUnifiedBulkActions.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 141 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 103 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 110 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 146 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 124 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/sections/hooks/useDishSectionActions.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 153 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/temperature/hooks/useEquipmentLogs.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 114 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/equipmentCRUD.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 137 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 143 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>app/webapp/temperature/hooks/useTemperaturePageData.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 113 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>components/CountrySetup.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 301 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>components/ui/InputDialog.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 308 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useAutosave.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 112 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useConfirm.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 104 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useDrawerSwipe/touchStartHandlers.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 115 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useLogoInteractions.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 121 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useNavigationTracking.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 115 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useOptimisticMutation.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 102 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useParallelFetch.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 106 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/usePrompt.tsx (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 121 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/useSessionTimeout.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 110 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>hooks/utils/drawerTouchMoveHandler.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds hook limit: 127 lines (limit 100)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/allergens/ai-allergen-detection.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 288 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/allergens/allergen-aggregation.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 400 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/allergens/australian-allergens.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 280 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/allergens/cache-invalidation.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 245 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/allergens/hybrid-allergen-detection.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 256 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/analytics.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 161 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/backup/encryption.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 414 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/backup/export.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 275 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/backup/google-drive.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 482 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/backup/restore.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 410 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/backup/scheduler.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 174 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/compliance/report-generator.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 235 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/compliance/report-types.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 167 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/country-config/configs.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 157 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/dietary/dietary-aggregation.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 541 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/dietary/vegetarian-vegan-detection.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 395 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/exports/pdf-template.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 320 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/ingredients/category-detection.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 361 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/ingredients/normalizeIngredientData.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 153 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/menu-lock/change-tracking.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 354 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/menu-pricing/cache-invalidation.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 404 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/navigation-optimization/optimizer.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 210 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/populate-helpers/dishes-data-helpers.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 170 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>lib/populate-helpers/populate-empty-dishes-helpers.ts (1 violations)</h3><div class="violation critical"><strong>File exceeds util limit: 463 lines (limit 150)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>scripts/check-performance-budget.js (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 341 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>scripts/generate-performance-report.js (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 402 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>scripts/optimize-performance.js (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 361 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>scripts/send-performance-report.js (1 violations)</h3><div class="violation critical"><strong>File exceeds component limit: 334 lines (limit 300)</strong><div class="violation-meta">Standard: <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a></div></div></div><div class="file-group"><h3>/Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts (1 violations)</h3><div class="violation warning"><strong>ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include it or remove the dependency array. (react-hooks/exhaustive-deps)</strong><span style="color:#9ca3af;"> (line 113)</span><div class="violation-meta">Standard: <a href="#development.mdc#eslint-configuration">development.mdc#eslint-configuration</a> | <span style="color:#29e7cd;">Fixable</span></div></div></div><div class="file-group"><h3>.next/static (3 violations)</h3><div class="violation warning"><strong>Total bundle size 3887.5KB exceeds budget of 488KB</strong><div class="violation-meta">Standard: <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a></div></div><div class="violation warning"><strong>JavaScript bundle size 3730.6KB exceeds budget of 195KB</strong><div class="violation-meta">Standard: <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a></div></div><div class="violation warning"><strong>CSS bundle size 156.9KB exceeds budget of 49KB</strong><div class="violation-meta">Standard: <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a></div></div></div></div><div class="violations"><h2>Violations by Standard</h2><div class="file-group" id="development.mdc#file-size-limits"><h3>development.mdc#file-size-limits (114 violations)</h3><ul><li>app/api/cleaning-tasks/route.ts - File exceeds api limit: 257 lines (limit 200)</li><li>app/api/compliance/allergens/export/route.ts - File exceeds api limit: 559 lines (limit 200)</li><li>app/api/compliance/allergens/route.ts - File exceeds api limit: 353 lines (limit 200)</li><li>app/api/compliance-records/route.ts - File exceeds api limit: 207 lines (limit 200)</li><li>app/api/dashboard/performance-summary/route.ts - File exceeds api limit: 257 lines (limit 200)</li><li>app/api/db/populate-empty-dishes/route.ts - File exceeds api limit: 375 lines (limit 200)</li><li>app/api/dishes/[id]/allergen-sources/route.ts - File exceeds api limit: 221 lines (limit 200)</li><li>app/api/dishes/[id]/helpers/fetchDishWithRelations.ts - File exceeds api limit: 287 lines (limit 200)</li><li>app/api/dishes/[id]/route.ts - File exceeds api limit: 335 lines (limit 200)</li><li>app/api/ingredients/detect-missing-allergens/route.ts - File exceeds api limit: 263 lines (limit 200)</li><li>... and 104 more</li></ul></div><div class="file-group" id="development.mdc#eslint-configuration"><h3>development.mdc#eslint-configuration (1 violations)</h3><ul><li>/Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts:113 - ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include it or remove the dependency array. (react-hooks/exhaustive-deps)</li></ul></div><div class="file-group" id="operations.mdc#performance-standards"><h3>operations.mdc#performance-standards (3 violations)</h3><ul><li>.next/static - Total bundle size 3887.5KB exceeds budget of 488KB</li><li>.next/static - JavaScript bundle size 3730.6KB exceeds budget of 195KB</li><li>.next/static - CSS bundle size 156.9KB exceeds budget of 49KB</li></ul></div></div><div style="margin-top:40px;padding-top:20px;border-top:1px solid #2a2a2a;color:#9ca3af;font-size:0.9em;">Generated at 2025-11-21T08:11:02.971Z</div></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cleanup Report</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 20px;
+        background: #0a0a0a;
+        color: #fff;
+      }
+      .summary {
+        background: #1f1f1f;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .summary h2 {
+        margin-top: 0;
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .summary-item {
+        background: #2a2a2a;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .summary-item .value {
+        font-size: 2em;
+        font-weight: bold;
+        color: #29e7cd;
+      }
+      .violations {
+        margin-top: 20px;
+      }
+      .file-group {
+        background: #1f1f1f;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+      }
+      .file-group h3 {
+        margin-top: 0;
+        color: #29e7cd;
+      }
+      .violation {
+        background: #2a2a2a;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        border-left: 4px solid;
+      }
+      .violation.critical {
+        border-color: #ef4444;
+      }
+      .violation.warning {
+        border-color: #f59e0b;
+      }
+      .violation.info {
+        border-color: #3b82f6;
+      }
+      .violation-meta {
+        font-size: 0.9em;
+        color: #9ca3af;
+        margin-top: 5px;
+      }
+      a {
+        color: #29e7cd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧹 Cleanup Report</h1>
+    <div class="summary">
+      <h2>Summary</h2>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="value">118</div>
+          <div>Total Violations</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">114</div>
+          <div>Critical</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">4</div>
+          <div>Warning</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">0</div>
+          <div>Info</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">116</div>
+          <div>Files Affected</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">3</div>
+          <div>Standards Violated</div>
+        </div>
+      </div>
+    </div>
+    <div class="violations">
+      <h2>Violations by File</h2>
+      <div class="file-group">
+        <h3>app/api/cleaning-tasks/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 257 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/compliance/allergens/export/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 559 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/compliance/allergens/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 353 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/compliance-records/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 207 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dashboard/performance-summary/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 257 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/db/populate-empty-dishes/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 375 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dishes/[id]/allergen-sources/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 221 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dishes/[id]/helpers/fetchDishWithRelations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 287 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/dishes/[id]/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 335 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ingredients/detect-missing-allergens/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 263 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/allergen-matrix/export/helpers/generateHTML.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 224 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/changes/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 240 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/helpers/fetchMenuWithItems.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 965 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/items/[itemId]/statistics/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 230 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/lock/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 312 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/statistics/helpers/calculateMenuStatistics.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 227 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/recipes/[id]/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 331 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/components/landing/hooks/helpers/animationEffects.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 115 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/components/landing/hooks/useAppleStyleAnimations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 114 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/cogs/hooks/useIngredientAddition.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 121 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/compliance/components/AllergenOverview.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 609 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/dish-builder/hooks/useDishBuilder.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 101 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/components/IngredientTableWithFilters.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 301 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/components/IngredientsClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 317 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/hooks/useIngredientAdd.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 106 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/hooks/useIngredientBulkUpdate.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 149 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/IngredientPopover.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 507 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuBuilderClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 375 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuEditor.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 600 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuItemHoverStatistics.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 349 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuLockedView.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 547 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/MenuUnlockChangesDialog.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 381 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/menu-builder/components/SortableMenuItem/hooks/useMenuItemHover.ts (1
+          violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 105 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/menu-builder/components/hooks/helpers/useMenuItemAddition.ts (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 126 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/menu-builder/components/hooks/helpers/useMenuItemReorder.ts (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 113 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/hooks/useMenuData/dataLoading.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 145 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/hooks/useMenuData.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 132 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/hooks/useMenuEditing.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 108 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/hooks/useMenuEditorUI.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 128 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/components/hooks/useMenuItemOperations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 107 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/hooks/useMenuDragDrop/dragEnd.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 111 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/utils/formatMenuForPrint.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 219 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/utils/menuPrintStyles.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 286 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/menu-builder/utils/menuPrintTemplate.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 290 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/par-levels/hooks/useParLevelsCRUD.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 109 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/par-levels/hooks/useParLevelsData.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 108 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/par-levels/hooks/useParLevelsForm/formSubmission.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 147 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/performance/utils/generatePerformanceTips/tipCategories.ts (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 215 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/hooks/usePrepListsCRUD.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 132 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/hooks/usePrepListsForm.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 115 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/prep-lists/utils/formatGeneratedPrepList.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 191 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/DishesClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 310 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/RecipeDishEditor.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 320 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/RecipeEditDrawer.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 319 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.helpers.ts (1
+          violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 107 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 116 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/hooks/useRecipeDishSave.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 125 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/recipes/components/hooks/useRecipeEditIngredientLoading.ts (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 101 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/hooks/useRecipeHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useBulkAddToMenu.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 107 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useDishCOGSCalculations.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 102 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useDishCostCalculation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 101 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useRecipeActions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 140 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useRecipeIngredients.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 101 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/useUnifiedBulkActions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 141 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/batchFetchWithRetry.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 103 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/buildPricingCallbacks.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/generateInstructionTemplates.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 146 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/hooks/utils/recipeSubscriptionSetup.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 124 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/sections/hooks/useDishSectionActions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 153 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useEquipmentLogs.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 114 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/temperature/hooks/useTemperatureEquipmentHandlers/equipmentCRUD.ts (1
+          violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 137 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useTemperatureEquipmentTabHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 143 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/temperature/hooks/useTemperaturePageData.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 113 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>components/CountrySetup.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 301 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>components/ui/InputDialog.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 308 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useAutosave.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 112 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useConfirm.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 104 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useDrawerSwipe/touchStartHandlers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 115 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useLogoInteractions.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 121 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useNavigationTracking.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 115 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useOptimisticMutation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 102 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useParallelFetch.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 106 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/usePrompt.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 121 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/useSessionTimeout.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 110 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>hooks/utils/drawerTouchMoveHandler.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds hook limit: 127 lines (limit 100)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/allergens/ai-allergen-detection.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 288 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/allergens/allergen-aggregation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 400 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/allergens/australian-allergens.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 280 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/allergens/cache-invalidation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 245 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/allergens/hybrid-allergen-detection.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 256 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/analytics.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 161 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/backup/encryption.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 414 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/backup/export.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 275 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/backup/google-drive.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 482 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/backup/restore.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 410 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/backup/scheduler.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 174 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/compliance/report-generator.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 235 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/compliance/report-types.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 167 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/country-config/configs.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 157 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/dietary/dietary-aggregation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 541 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/dietary/vegetarian-vegan-detection.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 395 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/exports/pdf-template.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 320 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ingredients/category-detection.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 361 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ingredients/normalizeIngredientData.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 153 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/menu-lock/change-tracking.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 354 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/menu-pricing/cache-invalidation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 404 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/navigation-optimization/optimizer.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 210 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/populate-helpers/dishes-data-helpers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 170 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/populate-helpers/populate-empty-dishes-helpers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 463 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/check-performance-budget.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 341 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/generate-performance-report.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 402 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/optimize-performance.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 361 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>scripts/send-performance-report.js (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 334 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          /Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts
+          (1 violations)
+        </h3>
+        <div class="violation warning">
+          <strong
+            >ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include
+            it or remove the dependency array. (react-hooks/exhaustive-deps)</strong
+          ><span style="color: #9ca3af"> (line 113)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#eslint-configuration">development.mdc#eslint-configuration</a>
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>.next/static (3 violations)</h3>
+        <div class="violation warning">
+          <strong>Total bundle size 3887.5KB exceeds budget of 488KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>JavaScript bundle size 3730.6KB exceeds budget of 195KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>CSS bundle size 156.9KB exceeds budget of 49KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="violations">
+      <h2>Violations by Standard</h2>
+      <div class="file-group" id="development.mdc#file-size-limits">
+        <h3>development.mdc#file-size-limits (114 violations)</h3>
+        <ul>
+          <li>app/api/cleaning-tasks/route.ts - File exceeds api limit: 257 lines (limit 200)</li>
+          <li>
+            app/api/compliance/allergens/export/route.ts - File exceeds api limit: 559 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/compliance/allergens/route.ts - File exceeds api limit: 353 lines (limit 200)
+          </li>
+          <li>
+            app/api/compliance-records/route.ts - File exceeds api limit: 207 lines (limit 200)
+          </li>
+          <li>
+            app/api/dashboard/performance-summary/route.ts - File exceeds api limit: 257 lines
+            (limit 200)
+          </li>
+          <li>
+            app/api/db/populate-empty-dishes/route.ts - File exceeds api limit: 375 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/dishes/[id]/allergen-sources/route.ts - File exceeds api limit: 221 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/dishes/[id]/helpers/fetchDishWithRelations.ts - File exceeds api limit: 287
+            lines (limit 200)
+          </li>
+          <li>app/api/dishes/[id]/route.ts - File exceeds api limit: 335 lines (limit 200)</li>
+          <li>
+            app/api/ingredients/detect-missing-allergens/route.ts - File exceeds api limit: 263
+            lines (limit 200)
+          </li>
+          <li>... and 104 more</li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#eslint-configuration">
+        <h3>development.mdc#eslint-configuration (1 violations)</h3>
+        <ul>
+          <li>
+            /Users/danielkuschmierz/prepflow-landing/app/webapp/recipes/components/hooks/useRecipeDishIngredientLoading.ts:113
+            - ESLint: React Hook useEffect has a missing dependency: 'selectedItem'. Either include
+            it or remove the dependency array. (react-hooks/exhaustive-deps)
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="operations.mdc#performance-standards">
+        <h3>operations.mdc#performance-standards (3 violations)</h3>
+        <ul>
+          <li>.next/static - Total bundle size 3887.5KB exceeds budget of 488KB</li>
+          <li>.next/static - JavaScript bundle size 3730.6KB exceeds budget of 195KB</li>
+          <li>.next/static - CSS bundle size 156.9KB exceeds budget of 49KB</li>
+        </ul>
+      </div>
+    </div>
+    <div
+      style="
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #2a2a2a;
+        color: #9ca3af;
+        font-size: 0.9em;
+      "
+    >
+      Generated at 2025-11-21T08:11:02.971Z
+    </div>
+  </body>
+</html>

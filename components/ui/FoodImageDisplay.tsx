@@ -255,7 +255,9 @@ export function FoodImageDisplay({
 
   return (
     <>
-      <div className={`relative overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] ${className}`}>
+      <div
+        className={`relative overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] ${className}`}
+      >
         {/* Image Container - Clickable */}
         <div
           className="relative aspect-video w-full cursor-pointer bg-[#0a0a0a] transition-all duration-200 hover:opacity-90"
@@ -276,9 +278,10 @@ export function FoodImageDisplay({
             </div>
           )}
 
-          {currentImageUrl && typeof currentImageUrl === 'string' && (
+          {currentImageUrl &&
+            typeof currentImageUrl === 'string' &&
             // Use regular img tag for data URLs (base64), Next.js Image for external URLs
-            currentImageUrl.startsWith('data:') ? (
+            (currentImageUrl.startsWith('data:') ? (
               <img
                 src={currentImageUrl}
                 alt={alt}
@@ -297,12 +300,11 @@ export function FoodImageDisplay({
                 onError={handleError}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-            )
-          )}
+            ))}
 
           {/* Plating Method Selector - Only show if multiple images exist */}
           {availablePlatingMethods.length > 1 && showSelector && (
-            <div ref={dropdownRef} data-plating-selector className="absolute bottom-4 right-4 z-20">
+            <div ref={dropdownRef} data-plating-selector className="absolute right-4 bottom-4 z-20">
               <button
                 onClick={e => {
                   e.stopPropagation();
@@ -322,7 +324,7 @@ export function FoodImageDisplay({
 
               {/* Dropdown Menu */}
               {isDropdownOpen && (
-                <div className="absolute bottom-full right-0 mb-2 max-h-[300px] min-w-[160px] overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+                <div className="absolute right-0 bottom-full mb-2 max-h-[300px] min-w-[160px] overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
                   {availablePlatingMethods.map(method => (
                     <button
                       key={method}

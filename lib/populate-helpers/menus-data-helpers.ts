@@ -118,5 +118,3 @@ export function buildMenuItemsData(
 
   return { data: menuItemsToInsert, skipped: skippedItems };
 }
-
-

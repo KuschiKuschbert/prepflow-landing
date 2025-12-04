@@ -27,7 +27,7 @@ export default function PerformanceTable({
   });
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+    <>
       <PerformanceClassificationLegend />
 
       <div className="desktop:hidden block">
@@ -48,6 +48,6 @@ export default function PerformanceTable({
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }

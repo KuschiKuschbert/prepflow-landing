@@ -90,7 +90,7 @@ export function RegionSelector() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f]"
+        className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40 hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
         aria-label="Change region"
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -110,7 +110,7 @@ export function RegionSelector() {
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 top-full z-50 mt-2 w-64 max-h-[400px] overflow-y-auto rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl"
+          className="absolute top-full right-0 z-50 mt-2 max-h-[400px] w-64 overflow-y-auto rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl"
           role="menu"
         >
           <div className="p-2">
@@ -130,7 +130,8 @@ export function RegionSelector() {
                   <div className="flex-1">
                     <div className="font-medium">{country.name}</div>
                     <div className="text-xs text-gray-400">
-                      {getUnitSystemLabel(country.unitSystem)} • {country.currency} • {country.taxName}
+                      {getUnitSystemLabel(country.unitSystem)} • {country.currency} •{' '}
+                      {country.taxName}
                     </div>
                   </div>
                   {isSelected && (

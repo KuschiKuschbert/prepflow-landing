@@ -74,7 +74,7 @@ const CUSTOM_AVATAR_NAMES: Record<number, string> = {
   0: 'Kitchen Kaos Kuschi', // Messy chef - "It's not a mess, it's organized chaos!"
   1: 'The Noodle Master', // Blonde chef stirring pasta - "Pasta la vista, hunger!" (placed next to Kitchen Kaos)
   2: 'The Tired Pooch', // Dog in messy kitchen - "Monday vibes, every single day"
-  3: 'Surf\'s Up Chef', // Male chef with shaka signs - "Hang loose, dinner's ready!"
+  3: "Surf's Up Chef", // Male chef with shaka signs - "Hang loose, dinner's ready!"
   4: 'The Snack Inspector', // avatar-05: Cat looking at food - "Quality control is my middle name"
   5: 'Guac & Roll', // avatar-06: Avocado chef - "Always fresh, never basic, totally extra"
   6: 'The Herding Chef', // avatar-07: Blue heeler with sheep - "Organizing chaos, one ingredient at a time"
@@ -161,10 +161,7 @@ export function generateAvatarName(index: number, originalFilename?: string): st
  * @param {string[]} originalFilenames - Original filenames (optional)
  * @returns {string[]} Array of avatar names
  */
-export function generateAvatarNames(
-  count: number,
-  originalFilenames?: string[],
-): string[] {
+export function generateAvatarNames(count: number, originalFilenames?: string[]): string[] {
   return Array.from({ length: count }, (_, index) =>
     generateAvatarName(index, originalFilenames?.[index]),
   );

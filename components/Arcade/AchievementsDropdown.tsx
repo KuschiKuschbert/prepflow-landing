@@ -158,7 +158,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               onClick={onClose}
-              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl hover:shadow-[#FF6B00]/25"
             >
               Close
             </motion.button>

@@ -212,40 +212,49 @@ const nextConfig: NextConfig = {
 
   // Headers for performance and security
   async headers() {
+    const isProduction = process.env.NODE_ENV === 'production';
     const baseHeaders = [
       {
+        key: 'X-DNS-Prefetch-Control',
+        value: 'on',
+      },
+      {
+        key: 'X-Frame-Options',
+        value: 'DENY',
+      },
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+      {
+        key: 'Referrer-Policy',
+        value: 'origin-when-cross-origin',
+      },
+      {
+        key: 'Permissions-Policy',
+        value: 'camera=(), microphone=(), geolocation=()',
+      },
+      // Only include HSTS in production (causes issues with HTTP dev server)
+      ...(isProduction
+        ? [
+            {
+              key: 'Strict-Transport-Security',
+              value: 'max-age=31536000; includeSubDomains; preload',
+            },
+          ]
+        : []),
+      {
+        key: 'Content-Security-Policy',
+        value:
+          "default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'",
+      },
+    ];
+
+    // Return early with proper structure
+    const result: Array<{ source: string; headers: Array<{ key: string; value: string }> }> = [
+      {
         source: '/(.*)',
-        headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains; preload',
-          },
-          {
-            key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'",
-          },
-        ],
+        headers: baseHeaders,
       },
       {
         source: '/api/(.*)',
@@ -281,8 +290,10 @@ const nextConfig: NextConfig = {
     //   });
     // }
 
-    const headers = [
-      ...baseHeaders,
+    const additionalHeaders: Array<{
+      source: string;
+      headers: Array<{ key: string; value: string }>;
+    }> = [
       {
         source: '/images/(.*)',
         headers: [
@@ -327,22 +338,18 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: '/webapp/time-attendance',
+        headers: [
+          {
+            key: 'Permissions-Policy',
+            value: 'geolocation=(self)',
+          },
+        ],
+      },
     ];
 
-    // Add compression headers only in production
-    if (process.env.NODE_ENV === 'production') {
-      headers.forEach(headerGroup => {
-        if (headerGroup.source === '/(.*)' || headerGroup.source === '/api/(.*)') {
-          // Remove explicit compression headers - let Vercel handle compression automatically
-          // headerGroup.headers.push({
-          //   key: 'Content-Encoding',
-          //   value: 'gzip, br',
-          // });
-        }
-      });
-    }
-
-    return headers;
+    return [...result, ...additionalHeaders];
   },
 };
 

@@ -109,6 +109,10 @@ pnpm-lock.yaml
 # Generated files
 *.generated.*
 
+# SSL Certificates (local development)
+.certificates/
+*.pem
+
 # Playwright
 /test-results/
 /test-failures/

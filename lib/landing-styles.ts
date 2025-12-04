@@ -1,8 +1,8 @@
 /**
- * Landing Page Style Constants and Utilities
+ * Landing Page Style Constants and Utilities (Cyber Carrot Design System)
  *
  * Centralized style constants for the PrepFlow landing page.
- * Use these constants to maintain consistency across landing page components.
+ * Part of the Cyber Carrot Design System - use these constants to maintain consistency across landing page components.
  *
  * @see docs/LANDING_PAGE_STYLE_GUIDE.md for complete style guide
  */
@@ -15,6 +15,7 @@ export const LANDING_COLORS = {
   primary: '#29E7CD', // Electric Cyan
   secondary: '#3B82F6', // Blue
   accent: '#D925C7', // Vibrant Magenta
+  tertiary: '#FF6B00', // Cyber Orange - Warm Accents & Carrot Theme
 
   // Background colors
   background: '#0a0a0a', // Dark background
@@ -56,6 +57,12 @@ export const LANDING_COLORS_RGBA = {
     '10': 'rgba(217, 37, 199, 0.1)',
     '15': 'rgba(217, 37, 199, 0.15)',
     '20': 'rgba(217, 37, 199, 0.2)',
+  },
+  tertiary: {
+    default: 'rgba(255, 107, 0, 1)',
+    '10': 'rgba(255, 107, 0, 0.1)',
+    '15': 'rgba(255, 107, 0, 0.15)',
+    '20': 'rgba(255, 107, 0, 0.2)',
   },
   white: {
     '5': 'rgba(255, 255, 255, 0.05)',
@@ -261,9 +268,9 @@ export const WEBAPP_LANDING_PRESETS = {
     breadcrumbActive: `${LANDING_TYPOGRAPHY.sm} text-[#29E7CD]`,
   },
   cta: {
-    primary: `rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 ${LANDING_TYPOGRAPHY.base} ${LANDING_FONT_WEIGHTS.semibold} text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl`,
+    primary: `rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-6 py-3 ${LANDING_TYPOGRAPHY.base} ${LANDING_FONT_WEIGHTS.semibold} text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:via-[#FF6B00]/80 hover:to-[#D925C7]/80 hover:shadow-xl hover:shadow-[#FF6B00]/25`,
     secondary: `rounded-2xl bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-6 py-3 ${LANDING_TYPOGRAPHY.base} ${LANDING_FONT_WEIGHTS.semibold} text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl`,
-    outline: `rounded-xl border border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 px-4 py-2.5 text-gray-300 transition-all duration-200 hover:border-[#29E7CD] hover:from-[#29E7CD]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#29E7CD]/20`,
+    outline: `rounded-xl border border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 via-[#FF6B00]/10 to-[#D925C7]/10 px-4 py-2.5 text-gray-300 transition-all duration-200 hover:border-[#FF6B00]/60 hover:from-[#29E7CD]/20 hover:via-[#FF6B00]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#FF6B00]/20`,
   },
   emptyState: {
     container: 'overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]',

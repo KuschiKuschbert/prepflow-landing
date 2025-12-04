@@ -28,9 +28,8 @@ export async function handleIngredientInsert(
 
   if (!isManuallySet && normalized.ingredient_name) {
     try {
-      const { enrichIngredientWithAllergensHybrid } = await import(
-        '@/lib/allergens/hybrid-allergen-detection'
-      );
+      const { enrichIngredientWithAllergensHybrid } =
+        await import('@/lib/allergens/hybrid-allergen-detection');
       const enriched = await enrichIngredientWithAllergensHybrid({
         ingredient_name: normalized.ingredient_name,
         brand: normalized.brand || undefined,

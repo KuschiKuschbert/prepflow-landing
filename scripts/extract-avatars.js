@@ -61,8 +61,17 @@ async function extractAvatars(sourcePath, rows = 3, cols = 4) {
         const outputPath = path.join(OUTPUT_DIR, `${avatarId}.webp`);
 
         // Validate extract area
-        if (left < 0 || top < 0 || left + extractWidth > width || top + extractHeight > height || extractWidth <= 0 || extractHeight <= 0) {
-          console.error(`❌ Invalid extract area for ${avatarId}: left=${left}, top=${top}, width=${extractWidth}, height=${extractHeight}`);
+        if (
+          left < 0 ||
+          top < 0 ||
+          left + extractWidth > width ||
+          top + extractHeight > height ||
+          extractWidth <= 0 ||
+          extractHeight <= 0
+        ) {
+          console.error(
+            `❌ Invalid extract area for ${avatarId}: left=${left}, top=${top}, width=${extractWidth}, height=${extractHeight}`,
+          );
           continue;
         }
 

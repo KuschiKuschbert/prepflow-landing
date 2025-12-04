@@ -1,20 +1,21 @@
 ---
 alwaysApply: true
 ---
-## 🎨 **Material Design 3 Design System**
+## 🎨 **Cyber Carrot Design System**
 
 ### **Color Palette**
 
 ```css
 --primary: #29e7cd /* Electric Cyan - Primary Actions */ --secondary: #3b82f6
   /* Blue - Secondary Actions */ --accent: #d925c7 /* Vibrant Magenta - Accent Elements */
+  --tertiary: #ff6b00 /* Cyber Orange - Warm Accents & Carrot Theme */
   --background: #0a0a0a /* Dark background */ --foreground: #ffffff /* White text */
   --muted: #1f1f1f /* Dark gray - Cards & Containers */ --border: #2a2a2a
   /* Border gray - Subtle borders */ --surface: #2a2a2a /* Surface color - Elevated elements */
   --surface-variant: #2a2a2a/30 /* Surface variant - Subtle backgrounds */;
 ```
 
-### **Material Design 3 Typography**
+### **Cyber Carrot Typography**
 
 - **Primary Font:** Geist Sans (Google Fonts)
 - **Monospace:** Geist Mono (for technical content)
@@ -26,18 +27,18 @@ alwaysApply: true
   - Label Large: sm (Labels & metadata)
   - Label Small: xs (Captions & fine print)
 
-### **Material Design 3 Component Guidelines**
+### **Cyber Carrot Component Guidelines**
 
 #### **Containers & Cards**
 
 - **Border Radius:** `rounded-3xl` for main containers, `rounded-2xl` for cards
 - **Elevation:** `shadow-lg` with `border border-[#2a2a2a]` for depth
 - **Background:** `bg-[#1f1f1f]` for main containers, `bg-[#2a2a2a]/30` for cards
-- **Gradients:** Subtle gradients for headers and accents
+- **Gradients:** Cyber Carrot gradient borders (Cyan → Orange → Magenta → Cyan) for popups/modals, subtle gradients for headers and accents
 
 #### **Buttons & Actions**
 
-- **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] to-[#D925C7]` with `rounded-2xl`
+- **Primary Buttons:** `bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7]` with `rounded-2xl` and `hover:shadow-[#FF6B00]/25` for orange glow
 - **Secondary Buttons:** `bg-[#29E7CD]/10` with `hover:bg-[#29E7CD]/20`
 - **Icon Buttons:** `rounded-full` with `p-2` and hover scaling
 - **Hover Effects:** `hover:shadow-xl` and `transition-all duration-200`
@@ -88,7 +89,7 @@ alwaysApply: true
 
 - **Input Fields:** `border border-[#2a2a2a]` with `focus:ring-2 focus:ring-[#29E7CD]`
 - **Focus States:** Cyan ring with smooth transitions
-- **Validation:** Color-coded feedback with Material 3 styling
+- **Validation:** Color-coded feedback with Cyber Carrot styling
 
 #### **Selection Controls & Checkboxes**
 
@@ -169,7 +170,37 @@ import { Zap, Store, MapPin } from 'lucide-react';
 
 **Implementation Note:** Always ensure dropdowns and modals have proper z-index values to prevent clipping behind other elements. Use backdrop divs with appropriate z-index to block interactions when dropdowns are open.
 
-### **Material Design 3 Animation System**
+#### **Gradient Borders (Cyber Carrot Pattern)**
+
+- **Cyber Carrot Gradient Border:** `bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-[1px]`
+- **Usage:** Popups, modals, dropdowns, and elevated components
+- **Inner Container:** `bg-[#1f1f1f]/95 rounded-xl` (slightly smaller radius than outer container)
+- **Pattern:** Creates glowing gradient border effect (Cyan → Orange → Magenta → Cyan)
+- **Example:**
+
+```tsx
+<div className="bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 p-[1px] rounded-2xl">
+  <div className="rounded-xl bg-[#1f1f1f]/95">
+    {/* Content */}
+  </div>
+</div>
+```
+
+#### **Orange Accent Usage**
+
+- **Cyber Orange (`#FF6B00`):** Use as tertiary accent color for warm highlights
+- **Use For:**
+  - Special callouts and notifications
+  - Alternative hover states (warm variant)
+  - Progress indicators (warm state)
+  - Badges and chips (warm variant)
+  - Gradient borders (Cyber Carrot pattern)
+- **Don't Overuse:**
+  - Keep cyan as primary action color
+  - Use orange sparingly for emphasis
+  - Maintain visual hierarchy (cyan > magenta > orange)
+
+### **Cyber Carrot Animation System**
 
 ```css
 /* Keyframe Animations */
@@ -206,7 +237,7 @@ import { Zap, Store, MapPin } from 'lucide-react';
 }
 ```
 
-### **Material Design 3 Layout Patterns**
+### **Cyber Carrot Layout Patterns**
 
 #### **Mobile-First Cards**
 
@@ -228,10 +259,10 @@ import { Zap, Store, MapPin } from 'lucide-react';
 - **Contextual Messaging:** Different messages for different states
 - **Call-to-Actions:** Prominent buttons with Material 3 styling
 
-### **Material Design 3 UX Guidelines**
+### **Cyber Carrot UX Guidelines**
 
-- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Material Design 3 principles
-- **Mobile Navigation:** Material 3 navigation rail with proper spacing
+- **Loading Skeletons:** Comprehensive skeleton system with multiple variants following Cyber Carrot design principles
+- **Mobile Navigation:** Cyber Carrot navigation rail with proper spacing
 - **Accessibility:** Focus rings, ARIA labels, keyboard navigation
 - **Smooth Transitions:** 200-300ms transitions for all interactions
 - **Touch Targets:** Minimum 44px for mobile, proper spacing
@@ -244,14 +275,14 @@ import { Zap, Store, MapPin } from 'lucide-react';
 - **Page-Level:** `PageSkeleton` for full-page loading states
 - **Landing Page:** `HeroSkeleton`, `PricingSkeleton` for marketing page
 - **Dynamic Imports:** Proper skeleton components replace inline animate-pulse divs
-- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Material Design 3 spacing
+- **Positioning:** All skeletons properly centered with `max-w-7xl mx-auto` and Cyber Carrot spacing
 - **Styling:** Consistent colors (`bg-[#2a2a2a]`), border radius (`rounded-xl`, `rounded-2xl`, `rounded-3xl`), and animations (`animate-pulse`)
 
-## 🎨 **Landing Page Style System**
+## 🎨 **Landing Page Style System (Cyber Carrot)**
 
 ### **Overview**
 
-The landing page uses a distinct style system optimized for marketing and conversion, while maintaining consistency with the overall Material Design 3 foundation. This section documents when and how to use landing page styles vs. webapp styles.
+The landing page uses a distinct style system optimized for marketing and conversion, while maintaining consistency with the overall Cyber Carrot Design System foundation. This section documents when and how to use landing page styles vs. webapp styles.
 
 **See Also:**
 - `docs/LANDING_PAGE_STYLE_GUIDE.md` - Complete landing page style guide
@@ -281,7 +312,7 @@ The landing page uses a distinct style system optimized for marketing and conver
 
 ### **Webapp Landing Style Integration**
 
-**Hybrid Approach:** Landing page styles enhance user-facing elements (headers, CTAs, empty states) while Material Design 3 remains the default for data interfaces (tables, forms, dashboards).
+**Hybrid Approach:** Landing page styles enhance user-facing elements (headers, CTAs, empty states) while Cyber Carrot Design System remains the default for data interfaces (tables, forms, dashboards).
 
 **When to Use Landing Styles in Webapp:**
 
@@ -292,7 +323,7 @@ The landing page uses a distinct style system optimized for marketing and conver
 - ✅ **Quick Actions** - Dashboard action cards
 - ✅ **Welcome Sections** - Feature introductions
 
-**When to Use Material Design 3 in Webapp:**
+**When to Use Cyber Carrot Design System in Webapp:**
 
 - ✅ **Data Tables** - All table components
 - ✅ **Forms** - Input fields, selects, checkboxes
@@ -474,7 +505,7 @@ import { GlowCard } from '@/components/ui/GlowCard';
 **When NOT to Use:**
 - Data tables (use standard table styling)
 - Form containers (use standard card styling)
-- Webapp dashboard cards (use Material Design 3 cards)
+- Webapp dashboard cards (use Cyber Carrot Design System cards)
 
 #### **ScrollReveal**
 
@@ -954,7 +985,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 ### **Comprehensive Loading Skeleton System ✅**
 
 - **Unified LoadingSkeleton Component:** Single component with multiple variants (stats, table, form, chart, card, list, button)
-- **Material Design 3 Compliance:** All skeletons follow Material Design 3 principles with proper colors, spacing, and animations
+- **Cyber Carrot Compliance:** All skeletons follow Cyber Carrot design principles with proper colors, spacing, and animations
 - **Contextual Skeletons:** Appropriate skeleton variants for different content types (TableSkeleton, FormSkeleton, ChartSkeleton)
 - **Consistent Positioning:** All skeletons properly centered and styled across the entire webapp
 - **Dynamic Import Optimization:** Removed unnecessary dynamic imports from lightweight components to eliminate persistent skeleton placeholders
@@ -1225,9 +1256,9 @@ Run `npm run detect-breakpoints` to analyze breakpoint usage across the codebase
 **Available Checks:**
 - Breakpoints: `npm run cleanup:check` (validates custom breakpoints, detects rogue breakpoints)
 - Icons: `npm run cleanup:check` (validates Icon wrapper usage, detects emoji usage)
-- Material Design 3: Manual review (design patterns)
+- Cyber Carrot Design System: Manual review (design patterns)
 
 **Available Fixes:**
 - Breakpoints: `npm run cleanup:fix` (auto-migrates rogue breakpoints via codemod)
 
-**Standards Reference:** See `cleanup.mdc` (Breakpoint Standards, Icon Standards, Material Design 3 Standards) for complete enforcement details.
+**Standards Reference:** See `cleanup.mdc` (Breakpoint Standards, Icon Standards, Cyber Carrot Design System Standards) for complete enforcement details.

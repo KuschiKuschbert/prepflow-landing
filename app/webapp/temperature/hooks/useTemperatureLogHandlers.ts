@@ -1,10 +1,14 @@
-import { useState } from 'react';
 import { useOnTemperatureLogged } from '@/lib/personality/hooks';
+import { useState } from 'react';
 
 interface UseTemperatureLogHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
 }
+
+// Helper function to get current date/time in correct format
+const getCurrentDate = () => new Date().toISOString().split('T')[0];
+const getCurrentTime = () => new Date().toTimeString().split(' ')[0].substring(0, 5);
 
 export function useTemperatureLogHandlers({
   activeTab,
@@ -12,8 +16,8 @@ export function useTemperatureLogHandlers({
 }: UseTemperatureLogHandlersProps) {
   const onTemperatureLogged = useOnTemperatureLogged();
   const [newLog, setNewLog] = useState({
-    log_date: '',
-    log_time: '',
+    log_date: getCurrentDate(),
+    log_time: getCurrentTime(),
     temperature_type: 'fridge',
     temperature_celsius: '',
     location: '',
@@ -42,8 +46,8 @@ export function useTemperatureLogHandlers({
         onTemperatureLogged();
 
         setNewLog({
-          log_date: new Date().toISOString().split('T')[0],
-          log_time: new Date().toTimeString().split(' ')[0].substring(0, 5),
+          log_date: getCurrentDate(),
+          log_time: getCurrentTime(),
           temperature_type: 'fridge',
           temperature_celsius: '',
           location: '',

@@ -21,7 +21,8 @@ const ConnectedAccountsPanel = dynamic(
 );
 
 const PersonalitySettingsPanel = dynamic(
-  () => import('../PersonalitySettingsPanel').then(mod => ({ default: mod.PersonalitySettingsPanel })),
+  () =>
+    import('../PersonalitySettingsPanel').then(mod => ({ default: mod.PersonalitySettingsPanel })),
   {
     loading: () => <SectionSkeleton />,
     ssr: false,

@@ -73,6 +73,17 @@ const AdvancedSection = dynamic(
   },
 );
 
+const FAQSection = dynamic(
+  () =>
+    import('./components/sections/FAQSection').then(mod => ({
+      default: mod.FAQSection,
+    })),
+  {
+    loading: () => <SectionSkeleton />,
+    ssr: false,
+  },
+);
+
 export default function SettingsPage() {
   // Always start with 'profile' for SSR consistency, then sync on client
   const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
@@ -95,14 +106,20 @@ export default function SettingsPage() {
   useEffect(() => {
     // Check URL hash first
     const hash = window.location.hash.slice(1);
-    if (hash && ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced'].includes(hash)) {
+    if (
+      hash &&
+      ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced', 'faq'].includes(hash)
+    ) {
       setActiveSection(hash as SettingsSection);
       return;
     }
 
     // Check sessionStorage
     const stored = sessionStorage.getItem('settings_active_section');
-    if (stored && ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced'].includes(stored)) {
+    if (
+      stored &&
+      ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced', 'faq'].includes(stored)
+    ) {
       setActiveSection(stored as SettingsSection);
     }
   }, []);
@@ -122,6 +139,8 @@ export default function SettingsPage() {
         return <PrivacyLegalSection key="privacy-section" />;
       case 'advanced':
         return <AdvancedSection key="advanced-section" />;
+      case 'faq':
+        return <FAQSection key="faq-section" />;
       default:
         return <ProfileAccountSection key="profile-section-default" />;
     }

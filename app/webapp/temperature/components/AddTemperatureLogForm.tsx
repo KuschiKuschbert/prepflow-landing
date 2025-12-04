@@ -2,8 +2,10 @@ import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { Icon } from '@/components/ui/Icon';
 import { useAutosave } from '@/hooks/useAutosave';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
+import { useStaff } from '@/hooks/useStaff';
 import { useTranslation } from '@/lib/useTranslation';
 import { Lightbulb } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export interface AddTemperatureLogFormProps {
   show: boolean;
@@ -26,8 +28,45 @@ export function AddTemperatureLogForm({
 }: AddTemperatureLogFormProps) {
   const { t } = useTranslation();
   const { countryConfig } = useCountryFormatting();
-  const getTypeIcon = (type: string) =>
-    temperatureTypes.find(tt => tt.value === type)?.icon || '🌡️';
+  const { staff, loading: staffLoading } = useStaff();
+  const [showNotes, setShowNotes] = useState(false);
+
+  // Ensure date/time are set when form opens
+  useEffect(() => {
+    if (show) {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const currentTime = new Date().toTimeString().split(' ')[0].substring(0, 5);
+      if (!newLog.log_date || !newLog.log_time) {
+        setNewLog({
+          ...newLog,
+          log_date: currentDate,
+          log_time: currentTime,
+        });
+      }
+    }
+  }, [show, newLog, setNewLog]);
+
+  // Format date/time for display
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(countryConfig.locale || 'en-AU', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const formatTime = (timeStr: string) => {
+    if (!timeStr) return '';
+    return timeStr;
+  };
+  /**
+   * Gets the icon string for a given equipment type (for use in select options).
+   * Note: Returns emoji string for select options compatibility (can't use React components in <option>).
+   */
+  const getTypeIcon = (type: string) => temperatureTypes.find(tt => tt.value === type)?.icon || '';
   const getTypeLabel = (type: string) =>
     temperatureTypes.find(tt => tt.value === type)?.label || type;
 
@@ -65,52 +104,16 @@ export function AddTemperatureLogForm({
           className="mr-1 inline text-[#29E7CD]"
           aria-hidden={true}
         />{' '}
-        You can log multiple temperatures per day for the same equipment (e.g., morning and evening
-        checks). There&apos;s a 5-minute cooling off period between entries for the same equipment.
+        You can log multiple temperatures per day for the same equipment.
       </p>
-      <div className="mb-4 rounded-2xl border border-blue-400/20 bg-blue-400/10 p-4">
-        <h4 className="mb-2 text-sm font-semibold text-blue-400">
-          🍽️ Queensland 2-Hour/4-Hour Rule
-        </h4>
-        <div className="space-y-1 text-xs text-gray-300">
-          <p>
-            • <span className="text-green-400">0-2 hours</span> in danger zone (5°C-60°C): Can
-            refrigerate for later use
-          </p>
-          <p>
-            • <span className="text-yellow-400">2-4 hours</span> in danger zone: Must use
-            immediately
-          </p>
-          <p>
-            • <span className="text-red-400">4+ hours</span> in danger zone: Must discard
-          </p>
-        </div>
-      </div>
       <form onSubmit={onAddLog} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            {t('temperature.date', 'Date')}
-            <span className="ml-2 text-xs text-gray-500">({countryConfig.dateFormat})</span>
-          </label>
-          <input
-            type="date"
-            value={newLog.log_date}
-            onChange={e => setNewLog({ ...newLog, log_date: e.target.value })}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            required
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            {t('temperature.time', 'Time')}
-          </label>
-          <input
-            type="time"
-            value={newLog.log_time}
-            onChange={e => setNewLog({ ...newLog, log_time: e.target.value })}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            required
-          />
+        <div className="desktop:col-span-2">
+          <div className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3">
+            <p className="text-sm text-gray-400">
+              <span className="font-medium text-gray-300">Date & Time:</span>{' '}
+              {formatDate(newLog.log_date)} at {formatTime(newLog.log_time)}
+            </p>
+          </div>
         </div>
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
@@ -193,43 +196,53 @@ export function AddTemperatureLogForm({
               newLog.temperature_type,
             )}
           />
-          {['food_cooking', 'food_hot_holding', 'food_cold_holding'].includes(
-            newLog.temperature_type,
-          ) && (
-            <p className="mt-1 text-xs text-gray-400">
-              <Icon
-                icon={Lightbulb}
-                size="xs"
-                className="mr-1 inline text-[#29E7CD]"
-                aria-hidden={true}
-              />{' '}
-              Specify the exact food item for proper 2-hour/4-hour rule tracking
-            </p>
-          )}
         </div>
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             {t('temperature.loggedBy', 'Logged By')}
           </label>
-          <input
-            type="text"
-            value={newLog.logged_by}
-            onChange={e => setNewLog({ ...newLog, logged_by: e.target.value })}
+          <select
+            value={staff.find(s => s.full_name === newLog.logged_by)?.id || ''}
+            onChange={e => {
+              const selectedStaff = staff.find(s => s.id === e.target.value);
+              setNewLog({
+                ...newLog,
+                logged_by: selectedStaff ? selectedStaff.full_name : '',
+              });
+            }}
             className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            placeholder="Staff member name"
-          />
+            disabled={staffLoading}
+          >
+            <option value="">{staffLoading ? 'Loading staff...' : 'Select staff member'}</option>
+            {staff.map(member => (
+              <option key={member.id} value={member.id}>
+                {member.full_name}
+                {member.role ? ` (${member.role})` : ''}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="desktop:col-span-2">
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            {t('temperature.notes', 'Notes')}
+          <label className="mb-3 flex cursor-pointer items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showNotes}
+              onChange={e => setShowNotes(e.target.checked)}
+              className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+            />
+            <span className="text-sm font-medium text-gray-300">
+              {t('temperature.addNotes', 'Add Notes')}
+            </span>
           </label>
-          <textarea
-            value={newLog.notes}
-            onChange={e => setNewLog({ ...newLog, notes: e.target.value })}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
-            placeholder="Additional notes or observations"
-            rows={3}
-          />
+          {showNotes && (
+            <textarea
+              value={newLog.notes}
+              onChange={e => setNewLog({ ...newLog, notes: e.target.value })}
+              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              placeholder="Additional notes or observations"
+              rows={3}
+            />
+          )}
         </div>
         <div className="desktop:col-span-2 flex space-x-4">
           <button

@@ -672,7 +672,7 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 
 #### **Chart Features**
 
-- **Smooth Line Drawing**: 1-second Material Design 3 animations
+- **Smooth Line Drawing**: 1-second Cyber Carrot animations
 - **Responsive Design**: Auto-adapts to all screen sizes
 - **Touch Support**: Full mobile gesture support
 - **Real-time Updates**: Optimized for live temperature data
@@ -689,7 +689,7 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 
 - **Component**: `RechartsTemperatureChart.tsx`
 - **Library**: Recharts (recharts)
-- **Styling**: Material Design 3 with Tailwind CSS
+- **Styling**: Cyber Carrot Design System with Tailwind CSS
 - **Responsive**: Auto-detection between desktop and mobile
 - **Accessibility**: Full keyboard and screen reader support
 

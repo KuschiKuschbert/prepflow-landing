@@ -102,6 +102,42 @@ export function useSidePanelCommon({
     };
   }, [isOpen, onClose, onEdit]);
 
+  // Click outside to close (desktop)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Element;
+
+      // Don't close if clicking inside the panel
+      if (panelRef.current?.contains(target)) {
+        return;
+      }
+
+      // Don't close if clicking on modals or dialogs
+      if (target.closest('[role="dialog"]') || target.closest('[aria-modal="true"]')) {
+        return;
+      }
+
+      // Don't close if clicking on dropdowns or menus
+      if (target.closest('[role="menu"]') || target.closest('[role="listbox"]')) {
+        return;
+      }
+
+      // Close the panel
+      onClose();
+    };
+
+    // Use mousedown instead of click to catch clicks before they bubble
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
   // Prevent body scroll when panel is open on mobile
   // Also prevent scroll restoration when panel opens
   useEffect(() => {

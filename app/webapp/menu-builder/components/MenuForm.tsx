@@ -70,7 +70,7 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-2xl">
+      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
         <div className="rounded-2xl bg-[#1f1f1f]/95">
           <div className="border-b border-[#2a2a2a] p-6">
             <div className="flex items-center justify-between">

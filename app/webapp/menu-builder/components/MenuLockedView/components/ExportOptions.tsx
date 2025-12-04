@@ -145,7 +145,7 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
           <div
             className="fixed inset-0 z-40"
             onClick={() => setShowContentDropdown(false)}
-            aria-hidden="true"
+            aria-hidden={true}
           />
           <div
             ref={contentDropdownRef}
@@ -178,7 +178,7 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
               setShowFormatDropdown(false);
               setSelectedContent(null);
             }}
-            aria-hidden="true"
+            aria-hidden={true}
           />
           <div
             ref={formatDropdownRef}

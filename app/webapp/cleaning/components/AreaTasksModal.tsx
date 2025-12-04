@@ -105,7 +105,7 @@ export function AreaTasksModal({
       aria-modal="true"
       aria-labelledby="area-tasks-modal-title"
     >
-      <div className="tablet:max-w-lg desktop:max-w-2xl tablet:mx-0 relative mx-2 mb-8 w-full max-w-full rounded-3xl bg-gradient-to-r from-[#29E7CD]/30 via-[#D925C7]/30 to-[#29E7CD]/30 p-[1px] shadow-xl">
+      <div className="tablet:max-w-lg desktop:max-w-2xl tablet:mx-0 relative mx-2 mb-8 w-full max-w-full rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
         <div
           className="flex w-full flex-col rounded-3xl bg-[#1f1f1f]/95"
           onClick={e => e.stopPropagation()}

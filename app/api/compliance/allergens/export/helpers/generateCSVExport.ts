@@ -37,4 +37,3 @@ export function generateCSVExport(items: AllergenExportItem[]): NextResponse {
     },
   });
 }
-

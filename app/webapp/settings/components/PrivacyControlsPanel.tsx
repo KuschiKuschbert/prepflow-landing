@@ -137,7 +137,7 @@ export function PrivacyControlsPanel() {
     const confirmed = await showConfirm({
       title: 'Delete Your Account?',
       message:
-        'Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.',
+        'Are you sure you want to delete your account? This action can&apos;t be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.',
       variant: 'danger',
       confirmLabel: 'Yes, Delete My Account',
       cancelLabel: 'Cancel',
@@ -170,7 +170,8 @@ export function PrivacyControlsPanel() {
   const handleCancelDeletion = async () => {
     const confirmed = await showConfirm({
       title: 'Cancel Account Deletion?',
-      message: 'Are you sure you want to cancel the account deletion request? Your account will remain active.',
+      message:
+        'Are you sure you want to cancel the account deletion request? Your account will remain active.',
       variant: 'info',
       confirmLabel: 'Yes, Cancel Deletion',
       cancelLabel: 'Keep Deletion Request',
@@ -219,7 +220,10 @@ export function PrivacyControlsPanel() {
 
   if (loading) {
     return (
-      <div ref={ref} className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div
+        ref={ref}
+        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      >
         <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
         <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
       </div>
@@ -229,7 +233,10 @@ export function PrivacyControlsPanel() {
   return (
     <>
       <ConfirmDialog />
-      <div ref={ref} className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div
+        ref={ref}
+        className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      >
         <div>
           <h2 className="text-xl font-semibold">Privacy & Data</h2>
           <p className="mt-1 text-sm text-gray-300">
@@ -245,7 +252,8 @@ export function PrivacyControlsPanel() {
           </div>
           {recentActivity.length === 0 ? (
             <p className="text-sm text-gray-400">
-              No recent activity found. Activity will be tracked after database migration is applied.
+              No recent activity found. Activity will be tracked after database migration is
+              applied.
             </p>
           ) : (
             <div className="space-y-2">
@@ -256,7 +264,9 @@ export function PrivacyControlsPanel() {
                 >
                   <div>
                     <p className="text-sm font-medium text-white">
-                      {activity.action_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      {activity.action_type
+                        .replace(/_/g, ' ')
+                        .replace(/\b\w/g, l => l.toUpperCase())}
                     </p>
                     <p className="text-xs text-gray-400">{formatDate(activity.created_at)}</p>
                   </div>
@@ -273,20 +283,15 @@ export function PrivacyControlsPanel() {
               <Icon icon={Database} size="md" className="text-[#29E7CD]" aria-hidden={true} />
               <h3 className="text-lg font-medium">Data Usage</h3>
             </div>
-            <div className="grid grid-cols-1 gap-3 desktop:grid-cols-2">
+            <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
               {Object.entries(dataUsage.usage).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-3"
-                >
+                <div key={key} className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-3">
                   <p className="text-xs text-gray-500 capitalize">{key.replace(/_/g, ' ')}</p>
                   <div className="mt-1 flex items-baseline gap-2">
                     <p className="text-lg font-semibold text-white">
                       {value.count.toLocaleString()}
                     </p>
-                    <p className="text-xs text-gray-400">
-                      ({formatFileSize(value.size_bytes)})
-                    </p>
+                    <p className="text-xs text-gray-400">({formatFileSize(value.size_bytes)})</p>
                   </div>
                 </div>
               ))}

@@ -72,6 +72,13 @@ export function NavigationHeader({
   const { avatar: userAvatar } = useUserAvatar();
   const [isDesktopUserMenuOpen, setIsDesktopUserMenuOpen] = useState(false);
   const desktopMenuRef = useRef<HTMLDivElement>(null);
+  const internalUserButtonRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; right: number } | null>(
+    null,
+  );
+
+  // Use provided ref or internal ref
+  const buttonRef = userButtonRef || internalUserButtonRef;
 
   // Get avatar URL or default initials
   const avatarUrl = getAvatarUrl(userAvatar);
@@ -130,21 +137,21 @@ export function NavigationHeader({
     if (!effect) return null;
     const banners: Record<string, string> = {
       lightsaber: 'May the 4th be with you',
-      toque: 'Happy Chef\'s Day! 👨‍🍳',
+      toque: "Happy Chef's Day! 👨‍🍳",
       santaHat: 'Merry Chaosmas, Chef! 🎅',
       newYear: 'Happy New Year! 🎉',
       australiaDay: 'Happy Australia Day! 🇦🇺',
-      valentines: 'Happy Valentine\'s Day! 💝',
+      valentines: "Happy Valentine's Day! 💝",
       anzac: 'Lest We Forget 🇦🇺🇳🇿',
       easter: 'Happy Easter! 🐰',
       independenceDay: 'Happy 4th of July! 🇺🇸',
       halloween: 'Happy Halloween! 🎃',
       boxingDay: 'Happy Boxing Day! 🎁',
-      newYearsEve: 'Happy New Year\'s Eve! 🥳',
-      mothersDay: 'Happy Mother\'s Day! 💐',
-      fathersDay: 'Happy Father\'s Day! 👔',
+      newYearsEve: "Happy New Year's Eve! 🥳",
+      mothersDay: "Happy Mother's Day! 💐",
+      fathersDay: "Happy Father's Day! 👔",
       labourDay: 'Happy Labour Day! 🛠️',
-      royalBirthday: 'Happy [King\'s/Queen\'s] Birthday! 👑',
+      royalBirthday: "Happy [King's/Queen's] Birthday! 👑",
     };
     return banners[effect] || null;
   };
@@ -172,6 +179,33 @@ export function NavigationHeader({
     };
     return colors[effect] || '#FFE81F';
   };
+
+  // Calculate dropdown position when menu opens
+  useEffect(() => {
+    if (!isDesktopUserMenuOpen || !buttonRef?.current) {
+      setDropdownPosition(null);
+      return;
+    }
+
+    const updatePosition = () => {
+      if (!buttonRef?.current) return;
+      const buttonRect = buttonRef.current.getBoundingClientRect();
+
+      setDropdownPosition({
+        top: buttonRect.bottom + 12, // mt-3 = 12px
+        right: window.innerWidth - buttonRect.right,
+      });
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [isDesktopUserMenuOpen, buttonRef]);
 
   // Close desktop user menu when clicking outside
   useEffect(() => {
@@ -216,12 +250,13 @@ export function NavigationHeader({
         'h-[var(--header-height-mobile)]',
         'desktop:h-[var(--header-height-desktop)]',
         // Auto-hide transition only on mobile/tablet (< 1025px)
-        !isDesktop && 'transition-transform duration-300 ease-in-out',
+        !isDesktop && 'transition-transform duration-300',
         className,
       )}
       style={{
         // Only apply transform on mobile/tablet (< 1025px)
         transform: !isDesktop && !isVisible ? 'translateY(-100%)' : 'translateY(0)',
+        transitionTimingFunction: !isDesktop ? 'var(--easing-standard)' : undefined,
       }}
     >
       <div className="desktop:px-4 relative flex items-center justify-between px-3 py-2">
@@ -262,9 +297,9 @@ export function NavigationHeader({
             <AutosaveGlobalIndicator />
             {/* Seasonal Banner - Next to autosave indicator */}
             {seasonalEffect && isDesktop && getBannerText(seasonalEffect) && (
-              <div className="pf-seasonal-banner ml-2 pointer-events-none">
+              <div className="pf-seasonal-banner pointer-events-none ml-2">
                 <span
-                  className="pf-seasonal-text text-xs desktop:text-sm font-bold tracking-wider uppercase"
+                  className="pf-seasonal-text desktop:text-sm text-xs font-bold tracking-wider uppercase"
                   style={{ color: getBannerColor(seasonalEffect) }}
                 >
                   {getBannerText(seasonalEffect)}
@@ -317,124 +352,142 @@ export function NavigationHeader({
           {/* Always show on mobile, only show on desktop if userName exists */}
           {(userName || !isDesktop) && (
             <div className="relative">
-              <button
-                ref={userButtonRef}
-                onClick={handleUserAvatarClick}
-                className="relative flex h-[40px] w-[40px] items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xs font-bold text-black shadow-md transition-transform hover:scale-105 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
-                aria-label="Open user settings"
-                aria-expanded={isDesktopUserMenuOpen}
-              >
-                {avatarUrl ? (
-                  <Image
-                    src={avatarUrl}
-                    alt={userName || 'User avatar'}
-                    fill
-                    sizes="40px"
-                    className="object-cover"
-                    unoptimized
-                  />
-                ) : (
-                  <span>{defaultInitials}</span>
+              <div
+                className={cn(
+                  'rounded-full transition-all duration-200',
+                  isDesktopUserMenuOpen &&
+                    'bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]',
                 )}
-              </button>
+              >
+                <button
+                  ref={buttonRef}
+                  onClick={handleUserAvatarClick}
+                  className="relative flex h-[40px] w-[40px] items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#FF6B00] to-[#FF6B00]/50 text-xs font-bold text-black shadow-md transition-transform duration-200 hover:scale-105 focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+                  style={{
+                    transitionTimingFunction: 'var(--easing-standard)',
+                  }}
+                  aria-label="Open user settings"
+                  aria-expanded={isDesktopUserMenuOpen}
+                >
+                  {avatarUrl ? (
+                    <Image
+                      src={avatarUrl}
+                      alt={userName || 'User avatar'}
+                      fill
+                      sizes="40px"
+                      className="object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <span>{defaultInitials}</span>
+                  )}
+                </button>
+              </div>
 
               {/* User Menu Popover - Works on both mobile and desktop */}
-              {isDesktopUserMenuOpen && (
+              {isDesktopUserMenuOpen && dropdownPosition && (
                 <div
                   ref={desktopMenuRef}
-                  className="animate-scale-in absolute top-full right-0 z-50 mt-3 w-[350px] max-w-[calc(100vw-2rem)] origin-top-right rounded-[28px] border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-2xl"
+                  className="fixed z-[70] w-[350px] max-w-[calc(100vw-2rem)] origin-top-right overflow-hidden rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl"
+                  style={{
+                    animation: 'scale-in-bubble 0.25s var(--easing-emphasized) forwards',
+                    top: `${dropdownPosition.top}px`,
+                    right: `${dropdownPosition.right}px`,
+                  }}
                 >
-                  {/* Header: Centered Profile */}
-                  <div className="flex flex-col items-center space-y-2 pb-4">
-                    <div className="relative">
-                      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#29E7CD] to-[#29E7CD]/50 text-xl font-bold text-black shadow-inner">
-                        {avatarUrl ? (
-                          <Image
-                            src={avatarUrl}
-                            alt={userName || 'User avatar'}
-                            fill
-                            sizes="64px"
-                            className="object-cover"
-                            unoptimized
-                          />
-                        ) : userName ? (
-                          userName[0].toUpperCase()
-                        ) : (
-                          <Icon icon={User} size="sm" className="text-black" aria-hidden={true} />
-                        )}
+                  <div className="rounded-xl bg-[#1f1f1f]/95 p-4">
+                    {/* Header: Centered Profile */}
+                    <div className="flex flex-col items-center space-y-2 pb-4">
+                      <div className="relative">
+                        <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#FF6B00] to-[#FF6B00]/50 text-xl font-bold text-black shadow-inner">
+                          {avatarUrl ? (
+                            <Image
+                              src={avatarUrl}
+                              alt={userName || 'User avatar'}
+                              fill
+                              sizes="64px"
+                              className="object-cover"
+                              unoptimized
+                            />
+                          ) : userName ? (
+                            userName[0].toUpperCase()
+                          ) : (
+                            <Icon icon={User} size="sm" className="text-black" aria-hidden={true} />
+                          )}
+                        </div>
+                        {/* Camera icon overlay (optional) */}
+                        <div className="absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border border-[#1f1f1f] bg-[#2a2a2a] text-white">
+                          <div className="h-2 w-2 rounded-full bg-[#FF6B00]" />
+                        </div>
                       </div>
-                      {/* Camera icon overlay (optional) */}
-                      <div className="absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border border-[#1f1f1f] bg-[#2a2a2a] text-white">
-                        <div className="h-2 w-2 rounded-full bg-[#29E7CD]" />
+                      <div className="text-center">
+                        <div className="text-lg font-medium text-white">
+                          Hi, {userName || 'User'}!
+                        </div>
+                        <div className="text-sm text-gray-400">{userEmail}</div>
                       </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-medium text-white">
-                        Hi, {userName || 'User'}!
-                      </div>
-                      <div className="text-sm text-gray-400">{userEmail}</div>
-                    </div>
 
-                    <Link
-                      href="/webapp/settings"
-                      onClick={() => setIsDesktopUserMenuOpen(false)}
-                      className="mt-2 inline-flex items-center justify-center rounded-full border border-gray-600 px-6 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#2a2a2a]"
-                    >
-                      Manage your Account
-                    </Link>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="my-2 border-t border-[#2a2a2a]" />
-
-                  {/* List Options */}
-                  <div className="space-y-1">
-                    <Link
-                      href="/webapp/settings"
-                      onClick={() => setIsDesktopUserMenuOpen(false)}
-                      onMouseEnter={() => prefetchRoute('/webapp/settings')}
-                      className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-                    >
-                      <Icon icon={Settings2} size="sm" className="text-gray-400" />
-                      <span>Settings</span>
-                    </Link>
-
-                    <Link
-                      href="/webapp/setup"
-                      onClick={() => setIsDesktopUserMenuOpen(false)}
-                      onMouseEnter={() => prefetchRoute('/webapp/setup')}
-                      className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-                    >
-                      <Icon icon={Settings} size="sm" className="text-gray-400" />
-                      <span>Setup</span>
-                    </Link>
-
-                    <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white">
-                      <div className="flex items-center space-x-3">
-                        <span className="flex h-4 w-4 items-center justify-center">🌐</span>
-                        <span>Language</span>
-                      </div>
-                      <div className="ml-auto">
-                        <LanguageSwitcher />
-                      </div>
+                      <Link
+                        href="/webapp/settings"
+                        onClick={() => setIsDesktopUserMenuOpen(false)}
+                        className="mt-2 inline-flex items-center justify-center rounded-full border border-gray-600 px-6 py-2 text-sm font-medium text-[#FF6B00] transition-colors hover:bg-[#2a2a2a]"
+                      >
+                        Manage your Account
+                      </Link>
                     </div>
 
-                    <div className="flex w-full items-center justify-center pt-2">
-                      <div className="w-full">
-                        <LogoutButton />
+                    {/* Divider */}
+                    <div className="my-2 border-t border-[#2a2a2a]" />
+
+                    {/* List Options */}
+                    <div className="space-y-1">
+                      <Link
+                        href="/webapp/settings"
+                        onClick={() => setIsDesktopUserMenuOpen(false)}
+                        onMouseEnter={() => prefetchRoute('/webapp/settings')}
+                        className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                      >
+                        <Icon icon={Settings2} size="sm" className="text-gray-400" />
+                        <span>Settings</span>
+                      </Link>
+
+                      <Link
+                        href="/webapp/setup"
+                        onClick={() => setIsDesktopUserMenuOpen(false)}
+                        onMouseEnter={() => prefetchRoute('/webapp/setup')}
+                        className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                      >
+                        <Icon icon={Settings} size="sm" className="text-gray-400" />
+                        <span>Setup</span>
+                      </Link>
+
+                      <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white">
+                        <div className="flex items-center space-x-3">
+                          <span className="flex h-4 w-4 items-center justify-center">🌐</span>
+                          <span>Language</span>
+                        </div>
+                        <div className="ml-auto">
+                          <LanguageSwitcher />
+                        </div>
+                      </div>
+
+                      <div className="flex w-full items-center justify-center pt-2">
+                        <div className="w-full">
+                          <LogoutButton />
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Footer */}
-                  <div className="mt-4 flex justify-center text-[10px] text-gray-500">
-                    <Link href="/privacy" className="mx-2 hover:text-gray-300">
-                      Privacy Policy
-                    </Link>
-                    <span>•</span>
-                    <Link href="/terms" className="mx-2 hover:text-gray-300">
-                      Terms of Service
-                    </Link>
+                    {/* Footer */}
+                    <div className="mt-4 flex justify-center text-[10px] text-gray-500">
+                      <Link href="/privacy" className="mx-2 hover:text-gray-300">
+                        Privacy Policy
+                      </Link>
+                      <span>•</span>
+                      <Link href="/terms" className="mx-2 hover:text-gray-300">
+                        Terms of Service
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
