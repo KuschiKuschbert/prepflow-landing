@@ -54,12 +54,10 @@ export function parseIngredientsCSV(csvText: string): {
       errors.push(`Row ${error.row}: ${error.message}`);
     });
   }
-
   if (result.data.length === 0) {
     errors.push('CSV file appears to be empty or has no valid data rows');
     return { ingredients: [], errors };
   }
-
   // Map CSV rows to ingredients
   const ingredients = result.data
     .map(row => mapCSVRowToIngredient(row))
@@ -78,7 +76,6 @@ export function parseIngredientsCSV(csvText: string): {
 
   return { ingredients: validation.valid ? transformed : ingredients, errors };
 }
-
 /**
  * Import ingredients from CSV data.
  *

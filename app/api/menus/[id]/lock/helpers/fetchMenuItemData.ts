@@ -35,164 +35,8 @@ export interface MenuItemData {
   instructions?: string;
 }
 
-/**
- * Fetch dish data with all nested ingredients
- */
-async function fetchDishData(
-  supabase: SupabaseClient,
-  dishId: string,
-): Promise<MenuItemData | null> {
-  const { data: dish, error } = await supabase
-    .from('dishes')
-    .select(
-      `
-      id,
-      dish_name,
-      description,
-      dish_ingredients (
-        quantity,
-        unit,
-        ingredients (
-          ingredient_name
-        )
-      ),
-        dish_recipes (
-        quantity,
-        recipes (
-          id,
-          name,
-          description,
-          yield,
-          yield_unit,
-          instructions,
-          recipe_ingredients (
-            quantity,
-            unit,
-            ingredients (
-              ingredient_name
-            )
-          )
-        )
-      )
-    `,
-    )
-    .eq('id', dishId)
-    .single();
-
-  if (error || !dish) {
-    logger.error(`Failed to fetch dish ${dishId}:`, error);
-    return null;
-  }
-
-  // Extract direct ingredients
-  const directIngredients: MenuItemIngredient[] =
-    dish.dish_ingredients?.map((di: any) => ({
-      name: di.ingredients?.ingredient_name || 'Unknown Ingredient',
-      quantity: Number(di.quantity) || 0,
-      unit: di.unit || '',
-      source: 'direct',
-    })) || [];
-
-  // Extract sub-recipes with their ingredients
-  const subRecipes: MenuItemSubRecipe[] = [];
-  if (dish.dish_recipes) {
-    for (const dr of dish.dish_recipes) {
-      const recipe = dr.recipes as any;
-      if (!recipe || Array.isArray(recipe)) continue;
-
-      // Handle both recipe_name and name columns
-      const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
-
-      const recipeIngredients: MenuItemIngredient[] =
-        (recipe.recipe_ingredients as any[])?.map((ri: any) => ({
-          name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
-          quantity: Number(ri.quantity) || 0,
-          unit: ri.unit || '',
-          source: `recipe:${recipeName}`,
-        })) || [];
-
-      subRecipes.push({
-        name: recipeName,
-        recipeId: recipe.id,
-        quantity: Number(dr.quantity) || 1, // How many servings of this recipe
-        yield: Number(recipe.yield) || 1,
-        yieldUnit: recipe.yield_unit || 'servings',
-        ingredients: recipeIngredients,
-        instructions: recipe.instructions || undefined,
-      });
-    }
-  }
-
-  return {
-    id: dish.id,
-    name: dish.dish_name,
-    description: dish.description || undefined,
-    type: 'dish',
-    baseYield: 1, // Dishes are typically 1 serving per menu item
-    yieldUnit: 'serving',
-    directIngredients,
-    subRecipes,
-    instructions: undefined, // Dishes don't have instructions, sub-recipes do
-  };
-}
-
-/**
- * Fetch recipe data with all nested ingredients
- */
-async function fetchRecipeData(
-  supabase: SupabaseClient,
-  recipeId: string,
-): Promise<MenuItemData | null> {
-  const { data: recipe, error } = await supabase
-    .from('recipes')
-    .select(
-      `
-      id,
-      name,
-      description,
-      yield,
-      yield_unit,
-      instructions,
-      recipe_ingredients (
-        quantity,
-        unit,
-        ingredients (
-          ingredient_name
-        )
-      )
-    `,
-    )
-    .eq('id', recipeId)
-    .single();
-
-  if (error || !recipe) {
-    logger.error(`Failed to fetch recipe ${recipeId}:`, error);
-    return null;
-  }
-
-  const ingredients: MenuItemIngredient[] =
-    recipe.recipe_ingredients?.map((ri: any) => ({
-      name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
-      quantity: Number(ri.quantity) || 0,
-      unit: ri.unit || '',
-      source: 'direct',
-    })) || [];
-
-  // Handle both recipe_name and name columns
-  const recipeName = (recipe as any).recipe_name || (recipe as any).name || 'Unknown Recipe';
-
-  return {
-    id: recipe.id,
-    name: recipeName,
-    description: recipe.description || undefined,
-    type: 'recipe',
-    baseYield: Number(recipe.yield) || 1,
-    yieldUnit: recipe.yield_unit || 'servings',
-    directIngredients: ingredients,
-    subRecipes: [], // Recipes don't have sub-recipes in current schema
-    instructions: recipe.instructions || undefined,
-  };
-}
+import { fetchDishData } from './fetchMenuItemData/fetchDish';
+import { fetchRecipeData } from './fetchMenuItemData/fetchRecipe';
 
 /**
  * Fetch menu item data (dish or recipe) with all nested ingredients
@@ -227,11 +71,11 @@ export async function fetchMenuItemData(
 
   // Fallback to database query (original behavior)
   if (menuItem.dish_id) {
-    return fetchDishData(supabase, menuItem.dish_id);
+    return await fetchDishData(supabase, menuItem.dish_id);
   }
 
   if (menuItem.recipe_id) {
-    return fetchRecipeData(supabase, menuItem.recipe_id);
+    return await fetchRecipeData(supabase, menuItem.recipe_id);
   }
 
   logger.warn(`Menu item ${menuItem.id} has neither dish_id nor recipe_id`);

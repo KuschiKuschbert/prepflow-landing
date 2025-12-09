@@ -2,8 +2,8 @@ import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { MenuItemData } from '../fetchMenuItemData';
 import { buildRecipeCardFromInstructions, generateDataHash } from '../cardBuilding';
-import { findExistingCardBySignature, linkMenuItemToCard } from '../cardManagement';
 import { consolidateInstructions, normalizeToSingleServing } from '../normalizeIngredients';
+import { saveCard, finalizeCardSave } from './processMenuItem/saveCard';
 
 interface ProcessResult {
   success: boolean;
@@ -122,97 +122,28 @@ export async function processMenuItem(
     }
 
     // Save card - use appropriate method based on migration status
-    let savedCardId: string;
+    const saveResult = await saveCard(
+      supabase,
+      cardData,
+      signature,
+      menuItem,
+      menuItemData,
+      crossReferencingEnabled,
+      existingCardId,
+    );
 
-    if (crossReferencingEnabled && existingCardId) {
-      // Update existing card (cross-referencing method)
-      const { data: updatedCard, error: updateError } = await supabase
-        .from('menu_recipe_cards')
-        .update(cardData)
-        .eq('id', existingCardId)
-        .select('id')
-        .single();
-
-      if (updateError) {
-        const errorMsg = `Failed to update card for ${menuItemData.name}: ${updateError.message || String(updateError)}`;
-        logger.error(`Failed to update recipe card for item ${menuItem.id}:`, updateError);
-        return { success: false, error: errorMsg };
-      }
-
-      savedCardId = updatedCard?.id || existingCardId;
-    } else if (crossReferencingEnabled) {
-      // Check if card exists by signature
-      const existingCard = await findExistingCardBySignature(supabase, signature, menuItem);
-      if (existingCard) {
-        // Update existing card
-        const { data: updatedCard, error: updateError } = await supabase
-          .from('menu_recipe_cards')
-          .update(cardData)
-          .eq('id', existingCard.id)
-          .select('id')
-          .single();
-
-        if (updateError) {
-          const errorMsg = `Failed to update card for ${menuItemData.name}: ${updateError.message || String(updateError)}`;
-          logger.error(`Failed to update recipe card for item ${menuItem.id}:`, updateError);
-          return { success: false, error: errorMsg };
-        }
-
-        savedCardId = updatedCard?.id || existingCard.id;
-      } else {
-        // Insert new card
-        const { data: insertedCard, error: insertError } = await supabase
-          .from('menu_recipe_cards')
-          .insert(cardData)
-          .select('id')
-          .single();
-
-        if (insertError) {
-          const errorMsg = `Failed to save card for ${menuItemData.name}: ${insertError.message || String(insertError)}`;
-          logger.error(`Failed to save recipe card for item ${menuItem.id}:`, insertError);
-          return { success: false, error: errorMsg };
-        }
-
-        if (!insertedCard?.id) {
-          const errorMsg = `Failed to save card for ${menuItemData.name}: No ID returned`;
-          logger.error(`Failed to save recipe card for item ${menuItem.id}: No ID returned`);
-          return { success: false, error: errorMsg };
-        }
-
-        savedCardId = insertedCard.id;
-      }
-    } else {
-      // Old method: upsert by menu_item_id
-      const { data: savedCard, error: saveError } = await supabase
-        .from('menu_recipe_cards')
-        .upsert(cardData, {
-          onConflict: 'menu_item_id',
-        })
-        .select('id')
-        .single();
-
-      if (saveError) {
-        const errorMsg = `Failed to save card for ${menuItemData.name}: ${saveError.message || String(saveError)}`;
-        logger.error(`Failed to save recipe card for item ${menuItem.id}:`, saveError);
-        return { success: false, error: errorMsg };
-      }
-
-      if (!savedCard?.id) {
-        const errorMsg = `Failed to save card for ${menuItemData.name}: No ID returned`;
-        logger.error(`Failed to save recipe card for item ${menuItem.id}: No ID returned`);
-        return { success: false, error: errorMsg };
-      }
-
-      savedCardId = savedCard.id;
+    if (!saveResult.success || !saveResult.cardId) {
+      return { success: false, error: saveResult.error || 'Failed to save card' };
     }
 
-    // Link menu item to card (only if cross-referencing is enabled)
-    if (crossReferencingEnabled) {
-      await linkMenuItemToCard(supabase, menuItem.id, savedCardId);
-    }
-
-    logger.dev(`Successfully generated recipe card for ${menuItemData.name}`);
-    return { success: true };
+    // Finalize card save (link menu item to card)
+    return await finalizeCardSave(
+      supabase,
+      menuItem.id,
+      saveResult.cardId,
+      menuItemData,
+      crossReferencingEnabled,
+    );
   } catch (err) {
     const errorMsg = `Error for menu item ${menuItem.id}: ${err instanceof Error ? err.message : String(err)}`;
     logger.error(`Error generating recipe card for menu item ${menuItem.id}:`, err);

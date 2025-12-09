@@ -155,7 +155,7 @@ export function CSVImportModal<T = any>({
       };
       reader.readAsText(file);
     },
-    [config, parseCSVData],
+    [parseCSVData],
   );
 
   const handleSelectEntity = useCallback((index: number, selected: boolean) => {

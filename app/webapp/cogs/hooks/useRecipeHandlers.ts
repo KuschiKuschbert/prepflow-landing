@@ -24,6 +24,7 @@ interface UseRecipeHandlersProps {
 }
 
 export function useRecipeHandlers(props: UseRecipeHandlersProps) {
+  const { setShowCreateModal } = props;
   const handleRecipeSelect = useRecipeSelectHandler(
     props.recipes,
     props.setSelectedRecipe,
@@ -31,8 +32,8 @@ export function useRecipeHandlers(props: UseRecipeHandlersProps) {
   );
 
   const handleCreateNewRecipe = useCallback(() => {
-    props.setShowCreateModal(true);
-  }, [props.setShowCreateModal]);
+    setShowCreateModal(true);
+  }, [setShowCreateModal]);
 
   const handleCreateRecipe = useRecipeCreateHandler(props);
   const handleFinishRecipe = useRecipeFinishHandler(props);

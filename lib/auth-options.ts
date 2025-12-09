@@ -18,7 +18,6 @@ if (
   // Using dynamic import() would be ideal but NextAuth expects synchronous provider array
   // So we use a try-catch to handle edge runtime compatibility issues
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const Auth0Provider = require('next-auth/providers/auth0').default;
     providers.push(
       Auth0Provider({

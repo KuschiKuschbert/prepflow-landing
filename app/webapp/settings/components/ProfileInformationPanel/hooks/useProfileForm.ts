@@ -43,7 +43,7 @@ export function useProfileForm({
       last_name: cachedProfile?.last_name || '',
       business_name: cachedProfile?.business_name || '',
     }),
-    [],
+    [cachedProfile?.first_name, cachedProfile?.last_name, cachedProfile?.business_name],
   );
 
   const initialFormValuesRef = useRef<ProfileFormData | null>(null);
@@ -69,6 +69,7 @@ export function useProfileForm({
       });
       prevFormDataRef.current = formData;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData, mountIdRef]);
 
   // Update formData when profile updates (only if user hasn't modified)

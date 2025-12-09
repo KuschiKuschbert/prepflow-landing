@@ -4,6 +4,7 @@
 
 import { NextResponse } from 'next/server';
 import { generateExportTemplate, escapeHtml } from '@/lib/exports/pdf-template';
+import { buildCategoryHTML } from './generateHTML/buildCategoryHTML';
 
 interface RecipeCardData {
   id: string;
@@ -175,82 +176,7 @@ export function generateHTML(
 
   sortedCategories.forEach(category => {
     const categoryCards = cardsByCategory.get(category)!;
-
-    cardsContent += `
-      <div class="recipe-category">
-        <h2 style="color: #29E7CD; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem;">${escapeHtml(category)}</h2>
-    `;
-
-    categoryCards.forEach(card => {
-      cardsContent += `
-        <div class="recipe-card">
-          <div class="recipe-card-header">
-            <h3 class="recipe-card-title">${escapeHtml(card.title)}</h3>
-            <div class="recipe-card-yield">Base Yield: ${card.baseYield} serving${card.baseYield !== 1 ? 's' : ''}</div>
-          </div>
-
-          <div class="recipe-card-section">
-            <h4 class="recipe-card-section-title">Ingredients</h4>
-            <ul class="recipe-card-ingredients">
-      `;
-
-      card.ingredients.forEach(ingredient => {
-        cardsContent += `
-              <li>${escapeHtml(ingredient.name)}: ${ingredient.quantity} ${escapeHtml(ingredient.unit)}</li>
-        `;
-      });
-
-      cardsContent += `
-            </ul>
-          </div>
-      `;
-
-      if (card.methodSteps && card.methodSteps.length > 0) {
-        cardsContent += `
-          <div class="recipe-card-section">
-            <h4 class="recipe-card-section-title">Method</h4>
-            <ol class="recipe-card-method">
-        `;
-
-        card.methodSteps.forEach(step => {
-          cardsContent += `
-              <li>${escapeHtml(step)}</li>
-          `;
-        });
-
-        cardsContent += `
-            </ol>
-          </div>
-        `;
-      }
-
-      if (card.notes && card.notes.length > 0) {
-        cardsContent += `
-          <div class="recipe-card-section">
-            <h4 class="recipe-card-section-title">Notes</h4>
-            <ul class="recipe-card-notes">
-        `;
-
-        card.notes.forEach(note => {
-          cardsContent += `
-              <li>${escapeHtml(note)}</li>
-          `;
-        });
-
-        cardsContent += `
-            </ul>
-          </div>
-        `;
-      }
-
-      cardsContent += `
-        </div>
-      `;
-    });
-
-    cardsContent += `
-      </div>
-    `;
+    cardsContent += buildCategoryHTML(category, categoryCards);
   });
 
   cardsContent += `</div>`;
@@ -265,12 +191,11 @@ export function generateHTML(
     customMeta: `Menu: ${menuName}`,
   });
 
+  const filename = `${menuName.replace(/[^a-z0-9]/gi, '_')}_recipe_cards.html`;
   return new NextResponse(htmlContent, {
     headers: {
       'Content-Type': 'text/html',
-      'Content-Disposition': forPDF
-        ? `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_recipe_cards.html"`
-        : `inline; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_recipe_cards.html"`,
+      'Content-Disposition': `inline; filename="${filename}"`,
     },
   });
 }

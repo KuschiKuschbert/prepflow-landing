@@ -51,9 +51,7 @@ export function EmployeeDetailModal({
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
-
   if (!isOpen || !employee) return null;
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
@@ -66,9 +64,7 @@ export function EmployeeDetailModal({
         return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
     }
   };
-
   const qualifications = employee.employee_qualifications || [];
-
   return (
     <>
       <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">

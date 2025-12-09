@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
@@ -42,11 +42,15 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
   const [isValidLocation, setIsValidLocation] = useState<boolean | null>(null);
 
   // Default venue location (should be configurable)
-  const defaultVenueLocation = venueLocation || {
-    latitude: -27.6394, // Brisbane, QLD (example)
-    longitude: 153.1094,
-    radiusMeters: 100,
-  };
+  const defaultVenueLocation = useMemo(
+    () =>
+      venueLocation || {
+        latitude: -27.6394, // Brisbane, QLD (example)
+        longitude: 153.1094,
+        radiusMeters: 100,
+      },
+    [venueLocation],
+  );
 
   // Get current location
   useEffect(() => {
@@ -90,32 +94,35 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
     } else {
       setLocationError('Geolocation is not supported by your browser');
     }
-  }, []);
+  }, [calculateDistance]);
 
   /**
    * Calculates distance between current location and venue.
    */
-  function calculateDistance(position: GeolocationPosition) {
-    const lat1 = position.coords.latitude;
-    const lon1 = position.coords.longitude;
-    const lat2 = defaultVenueLocation.latitude;
-    const lon2 = defaultVenueLocation.longitude;
+  const calculateDistance = useCallback(
+    (position: GeolocationPosition) => {
+      const lat1 = position.coords.latitude;
+      const lon1 = position.coords.longitude;
+      const lat2 = defaultVenueLocation.latitude;
+      const lon2 = defaultVenueLocation.longitude;
 
-    const R = 6371e3; // Earth radius in meters
-    const φ1 = (lat1 * Math.PI) / 180;
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+      const R = 6371e3; // Earth radius in meters
+      const φ1 = (lat1 * Math.PI) / 180;
+      const φ2 = (lat2 * Math.PI) / 180;
+      const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+      const Δλ = ((lon2 - lon1) * Math.PI) / 180;
 
-    const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const a =
+        Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const distanceMeters = R * c;
-    setDistance(distanceMeters);
-    setIsValidLocation(distanceMeters <= defaultVenueLocation.radiusMeters);
-  }
+      const distanceMeters = R * c;
+      setDistance(distanceMeters);
+      setIsValidLocation(distanceMeters <= defaultVenueLocation.radiusMeters);
+    },
+    [defaultVenueLocation],
+  );
 
   /**
    * Handles clock-in or clock-out.

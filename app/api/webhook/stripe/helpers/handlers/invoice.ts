@@ -30,8 +30,7 @@ export async function handleInvoicePaymentSucceeded(
   if (subscriptionId) {
     const subscriptionIdStr =
       typeof subscriptionId === 'string' ? subscriptionId : subscriptionId.id;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const subscription: any = await stripe.subscriptions.retrieve(subscriptionIdStr);
+    const subscription = await stripe.subscriptions.retrieve(subscriptionIdStr);
     const tier =
       extractTierFromStripe(
         subscription.items?.data?.[0]?.price?.id,

@@ -13,8 +13,7 @@ export async function handleSubscriptionCreated(
   subscription: Stripe.Subscription,
   stripe: Stripe,
 ): Promise<void> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sub: any = subscription;
+  const sub = subscription;
   const customerId = sub.customer as string;
 
   // Stripe best practice: Handle deleted customers gracefully
@@ -70,8 +69,7 @@ export async function handleSubscriptionUpdated(
   subscription: Stripe.Subscription,
   stripe: Stripe,
 ): Promise<void> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sub: any = subscription;
+  const sub = subscription;
   const customerId = sub.customer as string;
 
   // Stripe best practice: Handle deleted customers gracefully
@@ -141,8 +139,7 @@ export async function handleSubscriptionDeleted(
   subscription: Stripe.Subscription,
   stripe: Stripe,
 ): Promise<void> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sub: any = subscription;
+  const sub = subscription;
   const customerId = sub.customer as string;
 
   // Stripe best practice: Handle deleted customers gracefully

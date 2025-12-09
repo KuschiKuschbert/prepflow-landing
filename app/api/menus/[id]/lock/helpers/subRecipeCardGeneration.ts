@@ -7,10 +7,10 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { batchFetchAllMenuItemData, lookupMenuItemDataFromCache } from './batchFetchMenuItemData';
 import { MenuItemData } from './fetchMenuItemData';
 import { buildRecipeCardFromInstructions, generateDataHash } from './cardBuilding';
-import { linkMenuItemToCard } from './cardManagement';
 import { consolidateInstructions, NormalizedIngredient } from './normalizeIngredients';
 import { CollectedSubRecipe } from './recipe-card-types';
 import { collectUniqueSubRecipes } from './subRecipeUtils';
+import { saveSubRecipeCard } from './subRecipeCardGeneration/saveSubRecipeCard';
 
 /**
  * Generate recipe card for a single sub-recipe
@@ -95,86 +95,22 @@ export async function generateSubRecipeCard(
       recipe_signature: recipeId, // Use recipe ID as signature for cross-referencing
     };
 
-    // Check if card already exists for this sub-recipe
-    let savedCardId: string;
+    // Save card to database
+    const saveResult = await saveSubRecipeCard(
+      supabase,
+      cardData,
+      recipeId,
+      dataHash,
+      subRecipe.name,
+      usedByMenuItems,
+      crossReferencingEnabled,
+    );
 
-    if (crossReferencingEnabled) {
-      const { data: existingCard, error: findError } = await supabase
-        .from('menu_recipe_cards')
-        .select('id, data_hash')
-        .eq('recipe_id', recipeId)
-        .is('dish_id', null)
-        .single();
-
-      if (!findError && existingCard) {
-        // Card exists - check if data changed
-        if (existingCard.data_hash === dataHash) {
-          // Data hasn't changed, reuse existing card
-          savedCardId = existingCard.id;
-          logger.dev(`Reusing existing sub-recipe card ${savedCardId} for ${subRecipe.name}`);
-        } else {
-          // Data changed - update card
-          const { data: updatedCard, error: updateError } = await supabase
-            .from('menu_recipe_cards')
-            .update(cardData)
-            .eq('id', existingCard.id)
-            .select('id')
-            .single();
-
-          if (updateError) {
-            logger.error(`Failed to update sub-recipe card for ${subRecipe.name}:`, updateError);
-            return { success: false, error: updateError.message };
-          }
-
-          savedCardId = updatedCard?.id || existingCard.id;
-          logger.dev(`Updated sub-recipe card ${savedCardId} for ${subRecipe.name}`);
-        }
-      } else {
-        // Card doesn't exist - create new
-        const { data: insertedCard, error: insertError } = await supabase
-          .from('menu_recipe_cards')
-          .insert(cardData)
-          .select('id')
-          .single();
-
-        if (insertError) {
-          logger.error(`Failed to create sub-recipe card for ${subRecipe.name}:`, insertError);
-          return { success: false, error: insertError.message };
-        }
-
-        if (!insertedCard?.id) {
-          return { success: false, error: 'No ID returned from insert' };
-        }
-
-        savedCardId = insertedCard.id;
-        logger.dev(`Created new sub-recipe card ${savedCardId} for ${subRecipe.name}`);
-      }
-
-      // Link all menu items that use this sub-recipe to the card
-      for (const menuItemUsage of usedByMenuItems) {
-        await linkMenuItemToCard(supabase, menuItemUsage.menuItemId, savedCardId);
-      }
-    } else {
-      // Old method: just create card for first menu item
-      const { data: insertedCard, error: insertError } = await supabase
-        .from('menu_recipe_cards')
-        .insert(cardData)
-        .select('id')
-        .single();
-
-      if (insertError) {
-        logger.error(`Failed to create sub-recipe card for ${subRecipe.name}:`, insertError);
-        return { success: false, error: insertError.message };
-      }
-
-      if (!insertedCard?.id) {
-        return { success: false, error: 'No ID returned from insert' };
-      }
-
-      savedCardId = insertedCard.id;
+    if (!saveResult.success) {
+      return { success: false, error: saveResult.error };
     }
 
-    return { success: true, cardId: savedCardId };
+    return { success: true, cardId: saveResult.cardId };
   } catch (err) {
     const errorMsg = `Error generating sub-recipe card for ${collectedSubRecipe.subRecipe.name}: ${err instanceof Error ? err.message : String(err)}`;
     logger.error(errorMsg, err);

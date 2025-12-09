@@ -19,7 +19,6 @@ export function useTiers() {
   const [tiers, setTiers] = useState<TierConfiguration[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const fetchTiers = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -92,7 +91,6 @@ export function useTiers() {
     },
     [fetchTiers, showSuccess, showError],
   );
-
   return {
     tiers,
     loading,

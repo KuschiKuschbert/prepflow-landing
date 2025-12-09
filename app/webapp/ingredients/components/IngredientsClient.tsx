@@ -114,7 +114,6 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   useEffect(() => {
     if (ingredientsData?.items) setIngredients(ingredientsData.items as Ingredient[]);
   }, [ingredientsData]);
-
   // Check for action=new query parameter and open wizard
   useEffect(() => {
     const action = searchParams.get('action');

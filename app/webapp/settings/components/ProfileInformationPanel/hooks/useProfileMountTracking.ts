@@ -16,16 +16,19 @@ export function useProfileMountTracking() {
   useEffect(() => {
     mountCountRef.current += 1;
     mountIdRef.current = `mount-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const mountId = mountIdRef.current;
+    const mountCount = mountCountRef.current;
+    const userHasModified = userHasModifiedRef.current;
     logger.dev('[ProfileInformationPanel] Component mounted', {
-      mountId: mountIdRef.current,
-      mountCount: mountCountRef.current,
+      mountId,
+      mountCount,
     });
 
     return () => {
       logger.dev('[ProfileInformationPanel] Component unmounting', {
-        mountId: mountIdRef.current,
-        mountCount: mountCountRef.current,
-        userHasModified: userHasModifiedRef.current,
+        mountId,
+        mountCount,
+        userHasModified,
       });
     };
   }, []);
