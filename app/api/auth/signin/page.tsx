@@ -58,9 +58,18 @@ function SignInContent() {
                   {error === 'AccessDenied'
                     ? 'Access denied. Please check your credentials and try again.'
                     : error === 'Configuration'
-                      ? 'There was a problem with the server configuration.'
-                      : 'An error occurred during sign in. Please try again.'}
+                      ? 'There was a problem with the server configuration. Please contact support.'
+                      : error === 'Verification'
+                        ? 'The verification token has expired. Please try signing in again.'
+                        : error === 'Callback' || error === 'autho'
+                          ? 'There was a problem with the authentication callback. This usually means the callback URL is not properly configured. Please contact support.'
+                          : 'An error occurred during sign in. Please try again.'}
                 </p>
+                {error === 'Callback' || error === 'autho' ? (
+                  <p className={`${LANDING_TYPOGRAPHY.xs} mt-2 text-gray-500`}>
+                    Error code: {error}. This may indicate a callback URL configuration issue in Auth0.
+                  </p>
+                ) : null}
               </div>
             )}
 

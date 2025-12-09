@@ -30,7 +30,11 @@ export async function handleInvoicePaymentSucceeded(
   if (subscriptionId) {
     const subscriptionIdStr =
       typeof subscriptionId === 'string' ? subscriptionId : subscriptionId.id;
-    const subscription = await stripe.subscriptions.retrieve(subscriptionIdStr);
+    const subscriptionResponse = await stripe.subscriptions.retrieve(subscriptionIdStr);
+    const subscription = subscriptionResponse as unknown as Stripe.Subscription & {
+      current_period_end?: number;
+      current_period_start?: number;
+    };
     const tier =
       extractTierFromStripe(
         subscription.items?.data?.[0]?.price?.id,

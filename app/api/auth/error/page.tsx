@@ -29,6 +29,16 @@ function AuthErrorContent() {
       message:
         'The verification token has expired or has already been used. Please try signing in again.',
     },
+    Callback: {
+      title: 'Callback Error',
+      message:
+        'There was a problem with the authentication callback. This usually means the callback URL is not properly configured in Auth0. Please contact support.',
+    },
+    autho: {
+      title: 'Authentication Error',
+      message:
+        'There was a problem with the authentication callback. This usually means the callback URL is not properly configured in Auth0. Please contact support.',
+    },
     Default: {
       title: 'Authentication Error',
       message:

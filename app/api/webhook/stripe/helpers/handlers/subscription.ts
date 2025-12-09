@@ -13,7 +13,10 @@ export async function handleSubscriptionCreated(
   subscription: Stripe.Subscription,
   stripe: Stripe,
 ): Promise<void> {
-  const sub = subscription;
+  const sub = subscription as Stripe.Subscription & {
+    current_period_end?: number;
+    current_period_start?: number;
+  };
   const customerId = sub.customer as string;
 
   // Stripe best practice: Handle deleted customers gracefully
@@ -69,7 +72,10 @@ export async function handleSubscriptionUpdated(
   subscription: Stripe.Subscription,
   stripe: Stripe,
 ): Promise<void> {
-  const sub = subscription;
+  const sub = subscription as Stripe.Subscription & {
+    current_period_end?: number;
+    current_period_start?: number;
+  };
   const customerId = sub.customer as string;
 
   // Stripe best practice: Handle deleted customers gracefully

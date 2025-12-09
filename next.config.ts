@@ -192,6 +192,18 @@ const nextConfig: NextConfig = {
   // Redirects for SEO (301 permanent redirects for moved pages)
   async redirects() {
     return [
+      // Redirect non-www to www (fixes Auth0 callback URL mismatch)
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'prepflow.org',
+          },
+        ],
+        destination: 'https://www.prepflow.org/:path*',
+        permanent: true, // 301 redirect
+      },
       {
         source: '/webapp/ingredients',
         destination: '/webapp/recipes#ingredients',
