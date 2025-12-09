@@ -1,12 +1,18 @@
-/**
- * Hook for managing hidden feature flags
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { HiddenFeatureFlag } from '../types';
 
+/**
+ * Orchestrator hook for managing hidden feature flags.
+ * Combines fetching logic for hidden feature flags.
+ *
+ * @returns {Object} Hidden feature flags state and fetch function
+ * @returns {HiddenFeatureFlag[]} returns.hiddenFlags - Array of hidden feature flags
+ * @returns {boolean} returns.hiddenLoading - Loading state
+ * @returns {string | null} returns.hiddenError - Error message if any
+ * @returns {Function} returns.fetchHiddenFlags - Function to fetch hidden flags
+ */
 export function useHiddenFeatureFlags() {
   const { showError } = useNotification();
   const [hiddenFlags, setHiddenFlags] = useState<HiddenFeatureFlag[]>([]);

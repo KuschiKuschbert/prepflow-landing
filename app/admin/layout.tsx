@@ -57,6 +57,16 @@ function AdminLayoutContent({
   );
 }
 
+/**
+ * Admin layout component with authentication and authorization checks.
+ * Wraps admin pages with session provider, notification provider, and admin navigation.
+ * Redirects non-admin users to unauthorized page.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to render
+ * @returns {JSX.Element} Admin layout with navigation and providers
+ */
 export default function AdminLayout({
   children,
 }: Readonly<{
