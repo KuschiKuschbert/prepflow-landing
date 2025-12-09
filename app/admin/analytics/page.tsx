@@ -21,6 +21,13 @@ interface AnalyticsData {
   }[];
 }
 
+/**
+ * Analytics page component for admin dashboard.
+ * Displays user activity and feature usage metrics.
+ *
+ * @component
+ * @returns {JSX.Element} Analytics page with stats and feature usage charts
+ */
 export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);

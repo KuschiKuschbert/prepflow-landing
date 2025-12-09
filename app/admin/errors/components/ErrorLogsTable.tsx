@@ -1,7 +1,3 @@
-/**
- * Error Logs Table Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';

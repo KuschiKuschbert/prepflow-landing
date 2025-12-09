@@ -125,8 +125,8 @@ All required migrations are present:
 
 ```bash
 # Add to .env.local
-STRIPE_WEBHOOK_SECRET_DEV=whsec_e06eeccb5602f4d3df55a6158a58cd79c38fd9fcb4defc0aa13ea6443af74b84
-STRIPE_WEBHOOK_SECRET_PROD=whsec_0SfL7GjU2pT756jKtNFYutpkkAue7h06
+STRIPE_WEBHOOK_SECRET_DEV=whsec_YOUR_DEV_WEBHOOK_SECRET_HERE
+STRIPE_WEBHOOK_SECRET_PROD=whsec_YOUR_PROD_WEBHOOK_SECRET_HERE
 ```
 
 **Why:** Prevents webhook events from one environment affecting another.

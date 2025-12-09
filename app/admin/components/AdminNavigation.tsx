@@ -45,6 +45,13 @@ const navItems: NavItem[] = [
   { href: '/admin/support', label: 'Support Tools', icon: Wrench },
 ];
 
+/**
+ * Admin navigation component with sidebar and mobile menu.
+ * Displays navigation items with badge counts for unresolved tickets and errors.
+ *
+ * @component
+ * @returns {JSX.Element} Admin navigation sidebar with mobile menu support
+ */
 export default function AdminNavigation() {
   const { data: session } = useSession();
   const pathname = usePathname();

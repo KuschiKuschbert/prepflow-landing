@@ -12,6 +12,13 @@ interface SearchResult {
   created_at?: string;
 }
 
+/**
+ * Data audit page component for admin dashboard.
+ * Provides search and export functionality across all database tables.
+ *
+ * @component
+ * @returns {JSX.Element} Data audit page with search and export capabilities
+ */
 export default function DataAuditPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTable, setSelectedTable] = useState<string>('all');

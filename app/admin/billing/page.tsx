@@ -41,6 +41,13 @@ interface HealthReport {
   healthy: boolean;
 }
 
+/**
+ * Billing administration page component.
+ * Manages subscriptions, revenue tracking, and billing health checks.
+ *
+ * @component
+ * @returns {JSX.Element} Billing admin page with subscription management and health reports
+ */
 export default function BillingPage() {
   const { showSuccess, showError } = useNotification();
   const { showConfirm, ConfirmDialog } = useConfirm();
