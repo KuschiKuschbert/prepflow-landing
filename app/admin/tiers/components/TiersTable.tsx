@@ -1,7 +1,3 @@
-/**
- * Tiers Table Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -21,6 +17,23 @@ interface TiersTableProps {
   onRetry: () => void;
 }
 
+/**
+ * Tiers table component for admin dashboard.
+ * Displays tier configurations with edit and disable actions.
+ *
+ * @component
+ * @param {TiersTableProps} props - Component props
+ * @param {TierConfiguration[]} props.tiers - Array of tier configurations
+ * @param {boolean} props.loading - Loading state
+ * @param {string | null} props.error - Error message if any
+ * @param {string | null} props.editingTier - Slug of tier currently being edited
+ * @param {Function} props.onEdit - Callback to enter edit mode
+ * @param {Function} props.onCancel - Callback to cancel editing
+ * @param {Function} props.onSave - Callback to save tier changes
+ * @param {Function} props.onDisable - Callback to disable tier
+ * @param {Function} props.onRetry - Callback to retry loading tiers
+ * @returns {JSX.Element} Tiers table component
+ */
 export function TiersTable({
   tiers,
   loading,

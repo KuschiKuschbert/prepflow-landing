@@ -1,7 +1,3 @@
-/**
- * Features Table Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -20,6 +16,22 @@ interface FeaturesTableProps {
   onRetry: () => void;
 }
 
+/**
+ * Features table component for admin dashboard.
+ * Displays feature-to-tier mappings with edit actions.
+ *
+ * @component
+ * @param {FeaturesTableProps} props - Component props
+ * @param {FeatureMapping[]} props.features - Array of feature mappings
+ * @param {boolean} props.loading - Loading state
+ * @param {string | null} props.error - Error message if any
+ * @param {string | null} props.editingFeature - Key of feature currently being edited
+ * @param {Function} props.onEdit - Callback to enter edit mode
+ * @param {Function} props.onCancel - Callback to cancel editing
+ * @param {Function} props.onSave - Callback to save feature mapping changes
+ * @param {Function} props.onRetry - Callback to retry loading features
+ * @returns {JSX.Element} Features table component
+ */
 export function FeaturesTable({
   features,
   loading,
