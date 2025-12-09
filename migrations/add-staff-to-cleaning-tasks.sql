@@ -34,3 +34,7 @@ CREATE INDEX IF NOT EXISTS idx_cleaning_tasks_assigned_by ON cleaning_tasks(assi
 COMMENT ON COLUMN cleaning_tasks.assigned_to_employee_id IS 'Employee assigned to complete this cleaning task';
 COMMENT ON COLUMN cleaning_tasks.assigned_by_employee_id IS 'Employee who assigned this cleaning task';
 
+
+
+
+

@@ -3,13 +3,9 @@
 import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { logger } from '@/lib/logger';
-import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-} from '@/lib/text-utils';
+import { parseIngredientsCSV } from '../hooks/helpers/csvImport';
 import { CSVImportPreview } from './CSVImportPreview';
+import { ImportProgress, type ImportProgressState } from '@/components/ui/ImportProgress';
 
 interface Ingredient {
   id: string;
@@ -68,61 +64,33 @@ export default function CSVImportModal({
 
   const parseCSVWithAI = (csvText: string) => {
     try {
-      const lines = csvText.split('\n').filter(line => line.trim());
-      if (lines.length < 2) {
-        setError('CSV must have at least a header row and one data row');
+      if (!csvText || csvText.trim().length === 0) {
+        setError('CSV file is empty');
+        setParsedIngredients([]);
         return;
       }
 
-      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-      const parsedData: Partial<Ingredient>[] = [];
+      const result = parseIngredientsCSV(csvText);
 
-      for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(v => v.trim());
-        const ingredient: Partial<Ingredient> = {};
-
-        headers.forEach((header, index) => {
-          const value = values[index] || '';
-
-          // AI-powered column mapping with capitalization
-          if (header.includes('name') || header.includes('ingredient')) {
-            ingredient.ingredient_name = formatIngredientName(value);
-          } else if (header.includes('brand')) {
-            ingredient.brand = formatBrandName(value);
-          } else if (header.includes('cost') || header.includes('price')) {
-            ingredient.cost_per_unit = parseFloat(value) || 0;
-          } else if (header.includes('unit')) {
-            ingredient.unit = value.toUpperCase();
-          } else if (header.includes('supplier')) {
-            ingredient.supplier = formatSupplierName(value);
-          } else if (header.includes('code') || header.includes('sku')) {
-            ingredient.product_code = value;
-          } else if (header.includes('location') || header.includes('storage')) {
-            ingredient.storage_location = formatStorageLocation(value);
-          } else if (header.includes('pack') || header.includes('size')) {
-            ingredient.pack_size = value || '1';
-          }
-        });
-
-        // Set defaults for required fields
-        if (!ingredient.ingredient_name) continue; // Skip rows without ingredient name
-        if (!ingredient.cost_per_unit) ingredient.cost_per_unit = 0;
-        if (!ingredient.cost_per_unit_as_purchased)
-          ingredient.cost_per_unit_as_purchased = ingredient.cost_per_unit || 0;
-        if (!ingredient.cost_per_unit_incl_trim)
-          ingredient.cost_per_unit_incl_trim = ingredient.cost_per_unit || 0;
-        if (!ingredient.trim_peel_waste_percentage) ingredient.trim_peel_waste_percentage = 0;
-        if (!ingredient.yield_percentage) ingredient.yield_percentage = 100;
-        if (!ingredient.unit) ingredient.unit = 'GM';
-        if (!ingredient.pack_size) ingredient.pack_size = '1';
-
-        parsedData.push(ingredient);
+      if (result.errors.length > 0) {
+        setError(
+          `CSV parsing errors:\n${result.errors.slice(0, 5).join('\n')}${result.errors.length > 5 ? `\n... and ${result.errors.length - 5} more errors` : ''}`,
+        );
+      } else {
+        setError(null);
       }
 
-      setParsedIngredients(parsedData);
-      setError(null);
+      if (result.ingredients.length === 0) {
+        setError('No valid ingredients found in CSV file');
+        setParsedIngredients([]);
+        return;
+      }
+
+      setParsedIngredients(result.ingredients);
     } catch (err) {
-      setError('Failed to parse CSV file');
+      logger.error('[CSV Import Modal] Failed to parse CSV:', err);
+      setError(err instanceof Error ? err.message : 'Failed to parse CSV file');
+      setParsedIngredients([]);
     }
   };
 
@@ -146,15 +114,9 @@ export default function CSVImportModal({
 
   const handleImport = async () => {
     try {
-      const ingredientsToImport = parsedIngredients
-        .filter((_, index) => selectedIngredients.has(index.toString()))
-        .map(ingredient => ({
-          ...ingredient,
-          ingredient_name: formatIngredientName(ingredient.ingredient_name || ''),
-          brand: formatBrandName(ingredient.brand || ''),
-          supplier: formatSupplierName(ingredient.supplier || ''),
-          storage_location: formatStorageLocation(ingredient.storage_location || ''),
-        }));
+      const ingredientsToImport = parsedIngredients.filter((_, index) =>
+        selectedIngredients.has(index.toString()),
+      );
 
       await onImport(ingredientsToImport);
 
@@ -252,8 +214,22 @@ export default function CSVImportModal({
               </div>
             )}
 
+            {/* Progress Indicator */}
+            {loading && (
+              <ImportProgress
+                progress={{
+                  total: selectedIngredients.size,
+                  processed: selectedIngredients.size,
+                  successful: selectedIngredients.size,
+                  failed: 0,
+                  isComplete: false,
+                }}
+                title="Importing ingredients..."
+              />
+            )}
+
             {/* Preview */}
-            {parsedIngredients.length > 0 && (
+            {parsedIngredients.length > 0 && !loading && (
               <>
                 <CSVImportPreview
                   parsedIngredients={parsedIngredients}
@@ -275,7 +251,7 @@ export default function CSVImportModal({
                     disabled={loading || selectedIngredients.size === 0}
                     className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {loading ? 'Importing...' : `Import Selected (${selectedIngredients.size})`}
+                    {`Import Selected (${selectedIngredients.size})`}
                   </button>
                 </div>
               </>

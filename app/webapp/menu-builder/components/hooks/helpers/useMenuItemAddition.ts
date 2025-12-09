@@ -3,6 +3,7 @@
  */
 import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useOnMenuBuilt } from '@/lib/personality/hooks';
 import type { MenuItem, Dish, Recipe } from '../../../types';
 
 interface UseMenuItemAdditionProps {
@@ -31,6 +32,8 @@ export function useMenuItemAddition({
   refreshStatistics,
   showError,
 }: UseMenuItemAdditionProps) {
+  const onMenuBuilt = useOnMenuBuilt();
+
   const handleCategorySelect = useCallback(
     async (
       category: string,
@@ -282,6 +285,11 @@ export function useMenuItemAddition({
             return updatedItems;
           });
           refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
+
+          // Trigger personality hook when first item is added to menu (menu is "built")
+          if (menuItems.length === 0) {
+            onMenuBuilt();
+          }
         } else {
           const errorMessage =
             result.error || result.message || `Failed to add item (${response.status})`;
@@ -309,6 +317,7 @@ export function useMenuItemAddition({
       setCategories,
       refreshStatistics,
       showError,
+      onMenuBuilt,
     ],
   );
 

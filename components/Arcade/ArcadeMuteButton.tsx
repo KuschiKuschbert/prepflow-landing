@@ -44,11 +44,11 @@ export const ArcadeMuteButton: React.FC<ArcadeMuteButtonProps> = ({ className = 
       title={muted ? 'Unmute Arcade Sounds' : 'Mute Arcade Sounds'}
     >
       {muted ? (
-        <span className="text-fluid-xl" aria-hidden="true">
+        <span className="text-fluid-xl" aria-hidden={true}>
           🔇
         </span>
       ) : (
-        <span className="text-fluid-xl" aria-hidden="true">
+        <span className="text-fluid-xl" aria-hidden={true}>
           🔊
         </span>
       )}

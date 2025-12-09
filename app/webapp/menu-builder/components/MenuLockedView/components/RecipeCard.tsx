@@ -7,7 +7,8 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { X } from 'lucide-react';
+import { QrCode, X } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useEffect, useRef, useState } from 'react';
 import { formatScaledQuantity, scaleIngredients } from '../../../utils/recipeCardScaling';
 import { PrepQuantityInput } from './PrepQuantityInput';
@@ -25,6 +26,7 @@ interface RecipeCardProps {
   notes: string[];
   isExpanded?: boolean;
   onClick?: () => void;
+  recipeId?: string | null;
   usedByMenuItems?: Array<{
     menuItemId: string;
     menuItemName: string;
@@ -41,14 +43,21 @@ export function RecipeCard({
   notes,
   isExpanded = false,
   onClick,
+  recipeId,
   usedByMenuItems,
 }: RecipeCardProps) {
   const isSubRecipe = !!usedByMenuItems && usedByMenuItems.length > 0;
   const [prepQuantity, setPrepQuantity] = useState(1);
+  const [showQR, setShowQR] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const scaledIngredients = scaleIngredients(ingredients, prepQuantity, baseYield);
+
+  // Generate QR code URL for the recipe
+  const recipeUrl = recipeId
+    ? `${typeof window !== 'undefined' ? window.location.origin : ''}/webapp/recipes/${recipeId}`
+    : null;
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -131,7 +140,7 @@ export function RecipeCard({
         aria-label={`Expand recipe card for ${title}`}
       >
         <div className="p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
               <h3 className="truncate text-base font-semibold text-white">{title}</h3>
               {isSubRecipe && usedByMenuItems && usedByMenuItems.length > 0 && (
@@ -141,8 +150,45 @@ export function RecipeCard({
                 </p>
               )}
             </div>
-            <p className="ml-2 shrink-0 text-xs text-gray-500">Click</p>
+
+            {/* QR Code Toggle Button */}
+            {recipeUrl && (
+              <button
+                type="button"
+                onClick={e => {
+                  e.stopPropagation();
+                  setShowQR(!showQR);
+                }}
+                className={`shrink-0 rounded-lg p-1.5 transition-colors ${
+                  showQR
+                    ? 'bg-[#29E7CD] text-black'
+                    : 'bg-[#2a2a2a] text-gray-400 hover:bg-[#3a3a3a] hover:text-white'
+                }`}
+                aria-label={showQR ? 'Hide QR code' : 'Show QR code'}
+                data-prep-input
+              >
+                <Icon icon={QrCode} size="sm" />
+              </button>
+            )}
           </div>
+
+          {/* Mini QR Code - Shows when toggled */}
+          {showQR && recipeUrl && (
+            <div
+              className="mt-3 flex flex-col items-center rounded-lg bg-white p-2"
+              onClick={e => e.stopPropagation()}
+              data-prep-input
+            >
+              <QRCodeSVG
+                value={recipeUrl}
+                size={80}
+                level="M"
+                bgColor="#FFFFFF"
+                fgColor="#000000"
+              />
+              <p className="mt-1 text-[8px] text-gray-500">Scan to view recipe</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -277,6 +323,38 @@ export function RecipeCard({
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {/* QR Code Section - For printing/scanning */}
+                {recipeUrl && (
+                  <div className="mt-4 flex items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-3">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-lg bg-white p-2">
+                        <QRCodeSVG
+                          value={recipeUrl}
+                          size={64}
+                          level="M"
+                          bgColor="#FFFFFF"
+                          fgColor="#000000"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-white">📱 Scan for Instructions</p>
+                        <p className="text-[10px] text-gray-500">
+                          Access this recipe on any device
+                        </p>
+                      </div>
+                    </div>
+                    <a
+                      href={recipeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg bg-[#29E7CD]/20 px-3 py-1.5 text-xs font-medium text-[#29E7CD] hover:bg-[#29E7CD]/30"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      Open Recipe
+                    </a>
                   </div>
                 )}
               </div>

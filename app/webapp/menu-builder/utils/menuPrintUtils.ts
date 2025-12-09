@@ -1,13 +1,13 @@
 /**
  * Print utilities for menus
  *
- * Uses professional export template with PrepFlow logo and background elements
+ * Uses unified print template with PrepFlow logo and background elements
  * Follows the same synchronous pattern as prep-lists print utility for instant printing
  */
 
 import { formatMenuForPrint } from './formatMenuForPrint';
 import { getMenuPrintStyles } from './menuPrintStyles';
-import { generateMenuPrintTemplate } from './menuPrintTemplate';
+import { printWithTemplate } from '@/lib/exports/print-template';
 import type { Menu, MenuItem } from '../types';
 
 /**
@@ -21,12 +21,16 @@ import type { Menu, MenuItem } from '../types';
  * @param {MenuItem[]} menuItems - Array of menu items (must already include descriptions if available)
  * @returns {void} Prints immediately
  */
-export function printMenu(menu: Menu, menuItems: MenuItem[]): void {
+export function printMenu(
+  menu: Menu,
+  menuItems: MenuItem[],
+  variant: 'default' | 'customer' = 'default',
+): void {
   // Format menu content HTML (content only, no header/footer - template provides those)
-  const contentHtml = formatMenuForPrint(menu, menuItems);
+  const contentHtml = formatMenuForPrint(menu, menuItems, variant);
 
   // Get menu-specific styles (template handles global styles)
-  const menuStyles = getMenuPrintStyles();
+  const menuStyles = getMenuPrintStyles(variant);
 
   // Build custom meta info for header
   const customMeta: string[] = [];
@@ -37,23 +41,13 @@ export function printMenu(menu: Menu, menuItems: MenuItem[]): void {
     customMeta.push(`By: ${menu.locked_by}`);
   }
 
-  // Generate full HTML using client-side compatible template (includes logo, background elements, branding)
-  const fullHtml = generateMenuPrintTemplate({
+  // Use unified print template with variant support
+  printWithTemplate({
     title: menu.menu_name,
     subtitle: menu.description || 'Menu',
-    content: `<style>${menuStyles}</style>${contentHtml}`,
+    content: `<div class="${variant === 'customer' ? 'variant-customer' : ''}"><style>${menuStyles}</style>${contentHtml}</div>`,
     totalItems: menuItems.length,
     customMeta: customMeta.length > 0 ? customMeta.join(' | ') : undefined,
+    variant: variant === 'customer' ? 'customer' : 'default',
   });
-
-  // Open print window - same pattern as prep-lists
-  const printWindow = window.open('', '_blank');
-  if (!printWindow) return;
-
-  printWindow.document.write(fullHtml);
-  printWindow.document.close();
-  printWindow.focus();
-  setTimeout(() => {
-    printWindow.print();
-  }, 250);
 }

@@ -46,7 +46,7 @@ export function useIngredientCSV({
     async (parsedIngredients: Partial<Ingredient>[]) => {
       const result = await importIngredientsFromCSV(parsedIngredients);
       if (result.success && result.data) {
-        setIngredients(prev => [...prev, ...result.data!]);
+        setIngredients(prev => [...prev, ...(result.data as Ingredient[])]);
         setShowCSVImport?.(false);
         setCsvData?.('');
         setParsedIngredients?.([]);

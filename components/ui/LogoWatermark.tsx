@@ -66,7 +66,7 @@ export function LogoWatermark({
   return (
     <div
       className={`pointer-events-none fixed inset-0 -z-10 overflow-hidden ${className}`}
-      aria-hidden="true"
+      aria-hidden={true}
     >
       {positions.map(pos => (
         <motion.div
@@ -99,7 +99,7 @@ export function LogoWatermark({
             width={size}
             height={size}
             className="h-auto w-auto"
-            aria-hidden="true"
+            aria-hidden={true}
           />
         </motion.div>
       ))}

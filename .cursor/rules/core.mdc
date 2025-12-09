@@ -3,15 +3,51 @@ alwaysApply: true
 ---
 ## Auth, Allowlist, and Billing Setup
 
+**📚 Complete Reference:** See `docs/AUTH0_STRIPE_REFERENCE.md` for comprehensive Auth0 and Stripe configuration, setup, testing, and troubleshooting guide.
+
 ### Auth (NextAuth + Auth0)
 
-- Env:
-  - `AUTH0_ISSUER_BASE_URL`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`
-  - `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
-- Routes: `/api/auth/[...nextauth]`, `/api/me`
-- Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes).
+**MANDATORY Environment Variables:**
+- `AUTH0_ISSUER_BASE_URL` - Auth0 tenant URL (e.g., `https://dev-xxx.us.auth0.com`)
+- `AUTH0_CLIENT_ID` - Auth0 application client ID
+- `AUTH0_CLIENT_SECRET` - Auth0 application client secret
+- `NEXTAUTH_SECRET` - Generate with: `openssl rand -base64 32` (minimum 32 characters)
+- `NEXTAUTH_URL` - Application URL (`http://localhost:3000` for dev, `https://yourdomain.com` for prod)
+- `NEXTAUTH_SESSION_MAX_AGE` - Session timeout in seconds (default: 14400 = 4 hours)
+
+**MANDATORY Auth0 Dashboard Configuration:**
+- **Allowed Callback URLs:** Must include `/api/auth/callback/auth0` for all environments
+- **Allowed Logout URLs:** Must include exact logout URLs (with and without trailing slash) - **CRITICAL** or logout will fail
+- **Allowed Web Origins:** Must include application origins for CORS
+
+**Implementation Files:**
+- `lib/auth-options.ts` - NextAuth configuration with Auth0 provider
+- `lib/auth-user-sync.ts` - User sync on first login (creates user record, updates last_login)
+- `lib/auth0-management.ts` - Management API client for role extraction
+- `app/api/auth/[...nextauth]/route.ts` - NextAuth route handler
+- `middleware.ts` - Allowlist enforcement
+
+**MANDATORY Best Practices:**
+- ✅ User creation on first login (implemented in `lib/auth-user-sync.ts`)
+- ✅ JWT session strategy (stateless, 4-hour timeout)
+- ✅ Minimal scopes: `openid profile email` only
+- ✅ Role extraction with fallbacks (token → Management API)
+- ✅ Email verification sync from Auth0
+- ✅ Never downgrade email verification status
+
+**Routes:**
+- `/api/auth/[...nextauth]` - NextAuth authentication handlers
+- `/api/me` - Current user information
+- Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes)
+
+**See Also:**
+- `docs/AUTH0_STRIPE_REFERENCE.md` (Auth0 Configuration section) - Complete setup guide
+- `docs/AUTH0_LOCALHOST_SETUP.md` - Localhost-specific configuration
+- `docs/AUTH0_LOGOUT_SETUP.md` - Logout configuration troubleshooting
 
 ### Allowlist Configuration
+
+**MANDATORY:** Choose one allowlist configuration option:
 
 - **Option 1: Development Mode** (Default)
   - In development (`NODE_ENV=development`), allowlist is automatically bypassed
@@ -23,7 +59,7 @@ alwaysApply: true
   - All authenticated users can access (useful for testing/friend access)
   - Works in both development and production
 
-- **Option 3: Email Allowlist**
+- **Option 3: Email Allowlist** (Production Recommended)
   - `ALLOWED_EMAILS` (comma-separated). Only allowlisted emails can access protected routes.
   - Format: `email1@example.com,email2@example.com,email3@example.com`
   - Unauthorized pages redirect to `/not-authorized`; APIs return 401/403.
@@ -37,13 +73,58 @@ alwaysApply: true
 - **Use Case**: Testing and friend access - not suitable for production with multiple customers
 - **Documentation**: See `docs/FRIEND_ACCESS.md` for detailed configuration and usage instructions
 
-### Billing (Stripe scaffolding)
+### Billing (Stripe Integration)
 
-- Env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
-- Endpoints: `/api/billing/create-checkout-session`, `/api/billing/create-portal-session`, `/api/webhook/stripe`
-- Entitlements: `lib/tier-config.ts`, `lib/entitlements.ts`, `lib/feature-gate.ts`
+**MANDATORY Environment Variables:**
+- `STRIPE_SECRET_KEY` - Stripe secret key (`sk_test_...` for dev, `sk_live_...` for prod)
+- `STRIPE_WEBHOOK_SECRET` - Webhook signing secret (`whsec_...`)
+- `STRIPE_WEBHOOK_SECRET_DEV` - Optional: Dev-specific webhook secret (recommended)
+- `STRIPE_WEBHOOK_SECRET_PROD` - Optional: Prod-specific webhook secret (recommended)
+- `STRIPE_PRICE_STARTER_MONTHLY` - Price ID for Starter tier (`price_...`)
+- `STRIPE_PRICE_PRO_MONTHLY` - Price ID for Pro tier (`price_...`)
+- `STRIPE_PRICE_BUSINESS_MONTHLY` - Price ID for Business tier (`price_...`)
 
-**Note:** For security practices around secrets management and API security, see `security.mdc`.
+**MANDATORY Stripe Dashboard Configuration:**
+- **Products:** Create Starter, Pro, Business products with monthly recurring prices
+- **Webhook Endpoint:** `https://yourdomain.com/api/webhook/stripe`
+- **Webhook Events:** `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_succeeded`, `invoice.payment_failed`
+- **Webhook Secret:** Copy signing secret from Stripe Dashboard
+
+**Implementation Files:**
+- `lib/stripe.ts` - Stripe client singleton (API version: `2025-11-17.clover`)
+- `app/api/billing/create-checkout-session/route.ts` - Checkout session creation
+- `app/api/billing/create-portal-session/route.ts` - Customer portal creation
+- `app/api/webhook/stripe/route.ts` - Webhook handler with signature verification
+- `lib/tier-config.ts` - Subscription tier configuration
+- `lib/entitlements.ts` - Entitlement checking
+- `lib/feature-gate.ts` - Feature gating
+
+**MANDATORY Best Practices:**
+- ✅ Webhook signature verification (all webhook requests)
+- ✅ Webhook idempotency (via `webhook_events` table)
+- ✅ Environment-specific webhook secrets (DEV/PROD)
+- ✅ Customer ID caching (via `billing_customers` table)
+- ✅ Metadata usage (tier, user_email in checkout sessions)
+- ✅ Expand parameters (reduce API calls)
+- ✅ Deleted customer handling (check `customer.deleted` flag)
+- ✅ Proper error handling (correct HTTP status codes for retries)
+
+**Endpoints:**
+- `POST /api/billing/create-checkout-session` - Create Stripe checkout session (requires auth)
+- `POST /api/billing/create-portal-session` - Create Stripe customer portal (requires auth)
+- `POST /api/webhook/stripe` - Stripe webhook handler (requires signature verification)
+
+**Database Tables Required:**
+- `users` - Subscription fields (tier, status, stripe_customer_id, stripe_subscription_id)
+- `billing_customers` - Customer ID caching (user_email, stripe_customer_id)
+- `webhook_events` - Idempotency tracking (event_id, processed)
+- `user_notifications` - Notification system (user_email, notification_type)
+
+**See Also:**
+- `docs/AUTH0_STRIPE_REFERENCE.md` (Stripe Configuration section) - Complete setup guide
+- `docs/STRIPE_SETUP_CHECKLIST.md` - Step-by-step Stripe setup
+- `docs/STRIPE_INTEGRATION.md` - Detailed Stripe integration guide
+- `security.mdc` - Security practices for secrets management and API security
 
 ## Landing v2 (Sign‑in + Tour)
 

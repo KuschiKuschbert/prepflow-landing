@@ -125,7 +125,7 @@ export function FloatingParticles({
   return (
     <div
       className={`pointer-events-none fixed inset-0 -z-10 overflow-hidden ${className}`}
-      aria-hidden="true"
+      aria-hidden={true}
     >
       {displayParticles.map(particle => {
         const baseOpacity = 0.5 + Math.random() * 0.3; // 0.5-0.8 opacity for better visibility

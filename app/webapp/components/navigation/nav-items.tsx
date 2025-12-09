@@ -1,25 +1,31 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { optimizeNavigationItems } from '@/lib/navigation-optimization/optimizer';
+import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { useTranslation } from '@/lib/useTranslation';
 import {
   BarChart3,
-  Bot,
   BookOpen,
+  Bot,
+  Calendar,
   ClipboardCheck,
-  Clock,
+  FileText,
   LayoutDashboard,
   ListChecks,
   Package2,
+  Settings,
+  Settings2,
   Sparkles,
   Thermometer,
   Truck,
   Users,
   UtensilsCrossed,
 } from 'lucide-react';
-import { useEffect, useState, useMemo } from 'react';
-import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
-import { optimizeNavigationItems } from '@/lib/navigation-optimization/optimizer';
+import { useEffect, useMemo, useState } from 'react';
+
+type WorkflowType = 'daily-operations' | 'setup-planning-operations' | 'menu-first';
 
 export interface NavigationItemConfig {
   href: string;
@@ -30,48 +36,99 @@ export interface NavigationItemConfig {
 }
 
 /**
- * Get category for a navigation item.
+ * Get category for a navigation item based on workflow type.
  *
  * @param {string} href - Navigation item href
+ * @param {WorkflowType} workflow - Current workflow type
  * @returns {string} Category name for the item
  */
-function getCategoryForItem(href: string): string {
-  const categoryMap: Record<string, string> = {
-    '/webapp': 'primary',
-    '/webapp/recipes': 'primary',
-    '/webapp/performance': 'primary',
-    '/webapp/prep-lists': 'primary',
-    '/webapp/temperature': 'primary',
-    '/webapp/roster': 'operations',
-    '/webapp/staff': 'operations',
-    '/webapp/time-attendance': 'operations',
-    '/webapp/cleaning': 'kitchen',
-    '/webapp/compliance': 'kitchen',
-    '/webapp/suppliers': 'inventory',
-    '/webapp/par-levels': 'inventory',
-    '/webapp/order-lists': 'inventory',
-    '/webapp/sections': 'more',
-    '/webapp/employees': 'more',
-    '/webapp/ai-specials': 'more',
-    '/webapp/guide': 'more',
+function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
+  const categoryMap: Record<WorkflowType, Record<string, string>> = {
+    'daily-operations': {
+      '/webapp': 'service',
+      '/webapp/recipes': 'service',
+      '/webapp/performance': 'service',
+      '/webapp/cleaning': 'end-of-day',
+      '/webapp/temperature': 'morning-prep',
+      '/webapp/compliance': 'end-of-day',
+      '/webapp/employees': 'tools',
+      '/webapp/roster': 'operations',
+      '/webapp/suppliers': 'planning',
+      '/webapp/par-levels': 'planning',
+      '/webapp/order-lists': 'end-of-day',
+      '/webapp/sections': 'service',
+      '/webapp/menu-builder': 'service',
+      '/webapp/prep-lists': 'morning-prep',
+      '/webapp/ai-specials': 'tools',
+      '/webapp/guide': 'tools',
+      '/webapp/setup': 'tools',
+      '/webapp/settings': 'tools',
+    },
+    'setup-planning-operations': {
+      '/webapp': 'analysis',
+      '/webapp/recipes': 'planning',
+      '/webapp/performance': 'analysis',
+      '/webapp/cleaning': 'operations',
+      '/webapp/temperature': 'operations',
+      '/webapp/compliance': 'operations',
+      '/webapp/employees': 'tools',
+      '/webapp/roster': 'operations',
+      '/webapp/suppliers': 'planning',
+      '/webapp/par-levels': 'planning',
+      '/webapp/order-lists': 'operations',
+      '/webapp/sections': 'planning',
+      '/webapp/menu-builder': 'planning',
+      '/webapp/prep-lists': 'operations',
+      '/webapp/ai-specials': 'tools',
+      '/webapp/guide': 'tools',
+      '/webapp/setup': 'setup',
+      '/webapp/settings': 'setup',
+    },
+    'menu-first': {
+      '/webapp': 'overview',
+      '/webapp/recipes': 'menu',
+      '/webapp/performance': 'menu',
+      '/webapp/cleaning': 'operations',
+      '/webapp/temperature': 'operations',
+      '/webapp/compliance': 'operations',
+      '/webapp/employees': 'tools',
+      '/webapp/roster': 'operations',
+      '/webapp/suppliers': 'inventory',
+      '/webapp/par-levels': 'inventory',
+      '/webapp/order-lists': 'inventory',
+      '/webapp/sections': 'menu',
+      '/webapp/menu-builder': 'menu',
+      '/webapp/prep-lists': 'operations',
+      '/webapp/ai-specials': 'tools',
+      '/webapp/guide': 'tools',
+      '/webapp/setup': 'tools',
+      '/webapp/settings': 'tools',
+    },
   };
 
-  return categoryMap[href] || 'other';
+  return categoryMap[workflow][href] || 'other';
 }
 
 /**
- * Hook to get navigation items organized by category.
+ * Hook to get navigation items organized by workflow.
  * Applies adaptive optimization when enabled.
  *
+ * @param {WorkflowType} workflow - Current workflow type
  * @returns {NavigationItemConfig[]} Array of navigation items with categories
  */
-export function useNavigationItems(): NavigationItemConfig[] {
+export function useNavigationItems(
+  workflow: WorkflowType = 'daily-operations',
+): NavigationItemConfig[] {
   const { t } = useTranslation();
   const { settings } = useAdaptiveNavSettings();
   const [optimizedItems, setOptimizedItems] = useState<NavigationItemConfig[] | null>(null);
 
-  const baseItems: Omit<NavigationItemConfig, 'category'>[] = useMemo(
-    () => [
+  // Check feature flags
+  const kitchenStaffEnabled = useFeatureFlag('kitchen-staff');
+  const rosterEnabled = useFeatureFlag('roster');
+
+  const baseItems: Omit<NavigationItemConfig, 'category'>[] = useMemo(() => {
+    const allItems = [
       {
         href: '/webapp',
         label: t('nav.dashboard', 'Dashboard') as string,
@@ -91,46 +148,34 @@ export function useNavigationItems(): NavigationItemConfig[] {
         color: 'text-[#29E7CD]',
       },
       {
-        href: '/webapp/temperature',
-        label: t('nav.temperature', 'Temperature') as string,
-        icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden={true} />,
-        color: 'text-[#3B82F6]',
-      },
-      {
-        href: '/webapp/prep-lists',
-        label: t('nav.prepLists', 'Prep Lists') as string,
-        icon: <Icon icon={ListChecks} size="sm" className="text-current" aria-hidden={true} />,
-        color: 'text-[#3B82F6]',
-      },
-      {
-        href: '/webapp/roster',
-        label: t('nav.roster', 'Roster') as string,
-        icon: <Icon icon={ClipboardCheck} size="sm" className="text-current" aria-hidden={true} />,
-        color: 'text-[#29E7CD]',
-      },
-      {
-        href: '/webapp/staff',
-        label: t('nav.staff', 'Staff') as string,
-        icon: <Icon icon={Users} size="sm" className="text-current" aria-hidden={true} />,
-        color: 'text-[#3B82F6]',
-      },
-      {
-        href: '/webapp/time-attendance',
-        label: t('nav.timeAttendance', 'Time & Attendance') as string,
-        icon: <Icon icon={Clock} size="sm" className="text-current" aria-hidden={true} />,
-        color: 'text-[#D925C7]',
-      },
-      {
         href: '/webapp/cleaning',
         label: t('nav.cleaning', 'Cleaning') as string,
         icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[#29E7CD]',
       },
       {
+        href: '/webapp/temperature',
+        label: t('nav.temperature', 'Temperature') as string,
+        icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
+      },
+      {
         href: '/webapp/compliance',
         label: t('nav.compliance', 'Compliance') as string,
         icon: <Icon icon={ClipboardCheck} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[#D925C7]',
+      },
+      {
+        href: '/webapp/employees',
+        label: t('nav.employees', 'Kitchen Staff') as string,
+        icon: <Icon icon={Users} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/roster',
+        label: t('nav.roster', 'Roster') as string,
+        icon: <Icon icon={Calendar} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
       },
       {
         href: '/webapp/suppliers',
@@ -157,10 +202,16 @@ export function useNavigationItems(): NavigationItemConfig[] {
         color: 'text-[#29E7CD]',
       },
       {
-        href: '/webapp/employees',
-        label: t('nav.employees', 'Kitchen Staff') as string,
-        icon: <Icon icon={Users} size="sm" className="text-current" aria-hidden={true} />,
-        color: 'text-[#29E7CD]',
+        href: '/webapp/menu-builder',
+        label: t('nav.menuBuilder', 'Menu Builder') as string,
+        icon: <Icon icon={FileText} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#D925C7]',
+      },
+      {
+        href: '/webapp/prep-lists',
+        label: t('nav.prepLists', 'Prep Lists') as string,
+        icon: <Icon icon={ListChecks} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
       },
       {
         href: '/webapp/ai-specials',
@@ -174,18 +225,40 @@ export function useNavigationItems(): NavigationItemConfig[] {
         icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[#D925C7]',
       },
-    ],
-    [t],
-  );
+      {
+        href: '/webapp/setup',
+        label: t('nav.setup', 'Setup') as string,
+        icon: <Icon icon={Settings} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#29E7CD]',
+      },
+      {
+        href: '/webapp/settings',
+        label: t('nav.settings', 'Settings') as string,
+        icon: <Icon icon={Settings2} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[#3B82F6]',
+      },
+    ];
 
-  // Assign categories to items
+    // Filter items based on feature flags
+    return allItems.filter(item => {
+      if (item.href === '/webapp/employees' && !kitchenStaffEnabled) {
+        return false;
+      }
+      if (item.href === '/webapp/roster' && !rosterEnabled) {
+        return false;
+      }
+      return true;
+    });
+  }, [t, kitchenStaffEnabled, rosterEnabled]);
+
+  // Assign categories based on workflow
   const itemsWithCategories = useMemo(
     () =>
       baseItems.map(item => ({
         ...item,
-        category: getCategoryForItem(item.href),
+        category: getCategoryForWorkflow(item.href, workflow),
       })),
-    [baseItems],
+    [workflow, baseItems],
   );
 
   // Apply optimization if enabled (with debouncing)

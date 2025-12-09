@@ -49,7 +49,6 @@ interface IngredientsClientProps {
   hideHeader?: boolean;
 }
 export default function IngredientsClient({ hideHeader = false }: IngredientsClientProps = {}) {
-  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
   const {
@@ -197,10 +196,8 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   useEffect(() => setIsHydrated(true), []);
   useEffect(() => {
     if (page > totalPages && totalPages > 0) setPage(1);
-  }, [page, totalPages]);
-  useEffect(() => {
     if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
-  }, [selectedIngredients.size, isSelectionMode, exitSelectionMode]);
+  }, [page, totalPages, isSelectionMode, selectedIngredients.size, exitSelectionMode]);
   if (loading || isLoading) return <PageSkeleton />;
   return (
     <>
@@ -286,9 +283,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
         suppliers={suppliers}
         availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
-          if (editingIngredient?.id) {
-            await handleEditSave(editingIngredient.id, ingredientData);
-          }
+          if (editingIngredient?.id) await handleEditSave(editingIngredient.id, ingredientData);
         }}
         onClose={() => setEditingIngredient(null)}
         loading={loading}

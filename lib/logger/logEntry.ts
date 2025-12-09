@@ -11,6 +11,8 @@ export interface ErrorContext {
   hook?: string;
   operation?: string;
   table?: string;
+  severity?: 'safety' | 'critical' | 'high' | 'medium' | 'low';
+  category?: 'security' | 'database' | 'api' | 'client' | 'system' | 'other';
   [key: string]: unknown;
 }
 

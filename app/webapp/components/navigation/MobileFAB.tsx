@@ -1,14 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Calculator, Package, Plus, Search, UtensilsCrossed } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { memo, useState, useEffect, useRef } from 'react';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
-
-interface MobileFABProps {
-  onSearchClick?: () => void;
-}
+import { Package, Plus, UtensilsCrossed } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { memo, useEffect, useRef, useState } from 'react';
 
 const cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(' ');
@@ -16,21 +12,12 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
 
 /**
  * Floating action button component for mobile devices.
- * Provides quick access to common actions (Create Recipe, Create Ingredient, Quick Search).
+ * Provides quick access to create actions (Create Recipe, Create Ingredient).
  * Auto-hides when bottom navigation is hidden (scroll down).
- * Optimized for landscape mode with smaller size.
  *
  * @component
- * @param {Object} props - Component props
- * @param {Function} [props.onSearchClick] - Optional callback when quick search is triggered
- * @returns {JSX.Element} Floating action button
- *
- * @example
- * ```tsx
- * <MobileFAB onSearchClick={() => setIsSearchOpen(true)} />
- * ```
  */
-export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABProps) {
+export const MobileFAB = memo(function MobileFAB() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -96,13 +83,6 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
     router.push('/webapp/recipes#ingredients');
   };
 
-  const handleQuickSearch = () => {
-    setIsOpen(false);
-    if (onSearchClick) {
-      onSearchClick();
-    }
-  };
-
   if (!isVisible) return null;
 
   return (
@@ -111,14 +91,15 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
       {isOpen && (
         <div
           ref={menuRef}
-          className="mb-3 flex flex-col gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 shadow-2xl landscape:gap-1 landscape:p-1.5"
+          className="mb-3 flex flex-col gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/95 p-2 shadow-2xl backdrop-blur-sm landscape:gap-1 landscape:p-1.5"
+          style={{ animation: 'scaleIn 0.2s var(--easing-spring) forwards' }}
         >
           <button
             onClick={handleCreateRecipe}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:px-3 landscape:py-2"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:outline-none active:scale-95 landscape:px-3 landscape:py-2"
             aria-label="Create Recipe"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 landscape:h-8 landscape:w-8">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#29E7CD]/30 bg-[#29E7CD]/10 landscape:h-8 landscape:w-8">
               <Icon
                 icon={UtensilsCrossed}
                 size="sm"
@@ -127,40 +108,24 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-white landscape:text-xs">
-                Create Recipe
-              </span>
-              <span className="text-xs text-gray-400 landscape:text-[10px]">Add new dish</span>
+              <span className="text-sm font-medium text-white landscape:text-xs">New Recipe</span>
+              <span className="text-xs text-gray-400 landscape:text-[10px]">Create a dish</span>
             </div>
           </button>
 
           <button
             onClick={handleCreateIngredient}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:px-3 landscape:py-2"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:outline-none active:scale-95 landscape:px-3 landscape:py-2"
             aria-label="Create Ingredient"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#3B82F6]/20 landscape:h-8 landscape:w-8">
-              <Icon icon={Package} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#3B82F6]/30 bg-[#3B82F6]/10 landscape:h-8 landscape:w-8">
+              <Icon icon={Package} size="sm" className="text-[#3B82F6]" aria-hidden={true} />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium text-white landscape:text-xs">
-                Create Ingredient
+                New Ingredient
               </span>
-              <span className="text-xs text-gray-400 landscape:text-[10px]">Add new item</span>
-            </div>
-          </button>
-
-          <button
-            onClick={handleQuickSearch}
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:px-3 landscape:py-2"
-            aria-label="Quick Search"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 landscape:h-8 landscape:w-8">
-              <Icon icon={Search} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-white landscape:text-xs">Quick Search</span>
-              <span className="text-xs text-gray-400 landscape:text-[10px]">Find anything</span>
+              <span className="text-xs text-gray-400 landscape:text-[10px]">Add an item</span>
             </div>
           </button>
         </div>
@@ -171,15 +136,17 @@ export const MobileFAB = memo(function MobileFAB({ onSearchClick }: MobileFABPro
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7] shadow-lg transition-transform duration-200',
-          'hover:scale-110 hover:shadow-xl',
+          'flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200',
+          'bg-gradient-to-r from-[#29E7CD] to-[#D925C7]',
+          'hover:shadow-xl hover:shadow-[#29E7CD]/25',
           'active:scale-95',
-          'focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none',
+          'focus:outline-none',
           'landscape:h-10 landscape:w-10',
         )}
         style={{
           willChange: 'transform',
           transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
+          transitionTimingFunction: 'var(--easing-spring)',
         }}
         aria-label={isOpen ? 'Close quick actions' : 'Open quick actions'}
         aria-expanded={isOpen}

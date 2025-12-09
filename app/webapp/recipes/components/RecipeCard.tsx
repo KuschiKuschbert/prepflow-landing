@@ -1,24 +1,13 @@
 'use client';
 
-import React from 'react';
-import { Recipe, RecipePriceData } from '../types';
-import { Edit, Trash2, Check } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { formatRecipeDate } from '../utils/formatDate';
-import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
-import { DietaryBadge } from '@/components/ui/DietaryBadge';
-
-interface RecipeCardProps {
-  recipe: Recipe;
-  recipePrices: Record<string, RecipePriceData>;
-  selectedRecipes: Set<string>;
-  onSelectRecipe: (recipeId: string) => void;
-  onPreviewRecipe: (recipe: Recipe) => void;
-  onEditRecipe: (recipe: Recipe) => void;
-  onDeleteRecipe: (recipe: Recipe) => void;
-  capitalizeRecipeName: (name: string) => string;
-}
+import { QRCodeModal } from '@/lib/qr-codes';
+import { ChefHat } from 'lucide-react';
+import React, { useState } from 'react';
+import { RecipeCardHeader } from './RecipeCard/components/RecipeCardHeader';
+import { RecipeCardPricing } from './RecipeCard/components/RecipeCardPricing';
+import { RecipeCardAllergens } from './RecipeCard/components/RecipeCardAllergens';
+import { RecipeCardActions } from './RecipeCard/components/RecipeCardActions';
+import type { RecipeCardProps } from './RecipeCard/types';
 
 const RecipeCard = React.memo(function RecipeCard({
   recipe,
@@ -30,151 +19,55 @@ const RecipeCard = React.memo(function RecipeCard({
   onDeleteRecipe,
   capitalizeRecipeName,
 }: RecipeCardProps) {
+  const [showQRModal, setShowQRModal] = useState(false);
+
   return (
-    <div
-      className="cursor-pointer border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 p-4 transition-colors hover:bg-[#3B82F6]/5"
-      onClick={e => {
-        // Don't trigger if clicking on buttons or checkbox
-        if ((e.target as HTMLElement).closest('button')) return;
-        onPreviewRecipe(recipe);
-      }}
-      title="Click to preview recipe details"
-    >
-      <div className="mb-2 flex items-start justify-between">
-        <div className="flex items-center">
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              onSelectRecipe(recipe.id);
-            }}
-            className="mr-3 flex items-center justify-center transition-colors hover:text-[#29E7CD]"
-            aria-label={`${selectedRecipes.has(recipe.id) ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-            title={selectedRecipes.has(recipe.id) ? 'Deselect recipe' : 'Select recipe'}
-          >
-            {selectedRecipes.has(recipe.id) ? (
-              <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-            ) : (
-              <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
-            )}
-          </button>
-          <h3 className="text-sm font-medium text-white">
-            {capitalizeRecipeName(recipe.recipe_name)}
-          </h3>
-        </div>
-        <span
-          className="text-xs text-gray-500"
-          title={`Created on ${formatRecipeDate(recipe.created_at)}`}
-        >
-          {formatRecipeDate(recipe.created_at)}
-        </span>
+    <>
+      <div
+        className="cursor-pointer border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 p-4 transition-colors hover:bg-[#3B82F6]/5"
+        onClick={e => {
+          // Don't trigger if clicking on buttons or checkbox
+          if ((e.target as HTMLElement).closest('button')) return;
+          onPreviewRecipe(recipe);
+        }}
+        title="Click to preview recipe details"
+      >
+        <RecipeCardHeader
+          recipeName={recipe.recipe_name}
+          createdAt={recipe.created_at}
+          isSelected={selectedRecipes.has(recipe.id)}
+          onSelect={() => onSelectRecipe(recipe.id)}
+          capitalizeRecipeName={capitalizeRecipeName}
+        />
+
+        <RecipeCardPricing recipeId={recipe.id} recipePrices={recipePrices} yield={recipe.yield} />
+
+        <RecipeCardAllergens recipe={recipe} />
+
+        <RecipeCardActions
+          recipeName={recipe.recipe_name}
+          onPreview={() => onPreviewRecipe(recipe)}
+          onShowQR={() => setShowQRModal(true)}
+          onEdit={() => onEditRecipe(recipe)}
+          onDelete={() => onDeleteRecipe(recipe)}
+          capitalizeRecipeName={capitalizeRecipeName}
+        />
       </div>
 
-      <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
-        <div title="Recommended selling price based on ingredient costs and target profit margin">
-          <span className="font-medium">Recommended Price:</span>
-          {recipePrices[recipe.id] ? (
-            <span className="ml-1 font-semibold text-white">
-              ${recipePrices[recipe.id].recommendedPrice.toFixed(2)}
-              {recipe.yield > 1 && (
-                <>
-                  <span className="ml-1">/portion</span>
-                  <span className="ml-1 text-xs font-normal text-gray-400">
-                    (${(recipePrices[recipe.id].recommendedPrice * recipe.yield).toFixed(2)} total)
-                  </span>
-                </>
-              )}
-            </span>
-          ) : (
-            <LoadingSkeleton variant="text" width="w-24" height="h-4" className="ml-1" />
-          )}
-        </div>
-        {recipePrices[recipe.id] && (
-          <>
-            <div
-              title={`Profit margin: ${recipePrices[recipe.id].gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - Percentage of profit relative to selling price`}
-            >
-              <span className="font-medium">Profit Margin:</span>
-              <span className="ml-1 text-white">
-                {recipePrices[recipe.id].gross_profit_margin.toFixed(1)}%
-              </span>
-              <span className="ml-1 text-gray-400">
-                (${recipePrices[recipe.id].gross_profit.toFixed(2)} profit/portion)
-              </span>
-            </div>
-            <div title="Contributing margin: Profit after variable costs - helps cover fixed costs">
-              <span className="font-medium">Contributing Margin:</span>
-              <span className="ml-1 font-semibold text-[#D925C7]">
-                ${recipePrices[recipe.id].contributingMargin.toFixed(2)}
-              </span>
-              <span className="ml-1 text-gray-400">
-                ({recipePrices[recipe.id].contributingMarginPercent.toFixed(1)}% of revenue/portion)
-              </span>
-            </div>
-          </>
-        )}
-        {!recipePrices[recipe.id] && (
-          <div className="text-xs text-gray-600 italic" title="Click Preview to see cost breakdown">
-            Price calculation pending...
-          </div>
-        )}
-      </div>
-
-      {/* Allergens and Dietary Info */}
-      {((recipe.allergens?.length ?? 0) > 0 || recipe.is_vegetarian || recipe.is_vegan) && (
-        <div className="mb-3 ml-7 space-y-2">
-          {recipe.allergens && recipe.allergens.length > 0 && (
-            <div>
-              <span className="text-xs font-medium text-gray-400">Allergens:</span>
-              <div className="mt-1">
-                <AllergenDisplay allergens={recipe.allergens} size="sm" showEmpty={false} />
-              </div>
-            </div>
-          )}
-          <DietaryBadge
-            isVegetarian={recipe.is_vegetarian}
-            isVegan={recipe.is_vegan}
-            confidence={recipe.dietary_confidence}
-            size="sm"
-          />
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="ml-7 flex gap-2">
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            onPreviewRecipe(recipe);
-          }}
-          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-          title="View full recipe details, ingredients, and instructions"
-        >
-          Preview
-        </button>
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            onEditRecipe(recipe);
-          }}
-          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
-          aria-label={`Edit recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-          title="Edit recipe in builder"
-        >
-          <Icon icon={Edit} size="xs" />
-        </button>
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            onDeleteRecipe(recipe);
-          }}
-          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-red-400"
-          aria-label={`Delete recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-          title="Delete this recipe"
-        >
-          <Icon icon={Trash2} size="xs" />
-        </button>
-      </div>
-    </div>
+      {/* QR Code Modal - Links to actual recipe */}
+      <QRCodeModal
+        entity={{ id: recipe.id, name: capitalizeRecipeName(recipe.recipe_name) }}
+        isOpen={showQRModal}
+        onClose={() => setShowQRModal(false)}
+        entityTypeLabel="Recipe"
+        urlPattern="/webapp/recipes/{id}"
+        icon={ChefHat}
+        instructions="Scan to view the full recipe with ingredients and instructions"
+        hint="Perfect for kitchen stations and recipe cards!"
+        printInstructions="Scan this QR code to view the recipe"
+        permanentLinkNote="This QR code links directly to the recipe — great for printing on recipe cards!"
+      />
+    </>
   );
 });
 

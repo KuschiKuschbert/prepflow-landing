@@ -1,8 +1,9 @@
 /**
- * Generate CSV export for menu display
+ * Generate CSV export for menu display using PapaParse for consistent formatting
  */
 
 import { NextResponse } from 'next/server';
+import Papa from 'papaparse';
 
 interface MenuDisplayData {
   name: string;
@@ -21,23 +22,27 @@ interface MenuDisplayData {
 export function generateCSV(menuName: string, menuData: MenuDisplayData[]): NextResponse {
   const headers = ['Category', 'Item Name', 'Description', 'Price'];
 
-  const rows = menuData.map(item => [
-    item.category || 'Uncategorized',
-    item.name,
-    item.description || '',
-    `$${item.price.toFixed(2)}`,
-  ]);
+  const csvData = menuData.map(item => ({
+    Category: item.category || 'Uncategorized',
+    'Item Name': item.name,
+    Description: item.description || '',
+    Price: `$${item.price.toFixed(2)}`,
+  }));
 
-  const csvContent = [
-    `Menu Display - ${menuName}`,
-    '',
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
-  ].join('\n');
+  const csvContent = Papa.unparse(csvData, {
+    columns: headers,
+    header: true,
+    delimiter: ',',
+    newline: '\n',
+    quoteChar: '"',
+    escapeChar: '"',
+  });
 
-  return new NextResponse(csvContent, {
+  const fullContent = [`Menu Display - ${menuName}`, '', csvContent].join('\n');
+
+  return new NextResponse(fullContent, {
     headers: {
-      'Content-Type': 'text/csv',
+      'Content-Type': 'text/csv;charset=utf-8',
       'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_menu_display.csv"`,
     },
   });

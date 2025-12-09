@@ -38,14 +38,27 @@ async function loadTranslations(language: string) {
 }
 
 // Get browser language - Only English and German
+// Wrapped in try-catch to handle HMR edge cases
 function getBrowserLanguage(): string {
   if (typeof window === 'undefined') return 'en-AU';
 
-  const browserLang = navigator.language || 'en-AU';
-  if (availableLanguages[browserLang as keyof typeof availableLanguages]) return browserLang;
-  const langCode = browserLang.split('-')[0];
-  if (langCode === 'de') return 'de-DE';
-  return 'en-AU';
+  try {
+    // Safely access navigator (may not be available during HMR)
+    const browserLang = navigator?.language || 'en-AU';
+    if (availableLanguages[browserLang as keyof typeof availableLanguages]) return browserLang;
+    const langCode = browserLang.split('-')[0];
+    if (langCode === 'de') return 'de-DE';
+    return 'en-AU';
+  } catch (error) {
+    // Fallback during HMR or if navigator is unavailable
+    // Silently fail during HMR to prevent console spam
+    try {
+      logger.warn('Failed to get browser language, using default:', error);
+    } catch {
+      // Ignore logger errors during HMR (logger may not be available)
+    }
+    return 'en-AU';
+  }
 }
 
 // Get nested translation value
@@ -62,16 +75,41 @@ export function useTranslation() {
   // Initialize language on mount
   useEffect(() => {
     const initializeLanguage = async () => {
-      setIsClient(true);
-      const savedLanguage = localStorage.getItem('prepflow_language');
-      const browserLanguage = getBrowserLanguage();
-      const language = savedLanguage || browserLanguage;
+      try {
+        setIsClient(true);
 
-      setCurrentLanguage(language);
+        // Safely access localStorage (may not be available during HMR)
+        let savedLanguage: string | null = null;
+        try {
+          savedLanguage =
+            typeof window !== 'undefined' ? localStorage.getItem('prepflow_language') : null;
+        } catch (error) {
+          // Silently fail during HMR
+          try {
+            logger.warn('Failed to access localStorage:', error);
+          } catch {
+            // Ignore logger errors during HMR
+          }
+        }
 
-      // Load translations for the selected language
-      await loadTranslations(language);
-      setIsLoading(false);
+        const browserLanguage = getBrowserLanguage();
+        const language = savedLanguage || browserLanguage;
+
+        setCurrentLanguage(language);
+
+        // Load translations for the selected language
+        await loadTranslations(language);
+        setIsLoading(false);
+      } catch (error) {
+        // Handle HMR errors gracefully
+        try {
+          logger.error('Failed to initialize language:', error);
+        } catch {
+          // Ignore logger errors during HMR
+        }
+        setCurrentLanguage('en-AU');
+        setIsLoading(false);
+      }
     };
 
     initializeLanguage();
@@ -88,10 +126,31 @@ export function useTranslation() {
   // Change language
   const changeLanguage = async (language: string) => {
     if (availableLanguages[language as keyof typeof availableLanguages]) {
-      setCurrentLanguage(language);
-      localStorage.setItem('prepflow_language', language);
-      await loadTranslations(language);
-      if (typeof window !== 'undefined') window.location.reload();
+      try {
+        setCurrentLanguage(language);
+        // Safely access localStorage (may not be available during HMR)
+        try {
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('prepflow_language', language);
+          }
+        } catch (error) {
+          // Silently fail during HMR
+          try {
+            logger.warn('Failed to save language to localStorage:', error);
+          } catch {
+            // Ignore logger errors during HMR
+          }
+        }
+        await loadTranslations(language);
+        if (typeof window !== 'undefined') window.location.reload();
+      } catch (error) {
+        // Silently fail during HMR
+        try {
+          logger.error('Failed to change language:', error);
+        } catch {
+          // Ignore logger errors during HMR
+        }
+      }
     }
   };
 

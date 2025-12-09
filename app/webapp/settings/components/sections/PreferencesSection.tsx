@@ -31,7 +31,7 @@ const PersonalitySettingsPanel = dynamic(
 
 /**
  * Preferences section component.
- * Combines notification settings, connected accounts, and personality settings.
+ * Combines notifications, connected accounts, and personality settings.
  *
  * @component
  * @returns {JSX.Element} Preferences section

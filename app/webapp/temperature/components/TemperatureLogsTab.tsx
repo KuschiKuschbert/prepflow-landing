@@ -13,52 +13,16 @@ import { TemperatureLogsEmptyState } from './TemperatureLogsEmptyState';
 import { TemperatureLogsTimePeriodHeader } from './TemperatureLogsTimePeriodHeader';
 import { useSampleDataGeneration } from '../hooks/useSampleDataGeneration';
 import { TemperatureLogCard } from './TemperatureLogCard';
-import {
-  formatDateString as formatDateStringUtil,
-  formatTime as formatTimeUtil,
-  getFoodSafetyStatus as getFoodSafetyStatusUtil,
-  getTemperatureStatus as getTemperatureStatusUtil,
-  groupLogsByTimePeriod,
-} from './utils';
-import {
-  getTypeIconComponent,
-  getTypeLabel,
-  temperatureTypesForSelect,
-} from '../utils/temperatureUtils';
-
-interface TemperatureLogsTabProps {
-  logs: TemperatureLog[];
-  equipment: TemperatureEquipment[];
-  selectedDate: string;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
-  selectedType: string;
-  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
-  showAddLog: boolean;
-  setShowAddLog: (show: boolean) => void;
-  newLog: {
-    log_date: string;
-    log_time: string;
-    temperature_type: string;
-    temperature_celsius: string;
-    location: string;
-    notes: string;
-    logged_by: string;
-  };
-  setNewLog: React.Dispatch<
-    React.SetStateAction<{
-      log_date: string;
-      log_time: string;
-      temperature_type: string;
-      temperature_celsius: string;
-      location: string;
-      notes: string;
-      logged_by: string;
-    }>
-  >;
-  onAddLog: (e: React.FormEvent) => Promise<void>;
-  onRefreshLogs: () => Promise<void>;
-  isLoading?: boolean;
-}
+import { ExportButton } from '@/components/ui/ExportButton';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { useNotification } from '@/contexts/NotificationContext';
+import { groupLogsByTimePeriod } from './utils';
+import { getTypeLabel, temperatureTypesForSelect } from '../utils/temperatureUtils';
+import { useTemperatureExport } from './TemperatureLogsTab/hooks/useTemperatureExport';
+import { useEquipmentDrawer } from './TemperatureLogsTab/hooks/useEquipmentDrawer';
+import { createFormatHelpers } from './TemperatureLogsTab/utils/formatHelpers';
+import { convertEquipmentForFilters } from './TemperatureLogsTab/utils/equipmentFilters';
+import type { TemperatureLogsTabProps } from './TemperatureLogsTab/types';
 
 export default function TemperatureLogsTab({
   logs,
@@ -74,22 +38,33 @@ export default function TemperatureLogsTab({
   onAddLog,
   onRefreshLogs,
   isLoading = false,
+  allLogs = [],
 }: TemperatureLogsTabProps) {
   const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
-  const [drawerEquipment, setDrawerEquipment] = useState<TemperatureEquipment | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { showSuccess, showError } = useNotification();
   const [isMounted, setIsMounted] = useState(false);
 
   // Sample data generation for empty state
   const { isGenerating, handleGenerateSampleData } = useSampleDataGeneration({
     onRefreshLogs: async () => {
-      // Refresh logs using the parent's refresh handler
       if (onRefreshLogs) {
         await onRefreshLogs();
       }
     },
   });
+
+  // Export/print functionality
+  const { exportLoading, handlePrint, handleExport } = useTemperatureExport({
+    logs,
+    allLogs,
+    equipment,
+    selectedDate,
+  });
+
+  // Equipment drawer management
+  const { drawerEquipment, isDrawerOpen, handleLogClick, handleCloseDrawer } =
+    useEquipmentDrawer(equipment);
 
   // Ensure consistent initial render between server and client
   useEffect(() => {
@@ -116,47 +91,11 @@ export default function TemperatureLogsTab({
     }
   }, [isMounted, isLoading, logs]);
 
-  const handleLogClick = (log: TemperatureLog) => {
-    if (log.location) {
-      // Find equipment by matching location with equipment name OR equipment location
-      const matchingEquipment = equipment.find(
-        (eq: TemperatureEquipment) => eq.name === log.location || eq.location === log.location,
-      );
-      if (matchingEquipment) {
-        setDrawerEquipment(matchingEquipment);
-        setIsDrawerOpen(true);
-      }
-    }
-  };
-
-  const handleCloseDrawer = () => {
-    setIsDrawerOpen(false);
-    setDrawerEquipment(null);
-  };
-
-  const formatTime = (timeString: string) => formatTimeUtil(timeString);
-  const formatDateString = (dateString: string) => formatDateStringUtil(dateString, formatDate);
-  const getTemperatureStatus = (temp: number, location: string) =>
-    getTemperatureStatusUtil(temp, location, equipment);
-  const getFoodSafetyStatus = (temp: number, logTime: string, logDate: string, type: string) =>
-    getFoodSafetyStatusUtil(temp, logTime, logDate, type);
-  const getTypeIcon = (type: string) => getTypeIconComponent(type);
+  // Formatting helpers
+  const formatHelpers = createFormatHelpers(formatDate, equipment);
 
   // Convert equipment IDs from string to number for TemperatureFilters component
-  const equipmentForFilters: Array<{
-    id?: number;
-    name: string;
-    equipment_type: string;
-    is_active: boolean;
-  }> = equipment.map((eq: TemperatureEquipment) => {
-    const parsedId = eq.id && !isNaN(parseInt(eq.id, 10)) ? parseInt(eq.id, 10) : undefined;
-    return {
-      id: parsedId,
-      name: eq.name,
-      equipment_type: eq.equipment_type,
-      is_active: eq.is_active,
-    };
-  });
+  const equipmentForFilters = convertEquipmentForFilters(equipment);
 
   // Wrap t function to ensure it always returns a string
   const tString = (key: string, fallback: string): string => {
@@ -166,17 +105,33 @@ export default function TemperatureLogsTab({
 
   return (
     <div className="space-y-6">
-      {/* Filters and Add Button */}
-      <TemperatureFilters
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        equipment={equipmentForFilters}
-        temperatureTypes={temperatureTypesForSelect}
-        onAddClick={() => setShowAddLog(true)}
-        t={tString}
-      />
+      {/* Filters, Export, and Add Button */}
+      <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
+        <TemperatureFilters
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          equipment={equipmentForFilters}
+          temperatureTypes={temperatureTypesForSelect}
+          onAddClick={() => setShowAddLog(true)}
+          t={tString}
+        />
+        <div className="flex gap-2 print:hidden">
+          <PrintButton
+            onClick={handlePrint}
+            label="Print"
+            disabled={logs.length === 0 && allLogs.length === 0}
+          />
+          <ExportButton
+            onExport={handleExport}
+            loading={exportLoading}
+            availableFormats={['csv', 'pdf', 'html']}
+            label="Export"
+            disabled={logs.length === 0 && allLogs.length === 0}
+          />
+        </div>
+      </div>
 
       {/* Add Log Form */}
       <AddTemperatureLogForm
@@ -219,10 +174,10 @@ export default function TemperatureLogsTab({
                     log={log}
                     equipment={equipment}
                     temperatureTypes={temperatureTypesForSelect}
-                    formatDateString={formatDateString}
-                    getTemperatureStatus={getTemperatureStatus}
-                    getFoodSafetyStatus={getFoodSafetyStatus}
-                    getTypeIcon={getTypeIcon}
+                    formatDateString={formatHelpers.formatDateString}
+                    getTemperatureStatus={formatHelpers.getTemperatureStatus}
+                    getFoodSafetyStatus={formatHelpers.getFoodSafetyStatus}
+                    getTypeIcon={formatHelpers.getTypeIcon}
                     getTypeLabel={getTypeLabel}
                     onLogClick={handleLogClick}
                   />

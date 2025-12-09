@@ -1,6 +1,11 @@
 // PrepFlow Personality System - Achievement Tracker
 
 import { type Achievement, type AchievementId, ACHIEVEMENTS } from './achievements';
+import {
+  checkUsageMilestone,
+  checkAchievementMilestone,
+  dispatchMilestoneReached,
+} from '@/lib/gamification/milestones';
 
 const STORAGE_KEY = 'prepflow-achievements';
 const STORAGE_STATS_KEY = 'prepflow-achievement-stats';
@@ -132,6 +137,12 @@ export function trackSave(): AchievementId | null {
     return 'WEEKLY_STREAK';
   }
 
+  // Check for usage milestones (100 saves)
+  const saveMilestone = checkUsageMilestone('usage:100-saves', stats.saveCount);
+  if (saveMilestone) {
+    dispatchMilestoneReached(saveMilestone);
+  }
+
   return null;
 }
 
@@ -151,6 +162,18 @@ export function trackRecipeCreated(): AchievementId | null {
     return 'FIRST_RECIPE';
   }
 
+  // Check for usage milestones (10 recipes)
+  const recipeMilestone = checkUsageMilestone('usage:10-recipes', stats.recipeCount);
+  if (recipeMilestone) {
+    dispatchMilestoneReached(recipeMilestone);
+  }
+
+  // Check for achievement milestones (first achievement)
+  const achievementMilestone = checkAchievementMilestone(achievements.length);
+  if (achievementMilestone) {
+    dispatchMilestoneReached(achievementMilestone);
+  }
+
   return null;
 }
 
@@ -168,6 +191,12 @@ export function trackIngredientAdded(): AchievementId | null {
   if (stats.ingredientCount >= 10 && !unlockedIds.has('TEN_INGREDIENTS')) {
     unlockAchievement('TEN_INGREDIENTS');
     return 'TEN_INGREDIENTS';
+  }
+
+  // Check for usage milestones (50 ingredients)
+  const ingredientMilestone = checkUsageMilestone('usage:50-ingredients', stats.ingredientCount);
+  if (ingredientMilestone) {
+    dispatchMilestoneReached(ingredientMilestone);
   }
 
   return null;
@@ -313,6 +342,12 @@ function unlockAchievement(id: AchievementId): void {
         detail: { achievement },
       }),
     );
+  }
+
+  // Check for achievement milestones (first achievement, halfway, complete)
+  const achievementMilestone = checkAchievementMilestone(achievements.length);
+  if (achievementMilestone) {
+    dispatchMilestoneReached(achievementMilestone);
   }
 }
 

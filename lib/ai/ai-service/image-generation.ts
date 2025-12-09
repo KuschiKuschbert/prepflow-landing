@@ -19,20 +19,7 @@ const RETRY_DELAY = 1000;
 /**
  * Predefined plating methods for food image generation
  */
-export type PlatingMethod =
-  | 'classic'
-  | 'modern'
-  | 'rustic'
-  | 'minimalist'
-  | 'landscape'
-  | 'futuristic'
-  | 'hide_and_seek'
-  | 'super_bowl'
-  | 'bathing'
-  | 'deconstructed'
-  | 'stacking'
-  | 'brush_stroke'
-  | 'free_form';
+export type PlatingMethod = 'classic' | 'stacking' | 'landscape' | 'deconstructed';
 
 export interface FoodImageGenerationOptions extends AIRequestOptions {
   platingMethod?: PlatingMethod | string; // Plating method to use
@@ -63,11 +50,8 @@ export function buildFoodImagePrompt(
   // Sanitize dish name (remove special characters that might confuse the model)
   const sanitizedName = dishName.trim().replace(/[^\w\s-]/g, '');
 
-  // Limit ingredients to key ones (first 8-10) to keep prompt focused
-  const keyIngredients = ingredients.slice(0, 10).join(', ');
-  const ingredientCount = ingredients.length;
-  const moreIngredients =
-    ingredientCount > 10 ? ` and ${ingredientCount - 10} more ingredients` : '';
+  // Format all ingredients as explicit comma-separated list
+  const allIngredientsList = ingredients.join(', ');
 
   // Extract cooking method from instructions if available
   let cookingMethodText = '';
@@ -107,10 +91,25 @@ export function buildFoodImagePrompt(
     }
   }
 
-  // Base prompt components
-  const basePrompt = `A photorealistic, professional food photography image of ${sanitizedName}. The dish features ${keyIngredients}${moreIngredients}.${cookingMethodText}`;
+  // Base prompt with visual constraints
+  const basePrompt = `A photorealistic, high-resolution studio photograph of ${sanitizedName}.
+
+The image should only feature the final dish and the following ingredients, visibly present: ${allIngredientsList}.
+
+VISUAL CONSTRAINTS:
+
+1. Ingredients **must not** include any item not explicitly listed above (e.g., if "water" or "salt" are common but not listed, they must not be visible).
+
+2. Lighting: Professional, soft-box studio lighting.
+
+3. Style: Clean, modern food photography setup.
+
+4. Setting: Neutral-toned surface (e.g., slate, light wood, or marble).
+
+5. Composition: Only the food on a plate in the center, no other elements around the plate/dish. No background elements, props, or decorative items. The plate should be centered and isolated.${cookingMethodText}`;
+
   const qualitySuffix =
-    'Professional restaurant-quality photography, natural lighting, shallow depth of field, appetizing presentation, commercial food photography, high resolution, detailed textures.';
+    'High resolution, detailed textures, shallow depth of field, appetizing presentation, commercial food photography.';
 
   // Generate prompt based on plating method
   switch (platingMethod) {
@@ -118,53 +117,17 @@ export function buildFoodImagePrompt(
       // Classic: Clock method plating with balanced, symmetrical presentation
       return `${basePrompt} It is beautifully plated on a white ceramic plate using the traditional clock method: the main protein is positioned at the center or between 3 and 9 o'clock, starches (rice, potatoes, or pasta) are placed at 10 o'clock, and vegetables are arranged at 2 o'clock. The presentation is balanced, symmetrical, and organized with professional garnishing and food styling. Traditional fine dining style with clean, formal presentation that emphasizes harmony and structure. ${qualitySuffix}`;
 
-    case 'modern':
-      // Modern: Contemporary plating with geometric arrangements
-      return `${basePrompt} It is artfully arranged on a modern ceramic plate or contemporary dishware with geometric patterns, minimalist garnishing, and sophisticated food styling. Contemporary restaurant presentation, clean lines, artistic composition. ${qualitySuffix}`;
-
-    case 'rustic':
-      // Rustic: Top-down overhead view with artisanal presentation
-      return `A top-down overhead view of ${sanitizedName} featuring ${keyIngredients}${moreIngredients}.${cookingMethodText} Beautifully arranged on a rustic wooden board or artisanal ceramic plate. Natural, artisanal presentation with organic garnishing. Professional food photography, natural lighting, vibrant colors, restaurant menu quality, appetizing presentation, shallow depth of field, food styling, commercial photography style.`;
-
-    case 'minimalist':
-      // Minimalist: Clean, simple plating with negative space
-      return `${basePrompt} It is elegantly plated on a simple white or neutral-colored plate with clean lines, minimal garnishing, and generous negative space. Minimalist presentation, sophisticated simplicity, refined food styling. ${qualitySuffix}`;
+    case 'stacking':
+      // Stacking: Vertical tower presentation with layered ingredients creating height
+      return `${basePrompt} It is presented using the stacking method, building a vertical tower with ingredients carefully layered on top of each other. The base layer typically consists of starches or vegetables, followed by the main protein, and topped with additional components or garnishes. This creates significant height and visual sophistication, with each layer visible and contributing to the overall composition. Sauces and glazes are drizzled vertically down the sides of the stack, enhancing the vertical presentation. The tower-like structure adds depth, helps retain heat, and ensures balanced flavors in each bite. Presented on a minimalist white or neutral plate to emphasize the vertical structure. ${qualitySuffix}`;
 
     case 'landscape':
       // Landscape: Horizontal arrangement mimicking natural landscapes with visual flow
       return `${basePrompt} It is arranged horizontally across the plate in a landscape plating style, creating visual flow that mimics natural scenes like gardens, rivers, or terrains. Ingredients are positioned to guide the eye from left to right across the plate. Sauces and purees flow like rivers or winding paths, creating depth and movement. Edible flowers, microgreens, and herbs are arranged like foliage to enhance the garden-like appearance. The main components are placed slightly off-center with garnishes radiating outward, creating a harmonious and organic presentation that evokes natural landscapes. ${qualitySuffix}`;
 
-    case 'futuristic':
-      // Futuristic: Modern, geometric arrangements with precise placement
-      return `${basePrompt} It is arranged with modern, geometric precision using negative space and architectural elements. Futuristic plating technique with precise placement, clean lines, and contemporary aesthetic. ${qualitySuffix}`;
-
-    case 'hide_and_seek':
-      // Hide and seek: Layered presentation with partially hidden ingredients
-      return `${basePrompt} It is presented with layered components where some ingredients are partially hidden, creating depth and intrigue. Hide and seek plating technique with strategic layering and visual discovery. ${qualitySuffix}`;
-
-    case 'super_bowl':
-      // Super bowl: Deep bowl presentation with layered arrangement
-      return `${basePrompt} It is beautifully arranged in a deep bowl with ingredients layered or arranged in concentric circles. Super bowl technique with vertical depth and visual interest. ${qualitySuffix}`;
-
-    case 'bathing':
-      // Bathing: Ingredients arranged in or around sauce/broth
-      return `${basePrompt} It is arranged with ingredients positioned in or around a sauce or broth, creating a "bathing" effect with visual appeal. Bathing plating technique with sauce integration. ${qualitySuffix}`;
-
     case 'deconstructed':
       // Deconstructed: Modern gastronomy style with components separated and arranged individually
       return `${basePrompt} It is presented using the deconstructed plating technique, where all components of the dish are separated and arranged individually on the plate, allowing each element to be seen and experienced distinctly. This modern gastronomy and molecular gastronomy style showcases creativity and technique, with each ingredient placed in its own section or area of the plate. The arrangement is artistic and cohesive, yet each component remains distinct, inviting diners to experience individual flavors and textures before combining them. The presentation emphasizes the individual qualities of each element while maintaining visual harmony across the plate. Modern, minimalist plate presentation that highlights the separation and artistry of each component. ${qualitySuffix}`;
-
-    case 'stacking':
-      // Stacking: Vertical tower presentation with layered ingredients creating height
-      return `${basePrompt} It is presented using the stacking method, building a vertical tower with ingredients carefully layered on top of each other. The base layer typically consists of starches or vegetables, followed by the main protein, and topped with additional components or garnishes. This creates significant height and visual sophistication, with each layer visible and contributing to the overall composition. Sauces and glazes are drizzled vertically down the sides of the stack, enhancing the vertical presentation. The tower-like structure adds depth, helps retain heat, and ensures balanced flavors in each bite. Presented on a minimalist white or neutral plate to emphasize the vertical structure. ${qualitySuffix}`;
-
-    case 'brush_stroke':
-      // Brush stroke: Artistic presentation mimicking brush strokes
-      return `${basePrompt} It is artistically arranged with sauces and purees applied like brush strokes, creating an abstract, painterly effect. The brush stroke plating technique with artistic sauce application. ${qualitySuffix}`;
-
-    case 'free_form':
-      // Free form: Organic, asymmetrical arrangement
-      return `${basePrompt} It is arranged organically with asymmetrical placement following natural shapes and flows, creating a dynamic, less structured presentation. Free form plating technique with organic composition. ${qualitySuffix}`;
 
     default:
       // Custom plating method: Use the provided description
@@ -267,9 +230,9 @@ export async function generateFoodImage(
  *
  * Generates 4 images with different plating styles:
  * - classic: Traditional elegant plating (primary)
- * - modern: Contemporary minimalist plating
- * - rustic: Rustic/artisanal plating (alternative)
- * - minimalist: Clean, simple plating
+ * - stacking: Vertical tower with layered ingredients
+ * - landscape: Horizontal flow mimicking natural landscapes
+ * - deconstructed: Components separated for individual experience
  *
  * @param dishName - Name of the dish/recipe
  * @param ingredients - List of ingredient names
@@ -284,35 +247,40 @@ export async function generateFoodImages(
   instructions?: string | null,
 ): Promise<{
   classic: AIResponse<FoodImageResult>;
-  modern: AIResponse<FoodImageResult>;
-  rustic: AIResponse<FoodImageResult>;
-  minimalist: AIResponse<FoodImageResult>;
+  stacking: AIResponse<FoodImageResult>;
+  landscape: AIResponse<FoodImageResult>;
+  deconstructed: AIResponse<FoodImageResult>;
   // Legacy aliases for backward compatibility
   primary: AIResponse<FoodImageResult>;
   alternative: AIResponse<FoodImageResult>;
 }> {
   // Build prompts for all 4 plating methods
   const classicPrompt = buildFoodImagePrompt(dishName, ingredients, 'classic', instructions);
-  const modernPrompt = buildFoodImagePrompt(dishName, ingredients, 'modern', instructions);
-  const rusticPrompt = buildFoodImagePrompt(dishName, ingredients, 'rustic', instructions);
-  const minimalistPrompt = buildFoodImagePrompt(dishName, ingredients, 'minimalist', instructions);
+  const stackingPrompt = buildFoodImagePrompt(dishName, ingredients, 'stacking', instructions);
+  const landscapePrompt = buildFoodImagePrompt(dishName, ingredients, 'landscape', instructions);
+  const deconstructedPrompt = buildFoodImagePrompt(
+    dishName,
+    ingredients,
+    'deconstructed',
+    instructions,
+  );
 
   // Generate all 4 images in parallel
-  const [classicResult, modernResult, rusticResult, minimalistResult] = await Promise.all([
+  const [classicResult, stackingResult, landscapeResult, deconstructedResult] = await Promise.all([
     generateFoodImage(classicPrompt, { ...options, platingMethod: 'classic' }),
-    generateFoodImage(modernPrompt, { ...options, platingMethod: 'modern' }),
-    generateFoodImage(rusticPrompt, { ...options, platingMethod: 'rustic' }),
-    generateFoodImage(minimalistPrompt, { ...options, platingMethod: 'minimalist' }),
+    generateFoodImage(stackingPrompt, { ...options, platingMethod: 'stacking' }),
+    generateFoodImage(landscapePrompt, { ...options, platingMethod: 'landscape' }),
+    generateFoodImage(deconstructedPrompt, { ...options, platingMethod: 'deconstructed' }),
   ]);
 
   return {
     classic: classicResult,
-    modern: modernResult,
-    rustic: rusticResult,
-    minimalist: minimalistResult,
+    stacking: stackingResult,
+    landscape: landscapeResult,
+    deconstructed: deconstructedResult,
     // Legacy aliases for backward compatibility
     primary: classicResult,
-    alternative: rusticResult,
+    alternative: landscapeResult,
   };
 }
 

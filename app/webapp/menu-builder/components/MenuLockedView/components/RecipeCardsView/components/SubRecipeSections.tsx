@@ -38,6 +38,7 @@ export function SubRecipeSections({
                 ingredients={card.ingredients}
                 methodSteps={card.methodSteps}
                 notes={card.notes}
+                recipeId={card.recipeId}
                 usedByMenuItems={card.usedByMenuItems}
                 isExpanded={expandedCardId === card.id}
                 onClick={() => onCardClick(card.id)}
@@ -61,6 +62,7 @@ export function SubRecipeSections({
                 ingredients={card.ingredients}
                 methodSteps={card.methodSteps}
                 notes={card.notes}
+                recipeId={card.recipeId}
                 usedByMenuItems={card.usedByMenuItems}
                 isExpanded={expandedCardId === card.id}
                 onClick={() => onCardClick(card.id)}
@@ -84,6 +86,7 @@ export function SubRecipeSections({
                 ingredients={card.ingredients}
                 methodSteps={card.methodSteps}
                 notes={card.notes}
+                recipeId={card.recipeId}
                 usedByMenuItems={card.usedByMenuItems}
                 isExpanded={expandedCardId === card.id}
                 onClick={() => onCardClick(card.id)}
@@ -107,6 +110,7 @@ export function SubRecipeSections({
                 ingredients={card.ingredients}
                 methodSteps={card.methodSteps}
                 notes={card.notes}
+                recipeId={card.recipeId}
                 usedByMenuItems={card.usedByMenuItems}
                 isExpanded={expandedCardId === card.id}
                 onClick={() => onCardClick(card.id)}
@@ -130,6 +134,7 @@ export function SubRecipeSections({
                 ingredients={card.ingredients}
                 methodSteps={card.methodSteps}
                 notes={card.notes}
+                recipeId={card.recipeId}
                 usedByMenuItems={card.usedByMenuItems}
                 isExpanded={expandedCardId === card.id}
                 onClick={() => onCardClick(card.id)}

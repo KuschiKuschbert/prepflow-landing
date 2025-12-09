@@ -6,6 +6,8 @@ alwaysApply: true
 
 **Note:** For authentication setup and allowlist configuration, see `core.mdc`. For deployment security and monitoring, see `operations.mdc`. For security testing standards, see `testing.mdc`.
 
+**📚 Auth0 & Stripe Security:** See `docs/AUTH0_STRIPE_REFERENCE.md` for comprehensive Auth0 and Stripe security practices, webhook signature verification, and secrets management.
+
 ### **Environment Variable Validation**
 
 **MANDATORY:** All environment variables must be validated at application startup.
@@ -22,16 +24,19 @@ const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
 
-  // Auth
+  // Auth0 (see docs/AUTH0_STRIPE_REFERENCE.md for complete list)
   NEXTAUTH_SECRET: z.string().min(32),
   NEXTAUTH_URL: z.string().url(),
   AUTH0_ISSUER_BASE_URL: z.string().url().optional(),
   AUTH0_CLIENT_ID: z.string().optional(),
   AUTH0_CLIENT_SECRET: z.string().optional(),
 
-  // Stripe
+  // Stripe (see docs/AUTH0_STRIPE_REFERENCE.md for complete list)
   STRIPE_SECRET_KEY: z.string().startsWith('sk_').optional(),
   STRIPE_WEBHOOK_SECRET: z.string().startsWith('whsec_').optional(),
+  STRIPE_PRICE_STARTER_MONTHLY: z.string().startsWith('price_').optional(),
+  STRIPE_PRICE_PRO_MONTHLY: z.string().startsWith('price_').optional(),
+  STRIPE_PRICE_BUSINESS_MONTHLY: z.string().startsWith('price_').optional(),
 
   // Node Environment
   NODE_ENV: z.enum(['development', 'production', 'test']),
@@ -111,19 +116,23 @@ openssl rand -base64 32  # For AUTH0_SECRET
 
 ### **Authentication & Authorization**
 
+**📚 Auth0 Implementation:** See `docs/AUTH0_STRIPE_REFERENCE.md` (Auth0 Configuration section) for complete Auth0 setup, session management, and role extraction.
+
 **Session Management:**
 
 - **Secure cookies** with `httpOnly`, `secure`, `sameSite: 'strict'`
-- **Session timeout:** 4 hours (configurable)
+- **Session timeout:** 4 hours (configurable via `NEXTAUTH_SESSION_MAX_AGE`)
 - **Token refresh:** Automatic via NextAuth
 - **Logout:** Clear all session data server-side
+- **JWT Strategy:** Stateless authentication (no database lookups for session validation)
 
 **Authorization Checks:**
 
 - **MANDATORY:** Verify permissions on every API route
 - **Check user_id** matches resource ownership (when user isolation implemented)
-- **Validate subscription status** for premium features
+- **Validate subscription status** for premium features (see `lib/feature-gate.ts`)
 - **Fail closed:** Deny access by default, allow explicitly
+- **Role Extraction:** Multiple fallback sources (token → Management API)
 
 **Password Security (if implementing custom auth):**
 
@@ -236,6 +245,12 @@ For every new API endpoint:
 - [ ] SQL injection prevention (parameterized queries)
 - [ ] XSS prevention (sanitized output)
 - [ ] CSRF protection (NextAuth tokens)
+
+**For Stripe Webhook Endpoints:**
+- [ ] Webhook signature verification (MANDATORY - see `docs/AUTH0_STRIPE_REFERENCE.md`)
+- [ ] Idempotency checking (via `webhook_events` table)
+- [ ] Environment-specific secrets (DEV/PROD)
+- [ ] Proper HTTP status codes for retries (200 = success, 400 = don't retry, 500 = retry)
 
 ### **Security Testing**
 

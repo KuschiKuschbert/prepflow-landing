@@ -1,12 +1,15 @@
 /**
  * Format generated prep list with sections for printing
+ * Uses unified template system with Cyber Carrot branding
  */
 
+import { escapeHtml } from '@/lib/exports/template-utils';
 import type { SectionData } from '../types';
 
 interface ExportOptions {
   sections?: string[]; // Filter by section IDs
   includeInstructions?: boolean;
+  variant?: 'default' | 'kitchen';
 }
 
 export function formatGeneratedPrepListForPrint(
@@ -14,17 +17,23 @@ export function formatGeneratedPrepListForPrint(
   menuName: string,
   options: ExportOptions = {},
 ): string {
-  const { sections: filterSections, includeInstructions = true } = options;
+  const { sections: filterSections, includeInstructions = true, variant = 'default' } = options;
+
+  const date = new Date().toLocaleDateString('en-AU', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   let html = `
-      <div class="prep-list-print">
-        <div class="prep-list-header">
-          <h1>${menuName}</h1>
-          <div class="prep-list-meta">
-            <span>Date: ${new Date().toLocaleDateString()}</span>
-          </div>
+    <div class="prep-list-print">
+      <div class="prep-list-header">
+        <h1>${escapeHtml(menuName)}</h1>
+        <div class="prep-list-meta">
+          <span>Date: ${escapeHtml(date)}</span>
         </div>
-      `;
+      </div>
+  `;
 
   const filteredSections = filterSections
     ? sections.filter(s => filterSections.includes(s.sectionId || ''))
@@ -50,45 +59,75 @@ export function formatGeneratedPrepListForPrint(
     }
 
     html += `
-          <div class="prep-list-section">
-            <h2>${section.sectionName}</h2>
-        `;
+      <div class="prep-list-section">
+        <h2>${escapeHtml(section.sectionName)}</h2>
+    `;
 
     // Ingredients
     if (section.aggregatedIngredients.length > 0) {
-      html += `
-            <div class="prep-list-ingredients">
-              <h3>Ingredients</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Ingredient</th>
-                    <th>Total Quantity</th>
-                    <th>Unit</th>
-                  </tr>
-                </thead>
-                <tbody>
-          `;
-
-      section.aggregatedIngredients.forEach(ing => {
-        const prepNotes =
-          ing.prepNotes && ing.prepNotes.length > 0
-            ? `<br><small style="color: #666;">Prep: ${ing.prepNotes.join(', ')}</small>`
-            : '';
+      // Kitchen variant: compact list with checkboxes
+      if (variant === 'kitchen') {
         html += `
-              <tr>
-                <td>${ing.name}${prepNotes}</td>
-                <td>${ing.totalQuantity}</td>
-                <td>${ing.unit}</td>
-              </tr>
-            `;
-      });
+              <div class="prep-list-ingredients kitchen-variant">
+                <h3>Ingredients</h3>
+                <div class="kitchen-ingredient-list">
+        `;
 
-      html += `
-                </tbody>
-              </table>
+        section.aggregatedIngredients.forEach(ing => {
+          const prepNotes =
+            ing.prepNotes && ing.prepNotes.length > 0
+              ? `<span class="kitchen-ingredient-notes">Prep: ${escapeHtml(ing.prepNotes.join(', '))}</span>`
+              : '';
+          html += `
+            <div class="kitchen-ingredient-item">
+              <span class="kitchen-checkbox"></span>
+              <span class="kitchen-ingredient-name">${escapeHtml(ing.name)}</span>
+              <span class="kitchen-ingredient-quantity">${escapeHtml(String(ing.totalQuantity))} ${escapeHtml(ing.unit || '')}</span>
+              ${prepNotes}
             </div>
           `;
+        });
+
+        html += `
+                </div>
+              </div>
+            `;
+      } else {
+        // Default variant: table format
+        html += `
+              <div class="prep-list-ingredients">
+                <h3>Ingredients</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Ingredient</th>
+                      <th>Total Quantity</th>
+                      <th>Unit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+            `;
+
+        section.aggregatedIngredients.forEach(ing => {
+          const prepNotes =
+            ing.prepNotes && ing.prepNotes.length > 0
+              ? `<br><small style="color: rgba(255, 255, 255, 0.6);">Prep: ${escapeHtml(ing.prepNotes.join(', '))}</small>`
+              : '';
+          html += `
+            <tr>
+              <td>${escapeHtml(ing.name)}${prepNotes}</td>
+              <td>${escapeHtml(String(ing.totalQuantity))}</td>
+              <td>${escapeHtml(ing.unit || '')}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+                  </tbody>
+                </table>
+              </div>
+            `;
+      }
     }
 
     // Prep Instructions
@@ -100,12 +139,12 @@ export function formatGeneratedPrepListForPrint(
 
       section.prepInstructions.forEach(instruction => {
         html += `
-              <div class="instruction-item">
-                <h4>${instruction.recipeName}</h4>
-                ${instruction.dishName ? `<p class="instruction-source">From: ${instruction.dishName}</p>` : ''}
-                <div class="instruction-content">${instruction.instructions.replace(/\n/g, '<br>')}</div>
-              </div>
-            `;
+          <div class="instruction-item">
+            <h4>${escapeHtml(instruction.recipeName)}</h4>
+            ${instruction.dishName ? `<p class="instruction-source">From: ${escapeHtml(instruction.dishName)}</p>` : ''}
+            <div class="instruction-content">${escapeHtml(instruction.instructions).replace(/\n/g, '<br>')}</div>
+          </div>
+        `;
       });
 
       html += `</div>`;
@@ -131,7 +170,7 @@ export function formatGeneratedPrepListForPrint(
         if (pt.cutShapes.length > 0) {
           html += `<h4>Cut Shapes</h4><ul>`;
           pt.cutShapes.forEach(cs => {
-            html += `<li><strong>${cs.ingredient}</strong>: ${cs.shape}</li>`;
+            html += `<li><strong>${escapeHtml(cs.ingredient)}</strong>: ${escapeHtml(cs.shape)}</li>`;
           });
           html += `</ul>`;
         }
@@ -141,12 +180,12 @@ export function formatGeneratedPrepListForPrint(
           html += `<h4>Sauces & Dressings</h4>`;
           pt.sauces.forEach(sauce => {
             html += `
-                  <div class="technique-item">
-                    <strong>${sauce.name}</strong>
-                    <p>Ingredients: ${sauce.ingredients.join(', ')}</p>
-                    <p>${sauce.instructions}</p>
-                  </div>
-                `;
+              <div class="technique-item">
+                <strong>${escapeHtml(sauce.name)}</strong>
+                <p>Ingredients: ${escapeHtml(sauce.ingredients.join(', '))}</p>
+                <p>${escapeHtml(sauce.instructions)}</p>
+              </div>
+            `;
           });
         }
 
@@ -154,7 +193,7 @@ export function formatGeneratedPrepListForPrint(
         if (pt.marinations.length > 0) {
           html += `<h4>Marinations</h4><ul>`;
           pt.marinations.forEach(m => {
-            html += `<li><strong>${m.ingredient}</strong>: ${m.method}${m.duration ? ` (${m.duration})` : ''}</li>`;
+            html += `<li><strong>${escapeHtml(m.ingredient)}</strong>: ${escapeHtml(m.method)}${m.duration ? ` (${escapeHtml(m.duration)})` : ''}</li>`;
           });
           html += `</ul>`;
         }
@@ -163,7 +202,7 @@ export function formatGeneratedPrepListForPrint(
         if (pt.preCookingSteps.length > 0) {
           html += `<h4>Pre-Cooking Steps</h4><ul>`;
           pt.preCookingSteps.forEach(pc => {
-            html += `<li><strong>${pc.ingredient}</strong>: ${pc.step}</li>`;
+            html += `<li><strong>${escapeHtml(pc.ingredient)}</strong>: ${escapeHtml(pc.step)}</li>`;
           });
           html += `</ul>`;
         }
@@ -172,7 +211,7 @@ export function formatGeneratedPrepListForPrint(
         if (pt.specialTechniques.length > 0) {
           html += `<h4>Special Techniques</h4><ul>`;
           pt.specialTechniques.forEach(st => {
-            html += `<li>${st.description}${st.details ? `: ${st.details}` : ''}</li>`;
+            html += `<li>${escapeHtml(st.description)}${st.details ? `: ${escapeHtml(st.details)}` : ''}</li>`;
           });
           html += `</ul>`;
         }

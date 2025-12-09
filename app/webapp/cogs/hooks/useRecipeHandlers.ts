@@ -1,9 +1,10 @@
 'use client';
 
 import { useCallback } from 'react';
-import { Recipe } from '../types';
-import { useNotification } from '@/contexts/NotificationContext';
-import { useOnRecipeCreated } from '@/lib/personality/hooks';
+import type { Recipe } from '../types';
+import { useRecipeSelectHandler } from './useRecipeHandlers/useRecipeSelect';
+import { useRecipeCreateHandler } from './useRecipeHandlers/useRecipeCreate';
+import { useRecipeFinishHandler } from './useRecipeHandlers/useRecipeFinish';
 
 interface UseRecipeHandlersProps {
   recipes: Recipe[];
@@ -22,79 +23,19 @@ interface UseRecipeHandlersProps {
   setSaveError?: (error: string) => void;
 }
 
-export function useRecipeHandlers({
-  recipes,
-  selectedRecipe,
-  dishPortions,
-  calculations,
-  setSelectedRecipe,
-  setDishPortions,
-  setShowCreateModal,
-  createOrUpdateRecipe,
-  fetchData,
-  saveNow,
-  setSaveError,
-}: UseRecipeHandlersProps) {
-  const { showSuccess, showError } = useNotification();
-  const onRecipeCreated = useOnRecipeCreated();
-
-  const handleRecipeSelect = useCallback(
-    (recipeId: string) => {
-      setSelectedRecipe(recipeId);
-      if (recipeId) {
-        const recipe = recipes.find(r => r.id === recipeId);
-        if (recipe) setDishPortions(recipe.yield || 1);
-      }
-    },
-    [recipes, setSelectedRecipe, setDishPortions],
+export function useRecipeHandlers(props: UseRecipeHandlersProps) {
+  const handleRecipeSelect = useRecipeSelectHandler(
+    props.recipes,
+    props.setSelectedRecipe,
+    props.setDishPortions,
   );
 
   const handleCreateNewRecipe = useCallback(() => {
-    setShowCreateModal(true);
-  }, [setShowCreateModal]);
+    props.setShowCreateModal(true);
+  }, [props.setShowCreateModal]);
 
-  const handleCreateRecipe = useCallback(
-    async (name: string) => {
-      const result = await createOrUpdateRecipe(name, dishPortions);
-      if (result) {
-        await fetchData();
-        if (result.recipe) {
-          setSelectedRecipe(result.recipe.id);
-          setDishPortions(result.recipe.yield || 1);
-          showSuccess(`Recipe "${result.recipe.recipe_name}" created successfully!`);
-
-          // Trigger personality hook for new recipes
-          if (result.isNew) {
-            onRecipeCreated();
-          }
-        }
-        return result.recipe;
-      }
-      return null;
-    },
-    [
-      dishPortions,
-      createOrUpdateRecipe,
-      fetchData,
-      setSelectedRecipe,
-      setDishPortions,
-      showSuccess,
-      onRecipeCreated,
-    ],
-  );
-
-  const handleFinishRecipe = useCallback(async () => {
-    const selectedRecipeData = recipes.find(r => r.id === selectedRecipe);
-    if (!selectedRecipeData || calculations.length === 0) return;
-    try {
-      if (saveNow) await saveNow();
-      showSuccess(`Recipe "${selectedRecipeData.recipe_name}" is complete! 🎉`);
-    } catch (err) {
-      const errorMsg = 'Failed to save recipe. Please try again.';
-      if (setSaveError) setSaveError(errorMsg);
-      showError(errorMsg);
-    }
-  }, [recipes, selectedRecipe, calculations, saveNow, showSuccess, showError, setSaveError]);
+  const handleCreateRecipe = useRecipeCreateHandler(props);
+  const handleFinishRecipe = useRecipeFinishHandler(props);
 
   return {
     handleRecipeSelect,

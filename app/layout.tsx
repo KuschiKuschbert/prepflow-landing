@@ -10,7 +10,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 // Deployment attempt #2: testing Vercel deployment trigger
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
-import LandingBackground from './components/landing/LandingBackground';
 import { Providers } from './providers';
 
 const geistSans = Geist({
@@ -137,8 +136,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="geist-sans-variable geist-mono-variable antialiased">
-        {/* Global Grid Background */}
-        <LandingBackground />
         <ErrorBoundary>
           <Providers>{children}</Providers>
 

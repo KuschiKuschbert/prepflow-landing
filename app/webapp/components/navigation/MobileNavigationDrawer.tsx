@@ -1,11 +1,12 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { Icon } from '@/components/ui/Icon';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
+import { X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { getCategoryLabel } from './CategorySection';
 import { useNavigationItems } from './nav-items';
-import { ExpandableCategorySection } from './ExpandableCategorySection';
 import { NavItem } from './NavItem';
 
 interface MobileNavigationDrawerProps {
@@ -15,28 +16,27 @@ interface MobileNavigationDrawerProps {
 }
 
 /**
- * Mobile Navigation Menu (Chrome-style Popup).
- * A floating card expanding from the bottom-right corner containing navigation links.
- * Replaces the full-height side drawer for a lighter interaction.
+ * Mobile Navigation Drawer - Scrollable Burger Menu.
+ * Full-height scrollable drawer with categorized navigation items.
+ * Instagram/Gmail style with smooth animations.
  */
 export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
   isOpen,
   onClose,
-  menuButtonRef,
 }: MobileNavigationDrawerProps) {
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
   const { trackNavigation } = useNavigationTracking();
   const allItems = useNavigationItems();
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const hasAutoExpandedRef = useRef(false);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
 
-  // Group items by category
+  // Group items by category (excluding primary as they're in bottom nav)
   const groupedItems = useMemo(
     () =>
       allItems.reduce(
         (acc, item) => {
           const category = item.category || 'other';
+          if (category === 'primary') return acc; // Skip primary items
           if (!acc[category]) acc[category] = [];
           acc[category].push(item);
           return acc;
@@ -46,6 +46,9 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
     [allItems],
   );
 
+  // Categories in display order
+  const categoryOrder = ['kitchen', 'team', 'inventory', 'tools'];
+
   const isActive = useCallback(
     (href: string) => {
       if (href === '/webapp') return pathname === '/webapp';
@@ -54,34 +57,28 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
     [pathname],
   );
 
-  // Auto-expand category if it contains active item (only when drawer first opens)
-  useEffect(() => {
-    if (!isOpen) {
-      hasAutoExpandedRef.current = false;
-      return;
-    }
-    // Only auto-expand once when drawer opens
-    if (hasAutoExpandedRef.current) return;
-
-    const activeCategory = Object.entries(groupedItems).find(([category, items]) => {
-      if (category === 'primary') return false;
-      return items.some(item => isActive(item.href));
-    })?.[0];
-    if (activeCategory) {
-      setExpandedCategory(activeCategory);
-      hasAutoExpandedRef.current = true;
-    }
-  }, [pathname, isOpen, groupedItems, isActive]);
-
-  // Handle category toggle - collapse others when opening new one
-  const handleCategoryToggle = (category: string) => {
-    setExpandedCategory(prev => (prev === category ? null : category));
-  };
-
-  // Handle item click - close menu
-  const handleItemClick = (href: string) => {
+  // Handle item click - close drawer
+  const handleItemClick = useCallback(() => {
     onClose();
-  };
+  }, [onClose]);
+
+  // Swipe down to close (on header)
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    setTouchStartY(e.touches[0].clientY);
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartY === null) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchEndY - touchStartY;
+      if (deltaY > 50) {
+        onClose();
+      }
+      setTouchStartY(null);
+    },
+    [touchStartY, onClose],
+  );
 
   // Close on outside click
   useEffect(() => {
@@ -128,73 +125,83 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
 
   return (
     <>
-      {/* Backdrop - Subtle dimming */}
+      {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[65] bg-black/20 backdrop-blur-[1px] transition-opacity duration-200"
+        className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
         onClick={onClose}
         aria-hidden={true}
+        style={{ animation: 'fadeIn 0.2s ease-out forwards' }}
       />
 
-      {/* Floating Menu Card - Animated from button position (bottom-right) */}
-      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[300px] overflow-hidden rounded-xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
+      {/* Drawer */}
+      <div
+        ref={menuRef}
+        className="fixed top-0 right-0 bottom-0 z-[70] flex w-[85%] max-w-[320px] flex-col bg-[#1f1f1f] shadow-2xl"
+        style={{
+          animation: 'slideInRight 0.3s var(--easing-standard) forwards',
+        }}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+      >
+        {/* Header */}
         <div
-          ref={menuRef}
-          className="flex h-full flex-col overflow-hidden rounded-xl bg-[#1f1f1f]/95"
-          style={{
-            transformOrigin: 'bottom right',
-            animation: isOpen
-              ? 'scale-in-bubble 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-              : 'none',
-          }}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Main navigation"
+          className="flex flex-shrink-0 items-center justify-between border-b border-[#2a2a2a] px-4 py-4"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
-          {/* Header - Optional Title? Or just list? Chrome has no header usually. */}
-          {/* Let's keep it clean list only, maybe just a small drag handle visual or nothing. */}
+          <span className="text-lg font-semibold text-white">Menu</span>
+          <button
+            onClick={onClose}
+            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-[#2a2a2a]/50 active:scale-95"
+            aria-label="Close menu"
+          >
+            <Icon icon={X} size="sm" className="text-gray-400" aria-hidden={true} />
+          </button>
+        </div>
 
-          <div className="flex h-full flex-col overflow-y-auto p-3">
-            {/* Scrollable Content */}
-            <div className="space-y-5 p-3">
-              {Object.entries(groupedItems).map(([category, items]) => {
-                // Primary items shown directly without category header
-                if (category === 'primary') {
-                  return (
-                    <div key={category} className="space-y-2">
-                      {items.map(item => (
-                        <NavItem
-                          key={item.href}
-                          href={item.href}
-                          label={item.label}
-                          icon={item.icon}
-                          color={item.color}
-                          isActive={isActive(item.href)}
-                          onClick={handleItemClick ? () => handleItemClick(item.href) : undefined}
-                          onTrack={trackNavigation}
-                          iconSize="sm"
-                          showLabel={true}
-                          compact={true}
-                        />
-                      ))}
-                    </div>
-                  );
-                }
-                // Secondary groups shown as expandable sections (controlled mode - only one open at a time)
-                return (
-                  <ExpandableCategorySection
-                    key={category}
-                    category={category}
-                    items={items}
-                    isActive={isActive}
-                    onItemClick={handleItemClick}
-                    onTrack={trackNavigation}
-                    isExpanded={expandedCategory === category}
-                    onToggle={handleCategoryToggle}
-                  />
-                );
-              })}
-            </div>
-          </div>
+        {/* Scrollable Navigation List */}
+        <div
+          className="flex-1 overflow-y-auto overscroll-contain"
+          style={{
+            paddingBottom:
+              'calc(var(--bottom-navbar-height) + var(--safe-area-inset-bottom) + 1rem)',
+          }}
+        >
+          {categoryOrder.map(category => {
+            const items = groupedItems[category];
+            if (!items || items.length === 0) return null;
+
+            return (
+              <div key={category} className="border-b border-[#2a2a2a]/50">
+                {/* Category Header */}
+                <div className="px-4 pt-4 pb-2">
+                  <span className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                    {getCategoryLabel(category)}
+                  </span>
+                </div>
+
+                {/* Category Items */}
+                <div className="space-y-1 px-2 pb-3">
+                  {items.map(item => (
+                    <NavItem
+                      key={item.href}
+                      href={item.href}
+                      label={item.label}
+                      icon={item.icon}
+                      color={item.color}
+                      isActive={isActive(item.href)}
+                      onClick={handleItemClick}
+                      onTrack={trackNavigation}
+                      iconSize="sm"
+                      showLabel={true}
+                      compact={true}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>

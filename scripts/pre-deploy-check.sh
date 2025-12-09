@@ -80,19 +80,34 @@ else
 fi
 echo ""
 
-# 3. Lint check
+# 3. Security audit (check for vulnerabilities)
+echo -e "${BLUE}🔒 Security audit (npm audit)...${NC}"
+AUDIT_OUTPUT=$(npm audit --audit-level=moderate 2>&1)
+AUDIT_EXIT_CODE=$?
+if [ $AUDIT_EXIT_CODE -eq 0 ]; then
+    echo -e "${GREEN}✅ Security audit passed (no moderate+ vulnerabilities)${NC}"
+else
+    echo -e "${RED}❌ Security audit failed (moderate+ vulnerabilities found)${NC}"
+    echo -e "${YELLOW}   Review vulnerabilities: npm audit${NC}"
+    echo -e "${YELLOW}   Fix automatically: npm audit fix${NC}"
+    echo -e "${YELLOW}   Fix with breaking changes: npm audit fix --force${NC}"
+    FAILED=1
+fi
+echo ""
+
+# 4. Lint check
 run_check "Lint check" "npm run lint"
 echo ""
 
-# 4. Type check
+# 5. Type check
 run_check "Type check" "npm run type-check"
 echo ""
 
-# 5. Format check
+# 6. Format check
 run_check "Format check" "npm run format:check"
 echo ""
 
-# 6. Cleanup check (optional - can be verbose)
+# 7. Cleanup check (optional - can be verbose)
 echo -e "${BLUE}▶ Cleanup check...${NC}"
 if npm run cleanup:check > /dev/null 2>&1; then
     echo -e "${GREEN}✅ Cleanup check passed${NC}"
@@ -102,7 +117,7 @@ else
 fi
 echo ""
 
-# 7. Build check (most important - this is what Vercel runs)
+# 8. Build check (most important - this is what Vercel runs)
 echo -e "${BLUE}▶ Build check (this is what Vercel runs)...${NC}"
 if npm run build > /dev/null 2>&1; then
     echo -e "${GREEN}✅ Build check passed${NC}"
@@ -124,6 +139,8 @@ else
     echo -e "${RED}❌ Some checks failed. Fix issues before deploying.${NC}"
     echo ""
     echo -e "${YELLOW}💡 Quick fix commands:${NC}"
+    echo -e "   npm audit              # Review vulnerabilities"
+    echo -e "   npm audit fix          # Fix vulnerabilities automatically"
     echo -e "   npm run lint          # Fix linting issues"
     echo -e "   npm run type-check    # Fix TypeScript errors"
     echo -e "   npm run format        # Fix formatting issues"
@@ -131,4 +148,3 @@ else
     echo ""
     exit 1
 fi
-

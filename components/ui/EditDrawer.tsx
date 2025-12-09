@@ -194,7 +194,7 @@ export function EditDrawer({
       <div
         className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm transition-opacity duration-200"
         onClick={preventClose ? undefined : onClose}
-        aria-hidden="true"
+        aria-hidden={true}
         style={{
           opacity: isSwiping ? Math.max(0.3, 1 - translateX / 400) : 1,
         }}

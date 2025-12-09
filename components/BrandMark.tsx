@@ -159,31 +159,31 @@ export function BrandMark({
           whileHover={{
             opacity: 0.6,
           }}
-          aria-hidden="true"
+          aria-hidden={true}
         />
       )}
       {/* Seasonal overlays rendered via CSS based on data-seasonal attribute */}
       {seasonalEffect && (
         <>
-          <div className={`pf-seasonal-overlay pf-seasonal-${seasonalEffect}`} aria-hidden="true" />
+          <div className={`pf-seasonal-overlay pf-seasonal-${seasonalEffect}`} aria-hidden={true} />
           {/* Star Wars sparkles */}
           {seasonalEffect === 'lightsaber' && !reducedMotion && (
             <>
-              <div className="pf-lightsaber-sparkle pf-sparkle-1" aria-hidden="true" />
-              <div className="pf-lightsaber-sparkle pf-sparkle-2" aria-hidden="true" />
-              <div className="pf-lightsaber-sparkle pf-sparkle-3" aria-hidden="true" />
+              <div className="pf-lightsaber-sparkle pf-sparkle-1" aria-hidden={true} />
+              <div className="pf-lightsaber-sparkle pf-sparkle-2" aria-hidden={true} />
+              <div className="pf-lightsaber-sparkle pf-sparkle-3" aria-hidden={true} />
             </>
           )}
           {/* Santa snowflakes */}
           {seasonalEffect === 'santaHat' && !reducedMotion && (
             <>
-              <div className="pf-snowflake pf-snowflake-1" aria-hidden="true">
+              <div className="pf-snowflake pf-snowflake-1" aria-hidden={true}>
                 ❄️
               </div>
-              <div className="pf-snowflake pf-snowflake-2" aria-hidden="true">
+              <div className="pf-snowflake pf-snowflake-2" aria-hidden={true}>
                 ❄️
               </div>
-              <div className="pf-snowflake pf-snowflake-3" aria-hidden="true">
+              <div className="pf-snowflake pf-snowflake-3" aria-hidden={true}>
                 ❄️
               </div>
             </>
@@ -191,13 +191,13 @@ export function BrandMark({
           {/* Chef's Day sparkles */}
           {seasonalEffect === 'toque' && !reducedMotion && (
             <>
-              <div className="pf-chef-sparkle pf-chef-sparkle-1" aria-hidden="true">
+              <div className="pf-chef-sparkle pf-chef-sparkle-1" aria-hidden={true}>
                 ✨
               </div>
-              <div className="pf-chef-sparkle pf-chef-sparkle-2" aria-hidden="true">
+              <div className="pf-chef-sparkle pf-chef-sparkle-2" aria-hidden={true}>
                 ✨
               </div>
-              <div className="pf-chef-sparkle pf-chef-sparkle-3" aria-hidden="true">
+              <div className="pf-chef-sparkle pf-chef-sparkle-3" aria-hidden={true}>
                 ✨
               </div>
             </>
@@ -205,13 +205,13 @@ export function BrandMark({
           {/* New Year confetti */}
           {(seasonalEffect === 'newYear' || seasonalEffect === 'newYearsEve') && !reducedMotion && (
             <>
-              <div className="pf-confetti pf-confetti-1" aria-hidden="true">
+              <div className="pf-confetti pf-confetti-1" aria-hidden={true}>
                 🎊
               </div>
-              <div className="pf-confetti pf-confetti-2" aria-hidden="true">
+              <div className="pf-confetti pf-confetti-2" aria-hidden={true}>
                 🎉
               </div>
-              <div className="pf-confetti pf-confetti-3" aria-hidden="true">
+              <div className="pf-confetti pf-confetti-3" aria-hidden={true}>
                 ✨
               </div>
             </>
@@ -219,13 +219,13 @@ export function BrandMark({
           {/* Valentine hearts */}
           {seasonalEffect === 'valentines' && !reducedMotion && (
             <>
-              <div className="pf-heart pf-heart-1" aria-hidden="true">
+              <div className="pf-heart pf-heart-1" aria-hidden={true}>
                 💖
               </div>
-              <div className="pf-heart pf-heart-2" aria-hidden="true">
+              <div className="pf-heart pf-heart-2" aria-hidden={true}>
                 💕
               </div>
-              <div className="pf-heart pf-heart-3" aria-hidden="true">
+              <div className="pf-heart pf-heart-3" aria-hidden={true}>
                 💗
               </div>
             </>
@@ -233,13 +233,13 @@ export function BrandMark({
           {/* Easter eggs */}
           {seasonalEffect === 'easter' && !reducedMotion && (
             <>
-              <div className="pf-easter-egg pf-easter-egg-1" aria-hidden="true">
+              <div className="pf-easter-egg pf-easter-egg-1" aria-hidden={true}>
                 🥚
               </div>
-              <div className="pf-easter-egg pf-easter-egg-2" aria-hidden="true">
+              <div className="pf-easter-egg pf-easter-egg-2" aria-hidden={true}>
                 🐣
               </div>
-              <div className="pf-easter-egg pf-easter-egg-3" aria-hidden="true">
+              <div className="pf-easter-egg pf-easter-egg-3" aria-hidden={true}>
                 🌸
               </div>
             </>
@@ -247,13 +247,13 @@ export function BrandMark({
           {/* Halloween bats/pumpkins */}
           {seasonalEffect === 'halloween' && !reducedMotion && (
             <>
-              <div className="pf-halloween pf-halloween-1" aria-hidden="true">
+              <div className="pf-halloween pf-halloween-1" aria-hidden={true}>
                 🦇
               </div>
-              <div className="pf-halloween pf-halloween-2" aria-hidden="true">
+              <div className="pf-halloween pf-halloween-2" aria-hidden={true}>
                 🎃
               </div>
-              <div className="pf-halloween pf-halloween-3" aria-hidden="true">
+              <div className="pf-halloween pf-halloween-3" aria-hidden={true}>
                 👻
               </div>
             </>

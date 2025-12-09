@@ -7,6 +7,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { checkFeatureAccess } from '@/lib/api-feature-gate';
+import { authOptions } from '@/lib/auth-options';
+import { getServerSession } from 'next-auth';
 import { generateHTML } from './helpers/generateHTML';
 import { generateCSV } from './helpers/generateCSV';
 
@@ -32,6 +35,21 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         ),
         { status: 400 },
       );
+    }
+
+    // Check feature access for CSV/PDF exports (requires Pro tier)
+    // HTML export is available to all tiers
+    if (format === 'csv' || format === 'pdf') {
+      const session = await getServerSession(authOptions);
+      if (session?.user?.email) {
+        try {
+          const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
+          await checkFeatureAccess(featureKey, session.user.email, request);
+        } catch (error) {
+          // checkFeatureAccess throws NextResponse, so return it
+          return error as NextResponse;
+        }
+      }
     }
 
     const supabase = createSupabaseAdmin();

@@ -3,9 +3,8 @@
  */
 
 import { logger } from '@/lib/logger';
-import { validateIngredientInput } from '../../helpers/ingredientValidation';
 import { processIngredientAddition } from '../../helpers/ingredientProcessing';
-import type { Ingredient } from '../../../types';
+import { validateAndFindIngredient } from './executeIngredientAddition/validation';
 
 interface NewIngredient {
   ingredient_id?: string;
@@ -15,7 +14,7 @@ interface NewIngredient {
 
 interface ExecuteIngredientAdditionParams {
   newIngredient: NewIngredient;
-  ingredients: Ingredient[];
+  ingredients: import('../../../types').Ingredient[];
   selectedRecipe: string | null;
   currentCalculations: import('../../../types').COGSCalculation[];
   convertIngredientQuantity: (
@@ -46,31 +45,19 @@ export function executeIngredientAddition({
     unit: newIngredient.unit,
   });
 
-  // Clear any previous errors
-  setSaveError('');
-
-  // Validate input
-  if (!validateIngredientInput(newIngredient, setSaveError)) {
-    logger.warn('[useIngredientAddition] Validation failed:', {
-      ingredient_id: newIngredient.ingredient_id,
-      quantity: newIngredient.quantity,
-    });
-    return false;
-  }
-
   try {
+    const selectedIngredientData = validateAndFindIngredient(
+      newIngredient,
+      ingredients,
+      setSaveError,
+    );
+    if (!selectedIngredientData) {
+      return false;
+    }
+
     const existingIngredient = currentCalculations.find(
       calc => calc.ingredientId === newIngredient.ingredient_id,
     );
-    const selectedIngredientData = ingredients.find(ing => ing.id === newIngredient.ingredient_id);
-    if (!selectedIngredientData) {
-      logger.error('[useIngredientAddition] Ingredient not found in list:', {
-        ingredient_id: newIngredient.ingredient_id,
-        availableIngredients: ingredients.length,
-      });
-      setSaveError('Ingredient not found. Please select an ingredient from the list.');
-      return false;
-    }
 
     logger.dev('[useIngredientAddition] Processing ingredient addition:', {
       ingredient_name: selectedIngredientData.ingredient_name,

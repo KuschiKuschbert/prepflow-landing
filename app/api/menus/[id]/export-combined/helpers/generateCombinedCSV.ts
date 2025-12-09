@@ -1,8 +1,10 @@
 /**
  * Generate combined CSV export (menu display + allergen matrix + recipe cards)
+ * Uses PapaParse for consistent CSV formatting
  */
 
 import { NextResponse } from 'next/server';
+import Papa from 'papaparse';
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 
 interface MenuDisplayData {
@@ -61,19 +63,23 @@ export function generateCombinedCSV(
   // Menu display section
   if (includeMenu) {
     const menuHeaders = ['Category', 'Item Name', 'Description', 'Price'];
-    const menuRows = menuData.map(item => [
-      item.category || 'Uncategorized',
-      item.name,
-      item.description || '',
-      `$${item.price.toFixed(2)}`,
-    ]);
+    const menuDataForCSV = menuData.map(item => ({
+      Category: item.category || 'Uncategorized',
+      'Item Name': item.name,
+      Description: item.description || '',
+      Price: `$${item.price.toFixed(2)}`,
+    }));
 
-    sections.push(
-      '=== MENU DISPLAY ===',
-      '',
-      menuHeaders.join(','),
-      ...menuRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
-    );
+    const menuCSV = Papa.unparse(menuDataForCSV, {
+      columns: menuHeaders,
+      header: true,
+      delimiter: ',',
+      newline: '\n',
+      quoteChar: '"',
+      escapeChar: '"',
+    });
+
+    sections.push('=== MENU DISPLAY ===', '', menuCSV);
   }
 
   // Allergen matrix section
@@ -86,26 +92,32 @@ export function generateCombinedCSV(
       'Vegetarian',
       'Vegan',
     ];
-    const matrixRows = matrixData.map(item => {
-      const allergenColumns = AUSTRALIAN_ALLERGENS.map(allergen =>
-        item.allergens.includes(allergen.code) ? 'Yes' : '',
-      );
-      return [
-        item.name,
-        item.type,
-        item.category || '',
+    const matrixDataForCSV = matrixData.map(item => {
+      const allergenColumns: Record<string, string> = {};
+      AUSTRALIAN_ALLERGENS.forEach(allergen => {
+        allergenColumns[allergen.displayName] = item.allergens.includes(allergen.code) ? 'Yes' : '';
+      });
+
+      return {
+        'Item Name': item.name,
+        Type: item.type,
+        Category: item.category || '',
         ...allergenColumns,
-        item.isVegetarian ? 'Yes' : '',
-        item.isVegan ? 'Yes' : '',
-      ];
+        Vegetarian: item.isVegetarian ? 'Yes' : '',
+        Vegan: item.isVegan ? 'Yes' : '',
+      };
     });
 
-    sections.push(
-      '=== ALLERGEN MATRIX ===',
-      '',
-      matrixHeaders.join(','),
-      ...matrixRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
-    );
+    const matrixCSV = Papa.unparse(matrixDataForCSV, {
+      columns: matrixHeaders,
+      header: true,
+      delimiter: ',',
+      newline: '\n',
+      quoteChar: '"',
+      escapeChar: '"',
+    });
+
+    sections.push('=== ALLERGEN MATRIX ===', '', matrixCSV);
   }
 
   // Recipe cards section
@@ -118,36 +130,40 @@ export function generateCombinedCSV(
       'Method Steps',
       'Notes',
     ];
-    const recipeRows = recipeCardsData.map(card => {
+    const recipeDataForCSV = recipeCardsData.map(card => {
       const ingredients = card.ingredients
         .map(ing => `${ing.name}: ${ing.quantity} ${ing.unit}`)
         .join('; ');
       const methodSteps = card.methodSteps.join('; ');
       const notes = card.notes.join('; ');
 
-      return [
-        card.category || 'Uncategorized',
-        card.title,
-        card.baseYield.toString(),
-        ingredients,
-        methodSteps,
-        notes,
-      ];
+      return {
+        Category: card.category || 'Uncategorized',
+        'Recipe Name': card.title,
+        'Base Yield': card.baseYield.toString(),
+        Ingredients: ingredients,
+        'Method Steps': methodSteps,
+        Notes: notes,
+      };
     });
 
-    sections.push(
-      '=== RECIPE CARDS ===',
-      '',
-      recipeHeaders.join(','),
-      ...recipeRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
-    );
+    const recipeCSV = Papa.unparse(recipeDataForCSV, {
+      columns: recipeHeaders,
+      header: true,
+      delimiter: ',',
+      newline: '\n',
+      quoteChar: '"',
+      escapeChar: '"',
+    });
+
+    sections.push('=== RECIPE CARDS ===', '', recipeCSV);
   }
 
   const csvContent = [`Complete Menu Export - ${menuName}`, '', ...sections].join('\n');
 
   return new NextResponse(csvContent, {
     headers: {
-      'Content-Type': 'text/csv',
+      'Content-Type': 'text/csv;charset=utf-8',
       'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_complete.csv"`,
     },
   });

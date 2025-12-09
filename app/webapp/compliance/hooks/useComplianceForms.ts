@@ -3,14 +3,14 @@
  */
 
 import { useState, useCallback } from 'react';
-import { logger } from '@/lib/logger';
-import { cacheData } from '@/lib/cache/data-cache';
 import type {
   ComplianceRecord,
   ComplianceRecordFormData,
   ComplianceType,
   ComplianceTypeFormData,
 } from '../types';
+import { handleAddComplianceRecord } from './useComplianceForms/recordHandlers';
+import { handleAddComplianceType } from './useComplianceForms/typeHandlers';
 
 interface UseComplianceFormsProps {
   types: ComplianceType[];
@@ -23,6 +23,23 @@ interface UseComplianceFormsProps {
   setShowAddType: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const DEFAULT_RECORD_FORM: ComplianceRecordFormData = {
+  compliance_type_id: '',
+  document_name: '',
+  issue_date: '',
+  expiry_date: '',
+  document_url: '',
+  photo_url: '',
+  notes: '',
+  reminder_enabled: true,
+  reminder_days_before: 30,
+};
+const DEFAULT_TYPE_FORM: ComplianceTypeFormData = {
+  name: '',
+  description: '',
+  renewal_frequency_days: '',
+};
+
 export function useComplianceForms({
   types,
   records,
@@ -33,99 +50,47 @@ export function useComplianceForms({
   setShowAddRecord,
   setShowAddType,
 }: UseComplianceFormsProps) {
-  const [newRecord, setNewRecord] = useState<ComplianceRecordFormData>({
-    compliance_type_id: '',
-    document_name: '',
-    issue_date: '',
-    expiry_date: '',
-    document_url: '',
-    photo_url: '',
-    notes: '',
-    reminder_enabled: true,
-    reminder_days_before: 30,
-  });
+  const [newRecord, setNewRecord] = useState<ComplianceRecordFormData>(DEFAULT_RECORD_FORM);
+  const [newType, setNewType] = useState<ComplianceTypeFormData>(DEFAULT_TYPE_FORM);
 
-  const [newType, setNewType] = useState<ComplianceTypeFormData>({
-    name: '',
-    description: '',
-    renewal_frequency_days: '',
-  });
+  const resetRecordForm = useCallback(() => setNewRecord(DEFAULT_RECORD_FORM), []);
+  const resetTypeForm = useCallback(() => setNewType(DEFAULT_TYPE_FORM), []);
 
   const handleAddRecord = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      try {
-        const response = await fetch('/api/compliance-records', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...newRecord,
-            compliance_type_id: parseInt(newRecord.compliance_type_id),
-            reminder_days_before: parseInt(newRecord.reminder_days_before.toString()),
-          }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          const updatedRecords = [data.data, ...records];
-          setRecords(updatedRecords);
-          if (selectedType === 'all' && selectedStatus === 'all') {
-            cacheData('compliance_records', updatedRecords);
-          }
-          setNewRecord({
-            compliance_type_id: '',
-            document_name: '',
-            issue_date: '',
-            expiry_date: '',
-            document_url: '',
-            photo_url: '',
-            notes: '',
-            reminder_enabled: true,
-            reminder_days_before: 30,
-          });
-          setShowAddRecord(false);
-        }
-      } catch (error) {
-        logger.error('Error adding record:', error);
-      }
+      await handleAddComplianceRecord({
+        newRecord,
+        records,
+        selectedType,
+        selectedStatus,
+        setRecords,
+        setShowAddRecord,
+        resetForm: resetRecordForm,
+      });
     },
-    [newRecord, records, selectedType, selectedStatus, setRecords, setShowAddRecord],
+    [
+      newRecord,
+      records,
+      selectedType,
+      selectedStatus,
+      setRecords,
+      setShowAddRecord,
+      resetRecordForm,
+    ],
   );
-
   const handleAddType = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      try {
-        const response = await fetch('/api/compliance-types', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...newType,
-            renewal_frequency_days: newType.renewal_frequency_days
-              ? parseInt(newType.renewal_frequency_days)
-              : null,
-          }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          const updatedTypes = [...types, data.data];
-          setTypes(updatedTypes);
-          cacheData('compliance_types', updatedTypes);
-          setNewType({ name: '', description: '', renewal_frequency_days: '' });
-          setShowAddType(false);
-        }
-      } catch (error) {
-        logger.error('Error adding type:', error);
-      }
+      await handleAddComplianceType({
+        newType,
+        types,
+        setTypes,
+        setShowAddType,
+        resetForm: resetTypeForm,
+      });
     },
-    [newType, types, setTypes, setShowAddType],
+    [newType, types, setTypes, setShowAddType, resetTypeForm],
   );
-
-  return {
-    newRecord,
-    setNewRecord,
-    newType,
-    setNewType,
-    handleAddRecord,
-    handleAddType,
-  };
+  return { newRecord, setNewRecord, newType, setNewType, handleAddRecord, handleAddType };
 }

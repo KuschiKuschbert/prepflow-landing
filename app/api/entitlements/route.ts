@@ -1,6 +1,7 @@
 import { authOptions } from '@/lib/auth-options';
-import { getEntitlementsForTier } from '@/lib/entitlements';
+import { getEntitlementsForTierAsync } from '@/lib/entitlements';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { TierSlug } from '@/lib/tier-config';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
@@ -10,30 +11,26 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const email = session.user.email as string;
-  // Default tier until Stripe wiring
-  const tier = 'starter' as const;
-  const ent = getEntitlementsForTier(email, tier);
-  if (!supabaseAdmin) {
-    return NextResponse.json({ entitlements: ent, note: 'Supabase not available' });
-  }
-  try {
-    const { error } = await supabaseAdmin
-      .from('entitlements')
-      .upsert(
-        { user_email: email, tier: ent.tier, features: ent.features },
-        { onConflict: 'user_email' },
-      );
-    if (error) {
-      return NextResponse.json(
-        { entitlements: ent, note: 'Upsert failed (table missing?)', details: error.message },
-        { status: 501 },
-      );
+
+  // Get actual tier from database
+  let tier: TierSlug = 'starter';
+  if (supabaseAdmin) {
+    try {
+      const { data } = await supabaseAdmin
+        .from('users')
+        .select('subscription_tier')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (data?.subscription_tier) {
+        tier = data.subscription_tier as TierSlug;
+      }
+    } catch (error) {
+      // Fallback to starter on error
     }
-    return NextResponse.json({ entitlements: ent });
-  } catch (e: any) {
-    return NextResponse.json(
-      { entitlements: ent, note: 'Persistence error', details: String(e) },
-      { status: 500 },
-    );
   }
+
+  // Get entitlements using database config (with code fallback)
+  const ent = await getEntitlementsForTierAsync(email, tier);
+  return NextResponse.json({ entitlements: ent });
 }

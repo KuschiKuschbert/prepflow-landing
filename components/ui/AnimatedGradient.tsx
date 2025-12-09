@@ -73,7 +73,7 @@ export function AnimatedGradient({
           background: `linear-gradient(${angle}deg, ${colors.join(', ')})`,
           opacity,
         }}
-        aria-hidden="true"
+        aria-hidden={true}
       />
     );
   }
@@ -87,7 +87,7 @@ export function AnimatedGradient({
           background: `linear-gradient(${angle}deg, ${colors.join(', ')})`,
           opacity,
         }}
-        aria-hidden="true"
+        aria-hidden={true}
       />
     );
   }
@@ -95,7 +95,7 @@ export function AnimatedGradient({
   return (
     <motion.div
       className={`fixed inset-0 -z-10 ${className}`}
-      aria-hidden="true"
+      aria-hidden={true}
       style={{
         willChange: 'opacity',
       }}

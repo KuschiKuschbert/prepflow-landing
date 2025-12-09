@@ -1,26 +1,35 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { HelpTooltip } from '@/components/ui/HelpTooltip';
-import { ParLevelInlineForm } from './components/ParLevelInlineForm';
-import { ParLevelEditDrawer } from './components/ParLevelEditDrawer';
-import { ParLevelCard } from './components/ParLevelCard';
-import { ParLevelTable } from './components/ParLevelTable';
-import { ParLevelSelectionModeBanner } from './components/ParLevelSelectionModeBanner';
-import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { TablePagination } from '@/components/ui/TablePagination';
-import { Package2 } from 'lucide-react';
+import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
+import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { Icon } from '@/components/ui/Icon';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { TablePagination } from '@/components/ui/TablePagination';
 import { useNotification } from '@/contexts/NotificationContext';
-import { useSelectionMode } from './hooks/useSelectionMode';
+import { logger } from '@/lib/logger';
+import { useTranslation } from '@/lib/useTranslation';
+import { Package2 } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { ParLevelCard } from './components/ParLevelCard';
+import { ParLevelEditDrawer } from './components/ParLevelEditDrawer';
+import { ParLevelInlineForm } from './components/ParLevelInlineForm';
+import { ParLevelSelectionModeBanner } from './components/ParLevelSelectionModeBanner';
+import { ParLevelTable } from './components/ParLevelTable';
+import { useParLevelsCRUD } from './hooks/useParLevelsCRUD';
 import { useParLevelsData } from './hooks/useParLevelsData';
 import { useParLevelsForm } from './hooks/useParLevelsForm';
-import { useParLevelsCRUD } from './hooks/useParLevelsCRUD';
-import { useParLevelsSelection } from './hooks/useParLevelsSelection';
 import { useParLevelsPagination } from './hooks/useParLevelsPagination';
+import { useParLevelsSelection } from './hooks/useParLevelsSelection';
+import { useSelectionMode } from './hooks/useSelectionMode';
+import {
+  exportParLevelsToCSV,
+  exportParLevelsToHTML,
+  exportParLevelsToPDF,
+} from './utils/exportParLevels';
+import { printParLevels } from './utils/printParLevels';
 
 export default function ParLevelsPage() {
   const { t } = useTranslation();
@@ -79,6 +88,60 @@ export default function ParLevelsPage() {
   const { page, setPage, itemsPerPage, setItemsPerPage, totalPages, paginatedParLevels } =
     useParLevelsPagination({ parLevels });
 
+  const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
+  const [printLoading, setPrintLoading] = useState(false);
+
+  const handlePrint = useCallback(() => {
+    if (parLevels.length === 0) {
+      showError('No par levels to print');
+      return;
+    }
+
+    setPrintLoading(true);
+    try {
+      printParLevels({ parLevels });
+      showSuccess('Par levels report opened for printing');
+    } catch (error) {
+      logger.error('Failed to print par levels:', error);
+      showError('Failed to print par levels');
+    } finally {
+      setPrintLoading(false);
+    }
+  }, [parLevels, showSuccess, showError]);
+
+  const handleExport = useCallback(
+    async (format: ExportFormat) => {
+      if (parLevels.length === 0) {
+        showError('No par levels to export');
+        return;
+      }
+
+      setExportLoading(format);
+      try {
+        switch (format) {
+          case 'csv':
+            exportParLevelsToCSV(parLevels);
+            showSuccess('Par levels exported to CSV');
+            break;
+          case 'html':
+            exportParLevelsToHTML(parLevels);
+            showSuccess('Par levels exported to HTML');
+            break;
+          case 'pdf':
+            await exportParLevelsToPDF(parLevels);
+            showSuccess('Par levels exported to PDF');
+            break;
+        }
+      } catch (error) {
+        logger.error(`Failed to export par levels to ${format}:`, error);
+        showError(`Failed to export par levels to ${format.toUpperCase()}`);
+      } finally {
+        setExportLoading(null);
+      }
+    },
+    [parLevels, showSuccess, showError],
+  );
+
   const handleFormClose = () => {
     resetForm();
     setShowForm(false);
@@ -117,12 +180,25 @@ export default function ParLevelsPage() {
               />
             </div>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
-          >
-            + {t('parLevels.addParLevel', 'Add Par Level')}
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setShowForm(true)}
+              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+            >
+              + {t('parLevels.addParLevel', 'Add Par Level')}
+            </button>
+            <PrintButton
+              onClick={handlePrint}
+              loading={printLoading}
+              disabled={parLevels.length === 0}
+            />
+            <ExportButton
+              onExport={handleExport}
+              loading={exportLoading}
+              disabled={parLevels.length === 0}
+              availableFormats={['csv', 'pdf', 'html']}
+            />
+          </div>
         </div>
 
         {/* Inline Add Form */}

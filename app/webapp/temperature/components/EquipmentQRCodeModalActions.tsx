@@ -3,6 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Printer } from 'lucide-react';
 import { RefObject } from 'react';
+import { printQRCode } from '@/lib/qr-codes/qr-print-template';
 
 interface EquipmentQRCodeModalActionsProps {
   printRef: RefObject<HTMLDivElement | null>;
@@ -22,90 +23,20 @@ export function EquipmentQRCodeModalActions({
   const handlePrint = () => {
     if (!printRef.current) return;
 
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
+    const qrCodeElement = printRef.current.querySelector('.qr-code-svg');
+    if (!qrCodeElement) return;
 
-    const printContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>QR Code - ${equipment.name}</title>
-          <style>
-            @media print {
-              @page {
-                margin: 20mm;
-                size: A4;
-              }
-            }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              min-height: 100vh;
-              padding: 40px;
-              margin: 0;
-            }
-            .qr-container {
-              text-align: center;
-              padding: 20px;
-              border: 2px solid #000;
-              border-radius: 8px;
-              background: white;
-            }
-            .qr-code {
-              margin: 20px 0;
-            }
-            .equipment-name {
-              font-size: 24px;
-              font-weight: bold;
-              margin-bottom: 10px;
-              color: #000;
-            }
-            .equipment-type {
-              font-size: 16px;
-              color: #666;
-              margin-bottom: 10px;
-            }
-            .equipment-location {
-              font-size: 14px;
-              color: #888;
-              margin-bottom: 20px;
-            }
-            .instructions {
-              font-size: 12px;
-              color: #666;
-              margin-top: 20px;
-              max-width: 300px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="qr-container">
-            <div class="equipment-name">${equipment.name}</div>
-            ${equipment.equipment_type ? `<div class="equipment-type">${equipment.equipment_type}</div>` : ''}
-            ${equipment.location ? `<div class="equipment-location">Location: ${equipment.location}</div>` : ''}
-            <div class="qr-code">
-              ${printRef.current.querySelector('.qr-code-svg')?.outerHTML || ''}
-            </div>
-            <div class="instructions">
-              Scan this QR code to view equipment details and log temperature readings
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
+    const qrCodeHtml = qrCodeElement.outerHTML;
+    const locationText = equipment.location ? `Location: ${equipment.location}` : undefined;
 
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-    printWindow.focus();
-
-    // Wait for content to load, then print
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 250);
+    // Use unified print template with Cyber Carrot branding
+    printQRCode({
+      entityName: equipment.name,
+      entityType: equipment.equipment_type,
+      subtitle: locationText,
+      qrCodeHtml,
+      instructions: 'Scan this QR code to view equipment details and log temperature readings',
+    });
   };
 
   return (

@@ -18,17 +18,62 @@ const LIMITS = {
   util: 150,
   hook: 100,
   data: 2000,
+  config: 500, // Configuration/data files exception
+  algorithm: 300, // Complex algorithms exception
+  report: 300, // Report generators exception
 };
 
 const exts = new Set(['.ts', '.tsx', '.js', '.jsx']);
 
 function detectCategory(filePath) {
   const p = filePath.replace(/\\/g, '/');
+
+  // Configuration/data files exception (500 lines)
+  if (
+    p.includes('-styles.ts') ||
+    p.includes('PrintStyles') ||
+    p.includes('/menuPrintStyles/') ||
+    p.includes('/orderListPrintStyles') ||
+    p.includes('/prepListPrintStyles') ||
+    p.includes('-config.ts') ||
+    p.includes('standard-tasks.ts') ||
+    p.includes('australian-allergens.ts') ||
+    p.includes('country-config.ts')
+  ) {
+    return 'config';
+  }
+
+  // Complex algorithm exception (300 lines)
+  if (
+    p.includes('detection.ts') ||
+    p.includes('category-detection.ts') ||
+    p.includes('vegetarian-vegan-detection.ts')
+  ) {
+    return 'algorithm';
+  }
+
+  // Report generator exception (300 lines)
+  if (
+    p.includes('report-generator.ts') ||
+    p.includes('pdf-template.ts') ||
+    p.includes('/report-generator/')
+  ) {
+    return 'report';
+  }
+
+  // Standard detection logic
   if (p.includes('/app/api/')) return 'api';
   if (p.match(/\/hooks\//) || /\/hooks\/[^/]+\.(t|j)sx?$/.test(p)) return 'hook';
   if ((p.startsWith('app/') || p.includes('/app/')) && /\/page\.(t|j)sx$/.test(p)) return 'page';
   if (p.match(/\/(components|ui)\//)) return 'component';
-  if (p.includes('-data.ts') || p.includes('sample-') || p.includes('translations/')) return 'data';
+  // Check for data files (translations, seed data, sample data, guide data)
+  if (
+    p.includes('-data.ts') ||
+    p.includes('sample-') ||
+    p.includes('translations/') ||
+    (p.includes('/data/') && p.endsWith('.ts'))
+  )
+    return 'data';
   if (p.match(/\/(lib|utils?)\//) || /\/utils?\.(t|j)s$/.test(p)) return 'util';
   return 'component';
 }

@@ -1,0 +1,120 @@
+import {
+  CreditCard,
+  HardDrive,
+  HelpCircle,
+  QrCode,
+  Settings2,
+  Shield,
+  ShieldCheck,
+  User,
+  Wrench,
+} from 'lucide-react';
+import type { NavItem, Category } from './types';
+
+export const navItems: NavItem[] = [
+  {
+    hash: '#profile',
+    label: 'Profile & Account',
+    icon: User,
+    category: 'account',
+    ariaLabel: 'View profile and account settings',
+    description: 'Manage your profile and account details',
+  },
+  {
+    hash: '#billing',
+    label: 'Billing & Subscription',
+    icon: CreditCard,
+    category: 'account',
+    ariaLabel: 'View billing and subscription settings',
+    description: 'Manage your subscription and billing',
+  },
+  {
+    hash: '#preferences',
+    label: 'Preferences',
+    icon: Settings2,
+    category: 'preferences',
+    ariaLabel: 'View app preferences',
+    description: 'Customize app behavior and appearance',
+  },
+  {
+    hash: '#security',
+    label: 'Security',
+    icon: Shield,
+    category: 'preferences',
+    ariaLabel: 'View security settings',
+    description: 'Password, 2FA, and security settings',
+  },
+  {
+    hash: '#privacy',
+    label: 'Privacy & Legal',
+    icon: ShieldCheck,
+    category: 'privacy',
+    ariaLabel: 'View privacy and legal settings',
+    description: 'Privacy controls and legal information',
+  },
+  {
+    hash: '#help',
+    label: 'Help & Support',
+    icon: HelpCircle,
+    category: 'privacy',
+    ariaLabel: 'View help and support',
+    description: 'Get help and report issues',
+  },
+  {
+    hash: '#backup',
+    label: 'Backup & Restore',
+    icon: HardDrive,
+    category: 'data',
+    ariaLabel: 'View backup and restore options',
+    description: 'Export and restore your data',
+  },
+  {
+    hash: '#qr-codes',
+    label: 'QR Codes',
+    icon: QrCode,
+    category: 'data',
+    ariaLabel: 'View QR code settings',
+    description: 'Generate and manage QR codes',
+  },
+  {
+    hash: '#advanced',
+    label: 'Advanced',
+    icon: Wrench,
+    category: 'advanced',
+    ariaLabel: 'View advanced settings',
+    description: 'Advanced configuration options',
+  },
+];
+
+export const categories: Category[] = [
+  {
+    id: 'account',
+    label: 'Account',
+    icon: User,
+    items: navItems.filter(item => item.category === 'account'),
+  },
+  {
+    id: 'preferences',
+    label: 'Preferences',
+    icon: Settings2,
+    items: navItems.filter(item => item.category === 'preferences'),
+  },
+  {
+    id: 'privacy',
+    label: 'Privacy & Legal',
+    icon: ShieldCheck,
+    items: navItems.filter(item => item.category === 'privacy'),
+  },
+  {
+    id: 'data',
+    label: 'Data & Tools',
+    icon: HardDrive,
+    items: navItems.filter(item => item.category === 'data'),
+  },
+  {
+    id: 'advanced',
+    label: 'Advanced',
+    icon: Wrench,
+    items: navItems.filter(item => item.category === 'advanced'),
+  },
+];

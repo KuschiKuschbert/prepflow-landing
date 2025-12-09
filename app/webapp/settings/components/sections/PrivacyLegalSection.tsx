@@ -20,17 +20,9 @@ const LegalCompliancePanel = dynamic(
   },
 );
 
-const HelpSupportPanel = dynamic(
-  () => import('../HelpSupportPanel').then(mod => ({ default: mod.HelpSupportPanel })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
 /**
  * Privacy & Legal section component.
- * Combines privacy controls, legal compliance, and help & support.
+ * Combines privacy controls and legal compliance.
  *
  * @component
  * @returns {JSX.Element} Privacy & Legal section
@@ -40,7 +32,6 @@ export function PrivacyLegalSection() {
     <div className="space-y-6">
       <PrivacyControlsPanel />
       <LegalCompliancePanel />
-      <HelpSupportPanel />
     </div>
   );
 }

@@ -1,8 +1,9 @@
 /**
- * Generate CSV export for recipe cards
+ * Generate CSV export for recipe cards using PapaParse for consistent formatting
  */
 
 import { NextResponse } from 'next/server';
+import Papa from 'papaparse';
 
 interface RecipeCardData {
   id: string;
@@ -30,33 +31,37 @@ interface RecipeCardData {
 export function generateCSV(menuName: string, cards: RecipeCardData[]): NextResponse {
   const headers = ['Category', 'Recipe Name', 'Base Yield', 'Ingredients', 'Method Steps', 'Notes'];
 
-  const rows = cards.map(card => {
+  const csvData = cards.map(card => {
     const ingredients = card.ingredients
       .map(ing => `${ing.name}: ${ing.quantity} ${ing.unit}`)
       .join('; ');
     const methodSteps = card.methodSteps.join('; ');
     const notes = card.notes.join('; ');
 
-    return [
-      card.category || 'Uncategorized',
-      card.title,
-      card.baseYield.toString(),
-      ingredients,
-      methodSteps,
-      notes,
-    ];
+    return {
+      Category: card.category || 'Uncategorized',
+      'Recipe Name': card.title,
+      'Base Yield': card.baseYield.toString(),
+      Ingredients: ingredients,
+      'Method Steps': methodSteps,
+      Notes: notes,
+    };
   });
 
-  const csvContent = [
-    `Recipe Cards - ${menuName}`,
-    '',
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
-  ].join('\n');
+  const csvContent = Papa.unparse(csvData, {
+    columns: headers,
+    header: true,
+    delimiter: ',',
+    newline: '\n',
+    quoteChar: '"',
+    escapeChar: '"',
+  });
 
-  return new NextResponse(csvContent, {
+  const fullContent = [`Recipe Cards - ${menuName}`, '', csvContent].join('\n');
+
+  return new NextResponse(fullContent, {
     headers: {
-      'Content-Type': 'text/csv',
+      'Content-Type': 'text/csv;charset=utf-8',
       'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_recipe_cards.csv"`,
     },
   });

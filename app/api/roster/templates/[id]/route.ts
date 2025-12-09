@@ -7,8 +7,10 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { getTemplate } from './helpers/getTemplate';
+import { updateTemplate } from './helpers/updateTemplate';
+import { deleteTemplate } from './helpers/deleteTemplate';
 
 /**
  * GET /api/roster/templates/[id]
@@ -17,52 +19,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
-    const templateId = id;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    // Get template
-    const { data: template, error: templateError } = await supabaseAdmin
-      .from('roster_templates')
-      .select('*')
-      .eq('id', templateId)
-      .single();
-
-    if (templateError || !template) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Template not found', 'NOT_FOUND', 404),
-        {
-          status: 404,
-        },
-      );
-    }
-
-    // Get template shifts
-    const { data: templateShifts, error: shiftsError } = await supabaseAdmin
-      .from('template_shifts')
-      .select('*')
-      .eq('template_id', templateId)
-      .order('day_of_week', { ascending: true })
-      .order('start_time', { ascending: true });
-
-    if (shiftsError) {
-      logger.error('[Templates API] Database error fetching template shifts:', {
-        error: shiftsError.message,
-        code: (shiftsError as any).code,
-        context: { endpoint: '/api/roster/templates/[id]', operation: 'GET', templateId },
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      template,
-      templateShifts: templateShifts || [],
-    });
+    return await getTemplate(id);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -96,66 +53,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
-    const templateId = id;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    // Check if template exists
-    const { data: existingTemplate, error: fetchError } = await supabaseAdmin
-      .from('roster_templates')
-      .select('*')
-      .eq('id', templateId)
-      .single();
-
-    if (fetchError || !existingTemplate) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Template not found', 'NOT_FOUND', 404),
-        {
-          status: 404,
-        },
-      );
-    }
-
     const body = await request.json();
-
-    // Build update data
-    const updateData: any = {
-      updated_at: new Date().toISOString(),
-    };
-
-    if (body.name !== undefined) updateData.name = body.name;
-    if (body.description !== undefined) updateData.description = body.description;
-    if (body.is_active !== undefined) updateData.is_active = body.is_active;
-
-    // Update template
-    const { data: template, error: updateError } = await supabaseAdmin
-      .from('roster_templates')
-      .update(updateData)
-      .eq('id', templateId)
-      .select()
-      .single();
-
-    if (updateError) {
-      logger.error('[Templates API] Database error updating template:', {
-        error: updateError.message,
-        code: (updateError as any).code,
-        context: { endpoint: '/api/roster/templates/[id]', operation: 'PUT', templateId },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      template,
-      message: 'Template updated successfully',
-    });
+    return await updateTemplate(id, body);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -184,52 +83,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
-    const templateId = id;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    // Check if template exists
-    const { data: existingTemplate, error: fetchError } = await supabaseAdmin
-      .from('roster_templates')
-      .select('id')
-      .eq('id', templateId)
-      .single();
-
-    if (fetchError || !existingTemplate) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Template not found', 'NOT_FOUND', 404),
-        {
-          status: 404,
-        },
-      );
-    }
-
-    // Delete template (template_shifts will be deleted via CASCADE)
-    const { error: deleteError } = await supabaseAdmin
-      .from('roster_templates')
-      .delete()
-      .eq('id', templateId);
-
-    if (deleteError) {
-      logger.error('[Templates API] Database error deleting template:', {
-        error: deleteError.message,
-        code: (deleteError as any).code,
-        context: { endpoint: '/api/roster/templates/[id]', operation: 'DELETE', templateId },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(deleteError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Template deleted successfully',
-    });
+    return await deleteTemplate(id);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

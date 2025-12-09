@@ -7,6 +7,7 @@ import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { useTranslation } from '@/lib/useTranslation';
 import { Inter } from 'next/font/google';
 import dynamic from 'next/dynamic';
+import { signOut } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider, useGlobalWarning } from '../../contexts/GlobalWarningContext';
@@ -14,6 +15,7 @@ import { NotificationProvider } from '../../contexts/NotificationContext';
 import '../globals.css';
 import ModernNavigation from './components/ModernNavigation';
 import { NetworkStatusBanner } from './components/NetworkStatusBanner';
+import { SubscriptionStatusBanner } from '@/components/ui/SubscriptionStatusBanner';
 
 // Lazy load non-critical components to reduce initial bundle size
 const CatchTheDocketOverlay = dynamic(() => import('@/components/Loading/CatchTheDocketOverlay'), {
@@ -67,6 +69,17 @@ const AchievementToast = dynamic(
   },
 );
 
+const MilestoneToast = dynamic(
+  () =>
+    import('@/components/gamification/MilestoneToast').then(mod => ({
+      default: mod.MilestoneToast,
+    })),
+  {
+    ssr: false,
+    loading: () => null, // Milestone toast can load asynchronously
+  },
+);
+
 const WebappBackground = dynamic(
   () => import('@/components/ui/WebappBackground').then(mod => ({ default: mod.WebappBackground })),
   {
@@ -109,8 +122,11 @@ export default function WebAppLayout({
   const { isWarning, remainingMs, resetTimeout } = useSessionTimeout({
     timeoutMs,
     warningMs,
-    onTimeout: () => {
-      // Redirect to home page on timeout
+    onTimeout: async () => {
+      // Actually sign out the user (not just redirect)
+      // This clears the NextAuth session cookie
+      await signOut({ redirect: false });
+      // Then redirect to home page
       window.location.href = '/';
     },
     enabled: true,
@@ -212,6 +228,9 @@ function WebAppLayoutContent({
       {/* Network Status Banner */}
       <NetworkStatusBanner />
 
+      {/* Subscription Status Banner */}
+      <SubscriptionStatusBanner />
+
       {/* Global Warning System */}
       <GlobalWarning onHeightChange={handleWarningHeightChange} />
 
@@ -223,6 +242,9 @@ function WebAppLayoutContent({
 
       {/* Achievement Toast */}
       <AchievementToast />
+
+      {/* Milestone Toast */}
+      <MilestoneToast />
 
       {/* Main Content - responsive padding handled by CSS in globals.css */}
       <main className="webapp-main-content bg-transparent">

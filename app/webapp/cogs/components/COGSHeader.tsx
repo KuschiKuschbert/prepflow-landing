@@ -6,9 +6,85 @@ import { useState } from 'react';
 import { PageHeader } from '../../components/static/PageHeader';
 import { Calculator, Lightbulb } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
+import { printCOGSAnalysis } from '../utils/printCOGSAnalysis';
+import {
+  exportCOGSAnalysisToCSV,
+  exportCOGSAnalysisToHTML,
+  exportCOGSAnalysisToPDF,
+} from '../utils/exportCOGSAnalysis';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import type { Recipe, COGSCalculation } from '../types';
 
-export function COGSHeader() {
+interface COGSHeaderProps {
+  recipe: Recipe | null;
+  calculations: COGSCalculation[];
+  totalCOGS: number;
+  costPerPortion: number;
+  dishPortions: number;
+}
+
+export function COGSHeader({
+  recipe,
+  calculations,
+  totalCOGS,
+  costPerPortion,
+  dishPortions,
+}: COGSHeaderProps) {
   const [showGuide, setShowGuide] = useState(false);
+  const { showSuccess, showError } = useNotification();
+  const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
+  const [printLoading, setPrintLoading] = useState(false);
+
+  const handlePrint = () => {
+    if (!recipe || calculations.length === 0) {
+      showError('No COGS data to print. Please select a recipe and add ingredients.');
+      return;
+    }
+
+    setPrintLoading(true);
+    try {
+      printCOGSAnalysis({ recipe, calculations, totalCOGS, costPerPortion, dishPortions });
+      showSuccess('COGS analysis opened for printing');
+    } catch (error) {
+      logger.error('Failed to print COGS analysis:', error);
+      showError('Failed to print COGS analysis');
+    } finally {
+      setPrintLoading(false);
+    }
+  };
+
+  const handleExport = async (format: ExportFormat) => {
+    if (!recipe || calculations.length === 0) {
+      showError('No COGS data to export. Please select a recipe and add ingredients.');
+      return;
+    }
+
+    setExportLoading(format);
+    try {
+      switch (format) {
+        case 'csv':
+          exportCOGSAnalysisToCSV(calculations, totalCOGS, costPerPortion);
+          showSuccess('COGS analysis exported to CSV');
+          break;
+        case 'html':
+          exportCOGSAnalysisToHTML(calculations, totalCOGS, costPerPortion);
+          showSuccess('COGS analysis exported to HTML');
+          break;
+        case 'pdf':
+          await exportCOGSAnalysisToPDF(calculations, totalCOGS, costPerPortion);
+          showSuccess('COGS analysis exported to PDF');
+          break;
+      }
+    } catch (error) {
+      logger.error(`Failed to export COGS analysis to ${format}:`, error);
+      showError(`Failed to export COGS analysis to ${format.toUpperCase()}`);
+    } finally {
+      setExportLoading(null);
+    }
+  };
 
   return (
     <div className="mb-8">
@@ -16,7 +92,26 @@ export function COGSHeader() {
         title="COGS Calculator"
         subtitle="Calculate Cost of Goods Sold and optimize your profit margins"
         icon={Calculator}
-        actions={<HelpTooltip content={getHelpText('cogs', true, true)} title="What is COGS?" />}
+        actions={
+          <div className="flex items-center gap-2">
+            <PrintButton
+              onClick={handlePrint}
+              loading={printLoading}
+              disabled={!recipe || calculations.length === 0}
+              size="sm"
+              variant="secondary"
+            />
+            <ExportButton
+              onExport={handleExport}
+              loading={exportLoading}
+              disabled={!recipe || calculations.length === 0}
+              availableFormats={['csv', 'pdf', 'html']}
+              size="sm"
+              variant="secondary"
+            />
+            <HelpTooltip content={getHelpText('cogs', true, true)} title="What is COGS?" />
+          </div>
+        }
       />
 
       <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#3B82F6]/10 p-6">

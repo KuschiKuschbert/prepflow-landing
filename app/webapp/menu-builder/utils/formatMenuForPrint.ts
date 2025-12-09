@@ -36,9 +36,14 @@ function escapeHtml(text: string): string {
  * @param {MenuItem[]} menuItems - Array of menu items (should include existing descriptions)
  * @returns {string} HTML string for printing
  */
-export function formatMenuForPrint(menu: Menu, menuItems: MenuItem[]): string {
+export function formatMenuForPrint(
+  menu: Menu,
+  menuItems: MenuItem[],
+  variant: 'default' | 'customer' = 'default',
+): string {
   // Return content HTML only - template provides header, logo, background elements
-  let html = `<div class="menu-print">`;
+  const variantClass = variant === 'customer' ? 'variant-customer' : '';
+  let html = `<div class="menu-print ${variantClass}">`;
 
   // Group items by category
   const itemsByCategory = new Map<string, MenuItem[]>();

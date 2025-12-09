@@ -9,8 +9,6 @@ import { AlertCircle, AlertTriangle, ChefHat, Utensils } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { MenuItem } from '../../../types';
 import { useMenuItemStatistics } from '../hooks/useMenuItemStatistics';
-import { FoodImageDisplay } from '@/components/ui/FoodImageDisplay';
-import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface MenuItemContentProps {
   item: MenuItem;
@@ -100,17 +98,6 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
     }
   }
 
-  // Get image URLs from dish or recipe
-  const imageUrl = isDish ? (item.dishes as any)?.image_url : (item.recipes as any)?.image_url;
-  const imageUrlAlternative = isDish
-    ? (item.dishes as any)?.image_url_alternative
-    : (item.recipes as any)?.image_url_alternative;
-  const hasImages = !!(imageUrl || imageUrlAlternative);
-  const entityId = isDish ? item.dish_id : item.recipe_id;
-  const entityName = isDish
-    ? item.dishes?.dish_name || 'Unknown Dish'
-    : item.recipes?.recipe_name || 'Unknown Recipe';
-
   return (
     <div className="flex flex-1 items-center gap-2">
       {/* Type Icon */}
@@ -119,47 +106,6 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
       ) : isRecipe ? (
         <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
       ) : null}
-
-      {/* Image Generation Button (compact) - always show to allow regeneration */}
-      {entityId && (
-        <div className="flex-shrink-0" onClick={e => e.stopPropagation()}>
-          <FoodImageGenerator
-            entityType={isDish ? 'dish' : 'recipe'}
-            entityId={entityId}
-            entityName={entityName}
-            imageUrl={
-              hasImages
-                ? isDish
-                  ? (item.dishes as any)?.image_url
-                  : (item.recipes as any)?.image_url
-                : null
-            }
-            imageUrlAlternative={
-              hasImages
-                ? isDish
-                  ? (item.dishes as any)?.image_url_alternative
-                  : (item.recipes as any)?.image_url_alternative
-                : null
-            }
-            imageUrlModern={
-              hasImages
-                ? isDish
-                  ? (item.dishes as any)?.image_url_modern
-                  : (item.recipes as any)?.image_url_modern
-                : null
-            }
-            imageUrlMinimalist={
-              hasImages
-                ? isDish
-                  ? (item.dishes as any)?.image_url_minimalist
-                  : (item.recipes as any)?.image_url_minimalist
-                : null
-            }
-            compact={true}
-            showDisplay={false}
-          />
-        </div>
-      )}
 
       <div className="flex-1">
         {isDish ? (

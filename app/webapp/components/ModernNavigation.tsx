@@ -10,12 +10,12 @@ import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
+import { MobileFAB } from './navigation/MobileFAB';
 import { MoreDrawer } from './navigation/MoreDrawer';
 import { useNavigationItems } from './navigation/nav-items';
 import { NavigationHeader } from './navigation/NavigationHeader';
 import PersistentSidebar from './navigation/PersistentSidebar';
 import { SearchModal } from './navigation/SearchModal';
-import { MobileFAB } from './navigation/MobileFAB';
 
 // Utility function to ensure consistent class ordering
 const cn = (...classes: (string | undefined | null | false)[]): string => {
@@ -127,6 +127,7 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
         handleLogoMouseUp={handleLogoMouseUp}
         handleLogoMouseLeave={handleLogoMouseLeave}
         shouldPreventNavigation={shouldPreventNavigation}
+        onAchievementsClick={() => setShowAchievements(true)}
       />
 
       {/* Desktop: Persistent Sidebar - CSS handles visibility */}
@@ -136,12 +137,15 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
 
       {/* Mobile: Bottom Navigation Bar - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <BottomNavBar onMenuClick={() => setIsMoreDrawerOpen(true)} />
+        <BottomNavBar
+          onMenuClick={() => setIsMoreDrawerOpen(true)}
+          onSearchClick={() => setIsSearchOpen(true)}
+        />
       </div>
 
       {/* Mobile: Floating Action Button - CSS handles visibility */}
       <div className="desktop:hidden block">
-        <MobileFAB onSearchClick={() => setIsSearchOpen(true)} />
+        <MobileFAB />
       </div>
 
       {/* Mobile: More Drawer - CSS handles visibility */}

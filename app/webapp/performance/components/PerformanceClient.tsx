@@ -117,6 +117,9 @@ export default function PerformanceClient() {
               showImportModal={state.showImportModal}
               onImportClick={handleImportClick}
               onExportCSV={handleExportCSV}
+              dateRange={dateRange}
+              metadata={state.metadata}
+              performanceScore={state.performanceScore}
             />
 
             {/* Performance Table */}

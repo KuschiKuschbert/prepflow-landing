@@ -1,26 +1,14 @@
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { calculateOutOfRange } from './fetchTemperatureData/calculateOutOfRange';
+import { fetchSupabaseTemperatureData } from './fetchTemperatureData/fetchSupabaseData';
+import { fetchDashboardStats } from './fetchTemperatureData/fetchStats';
+import { extractLastCheckTime } from './fetchTemperatureData/extractLastCheckTime';
+
+export { calculateOutOfRange, extractLastCheckTime };
 
 /**
- * Calculate out of range temperature logs.
- *
- * @param {any[]} todayLogs - Today's temperature logs
- * @param {any[]} equipment - Temperature equipment list
- * @returns {number} Count of out of range logs
- */
-export function calculateOutOfRange(todayLogs: any[], equipment: any[]): number {
-  return todayLogs.filter((log: any) => {
-    const eq = equipment.find((e: any) => e.location === log.location);
-    if (!eq || eq.min_temp_celsius === null || eq.max_temp_celsius === null) return false;
-    return (
-      log.temperature_celsius < eq.min_temp_celsius || log.temperature_celsius > eq.max_temp_celsius
-    );
-  }).length;
-}
-
-/**
- * Fetch temperature status data from cache or API.
+ * Fetch temperature status data from cache or API
  *
  * @returns {Promise<{stats: any, logs: any[], equipment: any[]}>} Temperature data
  */
@@ -41,57 +29,8 @@ export async function fetchTemperatureStatusData() {
 
   // Fetch fresh data
   try {
-    let statsResponse: Response | null = null;
-    try {
-      statsResponse = await fetch('/api/dashboard/stats', { cache: 'no-store' });
-    } catch (fetchError) {
-      logger.error('Network error fetching temperature status:', fetchError);
-      // Return cached data if available, otherwise empty
-      return {
-        stats: cachedStats || null,
-        logs: cachedLogs?.filter((log: any) => log.log_date === today) || [],
-        equipment: cachedEquipment || [],
-      };
-    }
-
-    const [logsResult, equipmentResult] = await Promise.all([
-      supabase
-        .from('temperature_logs')
-        .select('id, log_date, log_time, temperature_celsius, location, created_at')
-        .order('log_date', { ascending: false })
-        .order('log_time', { ascending: false })
-        .limit(20),
-      supabase
-        .from('temperature_equipment')
-        .select('id, location, min_temp_celsius, max_temp_celsius')
-        .eq('is_active', true),
-    ]);
-
-    let stats = null;
-    if (statsResponse.ok) {
-      try {
-        const statsJson = await statsResponse.json();
-        stats = statsJson?.success ? statsJson : null;
-      } catch (parseError) {
-        logger.error('Error parsing temperature stats response:', parseError);
-      }
-    } else {
-      logger.error('Error fetching temperature stats:', {
-        status: statsResponse.status,
-        statusText: statsResponse.statusText,
-      });
-    }
-
-    const logs = logsResult.data || [];
-    const equipment = equipmentResult.data || [];
-
-    // Log Supabase errors but don't fail completely
-    if (logsResult.error) {
-      logger.error('Error fetching temperature logs:', logsResult.error);
-    }
-    if (equipmentResult.error) {
-      logger.error('Error fetching temperature equipment:', equipmentResult.error);
-    }
+    const stats = await fetchDashboardStats();
+    const { logs, equipment } = await fetchSupabaseTemperatureData();
 
     // Cache the data if we got fresh data
     if (logs.length > 0) {
@@ -115,18 +54,4 @@ export async function fetchTemperatureStatusData() {
       equipment: cachedEquipment || [],
     };
   }
-}
-
-/**
- * Extract last check time from logs.
- *
- * @param {any[]} logs - Temperature logs
- * @returns {string | undefined} Last check time string
- */
-export function extractLastCheckTime(logs: any[]): string | undefined {
-  if (logs.length === 0) return undefined;
-  const lastLog = logs[0];
-  return lastLog.log_date && lastLog.log_time
-    ? `${lastLog.log_date}T${lastLog.log_time}`
-    : lastLog.created_at;
 }

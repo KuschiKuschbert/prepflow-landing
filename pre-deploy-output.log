@@ -1,0 +1,15 @@
+
+> prepflow-landing@0.1.1 pre-deploy
+> bash scripts/pre-deploy-check.sh
+
+
+[0;34m🚀 Pre-Deployment Check[0m
+[0;34m========================[0m
+
+[0;34m📦 Checking Node version...[0m
+[0;32m✅ Node version 22.18.0 meets requirement (>= 22.0.0)[0m
+
+[0;34m📦 Installing dependencies (npm ci)...[0m
+[0;32m✅ Dependencies installed successfully[0m
+
+[0;34m🔒 Security audit (npm audit)...[0m

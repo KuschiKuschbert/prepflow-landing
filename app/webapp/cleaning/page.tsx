@@ -19,6 +19,20 @@ import { useCleaningKeyboardShortcuts } from './hooks/useCleaningKeyboardShortcu
 import { useCleaningModals } from './hooks/useCleaningModals';
 import { useCleaningPageData } from './hooks/useCleaningPageData';
 import { useStatsDates } from './hooks/useStatsDates';
+import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
+import { PrintButton } from '@/components/ui/PrintButton';
+import {
+  printCleaningRecords,
+  exportCleaningRecordsToCSV,
+} from './utils/cleaningRecordExportUtils';
+import {
+  exportCleaningScheduleToCSV,
+  exportCleaningScheduleToHTML,
+  exportCleaningScheduleToPDF,
+} from './utils/exportCleaningSchedules';
+import { printCleaningSchedule } from './utils/printCleaningSchedule';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 // Lazy load modals - only load when needed
 const CreateTaskForm = dynamic(
@@ -56,8 +70,10 @@ interface CleaningArea {
 }
 
 export default function CleaningRosterPage() {
+  const { showSuccess, showError } = useNotification();
   const [activeTab, setActiveTab] = useState<'grid' | 'areas'>('grid');
   const [gridFilter, setGridFilter] = useState<'today' | 'next2days' | 'week' | 'all'>('all');
+  const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
   const [newArea, setNewArea] = useState({
     area_name: '',
     description: '',
@@ -141,6 +157,51 @@ export default function CleaningRosterPage() {
     onSetActiveTab: setActiveTab,
   });
 
+  const handlePrint = () => {
+    if (tasks.length === 0) {
+      showError('No cleaning tasks to print');
+      return;
+    }
+
+    try {
+      printCleaningSchedule(tasks as any, startDate, endDate);
+      showSuccess('Cleaning schedule opened for printing');
+    } catch (err) {
+      logger.error('[Cleaning Schedule] Print error:', err);
+      showError('Failed to print cleaning schedule. Please try again.');
+    }
+  };
+
+  const handleExport = async (format: ExportFormat) => {
+    if (tasks.length === 0) {
+      showError('No cleaning tasks to export');
+      return;
+    }
+
+    setExportLoading(format);
+    try {
+      switch (format) {
+        case 'csv':
+          exportCleaningScheduleToCSV(tasks as any);
+          showSuccess('Cleaning schedule exported to CSV');
+          break;
+        case 'html':
+          exportCleaningScheduleToHTML(tasks as any, startDate, endDate);
+          showSuccess('Cleaning schedule exported to HTML');
+          break;
+        case 'pdf':
+          await exportCleaningScheduleToPDF(tasks as any, startDate, endDate);
+          showSuccess('Cleaning schedule exported to PDF');
+          break;
+      }
+    } catch (err) {
+      logger.error(`[Cleaning Schedule] Export error (${format}):`, err);
+      showError(`Failed to export cleaning schedule to ${format.toUpperCase()}. Please try again.`);
+    } finally {
+      setExportLoading(null);
+    }
+  };
+
   if (loading && tasks.length === 0 && activeTab === 'grid') {
     return (
       <ResponsivePageContainer>
@@ -199,7 +260,19 @@ export default function CleaningRosterPage() {
 
           {activeTab === 'grid' && (
             <div className="space-y-6">
-              <CleaningStats tasks={tasks} dates={statsDates} />
+              <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
+                <CleaningStats tasks={tasks} dates={statsDates} />
+                <div className="flex gap-2 print:hidden">
+                  <PrintButton onClick={handlePrint} label="Print" disabled={tasks.length === 0} />
+                  <ExportButton
+                    onExport={handleExport}
+                    loading={exportLoading}
+                    availableFormats={['csv', 'pdf', 'html']}
+                    label="Export"
+                    disabled={tasks.length === 0}
+                  />
+                </div>
+              </div>
 
               <GridFilterBar gridFilter={gridFilter} onFilterChange={setGridFilter} />
 

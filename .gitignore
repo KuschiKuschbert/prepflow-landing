@@ -118,3 +118,9 @@ pnpm-lock.yaml
 /test-failures/
 /playwright-report/
 /playwright/.cache/
+
+# Python virtual environment
+*.pyc
+*.pyo
+*.pyd
+.Python

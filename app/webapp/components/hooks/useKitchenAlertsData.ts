@@ -1,9 +1,15 @@
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import { supabase } from '@/lib/supabase';
+import { getCachedData } from '@/lib/cache/data-cache';
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
+import { fetchKitchenAlertsStats } from './useKitchenAlertsData/fetchStats';
+import { fetchTemperatureAlerts } from './useKitchenAlertsData/fetchTemperature';
 import { calculateTemperatureAlerts } from './useKitchenAlertsHelpers';
 
-import { logger } from '@/lib/logger';
+/**
+ * Hook for fetching kitchen alerts data
+ *
+ * @returns {Object} Stats, temperature alerts, and loading state
+ */
 export function useKitchenAlertsData() {
   const [stats, setStats] = useState<{
     ingredientsLowStock?: number;
@@ -43,81 +49,21 @@ export function useKitchenAlertsData() {
       }
 
       try {
-        let statsResponse: Response | null = null;
-        try {
-          statsResponse = await fetch('/api/dashboard/stats', { cache: 'no-store' });
-        } catch (fetchError) {
-          logger.error('Network error fetching kitchen alerts:', fetchError);
-          // Keep cached data if available
-          setLoading(false);
-          return;
-        }
+        const freshStats = await fetchKitchenAlertsStats();
+        if (freshStats) setStats(freshStats);
 
-        const [logsResult, equipmentResult] = await Promise.all([
-          supabase
-            .from('temperature_logs')
-            .select('id, log_date, log_time, temperature_celsius, location')
-            .eq('log_date', today)
-            .order('log_time', { ascending: false }),
-          supabase
-            .from('temperature_equipment')
-            .select('id, name, location, min_temp_celsius, max_temp_celsius')
-            .eq('is_active', true),
-        ]);
-
-        if (statsResponse.ok) {
-          try {
-            const statsJson = await statsResponse.json();
-            if (statsJson.success) {
-              setStats({
-                ingredientsLowStock: statsJson.ingredientsLowStock,
-                recipesWithoutCost: statsJson.recipesWithoutCost,
-                temperatureChecksToday: statsJson.temperatureChecksToday,
-                cleaningTasksPending: statsJson.cleaningTasksPending,
-              });
-            }
-          } catch (parseError) {
-            logger.error('Error parsing kitchen alerts stats:', parseError);
-          }
-        } else {
-          logger.error('Error fetching kitchen alerts stats:', {
-            status: statsResponse.status,
-            statusText: statsResponse.statusText,
-          });
-        }
-
-        // Log Supabase errors but still try to use data if available
-        if (logsResult.error) {
-          logger.error('Error fetching temperature logs for alerts:', logsResult.error);
-        }
-        if (equipmentResult.error) {
-          logger.error('Error fetching temperature equipment for alerts:', equipmentResult.error);
-        }
-
-        // Use data if available (even if there were errors)
-        if (
-          !logsResult.error &&
-          logsResult.data &&
-          !equipmentResult.error &&
-          equipmentResult.data
-        ) {
-          setTemperatureAlerts(
-            calculateTemperatureAlerts(logsResult.data || [], equipmentResult.data || []),
-          );
-        } else if (cachedLogs && cachedEquipment) {
-          // Fallback to cached data if fresh fetch failed
-          const todayLogs = (cachedLogs || []).filter((log: any) => log.log_date === today);
-          setTemperatureAlerts(calculateTemperatureAlerts(todayLogs, cachedEquipment));
-        }
+        const alerts = await fetchTemperatureAlerts(
+          today,
+          cachedLogs || undefined,
+          cachedEquipment || undefined,
+        );
+        setTemperatureAlerts(alerts);
       } catch (err) {
         logger.error('Error fetching kitchen alerts:', err);
-
-        // Check if it's a network error
         if (err instanceof TypeError && err.message.includes('fetch')) {
           logger.error(
             'Network error: Unable to connect to server. Using cached data if available.',
           );
-          // Keep cached data if available
         }
       } finally {
         setLoading(false);

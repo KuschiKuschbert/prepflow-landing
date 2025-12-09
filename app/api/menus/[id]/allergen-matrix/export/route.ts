@@ -11,6 +11,7 @@ import { generateHTML } from './helpers/generateHTML';
 import type { MenuItem } from '@/app/webapp/menu-builder/types';
 import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 import { aggregateDishDietaryStatus } from '@/lib/dietary/dietary-aggregation';
+import Papa from 'papaparse';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -139,30 +140,37 @@ function generateCSV(menuName: string, matrixData: any[]): NextResponse {
     'Vegetarian',
     'Vegan',
   ];
-  const rows = matrixData.map(item => {
-    const allergenColumns = AUSTRALIAN_ALLERGENS.map(allergen =>
-      item.allergens.includes(allergen.code) ? 'Yes' : '',
-    );
-    return [
-      item.name,
-      item.type,
-      item.category || '',
+
+  const csvData = matrixData.map(item => {
+    const allergenColumns: Record<string, string> = {};
+    AUSTRALIAN_ALLERGENS.forEach(allergen => {
+      allergenColumns[allergen.displayName] = item.allergens.includes(allergen.code) ? 'Yes' : '';
+    });
+
+    return {
+      'Item Name': item.name,
+      Type: item.type,
+      Category: item.category || '',
       ...allergenColumns,
-      item.isVegetarian ? 'Yes' : '',
-      item.isVegan ? 'Yes' : '',
-    ];
+      Vegetarian: item.isVegetarian ? 'Yes' : '',
+      Vegan: item.isVegan ? 'Yes' : '',
+    };
   });
 
-  const csvContent = [
-    `Allergen Matrix - ${menuName}`,
-    '',
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
-  ].join('\n');
+  const csvContent = Papa.unparse(csvData, {
+    columns: headers,
+    header: true,
+    delimiter: ',',
+    newline: '\n',
+    quoteChar: '"',
+    escapeChar: '"',
+  });
 
-  return new NextResponse(csvContent, {
+  const fullContent = [`Allergen Matrix - ${menuName}`, '', csvContent].join('\n');
+
+  return new NextResponse(fullContent, {
     headers: {
-      'Content-Type': 'text/csv',
+      'Content-Type': 'text/csv;charset=utf-8',
       'Content-Disposition': `attachment; filename="${menuName.replace(/[^a-z0-9]/gi, '_')}_allergen_matrix.csv"`,
     },
   });

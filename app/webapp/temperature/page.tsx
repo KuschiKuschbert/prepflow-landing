@@ -137,6 +137,7 @@ function TemperatureLogsPageContent() {
               onAddLog={handleAddLog}
               onRefreshLogs={handleRefreshLogs}
               isLoading={logsLoading}
+              allLogs={allLogs}
             />
             {isMounted && (
               <div className="mt-4 flex items-center justify-between">

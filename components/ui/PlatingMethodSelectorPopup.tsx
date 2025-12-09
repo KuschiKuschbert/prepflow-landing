@@ -11,7 +11,7 @@ interface PlatingMethodSelectorPopupProps {
   isOpen: boolean;
   onClose: () => void;
   onGenerate: (selectedMethods: PlatingMethodOption[]) => void;
-  triggerRef?: React.RefObject<HTMLElement>;
+  triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
 const platingMethodLabels: Record<PlatingMethodOption, string> = {
@@ -127,7 +127,7 @@ export function PlatingMethodSelectorPopup({
   const popoverContent = (
     <>
       {/* Light backdrop - clickable to close */}
-      <div className="fixed inset-0 z-[75] bg-black/20" onClick={onClose} aria-hidden="true" />
+      <div className="fixed inset-0 z-[75] bg-black/20" onClick={onClose} aria-hidden={true} />
       {/* Popover positioned near the button */}
       <div
         ref={popupRef}

@@ -1,5 +1,7 @@
 ## Auth, Allowlist, and Billing Setup
 
+**📚 Complete Reference:** See `docs/AUTH0_STRIPE_REFERENCE.md` for comprehensive Auth0 and Stripe configuration, setup, testing, and troubleshooting guide.
+
 ### Auth (NextAuth + Auth0)
 
 - Env:
@@ -7,6 +9,7 @@
   - `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
 - Routes: `/api/auth/[...nextauth]`, `/api/me`
 - Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes).
+- **Documentation:** See `docs/AUTH0_STRIPE_REFERENCE.md` (Auth0 Configuration section) for complete setup guide
 
 ### Allowlist Configuration
 
@@ -36,9 +39,10 @@
 
 ### Billing (Stripe scaffolding)
 
-- Env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- Env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_STARTER_MONTHLY`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_BUSINESS_MONTHLY`
 - Endpoints: `/api/billing/create-checkout-session`, `/api/billing/create-portal-session`, `/api/webhook/stripe`
 - Entitlements: `lib/tier-config.ts`, `lib/entitlements.ts`, `lib/feature-gate.ts`
+- **Documentation:** See `docs/AUTH0_STRIPE_REFERENCE.md` (Stripe Configuration section) for complete setup guide
 
 ## Landing v2 (Sign‑in + Tour)
 
@@ -2125,6 +2129,48 @@ The following unused components have been removed to reduce bundle size and impr
 - **Code Splitting:** Route-based code splitting with dynamic imports
 
 **React Optimization:** React.memo (214 instances), useMemo/useCallback for expensive computations, proper dependency arrays and stable references
+
+### **Print, Export, and Import Patterns**
+
+**MANDATORY:** When adding print, export, or import functionality to any page, use the standardized patterns documented below.
+
+**Quick Reference:**
+
+- **Print Templates:** `docs/PRINT_EXPORT_IMPORT_PATTERNS.md` - Complete guide for print/export/import patterns
+- **CSV Import:** `docs/CSV_IMPORT_INTEGRATION.md` - Detailed CSV import integration guide
+- **Export Templates:** `docs/EXPORT_TEMPLATES.md` - Export template system documentation
+
+**Key Components:**
+
+- **Print:** `lib/exports/print-template.ts` - Unified print template with variants (`default`, `customer`, `supplier`, `compliance`, `kitchen`, `compact`)
+- **Export:** `lib/exports/export-html.ts` - HTML/PDF export utilities
+- **CSV:** `lib/csv/csv-utils.ts` - CSV parsing and export utilities
+- **Import Modal:** `components/ui/CSVImportModal.tsx` - Reusable CSV import modal
+- **Import Configs:** `lib/imports/*-import.ts` - Entity-specific import configurations
+
+**UI Components:**
+
+- `components/ui/PrintButton.tsx` - Standardized print button
+- `components/ui/ExportButton.tsx` - Standardized export button (CSV/PDF/HTML dropdown)
+- `components/ui/ImportButton.tsx` - Standardized import button
+
+**Example Implementation:**
+See `app/webapp/suppliers/page.tsx` for a complete example with print, export (CSV/PDF/HTML), and import functionality.
+
+**Best Practices:**
+
+1. Always use unified templates - Never create custom print/export templates
+2. Reuse formatting functions - Use same formatting for print and export
+3. Choose appropriate variant - Use `customer` for menus, `kitchen` for prep lists, etc.
+4. Validate imports - Always validate data before importing
+5. Show progress - Update progress state during import loops
+6. Handle errors gracefully - Collect and display errors per row
+7. Update cache - Cache imported data for instant display
+
+**See Also:**
+
+- `docs/PRINT_EXPORT_IMPORT_PATTERNS.md` - Complete patterns reference with code examples
+- `docs/CSV_IMPORT_INTEGRATION.md` - Step-by-step CSV import integration guide
 
 ### **Development Workflow & Standards**
 

@@ -24,10 +24,10 @@ export function getCategoryLabel(category: string): string {
   // Unified category labels (same across all workflows)
   const categoryLabels: Record<string, string> = {
     primary: 'Primary',
-    operations: 'Operations',
     kitchen: 'Kitchen',
+    team: 'Team',
     inventory: 'Inventory',
-    more: 'More',
+    tools: 'Tools',
     other: 'Other',
   };
 

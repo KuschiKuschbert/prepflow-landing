@@ -1,15 +1,45 @@
-import type { TierSlug } from './tier-config';
-import { TIER_TO_ENTITLEMENTS } from './tier-config';
+import type { TierSlug, EntitlementConfig } from './tier-config';
+import { getDefaultTierConfig } from './tier-config';
+import { getTierConfigFromDB } from './tier-config-db';
 
 export interface UserEntitlements {
   userId: string;
   tier: TierSlug;
   features: Record<string, boolean>;
+  limits?: {
+    recipes?: number;
+    ingredients?: number;
+  };
 }
 
+/**
+ * Get entitlements for a tier.
+ * Uses database config if available, falls back to code defaults.
+ */
+export async function getEntitlementsForTierAsync(
+  userId: string,
+  tier: TierSlug,
+): Promise<UserEntitlements> {
+  const cfg = await getTierConfigFromDB(tier);
+  if (!cfg) {
+    // Fallback to default config if DB config not found
+    return getEntitlementsForTier(userId, tier);
+  }
+  return {
+    userId,
+    tier,
+    features: cfg.features,
+    limits: cfg.limits,
+  };
+}
+
+/**
+ * Synchronous version that uses code defaults only.
+ * Use getEntitlementsForTierAsync for database-backed configs.
+ */
 export function getEntitlementsForTier(userId: string, tier: TierSlug): UserEntitlements {
-  const cfg = TIER_TO_ENTITLEMENTS[tier];
-  return { userId, tier, features: cfg.features };
+  const cfg = getDefaultTierConfig(tier);
+  return { userId, tier, features: cfg.features, limits: cfg.limits };
 }
 
 export function hasFeature(entitlements: UserEntitlements, featureKey: string): boolean {

@@ -135,7 +135,7 @@ export default function Page() {
         }
       >
         {/* Base background color */}
-        <div className="fixed inset-0 -z-20 bg-[#0a0a0a]" aria-hidden="true" />
+        <div className="fixed inset-0 -z-20 bg-[#0a0a0a]" aria-hidden={true} />
 
         {/* Beautiful Grid Background with Enhanced Effects */}
         <LandingBackground />

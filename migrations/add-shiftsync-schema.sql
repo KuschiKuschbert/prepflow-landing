@@ -250,3 +250,7 @@ COMMENT ON COLUMN employees.skills IS 'Array of employee skills (e.g., ["chef", 
 COMMENT ON COLUMN shifts.status IS 'Shift status: draft (invisible), published (visible), completed, cancelled';
 COMMENT ON COLUMN shifts.published_at IS 'Timestamp when shift was published (moved from draft to published)';
 
+
+
+
+

@@ -1,60 +1,19 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import type { EquipmentMaintenanceFormData } from '../components/EquipmentMaintenanceForm';
-import type { EquipmentMaintenanceRecord } from '../components/EquipmentMaintenanceList';
+import { cacheData } from '@/lib/cache/data-cache';
+import { useEquipmentFetch } from './useEquipmentMaintenance/useEquipmentFetch';
+import { useEquipmentForm } from './useEquipmentMaintenance/useEquipmentForm';
 
+/**
+ * Hook for managing equipment maintenance
+ *
+ * @returns {Object} Equipment maintenance state and handlers
+ */
 export function useEquipmentMaintenance() {
-  const [records, setRecords] = useState<EquipmentMaintenanceRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [newEquipment, setNewEquipment] = useState<EquipmentMaintenanceFormData>({
-    equipment_name: '',
-    equipment_type: '',
-    maintenance_date: new Date().toISOString().split('T')[0],
-    maintenance_type: '',
-    service_provider: '',
-    description: '',
-    cost: '',
-    next_maintenance_date: '',
-    is_critical: false,
-    performed_by: '',
-    notes: '',
-    photo_url: '',
-  });
-
-  // Initialize with cached data for instant display
-  useEffect(() => {
-    const cached = getCachedData('equipment_maintenance');
-    if (cached) {
-      setRecords(cached as EquipmentMaintenanceRecord[]);
-      setLoading(false);
-    }
-  }, []);
-
-  // Fetch equipment maintenance records
-  const fetchRecords = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/equipment-maintenance');
-      const data = await response.json();
-
-      if (data.success && data.data) {
-        setRecords(data.data);
-        cacheData('equipment_maintenance', data.data);
-      }
-    } catch (error) {
-      logger.error('Error fetching equipment maintenance records:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Fetch on mount
-  useEffect(() => {
-    fetchRecords();
-  }, [fetchRecords]);
+  const { records, setRecords, loading, fetchRecords } = useEquipmentFetch();
+  const { newEquipment, setNewEquipment, resetForm } = useEquipmentForm();
 
   // Handle add equipment maintenance
   const handleAddEquipment = useCallback(
@@ -74,20 +33,7 @@ export function useEquipmentMaintenance() {
           const updatedRecords = [data.data, ...records];
           setRecords(updatedRecords);
           cacheData('equipment_maintenance', updatedRecords);
-          setNewEquipment({
-            equipment_name: '',
-            equipment_type: '',
-            maintenance_date: new Date().toISOString().split('T')[0],
-            maintenance_type: '',
-            service_provider: '',
-            description: '',
-            cost: '',
-            next_maintenance_date: '',
-            is_critical: false,
-            performed_by: '',
-            notes: '',
-            photo_url: '',
-          });
+          resetForm();
           return true;
         }
         return false;
@@ -96,7 +42,7 @@ export function useEquipmentMaintenance() {
         return false;
       }
     },
-    [newEquipment, records],
+    [newEquipment, records, setRecords, resetForm],
   );
 
   return {

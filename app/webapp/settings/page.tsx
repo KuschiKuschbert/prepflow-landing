@@ -1,154 +1,144 @@
 'use client';
 
-import { prefetchApis } from '@/lib/cache/data-cache';
-import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useState } from 'react';
-import { SectionSkeleton } from './components/SectionSkeleton';
-import { SettingsLayout, SettingsSection } from './components/SettingsLayout';
+import { useEffect, useState } from 'react';
+import { HelpSupportPanel } from './components/HelpSupportPanel';
+import SettingsNavigation from './components/SettingsNavigation';
+import { AdvancedSection } from './components/sections/AdvancedSection';
+import { BillingSection } from './components/sections/BillingSection';
+import { DataBackupSection } from './components/sections/DataBackupSection';
+import { FAQSection } from './components/sections/FAQSection';
+import { PreferencesSection } from './components/sections/PreferencesSection';
+import { PrivacyLegalSection } from './components/sections/PrivacyLegalSection';
+import { ProfileAccountSection } from './components/sections/ProfileAccountSection';
+import { QRCodesSection } from './components/sections/QRCodesSection';
+import { SecuritySection } from './components/sections/SecuritySection';
 
-// Lazy load all section components for code splitting
-const ProfileAccountSection = dynamic(
-  () =>
-    import('./components/sections/ProfileAccountSection').then(mod => ({
-      default: mod.ProfileAccountSection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
-const SecuritySection = dynamic(
-  () =>
-    import('./components/sections/SecuritySection').then(mod => ({
-      default: mod.SecuritySection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
-const PreferencesSection = dynamic(
-  () =>
-    import('./components/sections/PreferencesSection').then(mod => ({
-      default: mod.PreferencesSection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
-const DataBackupSection = dynamic(
-  () =>
-    import('./components/sections/DataBackupSection').then(mod => ({
-      default: mod.DataBackupSection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
-const PrivacyLegalSection = dynamic(
-  () =>
-    import('./components/sections/PrivacyLegalSection').then(mod => ({
-      default: mod.PrivacyLegalSection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
-const AdvancedSection = dynamic(
-  () =>
-    import('./components/sections/AdvancedSection').then(mod => ({
-      default: mod.AdvancedSection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
-
-const FAQSection = dynamic(
-  () =>
-    import('./components/sections/FAQSection').then(mod => ({
-      default: mod.FAQSection,
-    })),
-  {
-    loading: () => <SectionSkeleton />,
-    ssr: false,
-  },
-);
+type SettingsSection =
+  | 'profile'
+  | 'billing'
+  | 'preferences'
+  | 'security'
+  | 'privacy'
+  | 'help'
+  | 'backup'
+  | 'qr-codes'
+  | 'advanced';
 
 export default function SettingsPage() {
-  // Always start with 'profile' for SSR consistency, then sync on client
   const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Prefetch all settings API endpoints on mount
+  // Initialize from URL hash on client mount and sync with hash changes
   useEffect(() => {
-    prefetchApis([
-      '/api/user/profile',
-      '/api/user/notifications',
-      '/api/user/sessions',
-      '/api/user/login-history',
-      '/api/user/data-usage',
-      '/api/user/activity?limit=5',
-      '/api/backup/settings',
-      '/api/backup/list',
-    ]);
+    setIsMounted(true);
+
+    const updateSectionFromHash = () => {
+      if (typeof window === 'undefined') return;
+
+      const hash = window.location.hash.slice(1);
+      const validSections: SettingsSection[] = [
+        'profile',
+        'billing',
+        'preferences',
+        'security',
+        'privacy',
+        'help',
+        'backup',
+        'qr-codes',
+        'advanced',
+      ];
+
+      if (validSections.includes(hash as SettingsSection)) {
+        setActiveSection(hash as SettingsSection);
+        // Scroll to section after a brief delay to ensure it's rendered
+        setTimeout(() => {
+          const element = document.querySelector(`#${hash}`);
+          if (element) {
+            // Account for header height when scrolling
+            const headerHeight = window.innerWidth >= 1025 ? 64 : 56;
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerHeight - 20; // 20px extra padding
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth',
+            });
+          }
+        }, 300); // Increased delay to ensure section is rendered
+      } else if (!hash) {
+        setActiveSection('profile');
+        // Set default hash
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#profile';
+        }
+      }
+    };
+
+    // Set initial section from hash on mount
+    updateSectionFromHash();
+
+    // Sync with URL hash changes (e.g., browser back/forward)
+    const handleHashChange = () => {
+      updateSectionFromHash();
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Sync with URL hash or sessionStorage after hydration
-  useEffect(() => {
-    // Check URL hash first
-    const hash = window.location.hash.slice(1);
-    if (
-      hash &&
-      ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced', 'faq'].includes(hash)
-    ) {
-      setActiveSection(hash as SettingsSection);
-      return;
-    }
-
-    // Check sessionStorage
-    const stored = sessionStorage.getItem('settings_active_section');
-    if (
-      stored &&
-      ['profile', 'security', 'preferences', 'data', 'privacy', 'advanced', 'faq'].includes(stored)
-    ) {
-      setActiveSection(stored as SettingsSection);
-    }
-  }, []);
-
-  // Memoize section rendering to ensure stable component instances
-  const renderSection = useMemo(() => {
+  const renderSectionContent = () => {
     switch (activeSection) {
       case 'profile':
-        return <ProfileAccountSection key="profile-section" />;
-      case 'security':
-        return <SecuritySection key="security-section" />;
+        return <ProfileAccountSection />;
+      case 'billing':
+        return <BillingSection />;
       case 'preferences':
-        return <PreferencesSection key="preferences-section" />;
-      case 'data':
-        return <DataBackupSection key="data-section" />;
+        return <PreferencesSection />;
+      case 'security':
+        return <SecuritySection />;
       case 'privacy':
-        return <PrivacyLegalSection key="privacy-section" />;
+        return <PrivacyLegalSection />;
+      case 'help':
+        return (
+          <div className="space-y-6">
+            <HelpSupportPanel />
+            <FAQSection />
+          </div>
+        );
+      case 'backup':
+        return <DataBackupSection />;
+      case 'qr-codes':
+        return <QRCodesSection />;
       case 'advanced':
-        return <AdvancedSection key="advanced-section" />;
-      case 'faq':
-        return <FAQSection key="faq-section" />;
+        return <AdvancedSection />;
       default:
-        return <ProfileAccountSection key="profile-section-default" />;
+        return <ProfileAccountSection />;
     }
-  }, [activeSection]);
+  };
 
   return (
-    <SettingsLayout activeSection={activeSection} onSectionChange={setActiveSection}>
-      {renderSection}
-    </SettingsLayout>
+    <div className="flex min-h-screen bg-[#0a0a0a] text-white">
+      <SettingsNavigation />
+      <main className="desktop:ml-64 flex-1 overflow-auto">
+        <div className="desktop:p-8 p-6">
+          {/* Section Content - Render all sections with IDs for hash navigation */}
+          {isMounted && (
+            <div className="space-y-6">
+              <div id="profile">{activeSection === 'profile' && renderSectionContent()}</div>
+              <div id="billing">{activeSection === 'billing' && renderSectionContent()}</div>
+              <div id="preferences">
+                {activeSection === 'preferences' && renderSectionContent()}
+              </div>
+              <div id="security">{activeSection === 'security' && renderSectionContent()}</div>
+              <div id="privacy">{activeSection === 'privacy' && renderSectionContent()}</div>
+              <div id="help">{activeSection === 'help' && renderSectionContent()}</div>
+              <div id="backup">{activeSection === 'backup' && renderSectionContent()}</div>
+              <div id="qr-codes">{activeSection === 'qr-codes' && renderSectionContent()}</div>
+              <div id="advanced">{activeSection === 'advanced' && renderSectionContent()}</div>
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }

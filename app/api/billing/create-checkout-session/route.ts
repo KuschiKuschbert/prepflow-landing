@@ -10,7 +10,7 @@ import { z } from 'zod';
 const checkoutSessionSchema = z
   .object({
     priceId: z.string().optional(),
-    tier: z.enum(['starter', 'pro', 'enterprise']).optional(),
+    tier: z.enum(['starter', 'pro', 'business']).optional(),
   })
   .refine(data => data.priceId || data.tier, {
     message: 'Either priceId or tier must be provided',
@@ -78,13 +78,45 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Determine tier from priceId or provided tier
+    const determinedTier =
+      tier ||
+      (() => {
+        if (priceId === process.env.STRIPE_PRICE_STARTER_MONTHLY) return 'starter';
+        if (priceId === process.env.STRIPE_PRICE_PRO_MONTHLY) return 'pro';
+        if (priceId === process.env.STRIPE_PRICE_BUSINESS_MONTHLY) return 'business';
+        return null;
+      })();
+
     const origin = req.headers.get('origin') || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+
+    // Stripe best practice: Create checkout session with proper metadata
+    // Metadata is used by webhook handler to identify user and tier
     const checkout = await stripe.checkout.sessions.create({
       mode: 'subscription',
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${origin}/webapp/settings/billing?status=success`,
+      success_url: `${origin}/webapp/settings/billing?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/webapp/settings/billing?status=cancelled`,
+      payment_method_collection: 'always',
+      allow_promotion_codes: true,
+      // Stripe best practice: Include metadata for webhook processing
+      metadata: {
+        tier: determinedTier || 'starter',
+        user_email: session.user.email as string,
+        created_by: 'checkout_api',
+      },
+      subscription_data: {
+        // Stripe best practice: Include metadata in subscription for webhook events
+        metadata: {
+          tier: determinedTier || 'starter',
+          user_email: session.user.email as string,
+        },
+      },
+      // Stripe best practice: Enable automatic tax if configured
+      automatic_tax: {
+        enabled: false, // Set to true if Stripe Tax is configured
+      },
     });
 
     return NextResponse.json({ url: checkout.url });

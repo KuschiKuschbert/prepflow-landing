@@ -113,7 +113,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[74] bg-black/60 backdrop-blur-sm"
             onClick={onClose}
-            aria-hidden="true"
+            aria-hidden={true}
           />
 
           {/* Drawer */}

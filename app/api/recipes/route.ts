@@ -2,12 +2,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateRequest } from './helpers/validateRequest';
 import { buildQuery } from './helpers/buildQuery';
-import { filterRecipes } from './helpers/filterRecipes';
 import { checkExistingRecipe } from './helpers/checkExistingRecipe';
 import { createRecipe } from './helpers/createRecipe';
+import { filterRecipes } from './helpers/filterRecipes';
 import { updateRecipe } from './helpers/updateRecipe';
+import { validateRequest } from './helpers/validateRequest';
 
 export async function GET(request: NextRequest) {
   try {
@@ -78,7 +78,6 @@ export async function POST(request: NextRequest) {
     const recipeData = {
       yield: dishPortions || 1,
       yield_unit: yield_unit || 'servings',
-      category: category || 'Uncategorized',
       description: description || null,
       instructions: instructions || null,
     };

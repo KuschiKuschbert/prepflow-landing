@@ -332,9 +332,11 @@ FROM_NAME=PrepFlow Team
 
 **Billing:**
 
-- `POST /api/billing/create-checkout-session` - Create Stripe checkout session
-- `POST /api/billing/create-portal-session` - Create Stripe customer portal session
-- `POST /api/webhook/stripe` - Stripe webhook handler
+- `POST /api/billing/create-checkout-session` - Create Stripe checkout session (requires auth)
+- `POST /api/billing/create-portal-session` - Create Stripe customer portal session (requires auth)
+- `POST /api/webhook/stripe` - Stripe webhook handler (requires signature verification)
+
+**📚 Stripe Implementation:** See `docs/AUTH0_STRIPE_REFERENCE.md` (Stripe Configuration, API Endpoints sections) for complete Stripe integration guide, webhook setup, and best practices.
 
 **Ingredients:**
 

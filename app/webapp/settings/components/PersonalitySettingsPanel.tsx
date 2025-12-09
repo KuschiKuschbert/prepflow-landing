@@ -2,25 +2,55 @@
 
 'use client';
 
-import { usePersonality } from '@/lib/personality/store';
 import { useNotification } from '@/contexts/NotificationContext';
 import {
-  getUnlockedAchievements,
   getAchievementProgress,
+  getUnlockedAchievements,
 } from '@/lib/personality/achievement-tracker';
-import { getAllAchievements } from '@/lib/personality/achievements';
+import { ACHIEVEMENTS, getAllAchievements } from '@/lib/personality/achievements';
 import { getBehaviorProfile } from '@/lib/personality/behavior-tracker';
+import { usePersonality } from '@/lib/personality/store';
 import { useEffect, useState } from 'react';
 
 export function PersonalitySettingsPanel() {
   const { settings, set, silenceFor24h } = usePersonality();
   const { showInfo } = useNotification();
-  const [achievements, setAchievements] = useState(getUnlockedAchievements());
-  const [progress, setProgress] = useState(getAchievementProgress());
-  const [behaviorProfile, setBehaviorProfile] = useState(getBehaviorProfile());
+  // Initialize with default values to match SSR and prevent hydration mismatch
+  const [achievements, setAchievements] = useState<ReturnType<typeof getUnlockedAchievements>>([]);
+  const [progress, setProgress] = useState<ReturnType<typeof getAchievementProgress>>({
+    unlocked: 0,
+    total: Object.keys(ACHIEVEMENTS).length,
+    percentage: 0,
+  });
+  const [behaviorProfile, setBehaviorProfile] = useState<ReturnType<typeof getBehaviorProfile>>({
+    userExperience: 'new',
+    saveFrequency: 'medium',
+    sessionDuration: 'medium',
+    featureUsage: {
+      ingredients: 0,
+      recipes: 0,
+      cogs: 0,
+      performance: 0,
+      temperature: 0,
+      menu: 0,
+    },
+    timeOfDayUsage: {
+      morning: 0,
+      lunch: 0,
+      evening: 0,
+      late: 0,
+    },
+    lastUpdated: 0, // Will be updated after hydration
+  });
 
-  // Refresh achievements and behavior profile periodically
+  // Load data after hydration and refresh periodically
   useEffect(() => {
+    // Load initial data from localStorage only on client after hydration
+    setAchievements(getUnlockedAchievements());
+    setProgress(getAchievementProgress());
+    setBehaviorProfile(getBehaviorProfile());
+
+    // Refresh achievements and behavior profile periodically
     const interval = setInterval(() => {
       setAchievements(getUnlockedAchievements());
       setProgress(getAchievementProgress());

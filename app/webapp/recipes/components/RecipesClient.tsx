@@ -205,7 +205,12 @@ export default function RecipesClient() {
 
   return (
     <>
-      <RecipesActionButtons onRefresh={fetchRecipes} loading={loading} />
+      <RecipesActionButtons
+        onRefresh={fetchRecipes}
+        loading={loading}
+        recipes={recipes}
+        fetchBatchRecipeIngredients={fetchBatchRecipeIngredients}
+      />
       <div className="mb-4 flex items-center justify-between">
         <UnifiedBulkActionsMenu
           selectedCount={selectedRecipes.size}

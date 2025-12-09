@@ -88,6 +88,7 @@ export default function ComplianceTrackingPage() {
               onTypeChange={setSelectedType}
               onStatusChange={setSelectedStatus}
               onAddRecord={() => setShowAddRecord(true)}
+              records={records}
             />
           </div>
         )}

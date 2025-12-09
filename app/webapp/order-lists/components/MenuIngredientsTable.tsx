@@ -1,5 +1,13 @@
 'use client';
 
+import { useState } from 'react';
+import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { printOrderList, exportOrderListToCSV } from '../utils/orderListExportUtils';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import type { OrderListData } from '../utils/formatOrderListForPrint';
+
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -27,6 +35,79 @@ export function MenuIngredientsTable({
   groupedIngredients,
   sortBy,
 }: MenuIngredientsTableProps) {
+  const { showSuccess, showError } = useNotification();
+  const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
+
+  const orderListData: OrderListData = {
+    menuName,
+    groupedIngredients,
+    sortBy,
+  };
+
+  const handlePrint = () => {
+    try {
+      printOrderList(orderListData);
+      showSuccess('Order list opened for printing');
+    } catch (err) {
+      logger.error('[Order List] Print error:', err);
+      showError('Failed to print order list. Please try again.');
+    }
+  };
+
+  const handleExport = async (format: ExportFormat) => {
+    try {
+      setExportLoading(format);
+
+      if (format === 'csv') {
+        exportOrderListToCSV(orderListData);
+        showSuccess('Order list exported as CSV');
+      } else if (format === 'pdf') {
+        // PDF is handled via print dialog
+        printOrderList(orderListData);
+        showSuccess(
+          "Order list opened for printing. Use your browser's print dialog to save as PDF.",
+        );
+      } else if (format === 'html') {
+        // HTML export - generate and download
+        const { generatePrintTemplate } = await import('@/lib/exports/print-template');
+        const { formatOrderListForPrint } = await import('../utils/formatOrderListForPrint');
+        const { getOrderListPrintStyles } = await import('../utils/orderListPrintStyles');
+
+        const contentHtml = formatOrderListForPrint(orderListData);
+        const orderListStyles = getOrderListPrintStyles();
+        const totalItems = Object.values(groupedIngredients).reduce(
+          (sum, ingredients) => sum + ingredients.length,
+          0,
+        );
+
+        const html = generatePrintTemplate({
+          title: 'Order List',
+          subtitle: menuName,
+          content: `<style>${orderListStyles}</style>${contentHtml}`,
+          totalItems,
+          customMeta: `Sorted by: ${sortBy}`,
+        });
+
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `order_list_${menuName.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showSuccess('Order list exported as HTML');
+      }
+    } catch (err) {
+      logger.error('[Order List] Export error:', err);
+      showError('Failed to export order list. Please try again.');
+    } finally {
+      setExportLoading(null);
+    }
+  };
+
   const formatPrice = (price?: number) => {
     if (price === undefined || price === null) return '-';
     return new Intl.NumberFormat('en-AU', {
@@ -50,8 +131,33 @@ export function MenuIngredientsTable({
 
   return (
     <div className="order-list-print">
+      {/* Header with export buttons */}
+      <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-6 flex flex-col gap-4 print:hidden">
+        <div>
+          <h2 className="text-2xl font-bold text-white">{menuName}</h2>
+          <p className="text-gray-400">
+            Order List -{' '}
+            {new Date().toLocaleDateString('en-AU', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <PrintButton onClick={handlePrint} label="Print" />
+          <ExportButton
+            onExport={handleExport}
+            loading={exportLoading}
+            availableFormats={['csv', 'pdf', 'html']}
+            label="Export"
+          />
+        </div>
+      </div>
+
       {/* Header - visible in print */}
-      <div className="mb-6 print:mb-4">
+      <div className="mb-6 hidden print:mb-4 print:block">
         <h2 className="text-2xl font-bold text-white print:text-xl print:text-black">{menuName}</h2>
         <p className="text-gray-400 print:text-sm print:text-gray-600">
           Order List -{' '}

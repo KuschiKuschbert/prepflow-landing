@@ -4,6 +4,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { logger } from '@/lib/logger';
+import { useOnRecipeShared } from '@/lib/personality/hooks';
 import { EmptyState } from './components/EmptyState';
 import { ShareCard } from './components/ShareCard';
 import { ShareFormModal } from './components/ShareFormModal';
@@ -29,6 +30,7 @@ interface RecipeShare {
 
 export default function RecipeSharingPage() {
   const { t } = useTranslation();
+  const onRecipeShared = useOnRecipeShared();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipeShares, setRecipeShares] = useState<RecipeShare[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,6 +85,9 @@ export default function RecipeSharingPage() {
       });
       const result = await response.json();
       if (result.success) {
+        // Trigger personality hook for recipe sharing
+        onRecipeShared();
+
         await fetchRecipeShares();
         resetForm();
         setError(null);

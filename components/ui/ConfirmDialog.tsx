@@ -156,7 +156,7 @@ export function ConfirmDialog({
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onCancel}
-        aria-hidden="true"
+        aria-hidden={true}
       />
 
       {/* Dialog with gradient border */}

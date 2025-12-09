@@ -197,7 +197,13 @@ export default function CogsClient() {
   if (loading) return <PageSkeleton />;
   return (
     <>
-      <COGSHeader />
+      <COGSHeader
+        recipe={selectedRecipe ? recipes.find(r => r.id === selectedRecipe) || null : null}
+        calculations={calculations}
+        totalCOGS={totalCOGS}
+        costPerPortion={costPerPortion}
+        dishPortions={dishPortions}
+      />
 
       <COGSErrorDisplay
         error={error}

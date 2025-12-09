@@ -1,10 +1,11 @@
-import { generateAIVisionResponse } from '@/lib/ai/ai-service';
-import { buildAISpecialsPrompt, parseAISpecialsResponse } from '@/lib/ai/prompts/ai-specials';
-import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { checkFeatureAccess } from '@/lib/api-feature-gate';
+import { authOptions } from '@/lib/auth-options';
+import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleAISpecialsError } from './helpers/handleAISpecialsError';
-import { processImageWithAI } from './helpers/processImageWithAI';
+import { validateAISpecialsRequest } from './helpers/validateRequest';
+import { generateAISpecials } from './helpers/generateAISpecials';
+import { saveAISpecials } from './helpers/saveAISpecials';
 
 /**
  * POST /api/ai-specials
@@ -20,105 +21,35 @@ import { processImageWithAI } from './helpers/processImageWithAI';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { userId, imageData, prompt, countryCode } = body;
-
-    if (!userId || !imageData) {
-      return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'User ID and image data are required',
-        },
-        { status: 400 },
-      );
-    }
-
-    // Try AI Vision API first
-    let aiResponse: {
-      ingredients: string[];
-      suggestions: string[];
-      confidence: number;
-      notes?: string;
-      processing_time?: number;
-    };
-
-    try {
-      const aiPrompt = buildAISpecialsPrompt(prompt);
-      const visionResponse = await generateAIVisionResponse(
-        imageData, // imageData should be a data URL or public URL
-        aiPrompt,
-        countryCode || 'AU',
-        {
-          temperature: 0.7,
-          maxTokens: 1500,
-          useCache: true,
-          cacheTTL: 60 * 60 * 1000, // 1 hour cache
-        },
-      );
-
-      if (visionResponse.content && !visionResponse.error) {
-        const parsed = parseAISpecialsResponse(visionResponse.content);
-        aiResponse = {
-          ...parsed,
-          processing_time: 0, // Will be calculated if needed
-        };
-      } else {
-        // Fallback to mock
-        aiResponse = await processImageWithAI(imageData, prompt);
+    // Check feature access (requires Pro tier)
+    const session = await getServerSession(authOptions);
+    if (session?.user?.email) {
+      try {
+        await checkFeatureAccess('ai_specials', session.user.email, request);
+      } catch (error) {
+        // checkFeatureAccess throws NextResponse, so return it
+        return error as NextResponse;
       }
-    } catch (aiError) {
-      logger.warn('[AI Specials API] AI Vision API failed, using fallback:', {
-        error: aiError instanceof Error ? aiError.message : String(aiError),
-        context: { endpoint: '/api/ai-specials', operation: 'POST' },
-      });
-      // Fallback to mock
-      aiResponse = await processImageWithAI(imageData, prompt);
     }
 
-    // Save the AI analysis to database
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
+    const body = await request.json();
+    const validationResult = validateAISpecialsRequest(body);
+    if (validationResult instanceof NextResponse) return validationResult;
 
-    const { data: aiRecord, error: aiError } = await supabaseAdmin
-      .from('ai_specials_ingredients')
-      .insert({
-        user_id: userId,
-        image_data: imageData,
-        prompt: prompt,
-        ai_response: aiResponse,
-        status: 'completed',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
+    const { userId, imageData, prompt, countryCode } = validationResult;
 
-    if (aiError) {
-      logger.error('[AI Specials API] Database error saving:', {
-        error: aiError.message,
-        code: (aiError as any).code,
-        context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
-      });
-      return NextResponse.json(
-        {
-          error: 'Failed to save AI analysis',
-          message: 'Could not save AI processing results',
-        },
-        { status: 500 },
-      );
-    }
+    // Generate AI specials
+    const aiResponse = await generateAISpecials(imageData, prompt, countryCode);
+
+    // Save to database
+    const saveResult = await saveAISpecials(userId, imageData, prompt, aiResponse);
+    if (saveResult instanceof NextResponse) return saveResult;
 
     return NextResponse.json({
       success: true,
       message: 'AI specials generated successfully',
       data: {
-        aiRecord,
+        aiRecord: saveResult.aiRecord,
         suggestions: aiResponse.suggestions,
         ingredients: aiResponse.ingredients,
       },
@@ -127,6 +58,8 @@ export async function POST(request: NextRequest) {
     return handleAISpecialsError(error, 'POST');
   }
 }
+
+import { fetchAISpecialsHistory } from './helpers/fetchAISpecialsHistory';
 
 /**
  * GET /api/ai-specials
@@ -152,39 +85,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
-
-    const { data, error } = await supabaseAdmin
-      .from('ai_specials_ingredients')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      logger.error('[AI Specials API] Database error fetching:', {
-        error: error.message,
-        code: (error as any).code,
-        context: { endpoint: '/api/ai-specials', operation: 'GET', userId },
-      });
-      return NextResponse.json(
-        {
-          error: 'Failed to fetch AI specials',
-          message: 'Could not retrieve AI analysis data',
-        },
-        { status: 500 },
-      );
-    }
+    const result = await fetchAISpecialsHistory(userId);
+    if (result instanceof NextResponse) return result;
 
     return NextResponse.json({
       success: true,
-      data: data || [],
+      data: result.data,
     });
   } catch (error) {
     return handleAISpecialsError(error, 'GET');

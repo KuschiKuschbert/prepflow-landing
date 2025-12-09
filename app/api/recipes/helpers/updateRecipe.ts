@@ -2,14 +2,13 @@
  * Helper to update an existing recipe.
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export interface RecipeData {
   yield: number;
   yield_unit: string;
-  category: string;
   description: string | null;
   instructions: string | null;
 }

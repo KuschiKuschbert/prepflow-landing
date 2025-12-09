@@ -3,8 +3,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { PerformanceFilters as PerformanceFiltersType } from '../types';
-import { PerformanceItem } from '../types';
+import { PerformanceItem, DateRange, PerformanceMetadata } from '../types';
 import { LANDING_COLORS } from '@/lib/landing-styles';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
+import { printPerformanceReport } from '../utils/printPerformanceReport';
+import {
+  exportPerformanceReportToCSV,
+  exportPerformanceReportToHTML,
+  exportPerformanceReportToPDF,
+} from '../utils/exportPerformanceReport';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 interface PerformanceFiltersProps {
   filters: PerformanceFiltersType;
@@ -15,6 +25,9 @@ interface PerformanceFiltersProps {
   showImportModal: boolean;
   onImportClick: () => void;
   onExportCSV: () => void;
+  dateRange: DateRange;
+  metadata?: PerformanceMetadata | null;
+  performanceScore?: number;
 }
 
 const MENU_ITEM_CLASSES = ["Chef's Kiss", 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'] as const;
@@ -27,18 +40,21 @@ export default function PerformanceFilters({
   showImportModal,
   onImportClick,
   onExportCSV,
+  dateRange,
+  metadata,
+  performanceScore,
 }: PerformanceFiltersProps) {
+  const { showSuccess, showError } = useNotification();
+  const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
+  const [printLoading, setPrintLoading] = useState(false);
   // Tooltip states for action buttons
   const [importTooltipVisible, setImportTooltipVisible] = useState(false);
-  const [exportTooltipVisible, setExportTooltipVisible] = useState(false);
 
   // Refs for button positions
   const importButtonRef = useRef<HTMLButtonElement>(null);
-  const exportButtonRef = useRef<HTMLButtonElement>(null);
 
   // Tooltip positions
   const [importTooltipPos, setImportTooltipPos] = useState({ top: 0, left: 0 });
-  const [exportTooltipPos, setExportTooltipPos] = useState({ top: 0, left: 0 });
 
   // Update tooltip positions when buttons are hovered
   useEffect(() => {
@@ -51,15 +67,69 @@ export default function PerformanceFilters({
     }
   }, [importTooltipVisible]);
 
-  useEffect(() => {
-    if (exportTooltipVisible && exportButtonRef.current) {
-      const rect = exportButtonRef.current.getBoundingClientRect();
-      setExportTooltipPos({
-        top: rect.top - 8,
-        left: rect.left + rect.width / 2,
-      });
+  const handlePrint = () => {
+    if (performanceItems.length === 0) {
+      showError('No performance data to print');
+      return;
     }
-  }, [exportTooltipVisible]);
+
+    setPrintLoading(true);
+    try {
+      printPerformanceReport({
+        performanceItems,
+        metadata,
+        performanceScore,
+        dateRange:
+          dateRange.startDate && dateRange.endDate
+            ? {
+                start: dateRange.startDate,
+                end: dateRange.endDate,
+              }
+            : undefined,
+      });
+      showSuccess('Performance report opened for printing');
+    } catch (error) {
+      logger.error('Failed to print performance report:', error);
+      showError('Failed to print performance report');
+    } finally {
+      setPrintLoading(false);
+    }
+  };
+
+  const handleExport = async (format: ExportFormat) => {
+    if (performanceItems.length === 0) {
+      showError('No performance data to export');
+      return;
+    }
+
+    setExportLoading(format);
+    try {
+      switch (format) {
+        case 'csv':
+          exportPerformanceReportToCSV(performanceItems);
+          showSuccess('Performance data exported to CSV');
+          break;
+        case 'html':
+          exportPerformanceReportToHTML(performanceItems, dateRange, metadata, performanceScore);
+          showSuccess('Performance report exported to HTML');
+          break;
+        case 'pdf':
+          await exportPerformanceReportToPDF(
+            performanceItems,
+            dateRange,
+            metadata,
+            performanceScore,
+          );
+          showSuccess('Performance report exported to PDF');
+          break;
+      }
+    } catch (error) {
+      logger.error(`Failed to export performance report to ${format}:`, error);
+      showError(`Failed to export performance report to ${format.toUpperCase()}`);
+    } finally {
+      setExportLoading(null);
+    }
+  };
 
   const handleFilterChange = (key: keyof PerformanceFiltersType, value: any) => {
     onFiltersChange({
@@ -140,50 +210,22 @@ export default function PerformanceFilters({
               )}
           </div>
 
-          {/* Export Button with Tooltip */}
-          <div className="relative">
-            <button
-              ref={exportButtonRef}
-              onClick={onExportCSV}
-              className="flex items-center justify-center rounded-lg px-1.5 py-1 text-xs font-medium text-white transition-colors"
-              style={{
-                backgroundColor: LANDING_COLORS.secondary,
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = `${LANDING_COLORS.secondary}CC`;
-                setExportTooltipVisible(true);
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = LANDING_COLORS.secondary;
-                setExportTooltipVisible(false);
-              }}
-            >
-              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            {exportTooltipVisible &&
-              typeof window !== 'undefined' &&
-              createPortal(
-                <div
-                  className="fixed z-[100] w-48 -translate-x-1/2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 text-xs text-gray-300 shadow-lg"
-                  style={{
-                    top: `${exportTooltipPos.top - 40}px`,
-                    left: `${exportTooltipPos.left}px`,
-                  }}
-                  onMouseEnter={() => setExportTooltipVisible(true)}
-                  onMouseLeave={() => setExportTooltipVisible(false)}
-                >
-                  Export performance data to CSV
-                  <div className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-4 border-t-[#1f1f1f] border-r-transparent border-b-transparent border-l-transparent" />
-                </div>,
-                document.body,
-              )}
-          </div>
+          {/* Print and Export Buttons */}
+          <PrintButton
+            onClick={handlePrint}
+            loading={printLoading}
+            disabled={performanceItems.length === 0}
+            size="sm"
+            variant="secondary"
+          />
+          <ExportButton
+            onExport={handleExport}
+            loading={exportLoading}
+            disabled={performanceItems.length === 0}
+            availableFormats={['csv', 'pdf', 'html']}
+            size="sm"
+            variant="secondary"
+          />
         </div>
 
         {/* Result count */}

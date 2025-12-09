@@ -1,8 +1,10 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { authOptions } from '@/lib/auth-options';
-import { getEntitlementsForTier } from '@/lib/entitlements';
+import { getEntitlementsForTierAsync } from '@/lib/entitlements';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { TierSlug } from '@/lib/tier-config';
+import { getUsage } from '@/lib/usage-tracker';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
@@ -33,7 +35,19 @@ export async function GET() {
           expires_at: null,
           created_at: null,
         },
-        entitlements: getEntitlementsForTier(userEmail, 'starter'),
+        entitlements: {
+          userId: userEmail,
+          tier: 'starter',
+          features: {
+            cogs: true,
+            recipes: true,
+            analytics: true,
+            temperature: true,
+            cleaning: true,
+            compliance: true,
+          },
+          limits: { recipes: 50, ingredients: 200 },
+        },
         usage: {
           ingredients: 0,
           recipes: 0,
@@ -46,7 +60,9 @@ export async function GET() {
     // Get user subscription data
     const { data: userData, error: userError } = await supabaseAdmin
       .from('users')
-      .select('subscription_status, subscription_expires, created_at')
+      .select(
+        'subscription_status, subscription_expires, subscription_tier, subscription_cancel_at_period_end, subscription_current_period_start, created_at',
+      )
       .eq('email', userEmail)
       .single();
 
@@ -57,41 +73,18 @@ export async function GET() {
       });
     }
 
-    const tier = 'starter' as const; // Default until Stripe is fully wired
+    // Get actual tier from database, fallback to 'starter'
+    const tier = (userData?.subscription_tier as TierSlug) || 'starter';
     const status = userData?.subscription_status || 'trial';
     const expiresAt = userData?.subscription_expires || null;
+    const cancelAtPeriodEnd = userData?.subscription_cancel_at_period_end || false;
+    const currentPeriodStart = userData?.subscription_current_period_start || null;
 
-    // Get usage metrics
-    let usage = {
-      ingredients: 0,
-      recipes: 0,
-      dishes: 0,
-    };
+    // Get usage metrics using usage tracker
+    const usage = await getUsage(userEmail);
 
-    try {
-      // Count ingredients
-      const { count: ingredientsCount } = await supabaseAdmin
-        .from('ingredients')
-        .select('*', { count: 'exact', head: true });
-
-      // Count recipes
-      const { count: recipesCount } = await supabaseAdmin
-        .from('recipes')
-        .select('*', { count: 'exact', head: true });
-
-      // Count dishes
-      const { count: dishesCount } = await supabaseAdmin
-        .from('menu_dishes')
-        .select('*', { count: 'exact', head: true });
-
-      usage = {
-        ingredients: ingredientsCount || 0,
-        recipes: recipesCount || 0,
-        dishes: dishesCount || 0,
-      };
-    } catch (usageError) {
-      logger.warn('[Subscription API] Failed to fetch usage metrics:', usageError);
-    }
+    // Get entitlements using database config (with code fallback)
+    const entitlements = await getEntitlementsForTierAsync(userEmail, tier);
 
     return NextResponse.json({
       subscription: {
@@ -99,8 +92,10 @@ export async function GET() {
         status,
         expires_at: expiresAt,
         created_at: userData?.created_at || null,
+        cancel_at_period_end: cancelAtPeriodEnd,
+        current_period_start: currentPeriodStart,
       },
-      entitlements: getEntitlementsForTier(userEmail, tier),
+      entitlements,
       usage,
     });
   } catch (error) {

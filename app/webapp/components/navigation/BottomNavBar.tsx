@@ -3,37 +3,33 @@
 import { Icon } from '@/components/ui/Icon';
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
-import { Menu } from 'lucide-react';
+import { BarChart3, LayoutDashboard, Menu, Search, UtensilsCrossed } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
-import { useNavigationItems } from './nav-items';
 
 interface BottomNavBarProps {
   onMenuClick: () => void;
+  onSearchClick: () => void;
   menuButtonRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**
  * Bottom navigation bar component for mobile devices.
- * Displays primary navigation items (Dashboard, Recipes, Performance, Menu).
+ * Icon-only design with cyan circle active indicator (Cyber Carrot style).
  * Auto-hides on scroll down, shows on scroll up or at top.
- * Optimized for landscape mode with compact styling.
  *
  * @component
- * @param {Object} props - Component props
- * @param {Function} props.onMenuClick - Callback when "Menu" button is clicked
- * @returns {JSX.Element} Bottom navigation bar
  */
 export const BottomNavBar = memo(function BottomNavBar({
   onMenuClick,
+  onSearchClick,
   menuButtonRef,
 }: BottomNavBarProps) {
   const internalRef = useRef<HTMLButtonElement>(null);
   const buttonRef = menuButtonRef || internalRef;
   const pathname = usePathname();
   const { trackNavigation } = useNavigationTracking();
-  const allItems = useNavigationItems();
   const { direction, isAtTop } = useScrollDirection();
   const [isVisible, setIsVisible] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -55,15 +51,27 @@ export const BottomNavBar = memo(function BottomNavBar({
     }
   }, [direction, isAtTop, mounted]);
 
-  // Primary items for bottom nav: Dashboard, Recipes, Performance, Prep Lists, Temperature
-  const primaryItems = allItems.filter(
-    item =>
-      item.href === '/webapp' ||
-      item.href === '/webapp/recipes' ||
-      item.href === '/webapp/performance' ||
-      item.href === '/webapp/prep-lists' ||
-      item.href === '/webapp/temperature',
-  );
+  // Primary items for bottom nav (icon-only): Dashboard, Recipes, Performance
+  const primaryItems = [
+    {
+      href: '/webapp',
+      icon: LayoutDashboard,
+      label: 'Dashboard',
+      color: 'text-[#29E7CD]',
+    },
+    {
+      href: '/webapp/recipes',
+      icon: UtensilsCrossed,
+      label: 'Recipes',
+      color: 'text-[#29E7CD]',
+    },
+    {
+      href: '/webapp/performance',
+      icon: BarChart3,
+      label: 'Stats',
+      color: 'text-[#29E7CD]',
+    },
+  ];
 
   const isActive = (href: string) => {
     if (href === '/webapp') return pathname === '/webapp';
@@ -72,7 +80,7 @@ export const BottomNavBar = memo(function BottomNavBar({
 
   return (
     <nav
-      className="fixed right-0 bottom-0 left-0 z-[60] h-[var(--bottom-navbar-height)] border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/70 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300"
+      className="fixed right-0 bottom-0 left-0 z-[60] h-[var(--bottom-navbar-height)] border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/90 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300"
       style={{
         transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
         transitionTimingFunction: 'var(--easing-standard)',
@@ -80,7 +88,8 @@ export const BottomNavBar = memo(function BottomNavBar({
       aria-label="Bottom navigation"
       suppressHydrationWarning
     >
-      <div className="flex h-full w-full">
+      <div className="flex h-full w-full items-center justify-around px-2">
+        {/* Primary navigation items */}
         {primaryItems.map(item => {
           const active = isActive(item.href);
           return (
@@ -88,46 +97,64 @@ export const BottomNavBar = memo(function BottomNavBar({
               key={item.href}
               href={item.href}
               onClick={() => trackNavigation(item.href)}
-              className={`flex min-h-[44px] flex-1 flex-col items-center justify-center gap-1 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:flex-row landscape:gap-2 ${
-                active
-                  ? 'border-t-2 border-[#29E7CD] bg-[#29E7CD]/10'
-                  : 'hover:scale-[1.05] hover:bg-[#2a2a2a]/30'
-              }`}
-              style={{
-                transitionTimingFunction: 'var(--easing-standard)',
-                borderTopWidth: active ? '2px' : '0px',
-                transitionProperty: 'background-color, transform, border-top-width',
-              }}
+              className="group flex min-h-[44px] min-w-[44px] items-center justify-center transition-transform duration-200 focus:outline-none active:scale-95"
+              style={{ transitionTimingFunction: 'var(--easing-spring)' }}
+              aria-label={item.label}
               aria-current={active ? 'page' : undefined}
             >
+              {/* Cyan circle indicator for active state */}
               <span
-                className={`${active ? item.color : 'text-gray-400'} flex h-6 w-6 items-center justify-center landscape:h-5 landscape:w-5`}
+                className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200 ${
+                  active
+                    ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10'
+                    : 'border-transparent group-hover:border-[#2a2a2a]/50 group-hover:bg-[#2a2a2a]/30'
+                }`}
+                style={{ transitionTimingFunction: 'var(--easing-standard)' }}
               >
-                {item.icon}
-              </span>
-              <span
-                className={`text-xs font-medium landscape:text-[10px] ${active ? 'text-[#29E7CD]' : 'text-gray-400'}`}
-              >
-                {item.label}
+                <Icon
+                  icon={item.icon}
+                  size="sm"
+                  className={`transition-colors duration-200 ${active ? item.color : 'text-gray-400 group-hover:text-gray-300'}`}
+                  aria-hidden={true}
+                />
               </span>
             </Link>
           );
         })}
 
-        {/* More button */}
+        {/* Search button */}
+        <button
+          onClick={onSearchClick}
+          className="group flex min-h-[44px] min-w-[44px] items-center justify-center transition-transform duration-200 focus:outline-none active:scale-95"
+          style={{ transitionTimingFunction: 'var(--easing-spring)' }}
+          aria-label="Search"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent transition-all duration-200 group-hover:border-[#2a2a2a]/50 group-hover:bg-[#2a2a2a]/30">
+            <Icon
+              icon={Search}
+              size="sm"
+              className="text-gray-400 transition-colors duration-200 group-hover:text-gray-300"
+              aria-hidden={true}
+            />
+          </span>
+        </button>
+
+        {/* More menu button */}
         <button
           ref={buttonRef}
           onClick={onMenuClick}
-          className="flex min-h-[44px] flex-1 flex-col items-center justify-center gap-1 transition-all duration-200 hover:scale-[1.05] hover:bg-[#2a2a2a]/30 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none landscape:flex-row landscape:gap-2"
-          style={{
-            transitionTimingFunction: 'var(--easing-standard)',
-          }}
+          className="group flex min-h-[44px] min-w-[44px] items-center justify-center transition-transform duration-200 focus:outline-none active:scale-95"
+          style={{ transitionTimingFunction: 'var(--easing-spring)' }}
           aria-label="Open more menu"
         >
-          <span className="flex h-6 w-6 items-center justify-center text-gray-400 landscape:h-5 landscape:w-5">
-            <Icon icon={Menu} size="sm" aria-hidden={true} />
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent transition-all duration-200 group-hover:border-[#2a2a2a]/50 group-hover:bg-[#2a2a2a]/30">
+            <Icon
+              icon={Menu}
+              size="sm"
+              className="text-gray-400 transition-colors duration-200 group-hover:text-gray-300"
+              aria-hidden={true}
+            />
           </span>
-          <span className="text-xs font-medium text-gray-400 landscape:text-[10px]">More</span>
         </button>
       </div>
     </nav>

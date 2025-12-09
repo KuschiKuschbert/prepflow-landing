@@ -3,13 +3,11 @@ import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const supportRequestSchema = z.object({
-  subject: z.string().min(1).max(200),
-  message: z.string().min(10).max(5000),
-  type: z.enum(['bug', 'feature', 'question', 'other']).optional(),
-});
+import { checkRateLimit } from './helpers/checkRateLimit';
+import { createTicket } from './helpers/createTicket';
+import { detectSeverity } from './helpers/detectSeverity';
+import { getUserId } from './helpers/getUserId';
+import { validateRequest } from './helpers/validateRequest';
 
 /**
  * POST /api/support/contact
@@ -29,41 +27,71 @@ export async function POST(req: NextRequest) {
     }
 
     const userEmail = session.user.email;
-    const body = await req.json();
 
-    // Validate request body
-    const validationResult = supportRequestSchema.safeParse(body);
-    if (!validationResult.success) {
+    // Check rate limit
+    const rateLimit = checkRateLimit(userEmail);
+    if (!rateLimit.allowed) {
+      logger.warn('[Support API] Rate limit exceeded:', {
+        userEmail,
+        retryAfter: rateLimit.retryAfter,
+        context: { endpoint: '/api/support/contact', method: 'POST' },
+      });
+
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Invalid request data',
-          'VALIDATION_ERROR',
-          400,
-          validationResult.error.issues,
+          'Too many requests. Please try again later.',
+          'RATE_LIMIT_EXCEEDED',
+          429,
         ),
-        { status: 400 },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimit.retryAfter || 900),
+          },
+        },
       );
     }
 
-    const { subject, message, type } = validationResult.data;
+    const body = await req.json();
 
-    // Log support request (in production, you'd send an email or create a ticket)
-    logger.info('[Support API] Support request received:', {
+    // Validate request body
+    const validation = validateRequest(body);
+    if (!validation.isValid) {
+      return validation.error!;
+    }
+
+    const { subject, message, type, related_error_id } = validation.data!;
+
+    // Try to find user_id from email
+    const userId = await getUserId(userEmail);
+
+    // Auto-detect severity from message content
+    const severity = detectSeverity(subject, message);
+
+    // Store ticket in database
+    const ticketResult = await createTicket(
+      userId,
       userEmail,
       subject,
-      type: type || 'other',
-      messageLength: message.length,
-    });
+      message,
+      type || 'other',
+      severity,
+      related_error_id || null,
+    );
 
-    // In production, you would:
-    // 1. Send email via Resend to hello@prepflow.org
-    // 2. Create ticket in support system
-    // 3. Store in support_tickets table
+    if (ticketResult instanceof NextResponse) {
+      return ticketResult;
+    }
+
+    // TODO: Send email notification via Resend if SUPPORT_EMAIL_NOTIFICATIONS=true
+    // if (process.env.SUPPORT_EMAIL_NOTIFICATIONS === 'true') {
+    //   // Send email to hello@prepflow.org
+    // }
 
     return NextResponse.json({
       success: true,
       message: 'Support request submitted successfully. We will respond within 48 hours.',
-      ticket_id: `TICKET-${Date.now()}`, // Placeholder
+      ticket_id: ticketResult.ticketId,
     });
   } catch (error) {
     logger.error('[Support API] Unexpected error:', {

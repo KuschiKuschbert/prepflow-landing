@@ -1,16 +1,19 @@
 'use client';
 
+import { SeasonalEvaluator } from '@/components/SeasonalEvaluator';
+import { deriveAutosaveId } from '@/lib/autosave-id';
+import { clearDraft, getAllDrafts, saveDraft } from '@/lib/autosave-storage';
+import { initializeClientErrorHandlers } from '@/lib/error-handlers/client-error-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider } from 'next-auth/react';
 import { ReactNode, useEffect, useState } from 'react';
-import { getAllDrafts, saveDraft, clearDraft } from '@/lib/autosave-storage';
-import { deriveAutosaveId } from '@/lib/autosave-id';
-import { SeasonalEvaluator } from '@/components/SeasonalEvaluator';
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   // Run one-time draft migration on client
   useDraftMigration();
+  // Initialize global error handlers
+  useGlobalErrorHandlers();
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
@@ -19,6 +22,14 @@ export function Providers({ children }: { children: ReactNode }) {
       </QueryClientProvider>
     </SessionProvider>
   );
+}
+
+// Initialize global error handlers once on client mount
+function useGlobalErrorHandlers(): void {
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    initializeClientErrorHandlers();
+  }, []);
 }
 
 // One-time client migration: purge very stale drafts and re-key "new" drafts with stable IDs
