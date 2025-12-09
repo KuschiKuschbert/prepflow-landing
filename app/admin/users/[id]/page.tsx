@@ -31,6 +31,13 @@ interface UserData {
   email_verified: boolean;
 }
 
+/**
+ * User detail page component for admin dashboard.
+ * Displays and allows editing of individual user account details.
+ *
+ * @component
+ * @returns {JSX.Element} User detail admin page
+ */
 export default function UserDetailPage() {
   const params = useParams();
   const router = useRouter();
