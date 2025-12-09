@@ -1,7 +1,3 @@
-/**
- * Feature Mapping Row Component
- */
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -24,6 +20,19 @@ const tierNames: Record<TierSlug, string> = {
   business: 'Business',
 };
 
+/**
+ * Feature mapping row component for admin dashboard.
+ * Displays and allows editing of feature-to-tier mappings.
+ *
+ * @component
+ * @param {FeatureMappingRowProps} props - Component props
+ * @param {FeatureMapping} props.feature - Feature mapping to display/edit
+ * @param {boolean} props.isEditing - Whether feature is in edit mode
+ * @param {Function} props.onEdit - Callback to enter edit mode
+ * @param {Function} props.onCancel - Callback to cancel editing
+ * @param {Function} props.onSave - Callback to save feature mapping changes
+ * @returns {JSX.Element} Feature mapping row component
+ */
 export function FeatureMappingRow({
   feature,
   isEditing,

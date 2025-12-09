@@ -1,12 +1,17 @@
-/**
- * Hook for fetching feature flags
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { FeatureFlag } from '../types';
 
+/**
+ * Hook for fetching regular feature flags from the admin API.
+ *
+ * @returns {Object} Feature flags fetch state and refresh function
+ * @returns {FeatureFlag[]} returns.flags - Array of feature flags
+ * @returns {boolean} returns.loading - Loading state
+ * @returns {string | null} returns.error - Error message if any
+ * @returns {Function} returns.fetchFlags - Function to manually fetch flags
+ */
 export function useFeatureFlagsFetch() {
   const { showError } = useNotification();
   const [flags, setFlags] = useState<FeatureFlag[]>([]);

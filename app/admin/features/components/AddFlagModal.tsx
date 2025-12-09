@@ -1,7 +1,3 @@
-/**
- * Add Feature Flag Modal Component
- */
-
 'use client';
 
 import { useState } from 'react';
@@ -12,6 +8,17 @@ interface AddFlagModalProps {
   onSubmit: (flag: { flag_key: string; description: string; enabled: boolean }) => void;
 }
 
+/**
+ * Add feature flag modal component for admin dashboard.
+ * Provides form to create new regular feature flags.
+ *
+ * @component
+ * @param {AddFlagModalProps} props - Component props
+ * @param {boolean} props.isOpen - Whether modal is open
+ * @param {Function} props.onClose - Callback when modal is closed
+ * @param {Function} props.onSubmit - Callback when flag is submitted
+ * @returns {JSX.Element} Add flag modal component
+ */
 export function AddFlagModal({ isOpen, onClose, onSubmit }: AddFlagModalProps) {
   const [newFlag, setNewFlag] = useState({
     flag_key: '',

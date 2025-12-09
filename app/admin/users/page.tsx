@@ -27,6 +27,13 @@ interface User {
   last_login: string | null;
 }
 
+/**
+ * Users page component for admin dashboard.
+ * Manages user accounts with search, pagination, and user detail access.
+ *
+ * @component
+ * @returns {JSX.Element} Users admin page
+ */
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);

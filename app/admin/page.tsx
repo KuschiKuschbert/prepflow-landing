@@ -34,6 +34,13 @@ interface DashboardStats {
   recentSafetyErrors: SafetyError[];
 }
 
+/**
+ * Admin dashboard page component.
+ * Displays system overview with stats, health status, and quick navigation.
+ *
+ * @component
+ * @returns {JSX.Element} Admin dashboard page
+ */
 export default function AdminDashboard() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<DashboardStats | null>(null);

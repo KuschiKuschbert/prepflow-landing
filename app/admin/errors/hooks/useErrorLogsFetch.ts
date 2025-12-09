@@ -1,7 +1,3 @@
-/**
- * Hook for fetching error logs
- */
-
 import { useState, useCallback, useEffect } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
@@ -17,6 +13,25 @@ interface UseErrorLogsFilters {
   page: number;
 }
 
+/**
+ * Hook for fetching error logs from the admin API.
+ * Automatically refreshes every 30 seconds and handles pagination.
+ *
+ * @param {UseErrorLogsFilters} filters - Filter parameters for error logs
+ * @param {string} filters.searchQuery - Search query string
+ * @param {string} filters.severityFilter - Filter by severity
+ * @param {string} filters.statusFilter - Filter by status
+ * @param {string} filters.categoryFilter - Filter by category
+ * @param {number} filters.page - Current page number
+ * @returns {Object} Error logs fetch state and refresh function
+ * @returns {ErrorLog[]} returns.errors - Array of error logs
+ * @returns {boolean} returns.loading - Loading state
+ * @returns {number} returns.totalPages - Total number of pages
+ * @returns {number} returns.total - Total number of errors
+ * @returns {Record<string, number>} returns.severityCounts - Count of errors by severity
+ * @returns {Record<string, number>} returns.statusCounts - Count of errors by status
+ * @returns {Function} returns.refresh - Function to manually refresh error logs
+ */
 export function useErrorLogsFetch(filters: UseErrorLogsFilters) {
   const { showError } = useNotification();
   const [errors, setErrors] = useState<ErrorLog[]>([]);

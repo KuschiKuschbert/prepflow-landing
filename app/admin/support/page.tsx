@@ -8,6 +8,13 @@ import { useConfirm } from '@/hooks/useConfirm';
 import { usePrompt } from '@/hooks/usePrompt';
 import { logger } from '@/lib/logger';
 
+/**
+ * Support tools page component for admin dashboard.
+ * Provides admin utilities: user impersonation, password reset, and data export.
+ *
+ * @component
+ * @returns {JSX.Element} Support tools admin page
+ */
 export default function SupportToolsPage() {
   const { showSuccess, showError } = useNotification();
   const { showConfirm, ConfirmDialog } = useConfirm();

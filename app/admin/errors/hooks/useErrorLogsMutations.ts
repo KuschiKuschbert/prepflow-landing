@@ -1,11 +1,17 @@
-/**
- * Hook for error log mutations (update status, save notes)
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { ErrorLog } from '../types';
 
+/**
+ * Hook for error log mutations (update status, save notes).
+ * Handles API calls for updating error log status and saving admin notes.
+ *
+ * @param {Function} refresh - Function to refresh error logs after mutation
+ * @returns {Object} Mutation functions and loading state
+ * @returns {string | null} returns.updatingStatus - ID of error currently being updated
+ * @returns {Function} returns.updateStatus - Function to update error status
+ * @returns {Function} returns.saveNotes - Function to save admin notes for an error
+ */
 export function useErrorLogsMutations(refresh: () => Promise<void>) {
   const { showSuccess, showError } = useNotification();
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);

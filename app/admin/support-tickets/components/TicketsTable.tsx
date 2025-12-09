@@ -1,7 +1,3 @@
-/**
- * Support Tickets Table Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -16,6 +12,18 @@ interface TicketsTableProps {
   onViewDetails: (ticket: SupportTicket) => void;
 }
 
+/**
+ * Support tickets table component for admin dashboard.
+ * Displays support tickets with severity, status, type, and action buttons.
+ *
+ * @component
+ * @param {TicketsTableProps} props - Component props
+ * @param {SupportTicket[]} props.tickets - Array of support tickets to display
+ * @param {string | null} props.updatingStatus - ID of ticket currently being updated
+ * @param {Function} props.onStatusUpdate - Callback when ticket status is updated
+ * @param {Function} props.onViewDetails - Callback when ticket details are viewed
+ * @returns {JSX.Element} Support tickets table component
+ */
 export function TicketsTable({
   tickets,
   updatingStatus,

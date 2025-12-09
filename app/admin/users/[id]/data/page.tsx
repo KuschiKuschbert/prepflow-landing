@@ -22,6 +22,13 @@ interface UserData {
   };
 }
 
+/**
+ * User data page component for admin dashboard.
+ * Displays all data associated with a specific user (ingredients, recipes, dishes, etc.).
+ *
+ * @component
+ * @returns {JSX.Element} User data admin page
+ */
 export default function UserDataPage() {
   const params = useParams();
   const userId = params.id as string;

@@ -19,6 +19,13 @@ interface SystemHealth {
   recentErrors: number;
 }
 
+/**
+ * System health page component for admin dashboard.
+ * Displays system status, database connectivity, API performance, and uptime metrics.
+ *
+ * @component
+ * @returns {JSX.Element} System health admin page
+ */
 export default function SystemHealthPage() {
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [loading, setLoading] = useState(true);

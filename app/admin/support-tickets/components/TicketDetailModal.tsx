@@ -1,7 +1,3 @@
-/**
- * Ticket Detail Modal Component
- */
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -19,6 +15,19 @@ interface TicketDetailModalProps {
   onLinkError: (ticketId: string, errorId: string) => Promise<SupportTicket | null>;
 }
 
+/**
+ * Ticket detail modal component for admin dashboard.
+ * Displays detailed information about a support ticket with admin notes and error linking.
+ *
+ * @component
+ * @param {TicketDetailModalProps} props - Component props
+ * @param {SupportTicket | null} props.ticket - Support ticket to display
+ * @param {string | null} props.updatingStatus - ID of ticket being updated
+ * @param {Function} props.onClose - Callback when modal is closed
+ * @param {Function} props.onSaveNotes - Callback to save admin notes
+ * @param {Function} props.onLinkError - Callback to link ticket to error log
+ * @returns {JSX.Element} Ticket detail modal component
+ */
 export function TicketDetailModal({
   ticket,
   updatingStatus,

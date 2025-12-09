@@ -12,6 +12,18 @@ interface ErrorLogsTableProps {
   onViewDetails: (error: ErrorLog) => void;
 }
 
+/**
+ * Error logs table component for admin dashboard.
+ * Displays error logs with severity, status, and action buttons.
+ *
+ * @component
+ * @param {ErrorLogsTableProps} props - Component props
+ * @param {ErrorLog[]} props.errors - Array of error logs to display
+ * @param {string | null} props.updatingStatus - ID of error currently being updated
+ * @param {Function} props.onStatusUpdate - Callback when error status is updated
+ * @param {Function} props.onViewDetails - Callback when error details are viewed
+ * @returns {JSX.Element} Error logs table component
+ */
 export function ErrorLogsTable({
   errors,
   updatingStatus,

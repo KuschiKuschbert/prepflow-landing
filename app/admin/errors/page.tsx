@@ -8,6 +8,13 @@ import { ErrorLogsTable } from './components/ErrorLogsTable';
 import { useErrorLogs } from './hooks/useErrorLogs';
 import type { ErrorLog } from './types';
 
+/**
+ * Error logs page component for admin dashboard.
+ * Manages error logs with filtering, pagination, and status updates.
+ *
+ * @component
+ * @returns {JSX.Element} Error logs admin page
+ */
 export default function ErrorLogsPage() {
   const [selectedError, setSelectedError] = useState<ErrorLog | null>(null);
   const [searchQuery, setSearchQuery] = useState('');

@@ -8,6 +8,13 @@ import { TicketsTable } from './components/TicketsTable';
 import { useSupportTickets } from './hooks/useSupportTickets';
 import type { SupportTicket } from './types';
 
+/**
+ * Support tickets page component for admin dashboard.
+ * Manages support tickets with filtering, pagination, and status updates.
+ *
+ * @component
+ * @returns {JSX.Element} Support tickets admin page
+ */
 export default function SupportTicketsPage() {
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
   const [searchQuery, setSearchQuery] = useState('');

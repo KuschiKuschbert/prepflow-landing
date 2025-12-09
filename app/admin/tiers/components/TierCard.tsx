@@ -1,7 +1,3 @@
-/**
- * Tier Card Component
- */
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -25,6 +21,20 @@ const tierNames: Record<TierSlug, string> = {
   business: 'Business',
 };
 
+/**
+ * Tier card component for admin dashboard.
+ * Displays and allows editing of tier configuration (price, features, limits).
+ *
+ * @component
+ * @param {TierCardProps} props - Component props
+ * @param {TierConfiguration} props.tier - Tier configuration to display/edit
+ * @param {boolean} props.isEditing - Whether tier is in edit mode
+ * @param {Function} props.onEdit - Callback to enter edit mode
+ * @param {Function} props.onCancel - Callback to cancel editing
+ * @param {Function} props.onSave - Callback to save tier changes
+ * @param {Function} props.onDisable - Callback to disable tier
+ * @returns {JSX.Element} Tier card component
+ */
 export function TierCard({ tier, isEditing, onEdit, onCancel, onSave, onDisable }: TierCardProps) {
   const [editedTier, setEditedTier] = useState<TierConfiguration>(tier);
 

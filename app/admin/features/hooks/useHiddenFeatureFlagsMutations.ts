@@ -1,12 +1,17 @@
-/**
- * Hook for hidden feature flag mutations (toggle, delete)
- */
-
 import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { HiddenFeatureFlag } from '../types';
 
+/**
+ * Hook for hidden feature flag mutations (toggle unlock/enable, delete).
+ * Handles API calls for updating hidden feature flags.
+ *
+ * @param {Function} refresh - Function to refresh flags after mutation
+ * @returns {Object} Mutation functions
+ * @returns {Function} returns.toggleHiddenFlag - Function to toggle unlock or enable state
+ * @returns {Function} returns.deleteHiddenFlag - Function to delete a hidden flag
+ */
 export function useHiddenFeatureFlagsMutations(refresh: () => Promise<void>) {
   const { showSuccess, showError } = useNotification();
 

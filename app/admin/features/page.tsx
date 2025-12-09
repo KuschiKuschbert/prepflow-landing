@@ -16,6 +16,13 @@ import { HiddenFeatureFlagsTable } from './components/HiddenFeatureFlagsTable';
 import { AddFlagModal } from './components/AddFlagModal';
 import { SuggestedFlagsSection } from './components/SuggestedFlagsSection';
 
+/**
+ * Feature flags page component for admin dashboard.
+ * Manages regular and hidden feature flags with discovery and auto-create.
+ *
+ * @component
+ * @returns {JSX.Element} Feature flags admin page
+ */
 export default function FeatureFlagsPage() {
   const { showError } = useNotification();
   const { showConfirm, ConfirmDialog } = useConfirm();

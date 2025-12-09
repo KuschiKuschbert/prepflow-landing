@@ -11,6 +11,13 @@ import { useCacheInvalidation } from './hooks/useCacheInvalidation';
 import { TiersTable } from './components/TiersTable';
 import { FeaturesTable } from './components/FeaturesTable';
 
+/**
+ * Tiers and features page component for admin dashboard.
+ * Manages subscription tier configurations and feature-to-tier mappings.
+ *
+ * @component
+ * @returns {JSX.Element} Tiers admin page
+ */
 export default function TiersPage() {
   const { showConfirm, ConfirmDialog } = useConfirm();
   const [activeTab, setActiveTab] = useState<TabType>('tiers');

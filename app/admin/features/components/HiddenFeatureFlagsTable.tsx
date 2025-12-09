@@ -1,7 +1,3 @@
-/**
- * Hidden Feature Flags Table Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -17,6 +13,20 @@ interface HiddenFeatureFlagsTableProps {
   onRetry: () => void;
 }
 
+/**
+ * Hidden feature flags table component for admin dashboard.
+ * Displays hidden feature flags with unlock/enable toggle and delete actions.
+ *
+ * @component
+ * @param {HiddenFeatureFlagsTableProps} props - Component props
+ * @param {HiddenFeatureFlag[]} props.flags - Array of hidden feature flags to display
+ * @param {boolean} props.loading - Loading state
+ * @param {string | null} props.error - Error message if any
+ * @param {Function} props.onToggle - Callback when flag is toggled (unlock or enable)
+ * @param {Function} props.onDelete - Callback when flag is deleted
+ * @param {Function} props.onRetry - Callback to retry loading flags
+ * @returns {JSX.Element} Hidden feature flags table component
+ */
 export function HiddenFeatureFlagsTable({
   flags,
   loading,

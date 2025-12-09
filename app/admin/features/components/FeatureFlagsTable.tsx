@@ -1,7 +1,3 @@
-/**
- * Feature Flags Table Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -17,6 +13,20 @@ interface FeatureFlagsTableProps {
   onRetry: () => void;
 }
 
+/**
+ * Feature flags table component for admin dashboard.
+ * Displays regular feature flags with toggle and delete actions.
+ *
+ * @component
+ * @param {FeatureFlagsTableProps} props - Component props
+ * @param {FeatureFlag[]} props.flags - Array of feature flags to display
+ * @param {boolean} props.loading - Loading state
+ * @param {string | null} props.error - Error message if any
+ * @param {Function} props.onToggle - Callback when flag is toggled
+ * @param {Function} props.onDelete - Callback when flag is deleted
+ * @param {Function} props.onRetry - Callback to retry loading flags
+ * @returns {JSX.Element} Feature flags table component
+ */
 export function FeatureFlagsTable({
   flags,
   loading,

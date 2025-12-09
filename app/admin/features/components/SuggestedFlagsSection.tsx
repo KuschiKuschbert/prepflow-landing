@@ -1,7 +1,3 @@
-/**
- * Suggested Flags Section Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -16,6 +12,19 @@ interface SuggestedFlagsSectionProps {
   autoCreating: boolean;
 }
 
+/**
+ * Suggested flags section component for admin dashboard.
+ * Displays discovered feature flags that can be auto-created.
+ *
+ * @component
+ * @param {SuggestedFlagsSectionProps} props - Component props
+ * @param {Object} props.discoveredFlags - Discovered flags grouped by type
+ * @param {Set<string>} props.existingRegularKeys - Set of existing regular flag keys
+ * @param {Set<string>} props.existingHiddenKeys - Set of existing hidden flag keys
+ * @param {Function} props.onAutoCreate - Callback to auto-create missing flags
+ * @param {boolean} props.autoCreating - Loading state for auto-create operation
+ * @returns {JSX.Element} Suggested flags section component
+ */
 export function SuggestedFlagsSection({
   discoveredFlags,
   existingRegularKeys,
