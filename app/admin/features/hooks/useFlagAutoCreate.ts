@@ -1,12 +1,19 @@
-/**
- * Hook for auto-creating discovered feature flags
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { DiscoveredFlag } from '../types';
 
+/**
+ * Hook for auto-creating discovered feature flags.
+ * Creates feature flags from discovered flags found in the codebase.
+ *
+ * @param {Object} discoveredFlags - Discovered flags grouped by type
+ * @param {DiscoveredFlag[]} discoveredFlags.regular - Regular discovered flags
+ * @param {DiscoveredFlag[]} discoveredFlags.hidden - Hidden discovered flags
+ * @returns {Object} Auto-create state and function
+ * @returns {boolean} returns.autoCreating - Loading state for auto-create operation
+ * @returns {Function} returns.autoCreateFlags - Function to create all discovered flags
+ */
 export function useFlagAutoCreate(discoveredFlags: {
   regular: DiscoveredFlag[];
   hidden: DiscoveredFlag[];

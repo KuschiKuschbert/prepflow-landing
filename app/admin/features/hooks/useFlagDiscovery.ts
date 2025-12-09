@@ -1,12 +1,21 @@
-/**
- * Hook for discovering feature flags from codebase
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { DiscoveredFlag } from '../types';
 
+/**
+ * Hook for discovering feature flags from codebase.
+ * Scans the codebase for feature flag usage and returns discovered flags.
+ *
+ * @returns {Object} Discovery state and function
+ * @returns {boolean} returns.discovering - Loading state for discovery operation
+ * @returns {string | null} returns.discoveryError - Error message if discovery failed
+ * @returns {Object} returns.discoveredFlags - Discovered flags grouped by type
+ * @returns {DiscoveredFlag[]} returns.discoveredFlags.regular - Regular discovered flags
+ * @returns {DiscoveredFlag[]} returns.discoveredFlags.hidden - Hidden discovered flags
+ * @returns {Function} returns.discoverFlags - Function to start discovery
+ * @returns {Function} returns.setDiscoveredFlags - Function to manually set discovered flags
+ */
 export function useFlagDiscovery() {
   const { showSuccess, showError } = useNotification();
   const [discovering, setDiscovering] = useState(false);

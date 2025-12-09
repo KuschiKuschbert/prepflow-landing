@@ -1,11 +1,15 @@
-/**
- * Hook for linking support tickets to error logs
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { SupportTicket } from '../types';
 
+/**
+ * Hook for linking support tickets to error logs.
+ * Handles API calls for associating tickets with error log entries.
+ *
+ * @returns {Object} Linking state and function
+ * @returns {string | null} returns.linkingStatus - ID of ticket currently being linked
+ * @returns {Function} returns.linkError - Function to link ticket to error log
+ */
 export function useSupportTicketsLink() {
   const { showSuccess, showError } = useNotification();
   const [linkingStatus, setLinkingStatus] = useState<string | null>(null);

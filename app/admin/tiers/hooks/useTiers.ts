@@ -1,11 +1,19 @@
-/**
- * Hook for managing tier configurations
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { TierConfiguration } from '../types';
 
+/**
+ * Hook for managing tier configurations.
+ * Handles fetching, updating, and disabling subscription tiers.
+ *
+ * @returns {Object} Tier management state and functions
+ * @returns {TierConfiguration[]} returns.tiers - Array of tier configurations
+ * @returns {boolean} returns.loading - Loading state
+ * @returns {string | null} returns.error - Error message if any
+ * @returns {Function} returns.fetchTiers - Function to fetch tiers
+ * @returns {Function} returns.updateTier - Function to update a tier
+ * @returns {Function} returns.disableTier - Function to disable a tier
+ */
 export function useTiers() {
   const { showSuccess, showError } = useNotification();
   const [tiers, setTiers] = useState<TierConfiguration[]>([]);

@@ -1,7 +1,3 @@
-/**
- * Ticket Filters Component
- */
-
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
@@ -18,6 +14,22 @@ interface TicketFiltersProps {
   onTypeChange: (value: string) => void;
 }
 
+/**
+ * Ticket filters component for admin dashboard.
+ * Provides search and filter controls for support tickets.
+ *
+ * @component
+ * @param {TicketFiltersProps} props - Component props
+ * @param {string} props.searchQuery - Current search query
+ * @param {string} props.severityFilter - Selected severity filter
+ * @param {string} props.statusFilter - Selected status filter
+ * @param {string} props.typeFilter - Selected type filter
+ * @param {Function} props.onSearchChange - Callback when search changes
+ * @param {Function} props.onSeverityChange - Callback when severity filter changes
+ * @param {Function} props.onStatusChange - Callback when status filter changes
+ * @param {Function} props.onTypeChange - Callback when type filter changes
+ * @returns {JSX.Element} Ticket filters component
+ */
 export function TicketFilters({
   searchQuery,
   severityFilter,

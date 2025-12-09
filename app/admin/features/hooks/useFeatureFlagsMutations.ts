@@ -1,12 +1,18 @@
-/**
- * Hook for feature flag mutations (toggle, delete, create)
- */
-
 import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { FeatureFlag } from '../types';
 
+/**
+ * Hook for regular feature flag mutations (toggle, delete, create).
+ * Handles API calls for updating regular feature flags.
+ *
+ * @param {Function} refresh - Function to refresh flags after mutation
+ * @returns {Object} Mutation functions
+ * @returns {Function} returns.toggleFlag - Function to toggle flag enabled state
+ * @returns {Function} returns.deleteFlag - Function to delete a flag
+ * @returns {Function} returns.createFlag - Function to create a new flag
+ */
 export function useFeatureFlagsMutations(refresh: () => Promise<void>) {
   const { showSuccess, showError } = useNotification();
 

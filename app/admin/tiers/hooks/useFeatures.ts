@@ -1,11 +1,18 @@
-/**
- * Hook for managing feature mappings
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { FeatureMapping } from '../types';
 
+/**
+ * Hook for managing feature-to-tier mappings.
+ * Handles fetching and updating feature mappings for subscription tiers.
+ *
+ * @returns {Object} Feature mapping management state and functions
+ * @returns {FeatureMapping[]} returns.features - Array of feature mappings
+ * @returns {boolean} returns.loading - Loading state
+ * @returns {string | null} returns.error - Error message if any
+ * @returns {Function} returns.fetchFeatures - Function to fetch feature mappings
+ * @returns {Function} returns.updateFeature - Function to update a feature mapping
+ */
 export function useFeatures() {
   const { showSuccess, showError } = useNotification();
   const [features, setFeatures] = useState<FeatureMapping[]>([]);

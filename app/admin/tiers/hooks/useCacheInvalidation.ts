@@ -1,10 +1,14 @@
-/**
- * Hook for cache invalidation
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 
+/**
+ * Hook for invalidating tier configuration cache.
+ * Clears cached tier data to force fresh fetch from database.
+ *
+ * @returns {Object} Cache invalidation state and function
+ * @returns {boolean} returns.invalidating - Loading state for invalidation operation
+ * @returns {Function} returns.invalidateCache - Function to invalidate tier cache
+ */
 export function useCacheInvalidation() {
   const { showSuccess, showError } = useNotification();
   const [invalidating, setInvalidating] = useState(false);

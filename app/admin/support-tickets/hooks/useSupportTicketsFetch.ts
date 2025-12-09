@@ -1,7 +1,3 @@
-/**
- * Hook for fetching support tickets
- */
-
 import { useState, useCallback, useEffect } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
@@ -17,6 +13,23 @@ interface UseSupportTicketsFilters {
   page: number;
 }
 
+/**
+ * Hook for fetching support tickets from the admin API.
+ * Automatically refreshes every 30 seconds and handles pagination.
+ *
+ * @param {UseSupportTicketsFilters} filters - Filter parameters for support tickets
+ * @param {string} filters.searchQuery - Search query string
+ * @param {string} filters.severityFilter - Filter by severity
+ * @param {string} filters.statusFilter - Filter by status
+ * @param {string} filters.typeFilter - Filter by type
+ * @param {number} filters.page - Current page number
+ * @returns {Object} Support tickets fetch state and refresh function
+ * @returns {SupportTicket[]} returns.tickets - Array of support tickets
+ * @returns {boolean} returns.loading - Loading state
+ * @returns {number} returns.totalPages - Total number of pages
+ * @returns {number} returns.total - Total number of tickets
+ * @returns {Function} returns.refresh - Function to manually refresh tickets
+ */
 export function useSupportTicketsFetch(filters: UseSupportTicketsFilters) {
   const { showError } = useNotification();
   const [tickets, setTickets] = useState<SupportTicket[]>([]);

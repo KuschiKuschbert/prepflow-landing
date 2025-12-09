@@ -1,11 +1,17 @@
-/**
- * Hook for support ticket mutations (update status, save notes)
- */
-
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { SupportTicket } from '../types';
 
+/**
+ * Hook for support ticket mutations (update status, save notes).
+ * Handles API calls for updating support ticket status and saving admin notes.
+ *
+ * @param {Function} refresh - Function to refresh tickets after mutation
+ * @returns {Object} Mutation functions and loading state
+ * @returns {string | null} returns.updatingStatus - ID of ticket currently being updated
+ * @returns {Function} returns.updateStatus - Function to update ticket status
+ * @returns {Function} returns.saveNotes - Function to save admin notes for a ticket
+ */
 export function useSupportTicketsMutations(refresh: () => Promise<void>) {
   const { showSuccess, showError } = useNotification();
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
