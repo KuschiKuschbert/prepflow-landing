@@ -80,17 +80,55 @@ export function createLogEntry(
 }
 
 /**
+ * Redact sensitive information from strings (secrets, keys, passwords, tokens).
+ *
+ * @param {string} str - String that may contain sensitive data
+ * @returns {string} String with sensitive data redacted
+ */
+function redactSecrets(str: string): string {
+  // Patterns to redact: API keys, tokens, passwords, secrets
+  const patterns = [
+    // Stripe keys: sk_live_..., sk_test_..., pk_live_..., pk_test_...
+    /\b(sk|pk)_(live|test)_[a-zA-Z0-9]{24,}/g,
+    // Webhook secrets: whsec_...
+    /\bwhsec_[a-zA-Z0-9]{32,}/g,
+    // JWT tokens: eyJ...
+    /\beyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/g,
+    // Database URLs with passwords: postgresql://user:password@host
+    /postgresql:\/\/[^:]+:[^@]+@/g,
+    // Generic API keys: ..._KEY=..., ..._SECRET=...
+    /\b[A-Z_]+(?:KEY|SECRET|PASSWORD|TOKEN)=[^\s'"]+/gi,
+    // Hex keys: 64-character hex strings (encryption keys)
+    /\b[a-fA-F0-9]{64}\b/g,
+  ];
+
+  let redacted = str;
+  patterns.forEach(pattern => {
+    redacted = redacted.replace(pattern, '[REDACTED]');
+  });
+
+  return redacted;
+}
+
+/**
  * Safely stringify an object, handling circular references and large objects.
+ * Automatically redacts sensitive information like secrets, keys, and passwords.
  *
  * @param {unknown} obj - Object to stringify
  * @param {boolean} pretty - Whether to format with indentation
- * @returns {string} Stringified object
+ * @returns {string} Stringified object with secrets redacted
  */
 export function safeStringify(obj: unknown, pretty = false): string {
   try {
     // Handle circular references and large objects
     const seen = new WeakSet();
     const replacer = (key: string, value: unknown) => {
+      // Redact sensitive keys
+      const sensitiveKeys = ['password', 'secret', 'key', 'token', 'apiKey', 'api_key', 'authToken', 'auth_token'];
+      if (sensitiveKeys.some(sk => key.toLowerCase().includes(sk.toLowerCase()))) {
+        return '[REDACTED]';
+      }
+
       if (typeof value === 'object' && value !== null) {
         if (seen.has(value)) {
           return '[Circular]';
@@ -105,6 +143,12 @@ export function safeStringify(obj: unknown, pretty = false): string {
           }
         }
       }
+
+      // Redact secrets in string values
+      if (typeof value === 'string') {
+        return redactSecrets(value);
+      }
+
       return value;
     };
 
