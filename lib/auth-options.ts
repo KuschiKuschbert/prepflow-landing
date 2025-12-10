@@ -88,6 +88,9 @@ export const authOptions: NextAuthOptions = {
   // NextAuth v4+ automatically uses NEXTAUTH_URL for URL construction if set
   // We force the callback URL in the provider configuration above
   // CRITICAL: Ensure NEXTAUTH_URL is set for production to prevent callback URL mismatches
+  // trustHost: true allows NextAuth to use NEXTAUTH_URL even when request origin differs
+  // This is essential when users access via non-www but NEXTAUTH_URL is www
+  trustHost: true,
   session: {
     strategy: 'jwt',
     maxAge: SESSION_MAX_AGE, // 4 hours - prevents "logged in forever" issue
