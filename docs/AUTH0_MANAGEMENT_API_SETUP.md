@@ -44,6 +44,7 @@ The Auth0 Management API allows you to:
    - Toggle **Authorize**
    - Under **Permissions**, select:
      - ✅ `read:clients` (required for reading application settings)
+     - ✅ `update:clients` (required for updating application settings)
    - Click **Authorize**
 
 3. **Get Credentials:**
