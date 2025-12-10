@@ -148,14 +148,15 @@ export async function GET(request: NextRequest) {
         });
 
         // Test connection by getting application details
-        const app = await managementClient.clients.get({ client_id: auth0ClientId });
+        const appResponse = await managementClient.clients.get({ client_id: auth0ClientId });
+        const app = appResponse.data || (appResponse as any);
         addTest('Auth0 Management API', 'pass', 'Successfully connected to Auth0 Management API', {
-          applicationName: app.name,
-          applicationId: app.client_id,
+          applicationName: app.name || 'Unknown',
+          applicationId: app.client_id || auth0ClientId,
         });
 
         // Test 5: Verify Callback URLs in Auth0
-        const callbacks = app.callbacks || [];
+        const callbacks = (app.callbacks || []) as string[];
         const expectedCallback = nextAuthUrl ? `${nextAuthUrl}/api/auth/callback/auth0` : null;
         const expectedCallbackNonWww = nextAuthUrl && nextAuthUrl.includes('www.')
           ? `${nextAuthUrl.replace('www.', '')}/api/auth/callback/auth0`
@@ -185,13 +186,13 @@ export async function GET(request: NextRequest) {
         }
 
         // Test 6: Verify Logout URLs
-        const logoutUrls = app.logout_urls || [];
+        const logoutUrls = (app.logout_urls || []) as string[];
         const expectedLogout = nextAuthUrl || '';
         const expectedLogoutNonWww = nextAuthUrl && nextAuthUrl.includes('www.')
           ? nextAuthUrl.replace('www.', '')
           : null;
 
-        if (logoutUrls.some((url) => url.includes(expectedLogout))) {
+        if (logoutUrls.some((url: string) => url.includes(expectedLogout))) {
           addTest('Auth0 Logout URL', 'pass', `Found in Auth0: ${expectedLogout}`, {
             logoutUrls,
           });
@@ -203,7 +204,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Test 7: Verify Web Origins
-        const webOrigins = app.web_origins || [];
+        const webOrigins = (app.web_origins || []) as string[];
         const expectedOrigin = nextAuthUrl || '';
         const expectedOriginNonWww = nextAuthUrl && nextAuthUrl.includes('www.')
           ? nextAuthUrl.replace('www.', '')

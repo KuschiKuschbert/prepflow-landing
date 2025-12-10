@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Get current application configuration
-    const app = await managementClient.clients.get({ client_id: auth0ClientId });
+    const appResponse = await managementClient.clients.get({ client_id: auth0ClientId });
+    const app = appResponse.data || (appResponse as any);
 
     // Build required URLs
     const requiredCallbacks = [
@@ -72,9 +73,9 @@ export async function POST(request: NextRequest) {
     ];
 
     // Merge with existing URLs (avoid duplicates)
-    const currentCallbacks = app.callbacks || [];
-    const currentLogoutUrls = app.logout_urls || [];
-    const currentWebOrigins = app.web_origins || [];
+    const currentCallbacks = (app.callbacks || []) as string[];
+    const currentLogoutUrls = (app.logout_urls || []) as string[];
+    const currentWebOrigins = (app.web_origins || []) as string[];
 
     const updatedCallbacks = [
       ...new Set([...currentCallbacks, ...requiredCallbacks]),
@@ -93,7 +94,7 @@ export async function POST(request: NextRequest) {
         callbacks: updatedCallbacks,
         logout_urls: updatedLogoutUrls,
         web_origins: updatedWebOrigins,
-      },
+      } as any, // Auth0 SDK types may be incomplete
     );
 
     logger.info('[Auth0 Fix] Updated Auth0 application configuration', {
