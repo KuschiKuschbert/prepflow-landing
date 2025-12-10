@@ -85,10 +85,11 @@ if (
 const SESSION_MAX_AGE = Number(process.env.NEXTAUTH_SESSION_MAX_AGE) || 4 * 60 * 60; // 4 hours in seconds
 
 export const authOptions: NextAuthOptions = {
-  // CRITICAL: Set url explicitly to force NextAuth to use NEXTAUTH_URL for all URL construction
-  // This ensures callback URLs are constructed from NEXTAUTH_URL, not request origin
-  // NextAuth v4 validates callback URLs against this base URL
-  ...(process.env.NEXTAUTH_URL && { url: process.env.NEXTAUTH_URL }),
+  // CRITICAL: NextAuth v4 uses NEXTAUTH_URL environment variable for URL construction
+  // Ensure NEXTAUTH_URL is set correctly in production (https://www.prepflow.org)
+  // NextAuth v4 validates callback URLs against NEXTAUTH_URL when available
+  // The middleware redirects non-www to www BEFORE NextAuth processes requests
+  // This ensures NextAuth always sees www.prepflow.org as the request origin
   session: {
     strategy: 'jwt',
     maxAge: SESSION_MAX_AGE, // 4 hours - prevents "logged in forever" issue
