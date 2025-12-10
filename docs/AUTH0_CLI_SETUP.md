@@ -286,4 +286,3 @@ After setting up CLI access:
 - **Production Setup:** `docs/AUTH0_PRODUCTION_SETUP.md`
 - **Troubleshooting:** `docs/AUTH0_TROUBLESHOOTING.md`
 - **Quick Setup:** `docs/AUTH0_QUICK_SETUP.md`
-

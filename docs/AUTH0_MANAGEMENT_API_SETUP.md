@@ -59,7 +59,11 @@ The Auth0 Management API allows you to:
 
 5. **Test:**
    ```bash
+   # Validate current configuration
    npm run auth0:check-config
+
+   # Update configuration programmatically
+   npm run auth0:update-config
    ```
 
 ### Option 2: Grant Your Application Management API Access
@@ -75,9 +79,10 @@ The Auth0 Management API allows you to:
    - Find your application (the one with `AUTH0_CLIENT_ID`)
    - Toggle **Authorize** if not already authorized
 
-2. **Grant Required Scope:**
+2. **Grant Required Scopes:**
    - Under **Permissions**, select:
      - ✅ `read:clients` (required for reading application settings)
+     - ✅ `update:clients` (required for updating application settings)
    - Click **Update**
 
 3. **Test:**
