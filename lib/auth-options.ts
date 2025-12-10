@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from 'next-auth';
-import { getUserRoles, extractAuth0UserId } from './auth0-management';
-import { logger } from './logger';
 import { syncUserFromAuth0 } from './auth-user-sync';
+import { extractAuth0UserId, getUserRoles } from './auth0-management';
+import { logger } from './logger';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -51,8 +51,6 @@ if (
 const SESSION_MAX_AGE = Number(process.env.NEXTAUTH_SESSION_MAX_AGE) || 4 * 60 * 60; // 4 hours in seconds
 
 export const authOptions: NextAuthOptions = {
-  // Force NextAuth to always use NEXTAUTH_URL for callback construction (fixes domain mismatch)
-  url: process.env.NEXTAUTH_URL,
   session: {
     strategy: 'jwt',
     maxAge: SESSION_MAX_AGE, // 4 hours - prevents "logged in forever" issue
