@@ -1,10 +1,26 @@
 # Auth0 Management API Setup Guide
 
-**Purpose:** Guide for setting up Auth0 Management API access to enable automated configuration validation.
+**Purpose:** Guide for setting up Auth0 Management API access to enable automated configuration management and validation.
 
 ## Why Management API Access?
 
-The `check-auth0-config.js` script uses the Auth0 Management API to automatically validate your application settings (web origins, callback URLs, logout URLs) without manual dashboard checks.
+The Auth0 Management API allows you to:
+- ✅ **Validate** application settings programmatically (`check-auth0-config.js`)
+- ✅ **Update** application settings programmatically (`update-auth0-config.js`)
+- ✅ **Fix** configuration issues without manual dashboard changes
+- ✅ **Sync** configuration across environments
+- ✅ **Automate** Auth0 configuration in CI/CD pipelines
+
+## Required Scopes
+
+**For Reading Configuration (check-auth0-config.js):**
+- `read:clients` - Read application settings
+
+**For Updating Configuration (update-auth0-config.js):**
+- `read:clients` - Read application settings
+- `update:clients` - Update application settings
+
+**⚠️ IMPORTANT:** Both scopes are required for full programmatic management.
 
 ## Setup Options
 
