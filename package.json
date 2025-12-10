@@ -51,6 +51,7 @@
     "auth0:update-config": "node scripts/update-auth0-config.js",
     "auth0:show-urls": "node scripts/show-auth0-urls.js",
     "auth0:validate": "npm run auth0:validate-env && npm run auth0:check-config && npm run auth0:check-issues",
+    "vercel:check-env": "node scripts/check-vercel-env.js",
     "find-allergen-conflicts": "node scripts/find-allergen-vegan-conflicts.js",
     "audit:ids": "node scripts/audit-ids.js",
     "supabase:status": "npx supabase status",
