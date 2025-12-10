@@ -49,6 +49,19 @@ http://localhost:3000
 http://localhost:3001
 ```
 
+#### Application Login URI (OPTIONAL but Recommended)
+
+**Purpose:** Used for password reset and email verification redirects. Not required for standard OAuth flow, but improves UX.
+
+**Set to:**
+```
+https://www.prepflow.org/api/auth/signin
+```
+
+**Why:** When users reset passwords or verify emails, Auth0 redirects them back to this URL to complete the authentication flow.
+
+**Note:** This is optional - your OAuth flow will work without it, but it's recommended for better user experience.
+
 ### 2. Environment Variables (Production)
 
 **Vercel Environment Variables:**

@@ -92,4 +92,3 @@ If sign-in still fails after verifying Vercel environment variables:
 - Always check Vercel environment variables after deployment
 - Ensure `NEXTAUTH_URL` matches your primary domain
 - Redeploy after changing environment variables
-
