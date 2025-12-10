@@ -366,4 +366,3 @@ function generateChecklist() {
 }
 
 generateChecklist();
-

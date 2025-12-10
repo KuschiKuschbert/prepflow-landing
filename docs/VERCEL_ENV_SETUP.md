@@ -35,7 +35,7 @@ NEXTAUTH_SECRET=your-production-secret-min-32-chars
 NEXTAUTH_SESSION_MAX_AGE=14400
 ```
 
-**⚠️ CRITICAL:** 
+**⚠️ CRITICAL:**
 - `NEXTAUTH_URL` **MUST** be `https://www.prepflow.org` (with www) in production
 - `NEXTAUTH_SECRET` should be different from development (generate new one: `openssl rand -base64 32`)
 - `NEXTAUTH_SESSION_MAX_AGE` is optional (defaults to 14400 = 4 hours)
@@ -106,7 +106,7 @@ For each critical variable above:
 4. **Environment:** Select **Production** (or all environments if same value)
 5. Click **"Save"**
 
-**⚠️ IMPORTANT:** 
+**⚠️ IMPORTANT:**
 - Always select **Production** environment for production variables
 - Use **production secrets**, not development values
 - `NEXTAUTH_URL` must be `https://www.prepflow.org` (with www)
@@ -224,4 +224,3 @@ npm run auth0:validate
 - **Auth0 CLI:** `docs/AUTH0_CLI_SETUP.md`
 - **Vercel Checklist:** `docs/VERCEL_ENV_CHECKLIST.md`
 - **Troubleshooting:** `docs/AUTH0_TROUBLESHOOTING.md`
-
