@@ -18,3 +18,6 @@ CREATE INDEX IF NOT EXISTS idx_users_subscription_cancel_at_period_end ON users(
 COMMENT ON COLUMN users.stripe_subscription_id IS 'Stripe subscription ID for direct subscription management';
 COMMENT ON COLUMN users.subscription_cancel_at_period_end IS 'True if subscription is scheduled to cancel at period end';
 COMMENT ON COLUMN users.subscription_current_period_start IS 'Start date of current subscription billing period';
+
+
+

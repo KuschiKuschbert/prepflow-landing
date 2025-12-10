@@ -11,3 +11,6 @@ export interface CleaningArea {
   created_at: string;
   updated_at: string;
 }
+
+
+

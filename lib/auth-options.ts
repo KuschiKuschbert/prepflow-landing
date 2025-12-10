@@ -24,26 +24,53 @@ if (
       ? `${process.env.NEXTAUTH_URL}/api/auth/callback/auth0`
       : undefined;
 
-    // Development logging to verify callback URL construction
-    if (isDev && callbackUrl) {
-      logger.dev('[Auth0 Config] Forced callback URL:', callbackUrl);
-      logger.dev('[Auth0 Config] NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+    // Logging to verify callback URL construction (dev + production for debugging)
+    if (callbackUrl) {
+      if (isDev) {
+        logger.dev('[Auth0 Config] Forced callback URL:', callbackUrl);
+        logger.dev('[Auth0 Config] NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+      } else {
+        // Production logging (safe - no secrets, just URLs)
+        logger.info('[Auth0 Config] Callback URL configured:', {
+          callbackUrl,
+          nextAuthUrl: process.env.NEXTAUTH_URL,
+        });
+      }
+    } else {
+      logger.error('[Auth0 Config] NEXTAUTH_URL not set - callback URL cannot be constructed');
     }
 
-    providers.push(
-      Auth0Provider({
-        issuer: process.env.AUTH0_ISSUER_BASE_URL,
-        clientId: process.env.AUTH0_CLIENT_ID,
-        clientSecret: process.env.AUTH0_CLIENT_SECRET,
-        authorization: {
-          params: {
-            scope: 'openid profile email',
-            ...(callbackUrl && { redirect_uri: callbackUrl }),
-          },
+    // CRITICAL: Force callback URL to prevent domain mismatch errors
+    // NextAuth may construct callback URLs from request origin, so we explicitly override
+    const providerConfig: any = {
+      issuer: process.env.AUTH0_ISSUER_BASE_URL,
+      clientId: process.env.AUTH0_CLIENT_ID,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET,
+      authorization: {
+        params: {
+          scope: 'openid profile email',
         },
-        ...(callbackUrl && { callbackURL: callbackUrl }),
-      }),
-    );
+      },
+    };
+
+    // Force callback URL in both places to ensure NextAuth uses it
+    if (callbackUrl) {
+      // Set redirect_uri in authorization params (what Auth0 sees)
+      providerConfig.authorization.params.redirect_uri = callbackUrl;
+      // Set callbackURL at provider level (what NextAuth uses internally)
+      providerConfig.callbackURL = callbackUrl;
+
+      // Log the forced callback URL for debugging
+      if (isDev) {
+        logger.dev('[Auth0 Config] Forcing callback URL:', callbackUrl);
+      } else {
+        logger.info('[Auth0 Config] Forcing callback URL:', { callbackUrl });
+      }
+    } else {
+      logger.error('[Auth0 Config] Cannot force callback URL - NEXTAUTH_URL not set');
+    }
+
+    providers.push(Auth0Provider(providerConfig));
   } catch (error) {
     // If Auth0 provider fails to load (e.g., edge runtime issues), continue without it
     // This allows the app to work in development without Auth0 configured
@@ -58,6 +85,9 @@ if (
 const SESSION_MAX_AGE = Number(process.env.NEXTAUTH_SESSION_MAX_AGE) || 4 * 60 * 60; // 4 hours in seconds
 
 export const authOptions: NextAuthOptions = {
+  // NextAuth v4+ automatically uses NEXTAUTH_URL for URL construction if set
+  // We force the callback URL in the provider configuration above
+  // CRITICAL: Ensure NEXTAUTH_URL is set for production to prevent callback URL mismatches
   session: {
     strategy: 'jwt',
     maxAge: SESSION_MAX_AGE, // 4 hours - prevents "logged in forever" issue

@@ -47,3 +47,6 @@ ALTER TABLE support_tickets ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Service role can access support_tickets" ON support_tickets;
 CREATE POLICY "Service role can access support_tickets" ON support_tickets
   FOR ALL USING (true);
+
+
+

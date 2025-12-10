@@ -37,3 +37,6 @@ export function CleaningTabs({ activeTab, onTabChange }: CleaningTabsProps) {
     </div>
   );
 }
+
+
+

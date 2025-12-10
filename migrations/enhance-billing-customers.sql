@@ -27,3 +27,6 @@ CREATE INDEX IF NOT EXISTS idx_billing_customers_last_synced_at
 COMMENT ON COLUMN billing_customers.stripe_subscription_id IS 'Current active Stripe subscription ID';
 COMMENT ON COLUMN billing_customers.subscription_status IS 'Cached subscription status from Stripe (active, cancelled, past_due, etc.)';
 COMMENT ON COLUMN billing_customers.last_synced_at IS 'Last time subscription data was synced from Stripe';
+
+
+

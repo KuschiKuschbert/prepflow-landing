@@ -22,3 +22,6 @@ export async function getUserEmail(request: NextRequest): Promise<string | null>
     return null;
   }
 }
+
+
+

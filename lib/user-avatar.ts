@@ -89,3 +89,6 @@ export function clearStoredAvatar(): void {
  * @returns {boolean} True if valid
  */
 export { isValidAvatar };
+
+
+

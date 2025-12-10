@@ -77,3 +77,6 @@ export async function enrichDishWithAllergens(dish: any, dishId: string): Promis
     dietary_method: dietaryStatus?.method ?? null,
   };
 }
+
+
+

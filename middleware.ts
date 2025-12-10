@@ -24,7 +24,11 @@ export default async function middleware(req: NextRequest) {
   );
 
   // Always allow auth and selected public APIs
-  if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/leads')) {
+  if (
+    pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/leads') ||
+    pathname.startsWith('/api/debug')
+  ) {
     return NextResponse.next();
   }
 

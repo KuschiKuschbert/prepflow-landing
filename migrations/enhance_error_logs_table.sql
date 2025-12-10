@@ -20,3 +20,6 @@ CREATE INDEX IF NOT EXISTS idx_admin_error_logs_severity_status ON admin_error_l
 UPDATE admin_error_logs
 SET severity = 'medium', status = 'new', category = 'other'
 WHERE severity IS NULL OR status IS NULL OR category IS NULL;
+
+
+

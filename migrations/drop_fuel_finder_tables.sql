@@ -20,3 +20,6 @@ DROP TABLE IF EXISTS fuel_stations CASCADE;
 
 -- Remove feature flag entry from hidden_feature_flags table
 DELETE FROM hidden_feature_flags WHERE feature_key = 'fuel_finder';
+
+
+

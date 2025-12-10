@@ -105,3 +105,6 @@ export function printSuppliers({
     totalItems: filteredSuppliers.length,
   });
 }
+
+
+

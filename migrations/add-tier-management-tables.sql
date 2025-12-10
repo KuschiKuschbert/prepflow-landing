@@ -89,3 +89,6 @@ CREATE POLICY "Service role can access feature_tier_mapping" ON feature_tier_map
 DROP POLICY IF EXISTS "Service role can access tier_config_cache" ON tier_config_cache;
 CREATE POLICY "Service role can access tier_config_cache" ON tier_config_cache
   FOR ALL USING (true);
+
+
+

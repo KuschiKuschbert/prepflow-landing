@@ -22,3 +22,6 @@ CREATE INDEX IF NOT EXISTS idx_billing_customers_stripe_customer_id ON billing_c
 
 -- Update existing users to have 'starter' tier if null
 UPDATE users SET subscription_tier = 'starter' WHERE subscription_tier IS NULL;
+
+
+

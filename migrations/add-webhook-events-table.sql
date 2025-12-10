@@ -43,3 +43,6 @@ COMMENT ON COLUMN webhook_events.stripe_event_id IS 'Unique Stripe event ID (evt
 COMMENT ON COLUMN webhook_events.processed IS 'Whether this event has been successfully processed';
 COMMENT ON COLUMN webhook_events.processing_time_ms IS 'Time taken to process event in milliseconds';
 COMMENT ON COLUMN webhook_events.event_data IS 'Full event payload stored as JSONB';
+
+
+

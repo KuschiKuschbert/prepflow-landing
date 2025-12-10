@@ -110,3 +110,6 @@ export function ConsumablesListPanel({
     </div>
   );
 }
+
+
+

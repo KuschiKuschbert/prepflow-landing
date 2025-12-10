@@ -37,3 +37,6 @@ export function NavigationErrorBoundary({ children }: NavigationErrorBoundaryPro
     </ErrorBoundary>
   );
 }
+
+
+

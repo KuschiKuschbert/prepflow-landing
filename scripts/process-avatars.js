@@ -151,3 +151,6 @@ if (args.length === 0) {
 
 const sourceDir = args[0];
 processAvatars(sourceDir);
+
+
+

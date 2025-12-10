@@ -18,3 +18,6 @@ COMMENT ON COLUMN users.avatar IS 'User avatar ID (e.g., "avatar-01"). NULL mean
 
 
 
+
+
+

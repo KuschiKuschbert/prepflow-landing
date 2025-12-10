@@ -25,3 +25,6 @@
 -- 4. Only applies to authenticated users with critical/safety severity errors
 
 COMMENT ON COLUMN users.notification_preferences IS 'User notification preferences including error reporting settings. Structure: { "errorReporting": { "autoReport": boolean } }';
+
+
+

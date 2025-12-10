@@ -65,3 +65,6 @@ export function calculateExpandedWidth(
   const scaleRatio = totalWidth / (initialWidths[index] || expandedWidth);
   return { totalWidth, scaleRatio };
 }
+
+
+

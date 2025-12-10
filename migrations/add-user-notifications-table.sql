@@ -34,3 +34,6 @@ COMMENT ON TABLE user_notifications IS 'Stores user notifications for subscripti
 COMMENT ON COLUMN user_notifications.type IS 'Notification type: subscription, system, billing, etc.';
 COMMENT ON COLUMN user_notifications.metadata IS 'Additional notification data stored as JSONB';
 COMMENT ON COLUMN user_notifications.expires_at IS 'Optional expiration date - notifications older than this are automatically cleaned up';
+
+
+
