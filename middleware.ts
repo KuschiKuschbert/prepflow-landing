@@ -14,6 +14,13 @@ export default async function middleware(req: NextRequest) {
     process.env.AUTH0_CLIENT_SECRET,
   );
 
+  // Redirect non-www to www in production (fixes Auth0 callback URL mismatch)
+  if (isProduction && origin.includes('prepflow.org') && !origin.includes('www.prepflow.org')) {
+    const wwwUrl = new URL(req.url);
+    wwwUrl.hostname = 'www.prepflow.org';
+    return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
+  }
+
   // Always allow auth and selected public APIs
   if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/leads')) {
     return NextResponse.next();

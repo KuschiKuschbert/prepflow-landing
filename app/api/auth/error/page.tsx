@@ -39,6 +39,11 @@ function AuthErrorContent() {
       message:
         'There was a problem with the authentication callback. This usually means the callback URL is not properly configured in Auth0. Please contact support.',
     },
+    auth0: {
+      title: 'Authentication Error',
+      message:
+        'There was a problem with the authentication callback. This usually means the callback URL is not properly configured in Auth0. Please ensure you are accessing the site via www.prepflow.org (not prepflow.org).',
+    },
     Default: {
       title: 'Authentication Error',
       message:
