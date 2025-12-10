@@ -55,21 +55,28 @@ function SignInContent() {
             {error && (
               <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
                 <p className={`${LANDING_TYPOGRAPHY.sm} text-red-400`}>
-                  {error === 'AccessDenied'
-                    ? 'Access denied. Please check your credentials and try again.'
-                    : error === 'Configuration'
-                      ? 'There was a problem with the server configuration. Please contact support.'
-                      : error === 'Verification'
-                        ? 'The verification token has expired. Please try signing in again.'
-                        : error === 'Callback' || error === 'autho'
-                          ? 'There was a problem with the authentication callback. This usually means the callback URL is not properly configured. Please contact support.'
-                          : 'An error occurred during sign in. Please try again.'}
+                      {error === 'AccessDenied'
+                        ? 'Access denied. Please check your credentials and try again.'
+                        : error === 'Configuration'
+                          ? 'There was a problem with the server configuration. Please contact support.'
+                          : error === 'Verification'
+                            ? 'The verification token has expired. Please try signing in again.'
+                            : error === 'Callback' || error === 'autho' || error === 'auth0'
+                              ? 'There was a problem with the authentication callback. This usually means the callback URL is not properly configured. Please ensure you are accessing the site via www.prepflow.org (not prepflow.org).'
+                              : 'An error occurred during sign in. Please try again.'}
                 </p>
-                {error === 'Callback' || error === 'autho' ? (
+                {(error === 'Callback' || error === 'autho' || error === 'auth0') && (
                   <p className={`${LANDING_TYPOGRAPHY.xs} mt-2 text-gray-500`}>
-                    Error code: {error}. This may indicate a callback URL configuration issue in Auth0.
+                    Error code: {error}. This may indicate a callback URL configuration issue. Try accessing{' '}
+                    <a
+                      href="https://www.prepflow.org/api/auth/signin"
+                      className="text-[#29E7CD] hover:underline"
+                    >
+                      www.prepflow.org
+                    </a>{' '}
+                    instead.
                   </p>
-                ) : null}
+                )}
               </div>
             )}
 
