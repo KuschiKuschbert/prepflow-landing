@@ -19,6 +19,10 @@ if (
   // So we use a try-catch to handle edge runtime compatibility issues
   try {
     const Auth0Provider = require('next-auth/providers/auth0').default;
+    // Force callback URL to always use NEXTAUTH_URL (fixes domain mismatch issues)
+    const callbackUrl = process.env.NEXTAUTH_URL
+      ? `${process.env.NEXTAUTH_URL}/api/auth/callback/auth0`
+      : undefined;
     providers.push(
       Auth0Provider({
         issuer: process.env.AUTH0_ISSUER_BASE_URL,
@@ -27,8 +31,10 @@ if (
         authorization: {
           params: {
             scope: 'openid profile email',
+            ...(callbackUrl && { redirect_uri: callbackUrl }),
           },
         },
+        ...(callbackUrl && { callbackURL: callbackUrl }),
       }),
     );
   } catch (error) {
@@ -45,6 +51,8 @@ if (
 const SESSION_MAX_AGE = Number(process.env.NEXTAUTH_SESSION_MAX_AGE) || 4 * 60 * 60; // 4 hours in seconds
 
 export const authOptions: NextAuthOptions = {
+  // Force NextAuth to always use NEXTAUTH_URL for callback construction (fixes domain mismatch)
+  url: process.env.NEXTAUTH_URL,
   session: {
     strategy: 'jwt',
     maxAge: SESSION_MAX_AGE, // 4 hours - prevents "logged in forever" issue

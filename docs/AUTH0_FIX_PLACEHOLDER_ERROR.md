@@ -4,7 +4,7 @@
 
 Auth0 dashboard shows error:
 ```
-Payload validation error: 'Object didn't pass validation for format url-with-placeholders: ' 
+Payload validation error: 'Object didn't pass validation for format url-with-placeholders: '
 on property web_origins[4].
 ```
 
@@ -152,4 +152,3 @@ If the error persists after manual cleanup:
    - Client ID: `CO3Vl37SuZ4e9wke1PitgWvAUyMR2HfL`
    - Error message: `web_origins[4]` placeholder validation error
    - Screenshot of the error
-
