@@ -28,7 +28,7 @@
 curl "https://www.prepflow.org/api/auth/signin/auth0?callbackUrl=https%3A%2F%2Fwww.prepflow.org%2Fwebapp"
 ```
 
-**Result:** 
+**Result:**
 - HTTP 302 redirect
 - Redirects to: `https://www.prepflow.org/api/auth/signin?callbackUrl=...&error=auth0`
 - **NextAuth returns `error=auth0` IMMEDIATELY** before redirecting to Auth0
